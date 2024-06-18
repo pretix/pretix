@@ -382,7 +382,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
         return _('Blocked because of an API integration')
 
 
-log_entry_types.register(*OrderLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.event.order.modified': _('The order details have been changed.'),
     'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
     'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),
@@ -451,10 +451,12 @@ log_entry_types.register(*OrderLogEntryType.derive_plains({
                                                                 'approval.'),
     'pretix.event.order.email.resend': _('An email with a link to the order detail page has been resent to the user.'),
     'pretix.event.order.email.payment_failed': _('An email has been sent to notify the user that the payment failed.'),
-}))
+})
+class CoreOrderLogEntryType(OrderLogEntryType):
+    pass
 
 
-log_entry_types.register(*VoucherLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.voucher.added': _('The voucher has been created.'),
     'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
     'pretix.voucher.added.waitinglist': _('The voucher has been created and sent to a person on the waiting list.'),
@@ -462,10 +464,12 @@ log_entry_types.register(*VoucherLogEntryType.derive_plains({
         'The voucher has been set to expire because the recipient removed themselves from the waiting list.'),
     'pretix.voucher.changed': _('The voucher has been changed.'),
     'pretix.voucher.deleted': _('The voucher has been deleted.'),
-}))
+})
+class CoreVoucherLogEntryType(VoucherLogEntryType):
+    pass
 
 
-@log_entry_types.register_instance()
+@log_entry_types.new()
 class VoucherRedeemedLogEntryType(VoucherLogEntryType):
     action_type = 'pretix.voucher.redeemed'
     plain = _('The voucher has been redeemed in order {order_code}.')
@@ -483,19 +487,23 @@ class VoucherRedeemedLogEntryType(VoucherLogEntryType):
         ))
 
 
-log_entry_types.register(*ItemCategoryLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.event.category.added': _('The category has been added.'),
     'pretix.event.category.deleted': _('The category has been deleted.'),
     'pretix.event.category.changed': _('The category has been changed.'),
     'pretix.event.category.reordered': _('The category has been reordered.'),
-}))
+})
+class CoreItemCategoryLogEntryType(ItemCategoryLogEntryType):
+    pass
 
 
-log_entry_types.register(*TaxRuleLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.event.taxrule.added': _('The tax rule has been added.'),
     'pretix.event.taxrule.deleted': _('The tax rule has been deleted.'),
     'pretix.event.taxrule.changed': _('The tax rule has been changed.'),
-}))
+})
+class CoreTaxRuleLogEntryType(TaxRuleLogEntryType):
+    pass
 
 
 class TeamMembershipLogEntryType(LogEntryType):
@@ -503,15 +511,17 @@ class TeamMembershipLogEntryType(LogEntryType):
         return self.plain.format(user=logentry.parsed_data.get('email'))
 
 
-log_entry_types.register(*TeamMembershipLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.team.member.added': _('{user} has been added to the team.'),
     'pretix.team.member.removed': _('{user} has been removed from the team.'),
     'pretix.team.invite.created': _('{user} has been invited to the team.'),
     'pretix.team.invite.resent': _('Invite for {user} has been resent.'),
-}))
+})
+class CoreTeamMembershipLogEntryType(TeamMembershipLogEntryType):
+    pass
 
 
-@log_entry_types.register_instance()
+@log_entry_types.new()
 class TeamMemberJoinedLogEntryType(LogEntryType):
     action_type = 'pretix.team.member.joined'
 
@@ -521,7 +531,7 @@ class TeamMemberJoinedLogEntryType(LogEntryType):
         )
 
 
-@log_entry_types.register_instance()
+@log_entry_types.new()
 class UserSettingsChangedLogEntryType(LogEntryType):
     action_type = 'pretix.user.settings.changed'
 
@@ -544,13 +554,15 @@ class UserImpersonatedLogEntryType(LogEntryType):
         return self.plain.format(logentry.parsed_data['other_email'])
 
 
-log_entry_types.register(*UserImpersonatedLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.control.auth.user.impersonated': _('You impersonated {}.'),
     'pretix.control.auth.user.impersonate_stopped': _('You stopped impersonating {}.'),
-}))
+})
+class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
+    pass
 
 
-log_entry_types.register(*LogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.object.cloned': _('This object has been created by cloning.'),
     'pretix.organizer.changed': _('The organizer has been changed.'),
     'pretix.organizer.settings': _('The organizer settings have been changed.'),
@@ -658,9 +670,11 @@ log_entry_types.register(*LogEntryType.derive_plains({
     'pretix.giftcards.transaction.manual': _('A manual transaction has been performed.'),
     'pretix.team.token.created': _('The token "{name}" has been created.'),
     'pretix.team.token.deleted': _('The token "{name}" has been revoked.'),
-}))
+})
+class CoreLogEntryType(LogEntryType):
+    pass
 
-log_entry_types.register(*EventLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.event.item_meta_property.added': _('A meta property has been added to this event.'),
     'pretix.event.item_meta_property.deleted': _('A meta property has been removed from this event.'),
     'pretix.event.item_meta_property.changed': _('A meta property has been changed on this event.'),
@@ -686,9 +700,11 @@ log_entry_types.register(*EventLogEntryType.derive_plains({
     'pretix.event.permissions.invited': _('A user has been invited to the event team.'),
     'pretix.event.permissions.changed': _('A user\'s permissions have been changed.'),
     'pretix.event.permissions.deleted': _('A user has been removed from the event team.'),
-}))
+})
+class CoreEventLogEntryType(EventLogEntryType):
+    pass
 
-log_entry_types.register(*ItemLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.event.item.added': _('The product has been created.'),
     'pretix.event.item.changed': _('The product has been changed.'),
     'pretix.event.item.reordered': _('The product has been reordered.'),
@@ -699,9 +715,16 @@ log_entry_types.register(*ItemLogEntryType.derive_plains({
     'pretix.event.item.bundles.added': _('A bundled item has been added to this product.'),
     'pretix.event.item.bundles.removed': _('A bundled item has been removed from this product.'),
     'pretix.event.item.bundles.changed': _('A bundled item has been changed on this product.'),
-}))
+})
+class CoreItemLogEntryType(ItemLogEntryType):
+    pass
 
 
+@log_entry_types.new_from_dict({
+    'pretix.event.item.variation.added': _('The variation "{value}" has been created.'),
+    'pretix.event.item.variation.deleted': _('The variation "{value}" has been deleted.'),
+    'pretix.event.item.variation.changed': _('The variation "{value}" has been changed.'),
+})
 class VariationLogEntryType(ItemLogEntryType):
     def display(self, logentry):
         if 'value' not in logentry.parsed_data:
@@ -716,13 +739,7 @@ class VariationLogEntryType(ItemLogEntryType):
         return super().display(logentry_display)
 
 
-log_entry_types.register(*VariationLogEntryType.derive_plains({
-    'pretix.event.item.variation.added': _('The variation "{value}" has been created.'),
-    'pretix.event.item.variation.deleted': _('The variation "{value}" has been deleted.'),
-    'pretix.event.item.variation.changed': _('The variation "{value}" has been changed.'),
-}))
-
-log_entry_types.register(*OrderLogEntryType.derive_plains({
+@log_entry_types.new_from_dict({
     'pretix.event.order.payment.confirmed': _('Payment {local_id} has been confirmed.'),
     'pretix.event.order.payment.canceled': _('Payment {local_id} has been canceled.'),
     'pretix.event.order.payment.canceled.failed': _('Canceling payment {local_id} has failed.'),
@@ -736,31 +753,42 @@ log_entry_types.register(*OrderLogEntryType.derive_plains({
     'pretix.event.order.refund.done': _('Refund {local_id} has been completed.'),
     'pretix.event.order.refund.canceled': _('Refund {local_id} has been canceled.'),
     'pretix.event.order.refund.failed': _('Refund {local_id} has failed.'),
-}))
+})
+class CoreOrderLogEntryType(OrderLogEntryType):
+    pass
 
-log_entry_types.register(*QuotaLogEntryType.derive_plains({
+
+@log_entry_types.new_from_dict({
     'pretix.event.quota.added': _('The quota has been added.'),
     'pretix.event.quota.deleted': _('The quota has been deleted.'),
     'pretix.event.quota.changed': _('The quota has been changed.'),
     'pretix.event.quota.closed': _('The quota has closed.'),
     'pretix.event.quota.opened': _('The quota has been re-opened.'),
-}))
+})
+class CoreQuotaLogEntryType(QuotaLogEntryType):
+    pass
 
-log_entry_types.register(*QuestionLogEntryType.derive_plains({
+
+@log_entry_types.new_from_dict({
     'pretix.event.question.added': _('The question has been added.'),
     'pretix.event.question.deleted': _('The question has been deleted.'),
     'pretix.event.question.changed': _('The question has been changed.'),
     'pretix.event.question.reordered': _('The question has been reordered.'),
-}))
+})
+class CoreQuestionLogEntryType(QuestionLogEntryType):
+    pass
 
-log_entry_types.register(*DiscountLogEntryType.derive_plains({
+
+@log_entry_types.new_from_dict({
     'pretix.event.discount.added': _('The discount has been added.'),
     'pretix.event.discount.deleted': _('The discount has been deleted.'),
     'pretix.event.discount.changed': _('The discount has been changed.'),
-}))
+})
+class CoreDiscountLogEntryType(DiscountLogEntryType):
+    pass
 
 
-@log_entry_types.register_instance()
+@log_entry_types.new()
 class LegacyCheckinLogEntryType(OrderLogEntryType):
     action_type = 'pretix.control.views.checkin'
 

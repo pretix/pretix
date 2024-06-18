@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
+import logging
 from collections import defaultdict
 
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -43,12 +44,33 @@ from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
-from pretix.base.signals import logentry_object_link
+from pretix.base.signals import logentry_object_link, EventPluginRegistry
 
 
 class VisibleOnlyManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(visible=True)
+
+
+def make_link(a_map, wrapper, is_active=True, event=None):
+    if a_map:
+        if is_active:
+            a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
+        elif event:
+            a_map['val'] = '<i>{val}</i> <a href="{plugin_href}"><span data-tooltip title="{errmes}" class="fa fa-warning fa-fw"></span></a>'.format_map({
+                **a_map,
+                "errmes": _("The relevant plugin is currently not active. To activate it, click here to go to the plugin settings."),
+                "plugin_href": reverse('control:event.settings.plugins', kwargs={
+                    'organizer': event.organizer.slug,
+                    'event': event.slug,
+                }),
+            })
+        else:
+            a_map['val'] = '<i>{val}</i> <span data-tooltip title="{errmes}" class="fa fa-warning fa-fw"></span>'.format_map({
+                **a_map,
+                "errmes": _("The relevant plugin is currently not active."),
+            })
+        return wrapper.format_map(a_map)
 
 
 class LogEntry(models.Model):
@@ -93,7 +115,7 @@ class LogEntry(models.Model):
         indexes = [models.Index(fields=["datetime", "id"])]
 
     def display(self):
-        log_entry_type = log_entry_types.find(action_type=self.action_type)
+        log_entry_type, meta = log_entry_types.find(action_type=self.action_type)
         if log_entry_type:
             return log_entry_type.display(self)
 
@@ -142,92 +164,19 @@ class LogEntry(models.Model):
             co = self.content_object
         except:
             return ''
-        a_map = None
-        a_text = None
 
-        if isinstance(co, Order):
-            a_text = _('Order {val}')
-            a_map = {
-                'href': reverse('control:event.order', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'code': co.code
-                }),
-                'val': escape(co.code),
-            }
-        elif isinstance(co, Voucher):
-            a_text = _('Voucher {val}…')
-            a_map = {
-                'href': reverse('control:event.voucher', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'voucher': co.id
-                }),
-                'val': escape(co.code[:6]),
-            }
-        elif isinstance(co, Item):
-            a_text = _('Product {val}')
-            a_map = {
-                'href': reverse('control:event.item', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'item': co.id
-                }),
-                'val': escape(co.name),
-            }
-        elif isinstance(co, SubEvent):
-            a_text = pgettext_lazy('subevent', 'Date {val}')
-            a_map = {
-                'href': reverse('control:event.subevent', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'subevent': co.id
-                }),
-                'val': escape(str(co))
-            }
-        elif isinstance(co, Quota):
-            a_text = _('Quota {val}')
-            a_map = {
-                'href': reverse('control:event.items.quotas.show', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'quota': co.id
-                }),
-                'val': escape(co.name),
-            }
-        elif isinstance(co, Discount):
-            a_text = _('Discount {val}')
-            a_map = {
-                'href': reverse('control:event.items.discounts.edit', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'discount': co.id
-                }),
-                'val': escape(co.internal_name),
-            }
-        elif isinstance(co, Question):
-            a_text = _('Question {val}')
-            a_map = {
-                'href': reverse('control:event.items.questions.show', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'question': co.id
-                }),
-                'val': escape(co.question),
-            }
+        log_entry_type, meta = log_entry_types.find(action_type=self.action_type)
+        if log_entry_type:
+            return log_entry_type.get_object_link(self, is_active=meta['plugin'] == 'CORE' or (meta['plugin'] and meta['plugin'] in self.event.get_plugins()))
 
-        if a_text and a_map:
-            a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
-            return a_text.format_map(a_map)
-        else:
-            log_entry_type = log_entry_types.find(action_type=self.action_type)
-            if log_entry_type:
-                return log_entry_type.get_object_link(self)
+        for receiver, response in logentry_object_link.send(self.event, logentry=self):
+            if response:
+                return response
 
-            for receiver, response in logentry_object_link.send(self.event, logentry=self):
-                if response:
-                    return response
-            return ''
+        if isinstance(co, (Order, Voucher, Item, SubEvent, Quota, Discount, Question)):
+            logging.warning("LogEntryType missing or ill-defined: %s", self.action_type)
+
+        return ''
 
     @cached_property
     def parsed_data(self):
@@ -250,33 +199,23 @@ class LogEntry(models.Model):
             notify_webhooks.apply_async(args=(to_wh,))
 
 
-class Registry:
-    def __init__(self, keys):
-        self.registered_items = list()
-        self.keys = keys
-        self.by_key = {key: {} for key in self.keys.keys()}
-
-    def register(self, *objs):
-        for obj in objs:
-            self.registered_items.append(obj)
-            for key, accessor in self.keys.items():
-                self.by_key[key][accessor(obj)] = obj
-
-    def register_instance(self, *args, **kwargs):
+class LogEntryTypeRegistry(EventPluginRegistry):
+    def new_from_dict(self, data):
         def reg(clz):
-            obj = clz(*args, **kwargs)
-            self.register(obj)
+            for action_type, plain in data.items():
+                self.register(clz(action_type=action_type, plain=plain))
         return reg
 
-    def find(self, **kwargs):
-        (key, value), = kwargs.items()
-        return self.by_key.get(key).get(value)
 
-
-log_entry_types = Registry({'action_type': lambda o: getattr(o, 'action_type')})
+log_entry_types = LogEntryTypeRegistry({'action_type': lambda o: getattr(o, 'action_type')})
 
 
 class LogEntryType:
+    def __init__(self, action_type=None, plain=None):
+        assert self.__module__ != LogEntryType.__module__  # must not instantiate base classes, only derived ones
+        if action_type: self.action_type = action_type
+        if plain: self.plain = plain
+
     def display(self, logentry):
         if hasattr(self, 'plain'):
             plain = str(self.plain)
@@ -289,24 +228,14 @@ class LogEntryType:
     def get_object_link_info(self, logentry) -> dict:
         pass
 
-    def get_object_link(self, logentry):
+    def get_object_link(self, logentry, is_active):
         a_map = self.get_object_link_info(logentry)
-        if a_map:
-            a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
-            return self.object_link_wrapper.format_map(a_map)
+        return make_link(a_map, self.object_link_wrapper, is_active, logentry.event)
 
     object_link_wrapper = '{val}'
 
     def shred_pii(self, logentry):
         raise NotImplementedError
-
-    @classmethod
-    def derive_plains(cls, plains):
-        for action_type, plain_display in plains.items():
-            obj = cls()
-            obj.action_type = action_type
-            obj.plain = plain_display
-            yield obj
 
 
 class EventLogEntryType(LogEntryType):

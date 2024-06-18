@@ -133,18 +133,16 @@ def pdf_event_copy_data_receiver(sender, other, item_map, question_map, **kwargs
     return layout_map
 
 
+@log_entry_types.new_from_dict({
+    'pretix.plugins.ticketoutputpdf.layout.added': _('Ticket layout created.'),
+    'pretix.plugins.ticketoutputpdf.layout.deleted': _('Ticket layout deleted.'),
+    'pretix.plugins.ticketoutputpdf.layout.changed': _('Ticket layout changed.'),
+})
 class PdfTicketLayoutLogEntryType(EventLogEntryType):
     object_type = TicketLayout
     object_link_wrapper = _('Ticket layout {val}')
     object_link_viewname = 'plugins:ticketoutputpdf:edit'
     object_link_argname = 'layout'
-
-
-log_entry_types.register(*PdfTicketLayoutLogEntryType.derive_plains({
-    'pretix.plugins.ticketoutputpdf.layout.added': _('Ticket layout created.'),
-    'pretix.plugins.ticketoutputpdf.layout.deleted': _('Ticket layout deleted.'),
-    'pretix.plugins.ticketoutputpdf.layout.changed': _('Ticket layout changed.'),
-}))
 
 
 def _ticket_layouts_for_item(request, item):

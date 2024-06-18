@@ -172,15 +172,13 @@ def control_order_info(sender: Event, request, order: Order, **kwargs):
     return template.render(ctx, request=request)
 
 
+@log_entry_types.new_from_dict({
+    'pretix.plugins.badges.layout.added': _('Badge layout created.'),
+    'pretix.plugins.badges.layout.deleted': _('Badge layout deleted.'),
+    'pretix.plugins.badges.layout.changed': _('Badge layout changed.'),
+})
 class BadgeLogEntryType(EventLogEntryType):
     object_type = BadgeLayout
     object_link_wrapper = _('Badge layout {val}')
     object_link_viewname = 'plugins:badges:edit'
     object_link_argname = 'layout'
-
-
-log_entry_types.register(*BadgeLogEntryType.derive_plains({
-    'pretix.plugins.badges.layout.added': _('Badge layout created.'),
-    'pretix.plugins.badges.layout.deleted': _('Badge layout deleted.'),
-    'pretix.plugins.badges.layout.changed': _('Badge layout changed.'),
-}))
