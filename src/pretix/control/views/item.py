@@ -1323,11 +1323,12 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
     def plugin_forms(self):
         forms = []
         for rec, resp in item_forms.send(sender=self.request.event, item=self.item, request=self.request):
+            if not resp:
+                continue
             if isinstance(resp, (list, tuple)):
                 forms.extend(resp)
             else:
-                if resp:
-                    forms.append(resp)
+                forms.append(resp)
 
         for form in forms:
             if has_truthy_attr(form, "title") and has_truthy_attr(form, "is_layout"):
