@@ -106,6 +106,7 @@ class ControlFieldRenderer(FieldRenderer):
             html = f'<div class="{css_class}">{html}</div>'
         return html
 
+
 class ControlFieldWithVisibilityRenderer(ControlFieldRenderer):
     def __init__(self, *args, **kwargs):
         kwargs['layout'] = 'horizontal'
