@@ -335,7 +335,7 @@
                         </div>
                     </div>
                     <div class="row control-group text">
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 textarea">
                             <label>{% trans "Width (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
                                     id="toolbox-textwidth">
@@ -379,20 +379,32 @@
                         <div class="col-sm-6">
                             <label>&nbsp;</label><br>
                             <div class="btn-group btn-group-justified" role="group">
-                                <div class="btn-group" role="group">
+                                <div class="btn-group text" role="group">
                                     <button type="button" class="btn btn-default toggling" data-action="bold">
                                         <span class="fa fa-bold"></span>
                                     </button>
                                 </div>
-                                <div class="btn-group" role="group">
+                                <div class="btn-group text" role="group">
                                     <button type="button" class="btn btn-default toggling" data-action="italic">
                                         <span class="fa fa-italic"></span>
                                     </button>
                                 </div>
-                                <div class="btn-group" role="group">
+                                <div class="btn-group textarea" role="group">
                                     <button type="button" class="btn btn-default toggling" data-action="downward"
-                                        data-toggle="tooltip" title="{% trans "Flow multiple lines downward from specified position" %}">
+                                            data-toggle="tooltip" title="{% trans "Flow multiple lines downward from specified position" %}">
                                         <span class="fa fa-caret-square-o-down"></span>
+                                    </button>
+                                </div>
+                                <div class="btn-group textcontainer" role="group">
+                                    <button type="button" class="btn btn-default toggling" data-action="autoresize"
+                                            data-toggle="tooltip" title="{% trans "Automatically reduce font size to fit ocntent" %}">
+                                        <span class="fa fa-text-height"></span>
+                                    </button>
+                                </div>
+                                <div class="btn-group textcontainer" role="group">
+                                    <button type="button" class="btn btn-default toggling" data-action="splitlongwords"
+                                        data-toggle="tooltip" title="{% trans "Allow long words to be split" %}">
+                                        <span class="fa fa-unlink"></span>
                                     </button>
                                 </div>
                             </div>
@@ -414,6 +426,24 @@
                                     </button>
                                 </div>
                             </div>
+                            <label>&nbsp;</label><br>
+                            <div class="btn-group btn-group-justified" id="toolbox-verticalalign">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default option toggling" data-action="top">
+                                        <span class="fa fa-sort-up"></span>
+                                    </button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default option toggling" data-action="middle">
+                                        <span class="fa fa-sort"></span>
+                                    </button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default option toggling" data-action="bottom">
+                                        <span class="fa fa-sort-down"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -423,9 +453,13 @@
                     {% trans "Add a new object" %}
                 </div>
                 <div class="panel-body add-buttons">
+                    <button class="btn btn-default btn-block" id="editor-add-textcontainer" disabled>
+                        <span class="fa fa-font"></span>
+                        {% trans "Text box" %}
+                    </button>
                     <button class="btn btn-default btn-block" id="editor-add-text" disabled>
                         <span class="fa fa-font"></span>
-                        {% trans "Text" %}
+                        {% trans "Text (deprecated)" %}
                     </button>
                     <button class="btn btn-default btn-block" id="editor-add-qrcode" data-content="secret" disabled>
                         <span class="fa fa-qrcode"></span>
