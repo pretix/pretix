@@ -47,25 +47,72 @@ fabric.Imagearea = fabric.util.createClass(fabric.Rect, {
 fabric.Imagearea.fromObject = function (object, callback, forceAsync) {
     return fabric.Object._fromObject('Imagearea', object, callback, forceAsync);
 };
-fabric.Textcontainer = fabric.util.createClass(fabric.Textbox, {
+fabric.Textcontainer = fabric.util.createClass(fabric.Rect, {
     type: 'textcontainer',
 
     initialize: function (text, options) {
         options || (options = {});
 
-        this.callSuper('initialize', text, options);
+        this.callSuper('initialize', options);
+
+        //this.textbox = new fabric.Textbox(text, JSON.parse(JSON.stringify(options)));
         this.set('content', options.content || '');
-        this.set('splitByGrapheme', options.splitLongWords)
+
+        this.cacheProperties.push(
+            "width", "height", "fontSize", "lineHeight", "fill", "fontFamily", "fontWeight",
+            "fontStyle", "text", "textAlign", "splitLongWords", "splitByGrapheme", "verticalAlign",
+            "autoResize",
+        )
     },
 
     toObject: function (propertiesToInclude) {
         return this.callSuper('toObject', ['content'].concat(propertiesToInclude));
     },
 
+    _internalTextbox: function () {
+        var fontSize = parseFloat(this.fontSize);
+        var text = this.text.replace("-", "-\u200B");
+        while (true) {
+            var tmptext = new fabric.Textbox(text, {
+                _wordJoiners: /[ \t\r\u200B]/u,
+                left: 0,
+                top: 0,
+                originY: 'top',
+                originX: 'left',
+                width: this.width,
+                height: this.height,
+                fontSize: fontSize,
+                lineHeight: this.lineHeight,
+                fill: this.fill,
+                fontFamily: this.fontFamily,
+                fontWeight: this.fontWeight,
+                fontStyle: this.fontStyle,
+                text: text,
+                textAlign: this.textAlign,
+                splitByGrapheme: this.splitLongWords
+            })
+            tmptext.setCoords();
+            var lineHeights = 0;
+            for (var i = 0, len = tmptext._textLines.length; i < len; i++) {
+                var heightOfLine = tmptext.getHeightOfLine(i);
+                lineHeights += heightOfLine;
+            }
+            if (!this.autoResize || (lineHeights <= this.height && tmptext.width <= this.width) || fontSize <= 1.0) {
+                return {textbox: tmptext, height: lineHeights, width: tmptext.width}
+            }
+            if (lineHeights > this.height) { // we can do larger steps for height
+                fontSize = fontSize - Math.max(1.0, fontSize * .1)
+            } else {
+                fontSize = fontSize - Math.max(.25, fontSize * .025)
+            }
+        }
+    },
+
     _render: function (ctx) {
-        var w = this.width,
-            h = this.height,
-            x = -this.width / 2,
+        var h = this.height, w = this.weight;
+
+        /*
+        var x = -this.width / 2,
             y = -this.height / 2;
         ctx.fillStyle = '#ccc';
         ctx.beginPath();
@@ -76,9 +123,22 @@ fabric.Textcontainer = fabric.util.createClass(fabric.Textbox, {
         ctx.lineTo(x, y);
         ctx.closePath();
         ctx.fill();
+         */
+        var { textbox, height, width } = this._internalTextbox();
 
-        this.callSuper('_render', ctx);
-
+        ctx.save();
+        if (this.verticalAlign === "top") {
+            ctx.translate(0, - (h - height) / 2);
+        } else if (this.verticalAlign === "bottom") {
+            ctx.translate(0, (h - height) / 2);
+        }
+        if (this.textAlign === "left" && width > w) {
+            ctx.translate((w - width) / 2, 0);
+        } else if (this.verticalAlign === "right" && width > w) {
+            ctx.translate(-(w - width) / 2, 0);
+        }
+        textbox._render(ctx);
+        ctx.restore();
     },
 });
 fabric.Textcontainer.fromObject = function (object, callback, forceAsync) {
@@ -726,8 +786,8 @@ var editor = {
             if (verticalAlign) {
                 o.set('verticalAlign', verticalAlign);
             }
-            o.autoResize = $("#toolbox").find("button[data-action=autoresize]").is('.active');
-            o.splitLongWords = $("#toolbox").find("button[data-action=splitlongwords]").is('.active');
+            o.set('autoResize', $("#toolbox").find("button[data-action=autoresize]").is('.active'));
+            o.set('splitLongWords', $("#toolbox").find("button[data-action=splitlongwords]").is('.active'));
             // todo: verticalalign
             o.rotate(parseFloat($("#toolbox-textrotation").val()));
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
