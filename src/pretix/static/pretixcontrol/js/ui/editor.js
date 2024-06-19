@@ -109,7 +109,7 @@ fabric.Textcontainer = fabric.util.createClass(fabric.Rect, {
     },
 
     _render: function (ctx) {
-        var h = this.height, w = this.weight;
+        var h = this.height, w = this.width;
 
         /*
         var x = -this.width / 2,
@@ -132,10 +132,12 @@ fabric.Textcontainer = fabric.util.createClass(fabric.Rect, {
         } else if (this.verticalAlign === "bottom") {
             ctx.translate(0, (h - height) / 2);
         }
+
+        // it is entirely unclear to me why overflow is always rendered centered, so we manually readjust
         if (this.textAlign === "left" && width > w) {
-            ctx.translate((w - width) / 2, 0);
-        } else if (this.verticalAlign === "right" && width > w) {
             ctx.translate(-(w - width) / 2, 0);
+        } else if (this.verticalAlign === "right" && width > w) {
+            ctx.translate((w - width) / 2, 0);
         }
         textbox._render(ctx);
         ctx.restore();
