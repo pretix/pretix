@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-30 17:00+0000\n"
+"PO-Revision-Date: 2024-06-19 16:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -186,12 +186,12 @@ msgstr ""
 #: pretix/api/models.py:118 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:264
 msgid "All events (including newly created ones)"
-msgstr "Alle arrangementer (inkl. nyligt oprettede)"
+msgstr "Alle arrangementer (inkl. nyoprettede begivenheder)"
 
 #: pretix/api/models.py:119 pretix/base/models/devices.py:124
 #: pretix/base/models/organizer.py:265
 msgid "Limit to events"
-msgstr "Begræns til arrangementer"
+msgstr "Vis kun arrangementer"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:1049
@@ -1278,7 +1278,7 @@ msgstr "Dato"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:70
 msgid "Order code"
-msgstr "Bestillingskode"
+msgstr "Bestillingsnr."
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/modelimport_orders.py:60 pretix/base/models/customers.py:384
@@ -3175,7 +3175,7 @@ msgstr "Faktura til"
 #: pretix/base/invoice.py:401 pretix/base/invoice.py:951
 msgctxt "invoice"
 msgid "Order code"
-msgstr "Bestillingskode"
+msgstr "Bestillingsnr."
 
 #: pretix/base/invoice.py:410 pretix/base/invoice.py:964
 msgctxt "invoice"
@@ -11468,7 +11468,7 @@ msgstr "Arrangement:"
 #: pretix/base/templates/pretixbase/email/order_details.html:26
 #: pretix/base/templates/pretixbase/email/order_details.html:77
 msgid "Order code:"
-msgstr "Bestillingskode:"
+msgstr "Bestillingsnr.:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
 msgid "created by"
@@ -14949,9 +14949,10 @@ msgid "The order has been reactivated."
 msgstr "Bestilling oprettet."
 
 #: pretix/control/logdisplay.py:390
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The test mode order {code} has been deleted."
-msgstr "Den valgte dato er blevet slettet."
+msgstr ""
+"Bestillingen {code}, der blev oprettet under testmodus, er blevet slettet."
 
 #: pretix/control/logdisplay.py:391
 msgid "The order has been created."
@@ -27561,7 +27562,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:246
 msgctxt "export_category"
 msgid "Analysis"
-msgstr ""
+msgstr "Analyse"
 
 #: pretix/plugins/reports/accountingreport.py:82
 #, fuzzy
@@ -27659,9 +27660,8 @@ msgid "(excl. taxes)"
 msgstr "inkl. %(rate)s%% moms"
 
 #: pretix/plugins/reports/exporters.py:275
-#, fuzzy
 msgid "(incl. taxes)"
-msgstr "inkl. %(rate)s%% moms"
+msgstr "(inkl. moms)"
 
 #: pretix/plugins/reports/exporters.py:285
 #: pretix/plugins/reports/exporters.py:304
