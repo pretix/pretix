@@ -946,6 +946,17 @@ class StripeMethod(BasePaymentProvider):
             )
             if intent.status == 'requires_action':
                 payment.info = str(intent)
+                if intent.next_action.type == 'multibanco_display_details':
+                    payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                    payment.save()
+                    return
+
+                payment.state = OrderPayment.PAYMENT_STATE_CREATED
+                payment.save()
+                return self._redirect_to_sca(request, payment)
+
+            if intent.status == 'requires_action':
+                payment.info = str(intent)
                 payment.state = OrderPayment.PAYMENT_STATE_CREATED
                 payment.save()
                 return self._redirect_to_sca(request, payment)
@@ -1044,135 +1055,6 @@ class StripeMethod(BasePaymentProvider):
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
-
-
-class StripeSourceMethod(StripeMethod):
-    def payment_is_valid_session(self, request):
-        return True
-
-    def _charge_source(self, request, source, payment):
-        try:
-            params = {}
-            if not source.startswith('src_'):
-                params['statement_descriptor'] = self.statement_descriptor(payment)
-            params.update(self.api_kwargs)
-            params.update(self._connect_kwargs(payment))
-            charge = stripe.Charge.create(
-                amount=self._get_amount(payment),
-                currency=self.event.currency.lower(),
-                source=source,
-                description='{event}-{code}'.format(
-                    event=self.event.slug.upper(),
-                    code=payment.order.code
-                ),
-                metadata={
-                    'order': str(payment.order.id),
-                    'event': self.event.id,
-                    'code': payment.order.code
-                },
-                # TODO: Is this sufficient?
-                idempotency_key=str(self.event.id) + payment.order.code + source,
-                **params
-            )
-        except stripe.error.CardError as e:
-            if e.json_body:
-                err = e.json_body['error']
-                logger.exception('Stripe error: %s' % str(err))
-            else:
-                err = {'message': str(e)}
-                logger.exception('Stripe error: %s' % str(e))
-            logger.info('Stripe card error: %s' % str(err))
-            payment.fail(info={
-                'error': True,
-                'message': err['message'],
-            })
-            raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
-
-        except stripe.error.StripeError as e:
-            if e.json_body and 'error' in e.json_body:
-                err = e.json_body['error']
-                logger.exception('Stripe error: %s' % str(err))
-
-                if err.get('code') == 'idempotency_key_in_use':
-                    # This is not an error we normally expect, however some payment methods like iDEAL will redirect
-                    # the user back to our confirmation page at the same time from two devices: the web browser the
-                    # purchase is executed from and the online banking app the payment is authorized from.
-                    # In this case we will just log the idempotency error but not expose it to the user and just
-                    # forward them back to their order page. There is a good chance that by the time the user hits
-                    # the order page, the other request has gone through and the payment is confirmed.
-                    # Usually however this should be prevented by SELECT FOR UPDATE calls!
-                    return
-
-            else:
-                err = {'message': str(e)}
-                logger.exception('Stripe error: %s' % str(e))
-
-            payment.fail(info={
-                'error': True,
-                'message': err['message'],
-            })
-            raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
-                                     'with us if this problem persists.'))
-        else:
-            ReferencedStripeObject.objects.get_or_create(
-                reference=charge.id,
-                defaults={'order': payment.order, 'payment': payment}
-            )
-            if charge.status == 'succeeded' and charge.paid:
-                try:
-                    payment.info = str(charge)
-                    payment.confirm()
-                except Quota.QuotaExceededException as e:
-                    raise PaymentException(str(e))
-
-                except SendMailException:
-                    raise PaymentException(_('There was an error sending the confirmation mail.'))
-            elif charge.status == 'pending':
-                if request:
-                    messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
-                                                'payment completed.'))
-                payment.info = str(charge)
-                payment.state = OrderPayment.PAYMENT_STATE_PENDING
-                payment.save()
-                return
-            else:
-                logger.info('Charge failed: %s' % str(charge))
-                payment.fail(info=str(charge))
-                raise PaymentException(_('Stripe reported an error: %s') % charge.failure_message)
-
-    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
-        self._init_api()
-        try:
-            source = self._create_source(request, payment)
-
-        except stripe.error.StripeError as e:
-            if e.json_body and 'err' in e.json_body:
-                err = e.json_body['error']
-                logger.exception('Stripe error: %s' % str(err))
-
-                if err.get('code') == 'idempotency_key_in_use':
-                    # Same thing happening twice – we don't want to record a failure, as that might prevent the
-                    # other thread from succeeding.
-                    return
-            else:
-                err = {'message': str(e)}
-                logger.exception('Stripe error: %s' % str(e))
-            payment.fail(info={
-                'error': True,
-                'message': err['message'],
-            })
-            raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
-                                     'with us if this problem persists.'))
-
-        ReferencedStripeObject.objects.get_or_create(
-            reference=source.id,
-            defaults={'order': payment.order, 'payment': payment}
-        )
-        payment.info = str(source)
-        payment.state = OrderPayment.PAYMENT_STATE_PENDING
-        payment.save()
-        request.session['payment_stripe_order_secret'] = payment.order.secret
-        return self.redirect(request, source.redirect.url)
 
 
 class StripeRedirectMethod(StripeMethod):
@@ -1793,53 +1675,26 @@ class StripeEPS(StripeRedirectWithAccountNamePaymentIntentMethod):
             return super().payment_presale_render(payment)
 
 
-class StripeMultibanco(StripeSourceMethod):
+class StripeMultibanco(StripeRedirectMethod):
     identifier = 'stripe_multibanco'
     verbose_name = _('Multibanco via Stripe')
     public_name = _('Multibanco')
     method = 'multibanco'
+    explanation = _(
+        'Multibanco is a payment method available to Portuguese bank account holders.'
+    )
     redirect_in_widget_allowed = False
+    abort_pending_allowed = True
 
-    def payment_form_render(self, request) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form_simple_noform.html')
-        ctx = {
-            'request': request,
-            'event': self.event,
-            'settings': self.settings,
-            'explanation': self.explanation,
-            'form': self.payment_form(request)
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "multibanco",
+                "billing_details": {
+                    "email": payment.order.email,
+                }
+            }
         }
-        return template.render(ctx)
-
-    def _create_source(self, request, payment):
-        source = stripe.Source.create(
-            type='multibanco',
-            amount=self._get_amount(payment),
-            currency=self.event.currency.lower(),
-            metadata={
-                'order': str(payment.order.id),
-                'event': self.event.id,
-                'code': payment.order.code
-            },
-            owner={
-                'email': payment.order.email
-            },
-            redirect={
-                'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
-                    'order': payment.order.code,
-                    'payment': payment.pk,
-                    'hash': payment.order.tagged_secret('plugins:stripe'),
-                })
-            },
-            **self.api_kwargs
-        )
-        return source
-
-    def payment_is_valid_session(self, request):
-        return True
-
-    def checkout_prepare(self, request, cart):
-        return True
 
 
 class StripePrzelewy24(StripeRedirectMethod):
