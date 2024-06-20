@@ -1092,10 +1092,20 @@ class Renderer:
                     fg_num_pages = fg_pdf.get_num_pages()
                     bg_num_pages = self.bg_pdf.get_num_pages()
                     bg_pdf_to_merge = PdfWriter()
-                    bg_pdf_to_merge.append(self.bg_pdf, pages=(0, min(bg_num_pages, fg_num_pages)))
+                    bg_pdf_to_merge.append(
+                        self.bg_pdf,
+                        pages=(0, min(bg_num_pages, fg_num_pages)),
+                        import_outline=False,
+                        excluded_fields=("/Annots", "/B")
+                    )
                     if fg_num_pages > bg_num_pages:
                         # repeat last page in bg_pdf to match fg_pdf
-                        bg_pdf_to_merge.append(bg_pdf_to_merge, pages=[bg_num_pages - 1] * (fg_num_pages - bg_num_pages))
+                        bg_pdf_to_merge.append(
+                            bg_pdf_to_merge,
+                            pages=[bg_num_pages - 1] * (fg_num_pages - bg_num_pages),
+                            import_outline=False,
+                            excluded_fields=("/Annots", "/B")
+                        )
 
                     bg_pdf_to_merge.write(bg_filename)
 
@@ -1162,7 +1172,12 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
                 bg_num_pages = bg_pdf.get_num_pages()
                 if fg_num_pages > bg_num_pages:
                     # repeat last page in bg_pdf to match fg_pdf
-                    bg_pdf.append(bg_pdf, pages=[bg_num_pages - 1] * (fg_num_pages - bg_num_pages))
+                    bg_pdf.append(
+                        bg_pdf,
+                        pages=[bg_num_pages - 1] * (fg_num_pages - bg_num_pages),
+                        import_outline=False,
+                        excluded_fields=("/Annots", "/B")
+                    )
 
                 bg_pdf.write(bg_filename)
 
