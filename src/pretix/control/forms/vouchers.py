@@ -366,9 +366,9 @@ class VoucherBulkForm(VoucherForm):
                 raise ValidationError(_('CSV input contains an unknown field with the header "{header}".').format(header=unknown_fields[0]))
             for i, row in enumerate(reader):
                 try:
-                    EmailValidator()(row['email'])
+                    EmailValidator()(row['email'].strip())
                 except ValidationError as err:
-                    raise ValidationError(_('{value} is not a valid email address.').format(value=row['email'])) from err
+                    raise ValidationError(_('{value} is not a valid email address.').format(value=row['email'].strip())) from err
                 try:
                     res.append(self.Recipient(
                         name=row.get('name', ''),
