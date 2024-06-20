@@ -112,7 +112,8 @@ def test_typeahead(organizer, admin_user, client, gift_card):
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
-            total=14, locale='en'
+            total=14, locale='en',
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True, personalized=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))

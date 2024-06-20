@@ -133,7 +133,8 @@ def test_card_detail_view_transact_revert_refund(organizer, admin_user, gift_car
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_CANCELED,
             datetime=now(), expires=now() + timedelta(days=10),
-            total=14, locale='en'
+            total=14, locale='en',
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         o.payments.create(
             amount=o.total, provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CONFIRMED

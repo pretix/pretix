@@ -705,7 +705,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
 def can_generate_invoice(event, order, ignore_payments=False):
     v = (
-        order.sales_channel in event.settings.get('invoice_generate_sales_channels')
+        order.sales_channel.identifier in event.settings.get('invoice_generate_sales_channels')
         and (
             event.settings.get('invoice_generate') in ('user', 'True')
             or (

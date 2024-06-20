@@ -87,6 +87,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
             'variations', 'addons', 'bundles', 'meta_values', 'meta_values__property',
             'variations__meta_values', 'variations__meta_values__property',
             'require_membership_types', 'variations__require_membership_types',
+            'limit_sales_channels', 'variations__limit_sales_channels',
         ).all()
 
     def perform_create(self, serializer):
@@ -152,7 +153,8 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         return self.item.variations.all().prefetch_related(
             'meta_values',
             'meta_values__property',
-            'require_membership_types'
+            'require_membership_types',
+            'limit_sales_channels',
         )
 
     def get_serializer_context(self):

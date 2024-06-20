@@ -323,13 +323,15 @@ class EventsTest(SoupTest):
                 code='FOO', event=self.event1, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + datetime.timedelta(days=10),
-                total=14, locale='en', testmode=True
+                total=14, locale='en', testmode=True,
+                sales_channel=self.event1.organizer.sales_channels.get(identifier="web"),
             )
             o2 = Order.objects.create(
                 code='FOO2', event=self.event1, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + datetime.timedelta(days=10),
-                total=14, locale='en'
+                total=14, locale='en',
+                sales_channel=self.event1.organizer.sales_channels.get(identifier="web"),
             )
             self.event1.testmode = True
             self.event1.save()
@@ -347,13 +349,15 @@ class EventsTest(SoupTest):
                 code='FOO', event=self.event1, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + datetime.timedelta(days=10),
-                total=14, locale='en', testmode=True
+                total=14, locale='en', testmode=True,
+                sales_channel=self.event1.organizer.sales_channels.get(identifier="web"),
             )
             o2 = Order.objects.create(
                 code='FOO2', event=self.event1, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + datetime.timedelta(days=10),
-                total=14, locale='en'
+                total=14, locale='en',
+                sales_channel=self.event1.organizer.sales_channels.get(identifier="web"),
             )
             self.event1.testmode = True
             self.event1.save()
@@ -1272,12 +1276,14 @@ class EventDeletionTest(SoupTest):
             assert self.orga1.events.exists()
 
     def test_delete_orders(self):
-        Order.objects.create(
-            code='FOO', event=self.event1, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
-            datetime=now(), expires=now(),
-            total=14, locale='en'
-        )
+        with scopes_disabled():
+            Order.objects.create(
+                code='FOO', event=self.event1, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING,
+                datetime=now(), expires=now(),
+                total=14, locale='en',
+                sales_channel=self.event1.organizer.sales_channels.get(identifier="web"),
+            )
         self.post_doc('/control/event/ccc/30c3/delete/', {
             'user_pw': 'dummy',
             'slug': '30c3'

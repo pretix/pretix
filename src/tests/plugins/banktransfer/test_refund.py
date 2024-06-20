@@ -47,6 +47,7 @@ def env():
         code='1Z3AS', event=event, email='admin@localhost',
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
+        sales_channel=o.sales_channels.get(identifier="web"),
         total=23
     )
     payment = OrderPayment.objects.create(

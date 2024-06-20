@@ -68,6 +68,7 @@ def order(event, customer):
         email='admin@localhost',
         datetime=now() - timedelta(days=3),
         expires=now() + timedelta(days=11),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         total=Decimal("23"),
     )
     OrderPosition.objects.create(

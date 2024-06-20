@@ -249,7 +249,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
     icon = 'user'
 
     def is_applicable(self, request):
-        return request.organizer.settings.customer_accounts and request.sales_channel.customer_accounts_supported
+        return request.organizer.settings.customer_accounts and request.sales_channel.type_instance.customer_accounts_supported
 
     @cached_property
     def login_form(self):
@@ -539,7 +539,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         self.request.event,
                         subevent=cartpos.subevent,
                         voucher=None,
-                        channel=self.request.sales_channel.identifier,
+                        channel=self.request.sales_channel,
                         base_qs=iao.addon_category.items,
                         allow_addons=True,
                         quota_cache=quota_cache,
@@ -935,7 +935,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     event=self.request.event,
                     cart_id=get_or_create_cart_id(request),
                     invoice_address=addr,
-                    sales_channel=request.sales_channel.identifier,
+                    sales_channel=request.sales_channel,
                 )
                 diff = cm.recompute_final_prices_and_taxes()
             except TaxRule.SaleNotAllowed:

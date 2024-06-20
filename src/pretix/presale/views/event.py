@@ -63,10 +63,9 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    ItemVariation, Quota, SeatCategoryMapping, Voucher,
+    ItemVariation, Quota, SalesChannel, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
@@ -110,7 +109,7 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
+def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=None, require_seat=0, base_qs=None, allow_addons=False,
                       quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
                       ignore_hide_sold_out_for_item_ids=None):
     base_qs_set = base_qs is not None
@@ -152,8 +151,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             ),
         ).filter(
             variation_q,
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel.identifier),
             active=True,
-            sales_channels__contains=channel,
             quotas__isnull=False,
             subevent_disabled=False
         ).prefetch_related(
@@ -192,7 +191,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         )
     )
 
-    items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher, allow_addons=allow_addons).select_related(
+    items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel.identifier, voucher=voucher, allow_addons=allow_addons).select_related(
         'category', 'tax_rule',  # for re-grouping
         'hidden_if_available',
     ).prefetch_related(
@@ -244,7 +243,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         items = items.filter(category_id__in=[a for a in filter_categories if a.isdigit()])
 
     display_add_to_cart = False
-    quota_cache_key = f'item_quota_cache:{subevent.id if subevent else 0}:{channel}:{bool(require_seat)}'
+    quota_cache_key = f'item_quota_cache:{subevent.id if subevent else 0}:{channel.identifier}:{bool(require_seat)}'
     quota_cache = quota_cache or event.cache.get(quota_cache_key) or {}
     quota_cache_existed = bool(quota_cache)
 
@@ -284,7 +283,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             item.available_variations = [v for v in item.available_variations
                                          if v.pk == voucher.variation_id]
 
-        if get_all_sales_channels()[channel].unlimited_items_per_order:
+        if channel.type_instance.unlimited_items_per_order:
             max_per_order = sys.maxsize
         else:
             max_per_order = item.max_per_order or int(event.settings.max_items_per_order)
@@ -527,7 +526,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             r._csp_ignore = True
             return r
 
-        if request.sales_channel.identifier not in request.event.sales_channels:
+        if not request.event.all_sales_channels and request.sales_channel.identifier not in (s.identifier for s in request.event.limit_sales_channels.all()):
             raise Http404(_('Tickets for this event cannot be purchased on this sales channel.'))
 
         if request.event.has_subevents:
@@ -565,11 +564,12 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
             items, display_add_to_cart = get_grouped_items(
-                self.request.event, self.subevent,
+                self.request.event,
+                subevent=self.subevent,
                 filter_items=self.request.GET.getlist('item'),
                 filter_categories=self.request.GET.getlist('category'),
                 require_seat=None,
-                channel=self.request.sales_channel.identifier,
+                channel=self.request.sales_channel,
                 memberships=(
                     self.request.customer.usable_memberships(
                         for_event=self.subevent or self.request.event,

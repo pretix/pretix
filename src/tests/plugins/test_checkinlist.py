@@ -51,7 +51,8 @@ def event():
             code='FOO', event=event, email='dummy@dummy.test', phone="+498912345678",
             status=Order.STATUS_PAID,
             datetime=datetime.datetime(2019, 2, 22, 14, 0, 0, tzinfo=datetime.timezone.utc), expires=now() + datetime.timedelta(days=10),
-            total=33, locale='en'
+            total=33, locale='en',
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         item_ticket = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True)
         OrderPosition.objects.create(
@@ -150,7 +151,8 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
             code='BAR', event=event, email='dummy@dummy.test', phone='+498912345678',
             status=Order.STATUS_PAID,
             datetime=datetime.datetime(2019, 2, 22, 14, 0, 0, tzinfo=datetime.timezone.utc), expires=now() + datetime.timedelta(days=10),
-            total=33, locale='en'
+            total=33, locale='en',
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         OrderPosition.objects.create(
             order=order2,

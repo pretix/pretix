@@ -47,6 +47,7 @@ class EventCancelTests(TestCase):
                 code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING, locale='en',
                 datetime=now(), expires=now() + timedelta(days=10),
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                 total=Decimal('46.00'),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
@@ -495,6 +496,7 @@ class SubEventCancelTests(TestCase):
                 status=Order.STATUS_PENDING, locale='en',
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal('46.00'),
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                               default_price=Decimal('23.00'), admission=True)

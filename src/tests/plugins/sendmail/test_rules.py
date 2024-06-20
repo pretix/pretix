@@ -284,12 +284,14 @@ def test_sendmail_rule_all_subevents(event_series, subevent1, subevent2, item):
     o1 = Order.objects.create(event=item.event, status=Order.STATUS_PAID,
                               expires=now() + datetime.timedelta(hours=1),
                               total=13, code='DUMMY1', email='dummy1@dummy.test',
+                              sales_channel=event_series.organizer.sales_channels.get(identifier="web"),
                               datetime=now(), locale='en')
     o1.all_positions.create(item=item, price=13, subevent=subevent1)
     o1.all_positions.create(item=item, price=13, subevent=subevent2)
     o2 = Order.objects.create(event=item.event, status=Order.STATUS_PAID,
                               expires=now() + datetime.timedelta(hours=1),
                               total=13, code='DUMMY2', email='dummy2@dummy.test',
+                              sales_channel=event_series.organizer.sales_channels.get(identifier="web"),
                               datetime=now(), locale='en')
     o2.all_positions.create(item=item, price=23, subevent=subevent1)
     o2.all_positions.create(item=item, price=23, subevent=subevent2)

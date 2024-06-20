@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
+{% load static %}
 {% block title %}{% trans "Products" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Products" %}</h1>
@@ -56,10 +57,15 @@
                                 <br>
                                 <small class="text-muted">
                                     #{{ i.pk }}
-                                    {% for k, c in sales_channels.items %}
-                                        {% if k in i.sales_channels %}
-                                            <span class="fa fa-fw fa-{{ c.icon }} text-muted"
-                                                  data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
+                                    {% for c in sales_channels %}
+                                        {% if i.all_sales_channels or c in i.limit_sales_channels.all %}
+                                            {% if "." in c.icon %}
+                                                <img src="{% static c.icon %}" class="fa-like-image"
+                                                     data-toggle="tooltip" title="{{ c.label }}">
+                                            {% else %}
+                                                <span class="fa fa-fw fa-{{ c.icon }} text-muted"
+                                                      data-toggle="tooltip" title="{{ c.label }}"></span>
+                                            {% endif %}
                                         {% else %}
                                         {% endif %}
                                     {% endfor %}

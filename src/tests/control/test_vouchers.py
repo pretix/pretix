@@ -744,6 +744,7 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
                 code='DEDUP', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PAID,
                 datetime=now(), expires=now() + datetime.timedelta(days=10),
+                sales_channel=self.orga.sales_channels.get(identifier="web"),
                 total=0, locale='en'
             )
 

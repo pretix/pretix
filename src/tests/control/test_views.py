@@ -70,6 +70,7 @@ def order(item):
     o = Order.objects.create(event=item.event, status=Order.STATUS_PENDING,
                              expires=now() + datetime.timedelta(hours=1),
                              total=13, code='DUMMY', email='dummy@dummy.test',
+                             sales_channel=item.event.organizer.sales_channels.get(identifier="web"),
                              datetime=now())
     OrderPosition.objects.create(order=o, item=item, price=13)
     p1 = o.payments.create(

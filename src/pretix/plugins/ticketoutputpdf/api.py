@@ -21,30 +21,49 @@
 #
 from django.conf import settings
 from django.db import transaction
-from rest_framework import viewsets
+from django.db.models import QuerySet
+from django.utils.functional import lazy
+from rest_framework import serializers, viewsets
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 
 from ...api.serializers.fields import UploadedFileField
+from ...base.models import SalesChannel
 from ...base.pdf import PdfLayoutValidator
 from ...multidomain.utils import static_absolute
 from .models import TicketLayout, TicketLayoutItem
 
 
 class ItemAssignmentSerializer(I18nAwareModelSerializer):
+    sales_channel = serializers.SlugRelatedField(
+        slug_field='identifier',
+        queryset=SalesChannel.objects.none(),
+    )
 
     class Meta:
         model = TicketLayoutItem
         fields = ('id', 'layout', 'item', 'sales_channel')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
+
 
 class NestedItemAssignmentSerializer(I18nAwareModelSerializer):
+    sales_channel = serializers.SlugRelatedField(
+        slug_field='identifier',
+        queryset=SalesChannel.objects.none(),
+    )
 
     class Meta:
         model = TicketLayoutItem
         fields = ('item', 'sales_channel')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["sales_channel"].queryset = lazy(lambda: self.context["event"].organizer.sales_channels.all(), QuerySet)
 
 
 class TicketLayoutSerializer(I18nAwareModelSerializer):
@@ -131,3 +150,9 @@ class TicketLayoutItemViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return TicketLayoutItem.objects.filter(item__event=self.request.event)
+
+    def get_serializer_context(self):
+        return {
+            **super().get_serializer_context(),
+            'event': self.request.event,
+        }

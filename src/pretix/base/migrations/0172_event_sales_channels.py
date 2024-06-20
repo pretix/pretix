@@ -3,7 +3,7 @@
 from django.db import migrations
 
 import pretix.base.models.fields
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 
 
 class Migration(migrations.Migration):
@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='sales_channels',
-            field=pretix.base.models.fields.MultiStringField(default=list(get_all_sales_channels().keys())),
+            field=pretix.base.models.fields.MultiStringField(default=list(get_all_sales_channel_types().keys())),
         ),
     ]

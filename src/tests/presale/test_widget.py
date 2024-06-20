@@ -47,7 +47,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
             total=Decimal("23"),
-            locale='en'
+            locale='en',
+            sales_channel=self.orga.sales_channels.get(identifier="web"),
         )
         self.ticket_pos = OrderPosition.objects.create(
             order=self.order,
@@ -147,7 +148,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[1].text)
 
     def test_saleschannel_disabled(self):
-        self.event.sales_channels = []
+        self.event.all_sales_channels = False
         self.event.save()
         response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
         data = json.loads(response.content.decode())

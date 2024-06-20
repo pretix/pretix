@@ -132,6 +132,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
         ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
@@ -409,6 +410,7 @@ def test_medium_lookup_cross_organizer(token_client, organizer, organizer2, org2
         o = Order.objects.create(
             code='FOO', event=org2_event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=org2_event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
         ticket = org2_event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,

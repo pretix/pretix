@@ -91,6 +91,7 @@ class BaseOrdersTest(TestCase):
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
             total=Decimal("23"),
+            sales_channel=self.orga.sales_channels.get(identifier="web"),
             locale='en'
         )
         self.ticket_pos = OrderPosition.objects.create(
@@ -114,7 +115,8 @@ class BaseOrdersTest(TestCase):
             email='user@localhost',
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
-            total=Decimal("23")
+            total=Decimal("23"),
+            sales_channel=self.orga.sales_channels.get(identifier="web"),
         )
 
 

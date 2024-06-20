@@ -47,7 +47,7 @@ class TicketLayoutItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.sales_channel.identifier != 'web':
             self.fields['layout'].label = _('PDF ticket layout for {channel}').format(
-                channel=self.sales_channel.verbose_name
+                channel=self.sales_channel.label
             )
             self.fields['layout'].empty_label = _('(Same as PDF ticket layout)')
         else:
@@ -57,7 +57,7 @@ class TicketLayoutItemForm(forms.ModelForm):
         self.fields['layout'].required = False
 
     def save(self, commit=True):
-        self.instance.sales_channel = self.sales_channel.identifier
+        self.instance.sales_channel = self.sales_channel
         if self.cleaned_data['layout'] is None:
             if self.instance.pk:
                 self.instance.delete()

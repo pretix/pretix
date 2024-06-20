@@ -43,13 +43,13 @@ from pretix.api.serializers.organizer import (
     CustomerCreateSerializer, CustomerSerializer, DeviceSerializer,
     GiftCardSerializer, GiftCardTransactionSerializer, MembershipSerializer,
     MembershipTypeSerializer, OrganizerSerializer, OrganizerSettingsSerializer,
-    SeatingPlanSerializer, TeamAPITokenSerializer, TeamInviteSerializer,
-    TeamMemberSerializer, TeamSerializer,
+    SalesChannelSerializer, SeatingPlanSerializer, TeamAPITokenSerializer,
+    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
 )
 from pretix.base.models import (
     Customer, Device, GiftCard, GiftCardTransaction, Membership,
-    MembershipType, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
-    User,
+    MembershipType, Organizer, SalesChannel, SeatingPlan, Team, TeamAPIToken,
+    TeamInvite, User,
 )
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers import OF_SELF
@@ -679,3 +679,68 @@ class MembershipViewSet(viewsets.ModelViewSet):
             data=self.request.data,
         )
         return inst
+
+
+with scopes_disabled():
+    class SalesChannelFilter(FilterSet):
+        class Meta:
+            model = SalesChannel
+            fields = ['type', 'identifier']
+
+
+class SalesChannelViewSet(viewsets.ModelViewSet):
+    serializer_class = SalesChannelSerializer
+    queryset = SalesChannel.objects.none()
+    permission = 'can_change_organizer_settings'
+    write_permission = 'can_change_organizer_settings'
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = SalesChannelFilter
+    lookup_field = 'identifier'
+    lookup_url_kwarg = 'identifier'
+    lookup_value_regex = r"[a-zA-Z0-9.\-_]+"
+
+    def get_queryset(self):
+        return self.request.organizer.sales_channels.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(
+            organizer=self.request.organizer,
+            type="api"
+        )
+        inst.log_action(
+            'pretix.saleschannel.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=merge_dicts(self.request.data, {'id': inst.pk})
+        )
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save(
+            type=serializer.instance.type,
+            identifier=serializer.instance.identifier,
+        )
+        inst.log_action(
+            'pretix.sales_channel.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+    def perform_destroy(self, instance):
+        if not instance.allow_delete():
+            raise PermissionDenied("Can only be deleted if unused.")
+        instance.log_action(
+            'pretix.saleschannel.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'id': instance.pk}
+        )
+        instance.delete()

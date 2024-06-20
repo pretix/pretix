@@ -3760,6 +3760,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             o3 = QuestionAnswer.objects.get(question=q3)
             order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                          expires=now() + timedelta(days=3),
+                                         sales_channel=self.orga.sales_channels.get(identifier="web"),
                                          total=4)
             op = OrderPosition.objects.create(order=order, item=self.ticket, price=42)
             o1.cartposition, o2.cartposition, o3.cartposition = None, None, None
@@ -4454,7 +4455,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         )
         CartPosition.objects.filter(addon_to__isnull=False).delete()
         CartPosition.objects.all().delete()
-        cm = CartManager(event=self.event, cart_id="temp")
+        cm = CartManager(event=self.event, cart_id="temp", sales_channel=self.orga.sales_channels.get(identifier="web"))
         cm.add_new_items([{
             'item': self.ticket.pk,
             'variation': None,
@@ -4473,7 +4474,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
             cp.cart_id = self.session_key
             cp.addon_to = map[cp.addon_to_id]
             cp.save()
-        cm = CartManager(event=self.event, cart_id=self.session_key)
+        cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
         cm.commit()  # execute discounts on resorted cart
 
         self._set_payment()

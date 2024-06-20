@@ -34,8 +34,10 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import calendar
+import os
 import sys
 import uuid
+import warnings
 from collections import Counter, OrderedDict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
@@ -61,7 +63,6 @@ from django_countries.fields import Country
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
-from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
@@ -260,13 +261,15 @@ class SubEventItemVariation(models.Model):
 
 
 def filter_available(qs, channel='web', voucher=None, allow_addons=False):
+    assert isinstance(channel, str)
     q = (
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
         Q(active=True)
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()) | Q(available_from_mode='info'))
         & Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()) | Q(available_until_mode='info'))
-        & Q(sales_channels__contains=channel) & Q(require_bundling=False)
+        & Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
+        & Q(require_bundling=False)
     )
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
@@ -599,9 +602,14 @@ class Item(LoggedModel):
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
     )
-    sales_channels = fields.MultiStringField(
-        verbose_name=_('Sales channels'),
-        default=['web'],
+    all_sales_channels = models.BooleanField(
+        verbose_name=_("Sell on all sales channels"),
+        default=True,
+    )
+    limit_sales_channels = models.ManyToManyField(
+        "SalesChannel",
+        verbose_name=_("Restrict to specific sales channels"),
+        help_text=_('Only sell tickets for this product on the selected sales channels.'),
         blank=True,
     )
     issue_giftcard = models.BooleanField(
@@ -1023,9 +1031,13 @@ class Item(LoggedModel):
             return None, None
 
 
-def _all_sales_channels_identifiers():
-    from pretix.base.channels import get_all_sales_channels
-    return list(get_all_sales_channels().keys())
+def _all_sales_channels_identifiers():  # kept for legacy migrations
+    from pretix.base.channels import get_all_sales_channel_types
+
+    if "PYTEST_CURRENT_TEST" not in os.environ:
+        warnings.warn('Method should not be used in new code.', DeprecationWarning)
+
+    return list(get_all_sales_channel_types().keys())
 
 
 class ItemVariation(models.Model):
@@ -1133,9 +1145,13 @@ class ItemVariation(models.Model):
         default=Item.UNAVAIL_MODE_HIDDEN,
         max_length=16,
     )
-    sales_channels = fields.MultiStringField(
-        verbose_name=_('Sales channels'),
-        default=_all_sales_channels_identifiers,
+    all_sales_channels = models.BooleanField(
+        verbose_name=_("Sell on all sales channels the product is sold on"),
+        default=True,
+    )
+    limit_sales_channels = models.ManyToManyField(
+        "SalesChannel",
+        verbose_name=_("Restrict to specific sales channels"),
         help_text=_('The sales channel selection for the product as a whole takes precedence, so if a sales channel is '
                     'selected here but not on product level, the variation will not be available.'),
         blank=True,

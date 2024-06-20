@@ -152,9 +152,8 @@
                     </fieldset>
                     <fieldset>
                         <legend>{% trans "Availability" %}</legend>
-
-
-                        {% bootstrap_field form.sales_channels layout="control" horizontal_field_class="col-md-7" %}
+                        {% bootstrap_field form.all_sales_channels layout="control" horizontal_field_class="col-md-7" %}
+                        {% bootstrap_field form.limit_sales_channels layout="control" horizontal_field_class="col-md-7" %}
                         {% bootstrap_field form.available_from visibility_field=form.available_from_mode layout="control_with_visibility"  %}
                         {% bootstrap_field form.available_until visibility_field=form.available_until_mode layout="control_with_visibility" %}
                         {% bootstrap_field form.max_per_order layout="control" horizontal_field_class="col-md-7" %}

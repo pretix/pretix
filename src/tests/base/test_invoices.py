@@ -66,7 +66,8 @@ def env():
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
-            total=0, locale='en'
+            total=0, locale='en',
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         tr = event.tax_rules.create(rate=Decimal('19.00'))
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
@@ -442,7 +443,8 @@ def test_invoice_numbers(env):
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0,
-        locale='en'
+        locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     order2.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('0.00'),
                        tax_value=Decimal('0.00'))
@@ -451,7 +453,8 @@ def test_invoice_numbers(env):
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, testmode=True,
-        locale='en'
+        locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     inv1 = generate_invoice(order)
     inv2 = generate_invoice(order)
@@ -519,7 +522,8 @@ def test_invoice_number_prefixes(env):
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0,
-        locale='en'
+        locale='en',
+        sales_channel=event2.organizer.sales_channels.get(identifier="web"),
     )
     order2.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('0.00'),
                        tax_value=Decimal('0.00'))

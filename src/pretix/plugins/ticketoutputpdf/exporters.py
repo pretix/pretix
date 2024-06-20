@@ -223,7 +223,7 @@ class AllTicketsPDF(BaseExporter):
 
                 with language(op.order.locale, o.event.settings.region):
                     layout = o.layout_map.get(
-                        (op.item_id, op.order.sales_channel),
+                        (op.item_id, op.order.sales_channel_id),
                         o.layout_map.get(
                             (op.item_id, 'web'),
                             o.default_layout

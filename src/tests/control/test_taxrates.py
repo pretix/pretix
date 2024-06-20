@@ -116,6 +116,7 @@ class TaxRateFormTest(SoupTest):
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + datetime.timedelta(days=10),
                 total=14, locale='en',
+                sales_channel=self.orga1.sales_channels.get(identifier="web"),
             )
             o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
                           tax_value=Decimal('0.05'), tax_rule=tr)
@@ -135,7 +136,8 @@ class TaxRateFormTest(SoupTest):
                 code='FOO', event=self.event1, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + datetime.timedelta(days=10),
-                total=12, locale='en'
+                total=12, locale='en',
+                sales_channel=self.orga1.sales_channels.get(identifier="web"),
             )
             o.positions.create(
                 item=i, price=12, tax_rule=tr, tax_rate=19, tax_value=12 - 12 / 1.19

@@ -229,7 +229,7 @@ class OrderViewSetMixin:
         if 'customer' not in self.request.GET.getlist('exclude'):
             qs = qs.select_related('customer')
 
-        qs = qs.prefetch_related(self._positions_prefetch(self.request))
+        qs = qs.select_related('sales_channel').prefetch_related(self._positions_prefetch(self.request))
         return qs
 
     def _positions_prefetch(self, request):
@@ -315,6 +315,11 @@ class OrganizerOrderViewSet(OrderViewSetMixin, viewsets.ReadOnlyModelViewSet):
             )
         else:
             raise PermissionDenied()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx
 
 
 class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):

@@ -51,7 +51,10 @@ class WaitingListForm(forms.ModelForm):
             ('', '')
         ]
         items, display_add_to_cart = get_grouped_items(
-            self.event, self.instance.subevent, require_seat=None,
+            self.event,
+            subevent=self.instance.subevent,
+            require_seat=None,
+            channel=self.event.organizer.sales_channels.get(identifier="web"),
             memberships=(
                 customer.usable_memberships(
                     for_event=self.instance.subevent or self.event,

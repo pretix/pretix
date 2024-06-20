@@ -48,7 +48,8 @@ def env():
         code='1Z3AS', event=event, email='admin@localhost',
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=23
+        total=23,
+        sales_channel=o.sales_channels.get(identifier="web"),
     )
     refund = OrderRefund.objects.create(
         order=order,
@@ -74,7 +75,8 @@ def refund_huf(env):
         code='HUFFY', event=event, email='admin@localhost',
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=42
+        total=42,
+        sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
     )
     refund = OrderRefund.objects.create(
         order=order,

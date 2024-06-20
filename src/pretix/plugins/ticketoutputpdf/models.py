@@ -254,7 +254,10 @@ class TicketLayoutItem(models.Model):
     item = models.ForeignKey('pretixbase.Item', null=True, blank=True, related_name='ticketlayout_assignments',
                              on_delete=models.CASCADE)
     layout = models.ForeignKey('TicketLayout', on_delete=models.CASCADE, related_name='item_assignments')
-    sales_channel = models.CharField(max_length=190, default='web')
+    sales_channel = models.ForeignKey(
+        "pretixbase.SalesChannel",
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
         unique_together = (('item', 'layout', 'sales_channel'),)

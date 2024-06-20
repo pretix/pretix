@@ -211,8 +211,12 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
 
                     if validated_data.get('seat'):
                         # Assumption: Add-ons currently can't have seats, thus we only need to check the main product
+                        if validated_data.get('sales_channel'):
+                            sales_channel_id = validated_data.get('sales_channel').identifier
+                        else:
+                            sales_channel_id = "web"
                         if not validated_data['seat'].is_available(
-                            sales_channel=validated_data.get('sales_channel', 'web'),
+                            sales_channel=sales_channel_id,
                             distance_ignore_cart_id=validated_data['cart_id'],
                             ignore_voucher_id=validated_data['voucher'].pk if validated_data.get('voucher') else None,
                         ):

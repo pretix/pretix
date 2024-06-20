@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load static %}
 {% load urlreplace %}
 {% block title %}{% trans "Check-in lists" %}{% endblock %}
 {% block inside %}
@@ -137,9 +138,14 @@
                             {% endif %}
                         {% endif %}
                         <td>
-                            {% for channel in cl.auto_checkin_sales_channels %}
-                                <span class="fa fa-{{ channel.icon }} text-muted"
-                                      data-toggle="tooltip" title="{% trans channel.verbose_name %}"></span>
+                            {% for channel in cl.auto_checkin_sales_channels.all %}
+                                {% if "." in channel.icon %}
+                                    <img src="{% static channel.icon %}" class="fa-like-image"
+                                         data-toggle="tooltip" title="{{ channel.label }}">
+                                {% else %}
+                                    <span class="fa fa-{{ channel.icon }} text-muted"
+                                          data-toggle="tooltip" title="{{ channel.label }}"></span>
+                                {% endif %}
                             {% endfor %}
                         </td>
                         <td>

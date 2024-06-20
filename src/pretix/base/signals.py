@@ -294,12 +294,15 @@ This signal is sent out when a notification is sent.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_sales_channels = django.dispatch.Signal()
+register_sales_channel_types = django.dispatch.Signal()
 """
 This signal is sent out to get all known sales channels types. Receivers should return an
-instance of a subclass of ``pretix.base.channels.SalesChannel`` or a list of such
+instance of a subclass of ``pretix.base.channels.SalesChannelType`` or a list of such
 instances.
 """
+
+
+register_sales_channels = DeprecatedSignal()  # TODO: remove me
 
 register_data_exporters = EventPluginSignal()
 """

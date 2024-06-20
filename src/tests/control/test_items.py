@@ -225,6 +225,7 @@ class QuestionsTest(ItemFormTest):
             o = Order.objects.create(code='FOO', event=self.event1, email='dummy@dummy.test',
                                      status=Order.STATUS_PENDING, datetime=now(),
                                      expires=now() + datetime.timedelta(days=10),
+                                     sales_channel=self.event1.organizer.sales_channels.get(identifier="web"),
                                      total=14, locale='en')
             op = OrderPosition.objects.create(order=o, item=item1, variation=None, price=Decimal("14"),
                                               attendee_name_parts={'full_name': "Peter"})
@@ -616,6 +617,7 @@ class ItemsTest(ItemFormTest):
                 code='FOO', event=self.event1, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + datetime.timedelta(days=10),
+                sales_channel=self.event1.organizer.sales_channels.get(identifier="web"),
                 total=14, locale='en'
             )
             OrderPosition.objects.create(
@@ -661,7 +663,7 @@ class ItemsTest(ItemFormTest):
             assert i_new.require_voucher == i_old.require_voucher
             assert i_new.hide_without_voucher == i_old.hide_without_voucher
             assert i_new.allow_cancel == i_old.allow_cancel
-            assert i_new.sales_channels == i_old.sales_channels
+            assert set(i_new.limit_sales_channels.all()) == set(i_old.limit_sales_channels.all())
             assert i_new.meta_data == i_old.meta_data == {"Foo": "Bar"}
             assert set(i_new.questions.all()) == set(i_old.questions.all())
             assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])

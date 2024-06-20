@@ -92,6 +92,7 @@ class BaseOrdersTest(TestCase):
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
             total=Decimal("23"),
+            sales_channel=self.orga.sales_channels.get(identifier="web"),
             locale='en'
         )
         self.ticket_pos = OrderPosition.objects.create(
@@ -1349,12 +1350,12 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         self._assert_ws2a_not_allowed()
 
     def test_forbidden_sales_channel(self):
-        self.workshop2.sales_channels = ['pretixpos']
+        self.workshop2.all_sales_channels = False
         self.workshop2.save()
         self._assert_ws2a_not_allowed()
 
     def test_forbidden_var_sales_channel(self):
-        self.workshop2a.sales_channels = ['pretixpos']
+        self.workshop2a.all_sales_channels = False
         self.workshop2a.save()
         self._assert_ws2a_not_allowed()
 

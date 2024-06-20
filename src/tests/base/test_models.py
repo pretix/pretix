@@ -118,6 +118,7 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.items.add(self.item1)
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
@@ -131,6 +132,7 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item2, variation=self.var1, price=2)
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_GONE, 0))
@@ -140,12 +142,14 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.items.add(self.item1)
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
         order = Order.objects.create(event=self.event, status=Order.STATUS_PENDING,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
@@ -168,6 +172,7 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item2, variation=self.var1, price=2)
 
@@ -180,6 +185,7 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.save()
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=4)
         op = OrderPosition.objects.create(order=order, item=self.item1, price=2)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 2))
@@ -194,12 +200,14 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.save()
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 2))
 
         order = Order.objects.create(event=self.event, status=Order.STATUS_PENDING,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=4)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
@@ -246,6 +254,7 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.quota.items.add(self.item1)
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=2)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
@@ -589,6 +598,7 @@ class QuotaTestCase(BaseQuotaTestCase):
         # Create orders
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      total=6)
         OrderPosition.objects.create(order=order, item=self.item1, price=2)
         OrderPosition.objects.create(order=order, item=self.item1, price=2, blocked=["foo"])
@@ -610,12 +620,14 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         # Create orders
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      expires=now() + timedelta(days=3),
                                      total=6)
         OrderPosition.objects.create(order=order, item=self.item1, subevent=se1, price=2)
         OrderPosition.objects.create(order=order, item=self.item1, subevent=se1, price=2)
         OrderPosition.objects.create(order=order, item=self.item1, subevent=se2, price=2)
         order = Order.objects.create(event=self.event, status=Order.STATUS_PENDING,
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      expires=now() + timedelta(days=3),
                                      total=8)
         OrderPosition.objects.create(order=order, item=self.item1, subevent=se1, price=2)
@@ -686,6 +698,7 @@ class CheckinQuotaTestCase(BaseQuotaTestCase):
         self.quota.items.add(self.item1)
         self.cl = self.event.checkin_lists.create(name="Test", allow_entry_after_exit=False)
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
+                                     sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                                      expires=now() + timedelta(days=3),
                                      total=4)
         self.op = OrderPosition.objects.create(order=order, item=self.item1, price=2)
@@ -1071,14 +1084,18 @@ class VoucherTestCase(BaseQuotaTestCase):
 
         order = Order.objects.create(
             status=Order.STATUS_PENDING, event=self.event,
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             datetime=now() - timedelta(days=5), expires=now() + timedelta(days=5), total=46,
         )
-        OrderPosition.objects.create(order=order, item=self.item1, voucher=v, price=Decimal('20.00'),
-                                     voucher_budget_use=Decimal('3.00'))
+        OrderPosition.objects.create(
+            order=order, item=self.item1, voucher=v, price=Decimal('20.00'),
+            voucher_budget_use=Decimal('3.00')
+        )
         assert v.budget_used() == Decimal('3.00')
 
         order = Order.objects.create(
             status=Order.STATUS_PAID, event=self.event,
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             datetime=now() - timedelta(days=5), expires=now() + timedelta(days=5), total=46,
         )
         OrderPosition.objects.create(order=order, item=self.item1, voucher=v, price=Decimal('20.00'),
@@ -1095,6 +1112,7 @@ class OrderTestCase(BaseQuotaTestCase):
                 status=Order.STATUS_PENDING, event=self.event,
                 datetime=now() - timedelta(days=5),
                 expires=now() + timedelta(days=5), total=46,
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             )
             self.quota.items.add(self.item1)
             self.op1 = OrderPosition.objects.create(order=self.order, item=self.item1,
@@ -2079,7 +2097,9 @@ class ItemTest(TestCase):
         i = Item.objects.create(
             event=self.event, name="Ticket", default_price=23,
             active=True, available_until=now() + timedelta(days=1),
+            all_sales_channels=False,
         )
+        i.limit_sales_channels.add(self.o.sales_channels.get(identifier="web"))
         assert Item.objects.filter_available().exists()
         assert not Item.objects.filter_available(channel='foo').exists()
 
@@ -2300,10 +2320,12 @@ class EventTest(TestCase):
     def test_active_quotas_annotation(self):
         event = Event.objects.create(
             organizer=self.organizer, name='Download', slug='download',
-            date_from=now()
+            date_from=now(),
         )
         q = Quota.objects.create(event=event, name='Quota', size=2)
-        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True)
+        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True,
+                                   all_sales_channels=False)
+        item.limit_sales_channels.add(self.organizer.sales_channels.get(identifier="web"))
         item2 = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=False)
         q.items.add(item)
         q.items.add(item2)
@@ -2407,8 +2429,9 @@ class EventTest(TestCase):
         )
         q = Quota.objects.create(event=event, name='Quota', size=2)
         item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True)
-        v = item.variations.create(value="foo")
+        v = item.variations.create(value="foo", all_sales_channels=False)
         item.variations.create(value="bar")
+        v.limit_sales_channels.add(self.organizer.sales_channels.get(identifier="web"))
         q.items.add(item)
         q.variations.add(v)
         assert Event.annotated(Event.objects).first().active_quotas == [q]
@@ -2475,7 +2498,9 @@ class SubEventTest(TestCase):
     def test_active_quotas_annotation(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2,
                                  subevent=self.se)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                   all_sales_channels=False)
+        item.limit_sales_channels.add(self.organizer.sales_channels.get(identifier="web"))
         q.items.add(item)
         assert SubEvent.annotated(SubEvent.objects).first().active_quotas == [q]
         assert SubEvent.annotated(SubEvent.objects, 'foo').first().active_quotas == []
@@ -2497,6 +2522,7 @@ class SubEventTest(TestCase):
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
         o = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test',
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             status=Order.STATUS_PAID,
             datetime=now(), expires=now() + timedelta(days=10),
             total=Decimal("30"), locale='en'
@@ -2594,6 +2620,7 @@ class CheckinListTestCase(TestCase):
             self.cl_tickets.limit_products.add(self.item1)
             o = Order.objects.create(
                 code='FOO1', event=self.event, email='dummy@dummy.test',
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                 status=Order.STATUS_PAID,
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal("30"), locale='en'
@@ -2621,6 +2648,7 @@ class CheckinListTestCase(TestCase):
 
             o = Order.objects.create(
                 code='FOO2', event=self.event, email='dummy@dummy.test',
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal("30"), locale='en'
@@ -2687,6 +2715,7 @@ class SeatingTestCase(TestCase):
     def test_blocked_in_proximity(self):
         o = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             locale='en', status=Order.STATUS_PENDING, datetime=now(),
             expires=now() + timedelta(days=10),
         )
@@ -2709,6 +2738,7 @@ class SeatingTestCase(TestCase):
     def test_order_pending(self):
         o = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             locale='en', status=Order.STATUS_PENDING, datetime=now(),
             expires=now() + timedelta(days=10),
         )
@@ -2723,6 +2753,7 @@ class SeatingTestCase(TestCase):
     def test_order_paid(self):
         o = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             locale='en', status=Order.STATUS_PAID, datetime=now(),
             expires=now() + timedelta(days=10),
         )
@@ -2737,6 +2768,7 @@ class SeatingTestCase(TestCase):
     def test_order_expired(self):
         o = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             locale='en', status=Order.STATUS_EXPIRED, datetime=now(),
             expires=now() + timedelta(days=10),
         )
@@ -2772,6 +2804,7 @@ class SeatingTestCase(TestCase):
         self.seat_a1.save()
         o = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             locale='en', status=Order.STATUS_PAID, datetime=now(),
             expires=now() + timedelta(days=10),
         )
@@ -2789,6 +2822,7 @@ class SeatingTestCase(TestCase):
         self.seat_a1.save()
         o = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             locale='en', status=Order.STATUS_CANCELED, datetime=now(),
             expires=now() + timedelta(days=10),
         )
@@ -2982,9 +3016,15 @@ def test_subevent_date_updates_order_date():
         se1 = event.subevents.create(date_from=now(), name="SE 1")
         se2 = event.subevents.create(date_from=now(), name="SE 2")
 
-        order1 = Order.objects.create(event=event, status=Order.STATUS_PAID, expires=now() + timedelta(days=3), total=6)
+        order1 = Order.objects.create(
+            event=event, status=Order.STATUS_PAID, expires=now() + timedelta(days=3), total=6,
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+        )
         OrderPosition.objects.create(order=order1, item=item1, subevent=se1, price=2)
-        order2 = Order.objects.create(event=event, status=Order.STATUS_PAID, expires=now() + timedelta(days=3), total=6)
+        order2 = Order.objects.create(
+            event=event, status=Order.STATUS_PAID, expires=now() + timedelta(days=3), total=6,
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+        )
         OrderPosition.objects.create(order=order2, item=item1, subevent=se2, price=2)
 
         o1lm = order1.last_modified

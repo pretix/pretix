@@ -69,6 +69,7 @@ def order(event, item):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         total=14, locale='en'
     )
     event.settings.set('attendee_names_asked', True)

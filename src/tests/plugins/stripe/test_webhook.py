@@ -49,6 +49,7 @@ def env():
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
         total=Decimal('13.37'),
+        sales_channel=o.sales_channels.get(identifier="web"),
     )
     return event, o1
 

@@ -50,6 +50,7 @@ def env():
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
         total=Decimal('43.59'),
+        sales_channel=o.sales_channels.get(identifier="web"),
     )
     o1.payments.create(
         amount=o1.total,

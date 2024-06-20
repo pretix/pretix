@@ -160,6 +160,7 @@ def order(event):
         status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
         datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
         expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         total=23, locale='en'
     )
 

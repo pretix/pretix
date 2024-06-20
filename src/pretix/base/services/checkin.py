@@ -1159,7 +1159,7 @@ def order_placed(sender, **kwargs):
     order = kwargs['order']
     event = sender
 
-    cls = list(event.checkin_lists.filter(auto_checkin_sales_channels__contains=order.sales_channel).prefetch_related(
+    cls = list(event.checkin_lists.filter(auto_checkin_sales_channels=order.sales_channel).prefetch_related(
         'limit_products'))
     if not cls:
         return

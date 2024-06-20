@@ -120,7 +120,7 @@
         <div class="clearfix"></div>
     </div>
     {% if request.event.testmode %}
-        {% if request.sales_channel.testmode_supported %}
+        {% if request.sales_channel.type_instance.testmode_supported %}
             <div class="alert alert-warning">
                 <p><strong>
                     <span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
@@ -194,7 +194,7 @@
         </div>
     {% endif %}
     {% if request.event.testmode %}
-        {% if request.sales_channel.testmode_supported %}
+        {% if request.sales_channel.type_instance.testmode_supported %}
             <div class="alert alert-testmode alert-warning">
                 <p><strong>
                     <span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>

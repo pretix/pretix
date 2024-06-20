@@ -46,7 +46,9 @@ from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext_lazy as _
+from django_scopes import ScopedManager, scope
 from i18nfield.fields import I18nCharField
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.models.base import LoggedModel
 from pretix.base.validators import OrganizerSlugBanlistValidator
@@ -104,6 +106,8 @@ class Organizer(LoggedModel):
         if is_new:
             kwargs.pop('update_fields', None)  # does not make sense here
             self.set_defaults()
+            with scope(organizer=self):
+                self.create_default_sales_channels()
         else:
             self.get_cache().clear()
         return obj
@@ -211,6 +215,24 @@ class Organizer(LoggedModel):
                                   fail_silently=False, timeout=timeout)
         else:
             return get_connection(fail_silently=False)
+
+    def create_default_sales_channels(self):
+        from pretix.base.channels import get_all_sales_channel_types
+
+        i = 0
+        for channel in get_all_sales_channel_types().values():
+            if not channel.default_created:
+                continue
+
+            self.sales_channels.get_or_create(
+                identifier=channel.identifier,
+                defaults={
+                    'label': LazyI18nString.from_gettext(channel.verbose_name),
+                    'type': channel.identifier,
+                },
+                position=i
+            )
+            i += 1
 
 
 def generate_invite_token():
@@ -504,3 +526,58 @@ class OrganizerFooterLink(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.organizer.cache.clear()
+
+
+class SalesChannel(LoggedModel):
+    organizer = models.ForeignKey('Organizer', on_delete=models.CASCADE, related_name='sales_channels')
+    label = I18nCharField(
+        max_length=200,
+        verbose_name=_("Name"),
+    )
+    identifier = models.CharField(
+        verbose_name=_("Identifier"),
+        max_length=200,
+        validators=[
+            RegexValidator(
+                regex=r"^[a-zA-Z0-9.\-_]+$",
+                message=_("The identifier may only contain letters, numbers, dots, dashes, and underscores."),
+            ),
+        ],
+    )
+    type = models.CharField(
+        verbose_name=_("Type"),
+        max_length=200,
+    )
+    position = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Position")
+    )
+    configuration = models.JSONField(default=dict)
+
+    objects = ScopedManager(organizer="organizer")
+
+    class Meta:
+        ordering = ("position", "type", "identifier", "id")
+        unique_together = ("organizer", "identifier")
+
+    def __str__(self):
+        return str(self.label)
+
+    @cached_property
+    def type_instance(self):
+        from ..channels import get_all_sales_channel_types
+
+        types = get_all_sales_channel_types()
+        return types[self.type]
+
+    @property
+    def icon(self):
+        return self.type_instance.icon
+
+    def allow_delete(self):
+        from . import Order
+
+        if self.type_instance.default_created:
+            return False
+
+        return not Order.objects.filter(sales_channel=self).exists()
