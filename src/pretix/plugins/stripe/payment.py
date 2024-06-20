@@ -1961,7 +1961,7 @@ class StripeTwint(StripeRedirectMethod):
     )
 
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
-        return super().is_allowed(request, total) and request.event.currency == "CHF" and total < Decimal("5000.00")
+        return super().is_allowed(request, total) and request.event.currency == "CHF" and total <= Decimal("5000.00")
 
     def _payment_intent_kwargs(self, request, payment):
         return {
