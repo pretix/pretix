@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
 "PO-Revision-Date: 2024-06-20 15:00+0000\n"
-"Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
+"Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -530,10 +530,8 @@ msgstr ""
 "inklusive ändringar av kapslade objekt som varianter eller paket)"
 
 #: pretix/api/webhooks.py:339
-#, fuzzy
-#| msgid "Shop is live"
 msgid "Shop taken live"
-msgstr "Shoppen är live"
+msgstr "Shoppen är nu live"
 
 #: pretix/api/webhooks.py:343
 msgid "Shop taken offline"
@@ -750,11 +748,9 @@ msgstr "Svar på frågor om filuppladdning"
 #: pretix/base/exporters/orderlist.py:1213
 #: pretix/plugins/reports/exporters.py:478
 #: pretix/plugins/reports/exporters.py:651
-#, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Order data"
-msgstr "Beställningsdata"
+msgstr "Orderdata"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
