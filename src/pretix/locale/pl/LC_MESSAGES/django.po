@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
 "PO-Revision-Date: 2024-06-22 05:00+0000\n"
-"Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
+"Last-Translator: Maciej Szymczak <maciej+github@szymczak.at>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -595,7 +595,7 @@ msgstr "Wprowadź kod pocztowy w formacie XXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr "Wprowadź kod pocztowy w formacie XXXX."
+msgstr "Wprowadź kod pocztowy w formacie XX-XXX."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
