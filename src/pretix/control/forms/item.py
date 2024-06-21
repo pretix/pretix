@@ -106,7 +106,7 @@ class CategoryForm(I18nModelForm):
                 _('Combined category'), _('Products in this category are regular products displayed on the front page, '
                                           'but are additionally shown in the cross-selling step, according to the configuration below.'))),),
         ))
-        self.fields['category_type'].initial = 'addon' if self.instance.is_addon else (self.instance.cross_selling_mode or 'normal')
+        self.fields['category_type'].initial = self.instance.category_type
 
         self.fields['cross_selling_condition'].widget.attrs['data-display-dependency'] = '#id_category_type_2,#id_category_type_3'
         self.fields['cross_selling_condition'].widget.attrs['data-disable-dependent'] = 'true'
@@ -131,14 +131,7 @@ class CategoryForm(I18nModelForm):
         if d.get('category_type') == 'only' or d.get('category_type') == 'both':
             if not d.get('cross_selling_condition'):
                 raise ValidationError({'cross_selling_condition': [_('This field is required')]})
-            self.instance.cross_selling_mode = d.get('category_type')
-        else:
-            self.instance.cross_selling_mode = None
-        if d.get('category_type') == 'only' or d.get('category_type') == 'both' or d.get('category_type') == 'normal':
-            self.instance.is_addon = False
-        elif d.get('category_type') == 'addon':
-            self.instance.is_addon = True
-            d['category_type'] = 'normal'
+        self.instance.category_type = d.get('category_type')
         return d
 
 
