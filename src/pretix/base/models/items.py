@@ -220,21 +220,31 @@ class ItemCategory(LoggedModel):
 
     def __str__(self):
         name = self.internal_name or self.name
-        if self.is_addon:
-            return _('{category} (Add-On products)').format(category=str(name))
-        if self.cross_selling_mode is not None:
-            return _('{category} ({category_type})').format(category=str(name), category_type=self.get_cross_selling_mode_display())
+        category_type = self.get_category_type_display()
+        if category_type:
+            return _('{category} ({category_type})').format(category=str(name), category_type=category_type)
         return str(name)
 
     def get_category_type_display(self):
         if self.is_addon:
             return _('Add-On products')
+        elif self.cross_selling_mode:
+            return self.get_cross_selling_mode_display()
         else:
             return None
 
     @property
     def category_type(self):
-        return 'addon' if self.is_addon else 'normal'
+        return 'addon' if self.is_addon else self.cross_selling_mode or 'normal'
+
+    @category_type.setter
+    def category_type(self, new_value):
+        if new_value == 'addon':
+            self.is_addon = True
+            self.cross_selling_mode = None
+        else:
+            self.is_addon = False
+            self.cross_selling_mode = None if new_value == 'normal' else new_value
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

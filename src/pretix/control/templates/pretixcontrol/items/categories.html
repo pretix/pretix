@@ -42,11 +42,7 @@
                             <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.internal_name|default:c.name }}</a></strong>
                         </td>
                         <td>
-                            {% if c.is_addon %}{% trans "Add-on product category" %}
-                            {% elif c.cross_selling_mode is None %}{% trans "Normal category" %}
-                            {% elif c.cross_selling_mode == 'both' %}{% trans "Combined category" %}
-                            {% elif c.cross_selling_mode == 'only' %}{% trans "Cross-selling category" %}
-                            {% endif %}
+                            {{ c.get_category_type_display }}
                         </td>
                         <td class="text-right flip">
                             <button title="{% trans "Move up" %}" formaction="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
