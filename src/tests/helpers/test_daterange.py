@@ -76,9 +76,11 @@ def test_same_day_spanish_es_MX():
 
 
 def test_grep_locales():
-    import os
+    import os,sys
+    print("path",sys.path)
     os.system("grep -IR febrero /opt/hostedtoolcache/Python/3.11.9/x64")
     os.system("grep -IR Febrero /opt/hostedtoolcache/Python/3.11.9/x64")
+    assert True == False
 
 
 def test_same_day_other_lang():
