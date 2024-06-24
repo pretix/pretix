@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-24 15:12+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2024-06-25 01:00+0000\n"
+"Last-Translator: Reece Needham <nouveaureece@protonmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/es/>\n"
 "Language: es\n"
@@ -31,24 +31,24 @@ msgstr "Comentario:"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
 msgid "Venmo"
-msgstr ""
+msgstr "Venmo"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
 #: pretix/static/pretixpresale/js/walletdetection.js:38
 msgid "Apple Pay"
-msgstr ""
+msgstr "Apple Pay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:37
 msgid "Itaú"
-msgstr ""
+msgstr "Itaú"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
 msgid "PayPal Credit"
-msgstr ""
+msgstr "PayPal Credit"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
 msgid "Credit Card"
@@ -56,81 +56,79 @@ msgstr "Tarjeta de crédito"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
 msgid "PayPal Pay Later"
-msgstr ""
+msgstr "PayPal Paga Después"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "adeudo directo SEPA"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
-#, fuzzy
-#| msgid "Yes"
 msgid "eps"
-msgstr "Sí"
+msgstr "EPS"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
 msgid "MyBank"
-msgstr ""
+msgstr "MyBank"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
 msgid "Verkkopankki"
-msgstr ""
+msgstr "Netbank (Verkkopankki)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
 msgid "PayU"
-msgstr ""
+msgstr "PayU"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
 msgid "BLIK"
-msgstr ""
+msgstr "BLIK"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
 msgid "Trustly"
-msgstr ""
+msgstr "Trustly"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
 msgid "Zimpler"
-msgstr ""
+msgstr "Zimpler"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
 msgid "Maxima"
-msgstr ""
+msgstr "Maxima"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
 msgid "OXXO"
-msgstr ""
+msgstr "OXXO"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
 msgid "Boleto"
-msgstr ""
+msgstr "Boleto Bancário"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
 msgid "Mercado Pago"
-msgstr ""
+msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
@@ -148,7 +146,7 @@ msgstr "Confirmando el pago…"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:254
 msgid "Payment method unavailable"
-msgstr ""
+msgstr "Forma de pago no disponible"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -239,11 +237,11 @@ msgstr "Cancelado"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Confirmed"
-msgstr ""
+msgstr "Confirmado"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Approval pending"
-msgstr ""
+msgstr "Autorización pendiente"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
@@ -312,11 +310,11 @@ msgstr "Orden cancelada"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "El código de la entrada es ambiguo en la lista"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
-msgstr ""
+msgstr "Pedido no aprobado"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Checked-in Tickets"
@@ -442,7 +440,7 @@ msgstr "está después"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
 msgid "="
-msgstr ""
+msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
@@ -462,11 +460,11 @@ msgstr "Fecha y hora actual"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr ""
+msgstr "Día de la semana actual (1 = lunes, 7 = domingo)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Current entry status"
-msgstr ""
+msgstr "Estatus de la entrada actual"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
@@ -477,40 +475,32 @@ msgid "Number of previous entries since midnight"
 msgstr "Número de entradas previas desde medianoche"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries since"
-msgstr "Número de entradas previas"
+msgstr "Número de entradas desde"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries before"
-msgstr "Número de entradas previas"
+msgstr "Número de entradas antes de"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
 msgstr "Número de días con una entrada previa"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry since"
-msgstr "Número de días con una entrada previa"
+msgstr "Número de días con una entrada desde"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry before"
-msgstr "Número de días con una entrada previa"
+msgstr "Número de días con una entrada antes de"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
-msgstr ""
+msgstr "Minutos desde última entrada (-1 para la primera entrada)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
 msgid "Minutes since first entry (-1 on first entry)"
-msgstr ""
+msgstr "Minutos desde la primera entrada (-1 para la primera entrada)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
 msgid "All of the conditions below (AND)"
@@ -554,17 +544,17 @@ msgstr "minutos"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicar"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
 msgctxt "entry_status"
 msgid "present"
-msgstr ""
+msgstr "presente"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
 msgctxt "entry_status"
 msgid "absent"
-msgstr ""
+msgstr "ausente"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
@@ -667,11 +657,11 @@ msgstr "Solamente seleccionados"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:828
 msgid "Enter page number between 1 and %(max)s."
-msgstr ""
+msgstr "Introduce un número de página entre 1 y %(max)s."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:831
 msgid "Invalid page number."
-msgstr ""
+msgstr "Número de página inválido."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:989
 msgid "Use a different name internally"
@@ -719,9 +709,10 @@ msgstr "El carrito de compras ha expirado"
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
-"Los elementos en su carrito de compras se han reservado por {num} minutos."
+"Los elementos en su carrito de compras se han reservado durante un minuto."
 msgstr[1] ""
-"Los elementos en su carrito de compras se han reservado por {num} minutos."
+"Los elementos en su carrito de compras se han reservado durante {num} "
+"minutos."
 
 #: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -754,49 +745,44 @@ msgstr "Su hora local:"
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
 msgid "Google Pay"
-msgstr ""
+msgstr "Google Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "Cantidad"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Disminuir cantidad"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "Incrementar cantidad"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Precio"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
-#, fuzzy
-#| msgid "Selected only"
 msgctxt "widget"
 msgid "Select"
-msgstr "Solamente seleccionados"
+msgstr "Selecciona"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
-#, fuzzy, javascript-format
-#| msgid "Selected only"
+#, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr "Solamente seleccionados"
+msgstr "Selecciona %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#, fuzzy, javascript-format
-#| msgctxt "widget"
-#| msgid "See variations"
+#, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr "Ver variaciones"
+msgstr "Selecciona variaciones %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -860,25 +846,19 @@ msgid "Only available with a voucher"
 msgstr "Solo disponible mediante voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Not yet available"
-msgstr "disponible actualmente: %s"
+msgstr "Aún no disponible"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "Ya no disponible"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Currently not available"
-msgstr "disponible actualmente: %s"
+msgstr "No disponible actualmente"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #, javascript-format
@@ -971,20 +951,14 @@ msgid "Continue"
 msgstr "Continuar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Show variants"
-msgstr "Ver variaciones"
+msgstr "Mostrar variantes"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Hide variants"
-msgstr "Ver variaciones"
+msgstr "Occultar variantes"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
@@ -1033,6 +1007,9 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"Unas o todas de las entradas están agotadas. Si quisiera, puedes añadirte a "
+"la lista de espera. Te notificaremos si los asientos estén disponible de "
+"nuevo."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
