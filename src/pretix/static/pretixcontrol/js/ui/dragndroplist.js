@@ -3,7 +3,7 @@ $(function () {
     $("[data-dnd-url]").each(function(){
         const container = $(this),
             url = container.data("dnd-url"),
-            handle = $('<span class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></span>');
+            handle = $('<button type="button" class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></button>');
 
         container.find(".dnd-container").append(handle);
         container.find(".sortable-up, .sortable-down").addClass("sr-only");
