@@ -323,3 +323,13 @@ class TaxRuleLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Tax rule {val}')
     object_link_viewname = 'control:event.settings.tax.edit'
     object_link_argname = 'rule'
+
+
+class NoOpShredderMixin:
+    def shred_pii(self, logentry):
+        pass
+
+
+class ClearDataShredderMixin:
+    def shred_pii(self, logentry):
+        logentry.data = None
