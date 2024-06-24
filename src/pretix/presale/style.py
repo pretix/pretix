@@ -211,8 +211,11 @@ def get_theme_vars_css(obj, widget=False):
         sassrules.append(source_scss)
 
     sassdir = os.path.join(settings.STATIC_ROOT, "pretixbase/scss")
+    sassrule = "\n".join(sassrules)
+    if not sassrule.strip():
+        return ""
     css = sass.compile(
-        string="\n".join(sassrules),
+        string=sassrule,
         include_paths=[sassdir]
     )
     return css

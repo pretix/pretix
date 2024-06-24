@@ -153,7 +153,7 @@ $slider-primary-bottom: var(--pretix-brand-primary-darken-5);
 $slider-secondary-top: var(--pretix-brand-primary-lighten-28-saturate-20);
 $slider-secondary-bottom: var(--pretix-brand-primary-lighten-23-saturate-2);
 
-// The following vars default to $body-bg in bootstrap, which we don't want
+/* The following vars default to $body-bg in bootstrap, which we don't want */
 $nav-tabs-active-link-hover-bg: #FFFFFF;
 $nav-tabs-justified-active-link-border-color: #FFFFFF;
 $thumbnail-bg: #FFFFFF;
