@@ -320,6 +320,7 @@ Tracking
 transaktionale
 Trustly
 Turnover
+TWINT
 txt
 überbuchen
 überbucht

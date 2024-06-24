@@ -148,6 +148,7 @@ TOTP
 transactional
 trustable
 Trustly
+TWINT
 txt
 UID
 uncanceled
