@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-24 15:12+0000\n"
+"PO-Revision-Date: 2024-06-25 01:00+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -26558,11 +26558,15 @@ msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
+"Zwrot {} został zapisany, ale nie został jeszcze w pełni wykonany. Poniżej "
+"możesz oznaczyć go jako zakończony."
 
 #: pretix/control/views/orders.py:1373
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
+"Utworzono nową kartę podarunkową. Możesz teraz wysłać użytkownikowi kod "
+"karty podarunkowej."
 
 #: pretix/control/views/orders.py:1381
 #, fuzzy
@@ -26581,60 +26585,76 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Witaj,\n"
+"\n"
+"Zwróciliśmy Ci {amount} za Twoje zamówienie.\n"
+"\n"
+"Możesz użyć kodu karty podarunkowej {giftcard}, aby zapłacić za przyszłe "
+"zakupy biletów w naszym sklepie.\n"
+"\n"
+"Twój zespół - {event}"
 
 #: pretix/control/views/orders.py:1394
 msgid "The refunds you selected do not match the selected total refund amount."
-msgstr ""
+msgstr "Wybrane zwroty nie są zgodne z wybraną całkowitą kwotą zwrotu."
 
 #: pretix/control/views/orders.py:1522
 msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
 msgstr ""
+"Zamówienie zostało oznaczone jako opłacone, ale nie mogliśmy wysłać "
+"wiadomości potwierdzającej."
 
 #: pretix/control/views/orders.py:1525
 msgid "The payment has been created successfully."
-msgstr ""
+msgstr "Płatność została utworzona pomyślnie."
 
 #: pretix/control/views/orders.py:1539
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
 msgstr ""
+"Zamówienie zostało anulowane. Możesz teraz wybrać, w jaki sposób chcesz "
+"przelać pieniądze z powrotem do użytkownika."
 
 #: pretix/control/views/orders.py:1610 pretix/control/views/orders.py:1614
 msgid "No VAT ID specified."
-msgstr ""
+msgstr "Nie określono identyfikatora VAT."
 
 #: pretix/control/views/orders.py:1618
 msgid "No country specified."
-msgstr ""
+msgstr "Nie określono kraju."
 
 #: pretix/control/views/orders.py:1622
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
+"Identyfikator VAT nie mógł zostać sprawdzony, ponieważ ten kraj nie jest "
+"obsługiwany."
 
 #: pretix/control/views/orders.py:1633
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
+"Identyfikator VAT nie mógł zostać sprawdzony, ponieważ usługa sprawdzania "
+"VAT w kraju jest obecnie niedostępna."
 
 #: pretix/control/views/orders.py:1636
 msgid "This VAT ID is valid."
-msgstr ""
+msgstr "Ten identyfikator VAT jest ważny."
 
 #: pretix/control/views/orders.py:1650 pretix/control/views/orders.py:1683
 msgid "Unknown invoice."
-msgstr ""
+msgstr "Nieznana faktura."
 
 #: pretix/control/views/orders.py:1653
 msgid "Invoices may not be changed after they are created."
-msgstr ""
+msgstr "Faktury nie mogą być zmieniane po ich utworzeniu."
 
 #: pretix/control/views/orders.py:1655 pretix/control/views/orders.py:1686
 msgid "The invoice has already been canceled."
-msgstr ""
+msgstr "Faktura została już anulowana."
 
 #: pretix/control/views/orders.py:1657
 #, fuzzy
@@ -26648,62 +26668,68 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 
 #: pretix/control/views/orders.py:1661 pretix/control/views/orders.py:1688
 msgid "The invoice has been cleaned of personal data."
-msgstr ""
+msgstr "Faktura została oczyszczona z danych osobowych."
 
 #: pretix/control/views/orders.py:1719
 msgid "The email has been queued to be sent."
-msgstr ""
+msgstr "Wiadomość e-mail została umieszczona w kolejce do wysłania."
 
 #: pretix/control/views/orders.py:1743 pretix/presale/views/order.py:1282
 msgid "This invoice has not been found"
-msgstr ""
+msgstr "Ta faktura nie została odnaleziona"
 
 #: pretix/control/views/orders.py:1750 pretix/presale/views/order.py:1289
 msgid "The invoice file is no longer stored on the server."
-msgstr ""
+msgstr "Plik faktury nie jest już przechowywany na serwerze."
 
 #: pretix/control/views/orders.py:1755 pretix/presale/views/order.py:1294
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
 msgstr ""
+"Plik faktury nie został jeszcze wygenerowany, wygenerujemy go teraz. Spróbuj "
+"ponownie za kilka sekund."
 
 #: pretix/control/views/orders.py:1783
 msgid "The payment term has been changed."
-msgstr ""
+msgstr "Termin płatności został zmieniony."
 
 #: pretix/control/views/orders.py:1788 pretix/control/views/orders.py:1845
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
 msgstr ""
+"Nie byliśmy w stanie w pełni przetworzyć żądania, ponieważ serwer był zbyt "
+"zajęty."
 
 #: pretix/control/views/orders.py:1796
 msgid "This action is only allowed for pending orders."
-msgstr ""
+msgstr "Ta czynność jest dozwolona tylko w przypadku zamówień w toku."
 
 #: pretix/control/views/orders.py:1851
 msgid "This action is only allowed for canceled orders."
-msgstr ""
+msgstr "Ta czynność jest dozwolona tylko w przypadku anulowanych zamówień."
 
 #: pretix/control/views/orders.py:2068 pretix/presale/views/order.py:1566
 msgid "An error occurred. Please see the details below."
-msgstr ""
+msgstr "Wystąpił błąd. Sprawdź szczegóły poniżej."
 
 #: pretix/control/views/orders.py:2076
 msgid "The order has been changed and the user has been notified."
-msgstr ""
+msgstr "Zamówienie zostało zmienione, a użytkownik został o tym powiadomiony."
 
 #: pretix/control/views/orders.py:2078 pretix/control/views/orders.py:2212
 #: pretix/control/views/orders.py:2249 pretix/presale/views/order.py:1601
 msgid "The order has been changed."
-msgstr ""
+msgstr "Zamówienie zostało zmienione."
 
 #: pretix/control/views/orders.py:2105 pretix/presale/checkoutflow.py:898
 #: pretix/presale/views/order.py:791 pretix/presale/views/order.py:896
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr ""
+"Wystąpiły trudności z przetworzeniem danych wejściowych. Przejrzyj poniższe "
+"błędy."
 
 #: pretix/control/views/orders.py:2214
 msgid "Nothing about the order had to be changed."
@@ -26873,35 +26899,36 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:787 pretix/control/views/organizer.py:803
 msgid "Invalid invite selected."
-msgstr ""
+msgstr "Wybrano nieprawidłowe zaproszenie."
 
 #: pretix/control/views/organizer.py:796
 msgid "The invite has been revoked."
-msgstr ""
+msgstr "Zaproszenie zostało cofnięte."
 
 #: pretix/control/views/organizer.py:812
 msgid "The invite has been resent."
-msgstr ""
+msgstr "Zaproszenie zostało wysłane ponownie."
 
 #: pretix/control/views/organizer.py:819
 msgid "Invalid token selected."
-msgstr ""
+msgstr "Wybrano nieprawidłowy token."
 
 #: pretix/control/views/organizer.py:829
 msgid "The token has been revoked."
-msgstr ""
+msgstr "Token został unieważniony."
 
 #: pretix/control/views/organizer.py:841
 msgid "Users need to have a pretix account before they can be invited."
 msgstr ""
+"Użytkownicy muszą mieć konto pretix, zanim będą mogli zostać zaproszeni."
 
 #: pretix/control/views/organizer.py:851
 msgid "The new member has been invited to the team."
-msgstr ""
+msgstr "Nowy członek został zaproszony do zespołu."
 
 #: pretix/control/views/organizer.py:866
 msgid "The new member has been added to the team."
-msgstr ""
+msgstr "Nowy członek został dodany do zespołu."
 
 #: pretix/control/views/organizer.py:877
 msgid ""
@@ -26909,28 +26936,34 @@ msgid ""
 "Please copy this secret to a safe place. You will not be able to view it "
 "again here."
 msgstr ""
+"Utworzono nowy token API z następującym kluczem tajnym: {}.\n"
+"Skopiuj ten sekret w bezpieczne miejsce. Nie będzie można go tutaj ponownie "
+"wyświetlić."
 
 #: pretix/control/views/organizer.py:1175
 msgid "This device has been set up successfully."
-msgstr ""
+msgstr "To urządzenie zostało pomyślnie skonfigurowane."
 
 #: pretix/control/views/organizer.py:1203
 msgid "This device currently does not have access."
-msgstr ""
+msgstr "To urządzenie nie ma obecnie dostępu."
 
 #: pretix/control/views/organizer.py:1214
 msgid "Access for this device has been revoked."
-msgstr ""
+msgstr "Dostęp do tego urządzenia został cofnięty."
 
 #: pretix/control/views/organizer.py:1333
 msgid ""
 "All requests will now be scheduled for an immediate attempt. Please allow "
 "for a few minutes before they are processed."
 msgstr ""
+"Wszystkie żądania zostaną teraz zaplanowane do natychmiastowej próby. "
+"Prosimy o odczekanie kilku minut, zanim zostaną one przetworzone."
 
 #: pretix/control/views/organizer.py:1340
 msgid "All unprocessed webhooks have been stopped from retrying."
 msgstr ""
+"Wszystkie nieprzetworzone webhooki zostały zatrzymane przed ponowną próbą."
 
 #: pretix/control/views/organizer.py:1371
 #, fuzzy
@@ -26951,7 +26984,7 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 #: pretix/control/views/organizer.py:1488
 #: pretix/control/views/organizer.py:1525
 msgid "Gift cards are not allowed to have negative values."
-msgstr ""
+msgstr "Karty podarunkowe nie mogą mieć wartości ujemnych."
 
 #: pretix/control/views/organizer.py:1515
 #, fuzzy
@@ -26965,19 +26998,19 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 
 #: pretix/control/views/organizer.py:1522
 msgid "Your input was invalid, please try again."
-msgstr ""
+msgstr "Wprowadzone dane są nieprawidłowe, spróbuj ponownie."
 
 #: pretix/control/views/organizer.py:1540
 msgid "The manual transaction has been saved."
-msgstr ""
+msgstr "Transakcja ręczna została zapisana."
 
 #: pretix/control/views/organizer.py:1582
 msgid "The gift card has been created and can now be used."
-msgstr ""
+msgstr "Karta podarunkowa została utworzona i można z niej korzystać."
 
 #: pretix/control/views/organizer.py:1676
 msgid "All events (that I have access to)"
-msgstr ""
+msgstr "Wszystkie wydarzenia (do których mam dostęp)"
 
 #: pretix/control/views/organizer.py:2041
 #, fuzzy
@@ -27023,6 +27056,8 @@ msgid ""
 "The SSO client has been created. Please note down the following client "
 "secret, it will never be shown again: {secret}"
 msgstr ""
+"Klient SSO został utworzony. Zanotuj następujący sekret klienta, który nigdy "
+"więcej nie zostanie wyświetlony: {secret}"
 
 #: pretix/control/views/organizer.py:2577
 #, python-brace-format
@@ -27030,12 +27065,16 @@ msgid ""
 "Your changes have been saved. Please note down the following client secret, "
 "it will never be shown again: {secret}"
 msgstr ""
+"Zmiany zostały zapisane. Zanotuj następujący sekret klienta, który nigdy "
+"więcej nie zostanie wyświetlony: {secret}"
 
 #: pretix/control/views/organizer.py:2686
 msgid ""
 "We've sent the customer an email with further instructions on resetting your "
 "password."
 msgstr ""
+"Wysłaliśmy klientowi wiadomość e-mail z dalszymi instrukcjami dotyczącymi "
+"resetowania hasła."
 
 #: pretix/control/views/organizer.py:2947
 #, fuzzy
@@ -27044,49 +27083,49 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 
 #: pretix/control/views/pdf.py:83
 msgid "The uploaded PDF file is too large."
-msgstr ""
+msgstr "Przesłany plik PDF jest zbyt duży."
 
 #: pretix/control/views/pdf.py:85
 msgid "The uploaded PDF file is too small."
-msgstr ""
+msgstr "Przesłany plik PDF jest zbyt mały."
 
 #: pretix/control/views/pdf.py:87
 msgid "Please only upload PDF files."
-msgstr ""
+msgstr "Prosimy o przesyłanie wyłącznie plików PDF."
 
 #: pretix/control/views/pdf.py:210
 #, python-brace-format
 msgid "Unfortunately, we were unable to process this PDF file ({reason})."
-msgstr ""
+msgstr "Niestety nie byliśmy w stanie przetworzyć tego pliku PDF ({reason})."
 
 #: pretix/control/views/shredder.py:159
 msgid "The selected data was deleted successfully."
-msgstr ""
+msgstr "Wybrane dane zostały pomyślnie usunięte."
 
 #: pretix/control/views/subevents.py:168 pretix/control/views/subevents.py:513
 msgctxt "subevent"
 msgid "The requested date does not exist."
-msgstr ""
+msgstr "Żądana data nie istnieje."
 
 #: pretix/control/views/subevents.py:172 pretix/control/views/subevents.py:183
 msgctxt "subevent"
 msgid "A date can not be deleted if orders already have been placed."
-msgstr ""
+msgstr "Daty nie można usunąć, jeśli zamówienia zostały już złożone."
 
 #: pretix/control/views/subevents.py:191
 msgctxt "subevent"
 msgid "The selected date has been deleted."
-msgstr ""
+msgstr "Wybrana data została usunięta."
 
 #: pretix/control/views/subevents.py:602
 msgctxt "subevent"
 msgid "The new date has been created."
-msgstr ""
+msgstr "Nowa data została utworzona."
 
 #: pretix/control/views/subevents.py:668
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
-msgstr ""
+msgstr "Wybrane daty zostały wyłączone."
 
 #: pretix/control/views/subevents.py:678
 #, fuzzy
@@ -27097,20 +27136,20 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 #: pretix/control/views/subevents.py:701
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
-msgstr ""
+msgstr "Wybrane daty zostały usunięte lub wyłączone."
 
 #: pretix/control/views/subevents.py:882
 msgid "Please do not create more than 100.000 dates at once."
-msgstr ""
+msgstr "Nie należy tworzyć więcej niż 100 000 dat jednocześnie."
 
 #: pretix/control/views/subevents.py:1024
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr ""
+msgstr "Zostało utworzone {} nowych dat."
 
 #: pretix/control/views/typeahead.py:92
 msgid "Series:"
-msgstr ""
+msgstr "Seria:"
 
 #: pretix/control/views/typeahead.py:115
 #, fuzzy
@@ -27123,27 +27162,30 @@ msgstr "Voucher {}"
 
 #: pretix/control/views/user.py:162
 msgid "The password you entered was invalid, please try again."
-msgstr ""
+msgstr "Wprowadzone hasło było nieprawidłowe, spróbuj ponownie."
 
 #: pretix/control/views/user.py:349
 msgid "Security devices are only available if pretix is served via HTTPS."
 msgstr ""
+"Urządzenia zabezpieczające są dostępne tylko wtedy, gdy pretix jest "
+"obsługiwany przez HTTPS."
 
 #: pretix/control/views/user.py:386
 msgid "A two-factor authentication device has been removed from your account."
 msgstr ""
+"Urządzenie do uwierzytelniania dwuskładnikowego zostało usunięte z konta."
 
 #: pretix/control/views/user.py:397
 msgid "The device has been removed."
-msgstr ""
+msgstr "Urządzenie zostało usunięte."
 
 #: pretix/control/views/user.py:462
 msgid "This security device is already registered."
-msgstr ""
+msgstr "To urządzenie zabezpieczające jest już zarejestrowane."
 
 #: pretix/control/views/user.py:481 pretix/control/views/user.py:542
 msgid "A new two-factor authentication device has been added to your account."
-msgstr ""
+msgstr "Do konta dodano nowe urządzenie do uwierzytelniania dwuskładnikowego."
 
 #: pretix/control/views/user.py:497 pretix/control/views/user.py:557
 msgid ""
@@ -27151,6 +27193,9 @@ msgid ""
 "account using the buttons below to make a second factor required for logging "
 "into your account."
 msgstr ""
+"Pamiętaj, że nadal musisz włączyć uwierzytelnianie dwuskładnikowe dla "
+"swojego konta za pomocą poniższych przycisków, aby drugi składnik był "
+"wymagany do zalogowania się na konto."
 
 #: pretix/control/views/user.py:500 pretix/control/views/user.py:560
 msgid "The device has been verified and can now be used."
@@ -27158,13 +27203,15 @@ msgstr "Urządzenie zostało zweryfikowane i może być teraz używane."
 
 #: pretix/control/views/user.py:503
 msgid "The registration could not be completed. Please try again."
-msgstr ""
+msgstr "Rejestracja nie mogła zostać ukończona. Spróbuj ponownie."
 
 #: pretix/control/views/user.py:563
 msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
 msgstr ""
+"Wprowadzony kod był nieprawidłowy. Jeśli problem nie ustąpi, sprawdź, czy "
+"data i godzina w telefonie są prawidłowo skonfigurowane."
 
 #: pretix/control/views/user.py:583
 msgid "You have left all teams that require two-factor authentication."
