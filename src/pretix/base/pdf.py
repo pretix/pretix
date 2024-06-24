@@ -1024,7 +1024,10 @@ class Renderer:
         while True:
             p, ad, lineheight = self._text_paragraph(op, order, o, override_fontsize=fontsize)
             w, h = p.wrapOn(canvas, width, 1000 * mm)
-            actual_w = max(p.getActualLineWidths0())
+            widths = p.getActualLineWidths0()
+            if not widths:
+                break
+            actual_w = max(widths)
             if not o.get('autoresize', False) or (h <= height and actual_w <= width) or fontsize <= 1.0:
                 break
             if h > height:  # we can do larger steps for height
