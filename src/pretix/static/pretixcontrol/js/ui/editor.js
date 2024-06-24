@@ -71,7 +71,7 @@ fabric.Textcontainer = fabric.util.createClass(fabric.Rect, {
 
     _internalTextbox: function () {
         var fontSize = parseFloat(this.fontSize);
-        var text = this.text.replace("-", "-\u200B");
+        var text = (this.text || "").replace("-", "-\u200B");
         while (true) {
             var tmptext = new fabric.Textbox(text, {
                 _wordJoiners: /[ \t\r\u200B]/u,
@@ -656,8 +656,18 @@ var editor = {
             $("#toolbox").find("button[data-action=top]").toggleClass('active', o.verticalAlign === 'top' || !o.verticalAlign);
             $("#toolbox").find("button[data-action=middle]").toggleClass('active', o.verticalAlign === 'middle');
             $("#toolbox").find("button[data-action=bottom]").toggleClass('active', o.verticalAlign === 'bottom');
-            $("#toolbox-width").val(editor._px2mm(o.width).toFixed(2));
+
+            if (o.scaleY !== 1 || o.scaleX !== 1) {
+                o.set({
+                    height: o.height * o.scaleY,
+                    width: o.width * o.scaleX,
+                    scaleX: 1,
+                    scaleY: 1
+                });
+            }
+
             $("#toolbox-height").val(editor._px2mm(o.height).toFixed(2));
+            $("#toolbox-width").val(editor._px2mm(o.width).toFixed(2));
             $("#toolbox-textrotation").val((o.angle || 0.0).toFixed(1));
         } else if (o.type === "text" || o.type === "textarea") {
             var col = (new fabric.Color(o.fill))._source;
@@ -953,15 +963,18 @@ var editor = {
             width: 300,
             height: 20,
             lockRotation: false,
-            fill: '#666',
+            fill: '#000',
             content: 'event_name',
+            text: editor._get_text_sample('event_name'),
             fontFamily: 'Open Sans',
+            fontStyle: 'normal',
             lineHeight: 1,
             editable: false,
             fontSize: editor._pt2px(13),
             verticalAlign: 'middle',
-            align: 'left',
+            textAlign: 'left',
             splitLongWords: true,
+            autoResize: true,
         });
         rect.setControlsVisibility({
             'tr': true,
