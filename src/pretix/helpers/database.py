@@ -64,7 +64,8 @@ def casual_reads():
 
 class GroupConcat(Aggregate):
     function = 'group_concat'
-    template = '%(function)s(%(field)s, "%(separator)s")'
+    template = '%(function)s(%(distinct)s%(field)s, "%(separator)s")'
+    allow_distinct = True
 
     def __init__(self, *expressions, ordered=False, **extra):
         self.ordered = ordered
@@ -73,19 +74,17 @@ class GroupConcat(Aggregate):
             extra.update({'separator': ','})
         super().__init__(*expressions, **extra)
 
-    def as_postgresql(self, compiler, connection):
+    def as_postgresql(self, compiler, connection, **extra_context):
         if self.ordered:
-            return super().as_sql(
-                compiler, connection,
-                function='string_agg',
-                template="%(function)s(%(field)s::text, '%(separator)s' ORDER BY %(field)s ASC)",
-            )
+            template = "%(function)s(%(distinct)s%(field)s::text, '%(separator)s' ORDER BY %(field)s::text ASC)"
         else:
-            return super().as_sql(
-                compiler, connection,
-                function='string_agg',
-                template="%(function)s(%(field)s::text, '%(separator)s')",
-            )
+            template = "%(function)s(%(distinct)s%(field)s::text, '%(separator)s')"
+        return super().as_sql(
+            compiler, connection,
+            function='string_agg',
+            template=template,
+            **extra_context,
+        )
 
 
 class ReplicaRouter:

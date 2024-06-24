@@ -37,6 +37,7 @@ from decimal import Decimal
 from zoneinfo import ZoneInfo
 
 from django import forms
+from django.conf import settings
 from django.db.models import (
     Case, CharField, Count, DateTimeField, F, IntegerField, Max, Min, OuterRef,
     Q, Subquery, Sum, When,
@@ -54,7 +55,7 @@ from openpyxl.comments import Comment
 from openpyxl.styles import Font, PatternFill
 
 from pretix.base.models import (
-    GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
+    Checkin, GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
     OrderPosition, Question,
 )
 from pretix.base.models.orders import (
@@ -541,6 +542,22 @@ class OrderListExporter(MultiSheetListExporter):
         ).order_by()
         qs = base_qs.annotate(
             payment_providers=Subquery(p_providers, output_field=CharField()),
+            checked_in_lists=Subquery(
+                Checkin.objects.filter(
+                    successful=True,
+                    type=Checkin.TYPE_ENTRY,
+                    position=OuterRef("pk"),
+                ).order_by().values("position").annotate(
+                    c=GroupConcat(
+                        "list__name",
+                        # These appear not to work properly on SQLite. Well, we don't support SQLite outside testing
+                        # anyways.
+                        ordered='sqlite' not in settings.DATABASES['default']['ENGINE'],
+                        distinct='sqlite' not in settings.DATABASES['default']['ENGINE'],
+                        delimiter=", "
+                    )
+                ).values("c")
+            ),
         ).select_related(
             'order', 'order__invoice_address', 'order__customer', 'item', 'variation',
             'voucher', 'tax_rule'
@@ -638,6 +655,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Sales channel'), _('Order locale'),
             _('E-mail address verified'),
             _('External customer ID'),
+            _('Check-in lists'),
             _('Payment providers'),
         ]
 
@@ -776,6 +794,7 @@ class OrderListExporter(MultiSheetListExporter):
                     _('Yes') if order.email_known_to_work else _('No'),
                     str(order.customer.external_identifier) if order.customer and order.customer.external_identifier else '',
                 ]
+                row.append(op.checked_in_lists or "")
                 row.append(', '.join([
                     str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
                     if p and p != 'free'
