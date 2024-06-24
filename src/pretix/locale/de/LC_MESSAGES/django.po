@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-18 20:00+0000\n"
-"Last-Translator: Thilo-Alexander Ginkel <tg@tgbyte.de>\n"
+"PO-Revision-Date: 2024-06-24 08:52+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -35,7 +35,7 @@ msgstr "Arabisch"
 
 #: pretix/_base_settings.py:82
 msgid "Catalan"
-msgstr ""
+msgstr "Katalanisch"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (simplified)"
@@ -115,7 +115,7 @@ msgstr "Russisch"
 
 #: pretix/_base_settings.py:102
 msgid "Slovak"
-msgstr ""
+msgstr "Slowakisch"
 
 #: pretix/_base_settings.py:103
 msgid "Spanish"
@@ -3089,12 +3089,15 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
+"Es ist ein Fehler in Ihrer Platzhalter-Syntax. Bitte prüfen Sie, dass die "
+"öffnenden \"{\" und schließenden \"}\" geschweiften Klammern zusammenpassen. "
+"Um die geschweiften Klammern \"{\" und \"}\" im erzeugten Text zu verwenden, "
+"müssen sie doppelt gesetzt werden als \"{{\" und \"}}\"."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:771
-#, fuzzy, python-format
-#| msgid "Invalid placeholder(s): %(value)s"
+#, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr "Ungültige(r) Platzhalter: %(value)s"
+msgstr "Ungültiger Platzhalter: {%(value)s}"
 
 #: pretix/base/forms/widgets.py:67
 #, python-format
@@ -4659,11 +4662,6 @@ msgid "Suggested price"
 msgstr "Vorgeschlagener Preis"
 
 #: pretix/base/models/items.py:446 pretix/base/models/items.py:1089
-#, fuzzy
-#| msgid ""
-#| "This price will be used as the default value of the input field. The user "
-#| "can choose a lower value, but not lower than the price this product would "
-#| "have without the free price option."
 msgid ""
 "This price will be used as the default value of the input field. The user "
 "can choose a lower value, but not lower than the price this product would "
@@ -4672,7 +4670,8 @@ msgid ""
 msgstr ""
 "Dieser Preis wird als Standardwert für das Eingabefeld verwendet. Ein "
 "geringerer Preis kann eingegeben werden, aber nicht niedriger als der Preis, "
-"den das Produkt ohne die Option zur freien Preiseingabe hätte."
+"den das Produkt ohne die Option zur freien Preiseingabe hätte. Dies wird "
+"ignoriert, wenn ein Gutschein verwendet wird, der den Preis senkt."
 
 #: pretix/base/models/items.py:460
 msgid "Whether or not buying this product allows a person to enter your event"
@@ -14107,6 +14106,10 @@ msgid ""
 "restrict the validity of the gift card. A validity of gift cards can be set "
 "in your organizer settings."
 msgstr ""
+"Bitte setzen Sie keinen Gültigkeitszeitraum für Produkte, die Wertgutscheine "
+"erzeugen, da der Wertgutschein von der Gültigkeit nicht einschränkt werden "
+"würde. Die Gültigkeit von Wertgutscheinen kann in den "
+"Veranstaltereinstellungen konfiguriert werden."
 
 #: pretix/control/forms/item.py:724 pretix/control/forms/item.py:1000
 msgid ""
@@ -16667,10 +16670,8 @@ msgid "License check"
 msgstr "Lizenz-Check"
 
 #: pretix/control/navigation.py:448
-#, fuzzy
-#| msgid "System question"
 msgid "System report"
-msgstr "Systemfrage"
+msgstr "Systembericht"
 
 #: pretix/control/navigation.py:492
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -16994,21 +16995,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/base.html:328
 #: pretix/presale/templates/pretixpresale/base.html:55
-#, fuzzy
-#| msgid ""
-#| "Internet Explorer is an old browser that does not support lots of recent "
-#| "web-based technologies. While some features might already not work "
-#| "properly, we plan on no longer supporting Internet Explorer in our "
-#| "administrative backend in the next months."
 msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
 "based technologies and is no longer supported by this website."
 msgstr ""
 "Internet Explorer ist ein alter Browser, der viele moderne Internet-"
-"Technologien nicht unterstützt. Manche Funktionen funktionieren bereits "
-"jetzt nur eingeschränkt, aber wir planen in den nächsten Monaten die "
-"Unterstützung für Internet Explorer in unserem administrativen Backend "
-"vollständig einzustellen."
+"Technologien nicht unterstützt und von dieser Website nicht mehr unterstützt "
+"wird."
 
 #: pretix/control/templates/pretixcontrol/base.html:332
 #: pretix/presale/templates/pretixpresale/base.html:59
@@ -19758,6 +19751,9 @@ msgid ""
 "pretix support when your license renews. It may also be requested by pretix "
 "support to aid debugging of problems."
 msgstr ""
+"Wenn Sie eine pretix-Enterprise-Lizenz haben, muss dieser Report "
+"eingeschickt werden, wenn die Lizenz verlängert wird. Er kann außerdem vom "
+"pretix-Support angefordert werden um die Problemanalyse zu unterstützen."
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:8
 msgid ""
@@ -19765,10 +19761,14 @@ msgid ""
 "debugging problems in your pretix installation, and verifying that your "
 "usage of pretix is in compliance with the Enterprise license you purchased."
 msgstr ""
+"Der Bericht dient zwei Zwecken: Dem Sammeln nützlicher Informationen um "
+"Probleme mit Ihrer pretix-Installation zu analysieren und um zu überprüfen, "
+"dass Ihre Nutzung von pretix von der erworbenen pretix-Enterprice-Lizenz "
+"abgedeckt ist."
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:14
 msgid "First month of license term:"
-msgstr ""
+msgstr "Erster Monat des Lizenzzeitraums:"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:16
 msgid "January"
@@ -19779,10 +19779,8 @@ msgid "February"
 msgstr "Februar"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:18
-#, fuzzy
-#| msgid "Search"
 msgid "March"
-msgstr "Suche"
+msgstr "März"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:19
 msgid "April"
@@ -19821,10 +19819,8 @@ msgid "December"
 msgstr "Dezember"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:32
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Generate report"
-msgstr "Tickets generieren"
+msgstr "Bericht generieren"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:7
 msgid "Update check results"
@@ -27541,13 +27537,6 @@ msgid "IBAN blocklist for refunds"
 msgstr "IBAN-Blockliste für Erstattungen"
 
 #: pretix/plugins/banktransfer/payment.py:187
-#, fuzzy
-#| msgid ""
-#| "Put one IBAN or IBAN prefix per line. The system will not attempt to send "
-#| "refunds to any of these IBANs. Useful e.g. if you receive a lot of "
-#| "\"forwarded payments\" by a third-party payment provider. You can also "
-#| "list country codes such as \"GB\" if you never want to send refunds to "
-#| "IBANs from a specific country."
 msgid ""
 "Put one IBAN or IBAN prefix per line. The system will not attempt to send "
 "refunds to any of these IBANs. Useful e.g. if you receive a lot of "
@@ -27561,7 +27550,10 @@ msgstr ""
 "automatischen Rückerstattungen an diese IBANs zu senden. Dies ist z.B. "
 "nützlich wenn Sie viele \"weitergeleitete Zahlungen\" von einem "
 "Zahlungsdienstleister erhalten. Sie können auch Ländercodes wie \"GB\" "
-"auflisten, wenn Sie nie Erstattungen an britische IBANs anstoßen wollen."
+"auflisten, wenn Sie nie Erstattungen an britische IBANs anstoßen wollen. Die "
+"Prüfziffern der IBAN werden beim Vergleich ignoriert, sodass Sie z.B. "
+"DE0012345 sperren können, um alle deutschen IBANs mit einer BLZ, die mit "
+"12345 startet, zu sperren."
 
 #: pretix/plugins/banktransfer/payment.py:218
 msgid ""
@@ -29368,6 +29360,8 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:230
 msgid "Attachment of tickets is disabled in this event's email settings."
 msgstr ""
+"Das Anhängen von Tickets ist in den E-Mail-Einstellungen der Veranstaltung "
+"deaktiviert."
 
 #: pretix/plugins/sendmail/forms.py:234 pretix/plugins/sendmail/forms.py:388
 #: pretix/plugins/sendmail/views.py:268
@@ -30446,6 +30440,8 @@ msgstr "Multibanco über Stripe"
 msgid ""
 "Multibanco is a payment method available to Portuguese bank account holders."
 msgstr ""
+"Multibanco ist eine Zahlungsmethode, die für Inhaber eines portugiesischen "
+"Kontos verfügbar ist."
 
 #: pretix/plugins/stripe/payment.py:1711
 msgid "Przelewy24 via Stripe"
@@ -30489,22 +30485,16 @@ msgstr ""
 "BankID zur Verfügung. Bitte halten Sie Ihre Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1809
-#, fuzzy
-#| msgid "EPS via Stripe"
 msgid "TWINT via Stripe"
-msgstr "EPS über Stripe"
+msgstr "TWINT über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1814
-#, fuzzy
-#| msgid ""
-#| "This payment method is available to users of the Swedish apps Swish and "
-#| "BankID. Please have your app ready."
 msgid ""
 "This payment method is available to users of the Swiss app TWINT. Please "
 "have your app ready."
 msgstr ""
-"Diese Zahlungsmethode steht den Nutzern der schwedischen Apps Swish und "
-"BankID zur Verfügung. Bitte halten Sie Ihre Zugangsdaten bereit."
+"Diese Zahlungsmethode steht den Nutzern der Schweizer App TWINT zur "
+"Verfügung. Bitte halten Sie Ihre App bereit."
 
 #: pretix/plugins/stripe/signals.py:92
 msgid "Charge succeeded."
@@ -30725,36 +30715,32 @@ msgid "Disconnect"
 msgstr "Trennen"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:6
-#, fuzzy
-#| msgid "Payment settings"
 msgid "Payment instructions"
-msgstr "Zahlungseinstellungen"
+msgstr "Zahlungsinformationen"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
 "In your online bank account or from an ATM, choose \"Payment and other "
 "services\"."
 msgstr ""
+"In Ihrem Online-Banking oder an einem Geldautomat, wählen Sie \"Zahlung und "
+"andere Dienstleistungen\"."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:14
 msgid "Click \"Payments of services/shopping\"."
-msgstr ""
+msgstr "Klicken Sie \"Zahlungen für Dienstleistungen/Einkäufe\"."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:19
 msgid "Enter the entity number, reference number, and amount."
-msgstr ""
+msgstr "Geben Sie die Unternehmensnummer, Referenznummer und den Betrag ein."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Entity number:"
-msgstr "Rechnungsnummer"
+msgstr "Unternehmensnummer:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
-#, fuzzy
-#| msgid "Reference code"
 msgid "Reference number:"
-msgstr "Verwendungszweck"
+msgstr "Referenznummer:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:35
 msgid ""
