@@ -54,11 +54,31 @@ def test_same_day_english():
         assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">Feb. 1st, 2003</time>'
 
 
-def test_same_day_spanish():
+def test_same_day_spanish_es():
     with translation.override('es'):
         df = date(2003, 2, 1)
         assert daterange(df, df) == "1 de febrero de 2003"
         assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">1 de febrero de 2003</time>'
+
+
+def test_same_day_spanish_es_AR():
+    with translation.override('es_AR'):
+        df = date(2003, 2, 1)
+        assert daterange(df, df) == "1 de febrero de 2003"
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">1 de febrero de 2003</time>'
+
+
+def test_same_day_spanish_es_MX():
+    with translation.override('es_MX'):
+        df = date(2003, 2, 1)
+        assert daterange(df, df) == "1 de febrero de 2003"
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">1 de febrero de 2003</time>'
+
+
+def test_grep_locales():
+    import os
+    os.system("grep -IR febrero /opt/hostedtoolcache/Python/3.11.9/x64")
+    os.system("grep -IR Febrero /opt/hostedtoolcache/Python/3.11.9/x64")
 
 
 def test_same_day_other_lang():
