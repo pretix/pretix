@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 13:19+0000\n"
+"POT-Creation-Date: 2024-06-24 08:20+0000\n"
 "PO-Revision-Date: 2023-09-15 06:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -131,7 +131,7 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "Continue"
 msgstr "Pokračovat"
 
@@ -236,97 +236,105 @@ msgid "Canceled"
 msgstr "Zrušeno"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
+msgid "Confirmed"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
+msgid "Approval pending"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
 msgstr "Uplatněno"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket not paid"
 msgstr "Vstupenka není zaplacena"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
 msgstr "Vstupenka nebyla zaplacena. Chcete i přesto pokračovat?"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Additional information required"
 msgstr "Potřebné další informace"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Valid ticket"
 msgstr "Platná vstupenka"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Exit recorded"
 msgstr "Opustit nahrávané"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Ticket already used"
 msgstr "Vstupenka již byla použita"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Information required"
 msgstr "Informace vyžadována"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Unknown ticket"
 msgstr "Neznámá vstupenka"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Ticket type not allowed here"
 msgstr "Typ vstupenky zde není povolen"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Entry not allowed"
 msgstr "Vstup není povolen"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code revoked/changed"
 msgstr "Kód vstupenky změněn"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
 msgstr "Vstupenka zablokována"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket not valid at this time"
 msgstr "Vstupenka je v tuto chvíli neplatná"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order canceled"
 msgstr "Objednávka zrušena"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
 msgstr "Kód vstupenky je v seznamu nejednoznačný"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
 msgstr ""
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Checked-in Tickets"
 msgstr "Vyřízené vstupenky"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
 msgid "Valid Tickets"
 msgstr "Platné vstupenky"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
 msgid "Currently inside"
 msgstr "Aktuálně uvnitř"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
 msgstr "Ano"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:138
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "No"

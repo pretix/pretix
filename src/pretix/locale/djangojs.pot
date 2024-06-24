@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-24 08:47+0000\n"
+"POT-Creation-Date: 2024-06-24 08:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,7 +130,7 @@ msgid "Mercado Pago"
 msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "Continue"
 msgstr ""
 
@@ -235,97 +235,105 @@ msgid "Canceled"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Redeemed"
+msgid "Confirmed"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Cancel"
+msgid "Approval pending"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+msgid "Redeemed"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Ticket not paid"
-msgstr ""
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
+msgid "Cancel"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-msgid "Additional information required"
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
+msgid "Ticket not paid"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "Valid ticket"
+msgid "This ticket is not yet paid. Do you want to continue anyways?"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Exit recorded"
+msgid "Additional information required"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Ticket already used"
+msgid "Valid ticket"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Information required"
+msgid "Exit recorded"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Unknown ticket"
+msgid "Ticket already used"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Ticket type not allowed here"
+msgid "Information required"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
+msgid "Unknown ticket"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Entry not allowed"
-msgstr ""
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket code revoked/changed"
+msgid "Ticket type not allowed here"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Ticket blocked"
+msgid "Entry not allowed"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket not valid at this time"
+msgid "Ticket code revoked/changed"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Order canceled"
+msgid "Ticket blocked"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket code is ambiguous on list"
+msgid "Ticket not valid at this time"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order not approved"
+msgid "Order canceled"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Checked-in Tickets"
+msgid "Ticket code is ambiguous on list"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Valid Tickets"
+msgid "Order not approved"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Currently inside"
+msgid "Checked-in Tickets"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
+msgid "Valid Tickets"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
+msgid "Currently inside"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
 msgstr ""
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:138
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "No"

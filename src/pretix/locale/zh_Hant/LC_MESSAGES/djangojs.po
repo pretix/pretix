@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 13:19+0000\n"
+"POT-Creation-Date: 2024-06-24 08:20+0000\n"
 "PO-Revision-Date: 2024-01-22 17:08+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -131,7 +131,7 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "Continue"
 msgstr "繼續"
 
@@ -236,97 +236,105 @@ msgid "Canceled"
 msgstr "已取消"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
+msgid "Confirmed"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
+msgid "Approval pending"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
 msgstr "已兌換"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 msgid "Cancel"
 msgstr "取消"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket not paid"
 msgstr "票券還未付款"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
 msgstr "這張票券還沒有付款，你想要繼續嗎？"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Additional information required"
 msgstr "需要額外的資訊"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Valid ticket"
 msgstr "有效票券"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Exit recorded"
 msgstr "已經記錄離場了"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Ticket already used"
 msgstr "票券已經使用了"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Information required"
 msgstr "需要資訊"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Unknown ticket"
 msgstr "不知名的票券"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Ticket type not allowed here"
 msgstr "這裡不允這種票券類型"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Entry not allowed"
 msgstr "不允許入場"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code revoked/changed"
 msgstr "票券代碼已經取消/改變"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
 msgstr "票券已經封銷"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket not valid at this time"
 msgstr "在這時間票券仍未有效"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order canceled"
 msgstr "訂單已取消"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
 msgstr "清單上的票券代碼不清楚"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
 msgstr "票券未確認"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Checked-in Tickets"
 msgstr "已經入場的票券"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
 msgid "Valid Tickets"
 msgstr "有效票券"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
 msgid "Currently inside"
 msgstr "目前在場內"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
 msgstr "是"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:138
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "No"
