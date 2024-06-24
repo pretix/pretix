@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-01-31 04:00+0000\n"
-"Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
+"PO-Revision-Date: 2024-06-24 15:12+0000\n"
+"Last-Translator: Reece Needham <nouveaureece@protonmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -37,7 +37,7 @@ msgstr "Árabe"
 
 #: pretix/_base_settings.py:82
 msgid "Catalan"
-msgstr ""
+msgstr "catalán"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (simplified)"
@@ -117,7 +117,7 @@ msgstr "Ruso"
 
 #: pretix/_base_settings.py:102
 msgid "Slovak"
-msgstr ""
+msgstr "eslovaco"
 
 #: pretix/_base_settings.py:103
 msgid "Spanish"
@@ -2876,7 +2876,7 @@ msgstr "Código del cupón"
 #: pretix/base/forms/__init__.py:118
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "Se puede usar {markup_name} en este campo."
 
 #: pretix/base/forms/__init__.py:178
 #, python-format
@@ -3095,6 +3095,10 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
+"Hay un error con el sintaxis de marcador de posición. Por favor, asegúrase "
+"de que las llaves de apertura «{» y las llaves de cierre «}» de sus "
+"marcadores de posición coinciden. Tenga en cuenta: para usar «{» o «}» "
+"literalmente, se debe teclearlas dos veces como «{{» o «}}» respectivamente."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:771
 #, fuzzy, python-format
@@ -4601,7 +4605,7 @@ msgstr "Esperando, producto no disponible"
 #: pretix/base/models/items.py:382
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "Show info text if unavailable"
-msgstr ""
+msgstr "Muestra el texto informativo, si no es disponible"
 
 #: pretix/base/models/items.py:389 pretix/base/models/items.py:704
 msgid "Don't use re-usable media, use regular one-off tickets"
@@ -5964,6 +5968,9 @@ msgid ""
 "up two-factor authentication or leave the team. The setting may take a few "
 "minutes to become effective for all users."
 msgstr ""
+"Si activado, todos los miembros del equipo requerirán configurar la "
+"autenticación de dos factores o dejar el equipo. El ajuste podría tardar "
+"pocos minutos para activar para todos los usuarios."
 
 #: pretix/base/models/organizer.py:275
 msgid "Can create events"
@@ -6240,6 +6247,9 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
+"Este producto añadirá al carrito del usuario si está usado el vale. En vez "
+"de un producto específico, se puede seleccionar una cuota. En este caso, "
+"todos los productos que están asignados al esta cuota se pueden seleccionar."
 
 #: pretix/base/models/vouchers.py:265
 msgid "This variation of the product select above is being used."
@@ -9651,6 +9661,11 @@ msgid ""
 "still people on the waiting list. Vouchers that have already been sent "
 "remain active."
 msgstr ""
+"La lista de espera estará deshabilitada después de esta fecha. Esto "
+"significa que nadie puede añadirse a la lista; sin embargo, las entradas "
+"estarán disponibles para la venta de nuevo si permite la cuota, incluso si "
+"hay alguien en la lista de espera. Los vales que ya se han enviado "
+"permanecerán activos."
 
 #: pretix/base/settings.py:1420
 msgid "Ask for a name"
@@ -9894,7 +9909,7 @@ msgstr "Ocultar todas las fechas pasadas del calendario"
 
 #: pretix/base/settings.py:1664 pretix/base/settings.py:1673
 msgid "No modifications after order was submitted"
-msgstr ""
+msgstr "Ningunas modificaciones se entregaron después del pedido"
 
 #: pretix/base/settings.py:1665 pretix/base/settings.py:1674
 #, fuzzy
@@ -9904,7 +9919,7 @@ msgstr "Sólo las órdenes pendientes o pagadas pueden ser cambiadas."
 
 #: pretix/base/settings.py:1666 pretix/base/settings.py:1675
 msgid "Both the attendee and the person who ordered can make changes"
-msgstr ""
+msgstr "Ambos el/la asistente y el/la comprador(a) pueden hacer cambios"
 
 #: pretix/base/settings.py:1670
 #, fuzzy
@@ -9923,6 +9938,8 @@ msgid ""
 "By default, no more modifications are possible for an order as soon as one "
 "of the tickets in the order has been checked in."
 msgstr ""
+"Por defecto, las modificaciones del pedido no se estarán permitidas una vez "
+"que una de las entradas del pedido se hayan canjeado."
 
 #: pretix/base/settings.py:1696
 msgid "Last date of modifications"
@@ -16020,6 +16037,8 @@ msgid ""
 "A first login using {agent_type} on {os_type} from {country} has been "
 "detected."
 msgstr ""
+"Se ha detectado un inicio de sesión nuevo por {agent_type} usando {os_type} "
+"de {country}."
 
 #: pretix/control/logdisplay.py:460 pretix/control/views/user.py:489
 #: pretix/control/views/user.py:549 pretix/control/views/user.py:608
@@ -18110,6 +18129,21 @@ msgid ""
 "Best regards,  \n"
 "Your %(instance)s team\n"
 msgstr ""
+"Hola,\n"
+"\n"
+"Se ha detectado un inicio de sesión de tu cuenta %(instance)s por una "
+"ubicación nueva o inusual. Se inició el sesión por %(agent)s de %(os)s de "
+"%(country)s.\n"
+"\n"
+"Si tú hiciste esto, puedes ignorar este correo.\n"
+"\n"
+"Si no fuiste tú, recomendamos que cambies la contraseña en los ajustes de "
+"cuenta:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Saludos cordiales,\n"
+"Su equipo de %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
 #, python-format
