@@ -86,7 +86,7 @@ def _get_source_cache_key():
     global _source_cache_key
     checksum = hashlib.sha256()
     if not _source_cache_key:
-        with open(finders.find("pretixbase/scss/_variables.scss"), "r") as f:
+        with open(finders.find("pretixbase/scss/_theme_variables.scss"), "r") as f:
             checksum.update(f.read().encode())
         tpl = get_template('pretixpresale/widget_dummy.html')
         et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')

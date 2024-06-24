@@ -206,7 +206,7 @@ def get_theme_vars_css(obj, widget=False):
     if widget:
         sassrules.append("$widget: true;")
 
-    with open(finders.find("pretixbase/scss/_variables.scss"), "r") as f:
+    with open(finders.find("pretixbase/scss/_theme_variables.scss"), "r") as f:
         source_scss = f.read()
         sassrules.append(source_scss)
 

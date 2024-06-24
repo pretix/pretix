@@ -39,7 +39,7 @@ _source_cache_key = None
 def _get_source_cache_key():
     global _source_cache_key
     if not _source_cache_key:
-        with open(finders.find("pretixbase/scss/_variables.scss"), "r") as f:
+        with open(finders.find("pretixbase/scss/_theme_variables.scss"), "r") as f:
             _source_cache_key = hashlib.sha256(f.read().encode()).hexdigest()[:12]
     return _source_cache_key
 
