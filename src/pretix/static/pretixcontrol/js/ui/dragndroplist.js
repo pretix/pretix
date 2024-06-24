@@ -1,40 +1,51 @@
 /*global $, Sortable*/
 $(function () {
+    let didSort = false, lastClick = 0;
     $("[data-dnd-url]").each(function(){
         const container = $(this),
             url = container.data("dnd-url"),
-            handle = $('<button type="button" class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></button>');
+            handle = $('<span class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></span>');
 
         container.find(".dnd-container").append(handle);
-        container.find(".sortable-up, .sortable-down").addClass("sr-only");
+        if (!sessionStorage.dndShowMoveButtons) {
+            container.find(".sortable-up, .sortable-down").addClass("sr-only").on("click", function () {
+                sessionStorage.dndShowMoveButtons = 'true';
+            });
+        }
         if (container.find("[data-dnd-id]").length < 2 && !container.data("dnd-group")) {
             handle.addClass("disabled");
             return;
         }
-        let didSort = false, lastClick = 0;
-        function handleMouseUp() {
-            if (Date.now() - lastClick < 6000) {
-                container.find(".sortable-up, .sortable-down").removeClass("sr-only");
+        function maybeShowSortButtons() {
+            if (Date.now() - lastClick < 3000) {
+                $("[data-dnd-url] .sortable-up, [data-dnd-url] .sortable-down").removeClass("sr-only");
             }
             lastClick = Date.now();
         }
-        container.find(".dnd-sort-handle").on("mouseup", handleMouseUp);
+        container.find(".dnd-sort-handle").on("mouseup", maybeShowSortButtons);
+        const group = container.data("dnd-group");
+        const containers = group ? container.parent().find('[data-dnd-group="' + group + '"]') : container;
         Sortable.create(container.get(0), {
             filter: ".sortable-disabled",
             handle: ".dnd-sort-handle",
-            group: container.data("dnd-group"),
+            group: group,
             onMove: function (evt) {
                 return evt.related.className.indexOf('sortable-disabled') === -1;
             },
             onStart: function (evt) {
-                container.addClass("sortable-dragarea");
+                containers.addClass("sortable-dragarea");
                 container.parent().addClass("sortable-sorting");
                 didSort = false;
             },
             onEnd: function (evt) {
-                container.removeClass("sortable-dragarea");
+                containers.removeClass("sortable-dragarea");
                 container.parent().removeClass("sortable-sorting");
-                if (!didSort) handleMouseUp();
+                if (!didSort) {
+                    maybeShowSortButtons();
+                } else {
+                    $("[data-dnd-url] .sortable-up, [data-dnd-url] .sortable-down").addClass("sr-only");
+                    delete sessionStorage.dndShowMoveButtons;
+                }
             },
             onSort: function (evt){
                 if (evt.target !== evt.to) return;

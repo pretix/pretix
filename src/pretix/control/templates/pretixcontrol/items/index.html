@@ -48,7 +48,7 @@
                     {% if c %}
                         <tbody>
                             <tr class="sortable-disabled"><th colspan="9" scope="colgroup" class="text-muted">
-                                {{ c.name }}{% if c.category_type != "normal" %} <span class="not-bold">({{ c.get_category_type_display }})</span>{% endif %}
+                                {{ c.name }}{% if c.category_type != "normal" %} <span class="font-normal">({{ c.get_category_type_display }})</span>{% endif %}
                                 <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" title="{% trans "Edit" %}"><span class="fa fa-edit fa-fw"></span></a>
                             </th></tr>
                         </tbody>
