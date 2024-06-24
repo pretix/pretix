@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
 "PO-Revision-Date: 2024-06-24 15:12+0000\n"
-"Last-Translator: Reece Needham <nouveaureece@protonmail.com>\n"
+"Last-Translator: Mira <weller@rami.io>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -20004,52 +20004,51 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:16
 msgid "January"
-msgstr "Enero"
+msgstr "enero"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:17
 msgid "February"
-msgstr "Febrero"
+msgstr "febrero"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:18
-#, fuzzy
 msgid "March"
-msgstr "Marzo"
+msgstr "marzo"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:19
 msgid "April"
-msgstr "Abril"
+msgstr "abril"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:20
 msgid "May"
-msgstr "Mayo"
+msgstr "mayo"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:21
 msgid "June"
-msgstr "Junio"
+msgstr "junio"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:22
 msgid "July"
-msgstr "Julio"
+msgstr "julio"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:23
 msgid "August"
-msgstr "Agosto"
+msgstr "agosto"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:24
 msgid "September"
-msgstr "Septiembre"
+msgstr "septiembre"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:25
 msgid "October"
-msgstr "Octubre"
+msgstr "octubre"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:26
 msgid "November"
-msgstr "Noviembre"
+msgstr "noviembre"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:27
 msgid "December"
-msgstr "Diciembre"
+msgstr "diciembre"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:32
 #, fuzzy
