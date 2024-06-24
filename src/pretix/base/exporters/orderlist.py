@@ -554,7 +554,7 @@ class OrderListExporter(MultiSheetListExporter):
                         # anyways.
                         ordered='sqlite' not in settings.DATABASES['default']['ENGINE'],
                         distinct='sqlite' not in settings.DATABASES['default']['ENGINE'],
-                        delimiter=","
+                        delimiter=", "
                     )
                 ).values("c")
             ),
@@ -788,7 +788,7 @@ class OrderListExporter(MultiSheetListExporter):
                     _('Yes') if order.email_known_to_work else _('No'),
                     str(order.customer.external_identifier) if order.customer and order.customer.external_identifier else '',
                 ]
-                row.append((op.checked_in_lists or "").replace(",", ", "))
+                row.append(op.checked_in_lists or "")
                 row.append(', '.join([
                     str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
                     if p and p != 'free'
