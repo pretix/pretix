@@ -29,6 +29,7 @@ from pretix.base.models.log import OrderLogEntryType, log_entry_types
 from pretix.base.signals import register_payment_providers
 from pretix.control.signals import html_head, nav_event, nav_organizer
 
+from ...base.models.log import ClearDataShredderMixin
 from ...base.settings import settings_hierarkey
 from .payment import BankTransfer
 
@@ -119,7 +120,7 @@ def html_head_presale(sender, request=None, **kwargs):
 
 
 @log_entry_types.new()
-class BanktransferOrderEmailInvoiceLogEntryType(OrderLogEntryType):
+class BanktransferOrderEmailInvoiceLogEntryType(OrderLogEntryType, ClearDataShredderMixin):
     action_type = 'pretix.plugins.banktransfer.order.email.invoice'
     plain = _('The invoice was sent to the designated email address.')
 
