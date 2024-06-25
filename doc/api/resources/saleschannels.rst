@@ -16,7 +16,7 @@ identifier                            string                     Internal ID of 
                                                                  For sales channel types that allow multiple instances, this
                                                                  is always prefixed with ``type.``.
 label                                 multi-lingual string       Human-readable name of the sales channel
-type                                  string                     Type of the sales channel. Only channels with type ``"api"``
+type                                  string                     Type of the sales channel. Only channels with type ``api``
                                                                  can currently be created through the API.
 position                              integer                    Position for sorting lists of sales channels
 ===================================== ========================== =======================================================
