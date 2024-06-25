@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-24 15:12+0000\n"
+"PO-Revision-Date: 2024-06-25 09:31+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -8477,67 +8477,69 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
+"Du kan inte ändra planen eftersom sittplats \"%s\" inte finns i den nya "
+"planen och redan används i ett kvitto."
 
 #: pretix/base/services/shredder.py:126 pretix/control/views/shredder.py:96
 msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
 msgstr ""
+"Nedladdningsfilen kunde inte längre hittas på servern, var god försök att "
+"starta om."
 
 #: pretix/base/services/shredder.py:130 pretix/control/views/shredder.py:102
 msgid "This file is from a different event."
-msgstr ""
+msgstr "Den här filen är från ett annat evenemang."
 
 #: pretix/base/services/shredder.py:139
 msgid "The confirm code you entered was incorrect."
-msgstr ""
+msgstr "Bekräftelsekoden du angav var felaktig."
 
 #: pretix/base/services/shredder.py:141
 msgid "Something happened in your event after the export, please try again."
-msgstr ""
+msgstr "Något hände med ditt evenemang efter exporten, var god försök igen."
 
 #: pretix/base/services/shredder.py:177
 msgid "Data shredding completed"
-msgstr ""
+msgstr "Dataförstöring slutförd"
 
 #: pretix/base/services/stats.py:215
 msgid "Uncategorized"
-msgstr ""
+msgstr "Okategoriserad"
 
 #: pretix/base/services/tax.py:40 pretix/base/services/tax.py:206
-#, fuzzy
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country is currently not available. We will therefore need to charge VAT on "
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
-"Din moms-ID kunde inte hittas, eftersom moms checknings service i ditt land "
-"inte är tillfälligt tillgängligt. Vi kommer därför att lägga till moms i din "
-"faktura. Du kan få tillbaka skattebeloppet via moms ersättnings processen."
+"Ditt moms-ID kunde inte kontrolleras eftersom momskontrolltjänsten i ditt "
+"land för närvarande inte är tillgänglig. Vi kommer därför att behöva "
+"debitera moms på din faktura. Du kan få tillbaka momsen genom processen för "
+"momsåterbetalning."
 
 #: pretix/base/services/tax.py:45 pretix/base/services/tax.py:186
 #: pretix/base/services/tax.py:213
-#, fuzzy
 msgid "This VAT ID is not valid. Please re-check your input."
 msgstr ""
-"Den här moms-ID är inte giltig. Var snäll och kolla över din inmatning."
+"Det här moms-IDt är inte giltig. Var snäll och kontrollera din inmatning "
+"igen."
 
 #: pretix/base/services/tax.py:46 pretix/base/services/tax.py:171
 msgid "Your VAT ID does not match the selected country."
 msgstr "Din VAT-ID matchar inte det valda landet."
 
 #: pretix/base/services/tax.py:190 pretix/base/services/tax.py:198
-#, fuzzy
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
-"Din moms-ID kunde inte hittas, eftersom din moms checkings service i ditt "
-"land skickade tillbaka ett felaktigt resultat. Vi kommer därför lägga till "
-"moms på din faktura. Var snäll och kontakta support för att fixa detta "
-"manuellt."
+"Ditt moms-ID kunde inte hittas, eftersom moms-kontrolltjänsten i ditt land "
+"skickade tillbaka ett felaktigt resultat. Vi kommer därför lägga till moms "
+"på din faktura. Var snäll och kontakta support för att fixa detta manuellt."
 
 #: pretix/base/services/tickets.py:102 pretix/control/views/pdf.py:96
 msgid "Sample workshop"
@@ -8545,7 +8547,7 @@ msgstr ""
 
 #: pretix/base/services/update_check.py:113
 msgid "pretix update available"
-msgstr ""
+msgstr "Uppdatering av Pretix är tillgänglig"
 
 #: pretix/base/services/update_check.py:116
 #, python-brace-format
@@ -8567,36 +8569,54 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
+"Hej!\n"
+"\n"
+"En uppdatering är tillgänglig för Pretix eller för något av de tillägg du "
+"installerat i din Pretix-installation. Vänligen klicka på följande länk för "
+"mer information:\n"
+"\n"
+" {url} \n"
+"\n"
+"Du kan alltid hitta information om de senaste uppdateringarna på Pretix.eu-"
+"bloggen:\n"
+"\n"
+"https://pretix.eu/about/en/blog/\n"
+"\n"
+"Med vänliga hälsningar,\n"
+"\n"
+"dina Pretix-utvecklare"
 
 #: pretix/base/services/update_check.py:145
 #: pretix/base/services/update_check.py:147
 #, python-format
 msgid "Plugin: %s"
-msgstr ""
+msgstr "Tillägg: %s"
 
 #: pretix/base/services/vouchers.py:56 pretix/control/logdisplay.py:480
-#, fuzzy, python-brace-format
-#| msgid "The invoice has been generated."
+#, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr "Denna faktura har skapats."
+msgstr "Rabattkoden har skickats till {recipient}."
 
 #: pretix/base/settings.py:124
 msgid "Allow usage of restricted plugins"
-msgstr ""
+msgstr "Tillåt användning av begränsade plugins"
 
 #: pretix/base/settings.py:157
 msgid "Allow customers to create accounts"
-msgstr ""
+msgstr "Tillåt kunder att skapa konton"
 
 #: pretix/base/settings.py:158
 msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
+"Detta kommer att tillåta kunder att registrera sig för ett konto i din "
+"biljettbutik. Detta är en förutsättning för vissa avancerade funktioner som "
+"medlemskap."
 
 #: pretix/base/settings.py:168
 msgid "Allow customers to log in with email address and password"
-msgstr ""
+msgstr "Tillåt kunder att logga in med e-postadress och lösenord"
 
 #: pretix/base/settings.py:169
 msgid ""
@@ -8604,16 +8624,16 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:179
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Match orders based on email address"
-msgstr "Epost till deltagare"
+msgstr "Matcha beställningar baserat på e-postadress"
 
 #: pretix/base/settings.py:180
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"Detta kommer att tillåta registrerade kunder att komma åt beställningar "
+"gjorda med samma e-postadress, även om kunden inte var inloggad under köpet."
 
 #: pretix/base/settings.py:190
 #, fuzzy
@@ -8629,53 +8649,54 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:217
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "Length of barcodes"
-msgstr "Dina ändringar har sparats."
+msgstr "Längd på streckkoder"
 
 #: pretix/base/settings.py:246
 msgid ""
 "Automatically create a new gift card if a previously unknown chip is seen"
 msgstr ""
+"Skapa automatiskt ett nytt presentkort om ett tidigare okänt chip upptäcks"
 
 #: pretix/base/settings.py:259 pretix/base/settings.py:290
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card currency"
-msgstr "Presentkorts kod"
+msgstr "Valuta för presentkort"
 
 #: pretix/base/settings.py:277
 msgid "Automatically create a new gift card if a new chip is encoded"
-msgstr ""
+msgstr "Skapa automatiskt ett nytt presentkort om ett nytt chip kodas"
 
 #: pretix/base/settings.py:299
 msgid "Use UID protection feature of NFC chip"
-msgstr ""
+msgstr "Använd UID-skyddsfunktionen för NFC-chip"
 
 #: pretix/base/settings.py:315
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "Maximalt antal artiklar per beställning"
 
 #: pretix/base/settings.py:316
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "Tilläggsprodukter kommer inte att räknas."
 
 #: pretix/base/settings.py:325
 msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
 msgstr ""
+"Visa nettopriser istället för bruttopriser i produktlistan (inte "
+"rekommenderat!)"
 
 #: pretix/base/settings.py:326
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
+"Oberoende av ditt val kommer kundvagnen att visa bruttopriser eftersom det "
+"är det pris som behöver betalas."
 
 #: pretix/base/settings.py:337
 msgid "Hide prices on attendee ticket page"
-msgstr ""
+msgstr "Dölj priser på biljettsidan för deltagare"
 
 #: pretix/base/settings.py:338
 msgid ""
@@ -8684,26 +8705,30 @@ msgid ""
 "page of the individual attendees. The ticket buyer will of course see the "
 "price."
 msgstr ""
+"Om en person köper flera biljetter och du skickar e-post till alla "
+"deltagare, kommer biljettpriset inte att visas på biljettsidan för de "
+"enskilda deltagarna med detta alternativ. Biljettköparen kommer naturligtvis "
+"att se priset."
 
 #: pretix/base/settings.py:356
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "Fråga efter deltagarnas namn"
 
 #: pretix/base/settings.py:357
 msgid "Ask for a name for all personalized tickets."
-msgstr ""
+msgstr "Fråga efter ett namn för alla personliga biljetter."
 
 #: pretix/base/settings.py:366
 msgid "Require attendee names"
-msgstr ""
+msgstr "Kräv deltagarens namn"
 
 #: pretix/base/settings.py:367
 msgid "Require customers to fill in the names of all attendees."
-msgstr ""
+msgstr "Kräv att kunderna fyller i namnen på alla deltagare."
 
 #: pretix/base/settings.py:377
 msgid "Ask for email addresses per ticket"
-msgstr ""
+msgstr "Fråga efter e-postadresser per biljett"
 
 #: pretix/base/settings.py:378
 msgid ""
@@ -8716,10 +8741,19 @@ msgid ""
 "primary email address, not to the per-attendee addresses. You can however "
 "enable this in the email settings."
 msgstr ""
+"Normalt sett frågar pretix efter en e-postadress per beställning och "
+"beställningsbekräftelsen skickas endast till den e-postadressen. Om du "
+"aktiverar detta alternativ kommer systemet dessutom att fråga efter "
+"individuella e-postadresser för varje personlig biljett. Detta kan vara "
+"användbart om du vill få individuella adresser för varje deltagare även vid "
+"gruppbeställningar. Pretix kommer dock som standard endast att skicka "
+"beställningsbekräftelsen till den primära e-postadressen, inte till "
+"deltagarnas individuella adresser. Du kan dock aktivera detta i "
+"e-postinställningarna."
 
 #: pretix/base/settings.py:392
 msgid "Require email addresses per ticket"
-msgstr ""
+msgstr "Kräv e-postadresser per biljett"
 
 #: pretix/base/settings.py:393
 msgid ""
@@ -8727,6 +8761,10 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
+"Kräv att kunderna fyller i individuella e-postadresser för alla personliga "
+"biljetter. Se ovanstående alternativ för mer information. En e-postadress "
+"för beställningsbekräftelsen kommer alltid att krävas oavsett denna "
+"inställning."
 
 #: pretix/base/settings.py:405
 msgid "Ask for company per ticket"
@@ -8738,50 +8776,50 @@ msgstr ""
 
 #: pretix/base/settings.py:424
 msgid "Ask for postal addresses per ticket"
-msgstr ""
+msgstr "Fråga efter postadresser per biljett"
 
 #: pretix/base/settings.py:433
 msgid "Require postal addresses per ticket"
-msgstr ""
+msgstr "Kräv postadresser per biljett"
 
 #: pretix/base/settings.py:443
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "Fråga efter beställarens e-postadress två gånger"
 
 #: pretix/base/settings.py:444
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
 msgstr ""
+"Kräv att kunderna fyller i den primära e-postadressen två gånger för att "
+"undvika fel."
 
 #: pretix/base/settings.py:453
 msgid "Ask for a phone number per order"
-msgstr ""
+msgstr "Fråga efter ett telefonnummer per beställning"
 
 #: pretix/base/settings.py:462
 msgid "Require a phone number per order"
-msgstr ""
+msgstr "Kräv ett telefonnummer per beställning"
 
 #: pretix/base/settings.py:472
 msgid "Ask for invoice address"
-msgstr ""
+msgstr "Fråga efter fakturaadress"
 
 #: pretix/base/settings.py:481
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
+msgstr "Fråga inte efter fakturaadress om en beställning är gratis"
 
 #: pretix/base/settings.py:490
 msgid "Require customer name"
-msgstr ""
+msgstr "Kräv kundens namn"
 
 #: pretix/base/settings.py:499
 msgid "Show attendee names on invoices"
-msgstr ""
+msgstr "Visa deltagarnas namn på fakturor"
 
 #: pretix/base/settings.py:508
-#, fuzzy
-#| msgid "Your event registration: %(code)s"
 msgid "Show event location on invoices"
-msgstr "Förköp har inte startat: %(code)s"
+msgstr "Visa evenemangsplats på fakturor"
 
 #: pretix/base/settings.py:509
 msgid ""
@@ -8789,51 +8827,53 @@ msgid ""
 "same for all lines. It will be shown on every line if there are different "
 "locations."
 msgstr ""
+"Evenemangsplatsen kommer att visas under produktlistan om den är densamma "
+"för alla rader. Den kommer att visas på varje rad om det finns olika platser."
 
 #: pretix/base/settings.py:519
-#, fuzzy
-#| msgid "Show value at"
 msgid "Show exchange rates"
-msgstr "Visa värde"
+msgstr "Visa växelkurser"
 
 #: pretix/base/settings.py:522 pretix/base/settings.py:530
 #: pretix/control/forms/item.py:560
 msgid "Never"
-msgstr ""
+msgstr "Aldrig"
 
 #: pretix/base/settings.py:523 pretix/base/settings.py:531
 msgid ""
 "Based on European Central Bank daily rates, whenever the invoice recipient "
 "is in an EU country that uses a different currency."
 msgstr ""
+"Baserat på Europeiska centralbankens dagliga kurser, när fakturamottagaren "
+"är i ett EU-land som använder en annan valuta."
 
 #: pretix/base/settings.py:525 pretix/base/settings.py:533
 msgid ""
 "Based on Czech National Bank daily rates, whenever the invoice amount is not "
 "in CZK."
 msgstr ""
+"Baserat på Tjeckiska nationalbankens dagliga kurser, när fakturabeloppet "
+"inte är i CZK."
 
 #: pretix/base/settings.py:543
 msgid "Require invoice address"
-msgstr ""
+msgstr "Kräv fakturaadress"
 
 #: pretix/base/settings.py:553
 msgid "Require a business addresses"
-msgstr ""
+msgstr "Kräv en företagsadress"
 
 #: pretix/base/settings.py:554
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "Detta kommer att kräva att användare anger ett företagsnamn."
 
 #: pretix/base/settings.py:564
 msgid "Ask for beneficiary"
-msgstr ""
+msgstr "Fråga efter förmånstagare"
 
 #: pretix/base/settings.py:574
-#, fuzzy
-#| msgid "Custom address field"
 msgid "Custom recipient field"
-msgstr "Manuellt adressfält"
+msgstr "Anpassat mottagarfält"
 
 #: pretix/base/settings.py:576
 msgid ""
@@ -8843,10 +8883,15 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
+"Om du vill lägga till ett anpassat textfält, t.ex. för ett landspecifikt "
+"registreringsnummer, i ditt fakturaadressformulär, fyll i etiketten här. "
+"Denna etikett kommer både att användas för att be användaren att ange sina "
+"uppgifter samt för att visa värdet på fakturan. Det kommer att visas på "
+"fakturan under rubriken. Fältet kommer inte att vara obligatoriskt."
 
 #: pretix/base/settings.py:589
 msgid "Ask for VAT ID"
-msgstr ""
+msgstr "Fråga efter momsregistreringsnummer"
 
 #: pretix/base/settings.py:591
 #, python-brace-format
@@ -8855,6 +8900,9 @@ msgid ""
 "only requested from business customers in the following countries: "
 "{countries}"
 msgstr ""
+"Fungerar endast om en fakturaadress efterfrågas. Momsregistreringsnummer är "
+"aldrig obligatoriskt och efterfrågas endast från företagskunder i följande "
+"länder: {countries}"
 
 #: pretix/base/settings.py:604
 msgid "Invoice address explanation"
