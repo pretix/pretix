@@ -789,8 +789,6 @@ class Event(EventMixin, LoggedModel):
         ), tz)
 
     def copy_data_from(self, other, skip_meta_data=False):
-        from pretix.presale.style import regenerate_css
-
         from ..signals import event_copy_data
         from . import (
             Discount, Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue,
@@ -1011,10 +1009,10 @@ class Event(EventMixin, LoggedModel):
                 s.product = item_map[s.product_id]
             s.save(force_insert=True)
 
-        has_custom_style = other.settings.presale_css_file or other.settings.presale_widget_css_file
         skip_settings = (
             'ticket_secrets_pretix_sig1_pubkey',
             'ticket_secrets_pretix_sig1_privkey',
+            # no longer used, but we still don't need to copy them
             'presale_css_file',
             'presale_css_checksum',
             'presale_widget_css_file',
@@ -1056,9 +1054,6 @@ class Event(EventMixin, LoggedModel):
             tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,
             question_map=question_map, checkin_list_map=checkin_list_map, quota_map=quota_map,
         )
-
-        if has_custom_style:
-            regenerate_css.apply_async(args=(self.pk,))
 
     def get_payment_providers(self, cached=False) -> dict:
         """
@@ -1337,18 +1332,12 @@ class Event(EventMixin, LoggedModel):
 
     def enable_plugin(self, module, allow_restricted=frozenset()):
         plugins_active = self.get_plugins()
-        from pretix.presale.style import regenerate_css
-
         if module not in plugins_active:
             plugins_active.append(module)
             self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
 
-        regenerate_css.apply_async(args=(self.pk,))
-
     def disable_plugin(self, module):
         plugins_active = self.get_plugins()
-        from pretix.presale.style import regenerate_css
-
         if module in plugins_active:
             plugins_active.remove(module)
             self.set_active_plugins(plugins_active)
@@ -1356,8 +1345,6 @@ class Event(EventMixin, LoggedModel):
             plugins_available = self.get_available_plugins()
             if module in plugins_available and hasattr(plugins_available[module].app, 'uninstalled'):
                 getattr(plugins_available[module].app, 'uninstalled')(self)
-
-        regenerate_css.apply_async(args=(self.pk,))
 
     @staticmethod
     def clean_has_subevents(event, has_subevents):

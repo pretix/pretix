@@ -218,7 +218,7 @@ To update the frontend styles of shops with a custom styling, run the following 
 your virtual environment.::
 
     python -m pretix collectstatic --noinput
-    python -m pretix updatestyles
+    python -m pretix updateassets
 
 
 .. _Django's documentation: https://docs.djangoproject.com/en/1.11/ref/django-admin/#runserver

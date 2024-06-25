@@ -7,12 +7,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% if css_file %}
-        <link rel="stylesheet" type="text/css" href="{{ css_file }}"/>
-    {% else %}
-        {% compress css %}
-            <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
-        {% endcompress %}
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
+    {% endcompress %}
+    {% if css_theme %}
+        <link rel="stylesheet" type="text/css" href="{{ css_theme }}" />
     {% endif %}
     {% include "pretixpresale/fragment_js.html" %}
     <meta name="referrer" content="origin">

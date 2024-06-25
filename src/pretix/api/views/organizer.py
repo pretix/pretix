@@ -51,10 +51,8 @@ from pretix.base.models import (
     MembershipType, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
     User,
 )
-from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers import OF_SELF
 from pretix.helpers.dicts import merge_dicts
-from pretix.presale.style import regenerate_organizer_css
 
 
 class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
@@ -504,8 +502,6 @@ class OrganizerSettingsView(views.APIView):
                     k: v for k, v in s.validated_data.items()
                 }
             )
-        if any(p in s.changed_data for p in SETTINGS_AFFECTING_CSS):
-            regenerate_organizer_css.apply_async(args=(request.organizer.pk,))
         s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer, context={
             'request': request
         })

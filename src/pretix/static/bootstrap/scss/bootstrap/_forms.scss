@@ -414,13 +414,13 @@ textarea.form-control {
 
 // Feedback states
 .has-success {
-  @include form-control-validation($state-success-text, $state-success-text, $state-success-bg);
+  @include form-control-validation($state-success-text, $state-success-text, $state-success-bg, $state-success-border-focus, $state-success-shadow-focus);
 }
 .has-warning {
-  @include form-control-validation($state-warning-text, $state-warning-text, $state-warning-bg);
+  @include form-control-validation($state-warning-text, $state-warning-text, $state-warning-bg, $state-warning-border-focus, $state-warning-shadow-focus);
 }
 .has-error {
-  @include form-control-validation($state-danger-text, $state-danger-text, $state-danger-bg);
+  @include form-control-validation($state-danger-text, $state-danger-text, $state-danger-bg, $state-danger-border-focus, $state-danger-shadow-focus);
 }
 
 // Reposition feedback icon if input has visible label above

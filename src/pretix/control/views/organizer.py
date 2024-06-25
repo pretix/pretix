@@ -91,7 +91,6 @@ from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import multiexport, scheduled_organizer_export
 from pretix.base.services.mail import SendMailException, mail
-from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
@@ -127,7 +126,6 @@ from pretix.helpers.format import format_map
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.customer import TokenGenerator
-from pretix.presale.style import regenerate_organizer_css
 
 
 class OrganizerList(PaginationMixin, ListView):
@@ -466,7 +464,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     def form_valid(self, form):
         self.sform.save()
         self.save_footer_links_formset(self.object)
-        change_css = False
+        self.object.cache.clear()
         if self.sform.has_changed():
             self.request.organizer.log_action(
                 'pretix.organizer.settings',
@@ -478,8 +476,6 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
                     for k in self.sform.changed_data
                 }
             )
-            if any(p in self.sform.changed_data for p in SETTINGS_AFFECTING_CSS):
-                change_css = True
         if self.footer_links_formset.has_changed():
             self.request.organizer.log_action('pretix.organizer.footerlinks.changed', user=self.request.user, data={
                 'data': self.footer_links_formset.cleaned_data
@@ -491,13 +487,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
                 data={k: form.cleaned_data.get(k) for k in form.changed_data}
             )
 
-        if change_css:
-            regenerate_organizer_css.apply_async(args=(self.request.organizer.pk,))
-            messages.success(self.request, _('Your changes have been saved. Please note that it can '
-                                             'take a short period of time until your changes become '
-                                             'active.'))
-        else:
-            messages.success(self.request, _('Your changes have been saved.'))
+        messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
     def get_form_kwargs(self):

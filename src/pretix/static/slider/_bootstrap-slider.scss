@@ -301,7 +301,7 @@ $slider-unicode-color: #726204 !default;
 }
 
 .slider-selection.tick-slider-selection {
-  @include slider_background-image($slider-secondary-top, $slider-secondary-bottom, mix($slider-secondary-top, $slider-secondary-bottom));
+  @include slider_background-image($slider-secondary-top, $slider-secondary-bottom, $slider-secondary-top);
 }
 
 .slider-track-low, .slider-track-high {
@@ -313,7 +313,7 @@ $slider-unicode-color: #726204 !default;
 }
 
 .slider-handle {
-  @include slider_background-image($slider-primary-top, $slider-primary-bottom, mix($slider-primary-top, $slider-primary-bottom));
+  @include slider_background-image($slider-primary-top, $slider-primary-bottom, $slider-primary-top);
   @include slider_box-shadow(inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05));
 
   position: absolute;
@@ -380,7 +380,7 @@ $slider-unicode-color: #726204 !default;
   }
 
   &.in-selection {
-    @include slider_background-image($slider-secondary-top, $slider-secondary-bottom, mix($slider-secondary-top, $slider-secondary-bottom));
+    @include slider_background-image($slider-secondary-top, $slider-secondary-bottom, $slider-secondary-top);
     opacity: 1;
   }
 }

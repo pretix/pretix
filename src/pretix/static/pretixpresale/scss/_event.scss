@@ -282,7 +282,7 @@ h2.subevent-head {
         background: $brand-success;
     }
     .slider-handle {
-        @include slider_background-image($brand-success, darken($brand-success, 5%), mix($brand-success, darken($brand-success, 5%)));
+        @include slider_background-image($brand-success, var(--pretix-brand-success-darken-5), $brand-success);
     }
 
     .slider-tick-container {

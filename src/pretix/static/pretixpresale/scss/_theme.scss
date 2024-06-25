@@ -1,5 +1,3 @@
-@import "../../pretixbase/scss/_contrast.scss";
-
 h1, .h1,
 h2, .h2,
 h3, .h3 {
@@ -38,10 +36,10 @@ h3, .h3 {
   padding-top: 15px;
 
   a:link, a:visited {
-    color: choose-contrast-color($body-bg, white, $link-color);
+    color: var(--pretix-link-contrast-color);
   }
   a:active, a:hover, a:focus {
-    color: choose-contrast-color($body-bg, white, $link-hover-color);
+    color: var(--pretix-link-hover-contrast-color);
   }
 }
 
@@ -130,7 +128,7 @@ footer {
 }
 
 .label-success-warning {
-  @include label-variant($label-success-bg);
+  @include label-variant($label-success-bg, $label-success-bg-hover);
 
   padding-left: 2.5em;
   position: relative;

@@ -81,13 +81,6 @@ class OrganizerTest(SoupTest):
         assert self.orga1.name == "CCC e.V."
 
     def test_organizer_display_settings(self):
-        called = False
-
-        def set_called(*args, **kwargs):
-            nonlocal called
-            called = True
-
-        self.monkeypatch.setattr("pretix.presale.style.regenerate_organizer_css.apply_async", set_called)
         assert not self.orga1.settings.presale_css_checksum
         doc = self.get_doc('/control/organizer/%s/edit' % (self.orga1.slug,))
         doc.select("[name=settings-primary_color]")[0]['value'] = "#33c33c"
@@ -99,7 +92,6 @@ class OrganizerTest(SoupTest):
             assert doc.select("[name=settings-primary_color]")[0]['value'] == "#33c33c"
         self.orga1.settings.flush()
         assert self.orga1.settings.primary_color == "#33c33c"
-        assert called
 
     def test_email_settings(self):
         doc = self.get_doc('/control/organizer/%s/settings/email' % self.orga1.slug)
