@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-25 09:31+0000\n"
+"PO-Revision-Date: 2024-06-25 09:57+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -15541,22 +15541,20 @@ msgstr ""
 #: pretix/control/logdisplay.py:460 pretix/control/views/user.py:489
 #: pretix/control/views/user.py:549 pretix/control/views/user.py:608
 msgid "Two-factor authentication has been enabled."
-msgstr ""
+msgstr "Tvåfaktorsautentisering har aktiverats."
 
 #: pretix/control/logdisplay.py:461 pretix/control/views/user.py:392
 #: pretix/control/views/user.py:624
 msgid "Two-factor authentication has been disabled."
-msgstr ""
+msgstr "Tvåfaktorsautentisering har inaktiverats."
 
 #: pretix/control/logdisplay.py:462 pretix/control/views/user.py:641
 msgid "Your two-factor emergency codes have been regenerated."
-msgstr ""
+msgstr "Dina tvåfaktors nödkoder har återskapats."
 
 #: pretix/control/logdisplay.py:463
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "A two-factor emergency code has been generated."
-msgstr "Denna faktura har skapats."
+msgstr "En tvåfaktors nödkod har genererats."
 
 #: pretix/control/logdisplay.py:464
 #, python-brace-format
@@ -15564,6 +15562,7 @@ msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
 msgstr ""
+"En ny tvåfaktorsautentiseringsenhet \"{name}\" har lagts till i ditt konto."
 
 #: pretix/control/logdisplay.py:466
 #, python-brace-format
@@ -15571,373 +15570,350 @@ msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
 msgstr ""
+"Tvåfaktorsautentiseringsenheten \"{name}\" har tagits bort från ditt konto."
 
 #: pretix/control/logdisplay.py:468
 msgid "Notifications have been enabled."
-msgstr ""
+msgstr "Notifikationer har aktiverats."
 
 #: pretix/control/logdisplay.py:469
 msgid "Notifications have been disabled."
-msgstr ""
+msgstr "Notifikationer har inaktiverats."
 
 #: pretix/control/logdisplay.py:470
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "Dina notifikationsinställningar har ändrats."
 
 #: pretix/control/logdisplay.py:471
 msgid "This user has been anonymized."
-msgstr ""
+msgstr "Denna användare har anonymiserats."
 
 #: pretix/control/logdisplay.py:474
 msgid "Password reset mail sent."
-msgstr ""
+msgstr "E-post för återställning av lösenord skickad."
 
 #: pretix/control/logdisplay.py:475
 msgid "The password has been reset."
-msgstr ""
+msgstr "Lösenordet har återställts."
 
 #: pretix/control/logdisplay.py:476
 msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
 msgstr ""
+"En upprepning av lösenordsåterställningen har nekats eftersom den senaste "
+"begäran gjordes för mindre än 24 timmar sedan."
 
 #: pretix/control/logdisplay.py:478
 #, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr ""
+msgstr "Arrangören \"{name}\" har raderats."
 
 #: pretix/control/logdisplay.py:479
 msgid "The voucher has been created."
-msgstr ""
+msgstr "Presentkortet har skapats."
 
 #: pretix/control/logdisplay.py:481
 msgid "The voucher has been created and sent to a person on the waiting list."
-msgstr ""
+msgstr "Presentkortet har skapats och skickats till en person på väntelistan."
 
 #: pretix/control/logdisplay.py:482
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
 msgstr ""
+"Presentkortet har ställts in att gå ut eftersom mottagaren tog bort sig från "
+"väntelistan."
 
 #: pretix/control/logdisplay.py:483
 msgid "The voucher has been changed."
-msgstr ""
+msgstr "Presentkortet har ändrats."
 
 #: pretix/control/logdisplay.py:484
 msgid "The voucher has been deleted."
-msgstr ""
+msgstr "Presentkortet har raderats."
 
 #: pretix/control/logdisplay.py:485
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr ""
+msgstr "Presentkortet har lösts in i ordern {order_code}."
 
 #: pretix/control/logdisplay.py:486
 msgid "The product has been created."
-msgstr ""
+msgstr "Produkten har skapats."
 
 #: pretix/control/logdisplay.py:487
 msgid "The product has been changed."
-msgstr ""
+msgstr "Produkten har ändrats."
 
 #: pretix/control/logdisplay.py:488
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "The product has been reordered."
-msgstr "Dina ändringar har sparats."
+msgstr "Produkten har ordnats om."
 
 #: pretix/control/logdisplay.py:489
 msgid "The product has been deleted."
-msgstr ""
+msgstr "Produkten har tagits bort."
 
 #: pretix/control/logdisplay.py:490
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
-msgstr ""
+msgstr "Variationen \"{value}\" har skapats."
 
 #: pretix/control/logdisplay.py:491
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr ""
+msgstr "Variationen \"{value}\" har tagits bort."
 
 #: pretix/control/logdisplay.py:492
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr ""
+msgstr "Variationen \"{value}\" har ändrats."
 
 #: pretix/control/logdisplay.py:493
 msgid "An add-on has been added to this product."
-msgstr ""
+msgstr "Ett tillägg har lagts till på denna produkt."
 
 #: pretix/control/logdisplay.py:494
 msgid "An add-on has been removed from this product."
-msgstr ""
+msgstr "Ett tillägg har tagits bort från denna produkt."
 
 #: pretix/control/logdisplay.py:495
 msgid "An add-on has been changed on this product."
-msgstr ""
+msgstr "Ett tillägg har ändrats på denna produkt."
 
 #: pretix/control/logdisplay.py:496
 msgid "A bundled item has been added to this product."
-msgstr ""
+msgstr "En buntad artikel har lagts till på denna produkt."
 
 #: pretix/control/logdisplay.py:497
 msgid "A bundled item has been removed from this product."
-msgstr ""
+msgstr "En buntad artikel har tagits bort från denna produkt."
 
 #: pretix/control/logdisplay.py:498
 msgid "A bundled item has been changed on this product."
-msgstr ""
+msgstr "En buntad artikel har ändrats på denna produkt."
 
 #: pretix/control/logdisplay.py:499
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "A meta property has been added to this event."
-msgstr "Denna beställning har avbrutits"
+msgstr "En metaegenskap har lagts till på detta evenemang."
 
 #: pretix/control/logdisplay.py:500
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "A meta property has been removed from this event."
-msgstr "Dina ändringar har sparats."
+msgstr "En metaegenskap har tagits bort från detta evenemang."
 
 #: pretix/control/logdisplay.py:501
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "A meta property has been changed on this event."
-msgstr "Dina ändringar har sparats."
+msgstr "En metaegenskap har ändrats på detta evenemang."
 
 #: pretix/control/logdisplay.py:502
 msgid "The quota has been added."
-msgstr ""
+msgstr "Kvoten har lagts till."
 
 #: pretix/control/logdisplay.py:503
 msgid "The quota has been deleted."
-msgstr ""
+msgstr "Kvoten har tagits bort."
 
 #: pretix/control/logdisplay.py:504
 msgid "The quota has been changed."
-msgstr ""
+msgstr "Kvoten har ändrats."
 
 #: pretix/control/logdisplay.py:505
 msgid "The quota has closed."
-msgstr ""
+msgstr "Kvoten har stängts."
 
 #: pretix/control/logdisplay.py:506 pretix/control/views/item.py:1060
 msgid "The quota has been re-opened."
-msgstr ""
+msgstr "Kvoten har öppnats igen."
 
 #: pretix/control/logdisplay.py:507
 msgid "The category has been added."
-msgstr ""
+msgstr "Kategorin har lagts till."
 
 #: pretix/control/logdisplay.py:508
 msgid "The category has been deleted."
-msgstr ""
+msgstr "Kategorin har tagits bort."
 
 #: pretix/control/logdisplay.py:509
 msgid "The category has been changed."
-msgstr ""
+msgstr "Kategorin har ändrats."
 
 #: pretix/control/logdisplay.py:510
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "The category has been reordered."
-msgstr "Dina ändringar har sparats."
+msgstr "Kategorin har ordnats om."
 
 #: pretix/control/logdisplay.py:511
 msgid "The question has been added."
-msgstr ""
+msgstr "Frågan har lagts till."
 
 #: pretix/control/logdisplay.py:512
 msgid "The question has been deleted."
-msgstr ""
+msgstr "Frågan har tagits bort."
 
 #: pretix/control/logdisplay.py:513
 msgid "The question has been changed."
-msgstr ""
+msgstr "Frågan har ändrats."
 
 #: pretix/control/logdisplay.py:514
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "The question has been reordered."
-msgstr "Denna faktura har skapats."
+msgstr "Frågan har ordnats om."
 
 #: pretix/control/logdisplay.py:515
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "The discount has been added."
-msgstr "Dina ändringar har sparats."
+msgstr "Rabatten har lagts till."
 
 #: pretix/control/logdisplay.py:516
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The discount has been deleted."
-msgstr "Denna beställning har avbrutits"
+msgstr "Rabatten har tagits bort."
 
 #: pretix/control/logdisplay.py:517
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "The discount has been changed."
-msgstr "Dina ändringar har sparats."
+msgstr "Rabatten har ändrats."
 
 #: pretix/control/logdisplay.py:518
 msgid "The tax rule has been added."
-msgstr ""
+msgstr "Skatteregeln har lagts till."
 
 #: pretix/control/logdisplay.py:519
 msgid "The tax rule has been deleted."
-msgstr ""
+msgstr "Skatteregeln har tagits bort."
 
 #: pretix/control/logdisplay.py:520
 msgid "The tax rule has been changed."
-msgstr ""
+msgstr "Skatteregeln har ändrats."
 
 #: pretix/control/logdisplay.py:521
 msgid "The check-in list has been added."
-msgstr ""
+msgstr "Incheckningslistan har lagts till."
 
 #: pretix/control/logdisplay.py:522 pretix/control/logdisplay.py:523
 msgid "The check-in list has been deleted."
-msgstr ""
+msgstr "Incheckningslistan har tagits bort."
 
 #: pretix/control/logdisplay.py:524
 msgid "The check-in list has been changed."
-msgstr ""
+msgstr "Incheckningslistan har ändrats."
 
 #: pretix/control/logdisplay.py:525
 msgid "The event settings have been changed."
-msgstr ""
+msgstr "Evenemangsinställningarna har ändrats."
 
 #: pretix/control/logdisplay.py:526
 msgid "The ticket download settings have been changed."
-msgstr ""
+msgstr "Inställningarna för nedladdning av biljetter har ändrats."
 
 #: pretix/control/logdisplay.py:527
 msgid "A plugin has been enabled."
-msgstr ""
+msgstr "Ett tillägg har aktiverats."
 
 #: pretix/control/logdisplay.py:528
 msgid "A plugin has been disabled."
-msgstr ""
+msgstr "Ett tillägg har inaktiverats."
 
 #: pretix/control/logdisplay.py:529
 msgid "The shop has been taken live."
-msgstr ""
+msgstr "Butiken har gått live."
 
 #: pretix/control/logdisplay.py:530
 msgid "The shop has been taken offline."
-msgstr ""
+msgstr "Butiken har tagits offline."
 
 #: pretix/control/logdisplay.py:531
 msgid "The shop has been taken into test mode."
-msgstr ""
+msgstr "Butiken har ställts in i testläge."
 
 #: pretix/control/logdisplay.py:532
 msgid "The test mode has been disabled."
-msgstr ""
+msgstr "Testläget har inaktiverats."
 
 #: pretix/control/logdisplay.py:533
 msgid "The event has been created."
-msgstr ""
+msgstr "Evenemanget har skapats."
 
 #: pretix/control/logdisplay.py:534
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The event details have been changed."
-msgstr "Denna beställning har avbrutits"
+msgstr "Evenemangsdetaljerna har ändrats."
 
 #: pretix/control/logdisplay.py:536
 msgid "An answer option has been added to the question."
-msgstr ""
+msgstr "Ett svarsalternativ har lagts till frågan."
 
 #: pretix/control/logdisplay.py:537
 msgid "An answer option has been removed from the question."
-msgstr ""
+msgstr "Ett svarsalternativ har tagits bort från frågan."
 
 #: pretix/control/logdisplay.py:538
 msgid "An answer option has been changed."
-msgstr ""
+msgstr "Ett svarsalternativ har ändrats."
 
 #: pretix/control/logdisplay.py:539
 msgid "A user has been added to the event team."
-msgstr ""
+msgstr "En användare har lagts till i evenemangsteamet."
 
 #: pretix/control/logdisplay.py:540
 msgid "A user has been invited to the event team."
-msgstr ""
+msgstr "En användare har bjudits in till evenemangsteamet."
 
 #: pretix/control/logdisplay.py:541
 msgid "A user's permissions have been changed."
-msgstr ""
+msgstr "En användares behörigheter har ändrats."
 
 #: pretix/control/logdisplay.py:542
 msgid "A user has been removed from the event team."
-msgstr ""
+msgstr "En användare har tagits bort från eventteamet."
 
 #: pretix/control/logdisplay.py:543 pretix/control/logdisplay.py:544
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr ""
+msgstr "En kupong har skickats till en person på väntelistan."
 
 #: pretix/control/logdisplay.py:545
 msgid "An entry has been removed from the waiting list."
-msgstr ""
+msgstr "En post har tagits bort från väntelistan."
 
 #: pretix/control/logdisplay.py:546
 msgid "An entry has been transferred to another waiting list."
-msgstr ""
+msgstr "En post har överförts till en annan väntelista."
 
 #: pretix/control/logdisplay.py:547
 msgid "An entry has been changed on the waiting list."
-msgstr ""
+msgstr "En post har ändrats på väntelistan."
 
 #: pretix/control/logdisplay.py:548
 msgid "An entry has been added to the waiting list."
-msgstr ""
+msgstr "En post har lagts till på väntelistan."
 
 #: pretix/control/logdisplay.py:549
 msgid "The team has been created."
-msgstr ""
+msgstr "Teamet har skapats."
 
 #: pretix/control/logdisplay.py:550
 msgid "The team settings have been changed."
-msgstr ""
+msgstr "Teaminställningarna har ändrats."
 
 #: pretix/control/logdisplay.py:551
 msgid "The team has been deleted."
-msgstr ""
+msgstr "Teamet har raderats."
 
 #: pretix/control/logdisplay.py:552 pretix/control/views/organizer.py:1974
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "The gate has been created."
-msgstr "Dina ändringar har sparats."
+msgstr "Porten har skapats."
 
 #: pretix/control/logdisplay.py:553
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "The gate has been changed."
-msgstr "Dina ändringar har sparats."
+msgstr "Porten har ändrats."
 
 #: pretix/control/logdisplay.py:554
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The gate has been deleted."
-msgstr "Denna beställning har avbrutits"
+msgstr "Porten har raderats."
 
 #: pretix/control/logdisplay.py:555
 msgctxt "subevent"
 msgid "The event date has been deleted."
-msgstr ""
+msgstr "Evenemangsdatumet har raderats."
 
 #: pretix/control/logdisplay.py:556
-#, fuzzy
-#| msgid "The order has been canceled."
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr "Denna beställning har avbrutits"
+msgstr "Evenemangsdagen har blivit inställd."
 
 #: pretix/control/logdisplay.py:557
 msgctxt "subevent"
