@@ -83,7 +83,7 @@ h2.content-header {
     margin: calc(20px * var(--pretix-body-bg-white-0)) auto;
     padding-left: calc(25px * var(--pretix-body-bg-white-0) + 15px * var(--pretix-body-bg-white-1));
     padding-right: calc(25px * var(--pretix-body-bg-white-0) + 15px * var(--pretix-body-bg-white-1));
-    border-radius: calc($border-radius-large * var(--pretix-body-bg-white-0));
+    border-radius: calc(#{$border-radius-large} * var(--pretix-body-bg-white-0));
   }
   .page-header-links-outside {
     padding-left: calc(15px * var(--pretix-body-bg-white-1));
@@ -97,7 +97,7 @@ h2.content-header {
     margin-bottom: calc(-20px * var(--pretix-body-bg-white-0));
   }
   .page-header-links-outside > div.header-part {
-    padding-bottom: calc(15px * var(--pretix-body-bg-white-1));
+    padding-bottom: calc(10px * var(--pretix-body-bg-white-0) + 15px * var(--pretix-body-bg-white-1));
   }
 
   .page-header.logo-large {
@@ -107,8 +107,8 @@ h2.content-header {
     margin-right: calc(-25px * var(--pretix-body-bg-white-0));
 
     img {
-      border-top-right-radius: calc($border-radius-large * var(--pretix-body-bg-white-0));
-      border-top-left-radius: calc($border-radius-large * var(--pretix-body-bg-white-0));
+      border-top-right-radius: calc(#{$border-radius-large} * var(--pretix-body-bg-white-0));
+      border-top-left-radius: calc(#{$border-radius-large} * var(--pretix-body-bg-white-0));
     }
   }
 
