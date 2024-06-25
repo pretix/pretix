@@ -34,11 +34,13 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import calendar
+import functools
 import sys
 import uuid
-from collections import Counter, OrderedDict
+from collections import Counter, OrderedDict, defaultdict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
+from itertools import groupby
 from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 
@@ -60,6 +62,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
+from math import inf
 
 from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
@@ -110,17 +113,137 @@ class ItemCategory(LoggedModel):
                     'only be bought in combination with a product that has this category configured as a possible '
                     'source for add-ons.')
     )
+    CROSS_SELLING_MODES = (
+        (None, _('Normal category')),
+        ('both', _('Combined category')),
+        ('only', _('Cross-selling category')),
+    )
+    cross_selling_mode = models.CharField(
+        choices=CROSS_SELLING_MODES,
+        null=True,
+        max_length=5
+    )
+    CROSS_SELLING_CONDITION = (
+        ('always', _('Always show in cross-selling step')),
+        ('products', _('Only if the cart contains one of these products')),
+        ('discounts', _('Only show products affected by discount rules')),
+    )
+    cross_selling_condition = models.CharField(
+        verbose_name=_("Cross-selling condition"),
+        choices=CROSS_SELLING_CONDITION,
+        null=True,
+        max_length=10,
+    )
+    cross_selling_match_products = models.ManyToManyField(
+        'pretixbase.Item',
+        blank=True,
+        verbose_name=_("Cross-selling condition products"),
+        related_name="matched_by_cross_selling_categories",
+    )
 
     class Meta:
         verbose_name = _("Product category")
         verbose_name_plural = _("Product categories")
         ordering = ('position', 'id')
 
+    def cross_sell_visible(self, cart, sales_channel):
+        """
+        If this category should be visible in the cross-selling step for a given cart and sales_channel, this method
+        returns a queryset of the items that should be displayed, as well as a dict giving additional information on them.
+
+        :returns: (QuerySet<Item>, dict<item_pk: (max_count, discount_rule)>)
+            max_count is `inf` if the item should not be limited
+            discount_rule is None if the item will not be discounted
+        """
+        if self.cross_selling_mode is None:
+            return None, {}
+        if self.cross_selling_condition == 'always':
+            return self.items.all(), {}
+        if self.cross_selling_condition == 'products':
+            match = set(match.pk for match in self.cross_selling_match_products.only('pk'))  # TODO prefetch this
+            return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else (None, {})
+        if self.cross_selling_condition == 'discounts':
+            if not hasattr(self.event, '_potential_discounts_by_item_for_current_cart'):
+                potential_discounts_by_cartpos = defaultdict(list)
+
+                from ..services.pricing import apply_discounts
+                apply_discounts(
+                    self.event,
+                    sales_channel,
+                    [
+                        (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled,
+                         cp.listed_price - cp.price_after_voucher)
+                        for cp in cart
+                    ],
+                    collect_potential_discounts=potential_discounts_by_cartpos
+                )
+
+                # technically, this is a dict, but we use it as an OrderedSet here
+                potential_discount_set = dict.fromkeys(info for lst in potential_discounts_by_cartpos.values() for info in lst)
+
+                # sum up the max_counts and pass them on (also pass on the discount_rules so we can calculate actual discounted prices later):
+                # group by benefit product
+                # - max_count for product: sum up max_counts
+                # - discount_rule for product: take first discount_rule
+
+                def discount_info(item, infos_for_item):
+                    infos_for_item = list(infos_for_item)
+                    return (
+                        item,
+                        sum(max_count for (item, discount_rule, max_count, i) in infos_for_item),
+                        next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item)
+                    )
+
+                self.event._potential_discounts_by_item_for_current_cart = [
+                    discount_info(item, infos_for_item) for item, infos_for_item in
+                    groupby(
+                        sorted(
+                            (
+                                (item, discount_rule, max_count, i)
+                                for (discount_rule, max_count, i) in potential_discount_set.keys()
+                                for item in discount_rule.benefit_limit_products.all()
+                            ),
+                            key=lambda tup: tup[0].pk
+                        ),
+                        lambda tup: tup[0])
+                ]
+
+            my_item_pks = self.items.values_list('pk', flat=True)
+            potential_discount_items = {
+                item.pk: (max_count, discount_rule)
+                for item, max_count, discount_rule in self.event._potential_discounts_by_item_for_current_cart
+                if max_count > 0 and item.pk in my_item_pks and item.is_available()
+            }
+
+            return self.items.filter(pk__in=potential_discount_items), potential_discount_items
+
     def __str__(self):
         name = self.internal_name or self.name
-        if self.is_addon:
-            return _('{category} (Add-On products)').format(category=str(name))
+        category_type = self.get_category_type_display()
+        if category_type:
+            return _('{category} ({category_type})').format(category=str(name), category_type=category_type)
         return str(name)
+
+    def get_category_type_display(self):
+        if self.is_addon:
+            return _('Add-On products')
+        elif self.cross_selling_mode:
+            return self.get_cross_selling_mode_display()
+        else:
+            return None
+
+    @property
+    def category_type(self):
+        return 'addon' if self.is_addon else self.cross_selling_mode or 'normal'
+
+    @category_type.setter
+    def category_type(self, new_value):
+        if new_value == 'addon':
+            self.is_addon = True
+            self.cross_selling_mode = None
+        else:
+            self.is_addon = False
+            self.cross_selling_mode = None if new_value == 'normal' else new_value
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -259,7 +382,7 @@ class SubEventItemVariation(models.Model):
         return True
 
 
-def filter_available(qs, channel='web', voucher=None, allow_addons=False):
+def filter_available(qs, channel='web', voucher=None, allow_addons=False, allow_cross_sell=False):
     q = (
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
@@ -270,6 +393,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
     )
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
+    if not allow_cross_sell:
+        q &= Q(Q(category__isnull=True) | ~Q(category__cross_selling_mode='only'))
 
     if voucher:
         if voucher.item_id:
@@ -283,8 +408,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
 
 
 class ItemQuerySet(models.QuerySet):
-    def filter_available(self, channel='web', voucher=None, allow_addons=False):
-        return filter_available(self, channel, voucher, allow_addons)
+    def filter_available(self, channel='web', voucher=None, allow_addons=False, allow_cross_sell=False):
+        return filter_available(self, channel, voucher, allow_addons, allow_cross_sell)
 
 
 class ItemQuerySetManager(ScopedManager(organizer='event__organizer').__class__):
@@ -292,8 +417,8 @@ class ItemQuerySetManager(ScopedManager(organizer='event__organizer').__class__)
         super().__init__()
         self._queryset_class = ItemQuerySet
 
-    def filter_available(self, channel='web', voucher=None, allow_addons=False):
-        return filter_available(self.get_queryset(), channel, voucher, allow_addons)
+    def filter_available(self, channel='web', voucher=None, allow_addons=False, allow_cross_sell=False):
+        return filter_available(self.get_queryset(), channel, voucher, allow_addons, allow_cross_sell)
 
 
 class Item(LoggedModel):

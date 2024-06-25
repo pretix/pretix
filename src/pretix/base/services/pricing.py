@@ -155,7 +155,8 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
 
 
 def apply_discounts(event: Event, sales_channel: str,
-                    positions: List[Tuple[int, Optional[int], Decimal, bool, bool]]) -> List[Decimal]:
+                    positions: List[Tuple[int, Optional[int], Decimal, bool, bool]],
+                    collect_potential_discounts=None) -> List[Decimal]:
     """
     Applies any dynamic discounts to a cart
 
@@ -177,7 +178,7 @@ def apply_discounts(event: Event, sales_channel: str,
             idx: (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)
             for idx, (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount) in enumerate(positions)
             if not is_bundled and idx not in new_prices
-        })
+        }, collect_potential_discounts)
         for k in result.keys():
             result[k] = (result[k], discount)
         new_prices.update(result)

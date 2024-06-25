@@ -1520,10 +1520,9 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
     """
-    Removes a list of items from a user's cart.
     :param event: The event ID in question
     :param voucher: A voucher code
-    :param session: Session ID of a guest
+    :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
@@ -1540,10 +1539,10 @@ def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='e
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def remove_cart_position(self, event: Event, position: int, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
     """
-    Removes a list of items from a user's cart.
+    Removes an item specified by its position ID from a user's cart.
     :param event: The event ID in question
     :param position: A cart position ID
-    :param session: Session ID of a guest
+    :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
@@ -1560,9 +1559,9 @@ def remove_cart_position(self, event: Event, position: int, cart_id: str=None, l
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
     """
-    Removes a list of items from a user's cart.
+    Removes all items from a user's cart.
     :param event: The event ID in question
-    :param session: Session ID of a guest
+    :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
@@ -1577,13 +1576,14 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, locale='en',
+def set_cart_addons(self, event: Event, addons: List[dict], add_to_cart_items: List[dict], cart_id: str=None, locale='en',
                     invoice_address: int=None, sales_channel='web', override_now_dt: datetime=None) -> None:
     """
-    Removes a list of items from a user's cart.
+    Assigns addons to eligible products in a user's cart, adding and removing the addon products as necessary to
+    ensure the requested addon state.
     :param event: The event ID in question
     :param addons: A list of dicts with the keys addon_to, item, variation
-    :param session: Session ID of a guest
+    :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):
         ia = False
@@ -1597,6 +1597,7 @@ def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, l
             try:
                 cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, sales_channel=sales_channel)
                 cm.set_addons(addons)
+                cm.add_new_items(add_to_cart_items)
                 cm.commit()
             except LockTimeoutException:
                 self.retry()

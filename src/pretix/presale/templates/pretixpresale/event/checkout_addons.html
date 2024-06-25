@@ -6,9 +6,12 @@
 {% load money %}
 {% load thumb %}
 {% block inner %}
-    <p>
-        {% trans "For some of the products in your cart, you can choose additional options before you continue." %}
-    </p>
+
+    {% if forms %}
+        <p>
+            {% trans "For some of the products in your cart, you can choose additional options before you continue." %}
+        </p>
+    {% endif %}
     <form class="form-horizontal" method="post" data-asynctask
             data-asynctask-headline="{% trans "We're now trying to book these add-ons for you!" %}">
         {% csrf_token %}
@@ -46,6 +49,9 @@
                 </details>
             {% endfor %}
         </div>
+
+        {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event %}
+
         <div class="row checkout-button-row">
             <div class="col-md-4 col-sm-6">
                 <a class="btn btn-block btn-default btn-lg"

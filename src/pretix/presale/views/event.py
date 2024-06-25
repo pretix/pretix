@@ -110,7 +110,8 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
+def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None,
+                      allow_addons=False, allow_cross_sell=False,
                       quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
                       ignore_hide_sold_out_for_item_ids=None):
     base_qs_set = base_qs is not None
@@ -192,7 +193,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         )
     )
 
-    items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher, allow_addons=allow_addons).select_related(
+    items = base_qs.using(settings.DATABASE_REPLICA).filter_available(
+        channel=channel, voucher=voucher, allow_addons=allow_addons, allow_cross_sell=allow_cross_sell
+    ).select_related(
         'category', 'tax_rule',  # for re-grouping
         'hidden_if_available',
     ).prefetch_related(
