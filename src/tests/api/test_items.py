@@ -128,7 +128,10 @@ TEST_CATEGORY_RES = {
     "description": {"en": ""},
     "internal_name": None,
     "position": 0,
-    "is_addon": False
+    "is_addon": False,
+    "cross_selling_mode": None,
+    "cross_selling_condition": None,
+    "cross_selling_match_products": [],
 }
 
 
