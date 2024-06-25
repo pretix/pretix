@@ -43,6 +43,7 @@ from collections import Counter, OrderedDict, defaultdict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from itertools import groupby
+from math import inf
 from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 
@@ -64,7 +65,6 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
-from math import inf
 
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
