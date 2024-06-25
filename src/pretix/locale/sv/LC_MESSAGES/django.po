@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-25 09:57+0000\n"
+"PO-Revision-Date: 2024-06-25 10:54+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -15918,85 +15918,81 @@ msgstr "Evenemangsdagen har blivit inställd."
 #: pretix/control/logdisplay.py:557
 msgctxt "subevent"
 msgid "The event date has been changed."
-msgstr ""
+msgstr "Evenemangsdagen har ändrats."
 
 #: pretix/control/logdisplay.py:558
 msgctxt "subevent"
 msgid "The event date has been created."
-msgstr ""
+msgstr "Evenemangsdagen har skapats."
 
 #: pretix/control/logdisplay.py:559
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
-msgstr ""
+msgstr "En kvot har lagts till för evenemangsdagen."
 
 #: pretix/control/logdisplay.py:560
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
-msgstr ""
+msgstr "En kvot har ändrats för evenemangsdagen."
 
 #: pretix/control/logdisplay.py:561
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
-msgstr ""
+msgstr "En kvot har tagits bort från evenemangsdagen."
 
 #: pretix/control/logdisplay.py:562
 msgid "The device has been created."
-msgstr ""
+msgstr "Enheten har skapats."
 
 #: pretix/control/logdisplay.py:563
 msgid "The device has been changed."
-msgstr ""
+msgstr "Enheten har ändrats."
 
 #: pretix/control/logdisplay.py:564
 msgid "Access of the device has been revoked."
-msgstr ""
+msgstr "Åtkomsten till enheten har återkallats."
 
 #: pretix/control/logdisplay.py:565
 msgid "The device has been initialized."
-msgstr ""
+msgstr "Enheten har initialiserats."
 
 #: pretix/control/logdisplay.py:566
 msgid "The access token of the device has been regenerated."
-msgstr ""
+msgstr "Åtkomsttoken för enheten har förnyats."
 
 #: pretix/control/logdisplay.py:567
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
+"Enheten har meddelat servern om en hårdvaru- eller programvaruuppdatering."
 
 #: pretix/control/logdisplay.py:568
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "The gift card has been created."
-msgstr "Dina ändringar har sparats."
+msgstr "Presentkortet har skapats."
 
 #: pretix/control/logdisplay.py:569 pretix/control/views/organizer.py:1619
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "The gift card has been changed."
-msgstr "Dina ändringar har sparats."
+msgstr "Presentkortet har ändrats."
 
 #: pretix/control/logdisplay.py:570
 msgid "A manual transaction has been performed."
-msgstr ""
+msgstr "En manuell transaktion har utförts."
 
 #: pretix/control/logdisplay.py:605
 msgid "The settings of a payment provider have been changed."
-msgstr ""
+msgstr "Inställningarna för en betalningsleverantör har ändrats."
 
 #: pretix/control/logdisplay.py:608
 msgid "The settings of a ticket output provider have been changed."
-msgstr ""
+msgstr "Inställningarna för en biljettutskriftsleverantör har ändrats."
 
 #: pretix/control/logdisplay.py:611
 msgid "The user confirmed the following message: \"{}\""
-msgstr ""
+msgstr "Användaren bekräftade följande meddelande: \"{}\""
 
 #: pretix/control/logdisplay.py:618
-#, fuzzy, python-brace-format
-#| msgid "The invoice has been generated."
+#, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr "Denna faktura har skapats."
+msgstr "Beställningen har blivit inställd (kommentar: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:620 pretix/control/views/orders.py:1552
 #: pretix/presale/views/order.py:1052
@@ -16007,6 +16003,7 @@ msgstr "Denna beställning har avbrutits."
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
 msgstr ""
+"Incheckningen av position #{posid} på listan \"{list}\" har återställts."
 
 #: pretix/control/logdisplay.py:653
 #, python-brace-format
@@ -16014,107 +16011,115 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
+"Position #{posid} har blivit incheckad manuellt kl. {datetime} på listan \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:658
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
+"Position #{posid} har blivit incheckad igen kl. {datetime} på listan \"{list}"
+"\"."
 
 #: pretix/control/logdisplay.py:665
 #, python-brace-format
 msgid "{user} has been added to the team."
-msgstr ""
+msgstr "{user} har lagts till i teamet."
 
 #: pretix/control/logdisplay.py:668
 #, python-brace-format
 msgid "{user} has been removed from the team."
-msgstr ""
+msgstr "{user} har tagits bort från teamet."
 
 #: pretix/control/logdisplay.py:671
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
-msgstr ""
+msgstr "{user} har gått med i teamet med inbjudan som skickades till {email}."
 
 #: pretix/control/logdisplay.py:676
 #, python-brace-format
 msgid "{user} has been invited to the team."
-msgstr ""
+msgstr "{user} har blivit inbjuden till teamet."
 
 #: pretix/control/logdisplay.py:679
 #, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr ""
+msgstr "Inbjudan för {user} har skickats igen."
 
 #: pretix/control/logdisplay.py:682
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
-msgstr ""
+msgstr "Inbjudan för {user} har återkallats."
 
 #: pretix/control/logdisplay.py:685
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
-msgstr ""
+msgstr "Token \"{name}\" har skapats."
 
 #: pretix/control/logdisplay.py:688
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr ""
+msgstr "Token \"{name}\" har återkallats."
 
 #: pretix/control/logdisplay.py:691
 msgid "Your account settings have been changed."
-msgstr ""
+msgstr "Dina kontoinställningar har ändrats."
 
 #: pretix/control/logdisplay.py:693 pretix/control/views/user.py:252
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
-msgstr ""
+msgstr "Din e-postadress har ändrats till {email}."
 
 #: pretix/control/logdisplay.py:695 pretix/control/views/user.py:249
 msgid "Your password has been changed."
-msgstr ""
+msgstr "Ditt lösenord har ändrats."
 
 #: pretix/control/logdisplay.py:697
 msgid "Your account has been enabled."
-msgstr ""
+msgstr "Ditt konto har blivit aktiverat."
 
 #: pretix/control/logdisplay.py:699
 msgid "Your account has been disabled."
-msgstr ""
+msgstr "Ditt konto har blivit inaktiverat."
 
 #: pretix/control/logdisplay.py:703
 msgid "You impersonated {}."
-msgstr ""
+msgstr "Du har utgett dig för att vara {}."
 
 #: pretix/control/logdisplay.py:706
 msgid "You stopped impersonating {}."
-msgstr ""
+msgstr "Du har slutat utge dig för att vara {}."
 
 #: pretix/control/logdisplay.py:712
 msgid "Blocked manually"
-msgstr ""
+msgstr "Blockerad manuellt"
 
 #: pretix/control/logdisplay.py:714
 msgid "Blocked because of an API integration"
-msgstr ""
+msgstr "Blockerad på grund av en API-integration"
 
 #: pretix/control/middleware.py:153 pretix/control/middleware.py:167
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
 msgstr ""
+"Det valda evenemanget hittades inte eller så har du inte behörighet att "
+"administrera det."
 
 #: pretix/control/middleware.py:180 pretix/control/middleware.py:190
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
 msgstr ""
+"Den valda arrangören hittades inte eller så har du inte behörighet att "
+"administrera den."
 
 #: pretix/control/navigation.py:37 pretix/control/navigation.py:336
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: pretix/control/navigation.py:49 pretix/control/navigation.py:380
 #: pretix/control/navigation.py:485
@@ -16129,7 +16134,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:19
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:15
 msgid "General"
-msgstr ""
+msgstr "Allmänt"
 
 #: pretix/control/navigation.py:57
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:151
@@ -16148,17 +16153,17 @@ msgstr "Betalning"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:129
 #: pretix/presale/templates/pretixpresale/organizers/index.html:131
 msgid "Tickets"
-msgstr ""
+msgstr "Biljetter"
 
 #: pretix/control/navigation.py:89
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:5
 msgid "Tax rules"
-msgstr ""
+msgstr "Skatteregler"
 
 #: pretix/control/navigation.py:97
 msgid "Invoicing"
-msgstr ""
+msgstr "Fakturering"
 
 #: pretix/control/navigation.py:105
 msgctxt "action"
@@ -16168,28 +16173,25 @@ msgstr "Avbruten"
 #: pretix/control/navigation.py:113
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
 msgid "Widget"
-msgstr ""
+msgstr "Widget"
 
 #: pretix/control/navigation.py:126 pretix/control/navigation.py:433
 #: pretix/control/navigation.py:478
 #: pretix/control/templates/pretixcontrol/event/payment.html:41
 msgid "Settings"
-msgstr ""
+msgstr "Inställningar"
 
 #: pretix/control/navigation.py:174
 msgid "Categories"
-msgstr ""
+msgstr "Kategorier"
 
 #: pretix/control/navigation.py:190
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Amount"
 msgid "Discounts"
-msgstr "Belopp"
+msgstr "Rabatter"
 
 #: pretix/control/navigation.py:211
 msgid "Overview"
-msgstr ""
+msgstr "Översikt"
 
 #: pretix/control/navigation.py:219
 #: pretix/control/templates/pretixcontrol/order/index.html:831
@@ -16199,24 +16201,24 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:684
 #: pretix/presale/templates/pretixpresale/event/order.html:136
 msgid "Refunds"
-msgstr ""
+msgstr "Återbetalningar"
 
 #: pretix/control/navigation.py:245
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 #: pretix/control/navigation.py:274
 msgid "All vouchers"
-msgstr ""
+msgstr "Alla kuponger"
 
 #: pretix/control/navigation.py:282
 msgid "Tags"
-msgstr ""
+msgstr "Taggar"
 
 #: pretix/control/navigation.py:294
 msgctxt "navigation"
 msgid "Check-in"
-msgstr ""
+msgstr "Incheckning"
 
 #: pretix/control/navigation.py:303
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:5
@@ -16226,15 +16228,13 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:162
 #: pretix/plugins/checkinlists/apps.py:44
 msgid "Check-in lists"
-msgstr ""
+msgstr "Incheckningslistor"
 
 #: pretix/control/navigation.py:311
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:6
-#, fuzzy
-#| msgid "Change order"
 msgid "Check-in history"
-msgstr "Updatera beställningen"
+msgstr "Incheckningshistorik"
 
 #: pretix/control/navigation.py:354
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
@@ -16247,24 +16247,24 @@ msgstr "Sök"
 #: pretix/plugins/reports/accountingreport.py:677
 #: pretix/plugins/reports/accountingreport.py:871
 msgid "Payments"
-msgstr ""
+msgstr "Betalningar"
 
 #: pretix/control/navigation.py:374
 msgid "User settings"
-msgstr ""
+msgstr "Användarinställningar"
 
 #: pretix/control/navigation.py:385
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
 msgid "Notifications"
-msgstr ""
+msgstr "Notiser"
 
 #: pretix/control/navigation.py:390
 msgid "2FA"
-msgstr ""
+msgstr "Tvåfaktorsautentisering (2FA)"
 
 #: pretix/control/navigation.py:395
 msgid "Authorized apps"
-msgstr ""
+msgstr "Auktoriserade appar"
 
 #: pretix/control/navigation.py:400
 #: pretix/control/templates/pretixcontrol/user/history.html:4
@@ -16272,104 +16272,95 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/history.html:10
 #: pretix/control/templates/pretixcontrol/user/settings.html:70
 msgid "Account history"
-msgstr ""
+msgstr "Kontohistorik"
 
 #: pretix/control/navigation.py:415
 msgid "All users"
-msgstr ""
+msgstr "Alla användare"
 
 #: pretix/control/navigation.py:420
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:7
 msgid "Admin sessions"
-msgstr ""
+msgstr "Administratörssessioner"
 
 #: pretix/control/navigation.py:427
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:7
 msgid "Global settings"
-msgstr ""
+msgstr "Globala inställningar"
 
 #: pretix/control/navigation.py:438
 msgid "Update check"
-msgstr ""
+msgstr "Uppdateringskontroll"
 
 #: pretix/control/navigation.py:443
-#, fuzzy
-#| msgid "Tickets & check-in"
 msgid "License check"
-msgstr "Biljettdesign"
+msgstr "Licenskontroll"
 
 #: pretix/control/navigation.py:448
-#, fuzzy
-#| msgid "{system} User"
 msgid "System report"
-msgstr "{system} Användare"
+msgstr "Systemrapport"
 
 #: pretix/control/navigation.py:492
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
 msgid "Event metadata"
-msgstr ""
+msgstr "Händelsedata"
 
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
 msgid "Webhooks"
-msgstr ""
+msgstr "Webhooks"
 
 #: pretix/control/navigation.py:539
 msgid "Acceptance"
-msgstr ""
+msgstr "Acceptans"
 
 #: pretix/control/navigation.py:560
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Customer VAT ID"
 msgid "Customers"
-msgstr "Kundens moms-ID"
+msgstr "Kunder"
 
 #: pretix/control/navigation.py:579
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:6
 msgid "SSO clients"
-msgstr ""
+msgstr "SSO-klienter"
 
 #: pretix/control/navigation.py:588
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:6
-#, fuzzy
-#| msgid "Payment providers"
 msgid "SSO providers"
-msgstr "Betalningsleverantörer"
+msgstr "SSO-leverantörer"
 
 #: pretix/control/navigation.py:617 pretix/control/navigation.py:624
 msgid "Devices"
-msgstr ""
+msgstr "Enheter"
 
 #: pretix/control/permissions.py:72 pretix/control/permissions.py:109
 #: pretix/control/permissions.py:140 pretix/control/permissions.py:157
 msgid "You do not have permission to view this content."
-msgstr ""
+msgstr "Du har inte behörighet att visa detta innehåll."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:44
 #: pretix/control/templates/pretixcontrol/base.html:356
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
-msgstr ""
+msgstr "Du arbetar för närvarande på uppdrag av %(user)s."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:49
 #: pretix/control/templates/pretixcontrol/base.html:361
 msgid "Stop impersonating"
-msgstr ""
+msgstr "Sluta uppge dig för att vara någon annan"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
-msgstr ""
+msgstr "Skicka återställningsinformation"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:7
 msgid "Accept an invitation"
-msgstr ""
+msgstr "Acceptera en inbjudan"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:10
 #, python-format
@@ -16378,6 +16369,9 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"Om du redan har ett konto på den här webbplatsen med en annan e-postadress "
+"kan du <a %(login_href)s>logga in</a> först och sedan klicka på länken igen "
+"för att acceptera inbjudan med ditt befintliga konto."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
@@ -16388,29 +16382,31 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr ""
+msgstr "Registrera"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:21
 msgid "Log in"
-msgstr ""
+msgstr "Logga in"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:38
 msgid "Lost password?"
-msgstr ""
+msgstr "Glömt lösenordet?"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:9
 #: pretix/control/templates/pretixcontrol/user/reauth.html:9
 msgid "Welcome back!"
-msgstr ""
+msgstr "Välkommen tillbaka!"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:11
 msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
 msgstr ""
+"Du har konfigurerat ditt konto för att kräva autentisering med ett andra "
+"medium, t.ex. din telefon. Var god ange din verifieringskod här:"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:14
 msgid "Token"
