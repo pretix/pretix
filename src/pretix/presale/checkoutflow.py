@@ -36,6 +36,7 @@ import inspect
 import uuid
 from collections import defaultdict
 from decimal import Decimal
+from math import inf
 
 from django.conf import settings
 from django.contrib import messages
@@ -54,7 +55,6 @@ from django.utils.translation import (
 )
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
-from math import inf
 
 from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.items import Question
