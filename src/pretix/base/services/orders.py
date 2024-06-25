@@ -469,10 +469,10 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
     order_denied.send(order.event, order=order)
 
     if send_mail:
-        email_template = order.event.settings.mail_text_order_denied
-        email_subject = order.event.settings.mail_subject_order_denied
-        email_context = get_email_context(event=order.event, order=order, comment=comment)
         with language(order.locale, order.event.settings.region):
+            email_template = order.event.settings.mail_text_order_denied
+            email_subject = order.event.settings.mail_subject_order_denied
+            email_context = get_email_context(event=order.event, order=order, comment=comment)
             try:
                 order.send_mail(
                     email_subject, email_template, email_context,
