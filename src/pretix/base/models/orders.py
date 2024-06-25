@@ -187,8 +187,8 @@ class Order(LockModel, LoggedModel):
     :type require_approval: bool
     :param meta_info: Additional meta information on the order, JSON-encoded.
     :type meta_info: str
-    :param sales_channel: Identifier of the sales channel this order was created through.
-    :type sales_channel: str
+    :param sales_channel: Foreign key to the sales channel this order was created through.
+    :type sales_channel: SalesChannel
     """
 
     STATUS_PENDING = "n"

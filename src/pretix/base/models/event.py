@@ -540,8 +540,10 @@ class Event(EventMixin, LoggedModel):
     :type plugins: str
     :param has_subevents: Enable event series functionality
     :type has_subevents: bool
-    :param sales_channels: A list of sales channel identifiers, that this event is available for sale on
-    :type sales_channels: list
+    :param all_sales_channels: A flag indicating that this event is available on all channels and limit_sales_channels will be ignored.
+    :type all_sales_channels: bool
+    :param limit_sales_channels: A list of sales channel identifiers, that this event is available for sale on
+    :type limit_sales_channels: list
     """
 
     settings_namespace = 'event'

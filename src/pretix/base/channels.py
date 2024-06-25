@@ -62,7 +62,10 @@ class SalesChannelType:
     @property
     def icon(self) -> str:
         """
-        The name of a Font Awesome icon to represent this channel type
+        This can be:
+
+        - The name of a Font Awesome icon to represent this channel type.
+        - The name of a SVG icon file that is resolvable through the static file system. We recommend to design for a size of 18x14 pixels.
         """
         return "circle"
 

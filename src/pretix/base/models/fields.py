@@ -82,8 +82,6 @@ class MultiStringField(TextField):
             return make_multistring_contains_lookup(self.delimiter)
         elif lookup_name == 'icontains':
             return make_multistring_icontains_lookup(self.delimiter)
-        elif lookup_name == 'isempty':
-            return make_multistring_icontains_lookup(self.delimiter)
         elif lookup_name == 'isnull':
             return builtin_lookups.IsNull
         raise NotImplementedError(

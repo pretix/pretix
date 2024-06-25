@@ -1129,5 +1129,3 @@ class SalesChannelForm(I18nModelForm):
                 )
 
         return d
-
-        # self.fields['public_label'].widget.attrs['data-display-dependency'] = '#id_filter_public'

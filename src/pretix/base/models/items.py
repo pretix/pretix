@@ -356,8 +356,10 @@ class Item(LoggedModel):
     :type original_price: decimal.Decimal
     :param require_approval: If set to ``True``, orders containing this product can only be processed and paid after approved by an administrator
     :type require_approval: bool
-    :param sales_channels: Sales channels this item is available on.
-    :type sales_channels: bool
+    :param all_sales_channels: A flag indicating that this item is available on all channels and limit_sales_channels will be ignored.
+    :type all_sales_channels: bool
+    :param limit_sales_channels: A list of sales channel identifiers, that this item is available for sale on.
+    :type limit_sales_channels: list
     :param issue_giftcard: If ``True``, buying this product will give you a gift card with the value of the product's price
     :type issue_giftcard: bool
     :param validity_mode: Instruction how to set ``valid_from``/``valid_until`` on tickets, ``null`` is default event validity.
@@ -1070,6 +1072,10 @@ class ItemVariation(models.Model):
     :param require_approval: If set to ``True``, orders containing this variation can only be processed and paid after
     approval by an administrator
     :type require_approval: bool
+    :param all_sales_channels: A flag indicating that this variation is available on all channels and limit_sales_channels will be ignored.
+    :type all_sales_channels: bool
+    :param limit_sales_channels: A list of sales channel identifiers, that this variation is available for sale on.
+    :type limit_sales_channels: list
 
     """
     item = models.ForeignKey(
