@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-25 10:54+0000\n"
+"PO-Revision-Date: 2024-06-25 20:00+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -26825,28 +26825,32 @@ msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
 "check all uncanceled orders."
 msgstr ""
+"Zamówienia zostały anulowane. Wystąpił błąd z {count} zamówieniami, sprawdź "
+"wszystkie nie anulowane zamówienia."
 
 #: pretix/control/views/orders.py:2872
 msgid "Your input was not valid."
-msgstr ""
+msgstr "Wprowadzone dane były niepoprawne."
 
 #: pretix/control/views/organizer.py:162
 msgid "Token name"
-msgstr ""
+msgstr "Nazwa tokena"
 
 #: pretix/control/views/organizer.py:386
 msgid "This organizer can not be deleted."
-msgstr ""
+msgstr "Tego organizatora nie można usunąć."
 
 #: pretix/control/views/organizer.py:409
 msgid "The organizer has been deleted."
-msgstr ""
+msgstr "Organizator został usunięty."
 
 #: pretix/control/views/organizer.py:413
 msgid ""
 "The organizer could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
+"Organizator nie mógł zostać usunięty, ponieważ niektóre ograniczenia (np. "
+"dane utworzone przez wtyczki) nie pozwalają na to."
 
 #: pretix/control/views/organizer.py:423
 #, python-brace-format
@@ -26854,6 +26858,8 @@ msgid ""
 "The following database models still contain data that cannot be deleted "
 "automatically: {affected_models}"
 msgstr ""
+"Następujące modele bazy danych nadal zawierają dane, których nie można "
+"usunąć automatycznie: {affected_models}"
 
 #: pretix/control/views/organizer.py:546
 msgid "The new organizer has been created."
@@ -26865,7 +26871,7 @@ msgstr "Administratorzy"
 
 #: pretix/control/views/organizer.py:611
 msgid "The team has been created. You can now add members to the team."
-msgstr ""
+msgstr "Zespół został utworzony. Możesz teraz dodawać członków do zespołu."
 
 #: pretix/control/views/organizer.py:622 pretix/control/views/organizer.py:657
 #: pretix/control/views/organizer.py:882 pretix/control/views/organizer.py:966
@@ -26883,31 +26889,35 @@ msgstr ""
 #: pretix/control/views/organizer.py:2539
 #: pretix/control/views/organizer.py:2588
 msgid "Your changes could not be saved."
-msgstr ""
+msgstr "Zmiany nie mogły zostać zapisane."
 
 #: pretix/control/views/organizer.py:690
 msgid "The selected team cannot be deleted."
-msgstr ""
+msgstr "Wybranego zespołu nie można usunąć."
 
 #: pretix/control/views/organizer.py:700
 msgid ""
 "The team could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
+"Zespół nie mógł zostać usunięty, ponieważ niektóre ograniczenia (np. dane "
+"utworzone przez wtyczki) na to nie pozwalają."
 
 #: pretix/control/views/organizer.py:706
 msgid "The selected team has been deleted."
-msgstr ""
+msgstr "Wybrany zespół został usunięty."
 
 #: pretix/control/views/organizer.py:769
 msgid ""
 "You cannot remove the last member from this team as no one would be left "
 "with the permission to change teams."
 msgstr ""
+"Nie można usunąć ostatniego członka z tego zespołu, ponieważ nie zostałby "
+"nikt z uprawnieniami do zmiany zespołu."
 
 #: pretix/control/views/organizer.py:780
 msgid "The member has been removed from the team."
-msgstr ""
+msgstr "Członek został usunięty z zespołu."
 
 #: pretix/control/views/organizer.py:787 pretix/control/views/organizer.py:803
 msgid "Invalid invite selected."
@@ -27228,26 +27238,32 @@ msgstr ""
 #: pretix/control/views/user.py:583
 msgid "You have left all teams that require two-factor authentication."
 msgstr ""
+"Opuściłeś wszystkie zespoły, które wymagają uwierzytelniania "
+"dwuskładnikowego."
 
 #: pretix/control/views/user.py:597
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
 msgstr ""
+"Przed włączeniem uwierzytelniania dwuskładnikowego należy skonfigurować co "
+"najmniej jedno urządzenie."
 
 #: pretix/control/views/user.py:606
 msgid "Two-factor authentication is now enabled for your account."
-msgstr ""
+msgstr "Uwierzytelnianie dwuskładnikowe jest teraz włączone dla Twojego konta."
 
 #: pretix/control/views/user.py:622
 msgid "Two-factor authentication is now disabled for your account."
-msgstr ""
+msgstr "Uwierzytelnianie dwuskładnikowe jest teraz wyłączone dla Twojego konta."
 
 #: pretix/control/views/user.py:645
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices."
 msgstr ""
+"Kody awaryjne zostały wygenerowane na nowo. Pamiętaj, aby przechowywać je w "
+"bezpiecznym miejscu na wypadek utraty dostępu do urządzeń."
 
 #: pretix/control/views/user.py:661
 msgid "Your notifications have been disabled."
@@ -27273,6 +27289,10 @@ msgid ""
 "(other than email, if possible). Any previous emergency tokens for this user "
 "remain active."
 msgstr ""
+"Token awaryjny dla tego użytkownika to \"{token}\". Można go użyć tylko raz. "
+"Upewnij się, że przekazujesz ten kod tylko przez uwierzytelniony kanał (inny "
+"niż e-mail, jeśli to możliwe). Wszelkie poprzednie tokeny awaryjne dla tego "
+"użytkownika pozostają aktywne."
 
 #: pretix/control/views/users.py:312
 msgid "The new user has been created."
@@ -27280,11 +27300,11 @@ msgstr "Nowy użytkownik został utworzony."
 
 #: pretix/control/views/vouchers.py:118
 msgid "Reserve quota"
-msgstr ""
+msgstr "Rezerwacja limitu"
 
 #: pretix/control/views/vouchers.py:118
 msgid "Bypass quota"
-msgstr ""
+msgstr "Pominięcie limitu"
 
 #: pretix/control/views/vouchers.py:133
 #, fuzzy
@@ -27302,16 +27322,16 @@ msgstr "Wybrane pozycje z koszyka zostały usunięte."
 
 #: pretix/control/views/vouchers.py:243 pretix/control/views/vouchers.py:253
 msgid "A voucher can not be deleted if it already has been redeemed."
-msgstr ""
+msgstr "Vouchera nie można usunąć, jeśli został już zrealizowany."
 
 #: pretix/control/views/vouchers.py:259
 msgid "The selected voucher has been deleted."
-msgstr ""
+msgstr "Wybrany voucher został usunięty."
 
 #: pretix/control/views/vouchers.py:379
 #, python-brace-format
 msgid "The new voucher has been created: {code}"
-msgstr ""
+msgstr "Nowy voucher został utworzony: {code}"
 
 #: pretix/control/views/vouchers.py:403
 msgid "There is no voucher with the given voucher code."
@@ -27323,12 +27343,12 @@ msgstr "Nowe kody vouchera zostały utworzone."
 
 #: pretix/control/views/vouchers.py:641
 msgid "The selected vouchers have been deleted or disabled."
-msgstr ""
+msgstr "Wybrane vouchery zostały usunięte lub wyłączone."
 
 #: pretix/control/views/waitinglist.py:70
 #, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
-msgstr ""
+msgstr "Vouchery {num} zostały utworzone i wysłane pocztą elektroniczną."
 
 #: pretix/control/views/waitinglist.py:167
 #, fuzzy
@@ -27339,20 +27359,21 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
 msgstr ""
+"Wiadomość e-mail zawierająca kod vouchera została wysłana na podany adres."
 
 #: pretix/control/views/waitinglist.py:184
 #: pretix/control/views/waitinglist.py:202
 #: pretix/control/views/waitinglist.py:220
 msgid "Waiting list entry not found."
-msgstr ""
+msgstr "Nie znaleziono pozycji na liście oczekujących."
 
 #: pretix/control/views/waitinglist.py:199
 msgid "The waiting list entry has been moved to the top."
-msgstr ""
+msgstr "Wpis na liście oczekujących został przeniesiony na górę."
 
 #: pretix/control/views/waitinglist.py:217
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr ""
+msgstr "Pozycja na liście oczekujących została przeniesiona na koniec listy."
 
 #: pretix/control/views/waitinglist.py:307
 msgid "On list since"
@@ -27382,7 +27403,7 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 #: pretix/helpers/daterange.py:97
 #, python-brace-format
 msgid "{date_from} – {date_to}"
-msgstr ""
+msgstr "{date_from} – {date_to}"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
@@ -27396,7 +27417,7 @@ msgstr ""
 
 #: pretix/helpers/security.py:166
 msgid "Login from new source detected"
-msgstr ""
+msgstr "Wykryto logowanie z nowego źródła"
 
 #: pretix/helpers/security.py:170
 msgid "Unknown country"
@@ -27447,23 +27468,25 @@ msgstr "Jeden identyfikator na stronę"
 
 #: pretix/plugins/badges/exporters.py:97
 msgid "4 landscape A6 pages on one A4 page"
-msgstr ""
+msgstr "4 strony A6 w układzie poziomym na jednej stronie A4"
 
 #: pretix/plugins/badges/exporters.py:105
 msgid "4 portrait A6 pages on one A4 page"
-msgstr ""
+msgstr "4 strony A6 w układzie pionowym na jednej stronie A4"
 
 #: pretix/plugins/badges/exporters.py:113
 msgid "8 landscape A7 pages on one A4 page"
-msgstr ""
+msgstr "8 stron A7 w układzie poziomym na jednej stronie A4"
 
 #: pretix/plugins/badges/exporters.py:121
 msgid "8 portrait A7 pages on one A4 page"
-msgstr ""
+msgstr "8 stron A7 w układzie pionowym na jednej stronie A4"
 
 #: pretix/plugins/badges/exporters.py:353
 msgid "None of the selected products is configured to print badges."
 msgstr ""
+"Żaden z wybranych produktów nie jest skonfigurowany do drukowania "
+"identyfikatorów."
 
 #: pretix/plugins/badges/exporters.py:421
 msgid "Attendee badges"
@@ -27479,15 +27502,17 @@ msgstr "URI przekierowania"
 #: pretix/plugins/badges/exporters.py:423
 msgid "Download all attendee badges as one large PDF for printing."
 msgstr ""
+"Pobierz wszystkie identyfikatory uczestników jako jeden duży plik PDF do "
+"wydrukowania."
 
 #: pretix/plugins/badges/exporters.py:444
 #: pretix/plugins/ticketoutputpdf/exporters.py:80
 msgid "Include pending orders"
-msgstr ""
+msgstr "Uwzględnij zamówienia w toku"
 
 #: pretix/plugins/badges/exporters.py:449
 msgid "Include add-on or bundled positions"
-msgstr ""
+msgstr "Uwzględnij dodatkowe lub pakietowe pozycje"
 
 #: pretix/plugins/badges/exporters.py:454
 #, fuzzy
@@ -27501,14 +27526,18 @@ msgid ""
 "Please note that your individual badge layouts must already be in the "
 "correct size."
 msgstr ""
+"Ta opcja umożliwia wyrównanie wielu identyfikatorów na jednej stronie, na "
+"przykład jeśli chcesz wydrukować arkusz naklejek na zwykłej drukarce "
+"biurowej. Należy pamiętać, że poszczególne układy identyfikatorów muszą mieć "
+"już prawidłowy rozmiar."
 
 #: pretix/plugins/badges/exporters.py:468
 msgid "Only include tickets for dates on or after this date."
-msgstr ""
+msgstr "Uwzględnij bilety tylko z tą datą lub późniejszą."
 
 #: pretix/plugins/badges/exporters.py:475
 msgid "Only include tickets for dates on or before this date."
-msgstr ""
+msgstr "Uwzględnij bilety tylko z tą datą lub wcześniejszą."
 
 #: pretix/plugins/badges/exporters.py:479
 #: pretix/plugins/checkinlists/exporters.py:117
@@ -27516,7 +27545,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:677
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Sort by"
-msgstr ""
+msgstr "Sortuj według"
 
 #: pretix/plugins/badges/exporters.py:626
 #: pretix/plugins/ticketoutputpdf/exporters.py:242
@@ -27525,38 +27554,41 @@ msgid ""
 "invalid values in your databases, such as answers to number questions which "
 "are not a number."
 msgstr ""
+"Dane nie mogły zostać przekonwertowane zgodnie z żądaniem. Może to być "
+"spowodowane nieprawidłowymi wartościami w bazach danych, takimi jak "
+"odpowiedzi na pytania liczbowe, które nie są liczbami."
 
 #: pretix/plugins/badges/forms.py:33
 msgid "Template"
-msgstr ""
+msgstr "Szablon"
 
 #: pretix/plugins/badges/forms.py:34
 msgid ""
 "You can modify the layout or change to a different page size in the next "
 "step."
-msgstr ""
+msgstr "W następnym kroku można zmodyfikować układ lub zmienić rozmiar strony."
 
 #: pretix/plugins/badges/forms.py:51
 msgid "(Do not print badges)"
-msgstr ""
+msgstr "(Nie drukuj identyfikatorów)"
 
 #: pretix/plugins/badges/forms.py:84
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:15
 msgid "Badge layout"
-msgstr ""
+msgstr "Układ identyfikatora"
 
 #: pretix/plugins/badges/signals.py:182
 msgid "Badge layout created."
-msgstr ""
+msgstr "Utworzono układ identyfikatora."
 
 #: pretix/plugins/badges/signals.py:183
 msgid "Badge layout deleted."
-msgstr ""
+msgstr "Usunięto układ identyfikatora."
 
 #: pretix/plugins/badges/signals.py:184
 msgid "Badge layout changed."
-msgstr ""
+msgstr "Zmieniono układ identyfikatora."
 
 #: pretix/plugins/badges/signals.py:197
 #, python-brace-format
@@ -27565,24 +27597,24 @@ msgstr "Układ identyfikatora {val}"
 
 #: pretix/plugins/badges/templates.py:77
 msgid "A6 landscape"
-msgstr ""
+msgstr "A6 poziomo"
 
 #: pretix/plugins/badges/templates.py:82
 msgid "A6 portrait"
-msgstr ""
+msgstr "A6 pionowo"
 
 #: pretix/plugins/badges/templates.py:87
 msgid "A7 landscape"
-msgstr ""
+msgstr "A7 poziomo"
 
 #: pretix/plugins/badges/templates.py:92
 msgid "A7 portrait"
-msgstr ""
+msgstr "A7 pionowo"
 
 #: pretix/plugins/badges/templates.py:97
 #, python-brace-format
 msgid "{width} x {height} mm butterfly badge"
-msgstr ""
+msgstr "Identyfikator sklejany {width} x {height} mm"
 
 #: pretix/plugins/badges/templates.py:183
 #: pretix/plugins/badges/templates.py:188
@@ -27598,7 +27630,7 @@ msgstr ""
 #: pretix/plugins/badges/templates.py:238
 #, python-brace-format
 msgid "{width} x {height} mm label"
-msgstr ""
+msgstr "Etykieta {width} x {height} mm"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
@@ -27614,12 +27646,13 @@ msgstr "Identyfikator"
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Czy na pewno chcesz usunąć układ identyfikatora <strong>%(layout)s</strong>?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr ""
+msgstr "Układ identyfikatora: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:26
 #, fuzzy
@@ -27628,12 +27661,12 @@ msgstr "Aktywny"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
-msgstr ""
+msgstr "Nie utworzono jeszcze żadnych układów identyfikatorów."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
 msgid "Create a new badge layout"
-msgstr ""
+msgstr "Utwórz nowy układ identyfikatora"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:63
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
@@ -27642,20 +27675,20 @@ msgstr "Ustaw jako domyślne"
 
 #: pretix/plugins/badges/views.py:89
 msgid "The new badge layout has been created."
-msgstr ""
+msgstr "Nowy układ identyfikatora został utworzony."
 
 #: pretix/plugins/badges/views.py:150 pretix/plugins/badges/views.py:180
 #: pretix/plugins/badges/views.py:210
 msgid "The requested badge layout does not exist."
-msgstr ""
+msgstr "Żądany układ identyfikatora nie istnieje."
 
 #: pretix/plugins/badges/views.py:192
 msgid "The selected badge layout been deleted."
-msgstr ""
+msgstr "Wybrany układ identyfikatora został usunięty."
 
 #: pretix/plugins/badges/views.py:214
 msgid "Badge layout: {}"
-msgstr ""
+msgstr "Układ identyfikatora: {}"
 
 #: pretix/plugins/banktransfer/apps.py:31
 #: pretix/plugins/banktransfer/apps.py:34
@@ -27670,11 +27703,15 @@ msgid ""
 "Accept payments from your customers using classical wire transfer methods "
 "with your own bank account."
 msgstr ""
+"Akceptuj płatności od swoich klientów za pomocą klasycznych metod przelewów "
+"bankowych na własne konto bankowe."
 
 #: pretix/plugins/banktransfer/apps.py:53
 msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
 msgstr ""
+"Zainstaluj pakiet Python \"chardet\", aby uzyskać lepsze możliwości importu "
+"CSV."
 
 #: pretix/plugins/banktransfer/payment.py:75
 msgid ""
@@ -27684,28 +27721,34 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"Zrozumiałem, że ludzie będą płacić cenę biletu bezpośrednio na moje konto "
+"bankowe, a pretix nie może automatycznie wiedzieć, jakie płatności dotarły. "
+"Dlatego będę ręcznie oznaczać płatności jako kompletne lub regularnie "
+"importować cyfrowy wyciąg bankowy, aby przekazać pretix wymagane informacje."
 
 #: pretix/plugins/banktransfer/payment.py:82
 msgid "Bank account type"
-msgstr ""
+msgstr "Typ konta bankowego"
 
 #: pretix/plugins/banktransfer/payment.py:85
 msgid "SEPA bank account"
-msgstr ""
+msgstr "Konto bankowe SEPA"
 
 #: pretix/plugins/banktransfer/payment.py:86
 msgid "Other bank account"
-msgstr ""
+msgstr "Inne konto bankowe"
 
 #: pretix/plugins/banktransfer/payment.py:91
 msgid "Name of account holder"
-msgstr ""
+msgstr "Imię i nazwisko posiadacza konta"
 
 #: pretix/plugins/banktransfer/payment.py:93
 msgid ""
 "Please note: special characters other than letters, numbers, and some "
 "punctuation can cause problems with some banks."
 msgstr ""
+"Uwaga: znaki specjalne inne niż litery, cyfry i niektóre znaki "
+"interpunkcyjne mogą powodować problemy z niektórymi bankami."
 
 #: pretix/plugins/banktransfer/payment.py:103
 #: pretix/plugins/banktransfer/payment.py:466
@@ -27728,11 +27771,11 @@ msgstr "Numer BIC (SWIFT)"
 
 #: pretix/plugins/banktransfer/payment.py:123
 msgid "Name of bank"
-msgstr ""
+msgstr "Nazwa banku"
 
 #: pretix/plugins/banktransfer/payment.py:133
 msgid "Bank account details"
-msgstr ""
+msgstr "Dane konta bankowego"
 
 #: pretix/plugins/banktransfer/payment.py:136
 msgid ""
@@ -27740,6 +27783,9 @@ msgid ""
 "transfer payment. If you have lots of international customers, they might "
 "need your full address and your bank's full address."
 msgstr ""
+"Uwzględnij wszystkie inne informacje, których klienci mogą potrzebować do "
+"wysłania płatności przelewem bankowym. Jeśli masz wielu międzynarodowych "
+"klientów, mogą potrzebować pełnego adresu Twojej firmy i banku."
 
 #: pretix/plugins/banktransfer/payment.py:142
 msgid ""
@@ -27747,22 +27793,25 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
+"W przypadku kont SEPA można pozostawić to pole puste. W przeciwnym razie "
+"dodaj wszystko, czego potrzebują Twoi klienci, aby przelać pieniądze, np. "
+"numery kont, numery rozliczeniowe, adresy itp."
 
 #: pretix/plugins/banktransfer/payment.py:161
 msgid "Do not include hyphens in the payment reference."
-msgstr ""
+msgstr "W numerze referencyjnym płatności nie należy umieszczać myślników."
 
 #: pretix/plugins/banktransfer/payment.py:162
 msgid "This is required in some countries."
-msgstr ""
+msgstr "Jest to wymagane w niektórych krajach."
 
 #: pretix/plugins/banktransfer/payment.py:166
 msgid "Include invoice number in the payment reference."
-msgstr ""
+msgstr "W numerze płatności należy podać numer faktury."
 
 #: pretix/plugins/banktransfer/payment.py:170
 msgid "Prefix for the payment reference"
-msgstr ""
+msgstr "Prefiks dla numeru referencyjnego płatności"
 
 #: pretix/plugins/banktransfer/payment.py:174
 #, fuzzy
@@ -27774,10 +27823,12 @@ msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
 msgstr ""
+"Ten tekst będzie wyświetlany na stronie potwierdzenia zamówienia dla "
+"zamówień w toku (oprócz standardowego tekstu)."
 
 #: pretix/plugins/banktransfer/payment.py:184
 msgid "IBAN blocklist for refunds"
-msgstr ""
+msgstr "Lista blokad IBAN dla zwrotów"
 
 #: pretix/plugins/banktransfer/payment.py:187
 msgid ""
@@ -27789,12 +27840,22 @@ msgid ""
 "can e.g. ban DE0012345 to ban all German IBANs with the bank identifier "
 "starting with 12345."
 msgstr ""
+"W każdym wierszu należy umieścić jeden numer IBAN lub prefiks IBAN. System "
+"nie będzie próbował wysyłać zwrotów na żaden z tych numerów IBAN. Przydatne "
+"np. w przypadku otrzymywania wielu \"przekazanych płatności\" od "
+"zewnętrznego dostawcy usług płatniczych. Możesz również wymienić kody "
+"krajów, takie jak \"GB\", jeśli nigdy nie chcesz wysyłać zwrotów na numery "
+"IBAN z określonego kraju. Cyfry kontrolne zostaną zignorowane do porównania, "
+"więc możesz np. zablokować DE0012345, aby zablokować wszystkie niemieckie "
+"numery IBAN z identyfikatorem banku zaczynającym się od 12345."
 
 #: pretix/plugins/banktransfer/payment.py:218
 msgid ""
 "Allow users to enter an additional email address that the invoice will be "
 "sent to."
 msgstr ""
+"Pozwól użytkownikom wprowadzić dodatkowy adres e-mail, na który zostanie "
+"wysłana faktura."
 
 #: pretix/plugins/banktransfer/payment.py:220
 msgid ""
@@ -27803,6 +27864,10 @@ msgid ""
 "sent to this email address, subsequent invoice corrections will not be sent "
 "automatically. Only the invoice will be sent, no additional information."
 msgstr ""
+"Wymaga to, aby ustawienia tworzenia faktury pozwalały na utworzenie faktury "
+"zaraz po wybraniu metody płatności. Tylko faktura zostanie wysłana na ten "
+"adres e-mail, kolejne korekty faktury nie będą wysyłane automatycznie. "
+"Zostanie wysłana tylko faktura, bez dodatkowych informacji."
 
 #: pretix/plugins/banktransfer/payment.py:229
 #, fuzzy
@@ -27824,19 +27889,23 @@ msgid ""
 "Only allow choosing this payment provider for customers who enter an invoice "
 "address and select \"Business or institutional customer\"."
 msgstr ""
+"Zezwól na wybór tego dostawcy płatności tylko klientom, którzy wprowadzą "
+"adres faktury i wybiorą opcję \"Klient biznesowy lub instytucjonalny\"."
 
 #: pretix/plugins/banktransfer/payment.py:288
 msgid "Please fill out your bank account details."
-msgstr ""
+msgstr "Prosimy o podanie danych konta bankowego."
 
 #: pretix/plugins/banktransfer/payment.py:292
 msgid "Please enter your bank account details."
-msgstr ""
+msgstr "Wprowadź dane swojego konta bankowego."
 
 #: pretix/plugins/banktransfer/payment.py:332
 msgid ""
 "Please additionally send my invoice directly to our accounting department"
 msgstr ""
+"Dodatkowo proszę o przesłanie faktury bezpośrednio do naszego działu "
+"księgowości"
 
 #: pretix/plugins/banktransfer/payment.py:336
 msgid "Invoice recipient e-mail"
@@ -27847,6 +27916,8 @@ msgid ""
 "The invoice recipient will receive an email which includes the invoice and "
 "your email address so they know who placed this order."
 msgstr ""
+"Odbiorca faktury otrzyma wiadomość e-mail zawierającą fakturę i Twój adres e-"
+"mail, aby wiedział, kto złożył zamówienie."
 
 #: pretix/plugins/banktransfer/payment.py:457
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
@@ -27879,24 +27950,24 @@ msgstr "Bank"
 
 #: pretix/plugins/banktransfer/payment.py:548
 msgid "Invalid IBAN/BIC"
-msgstr ""
+msgstr "Nieprawidłowy IBAN/BIC"
 
 #: pretix/plugins/banktransfer/payment.py:624
 #, python-brace-format
 msgid "Bank account {iban}"
-msgstr ""
+msgstr "Konto bankowe {iban}"
 
 #: pretix/plugins/banktransfer/payment.py:640
 msgid "Can only create a bank transfer refund from an existing payment."
-msgstr ""
+msgstr "Zwrot przelewem bankowym można utworzyć tylko z istniejącej płatności."
 
 #: pretix/plugins/banktransfer/payment.py:660
 msgid "BIC (optional)"
-msgstr ""
+msgstr "BIC (opcjonalnie)"
 
 #: pretix/plugins/banktransfer/payment.py:699
 msgid "Your input was invalid, please see below for details."
-msgstr ""
+msgstr "Wprowadzone dane były nieprawidłowe, szczegóły znajdują się poniżej."
 
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:10
@@ -27905,7 +27976,7 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:12
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:9
 msgid "Payer"
-msgstr ""
+msgstr "Płatnik"
 
 #: pretix/plugins/banktransfer/signals.py:55
 #: pretix/plugins/banktransfer/signals.py:91
@@ -27914,16 +27985,16 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:4
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:7
 msgid "Import bank data"
-msgstr ""
+msgstr "Importuj dane bankowe"
 
 #: pretix/plugins/banktransfer/signals.py:63
 #: pretix/plugins/banktransfer/signals.py:99
 msgid "Export refunds"
-msgstr ""
+msgstr "Eksportuj zwroty"
 
 #: pretix/plugins/banktransfer/signals.py:123
 msgid "The invoice was sent to the designated email address."
-msgstr ""
+msgstr "Faktura została wysłana na wskazany adres e-mail."
 
 #: pretix/plugins/banktransfer/signals.py:132
 #, python-brace-format
@@ -27942,6 +28013,14 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Witaj,\n"
+"\n"
+"Otrzymujesz tę wiadomość, ponieważ zamówienie na {event} zostało złożone "
+"przez {order_email} i zostaliśmy poproszeni o przekazanie Ci faktury.\n"
+"\n"
+"Z wyrazami szacunku,  \n"
+"\n"
+"Twój zespół - {event}"
 
 #: pretix/plugins/banktransfer/tasks.py:172
 msgid "The order has already been canceled."
@@ -27951,11 +28030,11 @@ msgstr "Zamówienie zostało już anulowane."
 #: pretix/plugins/banktransfer/views.py:106
 #: pretix/plugins/banktransfer/views.py:193
 msgid "Currencies do not match."
-msgstr ""
+msgstr "Waluty nie pasują do siebie."
 
 #: pretix/plugins/banktransfer/tasks.py:188
 msgid "Automatic split to multiple orders not possible."
-msgstr ""
+msgstr "Automatyczny podział na wiele zamówień nie jest możliwy."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:6
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:6
@@ -28025,22 +28104,26 @@ msgid ""
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
 msgstr ""
+"Nie byliśmy w stanie automatycznie określić sposobu wyrównania kolumn w "
+"pliku. Pomóż nam, wybierając, która kolumna zawiera jaki rodzaj danych."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:95
 msgid ""
 "More data was uploaded but is not shown here. It will still be processed"
 msgstr ""
+"Przesłano więcej danych, ale nie są one tutaj wyświetlane. Będą one nadal "
+"przetwarzane"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:9
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:9
 msgid "Import currently running…"
-msgstr ""
+msgstr "Import jest w trakcie…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:11
 #, python-format
 msgid "Last import: %(date)s"
-msgstr ""
+msgstr "Ostatni import: %(date)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:8
 #, python-format
@@ -28048,42 +28131,52 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
+"W ustawieniach płatności wydarzenia ustawiłeś %(date)s jako ostatnią datę "
+"wszelkich płatności. W związku z tym nie będzie można tutaj oznaczyć żadnego "
+"zamówienia jako opłaconego."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
 msgstr ""
+"Ta strona umożliwia przesyłanie plików wyciągów bankowych w celu "
+"przetwarzania płatności przychodzących."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
 msgstr ""
+"Obecnie funkcja ta obsługuje pliki <code>.csv</code> i pliki w formacie "
+"MT940."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:29
 #: pretix/plugins/banktransfer/views.py:561
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
-msgstr ""
+msgstr "Import jest obecnie przetwarzany, spróbuj ponownie za kilka minut."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:51
 msgid "Start upload"
-msgstr ""
+msgstr "Rozpocznij przesyłanie"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:61
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "Nierozstrzygnięte transakcje"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:66
 msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
 msgstr ""
+"Na tej stronie można importować dane bankowe na poziomie poszczególnych "
+"zdarzeń. Widoczne są również tylko niedopasowane transakcje zaimportowane "
+"bezpośrednio dla tego zdarzenia."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:71
 msgid "Go to organizer-level import"
-msgstr ""
+msgstr "Przejdź do importu na poziomie organizatora"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:78
 #, fuzzy
@@ -28093,11 +28186,11 @@ msgstr "Ilość"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:86
 msgid "up to"
-msgstr ""
+msgstr "do"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:92
 msgid "Clear"
-msgstr ""
+msgstr "Wyczyść"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:101
 msgid "Discard all"
@@ -28105,21 +28198,23 @@ msgstr "Odrzuć wszystkie"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:113
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "W wyniku wyszukiwania nie znaleziono żadnych transakcji."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "Importuj wynik"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
 msgstr ""
+"Wynik importu jest w toku. Prosimy o cierpliwość podczas przetwarzania "
+"danych …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
+msgstr "Podczas przetwarzania danych wystąpił błąd wewnętrzny."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try to re-import the file."
