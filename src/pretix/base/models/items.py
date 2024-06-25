@@ -227,7 +227,7 @@ class ItemCategory(LoggedModel):
 
     def get_category_type_display(self):
         if self.is_addon:
-            return _('Add-On products')
+            return _('Add-on products')
         elif self.cross_selling_mode:
             return self.get_cross_selling_mode_display()
         else:
