@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-25 01:00+0000\n"
+"PO-Revision-Date: 2024-06-25 10:54+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -26733,44 +26733,46 @@ msgstr ""
 
 #: pretix/control/views/orders.py:2214
 msgid "Nothing about the order had to be changed."
-msgstr ""
+msgstr "Nic w zamówieniu nie musiało zostać zmienione."
 
 #: pretix/control/views/orders.py:2295 pretix/plugins/sendmail/views.py:175
 msgid "We could not send the email. See below for details."
-msgstr ""
+msgstr "Nie mogliśmy wysłać wiadomości e-mail. Szczegóły znajdują się poniżej."
 
 #: pretix/control/views/orders.py:2311 pretix/control/views/orders.py:2376
 #: pretix/plugins/sendmail/views.py:205 pretix/plugins/sendmail/views.py:620
 #: pretix/plugins/sendmail/views.py:696
 #, python-brace-format
 msgid "Subject: {subject}"
-msgstr ""
+msgstr "Temat: {subject}"
 
 #: pretix/control/views/orders.py:2325 pretix/control/views/orders.py:2391
 msgid "Your message has been queued and will be sent to {}."
-msgstr ""
+msgstr "Wiadomość została umieszczona w kolejce i zostanie wysłana do {}."
 
 #: pretix/control/views/orders.py:2329 pretix/control/views/orders.py:2394
 msgid "Failed to send mail to the following user: {}"
-msgstr ""
+msgstr "Nie udało się wysłać poczty do następującego użytkownika: {}"
 
 #: pretix/control/views/orders.py:2430 pretix/presale/views/order.py:1065
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
-msgstr ""
+msgstr "Ten link jest już nieaktualny. Wróć, odśwież stronę i spróbuj ponownie."
 
 #: pretix/control/views/orders.py:2506
 msgid "There is no order with the given order code."
-msgstr ""
+msgstr "Nie ma zamówienia z podanym kodem zamówienia."
 
 #: pretix/control/views/orders.py:2612 pretix/control/views/organizer.py:1768
 msgid "The selected exporter was not found."
-msgstr ""
+msgstr "Wybrany eksporter nie został znaleziony."
 
 #: pretix/control/views/orders.py:2622 pretix/control/views/organizer.py:1778
 msgid "There was a problem processing your input. See below for error details."
 msgstr ""
+"Wystąpił problem z przetwarzaniem danych wejściowych. Szczegóły błędu "
+"znajdują się poniżej."
 
 #: pretix/control/views/orders.py:2657 pretix/control/views/organizer.py:1821
 #, python-brace-format
@@ -26778,15 +26780,18 @@ msgid ""
 "Your export schedule has been saved. The next export will start around "
 "{datetime}."
 msgstr ""
+"Harmonogram eksportu został zapisany. Następny eksport rozpocznie się około "
+"{datetime}."
 
 #: pretix/control/views/orders.py:2662 pretix/control/views/organizer.py:1826
 msgid "Your export schedule has been saved, but no next export is planned."
 msgstr ""
+"Harmonogram eksportu został zapisany, ale nie zaplanowano kolejnego eksportu."
 
 #: pretix/control/views/orders.py:2701 pretix/control/views/organizer.py:1866
 #, python-brace-format
 msgid "Export: {title}"
-msgstr ""
+msgstr "Eksport: {title}"
 
 #: pretix/control/views/orders.py:2702 pretix/control/views/organizer.py:1868
 #, python-brace-format
@@ -26795,6 +26800,10 @@ msgid ""
 "\n"
 "attached to this email, you can find a new scheduled report for {name}."
 msgstr ""
+"Witaj,\n"
+"\n"
+"W załączniku do tej wiadomości e-mail znajduje się nowy zaplanowany raport "
+"dla {name}."
 
 #: pretix/control/views/orders.py:2770 pretix/control/views/organizer.py:1936
 msgid ""
@@ -26802,6 +26811,9 @@ msgid ""
 "Depending on system load and type and size of export, this may take a few "
 "minutes."
 msgstr ""
+"Twój eksport wkrótce się rozpocznie. Wyniki zostaną wysłane pocztą e-mail. W "
+"zależności od obciążenia systemu oraz typu i rozmiaru eksportu może to "
+"potrwać kilka minut."
 
 #: pretix/control/views/orders.py:2849
 msgid "All orders have been canceled."
