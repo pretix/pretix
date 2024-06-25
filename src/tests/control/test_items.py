@@ -402,6 +402,24 @@ class ItemsTest(ItemFormTest):
         self.item2.refresh_from_db()
         assert self.item1.position < self.item2.position
 
+    def test_reorder(self):
+        self.client.post('/control/event/%s/%s/items/reorder/0/' % (self.orga1.slug, self.event1.slug), {
+            'ids': [str(self.item2.id), str(self.item1.id)],
+        }, content_type='application/json')
+        self.item1.refresh_from_db()
+        self.item2.refresh_from_db()
+        assert self.item1.position > self.item2.position
+        assert self.item1.category is None
+        assert self.item2.category is None
+        self.client.post('/control/event/%s/%s/items/reorder/%s/' % (self.orga1.slug, self.event1.slug, self.addoncat.id), {
+            'ids': [str(self.item1.id), str(self.item2.id)],
+        }, content_type='application/json')
+        self.item1.refresh_from_db()
+        self.item2.refresh_from_db()
+        assert self.item1.position < self.item2.position
+        assert self.item1.category.id == self.addoncat.id
+        assert self.item2.category.id == self.addoncat.id
+
     def test_create(self):
         self.client.post('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), {
             'name_0': 'T-Shirt',

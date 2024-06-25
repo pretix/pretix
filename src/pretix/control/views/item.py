@@ -35,6 +35,7 @@
 
 import json
 from collections import OrderedDict, namedtuple
+from itertools import groupby
 from json.decoder import JSONDecodeError
 
 from django.contrib import messages
@@ -113,6 +114,8 @@ class ItemList(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['sales_channels'] = get_all_sales_channels()
+        items_by_category = {cat: list(items) for cat, items in groupby(ctx['items'], lambda item: item.category)}
+        ctx['cat_list'] = [(cat, items_by_category.get(cat, [])) for cat in [None, *self.request.event.categories.all()]]
         return ctx
 
 
@@ -169,7 +172,7 @@ def item_move_down(request, organizer, event, item):
 @transaction.atomic
 @event_permission_required("can_change_items")
 @require_http_methods(["POST"])
-def reorder_items(request, organizer, event):
+def reorder_items(request, organizer, event, category):
     try:
         ids = json.loads(request.body.decode('utf-8'))['ids']
     except (JSONDecodeError, KeyError, ValueError):
@@ -180,23 +183,21 @@ def reorder_items(request, organizer, event):
     if len(input_items) != len(ids):
         raise Http404(_("Some of the provided object ids are invalid."))
 
-    item_categories = {i.category_id for i in input_items}
-    if len(item_categories) > 1:
-        raise Http404(_("You cannot reorder items spanning different categories."))
-
-    # get first and only category
-    item_category = next(iter(item_categories))
-    if len(input_items) != request.event.items.filter(category=item_category).count():
-        raise Http404(_("Not all objects have been selected."))
+    if int(category):
+        target_category = request.event.categories.get(id=category)
+    else:
+        target_category = None
 
     for i in input_items:
         pos = ids.index(str(i.pk))
-        if pos != i.position:  # Save unneccessary UPDATE queries
+        if pos != i.position or target_category != i.category:  # Save unneccessary UPDATE queries
             i.position = pos
-            i.save(update_fields=['position'])
+            i.category = target_category
+            i.save(update_fields=['position', 'category_id'])
             i.log_action(
                 'pretix.event.item.reordered', user=request.user, data={
                     'position': i,
+                    'category': target_category and target_category.pk,
                 }
             )
 

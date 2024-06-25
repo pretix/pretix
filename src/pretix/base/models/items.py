@@ -122,6 +122,16 @@ class ItemCategory(LoggedModel):
             return _('{category} (Add-On products)').format(category=str(name))
         return str(name)
 
+    def get_category_type_display(self):
+        if self.is_addon:
+            return _('Add-On products')
+        else:
+            return None
+
+    @property
+    def category_type(self):
+        return 'addon' if self.is_addon else 'normal'
+
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
