@@ -744,6 +744,14 @@ class ItemUpdateForm(I18nModelForm):
                     _("The start of validity must be before the end of validity.")
                 )
 
+        if d.get('validity_mode') == Item.VALIDITY_MODE_DYNAMIC:
+            if not any(d.get(f'validity_dynamic_duration_{k}') for k in ('months', 'days', 'hours', 'minutes')):
+                self.add_error(
+                    'validity_dynamic_duration_months',
+                    _("You have selected dynamic validity but have not entered a time period. This would render "
+                      "the tickets unusable.")
+                )
+
         Item.clean_media_settings(self.event, d.get('media_policy'), d.get('media_type'), d.get('issue_giftcard'))
 
         return d
