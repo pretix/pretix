@@ -38,7 +38,7 @@ class StripeApp(AppConfig):
         featured = True
         picture = 'pretixplugins/stripe/stripe_logo.svg'
         description = _("Accept payments via Stripe, a globally popular payment service provider. Stripe supports "
-                        "payments via credit cards as well as many local payment methods such as giropay, iDEAL, Alipay,"
+                        "payments via credit cards as well as many local payment methods such as iDEAL, Alipay,"
                         "and many more.")
 
     def ready(self):
