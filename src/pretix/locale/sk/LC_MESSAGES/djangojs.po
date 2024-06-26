@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-17 17:00+0000\n"
+"PO-Revision-Date: 2024-06-26 22:00+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "sk/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -1019,7 +1019,7 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:80
 msgid "March"
-msgstr ""
+msgstr "Marec"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 msgid "April"
@@ -1027,7 +1027,7 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "May"
-msgstr ""
+msgstr "Máj"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "June"
@@ -1043,7 +1043,7 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "September"
-msgstr ""
+msgstr "September"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "October"
@@ -1051,8 +1051,8 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:88
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:89
 msgid "December"
-msgstr ""
+msgstr "December"
