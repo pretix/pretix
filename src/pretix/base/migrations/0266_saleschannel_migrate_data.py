@@ -64,7 +64,7 @@ def create_sales_channels(apps, schema_editor):
     CheckinList = apps.get_model("pretixbase", "CheckinList")
     for c in CheckinList.objects.select_related("event"):
         for s in c.auto_checkin_sales_channel_types:
-            c.auto_checkin_sales_channels.add(type_to_channel[s, d.event.organizer_id])
+            c.auto_checkin_sales_channels.add(type_to_channel[s, c.event.organizer_id])
 
     Order = apps.get_model("pretixbase", "Order")
     for (k, orgid), v in type_to_channel.items():
