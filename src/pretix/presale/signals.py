@@ -80,6 +80,17 @@ of every page in the frontend. You will get the request as the keyword argument
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+seatingframe_html_head = EventPluginSignal()
+"""
+Arguments: ``request``
+
+This signal allows you to put code inside the HTML ``<head>`` tag
+of the seatingframe page in the frontend. You will get the request as the keyword argument
+``request`` and are expected to return plain HTML.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 html_page_header = EventPluginSignal()
 """
 Arguments: ``request``

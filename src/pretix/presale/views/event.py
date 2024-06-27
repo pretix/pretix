@@ -82,7 +82,7 @@ from pretix.helpers.formats.en.formats import (
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
-from pretix.presale.signals import item_description
+from pretix.presale.signals import item_description, seatingframe_html_head
 from pretix.presale.views.organizer import (
     EventListMixin, add_subevents_for_days, days_for_template,
     filter_qs_by_attr, has_before_after, weeks_for_template,
@@ -849,6 +849,11 @@ class SeatingPlanView(EventViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        _html_head = []
+        for receiver, response in seatingframe_html_head.send(self.request.event, request=self.request):
+            _html_head.append(response)
+        context['seatingframe_html_head'] = "".join(_html_head)
         context['subevent'] = self.subevent
         context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
                                                 kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
