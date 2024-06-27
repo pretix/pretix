@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-27 08:20+0000\n"
+"PO-Revision-Date: 2024-06-27 08:46+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -32032,11 +32032,17 @@ msgid ""
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
+"W przypadku użytej metody płatności kwota zwrotu <strong>nie może zostać "
+"odesłana automatycznie</strong>. Zamiast tego organizator wydarzenia będzie "
+"musiał ręcznie zainicjować przelew. Prosimy o cierpliwość, ponieważ może to "
+"potrwać nieco dłużej."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:185
 msgid ""
 "Your entire order will be considered unpaid until you paid this difference."
 msgstr ""
+"Całe zamówienie zostanie uznane za nieopłacone do momentu uiszczenia tej "
+"różnicy."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:186
 msgid ""
@@ -32115,32 +32121,32 @@ msgstr "Będziesz mógł pobrać bilety tutaj, zaczynając od %(date)s."
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:6
 msgid "Where does the event happen?"
-msgstr ""
+msgstr "Gdzie odbywa się wydarzenie?"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:13
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:14
 msgid "When does the event happen?"
-msgstr ""
+msgstr "Kiedy wydarzenie ma miejsce?"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:20
 #, python-format
 msgid "Begin: %(time)s"
-msgstr ""
+msgstr "Początek: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:29
 #, python-format
 msgid "End: %(time)s"
-msgstr ""
+msgstr "Koniec: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:41
 #, python-format
 msgid "Admission: %(time)s"
-msgstr ""
+msgstr "Wejście: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:49
 #, python-format
 msgid "Admission: %(datetime)s"
-msgstr ""
+msgstr "Wejście: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:62
 msgid "Add to Calendar"
@@ -32172,7 +32178,7 @@ msgstr "Produkty bez kategorii"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:275
 #, python-format
 msgid "Show full-size image of %(item)s"
-msgstr ""
+msgstr "Pokaż pełnowymiarowy obraz %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:177
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:329
@@ -32194,7 +32200,7 @@ msgstr "%(value)s bez podatku"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:321
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
-msgstr ""
+msgstr "Ustaw cenę w %(currency)s dla %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
@@ -32203,19 +32209,18 @@ msgstr "%(num)s obecnie dostępne"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:5
-#, fuzzy
 msgid "calendar navigation"
-msgstr "Wariant produktu"
+msgstr "nawigacja po kalendarzu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:10
 #, python-format
 msgid "Show previous month, %(month)s"
-msgstr ""
+msgstr "Pokaż poprzedni miesiąc, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:23
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:24
 msgid "Select month to show"
-msgstr ""
+msgstr "Wybierz miesiąc do wyświetlenia"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:33
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:37
@@ -32228,24 +32233,24 @@ msgstr "Przejdź"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:40
 #, python-format
 msgid "Show next month, %(month)s"
-msgstr ""
+msgstr "Pokaż następny miesiąc, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:10
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:55
 #, python-format
 msgid "Show previous week, %(week)s"
-msgstr ""
+msgstr "Pokaż poprzedni tydzień, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:23
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:26
 msgid "Select week to show"
-msgstr ""
+msgstr "Wybierz tydzień do wyświetlenia"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:44
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:60
 #, python-format
 msgid "Show next week, %(week)s"
-msgstr ""
+msgstr "Pokaż następny tydzień, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:26
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:69
@@ -32254,7 +32259,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:94
 #: pretix/presale/views/widget.py:390
 msgid "Few tickets left"
-msgstr ""
+msgstr "Pozostało niewiele biletów"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:29
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:72
@@ -32264,7 +32269,7 @@ msgstr ""
 #: pretix/presale/views/widget.py:395
 msgctxt "available_event_in_list"
 msgid "Buy now"
-msgstr ""
+msgstr "Kup teraz"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:31
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:46
@@ -32278,7 +32283,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:114
 #: pretix/presale/views/widget.py:397 pretix/presale/views/widget.py:420
 msgid "Book now"
-msgstr ""
+msgstr "Zarezerwuj teraz"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:42
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:85
@@ -32287,23 +32292,23 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:110
 #: pretix/presale/views/widget.py:412
 msgid "Fully booked"
-msgstr ""
+msgstr "W pełni zarezerwowane"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:51
 #: pretix/presale/templates/pretixpresale/organizers/index.html:119
 #, python-format
 msgid "Sale starts %(date)s"
-msgstr ""
+msgstr "Sprzedaż zaczyna się %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:56
 #: pretix/presale/templates/pretixpresale/organizers/index.html:124
 msgid "Not yet on sale"
-msgstr ""
+msgstr "Jeszcze nie w sprzedaży"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:13
 msgctxt "form"
 msgid "has error"
-msgstr ""
+msgstr "ma błąd"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:14
 #: pretix/presale/templates/pretixpresale/event/index.html:18
@@ -32313,6 +32318,9 @@ msgid ""
 "                Calendar for %(datetime)s\n"
 "            "
 msgstr ""
+"\n"
+"                Kalendarz dla %(datetime)s\n"
+"            "
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "Your cart, general information, add products to your cart"
@@ -32324,22 +32332,20 @@ msgstr "Informacje ogólne, dodaj produkty do koszyka"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:68
 msgid "Please select a date to redeem your voucher."
-msgstr ""
+msgstr "Wybierz datę realizacji vouchera."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:82
 msgid "View other date"
-msgstr ""
+msgstr "Zobacz inną datę"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:87
-#, fuzzy
 msgid "Choose date to book a ticket"
-msgstr "Do wyboru z listy"
+msgstr "Wybierz datę, aby zarezerwować bilet"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:92
-#, fuzzy
 msgctxt "subevent"
 msgid "Other dates"
-msgstr "Data zamówienia"
+msgstr "Inne daty"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:142
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:733
@@ -32364,6 +32370,9 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
+"Niektóre kategorie w powyższym planie miejsc są obecnie wyprzedane. Jeśli "
+"chcesz, możesz dodać się do listy oczekujących. Powiadomimy Cię, jeśli "
+"miejsca będą ponownie dostępne."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:201
 msgid "Join waiting list"
@@ -32402,9 +32411,8 @@ msgstr "Wyślij ponownie link do zamówienia"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:4
 #: pretix/presale/templates/pretixpresale/event/offline.html:8
-#, fuzzy
 msgid "Shop offline"
-msgstr "Sklep został wyłączony"
+msgstr "Sklep wyłączony"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
 msgid "This ticket shop is currently turned off."
@@ -32412,12 +32420,11 @@ msgstr "Ten sklep z biletami jest obecnie wyłączony."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
-msgstr ""
+msgstr "Jest on dostępny tylko dla uwierzytelnionych członków zespołu."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:11
-#, fuzzy
 msgid "Please try again later."
-msgstr "Proszę spróbuj ponownie."
+msgstr "Spróbuj ponownie później."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
@@ -32448,12 +32455,16 @@ msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
 msgstr ""
+"Pamiętaj, że zanim twoje zamówienie zostanie potwierdzone, najpierw czekamy "
+"na jego zatwierdzenie przez organizatora wydarzenia."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
 msgstr ""
+"Pamiętaj, że zanim będziesz mógł opłacić i dokończyć swoje zamówienie, "
+"najpierw czekamy na jego zatwierdzenie przez organizatora wydarzenia."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
@@ -32481,7 +32492,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:73
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
-msgstr ""
+msgstr "Zobacz w wewnętrznym systemie"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:90
 #, python-format
@@ -32502,15 +32513,18 @@ msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
+"Otrzymaliśmy prośbę o anulowanie tego zamówienia. Prosimy o cierpliwość, "
+"dopóki organizator wydarzenia nie podejmie decyzji o anulowaniu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:143
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
+"Zwrot %(amount)s zostanie wkrótce do Ciebie wysłany, prosimy o cierpliwość."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
-msgstr ""
+msgstr "Drukuj"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
@@ -32518,6 +32532,9 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
+"Zwrot %(amount)s został przyznany w formie karty podarunkowej. Przy "
+"następnym zakupie u nas możesz użyć następującego kodu karty podarunkowej "
+"podczas płatności:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:162
 #, python-format
@@ -32535,6 +32552,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
+"Zwrot %(amount)s został wysłany. W zależności od metody płatności zwrot może "
+"pojawić się na wyciągu z konta do 14 dni."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 #: pretix/presale/templates/pretixpresale/event/position.html:33
@@ -32551,12 +32570,14 @@ msgstr "Zmień szczegóły"
 msgid ""
 "You need to select a payment method above before you can request an invoice."
 msgstr ""
+"Musisz wybrać metodę płatności powyżej, zanim będziesz mógł poprosić o "
+"fakturę."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:267
 #: pretix/presale/templates/pretixpresale/event/order.html:274
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
-msgstr ""
+msgstr "Poproś o fakturę"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:286
 msgid "Your information"
@@ -32568,25 +32589,22 @@ msgstr "Zmień swoje dane"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
 msgid "Internal Reference"
-msgstr ""
+msgstr "Wewnętrzny numer referencyjny"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:349
-#, fuzzy
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Może zmienić ustawienia organizatora"
+msgstr "Zmień lub anuluj swoje zamówienie"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:351
-#, fuzzy
 msgctxt "action"
 msgid "Change your order"
-msgstr "Może edytować"
+msgstr "Zmień swoje zamówienie"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:353
-#, fuzzy
 msgctxt "action"
 msgid "Cancel your order"
-msgstr "Może zmienić ustawienia organizatora"
+msgstr "Anuluj swoje zamówienie"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:361
 msgid ""
@@ -32597,15 +32615,13 @@ msgstr ""
 "przycisk, aby zmienić zamówienie."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:369
-#, fuzzy
 msgid "Change order"
-msgstr "Może edytować"
+msgstr "Zmień zamówienie"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:381
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
-#, fuzzy
 msgid "You can request to cancel this order."
-msgstr "Wybrano podwydarzenie dla wydarzenie nieseryjnego."
+msgstr "Możesz poprosić o anulowanie tego zamówienia."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:384
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
@@ -32614,6 +32630,9 @@ msgid ""
 "receive a full refund or if a cancellation fee is deducted according to "
 "their cancellation policy."
 msgstr ""
+"Jeśli twój wniosek zostanie zatwierdzony, organizator określi, czy otrzymasz "
+"pełny zwrot kosztów, czy też zostanie potrącona opłata za anulowanie zgodnie "
+"z zasadami anulowania."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:392
 #: pretix/presale/templates/pretixpresale/event/order.html:428
@@ -32621,12 +32640,14 @@ msgstr ""
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
+"Zwrot może zostać dokonany przy użyciu oryginalnej metody płatności lub w "
+"formie karty podarunkowej."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:394
 #: pretix/presale/templates/pretixpresale/event/order.html:430
 #: pretix/presale/templates/pretixpresale/event/order.html:451
 msgid "The refund will be issued to your original payment method."
-msgstr ""
+msgstr "Zwrot zostanie dokonany przy użyciu pierwotnej metody płatności."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:396
 #: pretix/presale/templates/pretixpresale/event/order.html:409
@@ -32654,6 +32675,9 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
+"Możesz poprosić o anulowanie tego zamówienia. Jeśli twój wniosek zostanie "
+"zatwierdzony, opłata za anulowanie w wysokości <strong>%(fee)s</strong> "
+"zostanie potrącona, a Ty otrzymasz zwrot pozostałej kwoty."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:420
 #, python-format
@@ -32662,16 +32686,21 @@ msgid ""
 "<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
 "remainder."
 msgstr ""
+"Możesz anulować to zamówienie. W takim przypadku, opłata za anulowanie w "
+"wysokości <strong>%(fee)s</strong> zostanie potrącona, a Ty otrzymasz zwrot "
+"pozostałej kwoty."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:437
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
+"Możesz poprosić o anulowanie tego zamówienia. Jeśli twój wniosek zostanie "
+"zatwierdzony otrzymasz zwrot pełnej kwoty."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:442
 msgid "You can cancel this order and receive a full refund."
-msgstr ""
+msgstr "Możesz anulować to zamówienie i otrzymać pełny zwrot pieniędzy."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:461
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
@@ -32680,6 +32709,9 @@ msgid ""
 "You can cancel this order. As per our cancellation policy, you will still be "
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
+"Możesz anulować to zamówienie. Zgodnie z naszą polityką anulowania, nadal "
+"będziesz musiał uiścić opłatę za anulowanie w wysokości "
+"<strong>%(fee)s</strong>."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:467
 msgid "You can cancel this order using the following button."
@@ -32688,7 +32720,7 @@ msgstr "Możesz anulować to zamówienie używając przycisku poniżej."
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
 msgid "Request cancellation: %(code)s"
-msgstr ""
+msgstr "Poproś o anulowanie: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
@@ -32701,6 +32733,10 @@ msgid ""
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
 msgstr ""
+"Na tej stronie można złożyć wniosek o anulowanie zamówienia. Organizator "
+"wydarzenia podejmie decyzję w sprawie wniosku. Jeśli wniosek zostanie "
+"zaakceptowany, zamówienie zostanie anulowane, a wszystkie bilety zostaną "
+"unieważnione."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:46
 msgid ""
@@ -32716,15 +32752,16 @@ msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
 msgstr ""
+"Jeśli chcesz, możesz poprosić o zwrot pełnej kwoty pomniejszonej o opłatę za "
+"anulowanie w wysokości %(fee)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:67
 msgid "If you want, you can request a full refund."
-msgstr ""
+msgstr "Jeśli chcesz, możesz poprosić o pełny zwrot pieniędzy."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:96
-#, fuzzy
 msgid "Enter custom amount"
-msgstr "Komentarz wewnętrzny"
+msgstr "Wprowadź kwotę"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 msgid "Refund amount:"
@@ -32734,20 +32771,22 @@ msgstr "Kwota zwrotu:"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:138
 #, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr ""
+msgstr "Karta podarunkowa będzie ważna do %(expiry_date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:126
 msgid "I want the refund as a gift card for later purchases"
 msgstr ""
+"Chcę otrzymać zwrot pieniędzy w postaci karty podarunkowej na późniejsze "
+"zakupy"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:132
 msgid "I want the refund to be sent to my original payment method"
-msgstr ""
+msgstr "Chcę, aby zwrot został wysłany na moją pierwotną metodę płatności"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:185
 msgid "The following payment methods will be used to refund the money to you:"
-msgstr ""
+msgstr "Następujące metody płatności zostaną wykorzystane do zwrotu pieniędzy:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:218
 msgid "Yes, request cancellation"
@@ -32828,9 +32867,8 @@ msgid "Your items"
 msgstr "Twoje produkty"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:46
-#, fuzzy
 msgid "Additional information"
-msgstr "Metadane"
+msgstr "Dodatkowe informacje"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:51
 #, python-format
@@ -32838,12 +32876,14 @@ msgid ""
 "This order is managed for you by %(email)s. Please contact them for any "
 "questions regarding payment, cancellation or changes to this order."
 msgstr ""
+"To zamówienie jest zarządzane przez %(email)s. Prosimy o kontakt w przypadku "
+"jakichkolwiek pytań dotyczących płatności, anulowania lub zmian w tym "
+"zamówieniu."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:63
-#, fuzzy
 msgctxt "action"
 msgid "Change your ticket"
-msgstr "Zmień swoje dane"
+msgstr "Zmień swój bilet"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:68
 msgid ""
@@ -32860,21 +32900,25 @@ msgid ""
 "changes, please get in touch with the person who bought the ticket "
 "(%(email)s)."
 msgstr ""
+"W bilecie można samodzielnie wprowadzić tylko niektóre zmiany. Aby "
+"wprowadzić dodatkowe zmiany, należy skontaktować się z osobą, która kupiła "
+"bilet (%(email)s)."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:82
 #: pretix/presale/templates/pretixpresale/event/position_change.html:5
 #: pretix/presale/templates/pretixpresale/event/position_change.html:10
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:11
-#, fuzzy
 msgid "Change ticket"
-msgstr "Może edytować"
+msgstr "Zmień bilet"
 
 #: pretix/presale/templates/pretixpresale/event/position_change.html:16
 msgid ""
 "Please select the desired changes to your ticket. Note that you can only "
 "perform changes that do not change the total price of the ticket."
 msgstr ""
+"Wybierz żądane zmiany w bilecie. Należy pamiętać, że można wprowadzać tylko "
+"zmiany, które nie zmieniają całkowitej ceny biletu."
 
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:19
 msgid "Please confirm the following changes to your ticket."
@@ -32882,9 +32926,8 @@ msgstr "Potwierdź następujące zmiany w bilecie."
 
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:5
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:8
-#, fuzzy
 msgid "Modify ticket"
-msgstr "Zmodyfikuj płatność"
+msgstr "Zmodyfikuj bilet"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
@@ -32907,20 +32950,16 @@ msgstr "Wyślij linki"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:10
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:15
-#, fuzzy
-#| msgid "Timezone"
 msgid "Time machine"
-msgstr "Strefa czasowa"
+msgstr "Wehikuł czasu"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:22
 msgid "Test your shop as if it were a different date and time."
-msgstr ""
+msgstr "Przetestuj swój sklep tak, jakby była inna data i godzina."
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:30
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Enable time machine"
-msgstr "Aktywuj metodę płatności"
+msgstr "Włącz wehikuł czasu"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:17
@@ -32931,9 +32970,8 @@ msgid "Voucher redemption"
 msgstr "Wykorzystanie kuponu"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:20
-#, fuzzy
 msgid "This voucher is valid only for the following specific date and time."
-msgstr "Produkt nie będzie sprzedawany przed podaną datą."
+msgstr "Ten voucher jest ważny tylko na następującą konkretną datę i godzinę."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:43
 msgid ""
@@ -33035,16 +33073,14 @@ msgstr "Kalendarz"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:49
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
-#, fuzzy
 msgid "(continued)"
-msgstr "Kontynuuj"
+msgstr "(ciąg dalszy)"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:58
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
-#, fuzzy
 msgctxt "timerange"
 msgid "until"
-msgstr "Data i czas"
+msgstr "aż do"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:95
 #, python-format
@@ -33053,6 +33089,9 @@ msgid ""
 "                                                        from %(start_date)s\n"
 "                                                    "
 msgstr ""
+"\n"
+"                                                        od %(start_date)s\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
 msgid "Week"
@@ -33068,10 +33107,9 @@ msgid "iCal"
 msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:24
-#, fuzzy
 msgctxt "day calendar"
 msgid "Single events"
-msgstr "Cena oryginalna"
+msgstr "Pojedyncze wydarzenia"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:78
 msgctxt "timerange"
@@ -33085,16 +33123,17 @@ msgid ""
 "                                    from %(start_date)s\n"
 "                                "
 msgstr ""
+"\n"
+"                                    od %(start_date)s\n"
+"                                "
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
-#, fuzzy
 msgid "customer account"
-msgstr "Komentarz wewnętrzny"
+msgstr "konto klienta"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
-#, fuzzy
 msgid "View customer account"
-msgstr "Komentarz wewnętrzny"
+msgstr "Wyświetl konto klienta"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:9
 msgid "View user profile"
@@ -33122,9 +33161,8 @@ msgid "Adjust settings in detail"
 msgstr "Dostosuj szczegółowe ustawienia"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:74
-#, fuzzy
 msgid "Required cookies"
-msgstr "Zewnętrzny zwrot płatności"
+msgstr "Wymagane pliki cookie"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:76
 msgid ""
@@ -33152,12 +33190,11 @@ msgstr "Marketing"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:95
 msgctxt "cookie_usage"
 msgid "Social features"
-msgstr ""
+msgstr "Funkcje społecznościowe"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:114
-#, fuzzy
 msgid "Save selection"
-msgstr "Aktywny"
+msgstr "Zapisz wybór"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -33166,6 +33203,9 @@ msgid ""
 "                                        from %(start_date)s\n"
 "                                    "
 msgstr ""
+"\n"
+"                                        od %(start_date)s\n"
+"                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
@@ -33177,6 +33217,8 @@ msgid ""
 "This is a self-hosted installation of <a %(a_attr)s>pretix, your free and "
 "open source ticket sales software</a>."
 msgstr ""
+"Jest to samodzielna instalacja <a %(a_attr)s>pretix, darmowego i otwartego "
+"oprogramowania do sprzedaży biletów</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:15
 msgid ""
@@ -33213,9 +33255,8 @@ msgstr "Uwaga, wydarzenia w tym poglądzie są w różnych strefach czasowych."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
-#, fuzzy
 msgid "Delete address"
-msgstr "Adres"
+msgstr "Usuń adres"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
 msgid "Do you really want to delete the following address from your account?"
@@ -33223,9 +33264,8 @@ msgstr "Czy naprawdę chcesz usunąć następujący adres z swojego konta?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
-#, fuzzy
 msgid "Account information"
-msgstr "Zmiana informacji konta"
+msgstr "Informacje o koncie"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
 msgid "Update your account information"
@@ -33238,9 +33278,8 @@ msgstr "Zaloguj się na swoje konto w %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:38
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:20
-#, fuzzy
 msgid "Create account"
-msgstr "Data stworzenia"
+msgstr "Utwórz konto"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
@@ -33251,9 +33290,8 @@ msgstr "Twoje członkostwo"
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:6
-#, fuzzy
 msgid "Password reset"
-msgstr "Odzyskanie hasła"
+msgstr "Resetowanie hasła"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
@@ -33262,47 +33300,40 @@ msgstr "Ustaw nowe hasło do swojego konta"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
-#, fuzzy
 msgid "Your account"
-msgstr "Ilość"
+msgstr "Twoje konto"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:23
-#, fuzzy
 msgid "Login method"
-msgstr "Metoda płatności"
+msgstr "Metoda logowania"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:39
-#, fuzzy
 msgid "Change account information"
-msgstr "Metadane"
+msgstr "Zmień informacje o koncie"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:44
-#, fuzzy
 msgid "Change password"
-msgstr "Nowe hasło"
+msgstr "Zmień hasło"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:59
-#, fuzzy
 msgid "Addresses"
-msgstr "Adres"
+msgstr "Adresy"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:62
-#, fuzzy
 msgid "Attendee profiles"
-msgstr "Adres email uczestnika"
+msgstr "Profile uczestników"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:179
 msgid "No memberships are stored in your account."
-msgstr ""
+msgstr "Na koncie użytkownika nie są przechowywane żadne członkostwa."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:211
 msgid "No addresses are stored in your account."
 msgstr "Na Twoim koncie nie są przechowywane żadne adresy."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:222
-#, fuzzy
 msgid "Profile"
-msgstr "<plik>"
+msgstr "Profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:244
 msgid "No attendee profiles are stored in your account."
@@ -33310,32 +33341,29 @@ msgstr "Żadne profile uczestnika nie są przechowywane na Twoim koncie."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
-#, fuzzy
 msgid "Delete profile"
-msgstr "Data w serii wydarzeń"
+msgstr "Usuń profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
 msgid "Do you really want to delete the following profile from your account?"
 msgstr "Czy naprawdę chcesz usunąć następujący profil z swojego konta?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
-#, fuzzy
 msgid "Registration"
-msgstr "URI przekierowania"
+msgstr "Rejestracja"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
 #, python-format
 msgid "Create a new account at %(org)s"
-msgstr ""
+msgstr "Utwórz nowe konto w %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
 msgid "Log in to an existing account"
 msgstr "Zaloguj się do istniejącego konta"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:20
-#, fuzzy
 msgid "Request a new password"
-msgstr "Powtórz nowe hasło"
+msgstr "Poproś o nowe hasło"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
@@ -33350,10 +33378,9 @@ msgid "Upcoming events"
 msgstr "Nadchodzące wydarzenia"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:65
-#, fuzzy
 msgctxt "subevent"
 msgid "Multiple dates"
-msgstr "Może edytować"
+msgstr "Wiele dat"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 #: pretix/presale/views/widget.py:416
@@ -33490,9 +33517,8 @@ msgstr ""
 "przez inne konto."
 
 #: pretix/presale/views/customer.py:576
-#, fuzzy
 msgid "Your email address has been updated."
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr "Twój adres e-mail został zaktualizowany."
 
 #: pretix/presale/views/customer.py:789 pretix/presale/views/customer.py:800
 #, python-brace-format
@@ -33524,20 +33550,16 @@ msgid "Please go back and try again."
 msgstr "Wróć i spróbuj ponownie."
 
 #: pretix/presale/views/event.py:942
-#, fuzzy
 msgid "Fake date time"
-msgstr "Zakupione produkty"
+msgstr "Fałszywa data i godzina"
 
 #: pretix/presale/views/event.py:954
-#, fuzzy
-#| msgid "You do not have access to this page."
 msgid "You are not allowed to access time machine mode."
-msgstr "Nie masz dostępu do tej strony."
+msgstr "Nie masz dostępu do trybu wehikułu czasu."
 
 #: pretix/presale/views/event.py:956
-#, fuzzy
 msgid "This feature is only available in test mode."
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr "Ta funkcja jest dostępna tylko w trybie testowym."
 
 #: pretix/presale/views/event.py:973
 msgid "Time machine disabled!"
@@ -33554,9 +33576,8 @@ msgid "The payment is too late to be accepted."
 msgstr "Jest za późno na przyjęcie płatności."
 
 #: pretix/presale/views/order.py:462
-#, fuzzy
 msgid "An invoice has been generated."
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr "Faktura została wygenerowana."
 
 #: pretix/presale/views/order.py:559
 msgid "The payment method for this order cannot be changed."
@@ -33580,9 +33601,8 @@ msgid "Canceled by customer"
 msgstr "Anulowane przez klienta"
 
 #: pretix/presale/views/order.py:1050
-#, fuzzy
 msgid "The cancellation has been requested."
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr "Złożono wniosek o anulowanie."
 
 #: pretix/presale/views/order.py:1103
 msgid "Ticket download is not (yet) enabled for this order."
@@ -33624,6 +33644,8 @@ msgstr "Nie możesz zmienić zamówienia w sposób, który zmieni całkowitą ce
 #: pretix/presale/views/order.py:1635
 msgid "You may not change your order in a way that would require a refund."
 msgstr ""
+"Nie możesz zmienić swojego zamówienia w sposób, który wymagałby zwrotu "
+"pieniędzy."
 
 #: pretix/presale/views/order.py:1643
 msgid ""
@@ -33715,9 +33737,8 @@ msgid "This ticket shop is currently disabled."
 msgstr "Ten sklep z biletami jest obecnie wyłączony."
 
 #: pretix/presale/views/widget.py:365
-#, fuzzy
 msgid "The selected date does not exist in this event series."
-msgstr "Podwydarzenie nie należy do tego wydarzenia."
+msgstr "Wybrana data nie istnieje w tej serii zdarzeń."
 
 #: pretix/presale/views/widget.py:428
 #, python-format
