@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-26 13:25+0000\n"
+"PO-Revision-Date: 2024-06-27 08:46+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -27095,31 +27095,28 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:71
 msgid "Go to organizer-level import"
-msgstr ""
+msgstr "Gå till import på arrangörsnivå"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:78
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Amount"
 msgid "Amount from"
-msgstr "Belopp"
+msgstr "Belopp från"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:86
 msgid "up to"
-msgstr ""
+msgstr "upp till"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:92
 msgid "Clear"
-msgstr ""
+msgstr "Rensa"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:101
 msgid "Discard all"
-msgstr ""
+msgstr "Kassera alla"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:113
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "Din sökning matchade inga transaktioner."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
