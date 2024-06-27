@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-25 20:00+0000\n"
+"PO-Revision-Date: 2024-06-27 17:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -29,23 +29,23 @@ msgstr "Tysk (uformelt)"
 
 #: pretix/_base_settings.py:81
 msgid "Arabic"
-msgstr ""
+msgstr "Arabisk"
 
 #: pretix/_base_settings.py:82
 msgid "Catalan"
-msgstr ""
+msgstr "Katalansk"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Kinesisk (forenklet)"
 
 #: pretix/_base_settings.py:84
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Kinesisk (traditionel)"
 
 #: pretix/_base_settings.py:85
 msgid "Czech"
-msgstr ""
+msgstr "Tjekkisk"
 
 #: pretix/_base_settings.py:86
 msgid "Danish"
@@ -24168,6 +24168,9 @@ msgid ""
 "mail containing further instructions. Please note that we will send at most "
 "one email every 24 hours."
 msgstr ""
+"Hvis mailadressen er tilknyttet en gyldig konto, sender vi en mail til dig, "
+"som indeholder yderligere instruktioner. Vær opmærksom på, at vi sender "
+"maks. en mail per døgn."
 
 #: pretix/control/views/auth.py:358
 #, fuzzy
@@ -28921,6 +28924,10 @@ msgid ""
 "German banks, usually after one-time activation. Please keep your online "
 "banking account and login information available."
 msgstr ""
+"Giropay er en online betalingsmetode, som er tilgængelig til samtlige kunder "
+"af de fleste tyske banker. Denne service kræver normalt en aktivering ved "
+"første brug. Du skal have din online banking konto og dit login klar, hvis "
+"du vil fortsætte."
 
 #: pretix/plugins/stripe/payment.py:1496 pretix/plugins/stripe/payment.py:1565
 #: pretix/plugins/stripe/payment.py:1668
@@ -29201,6 +29208,9 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"Din betaling bliver gennemført af betalingsudbyderen Stripe Inc. Dine "
+"kreditkortdata bliver overført direkte til Stripe uden at gå igennem vores "
+"servere."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
 #, fuzzy
