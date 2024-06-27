@@ -13,6 +13,7 @@
     {% if css_theme %}
         <link rel="stylesheet" type="text/css" href="{{ css_theme }}" />
     {% endif %}
+    {{ html_head|safe }}
     {% include "pretixpresale/fragment_js.html" %}
     <meta name="referrer" content="origin">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
