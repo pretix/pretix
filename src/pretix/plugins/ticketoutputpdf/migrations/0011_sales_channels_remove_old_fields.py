@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0266_remove_old_sales_channels"),
+        ("pretixbase", "0267_remove_old_sales_channels"),
         ("ticketoutputpdf", "0010_sales_channels_migrate_data"),
     ]
 

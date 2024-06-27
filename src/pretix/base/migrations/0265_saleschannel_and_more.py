@@ -10,7 +10,7 @@ import pretix.base.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0263_auto_20240409_0732"),
+        ("pretixbase", "0264_order_internal_secret"),
     ]
 
     operations = [
