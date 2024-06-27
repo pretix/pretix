@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-27 08:46+0000\n"
+"PO-Revision-Date: 2024-06-27 17:00+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -27120,71 +27120,67 @@ msgstr "Din sökning matchade inga transaktioner."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "Importresultat"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
 msgstr ""
+"Resultatet av din import pågår. Vänligen ha tålamod medan vi bearbetar datan…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
+msgstr "Ett internt fel inträffade under bearbetningen av din data."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try to re-import the file."
-msgstr ""
+msgstr "Vissa transaktioner kan saknas, försök att importera filen igen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
 "Your import did not contain any transactions that you did not import before."
 msgstr ""
+"Din import innehöll inga transaktioner som inte tidigare hade importerats."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr ""
+msgstr "Beställningar markerade som betalda"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
-msgstr ""
+msgstr "Ogiltiga betalningar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:38
 msgid "Ignored payments"
-msgstr ""
+msgstr "Ignorerade betalningar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:44
 msgid "Review invalid and ignored payments"
-msgstr ""
+msgstr "Granska ogiltiga och ignorerade betalningar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:38
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:27
 msgid "Amount:"
-msgstr ""
+msgstr "Belopp:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:42
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:30
 msgid "There is no further action required on this website."
-msgstr ""
+msgstr "Det krävs ingen ytterligare åtgärd på denna webbplats."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:43
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:31
-#, fuzzy
-#| msgid ""
-#| "We will sent you an email as soon as the event organizer approved or "
-#| "rejected your order. If your order was approved, we will send you a link "
-#| "that you can use to pay."
 msgid "We will send you an email as soon as we received your payment."
 msgstr ""
-"Vi kommer skicka dig ett email så fort arrangören har godkänt eller nekat "
-"din beställning. Om den var godkänd, så kommer vi skicka med en länk som "
-"används för att betala."
+"Vi kommer att skicka ett e-postmeddelande så snart vi har mottagit din "
+"betalning."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:61
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:72
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:92
 msgid "Scan the qr-code with your banking app"
-msgstr ""
+msgstr "Skanna QR-koden med din bankapp"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:65
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:75
@@ -27193,44 +27189,43 @@ msgid ""
 "Scan this image with your banking app’s QR-Reader to start the payment "
 "process."
 msgstr ""
+"Skanna den här bilden med din bankapps QR-läsare för att starta "
+"betalningsprocessen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:95
 msgid "Open BezahlCode in your banking app to start the payment process."
-msgstr ""
+msgstr "Öppna BezahlCode i din bankapp för att starta betalningsprocessen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:112
 #, python-format
 msgid "At your request, we sent the invoice directly to %(recipient)s."
-msgstr ""
+msgstr "På din begäran skickade vi fakturan direkt till %(recipient)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:117
 msgid "Send again or somewhere else"
-msgstr ""
+msgstr "Skicka igen eller till någon annanstans"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:126
 msgid ""
 "To send the invoice directly to your accounting department, please enter "
 "their email address:"
 msgstr ""
+"För att skicka fakturan direkt till er ekonomiavdelning, vänligen ange deras "
+"e-postadress:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:132
-#, fuzzy
-#| msgid "Invoice recipient:"
 msgid "Invoice recipient email"
-msgstr "Fakturamottagare:"
+msgstr "E-postadress till fakturamottagare"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:139
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice to"
 msgid "Send invoice via email"
-msgstr "Faktura till"
+msgstr "Skicka fakturan via e-post"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:7
 msgid "Export bank transfer refunds"
-msgstr ""
+msgstr "Exportera återbetalningar via banköverföring"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:9
 #, python-format
@@ -27238,28 +27233,34 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
+"<strong>%(num_new)s</strong> Återbetalningar via banköverföring har lagts "
+"till och ingår ännu inte i en export."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
 msgstr ""
+"I testläge kommer dina exportfiler endast att innehålla beställningar från "
+"testläge."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:19
 msgid ""
 "If you want, you can now also create these exports for multiple events "
 "combined."
 msgstr ""
+"Om du vill kan du nu också skapa dessa exportfiler för flera evenemang "
+"kombinerade."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
 msgid "Go to organizer-level exports"
-msgstr ""
+msgstr "Gå till export på arrangörsnivå"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:32
 msgid "Create new export file"
-msgstr ""
+msgstr "Skapa ny exportfil"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:38
 msgid "Aggregate transactions to the same bank account"
-msgstr ""
+msgstr "Sammanfoga transaktioner till samma bankkonto"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:43
 msgid ""
@@ -27270,44 +27271,46 @@ msgid ""
 "refunds.\n"
 "                "
 msgstr ""
+"\n"
+"                    Observera att återbetalningar kommer att markeras som "
+"utförda så snart en export skapas.\n"
+"                    Se till att ladda ner exporten och genomföra "
+"återbetalningarna.\n"
+"                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
 msgid "Exported files"
-msgstr ""
+msgstr "Exporterade filer"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:55
-#, fuzzy
-#| msgid "Expired"
 msgid "Export date"
-msgstr "Utgången"
+msgstr "Exportdatum"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:56
 msgid "Number of orders"
-msgstr ""
+msgstr "Antal beställningar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:80
 msgid "not downloaded"
-msgstr ""
+msgstr "inte nedladdad"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:85
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:96
 msgid "Download CSV"
-msgstr ""
+msgstr "Ladda ner CSV"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:90
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:101
 msgid "SEPA XML"
-msgstr ""
+msgstr "SEPA XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:110
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "No exports have been created yet."
-msgstr "Denna beställning har avbrutits"
+msgstr "Inga exportfiler har skapats ännu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
-msgstr ""
+msgstr "Exportera SEPA XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:13
 #, python-format
@@ -27318,34 +27321,38 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
+"Du försöker ladda ner en återbetalningsexport från %(date)s med en "
+"beställning och totalt %(sum)s."
 msgstr[1] ""
+"Du försöker ladda ner en återbetalningsexport från %(date)s med %(cnt)s "
+"beställning och totalt %(sum)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr ""
+msgstr "Vänligen ange från vilket bankkonto återbetalningarna ska överföras."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
-msgstr ""
+msgstr "Ladda ner"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
-msgstr ""
+msgstr "Betalare och referens"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr ""
+msgstr "Acceptera ändå"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:44
 msgid "Assign to order"
-msgstr ""
+msgstr "Tilldela till beställning"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:49
 msgid "Retry"
-msgstr ""
+msgstr "Försök igen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
@@ -27353,109 +27360,108 @@ msgstr "Kommentar:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
-msgstr ""
+msgstr "Ingen beställningskod upptäckt"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:100
 msgid "Invalid for this order"
-msgstr ""
+msgstr "Ogiltigt för denna beställning"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:102
 msgid "Error while processing"
-msgstr ""
+msgstr "Fel vid bearbetning"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:104
 msgid "The order is already marked as paid"
-msgstr ""
+msgstr "Beställningen är redan markerad som betald"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:106
 msgid "Order already paid"
-msgstr ""
+msgstr "Beställningen är redan betald"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:123
 msgid "Discard"
-msgstr ""
+msgstr "Kassera"
 
 #: pretix/plugins/banktransfer/views.py:146
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
 msgstr ""
+"Beloppet är negativt men återbetalningen kan inte loggas, vänligen skapa en "
+"manuell återbetalning först."
 
 #: pretix/plugins/banktransfer/views.py:172
 msgid "Problem sending email."
-msgstr ""
+msgstr "Problem med att skicka e-post."
 
 #: pretix/plugins/banktransfer/views.py:198
 msgid "Unknown order code"
-msgstr ""
+msgstr "Okänd beställningskod"
 
 #: pretix/plugins/banktransfer/views.py:355
 msgid "Search text"
-msgstr ""
+msgstr "Söktext"
 
 #: pretix/plugins/banktransfer/views.py:356
-#, fuzzy
-#| msgid "Imprint"
 msgid "min"
-msgstr "URL till kontaktuppgifter och juridisk information"
+msgstr "mine"
 
 #: pretix/plugins/banktransfer/views.py:357
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Tax"
 msgid "max"
-msgstr "Moms"
+msgstr "max"
 
 #: pretix/plugins/banktransfer/views.py:366
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "Filter form is not valid."
-msgstr "Dina ändringar har sparats."
+msgstr "Filterformuläret är inte giltigt."
 
 #: pretix/plugins/banktransfer/views.py:409
 msgid "All unresolved transactions have been discarded."
-msgstr ""
+msgstr "Alla olösta transaktioner har kasserats."
 
 #: pretix/plugins/banktransfer/views.py:429
 msgid "You must choose a file to import."
-msgstr ""
+msgstr "Du måste välja en fil att importera."
 
 #: pretix/plugins/banktransfer/views.py:433
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
 msgstr ""
+"Vi kunde inte identifiera filtypen för denna import. Vänligen kontakta "
+"supporten för hjälp."
 
 #: pretix/plugins/banktransfer/views.py:446
 #: pretix/plugins/banktransfer/views.py:495
 msgid "We were unable to process your input."
-msgstr ""
+msgstr "Vi kunde inte behandla ditt inmatning."
 
 #: pretix/plugins/banktransfer/views.py:460
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
 msgstr ""
+"Tyvärr kunde vi inte importera denna CSV-fil. Vänligen kontakta supporten "
+"för hjälp."
 
 #: pretix/plugins/banktransfer/views.py:465
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
 msgstr ""
+"Tyvärr upptäckte vi att denna fil är tom. Vänligen kontakta supporten för "
+"hjälp."
 
 #: pretix/plugins/banktransfer/views.py:485
 msgid "Invalid input data."
-msgstr ""
+msgstr "Ogiltiga inputdata."
 
 #: pretix/plugins/banktransfer/views.py:489
 msgid "You need to select the column containing the payment reference."
-msgstr ""
+msgstr "Du måste välja kolumnen som innehåller betalningsreferensen."
 
 #: pretix/plugins/banktransfer/views.py:570
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "No currency has been selected."
-msgstr "Denna faktura har skapats."
+msgstr "Ingen valuta har valts."
 
 #: pretix/plugins/banktransfer/views.py:718
 #, python-brace-format
@@ -27463,12 +27469,12 @@ msgid ""
 "We could not find bank account information for the refund {refund_id}. It "
 "was marked as failed."
 msgstr ""
+"Vi kunde inte hitta bankkontoinformation för återbetalningen {refund_id}. "
+"Den markerades som misslyckad."
 
 #: pretix/plugins/banktransfer/views.py:751
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "No valid orders have been found."
-msgstr "Denna beställning har avbrutits"
+msgstr "Inga giltiga beställningar har hittats."
 
 #: pretix/plugins/banktransfer/views.py:905 pretix/presale/checkoutflow.py:969
 #: pretix/presale/checkoutflow.py:975
@@ -27480,91 +27486,88 @@ msgid ""
 "No pending bank transfer payment found. Maybe the order has been paid "
 "already?"
 msgstr ""
+"Ingen väntande banköverföringsbetalning hittades. Kanske har beställningen "
+"redan blivit betald?"
 
 #: pretix/plugins/banktransfer/views.py:915
-#, fuzzy
-#| msgid "This order is not yet approved by the event organizer."
 msgid "Sending invoices via email is disabled by the event organizer."
-msgstr "Beställningen har ännu inte godkännts av organisatören."
+msgstr "Att skicka fakturor via e-post är inaktiverat av evenemangsarrangören."
 
 #: pretix/plugins/banktransfer/views.py:920
 msgid "No invoice found, please request an invoice first."
-msgstr ""
+msgstr "Ingen faktura hittades, vänligen begär en faktura först."
 
 #: pretix/plugins/banktransfer/views.py:932
 #, python-brace-format
 msgid "Sending the latest invoice via e-mail to {email}."
-msgstr ""
+msgstr "Skickar den senaste fakturan via e-post till {email}."
 
 #: pretix/plugins/checkinlists/apps.py:47
 msgid "Check-in list exporter"
-msgstr ""
+msgstr "Export av incheckningslista"
 
 #: pretix/plugins/checkinlists/apps.py:51
 msgid "This plugin allows you to generate check-in lists for your conference."
-msgstr ""
+msgstr "Med detta tillägg kan du skapa incheckningslistor för din konferens."
 
 #: pretix/plugins/checkinlists/exporters.py:91
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include tickets for dates within this range."
-msgstr "Inkludera endast biljetter för datum på eller efter detta datum."
+msgstr "Inkludera endast biljetter för datum inom detta intervall."
 
 #: pretix/plugins/checkinlists/exporters.py:95
 msgid "Include QR-code secret"
-msgstr ""
+msgstr "Inkludera QR-kodens hemlighet"
 
 #: pretix/plugins/checkinlists/exporters.py:100
 msgid "Only tickets requiring special attention"
-msgstr ""
+msgstr "Endast biljetter som kräver särskild uppmärksamhet"
 
 #: pretix/plugins/checkinlists/exporters.py:132
 msgid "Include questions"
-msgstr ""
+msgstr "Inkludera frågor"
 
 #: pretix/plugins/checkinlists/exporters.py:298
 msgid "Check-in list (PDF)"
-msgstr ""
+msgstr "Incheckningslista (PDF)"
 
 #: pretix/plugins/checkinlists/exporters.py:299
 #: pretix/plugins/checkinlists/exporters.py:470
 #: pretix/plugins/checkinlists/exporters.py:665
 #: pretix/plugins/checkinlists/exporters.py:735
-#, fuzzy
-#| msgid "Checkout"
 msgctxt "export_category"
 msgid "Check-in"
-msgstr "Kassa"
+msgstr "Incheckning"
 
 #: pretix/plugins/checkinlists/exporters.py:300
 msgid ""
 "Download a PDF version of a check-in list that can be used to check people "
 "in at the event without digital methods."
 msgstr ""
+"Ladda ner en PDF-version av en incheckningslista som kan användas för att "
+"checka in personer vid evenemanget utan digitala metoder."
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:368
 msgctxt "tablehead"
 msgid "paid"
-msgstr ""
+msgstr "betald"
 
 #: pretix/plugins/checkinlists/exporters.py:471
 msgid ""
 "Download a spreadsheet with all attendees that are included in a check-in "
 "list."
 msgstr ""
+"Ladda ner en kalkylblad med alla deltagare som ingår i en incheckningslista."
 
 #: pretix/plugins/checkinlists/exporters.py:494
-#, fuzzy
-#| msgid "Checkout"
 msgid "Checked out"
-msgstr "Kassa"
+msgstr "Utcheckad"
 
 #: pretix/plugins/checkinlists/exporters.py:494
 #: pretix/plugins/checkinlists/exporters.py:757
 msgid "Automatically checked in"
-msgstr ""
+msgstr "Automatiskt incheckad"
 
 #: pretix/plugins/checkinlists/exporters.py:500
 #: pretix/plugins/checkinlists/exporters.py:686
@@ -27574,49 +27577,50 @@ msgid "Secret"
 msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:664
-#, fuzzy
-#| msgid "Checkout"
 msgid "Valid check-in codes"
-msgstr "Kassa"
+msgstr "Giltiga incheckningskoder"
 
 #: pretix/plugins/checkinlists/exporters.py:666
 msgid ""
 "Download a spreadsheet with all valid check-in barcodes e.g. for import into "
 "a different system. Does not included blocked codes or personal data."
 msgstr ""
+"Ladda ner en kalkylblad med alla giltiga incheckningskoder, t.ex. för import "
+"till ett annat system. Inkluderar inte blockerade koder eller "
+"personuppgifter."
 
 #: pretix/plugins/checkinlists/exporters.py:734
 msgid "Check-in log (all scans)"
-msgstr ""
+msgstr "Incheckningslogg (alla skanningar)"
 
 #: pretix/plugins/checkinlists/exporters.py:736
 msgid ""
 "Download a spreadsheet with one line for every scan that happened at your "
 "check-in stations."
 msgstr ""
+"Ladda ner en kalkylblad med en rad för varje skanning som skedde vid dina "
+"incheckningsstationer."
 
 #: pretix/plugins/checkinlists/exporters.py:755
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 #: pretix/plugins/checkinlists/exporters.py:756
 msgid "Offline override"
-msgstr ""
+msgstr "Offline-överstyrning"
 
 #: pretix/plugins/checkinlists/exporters.py:760
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:83
 msgid "Error message"
-msgstr ""
+msgstr "Felmeddelande"
 
 #: pretix/plugins/checkinlists/exporters.py:761
-#, fuzzy
-#| msgid "Expired"
 msgid "Upload date"
-msgstr "Utgången"
+msgstr "Uppladdningsdatum"
 
 #: pretix/plugins/checkinlists/exporters.py:762
 msgid "Upload time"
-msgstr ""
+msgstr "Uppladdningstid"
 
 #: pretix/plugins/checkinlists/exporters.py:813
 msgid "OK"
@@ -27624,15 +27628,15 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:845
 msgid "Successful scans only"
-msgstr ""
+msgstr "Endast lyckade skanningar"
 
 #: pretix/plugins/checkinlists/exporters.py:866
 msgid "All check-in lists"
-msgstr ""
+msgstr "Alla incheckningslistor"
 
 #: pretix/plugins/manualpayment/apps.py:37
 msgid "A fully customizable payment method for manual processing."
-msgstr ""
+msgstr "En helt anpassningsbar betalningsmetod för manuell hantering."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
 #: pretix/plugins/paypal/payment.py:75 pretix/plugins/paypal2/payment.py:82
@@ -27646,54 +27650,62 @@ msgid ""
 "Accept payments with your PayPal account. PayPal is one of the most popular "
 "payment methods world-wide."
 msgstr ""
+"Acceptera betalningar med ditt PayPal-konto. PayPal är en av de mest "
+"populära betalningsmetoderna världen över."
 
 #: pretix/plugins/paypal/payment.py:91 pretix/plugins/paypal2/payment.py:376
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
 msgstr ""
+"PayPal sandbox används, vilket gör att du kan testa utan att faktiskt skicka "
+"pengar, men du behöver en PayPal sandbox-användare för att logga in."
 
 #: pretix/plugins/paypal/payment.py:103
 msgid "PayPal account"
-msgstr ""
+msgstr "PayPal-konto"
 
 #: pretix/plugins/paypal/payment.py:116 pretix/plugins/paypal2/payment.py:113
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr ""
+msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #: pretix/plugins/paypal/payment.py:117 pretix/plugins/paypal2/payment.py:114
 msgid "Click here for a tutorial on how to obtain the required keys"
-msgstr ""
+msgstr "Klicka här för en handledning om hur du får de nödvändiga nycklarna"
 
 #: pretix/plugins/paypal/payment.py:129 pretix/plugins/paypal2/payment.py:126
 #: pretix/plugins/stripe/payment.py:256
 msgid "Endpoint"
-msgstr ""
+msgstr "Slutpunkt"
 
 #: pretix/plugins/paypal/payment.py:141 pretix/plugins/paypal2/payment.py:200
 msgid "Reference prefix"
-msgstr ""
+msgstr "Referensprefix"
 
 #: pretix/plugins/paypal/payment.py:142 pretix/plugins/paypal2/payment.py:201
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
 msgstr ""
+"Vilket värde som helst som anges här kommer att läggas till före den vanliga "
+"bokningsreferensen som innehåller beställningsnumret."
 
 #: pretix/plugins/paypal/payment.py:148 pretix/plugins/paypal2/payment.py:207
 msgid "Reference postfix"
-msgstr ""
+msgstr "Referenspostfix"
 
 #: pretix/plugins/paypal/payment.py:149 pretix/plugins/paypal2/payment.py:208
 msgid ""
 "Any value entered here will be added behind the regular booking reference "
 "containing the order number."
 msgstr ""
+"Vilket värde som helst som anges här kommer att läggas till bakom den "
+"vanliga bokningsreferensen som innehåller beställningsnumret."
 
 #: pretix/plugins/paypal/payment.py:187 pretix/plugins/paypal2/payment.py:261
 msgid "Disconnect from PayPal"
-msgstr ""
+msgstr "Koppla från PayPal"
 
 #: pretix/plugins/paypal/payment.py:241 pretix/plugins/paypal/payment.py:307
 #: pretix/plugins/paypal/payment.py:345 pretix/plugins/paypal/payment.py:360
@@ -27706,7 +27718,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:1011
 #: pretix/plugins/paypal2/payment.py:1107
 msgid "We had trouble communicating with PayPal"
-msgstr ""
+msgstr "Vi hade problem med att kommunicera med PayPal"
 
 #: pretix/plugins/paypal/payment.py:374 pretix/plugins/paypal/payment.py:383
 #: pretix/plugins/paypal/payment.py:457 pretix/plugins/paypal2/payment.py:637
@@ -27716,6 +27728,8 @@ msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
+"Vi kunde inte behandla din betalning. Se nedan för detaljer om hur du ska gå "
+"vidare."
 
 #: pretix/plugins/paypal/payment.py:438 pretix/plugins/paypal/payment.py:447
 #: pretix/plugins/paypal2/payment.py:783
@@ -27723,34 +27737,34 @@ msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"PayPal har ännu inte godkänt betalningen. Vi kommer att meddela dig så snart "
+"betalningen har genomförts."
 
 #: pretix/plugins/paypal/payment.py:472 pretix/plugins/paypal2/payment.py:811
 #: pretix/plugins/stripe/payment.py:987
 msgid "There was an error sending the confirmation mail."
-msgstr ""
+msgstr "Det uppstod ett fel vid sändningen av bekräftelsemejlet."
 
 #: pretix/plugins/paypal/payment.py:565 pretix/plugins/paypal/payment.py:572
 #: pretix/plugins/paypal2/payment.py:959 pretix/plugins/paypal2/payment.py:980
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr ""
+msgstr "Återbetalningen av beloppet via PayPal misslyckades: {}"
 
 #: pretix/plugins/paypal/payment.py:707 pretix/plugins/paypal/payment.py:715
 #: pretix/plugins/paypal2/payment.py:1057
 #: pretix/plugins/paypal2/payment.py:1065
-#, fuzzy
-#| msgid "The presale for this event has not yet started."
 msgid "The payment for this invoice has already been received."
-msgstr "Förköp för detta evenemang har ännu inte påbörjats."
+msgstr "Betalningen för denna faktura har redan mottagits."
 
 #: pretix/plugins/paypal/payment.py:708 pretix/plugins/paypal/payment.py:716
 #: pretix/plugins/paypal2/payment.py:1058
 #: pretix/plugins/paypal2/payment.py:1066
 msgid "PayPal payment ID"
-msgstr ""
+msgstr "PayPal betalnings-ID"
 
 #: pretix/plugins/paypal/payment.py:710 pretix/plugins/paypal2/payment.py:1060
 msgid "PayPal sale ID"
-msgstr ""
+msgstr "PayPal försäljnings-ID"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:19
@@ -27758,6 +27772,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Det totala beloppet ovan kommer att dras från ditt PayPal-konto efter "
+"bekräftelse av ditt köp."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -27765,33 +27781,36 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
+"Efter att du har klickat på fortsätt kommer vi att dirigera dig till PayPal "
+"för att fylla i dina betalningsuppgifter. Du kommer sedan att dirigeras "
+"tillbaka hit för att granska och bekräfta din beställning."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:6
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:7
-#, fuzzy
-#| msgid "Sale over"
 msgid "Sale ID"
-msgstr "Försäljning är avslutad"
+msgstr "Försäljnings-ID"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:35
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:11
 msgid "Last update"
-msgstr ""
+msgstr "Senaste uppdatering"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:37
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:71
 msgid "Total value"
-msgstr ""
+msgstr "Totalt värde"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Vårt försök att genomföra din betalning via PayPal misslyckades. Vänligen "
+"försök igen eller kontakta oss."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:15
@@ -27799,36 +27818,39 @@ msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"Vi väntar på ett svar från PayPal angående din betalning. Vänligen kontakta "
+"oss om detta tar mer än några timmar."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "Betalningsprocessen har startat i ett nytt fönster."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
+"Fönstret för att ange dina betalningsuppgifter öppnades inte eller stängdes?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:25
 msgid "Click here in order to open the window."
-msgstr ""
+msgstr "Klicka här för att öppna fönstret."
 
 #: pretix/plugins/paypal/views.py:107 pretix/plugins/paypal2/views.py:315
 msgid "Invalid response from PayPal received."
-msgstr ""
+msgstr "Ogiltigt svar från PayPal mottaget."
 
 #: pretix/plugins/paypal/views.py:123 pretix/plugins/paypal2/views.py:336
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "Det verkar som att du har avbrutit PayPal-betalningen"
 
 #: pretix/plugins/paypal/views.py:255 pretix/plugins/paypal2/views.py:521
 msgid "Your PayPal account has been disconnected."
-msgstr ""
+msgstr "Ditt PayPal-konto har kopplats ifrån."
 
 #: pretix/plugins/paypal2/apps.py:40
 msgid ""
@@ -27838,12 +27860,15 @@ msgid ""
 "they don't even need a PayPal account. PayPal is one of the most popular "
 "payment methods world-wide."
 msgstr ""
+"Acceptera betalningar med ditt PayPal-konto. Förutom vanliga PayPal-"
+"betalningar kan du nu också erbjuda betalningar med olika lokala "
+"betalningsmetoder som giropay, SOFORT, iDEAL och många fler till dina kunder "
+"- de behöver inte ens ha ett PayPal-konto. PayPal är en av de mest populära "
+"betalningsmetoderna globalt sett."
 
 #: pretix/plugins/paypal2/payment.py:99
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal Merchant ID"
-msgstr "Betalnings ID"
+msgstr "PayPal Merchant ID"
 
 #: pretix/plugins/paypal2/payment.py:141
 msgid ""
@@ -27851,12 +27876,13 @@ msgid ""
 "have the option to revert back to paying with their PayPal account. For this "
 "reason, this payment method is always active."
 msgstr ""
+"Även om en kund väljer en alternativ betalningsmetod kommer de alltid att ha "
+"möjlighet att återgå till att betala med sitt PayPal-konto. Av den "
+"anledningen är denna betalningsmetod alltid aktiv."
 
 #: pretix/plugins/paypal2/payment.py:149
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "Alternative Payment Methods"
-msgstr "Välj ett betalsätt"
+msgstr "Alternativa betalningsmetoder"
 
 #: pretix/plugins/paypal2/payment.py:151
 msgid ""
@@ -27867,10 +27893,16 @@ msgid ""
 "on the shoppers location. For German merchants, this is the direct successor "
 "of PayPal Plus."
 msgstr ""
+"Förutom betalningar via ett PayPal-konto kan du också erbjuda dina kunder "
+"möjligheten att betala med kreditkort och andra lokala betalningsmetoder som "
+"SOFORT, giropay, iDEAL och många fler - även när de inte har ett PayPal-"
+"konto. Behöriga betalningsmetoder kommer att bestämmas baserat på kundens "
+"plats. För tyska handlare är detta den direkta efterträdaren till PayPal "
+"Plus."
 
 #: pretix/plugins/paypal2/payment.py:166
 msgid "Disable SEPA Direct Debit"
-msgstr ""
+msgstr "Inaktivera SEPA-direktdebitering"
 
 #: pretix/plugins/paypal2/payment.py:168
 msgid ""
@@ -27880,10 +27912,15 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
+"Eftersom de flesta betalningsmetoder inte kan återkallas av en kund utan att "
+"ange exakt vad de är missnöjda med hos handlaren, kan SEPA-direktdebitering "
+"återkallas med ett knapptryck. Av den anledningen - och beroende på typen av "
+"ditt evenemang - kan du överväga att inaktivera möjligheten att betala med "
+"SEPA-direktdebitering för att minska risken för kostsamma återbetalningar."
 
 #: pretix/plugins/paypal2/payment.py:182
 msgid "Enable Buy Now Pay Later"
-msgstr ""
+msgstr "Aktivera Köp nu, betala senare"
 
 #: pretix/plugins/paypal2/payment.py:184
 msgid ""
@@ -27891,18 +27928,17 @@ msgid ""
 "pay in multiple installments or within 30 days. You, as the merchant, are "
 "getting your money right away."
 msgstr ""
+"Erjud dina kunder möjligheten att köpa nu (upp till en viss gräns) och "
+"betala i flera avbetalningar eller inom 30 dagar. Du som handlare får dina "
+"pengar direkt."
 
 #: pretix/plugins/paypal2/payment.py:216
-#, fuzzy
-#| msgid "Confirmations"
 msgid "-- Automatic --"
-msgstr "Bekräftelser"
+msgstr "-- Automatiskt --"
 
 #: pretix/plugins/paypal2/payment.py:222
-#, fuzzy
-#| msgid "Merchant country"
 msgid "Buyer country"
-msgstr "Handlarens land"
+msgstr "Köparens land"
 
 #: pretix/plugins/paypal2/payment.py:246
 msgid ""
@@ -27910,26 +27946,33 @@ msgid ""
 "clicking on the following button, you can either create a new PayPal account "
 "or connect pretix to an existing one."
 msgstr ""
+"För att acceptera betalningar via PayPal behöver du ett konto hos PayPal. "
+"Genom att klicka på följande knapp kan du antingen skapa ett nytt PayPal-"
+"konto eller ansluta pretix till ett befintligt."
 
 #: pretix/plugins/paypal2/payment.py:251
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr ""
+msgstr "Anslut med {icon} PayPal"
 
 #: pretix/plugins/paypal2/payment.py:265
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
+"Vänligen konfigurera en PayPal Webhook till följande slutpunkt för att "
+"automatiskt avbryta beställningar när betalningar återbetalas externt."
 
 #: pretix/plugins/paypal2/payment.py:276
 msgid "PayPal does not process payments in your event's currency."
-msgstr ""
+msgstr "PayPal hanterar inte betalningar i valutan för ditt evenemang."
 
 #: pretix/plugins/paypal2/payment.py:277
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
 msgstr ""
+"Vänligen kontrollera denna PayPal-sida för en komplett lista över stödda "
+"valutor."
 
 #: pretix/plugins/paypal2/payment.py:282
 msgid ""
@@ -27939,10 +27982,15 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
+"Valutan för ditt evenemang stöds av PayPal som en betalnings- och "
+"saldovaluta endast för konton inom samma land. Det innebär att både det "
+"mottagande och det sändande PayPal-kontot måste ha skapats i samma land och "
+"använda samma valuta. Konton från andra länder kommer inte kunna skicka "
+"några betalningar."
 
 #: pretix/plugins/paypal2/payment.py:334 pretix/plugins/paypal2/views.py:244
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr ""
+msgstr "Ett fel inträffade vid anslutningen med PayPal, vänligen försök igen."
 
 #: pretix/plugins/paypal2/payment.py:466 pretix/plugins/paypal2/payment.py:598
 #: pretix/plugins/paypal2/payment.py:658 pretix/plugins/paypal2/payment.py:721
@@ -27953,143 +28001,133 @@ msgid ""
 "again, there is a high chance of the payment succeeding on a second or third "
 "attempt. You can also try other payment methods, if available."
 msgstr ""
+"Din betalning misslyckades på grund av ett känt problem hos PayPal. Vänligen "
+"försök igen, det finns en hög chans att betalningen lyckas vid ett andra "
+"eller tredje försök. Du kan också prova andra betalningsmetoder om det är "
+"möjligt."
 
 #: pretix/plugins/paypal2/payment.py:476 pretix/plugins/paypal2/payment.py:1007
-#, fuzzy
-#| msgid ""
-#| "There was an error sending the confirmation mail. Please try again later."
 msgid ""
 "Something went wrong when requesting the payment status. Please try again."
-msgstr ""
-"Det uppstod problem vid utskicket av bekräftelse-emailet. Vänligen försök "
-"igen."
+msgstr "Något gick fel vid begäran om betalningsstatus. Vänligen försök igen."
 
 #: pretix/plugins/paypal2/payment.py:485 pretix/plugins/paypal2/payment.py:1016
-#, fuzzy
-#| msgid "You did not select any products."
 msgid "You may need to enable JavaScript for PayPal payments."
-msgstr "Du valde ingen av produkterna."
+msgstr "Du kanske behöver aktivera JavaScript för PayPal-betalningar."
 
 #: pretix/plugins/paypal2/payment.py:1084
 msgid "PayPal APM"
-msgstr ""
+msgstr "PayPal APM"
 
 #: pretix/plugins/paypal2/payment.py:1085
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "PayPal Alternative Payment Methods"
-msgstr "Välj ett betalsätt"
+msgstr "PayPal alternativa betalningsmetoder"
 
 #: pretix/plugins/paypal2/signals.py:59
 msgid "Payment completed."
-msgstr ""
+msgstr "Betalningen är genomförd."
 
 #: pretix/plugins/paypal2/signals.py:60
 msgid "Payment denied."
-msgstr ""
+msgstr "Betalningen nekades."
 
 #: pretix/plugins/paypal2/signals.py:61
 msgid "Payment refunded."
-msgstr ""
+msgstr "Betalningen återbetalades."
 
 #: pretix/plugins/paypal2/signals.py:62
 msgid "Payment reversed."
-msgstr ""
+msgstr "Betalningen återfördes."
 
 #: pretix/plugins/paypal2/signals.py:63
 msgid "Payment pending."
-msgstr ""
+msgstr "Betalningen väntar."
 
 #: pretix/plugins/paypal2/signals.py:64
-#, fuzzy
-#| msgid "Order approved"
 msgctxt "paypal"
 msgid "Order approved."
-msgstr "Beställningen har godkänts"
+msgstr "Beställningen godkänd."
 
 #: pretix/plugins/paypal2/signals.py:65
-#, fuzzy
-#| msgid "Order comment"
 msgctxt "paypal"
 msgid "Order completed."
-msgstr "Beställngskommentar"
+msgstr "Beställningen slutförd."
 
 #: pretix/plugins/paypal2/signals.py:66
 msgctxt "paypal"
 msgid "Capture completed."
-msgstr ""
+msgstr "Fångsten slutförd."
 
 #: pretix/plugins/paypal2/signals.py:67
-#, fuzzy
-#| msgid "Approval pending"
 msgctxt "paypal"
 msgid "Capture pending."
-msgstr "Väntar godkännande"
+msgstr "Fångst väntar."
 
 #: pretix/plugins/paypal2/signals.py:76
 msgid "PayPal reported an event: {}"
-msgstr ""
+msgstr "PayPal rapporterade en händelse: {}"
 
 #: pretix/plugins/paypal2/signals.py:83
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal ISU/Connect: Client ID"
-msgstr "Betalnings ID"
+msgstr "PayPal ISU/Connect: Klient-ID"
 
 #: pretix/plugins/paypal2/signals.py:87
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal ISU/Connect: Secret key"
-msgstr "Betalnings ID"
+msgstr "PayPal ISU/Connect: Hemlig nyckel"
 
 #: pretix/plugins/paypal2/signals.py:91
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal ISU/Connect: Partner Merchant ID"
-msgstr "Betalnings ID"
+msgstr "PayPal ISU/Connect: Partner Merchant ID"
 
 #: pretix/plugins/paypal2/signals.py:92
 msgid ""
 "This is not the BN-code, but rather the ID of the merchant account which "
 "holds branding information for ISU."
 msgstr ""
+"Detta är inte BN-koden, utan snarare ID:t för handelskontot som innehåller "
+"varumärkesinformation för ISU."
 
 #: pretix/plugins/paypal2/signals.py:96
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal ISU/Connect Endpoint"
-msgstr "Betalnings ID"
+msgstr "PayPal ISU/Connect slutpunkt"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:9
 msgid "Almost done …"
-msgstr ""
+msgstr "Nästan klart …"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:12
-#, fuzzy
-#| msgid "Please review the details below and confirm your order."
 msgid "Please click on the \"Pay now\" button below to confirm your payment."
-msgstr "Kontrollera uppgifterna nedan och slutför din beställning."
+msgstr ""
+"Vänligen klicka på knappen \"Betala nu\" nedan för att bekräfta din "
+"betalning."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:15
 msgid "We will then charge your PayPal account and finalize the order."
 msgstr ""
+"Vi kommer sedan att debitera ditt PayPal-konto och slutföra beställningen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:27
 msgid ""
 "After placing your order, you will be able to select your desired payment "
 "method, including PayPal."
 msgstr ""
+"Efter att du har lagt din beställning kommer du att kunna välja önskad "
+"betalningsmetod, inklusive PayPal."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:5
 msgid ""
 "A PayPal account is required to use this online payment method. Please keep "
 "your account information ready to enter in the next step."
 msgstr ""
+"Ett PayPal-konto krävs för att använda denna onlinebetalningsmetod. Ha ditt "
+"kontoinformation redo att ange i nästa steg."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
 msgstr ""
+"Vänligen klicka på knappen \"Betala med PayPal\" nedan för att påbörja din "
+"betalning."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:13
 msgid ""
@@ -28097,6 +28135,9 @@ msgid ""
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
+"Efter att du har klickat på Fortsätt kommer vi att kunna välja hur du vill "
+"betala och fylla i dina betalningsuppgifter. Du kommer sedan att omdirigeras "
+"tillbaka hit för att granska och bekräfta din beställning."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:22
 msgid ""
@@ -28104,23 +28145,27 @@ msgid ""
 "fail. If your payment fails, please just try again. You can also try with a "
 "different payment method, if you prefer."
 msgstr ""
+"Det finns för närvarande ett känt problem med PayPal som kan orsaka att "
+"vissa betalningar misslyckas. Om din betalning misslyckas, försök bara igen. "
+"Du kan också prova med en annan betalningsmetod om du föredrar det."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
 msgid "Error"
-msgstr ""
+msgstr "Fel"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:24
-#, fuzzy
-#| msgid "Order status"
 msgid "Capture status"
-msgstr "Beställningsstatus"
+msgstr "Fångststatus"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:27
 msgid ""
 "This payment is being reviewed by PayPal. Until the review is lifted, the "
 "money will not be disbursed and the order remain in its pending state."
 msgstr ""
+"Denna betalning granskas av PayPal. Tills granskningen är avslutad kommer "
+"pengarna inte att utbetalas och beställningen förblir i sitt väntande "
+"tillstånd."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:5
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
@@ -28138,10 +28183,8 @@ msgid "Pay order: %(code)s"
 msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:26
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "Please turn on JavaScript."
-msgstr "Ange en giltig epost."
+msgstr "Vänligen aktivera JavaScript."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:29
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:55
@@ -28153,40 +28196,52 @@ msgid ""
 "Our attempt to execute your payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Vårt försök att genomföra din betalning via PayPal har misslyckats. Vänligen "
+"försök igen eller kontakta oss."
 
 #: pretix/plugins/paypal2/views.py:217
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
+"Ett fel uppstod vid återkomsten från PayPal: begärda parametrar saknas. "
+"Vänligen försök igen."
 
 #: pretix/plugins/paypal2/views.py:253
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
 msgstr ""
+"Ett fel uppstod vid återkomsten från PayPal: resultatparametrar saknas. "
+"Vänligen försök igen."
 
 #: pretix/plugins/paypal2/views.py:258
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
+"Ett fel uppstod vid återkomsten från PayPal: sessionparametern matchar inte. "
+"Vänligen försök igen."
 
 #: pretix/plugins/paypal2/views.py:263
 msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
+"E-postadressen på ditt PayPal-konto har ännu inte bekräftats. Du måste göra "
+"detta innan du kan börja ta emot betalningar."
 
 #: pretix/plugins/paypal2/views.py:269
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Ditt PayPal-konto är nu anslutet till pretix. Du kan ändra inställningarna i "
+"detalj nedan."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 msgid "Old check-in device API"
-msgstr ""
+msgstr "Äldre API för incheckningsenhet"
 
 #: pretix/plugins/pretixdroid/apps.py:39
 msgid ""
@@ -29221,14 +29276,19 @@ msgid ""
 "of characters is allowed. We do not recommend entering more than {cnt} "
 "characters into this field."
 msgstr ""
+"Värdet som anges här kommer att visas på kundens kreditkorts- eller "
+"banktransaktionsräkning. Vi lägger automatiskt till beställningskoden "
+"framför det. Observera att beroende på betalningsmetoden tillåts endast ett "
+"mycket begränsat antal tecken. Vi rekommenderar inte att du anger mer än "
+"{cnt} tecken i detta fält."
 
 #: pretix/plugins/stripe/payment.py:335
 msgid "Credit card payments"
-msgstr ""
+msgstr "Kreditkortsbetalningar"
 
 #: pretix/plugins/stripe/payment.py:340 pretix/plugins/stripe/payment.py:1482
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:350
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:366
@@ -29240,6 +29300,8 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before they work properly."
 msgstr ""
+"Vissa betalningsmetoder kan behöva aktiveras i inställningarna för ditt "
+"Stripe-konto innan de fungerar korrekt."
 
 #: pretix/plugins/stripe/payment.py:348 pretix/plugins/stripe/payment.py:1518
 #, fuzzy
@@ -29248,7 +29310,7 @@ msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:356 pretix/plugins/stripe/payment.py:1543
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: pretix/plugins/stripe/payment.py:364 pretix/plugins/stripe/payment.py:1555
 msgid "Bancontact"
@@ -29263,6 +29325,8 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before work properly."
 msgstr ""
+"Vissa betalningsmetoder kan behöva aktiveras i inställningarna för ditt "
+"Stripe-konto innan de fungerar korrekt."
 
 #: pretix/plugins/stripe/payment.py:378
 msgid ""
@@ -29271,26 +29335,34 @@ msgid ""
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
+"SEPA Direct Debit-betalningar via Stripe bearbetas <strong>inte</strong> "
+"omedelbart utan kan ta upp till <strong>14 dagar</strong> att bekräftas i "
+"vissa fall. Aktivera endast denna betalningsmetod om din betalningstid "
+"tillåter denna fördröjning."
 
 #: pretix/plugins/stripe/payment.py:386
 msgid "SEPA Creditor Mandate Name"
-msgstr ""
+msgstr "SEPA Kreditorgivare Mandatnamn"
 
 #: pretix/plugins/stripe/payment.py:388
 msgid ""
 "Please provide your SEPA Creditor Mandate Name, that will be displayed to "
 "the user."
 msgstr ""
+"Vänligen ange ditt SEPA-kreditorgivarmandatnamn som kommer att visas för "
+"användaren."
 
 #: pretix/plugins/stripe/payment.py:399
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/stripe/payment.py:402
 msgid ""
 "Stripe is in the process of removing this payment method. If you created "
 "your Stripe account after November 2023, you cannot use this payment method."
 msgstr ""
+"Stripe håller på att ta bort denna betalningsmetod. Om du skapade ditt "
+"Stripe-konto efter november 2023 kan du inte använda denna betalningsmetod."
 
 #: pretix/plugins/stripe/payment.py:405
 msgid ""
@@ -29299,56 +29371,62 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
+"Trots namnet bearbetas Sofort-betalningar via Stripe <strong>inte</strong> "
+"omedelbart utan kan ta upp till <strong>14 dagar</strong> att bekräftas i "
+"vissa fall. Aktivera endast denna betalningsmetod om din betalningsterm "
+"tillåter denna fördröjning."
 
 #: pretix/plugins/stripe/payment.py:414 pretix/plugins/stripe/payment.py:1658
 msgid "EPS"
-msgstr ""
+msgstr "EPS"
 
 #: pretix/plugins/stripe/payment.py:422 pretix/plugins/stripe/payment.py:1690
 msgid "Multibanco"
-msgstr ""
+msgstr "Multibanco"
 
 #: pretix/plugins/stripe/payment.py:430 pretix/plugins/stripe/payment.py:1712
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:438 pretix/plugins/stripe/payment.py:1751
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:446 pretix/plugins/stripe/payment.py:1786
 msgid "Swish"
-msgstr ""
+msgstr "Swish"
 
 #: pretix/plugins/stripe/payment.py:462 pretix/plugins/stripe/payment.py:1320
 msgid "Affirm"
-msgstr ""
+msgstr "Bekräfta"
 
 #: pretix/plugins/stripe/payment.py:467
 msgid "Only available for payments between $50 and $30,000."
-msgstr ""
+msgstr "Endast tillgänglig för betalningar mellan $50 och $30,000."
 
 #: pretix/plugins/stripe/payment.py:473 pretix/plugins/stripe/payment.py:1365
 msgid "Klarna"
-msgstr ""
+msgstr "Klarna"
 
 #: pretix/plugins/stripe/payment.py:480
 msgid ""
 "Klarna and Stripe will decide which of the payment methods offered by Klarna "
 "are available to the user."
 msgstr ""
+"Klarna och Stripe kommer att besluta vilka av Klarnas betalningsmetoder som "
+"är tillgängliga för användaren."
 
 #: pretix/plugins/stripe/payment.py:482
 msgid ""
 "Klarna's terms of services do not allow it to be used by charities or "
 "political organizations."
 msgstr ""
+"Klarnas användarvillkor tillåter inte att det används av "
+"välgörenhetsorganisationer eller politiska organisationer."
 
 #: pretix/plugins/stripe/payment.py:499
-#, fuzzy
-#| msgid "Description"
 msgid "Destination"
-msgstr "Beskrivning"
+msgstr "Destination"
 
 #: pretix/plugins/stripe/payment.py:529 pretix/plugins/stripe/payment.py:1435
 #, python-brace-format
@@ -29357,54 +29435,62 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"Pluginet Stripe är i testläge. Du kan använda <a {args}>många testkort</a> "
+"för att genomföra en transaktion. Inget pengar kommer faktiskt att överföras."
 
 #: pretix/plugins/stripe/payment.py:722
 msgid "No payment information found."
-msgstr ""
+msgstr "Ingen betalningsinformation hittades."
 
 #: pretix/plugins/stripe/payment.py:760
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
 msgstr ""
+"Vi hade problem med att kommunicera med Stripe. Försök igen och kontakta "
+"support om problemet kvarstår."
 
 #: pretix/plugins/stripe/payment.py:764
 msgid "Stripe returned an error"
-msgstr ""
+msgstr "Stripe returnerade ett fel"
 
 #: pretix/plugins/stripe/payment.py:836
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr ""
+msgstr "Du kanske behöver aktivera JavaScript för Stripe-betalningar."
 
 #: pretix/plugins/stripe/payment.py:931 pretix/plugins/stripe/payment.py:1053
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr ""
+msgstr "Stripe rapporterade ett fel med ditt kort: %s"
 
 #: pretix/plugins/stripe/payment.py:949 pretix/plugins/stripe/payment.py:1065
 msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
+"Vi hade problem med att kommunicera med Stripe. Försök igen och kontakta oss "
+"om problemet kvarstår."
 
 #: pretix/plugins/stripe/payment.py:990
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"Din betalning är avvaktande färdigställande. Vi kommer att informera dig så "
+"snart betalningen är genomförd."
 
 #: pretix/plugins/stripe/payment.py:998
 msgid "Your payment failed. Please try again."
-msgstr ""
+msgstr "Din betalning misslyckades. Vänligen försök igen."
 
 #: pretix/plugins/stripe/payment.py:1004
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr ""
+msgstr "Stripe rapporterade ett fel: %s"
 
 #: pretix/plugins/stripe/payment.py:1105
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "Kretidkort via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1106
 msgid "Credit card"
