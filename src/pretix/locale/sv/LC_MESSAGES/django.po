@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-27 17:00+0000\n"
+"PO-Revision-Date: 2024-06-28 10:33+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -29653,86 +29653,92 @@ msgid ""
 "This payment method is available to users of the Chinese app WeChat. Please "
 "keep your login information available."
 msgstr ""
+"Denna betalningsmetod är tillgänglig för användare av den kinesiska appen "
+"WeChat. Vänligen håll din inloggningsinformation tillgänglig."
 
 #: pretix/plugins/stripe/payment.py:1778
 msgid "PayPal via Stripe"
-msgstr ""
+msgstr "PayPal via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1785
 msgid "Swish via Stripe"
-msgstr ""
+msgstr "Swish via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1790
 msgid ""
 "This payment method is available to users of the Swedish apps Swish and "
 "BankID. Please have your app ready."
 msgstr ""
+"Denna betalningsmetod är tillgänglig för användare av de svenska apparna "
+"Swish och BankID. Vänligen ha din app redo."
 
 #: pretix/plugins/stripe/payment.py:1809
 msgid "TWINT via Stripe"
-msgstr ""
+msgstr "TWINT via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1814
 msgid ""
 "This payment method is available to users of the Swiss app TWINT. Please "
 "have your app ready."
 msgstr ""
+"Denna betalningsmetod är tillgänglig för användare av den schweiziska appen "
+"TWINT. Vänligen ha din app redo."
 
 #: pretix/plugins/stripe/signals.py:92
 msgid "Charge succeeded."
-msgstr ""
+msgstr "Debiteringen lyckades."
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge refunded."
-msgstr ""
+msgstr "Debiteringen återbetalades."
 
 #: pretix/plugins/stripe/signals.py:94
 msgid "Charge updated."
-msgstr ""
+msgstr "Debiteringen uppdaterades."
 
 #: pretix/plugins/stripe/signals.py:95
 msgid "Charge pending"
-msgstr ""
+msgstr "Debitering väntar"
 
 #: pretix/plugins/stripe/signals.py:96
 msgid "Payment authorized."
-msgstr ""
+msgstr "Betalning godkänd."
 
 #: pretix/plugins/stripe/signals.py:97
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "Betalningsauktorisation avbruten."
 
 #: pretix/plugins/stripe/signals.py:98
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "Betalningsauktorisation misslyckades."
 
 #: pretix/plugins/stripe/signals.py:104
 msgid "Charge failed. Reason: {}"
-msgstr ""
+msgstr "Avgiften misslyckades. Anledning: {}"
 
 #: pretix/plugins/stripe/signals.py:106
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "Tvist skapad. Anledning: {}"
 
 #: pretix/plugins/stripe/signals.py:108
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "Tvist uppdaterad. Anledning: {}"
 
 #: pretix/plugins/stripe/signals.py:110
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "Tvist avslutad. Status: {}"
 
 #: pretix/plugins/stripe/signals.py:113
 msgid "Stripe reported an event: {}"
-msgstr ""
+msgstr "Stripe rapporterade en händelse: {}"
 
 #: pretix/plugins/stripe/signals.py:124
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Stripe Connect: Klient-ID"
 
 #: pretix/plugins/stripe/signals.py:131
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Stripe Connect: Hemlig nyckel"
 
 #: pretix/plugins/stripe/signals.py:138
 msgid "Stripe Connect: Publishable key"
@@ -29740,7 +29746,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/signals.py:145
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Stripe Connect: Hemlig nyckel (test)"
 
 #: pretix/plugins/stripe/signals.py:152
 msgid "Stripe Connect: Publishable key (test)"
@@ -29752,33 +29758,31 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:6
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:9
 msgid "Stripe Connect"
-msgstr ""
+msgstr "Stripe Connect"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "Det totala beloppet kommer att dras från ditt kreditkort."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:12
 msgid "Card type"
-msgstr ""
+msgstr "Korttyp"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 msgid "The total amount will be withdrawn from your bank account."
-msgstr ""
+msgstr "Det totala beloppet kommer att dras från ditt bankkonto."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:23
 msgid "Banking Institution"
-msgstr ""
+msgstr "Bankinstitution"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:25
-#, fuzzy
-#| msgid "Phone number"
 msgid "Account number"
-msgstr "Telefonnummer"
+msgstr "Kontonummer"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:7
