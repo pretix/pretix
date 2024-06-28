@@ -48,28 +48,28 @@
     }
 
     &.soon {
-      background: var(--brand-primary-lighten-53);
-      border-color: var(--brand-primary-lighten-40);
-      border-left-color: var(--brand-primary-lighten-20);
-      color: var(--brand-primary-lighten-5);
+      background: var(--pretix-brand-primary-lighten-53);
+      border-color: var(--pretix-brand-primary-lighten-40);
+      border-left-color: var(--pretix-brand-primary-lighten-20);
+      color: var(--pretix-brand-primary-lighten-5);
       &:hover {
-        background: var(--brand-primary-lighten-55);
-        border-color: var(--brand-primary-lighten-20);
+        background: var(--pretix-brand-primary-lighten-55);
+        border-color: var(--pretix-brand-primary-lighten-20);
       }
     }
 
     &.available {
-      background: var(--brand-success-lighten-48);
-      border-color: var(--brand-success-lighten-30);
+      background: var(--pretix-brand-success-lighten-48);
+      border-color: var(--pretix-brand-success-lighten-30);
       border-left-color: $brand-success;
-      color: var(--brand-success-darken-12);
+      color: var(--pretix-brand-success-darken-12);
 
       &.low {
-        border-left-color: var(--brand-warning-lighten-12);
+        border-left-color: var(--pretix-brand-warning-lighten-12);
       }
 
       &:hover {
-        background: var(--brand-success-lighten-50);
+        background: var(--pretix-brand-success-lighten-50);
         border-color: $brand-success;
 
         &.low {
@@ -79,26 +79,26 @@
     }
 
     &.waitinglist {
-      background: var(--brand-warning-lighten-41);
-      border-color: var(--brand-warning-lighten-31);
-      border-left-color: var(--brand-warning-lighten-12);
+      background: var(--pretix-brand-warning-lighten-41);
+      border-color: var(--pretix-brand-warning-lighten-31);
+      border-left-color: var(--pretix-brand-warning-lighten-12);
       color: #963;
 
       &:hover {
-        background: var(--brand-warning-lighten-43);
+        background: var(--pretix-brand-warning-lighten-43);
         border-color: $brand-warning;
       }
     }
 
     &.reserved, &.soldout, {
-      background: var(--brand-danger-lighten-43);
-      border-color: var(--brand-danger-lighten-30);
-      border-left-color: var(--brand-danger-lighten-30);
-      color: var(--brand-danger-darken-5);
+      background: var(--pretix-brand-danger-lighten-43);
+      border-color: var(--pretix-brand-danger-lighten-30);
+      border-left-color: var(--pretix-brand-danger-lighten-30);
+      color: var(--pretix-brand-danger-darken-5);
 
       &:hover {
-        background: var(--brand-danger-lighten-45);
-        border-color: var(--brand-danger-lighten-25);
+        background: var(--pretix-brand-danger-lighten-45);
+        border-color: var(--pretix-brand-danger-lighten-25);
       }
     }
 
@@ -481,7 +481,7 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
     color: white;
   }
   .table-calendar td.day.has-events:hover {
-    background: var(--brand-primary-darken-15);
+    background: var(--pretix-brand-primary-darken-15);
   }
 }
 #monthselform .row {
