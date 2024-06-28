@@ -36,7 +36,9 @@ import json
 import logging
 import re
 import urllib.parse
+import zoneinfo
 from collections import OrderedDict
+from datetime import datetime
 from decimal import Decimal
 from json import JSONDecodeError
 
@@ -108,7 +110,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Bancontact: ✓
 # - BLIK: ✗
 # - EPS: ✓
-# - giropay: ✓
+# - giropay: (deprecated)
 # - iDEAL: ✓
 # - P24: ✓
 # - Sofort: ✓
@@ -333,14 +335,6 @@ class StripeSettingsHolder(BasePaymentProvider):
                 ('method_card',
                  forms.BooleanField(
                      label=_('Credit card payments'),
-                     required=False,
-                 )),
-                ('method_giropay',
-                 forms.BooleanField(
-                     label=_('giropay'),
-                     disabled=self.event.currency != 'EUR',
-                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_ideal',
@@ -1487,6 +1481,17 @@ class StripeGiropay(StripeRedirectWithAccountNamePaymentIntentMethod):
     )
     redirect_in_widget_allowed = False
 
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        # Stripe<>giropay is shut down July 1st
+        return super().is_allowed(request, total) and now() < datetime(
+            2024, 7, 1, 0, 0, 0, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")
+        )
+
+    def order_change_allowed(self, order: Order, request: HttpRequest=None) -> bool:
+        return super().order_change_allowed(order, request) and now() < datetime(
+            2024, 7, 1, 0, 0, 0, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")
+        )
+
     def _payment_intent_kwargs(self, request, payment):
         return {
             "payment_method_data": {
@@ -1560,7 +1565,6 @@ class StripeBancontact(StripeRedirectWithAccountNamePaymentIntentMethod):
         return {
             "payment_method_data": {
                 "type": "bancontact",
-                "giropay": {},
                 "billing_details": {
                     "name": request.session.get(f"payment_stripe_{self.method}_account") or gettext("unknown name")
                 },
@@ -1663,7 +1667,6 @@ class StripeEPS(StripeRedirectWithAccountNamePaymentIntentMethod):
         return {
             "payment_method_data": {
                 "type": "eps",
-                "giropay": {},
                 "billing_details": {
                     "name": request.session.get(f"payment_stripe_{self.method}_account") or gettext("unknown name")
                 },
