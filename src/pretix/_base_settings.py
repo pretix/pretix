@@ -100,6 +100,7 @@ ALL_LANGUAGES = [
     ('ro', _('Romanian')),
     ('ru', _('Russian')),
     ('sk', _('Slovak')),
+    ('sv', _('Swedish')),
     ('es', _('Spanish')),
     ('tr', _('Turkish')),
     ('uk', _('Ukrainian')),
@@ -111,7 +112,7 @@ LANGUAGES_RTL = {
     'ar', 'hw'
 }
 LANGUAGES_INCUBATING = {
-    'fi', 'pt-br', 'gl',
+    'fi', 'pt-br', 'gl', 'sv'
 }
 LANGUAGES = ALL_LANGUAGES
 LOCALE_PATHS = [
