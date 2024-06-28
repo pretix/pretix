@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-06-27 17:00+0000\n"
+"PO-Revision-Date: 2024-06-28 10:33+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -27234,6 +27234,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Det ovenstående, samlede beløb for din bestilling bliver trukket fra din "
+"PayPal-konto, så snart du har bekræftet bestillingen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -30042,7 +30044,7 @@ msgstr "Kontroller venligst detaljerne nedenfor og bekræft din bestilling."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:14
 msgid "Please hang tight, we're finalizing your order!"
-msgstr "Hæng venligst på, mens vi gør din booking færdig!"
+msgstr "Hæng venligst på, mens vi generer din bestilling!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:22
 msgid "Add or remove tickets"
@@ -30139,9 +30141,8 @@ msgid "Reset password"
 msgstr "Nulstil adgangskode"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:92
-#, fuzzy
 msgid "Create a new customer account"
-msgstr "Opret konto"
+msgstr "Opret en ny konto"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:101
 #, python-format
@@ -30157,7 +30158,6 @@ msgstr ""
 "mailen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:122
-#, fuzzy
 msgid "Continue as a guest"
 msgstr "Fortsæt som gæst"
 
