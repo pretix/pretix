@@ -85,6 +85,7 @@ def order(event, item, taxrule, question):
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
             datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=23, locale='en'
         )
         p1 = o.payments.create(
@@ -148,6 +149,7 @@ def order2(event2, item2):
             status=Order.STATUS_PENDING, secret="asd436cvbfd1",
             datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            sales_channel=event2.organizer.sales_channels.get(identifier="web"),
             total=23, locale='en'
         )
         o.payments.create(

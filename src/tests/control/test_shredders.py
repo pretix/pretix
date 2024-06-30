@@ -66,7 +66,8 @@ class EventShredderTest(SoupTest):
             code='FOO', event=self.event1, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now(),
-            total=14, locale='en'
+            total=14, locale='en',
+            sales_channel=self.orga1.sales_channels.get(identifier="web"),
         )
 
         self.client.login(email='dummy@dummy.dummy', password='dummy')

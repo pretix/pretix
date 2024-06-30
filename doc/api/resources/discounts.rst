@@ -20,8 +20,12 @@ id                                       integer                    Internal ID 
 active                                   boolean                    The discount will be ignored if this is ``false``
 internal_name                            string                     A name for the rule used in the backend
 position                                 integer                    An integer, used for sorting the rules which are applied in order
-sales_channels                           list of strings            Sales channels this discount is available on, such as
-                                                                    ``"web"`` or ``"resellers"``. Defaults to ``["web"]``.
+all_sales_channels                       boolean                    If ``true`` (default), the discount is available on all sales channels
+                                                                    that support discounts.
+limit_sales_channels                     list of strings            List of sales channel identifiers the discount is available on
+                                                                    if ``all_sales_channels`` is ``false``.
+sales_channels                           list of strings            **DEPRECATED.** Legacy interface, use ``all_sales_channels``
+                                                                    and ``limit_sales_channels`` instead.
 available_from                           datetime                   The first date time at which this discount can be applied
                                                                     (or ``null``).
 available_until                          datetime                   The last date time at which this discount can be applied
@@ -95,6 +99,8 @@ Endpoints
             "active": true,
             "internal_name": "3 for 2",
             "position": 1,
+            "all_sales_channels": false,
+            "limit_sales_channels": ["web"],
             "sales_channels": ["web"],
             "available_from": null,
             "available_until": null,
@@ -151,6 +157,8 @@ Endpoints
         "active": true,
         "internal_name": "3 for 2",
         "position": 1,
+        "all_sales_channels": false,
+        "limit_sales_channels": ["web"],
         "sales_channels": ["web"],
         "available_from": null,
         "available_until": null,
@@ -193,6 +201,8 @@ Endpoints
         "active": true,
         "internal_name": "3 for 2",
         "position": 1,
+        "all_sales_channels": false,
+        "limit_sales_channels": ["web"],
         "sales_channels": ["web"],
         "available_from": null,
         "available_until": null,
@@ -224,6 +234,8 @@ Endpoints
         "active": true,
         "internal_name": "3 for 2",
         "position": 1,
+        "all_sales_channels": false,
+        "limit_sales_channels": ["web"],
         "sales_channels": ["web"],
         "available_from": null,
         "available_until": null,
@@ -284,6 +296,8 @@ Endpoints
         "active": false,
         "internal_name": "3 for 2",
         "position": 1,
+        "all_sales_channels": false,
+        "limit_sales_channels": ["web"],
         "sales_channels": ["web"],
         "available_from": null,
         "available_until": null,

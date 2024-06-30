@@ -44,7 +44,6 @@ from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from tests.const import SAMPLE_PNG
 
-from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
     CartPosition, InvoiceAddress, Item, ItemAddOn, ItemBundle, ItemCategory,
     ItemVariation, Order, OrderPosition, Question, QuestionOption, Quota,
@@ -81,6 +80,7 @@ def order(event, item, taxrule):
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
             datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc),
             expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=timezone.utc),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=23, locale='en'
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
@@ -254,7 +254,9 @@ TEST_ITEM_RES = {
     "name": {"en": "Budget Ticket"},
     "internal_name": None,
     "default_price": "23.00",
-    "sales_channels": ["web"],
+    "sales_channels": ["bar", "baz", "web"],
+    "all_sales_channels": True,
+    "limit_sales_channels": [],
     "category": None,
     "active": True,
     "description": None,
@@ -383,32 +385,34 @@ def test_item_detail(token_client, organizer, event, team, item):
 def test_item_detail_variations(token_client, organizer, event, team, item):
     with scopes_disabled():
         var = item.variations.create(value="Children")
-    res = dict(TEST_ITEM_RES)
-    res["id"] = item.pk
-    res["variations"] = [{
-        "id": var.pk,
-        "value": {"en": "Children"},
-        "default_price": None,
-        "free_price_suggestion": None,
-        "price": "23.00",
-        "active": True,
-        "description": None,
-        "position": 0,
-        "checkin_attention": False,
-        "checkin_text": None,
-        "require_approval": False,
-        "require_membership": False,
-        "require_membership_hidden": False,
-        "require_membership_types": [],
-        "sales_channels": list(get_all_sales_channels().keys()),
-        "available_from": None,
-        "available_until": None,
-        "available_from_mode": "hide",
-        "available_until_mode": "hide",
-        "hide_without_voucher": False,
-        "original_price": None,
-        "meta_data": {}
-    }]
+        res = dict(TEST_ITEM_RES)
+        res["id"] = item.pk
+        res["variations"] = [{
+            "id": var.pk,
+            "value": {"en": "Children"},
+            "default_price": None,
+            "free_price_suggestion": None,
+            "price": "23.00",
+            "active": True,
+            "description": None,
+            "position": 0,
+            "checkin_attention": False,
+            "checkin_text": None,
+            "require_approval": False,
+            "require_membership": False,
+            "require_membership_hidden": False,
+            "require_membership_types": [],
+            "sales_channels": sorted(organizer.sales_channels.values_list("identifier", flat=True)),
+            "all_sales_channels": True,
+            "limit_sales_channels": [],
+            "available_from": None,
+            "available_until": None,
+            "available_from_mode": "hide",
+            "available_until_mode": "hide",
+            "hide_without_voucher": False,
+            "original_price": None,
+            "meta_data": {}
+        }]
     res["has_variations"] = True
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
@@ -466,7 +470,7 @@ def test_item_create(token_client, organizer, event, item, category, taxrule, me
                 "en": "Ticket"
             },
             "active": True,
-            "sales_channels": ["web", "pretixpos"],
+            "sales_channels": ["web", "bar"],
             "description": None,
             "default_price": "23.00",
             "free_price": False,
@@ -496,7 +500,8 @@ def test_item_create(token_client, organizer, event, item, category, taxrule, me
     assert resp.status_code == 201
     with scopes_disabled():
         i = Item.objects.get(pk=resp.data['id'])
-        assert i.sales_channels == ["web", "pretixpos"]
+        assert not i.all_sales_channels
+        assert sorted(i.limit_sales_channels.values_list("identifier", flat=True)) == ["bar", "web"]
         assert i.meta_data == {'day': 'Wednesday'}
         assert i.require_membership_types.count() == 1
         assert i.personalized is True  # auto-set for backwards-compatibility
@@ -596,7 +601,8 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
         assert new_item.variations.first().value.localize('de') == "Kommentar"
         assert new_item.variations.first().value.localize('en') == "Comment"
         assert new_item.variations.first().require_approval is True
-        assert set(new_item.variations.first().sales_channels) == set(get_all_sales_channels().keys())
+        assert new_item.variations.first().all_sales_channels is True
+        assert not new_item.variations.first().limit_sales_channels.exists()
         assert new_item.variations.first().meta_data == {"day": "Wednesday"}
 
 
@@ -1192,7 +1198,7 @@ def test_item_file_upload(token_client, organizer, event, item):
                 "en": "Ticket"
             },
             "active": True,
-            "sales_channels": ["web", "pretixpos"],
+            "sales_channels": ["web"],
             "picture": file_id_png,
             "description": None,
             "default_price": "23.00",
@@ -1331,7 +1337,8 @@ TEST_VARIATIONS_RES = {
     "require_membership": False,
     "require_membership_hidden": False,
     "require_membership_types": [],
-    "sales_channels": list(get_all_sales_channels().keys()),
+    "all_sales_channels": True,
+    "limit_sales_channels": [],
     "available_from": None,
     "available_until": None,
     "available_from_mode": "hide",
@@ -1357,6 +1364,8 @@ TEST_VARIATIONS_UPDATE = {
     "require_membership_hidden": False,
     "require_membership_types": [],
     "sales_channels": ["web"],
+    "all_sales_channels": False,
+    "limit_sales_channels": ["web"],
     "available_from": None,
     "available_until": None,
     "available_from_mode": "hide",
@@ -1372,6 +1381,8 @@ TEST_VARIATIONS_UPDATE = {
 def test_variations_list(token_client, organizer, event, item, variation):
     res = dict(TEST_VARIATIONS_RES)
     res["id"] = variation.pk
+    with scopes_disabled():
+        res["sales_channels"] = sorted(organizer.sales_channels.values_list("identifier", flat=True))
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk))
     assert resp.status_code == 200
     assert res['value'] == resp.data['results'][0]['value']
@@ -1383,6 +1394,8 @@ def test_variations_list(token_client, organizer, event, item, variation):
 def test_variations_detail(token_client, organizer, event, item, variation):
     res = dict(TEST_VARIATIONS_RES)
     res["id"] = variation.pk
+    with scopes_disabled():
+        res["sales_channels"] = sorted(organizer.sales_channels.values_list("identifier", flat=True))
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
     assert resp.status_code == 200
     assert res == resp.data
@@ -1413,7 +1426,9 @@ def test_variations_create(token_client, organizer, event, item, variation):
         var = ItemVariation.objects.get(pk=resp.data['id'])
     assert var.position == 1
     assert var.price == 23.0
-    assert set(var.sales_channels) == set(get_all_sales_channels().keys())
+    assert var.all_sales_channels
+    with scopes_disabled():
+        assert not var.limit_sales_channels.exists()
     assert var.meta_data == {"day": "Wednesday"}
 
 

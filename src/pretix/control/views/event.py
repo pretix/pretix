@@ -71,7 +71,6 @@ from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
 from i18nfield.utils import I18nJSONEncoder
 
-from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import Event, LogEntry, Order, TaxRule, Voucher
@@ -559,7 +558,7 @@ class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
             key=lambda s: s.verbose_name
         )
 
-        sales_channels = get_all_sales_channels()
+        sales_channels = {s.identifier: s for s in self.request.organizer.sales_channels.all()}
         for p in context['providers']:
             p.show_enabled = p.is_enabled
             p.sales_channels = [sales_channels[channel] for channel in p.settings.get('_restrict_to_sales_channels', as_type=list, default=['web'])]
@@ -1468,7 +1467,7 @@ class QuickSetupView(FormView):
                 admission=True,
                 personalized=True,
                 position=i,
-                sales_channels=list(get_all_sales_channels().keys())
+                all_sales_channels=True,
             )
             item.log_action('pretix.event.item.added', user=self.request.user, data=dict(f.cleaned_data))
             if f.cleaned_data['quota'] or not form.cleaned_data['total_quota']:

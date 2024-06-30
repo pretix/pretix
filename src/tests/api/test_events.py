@@ -70,6 +70,7 @@ def order(event, item, taxrule):
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
             datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc),
             expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=timezone.utc),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=23, locale='en'
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
@@ -121,7 +122,9 @@ TEST_EVENT_RES = {
     'item_meta_properties': {
         'day': 'Monday',
     },
-    'sales_channels': ['web', 'bar', 'baz'],
+    'sales_channels': ['bar', 'baz', 'web'],
+    'all_sales_channels': True,
+    'limit_sales_channels': [],
     'public_url': 'http://example.com/dummy/dummy/'
 }
 

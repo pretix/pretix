@@ -149,7 +149,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                  label=_('Alternative Payment Methods'),
                  help_text=_(
                      'In addition to payments through a PayPal account, you can also offer your customers the option '
-                     'to pay with credit cards and other, local payment methods such as SOFORT, giropay, iDEAL, and '
+                     'to pay with credit cards and other, local payment methods such as eps, iDEAL, and '
                      'many more - even when they do not have a PayPal account. Eligible payment methods will be '
                      'determined based on the shoppers location. For German merchants, this is the direct successor '
                      'of PayPal Plus.'

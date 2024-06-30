@@ -55,6 +55,7 @@ def env():
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     Team.objects.create(pk=1, organizer=o)
     return event, user, o
@@ -536,6 +537,10 @@ organizer_permission_urls = [
     ("can_change_organizer_settings", "organizer/dummy/property/add", 200),
     ("can_change_organizer_settings", "organizer/dummy/property/1/edit", 404),
     ("can_change_organizer_settings", "organizer/dummy/property/1/delete", 404),
+    ("can_change_organizer_settings", "organizer/dummy/channels", 200),
+    ("can_change_organizer_settings", "organizer/dummy/channel/add", 200),
+    ("can_change_organizer_settings", "organizer/dummy/channel/web/edit", 200),
+    ("can_change_organizer_settings", "organizer/dummy/channel/web/delete", 200),
     ("can_change_organizer_settings", "organizer/dummy/membershiptypes", 200),
     ("can_change_organizer_settings", "organizer/dummy/membershiptype/add", 200),
     ("can_change_organizer_settings", "organizer/dummy/membershiptype/1/edit", 404),

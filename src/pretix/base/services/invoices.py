@@ -420,7 +420,7 @@ def invoice_pdf_task(invoice: int):
 
 def invoice_qualified(order: Order):
     if order.total == Decimal('0.00') or order.require_approval or \
-            order.sales_channel not in order.event.settings.get('invoice_generate_sales_channels'):
+            order.sales_channel.identifier not in order.event.settings.get('invoice_generate_sales_channels'):
         return False
     return True
 
@@ -443,8 +443,11 @@ def build_preview_invoice_pdf(event):
         locale = event.settings.locale
 
     with rolledback_transaction(), language(locale, event.settings.region):
-        order = event.orders.create(status=Order.STATUS_PENDING, datetime=timezone.now(),
-                                    expires=timezone.now(), code="PREVIEW", total=100 * event.tax_rules.count())
+        order = event.orders.create(
+            status=Order.STATUS_PENDING, datetime=timezone.now(),
+            expires=timezone.now(), code="PREVIEW", total=100 * event.tax_rules.count(),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+        )
         invoice = Invoice(
             order=order, event=event, invoice_no="PREVIEW",
             date=timezone.now().date(), locale=locale, organizer=event.organizer

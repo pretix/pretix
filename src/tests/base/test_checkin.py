@@ -68,6 +68,7 @@ def position(event, item):
         datetime=now() - timedelta(days=4),
         expires=now() - timedelta(hours=4) + timedelta(days=10),
         total=Decimal('23.00'),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     return OrderPosition.objects.create(
         order=order, item=item, variation=None,

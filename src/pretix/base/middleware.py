@@ -256,8 +256,6 @@ class SecurityMiddleware(MiddlewareMixin):
             # pages
             return resp
 
-        resp['X-XSS-Protection'] = '1'
-
         # We just need to have a P3P, not matter whats in there
         # https://blogs.msdn.microsoft.com/ieinternals/2013/09/17/a-quick-look-at-p3p/
         # https://github.com/pretix/pretix/issues/765

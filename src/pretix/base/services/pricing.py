@@ -28,7 +28,8 @@ from django.db.models import Q
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Voucher,
+    AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation,
+    SalesChannel, Voucher,
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
@@ -164,12 +165,14 @@ def apply_discounts(event: Event, sales_channel: str,
     :param positions: Tuple of the form ``(item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount)``
     :return: A list of ``(new_gross_price, discount)`` tuples in the same order as the input
     """
+    if isinstance(sales_channel, SalesChannel):
+        sales_channel = sales_channel.identifier
     new_prices = {}
 
     discount_qs = event.discounts.filter(
         Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()),
         Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()),
-        sales_channels__contains=sales_channel,
+        Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=sales_channel),
         active=True,
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:

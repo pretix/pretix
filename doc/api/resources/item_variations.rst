@@ -38,11 +38,14 @@ require_membership                    boolean                    If ``true``, bo
 require_membership_hidden             boolean                    If ``true`` and ``require_membership`` is set, this variation will
                                                                  be hidden from users without a valid membership.
 require_membership_types              list of integers           Internal IDs of membership types valid if ``require_membership`` is ``true``
-sales_channels                        list of strings            Sales channels this variation is available on, such as
-                                                                 ``"web"`` or ``"resellers"``. Defaults to all existing sales channels.
+all_sales_channels                    boolean                    If ``true`` (default), the variation is available on all sales channels.
+limit_sales_channels                  list of strings            List of sales channel identifiers the variation is available on
+                                                                 if ``all_sales_channels`` is ``false``.
                                                                  The item-level list takes precedence, i.e. a sales
-                                                                 channel needs to be on both lists for the item to be
-                                                                 available.
+                                                                 channel needs to be on both lists for the variation to be
+                                                                 available (unless ``all_sales_channels`` is used).
+sales_channels                        list of strings            **DEPRECATED.** Legacy interface, use ``all_sales_channels``
+                                                                 and ``limit_sales_channels`` instead.
 available_from                        datetime                   The first date time at which this variation can be bought
                                                                  (or ``null``).
 available_from_mode                   string                     If ``hide`` (the default), this variation is hidden in the shop
@@ -111,6 +114,8 @@ Endpoints
             "require_membership": false,
             "require_membership_hidden": false,
             "require_membership_types": [],
+            "all_sales_channels": false,
+            "limit_sales_channels": ["web"],
             "sales_channels": ["web"],
             "available_from": null,
             "available_from_mode": "hide",
@@ -139,6 +144,8 @@ Endpoints
             "require_membership": false,
             "require_membership_hidden": false,
             "require_membership_types": [],
+            "all_sales_channels": false,
+            "limit_sales_channels": ["web"],
             "sales_channels": ["web"],
             "available_from": null,
             "available_from_mode": "hide",
@@ -202,6 +209,8 @@ Endpoints
         "require_membership": false,
         "require_membership_hidden": false,
         "require_membership_types": [],
+        "all_sales_channels": false,
+        "limit_sales_channels": ["web"],
         "sales_channels": ["web"],
         "available_from": null,
         "available_from_mode": "hide",
@@ -244,7 +253,8 @@ Endpoints
         "require_membership": false,
         "require_membership_hidden": false,
         "require_membership_types": [],
-        "sales_channels": ["web"],
+        "all_sales_channels": false,
+        "limit_sales_channels": ["web"],
         "available_from": null,
         "available_from_mode": "hide",
         "available_until": null,
@@ -277,6 +287,8 @@ Endpoints
         "require_membership": false,
         "require_membership_hidden": false,
         "require_membership_types": [],
+        "all_sales_channels": false,
+        "limit_sales_channels": ["web"],
         "sales_channels": ["web"],
         "available_from": null,
         "available_from_mode": "hide",
@@ -341,6 +353,8 @@ Endpoints
         "require_membership": false,
         "require_membership_hidden": false,
         "require_membership_types": [],
+        "all_sales_channels": false,
+        "limit_sales_channels": ["web"],
         "sales_channels": ["web"],
         "available_from": null,
         "available_from_mode": "hide",

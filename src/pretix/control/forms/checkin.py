@@ -30,11 +30,12 @@ from django_scopes.forms import (
     SafeModelChoiceField, SafeModelMultipleChoiceField,
 )
 
-from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import Gate
 from pretix.base.models.checkin import Checkin, CheckinList
-from pretix.control.forms import ItemMultipleChoiceField
+from pretix.control.forms import (
+    ItemMultipleChoiceField, SalesChannelCheckboxSelectMultiple,
+)
 from pretix.control.forms.widgets import Select2
 
 
@@ -66,14 +67,9 @@ class CheckinListForm(forms.ModelForm):
         kwargs.pop('locales', None)
         super().__init__(**kwargs)
         self.fields['limit_products'].queryset = self.event.items.all()
-        self.fields['auto_checkin_sales_channels'] = forms.MultipleChoiceField(
-            label=self.fields['auto_checkin_sales_channels'].label,
-            help_text=self.fields['auto_checkin_sales_channels'].help_text,
-            required=self.fields['auto_checkin_sales_channels'].required,
-            choices=(
-                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
-            ),
-            widget=forms.CheckboxSelectMultiple
+        self.fields['auto_checkin_sales_channels'].queryset = self.event.organizer.sales_channels.all()
+        self.fields['auto_checkin_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(
+            self.event, choices=self.fields['auto_checkin_sales_channels'].widget.choices
         )
 
         if not self.event.organizer.gates.exists():
@@ -123,13 +119,13 @@ class CheckinListForm(forms.ModelForm):
             'gates': forms.CheckboxSelectMultiple(attrs={
                 'class': 'scrolling-multiple-choice'
             }),
-            'auto_checkin_sales_channels': forms.CheckboxSelectMultiple(),
             'exit_all_at': NextTimeInput(attrs={'class': 'timepickerfield'}),
         }
         field_classes = {
             'limit_products': ItemMultipleChoiceField,
             'gates': SafeModelMultipleChoiceField,
             'subevent': SafeModelChoiceField,
+            'auto_checkin_sales_channels': SafeModelMultipleChoiceField,
             'exit_all_at': NextTimeField,
         }
 

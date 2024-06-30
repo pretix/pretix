@@ -47,7 +47,6 @@ class BundlePricesTest(TestCase):
             date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
             live=True,
             plugins="pretix.plugins.banktransfer",
-            sales_channels=['web', 'bar']
         )
         self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
         self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))

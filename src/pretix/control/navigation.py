@@ -503,6 +503,13 @@ def get_organizer_navigation(request):
                     'active': url.url_name == 'organizer.settings.mail',
                 },
                 {
+                    'label': _('Sales channels'),
+                    'url': reverse('control:organizer.channels', kwargs={
+                        'organizer': request.organizer.slug
+                    }),
+                    'active': url.url_name.startswith('organizer.channel'),
+                },
+                {
                     'label': _('Webhooks'),
                     'url': reverse('control:organizer.webhooks', kwargs={
                         'organizer': request.organizer.slug

@@ -60,7 +60,9 @@ class DiscountViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'can_change_items'
 
     def get_queryset(self):
-        return self.request.event.discounts.all()
+        return self.request.event.discounts.prefetch_related(
+            'limit_sales_channels',
+        )
 
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)

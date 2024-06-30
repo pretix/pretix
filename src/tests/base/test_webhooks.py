@@ -65,6 +65,7 @@ def order(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() + timedelta(days=10),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         total=Decimal('46.00'),
     )
     tr19 = event.tax_rules.create(rate=Decimal('19.00'))

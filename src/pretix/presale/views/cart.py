@@ -515,7 +515,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         return u
 
     def post(self, request, *args, **kwargs):
-        if request.sales_channel.identifier not in request.event.sales_channels:
+        if not request.event.all_sales_channels and request.sales_channel.identifier not in (s.identifier for s in request.event.limit_sales_channels.all()):
             raise Http404(_('Tickets for this event cannot be purchased on this sales channel.'))
 
         cart_id = get_or_create_cart_id(self.request)
@@ -564,9 +564,9 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         # Fetch all items
         items, display_add_to_cart = get_grouped_items(
             self.request.event,
-            self.subevent,
+            subevent=self.subevent,
             voucher=self.voucher,
-            channel=self.request.sales_channel.identifier,
+            channel=self.request.sales_channel,
             memberships=(
                 self.request.customer.usable_memberships(
                     for_event=self.subevent or self.request.event,

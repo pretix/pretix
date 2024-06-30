@@ -112,6 +112,7 @@ def order(event, item, taxrule, question):
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
             datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=23, locale='en'
         )
         p1 = o.payments.create(
@@ -166,7 +167,8 @@ def order(event, item, taxrule, question):
 
 @pytest.fixture
 def clist_autocheckin(event):
-    c = event.checkin_lists.create(name="Default", all_products=True, auto_checkin_sales_channels=['web'])
+    c = event.checkin_lists.create(name="Default", all_products=True)
+    c.auto_checkin_sales_channels.add(event.organizer.sales_channels.get(identifier="web"))
     return c
 
 
@@ -245,7 +247,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.locale == "en"
     assert o.total == Decimal('23.25')
     assert o.status == Order.STATUS_PENDING
-    assert o.sales_channel == "web"
+    assert o.sales_channel.identifier == "web"
     assert o.valid_if_pending
     assert o.expires > now()
     assert not o.testmode
@@ -550,11 +552,10 @@ def test_order_create_autocheckin(token_client, organizer, event, item, quota, q
     assert resp.status_code == 201
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
-        assert "web" in clist_autocheckin.auto_checkin_sales_channels
+        assert clist_autocheckin.auto_checkin_sales_channels.contains(organizer.sales_channels.get(identifier="web"))
         assert o.positions.first().checkins.first().auto_checked_in
 
-    clist_autocheckin.auto_checkin_sales_channels = []
-    clist_autocheckin.save()
+    clist_autocheckin.auto_checkin_sales_channels.clear()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -564,7 +565,7 @@ def test_order_create_autocheckin(token_client, organizer, event, item, quota, q
     assert resp.status_code == 201
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
-        assert clist_autocheckin.auto_checkin_sales_channels == []
+        assert clist_autocheckin.auto_checkin_sales_channels.count() == 0
         assert o.positions.first().checkins.count() == 0
 
 
@@ -625,7 +626,7 @@ def test_order_create_sales_channel_optional(token_client, organizer, event, ite
     assert resp.status_code == 201
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
-    assert o.sales_channel == "web"
+    assert o.sales_channel.identifier == "web"
 
 
 @pytest.mark.django_db
@@ -640,7 +641,7 @@ def test_order_create_sales_channel_invalid(token_client, organizer, event, item
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'sales_channel': ['Unknown sales channel.']}
+    assert resp.data == {'sales_channel': ['Object with identifier=foo does not exist.']}
 
 
 @pytest.mark.django_db

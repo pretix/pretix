@@ -38,7 +38,7 @@ class Paypal2App(AppConfig):
         featured = True
         picture = 'pretixplugins/paypal2/paypal_logo.svg'
         description = _("Accept payments with your PayPal account. In addition to regular PayPal payments, you can now "
-                        "also offer payments in a variety of local payment methods such as giropay, SOFORT, iDEAL and "
+                        "also offer payments in a variety of local payment methods such as eps, iDEAL, and "
                         "many more to your customers - they don't even need a PayPal account. PayPal is one of the "
                         "most popular payment methods world-wide.")
 

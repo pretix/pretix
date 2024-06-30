@@ -43,6 +43,7 @@ def order1_expired(event, organizer, item):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_EXPIRED, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
+        sales_channel=organizer.sales_channels.get(identifier="web"),
         total=Decimal('0.00'),
     )
     OrderPosition.objects.create(
@@ -62,6 +63,7 @@ def order2_expired(event, organizer, item, customer):
         code='BAR', event=event, email='dummy@dummy.test',
         status=Order.STATUS_EXPIRED, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
+        sales_channel=organizer.sales_channels.get(identifier="web"),
         total=Decimal('0.00'),
     )
     OrderPosition.objects.create(

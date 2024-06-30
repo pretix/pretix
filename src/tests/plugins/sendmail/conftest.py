@@ -57,11 +57,12 @@ def checkin_list(event):
 
 
 @pytest.fixture
-def order(item):
+def order(event, item):
     """Returns an order instance"""
     o = Order.objects.create(event=item.event, status=Order.STATUS_PENDING,
                              expires=now() + datetime.timedelta(hours=1),
                              total=13, code='DUMMY', email='dummy@dummy.test',
+                             sales_channel=event.organizer.sales_channels.get(identifier="web"),
                              datetime=now(), locale='en')
     return o
 

@@ -134,7 +134,7 @@ class TicketLayoutFormTest(SoupTest):
     def test_item_copy(self):
         with scopes_disabled():
             bl2 = self.event1.ticket_layouts.create(name="Layout 2")
-            TicketLayoutItem.objects.create(item=self.item1, layout=bl2)
+            TicketLayoutItem.objects.create(item=self.item1, layout=bl2, sales_channel=self.orga1.sales_channels.get(identifier="web"))
         self.client.post('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), {
             'name_0': 'Intermediate',
             'default_price': '23.00',
@@ -150,7 +150,7 @@ class TicketLayoutFormTest(SoupTest):
     def test_copy_event(self):
         with scopes_disabled():
             bl2 = self.event1.ticket_layouts.create(name="Layout 2")
-            TicketLayoutItem.objects.create(item=self.item1, layout=bl2)
+            TicketLayoutItem.objects.create(item=self.item1, layout=bl2, sales_channel=self.orga1.sales_channels.get(identifier="web"))
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
             'event_wizard-prefix': 'event_wizard',

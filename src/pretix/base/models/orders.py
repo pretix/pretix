@@ -187,8 +187,8 @@ class Order(LockModel, LoggedModel):
     :type require_approval: bool
     :param meta_info: Additional meta information on the order, JSON-encoded.
     :type meta_info: str
-    :param sales_channel: Identifier of the sales channel this order was created through.
-    :type sales_channel: str
+    :param sales_channel: Foreign key to the sales channel this order was created through.
+    :type sales_channel: SalesChannel
     """
 
     STATUS_PENDING = "n"
@@ -305,7 +305,10 @@ class Order(LockModel, LoggedModel):
     require_approval = models.BooleanField(
         default=False
     )
-    sales_channel = models.CharField(max_length=190, default="web")
+    sales_channel = models.ForeignKey(
+        "SalesChannel",
+        on_delete=models.PROTECT,
+    )
     email_known_to_work = models.BooleanField(
         default=False,
         verbose_name=_('E-mail address verified')
@@ -1932,7 +1935,7 @@ class OrderPayment(models.Model):
                     trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
                 )
 
-        if send_mail and self.order.sales_channel in self.order.event.settings.mail_sales_channel_placed_paid:
+        if send_mail and self.order.sales_channel.identifier in self.order.event.settings.mail_sales_channel_placed_paid:
             self._send_paid_mail(invoice, user, mail_text)
             if self.order.event.settings.mail_send_order_paid_attendee:
                 for p in self.order.positions.all():

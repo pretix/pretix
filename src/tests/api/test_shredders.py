@@ -57,6 +57,7 @@ def order(event, item):
         status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
         datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc),
         expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=timezone.utc),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         total=23, locale='en'
     )
     OrderPosition.objects.create(
