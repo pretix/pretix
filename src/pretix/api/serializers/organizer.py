@@ -38,7 +38,7 @@ from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
     Customer, Device, GiftCard, GiftCardAcceptance, GiftCardTransaction,
     Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
-    SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
+    SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
@@ -163,6 +163,36 @@ class FlexibleTicketRelatedField(serializers.PrimaryKeyRelatedField):
                 self.fail('does_not_exist', pk_value=data)
 
         self.fail('incorrect_type', data_type=type(data).__name__)
+
+
+class SalesChannelSerializer(I18nAwareModelSerializer):
+    type = serializers.CharField(default="api")
+
+    class Meta:
+        model = SalesChannel
+        fields = ('identifier', 'type', 'label', 'position')
+
+    def validate_type(self, value):
+        if (not self.instance or not self.instance.pk) and value != "api":
+            raise ValidationError(
+                "You can currently only create channels of type 'api' through the API."
+            )
+        if value and self.instance and self.instance.pk and self.instance.type != value:
+            raise ValidationError(
+                "You cannot change the type of a sales channel."
+            )
+        return value
+
+    def validate_identifier(self, value):
+        if (not self.instance or not self.instance.pk) and not value.startswith("api."):
+            raise ValidationError(
+                "Your identifier needs to start with 'api.'."
+            )
+        if value and self.instance and self.instance.pk and self.instance.identifier != value:
+            raise ValidationError(
+                "You cannot change the identifier of a sales channel."
+            )
+        return value
 
 
 class GiftCardSerializer(I18nAwareModelSerializer):

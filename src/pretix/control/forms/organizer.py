@@ -50,6 +50,7 @@ from django_scopes.forms import SafeModelChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextInput,
 )
+from i18nfield.strings import LazyI18nString
 from phonenumber_field.formfields import PhoneNumberField
 from pytz import common_timezones
 
@@ -68,7 +69,8 @@ from pretix.base.forms.widgets import (
 )
 from pretix.base.models import (
     Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardAcceptance,
-    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
+    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
+    SalesChannel, Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
@@ -1090,3 +1092,40 @@ class GiftCardAcceptanceInviteForm(forms.Form):
         if self.organizer.gift_card_acceptor_acceptance.filter(acceptor=acceptor).exists():
             raise ValidationError(_('The selected organizer has already been invited.'))
         return acceptor
+
+
+class SalesChannelForm(I18nModelForm):
+    class Meta:
+        model = SalesChannel
+        fields = ['label', 'identifier']
+        widgets = {
+            'default': forms.TextInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.type = kwargs.pop("type")
+        super().__init__(*args, **kwargs)
+
+        if not self.type.multiple_allowed or (self.instance and self.instance.pk):
+            self.fields["identifier"].initial = self.type.identifier
+            self.fields["identifier"].disabled = True
+            self.fields["label"].initial = LazyI18nString.from_gettext(self.type.verbose_name)
+
+    def clean(self):
+        d = super().clean()
+
+        if self.instance.pk:
+            d["identifier"] = self.instance.identifier
+        elif self.type.multiple_allowed:
+            d["identifier"] = self.type.identifier + "." + d["identifier"]
+        else:
+            d["identifier"] = self.type.identifier
+
+        if not self.instance.pk:
+            # self.event is actually the organizer, sorry I18nModelForm!
+            if self.event.sales_channels.filter(identifier=d["identifier"]).exists():
+                raise ValidationError(
+                    _("A sales channel with the same identifier already exists.")
+                )
+
+        return d

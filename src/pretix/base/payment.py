@@ -56,7 +56,6 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms import I18nMarkdownTextarea, PlaceholderValidator
 from pretix.base.models import (
     CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
@@ -417,8 +416,8 @@ class BasePaymentProvider:
              forms.MultipleChoiceField(
                  label=_('Restrict to specific sales channels'),
                  choices=(
-                     (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
-                     if c.payment_restrictions_supported
+                     (c.identifier, c.label) for c in self.event.organizer.sales_channels.all()
+                     if c.type_instance.payment_restrictions_supported
                  ),
                  initial=['web'],
                  widget=forms.CheckboxSelectMultiple,
@@ -853,7 +852,7 @@ class BasePaymentProvider:
                 if str(ia.country) != '' and str(ia.country) not in restricted_countries:
                     return False
 
-        if order.sales_channel not in self.settings.get('_restrict_to_sales_channels', as_type=list, default=['web']):
+        if order.sales_channel.identifier not in self.settings.get('_restrict_to_sales_channels', as_type=list, default=['web']):
             return False
 
         return self._is_available_by_time(order=order)

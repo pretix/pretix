@@ -1,0 +1,27 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load formset_tags %}
+{% load bootstrap3 %}
+{% block inner %}
+    <h1>{% trans "Add sales channel" %}</h1>
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form_errors form layout="control" %}
+
+        {% bootstrap_field form.label layout="control" %}
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="id_identifier">{% trans "Channel type" %}</label>
+            <div class="col-md-9">
+                <input type="text" value="{{ type.verbose_name }}" class="form-control" disabled>
+            </div>
+        </div>
+        {% bootstrap_field form.identifier addon_before=identifier_prefix layout="control" %}
+
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+
+    </form>
+{% endblock %}

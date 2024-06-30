@@ -466,6 +466,7 @@ def test_org_order_list(env, client):
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
             total=Decimal("23"),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         OrderPosition.objects.create(
             order=o1,
@@ -481,6 +482,7 @@ def test_org_order_list(env, client):
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
             total=Decimal("23"),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         OrderPosition.objects.create(
             order=o2,
@@ -497,6 +499,7 @@ def test_org_order_list(env, client):
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
             total=Decimal("23"),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         OrderPosition.objects.create(
             order=o3,

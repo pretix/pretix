@@ -185,7 +185,7 @@ class EventListMixin:
     def _get_event_list_queryset(self):
         query = Q(is_public=True) & Q(live=True)
         qs = self.request.organizer.events.using(settings.DATABASE_REPLICA).filter(query)
-        qs = qs.filter(sales_channels__contains=self.request.sales_channel.identifier)
+        qs = qs.filter(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier))
         qs = qs.annotate(
             min_from=Min('subevents__date_from'),
             min_to=Min('subevents__date_to'),
@@ -724,13 +724,13 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['has_before'], ctx['has_after'] = has_before_after(
             self.request.organizer.events.filter(
-                sales_channels__contains=self.request.sales_channel.identifier
+                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
             ),
             SubEvent.objects.filter(
+                Q(event__all_sales_channels=True) | Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
                 event__organizer=self.request.organizer,
                 event__is_public=True,
                 event__live=True,
-                event__sales_channels__contains=self.request.sales_channel.identifier
             ),
             before,
             after,
@@ -749,13 +749,14 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
             settings.DATABASE_REPLICA
         ).filter(
-            sales_channels__contains=self.request.sales_channel.identifier
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
         ), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+            Q(event__all_sales_channels=True) |
+            Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
-            event__sales_channels__contains=self.request.sales_channel.identifier
         ).prefetch_related(
             Prefetch(
                 'event',
@@ -806,13 +807,14 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['has_before'], ctx['has_after'] = has_before_after(
             self.request.organizer.events.filter(
-                sales_channels__contains=self.request.sales_channel.identifier
+                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
             ),
             SubEvent.objects.filter(
+                Q(event__all_sales_channels=True) |
+                Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
                 event__organizer=self.request.organizer,
                 event__is_public=True,
                 event__live=True,
-                event__sales_channels__contains=self.request.sales_channel.identifier
             ),
             before,
             after,
@@ -843,13 +845,14 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
             settings.DATABASE_REPLICA
         ).filter(
-            sales_channels__contains=self.request.sales_channel.identifier
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
         ), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+            Q(event__all_sales_channels=True) |
+            Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
-            event__sales_channels__contains=self.request.sales_channel.identifier
         ).prefetch_related(
             Prefetch(
                 'event',
@@ -943,13 +946,14 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['has_before'], ctx['has_after'] = has_before_after(
             self.request.organizer.events.filter(
-                sales_channels__contains=self.request.sales_channel.identifier
+                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
             ),
             SubEvent.objects.filter(
+                Q(event__all_sales_channels=True) |
+                Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
                 event__organizer=self.request.organizer,
                 event__is_public=True,
                 event__live=True,
-                event__sales_channels__contains=self.request.sales_channel.identifier
             ),
             before,
             after,
@@ -1193,13 +1197,14 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
             settings.DATABASE_REPLICA
         ).filter(
-            sales_channels__contains=self.request.sales_channel.identifier
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
         ), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+            Q(event__all_sales_channels=True) |
+            Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
-            event__sales_channels__contains=self.request.sales_channel.identifier
         ).prefetch_related(
             Prefetch(
                 'event',
@@ -1224,10 +1229,10 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
             filter_qs_by_attr(
                 self.request.organizer.events.filter(
                     Q(date_from__gt=cutoff) | Q(date_to__gt=cutoff),
+                    Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
                     is_public=True,
                     live=True,
                     has_subevents=False,
-                    sales_channels__contains=self.request.sales_channel.identifier,
                 ),
                 request
             ).order_by(
@@ -1244,12 +1249,13 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
             filter_qs_by_attr(
                 SubEvent.objects.filter(
                     Q(date_from__gt=cutoff) | Q(date_to__gt=cutoff),
+                    Q(event__all_sales_channels=True) |
+                    Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
                     event__organizer=self.request.organizer,
                     event__is_public=True,
                     event__live=True,
                     is_public=True,
                     active=True,
-                    event__sales_channels__contains=self.request.sales_channel.identifier
                 ),
                 request
             ).prefetch_related(

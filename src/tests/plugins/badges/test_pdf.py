@@ -61,6 +61,7 @@ def env():
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
             total=Decimal('13.37'),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         shirt = Item.objects.create(event=event, name='T-Shirt', default_price=12)
         shirt_red = ItemVariation.objects.create(item=shirt, default_price=14, value="Red")

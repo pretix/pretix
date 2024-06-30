@@ -65,7 +65,8 @@ def order(event, item, other_item, taxrule):
             status=Order.STATUS_PAID, secret="k24fiuwvu8kxz3y1",
             datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
-            total=46, locale='en'
+            total=46, locale='en',
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
         op1 = OrderPosition.objects.create(
@@ -250,7 +251,7 @@ def test_list_list(token_client, organizer, event, clist, item, subevent, django
     res["limit_products"] = [item.pk]
     res["auto_checkin_sales_channels"] = []
 
-    with django_assert_num_queries(11):
+    with django_assert_num_queries(12):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
@@ -335,7 +336,7 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
         assert cl.name == "VIP"
         assert cl.limit_products.count() == 1
         assert not cl.all_products
-        assert "web" in cl.auto_checkin_sales_channels
+        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -381,7 +382,7 @@ def test_list_create_with_subevent(token_client, organizer, event, event3, item,
     assert resp.status_code == 201
     with scopes_disabled():
         cl = CheckinList.objects.get(pk=resp.data['id'])
-        assert "web" in cl.auto_checkin_sales_channels
+        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -448,7 +449,7 @@ def test_list_update(token_client, organizer, event, clist):
     assert resp.status_code == 200
     with scopes_disabled():
         cl = CheckinList.objects.get(pk=resp.data['id'])
-        assert "web" in cl.auto_checkin_sales_channels
+        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
 
 @pytest.mark.django_db

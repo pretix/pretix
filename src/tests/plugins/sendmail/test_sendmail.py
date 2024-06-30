@@ -173,10 +173,11 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
     event.settings.set('locales', ['en', 'de'])
 
     with scopes_disabled():
-        o = Order.objects.create(event=item.event, status=Order.STATUS_PAID,
+        o = Order.objects.create(event=event, status=Order.STATUS_PAID,
                                  expires=now() + datetime.timedelta(hours=1),
                                  total=13, code='DUMMY', email='dummy@dummy.test',
                                  datetime=now(),
+                                 sales_channel=event.organizer.sales_channels.get(identifier="web"),
                                  locale='de')
         OrderPosition.objects.create(order=o, item=item, price=13)
 

@@ -1,0 +1,26 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap3 %}
+{% block inner %}
+    <h1>{% trans "Add sales channel" %}</h1>
+    <div class="list-group large-link-group">
+        {% for t in types %}
+            <a class="list-group-item" href="?type={{ t.identifier }}">
+                <h4>
+                    {% if "." in t.icon %}
+                        <img class="fa-like-image" src="{% static t.icon %}" alt="">
+                    {% else %}
+                        <span class="fa fa-fw fa-{{ t.icon }} text-muted"></span>
+                    {% endif %}
+                    {{ t.verbose_name }}
+                </h4>
+                {% if t.description %}
+                    <p>
+                        {{ t.description }}
+                    </p>
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

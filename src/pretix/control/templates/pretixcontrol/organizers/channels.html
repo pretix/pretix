@@ -1,0 +1,64 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load static %}
+{% block inner %}
+    <h1>{% trans "Sales channels" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            On this page, you can manage the different channels your tickets can be sold through. This is useful
+            to unlock new revenue streams or to separate revenue between different sources for reporting purchases.
+        {% endblocktrans %}
+    </p>
+    <a href="{% url "control:organizer.channel.add" organizer=request.organizer.slug %}" class="btn btn-default">
+        <span class="fa fa-plus"></span>
+        {% trans "Add a new channel" %}
+    </a>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-condensed table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Channel" %}</th>
+                <th>{% trans "Identifier" %}</th>
+                <th>{% trans "Channel type" %}</th>
+                <th class="action-col-2"></th>
+                <th class="action-col-2"></th>
+            </tr>
+            </thead>
+            <tbody data-dnd-url="{% url "control:organizer.channels.reorder" organizer=request.organizer.slug %}">
+            {% for c in channels %}
+                <tr data-dnd-id="{{ c.pk }}">
+                    <td><strong>
+                        <a href="{% url "control:organizer.channel.edit" organizer=request.organizer.slug channel=c.identifier %}">
+                            {{ c.label }}
+                        </a>
+                    </strong></td>
+                    <td>
+                        <code>{{ c.identifier }}</code>
+                    </td>
+                    <td>
+                        {% if "." in c.type_instance.icon %}
+                            <img class="fa-like-image" src="{% static c.icon %}" alt="">
+                        {% else %}
+                            <span class="fa fa-fw fa-{{ c.type_instance.icon }} text-muted"></span>
+                        {% endif %}
+                        {{ c.type_instance.verbose_name }}
+                    </td>
+                    <td>
+                        <button formaction="{% url "control:organizer.channel.up" organizer=request.organizer.slug channel=c.identifier %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
+                        <button formaction="{% url "control:organizer.channel.down" organizer=request.organizer.slug channel=c.identifier %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
+                        <span class="dnd-container"></span>
+                    </td>
+                    <td class="text-right flip">
+                        <a href="{% url "control:organizer.channel.edit" organizer=request.organizer.slug channel=c.identifier %}"
+                                class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="{% url "control:organizer.channel.delete" organizer=request.organizer.slug channel=c.identifier %}"
+                                class="btn btn-danger btn-sm {% if c.type_instance.default_created %}disabled{% endif %}"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+{% endblock %}

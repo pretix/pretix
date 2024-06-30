@@ -1162,7 +1162,7 @@ class StripeCC(StripeMethod):
             request.sales_channel.identifier == 'resellers'
 
         if payment:
-            return moto and payment.order.sales_channel == 'resellers'
+            return moto and payment.order.sales_channel.identifier == 'resellers'
 
         return moto
 
