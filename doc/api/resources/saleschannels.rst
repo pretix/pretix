@@ -192,7 +192,7 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to change this resource.
 
-.. http:delete:: /api/v1/organizers/(organizer)/saleschannels/(id)/
+.. http:delete:: /api/v1/organizers/(organizer)/saleschannels/(identifier)/
 
    Delete a sales channel. You can not delete sales channels which have already been used or which are integral parts
    of the system.
