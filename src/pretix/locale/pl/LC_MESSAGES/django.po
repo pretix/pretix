@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-06-27 17:00+0000\n"
+"PO-Revision-Date: 2024-07-01 16:00+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -122,7 +122,7 @@ msgstr "Słowacki"
 
 #: pretix/_base_settings.py:103
 msgid "Swedish"
-msgstr ""
+msgstr "Szwedzki"
 
 #: pretix/_base_settings.py:104
 msgid "Spanish"
@@ -640,13 +640,15 @@ msgstr "Sklep online"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"Kanały sprzedaży API nie mają wbudowanych funkcji, ale mogą być używane do "
+"niestandardowych integracji."
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -4041,10 +4043,8 @@ msgid "Position"
 msgstr "Pozycja"
 
 #: pretix/base/models/discount.py:68
-#, fuzzy
-#| msgid "Sales channels"
 msgid "All supported sales channels"
-msgstr "Kanały sprzedaży"
+msgstr "Wszystkie obsługiwane kanały sprzedaży"
 
 #: pretix/base/models/discount.py:89
 msgid "Event series handling"
@@ -4257,10 +4257,8 @@ msgid "Seating plan"
 msgstr "Plan miejsc"
 
 #: pretix/base/models/event.py:639 pretix/base/models/items.py:618
-#, fuzzy
-#| msgid "Sales channels"
 msgid "Sell on all sales channels"
-msgstr "Kanały sprzedaży"
+msgstr "Sprzedawaj we wszystkich kanałach sprzedaży"
 
 #: pretix/base/models/event.py:644 pretix/base/models/items.py:623
 #: pretix/base/models/items.py:1170 pretix/base/payment.py:417
@@ -4570,9 +4568,6 @@ msgid "{category} (Add-On products)"
 msgstr "{category} (Produkty dodatkowe)"
 
 #: pretix/base/models/items.py:128
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Add-On products"
 msgstr "Produkty dodatkowe"
 
@@ -4859,11 +4854,8 @@ msgstr ""
 "przeceny. Ustawienie kosmetyczne bez wzgędlu na faktyczną cenę sprzedaży."
 
 #: pretix/base/models/items.py:624
-#, fuzzy
-#| msgid "Only sell tickets for this event on the following sales channels."
 msgid "Only sell tickets for this product on the selected sales channels."
-msgstr ""
-"Sprzedaj bilety tylko na to wydarzenie na następujących kanałach sprzedaży."
+msgstr "Sprzedaj bilety na ten produkt tylko w wybranych kanałach sprzedaży."
 
 #: pretix/base/models/items.py:629
 msgid ""
@@ -5114,6 +5106,8 @@ msgstr "Ten wariant nie będzie sprzedawany po podanej dacie."
 #: pretix/base/models/items.py:1165
 msgid "Sell on all sales channels the product is sold on"
 msgstr ""
+"Sprzedaj we wszystkich kanałach sprzedaży, w których sprzedawany jest ten "
+"produkt."
 
 #: pretix/base/models/items.py:1171
 msgid ""
@@ -6053,9 +6047,6 @@ msgstr "Zaproszenie do zespołu '{team}' dla '{email}'"
 
 #: pretix/base/models/organizer.py:538
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
-#, fuzzy
-#| msgctxt "reusable_medium"
-#| msgid "Identifier"
 msgid "Identifier"
 msgstr "Identyfikator"
 
@@ -12050,6 +12041,8 @@ msgid ""
 "This sales channel cannot be used properly since the respective plugin is "
 "not active for this event."
 msgstr ""
+"Ten kanał sprzedaży nie może być używany prawidłowo, ponieważ odpowiednia "
+"wtyczka nie jest aktywna dla tego wydarzenia."
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
@@ -14061,6 +14054,8 @@ msgid ""
 "You have selected dynamic validity but have not entered a time period. This "
 "would render the tickets unusable."
 msgstr ""
+"Wybrałeś dynamiczną ważność, ale nie wprowadziłeś okresu czasu. Spowoduje "
+"to, że bilety będą bezużyteczne."
 
 #: pretix/control/forms/item.py:858
 #, python-format
@@ -14807,10 +14802,8 @@ msgid "The selected organizer has already been invited."
 msgstr "Wybrany organizator został już zaproszony."
 
 #: pretix/control/forms/organizer.py:1128
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A sales channel with the same identifier already exists."
-msgstr "Voucher o tym kodzie już istnieje."
+msgstr "Kanał sprzedaży o tym samym identyfikatorze już istnieje."
 
 #: pretix/control/forms/renderers.py:56
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:139
@@ -15423,23 +15416,16 @@ msgid "The membership type has been deleted."
 msgstr "Typ członkostwa został usunięty."
 
 #: pretix/control/logdisplay.py:360 pretix/control/views/organizer.py:3119
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The new date has been created."
 msgid "The sales channel has been created."
-msgstr "Nowa data została utworzona."
+msgstr "Kanał sprzedaży został utworzony."
 
 #: pretix/control/logdisplay.py:361
-#, fuzzy
-#| msgid "The device has been changed."
 msgid "The sales channel has been changed."
-msgstr "Urządzenie zostało zmienione."
+msgstr "Kanał sprzedaży został zmieniony."
 
 #: pretix/control/logdisplay.py:362
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The sales channel has been deleted."
-msgstr "Wybrana lista została usunięta."
+msgstr "Kanał sprzedaży został usunięty."
 
 #: pretix/control/logdisplay.py:363
 msgid "The account has been created."
@@ -20190,14 +20176,14 @@ msgstr "Utwórz nową kategorię"
 #: pretix/control/templates/pretixcontrol/items/index.html:146
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:54
 msgid "Move up"
-msgstr ""
+msgstr "Przesuń w górę"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:45
 #: pretix/control/templates/pretixcontrol/items/discounts.html:142
 #: pretix/control/templates/pretixcontrol/items/index.html:147
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:55
 msgid "Move down"
-msgstr ""
+msgstr "Przesuń w dół"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:46
 #: pretix/control/templates/pretixcontrol/items/discounts.html:145
@@ -20207,6 +20193,8 @@ msgid ""
 "Click and drag this button to reorder. Double click to show buttons for "
 "reordering."
 msgstr ""
+"Kliknij i przeciągnij ten przycisk, aby zmienić kolejność. Kliknij "
+"dwukrotnie, aby wyświetlić przyciski do zmiany kolejności."
 
 #: pretix/control/templates/pretixcontrol/items/category.html:27
 msgid "Category history"
@@ -20350,15 +20338,12 @@ msgstr ""
 "produktu"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:111
-#, fuzzy
-#| msgctxt "discount"
-#| msgid "Condition"
 msgid "Condition:"
-msgstr "Stan"
+msgstr "Stan:"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:126
 msgid "Applies to:"
-msgstr ""
+msgstr "Dotyczy:"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Closed"
@@ -20398,12 +20383,6 @@ msgid "taxes"
 msgstr "podatki"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:10
-#, fuzzy
-#| msgid ""
-#| "Below, you find a list of all available products. You can click on a "
-#| "product name to inspect and change product details. You can also use the "
-#| "buttons on the right to change the order of products within a give "
-#| "category."
 msgid ""
 "Below, you find a list of all available products. You can click on a product "
 "name to inspect and change product details. You can also use the buttons on "
@@ -20412,8 +20391,8 @@ msgid ""
 msgstr ""
 "Poniżej znajduje się lista wszystkich dostępnych produktów. Możesz kliknąć "
 "nazwę produktu, aby sprawdzić i zmienić jego szczegóły. Możesz także użyć "
-"przycisków po prawej stronie, aby zmienić kolejność produktów w danej "
-"kategorii."
+"przycisków po prawej stronie, aby zmienić kolejność produktów lub przenieść "
+"produkty do innej kategorii."
 
 #: pretix/control/templates/pretixcontrol/items/index.html:19
 msgid "You haven't created any products yet."
@@ -22479,48 +22458,34 @@ msgstr "Wyszukiwanie zamówień"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_add.html:6
 #: pretix/control/templates/pretixcontrol/organizers/channel_add_choice.html:6
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Add sales channel"
-msgstr "Kanał sprzedaży"
+msgstr "Dodaj kanał sprzedaży"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_add.html:13
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:13
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:24
-#, fuzzy
-#| msgid "Scan type"
 msgid "Channel type"
-msgstr "Typ skanowania"
+msgstr "Typ kanału"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:5
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Delete sales channel:"
-msgstr "Kanał sprzedaży"
+msgstr "Usuń kanał sprzedaży:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:10
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete this sales channel?"
-msgstr "Czy na pewno chcesz usunąć bramkę?"
+msgstr "Czy na pewno chcesz usunąć ten kanał sprzedaży?"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:15
-#, fuzzy
-#| msgid ""
-#| "This membership cannot be deleted since it has been used in an order. "
-#| "Change its end date to the past instead."
 msgid ""
 "This sales channel cannot be deleted since it has already been used to sell "
 "orders or because it is a core element of the system."
 msgstr ""
-"Tego członkostwa nie można usunąć, ponieważ zostało użyte w zamówieniu. "
-"Zamiast tego zmień jego datę końcową na przeszłą."
+"Tego kanału sprzedaży nie można usunąć, ponieważ został już użyty do "
+"sprzedaży zamówień lub jest podstawowym elementem systemu."
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:6
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Sales channel:"
-msgstr "Kanał sprzedaży"
+msgstr "Kanał sprzedaży:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:8
 msgid ""
@@ -22528,18 +22493,17 @@ msgid ""
 "through. This is useful to unlock new revenue streams or to separate revenue "
 "between different sources for reporting purchases."
 msgstr ""
+"Na tej stronie można zarządzać różnymi kanałami sprzedaży biletów. Jest to "
+"przydatne do odblokowania nowych źródeł przychodów lub rozdzielenia "
+"przychodów między różne źródła w celu raportowania zakupów."
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:15
-#, fuzzy
-#| msgid "Add a new value"
 msgid "Add a new channel"
-msgstr "Dodaj nową wartość"
+msgstr "Dodaj nowy kanał"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:22
-#, fuzzy
-#| msgid "Change"
 msgid "Channel"
-msgstr "Zmień"
+msgstr "Kanał"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:7
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:13
@@ -26776,34 +26740,24 @@ msgid "The customer account has been anonymized."
 msgstr "Konto klienta zostało zanonimizowane."
 
 #: pretix/control/views/organizer.py:3201
-#, fuzzy
-#| msgid "This organizer can not be deleted."
 msgid "This channel can not be deleted."
-msgstr "Tego organizatora nie można usunąć."
+msgstr "Tego kanału nie można usunąć."
 
 #: pretix/control/views/organizer.py:3206
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The selected sales channel has been deleted."
-msgstr "Wybrana lista została usunięta."
+msgstr "Wybrany kanał sprzedaży został usunięty."
 
 #: pretix/control/views/organizer.py:3208
-#, fuzzy
-#| msgid ""
-#| "The team could not be deleted as some constraints (e.g. data created by "
-#| "plug-ins) do not allow it."
 msgid ""
 "The channel could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it."
 msgstr ""
-"Zespół nie mógł zostać usunięty, ponieważ niektóre ograniczenia (np. dane "
-"utworzone przez wtyczki) na to nie pozwalają."
+"Kanał nie mógł zostać usunięty, ponieważ niektóre ograniczenia (np. dane "
+"utworzone przez wtyczki) na to nie pozwoliły."
 
 #: pretix/control/views/organizer.py:3232
-#, fuzzy
-#| msgid "The order of discounts has been updated."
 msgid "The order of sales channels has been updated."
-msgstr "Kolejność rabatów została zaktualizowana."
+msgstr "Kolejność kanałów sprzedaży została zaktualizowana."
 
 #: pretix/control/views/pdf.py:83
 msgid "The uploaded PDF file is too large."
@@ -28613,13 +28567,6 @@ msgid "Your PayPal account has been disconnected."
 msgstr "Twoje konto PayPal zostało odłączone."
 
 #: pretix/plugins/paypal2/apps.py:40
-#, fuzzy
-#| msgid ""
-#| "Accept payments with your PayPal account. In addition to regular PayPal "
-#| "payments, you can now also offer payments in a variety of local payment "
-#| "methods such as giropay, SOFORT, iDEAL and many more to your customers - "
-#| "they don't even need a PayPal account. PayPal is one of the most popular "
-#| "payment methods world-wide."
 msgid ""
 "Accept payments with your PayPal account. In addition to regular PayPal "
 "payments, you can now also offer payments in a variety of local payment "
@@ -28629,9 +28576,9 @@ msgid ""
 msgstr ""
 "Akceptuj płatności za pomocą konta PayPal. Oprócz zwykłych płatności PayPal, "
 "możesz teraz oferować swoim klientom płatności za pomocą różnych lokalnych "
-"metod płatności, takich jak giropay, SOFORT, iDEAL i wiele innych - nie "
-"potrzebują oni nawet konta PayPal. PayPal jest jedną z najpopularniejszych "
-"metod płatności na całym świecie."
+"metod płatności, takich jak eps, iDEAL i wiele innych - nie potrzebują oni "
+"nawet konta PayPal. PayPal jest jedną z najpopularniejszych metod płatności "
+"na całym świecie."
 
 #: pretix/plugins/paypal2/payment.py:99
 msgid "PayPal Merchant ID"
@@ -28652,14 +28599,6 @@ msgid "Alternative Payment Methods"
 msgstr "Alternatywne metody płatności"
 
 #: pretix/plugins/paypal2/payment.py:151
-#, fuzzy
-#| msgid ""
-#| "In addition to payments through a PayPal account, you can also offer your "
-#| "customers the option to pay with credit cards and other, local payment "
-#| "methods such as SOFORT, giropay, iDEAL, and many more - even when they do "
-#| "not have a PayPal account. Eligible payment methods will be determined "
-#| "based on the shoppers location. For German merchants, this is the direct "
-#| "successor of PayPal Plus."
 msgid ""
 "In addition to payments through a PayPal account, you can also offer your "
 "customers the option to pay with credit cards and other, local payment "
@@ -28670,10 +28609,10 @@ msgid ""
 msgstr ""
 "Oprócz płatności za pośrednictwem konta PayPal, możesz również zaoferować "
 "swoim klientom możliwość płacenia kartami kredytowymi i innymi lokalnymi "
-"metodami płatności, takimi jak SOFORT, giropay, iDEAL i wiele innych - nawet "
-"jeśli nie mają konta PayPal. Kwalifikujące się metody płatności zostaną "
-"określone na podstawie lokalizacji kupującego. Dla niemieckich sprzedawców "
-"jest to bezpośredni następca PayPal Plus."
+"metodami płatności, takimi jak eps, iDEAL i wiele innych - nawet jeśli nie "
+"mają konta PayPal. Kwalifikujące się metody płatności zostaną określone na "
+"podstawie lokalizacji kupującego. Dla niemieckich sprzedawców jest to "
+"bezpośredni następca PayPal Plus."
 
 #: pretix/plugins/paypal2/payment.py:166
 msgid "Disable SEPA Direct Debit"
@@ -29880,11 +29819,6 @@ msgid "Stripe"
 msgstr "Stripe"
 
 #: pretix/plugins/stripe/apps.py:40
-#, fuzzy
-#| msgid ""
-#| "Accept payments via Stripe, a globally popular payment service provider. "
-#| "Stripe supports payments via credit cards as well as many local payment "
-#| "methods such as giropay, iDEAL, Alipay,and many more."
 msgid ""
 "Accept payments via Stripe, a globally popular payment service provider. "
 "Stripe supports payments via credit cards as well as many local payment "
@@ -33278,6 +33212,9 @@ msgid ""
 "been added to the waiting list. We will only contact you once a spot opens "
 "up."
 msgstr ""
+"Po dodaniu do listy oczekujących <strong>nie</strong> otrzymasz wiadomość e-"
+"mail z potwierdzeniem. Skontaktujemy się z Tobą dopiero, gdy zwolni się "
+"miejsce."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:44
 msgid "Add me to the list"
