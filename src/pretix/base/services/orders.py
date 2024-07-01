@@ -2042,7 +2042,7 @@ class OrderChangeManager:
                             # This also prevents accidental removal through the UI because a hidden product will no longer
                             # be part of the input.
                             (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
-                            or (a.variation and self.order.sales_channel not in a.variation.sales_channels)
+                            or (a.variation and not a.variation.all_sales_channels and not a.variation.limit_sales_channels.contains(self.order.sales_channel))
                             or a.item.unavailability_reason(has_voucher=True, subevent=a.subevent)
                             or (
                                 not item.all_sales_channels and
