@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-06-28 10:33+0000\n"
+"PO-Revision-Date: 2024-07-01 16:00+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -29845,7 +29845,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1714
 msgid "Przelewy24 via Stripe"
-msgstr ""
+msgstr "Przelewy24 via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1718
 msgid ""
@@ -29853,10 +29853,13 @@ msgid ""
 "banks. Please keep your online banking account and login information "
 "available."
 msgstr ""
+"Przelewy24 är en onlinebetalningsmetod som är tillgänglig för kunder hos "
+"polska banker. Vänligen ha dina onlinebankuppgifter och "
+"inloggningsinformation tillgängliga."
 
 #: pretix/plugins/stripe/payment.py:1753
 msgid "WeChat Pay via Stripe"
-msgstr ""
+msgstr "WeChat Pay via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1758
 msgid ""
@@ -30003,48 +30006,59 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
+"Efter att du har skickat in din beställning, kommer vi att omdirigera dig "
+"till betaltjänstleverantören för att slutföra din betalning. Du kommer sedan "
+"att omdirigeras tillbaka hit för att hämta dina biljetter."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
 "This transaction will be marked as Mail Order/Telephone Order, exempting it "
 "from Strong Customer Authentication (SCA) whenever possible"
 msgstr ""
+"Denna transaktion kommer att markeras som postorder/telefonorder, vilket "
+"undantar den från stark kundautentisering (SCA) när det är möjligt"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:19
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr ""
+msgstr "För en kreditkortsbetalning, vänligen aktivera JavaScript."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:25
 msgid ""
 "You already entered a card number that we will use to charge the payment "
 "amount."
 msgstr ""
+"Du har redan angett ett kortnummer som vi kommer att använda för att "
+"debitera betalningsbeloppet."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:36
 msgid "Use a different card"
-msgstr ""
+msgstr "Använd ett annat kort"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:66
 msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"Din betalning kommer att behandlas av Stripe, Inc. Dina kreditkortsuppgifter "
+"kommer att överföras direkt till Stripe och kommer aldrig att beröra våra "
+"servrar."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "For a SEPA Debit payment, please turn on JavaScript."
-msgstr "Ange en giltig epost."
+msgstr ""
+"För att kunna använda SEPA Direktdebitering, vänligen aktivera JavaScript."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:19
 msgid ""
 "You already entered a bank account that we will use to charge the payment "
 "amount."
 msgstr ""
+"Du har redan angett ett bankkonto som vi kommer att använda för att debitera "
+"betalningsbeloppet."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:30
 msgid "Use a different account"
-msgstr ""
+msgstr "Använd ett annat konto"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:54
 #, python-format
@@ -30060,14 +30074,24 @@ msgid ""
 "statement that you can obtain from your bank. You agree to receive "
 "notifications for future debits up to 2 days before they occur."
 msgstr ""
+"Genom att tillhandahålla din betalningsinformation och bekräfta denna "
+"betalning, godkänner du (A) %(sepa_creditor_name)s och Stripe, vår "
+"betalningstjänstleverantör och/eller PPRO, dess lokala tjänsteleverantör, "
+"att skicka instruktioner till din bank för att debitera ditt konto och (B) "
+"att din bank debiterar ditt konto i enlighet med dessa instruktioner. Som en "
+"del av dina rättigheter har du rätt till återbetalning från din bank enligt "
+"villkoren i ditt avtal med banken. En återbetalning måste begäras inom 8 "
+"veckor från det datum då ditt konto debiterades. Dina rättigheter förklaras "
+"i ett uttalande som du kan få från din bank. Du godkänner att motta "
+"aviseringar för framtida debiteringar upp till 2 dagar innan de sker."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:7
 msgid "Charge ID"
-msgstr ""
+msgstr "Avgifts-ID"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:18
 msgid "MOTO"
-msgstr ""
+msgstr "MOTO"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:26
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:34
@@ -30077,65 +30101,59 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:64
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:67
 msgid "Payer name"
-msgstr ""
+msgstr "Betalarens namn"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
-#, fuzzy
-#| msgid ""
-#| "Do you really want to cancel this order? You cannot revert this action."
 msgid "Do you really want to disconnect your Stripe account?"
-msgstr "Vill du verkligen avbryta denna beställning? Du kan inte ångra detta."
+msgstr "Vill du verkligen koppla bort ditt Stripe-konto?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Amount"
 msgid "Disconnect"
-msgstr "Belopp"
+msgstr "Koppla bort"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:6
-#, fuzzy
-#| msgid "Payment information"
 msgid "Payment instructions"
-msgstr "Betalningsinformation"
+msgstr "Betalningsinstruktioner"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
 "In your online bank account or from an ATM, choose \"Payment and other "
 "services\"."
 msgstr ""
+"I din internetbank eller vid en bankomat, välj \"Betalningar och andra "
+"tjänster\"."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:14
 msgid "Click \"Payments of services/shopping\"."
-msgstr ""
+msgstr "Klicka på \"Betalningar av tjänster/inköp\"."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:19
 msgid "Enter the entity number, reference number, and amount."
-msgstr ""
+msgstr "Ange bankgironummer, referensnummer och belopp."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Entity number:"
-msgstr "Fakturanummer"
+msgstr "Bankgironummer:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
-#, fuzzy
-#| msgid "Seat number"
 msgid "Reference number:"
-msgstr "Stol nummer"
+msgstr "Referensnummer:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:35
 msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
+"Vi väntar på ett svar från betalningsleverantören angående din betalning. "
+"Vänligen kontakta oss om detta tar längre än några dagar."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:42
 msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
+"Du behöver bekräfta din betalning. Vänligen klicka på länken nedan för att "
+"göra det eller starta en ny betalning."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:48
 msgid "Confirm payment"
@@ -30146,39 +30164,43 @@ msgid ""
 "Please scan the barcode below to complete your WeChat payment. Once you have "
 "completed your payment, you can refresh this page."
 msgstr ""
+"Vänligen skanna streckkoden nedan för att slutföra din WeChat-betalning. När "
+"du har slutfört din betalning kan du uppdatera den här sidan."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:62
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr ""
+msgstr "Betalningstransaktionen kunde inte slutföras av följande anledning:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
 msgid "Confirm payment: %(code)s"
-msgstr ""
+msgstr "Bekräfta betalning: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:20
 msgid "Confirming your payment…"
-msgstr ""
+msgstr "Bekräftar din betalning…"
 
 #: pretix/plugins/stripe/views.py:104 pretix/plugins/stripe/views.py:110
 #: pretix/plugins/stripe/views.py:137 pretix/plugins/stripe/views.py:149
 msgid "An error occurred during connecting with Stripe, please try again."
-msgstr ""
+msgstr "Ett fel uppstod vid anslutning till Stripe, vänligen försök igen."
 
 #: pretix/plugins/stripe/views.py:157 pretix/plugins/stripe/views.py:159
 msgid "Stripe returned an error: {}"
-msgstr ""
+msgstr "Stripe returnerade ett fel: {}"
 
 #: pretix/plugins/stripe/views.py:162
 msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Ditt Stripe-konto är nu anslutet till pretix. Du kan ändra inställningarna i "
+"detalj nedan."
 
 #: pretix/plugins/stripe/views.py:476
 msgid "Your Stripe account has been disconnected."
-msgstr ""
+msgstr "Ditt Stripe-konto har blivit frånkopplat."
 
 #: pretix/plugins/stripe/views.py:506 pretix/plugins/stripe/views.py:525
 #: pretix/plugins/stripe/views.py:530
@@ -30186,93 +30208,100 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Tyvärr uppstod ett fel i betalningsprocessen. Vänligen kontrollera länken i "
+"dina e-postmeddelanden för att fortsätta."
 
 #: pretix/plugins/stripe/views.py:562
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
 msgstr ""
+"Vi hade problem med att godkänna din kortbetalning. Vänligen försök igen och "
+"kontakta oss om problemet kvarstår."
 
 #: pretix/plugins/stripe/views.py:590 pretix/plugins/stripe/views.py:593
 msgid "Sorry, there was an error in the payment process."
-msgstr ""
+msgstr "Tyvärr uppstod ett fel i betalningsprocessen."
 
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
 msgid "PDF ticket output"
-msgstr ""
+msgstr "PDF-biljettutskrift"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:52
 msgid ""
 "Issue tickets as PDF files, usable on any device. Our drag-and-drop editor "
 "allows you to customize the layout of the PDF files to your brand."
 msgstr ""
+"Utfärda biljetter som PDF-filer, användbara på alla enheter. Vår dra-och-"
+"släpp-editor låter dig anpassa layouten av PDF-filerna efter ditt varumärke."
 
 #: pretix/plugins/ticketoutputpdf/apps.py:71
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
 #: pretix/plugins/ticketoutputpdf/views.py:227
 msgid "Default layout"
-msgstr ""
+msgstr "Standardlayout"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:70
 msgid ""
 "Download PDF versions of all tickets in your event as one large PDF file."
 msgstr ""
+"Ladda ner PDF-versioner av alla biljetter till ditt evenemang som en enda "
+"stor PDF-fil."
 
 #: pretix/plugins/ticketoutputpdf/forms.py:49
 #, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr ""
+msgstr "PDF-biljettlayout för {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:52
 msgid "(Same as PDF ticket layout)"
-msgstr ""
+msgstr "(Samma som PDF-biljettlayouten)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:54
 msgid "PDF ticket layout"
-msgstr ""
+msgstr "PDF-biljettlayout"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:143
 msgid "Ticket layout created."
-msgstr ""
+msgstr "Biljettlayout skapat."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:144
 msgid "Ticket layout deleted."
-msgstr ""
+msgstr "Biljettlayout raderad."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:145
 msgid "Ticket layout changed."
-msgstr ""
+msgstr "Biljettlayout ändrad."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:158
 #, python-brace-format
 msgid "Ticket layout {val}"
-msgstr ""
+msgstr "Biljettlayout {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/control_order_position_buttons.html:7
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Alternative ticket"
-msgstr "Skapa biljetter"
+msgstr "Alternativ biljett"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr ""
+msgstr "Biljettlayout"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Är du säker på att du vill ta bort layouten <strong>%(layout)s</strong>?"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
 #, python-format
 msgid "Ticket layout: %(name)s"
-msgstr ""
+msgstr "Biljettlayout: %(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
@@ -30290,72 +30319,71 @@ msgid ""
 "choice. The editor is easy to use thanks to its drag-and-drop user "
 "interface, but it requires a modern browser and a decent internet connection."
 msgstr ""
+"Du kan anpassa biljettens design med vår PDF-biljettredigerare. Där kan du "
+"ladda upp en PDF-fil som används som bakgrund för biljetterna och sedan "
+"placera olika texter och QR-koder på bakgrunden på de positioner du väljer. "
+"Editorn är enkel att använda tack vare dess dra-och-släpp-gränssnitt, men "
+"den kräver en modern webbläsare och en stabil internetanslutning."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
 msgid "Open Layout Designer"
-msgstr ""
+msgstr "Öppna Layout Designer"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Advanced mode (multiple layouts)"
-msgstr ""
+msgstr "Avancerat läge (flera layouter)"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:6
 msgid "Ticket layouts"
-msgstr ""
+msgstr "Biljettlayouter"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:10
 msgid "You haven't created any layouts yet."
-msgstr ""
+msgstr "Du har ännu inte skapat några layouter."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:17
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:24
 msgid "Create a new layout"
-msgstr ""
+msgstr "Skapa en ny layout"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:63
 msgid "PDF output"
-msgstr ""
+msgstr "PDF-utdata"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:65
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download tickets (PDF)"
-msgstr "Ladda ner alla biljetter på en gång:"
+msgstr "Ladda ner biljetter (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:66
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download ticket (PDF)"
-msgstr "Ladda ner alla biljetter på en gång:"
+msgstr "Ladda ner biljetter (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:62
 msgid "Default ticket layout"
-msgstr ""
+msgstr "Standardbiljettlayout"
 
 #: pretix/plugins/ticketoutputpdf/views.py:119
 msgid "The new ticket layout has been created."
-msgstr ""
+msgstr "Den nya biljettlayouten har skapats."
 
 #: pretix/plugins/ticketoutputpdf/views.py:168
 #: pretix/plugins/ticketoutputpdf/views.py:198
 #: pretix/plugins/ticketoutputpdf/views.py:246
 msgid "The requested layout does not exist."
-msgstr ""
+msgstr "Den begärda layouten finns inte."
 
 #: pretix/plugins/ticketoutputpdf/views.py:210
 msgid "The selected ticket layout been deleted."
-msgstr ""
+msgstr "Den valda biljettlayouten har raderats."
 
 #: pretix/plugins/ticketoutputpdf/views.py:250
 msgid "Ticket PDF layout: {}"
-msgstr ""
+msgstr "PDF-biljettlayout: {}"
 
 #: pretix/plugins/webcheckin/apps.py:30 pretix/plugins/webcheckin/apps.py:33
-#, fuzzy
-#| msgid "Tickets & check-in"
 msgid "Web-based check-in"
-msgstr "Biljettdesign"
+msgstr "Incheckning via webben"
 
 #: pretix/plugins/webcheckin/apps.py:38
 msgid "Turn your browser into a check-in device to perform access control."
@@ -30989,16 +31017,12 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
-#, fuzzy
-#| msgid ""
-#| "For some of the products in your cart, you can choose additional options "
-#| "before you continue."
 msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
 msgstr ""
-"För vissa av produkterna i din varukorg, kan du välja extra tillval innan du "
-"fortsätter."
+"Vissa av produkterna i din varukorg kan endast köpas om det finns ett aktivt "
+"medlemskap på ditt konto."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:37
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:114
@@ -31011,47 +31035,38 @@ msgid ""
 "account that includes a valid membership or authorization for this type of "
 "product."
 msgstr ""
+"Den här produkten kan endast köpas när du är inloggad med ett kundkonto som "
+"inkluderar ett giltigt medlemskap eller auktorisering för den här typen av "
+"produkt."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:12
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "You already selected the following payment methods:"
-msgstr "Välj ett betalsätt."
+msgstr "Du har redan valt följande betalningsmetoder:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:26
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Received payments"
 msgid "Remove payment"
-msgstr "Mottagna betalningar"
+msgstr "Ta bort betalning"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:38
-#, fuzzy
-#| msgid "Pending amount"
 msgid "Remaining balance"
-msgstr "Väntande belopp"
+msgstr "Återstående saldo"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:39
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "Please select a payment method below."
-msgstr "Välj ett betalsätt."
+msgstr "Vänligen välj en betalningsmetod nedan."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:52
-#, fuzzy
-#| msgid "Please select how you want to pay."
 msgid "Please select how you want to pay the remaining balance:"
-msgstr "Välj hur du vill betala."
+msgstr "Vänligen välj hur du vill betala det återstående saldot:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:95
-#, fuzzy
-#| msgid "This payment provider does not provide support for test mode."
 msgid "This sales channel does not provide support for test mode."
-msgstr "Detta betalsätt har ingen support för test-betalningar."
+msgstr "Denna försäljningskanal erbjuder inte stöd för testläge."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:97
 msgid "If you continue, you might pay an actual order with non-existing money!"
 msgstr ""
+"Om du fortsätter kan du betala en faktisk order med pengar som inte finns!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:105
 msgid "This payment provider does not provide support for test mode."
@@ -31083,29 +31098,25 @@ msgstr ""
 "fortsätta."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:51
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Auto-fill with address"
-msgstr "E-postadress"
+msgstr "Automatiskt fyll i med adress"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:58
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:168
 msgid "Fill form"
-msgstr ""
+msgstr "Fyll i formuläret"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:86
 msgid "Copy answers from above"
 msgstr "Kopiera svaren från ovanstående"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:150
-#, fuzzy
-#| msgid "Copy answers from above"
 msgid "Copy answers"
-msgstr "Kopiera svaren från ovanstående"
+msgstr "Kopiera svar"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:159
 msgid "Auto-fill with profile"
-msgstr ""
+msgstr "Automatiskt fyll i med profil"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
@@ -31118,10 +31129,14 @@ msgid ""
 "embedded into the website. Please try to open the ticket shop in a new tab "
 "or change your browser settings."
 msgstr ""
+"Din webbläsare är konfigurerad för att blockera cookies från tredjeparts "
+"webbelement. Tyvärr innebär detta att vi inte kan visa dig den här "
+"biljettbutiken inbäddad på webbplatsen. Vänligen försök att öppna "
+"biljettbutiken i en ny flik eller ändra dina webbläsarinställningar."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:17
 msgid "We apologize for the inconvenience!"
-msgstr ""
+msgstr "Vi ber om ursäkt för besväret!"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:24
 msgid "Continue in new tab"
@@ -31137,25 +31152,23 @@ msgid ""
 "cookie to remember who you are and what is in your cart. Please change your "
 "browser settings accordingly."
 msgstr ""
+"Din webbläsare accepterar inte cookies från oss. Vi behöver dock ställa in "
+"en cookie för att komma ihåg vem du är och vad som finns i din varukorg. "
+"Vänligen ändra dina webbläsarinställningar därefter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:16
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du måste välja exakt ett alternativ från denna kategori."
+msgstr[1] "Du måste välja %(min_count)s alternativ från denna kategori."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:25
-#, fuzzy, python-format
-#| msgid ""
-#| "You can choose between %(min_count)s and %(max_count)s options from this "
-#| "category."
+#, python-format
 msgid "You can choose %(max_count)s option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] ""
-"Du kan välja mellan %(min_count)s och %(max_count)s val i denna kategori."
-msgstr[1] ""
-"Du kan välja mellan %(min_count)s och %(max_count)s val i denna kategori."
+msgstr[0] "Du kan välja %(max_count)s alternativ från denna kategori."
+msgstr[1] "Du kan välja upp till %(max_count)s alternativ från denna kategori."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:33
 #, python-format
@@ -31187,7 +31200,7 @@ msgstr "minsta ordersumma: %(num)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:341
 msgctxt "price"
 msgid "free"
-msgstr ""
+msgstr "gratis"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:77
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
@@ -31199,21 +31212,18 @@ msgstr "från %(price)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:56
 #, python-format
 msgid "from %(from_price)s to %(to_price)s"
-msgstr ""
+msgstr "från %(from_price)s till %(to_price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:97
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:89
-#, fuzzy
-#| msgid "Show variants"
 msgid "Hide variants"
-msgstr "Visa varianter"
+msgstr "Dölj varianter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:99
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:91
-#, fuzzy, python-format
-#| msgid "Show all events of %(name)s"
+#, python-format
 msgid "Show %(count)s variants of %(item)s"
-msgstr "Visa alla evenemang från %(name)s"
+msgstr "Visa %(count)s varianter av %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:101
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:93
@@ -31226,10 +31236,8 @@ msgstr "Visa varianter"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:273
 #: pretix/presale/templates/pretixpresale/event/voucher.html:148
 #: pretix/presale/templates/pretixpresale/event/voucher.html:304
-#, fuzzy
-#| msgid "Original price"
 msgid "Original price:"
-msgstr "Original pris"
+msgstr "Original pris:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:135
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:275
@@ -31237,10 +31245,8 @@ msgstr "Original pris"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:283
 #: pretix/presale/templates/pretixpresale/event/voucher.html:158
 #: pretix/presale/templates/pretixpresale/event/voucher.html:314
-#, fuzzy
-#| msgid "Net price"
 msgid "New price:"
-msgstr "Nettopris"
+msgstr "Nytt pris:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:147
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:149
@@ -31254,10 +31260,9 @@ msgstr "Nettopris"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:176
 #: pretix/presale/templates/pretixpresale/event/voucher.html:328
 #: pretix/presale/templates/pretixpresale/event/voucher.html:330
-#, fuzzy, python-format
-#| msgid "Modify price for %(item)s"
+#, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
-msgstr "Ändra pris för %(item)s"
+msgstr "Ändra pris för %(item)s, åtminstone %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:152
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:291
@@ -31304,10 +31309,9 @@ msgstr "inkl. %(rate)s%% %(name)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:202
 #: pretix/presale/templates/pretixpresale/event/voucher.html:228
 #: pretix/presale/templates/pretixpresale/event/voucher.html:251
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s – %(var)s to order"
+#, python-format
 msgid "Add %(item)s, %(var)s to cart"
-msgstr "Antal av %(item)s – %(var)s att beställa"
+msgstr "Lägg till %(item)s, %(var)s i varukorgen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:201
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:346
@@ -31315,12 +31319,9 @@ msgstr "Antal av %(item)s – %(var)s att beställa"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:356
 #: pretix/presale/templates/pretixpresale/event/voucher.html:231
 #: pretix/presale/templates/pretixpresale/event/voucher.html:385
-#, fuzzy
-#| msgctxt "address"
-#| msgid "Select state"
 msgctxt "checkbox"
 msgid "Select"
-msgstr "Förköp har inte startat"
+msgstr "Välj"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:205
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:350
@@ -31329,15 +31330,14 @@ msgstr "Förköp har inte startat"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:235
 #: pretix/presale/templates/pretixpresale/event/voucher.html:389
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Minska antal"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:214
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:219
 #: pretix/presale/templates/pretixpresale/event/voucher.html:241
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s – %(var)s to order"
+#, python-format
 msgid "Quantity of %(item)s, %(var)s to order"
-msgstr "Antal av %(item)s – %(var)s att beställa"
+msgstr "Antal av %(item)s, %(var)s att beställa"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:215
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:361
@@ -31346,22 +31346,20 @@ msgstr "Antal av %(item)s – %(var)s att beställa"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:242
 #: pretix/presale/templates/pretixpresale/event/voucher.html:398
 msgid "Increase quantity"
-msgstr ""
+msgstr "Öka antalet"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:343
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:353
 #: pretix/presale/templates/pretixpresale/event/voucher.html:382
 #: pretix/presale/templates/pretixpresale/event/voucher.html:407
-#, fuzzy, python-format
-#| msgid "Add to cart"
+#, python-format
 msgid "Add %(item)s to cart"
-msgstr "Lägg i varukorg"
+msgstr "Lägg till %(item)s i varukorgen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:359
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:371
 #: pretix/presale/templates/pretixpresale/event/voucher.html:396
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s to order"
+#, python-format
 msgid "Quantity of %(item)s to order"
 msgstr "Antal av %(item)s att beställa"
 
@@ -31370,25 +31368,21 @@ msgid "There are no add-ons available for this product."
 msgstr "Det finns inga tillval på denna produkt."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
-#, fuzzy
-#| msgid "Enter a voucher code below to buy this ticket."
 msgid "Enter a voucher code below to buy this product."
-msgstr "Skriv en rabattkod nedan för att köpa denna biljett."
+msgstr "Ange en rabattkod nedan för att köpa denna produkt."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
-#, fuzzy
-#| msgid "Quota availabilities"
 msgid "Not available yet."
-msgstr "Tillgänglighet av kvoteringar"
+msgstr "Inte tillgänglig ännu."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
 msgid "Not available any more."
-msgstr ""
+msgstr "Inte längre tillgänglig."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:19
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:71
 msgid "FULLY BOOKED"
-msgstr ""
+msgstr "FULLBOKAD"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:21
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
@@ -31412,87 +31406,67 @@ msgstr ""
 "Alla tillgängliga produkter är reserverade, men de kan bli tillgängliga igen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:15
-#, fuzzy
-#| msgid "Modify price for %(item)s"
 msgid "Price per item"
-msgstr "Ändra pris för %(item)s"
+msgstr "Pris per artikel"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:18
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice total"
 msgid "Price total"
-msgstr "Faktura total"
+msgstr "Totalt pris"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:42
-#, fuzzy
-#| msgid "Seat ID"
 msgid "Seat:"
-msgstr "Stol ID"
+msgstr "Plats:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:60
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date:"
-msgstr "Datum"
+msgstr "Datum:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:83
-#, fuzzy
-#| msgid "Location"
 msgid "Location:"
-msgstr "Plats"
+msgstr "Plats:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:85
 msgid "Show full location"
-msgstr ""
+msgstr "Visa fullständig plats"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:96
-#, fuzzy
-#| msgid "Membership types"
 msgid "Membership:"
-msgstr "Medlemsskapstyp"
+msgstr "Medlemsskap:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:127
-#, fuzzy
-#| msgid "The device has been removed."
 msgid "This ticket is blocked."
-msgstr "Den här enheten har tagits bort."
+msgstr "Denna biljett är blockerad."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:134
-#, fuzzy
-#| msgid "Usages"
 msgctxt "ticket_checkins"
 msgid "Usage:"
-msgstr "Användning"
+msgstr "Användning:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:138
-#, fuzzy, python-format
-#| msgid "The device has been removed."
+#, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
-msgstr[0] "Den här enheten har tagits bort."
-msgstr[1] "Den här enheten har tagits bort."
+msgstr[0] "Den här biljetten har använts en gång."
+msgstr[1] "Den här biljetten har använts %(count)s gånger."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:170
-#, fuzzy
-#| msgid "Attendee name"
 msgid "No attendee name provided"
-msgstr "Namn på deltagare"
+msgstr "Inget deltagarnamn angivet"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:223
 msgid "The image you previously uploaded"
-msgstr ""
+msgstr "Bilden du tidigare laddade upp"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:269
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:336
 msgid "The price of this product was reduced because of an automatic discount."
-msgstr ""
+msgstr "Priset på denna produkt har sänkts på grund av en automatisk rabatt."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:272
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:339
 msgid "Discounted"
-msgstr ""
+msgstr "Rabatterad"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:281
 msgid "Okay, we're removing that…"
@@ -31502,13 +31476,12 @@ msgstr "OK, vi tar bort denna…"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:288
 #, python-format
 msgid "Remove %(item)s from your cart"
-msgstr ""
+msgstr "Ta bort %(item)s från din varukorg"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:291
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s to order"
+#, python-format
 msgid "Remove one %(item)s from your cart"
-msgstr "Antal av %(item)s att beställa"
+msgstr "Ta bort en %(item)s från din varukorg"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:293
 #, python-format
@@ -31516,6 +31489,8 @@ msgid ""
 "Remove one %(item)s from your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Ta bort en %(item)s från din varukorg. Du har för närvarande %(count)s i din "
+"varukorg."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 msgid "We're trying to reserve another one for you!"
@@ -31534,10 +31509,9 @@ msgstr ""
 "beställning."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:321
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s to order"
+#, python-format
 msgid "Add one more %(item)s to your cart"
-msgstr "Antal av %(item)s att beställa"
+msgstr "Lägg till en till %(item)s i din varukorg"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:323
 #, python-format
@@ -31545,14 +31519,14 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Lägg till en till %(item)s i din varukorg. Du har för närvarande %(count)s i "
+"din varukorg."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:20
-#, fuzzy
-#| msgid "Current value"
 msgid "Current value:"
-msgstr "Nuvarande värde"
+msgstr "Nuvarande värde:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:451
 #, python-format
@@ -31567,10 +31541,9 @@ msgid "incl. %(tax_sum)s taxes"
 msgstr "inkl. %(tax_sum)s skatter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:482
-#, fuzzy, python-format
-#| msgid "The items in your cart are reserved for you for %(minutes)s minutes."
+#, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr "Varorna i din varukorg är reserverade för dig i %(minutes)s minuter."
+msgstr "Varorna i din varukorg är reserverade för dig i %(minutes)s minuter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:486
 msgid ""
@@ -31582,11 +31555,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:490
 msgid "Overview of your ordered products."
-msgstr ""
+msgstr "Översikt över dina beställda produkter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:27
 msgid "Continue with order process"
-msgstr ""
+msgstr "Fortsätt med beställningsprocessen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:32
 #: pretix/presale/templates/pretixpresale/event/index.html:219
@@ -31602,22 +31575,20 @@ msgstr "Töm varukorg"
 #: pretix/presale/templates/pretixpresale/event/index.html:236
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Lösa in en rabattkod"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 msgid "We're applying this voucher to your cart..."
-msgstr ""
+msgstr "Vi applicerar denna rabattkod på din varukorg..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
 msgid "Redeem voucher"
-msgstr ""
+msgstr "Lösa in rabattkod"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:10
-#, fuzzy
-#| msgid "Change order"
 msgid "Change summary"
-msgstr "Updatera beställningen"
+msgstr "Ändra sammanfattning"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:19
 #, python-format
@@ -31625,12 +31596,15 @@ msgid ""
 "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s\" to "
 "\"%(new_item)s – %(new_variation)s\""
 msgstr ""
+"Ändra position #%(positionid)s från \"%(old_item)s – %(old_variation)s\" "
+"till \"%(new_item)s – %(new_variation)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:23
 #, python-format
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s\" to \"%(new_item)s\""
 msgstr ""
+"Ändra position #%(positionid)s från \"%(old_item)s\" till \"%(new_item)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:56
@@ -31638,62 +31612,58 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:106
 #, python-format
 msgid "Add-on product to position #%(positionid)s"
-msgstr ""
+msgstr "Tilläggsprodukt till position #%(positionid)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:40
 #, python-format
 msgid "Change date of position #%(positionid)s from \"%(old)s\" to \"%(new)s\""
 msgstr ""
+"Ändra datum för position #%(positionid)s från \"%(old)s\" till \"%(new)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:50
 #, python-format
 msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
-msgstr ""
+msgstr "Ändra pris för position #%(positionid)s från %(old)s till %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:70
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s – %(var)s to order"
+#, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr "Antal av %(item)s – %(var)s att beställa"
+msgstr "Lägg till position (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:74
 #, python-format
 msgid "Add position (%(item)s)"
-msgstr ""
+msgstr "Lägg till position (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:95
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s – %(variation)s)"
-msgstr ""
+msgstr "Ta bort position #%(positionid)s (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:99
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s)"
-msgstr ""
+msgstr "Ta bort position #%(positionid)s (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:121
-#, fuzzy
-#| msgid "Net price"
 msgid "Total price change"
-msgstr "Nettopris"
+msgstr "Totalprisändring"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:130
-#, fuzzy
-#| msgid "Order total"
 msgid "New order total"
-msgstr "Beställningstotal"
+msgstr "Nytt totalbelopp i beställningen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:136
 msgid "You already paid"
-msgstr ""
+msgstr "Du har redan betalat"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:144
 msgid "You will need to pay"
-msgstr ""
+msgstr "Du kommer att behöva betala"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:146
 msgid "You will be refunded"
-msgstr ""
+msgstr "Du kommer att få en återbetalning"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:150
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:109
