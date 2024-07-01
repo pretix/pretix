@@ -785,8 +785,11 @@ class MailSettingsRendererPreview(MailSettingsPreview):
         renderers = request.event.get_html_mail_renderers()
         if request.GET.get('renderer') in renderers:
             with rolledback_transaction():
-                order = request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
-                                                    expires=now(), code="PREVIEW", total=119)
+                order = request.event.orders.create(
+                    status=Order.STATUS_PENDING, datetime=now(),
+                    expires=now(), code="PREVIEW", total=119,
+                    sales_channel=request.organizer.sales_channels.get(identifier="web")
+                )
                 item = request.event.items.create(name=gettext("Sample product"), default_price=42.23,
                                                   description=gettext("Sample product description"))
                 order.positions.create(item=item, attendee_name_parts={'_legacy': gettext("John Doe")},
