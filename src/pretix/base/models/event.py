@@ -468,7 +468,7 @@ class EventMixin:
         return best_state_found, num_tickets_found, num_tickets_possible
 
     def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
-        assert isinstance(sales_channel, str)
+        assert isinstance(sales_channel, str) or sales_channel is None
         qs_annotated = self._seats(ignore_voucher=ignore_voucher)
 
         qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
