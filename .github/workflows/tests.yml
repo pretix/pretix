@@ -5,12 +5,10 @@ on:
     branches: [ master ]
     paths-ignore:
       - 'doc/**'
-      - 'src/pretix/locale/**'
   pull_request:
     branches: [ master ]
     paths-ignore:
       - 'doc/**'
-      - 'src/pretix/locale/**'
 
 permissions:
   contents: read  #  to fetch code (actions/checkout)
