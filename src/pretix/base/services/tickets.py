@@ -105,6 +105,7 @@ def preview(event: int, provider: str):
         order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
                                     email='sample@pretix.eu',
                                     locale=event.settings.locale,
+                                    sales_channel=event.organizer.sales_channels.get(identifier="web"),
                                     expires=now(), code="PREVIEW1234", total=119)
 
         scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
