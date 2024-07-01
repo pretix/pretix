@@ -886,8 +886,10 @@ var editor = {
         } else if (selected.length == 1) {
             var o = selected[0];
             $("#toolbox").attr("data-type", o.type);
-            if (o.type === "textarea" || o.type === "text" || o.type === "textcontainer") {
-                $("#toolbox-heading").text(gettext("Text object"));
+            if (o.type === "textarea" || o.type === "text") {
+                $("#toolbox-heading").text(gettext("Text object (deprecated)"));
+            } else if (o.type === "textarea" || o.type === "text" || o.type === "textcontainer") {
+                $("#toolbox-heading").text(gettext("Text box"));
             } else if (o.type === "barcodearea") {
                 $("#toolbox-heading").text(gettext("Barcode area"));
             } else if (o.type === "imagearea") {
