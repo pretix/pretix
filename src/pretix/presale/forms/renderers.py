@@ -174,3 +174,11 @@ class CheckoutFieldRenderer(FieldRenderer):
         else:
             attrs = ''
         return '<div class="{klass}"{attrs}>{html}</div>'.format(klass=self.get_form_group_class(), html=html, attrs=attrs)
+
+    def wrap_widget(self, html):
+        if isinstance(self.widget, CheckboxInput):
+            css_class = "checkbox"
+            if self.field.field.disabled:
+                css_class += " disabled"
+            html = f'<div class="{css_class}">{html}</div>'
+        return html
