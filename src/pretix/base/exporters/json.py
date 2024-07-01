@@ -54,6 +54,7 @@ class JSONExporter(BaseExporter):
                                'import in third-party systems.')
 
     def render(self, form_data):
+        all_sales_channels = self.event.organizer.sales_channels.all()
         jo = {
             'event': {
                 'name': str(self.event.name),
@@ -85,7 +86,7 @@ class JSONExporter(BaseExporter):
                         'admission': item.admission,
                         'personalized': item.personalized,
                         'active': item.active,
-                        'sales_channels': item.sales_channels,
+                        'sales_channels': [c.identifier for c in (all_sales_channels if item.all_sales_channels else item.limit_sales_channels.all())],
                         'description': str(item.description),
                         'available_from': item.available_from,
                         'available_until': item.available_until,
@@ -114,7 +115,9 @@ class JSONExporter(BaseExporter):
                                 'checkin_text': variation.checkin_text,
                                 'require_approval': variation.require_approval,
                                 'require_membership': variation.require_membership,
-                                'sales_channels': variation.sales_channels,
+                                'sales_channels': [
+                                    c.identifier for c in (all_sales_channels if variation.all_sales_channels else variation.limit_sales_channels.all())
+                                ],
                                 'available_from': variation.available_from,
                                 'available_until': variation.available_until,
                                 'hide_without_voucher': variation.hide_without_voucher,
@@ -122,6 +125,7 @@ class JSONExporter(BaseExporter):
                             } for variation in item.variations.all()
                         ]
                     } for item in self.event.items.select_related('tax_rule').prefetch_related(
+                        'limit_sales_channels',
                         Prefetch(
                             'meta_values',
                             ItemMetaValue.objects.select_related('property'),
@@ -130,6 +134,7 @@ class JSONExporter(BaseExporter):
                         Prefetch(
                             'variations',
                             queryset=ItemVariation.objects.prefetch_related(
+                                'limit_sales_channels',
                                 Prefetch(
                                     'meta_values',
                                     ItemVariationMetaValue.objects.select_related('property'),
@@ -167,7 +172,7 @@ class JSONExporter(BaseExporter):
                         'require_approval': order.require_approval,
                         'checkin_attention': order.checkin_attention,
                         'checkin_text': order.checkin_text,
-                        'sales_channel': order.sales_channel,
+                        'sales_channel': order.sales_channel.identifier,
                         'expires': order.expires,
                         'datetime': order.datetime,
                         'fees': [
