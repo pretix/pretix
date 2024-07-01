@@ -585,7 +585,7 @@
                 var monthsView = widget.find('.datepicker-months'),
                     monthsViewHeader = monthsView.find('th'),
                     months = monthsView.find('tbody').find('span');
-
+                
                 monthsViewHeader.eq(0).find('span').attr('title', options.tooltips.prevYear);
                 monthsViewHeader.eq(1).attr('title', options.tooltips.selectYear);
                 monthsViewHeader.eq(2).find('span').attr('title', options.tooltips.nextYear);
@@ -697,7 +697,7 @@
                 if (!hasDate()) {
                     return;
                 }
-
+                
                 daysViewHeader.eq(0).find('span').attr('title', options.tooltips.prevMonth);
                 daysViewHeader.eq(1).attr('title', options.tooltips.selectMonth);
                 daysViewHeader.eq(2).find('span').attr('title', options.tooltips.nextMonth);
@@ -947,8 +947,17 @@
 
                 input.blur();
 
-                viewDate = date.clone();
+                // PROBLEM IS HERE 
+                // WHEN YOU CLICK OUT OF WIDGET WITHOUT SELECTING A DATE, date IS CURRENT DATE
+                // WHEN YOU SELECT DATE, date STILL JUNE 3 REGARDLESS OF SELECTED DATE
+                // THEREFORE, we do not want to set date to viewDate when clicking out of widget
 
+                // date.month() & viewDate.month() will be the same if date selected by user
+                // date.month() & viewDate.month() will be different if user clicks out of widget
+                // therefore, do not set date to be equal to viewDate if date.month() !== viewDate.month()
+                if (date.month() === viewDate.month()) {
+                    viewDate = date.clone();
+                }
                 return picker;
             },
 
