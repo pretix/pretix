@@ -977,6 +977,7 @@ var editor = {
             textAlign: 'left',
             splitLongWords: true,
             autoResize: true,
+            lockScalingFlip: true,
         });
         rect.setControlsVisibility({
             'tr': true,
