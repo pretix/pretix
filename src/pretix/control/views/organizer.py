@@ -3161,7 +3161,7 @@ class ChannelUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
         }
 
     def form_valid(self, form):
-        if form.has_changed() or self.formset.has_changed():
+        if form.has_changed():
             self.object.log_action('pretix.saleschannel.changed', user=self.request.user, data={
                 k: getattr(self.object, k)
                 for k in form.changed_data
