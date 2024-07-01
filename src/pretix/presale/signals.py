@@ -84,6 +84,7 @@ seatingframe_html_head = EventPluginSignal()
 """
 Arguments: ``request``
 
+**Temporary workaround, might be removed again later.**
 This signal allows you to put code inside the HTML ``<head>`` tag
 of the seatingframe page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
