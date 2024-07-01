@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-06-28 10:33+0000\n"
+"PO-Revision-Date: 2024-07-01 16:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -56,18 +56,16 @@ msgid "Dutch"
 msgstr ""
 
 #: pretix/_base_settings.py:88
-#, fuzzy
 msgid "Dutch (informal)"
-msgstr "Tysk (uformelt)"
+msgstr "Hollandsk (uformelt)"
 
 #: pretix/_base_settings.py:89
 msgid "French"
 msgstr ""
 
 #: pretix/_base_settings.py:90
-#, fuzzy
 msgid "Finnish"
-msgstr "Dansk"
+msgstr "Finsk"
 
 #: pretix/_base_settings.py:91
 msgid "Galician"
@@ -94,14 +92,12 @@ msgid "Norwegian Bokmål"
 msgstr ""
 
 #: pretix/_base_settings.py:97
-#, fuzzy
 msgid "Polish"
-msgstr "Engelsk"
+msgstr "Polsk"
 
 #: pretix/_base_settings.py:98
-#, fuzzy
 msgid "Portuguese (Portugal)"
-msgstr "Portugisisk (Brasilien)"
+msgstr "Portugisisk (Portugal)"
 
 #: pretix/_base_settings.py:99
 msgid "Portuguese (Brazil)"
@@ -124,9 +120,8 @@ msgid "Swedish"
 msgstr ""
 
 #: pretix/_base_settings.py:104
-#, fuzzy
 msgid "Spanish"
-msgstr "Dansk"
+msgstr "Spansk"
 
 #: pretix/_base_settings.py:105
 msgid "Turkish"
@@ -143,9 +138,8 @@ msgid ""
 msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:53
-#, fuzzy
 msgid "pretixSCAN"
-msgstr "Hent billet"
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:90
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
@@ -172,9 +166,8 @@ msgid "Allowed URIs list, space separated"
 msgstr "Liste af tilladte urler adskilt af mellemrum"
 
 #: pretix/api/models.py:47
-#, fuzzy
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Liste af tilladte urler adskilt af mellemrum"
+msgstr "Liste over tilladte URL'er efter logout, separeret med mellemrum"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:395
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
@@ -182,9 +175,8 @@ msgid "Client ID"
 msgstr "Klient-id"
 
 #: pretix/api/models.py:55
-#, fuzzy
 msgid "Client secret"
-msgstr "Arrangementsrække"
+msgstr "Kundehemmelighed"
 
 #: pretix/api/models.py:116
 msgid "Enable webhook"
@@ -286,9 +278,8 @@ msgid ""
 msgstr ""
 
 #: pretix/api/serializers/item.py:315 pretix/control/forms/item.py:708
-#, fuzzy
 msgid "Gift card products should not be admission products at the same time."
-msgstr "Du kan ikke vælge en kvote og et specifikt produkt på samme tid."
+msgstr "Gavekort-produkter bør ikke samtidig være adgangsgivende produkter"
 
 #: pretix/api/serializers/item.py:494
 msgid ""
@@ -309,9 +300,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr ""
 
 #: pretix/api/serializers/item.py:521 pretix/control/forms/item.py:143
-#, fuzzy
 msgid "This type of question cannot be shown during check-in."
-msgstr "Dette spørgsmål vil kun blive vist i administrationen."
+msgstr "Denne type spørgsmål kan ikke blive vist under tjek-ind."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
@@ -320,9 +310,9 @@ msgid ""
 msgstr ""
 
 #: pretix/api/serializers/order.py:78
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "Indtast venligt en gyldig e-mailadresse."
+msgstr "{input} er ikke et gyldigt valg."
 
 #: pretix/api/serializers/order.py:1316 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1528
@@ -331,23 +321,20 @@ msgid "The selected seat \"{seat}\" is not available."
 msgstr "Det valgte sæde \"{seat}\" er ikke tilgængeligt."
 
 #: pretix/api/serializers/order.py:1342 pretix/api/serializers/order.py:1349
-#, fuzzy
 msgid "The product \"{}\" is not available on this date."
-msgstr "Produktet \"{}\" er ikke tilknyttet en kvote."
+msgstr "Produktet \"{}\" er ikke til rådighed på denne dato."
 
 #: pretix/api/serializers/order.py:1364 pretix/api/views/cart.py:200
-#, fuzzy
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
-"Kvoten {name} har ikke nok overskydende kapacitet til at handlingen kan "
-"udføres."
+"Der er ikke enheder nok tilbage på kvoten \"{}\" til at udføre denne "
+"operation."
 
 #: pretix/api/serializers/organizer.py:102
 #: pretix/control/forms/organizer.py:831 pretix/presale/forms/customer.py:439
-#, fuzzy
 msgid "An account with this email address is already registered."
-msgstr "Denne bestilling er allerede blevet tilbagebetalt."
+msgstr "En konto med denne mailadresse er allerede blevet registreret."
 
 #: pretix/api/serializers/organizer.py:235
 #: pretix/control/forms/organizer.py:680
@@ -372,11 +359,10 @@ msgid "This user already has permissions for this team."
 msgstr "Denne bruger har allerede adgang til denne gruppe."
 
 #: pretix/api/views/cart.py:209
-#, fuzzy
 msgid ""
 "The specified voucher has already been used the maximum number of times."
 msgstr ""
-"Denne voucherkode er allerede blevet indløst det maksimalt tilladte antal "
+"Denne voucherkode er allerede blevet brugt det maksimalt tilladte antal "
 "gange."
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
@@ -407,9 +393,8 @@ msgstr "Mailen kunne ikke sendes. Prøv venligst igen senere."
 
 #: pretix/api/views/order.py:703 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:798
-#, fuzzy
 msgid "One of the selected products is not available in the selected country."
-msgstr "Det valgte produkt er ikke aktivt eller har ingen pris."
+msgstr "Et af de valgte produkter er ikke til rådighed i det valgte land."
 
 #: pretix/api/webhooks.py:226 pretix/base/notifications.py:233
 msgid "New order placed"
@@ -480,9 +465,8 @@ msgid "Refund of payment failed"
 msgstr "Tilbagebetaling mislykkedes"
 
 #: pretix/api/webhooks.py:290
-#, fuzzy
 msgid "Payment confirmed"
-msgstr "Betalingsoplysninger"
+msgstr "Betaling bekræftet"
 
 #: pretix/api/webhooks.py:294
 msgid "Order approved"
@@ -493,9 +477,8 @@ msgid "Order denied"
 msgstr "Bestilling afvist"
 
 #: pretix/api/webhooks.py:302
-#, fuzzy
 msgid "Ticket checked in"
-msgstr "Ikke tjekket ind"
+msgstr "Ticket tjekket ind"
 
 #: pretix/api/webhooks.py:306
 msgid "Ticket check-in reverted"
@@ -519,16 +502,14 @@ msgid "Event series date added"
 msgstr "Dato for arrangementsserien tilføjet"
 
 #: pretix/api/webhooks.py:326
-#, fuzzy
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "Arrangementsdatoer"
+msgstr "Datoen på arrangements-serien ændret"
 
 #: pretix/api/webhooks.py:330
-#, fuzzy
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr "Arrangements startdato og -tidspunkt"
+msgstr "Dato på arrangementsserien slettet"
 
 #: pretix/api/webhooks.py:334
 msgid ""
@@ -541,9 +522,8 @@ msgid "Shop taken live"
 msgstr "Butik gået i luften"
 
 #: pretix/api/webhooks.py:343
-#, fuzzy
 msgid "Shop taken offline"
-msgstr "Butik ikke i luften"
+msgstr "Shoppen er taget offline"
 
 #: pretix/api/webhooks.py:347
 msgid "Test-Mode of shop has been activated"
@@ -554,27 +534,22 @@ msgid "Test-Mode of shop has been deactivated"
 msgstr "Butikkens testtilstand er blevet deaktiveret"
 
 #: pretix/api/webhooks.py:355
-#, fuzzy
 msgid "Waiting list entry added"
-msgstr "Ventelisteplads"
+msgstr "Post tilføjet til venteliste"
 
 #: pretix/api/webhooks.py:359
-#, fuzzy
 msgid "Waiting list entry changed"
-msgstr "Ventelisteplads"
+msgstr "Post på ventelisten ændret"
 
 #: pretix/api/webhooks.py:363
-#, fuzzy
 msgid "Waiting list entry deleted"
-msgstr "Ventelisteplads"
+msgstr "Post på ventelisten slettet"
 
 #: pretix/api/webhooks.py:367
-#, fuzzy
 msgid "Waiting list entry received voucher"
-msgstr "Ventelistepladser"
+msgstr "Post på ventelisten har modtaget voucher"
 
 #: pretix/api/webhooks.py:371
-#, fuzzy
 msgid "Customer account created"
 msgstr "Kundekonto er blevet oprettet!"
 
@@ -583,9 +558,8 @@ msgid "Customer account changed"
 msgstr "Kundekonto er blevet ændret!"
 
 #: pretix/api/webhooks.py:379
-#, fuzzy
 msgid "Customer account anonymized"
-msgstr "Bestillingen er blevet tilbagebetalt."
+msgstr "Kondekonto anonymiseret"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:953
@@ -656,14 +630,13 @@ msgid "powered by {name} based on <a {a_attr}>pretix</a>"
 msgstr "drevet af {name} baseret på <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
-#, fuzzy, python-format
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "drevet af <a %(a_attr)s>pretix</a>"
+msgstr "Drevet af <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
 msgid "source code"
-msgstr "Voucherkode"
+msgstr "kildekode"
 
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
@@ -686,7 +659,7 @@ msgstr ""
 #: pretix/base/customersso/oidc.py:109
 #, fuzzy, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Din bestilling: {code}"
+msgstr "Du ønsker ikke: {code}"
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
@@ -733,9 +706,8 @@ msgid "Simple with logo"
 msgstr "Enkelt med logo"
 
 #: pretix/base/exporter.py:187 pretix/base/exporter.py:317
-#, fuzzy
 msgid "Export format"
-msgstr "Kort navn"
+msgstr "Eksportér format"
 
 #: pretix/base/exporter.py:189
 msgid "Excel (.xlsx)"
@@ -758,9 +730,8 @@ msgid "Combined Excel (.xlsx)"
 msgstr ""
 
 #: pretix/base/exporters/answers.py:54
-#, fuzzy
 msgid "Question answer file uploads"
-msgstr "Spørgsmål"
+msgstr "Uploads af fil med besvarede spørgsmål"
 
 #: pretix/base/exporters/answers.py:55 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:87
@@ -769,10 +740,9 @@ msgstr "Spørgsmål"
 #: pretix/base/exporters/orderlist.py:1238
 #: pretix/plugins/reports/exporters.py:478
 #: pretix/plugins/reports/exporters.py:651
-#, fuzzy
 msgctxt "export_category"
 msgid "Order data"
-msgstr "Bestillingsdato"
+msgstr "Bestillingsdata"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
@@ -841,15 +811,13 @@ msgstr "Alle datoer"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:604
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
-#, fuzzy
 msgid "Customer accounts"
-msgstr "Kundehandlinger"
+msgstr "Kondekonti"
 
 #: pretix/base/exporters/customers.py:51
-#, fuzzy
 msgctxt "export_category"
 msgid "Customer accounts"
-msgstr "Kundehandlinger"
+msgstr "Kundekonti"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
@@ -860,23 +828,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:54
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
-#, fuzzy
 msgid "Customer ID"
 msgstr "Kunde ID"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:32
-#, fuzzy
 msgid "SSO provider"
-msgstr "Betalingsudbyder"
+msgstr "SSO-udbyder"
 
 #: pretix/base/exporters/customers.py:66 pretix/base/models/customers.py:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:36
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:49
-#, fuzzy
 msgid "External identifier"
-msgstr "Internt id"
+msgstr "Internt ID"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:445
@@ -954,9 +919,8 @@ msgid "Account active"
 msgstr "Konto aktiv"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:100
-#, fuzzy
 msgid "Verified email address"
-msgstr "E-mailadresse"
+msgstr "Verificeret mailadresse"
 
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:68
@@ -1048,7 +1012,6 @@ msgid "No"
 msgstr "Nej"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
-#, fuzzy
 msgctxt "export_category"
 msgid "Invoices"
 msgstr "Fakturaer"
@@ -1060,9 +1023,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/exporters/dekodi.py:105
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr "{event}-{code}"
+msgstr "Arrangementsbillet {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:74
 #: pretix/base/exporters/orderlist.py:128
@@ -1074,12 +1037,10 @@ msgstr "{event}-{code}"
 #: pretix/plugins/reports/exporters.py:461
 #: pretix/plugins/reports/exporters.py:698
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
 msgid "Date range"
-msgstr "Dato og tidspunkt"
+msgstr "Datoområde"
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
-#, fuzzy
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
@@ -1088,12 +1049,10 @@ msgstr ""
 "fakturadatoen ikke altid er den samme som ordre- eller betalingsdato."
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
 msgid "Event data"
 msgstr "Arrangementsdato"
 
 #: pretix/base/exporters/events.py:48
-#, fuzzy
 msgctxt "export_category"
 msgid "Event data"
 msgstr "Arrangementsdato"
@@ -1224,7 +1183,6 @@ msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
 
 #: pretix/base/exporters/invoices.py:178
-#, fuzzy
 msgid "Invoice data"
 msgstr "Fakturadato"
 
@@ -1245,12 +1203,10 @@ msgid "Invoices"
 msgstr "Fakturaer"
 
 #: pretix/base/exporters/invoices.py:192
-#, fuzzy
 msgid "Invoice lines"
 msgstr "Fakturanumre"
 
 #: pretix/base/exporters/invoices.py:199 pretix/base/exporters/invoices.py:318
-#, fuzzy
 msgid "Invoice number"
 msgstr "Fakturanummer"
 
@@ -1308,9 +1264,8 @@ msgid "E-mail address"
 msgstr "E-mailadresse"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
-#, fuzzy
 msgid "Invoice type"
-msgstr "Fakturadesign"
+msgstr "Fakturatype"
 
 #: pretix/base/exporters/invoices.py:204 pretix/base/exporters/invoices.py:331
 msgid "Cancellation of"
@@ -1395,9 +1350,8 @@ msgid "Country"
 msgstr "Land"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
-#, fuzzy
 msgid "Tax ID"
-msgstr "CVR-nr.: %s"
+msgstr "CVR-nr."
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
@@ -1444,9 +1398,8 @@ msgid "Company"
 msgstr "Virksomhed"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
-#, fuzzy
 msgid "Street address"
-msgstr "Afsenderadresse"
+msgstr "Vejnavn / Nr."
 
 #: pretix/base/exporters/invoices.py:219 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/orderlist.py:269
@@ -1460,10 +1413,9 @@ msgstr "Afsenderadresse"
 #: pretix/plugins/reports/exporters.py:843
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:322
-#, fuzzy
 msgctxt "address"
 msgid "State"
-msgstr "Status"
+msgstr "Stat / region"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
 #: pretix/base/models/orders.py:3189 pretix/base/models/orders.py:3224
@@ -1483,28 +1435,24 @@ msgid "Reverse charge"
 msgstr ""
 
 #: pretix/base/exporters/invoices.py:224
-#, fuzzy
 msgid "Shown foreign currency"
-msgstr "Eventvaluta"
+msgstr "Vis udenlandsk valuta"
 
 #: pretix/base/exporters/invoices.py:225
-#, fuzzy
 msgid "Foreign currency rate"
-msgstr "Eventvaluta"
+msgstr "Vekselkurs for udenlandsk valuta"
 
 #: pretix/base/exporters/invoices.py:226
-#, fuzzy
 msgid "Total value (with taxes)"
-msgstr "Samlet værdi"
+msgstr "Samlet værdi (inkl. moms)"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Total value (without taxes)"
 msgstr ""
 
 #: pretix/base/exporters/invoices.py:228
-#, fuzzy
 msgid "Payment matching IDs"
-msgstr "Betalingsindstillinger"
+msgstr "IDs, der svarer til betalinger"
 
 #: pretix/base/exporters/invoices.py:229 pretix/base/exporters/invoices.py:349
 #: pretix/base/exporters/orderlist.py:289
@@ -1540,9 +1488,8 @@ msgid "Gross price"
 msgstr "Bruttopris"
 
 #: pretix/base/exporters/invoices.py:322
-#, fuzzy
 msgid "Net price"
-msgstr "Standardpris"
+msgstr "Nettopris"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:453
 #: pretix/base/exporters/orderlist.py:594
@@ -1564,29 +1511,25 @@ msgid "Tax rate"
 msgstr ""
 
 #: pretix/base/exporters/invoices.py:325
-#, fuzzy
 msgid "Tax name"
-msgstr "Navn"
+msgstr "Navn på moms"
 
 #: pretix/base/exporters/invoices.py:326
 msgid "Event start date"
 msgstr "Startdato"
 
 #: pretix/base/exporters/invoices.py:350 pretix/base/pdf.py:278
-#, fuzzy
 msgid "Event end date"
 msgstr "Sluttidspunkt"
 
 #: pretix/base/exporters/items.py:49
-#, fuzzy
 msgid "Product data"
-msgstr "Produktnavn"
+msgstr "Produktdata"
 
 #: pretix/base/exporters/items.py:50 pretix/base/exporters/orderlist.py:1125
-#, fuzzy
 msgctxt "export_category"
 msgid "Product data"
-msgstr "Produktnavn"
+msgstr "Produktdata"
 
 #: pretix/base/exporters/items.py:51
 msgid "Download a spreadsheet with details about all products and variations."
@@ -1594,15 +1537,13 @@ msgstr ""
 
 #: pretix/base/exporters/items.py:57 pretix/base/exporters/orderlist.py:588
 #: pretix/base/exporters/orderlist.py:887
-#, fuzzy
 msgid "Product ID"
-msgstr "Produkt"
+msgstr "Produkt ID"
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:590
 #: pretix/base/exporters/orderlist.py:889
-#, fuzzy
 msgid "Variation ID"
-msgstr "Variant"
+msgstr "Variant ID"
 
 #: pretix/base/exporters/items.py:59 pretix/base/models/items.py:116
 #: pretix/base/pdf.py:151
@@ -1615,9 +1556,8 @@ msgstr "Produktkategori"
 #: pretix/base/models/items.py:97 pretix/base/models/items.py:431
 #: pretix/base/models/tax.py:163 pretix/control/forms/organizer.py:217
 #: pretix/control/templates/pretixcontrol/items/discounts.html:57
-#, fuzzy
 msgid "Internal name"
-msgstr "Intern kommentar"
+msgstr "Internt navn"
 
 #: pretix/base/exporters/items.py:64 pretix/base/models/items.py:428
 msgid "Item name"
@@ -1671,14 +1611,12 @@ msgstr "Er en adgangsbillet"
 #: pretix/base/exporters/items.py:77
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
-#, fuzzy
 msgid "Personalized ticket"
-msgstr "Generer fakturaer"
+msgstr "Personaliseret billet"
 
 #: pretix/base/exporters/items.py:78 pretix/base/models/items.py:487
-#, fuzzy
 msgid "Generate tickets"
-msgstr "Generer fakturaer"
+msgstr "Generér fakturaer"
 
 #: pretix/base/exporters/items.py:79 pretix/base/exporters/orderlist.py:1132
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:367
@@ -1746,9 +1684,8 @@ msgid "Only sell this product as part of a bundle"
 msgstr ""
 
 #: pretix/base/exporters/items.py:86 pretix/base/models/items.py:578
-#, fuzzy
 msgid "Allow product to be canceled or changed"
-msgstr "Tillad annullering af produkt"
+msgstr "Tillad annullering eller ændring af produkt"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:584
 msgid "Minimum amount per order"
@@ -1768,15 +1705,13 @@ msgstr "Kræver særlig opmærksomhed"
 #: pretix/base/exporters/items.py:90 pretix/base/exporters/orderlist.py:283
 #: pretix/base/models/items.py:606 pretix/base/models/items.py:1189
 #: pretix/base/models/orders.py:287
-#, fuzzy
 msgid "Check-in text"
-msgstr "Tjek-ind-liste"
+msgstr "Tjek-ind-tekst"
 
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:611
 #: pretix/base/models/items.py:1109
-#, fuzzy
 msgid "Original price"
-msgstr "Oprindelig faktura"
+msgstr "Oprindelig pris"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:628
 msgid "This product is a gift card"
@@ -1795,9 +1730,8 @@ msgid "Hide without a valid membership"
 msgstr "Skjul uden gyldigt medlemskab"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:86
-#, fuzzy
 msgid "Order data"
-msgstr "Bestillingsdato"
+msgstr "Bestillingsdata"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
@@ -1845,18 +1779,16 @@ msgid "Order positions"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:102
-#, fuzzy
 msgid "Order fees"
-msgstr "Andre gebyrer"
+msgstr "Bestillingsgebyrer"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Only paid orders"
 msgstr "Kun betalte ordrer"
 
 #: pretix/base/exporters/orderlist.py:116
-#, fuzzy
 msgid "Include payment amounts"
-msgstr "Betalingsdato"
+msgstr "Inkludér betalingsbeløb"
 
 #: pretix/base/exporters/orderlist.py:122
 msgid "Show multiple choice answers grouped in one column"
@@ -1864,9 +1796,8 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:131
 #: pretix/plugins/reports/exporters.py:701
-#, fuzzy
 msgid "Only include orders created within this date range."
-msgstr "Den valgte gruppe kan ikke slettet."
+msgstr "Medtag kun bestillinger oprettet inden for dette dato-område."
 
 #: pretix/base/exporters/orderlist.py:135 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:234 pretix/plugins/badges/exporters.py:484
@@ -1988,12 +1919,10 @@ msgid "Order time"
 msgstr "Bestillingstidspunkt"
 
 #: pretix/base/exporters/orderlist.py:270
-#, fuzzy
 msgid "Custom address field"
-msgstr "E-mailadresse"
+msgstr "Tilpasset adresse-felt"
 
 #: pretix/base/exporters/orderlist.py:270
-#, fuzzy
 msgid "Date of last payment"
 msgstr "Seneste betalingsdato"
 
@@ -2050,16 +1979,14 @@ msgstr "Linjer"
 #: pretix/base/exporters/orderlist.py:287
 #: pretix/base/exporters/orderlist.py:656 pretix/base/models/orders.py:314
 #: pretix/control/forms/filter.py:564
-#, fuzzy
 msgid "E-mail address verified"
-msgstr "E-mailadresse"
+msgstr "E-Mail-adresse verificeret"
 
 #: pretix/base/exporters/orderlist.py:288
 #: pretix/base/exporters/orderlist.py:465
 #: pretix/base/exporters/orderlist.py:657
-#, fuzzy
 msgid "External customer ID"
-msgstr "Kundehandlinger"
+msgstr "Ekstern kunde-ID"
 
 #: pretix/base/exporters/orderlist.py:293
 #, python-brace-format
@@ -2068,9 +1995,8 @@ msgstr "Betalt med {method}"
 
 #: pretix/base/exporters/orderlist.py:448
 #: pretix/base/exporters/orderlist.py:891
-#, fuzzy
 msgid "Fee type"
-msgstr "Enhedstype"
+msgstr "Gebyrtype"
 
 #: pretix/base/exporters/orderlist.py:450
 #: pretix/base/exporters/orderlist.py:591
@@ -2102,9 +2028,8 @@ msgstr "Momsregel"
 #: pretix/base/exporters/orderlist.py:460
 #: pretix/base/exporters/orderlist.py:643
 #: pretix/base/exporters/orderlist.py:647 pretix/base/pdf.py:330
-#, fuzzy
 msgid "Invoice address name"
-msgstr "Faktureringsadresse: navn"
+msgstr "Navn på faktura-adresse"
 
 #: pretix/base/exporters/orderlist.py:480
 #: pretix/base/exporters/orderlist.py:681 pretix/base/models/orders.py:203
@@ -2114,9 +2039,8 @@ msgstr "annulleret"
 #: pretix/base/exporters/orderlist.py:575
 #: pretix/base/exporters/orderlist.py:884
 #: pretix/plugins/checkinlists/exporters.py:750
-#, fuzzy
 msgid "Position ID"
-msgstr "Linje"
+msgstr "Post-ID"
 
 #: pretix/base/exporters/orderlist.py:584
 #: pretix/base/exporters/orderlist.py:1136
@@ -2222,40 +2146,34 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:611 pretix/control/forms/filter.py:675
 #: pretix/control/templates/pretixcontrol/order/change.html:262
-#, fuzzy
 msgid "Ticket secret"
-msgstr "Billetter"
+msgstr "Billethemmelighed"
 
 #: pretix/base/exporters/orderlist.py:612 pretix/base/modelimport_orders.py:569
 #: pretix/base/modelimport_vouchers.py:272
 #: pretix/plugins/checkinlists/exporters.py:519
-#, fuzzy
 msgid "Seat ID"
-msgstr "Klient-id"
+msgstr "Plads-ID"
 
 #: pretix/base/exporters/orderlist.py:613
 #: pretix/plugins/checkinlists/exporters.py:520
-#, fuzzy
 msgid "Seat name"
-msgstr "Navn"
+msgstr "Pladsnavn"
 
 #: pretix/base/exporters/orderlist.py:614
 #: pretix/plugins/checkinlists/exporters.py:521
-#, fuzzy
 msgid "Seat zone"
-msgstr "Navn"
+msgstr "Plads-zone"
 
 #: pretix/base/exporters/orderlist.py:615
 #: pretix/plugins/checkinlists/exporters.py:522
-#, fuzzy
 msgid "Seat row"
-msgstr "Klient-id"
+msgstr "Plads-række"
 
 #: pretix/base/exporters/orderlist.py:616
 #: pretix/plugins/checkinlists/exporters.py:523
-#, fuzzy
 msgid "Seat number"
-msgstr "Navn"
+msgstr "Plads-nr."
 
 #: pretix/base/exporters/orderlist.py:617
 #: pretix/control/templates/pretixcontrol/order/change.html:212
@@ -2273,9 +2191,8 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:697
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:131
-#, fuzzy
 msgid "Valid from"
-msgstr "Gyldig"
+msgstr "Gyldig fra"
 
 #: pretix/base/exporters/orderlist.py:619 pretix/base/modelimport_orders.py:507
 #: pretix/base/modelimport_vouchers.py:111 pretix/base/models/orders.py:2466
@@ -2294,30 +2211,25 @@ msgid "Order comment"
 msgstr "Ordrekommentar"
 
 #: pretix/base/exporters/orderlist.py:649 pretix/base/pdf.py:340
-#, fuzzy
 msgid "Invoice address street"
-msgstr "Faktureringsadresse: navn"
+msgstr "Fakturaadresse (vejnavn og nr.)"
 
 #: pretix/base/exporters/orderlist.py:649 pretix/base/pdf.py:345
-#, fuzzy
 msgid "Invoice address ZIP code"
-msgstr "Faktureringsadresse: navn"
+msgstr "Faktureringsadresse (postnr.)"
 
 #: pretix/base/exporters/orderlist.py:649 pretix/base/pdf.py:350
-#, fuzzy
 msgid "Invoice address city"
-msgstr "Faktureringsadresse: virksomhed"
+msgstr "Faktureringsadresse (by)"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:360
-#, fuzzy
 msgid "Invoice address country"
-msgstr "Faktureringsadresse: virksomhed"
+msgstr "Faktureringsadresse (land)"
 
 #: pretix/base/exporters/orderlist.py:651
-#, fuzzy
 msgctxt "address"
 msgid "Invoice address state"
-msgstr "Faktureringsadresse: navn"
+msgstr "Faktureringsadresse (stat/region)"
 
 #: pretix/base/exporters/orderlist.py:658 pretix/control/navigation.py:303
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:6
@@ -2330,9 +2242,8 @@ msgid "Check-in lists"
 msgstr "Tjek-ind-lister"
 
 #: pretix/base/exporters/orderlist.py:819
-#, fuzzy
 msgid "Order transaction data"
-msgstr "Opret dato"
+msgstr "Overførselsdata for bestillingen"
 
 #: pretix/base/exporters/orderlist.py:821
 msgid ""
@@ -2342,9 +2253,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:837
-#, fuzzy
 msgid "Only include transactions created within this date range."
-msgstr "Den valgte gruppe kan ikke slettet."
+msgstr "Medtag kun overførsler inden for dette dato-område."
 
 #: pretix/base/exporters/orderlist.py:872 pretix/base/models/event.py:651
 #: pretix/base/models/items.py:416 pretix/base/models/items.py:1971
@@ -2376,53 +2286,44 @@ msgid "Currency"
 msgstr "Valuta"
 
 #: pretix/base/exporters/orderlist.py:880
-#, fuzzy
 msgid "Transaction date"
-msgstr "Opret dato"
+msgstr "Overførselsdato"
 
 #: pretix/base/exporters/orderlist.py:881
-#, fuzzy
 msgid "Transaction time"
-msgstr "Opret dato"
+msgstr "Overførselstidspunkt"
 
 #: pretix/base/exporters/orderlist.py:882
-#, fuzzy
 msgid "Old data"
-msgstr "Bestillingsdato"
+msgstr "Gamle data"
 
 #: pretix/base/exporters/orderlist.py:885 pretix/base/models/items.py:1494
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
-#, fuzzy
 msgid "Quantity"
-msgstr "Tilgængeligt antal"
+msgstr "Antal"
 
 #: pretix/base/exporters/orderlist.py:892
-#, fuzzy
 msgid "Internal fee type"
-msgstr "Intern reference"
+msgstr "Intern gebyrtype"
 
 #: pretix/base/exporters/orderlist.py:894
-#, fuzzy
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Dato"
+msgstr "Dato-ID"
 
 #: pretix/base/exporters/orderlist.py:899
-#, fuzzy
 msgid "Tax rule ID"
-msgstr "Momsregel"
+msgstr "ID på momsregel"
 
 #: pretix/base/exporters/orderlist.py:902
 #: pretix/plugins/reports/accountingreport.py:319
-#, fuzzy
 msgid "Gross total"
-msgstr "I alt"
+msgstr "I alt (eksl. moms)"
 
 #: pretix/base/exporters/orderlist.py:903
 #: pretix/plugins/reports/accountingreport.py:318
-#, fuzzy
 msgid "Tax total"
-msgstr "Total"
+msgstr "Moms i alt"
 
 #: pretix/base/exporters/orderlist.py:913
 msgid ""
@@ -2435,38 +2336,38 @@ msgid "Converted from legacy version"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:998
-#, fuzzy
 msgid "Payments and refunds"
-msgstr "Bestillingsliste (CSV)"
+msgstr "Betalinger og tilbagebetalinger"
 
 #: pretix/base/exporters/orderlist.py:1000
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Download et regneark med alle betalinger og tilbagebetalinger fra hver "
+"bestilling."
 
 #: pretix/base/exporters/orderlist.py:1009
-#, fuzzy
 msgid "Date range (payment date)"
-msgstr "Udvid betalingsfrist"
+msgstr "Dato-område (betalingsdato)"
 
 #: pretix/base/exporters/orderlist.py:1012
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Vær opmærksom på, at denne indstilling vil udelukke samtlige ikke-bekræftede "
+"betalinger og uafsluttede tilbagebetalinger."
 
 #: pretix/base/exporters/orderlist.py:1016
 msgid "Date range (start of transaction)"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1022
-#, fuzzy
 msgid "Payment states"
-msgstr "Betalingsdato"
+msgstr "Status på betalinger"
 
 #: pretix/base/exporters/orderlist.py:1030
-#, fuzzy
 msgid "Refund states"
-msgstr "Tjek-ind-status"
+msgstr "Status på tilbagebetalinger"
 
 #: pretix/base/exporters/orderlist.py:1073
 #: pretix/base/exporters/orderlist.py:1214
@@ -2535,15 +2436,13 @@ msgid "Payment method"
 msgstr "Betalingsmetode"
 
 #: pretix/base/exporters/orderlist.py:1074
-#, fuzzy
 msgid "Matching ID"
-msgstr "Betalingsindstillinger"
+msgstr "Matching ID"
 
 #: pretix/base/exporters/orderlist.py:1074
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
-#, fuzzy
 msgid "Payment details"
-msgstr "Betalingsindstillinger"
+msgstr "Betalingsinformationer"
 
 #: pretix/base/exporters/orderlist.py:1124
 msgid "Quota availabilities"
@@ -2598,13 +2497,11 @@ msgid "Infinite"
 msgstr "Ubegrænset"
 
 #: pretix/base/exporters/orderlist.py:1178
-#, fuzzy
 msgid "Gift card transactions"
-msgstr "Indløsninger"
+msgstr "Gavekortoverførsler"
 
 #: pretix/base/exporters/orderlist.py:1180
 #: pretix/base/exporters/orderlist.py:1285
-#, fuzzy
 msgctxt "export_category"
 msgid "Gift cards"
 msgstr "Gavekort"
@@ -2622,9 +2519,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:28
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:156
-#, fuzzy
 msgid "Gift card code"
-msgstr "Gavekort"
+msgstr "Gavekort-kode"
 
 #: pretix/base/exporters/orderlist.py:1210
 #: pretix/base/exporters/orderlist.py:1299
@@ -2679,26 +2575,25 @@ msgid "TEST MODE"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1237
-#, fuzzy
 msgid "Gift card redemptions"
-msgstr "Indløsninger"
+msgstr "Gavekort-tilbagekøb"
 
 #: pretix/base/exporters/orderlist.py:1239
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Download et regneark med alle betalinger og tilbagebetalinger, som "
+"indeholder gavekort."
 
 #: pretix/base/exporters/orderlist.py:1256
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:16
-#, fuzzy
 msgid "Issuer"
-msgstr "Voucherdetaljer"
+msgstr "Udsteder"
 
 #: pretix/base/exporters/orderlist.py:1283 pretix/control/navigation.py:536
 #: pretix/control/navigation.py:554
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
 #: pretix/plugins/reports/accountingreport.py:898
-#, fuzzy
 msgid "Gift cards"
 msgstr "Gavekort"
 
@@ -2707,9 +2602,8 @@ msgid "Download a spreadsheet of all gift cards including their current value."
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1293
-#, fuzzy
 msgid "Show value at"
-msgstr "Vis varianter"
+msgstr "Vis værdi på"
 
 #: pretix/base/exporters/orderlist.py:1296
 msgid "Defaults to the time of report."
@@ -2740,9 +2634,8 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1312 pretix/control/forms/filter.py:1350
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
-#, fuzzy
 msgid "Empty"
-msgstr "Tøm kurv"
+msgstr "Tom"
 
 #: pretix/base/exporters/orderlist.py:1313 pretix/control/forms/filter.py:1351
 msgid "Valid and with value"
@@ -2783,24 +2676,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:392
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:68
-#, fuzzy
 msgid "Current value"
-msgstr "Aktuelle problemer"
+msgstr "Aktuel værdi"
 
 #: pretix/base/exporters/orderlist.py:1359
-#, fuzzy
 msgid "Created in order"
-msgstr "Gratis bestilling"
+msgstr "Oprettet i bestilling"
 
 #: pretix/base/exporters/orderlist.py:1360
-#, fuzzy
 msgid "Last invoice number of order"
-msgstr "Faktureringsnummerpræfiks"
+msgstr "Sidste fakturanummer i bestilling"
 
 #: pretix/base/exporters/orderlist.py:1361
-#, fuzzy
 msgid "Last invoice date of order"
-msgstr "Kun betalte bestillinger"
+msgstr "Sidste fakturadato i bestilling"
 
 #: pretix/base/exporters/reusablemedia.py:34 pretix/control/navigation.py:614
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:204
@@ -2812,10 +2701,9 @@ msgid "Reusable media"
 msgstr ""
 
 #: pretix/base/exporters/reusablemedia.py:35
-#, fuzzy
 msgctxt "export_category"
 msgid "Reusable media"
-msgstr "Deaktiveret"
+msgstr "Medier til genbrug"
 
 #: pretix/base/exporters/reusablemedia.py:36
 msgid ""
@@ -2823,16 +2711,14 @@ msgid ""
 msgstr ""
 
 #: pretix/base/exporters/reusablemedia.py:46 pretix/base/models/media.py:67
-#, fuzzy
 msgctxt "reusable_medium"
 msgid "Media type"
-msgstr "Enhedstype"
+msgstr "Mediatype"
 
 #: pretix/base/exporters/reusablemedia.py:47 pretix/base/models/media.py:73
-#, fuzzy
 msgctxt "reusable_medium"
 msgid "Identifier"
-msgstr "Internt id"
+msgstr "ID"
 
 #: pretix/base/exporters/reusablemedia.py:49 pretix/base/models/media.py:81
 #: pretix/base/models/orders.py:263 pretix/base/models/orders.py:3009
@@ -2844,22 +2730,18 @@ msgstr "Udløbsdato"
 #: pretix/base/exporters/reusablemedia.py:50 pretix/base/models/media.py:90
 #: pretix/control/templates/pretixcontrol/order/index.html:215
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:136
-#, fuzzy
 msgid "Customer account"
 msgstr "Kundekonto"
 
 #: pretix/base/exporters/reusablemedia.py:51 pretix/base/models/media.py:97
-#, fuzzy
 msgid "Linked ticket"
-msgstr "Information"
+msgstr "Forbundet billet"
 
 #: pretix/base/exporters/reusablemedia.py:52 pretix/base/models/media.py:104
-#, fuzzy
 msgid "Linked gift card"
-msgstr "Kreditkort"
+msgstr "Forbundet gavekort"
 
 #: pretix/base/exporters/waitinglist.py:42
-#, fuzzy
 msgctxt "export_category"
 msgid "Waiting list"
 msgstr "Venteliste"
@@ -2875,9 +2757,8 @@ msgstr "Alle"
 
 #: pretix/base/exporters/waitinglist.py:54
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:94
-#, fuzzy
 msgid "Waiting for a voucher"
-msgstr "Send en rabatkode"
+msgstr "Venter på en voucher"
 
 #: pretix/base/exporters/waitinglist.py:59
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:96
@@ -2888,16 +2769,14 @@ msgstr "Rabatkode tildelt"
 
 #: pretix/base/exporters/waitinglist.py:64
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:99
-#, fuzzy
 msgid "Waiting for redemption"
-msgstr "Beskrivelse"
+msgstr "Venter på indløsning"
 
 #: pretix/base/exporters/waitinglist.py:72
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:212
 #: pretix/control/views/waitinglist.py:322
-#, fuzzy
 msgid "Voucher redeemed"
-msgstr "Voucherkode"
+msgstr "Voucher indløst"
 
 #: pretix/base/exporters/waitinglist.py:80
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:105
@@ -2915,7 +2794,6 @@ msgstr "Produktnavn"
 #: pretix/base/exporters/waitinglist.py:115
 #: pretix/base/modelimport_orders.py:95 pretix/base/modelimport_vouchers.py:60
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
-#, fuzzy
 msgctxt "subevents"
 msgid "Date"
 msgstr "Dato"
@@ -2991,20 +2869,17 @@ msgid "Repeat password"
 msgstr "Gentag adgangskode"
 
 #: pretix/base/forms/questions.py:212
-#, fuzzy
 msgid "Please do not use special characters in names."
-msgstr "Indtast venligst dit navn."
+msgstr "Brug venligst ikke  specialtegn i navne."
 
 #: pretix/base/forms/questions.py:271
-#, fuzzy
 msgid "Please enter a shorter name."
-msgstr "Indtast venligst dit navn."
+msgstr "Indtast venligst et kortere navn."
 
 #: pretix/base/forms/questions.py:291
-#, fuzzy
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Intern reference"
+msgstr "Internationalt postnummer"
 
 #: pretix/base/forms/questions.py:315
 msgctxt "phonenumber"
@@ -3044,10 +2919,9 @@ msgid "Street and Number"
 msgstr "Gadenavn og nummer"
 
 #: pretix/base/forms/questions.py:717 pretix/base/forms/questions.py:1059
-#, fuzzy
 msgctxt "address"
 msgid "Select state"
-msgstr "Forsalg ikke startet"
+msgstr "Vælg delstat / region"
 
 #: pretix/base/forms/questions.py:1046
 msgid ""
@@ -3066,14 +2940,12 @@ msgid ""
 msgstr ""
 
 #: pretix/base/forms/questions.py:1144
-#, fuzzy
 msgid "You need to provide a company name."
-msgstr "Du skal oplyse enten et firmanavn eller dit eget navn."
+msgstr "Du skal oplyse et firmanavn."
 
 #: pretix/base/forms/questions.py:1146
-#, fuzzy
 msgid "You need to provide your name."
-msgstr "Du skal oplyse enten et firmanavn eller dit eget navn."
+msgstr "Du skal oplyse dit navn."
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
@@ -3139,9 +3011,8 @@ msgid "Smartphone with the Authenticator application"
 msgstr "Smartphone med Authenticator-app'en"
 
 #: pretix/base/forms/user.py:178
-#, fuzzy
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "U2F-kompatibel hardware-token (fx Yubikey)"
+msgstr "WebAuthn-kompatibel hardware-token (fx. Yubikey)"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -3152,20 +3023,19 @@ msgid ""
 msgstr ""
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:761
-#, fuzzy, python-format
-#| msgid "Invalid placeholder(s): %(value)s"
+#, python-format
 msgid "Invalid placeholder: {%(value)s}"
 msgstr "Ugyldig(e) pladsholder(e): %(value)s"
 
 #: pretix/base/forms/widgets.py:67
-#, fuzzy, python-format
+#, python-format
 msgid "Sample: %s"
-msgstr "Eksempelvirksomhed"
+msgstr "Eksempel: %s"
 
 #: pretix/base/forms/widgets.py:70
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Tilgængelige pladsholdere: {event}, {url}"
+msgstr "Tilgængelige pladsholdere: {list}"
 
 #: pretix/base/forms/widgets.py:213 pretix/base/models/items.py:1595
 #: pretix/base/reldate.py:201 pretix/plugins/checkinlists/exporters.py:746
@@ -3175,9 +3045,8 @@ msgid "Time"
 msgstr "Tid"
 
 #: pretix/base/forms/widgets.py:233 pretix/base/forms/widgets.py:238
-#, fuzzy
 msgid "Business or institutional customer"
-msgstr "Virksomhedskunde"
+msgstr "Virksomheds- eller institutionel kunde"
 
 #: pretix/base/forms/widgets.py:237
 msgid "Individual customer"
@@ -3261,16 +3130,15 @@ msgid "Invoice {num}"
 msgstr "Faktura {num}"
 
 #: pretix/base/invoice.py:560
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "Din reference: {reference}"
+msgstr "Kundereference: {reference}"
 
 #: pretix/base/invoice.py:568
-#, fuzzy
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Kundehandlinger"
+msgstr "Kundens CVR-nr."
 
 #: pretix/base/invoice.py:575
 msgctxt "invoice"
@@ -3278,7 +3146,6 @@ msgid "Beneficiary"
 msgstr ""
 
 #: pretix/base/invoice.py:596
-#, fuzzy
 msgctxt "invoice"
 msgid "Tax Invoice"
 msgstr "Faktura"
@@ -3332,10 +3199,10 @@ msgid "Single price: {net_price} net / {gross_price} gross"
 msgstr ""
 
 #: pretix/base/invoice.py:659
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Oprindelig faktura"
+msgstr "Enkeltpris: {price}"
 
 #: pretix/base/invoice.py:677 pretix/base/invoice.py:683
 msgctxt "invoice"
@@ -3343,28 +3210,24 @@ msgid "Invoice total"
 msgstr "Fakturatotal"
 
 #: pretix/base/invoice.py:693
-#, fuzzy
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Ugyldige betalinger"
+msgstr "Modtagede betalinger"
 
 #: pretix/base/invoice.py:698
-#, fuzzy
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr "Ugyldige betalinger"
+msgstr "Udestående betalinger"
 
 #: pretix/base/invoice.py:715
-#, fuzzy
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Kreditkort"
+msgstr "Betalt med gavekort"
 
 #: pretix/base/invoice.py:720
-#, fuzzy
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr "Betalingsdato"
+msgstr "Resterende antal"
 
 #: pretix/base/invoice.py:769
 msgctxt "invoice"
@@ -3387,44 +3250,43 @@ msgid "Included taxes"
 msgstr ""
 
 #: pretix/base/invoice.py:829
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"Ved brug af konverteringsraten 1:{rate} publiseret af Den Europæiske "
-"Centralbank {date}, svarer dette til:"
+"Ved brug af vekselkursen 1:{rate} offentliggjort af {authority} den  {date}, "
+"svarer dette til:"
 
 #: pretix/base/invoice.py:844
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"Ved brug af konverteringsraten 1:{rate} publiseret af Den Europæiske "
-"Centralbank {date}, svarer fakturatotalen til {total}."
+"Ved brug af vekselkursen 1:{rate} offentliggjort af {authority} den {date}, "
+"svarer fakturaens samlede beløb til {total}."
 
 #: pretix/base/invoice.py:858
 msgid "Default invoice renderer (European-style letter)"
 msgstr ""
 
 #: pretix/base/invoice.py:947
-#, fuzzy
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr "Vælg venligst en kvote."
+msgstr "(Citér venligst altid.)"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
 msgstr ""
 
 #: pretix/base/invoice.py:1013
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "Arrangementsdatoer"
+msgstr "Arrangementsdato: {date_range}"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
@@ -3466,16 +3328,14 @@ msgid "You entered an invalid number."
 msgstr ""
 
 #: pretix/base/modelimport.py:270 pretix/base/modelimport.py:282
-#, fuzzy
 msgctxt "subevent"
 msgid "No matching date was found."
-msgstr "Ingen passende svar fundet."
+msgstr "Der blev ikke fundet en passende dato."
 
 #: pretix/base/modelimport.py:272 pretix/base/modelimport.py:284
-#, fuzzy
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr "Ingen passende svar fundet."
+msgstr "Der blev fundet flere passende datoer."
 
 #: pretix/base/modelimport_orders.py:85
 msgid "Enter a valid phone number."
@@ -4871,12 +4731,18 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
+"Hvis du aktiverer dette flueben, vil tjek-ind-app'en vise en tydelig "
+"advarsel, at billetter fra denne bestilling kræver særlig opmærksomhed. Der "
+"vil ikke blive vist flere informationer eller en tilpasset besked. Du bliver "
+"altså nødt til at briefe dine tjek-ind-medarbejdere, hvordan de skal "
+"håndterer disse billetter."
 
 #: pretix/base/models/items.py:608 pretix/base/models/items.py:1191
 msgid ""
 "This text will be shown by the check-in app if a ticket of this type is "
 "scanned."
 msgstr ""
+"Denne tekst vises i tjek-ind-app'en, når en billet af denne slags scannes."
 
 #: pretix/base/models/items.py:614 pretix/base/models/items.py:1112
 msgid ""
@@ -5688,13 +5554,12 @@ msgstr ""
 "betalingsindtillingerne er overskredet."
 
 #: pretix/base/models/orders.py:1006
-#, fuzzy
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
 "Betalingen kan ikke godkendes eftersom bestillingen er udløbet og du har "
-"lavet betalingsindstillinger som ikke tillader for sene betalinger."
+"lavet betalingsindstillinger, som ikke tillader for sene betalinger."
 
 #: pretix/base/models/orders.py:1008
 #, fuzzy
@@ -7438,6 +7303,8 @@ msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
 msgstr ""
+"Alle betalinger for dette arrangement skal være bekræftet allerede. Så der "
+"kan ikke oprettes nye bestillinger."
 
 #: pretix/base/services/cart.py:148
 #, fuzzy
@@ -8977,8 +8844,12 @@ msgid ""
 "recommend 14 days. If you only use real-time payment methods, we recommend "
 "still setting two or three days to allow people to retry failed payments."
 msgstr ""
-"Antal dage efter bestilling som en kunde har til at betale for sin "
-"bestilling."
+"Antal dage efter bestillingen, som brugeren har til at betale, inden "
+"bestillingen slettes. Hvis du bruger langsomme betalingsmetoder som f.eks. "
+"bankoverførsel, anbefaler vi en betalingsfrist på 14 dage. Hvis du kun "
+"bruger real-time-betalingsmetoder, anbefaler vi stadig, at du sætter værdien "
+"til to eller tre dage, for at give kunder mulighed for at prøve igen, hvis "
+"en betaling skulle fejle."
 
 #: pretix/base/settings.py:879
 msgid "Only end payment terms on weekdays"
@@ -8991,6 +8862,10 @@ msgid ""
 "some countries by civil law. This will not effect the last date of payments "
 "configured below."
 msgstr ""
+"Hvis denne indstilling er aktiveret og betalingsfristen af en hvilken som "
+"helst bestilling slutter på en lørdag eller søndag, så vil den blive flyttet "
+"til næste mandag. Dette er et krav i lovgivningen i mange lande. Dette har "
+"ingen indflydelse på den sidste betalingsdato, som kan tilpasses forneden."
 
 #: pretix/base/settings.py:896
 #, fuzzy
@@ -11661,237 +11536,212 @@ msgstr "Hent billet"
 #: pretix/base/timeframes.py:49
 msgctxt "reporting_timeframe"
 msgid "Today"
-msgstr ""
+msgstr "I dag"
 
 #: pretix/base/timeframes.py:53 pretix/base/timeframes.py:62
 #: pretix/base/timeframes.py:71 pretix/base/timeframes.py:80
 #: pretix/base/timeframes.py:89 pretix/base/timeframes.py:98
 #: pretix/base/timeframes.py:107
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "by day"
-msgstr "Bestillinger pr. dag"
+msgstr "pr. dag"
 
 #: pretix/base/timeframes.py:58
 msgctxt "reporting_timeframe"
 msgid "Yesterday"
-msgstr ""
+msgstr "I går"
 
 #: pretix/base/timeframes.py:67
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Last 7 days"
-msgstr "Seneste dato"
+msgstr "Seneste 7 dage"
 
 #: pretix/base/timeframes.py:76
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Last 14 days"
-msgstr "Seneste dato"
+msgstr "Seneste 14 dage"
 
 #: pretix/base/timeframes.py:85
 msgctxt "reporting_timeframe"
 msgid "Tomorrow"
-msgstr ""
+msgstr "I morgen"
 
 #: pretix/base/timeframes.py:94
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Next 7 days"
-msgstr "Antal dage"
+msgstr "Næste 7 dage"
 
 #: pretix/base/timeframes.py:103
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Next 14 days"
-msgstr "Antal dage"
+msgstr "Næste 14 dage"
 
 #: pretix/base/timeframes.py:112
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current week"
-msgstr "Aktuelle problemer"
+msgstr "Indeværende uge"
 
 #: pretix/base/timeframes.py:116 pretix/base/timeframes.py:125
 #: pretix/base/timeframes.py:134 pretix/base/timeframes.py:143
 msgctxt "reporting_timeframe"
 msgid "by week"
-msgstr ""
+msgstr "pr. uge"
 
 #: pretix/base/timeframes.py:121
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current week to date"
-msgstr "Opret dato"
+msgstr "Indeværende uge til dato"
 
 #: pretix/base/timeframes.py:130
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Previous week"
-msgstr "Gennemse"
+msgstr "Sidste uge"
 
 #: pretix/base/timeframes.py:139
 msgctxt "reporting_timeframe"
 msgid "Next week"
-msgstr ""
+msgstr "Næste uge"
 
 #: pretix/base/timeframes.py:148
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current month"
-msgstr "Nuværende:"
+msgstr "Indeværende måned"
 
 #: pretix/base/timeframes.py:152 pretix/base/timeframes.py:161
 #: pretix/base/timeframes.py:170 pretix/base/timeframes.py:179
 msgctxt "reporting_timeframe"
 msgid "by month"
-msgstr ""
+msgstr "pr. måned"
 
 #: pretix/base/timeframes.py:157
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current month to date"
-msgstr "Oprettelsesdato"
+msgstr "Indeværende måned til dato"
 
 #: pretix/base/timeframes.py:166
 msgctxt "reporting_timeframe"
 msgid "Previous month"
-msgstr ""
+msgstr "Sidste måned"
 
 #: pretix/base/timeframes.py:175
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Next month"
-msgstr "Tekstindhold"
+msgstr "Næste måned"
 
 #: pretix/base/timeframes.py:184
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current quarter"
-msgstr "Aktuelle problemer"
+msgstr "Indeværende kvartal"
 
 #: pretix/base/timeframes.py:188 pretix/base/timeframes.py:197
 #: pretix/base/timeframes.py:206 pretix/base/timeframes.py:217
 msgctxt "reporting_timeframe"
 msgid "by quarter"
-msgstr ""
+msgstr "pr. kvartal"
 
 #: pretix/base/timeframes.py:193
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current quarter to date"
-msgstr "Aktuelle brugers kurve"
+msgstr "Indeværende kvartal til dato"
 
 #: pretix/base/timeframes.py:202
 msgctxt "reporting_timeframe"
 msgid "Previous quarter"
-msgstr ""
+msgstr "Sidste kvartal"
 
 #: pretix/base/timeframes.py:211
 msgctxt "reporting_timeframe"
 msgid "Next quarter"
-msgstr ""
+msgstr "Næste kvartal"
 
 #: pretix/base/timeframes.py:222
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current year"
-msgstr "Aktuelle problemer"
+msgstr "Indeværende år"
 
 #: pretix/base/timeframes.py:226 pretix/base/timeframes.py:235
 #: pretix/base/timeframes.py:244 pretix/base/timeframes.py:253
 msgctxt "reporting_timeframe"
 msgid "by year"
-msgstr ""
+msgstr "pr. år"
 
 #: pretix/base/timeframes.py:231
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current year to date"
-msgstr "Pt. ikke tilgængelig"
+msgstr "Indeværende år til dato"
 
 #: pretix/base/timeframes.py:240
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Previous year"
-msgstr "Forhåndsvis e-mail"
+msgstr "Sidste år"
 
 #: pretix/base/timeframes.py:249
 msgctxt "reporting_timeframe"
 msgid "Next year"
-msgstr ""
+msgstr "Næste år"
 
 #: pretix/base/timeframes.py:258
 msgctxt "reporting_timeframe"
 msgid "All future (excluding today)"
-msgstr ""
+msgstr "Alle i fremtiden (undtaget i dag)"
 
 #: pretix/base/timeframes.py:262 pretix/base/timeframes.py:271
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Other"
 msgstr "Andet"
 
 #: pretix/base/timeframes.py:267
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "All past (including today)"
-msgstr "Alle produkter (inkl. nyligt oprettede)"
+msgstr "Alle i fortiden (inkl. i dag)"
 
 #: pretix/base/timeframes.py:284
-#, fuzzy
 msgctxt "timeframe"
 msgid "Start"
 msgstr "Starttidspunkt"
 
 #: pretix/base/timeframes.py:285
-#, fuzzy
 msgctxt "timeframe"
 msgid "End"
-msgstr "Aktiveret"
+msgstr "Sluttidspunkt"
 
 #: pretix/base/timeframes.py:318
-#, fuzzy
 msgid "The end date must be after the start date."
 msgstr "Arrangementets sluttidspunkt skal være efter starttidspunktet."
 
 #: pretix/base/timeframes.py:324
-#, fuzzy
 msgid "Custom timeframe"
-msgstr "Kundehandlinger"
+msgstr "Tilpasset tidsrum"
 
 #: pretix/base/timeframes.py:326
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "All time"
-msgstr "Alle"
+msgstr "Samtlige tidsrum"
 
 #: pretix/base/timeline.py:60
 msgctxt "timeline"
 msgid "Your event starts"
-msgstr "Arrangements starttidspunkt"
+msgstr "Dit arrangement starter"
 
 #: pretix/base/timeline.py:68
-#, fuzzy
 msgctxt "timeline"
 msgid "Your event ends"
-msgstr "Arrangements sluttidspunkt"
+msgstr "Dit arrangement slutter"
 
 #: pretix/base/timeline.py:76
 msgctxt "timeline"
 msgid "Admissions for your event start"
-msgstr ""
+msgstr "Adgang til starten på dit arrangement"
 
 #: pretix/base/timeline.py:84
-#, fuzzy
 msgctxt "timeline"
 msgid "Start of ticket sales"
-msgstr "Start af forsalg"
+msgstr "Start af billetsalg"
 
 #: pretix/base/timeline.py:95
 msgctxt "timeline"
 msgid "End of ticket sales"
-msgstr "Slut af forsalg"
+msgstr "Slut af billetsalg"
 
 #: pretix/base/timeline.py:96
 msgctxt "timeline"
@@ -14766,9 +14616,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/logdisplay.py:332
-#, fuzzy
 msgid "This object has been created by cloning."
-msgstr "Produktet er blevet oprettet."
+msgstr "Dette objekt er blevet oprettet ved kloning"
 
 #: pretix/control/logdisplay.py:333
 #, fuzzy
@@ -20688,9 +20537,8 @@ msgstr "Afventende i alt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:747
 #: pretix/control/templates/pretixcontrol/search/payments.html:88
-#, fuzzy
 msgid "Confirmation date"
-msgstr "Bekræftelsestekst"
+msgstr "Bekræftelsesdato"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:760
 #: pretix/control/templates/pretixcontrol/search/payments.html:125
@@ -20717,9 +20565,8 @@ msgid "Confirm as paid"
 msgstr "Marker som betalt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:821
-#, fuzzy
 msgid "Create a refund"
-msgstr "Opret dato"
+msgstr "Opret en tilbagebetaling"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:842
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:60
@@ -21614,6 +21461,12 @@ msgid ""
 "be removed in the future. Use the \"Accounting report\" in the export "
 "section instead."
 msgstr ""
+"Filtrering af denne rapport efter dato anbefales ikke, da resultatet vil "
+"føre til misvisende information, da denne rapport kun viser den aktuelle "
+"status af en hver bestilling. Den viser ikke nogen ændringer, som er blevet "
+"foretaget på en given bestilling. Dette datofilter kan givetvis blive "
+"fjernet i fremtiden. Brug \"Bogholder-rapport\"-funktionen i eksport-"
+"sektionen i stedet for."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:66
 msgctxt "subevent"
@@ -24871,9 +24724,8 @@ msgid "Exit scans"
 msgstr "Først scannet: %(date)s"
 
 #: pretix/control/views/item.py:968
-#, fuzzy
 msgid "Vouchers and waiting list reservations"
-msgstr "På venteliste siden"
+msgstr "Gavekort og reserveringer på ventelisten"
 
 #: pretix/control/views/item.py:983
 #, fuzzy
@@ -24881,14 +24733,12 @@ msgid "Available quota"
 msgstr "Tilgængelig indtil"
 
 #: pretix/control/views/item.py:989
-#, fuzzy
 msgid "Waiting list (pending)"
-msgstr "Ventelistepladser"
+msgstr "På venteliste"
 
 #: pretix/control/views/item.py:996
-#, fuzzy
 msgid "Currently for sale"
-msgstr "Pt. ikke tilgængelig"
+msgstr "Lige nu til salg"
 
 #: pretix/control/views/item.py:1050 pretix/control/views/item.py:1096
 #: pretix/control/views/item.py:1150
@@ -29039,7 +28889,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1099
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "Kreditkort via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1100
 msgid "Credit card"
