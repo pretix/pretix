@@ -132,6 +132,8 @@ TAX_CODE_LISTS = (
     # https://docs.peppol.eu/poacc/billing/3.0/codelist/vatex/
     # https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5305/
     # https://www.bzst.de/DE/Unternehmen/Aussenpruefungen/DigitaleSchnittstelleFinV/digitaleschnittstellefinv_node.html#js-toc-entry2
+    #
+    # !! When changed, also update tax-rules-custom.schema.json !!
     (
         _("Standard rates"),
         (
@@ -294,6 +296,8 @@ class TaxRule(LoggedModel):
     )
     code = models.CharField(
         verbose_name=_('Tax code'),
+        help_text=_('If you help us understand what this tax rules legally is, we can use this information for '
+                    'eInvoices, exporting to accounting system, etc.'),
         null=True, blank=True,
         max_length=190,
         choices=TAX_CODE_LISTS,
@@ -374,6 +378,12 @@ class TaxRule(LoggedModel):
     def clean(self):
         if self.eu_reverse_charge and not self.home_country:
             raise ValidationError(_('You need to set your home country to use the reverse charge feature.'))
+
+        if self.rate != Decimal("0.00") and (self.code.split("/")[0] in ("O", "E", "Z", "G", "K", "AE")):
+            raise ValidationError(_("A combination of this tax code with a non-zero tax rate does not make sense."))
+
+        if self.rate == Decimal("0.00") and (self.code.split("/")[0] in ("S", "L", "M", "B", "AE")):
+            raise ValidationError(_("A combination of this tax code with a zero tax rate does not make sense."))
 
     def __str__(self):
         if self.price_includes_tax:
@@ -551,6 +561,37 @@ class TaxRule(LoggedModel):
             if rule.get('action', 'vat') == 'require_approval':
                 return True
         return False
+
+    def tax_code_for(self, invoice_address):
+        if self._custom_rules:
+            rule = self.get_matching_rule(invoice_address)
+            if rule.get("code"):
+                return rule["code"]
+            if rule.get("action", "vat") == "reverse":
+                return "AE"
+
+        if not self.eu_reverse_charge:
+            # No reverse charge rules? Always apply VAT!
+            return self.code
+
+        if not invoice_address or not invoice_address.country:
+            # No country specified? Always apply VAT!
+            return self.code
+
+        if not is_eu_country(invoice_address.country):
+            # Non-EU country? "Non-taxable" since not in scope
+            return "O"
+
+        if invoice_address.country == self.home_country:
+            # Within same EU country? Always apply VAT!
+            return self.code
+
+        if invoice_address.is_business and invoice_address.vat_id and invoice_address.vat_id_validated:
+            # Reverse charge case
+            return "AE"
+
+        # Consumer in different EU country / invalid VAT
+        return self.code
 
     def _tax_applicable(self, invoice_address):
         if self._custom_rules:

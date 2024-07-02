@@ -63,6 +63,7 @@ from pretix.base.forms import (
 )
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
+from pretix.base.models.tax import TAX_CODE_LISTS
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
@@ -1504,6 +1505,11 @@ class TaxRuleLineForm(I18nForm):
             ('require_approval', _('Order requires approval')),
         ],
     )
+    code = forms.ChoiceField(
+        label=_("Tax code"),
+        choices=[("", _("Default tax code")), *TAX_CODE_LISTS],
+        required=False,
+    )
     rate = forms.DecimalField(
         label=_('Deviating tax rate'),
         max_digits=10, decimal_places=2,
@@ -1517,6 +1523,26 @@ class TaxRuleLineForm(I18nForm):
             'placeholder': _('Text on invoice'),
         })
     )
+
+    def clean(self):
+        d = super().clean()
+
+        if d.get("action") in ("reverse", "no", "block") and d.get("rate"):
+            raise ValidationError(_("A combination of this calculation mode with a non-zero tax rate does not make sense."))
+
+        if d.get("action") == "reverse" and d.get("code") and d.get("code") != "AE":
+            # Reverse charge but code is not reverse charge
+            raise ValidationError(_("This combination of calculation mode and tax code does not make sense."))
+
+        if d.get("action") == "no" and d.get("code") and d["code"].split("/")[0] in ("S", "AE", "L", "M", "B"):
+            # No VAT but code indicates VAT
+            raise ValidationError(_("This combination of calculation mode and tax code does not make sense."))
+
+        if d.get("action") == "vat" and d.get("code") and d.get("rate") != Decimal("0.00") and d["code"].split("/")[0] in ("O", "E", "Z", "G", "K"):
+            # VAT, but code indicates exempt
+            raise ValidationError(_("This combination of calculation mode and tax code does not make sense."))
+
+        return d
 
 
 class I18nBaseFormSet(I18nFormSetMixin, forms.BaseFormSet):
@@ -1538,7 +1564,16 @@ TaxRuleLineFormSet = formset_factory(
 class TaxRuleForm(I18nModelForm):
     class Meta:
         model = TaxRule
-        fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name', 'keep_gross_if_rate_changes']
+        fields = [
+            'name',
+            'rate',
+            'price_includes_tax',
+            'code',
+            'eu_reverse_charge',
+            'home_country',
+            'internal_name',
+            'keep_gross_if_rate_changes'
+        ]
 
 
 class WidgetCodeForm(forms.Form):
