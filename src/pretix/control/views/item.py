@@ -103,7 +103,7 @@ class ItemList(ListView):
     def get_queryset(self):
         return Item.objects.filter(
             event=self.request.event
-        ).annotate(
+        ).select_related("tax_rule").annotate(
             var_count=Count('variations')
         ).prefetch_related("category", "limit_sales_channels").order_by(
             F('category__position').asc(nulls_first=True),
