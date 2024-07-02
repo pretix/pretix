@@ -545,9 +545,9 @@ class WidgetAPIProductList(EventListMixin, View):
             if hasattr(self.request, 'event'):
                 add_subevents_for_days(
                     filter_qs_by_attr(
-                        self.request.event.subevents_annotated('web').filter(
+                        self.request.event.subevents_annotated(self.request.sales_channel).filter(
                             Q(event__all_sales_channels=True) |
-                            Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                            Q(event__limit_sales_channels=self.request.sales_channel),
                         ), self.request
                     ),
                     limit_before, after, ebd, set(), self.request.event,
@@ -558,8 +558,8 @@ class WidgetAPIProductList(EventListMixin, View):
                 add_events_for_days(
                     self.request,
                     filter_qs_by_attr(
-                        Event.annotated(self.request.organizer.events, 'web').filter(
-                            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                        Event.annotated(self.request.organizer.events, self.request.sales_channel).filter(
+                            Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
                         ), self.request
                     ),
                     limit_before, after, ebd, timezones
@@ -572,7 +572,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     event__live=True,
                 ).prefetch_related(
                     'event___settings_objects', 'event__organizer___settings_objects'
-                )), self.request), limit_before, after, ebd, timezones)
+                ), self.request.sales_channel), self.request), limit_before, after, ebd, timezones)
 
             data['weeks'] = weeks_for_template(ebd, self.year, self.month)
             for w in data['weeks']:
@@ -605,7 +605,7 @@ class WidgetAPIProductList(EventListMixin, View):
             ebd = defaultdict(list)
             if hasattr(self.request, 'event'):
                 add_subevents_for_days(
-                    filter_qs_by_attr(self.request.event.subevents_annotated('web'), self.request),
+                    filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel), self.request),
                     limit_before, after, ebd, set(), self.request.event,
                     kwargs.get('cart_namespace')
                 )
@@ -613,7 +613,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 timezones = set()
                 add_events_for_days(
                     self.request,
-                    filter_qs_by_attr(Event.annotated(self.request.organizer.events, 'web'), self.request),
+                    filter_qs_by_attr(Event.annotated(self.request.organizer.events, self.request.sales_channel), self.request),
                     limit_before, after, ebd, timezones
                 )
                 add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
@@ -622,7 +622,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     event__live=True,
                 ).prefetch_related(
                     'event___settings_objects', 'event__organizer___settings_objects'
-                )), self.request), limit_before, after, ebd, timezones)
+                ), self.request.sales_channel), self.request), limit_before, after, ebd, timezones)
 
             data['days'] = days_for_template(ebd, week)
             for d in data['days']:
@@ -632,7 +632,7 @@ class WidgetAPIProductList(EventListMixin, View):
             limit = 50
             if hasattr(self.request, 'event'):
                 evs = filter_qs_by_attr(
-                    self.request.event.subevents_annotated(self.request.sales_channel.identifier),
+                    self.request.event.subevents_annotated(self.request.sales_channel),
                     self.request,
                     match_subevents_with_conditions=(
                         Q(Q(date_to__isnull=True) & Q(date_from__gte=now() - timedelta(hours=24)))

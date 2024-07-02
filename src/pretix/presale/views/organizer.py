@@ -185,7 +185,7 @@ class EventListMixin:
     def _get_event_list_queryset(self):
         query = Q(is_public=True) & Q(live=True)
         qs = self.request.organizer.events.using(settings.DATABASE_REPLICA).filter(query)
-        qs = qs.filter(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier))
+        qs = qs.filter(Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel))
         qs = qs.annotate(
             min_from=Min('subevents__date_from'),
             min_to=Min('subevents__date_to'),
@@ -213,7 +213,7 @@ class EventListMixin:
             ).order_by('order_from')
         qs = Event.annotated(filter_qs_by_attr(
             qs, self.request, match_subevents_with_conditions=Q(active=True) & Q(is_public=True) & date_q
-        ))
+        ), self.request.sales_channel)
         return qs
 
     def _set_month_to_next_subevent(self):
@@ -724,10 +724,10 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['has_before'], ctx['has_after'] = has_before_after(
             self.request.organizer.events.filter(
-                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
             ),
             SubEvent.objects.filter(
-                Q(event__all_sales_channels=True) | Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                Q(event__all_sales_channels=True) | Q(event__limit_sales_channels=self.request.sales_channel),
                 event__organizer=self.request.organizer,
                 event__is_public=True,
                 event__live=True,
@@ -746,14 +746,14 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, self.request.sales_channel).using(
             settings.DATABASE_REPLICA
         ).filter(
-            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
+            Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
         ), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
             Q(event__all_sales_channels=True) |
-            Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+            Q(event__limit_sales_channels=self.request.sales_channel),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
@@ -768,7 +768,7 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                     )
                 )
             )
-        )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
 
@@ -807,11 +807,11 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['has_before'], ctx['has_after'] = has_before_after(
             self.request.organizer.events.filter(
-                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
             ),
             SubEvent.objects.filter(
                 Q(event__all_sales_channels=True) |
-                Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                Q(event__limit_sales_channels=self.request.sales_channel),
                 event__organizer=self.request.organizer,
                 event__is_public=True,
                 event__live=True,
@@ -842,14 +842,14 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, self.request.sales_channel).using(
             settings.DATABASE_REPLICA
         ).filter(
-            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
+            Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
         ), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
             Q(event__all_sales_channels=True) |
-            Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+            Q(event__limit_sales_channels=self.request.sales_channel),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
@@ -864,7 +864,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                     )
                 )
             )
-        )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
 
@@ -946,11 +946,11 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['has_before'], ctx['has_after'] = has_before_after(
             self.request.organizer.events.filter(
-                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
             ),
             SubEvent.objects.filter(
                 Q(event__all_sales_channels=True) |
-                Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                Q(event__limit_sales_channels=self.request.sales_channel),
                 event__organizer=self.request.organizer,
                 event__is_public=True,
                 event__live=True,
@@ -1194,14 +1194,14 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, self.request.sales_channel).using(
             settings.DATABASE_REPLICA
         ).filter(
-            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
+            Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
         ), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
             Q(event__all_sales_channels=True) |
-            Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+            Q(event__limit_sales_channels=self.request.sales_channel),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
@@ -1216,7 +1216,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                     )
                 )
             )
-        )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
 
@@ -1229,7 +1229,7 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
             filter_qs_by_attr(
                 self.request.organizer.events.filter(
                     Q(date_from__gt=cutoff) | Q(date_to__gt=cutoff),
-                    Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                    Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
                     is_public=True,
                     live=True,
                     has_subevents=False,
@@ -1250,7 +1250,7 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
                 SubEvent.objects.filter(
                     Q(date_from__gt=cutoff) | Q(date_to__gt=cutoff),
                     Q(event__all_sales_channels=True) |
-                    Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                    Q(event__limit_sales_channels=self.request.sales_channel),
                     event__organizer=self.request.organizer,
                     event__is_public=True,
                     event__live=True,

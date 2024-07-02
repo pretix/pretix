@@ -41,6 +41,7 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import serializers, views, viewsets
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from pretix.api.auth.permission import EventCRUDPermission
@@ -162,7 +163,13 @@ class EventViewSet(viewsets.ModelViewSet):
         qs = filter_qs_by_attr(qs, self.request)
 
         if 'with_availability_for' in self.request.GET:
-            qs = Event.annotated(qs, channel=self.request.GET.get('with_availability_for'))
+            qs = Event.annotated(
+                qs,
+                channel=get_object_or_404(
+                    self.request.organizer.sales_channels,
+                    identifier=self.request.GET.get('with_availability_for')
+                )
+            )
 
         return qs.prefetch_related(
             'organizer',
@@ -442,7 +449,13 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
         qs = filter_qs_by_attr(qs, self.request)
 
         if 'with_availability_for' in self.request.GET:
-            qs = SubEvent.annotated(qs, channel=self.request.GET.get('with_availability_for'))
+            qs = SubEvent.annotated(
+                qs,
+                channel=get_object_or_404(
+                    self.request.organizer.sales_channels,
+                    identifier=self.request.GET.get('with_availability_for')
+                )
+            )
 
         return qs.prefetch_related(
             'event',

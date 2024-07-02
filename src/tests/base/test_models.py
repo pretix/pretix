@@ -2329,8 +2329,8 @@ class EventTest(TestCase):
         item2 = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=False)
         q.items.add(item)
         q.items.add(item2)
-        assert Event.annotated(Event.objects).first().active_quotas == [q]
-        assert Event.annotated(Event.objects, 'foo').first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == [q]
+        assert Event.annotated(Event.objects, self.organizer.sales_channels.get(identifier="bar")).first().active_quotas == []
 
     @classscope(attr='organizer')
     def test_active_quotas_annotation_product_inactive(self):
@@ -2341,7 +2341,7 @@ class EventTest(TestCase):
         q = Quota.objects.create(event=event, name='Quota', size=2)
         item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=False)
         q.items.add(item)
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
 
     @classscope(attr='organizer')
     def test_active_quotas_annotation_product_hidden_by_voucher(self):
@@ -2354,16 +2354,16 @@ class EventTest(TestCase):
         q.items.add(item)
 
         voucher = Voucher.objects.create(event=event, code='a', item=item, show_hidden_items=True)
-        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+        assert Event.annotated(Event.objects, "web", voucher=voucher).first().active_quotas == [q]
 
         voucher = Voucher.objects.create(event=event, code='b', item=item, show_hidden_items=False)
-        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == []
+        assert Event.annotated(Event.objects, "web", voucher=voucher).first().active_quotas == []
 
         voucher = Voucher.objects.create(event=event, code='c', show_hidden_items=True)
-        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+        assert Event.annotated(Event.objects, "web", voucher=voucher).first().active_quotas == [q]
 
         voucher = Voucher.objects.create(event=event, code='d', quota=q, show_hidden_items=True)
-        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+        assert Event.annotated(Event.objects, "web", voucher=voucher).first().active_quotas == [q]
 
         item2 = Item.objects.create(event=event, name='Early-bird ticket', default_price=0)
         var = item2.variations.create(item=item2, value='Test', hide_without_voucher=True)
@@ -2373,13 +2373,13 @@ class EventTest(TestCase):
         q.variations.add(var)
 
         voucher = Voucher.objects.create(event=event, code='e', item=item2, variation=var, show_hidden_items=True)
-        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+        assert Event.annotated(Event.objects, "web", voucher=voucher).first().active_quotas == [q]
 
         voucher = Voucher.objects.create(event=event, code='f', item=item2, variation=var2, show_hidden_items=True)
-        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == []
+        assert Event.annotated(Event.objects, "web", voucher=voucher).first().active_quotas == []
 
         voucher = Voucher.objects.create(event=event, code='g', quota=q, show_hidden_items=True)
-        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+        assert Event.annotated(Event.objects, "web", voucher=voucher).first().active_quotas == [q]
 
     @classscope(attr='organizer')
     def test_active_quotas_annotation_product_addon(self):
@@ -2395,7 +2395,7 @@ class EventTest(TestCase):
         item.category = cat
         item.save()
         q.items.add(item)
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
 
     @classscope(attr='organizer')
     def test_active_quotas_annotation_product_unavailable(self):
@@ -2407,7 +2407,7 @@ class EventTest(TestCase):
         item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True,
                                    available_until=now() - timedelta(days=1))
         q.items.add(item)
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
 
     @classscope(attr='organizer')
     def test_active_quotas_annotation_variation_not_in_quota(self):
@@ -2419,7 +2419,7 @@ class EventTest(TestCase):
         item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True)
         item.variations.create(value="foo")
         q.items.add(item)
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
 
     @classscope(attr='organizer')
     def test_active_quotas_annotation_variation(self):
@@ -2434,29 +2434,29 @@ class EventTest(TestCase):
         v.limit_sales_channels.add(self.organizer.sales_channels.get(identifier="web"))
         q.items.add(item)
         q.variations.add(v)
-        assert Event.annotated(Event.objects).first().active_quotas == [q]
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == [q]
         item.available_until = now() - timedelta(days=1)
         item.save()
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
         item.available_until = None
         item.available_from = now() + timedelta(days=1)
         item.save()
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
         item.available_until = None
         item.available_from = None
         item.active = False
         item.save()
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
         item.active = True
         item.save()
-        assert Event.annotated(Event.objects).first().active_quotas == [q]
-        assert Event.annotated(Event.objects, 'foo').first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == [q]
+        assert Event.annotated(Event.objects, self.organizer.sales_channels.get(identifier="bar")).first().active_quotas == []
         v.active = False
         v.save()
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
         item.hide_without_voucher = True
         item.save()
-        assert Event.annotated(Event.objects).first().active_quotas == []
+        assert Event.annotated(Event.objects, 'web').first().active_quotas == []
 
 
 class SubEventTest(TestCase):
@@ -2502,8 +2502,10 @@ class SubEventTest(TestCase):
                                    all_sales_channels=False)
         item.limit_sales_channels.add(self.organizer.sales_channels.get(identifier="web"))
         q.items.add(item)
-        assert SubEvent.annotated(SubEvent.objects).first().active_quotas == [q]
-        assert SubEvent.annotated(SubEvent.objects, 'foo').first().active_quotas == []
+        assert SubEvent.annotated(SubEvent.objects, 'web').first().active_quotas == [q]
+        assert SubEvent.annotated(SubEvent.objects, 'bar').first().active_quotas == []
+        assert SubEvent.annotated(SubEvent.objects, self.organizer.sales_channels.get(identifier="web")).first().active_quotas == [q]
+        assert SubEvent.annotated(SubEvent.objects, self.organizer.sales_channels.get(identifier="bar")).first().active_quotas == []
 
     @classscope(attr='organizer')
     def test_active_quotas_annotation_no_interference(self):
@@ -2514,8 +2516,8 @@ class SubEventTest(TestCase):
                                  subevent=se2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
         q.items.add(item)
-        assert SubEvent.annotated(SubEvent.objects).filter(pk=self.se.pk).first().active_quotas == []
-        assert SubEvent.annotated(SubEvent.objects).filter(pk=se2.pk).first().active_quotas == [q]
+        assert SubEvent.annotated(SubEvent.objects, 'web').filter(pk=self.se.pk).first().active_quotas == []
+        assert SubEvent.annotated(SubEvent.objects, 'web').filter(pk=se2.pk).first().active_quotas == [q]
 
     @classscope(attr='organizer')
     def test_best_availability(self):
@@ -2540,7 +2542,7 @@ class SubEventTest(TestCase):
         q = Quota.objects.create(event=self.event, name='Quota', size=1,
                                  subevent=self.se)
         q.items.add(item)
-        obj = SubEvent.annotated(SubEvent.objects).first()
+        obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 1
         assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1)
 
@@ -2548,14 +2550,14 @@ class SubEventTest(TestCase):
         q2 = Quota.objects.create(event=self.event, name='Quota 2', size=2,
                                   subevent=self.se)
         q2.items.add(item)
-        obj = SubEvent.annotated(SubEvent.objects).first()
+        obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 2
         assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1)
 
         # 2 quotas - 2 items. Higher quota wins since second item is only connected to second quota.
         item2 = Item.objects.create(event=self.event, name='Regular ticket', default_price=10, active=True)
         q2.items.add(item2)
-        obj = SubEvent.annotated(SubEvent.objects).first()
+        obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 2
         assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 2)
         assert obj.best_availability_is_low
@@ -2564,7 +2566,7 @@ class SubEventTest(TestCase):
         q.size = 10
         q.save()
         q2.delete()
-        obj = SubEvent.annotated(SubEvent.objects).first()
+        obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 1
         assert obj.best_availability == (Quota.AVAILABILITY_OK, 9, 10)
         assert not obj.best_availability_is_low
@@ -2572,7 +2574,7 @@ class SubEventTest(TestCase):
         # Unlimited quota
         q.size = None
         q.save()
-        obj = SubEvent.annotated(SubEvent.objects).first()
+        obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert obj.best_availability == (Quota.AVAILABILITY_OK, None, None)
         assert not obj.best_availability_is_low
 

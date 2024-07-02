@@ -271,16 +271,24 @@ class SubEventItemVariation(models.Model):
 
 
 def filter_available(qs, channel='web', voucher=None, allow_addons=False):
-    assert isinstance(channel, str)
+    # Channel can currently be a SalesChannel or a str, since we need that compatibility, but a SalesChannel
+    # makes the query SIGNIFICANTLY faster
+    from .organizer import SalesChannel
+
+    assert isinstance(channel, (SalesChannel, str))
     q = (
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
         Q(active=True)
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()) | Q(available_from_mode='info'))
         & Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()) | Q(available_until_mode='info'))
-        & Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
         & Q(require_bundling=False)
     )
+    if isinstance(channel, str):
+        q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
+    else:
+        q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels=channel))
+
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
 

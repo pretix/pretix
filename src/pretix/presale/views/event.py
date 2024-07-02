@@ -151,7 +151,7 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
             ),
         ).filter(
             variation_q,
-            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel.identifier),
+            Q(all_sales_channels=True) | Q(limit_sales_channels=channel),
             active=True,
             quotas__isnull=False,
             subevent_disabled=False
@@ -685,7 +685,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             add_subevents_for_days(
                 filter_qs_by_attr(
                     self.request.event.subevents_annotated(
-                        self.request.sales_channel.identifier,
+                        self.request.sales_channel,
                         voucher,
                     ).using(settings.DATABASE_REPLICA),
                     self.request
@@ -744,7 +744,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             add_subevents_for_days(
                 filter_qs_by_attr(
                     self.request.event.subevents_annotated(
-                        self.request.sales_channel.identifier,
+                        self.request.sales_channel,
                         voucher=voucher,
                     ).using(settings.DATABASE_REPLICA),
                     self.request
@@ -793,7 +793,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(
                     self.request.event.subevents_annotated(
-                        self.request.sales_channel.identifier,
+                        self.request.sales_channel,
                         voucher=voucher,
                     ).using(settings.DATABASE_REPLICA),
                     self.request
