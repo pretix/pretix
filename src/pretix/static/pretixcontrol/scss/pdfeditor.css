@@ -19,6 +19,8 @@ body {
 #toolbox .poweredby,
 #toolbox[data-type] .pdf-info,
 #toolbox .text,
+#toolbox .textarea,
+#toolbox .textcontainer,
 #toolbox .imagecontent,
 #toolbox .object-buttons {
     display: none;
@@ -30,9 +32,22 @@ body {
 #toolbox[data-type=imagearea] .imagecontent,
 #toolbox[data-type=poweredby] .poweredby,
 #toolbox[data-type=text] .text,
+#toolbox[data-type=text] .textarea,
+#toolbox[data-type=textcontainer] .text,
+#toolbox[data-type=textcontainer] .textcontainer,
+#toolbox[data-type=textcontainer] .rectsize,
 #toolbox[data-type=textarea] .text,
+#toolbox[data-type=textarea] .textarea,
 #toolbox[data-type] .object-buttons {
     display: block;
+}
+#toolbox[data-type=text] .btn-group-justified > .btn-group.text,
+#toolbox[data-type=text] .btn-group-justified > .btn-group.textarea,
+#toolbox[data-type=textcontainer] .btn-group-justified > .btn-group.text,
+#toolbox[data-type=textcontainer] .btn-group-justified > .btn-group.textcontainer,
+#toolbox[data-type=textarea] .btn-group-justified > .btn-group.text,
+#toolbox[data-type=textarea] .btn-group-justified > .btn-group.textarea {
+    display: table-cell;
 }
 #loading-container {
     position: absolute;
