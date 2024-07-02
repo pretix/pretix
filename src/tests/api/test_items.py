@@ -590,7 +590,28 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
                     "meta_data": {
                         "day": "Wednesday",
                     },
-                }
+                },
+                {
+                    "value": {
+                        "de": "web",
+                        "en": "web"
+                    },
+                    "active": True,
+                    "require_approval": True,
+                    "checkin_attention": False,
+                    "checkin_text": None,
+                    "require_membership": False,
+                    "require_membership_hidden": False,
+                    "require_membership_types": [],
+                    "description": None,
+                    "position": 0,
+                    "default_price": None,
+                    "sales_channels": ["web"],
+                    "price": "23.00",
+                    "meta_data": {
+                        "day": "Wednesday",
+                    },
+                },
             ]
         },
         format='json'
@@ -604,6 +625,8 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
         assert new_item.variations.first().all_sales_channels is True
         assert not new_item.variations.first().limit_sales_channels.exists()
         assert new_item.variations.first().meta_data == {"day": "Wednesday"}
+        assert new_item.variations.last().all_sales_channels is False
+        assert new_item.variations.last().limit_sales_channels.exists()
 
 
 @pytest.mark.django_db

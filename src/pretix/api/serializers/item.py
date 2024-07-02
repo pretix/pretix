@@ -76,7 +76,9 @@ class InlineItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSe
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['require_membership_types'].queryset = lazy(lambda: self.context['event'].organizer.membership_types.all(), QuerySet)
-        self.fields['limit_sales_channels'].child_relation.queryset = lazy(lambda: self.context['event'].organizer.sales_channels.all(), QuerySet)
+        self.fields['limit_sales_channels'].child_relation.queryset = (
+            self.context['event'].organizer.sales_channels() if 'event' in self.context else SalesChannel.objects.none()
+        )
 
     def validate_meta_data(self, value):
         for key in value['meta_data'].keys():
@@ -284,6 +286,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
+            self.fields['variations'].child.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
     def validate(self, data):
         data = super().validate(data)
@@ -371,10 +374,13 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
 
         for variation_data in variations_data:
             require_membership_types = variation_data.pop('require_membership_types', [])
+            limit_sales_channels = variation_data.pop('limit_sales_channels', [])
             var_meta_data = variation_data.pop('meta_data', {})
             v = ItemVariation.objects.create(item=item, **variation_data)
             if require_membership_types:
                 v.require_membership_types.add(*require_membership_types)
+            if limit_sales_channels:
+                v.limit_sales_channels.add(*limit_sales_channels)
 
             if var_meta_data is not None:
                 for key, value in var_meta_data.items():

@@ -585,7 +585,7 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
             self.fields['item'] = ItemSerializer(read_only=True, context=self.context)
 
         if 'variation' in self.context['expand']:
-            self.fields['variation'] = InlineItemVariationSerializer(read_only=True)
+            self.fields['variation'] = InlineItemVariationSerializer(read_only=True, context=self.context)
 
         if 'answers.question' in self.context['expand']:
             self.fields['answers'].child.fields['question'] = QuestionSerializer(read_only=True)
