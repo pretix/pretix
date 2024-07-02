@@ -32,6 +32,7 @@ from django.utils.formats import localize
 from django.utils.functional import lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, pgettext
+from django.utils.translation import gettext_lazy as _, pgettext, pgettext_lazy
 from i18nfield.fields import I18nCharField
 from i18nfield.strings import LazyI18nString
 
@@ -125,6 +126,124 @@ VAT_ID_COUNTRIES = EU_COUNTRIES | {'CH', 'NO'}
 format_html_lazy = lazy(format_html, str)
 
 
+TAX_CODE_LISTS = (
+    # Sources:
+    # https://ec.europa.eu/digital-building-blocks/sites/display/DIGITAL/Registry+of+supporting+artefacts+to+implement+EN16931#RegistryofsupportingartefactstoimplementEN16931-Codelists#RegistryofsupportingartefactstoimplementEN16931-Codelists
+    # https://docs.peppol.eu/poacc/billing/3.0/codelist/vatex/
+    # https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5305/
+    # https://www.bzst.de/DE/Unternehmen/Aussenpruefungen/DigitaleSchnittstelleFinV/digitaleschnittstellefinv_node.html#js-toc-entry2
+    (
+        _("Standard rates"),
+        (
+            # Standard rate in any country, such as 19% in Germany or 20% in Austria
+            # DSFinV-K mapping: 1
+            ("S/standard", pgettext_lazy("tax_code", "Standard rate")),
+
+            # Reduced rate in any country, such as 7% in Germany or both 10% and 13% in Austria
+            # DSFinV-K mapping: 2
+            ("S/reduced", pgettext_lazy("tax_code", "Reduced rate")),
+
+            # Averaged rate, for example Germany § 24 (1) Nr. 3 UStG "für die übrigen Umsätze" in agricultural and silvicultural businesses
+            # DSFinV-K mapping: 3
+            ("S/averaged", pgettext_lazy("tax_code", "Averaged rate (other revenue in a agricultural and silvicultural business)")),
+
+            # We ignore the German special case of the actual silvicultural products as they won't be sold through pretix (DSFinV-K mapping: 4)
+        )
+    ),
+    (
+        _("Reverse charge"),
+        (
+            ("AE", pgettext_lazy("tax_code", "Reverse charge")),
+        )
+    ),
+    (
+        _("Tax free"),
+        (
+            # DSFinV-K mapping: 5
+            ("O", pgettext_lazy("tax_code", "Services outside of scope of tax")),
+
+            # DSFinV-K mapping: 6
+            ("E", pgettext_lazy("tax_code", "Exempt from tax (no reason given)")),
+
+            # DSFinV-K mapping: 6
+            ("Z", pgettext_lazy("tax_code", "Zero-rated goods")),
+
+            # DSFinV-K mapping: 5
+            ("G", pgettext_lazy("tax_code", "Free export item, VAT not charged")),
+
+            # DSFinV-K mapping: 6?
+            ("K", pgettext_lazy("tax_code", "VAT exempt for EEA intra-community supply of goods and services")),
+        )
+    ),
+    (
+        _("Special cases"),
+        (
+            ("L", pgettext_lazy("tax_code", "Canary Islands general indirect tax")),
+            ("M", pgettext_lazy("tax_code", "Tax for production, services and importation in Ceuta and Melilla")),
+            ("B", pgettext_lazy("tax_code", "Transferred (VAT), only in Italy")),
+        )
+    ),
+    (
+        _("Except with specific reason"),
+        (
+            ("E/VATEX-EU-79-C",
+             pgettext_lazy("tax_code", "Exempt based on article 79, point c of Council Directive 2006/112/EC")),
+            *[
+                (
+                    f"E/VATEX-EU-132-1{letter.upper()}",
+                    lazy(
+                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} ({letter}) of Council Directive 2006/112/EC").format(article="132", section="1", letter=letter),
+                        str
+                    )()
+                ) for letter in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q")
+            ],
+            *[
+                (
+                    f"E/VATEX-EU-143-1{letter.upper()}",
+                    lazy(
+                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} ({letter}) of Council Directive 2006/112/EC").format(article="143", section="1", letter=letter),
+                        str
+                    )()
+                ) for letter in ("a", "b", "c", "d", "e", "f", "fa", "g", "h", "i", "j", "k", "l")
+            ],
+            *[
+                (
+                    f"E/VATEX-EU-148-{letter.upper()}",
+                    lazy(
+                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section ({letter}) of Council Directive 2006/112/EC").format(article="143", letter=letter),
+                        str
+                    )()
+                ) for letter in ("a", "b", "c", "d", "e", "f", "g")
+            ],
+            *[
+                (
+                    f"E/VATEX-EU-151-1{letter.upper()}",
+                    lazy(
+                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} ({letter}) of Council Directive 2006/112/EC").format(article="151", section="1", letter=letter),
+                        str
+                    )()
+                ) for letter in ("a", "aa", "b", "c", "d", "e")
+            ],
+            ("E/VATEX-EU-309",
+             pgettext_lazy("tax_code", "Exempt based on article 309 of Council Directive 2006/112/EC")),
+            ("E/VATEX-EU-D",
+             pgettext_lazy("tax_code", "Intra-Community acquisition from second hand means of transport")),
+            ("E/VATEX-EU-F",
+             pgettext_lazy("tax_code", "Intra-Community acquisition of second hand goods")),
+            ("E/VATEX-EU-I",
+             pgettext_lazy("tax_code", "Intra-Community acquisition of works of art")),
+            ("E/VATEX-EU-J",
+             pgettext_lazy("tax_code", "Intra-Community acquisition of collectors items and antiques")),
+            ("E/VATEX-FR-FRANCHISE",
+             pgettext_lazy("tax_code", "France domestic VAT franchise in base")),
+            ("E/VATEX-FR-CNWVAT",
+             pgettext_lazy("tax_code", "France domestic Credit Notes without VAT, due to supplier forfeit of VAT for discount")),
+        )
+    ),
+
+)
+
+
 def is_eu_country(cc):
     cc = str(cc)
     return cc in EU_COUNTRIES
@@ -172,6 +291,12 @@ class TaxRule(LoggedModel):
         verbose_name=_('Official name'),
         help_text=_('Should be short, e.g. "VAT"'),
         max_length=190,
+    )
+    code = models.CharField(
+        verbose_name=_('Tax code'),
+        null=True, blank=True,
+        max_length=190,
+        choices=TAX_CODE_LISTS,
     )
     rate = models.DecimalField(
         max_digits=10,
