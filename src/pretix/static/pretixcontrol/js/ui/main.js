@@ -314,9 +314,6 @@ var form_handlers = function (el) {
             icon = "fa-check-circle";
             text = gettext('Your color has great contrast and is very easy to read!');
             cls = "text-success";
-            $note.html("<span class='fa fa-fw fa-check-circle'></span>")
-                .append(gettext('Your color has great contrast and is very easy to read!'));
-            $note.addClass("text-success").removeClass("text-warning").removeClass("text-danger");
         } else if (c > 2.5) {
             icon = "fa-info-circle";
             text = gettext('Your color has decent contrast and is probably good-enough to read!');
