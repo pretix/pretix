@@ -8,7 +8,7 @@
 <html{% if rtl %} dir="rtl" class="rtl"{% endif %} lang="{{ html_locale }}">
 <head>
     <title>{% block thetitle %}{% endblock %}</title>
-    {% compress css %}
+    {% compress css file presale %}
         <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
     {% endcompress %}
     {% if css_theme %}
@@ -92,7 +92,7 @@
     <script src="{% statici18n request.LANGUAGE_CODE %}"></script>
 {% endif %}
 {% if request.session.iframe_session %}
-    {% compress js %}
+    {% compress js file iframeresizer %}
         <script type="text/javascript" src="{% static "iframeresizer/iframeResizer.contentWindow.js" %}"></script>
     {% endcompress %}
 {% endif %}

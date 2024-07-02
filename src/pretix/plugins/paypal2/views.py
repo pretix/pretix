@@ -185,6 +185,10 @@ class XHRView(View):
 class PayView(PaypalOrderView, TemplateView):
     template_name = ''
 
+    def dispatch(self, request, *args, **kwargs):
+        self.request.pci_dss_payment_page = True
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED:
             return self._redirect_to_order()

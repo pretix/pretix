@@ -68,7 +68,7 @@ class BaseCheckoutTestCase:
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
-            plugins='pretix.plugins.stripe,pretix.plugins.banktransfer',
+            plugins='pretix.plugins.stripe,pretix.plugins.banktransfer,tests.testdummy',
             live=True
         )
         self.tr19 = self.event.tax_rules.create(rate=19)
@@ -150,6 +150,28 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         self._set_session('invoice_address', ia.pk)
         return ia
+
+    def test_pci_page(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        r = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug))
+        assert b'TRACKING SCRIPT' in r.content
+
+        payment_r = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name': 'Bar',
+            'street': 'Baz',
+            'zipcode': '1234',
+            'city': 'Here',
+            'country': 'AT',
+            'email': 'admin@localhost'
+        }, follow=True)
+        assert b'TRACKING SCRIPT' not in payment_r.content
 
     def test_empty_cart(self):
         response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)

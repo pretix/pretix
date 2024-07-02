@@ -359,6 +359,7 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
+        self.request.pci_dss_payment_page = True
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if (self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED)
@@ -553,6 +554,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
+        self.request.pci_dss_payment_page = True
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or self.order._can_be_paid() is not True:
