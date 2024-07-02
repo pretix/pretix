@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-06-30 21:07+0000\n"
+"PO-Revision-Date: 2024-07-02 19:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -3536,7 +3536,7 @@ msgstr "Sie können keinen Ticketcode verwenden, der bereits existiert."
 
 #: pretix/base/modelimport_orders.py:490
 msgid "Please enter a valid language code."
-msgstr "Bitte geben Sie einen gültigen Sprachcode ein."
+msgstr "Bitte einen gültigen Sprachcode eingeben."
 
 #: pretix/base/modelimport_orders.py:558 pretix/base/modelimport_orders.py:560
 msgid "Please enter a valid sales channel."
