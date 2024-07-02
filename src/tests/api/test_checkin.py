@@ -1381,3 +1381,18 @@ def test_checkin_pdf_data_requires_permission(token_client, event, team, organiz
         organizer.slug, event.slug, clist_all.pk
     ))
     assert not resp.data['results'][0].get('pdf_data')
+
+
+@pytest.mark.django_db
+def test_expand(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_max_num_queries):
+    with scopes_disabled():
+        op = order.positions.first()
+        var1 = item.variations.create(value="XS")
+        op.variation = var1
+        op.save()
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?search=z3fsn8jyu&expand=variation'.format(
+        organizer.slug, event.slug, clist_all.pk
+    ))
+    assert resp.status_code == 200
+    assert 'value' in resp.data['results'][0]['variation']

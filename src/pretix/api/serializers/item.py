@@ -77,7 +77,7 @@ class InlineItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSe
         super().__init__(*args, **kwargs)
         self.fields['require_membership_types'].queryset = lazy(lambda: self.context['event'].organizer.membership_types.all(), QuerySet)
         self.fields['limit_sales_channels'].child_relation.queryset = (
-            self.context['event'].organizer.sales_channels() if 'event' in self.context else SalesChannel.objects.none()
+            self.context['event'].organizer.sales_channels.all() if 'event' in self.context else SalesChannel.objects.none()
         )
 
     def validate_meta_data(self, value):

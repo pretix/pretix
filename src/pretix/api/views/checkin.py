@@ -406,7 +406,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
                                  'item__variations').select_related('item__tax_rule')
 
     if expand and 'variation' in expand:
-        qs = qs.prefetch_related('variation')
+        qs = qs.prefetch_related('variation', 'variation__meta_values')
 
     return qs
 
