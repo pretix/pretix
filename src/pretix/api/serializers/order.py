@@ -165,7 +165,7 @@ class InlineSeatSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Seat
-        fields = ('id', 'name', 'seat_guid')
+        fields = ('id', 'name', 'seat_guid', 'zone_name', 'row_name', 'row_label', 'seat_label', 'seat_number')
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
