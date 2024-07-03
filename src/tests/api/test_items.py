@@ -370,6 +370,13 @@ def test_item_list(token_client, organizer, event, team, item):
     assert resp.status_code == 200
     assert [] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?search=Budget'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?search=Free'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+
 
 @pytest.mark.django_db
 def test_item_detail(token_client, organizer, event, team, item):
@@ -1411,6 +1418,21 @@ def test_variations_list(token_client, organizer, event, item, variation):
     assert res['value'] == resp.data['results'][0]['value']
     assert res['position'] == resp.data['results'][0]['position']
     assert res['price'] == resp.data['results'][0]['price']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/?active=true'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 200
+    assert res['value'] == resp.data['results'][0]['value']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/?active=false'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/?search=Child'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 200
+    assert res['value'] == resp.data['results'][0]['value']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/?search=Incorrect'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
 
 
 @pytest.mark.django_db

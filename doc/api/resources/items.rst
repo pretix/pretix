@@ -392,6 +392,7 @@ Endpoints
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
+   :query boolean search: Filter the list by internal name or name of the item (substring search).
    :query boolean active: If set to ``true`` or ``false``, only items with this value for the field ``active`` will be
                           returned.
    :query integer category: If set to the ID of a category, only items within that category will be returned.

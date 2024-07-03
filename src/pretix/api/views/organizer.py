@@ -24,10 +24,11 @@ from decimal import Decimal
 import django_filters
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
-from django.db.models import OuterRef, Subquery, Sum
+from django.db.models import OuterRef, Q, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import mixins, serializers, status, views, viewsets
@@ -136,10 +137,18 @@ class SeatingPlanViewSet(viewsets.ModelViewSet):
 with scopes_disabled():
     class GiftCardFilter(FilterSet):
         secret = django_filters.CharFilter(field_name='secret', lookup_expr='iexact')
+        expired = django_filters.BooleanFilter(method='expired_qs')
+        value = django_filters.NumberFilter(field_name='cached_value')
 
         class Meta:
             model = GiftCard
             fields = ['secret', 'testmode']
+
+        def expired_qs(self, qs, name, value):
+            if value:
+                return qs.filter(expires__isnull=False, expires__lt=now())
+            else:
+                return qs.filter(Q(expires__isnull=True) | Q(expires__gte=now()))
 
 
 class GiftCardViewSet(viewsets.ModelViewSet):

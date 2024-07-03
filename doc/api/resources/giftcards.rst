@@ -96,6 +96,8 @@ Endpoints
 
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string secret: Only show gift cards with the given secret.
+   :query string value: Only show gift cards with the given value.
+   :query boolean expired: Filter for gift cards that are (not) expired.
    :query boolean testmode: Filter for gift cards that are (not) in test mode.
    :query boolean include_accepted: Also show gift cards issued by other organizers that are accepted by this organizer.
    :query string expand: If you pass ``"owner_ticket"``, the respective field will be shown as a nested value instead of just an ID.

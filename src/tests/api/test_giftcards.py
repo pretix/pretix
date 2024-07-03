@@ -86,6 +86,18 @@ def test_giftcard_list(token_client, organizer, event, giftcard, other_giftcard)
     assert resp.status_code == 200
     assert 2 == len(resp.data['results'])
 
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?expired=false'.format(organizer.slug))
+    assert 1 == len(resp.data['results'])
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?expired=true'.format(organizer.slug))
+    assert 0 == len(resp.data['results'])
+
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?value=23.00'.format(organizer.slug))
+    assert 1 == len(resp.data['results'])
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?value=23'.format(organizer.slug))
+    assert 1 == len(resp.data['results'])
+    resp = token_client.get('/api/v1/organizers/{}/giftcards/?value=24'.format(organizer.slug))
+    assert 0 == len(resp.data['results'])
+
 
 @pytest.mark.django_db
 def test_giftcard_detail(token_client, organizer, event, giftcard):

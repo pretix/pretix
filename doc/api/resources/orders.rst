@@ -460,10 +460,13 @@ List of all orders
    :query datetime modified_since: Only return orders that have changed since the given date. Be careful: We only
        recommend using this in combination with ``testmode=false``, since test mode orders can vanish at any time and
        you will not notice it using this method.
-   :query datetime created_since: Only return orders that have been created since the given date.
+   :query datetime created_since: Only return orders that have been created since the given date (inclusive).
+   :query datetime created_before: Only return orders that have been created before the given date (exclusive).
    :query integer subevent: Only return orders with a position that contains this subevent ID. *Warning:* Result will also include orders if they contain mixed subevents, and it will even return orders where the subevent is only contained in a canceled position.
    :query datetime subevent_after: Only return orders that contain a ticket for a subevent taking place after the given date. This is an exclusive after, and it considers the **end** of the subevent (or its start, if the end is not set).
    :query datetime subevent_before: Only return orders that contain a ticket for a subevent taking place after the given date. This is an exclusive before, and it considers the **start** of the subevent.
+   :query string sales_channel: Only return orders with the given sales channel identifier (e.g. ``"web"``).
+   :query string payment_provider: Only return orders that contain a payment using the given payment provider. Note that this also searches for partial incomplete, or failed payments within the order and is not useful to get a sum of payment amounts without further processing.
    :query string exclude: Exclude a field from the output, e.g. ``fees`` or ``positions.downloads``. Can be used as a performance optimization. Can be passed multiple times.
    :query string include: Include only the given field in the output, e.g. ``fees`` or ``positions.downloads``. Can be used as a performance optimization. Can be passed multiple times. ``include`` is applied before ``exclude``, so ``exclude`` takes precedence.
    :param organizer: The ``slug`` field of the organizer to fetch

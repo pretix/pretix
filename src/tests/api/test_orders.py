@@ -414,6 +414,16 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
         '/api/v1/organizers/{}/events/{}/orders/?email=foo@example.org'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?payment_provider=banktransfer'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?payment_provider=manual'.format(organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?sales_channel=web'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?sales_channel=bar'.format(organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?locale=en'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?locale=de'.format(organizer.slug, event.slug))
@@ -433,6 +443,36 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
         (order.last_modified + datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
     ))
     assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?created_since={}'.format(
+        organizer.slug, event.slug,
+        (order.datetime - datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?created_since={}'.format(
+        organizer.slug, event.slug, order.datetime.isoformat().replace('+00:00', 'Z')
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?created_since={}'.format(
+        organizer.slug, event.slug,
+        (order.datetime + datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?created_before={}'.format(
+        organizer.slug, event.slug,
+        (order.datetime - datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?created_before={}'.format(
+        organizer.slug, event.slug, order.datetime.isoformat().replace('+00:00', 'Z')
+    ))
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?created_before={}'.format(
+        organizer.slug, event.slug,
+        (order.datetime + datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert [res] == resp.data['results']
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?include_canceled_positions=false'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
