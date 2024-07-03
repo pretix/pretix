@@ -299,6 +299,8 @@ class EventsTest(SoupTest):
         doc = self.get_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug))
         self.assertIn("Stripe", doc.select(".form-plugins")[0].text)
         self.assertIn("Enable", doc.select("[name=\"plugin:pretix.plugins.stripe\"]")[0].text)
+        assert not doc.select("[name=\"plugin:tests.testdummyrestricted\"]")
+        assert not doc.select("[name=\"plugin:tests.testdummyhidden\"]")
 
         doc = self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
                             {'plugin:pretix.plugins.stripe': 'enable'})
@@ -307,6 +309,23 @@ class EventsTest(SoupTest):
         doc = self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
                             {'plugin:pretix.plugins.stripe': 'disable'})
         self.assertIn("Enable", doc.select("[name=\"plugin:pretix.plugins.stripe\"]")[0].text)
+
+        self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
+                      {'plugin:tests.testdummyhidden': 'enable'})
+        self.event1.refresh_from_db()
+        assert "testdummyhidden" not in self.event1.plugins
+
+        self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
+                      {'plugin:tests.testdummyrestricted': 'enable'})
+        self.event1.refresh_from_db()
+        assert "testdummyrestricted" not in self.event1.plugins
+
+        self.orga1.settings.allowed_restricted_plugins = ["tests.testdummyrestricted"]
+
+        self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
+                      {'plugin:tests.testdummyrestricted': 'enable'})
+        self.event1.refresh_from_db()
+        assert "testdummyrestricted" in self.event1.plugins
 
     def test_testmode_enable(self):
         self.event1.testmode = False

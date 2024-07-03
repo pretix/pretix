@@ -764,6 +764,50 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
 
 
 @pytest.mark.django_db
+def test_event_update_plugins_validation(token_client, organizer, event, item, meta_prop):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["pretix.plugins.paypal2", "unknown"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"plugins": ["Unknown plugin: 'unknown'."]}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["pretix.plugins.paypal2", "tests.testdummyhidden"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"plugins": ["Unknown plugin: 'tests.testdummyhidden'."]}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["pretix.plugins.paypal2", "tests.testdummyrestricted"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"plugins": ["Restricted plugin: 'tests.testdummyrestricted'."]}
+
+    organizer.settings.allowed_restricted_plugins = ["tests.testdummyrestricted"]
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["pretix.plugins.paypal2", "tests.testdummyrestricted"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+
+@pytest.mark.django_db
 def test_event_test_mode(token_client, organizer, event):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),

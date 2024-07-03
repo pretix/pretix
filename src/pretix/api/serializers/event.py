@@ -281,13 +281,17 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         from pretix.base.plugins import get_all_plugins
 
         plugins_available = {
-            p.module for p in get_all_plugins(self.instance)
+            p.module: p for p in get_all_plugins(self.instance)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
+        settings_holder = self.instance if self.instance and self.instance.pk else self.context['organizer']
 
         for plugin in value.get('plugins'):
             if plugin not in plugins_available:
                 raise ValidationError(_('Unknown plugin: \'{name}\'.').format(name=plugin))
+            if getattr(plugins_available[plugin], 'restricted', False):
+                if plugin not in settings_holder.settings.allowed_restricted_plugins:
+                    raise ValidationError(_('Restricted plugin: \'{name}\'.').format(name=plugin))
 
         return value
 
