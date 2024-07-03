@@ -19,23 +19,17 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import os
-from pretix.testutils.settings import *  # NOQA
+from django.apps import AppConfig
 
 
-TEST_DIR = os.path.dirname(__file__)
+class TestDummyHiddenApp(AppConfig):
+    name = 'tests.testdummyhidden'
+    verbose_name = 'testdummyhidden'
 
-TEMPLATES[0]['DIRS'].append(os.path.join(TEST_DIR, 'templates'))  # NOQA
+    class PretixPluginMeta:
+        name = 'testdummyhidden'
+        version = '1.0.0'
+        restricted = True
 
-INSTALLED_APPS.append('tests.testdummy')  # NOQA
-INSTALLED_APPS.append('tests.testdummyrestricted')  # NOQA
-INSTALLED_APPS.append('tests.testdummyhidden')  # NOQA
-
-PRETIX_AUTH_BACKENDS = [
-    'pretix.base.auth.NativeAuthBackend',
-    'tests.testdummy.auth.TestFormAuthBackend',
-    'tests.testdummy.auth.TestRequestAuthBackend',
-]
-
-for a in PLUGINS:
-    INSTALLED_APPS.remove(a)
+    def is_available(self, event):
+        return False

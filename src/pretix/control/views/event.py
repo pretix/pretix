@@ -400,7 +400,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
-                        if getattr(plugins_available[module].app, 'restricted', False):
+                        if getattr(plugins_available[module], 'restricted', False):
                             if module not in request.event.settings.allowed_restricted_plugins:
                                 continue
 
