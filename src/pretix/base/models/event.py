@@ -970,7 +970,7 @@ class Event(EventMixin, LoggedModel):
         ):
             c_items = list(d.condition_limit_products.all())
             b_items = list(d.benefit_limit_products.all())
-            limit_sales_channels = list(v.limit_sales_channels.all())
+            limit_sales_channels = list(d.limit_sales_channels.all())
             d.pk = None
             d.event = self
             d._prefetched_objects_cache = {}
