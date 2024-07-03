@@ -871,12 +871,12 @@ msgstr "minimale Bestellmenge: %s"
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr "Ticket-Shop schließen"
+msgstr "Ticketshop schließen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr "Der Ticket-Shop konnte nicht geladen werden."
+msgstr "Der Ticketshop konnte nicht geladen werden."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
@@ -890,7 +890,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr "Ticket-Shop öffnen"
+msgstr "Ticketshop öffnen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"

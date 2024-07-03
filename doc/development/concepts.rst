@@ -17,7 +17,7 @@ The project pretix is split into several components. The main components are:
     create and manage their events, items, orders and tickets.
 
 **presale**
-    This is the ticket-shop itself, containing all of the parts visible to the
+    This is the ticket shop itself, containing all of the parts visible to the
     end user. Also called "frontend" in parts of this documentation.
 
 **api**

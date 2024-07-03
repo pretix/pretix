@@ -9608,7 +9608,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1346
 msgid "Ask search engines not to index the ticket shop"
-msgstr "Der Ticket-Shop soll von Suchmaschinen nicht indiziert werden"
+msgstr "Der Ticketshop soll von Suchmaschinen nicht indiziert werden"
 
 #: pretix/base/settings.py:1355
 msgid "Show variations of a product expanded by default"
@@ -10874,7 +10874,7 @@ msgstr ""
 "Sie haben sich auf die Warteliste für {event} \n"
 "für das Produkt {product} eingetragen.\n"
 "\n"
-"Wir haben nun ein Ticket für Sie! Sie können es in unserem Ticket-Shop "
+"Wir haben nun ein Ticket für Sie! Sie können es in unserem Ticketshop "
 "erwerben,\n"
 "indem Sie in den nächsten {hours} Stunden den folgenden Gutscheincode "
 "eingeben:\n"
@@ -11971,7 +11971,7 @@ msgid ""
 "If you just configured this as a domain for your ticket shop, you now need "
 "to set this up as a \"custom domain\" in your organizer account."
 msgstr ""
-"Wenn Sie gerade diese Domain für Ihren Ticket-Shop eingerichtet haben, "
+"Wenn Sie gerade diese Domain für Ihren Ticketshop eingerichtet haben, "
 "müssen Sie diese nun in Ihrem Veranstalterkonto als \"eigene Domain\" "
 "eintragen."
 
@@ -18403,7 +18403,7 @@ msgid ""
 "You can instead take your shop offline. This will hide it from everyone "
 "except from the organizer teams you configured to have access to the event."
 msgstr ""
-"Sie können stattdessen den Ticket-Shop abschalten. Dies wird die "
+"Sie können stattdessen den Ticketshop abschalten. Dies wird die "
 "Veranstaltung vor allen außer den zugewiesenen Veranstalter-Teams verstecken."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:66
@@ -18629,14 +18629,14 @@ msgid ""
 "Your ticket shop is currently not live. It is thus only visible to you and "
 "your team, not to any visitors."
 msgstr ""
-"Ihr Ticket-Shop ist zur Zeit offline und daher nur für Sie und Ihr Team "
+"Ihr Ticketshop ist zur Zeit offline und daher nur für Sie und Ihr Team "
 "verfügbar und nicht für Besucher."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:41
 msgid ""
 "To publish your ticket shop, you first need to resolve the following issues:"
 msgstr ""
-"Um Ihren Ticket-Shop zu veröffentlichen, müssen Sie zuerst die folgenden "
+"Um Ihren Ticketshop zu veröffentlichen, müssen Sie zuerst die folgenden "
 "Probleme beheben:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:51
@@ -18646,7 +18646,7 @@ msgstr "Shop veröffentlichen"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:59
 msgid "If you want to, you can publish your ticket shop now."
-msgstr "Sie können Ihren Ticket-Shop jederzeit veröffentlichen."
+msgstr "Sie können Ihren Ticketshop jederzeit veröffentlichen."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:83
 msgid ""
@@ -19488,7 +19488,7 @@ msgid ""
 "website. This way, your visitors can buy their ticket right away without "
 "leaving your website."
 msgstr ""
-"Das pretix-Widget ist ein Weg, den Ticket-Shop in Ihre Event-Website "
+"Das pretix-Widget ist ein Weg, den Ticketshop in Ihre Event-Website "
 "einzubetten. Auf diese Weise können Besucher Ihrer Website ein Ticket "
 "erwerben, ohne die Website verlassen zu müssen."
 
@@ -19515,7 +19515,7 @@ msgid ""
 "JavaScript is disabled in your browser. To access our ticket shop without "
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
-"JavaScript ist in Ihrem Browser deaktiviert. Um unseren Ticket-Shop ohne "
+"JavaScript ist in Ihrem Browser deaktiviert. Um unseren Ticketshop ohne "
 "JavaScript aufzurufen, klicken Sie bitte &lt;a %(a_attr)s&gt;hier&lt;/a&gt;."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
@@ -19580,7 +19580,7 @@ msgid ""
 "less than 10 characters that can be easily remembered, but you can also "
 "choose to use a random value."
 msgstr ""
-"Dies ist die Adresse, unter der Ihr Ticket-Shop verfügbar sein wird. Sie "
+"Dies ist die Adresse, unter der Ihr Ticketshop verfügbar sein wird. Sie "
 "sollte kurz sein und darf nur Kleinbuchstaben, Zahlen, Punkte und "
 "Bindestriche enthalten. Sie muss unter Ihren Veranstaltungen einmalig sein. "
 "Wir empfehlen eine Abkürzung oder ein Datum mit weniger als 10 Zeichen, das "
@@ -22464,7 +22464,7 @@ msgstr "Veröffentlichen Sie Ihren Shop"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:27
 msgid "Go to the ticket shop"
-msgstr "Zum Ticket-Shop"
+msgstr "Zum Ticketshop"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:35
 msgid "Search query:"
@@ -23102,7 +23102,7 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
-"Trotzdem bleibt es Ihre Verantwortung, dass Ihr Ticket-Shop allen "
+"Trotzdem bleibt es Ihre Verantwortung, dass Ihr Ticketshop allen "
 "anwendbaren Gesetzen entspricht. Wir versuchen mit diesen Einstellungen zu "
 "helfen, aber können keine Haftung übernehmen, da wir unter anderem die "
 "genaue Konfiguration Ihres Ticketshops, die rechtlichen Details der "
@@ -25624,7 +25624,7 @@ msgstr "{quota} übrig"
 
 #: pretix/control/views/dashboards.py:269
 msgid "Your ticket shop is"
-msgstr "Ihr Ticket-Shop ist"
+msgstr "Ihr Ticketshop ist"
 
 #: pretix/control/views/dashboards.py:269
 msgid "Click here to change"
@@ -31490,7 +31490,7 @@ msgstr "Warnung"
 #: pretix/presale/templates/pretixpresale/event/base.html:127
 #: pretix/presale/templates/pretixpresale/event/base.html:201
 msgid "This ticket shop is currently in test mode."
-msgstr "Dieser Ticket-Shop ist momentan im Testmodus."
+msgstr "Dieser Ticketshop ist momentan im Testmodus."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:130
 #: pretix/presale/templates/pretixpresale/event/base.html:204
@@ -32857,7 +32857,7 @@ msgstr "Shop ausgeschaltet"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
 msgid "This ticket shop is currently turned off."
-msgstr "Dieser Ticket-Shop ist im Moment nicht aktiv."
+msgstr "Dieser Ticketshop ist im Moment nicht aktiv."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
@@ -33684,7 +33684,7 @@ msgid ""
 "open source ticket sales software</a>."
 msgstr ""
 "Dies ist eine selbst-gehostete Installation von <a %(a_attr)s>pretix, dem "
-"freundlichen Open Source Ticket-Shop</a>."
+"freundlichen Open Source Ticketshop</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:15
 msgid ""
@@ -34215,7 +34215,7 @@ msgstr ""
 
 #: pretix/presale/views/widget.py:372
 msgid "This ticket shop is currently disabled."
-msgstr "Dieser Ticket-Shop ist im Moment nicht verfügbar."
+msgstr "Dieser Ticketshop ist im Moment nicht verfügbar."
 
 #: pretix/presale/views/widget.py:386
 msgid "The selected date does not exist in this event series."
@@ -34336,7 +34336,7 @@ msgstr "Kosovo"
 #~ msgstr "Sie können nicht fortfahren."
 
 #~ msgid "The selected ticket shop is currently not available."
-#~ msgstr "Der ausgewählte Ticket-Shop ist im Moment nicht verfügbar."
+#~ msgstr "Der ausgewählte Ticketshop ist im Moment nicht verfügbar."
 
 #~ msgid "Needs to be enabled in your Stripe account first."
 #~ msgstr "Muss erst im Stripe-Account aktiviert werden."
