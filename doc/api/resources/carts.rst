@@ -40,6 +40,11 @@ answers                               list of objects            Answers to user
 seat                                  objects                    The assigned seat (or ``null``)
 ├ id                                  integer                    Internal ID of the seat instance
 ├ name                                string                     Human-readable seat name
+├ zone_name                           string                     Name of the zone the seat is in
+├ row_name                            string                     Name/number of the row the seat is in
+├ row_label                           string                     Additional label of the row (or ``null``)
+├ seat_number                         string                     Number of the seat within the row
+├ seat_label                          string                     Additional label of the seat (or ``null``)
 └ seat_guid                           string                     Identifier of the seat within the seating plan
 ===================================== ========================== =======================================================
 
