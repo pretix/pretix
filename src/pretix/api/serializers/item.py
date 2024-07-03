@@ -117,10 +117,14 @@ class ItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializ
     def create(self, validated_data):
         meta_data = validated_data.pop('meta_data', None)
         require_membership_types = validated_data.pop('require_membership_types', [])
+        limit_sales_channels = validated_data.pop('limit_sales_channels', [])
         variation = ItemVariation.objects.create(**validated_data)
 
         if require_membership_types:
             variation.require_membership_types.add(*require_membership_types)
+
+        if limit_sales_channels:
+            variation.limit_sales_channels.add(*limit_sales_channels)
 
         # Meta data
         if meta_data is not None:
