@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-01 16:00+0000\n"
+"PO-Revision-Date: 2024-07-04 20:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -53,7 +53,7 @@ msgstr "Dansk"
 
 #: pretix/_base_settings.py:87
 msgid "Dutch"
-msgstr ""
+msgstr "Hollandsk"
 
 #: pretix/_base_settings.py:88
 msgid "Dutch (informal)"
@@ -61,7 +61,7 @@ msgstr "Hollandsk (uformelt)"
 
 #: pretix/_base_settings.py:89
 msgid "French"
-msgstr ""
+msgstr "Fransk"
 
 #: pretix/_base_settings.py:90
 msgid "Finnish"
@@ -69,27 +69,27 @@ msgstr "Finsk"
 
 #: pretix/_base_settings.py:91
 msgid "Galician"
-msgstr ""
+msgstr "Galicisk"
 
 #: pretix/_base_settings.py:92
 msgid "Greek"
-msgstr ""
+msgstr "Græsk"
 
 #: pretix/_base_settings.py:93
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesisk"
 
 #: pretix/_base_settings.py:94
 msgid "Italian"
-msgstr ""
+msgstr "Italiensk"
 
 #: pretix/_base_settings.py:95
 msgid "Latvian"
-msgstr ""
+msgstr "Lettisk"
 
 #: pretix/_base_settings.py:96
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norsk (Bokmål)"
 
 #: pretix/_base_settings.py:97
 msgid "Polish"
@@ -105,19 +105,19 @@ msgstr "Portugisisk (Brasilien)"
 
 #: pretix/_base_settings.py:100
 msgid "Romanian"
-msgstr ""
+msgstr "Rumænsk"
 
 #: pretix/_base_settings.py:101
 msgid "Russian"
-msgstr ""
+msgstr "Russisk"
 
 #: pretix/_base_settings.py:102
 msgid "Slovak"
-msgstr ""
+msgstr "Slovakisk"
 
 #: pretix/_base_settings.py:103
 msgid "Swedish"
-msgstr ""
+msgstr "Svensk"
 
 #: pretix/_base_settings.py:104
 msgid "Spanish"
@@ -125,17 +125,19 @@ msgstr "Spansk"
 
 #: pretix/_base_settings.py:105
 msgid "Turkish"
-msgstr ""
+msgstr "Tyrkisk"
 
 #: pretix/_base_settings.py:106
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrainsk"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Fuld adgang til enhed (se og ændre bestillinger og gavekort, se produkter og "
+"indstillinger)"
 
 #: pretix/api/auth/devicesecurity.py:53
 msgid "pretixSCAN"
@@ -144,10 +146,11 @@ msgstr "pretixSCAN"
 #: pretix/api/auth/devicesecurity.py:90
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
 msgstr ""
+"pretixSCAN (kiosk-modus, ingen synkronisering af bestillinger, ingen søgning)"
 
 #: pretix/api/auth/devicesecurity.py:124
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (kun online, ingen synkronisering af bestillinger)"
 
 #: pretix/api/auth/devicesecurity.py:159
 msgid "pretixPOS"
@@ -185,7 +188,7 @@ msgstr "Aktiver webhook"
 #: pretix/api/models.py:117
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Target URL"
 
 #: pretix/api/models.py:118 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:286
@@ -231,6 +234,8 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Arrangementer kan ikke publiceres offentligt. Kvoter og betalingsmuligheder "
+"skal tilføjes, inden der kan åbnes for billetsalget."
 
 #: pretix/api/serializers/event.py:244 pretix/api/serializers/event.py:543
 #, python-brace-format
@@ -256,26 +261,33 @@ msgstr "Den valgte produktkategori {name} findes ikke."
 #: pretix/api/serializers/item.py:201 pretix/control/forms/item.py:1214
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr ""
+"Den grupperede enhed skal altid være den samme enhed som den, der grupperer."
 
 #: pretix/api/serializers/item.py:204 pretix/control/forms/item.py:1216
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Den grupperede enhed må ikke selv have grupper."
 
 #: pretix/api/serializers/item.py:291
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Opdatering af add-ons, grupperinger eller variationer via PATCH/PUT bliver "
+"ikke understøttet. Brug venligst det dedicerede , indlejrede slutpunkt."
 
 #: pretix/api/serializers/item.py:299
 msgid "Only admission products can currently be personalized."
 msgstr ""
+"På nuværende tidspunkt er det kun muligt at personalisere adgangsgivende "
+"produkter."
 
 #: pretix/api/serializers/item.py:310
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Gavekort-produkter skal ikke forbindes med moms-værdier, der afviger fra 0, "
+"da momsen bliver lagt på beløbet, når gavekortet indløses."
 
 #: pretix/api/serializers/item.py:315 pretix/control/forms/item.py:708
 msgid "Gift card products should not be admission products at the same time."
@@ -286,18 +298,21 @@ msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Opdateringsmuligheder via PATCH/PUT er ikke understøttet. Brug venligst det "
+"dedicerede, indlejrede slutpunkt."
 
 #: pretix/api/serializers/item.py:508 pretix/control/forms/item.py:121
 msgid "Question cannot depend on a question asked during check-in."
 msgstr ""
+"Et spørgsmål kan ikke være afhængig af et spørgsmål stillet under tjek-ind."
 
 #: pretix/api/serializers/item.py:513 pretix/control/forms/item.py:126
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Der er blevet opdaget en cirkulær afhængighed mellem spørgsmål."
 
 #: pretix/api/serializers/item.py:518 pretix/control/forms/item.py:135
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Denne type spørgsmål kan ikke stilles under tjek-ind."
 
 #: pretix/api/serializers/item.py:521 pretix/control/forms/item.py:143
 msgid "This type of question cannot be shown during check-in."
@@ -308,6 +323,8 @@ msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
+"Der findes allerede et medium med samme filnavn og type i din organisations "
+"konto."
 
 #: pretix/api/serializers/order.py:78
 #, python-brace-format
@@ -342,6 +359,8 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Et gavekort med samme hemmelighed eksisterer allerede i din eller en "
+"tilknyttet organisation."
 
 #: pretix/api/serializers/organizer.py:321
 #: pretix/control/views/organizer.py:729
@@ -367,7 +386,7 @@ msgstr ""
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Medie er tilknyttet et andet arrangement"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:475
 #, python-brace-format
@@ -433,7 +452,7 @@ msgstr "Bestillingsoplysninger ændret"
 
 #: pretix/api/webhooks.py:258 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Adresse på kontakt til bestillingen ændret"
 
 #: pretix/api/webhooks.py:262 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
@@ -516,6 +535,8 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produkt ændret (omfatter også ændring eller sletning af produktet og "
+"ændringer til indlejrede objekter som variationer og grupperinger)"
 
 #: pretix/api/webhooks.py:339
 msgid "Shop taken live"
@@ -575,11 +596,11 @@ msgstr "Dette felt er obligatorisk."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Indtast et postnummer i formatet XXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Indtast et postnummer i formatet XXXX."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -616,13 +637,15 @@ msgstr "Netbutik"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"API-salgskanaler kommer uden indbygget funktionalitet, men må gerne bruges  "
+"til skræddersyede integrationer."
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -641,25 +664,25 @@ msgstr "kildekode"
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "Konfigurationsoptionen {name} mangler."
 
 #: pretix/base/customersso/oidc.py:67 pretix/base/customersso/oidc.py:72
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
-msgstr ""
+msgstr "Kan ikke hente konfiguration fra \"{url}\". Fejlbesked: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:78 pretix/base/customersso/oidc.py:83
 #: pretix/base/customersso/oidc.py:88 pretix/base/customersso/oidc.py:93
 #: pretix/base/customersso/oidc.py:98 pretix/base/customersso/oidc.py:103
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "SSO-udbyder er ikke kompatibel: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
 #, fuzzy, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Du ønsker ikke: {code}"
+msgstr "Du ønsker ikke: \"{code}\"."
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
