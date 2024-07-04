@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-02 19:00+0000\n"
+"PO-Revision-Date: 2024-07-04 20:00+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -121,7 +121,7 @@ msgstr "Slovakiska"
 
 #: pretix/_base_settings.py:103
 msgid "Swedish"
-msgstr ""
+msgstr "Svenska"
 
 #: pretix/_base_settings.py:104
 msgid "Spanish"
@@ -636,13 +636,15 @@ msgstr "Onlinebutik"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"API-försäljningskanaler har ingen inbyggd funktionalitet, men kan användas "
+"för anpassade integrationer."
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -3910,10 +3912,8 @@ msgid "Login button label"
 msgstr "Etiketten för inloggningsknappen"
 
 #: pretix/base/models/customers.py:64
-#, fuzzy
-#| msgid "Net total"
 msgid "Single-sign-on method"
-msgstr "Totalt"
+msgstr "Single-sign-on-metod"
 
 #: pretix/base/models/customers.py:85 pretix/base/models/devices.py:72
 #: pretix/base/models/items.py:1615 pretix/base/models/items.py:1863
@@ -3976,16 +3976,12 @@ msgid "Client type"
 msgstr "Användartyp"
 
 #: pretix/base/models/customers.py:406
-#, fuzzy
-#| msgid "Payment"
 msgid "Grant type"
-msgstr "Betalning"
+msgstr "Tilldelningstyp"
 
 #: pretix/base/models/customers.py:417
-#, fuzzy
-#| msgid "Allowed membership types"
 msgid "Allowed access scopes"
-msgstr "Godkända medlemstyper"
+msgstr "Tillåtna åtkomstområden"
 
 #: pretix/base/models/customers.py:418
 msgid "Separate multiple values with spaces"
@@ -4039,10 +4035,8 @@ msgid "Position"
 msgstr "Position"
 
 #: pretix/base/models/discount.py:68
-#, fuzzy
-#| msgid "Sales channels"
 msgid "All supported sales channels"
-msgstr "Försäljnings kanaler"
+msgstr "Alla stödda försäljningskanaler"
 
 #: pretix/base/models/discount.py:89
 msgid "Event series handling"
@@ -4258,10 +4252,8 @@ msgid "Seating plan"
 msgstr "Sittplatser"
 
 #: pretix/base/models/event.py:639 pretix/base/models/items.py:618
-#, fuzzy
-#| msgid "Sales channels"
 msgid "Sell on all sales channels"
-msgstr "Försäljnings kanaler"
+msgstr "Sälj på alla försäljningskanaler"
 
 #: pretix/base/models/event.py:644 pretix/base/models/items.py:623
 #: pretix/base/models/items.py:1170 pretix/base/payment.py:417
@@ -4569,11 +4561,8 @@ msgid "{category} (Add-On products)"
 msgstr "{category} (Add-On produkter)"
 
 #: pretix/base/models/items.py:128
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Add-On products"
-msgstr "Extra produkter"
+msgstr "Tilläggsprodukter"
 
 #: pretix/base/models/items.py:184 pretix/base/models/items.py:240
 msgid "Disable product for this date"
@@ -4743,14 +4732,6 @@ msgid "Only show after sellout of"
 msgstr "Visa endast efter slutförsäljning av"
 
 #: pretix/base/models/items.py:545
-#, fuzzy
-#| msgid ""
-#| "If you select a quota here, this product will only be shown when that "
-#| "quota is unavailable. If combined with the option to hide sold-out "
-#| "products, this allows you to swap out products for more expensive ones "
-#| "once they are sold out. There might be a short period in which both "
-#| "products are visible while all tickets in the referenced quota are "
-#| "reserved, but not yet sold."
 msgid ""
 "If you select a product here, this product will only be shown when that "
 "product is sold out. If combined with the option to hide sold-out products, "
@@ -4759,11 +4740,12 @@ msgid ""
 "products are visible while all tickets of the referenced product are "
 "reserved, but not yet sold."
 msgstr ""
-"Om du valt en produkt här, visas produkten endast när den slutsåld. Om detta "
-"kombineras med valet att gömma slutsålda produkter, kan du byta ut produkter "
-"mot dyrare produkter när de sålt slut. Båda produkter kan under en kortare "
-"tid visas om alla biljetter i den valda kvoten är reserverade, men ännu inte "
-"sålda."
+"Om du väljer en produkt här kommer denna produkt endast att visas när den "
+"produkten är slutsåld. Om det kombineras med alternativet att dölja "
+"slutsålda produkter kan du byta ut produkter mot dyrare alternativ när det "
+"billigare alternativet är slutsålt. Det kan finnas en kort period då båda "
+"produkterna är synliga medan alla biljetter för den refererade produkten är "
+"reserverade, men ännu inte sålda."
 
 #: pretix/base/models/items.py:554
 msgid ""
@@ -4866,10 +4848,9 @@ msgstr ""
 "kommer inte påverka priset."
 
 #: pretix/base/models/items.py:624
-#, fuzzy
-#| msgid "Only sell tickets for this event on the following sales channels."
 msgid "Only sell tickets for this product on the selected sales channels."
-msgstr "Sälj bara biljetter för det här eventet på följande sälj kanaler."
+msgstr ""
+"Sälj endast biljetter för denna produkt på de valda försäljningskanalerna."
 
 #: pretix/base/models/items.py:629
 msgid ""
@@ -5114,7 +5095,7 @@ msgstr "Den här variationen kommer inte säljas efter det angivna datumet."
 
 #: pretix/base/models/items.py:1165
 msgid "Sell on all sales channels the product is sold on"
-msgstr ""
+msgstr "Sälj produkten på alla försäljningskanaler där den säljs"
 
 #: pretix/base/models/items.py:1171
 msgid ""
@@ -6046,9 +6027,6 @@ msgstr "Inbjudan till teamet '{team}' för '{email}'"
 
 #: pretix/base/models/organizer.py:538
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
-#, fuzzy
-#| msgctxt "reusable_medium"
-#| msgid "Identifier"
 msgid "Identifier"
 msgstr "Identifierare"
 
@@ -6056,7 +6034,7 @@ msgstr "Identifierare"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:54
 #: pretix/control/templates/pretixcontrol/items/questions.html:22
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: pretix/base/models/seating.py:45 pretix/base/models/tax.py:148
 #: pretix/base/pdf.py:1226
@@ -6885,10 +6863,8 @@ msgid "Order position number"
 msgstr "Orderpositionsnummer"
 
 #: pretix/base/pdf.py:116
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order code and position number"
-msgstr "Beställningsrad"
+msgstr "Beställningskod och positionsnummer"
 
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:100
 #: pretix/control/views/event.py:790 pretix/control/views/pdf.py:94
@@ -6901,7 +6877,7 @@ msgstr "Variationsnamn"
 
 #: pretix/base/pdf.py:127
 msgid "Sample variation"
-msgstr ""
+msgstr "Exempelvariation"
 
 #: pretix/base/pdf.py:131
 msgid "Product description"
@@ -6910,7 +6886,7 @@ msgstr "Produktbeskrivning"
 #: pretix/base/pdf.py:132 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:791 pretix/control/views/pdf.py:95
 msgid "Sample product description"
-msgstr ""
+msgstr "Exempel på produktbeskrivning"
 
 #: pretix/base/pdf.py:136
 msgid "Product name and variation"
@@ -6918,17 +6894,15 @@ msgstr "Produktnamn och variation"
 
 #: pretix/base/pdf.py:137
 msgid "Sample product – sample variation"
-msgstr ""
+msgstr "Exempelprodukt – exempelvariation"
 
 #: pretix/base/pdf.py:144
 msgid "Product variation description"
 msgstr "Beskrivning av produktvarianter"
 
 #: pretix/base/pdf.py:145
-#, fuzzy
-#| msgid "Product variation"
 msgid "Sample product variation description"
-msgstr "Produktvarianter"
+msgstr "Exempel på produktvariationsbeskrivning"
 
 #: pretix/base/pdf.py:152
 msgid "Ticket category"
@@ -6957,21 +6931,17 @@ msgstr "John Doe"
 #: pretix/plugins/ticketoutputpdf/exporters.py:95
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:186
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:189
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee company"
-msgstr "Epost till deltagare"
+msgstr "Företag för deltagaren"
 
 #: pretix/base/pdf.py:178 pretix/base/pdf.py:336
 #: pretix/base/services/tickets.py:117 pretix/control/views/pdf.py:111
 msgid "Sample company"
-msgstr ""
+msgstr "Exempelföretag"
 
 #: pretix/base/pdf.py:182
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Full attendee address"
-msgstr "Epost till deltagare"
+msgstr "Fullständig adress för deltagaren"
 
 #: pretix/base/pdf.py:183
 msgid ""
@@ -6981,75 +6951,67 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"John Doe  \n"
+"Exempelföretag  \n"
+"Sesame Gatan 42  \n"
+"12345 Stad  \n"
+"Atlantis"
 
 #: pretix/base/pdf.py:187
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee street"
-msgstr "Namn på deltagare"
+msgstr "Deltagarens gatuadress"
 
 #: pretix/base/pdf.py:192
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee ZIP code"
-msgstr "Namn på deltagare"
+msgstr "Postnummer för deltagaren"
 
 #: pretix/base/pdf.py:197
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee city"
-msgstr "Epost till deltagare"
+msgstr "Deltagarens stad"
 
 #: pretix/base/pdf.py:202
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee state"
-msgstr "Namn på deltagare"
+msgstr "Deltagarens delstat"
 
 #: pretix/base/pdf.py:207
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee country"
-msgstr "Epost till deltagare"
+msgstr "Deltagarens land"
 
 #: pretix/base/pdf.py:219
-#, fuzzy
-#| msgid "Pseudonymization ID"
 msgid "Pseudonymization ID (lead scanning)"
-msgstr "Pseudonymisations-ID"
+msgstr "Pseudonymiserings-ID (för ledscanning)"
 
 #: pretix/base/pdf.py:225 pretix/base/pdf.py:230
 msgid "Sample event name"
-msgstr ""
+msgstr "Exempel på evenemangsnamn"
 
 #: pretix/base/pdf.py:235
 msgid "May 31st, 2017"
-msgstr ""
+msgstr "31 maj 2017"
 
 #: pretix/base/pdf.py:239
 msgid "Event date range"
-msgstr ""
+msgstr "Evenemangsdatumintervall"
 
 #: pretix/base/pdf.py:240
 msgid "May 31st – June 4th, 2017"
-msgstr ""
+msgstr "31 maj – 4 juni 2017"
 
 #: pretix/base/pdf.py:244
 msgid "Event begin date and time"
-msgstr ""
+msgstr "Börjandatum och tid för evenemanget"
 
 #: pretix/base/pdf.py:245
 msgid "2017-05-31 20:00"
-msgstr ""
+msgstr "2017-05-31 20:00"
 
 #: pretix/base/pdf.py:252
 msgid "Event begin date"
-msgstr ""
+msgstr "Evenemangets startdatum"
 
 #: pretix/base/pdf.py:253 pretix/base/pdf.py:279 pretix/base/pdf.py:388
 #: pretix/base/pdf.py:412 pretix/base/pdf.py:436 pretix/base/pdf.py:460
 #: pretix/base/pdf.py:517 pretix/base/pdf.py:522
-#, fuzzy
 msgid "2017-05-31"
 msgstr "2017-05-31"
 
@@ -7058,15 +7020,12 @@ msgid "Event begin time"
 msgstr "Eventets starttid"
 
 #: pretix/base/pdf.py:261
-#, fuzzy
 msgid "20:00"
 msgstr "20:00"
 
 #: pretix/base/pdf.py:265
-#, fuzzy
-#| msgid "Event end date"
 msgid "Event begin weekday"
-msgstr "Evenemangets slutdatum"
+msgstr "Veckodag för evenemangets början"
 
 #: pretix/base/pdf.py:266 pretix/base/pdf.py:295
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1159
@@ -7082,15 +7041,12 @@ msgid "2017-05-31 22:00"
 msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:287
-#, fuzzy
 msgid "22:00"
 msgstr "22:00"
 
 #: pretix/base/pdf.py:294
-#, fuzzy
-#| msgid "Event end date"
 msgid "Event end weekday"
-msgstr "Evenemangets slutdatum"
+msgstr "Veckodag för evenemangets slut"
 
 #: pretix/base/pdf.py:299
 msgid "Event admission date and time"
@@ -7098,7 +7054,6 @@ msgstr "Datum och tid för tillträde till evenemanget"
 
 #: pretix/base/pdf.py:300 pretix/base/pdf.py:396 pretix/base/pdf.py:420
 #: pretix/base/pdf.py:444 pretix/base/pdf.py:468 pretix/base/pdf.py:511
-#, fuzzy
 msgid "2017-05-31 19:00"
 msgstr "2017-05-31 19:00"
 
@@ -7108,7 +7063,6 @@ msgstr "Tillträdestid för evenemang"
 
 #: pretix/base/pdf.py:308 pretix/base/pdf.py:404 pretix/base/pdf.py:428
 #: pretix/base/pdf.py:452 pretix/base/pdf.py:476
-#, fuzzy
 msgid "19:00"
 msgstr "19:00"
 
@@ -7125,12 +7079,10 @@ msgid "Invoice address company"
 msgstr "Fakturaadress företag"
 
 #: pretix/base/pdf.py:341
-#, fuzzy
 msgid "Sesame Street 42"
 msgstr "Sesame Street 42"
 
 #: pretix/base/pdf.py:346
-#, fuzzy
 msgid "12345"
 msgstr "12345"
 
@@ -7139,20 +7091,14 @@ msgid "Sample city"
 msgstr "Teststad"
 
 #: pretix/base/pdf.py:355
-#, fuzzy
-#| msgid "Invoices"
 msgid "Invoice address state"
-msgstr "Fakturor"
+msgstr "Delstat för fakturaadress"
 
 #: pretix/base/pdf.py:356
-#, fuzzy
-#| msgctxt "address"
-#| msgid "Select state"
 msgid "Sample State"
-msgstr "Välj region"
+msgstr "Exempelstat"
 
 #: pretix/base/pdf.py:361
-#, fuzzy
 msgid "Atlantis"
 msgstr "Atlantis"
 
@@ -7187,10 +7133,8 @@ msgid "Event organizer info text"
 msgstr "Informationstext för evenemangarrangör"
 
 #: pretix/base/pdf.py:382 pretix/base/pdf.py:383
-#, fuzzy
-#| msgid "Event end"
 msgid "Event info text"
-msgstr "Evenemanget slutar"
+msgstr "Evenemangsinformationstext"
 
 #: pretix/base/pdf.py:387
 msgid "Printing date"
@@ -7209,44 +7153,32 @@ msgid "Purchase date"
 msgstr "Inköpsdatum"
 
 #: pretix/base/pdf.py:419
-#, fuzzy
-#| msgid "Purchased"
 msgid "Purchase date and time"
-msgstr "Köpta"
+msgstr "Köpdatum och tid"
 
 #: pretix/base/pdf.py:427
 msgid "Purchase time"
 msgstr "Inköpstid"
 
 #: pretix/base/pdf.py:435
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity start date"
-msgstr "Giltig till"
+msgstr "Startdatum för giltighet"
 
 #: pretix/base/pdf.py:443
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity start date and time"
-msgstr "Giltig till"
+msgstr "Startdatum och tid för giltighet"
 
 #: pretix/base/pdf.py:451
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity start time"
-msgstr "Giltig till"
+msgstr "Giltighetens starttid"
 
 #: pretix/base/pdf.py:459
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity end date"
-msgstr "Giltig till"
+msgstr "Slutdatum för giltighet"
 
 #: pretix/base/pdf.py:467
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity end date and time"
-msgstr "Giltig till"
+msgstr "Slutdatum och tid för giltighet"
 
 #: pretix/base/pdf.py:475
 msgid "Validity end time"
@@ -7486,13 +7418,12 @@ msgstr[0] "Du kan inte välja mer än %(max)s styck av produkten %(product)s."
 msgstr[1] "Du kan inte välja mer än %(max)s objekt av produkten %(product)s."
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1542
-#, fuzzy, python-format
-#| msgid "You did not select any products."
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] "Du valde ingen av produkterna."
-msgstr[1] "Du valde ingen av produkterna."
+msgstr[0] "Du måste välja minst %(min)s enhet av produkten %(product)s."
+msgstr[1] "Du måste välja minst %(min)s stycken av produkten %(product)s."
 
 #: pretix/base/services/cart.py:140
 #, python-format
@@ -7638,10 +7569,8 @@ msgid "This voucher is not valid for this product."
 msgstr "Denna rabattkod är inte giltig för denna produkt."
 
 #: pretix/base/services/cart.py:183
-#, fuzzy
-#| msgid "Ticket download is not enabled for this product."
 msgid "This voucher is not valid for this seat."
-msgstr "Nedladdning av biljett är inte aktiverat för denna produkt."
+msgstr "Denna rabattkod gäller inte för denna plats."
 
 #: pretix/base/services/cart.py:185
 msgid ""
@@ -7699,36 +7628,36 @@ msgstr[1] ""
 "%(base)s."
 
 #: pretix/base/services/cart.py:202 pretix/base/services/orders.py:196
-#, fuzzy, python-format
-#| msgid "You did not select any products."
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-on from the category %(cat)s for the "
 "product %(base)s."
 msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
-msgstr[0] "Du valde ingen av produkterna."
-msgstr[1] "Du valde ingen av produkterna."
+msgstr[0] ""
+"Du måste välja minst %(min)s tillägg från kategorin %(cat)s för produkten "
+"%(base)s."
+msgstr[1] ""
+"Du måste välja minst %(min)s tillägg från kategorin %(cat)s för produkten "
+"%(base)s."
 
 #: pretix/base/services/cart.py:206 pretix/base/services/orders.py:200
-#, fuzzy, python-format
-#| msgid "You did not select any products."
+#, python-format
 msgid ""
 "You can select every add-on from the category %(cat)s for the product "
 "%(base)s at most once."
-msgstr "Du valde ingen av produkterna."
+msgstr ""
+"Du kan välja varje tillägg från kategorin %(cat)s för produkten %(base)s "
+"högst en gång."
 
 #: pretix/base/services/cart.py:207
-#, fuzzy
-#| msgid ""
-#| "For some of the products in your cart, you can choose additional options "
-#| "before you continue."
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "product."
 msgstr ""
-"För vissa av produkterna i din varukorg, kan du välja extra tillval innan du "
-"fortsätter."
+"En av produkterna du valde kan endast köpas som tillägg till en annan "
+"produkt."
 
 #: pretix/base/services/cart.py:208
 msgid "One of the products you selected can only be bought part of a bundle."
@@ -7786,26 +7715,20 @@ msgid "Attendee is already checked in"
 msgstr "Deltagaren är redan incheckad"
 
 #: pretix/base/services/checkin.py:286
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket type not allowed"
-msgstr "Försäljningen har inte påbörjats"
+msgstr "Biljettypen är inte tillåten"
 
 #: pretix/base/services/checkin.py:289
 msgid "Wrong entrance gate"
 msgstr "Fel ingång/entre"
 
 #: pretix/base/services/checkin.py:313
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "time since last entry"
-msgstr "Post på väntelistan"
+msgstr "tid sedan senaste inträde"
 
 #: pretix/base/services/checkin.py:314
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "time since first entry"
-msgstr "Post på väntelistan"
+msgstr "tid sedan första inträdet"
 
 #: pretix/base/services/checkin.py:315
 msgid "number of days with an entry"
@@ -7820,10 +7743,9 @@ msgid "number of entries today"
 msgstr "Antal inlägg idag"
 
 #: pretix/base/services/checkin.py:318
-#, fuzzy, python-brace-format
-#| msgid "Admission: {datetime}"
+#, python-brace-format
 msgid "number of entries since {datetime}"
-msgstr "Tillträde: {datetime}"
+msgstr "antal inträden sedan {datetime}"
 
 #: pretix/base/services/checkin.py:319
 #, python-brace-format
@@ -7831,16 +7753,14 @@ msgid "number of entries before {datetime}"
 msgstr "Antal inlägg före {datetime}"
 
 #: pretix/base/services/checkin.py:320
-#, fuzzy, python-brace-format
-#| msgid "Admission: {datetime}"
+#, python-brace-format
 msgid "number of days with an entry since {datetime}"
-msgstr "Tillträde: {datetime}"
+msgstr "antal dagar med ett inträde sedan {datetime}"
 
 #: pretix/base/services/checkin.py:321
-#, fuzzy, python-brace-format
-#| msgid "Admission: {datetime}"
+#, python-brace-format
 msgid "number of days with an entry before {datetime}"
-msgstr "Tillträde: {datetime}"
+msgstr "antal dagar med ett inträde före {datetime}"
 
 #: pretix/base/services/checkin.py:322
 msgid "week day"
@@ -7871,15 +7791,14 @@ msgid "Sunday"
 msgstr "Söndag"
 
 #: pretix/base/services/checkin.py:368
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{variable} is not {value}"
-msgstr "{variabel} är inte {value}"
+msgstr "{variable} är inte {value}"
 
 #: pretix/base/services/checkin.py:370
-#, fuzzy, python-brace-format
-#| msgid "Tax value"
+#, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr "Skattevärde"
+msgstr "Maximalt {variable} överskridet"
 
 #: pretix/base/services/checkin.py:372
 #, python-brace-format
@@ -7896,10 +7815,8 @@ msgid "This order position has been canceled."
 msgstr "Denna beställningsposition har blivit inställd."
 
 #: pretix/base/services/checkin.py:981
-#, fuzzy
-#| msgid "The device has been removed."
 msgid "This ticket has been blocked."
-msgstr "Den här enheten har tagits bort."
+msgstr "Den här biljetten har blockerats."
 
 #: pretix/base/services/checkin.py:990
 msgid "This order is not yet approved."
@@ -7911,10 +7828,9 @@ msgid "This ticket is only valid after {datetime}."
 msgstr "Denna biljett är endast giltig efter {datetime}."
 
 #: pretix/base/services/checkin.py:1013 pretix/base/services/checkin.py:1017
-#, fuzzy, python-brace-format
-#| msgid "Ticket download is not enabled for this product."
+#, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr "Nedladdning av biljett är inte aktiverat för denna produkt."
+msgstr "Denna biljett var endast giltig före {datetime}."
 
 #: pretix/base/services/checkin.py:1048
 msgid "This order position has an invalid product for this check-in list."
@@ -7923,10 +7839,10 @@ msgstr ""
 "incheckningslista."
 
 #: pretix/base/services/checkin.py:1057
-#, fuzzy
-#| msgid "Ticket download is not enabled for this product."
 msgid "This order position has an invalid date for this check-in list."
-msgstr "Nedladdning av biljett är inte aktiverat för denna produkt."
+msgstr ""
+"Denna beställningsposition har ett ogiltigt datum för denna "
+"incheckningslista."
 
 #: pretix/base/services/checkin.py:1068
 msgid "This order is not marked as paid."
@@ -7967,16 +7883,12 @@ msgid "You do not have sufficient permission to perform this export."
 msgstr "Du har inte tillräckliga behörigheter för att utföra denna export."
 
 #: pretix/base/services/export.py:189
-#, fuzzy
-#| msgid "Expired"
 msgid "Export failed"
-msgstr "Utgången"
+msgstr "Export misslyckades"
 
 #: pretix/base/services/export.py:206
-#, fuzzy
-#| msgid "Admission time"
 msgid "Permission denied."
-msgstr "tillträdes tid"
+msgstr "Åtkomst nekad."
 
 #: pretix/base/services/export.py:221
 msgid "Your exported data exceeded the size limit for scheduled exports."
@@ -8119,10 +8031,8 @@ msgid ""
 msgstr "Du har valt ett medlemskap som är kopplat till ett annat kundkonto."
 
 #: pretix/base/services/memberships.py:154
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "You selected membership that has been canceled."
-msgstr "Dina ändringar har sparats."
+msgstr "Du har valt ett medlemskap som har blivit avbrutet."
 
 #: pretix/base/services/memberships.py:159
 msgid ""
@@ -8190,17 +8100,13 @@ msgstr ""
 
 #: pretix/base/services/memberships.py:231
 #: pretix/base/services/memberships.py:233
-#, fuzzy
-#| msgid "Start date"
 msgid "start"
-msgstr "Start datum"
+msgstr "början"
 
 #: pretix/base/services/memberships.py:232
 #: pretix/base/services/memberships.py:234
-#, fuzzy
-#| msgid "Event end"
 msgid "open end"
-msgstr "Evenemanget slutar"
+msgstr "öppen ände"
 
 #: pretix/base/services/memberships.py:244
 #, python-brace-format
@@ -8239,10 +8145,8 @@ msgid "Invalid data in row {row}: {message}"
 msgstr "Ogiltiga data i rad {row}: {message}"
 
 #: pretix/base/services/modelimport.py:217
-#, fuzzy
-#| msgid "A voucher can not be deleted if it already has been redeemed."
 msgid "A voucher cannot be created without a code."
-msgstr "En kupong kan inte raderas om den redan har blivit inlöst."
+msgstr "En kupong kan inte skapas utan en kod."
 
 #: pretix/base/services/orders.py:129
 msgid ""
@@ -8300,10 +8204,8 @@ msgstr[1] ""
 "tagit bort överskottet från din kundvagn."
 
 #: pretix/base/services/orders.py:154
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The booking period has ended."
-msgstr "Denna beställning har avbrutits"
+msgstr "Bokningsperioden har avslutats."
 
 #: pretix/base/services/orders.py:160
 msgid ""
@@ -8356,44 +8258,48 @@ msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
+"Bokningsperioden för ett av evenemangen i din kundvagn har ännu inte börjat. "
+"De berörda positionerna har tagits bort från din kundvagn."
 
 #: pretix/base/services/orders.py:184
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
+"En av platserna i din order var ogiltig, vi har tagit bort positionen från "
+"din kundvagn."
 
 #: pretix/base/services/orders.py:185
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
+"En av platserna i din order har blivit upptagen i mellantiden, vi har tagit "
+"bort positionen från din kundvagn."
 
 #: pretix/base/services/orders.py:201
-#, fuzzy, python-format
-#| msgid "A voucher can not be deleted if it already has been redeemed."
+#, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr "En kupong kan inte raderas om den redan har blivit inlöst."
+msgstr ""
+"Du kan inte ta bort positionen %(addon)s eftersom den redan har checkats in."
 
 #: pretix/base/services/orders.py:202
 msgid "Paid products not supported without a valid currency."
-msgstr ""
+msgstr "Betalande produkter stöds inte utan en giltig valuta."
 
 #: pretix/base/services/orders.py:218
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The order was not canceled."
-msgstr "Denna beställning har avbrutits."
+msgstr "Beställningen avbröts inte."
 
 #: pretix/base/services/orders.py:272 pretix/control/forms/orders.py:124
 msgid "The new expiry date needs to be in the future."
-msgstr ""
+msgstr "Det nya förfallodatumet måste vara i framtiden."
 
 #: pretix/base/services/orders.py:365 pretix/base/services/orders.py:451
 msgid "This order is not pending approval."
-msgstr ""
+msgstr "Denna order är inte väntande godkännande."
 
 #: pretix/base/services/orders.py:509 pretix/presale/views/order.py:938
 #: pretix/presale/views/order.py:987
@@ -8406,15 +8312,19 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Denna order kan inte avbrytas eftersom presentkortet {card} som köptes i "
+"denna order redan har använts."
 
 #: pretix/base/services/orders.py:561 pretix/control/forms/orders.py:205
 msgid ""
 "The cancellation fee cannot be higher than the total amount of this order."
 msgstr ""
+"Avbokningsavgiften kan inte vara högre än det totala beloppet för denna "
+"order."
 
 #: pretix/base/services/orders.py:955
 msgid "The selected payment methods do not cover the total balance."
-msgstr ""
+msgstr "De valda betalningsmetoderna täcker inte hela saldo."
 
 #: pretix/base/services/orders.py:1022
 msgid ""
@@ -8422,52 +8332,64 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
+"När du försökte lägga din order märkte vi att ordertotalen har ändrats. "
+"Antingen har en av priserna just ändrats, eller ett presentkort som du "
+"använde har använts under tiden. Vänligen kontrollera priserna nedan och "
+"försök igen."
 
 #: pretix/base/services/orders.py:1516
 msgid "You need to select a variation of the product."
-msgstr ""
+msgstr "Du måste välja en variation av produkten."
 
 #: pretix/base/services/orders.py:1517
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
 msgstr ""
+"Kvoten {name} har inte tillräcklig kapacitet kvar för att utföra operationen."
 
 #: pretix/base/services/orders.py:1518
 msgid "There is no quota defined that allows this operation."
-msgstr ""
+msgstr "Det finns ingen kvot definierad som tillåter denna operation."
 
 #: pretix/base/services/orders.py:1519
 msgid "The selected product is not active or has no price set."
-msgstr ""
+msgstr "Den valda produkten är inte aktiv eller har ingen prisinställning."
 
 #: pretix/base/services/orders.py:1520
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
 msgstr ""
+"Denna åtgärd skulle lämna ordern tom. Vänligen avbryt själva ordern istället."
 
 #: pretix/base/services/orders.py:1522
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
 msgstr ""
+"Denna åtgärd skulle göra ordern gratis och därför omedelbart betald, men "
+"ingen kvot är tillgänglig."
 
 #: pretix/base/services/orders.py:1525
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
 msgstr ""
+"Detta är en tilläggsprodukt. Vänligen välj den grundposition den ska läggas "
+"till."
 
 #: pretix/base/services/orders.py:1526
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
 msgstr ""
+"Den valda grundpositionen tillåter inte att du lägger till denna produkt som "
+"ett tillägg."
 
 #: pretix/base/services/orders.py:1527
 msgid "You need to choose a subevent for the new position."
-msgstr ""
+msgstr "Du måste välja en delhändelse för den nya positionen."
 
 #: pretix/base/services/orders.py:1530
 #, python-brace-format
@@ -8475,18 +8397,20 @@ msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr ""
+"Du har valt platsen \"{seat}\" för ett datum som inte matchar det valda "
+"biljettdatumet. Vänligen välj en plats igen."
 
 #: pretix/base/services/orders.py:1532
 msgid "The selected product requires you to select a seat."
-msgstr ""
+msgstr "Den valda produkten kräver att du väljer en plats."
 
 #: pretix/base/services/orders.py:1533
 msgid "The selected product does not allow to select a seat."
-msgstr ""
+msgstr "Den valda produkten tillåter inte att du väljer en plats."
 
 #: pretix/base/services/orders.py:1534
 msgid "The selected country is blocked by your tax rule."
-msgstr ""
+msgstr "Det valda landet är blockerat enligt din skatteregel."
 
 #: pretix/base/services/orders.py:1535
 msgid ""
