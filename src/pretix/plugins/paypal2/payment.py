@@ -949,6 +949,9 @@ class PaypalMethod(BasePaymentProvider):
                 }
             })
             response = self.client.execute(req)
+        except KeyError:
+            raise PaymentException(_('Refunding the amount via PayPal failed: The original payment does not contain '
+                                     'the required information to issue an automated refund.'))
         except IOError as e:
             refund.order.log_action('pretix.event.order.refund.failed', {
                 'local_id': refund.local_id,
