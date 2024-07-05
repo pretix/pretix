@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-05-30 17:00+0000\n"
+"PO-Revision-Date: 2024-07-05 17:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "da/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -261,7 +261,7 @@ msgstr ""
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Billet ikke betalt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
@@ -281,11 +281,11 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Ticket already used"
-msgstr ""
+msgstr "Billet allerede i brug"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Information required"
-msgstr ""
+msgstr "Kræver information"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Unknown ticket"
@@ -301,15 +301,15 @@ msgstr "Adgang ikke tilladt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Billetkode trukket tilbage/ændret"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
-msgstr ""
+msgstr "Billet blokeret"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket not valid at this time"
-msgstr ""
+msgstr "Billetten er ikke gyldig på dette tidspunkt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order canceled"
@@ -317,11 +317,11 @@ msgstr "Bestilling annulleret"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Billetkoden er flertydig på listen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
-msgstr ""
+msgstr "Bestilling ikke godkendt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 #, fuzzy
@@ -472,7 +472,7 @@ msgstr "Produktvariation"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
-msgstr ""
+msgstr "Indgang"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
