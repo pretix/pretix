@@ -108,6 +108,7 @@ with scopes_disabled():
         status = django_filters.CharFilter(field_name='status', lookup_expr='iexact')
         modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
         created_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
+        created_before = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='lt')
         subevent_after = django_filters.IsoDateTimeFilter(method='subevent_after_qs')
         subevent_before = django_filters.IsoDateTimeFilter(method='subevent_before_qs')
         search = django_filters.CharFilter(method='search_qs')
@@ -115,6 +116,8 @@ with scopes_disabled():
         variation = django_filters.CharFilter(field_name='all_positions', lookup_expr='variation_id', distinct=True)
         subevent = django_filters.CharFilter(field_name='all_positions', lookup_expr='subevent_id', distinct=True)
         customer = django_filters.CharFilter(field_name='customer__identifier')
+        sales_channel = django_filters.CharFilter(field_name='sales_channel__identifier')
+        payment_provider = django_filters.CharFilter(method='provider_qs')
 
         class Meta:
             model = Order
@@ -137,6 +140,11 @@ with scopes_disabled():
                 )
             )
             return qs
+
+        def provider_qs(self, qs, name, value):
+            return qs.filter(Exists(
+                OrderPayment.objects.filter(order=OuterRef('pk'), provider=value)
+            ))
 
         def subevent_before_qs(self, qs, name, value):
             if getattr(self.request, 'event', None):
