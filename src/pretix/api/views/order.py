@@ -142,14 +142,9 @@ with scopes_disabled():
             return qs
 
         def provider_qs(self, qs, name, value):
-            qs = qs.annotate(
-                has_payment_with_provider=Exists(
-                    OrderPayment.objects.filter(
-                        Q(order=OuterRef('pk')) & Q(provider=value)
-                    )
-                )
-            ).filter(has_payment_with_provider=True)
-            return qs
+            return qs.filter(Exists(
+                OrderPayment.objects.filter(order=OuterRef('pk'), provider=value)
+            ))
 
         def subevent_before_qs(self, qs, name, value):
             if getattr(self.request, 'event', None):
