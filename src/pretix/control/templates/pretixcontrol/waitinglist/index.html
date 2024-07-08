@@ -57,7 +57,7 @@
                                 {% for se in request.event.subevents.all %}
                                     <option value="{{ se.id }}"
                                             {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
-                                        {{ se.name }} – {{ se.get_date_range_display }}
+                                        {{ se }}
                                     </option>
                                 {% endfor %}
                             </select>
