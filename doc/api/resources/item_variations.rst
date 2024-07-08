@@ -164,7 +164,7 @@ Endpoints
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
-   :query boolean search: Filter the list by the value of the variation (substring search).
+   :query string search: Filter the list by the value of the variation (substring search).
    :query boolean active: If set to ``true`` or ``false``, only items with this value for the field ``active`` will be
                           returned.
    :param organizer: The ``slug`` field of the organizer to fetch
