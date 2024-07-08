@@ -295,7 +295,7 @@ var pretixstripe = {
             let iframe = document.createElement('iframe');
             iframe.src = payment_intent_next_action_redirect_url;
             iframe.className = 'embed-responsive-item';
-            iframe.setAttribute('sandbox', 'allow-scripts allow-top-navigation');
+            iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-top-navigation');
             $('#scacontainer').append(iframe);
             $('#scacontainer iframe').on("load", function () {
                 waitingDialog.hide();
