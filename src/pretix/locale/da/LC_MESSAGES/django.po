@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-05 17:00+0000\n"
+"PO-Revision-Date: 2024-07-09 23:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -3517,9 +3517,8 @@ msgid "Generate automatically"
 msgstr "Generér automatisk"
 
 #: pretix/base/modelimport_orders.py:459
-#, fuzzy
 msgid "You cannot assign a position secret that already exists."
-msgstr "Du kan tildele en hemmelig position, der allerede eksisterer."
+msgstr "Du kan ikke tildele en positionshemmelighed, som allerede eksisterer."
 
 #: pretix/base/modelimport_orders.py:490
 msgid "Please enter a valid language code."
@@ -4396,26 +4395,26 @@ msgstr "Gyldige værdier"
 
 #: pretix/base/models/event.py:1716
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
-#, fuzzy
 msgid "Show filter option to customers"
-msgstr "Vis antal resterende billetter"
+msgstr "Vis filtreringsmuligheder overfor kunder"
 
 #: pretix/base/models/event.py:1717
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
 msgstr ""
+"Dette felt blivervist i den offentlige liste over arrangementer og i "
+"kalendervisningen, således at kunderne kan filtrere begivenhederne."
 
 #: pretix/base/models/event.py:1720 pretix/control/forms/organizer.py:222
 #: pretix/control/forms/organizer.py:226
-#, fuzzy
 msgid "Public name"
-msgstr "Fuldt navn"
+msgstr "Offentligt navn"
 
 #: pretix/base/models/event.py:1724
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
 msgid "Can be used for filtering"
-msgstr ""
+msgstr "Kan blive brugt til filtrering"
 
 #: pretix/base/models/event.py:1725
 msgid ""
@@ -4423,19 +4422,23 @@ msgid ""
 "can also be used for hidden filter parameters in the frontend (e.g. using "
 "the widget)."
 msgstr ""
+"Dette felt vil blive vist til at filtrere arrangementer og rapporter i "
+"backendet. Det kan også blive brugt til ikke synlige parametre i frontendet ("
+"f.eks. til brug af widgetet)."
 
 #: pretix/base/models/event.py:1735
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
+"En egenskab kan enten være påkrævet eller have en standardværdi, men ikke "
+"begge dele."
 
 #: pretix/base/models/event.py:1815 pretix/base/models/organizer.py:516
-#, fuzzy
 msgid "Link text"
-msgstr "Information"
+msgstr "Linkets tekst, der bliver vist"
 
 #: pretix/base/models/event.py:1818 pretix/base/models/organizer.py:519
 msgid "Link URL"
-msgstr ""
+msgstr "Linkets URL"
 
 #: pretix/base/models/exports.py:42 pretix/control/navigation.py:227
 #: pretix/control/navigation.py:648
@@ -4443,24 +4446,21 @@ msgid "Export"
 msgstr "Eksporter"
 
 #: pretix/base/models/exports.py:59
-#, fuzzy
 msgid "Additional recipients"
-msgstr "Yderligere indstillinger"
+msgstr "Yderligere modtagere"
 
 #: pretix/base/models/exports.py:61 pretix/base/models/exports.py:66
 #: pretix/base/models/exports.py:71
 msgid "You can specify multiple recipients separated by commas."
-msgstr ""
+msgstr "Du kan angive flere modtagere separeret med kommaer."
 
 #: pretix/base/models/exports.py:64
-#, fuzzy
 msgid "Additional recipients (Cc)"
-msgstr "Yderligere indstillinger"
+msgstr "Yderligere modtagere (CC)"
 
 #: pretix/base/models/exports.py:69
-#, fuzzy
 msgid "Additional recipients (Bcc)"
-msgstr "Yderligere indstillinger"
+msgstr "Yderligere modtagere (BCC)"
 
 #: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1084
 #: pretix/control/forms/event.py:1146 pretix/control/forms/event.py:1158
@@ -4482,43 +4482,41 @@ msgid "Message"
 msgstr "Meddelelse"
 
 #: pretix/base/models/exports.py:85
-#, fuzzy
 msgid "Requested start time"
-msgstr "Starttidspunkt"
+msgstr "Ønsket starttidspunkt"
 
 #: pretix/base/models/exports.py:86
 msgid "The actual start time might be delayed depending on system load."
 msgstr ""
+"Det aktuelle starttidspunkt kan være forsinket afhængig af systemets "
+"belastning."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Ingen værdi må indeholde det afgrænsende tegn."
 
 #: pretix/base/models/giftcards.py:81
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
-#, fuzzy
 msgid "Owned by ticket holder"
-msgstr "Hent din billet her:"
+msgstr "Tilhører billettens indehaver"
 
 #: pretix/base/models/giftcards.py:93
-#, fuzzy
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
 msgstr ""
-"Den korte url må kun indeholder bogstaver, tal, punktummer og bindestreger."
+"Gavekortets kode må kun indeholde bogstaver, tal, punktumer og bindetreger."
 
 #: pretix/base/models/giftcards.py:105
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Særlige betingelser"
 
 #: pretix/base/models/giftcards.py:219 pretix/base/models/giftcards.py:223
-#, fuzzy
 msgid "Manual transaction"
-msgstr "Beskrivelse"
+msgstr "Manuel overførsel"
 
 #: pretix/base/models/invoices.py:185
-#, fuzzy, python-format
+#, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
 msgstr "CVR-nr.: %s"
@@ -4537,6 +4535,8 @@ msgstr "Kategorinavn"
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
 msgstr ""
+"Hvis du aktiverer denne indstilling, vil denne blive brugt i stedet for det "
+"offentlige navn i backendet."
 
 #: pretix/base/models/items.py:102
 msgid "Category description"
@@ -4552,6 +4552,9 @@ msgid ""
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
 msgstr ""
+"Hvis dette er valgt, vil produkterne, som tilhører denne kategori, ikke være "
+"til salg for sig selv. De kan kun købes i kombination med et produkt, som "
+"har denne kategori konfigureret som en mulig kilde for add-ons."
 
 #: pretix/base/models/items.py:117
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
@@ -4566,11 +4569,8 @@ msgid "{category} (Add-On products)"
 msgstr "{category} (Tillægsprodukter)"
 
 #: pretix/base/models/items.py:128
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Add-On products"
-msgstr "Tilføjelsesprodukter"
+msgstr "Add-on-produkter"
 
 #: pretix/base/models/items.py:184 pretix/base/models/items.py:240
 msgid "Disable product for this date"
@@ -4587,46 +4587,42 @@ msgid "This product will not be sold after the given date."
 msgstr "Dette produkt vil ikke blive solgt efter denne dato."
 
 #: pretix/base/models/items.py:388
-#, fuzzy
 msgid "Event validity (default)"
-msgstr "Arrangementsdato"
+msgstr "Arrangementsgyldighed (standard)"
 
 #: pretix/base/models/items.py:389
-#, fuzzy
 msgid "Fixed time frame"
-msgstr "Kundehandlinger"
+msgstr "Fast tidsrum"
 
 #: pretix/base/models/items.py:390
-#, fuzzy
 msgid "Dynamic validity"
-msgstr "Gavekort"
+msgstr "Dynamisk gyldighed"
 
 #: pretix/base/models/items.py:396 pretix/control/forms/item.py:600
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
-#, fuzzy
 msgid "Hide product if unavailable"
-msgstr "Venter, produkt ikke tilgængeligt"
+msgstr "Skjul produkt, hvis ikke til rådighed"
 
 #: pretix/base/models/items.py:397
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "Show info text if unavailable"
-msgstr ""
+msgstr "Vis info-tekst, hvis ikke til rådighed"
 
 #: pretix/base/models/items.py:404 pretix/base/models/items.py:724
 msgid "Don't use re-usable media, use regular one-off tickets"
-msgstr ""
+msgstr "Brug ikke genanvendelige medier, brug almindelige engangsbilletter"
 
 #: pretix/base/models/items.py:405
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Påkræv genanvendelse af et eksisterende medie"
 
 #: pretix/base/models/items.py:406
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "Påkræv, at et førhen ukendt medie bliver tilføjet fornylig"
 
 #: pretix/base/models/items.py:407
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Påkræv, at der enten bruges et eksisterende eller et nyt medie"
 
 #: pretix/base/models/items.py:423 pretix/base/models/items.py:1397
 msgid "Category"
@@ -4650,6 +4646,9 @@ msgid ""
 "each of the variations. If a variation does not have a special price or if "
 "you do not have variations, this price will be used."
 msgstr ""
+"Hvis der findes flere variationer af dette produkt, kan du fastlægge "
+"forskellige priser for hver af variationerne. Hvis en variation ikke har en "
+"særlig pris eller hvis du ikke har variationer, vil denne pris blive brugt."
 
 #: pretix/base/models/items.py:454
 msgid ""
@@ -4659,11 +4658,15 @@ msgid ""
 "event. This is currently not supported for products that are bought as an "
 "add-on to other products."
 msgstr ""
+"Hvis denne option er valgt, kan dine brugere selv vælge prisen. Prisen "
+"konfigureret foroven vil så blive anset som minimumsprisen, som en bruger "
+"skal indtaste. Dette kunne du f.eks. bruge til at indsamle yderligere "
+"donationer for dit arrangement. Denne indstilling understøttes for tiden "
+"ikke for produkter, som er købt som et add-on for andre produkter."
 
 #: pretix/base/models/items.py:460 pretix/base/models/items.py:1116
-#, fuzzy
 msgid "Suggested price"
-msgstr "Standardpris"
+msgstr "Foreslået pris"
 
 #: pretix/base/models/items.py:461 pretix/base/models/items.py:1117
 msgid ""
@@ -4672,6 +4675,10 @@ msgid ""
 "have without the free price option. This will be ignored if a voucher is "
 "used that lowers the price."
 msgstr ""
+"Denne pris vil blive brugt som standardværdien for dette indtastningsfelt. "
+"Brugeren kan vælge en lavere værdi, dog ikke lavere end den pris, som "
+"produktet ville have uden indstillingen for valgfrie priser. Denne "
+"indstilling ignoreres, hvis der bruges en voucher, som reducerer prisen."
 
 #: pretix/base/models/items.py:475
 msgid "Whether or not buying this product allows a person to enter your event"
