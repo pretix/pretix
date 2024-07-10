@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-10 15:00+0000\n"
+"PO-Revision-Date: 2024-07-11 02:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -4930,54 +4930,49 @@ msgstr ""
 "ændringen, men beholde sin akutelle gyldighed."
 
 #: pretix/base/models/items.py:681 pretix/control/forms/item.py:663
-#, fuzzy
 msgid "Start of validity"
-msgstr "Gavekort"
+msgstr "Gyldig fra"
 
 #: pretix/base/models/items.py:682
-#, fuzzy
 msgid "End of validity"
-msgstr "Slut af forsalg"
+msgstr "Gyldig til"
 
 #: pretix/base/models/items.py:685
-#, fuzzy
 msgid "Minutes"
-msgstr "dage før"
+msgstr "Minutter"
 
 #: pretix/base/models/items.py:689
 msgid "Hours"
-msgstr ""
+msgstr "Timer"
 
 #: pretix/base/models/items.py:693
 msgid "Days"
-msgstr ""
+msgstr "Dage"
 
 #: pretix/base/models/items.py:697
 msgid "Months"
 msgstr "Måneder"
 
 #: pretix/base/models/items.py:700
-#, fuzzy
 msgid "Customers can select the validity start date"
-msgstr "Tillad brugere at annullere ubetalte bestillinger"
+msgstr "Kunder kan vælge gyldighedens starttidspunkt"
 
 #: pretix/base/models/items.py:701
 msgid "If not selected, the validity always starts at the time of purchase."
-msgstr ""
+msgstr "Hvis dette ikke er valgt, starter gyldigheden altid på købstidspunktet."
 
 #: pretix/base/models/items.py:706
 #, fuzzy
 msgid "Maximum future start"
-msgstr "I alt"
+msgstr "Maximal start i fremtiden"
 
 #: pretix/base/models/items.py:707
-#, fuzzy
 msgid "The selected start date may only be this many days in the future."
-msgstr "Delarrangementet tilhører ikke dette arrangement."
+msgstr "Det valgte starttidspunkt må kun være så mange dage i fremtiden."
 
 #: pretix/base/models/items.py:713
 msgid "Reusable media policy"
-msgstr ""
+msgstr "Politik for genanvendelige medier"
 
 #: pretix/base/models/items.py:715
 msgid ""
@@ -4988,10 +4983,16 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
+"Hvis dette produkt skal opbevares på et genanvendeligt fysisk medie, kan du "
+"vedhæfte en politik for fysiske medier. Dette er ikke nødvendigt for "
+"almindelige billetter, som bare bruger en engangs-stregkode, men kun for "
+"produkter som f.eks. fornyelige sæsonkort eller genopladelige gavekort-"
+"armbånd. Dette er en avanceret funktion, som også kræver en specifik "
+"konfiguration af billet- og printindstillinger."
 
 #: pretix/base/models/items.py:725
 msgid "Reusable media type"
-msgstr ""
+msgstr "Genanvendelig medietype"
 
 #: pretix/base/models/items.py:727
 msgid ""
@@ -4999,6 +5000,10 @@ msgid ""
 "Note that not all media types support all types of products, and not all "
 "media types are supported across all sales channels or check-in processes."
 msgstr ""
+"Vælg den type fysisk medie, der skal bruges til dette produkt. Bemærk, at "
+"ikke alle medietyper understøtter alle typer produkter, og at ikke alle "
+"medietyper understøttes på tværs af alle salgskanaler eller check-in-"
+"processer."
 
 #: pretix/base/models/items.py:738 pretix/base/models/items.py:1641
 #: pretix/control/forms/filter.py:418 pretix/control/forms/filter.py:1822
@@ -5020,22 +5025,21 @@ msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
 msgstr ""
+"Hvis du vælger en politik for genanvendelige medier, skal du også vælge en "
+"genanvendelig medietype."
 
 #: pretix/base/models/items.py:932
-#, fuzzy
 msgid "The selected media type is not enabled in your organizer settings."
-msgstr "Det valgte produkt er ikke aktivt eller har ingen pris."
+msgstr "Den valgte medietype er ikke aktiveret i dine arrangør-indstillinger."
 
 #: pretix/base/models/items.py:934
-#, fuzzy
 msgid "The selected media type does not support usage for tickets currently."
-msgstr "Delarrangementet tilhører ikke dette arrangement."
+msgstr "Den valgte medietype kan på dette tidspunkt ikke bruges til billetter."
 
 #: pretix/base/models/items.py:936
-#, fuzzy
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr "Delarrangementet tilhører ikke dette arrangement."
+msgstr "Den valgte medietype kan for tiden ikke bruges til gavekort."
 
 #: pretix/base/models/items.py:938
 msgid ""
@@ -5043,24 +5047,31 @@ msgid ""
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
 msgstr ""
+"Du kan på dette tidspunkt ikke oprette gavekort med en politik for "
+"genanvendelige medier. Gavekort for nogle genanvendelige medier kan i stedet "
+"for oprettes eller oplades direkte ved POS'en."
 
 #: pretix/base/models/items.py:946
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
 msgstr ""
+"Det maksimale antal per bestilling kan ikke være mindre end det minimale "
+"antal per bestilling."
 
 #: pretix/base/models/items.py:952
 msgid "The item's category must belong to the same event as the item."
 msgstr ""
+"Artiklens kategori skal være knyttet til samme arrangement som artiklen."
 
 #: pretix/base/models/items.py:957
 msgid "The item's tax rule must belong to the same event as the item."
 msgstr ""
+"Artiklens momsregel skal være knyttet til det samme arrangement som artiklen."
 
 #: pretix/base/models/items.py:963
 msgid "The item's availability cannot end before it starts."
-msgstr ""
+msgstr "Artiklens tilgængelighed kan ikke slutte, før den starter."
 
 #: pretix/base/models/items.py:1096
 msgid "This is shown below the variation name in lists."
@@ -7345,12 +7356,13 @@ msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
+"pretix signature scheme 1 (til meget store begivenheder, ændrer semantikken "
+"for offline-scanning - se dokumentation eller support for detaljer)"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
-#, fuzzy
 msgid "Event canceled"
-msgstr "Arrangementsdato"
+msgstr "Arrangement aflyst"
 
 #: pretix/base/services/cart.py:101 pretix/base/services/modelimport.py:194
 #: pretix/base/services/orders.py:150
@@ -7395,49 +7407,50 @@ msgstr ""
 "du har valgt. Se venligst detaljer nedenfor."
 
 #: pretix/base/services/cart.py:117
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Some of the products you selected are no longer available. The following "
 "products are affected and have not been added to your cart: %s"
 msgstr ""
-"Nogle af produkterne du har valgt er ikke længere tilgængelige i de mængder "
-"du har valgt. Se venligst detaljer nedenfor."
+"Nogle af de produkter, du har valgt, er ikke længere tilgængelige. Følgende "
+"produkter er berørt og er ikke blevet tilføjet til din kurv: %s"
 
 #: pretix/base/services/cart.py:121
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. The following products are affected and have not been added to "
 "your cart: %s"
 msgstr ""
-"Nogle af produkterne du har valgt er ikke længere tilgængelige i de mængder "
-"du har valgt. Se venligst detaljer nedenfor."
+"Nogle af de produkter, du har valgt, er ikke længere tilgængelige i det "
+"antal, du har valgt. Følgende produkter er berørt og er ikke blevet tilføjet "
+"til din kurv: %s"
 
 #: pretix/base/services/cart.py:126
-#, fuzzy, python-format
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "Du kan ikke vælge mere end %s produkter pr. bestilling."
-msgstr[1] "Du kan ikke vælge mere end %s produkter pr. bestilling."
+msgstr[0] "Du kan ikke vælge mere end %s artikel pr. bestilling."
+msgstr[1] "Du kan ikke vælge flere end %s artikler pr. bestilling."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1537
-#, fuzzy, python-format
+#, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] "Du kan højst vælge %(max)s af produktet %(product)s."
-msgstr[1] "Du kan højst vælge %(max)s af produktet %(product)s."
+msgstr[0] "Du kan ikke vælge mere end %(max)s artikel fra produktet %(product)s."
+msgstr[1] "Du kan ikke vælge flere end %(max)s artikler fra produktet %(product)s."
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1542
-#, fuzzy, python-format
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] "Du skal vælge mindst %(min)s af produktet %(product)s."
-msgstr[1] "Du skal vælge mindst %(min)s af produktet %(product)s."
+msgstr[0] "Du skal vælge mindst %(min)s artikel fra produktet %(product)s."
+msgstr[1] "Du skal vælge mindst %(min)s artikler fra produktet %(product)s."
 
 #: pretix/base/services/cart.py:140
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "item of it."
@@ -7445,23 +7458,21 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-"Vi har fjernet %(product)s fra din kurv idet du ikke kan købe færre end "
-"%(min)s af det."
+"Vi har fjernet %(product)s fra din kurv, idet du ikke kan købe færre end "
+"%(min)s artikel fra dette produkt."
 msgstr[1] ""
-"Vi har fjernet %(product)s fra din kurv idet du ikke kan købe færre end "
-"%(min)s af det."
+"Vi har fjernet %(product)s fra din kurv, idet du ikke kan købe færre end "
+"%(min)s artikler fra dette produkt."
 
 #: pretix/base/services/cart.py:144 pretix/base/services/orders.py:153
 #: pretix/presale/templates/pretixpresale/event/index.html:157
 #: pretix/presale/views/waiting.py:106 pretix/presale/views/widget.py:763
-#, fuzzy
 msgid "The booking period for this event has not yet started."
-msgstr "Forsalgsperioden for dette arrangement er endnu ikke startet."
+msgstr "Forsalget for dette arrangement er ikke startet endnu."
 
 #: pretix/base/services/cart.py:145
-#, fuzzy
 msgid "The booking period for this event has ended."
-msgstr "Forsalgsperioden for dette arrangement er ovre."
+msgstr "Forsalget for dette arrangement er afsluttet."
 
 #: pretix/base/services/cart.py:146
 msgid ""
@@ -7472,27 +7483,24 @@ msgstr ""
 "kan ikke oprettes nye bestillinger."
 
 #: pretix/base/services/cart.py:148
-#, fuzzy
 msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
-"Forsalget for dette arrangement er endnu ikke startet. Vi har fjernet de "
-"berørte produkter fra din kurv."
+"Forsalget for dette arrangement er endnu ikke begyndt. De berørte poster er "
+"blevet fjernet fra din indkøbskurv."
 
 #: pretix/base/services/cart.py:151 pretix/base/services/orders.py:181
-#, fuzzy
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
-"Forsalget for dette arrangement er slut. Vi har fjernet de berørte produkter "
-"fra din kurv."
+"Forsalget for et af arrangementerne i din indkøbskurv er afsluttet. De "
+"berørte poster er blevet fjernet fra din indkøbskurv."
 
 #: pretix/base/services/cart.py:153
-#, fuzzy
 msgid "The entered price is not a number."
-msgstr "Den indtastede pris er for høj."
+msgstr "Den indtastede pris er ikke noget tal."
 
 #: pretix/base/services/cart.py:154
 msgid "The entered price is to high."
@@ -7511,7 +7519,11 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
+"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst "
+"%(number)s passende produkter."
 msgstr[1] ""
+"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst "
+"%(number)s passende produkter."
 
 #: pretix/base/services/cart.py:162
 #, python-format
@@ -7524,7 +7536,13 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst "
+"%(number)s passende produkter. Vi har derfor fjernet nogle poster fra din "
+"indkøbskurv, som ikke længere kan blive købt på denne måde."
 msgstr[1] ""
+"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst "
+"%(number)s passende produkter. Vi har derfor fjernet nogle poster fra din "
+"indkøbskurv, som ikke længere kan blive købt på denne måde."
 
 #: pretix/base/services/cart.py:168
 msgid ""
@@ -7541,6 +7559,10 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Denne voucherkoden er i øjeblikket låst, da den allerede ligger i en "
+"indkøbskurv. Det kan betyde, at en anden er ved at indløse denne rabatkode "
+"lige nu, eller at du har forsøgt at indløse den før, men ikke fik afsluttet "
+"betalingsprocessen. Du kan prøve at bruge den igen om %d minutter."
 
 #: pretix/base/services/cart.py:175
 #, python-format
@@ -7552,6 +7574,8 @@ msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
+"Anvendelse af en voucher på hele indkøbskurven bør ikke kombineres med andre "
+"operationer."
 
 #: pretix/base/services/cart.py:178
 msgid ""
@@ -7570,9 +7594,8 @@ msgid "This voucher is not valid for this product."
 msgstr "Voucheren er ikke gyldig for dette produkt."
 
 #: pretix/base/services/cart.py:183
-#, fuzzy
 msgid "This voucher is not valid for this seat."
-msgstr "Voucheren er ikke gyldig for denne dato."
+msgstr "Denne voucher er ikke gyldig for denne plads."
 
 #: pretix/base/services/cart.py:185
 msgid ""
@@ -7580,6 +7603,9 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"Vi fandt ikke nogen post i din indkøbskurv, som vi kunne bruge denne voucher "
+"til. Hvis du vil tilføje noget nyt til din kurv ved hjælp af denne voucher, "
+"kan du gøre det med voucherindløsningsmuligheden nederst på siden."
 
 #: pretix/base/services/cart.py:190
 msgid "Your voucher is valid for a product that is currently not for sale."
