@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-04-19 23:00+0000\n"
-"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2024-07-11 02:00+0000\n"
+"Last-Translator: Dirk-jan mollema <dirkjan@outsidersecurity.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.6.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -25927,10 +25927,8 @@ msgstr "Voucherhistorie"
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:81
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:94
-#, fuzzy
-#| msgid "Import mode"
 msgid "Import vouchers"
-msgstr "Importmodus"
+msgstr "Importeer vouchers"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:10
 msgid ""
@@ -33194,10 +33192,8 @@ msgid "There are no add-ons available for this product."
 msgstr "Er zijn geen add-ons beschikbaar voor dit product."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
-#, fuzzy
-#| msgid "Enter a voucher code below to buy this ticket."
 msgid "Enter a voucher code below to buy this product."
-msgstr "Voer hieronder een vouchercode in om dit ticket te kopen."
+msgstr "Voer hieronder een vouchercode in om dit product te kopen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
 #, fuzzy
