@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-11 02:00+0000\n"
+"PO-Revision-Date: 2024-07-11 15:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -7896,42 +7896,38 @@ msgid "You need to answer questions to complete this check-in."
 msgstr "Du skal knytte spørgsmålet til et produkt for at kunne indsamle svar."
 
 #: pretix/base/services/checkin.py:1152
-#, fuzzy
 msgid "This ticket has already been redeemed."
-msgstr "Denne bestilling er allerede blevet tilbagebetalt."
+msgstr "Denne billet er allerede blevet indløst."
 
 #: pretix/base/services/currencies.py:38 pretix/base/services/currencies.py:39
 msgid "European Central Bank"
-msgstr ""
+msgstr "Den Europæiske Centralbank"
 
 #: pretix/base/services/currencies.py:40
 msgid "Czech National Bank"
-msgstr ""
+msgstr "Den tjekkiske nationalbank"
 
 #: pretix/base/services/export.py:86 pretix/base/services/export.py:157
 #: pretix/base/services/export.py:215
-#, fuzzy
 msgid "Your export did not contain any data."
-msgstr "Du har ikke valgt nogen produkter."
+msgstr "Din eksport indeholdt ingen data."
 
 #: pretix/base/services/export.py:151
-#, fuzzy
 msgid "You do not have sufficient permission to perform this export."
-msgstr "Du har ikke rettighed til at udføre denne handling."
+msgstr "Du har ikke tilstrækkelige rettigheder til at udføre denne eksport."
 
 #: pretix/base/services/export.py:189
-#, fuzzy
 msgid "Export failed"
-msgstr "Importer fil"
+msgstr "Eksport mislykkedes"
 
 #: pretix/base/services/export.py:206
-#, fuzzy
 msgid "Permission denied."
-msgstr "Adgang nægtet"
+msgstr "Tilladelse nægtet."
 
 #: pretix/base/services/export.py:221
 msgid "Your exported data exceeded the size limit for scheduled exports."
 msgstr ""
+"Dine eksporterede data overskred størrelsesgrænsen for planlagte eksporter."
 
 #: pretix/base/services/invoices.py:103
 #, python-brace-format
@@ -7956,10 +7952,10 @@ msgstr ""
 "{country}"
 
 #: pretix/base/services/invoices.py:220 pretix/base/services/invoices.py:257
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event location: {location}"
-msgstr "Arrangements sted"
+msgstr "Arrangementets sted: {location}"
 
 #: pretix/base/services/invoices.py:236
 #, python-brace-format
@@ -7977,16 +7973,12 @@ msgid "A payment provider specific text might appear here."
 msgstr "En tekst knyttet til en betalingsudbyder kan dukke op her."
 
 #: pretix/base/services/invoices.py:474
-#, fuzzy
 msgid "214th Example Street"
-msgstr ""
-"Anders And\n"
-"Paradisæblevej 111\n"
-"111 Andeby"
+msgstr "Eksempelvej 214"
 
 #: pretix/base/services/invoices.py:475
 msgid "012345"
-msgstr ""
+msgstr "012345"
 
 #: pretix/base/services/invoices.py:492
 msgid "Sample product {}"
@@ -7997,9 +7989,9 @@ msgid "Sample product A"
 msgstr "Eksempelprodukt A"
 
 #: pretix/base/services/invoices.py:526
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "Fakturanummer"
+msgstr "Fakturanummer: {number}"
 
 #: pretix/base/services/invoices.py:528
 #, python-brace-format
@@ -8011,13 +8003,22 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"Hej,\n"
+"\n"
+"En ny faktura for bestillingen {order} til {event} er blevet oprettet (se "
+"vedhæftet).\n"
+"\n"
+"Vi sender denne mail, fordi du har bedt os om at gøre det i dine "
+"arrangementsinstillinger."
 
 #: pretix/base/services/mail.py:265
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr "Du modtager denne e-mail fordi du har afgivet bestlling på {event}."
+msgstr ""
+"Du modtager denne mail, fordi nogen har foretaget en bestilling til {event} "
+"for dig."
 
 #: pretix/base/services/mail.py:269 pretix/base/services/mail.py:285
 #, python-brace-format
@@ -8032,10 +8033,9 @@ msgid "You are receiving this email because you placed an order for {event}."
 msgstr "Du modtager denne e-mail fordi du har afgivet bestlling på {event}."
 
 #: pretix/base/services/mail.py:457
-#, fuzzy
 msgctxt "attachment_filename"
 msgid "Calendar invite"
-msgstr "Gensend link"
+msgstr "Kalenderinvitation"
 
 #: pretix/base/services/memberships.py:108
 #, python-brace-format
@@ -8043,35 +8043,41 @@ msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
 msgstr ""
+"Du har valgt et medlemskab for produktet \"{product}\", som ikke kræver et "
+"medlemskab."
 
 #: pretix/base/services/memberships.py:116
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr "Du har valgt et produkt der ikke er til salg."
+msgstr ""
+"Du har valgt produktet \"{product}\", som kræver et aktivt medlemskab, for "
+"at kunne blive valgt."
 
 #: pretix/base/services/memberships.py:149
-#, fuzzy
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr "Du kan ikke vælge et element der tilhører et andet arrangement."
+msgstr "Du har valgt et medlemskab, som er knyttet til en anden kundekonto."
 
 #: pretix/base/services/memberships.py:154
-#, fuzzy
 msgid "You selected membership that has been canceled."
-msgstr "Arrangementsdatoen er blevet ændret."
+msgstr "Du har valgt et medlemskab, som er blevet annulleret."
 
 #: pretix/base/services/memberships.py:159
 msgid ""
 "You can not use a test mode membership for tickets that are not in test mode."
 msgstr ""
+"Du kan ikke bruge et testmodus-medlemskab til billetter, som ikke befinder "
+"sig i testmodus."
 
 #: pretix/base/services/memberships.py:163
 msgid ""
 "You need to add a test mode membership to the customer account to use it in "
 "test mode."
 msgstr ""
+"Du skal tilføje et testmodus-medlemskab til kundekontoen, for at bruge det i "
+"testmodus."
 
 #: pretix/base/services/memberships.py:179
 #, python-brace-format
@@ -8079,6 +8085,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "a ticket that starts to be valid on {date}."
 msgstr ""
+"Du har valgt et medlemskab, som er gyldig fra {start} til {end}, men du har "
+"valgt en billet, som bliver gyldig den {date}."
 
 #: pretix/base/services/memberships.py:188
 #, python-brace-format
@@ -8086,6 +8094,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"Du har valgt et medlemskab, som er gyldig fra {start} til {end}, men du har "
+"valgt et arrangement, som finder sted den {date}."
 
 #: pretix/base/services/memberships.py:203
 #, python-brace-format
@@ -8093,6 +8103,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"Du har valgt et medlemskab af typen \"{type}\", som ikke er tilladt for "
+"produktet \"{product}\"."
 
 #: pretix/base/services/memberships.py:212
 #, python-brace-format
@@ -8100,6 +8112,8 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
+"Du prøver at bruge et medlemskab af typen \"{type}\" flere end {number} "
+"gange, whilket er det maksimale antal."
 
 #: pretix/base/services/memberships.py:227
 #, python-brace-format
@@ -8109,18 +8123,20 @@ msgid ""
 "membership for a different ticket that overlaps with this time frame "
 "({conflict_from} – {conflict_until})."
 msgstr ""
+"Du prøver at bruge et medlemskab af typen \"{type}\" til en billet, som er "
+"gyldig fra {valid_from} til {valid_until}. Du har dog allerede brugt det "
+"samme medlemskab til en anden billet, som overlapper med dette tidsrum "
+"({conflict_from} - {conflict_until})."
 
 #: pretix/base/services/memberships.py:231
 #: pretix/base/services/memberships.py:233
-#, fuzzy
 msgid "start"
 msgstr "Starttidspunkt"
 
 #: pretix/base/services/memberships.py:232
 #: pretix/base/services/memberships.py:234
-#, fuzzy
 msgid "open end"
-msgstr "Arrangements sluttidspunkt"
+msgstr "Open end"
 
 #: pretix/base/services/memberships.py:244
 #, python-brace-format
@@ -8129,11 +8145,14 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"Du prøver at bruge et medlemskab af typen \"{type}\" til et arrangement, som "
+"finder sted den {date}. Du har dog allerede brugt det samme medlemskab til "
+"en anden billet på samme tidspunkt."
 
 #: pretix/base/services/modelimport.py:53
 #, python-brace-format
 msgid "Error decoding special characters in your file: {message}"
-msgstr ""
+msgstr "Fejl i afkodning af specialtegn i din fil: {message}"
 
 #: pretix/base/services/modelimport.py:71
 #, python-brace-format
@@ -8141,11 +8160,13 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
+"Der opstod en fejl under import af værdien \"{value}\" fra spalte \"{column}"
+"\" i række \"{line}\": {message}"
 
 #: pretix/base/services/modelimport.py:89 pretix/base/services/orders.py:1546
 #, python-format
 msgid "Orders cannot have more than %(max)s positions."
-msgstr ""
+msgstr "Bestillinger kan ikke have mere end %(max)s poster."
 
 #: pretix/base/services/modelimport.py:124
 #: pretix/base/services/modelimport.py:236
@@ -8154,9 +8175,8 @@ msgid "Invalid data in row {row}: {message}"
 msgstr "Ugyldige data i rad {row}: {message}"
 
 #: pretix/base/services/modelimport.py:217
-#, fuzzy
 msgid "A voucher cannot be created without a code."
-msgstr "Den nye rabatkode er blevet oprettet: {code}"
+msgstr "En voucher kan ikke oprettes uden kode."
 
 #: pretix/base/services/orders.py:129
 msgid ""
@@ -8191,13 +8211,15 @@ msgid ""
 "This order was changed by someone else simultaneously. Please check if your "
 "changes are still accurate and try again."
 msgstr ""
+"Denne bestilling er blevet ændret af nogen andre på samme tidspunkt. Tjek "
+"venligst, om dine ændringer stadig er korrekte, og prøv igen."
 
 #: pretix/base/services/orders.py:143
 msgid "Your cart is empty."
 msgstr "Din kurv er tom."
 
 #: pretix/base/services/orders.py:145
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You cannot select more than %(max)s item of the product %(product)s. We "
 "removed the surplus items from your cart."
@@ -8205,22 +8227,23 @@ msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr[0] ""
-"Du kan ikke vælge flere end %(max)s af %(product)s. Vi har fjernet de "
-"overskydende produkter fra din kurv."
+"Du kan ikke vælge mere end %(max)s artikel af produktet %(product)s. Vi har "
+"fjernet de overskydende artikler fra din kurv."
 msgstr[1] ""
-"Du kan ikke vælge flere end %(max)s af %(product)s. Vi har fjernet de "
-"overskydende produkter fra din kurv."
+"Du kan ikke vælge flere end %(max)s artikler af produktet %(product)s. Vi "
+"har fjernet de overskydende artikler fra din kurv."
 
 #: pretix/base/services/orders.py:154
-#, fuzzy
 msgid "The booking period has ended."
-msgstr "Forsalgsperioden er ovre."
+msgstr "Forsalgsperioden er afsluttet."
 
 #: pretix/base/services/orders.py:160
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
+"Voucherkoden, du har brugt for en af artiklerne i din indkøbskurv, genkendes "
+"ikke i vores database."
 
 #: pretix/base/services/orders.py:162
 msgid ""
@@ -8228,72 +8251,80 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
+"Voucherkoden, som er blevet brugt til en af artiklerne i din indkøbskurv, er "
+"allerede blevet brugt det maksimalt tilladte antal gange. Vi har fjernet "
+"denne artikel fra din kurv."
 
 #: pretix/base/services/orders.py:166
-#, fuzzy
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"Forsalget for dette arrangement er slut. Vi har fjernet de berørte produkter "
-"fra din kurv."
+"Voucherkoden, som er blevet brugt til en af artiklerne i din indkøbskurv, er "
+"allerede blevet brugt for ofte. Vi har tilpasset prisen af artiklen i din "
+"indkøbskurv."
 
 #: pretix/base/services/orders.py:170
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
+"Voucherkoden, som er blevet brugt til en af artiklerne i din indkøbskurv, er "
+"udløbet. Vi har fjernet denne artikel fra din kurv."
 
 #: pretix/base/services/orders.py:173
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
+"Voucherkoden, som er blevet brugt til en af artiklerne i din indkøbskurv, er "
+"ikke gyldig for denne artikel. Vi har fjernet denne artikel fra din kurv."
 
 #: pretix/base/services/orders.py:175
-#, fuzzy
 msgid "You need a valid voucher code to order one of the products."
-msgstr "Du skal have en gyldig voucherkode for at bestille dette produkt."
+msgstr ""
+"Du har brug for en gyldig voucherkode, hvis du vil bestille et af "
+"produkterne."
 
 #: pretix/base/services/orders.py:177
-#, fuzzy
 msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
-"Forsalget for dette arrangement er slut. Vi har fjernet de berørte produkter "
-"fra din kurv."
+"Forsalget for et af arrangementerne i din indkøbskurv er ikke startet endnu. "
+"De berørte poster er blevet fjernet fra din kurv."
 
 #: pretix/base/services/orders.py:184
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
+"En af pladserne i din bestilling var ikke gyldig. Vi har fjernet posten fra "
+"din indkøbskurv."
 
 #: pretix/base/services/orders.py:185
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
+"En af pladserne i din bestilling er i mellemtiden blevet taget af en anden. "
+"Vi har fjernet posten fra din indkøbskurv."
 
 #: pretix/base/services/orders.py:201
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
 msgstr ""
-"Du kan ikke slette produktet <strong>%(item)s</strong> fordi det allerede er "
-"blevet bestilt."
+"Du kan ikke fjerne posten %(addon)s, da den allerede er blevet tjekket ind."
 
 #: pretix/base/services/orders.py:202
-#, fuzzy
 msgid "Paid products not supported without a valid currency."
-msgstr "Denne variant hører ikke til dette produkt."
+msgstr "Betalte produkter ikke understøttet uden gyldig valuta."
 
 #: pretix/base/services/orders.py:218
-#, fuzzy
 msgid "The order was not canceled."
-msgstr "Bestillingen er blevet annulleret."
+msgstr "Bestillingen er ikke blevet annulleret."
 
 #: pretix/base/services/orders.py:272 pretix/control/forms/orders.py:124
 msgid "The new expiry date needs to be in the future."
@@ -8314,15 +8345,19 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Denne bestilling kan ikke blive annulleret, da gavekortet {card}, som er "
+"blevet købt i denne bestilling, allerede er blevet indløst."
 
 #: pretix/base/services/orders.py:561 pretix/control/forms/orders.py:205
 msgid ""
 "The cancellation fee cannot be higher than the total amount of this order."
 msgstr ""
+"Afbestillingsgebyret kan ikke være højere end det samlede beløb for denne "
+"bestilling."
 
 #: pretix/base/services/orders.py:955
 msgid "The selected payment methods do not cover the total balance."
-msgstr ""
+msgstr "Den valgte betalingsmetode dækker ikke over det samlede beløb."
 
 #: pretix/base/services/orders.py:1022
 msgid ""
@@ -8330,6 +8365,10 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
+"Da vi forsøgte at placere din ordre, bemærkede vi, at ordrebeløbet har "
+"ændret sig. Enten er en af priserne blevet ændret lige nu, eller også er et "
+"gavekort, du har brugt, blevet brugt i mellemtiden. Tjek venligst priserne "
+"nedenfor, og prøv igen."
 
 #: pretix/base/services/orders.py:1516
 msgid "You need to select a variation of the product."
@@ -8368,11 +8407,12 @@ msgstr ""
 "kvote er tilgængelig."
 
 #: pretix/base/services/orders.py:1525
-#, fuzzy
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
-msgstr "Dette er et tillægsprodukt. Vælg linjen det skal føjes til."
+msgstr ""
+"Dette er et tilkøbsprodukt. Tjek venligst grundposten, som tilkøbsproduktet "
+"skal tilføjes til."
 
 #: pretix/base/services/orders.py:1526
 msgid ""
