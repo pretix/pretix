@@ -519,6 +519,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers.append(_('Order time'))
         headers.append(_('Requires special attention'))
         headers.append(_('Comment'))
+        headers.append(_('Check-in text'))
         headers.append(_('Seat ID'))
         headers.append(_('Seat name'))
         headers.append(_('Seat zone'))
@@ -626,6 +627,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 row.append(op.order.datetime.astimezone(self.event.timezone).strftime('%H:%M:%S'))
                 row.append(_('Yes') if op.require_checkin_attention else _('No'))
                 row.append(op.order.comment or "")
+                row.append("\n".join(text for text in [op.order.checkin_text, op.item.checkin_text] if text))
 
                 if op.seat:
                     row += [
