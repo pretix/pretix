@@ -34,7 +34,6 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import calendar
-import functools
 import os
 import sys
 import uuid
@@ -43,7 +42,6 @@ from collections import Counter, OrderedDict, defaultdict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from itertools import groupby
-from math import inf
 from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 
