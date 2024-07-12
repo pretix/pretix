@@ -119,7 +119,7 @@ class CheckInListMixin(BaseExporter):
                      choices=[
                          ('name', _('Attendee name')),
                          ('code', _('Order code')),
-                         ('datetime', _('Order date')),
+                         ('order_datetime', _('Order date')),
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
@@ -230,7 +230,7 @@ class CheckInListMixin(BaseExporter):
             )
         elif sort == 'code':
             qs = qs.order_by(*o, 'order__code')
-        elif sort == 'datetime':
+        elif sort == 'order_datetime':
             qs = qs.order_by(*o, 'order__datetime')
         elif sort.startswith('name:'):
             part = sort[5:]
