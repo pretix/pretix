@@ -119,6 +119,7 @@ class CheckInListMixin(BaseExporter):
                      choices=[
                          ('name', _('Attendee name')),
                          ('code', _('Order code')),
+                         ('order_datetime', _('Order date')),
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
@@ -229,6 +230,8 @@ class CheckInListMixin(BaseExporter):
             )
         elif sort == 'code':
             qs = qs.order_by(*o, 'order__code')
+        elif sort == 'order_datetime':
+            qs = qs.order_by(*o, '-order__datetime')
         elif sort.startswith('name:'):
             part = sort[5:]
             qs = qs.annotate(
@@ -516,6 +519,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers.append(_('Order time'))
         headers.append(_('Requires special attention'))
         headers.append(_('Comment'))
+        headers.append(_('Check-in text'))
         headers.append(_('Seat ID'))
         headers.append(_('Seat name'))
         headers.append(_('Seat zone'))
@@ -623,6 +627,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 row.append(op.order.datetime.astimezone(self.event.timezone).strftime('%H:%M:%S'))
                 row.append(_('Yes') if op.require_checkin_attention else _('No'))
                 row.append(op.order.comment or "")
+                row.append("\n".join(text for text in [op.order.checkin_text, op.item.checkin_text] if text))
 
                 if op.seat:
                     row += [
