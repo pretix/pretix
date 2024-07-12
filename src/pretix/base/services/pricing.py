@@ -31,6 +31,7 @@ from pretix.base.models import (
     AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation,
     SalesChannel, Voucher,
 )
+from pretix.base.models.discount import PositionInfo
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.timemachine import time_machine_now
@@ -156,7 +157,7 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
 
 
 def apply_discounts(event: Event, sales_channel: str,
-                    positions: List[Tuple[int, Optional[int], Decimal, bool, bool]],
+                    positions: List[Tuple[int, Optional[int], Decimal, bool, bool, Decimal]],
                     collect_potential_discounts=None) -> List[Decimal]:
     """
     Applies any dynamic discounts to a cart
@@ -178,7 +179,7 @@ def apply_discounts(event: Event, sales_channel: str,
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:
         result = discount.apply({
-            idx: (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)
+            idx: PositionInfo(item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)
             for idx, (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount) in enumerate(positions)
             if not is_bundled and idx not in new_prices
         }, collect_potential_discounts)
