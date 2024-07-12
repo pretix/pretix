@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-12 20:00+0000\n"
+"PO-Revision-Date: 2024-07-15 12:00+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -22153,7 +22153,7 @@ msgstr "Rekommenderas för nya användare"
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:6
 msgid "Delete scheduled export"
-msgstr ""
+msgstr "Radera schemalagd export"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:9
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:9
@@ -22162,6 +22162,8 @@ msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
 msgstr ""
+"Är du säker på att du vill radera den schemalagda exporten "
+"<strong>%(export)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
@@ -22176,11 +22178,13 @@ msgid ""
 "Your generated Excel file will have <strong>multiple sheets</strong>. Some "
 "data you are looking for might not be on the first sheet."
 msgstr ""
+"Din genererade Excel-fil kommer att ha <strong>flera blad</strong>. Viss "
+"data du letar efter kanske inte finns på det första bladet."
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:52
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:53
 msgid "Start export"
-msgstr ""
+msgstr "Starta exporten"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:57
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:58
@@ -22191,29 +22195,29 @@ msgstr "Andra avgifter"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:6
 msgid "Schedule"
-msgstr ""
+msgstr "Schema"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:15
 msgid "Repetition schedule"
-msgstr ""
+msgstr "Repetitionsschema"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:46
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s"
-msgstr ""
+msgstr "Upprepa var %(interval)s %(freq)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:54
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:89
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:200
 msgid "At the same date every year"
-msgstr ""
+msgstr "På samma datum varje år"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:58
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:93
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:204
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr ""
+msgstr "På den %(setpos)s %(weekday)s i %(month)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:68
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:103
@@ -33600,7 +33604,7 @@ msgstr "Funktionalitet"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:91
 msgctxt "cookie_usage"
 msgid "Analytics"
-msgstr ""
+msgstr "Statistik"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:93
 msgctxt "cookie_usage"
