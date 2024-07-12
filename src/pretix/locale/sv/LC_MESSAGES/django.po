@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-11 15:00+0000\n"
+"PO-Revision-Date: 2024-07-12 08:37+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -29736,7 +29736,7 @@ msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:34
 msgid "Revenue over time"
-msgstr ""
+msgstr "Intäkter över tid"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:40
 msgctxt "subevent"
@@ -29744,6 +29744,8 @@ msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
 msgstr ""
+"Om du väljer ett enda datum kommer avgifter för betalningsmetoder inte att "
+"listas här eftersom det kanske inte är tydligt vilket datum de tillhör."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:48
 msgid ""
