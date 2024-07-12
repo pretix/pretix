@@ -1585,7 +1585,7 @@ class StripeBancontact(StripeRedirectWithAccountNamePaymentIntentMethod):
             return super().payment_presale_render(payment)
 
 
-class StripeSofort(StripeMethod):
+class StripeSofort(StripeRedirectMethod):
     identifier = 'stripe_sofort'
     verbose_name = _('SOFORT via Stripe')
     public_name = _('SOFORT (instant bank transfer)')
