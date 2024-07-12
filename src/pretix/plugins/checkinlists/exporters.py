@@ -231,7 +231,7 @@ class CheckInListMixin(BaseExporter):
         elif sort == 'code':
             qs = qs.order_by(*o, 'order__code')
         elif sort == 'order_datetime':
-            qs = qs.order_by(*o, 'order__datetime')
+            qs = qs.order_by(*o, '-order__datetime')
         elif sort.startswith('name:'):
             part = sort[5:]
             qs = qs.annotate(
