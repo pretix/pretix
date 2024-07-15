@@ -1478,6 +1478,10 @@ DEFAULTS = {
             min_value=1,
             required=True,
             widget=forms.NumberInput(),
+            help_text=_('With an increased limit, a customer may request more than one ticket for a specific product '
+                        'using the same, unique email address. However, regardless of this setting, they will need to '
+                        'fill the waitlist form multiple times if they want more than one ticket, as every entry only '
+                        'grants one single ticket at a time.'),
         )
     },
     'show_checkin_number_user': {
