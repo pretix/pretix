@@ -156,7 +156,7 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
     return price
 
 
-def apply_discounts(event: Event, sales_channel: str,
+def apply_discounts(event: Event, sales_channel: str | SalesChannel,
                     positions: List[Tuple[int, Optional[int], Decimal, bool, bool, Decimal]],
                     collect_potential_discounts=None) -> List[Decimal]:
     """

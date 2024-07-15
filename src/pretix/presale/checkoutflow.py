@@ -57,7 +57,7 @@ from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Customer, Membership, Order
-from pretix.base.models.items import Question, ItemCategory
+from pretix.base.models.items import ItemCategory, Question
 from pretix.base.models.orders import (
     InvoiceAddress, OrderPayment, QuestionAnswer,
 )
@@ -632,11 +632,11 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     @property
     def cross_selling_applicable_categories(self):
-        cart = self.positions
+        cartpositions = self.positions
         return [
             (c, products_qs, discount_info) for (c, products_qs, discount_info) in
             (
-                (c, *c.cross_sell_visible(cart, self.request.sales_channel.identifier))
+                (c, *c.cross_sell_visible(cartpositions, self.request.sales_channel.identifier))
                 for c in self.request.event.categories.filter(cross_selling_mode__isnull=False)
             )
             if products_qs is not None

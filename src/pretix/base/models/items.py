@@ -42,7 +42,7 @@ from collections import Counter, OrderedDict, defaultdict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from itertools import groupby
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 from zoneinfo import ZoneInfo
 
 import dateutil.parser
@@ -64,14 +64,13 @@ from django_countries.fields import Country
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
+from pretix.base.media import MEDIA_TYPES
+from pretix.base.models import CartPosition, Event, SalesChannel, SubEvent
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.timemachine import time_machine_now
-
-from ...helpers.images import ImageSizeValidator
-from ..media import MEDIA_TYPES
-from .event import Event, SubEvent
+from pretix.helpers.images import ImageSizeValidator
 
 
 class ItemCategory(LoggedModel):
@@ -145,7 +144,7 @@ class ItemCategory(LoggedModel):
         verbose_name_plural = _("Product categories")
         ordering = ('position', 'id')
 
-    def cross_sell_visible(self, cart, sales_channel):
+    def cross_sell_visible(self, cartpositions: List[CartPosition], sales_channel: SalesChannel):
         """
         If this category should be visible in the cross-selling step for a given cart and sales_channel, this method
         returns a queryset of the items that should be displayed, as well as a dict giving additional information on them.
@@ -160,7 +159,7 @@ class ItemCategory(LoggedModel):
             return self.items.all(), {}
         if self.cross_selling_condition == 'products':
             match = set(match.pk for match in self.cross_selling_match_products.only('pk'))  # TODO prefetch this
-            return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else (None, {})
+            return (self.items.all(), {}) if any(pos.item.pk in match for pos in cartpositions) else (None, {})
         if self.cross_selling_condition == 'discounts':
             if not hasattr(self.event, '_potential_discounts_by_item_for_current_cart'):
                 potential_discounts_by_cartpos = defaultdict(list)
@@ -172,7 +171,7 @@ class ItemCategory(LoggedModel):
                     [
                         (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled,
                          cp.listed_price - cp.price_after_voucher)
-                        for cp in cart
+                        for cp in cartpositions
                     ],
                     collect_potential_discounts=potential_discounts_by_cartpos
                 )
