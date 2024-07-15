@@ -674,7 +674,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             self.request.event,
             subevent=subevent,
             voucher=None,
-            channel=self.request.sales_channel.identifier,
+            channel=self.request.sales_channel,
             base_qs=items_qs,
             allow_addons=True,
             allow_cross_sell=True,
