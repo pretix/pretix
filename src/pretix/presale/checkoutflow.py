@@ -57,7 +57,7 @@ from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Customer, Membership, Order
-from pretix.base.models.items import Question
+from pretix.base.models.items import Question, ItemCategory
 from pretix.base.models.orders import (
     InvoiceAddress, OrderPayment, QuestionAnswer,
 )
@@ -649,10 +649,10 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     @cached_property
     def cross_selling_data(self):
         class DummyCategory:
-            def __init__(self, rule, subevent=None):
-                self.id = rule.id
-                self.name = rule.name + (f" ({subevent})" if subevent else "")
-                self.description = rule.description
+            def __init__(self, category: ItemCategory, subevent=None):
+                self.id = category.id
+                self.name = category.name + (f" ({subevent})" if subevent else "")
+                self.description = category.description
 
         categories = self.cross_selling_applicable_categories
         if self.event.has_subevents:

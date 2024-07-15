@@ -177,7 +177,8 @@ class ItemCategory(LoggedModel):
                     collect_potential_discounts=potential_discounts_by_cartpos
                 )
 
-                # technically, this is a dict, but we use it as an OrderedSet here
+                # flatten potential_discounts_by_cartpos (a dict of lists of potential discounts) into a set of potential discounts
+                # (which is technically stored as a dict, but we use it as an OrderedSet here)
                 potential_discount_set = dict.fromkeys(info for lst in potential_discounts_by_cartpos.values() for info in lst)
 
                 # sum up the max_counts and pass them on (also pass on the discount_rules so we can calculate actual discounted prices later):
