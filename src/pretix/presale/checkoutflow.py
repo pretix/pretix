@@ -36,7 +36,6 @@ import inspect
 import uuid
 from collections import defaultdict
 from decimal import Decimal
-from math import inf
 
 from django.conf import settings
 from django.contrib import messages
@@ -57,7 +56,7 @@ from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Customer, Membership, Order
-from pretix.base.models.items import ItemCategory, Question
+from pretix.base.models.items import Question
 from pretix.base.models.orders import (
     InvoiceAddress, OrderPayment, QuestionAnswer,
 )
@@ -66,6 +65,7 @@ from pretix.base.services.cart import (
     CartError, CartManager, add_payment_to_cart, error_messages, get_fees,
     set_cart_addons,
 )
+from pretix.base.services.cross_selling import CrossSellingService
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
 from pretix.base.services.tasks import EventTask
@@ -630,90 +630,15 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 formset.append(formsetentry)
         return formset
 
-    @property
-    def cross_selling_applicable_categories(self):
-        cartpositions = self.positions
-        return [
-            (c, products_qs, discount_info) for (c, products_qs, discount_info) in
-            (
-                (c, *c.cross_sell_visible(cartpositions, self.request.sales_channel.identifier))
-                for c in self.request.event.categories.filter(cross_selling_mode__isnull=False)
-            )
-            if products_qs is not None
-        ]
-
     @cached_property
     def cross_selling_is_applicable(self):
         return any(len(items) > 0 for (category, items) in self.cross_selling_data)
 
     @cached_property
     def cross_selling_data(self):
-        class DummyCategory:
-            def __init__(self, category: ItemCategory, subevent=None):
-                self.id = category.id
-                self.name = category.name + (f" ({subevent})" if subevent else "")
-                self.description = category.description
-
-        categories = self.cross_selling_applicable_categories
-        if self.event.has_subevents:
-            subevents = set(pos.subevent for pos in self.positions)
-            result = (
-                (DummyCategory(category, subevent), self._items_for_cross_selling(subevent, items_qs, discount_info), f'subevent_{subevent.pk}_')
-                for (category, items_qs, discount_info) in categories
-                for subevent in subevents
-            )
-        else:
-            result = (
-                (category, self._items_for_cross_selling(None, items_qs, discount_info))
-                for (category, items_qs, discount_info) in categories
-            )
-        return [(category, items) for (category, items) in result if len(items) > 0]
-
-    def _items_for_cross_selling(self, subevent, items_qs, discount_info):
-        items, _btn = get_grouped_items(
-            self.request.event,
-            subevent=subevent,
-            voucher=None,
-            channel=self.request.sales_channel,
-            base_qs=items_qs,
-            allow_addons=True,
-            allow_cross_sell=True,
-            memberships=(
-                self.request.customer.usable_memberships(
-                    for_event=subevent or self.request.event,
-                    testmode=self.request.event.testmode
-                )
-                if self.request.customer else None
-            ),
-        )
-        new_items = list()
-        for item in items:
-            max_count = inf
-            if item.pk in discount_info:
-                (max_count, discount_rule) = discount_info[item.pk]
-
-                # only benefit_only_apply_to_cheapest_n_matches discounted items have a max_count, all others get 'inf'
-                if not max_count:
-                    max_count = inf
-
-                # calculate discounted price
-                if discount_rule:
-                    item.original_price = item.original_price or item.display_price
-                    previous_price = item.display_price
-                    new_price = (
-                        previous_price * ((Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'))
-                    )
-                    item.display_price = new_price
-
-            # reduce order_max by number of items already in cart (prevent recommending a product the user can't add anyway)
-            item.order_max = min(
-                item.order_max - sum(1 for pos in self.positions if pos.item_id == item.pk),
-                max_count
-            )
-            if item.order_max > 0:
-                new_items.append(item)
-
-        return new_items
+        return CrossSellingService(
+            self.request.event, self.request.sales_channel, self.positions, self.request.customer
+        ).get_data()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
