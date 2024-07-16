@@ -21,6 +21,7 @@
 #
 import json
 
+from django.db.models import prefetch_related_objects
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -80,6 +81,7 @@ class SalesChannelMigrationMixin:
 
     def to_internal_value(self, data):
         if "sales_channels" in data:
+            prefetch_related_objects([self.organizer], "sales_channels")
             all_channels = {
                 s.identifier for s in
                 self.organizer.sales_channels.all()
@@ -109,6 +111,7 @@ class SalesChannelMigrationMixin:
     def to_representation(self, value):
         value = super().to_representation(value)
         if value.get("all_sales_channels"):
+            prefetch_related_objects([self.organizer], "sales_channels")
             value["sales_channels"] = sorted([
                 s.identifier for s in
                 self.organizer.sales_channels.all()
