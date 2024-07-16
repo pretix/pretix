@@ -126,6 +126,17 @@ class ParametrizedOrderWebhookEvent(ParametrizedWebhookEvent):
         }
 
 
+class DeletedOrderWebhookEvent(ParametrizedWebhookEvent):
+    def build_payload(self, logentry: LogEntry):
+        return {
+            'notification_id': logentry.pk,
+            'organizer': logentry.organizer.slug,
+            'event': logentry.event.slug,
+            'code': logentry.parsed_data.get("code"),
+            'action': logentry.action_type,
+        }
+
+
 class ParametrizedEventWebhookEvent(ParametrizedWebhookEvent):
 
     def build_payload(self, logentry: LogEntry):
@@ -296,6 +307,10 @@ def register_default_webhook_events(sender, **kwargs):
         ParametrizedOrderWebhookEvent(
             'pretix.event.order.denied',
             _('Order denied'),
+        ),
+        DeletedOrderWebhookEvent(
+            'pretix.event.order.deleted',
+            _('Order deleted'),
         ),
         ParametrizedOrderPositionCheckinWebhookEvent(
             'pretix.event.checkin',
