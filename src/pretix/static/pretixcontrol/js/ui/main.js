@@ -781,7 +781,7 @@ function setup_basics(el) {
                 scrollTarget.id = "panel_" + $("input", scrollTarget).attr("id");
             }
         } else {
-            label = $("label", this).first().text();
+            label = $("label", this).first().contents().filter(function () { return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("optional") }).text();
             description = $(".help-block", this).first().text();
             scrollTarget = $(":input", this).get(0);
         }
