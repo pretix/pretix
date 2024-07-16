@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-15 23:00+0000\n"
+"PO-Revision-Date: 2024-07-16 20:00+0000\n"
 "Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -22938,12 +22938,12 @@ msgstr "Är du säker på att du vill ta bort porten?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
 msgid "Gate:"
-msgstr ""
+msgstr "Port:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11
 msgid "Create a new gate"
-msgstr ""
+msgstr "Skapa en ny port"
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
 msgid "The list below shows gates that you can use to group check-in devices."
@@ -29294,28 +29294,20 @@ msgid "Anyone who never checked in before"
 msgstr "Den som aldrig har checkat in förut"
 
 #: pretix/plugins/sendmail/models.py:236
-#, fuzzy
-#| msgid "Limit to products"
 msgid "Limit products"
-msgstr "Begränsa till produkter"
+msgstr "Begränsa produkter"
 
 #: pretix/plugins/sendmail/models.py:239
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Restrict to orders with status"
-msgstr "Inkludera endast ordrar från och med detta datum."
+msgstr "Begränsa till beställningar med status"
 
 #: pretix/plugins/sendmail/models.py:244
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Restrict to check-in status"
-msgstr "Inkludera endast ordrar från och med detta datum."
+msgstr "Begränsa till incheckningsstatus"
 
 #: pretix/plugins/sendmail/models.py:258
-#, fuzzy
-#| msgid "End date"
 msgid "Send date"
-msgstr "Slut datum"
+msgstr "Skickningsdatum"
 
 #: pretix/plugins/sendmail/models.py:260
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
@@ -29331,10 +29323,9 @@ msgid "Only enabled rules are actually sent"
 msgstr "Endast aktiverade regler skickas faktiskt"
 
 #: pretix/plugins/sendmail/models.py:318
-#, fuzzy, python-brace-format
-#| msgid "Admission: {datetime}"
+#, python-brace-format
 msgid "on {date} at {time}"
-msgstr "Tillträde: {datetime}"
+msgstr "den {date} kl. {time}"
 
 #: pretix/plugins/sendmail/models.py:324
 #, python-format
@@ -29365,10 +29356,8 @@ msgstr[0] "%(count)d dag före evenemangets start kl %(time)s"
 msgstr[1] "%(count)d dagar före evenemangets start kl %(time)s"
 
 #: pretix/plugins/sendmail/signals.py:99
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Scheduled emails"
-msgstr "Epost till deltagare"
+msgstr "Schemalagda e-postmeddelanden"
 
 #: pretix/plugins/sendmail/signals.py:122
 msgid "Mass email was sent to customers or attendees."
@@ -29388,16 +29377,12 @@ msgstr ""
 "En biljettinnehavare till denna beställning mottog ett massutskick av e-post."
 
 #: pretix/plugins/sendmail/signals.py:126
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "An email rule was created"
-msgstr "Denna beställning har avbrutits"
+msgstr "En e-postregel skapades"
 
 #: pretix/plugins/sendmail/signals.py:127
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "An email rule was updated"
-msgstr "Denna beställning har avbrutits"
+msgstr "En e-postregel uppdaterades"
 
 #: pretix/plugins/sendmail/signals.py:128
 msgid "A scheduled email was sent to the order"
@@ -29408,10 +29393,8 @@ msgid "A scheduled email was sent to a ticket holder"
 msgstr "Ett schemalagt e-postmeddelande skickades till en biljettinnehavare"
 
 #: pretix/plugins/sendmail/signals.py:130
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "An email rule was deleted"
-msgstr "Denna beställning har avbrutits"
+msgstr "En e-postregel raderades"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:8
 msgid ""
@@ -29447,10 +29430,8 @@ msgstr "Kontaktadresser för beställningar"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:6
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Create Email Rule"
-msgstr "Avbryt beställning"
+msgstr "Skapa e-postregel"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:9
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
@@ -29484,10 +29465,8 @@ msgstr "Är du säker på att du vill ta bort regeln <strong>%(subject)s</strong
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:6
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Inspect Email Rule"
-msgstr "Avbryt beställning"
+msgstr "Inspektera e-postregel"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:8
 msgid "This page shows when your rule is planned to be sent."
@@ -29510,10 +29489,8 @@ msgstr "Senaste schemaberäkning"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Scheduled email rules"
-msgstr "Epost till deltagare"
+msgstr "Schemalagda e-postregler"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
@@ -29525,17 +29502,13 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:101
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Create a new rule"
-msgstr "Avbryt beställning"
+msgstr "Skapa en ny regel"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:33
-#, fuzzy
-#| msgid "Event start date"
 msgctxt "subevent"
 msgid "Sent / Total dates"
-msgstr "Startdatum för evenemang"
+msgstr "Skickade / Totalt antal datum"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:52
 msgid "Next execution:"
@@ -29554,10 +29527,8 @@ msgid "Inspect scheduled times"
 msgstr "Granska schemalagda tider"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:83
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Use as a template for a new rule"
-msgstr "Avbryt beställning"
+msgstr "Använd som mall för en ny regel"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
 msgid "You haven't created any rules yet."
@@ -29578,9 +29549,10 @@ msgstr ""
 "datum i denna evenemangsserie."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:23
-#, fuzzy
 msgid "This email has already been sent. Changing it will have no effect."
-msgstr "Den här sigeln används redan i ett annat event"
+msgstr ""
+"Det här e-postmeddelandet har redan skickats. Att ändra det kommer inte att "
+"ha någon effekt."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:28
 msgid ""
@@ -29615,10 +29587,8 @@ msgstr ""
 "kontaktadresserna för %s inom de närmaste minuterna."
 
 #: pretix/plugins/sendmail/views.py:251
-#, fuzzy
-#| msgid "Order reactivated"
 msgid "Orders or attendees"
-msgstr "Beställningen återaktiverad"
+msgstr "Beställningar eller deltagare"
 
 #: pretix/plugins/sendmail/views.py:252
 msgid ""
@@ -29644,24 +29614,19 @@ msgstr ""
 "att få en kupong genom väntelistan."
 
 #: pretix/plugins/sendmail/views.py:514
-#, fuzzy, python-format
-#| msgid "Waiting list entry"
+#, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] "Post på väntelistan"
-msgstr[1] "Post på väntelistan"
+msgstr[0] "%(number)s väntelista-post"
+msgstr[1] "%(number)s väntelista-anteckningar"
 
 #: pretix/plugins/sendmail/views.py:626
-#, fuzzy
-#| msgid "Your changes have been saved."
 msgid "Your rule has been created."
-msgstr "Dina ändringar har sparats."
+msgstr "Din regel har skapats."
 
 #: pretix/plugins/sendmail/views.py:755
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The selected rule has been deleted."
-msgstr "Denna beställning har avbrutits"
+msgstr "Den valda regeln har raderats."
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
@@ -29712,10 +29677,8 @@ msgid "Seating Overview"
 msgstr "Sittplatsöversikt"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
-#, fuzzy
-#| msgid "Sold out"
 msgid "Sold Seats"
-msgstr "Utsålt"
+msgstr "Sålda platser"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:80
 msgid "Blocked Seats"
@@ -29751,10 +29714,8 @@ msgid "On Sale"
 msgstr "Till salu"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:136
-#, fuzzy
-#| msgid "Not yet on sale"
 msgid "Not on Sale"
-msgstr "Försäljning inte påbörjad"
+msgstr "Inte till salu"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:146
 msgid "Seats not attributed to any specific product"
@@ -29892,10 +29853,8 @@ msgid "Publishable key"
 msgstr "Publik nyckel"
 
 #: pretix/plugins/stripe/payment.py:280
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Generate API keys"
-msgstr "Skapa biljetter"
+msgstr "Generera API-nycklar"
 
 #: pretix/plugins/stripe/payment.py:282
 msgid ""
@@ -30174,10 +30133,8 @@ msgid "SEPA Debit"
 msgstr "SEPA Debit"
 
 #: pretix/plugins/stripe/payment.py:1228
-#, fuzzy
-#| msgid "Account active"
 msgid "Account Holder Name"
-msgstr "Konto aktivt"
+msgstr "Kontoinnehavarens namn"
 
 #: pretix/plugins/stripe/payment.py:1233
 msgid "Account Holder Street"
@@ -30188,10 +30145,8 @@ msgid "Account Holder Postal Code"
 msgstr "Kontoinnehavarens postnummer"
 
 #: pretix/plugins/stripe/payment.py:1257
-#, fuzzy
-#| msgid "Account information changed"
 msgid "Account Holder City"
-msgstr "Kontoinformationen har ändrats"
+msgstr "Kontoinnehavarens stad"
 
 #: pretix/plugins/stripe/payment.py:1269
 msgid "Account Holder Country"
@@ -30866,16 +30821,12 @@ msgstr ""
 "åtkomstkontroll."
 
 #: pretix/plugins/webcheckin/signals.py:36
-#, fuzzy
-#| msgid "Tickets & check-in"
 msgid "Web Check-in"
-msgstr "Biljettdesign"
+msgstr "Webbincheckning"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
-#, fuzzy
-#| msgid "Checkout"
 msgid "Check-in"
-msgstr "Kassa"
+msgstr "Incheckning"
 
 #: pretix/presale/checkoutflow.py:116
 msgctxt "checkoutflow"
@@ -30883,11 +30834,9 @@ msgid "Step"
 msgstr "Steg"
 
 #: pretix/presale/checkoutflow.py:248
-#, fuzzy
-#| msgid "Confirmations"
 msgctxt "checkoutflow"
 msgid "Customer account"
-msgstr "Bekräftelser"
+msgstr "Kundkonto"
 
 #: pretix/presale/checkoutflow.py:335
 msgid "We failed to process your authentication request, please try again."
@@ -30974,10 +30923,8 @@ msgstr "Välj ett betalsätt."
 
 #: pretix/presale/checkoutflow.py:1366 pretix/presale/checkoutflow.py:1380
 #: pretix/presale/checkoutflow.py:1391
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "Please select a payment method to proceed."
-msgstr "Välj ett betalsätt."
+msgstr "Vänligen välj en betalningsmetod för att fortsätta."
 
 #: pretix/presale/checkoutflow.py:1396 pretix/presale/views/order.py:437
 #: pretix/presale/views/order.py:518
@@ -31015,16 +30962,12 @@ msgid "Please enter the same email address twice."
 msgstr "Ange samma epost två gånger."
 
 #: pretix/presale/forms/checkout.py:125
-#, fuzzy
-#| msgid "Street address"
 msgid "Save to address"
-msgstr "Gatuadress"
+msgstr "Spara till adress"
 
 #: pretix/presale/forms/checkout.py:126
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Create new address"
-msgstr "Avbryt beställning"
+msgstr "Skapa ny adress"
 
 #: pretix/presale/forms/checkout.py:129
 msgid "Save address in my customer account for future purchases"
@@ -31039,10 +30982,8 @@ msgid "Save to profile"
 msgstr "Spara till profil"
 
 #: pretix/presale/forms/checkout.py:166
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Create new profile"
-msgstr "Avbryt beställning"
+msgstr "Skapa ny profil"
 
 #: pretix/presale/forms/customer.py:66
 msgid "You need to fill out all fields."
@@ -31089,10 +31030,8 @@ msgid "What is the result of {num1} + {num2}?"
 msgstr "Vad är resultatet av {num1} + {num2}?"
 
 #: pretix/presale/forms/customer.py:235
-#, fuzzy
-#| msgid "Please enter a shorter name."
 msgid "Please enter the correct result."
-msgstr "Var snäll och ange ett kortare namn."
+msgstr "Vänligen ange rätt resultat."
 
 #: pretix/presale/forms/customer.py:322
 msgid "For security reasons, please wait 10 minutes before you try again."
@@ -31132,10 +31071,8 @@ msgstr ""
 "för dig."
 
 #: pretix/presale/forms/order.py:137
-#, fuzzy
-#| msgid "You did not select any products."
 msgid "No other variations of this product exist."
-msgstr "Du valde ingen av produkterna."
+msgstr "Inga andra varianter av denna produkt existerar."
 
 #: pretix/presale/forms/renderers.py:50
 msgctxt "form"
@@ -31149,11 +31086,9 @@ msgstr "har fel"
 
 #: pretix/presale/forms/renderers.py:64
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
-#, fuzzy
-#| msgid "Cart expired"
 msgctxt "form"
 msgid "required"
-msgstr "Varukorgen har gått ut"
+msgstr "obligatorisk"
 
 #: pretix/presale/ical.py:85 pretix/presale/ical.py:141
 #, python-brace-format
@@ -31186,11 +31121,8 @@ msgstr "Gå live nu"
 #: pretix/presale/templates/pretixpresale/event/base.html:105
 #: pretix/presale/templates/pretixpresale/organizers/base.html:27
 #: pretix/presale/templates/pretixpresale/organizers/base.html:69
-#, fuzzy
-#| msgctxt "address"
-#| msgid "Select state"
 msgid "select language"
-msgstr "Förköp har inte startat"
+msgstr "välj språk"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:48
 #: pretix/presale/templates/pretixpresale/event/base.html:109
@@ -31222,23 +31154,17 @@ msgstr "Varning"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:127
 #: pretix/presale/templates/pretixpresale/event/base.html:201
-#, fuzzy
-#| msgid "The device has been removed."
 msgid "This ticket shop is currently in test mode."
-msgstr "Den här enheten har tagits bort."
+msgstr "Denna biljettbutik är för närvarande i testläge."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:130
 #: pretix/presale/templates/pretixpresale/event/base.html:204
-#, fuzzy
-#| msgid ""
-#| "This ticket shop is currently in test mode. Please do not perform any "
-#| "real purchases as your order might be deleted without notice."
 msgid ""
 "Please do not perform any real purchases as your order might be deleted "
 "without notice."
 msgstr ""
-"Denna butik är i test-mode. Genomför inga köp, då dina beställningar kan tas "
-"bort utan förvarning."
+"Var vänlig och utför inga riktiga köp eftersom din beställning kan raderas "
+"utan förvarning."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:134
 #, python-format
@@ -31276,11 +31202,9 @@ msgid "Error"
 msgstr "Fel"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:176
-#, fuzzy
-#| msgid "Confirmations"
 msgctxt "alert-messages"
 msgid "Information"
-msgstr "Bekräftelser"
+msgstr "Information"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:218
 #: pretix/presale/templates/pretixpresale/organizers/base.html:97
@@ -31296,11 +31220,8 @@ msgstr "Integritetspolicy"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:224
 #: pretix/presale/templates/pretixpresale/organizers/base.html:103
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Other dates"
 msgid "Cookie settings"
-msgstr "Andra datum"
+msgstr "Inställningar för cookies"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:227
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
@@ -31320,11 +31241,8 @@ msgid "We're now trying to book these add-ons for you!"
 msgstr "Vi försöker nu reservera dessa tillval till dig!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Add-ons:"
-msgstr "Extra produkter"
+msgstr "Tillägg:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:53
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:205
@@ -31363,10 +31281,8 @@ msgid "Cart expired"
 msgstr "Varukorgen har gått ut"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
-#, fuzzy
-#| msgid "Show value at"
 msgid "Show full cart"
-msgstr "Visa värde"
+msgstr "Visa hela varukorgen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:78
@@ -31392,10 +31308,8 @@ msgid "Add or remove tickets"
 msgstr "Lägg till eller ta bort biljetter"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:44
-#, fuzzy
-#| msgid "Confirm payment"
 msgid "Modify payment"
-msgstr "Bekräfta betalning"
+msgstr "Ändra betalning"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:80
@@ -31404,10 +31318,8 @@ msgid "Modify"
 msgstr "Ändra"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Modify invoice information"
-msgstr "Fakturainformation"
+msgstr "Ändra faktureringsinformation"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:127
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:23
@@ -31416,53 +31328,37 @@ msgid "Contact information"
 msgstr "Kontaktinformation"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:128
-#, fuzzy
-#| msgid "Contact information"
 msgid "Modify contact information"
-msgstr "Kontaktinformation"
+msgstr "Ändra kontaktinformation"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:171
 msgid "Confirmations"
 msgstr "Bekräftelser"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:189
-#, fuzzy
-#| msgid ""
-#| "Your order requires approval by the event organizer before it can be "
-#| "confirmed and forms a valid contract."
 msgid ""
 "After you submitted your order using the button below, it will require "
 "approval by the event organizer before it can be confirmed and forms a valid "
 "contract."
 msgstr ""
-"Din beställning kräver godkännande från arrangören innan den kan slutföras."
+"Efter att du har skickat din beställning med knappen nedan krävs godkännande "
+"av evenemangsarrangören innan den kan bekräftas och utgör ett giltigt "
+"kontrakt."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:191
-#, fuzzy
-#| msgid ""
-#| "We will sent you an email as soon as the event organizer approved or "
-#| "rejected your order. If your order was approved, we will send you a link "
-#| "that you can use to pay."
 msgid ""
 "We will send you an email as soon as the event organizer approved or "
 "rejected your order."
 msgstr ""
-"Vi kommer skicka dig ett email så fort arrangören har godkänt eller nekat "
-"din beställning. Om den var godkänd, så kommer vi skicka med en länk som "
-"används för att betala."
+"Vi kommer att skicka ett e-postmeddelande till dig så snart "
+"evenemangsarrangören har godkänt eller avvisat din beställning."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
-#, fuzzy
-#| msgid ""
-#| "We will sent you an email as soon as the event organizer approved or "
-#| "rejected your order. If your order was approved, we will send you a link "
-#| "that you can use to pay."
 msgid ""
 "If your order was approved, we will send you a link that you can use to pay."
 msgstr ""
-"Vi kommer skicka dig ett email så fort arrangören har godkänt eller nekat "
-"din beställning. Om den var godkänd, så kommer vi skicka med en länk som "
-"används för att betala."
+"Om din beställning godkändes kommer vi att skicka en länk till dig som du "
+"kan använda för att betala."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:211
 msgid "Place binding order"
@@ -31493,10 +31389,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:60
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:44
-#, fuzzy
-#| msgid "Password"
 msgid "Reset password"
-msgstr "Lösenord"
+msgstr "Återställ lösenord"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:92
 msgid "Create a new customer account"
@@ -31515,10 +31409,8 @@ msgstr ""
 "e-postmeddelandet."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:122
-#, fuzzy
-#| msgid "Continue in new tab"
 msgid "Continue as a guest"
-msgstr "Fortsätt i en ny flik"
+msgstr "Fortsätt som gäst"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:130
 msgid ""
@@ -32243,21 +32135,17 @@ msgstr ""
 "denna betalning har mottagits."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
-#, fuzzy
-#| msgid "Checkout"
 msgctxt "checkoutflow"
 msgid "Checkout steps"
-msgstr "Kassa"
+msgstr "Kassasteg"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:12
 msgid "Completed:"
 msgstr "Slutförd:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:14
-#, fuzzy
-#| msgid "Comment:"
 msgid "Current:"
-msgstr "Kommentar:"
+msgstr "Aktuell:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:26
 msgctxt "checkoutflow"
@@ -32286,12 +32174,12 @@ msgstr ""
 "bekräfta att e-postadressen är giltig."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:26
-#, fuzzy
-#| msgid "You will be able to download your tickets here starting on %(date)s."
 msgid ""
 "If you click the link in our email, you will be able to download your "
 "tickets here."
-msgstr "Du kommer kunna ladda ner dina biljetter här från och med %(date)s."
+msgstr ""
+"Om du klickar på länken i vårt e-postmeddelande kommer du att kunna ladda "
+"ner dina biljetter här."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:30
 msgid ""
@@ -32304,20 +32192,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:57
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:82
-#, fuzzy
-#| msgid ""
-#| "You can download your tickets using the buttons below. Please have your "
-#| "ticket ready when entering the event."
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
-"Du kan ladda ner dina biljetter genom knappen nedan. Ha din biljett "
-"tillgänglig när du besöker evenemanget."
+msgstr "Var snäll och ha din biljett redo när du går in på evenemanget."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets using the buttons below."
-msgstr "Ladda ner alla biljetter på en gång:"
+msgstr "Ladda ner dina biljetter genom att använda knapparna nedan."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:94
 #, python-format
@@ -32359,19 +32239,15 @@ msgid "Add to Calendar"
 msgstr "Lägg till i kalender"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:8
-#, fuzzy
-#| msgid "Confirmations"
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr "Bekräftelser"
+msgstr "Bekräftelse avvaktar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:12
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:23
-#, fuzzy
-#| msgid "Confirm payment"
 msgctxt "order state"
 msgid "Confirmed"
-msgstr "Kommentar:"
+msgstr "Bekräftad"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:14
 msgid "Payment pending"
@@ -32379,45 +32255,38 @@ msgstr "Inväntar betalning"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:78
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Uncategorized items"
-msgstr "Extra produkter"
+msgstr "Okategori saker"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:244
 #: pretix/presale/templates/pretixpresale/event/voucher.html:95
 #: pretix/presale/templates/pretixpresale/event/voucher.html:275
-#, fuzzy, python-format
-#| msgid "Show all events of %(name)s"
+#, python-format
 msgid "Show full-size image of %(item)s"
-msgstr "Visa alla evenemang från %(name)s"
+msgstr "Visa fullstor bild av %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:177
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:329
 #: pretix/presale/templates/pretixpresale/event/voucher.html:204
 #: pretix/presale/templates/pretixpresale/event/voucher.html:358
-#, fuzzy, python-format
-#| msgid "incl. taxes"
+#, python-format
 msgid "%(value)s incl. taxes"
-msgstr "inkl. skatter"
+msgstr "%(value)s inkl. skatter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:183
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:335
 #: pretix/presale/templates/pretixpresale/event/voucher.html:210
 #: pretix/presale/templates/pretixpresale/event/voucher.html:364
-#, fuzzy, python-format
-#| msgid "Total value (without taxes)"
+#, python-format
 msgid "%(value)s without taxes"
-msgstr "Totalt värde (utan skatter)"
+msgstr "%(value)s exklusive skatter"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:290
 #: pretix/presale/templates/pretixpresale/event/voucher.html:321
-#, fuzzy, python-format
-#| msgid "Modify price for %(item)s"
+#, python-format
 msgid "Set price in %(currency)s for %(item)s"
-msgstr "Ändra pris för %(item)s"
+msgstr "Ange pris i %(currency)s för %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
@@ -32475,10 +32344,8 @@ msgstr "Visa nästa vecka, %(week)s"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:57
 #: pretix/presale/templates/pretixpresale/organizers/index.html:94
 #: pretix/presale/views/widget.py:411
-#, fuzzy
-#| msgid "Show number of tickets left"
 msgid "Few tickets left"
-msgstr "Visa antalet kvarvarande biljetter"
+msgstr "Få biljetter kvar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:29
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:72
@@ -32550,20 +32417,16 @@ msgid "General information, add products to your cart"
 msgstr "Allmän information, lägg till produkter i din kundvagn"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:68
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "Please select a date to redeem your voucher."
-msgstr "Välj ett betalsätt."
+msgstr "Vänligen välj ett datum för att lösa in din voucher."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:82
 msgid "View other date"
 msgstr "Välj annat datum"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:87
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
-msgstr "Välj datum för att köpa en biljett"
+msgstr "Välj datum för att boka en biljett"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:92
 msgctxt "subevent"
@@ -32572,17 +32435,14 @@ msgstr "Andra datum"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:142
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:756
-#, fuzzy
-#| msgid "The presale period for this event is over."
 msgid "The booking period for this event is over."
-msgstr "Tiden för förköp för detta evenemang har passerat."
+msgstr "Bokningsperioden för detta evenemang är över."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:150
 #: pretix/presale/views/widget.py:758
-#, fuzzy, python-format
-#| msgid "The presale for this event will start on %(date)s at %(time)s."
+#, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
-msgstr "Förköp för detta evenemang börjar %(date)s at %(time)s."
+msgstr "Bokningsperioden för detta evenemang börjar den %(date)s kl. %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:172
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
@@ -32601,10 +32461,8 @@ msgstr ""
 "blir tillgängliga igen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:201
-#, fuzzy
-#| msgid "Waiting list"
 msgid "Join waiting list"
-msgstr "Väntlista"
+msgstr "Gå med i väntelistan"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:217
 #: pretix/presale/templates/pretixpresale/event/voucher.html:437
@@ -32639,26 +32497,20 @@ msgstr "Skicka orderlänk igen"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:4
 #: pretix/presale/templates/pretixpresale/event/offline.html:8
-#, fuzzy
-#| msgid "Shop is live"
 msgid "Shop offline"
-msgstr "Shoppen är live"
+msgstr "Butiken är offline"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
-#, fuzzy
-#| msgid "The device has been removed."
 msgid "This ticket shop is currently turned off."
-msgstr "Den här enheten har tagits bort."
+msgstr "Denna biljettbutik är för närvarande avstängd."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
 msgstr "Det är endast tillgängligt för autentiserade teammedlemmar."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:11
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "Please try again later."
-msgstr "Ange en giltig epost."
+msgstr "Vänligen försök igen senare."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
@@ -32755,10 +32607,8 @@ msgstr ""
 "tålamod."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
-#, fuzzy
-#| msgid "Imprint"
 msgid "Print"
-msgstr "Imprint"
+msgstr "Skriv ut"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
@@ -32792,10 +32642,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 #: pretix/presale/templates/pretixpresale/event/position.html:33
-#, fuzzy
-#| msgid "Change order"
 msgid "Change ordered items"
-msgstr "Updatera beställningen"
+msgstr "Ändra beställda objekt"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/order.html:290
