@@ -718,7 +718,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
-    api_meta_info = serializers.JSONField()
+    api_meta_info = serializers.JSONField(required=False)
 
     class Meta:
         model = Order
@@ -1047,6 +1047,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
+    api_meta_info = serializers.JSONField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1060,7 +1061,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'checkin_text', 'payment_info', 'payment_date',
                   'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at',
-                  'require_approval', 'valid_if_pending', 'expires')
+                  'require_approval', 'valid_if_pending', 'expires', 'api_meta_info')
 
     def validate_payment_provider(self, pp):
         if pp is None:
