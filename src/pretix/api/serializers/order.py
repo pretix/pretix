@@ -726,7 +726,7 @@ class OrderSerializer(I18nAwareModelSerializer):
             'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
-            'url', 'customer', 'valid_if_pending'
+            'url', 'customer', 'valid_if_pending', 'api_meta_info'
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
@@ -786,7 +786,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         # Even though all fields that shouldn't be edited are marked as read_only in the serializer
         # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
         update_fields = ['comment', 'custom_followup_at', 'checkin_attention', 'checkin_text', 'email', 'locale',
-                         'phone', 'valid_if_pending']
+                         'phone', 'valid_if_pending', 'api_meta_info']
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
