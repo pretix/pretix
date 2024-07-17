@@ -254,7 +254,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.valid_if_pending
     assert o.expires > now()
     assert not o.testmode
-    assert o.api_meta_info == {
+    assert o.api_meta_info_data == {
         'test': 1
     }
 
