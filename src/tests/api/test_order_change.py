@@ -255,6 +255,9 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
             organizer.slug, event.slug, order.code
         ), format='json', data={
             'comment': 'Here is a comment',
+            'api_meta_info': {
+                'test': 1
+            },
             'valid_if_pending': True,
             'custom_followup_at': '2021-06-12',
             'checkin_attention': True,
@@ -280,6 +283,9 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
     assert resp.status_code == 200
     order.refresh_from_db()
     assert order.comment == 'Here is a comment'
+    assert order.api_meta_info == {
+        'test': 1
+    }
     assert order.custom_followup_at.isoformat() == '2021-06-12'
     assert order.checkin_attention
     assert order.checkin_text == 'foobar'
