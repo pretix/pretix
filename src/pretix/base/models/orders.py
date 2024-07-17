@@ -299,7 +299,7 @@ class Order(LockModel, LoggedModel):
         verbose_name=_("Meta information"),
         null=True, blank=True
     )
-    api_meta_info = models.JSONField(
+    api_meta = models.JSONField(
         verbose_name=_("API-Meta information"),
         null=True, blank=True,
         default=dict

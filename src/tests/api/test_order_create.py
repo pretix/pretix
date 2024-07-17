@@ -232,8 +232,8 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     with scopes_disabled():
         customer = organizer.customers.create()
     res['customer'] = customer.identifier
-    res['api_meta_info'] = {
-        "test": 1
+    res['api_meta'] = {
+        'test': 1
     }
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -254,7 +254,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.valid_if_pending
     assert o.expires > now()
     assert not o.testmode
-    assert o.api_meta_info == {
+    assert o.api_meta == {
         'test': 1
     }
 
@@ -427,7 +427,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         ],
         'total': '21.75',
         'comment': '',
-        'api_meta_info': {},
+        'api_meta': {},
         "custom_followup_at": None,
         'invoice_address': {
             'is_business': False,
