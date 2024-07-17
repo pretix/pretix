@@ -718,7 +718,6 @@ class OrderSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
-    api_meta_info = serializers.JSONField(required=False)
 
     class Meta:
         model = Order
@@ -1047,7 +1046,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
-    api_meta_info = serializers.JSONField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
