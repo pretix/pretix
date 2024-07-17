@@ -299,9 +299,10 @@ class Order(LockModel, LoggedModel):
         verbose_name=_("Meta information"),
         null=True, blank=True
     )
-    api_meta_info = models.TextField(
+    api_meta_info = models.JSONField(
         verbose_name=_("API-Meta information"),
-        null=True, blank=True
+        null=True, blank=True,
+        default=dict
     )
     last_modified = models.DateTimeField(
         auto_now=True, db_index=False
@@ -428,15 +429,6 @@ class Order(LockModel, LoggedModel):
             return {}
         try:
             return json.loads(self.meta_info)
-        except TypeError:
-            return None
-
-    @cached_property
-    def api_meta_info_data(self):
-        if not self.api_meta_info:
-            return {}
-        try:
-            return json.loads(self.api_meta_info)
         except TypeError:
             return None
 

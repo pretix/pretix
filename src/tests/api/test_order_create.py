@@ -254,7 +254,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.valid_if_pending
     assert o.expires > now()
     assert not o.testmode
-    assert o.api_meta_info_data == {
+    assert o.api_meta_info == {
         'test': 1
     }
 
@@ -427,7 +427,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         ],
         'total': '21.75',
         'comment': '',
-        'api_meta_info': None,
+        'api_meta_info': {},
         "custom_followup_at": None,
         'invoice_address': {
             'is_business': False,
