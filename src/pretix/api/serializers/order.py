@@ -718,6 +718,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
+    api_meta_info = serializers.JSONField()
 
     class Meta:
         model = Order
