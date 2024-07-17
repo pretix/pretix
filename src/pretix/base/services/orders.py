@@ -985,7 +985,7 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         total=total,
         testmode=True if sales_channel.type_instance.testmode_supported and event.testmode else False,
         meta_info=json.dumps(meta_info or {}),
-        api_meta_info=json.dumps(api_meta_info or {}),
+        api_meta_info=api_meta_info or {},
         require_approval=require_approval,
         sales_channel=sales_channel,
         customer=customer,
