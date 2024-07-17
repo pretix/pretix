@@ -384,7 +384,9 @@ $(function () {
             if (this.placeholder) {
                 $first_ticket_form.find("[placeholder='" + this.placeholder + "']").val(this.value);
             }
-            var label = document.querySelector("label[for=" + this.id +"]")?.firstChild.textContent;
+            var label = $("label[for=" + this.id +"]").first().contents().filter(function () {
+                return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
+            }).text();
             if (label) {
                 $first_ticket_form.find("[placeholder='" + label + "']").val(this.value);
             }
