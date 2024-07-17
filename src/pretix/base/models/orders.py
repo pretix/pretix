@@ -301,7 +301,7 @@ class Order(LockModel, LoggedModel):
     )
     api_meta = models.JSONField(
         verbose_name=_("API meta information"),
-        null=True, blank=True,
+        null=False, blank=True,
         default=dict
     )
     last_modified = models.DateTimeField(
