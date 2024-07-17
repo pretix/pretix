@@ -449,6 +449,16 @@ Further reading:
 
 * `Stripe Payment Method Domain registration`_
 
+
+External payment providers and Cross-Origin-Opener-Policy
+---------------------------------------------------------
+
+If you use a payment provider that opens a new window during checkout (such as PayPal), be aware that setting
+``Cross-Origin-Opener-Policy: same-origin`` results in an empty popup-window being opened in the foreground. This is
+due to JavaScript not having access to the opened window. To mitigate this, you either need to always open the widget’s
+checkout in a new tab (see :ref:`Always open a new tab`) or set ``Cross-Origin-Opener-Policy: same-origin-allow-popups``
+
+
 Working with Cross-Origin-Embedder-Policy
 -----------------------------------------
 
