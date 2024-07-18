@@ -63,7 +63,7 @@ from pretix.base.models import (
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
-    ButtonGroupRadioSelect, ItemMultipleChoiceField,
+    ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
     SalesChannelCheckboxSelectMultiple, SizeValidationMixin,
     SplitDateTimeField, SplitDateTimePickerWidget,
 )
@@ -562,6 +562,12 @@ class TicketNullBooleanSelect(forms.NullBooleanSelect):
 
 
 class ItemUpdateForm(I18nModelForm):
+    picture = ExtFileField(
+        label = _('Product picture'),
+        ext_whitelist = settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
+        max_size = settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
+        required = False,
+    )
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
