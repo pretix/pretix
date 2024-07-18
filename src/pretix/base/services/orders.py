@@ -960,7 +960,7 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
 def _create_order(event: Event, *, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_requests: List[dict], sales_channel: SalesChannel, locale: str=None,
                   address: InvoiceAddress=None, meta_info: dict=None, shown_total=None,
-                  customer=None, valid_if_pending=False):
+                  customer=None, valid_if_pending=False, api_meta: dict=None):
     payments = []
 
     try:
@@ -985,6 +985,7 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         total=total,
         testmode=True if sales_channel.type_instance.testmode_supported and event.testmode else False,
         meta_info=json.dumps(meta_info or {}),
+        api_meta=api_meta or {},
         require_approval=require_approval,
         sales_channel=sales_channel,
         customer=customer,
@@ -1096,7 +1097,7 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
 
 def _perform_order(event: Event, payment_requests: List[dict], position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
-                   shown_total=None, customer=None):
+                   shown_total=None, customer=None, api_meta: dict=None):
     for p in payment_requests:
         p['pprov'] = event.get_payment_providers(cached=True)[p['provider']]
         if not p['pprov']:
@@ -1200,7 +1201,8 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 sales_channel=sales_channel,
                 shown_total=shown_total,
                 customer=customer,
-                valid_if_pending=valid_if_pending
+                valid_if_pending=valid_if_pending,
+                api_meta=api_meta,
             )
 
             try:
@@ -2873,12 +2875,13 @@ class OrderChangeManager:
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: Event, payments: List[dict], positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
-                  sales_channel: str='web', shown_total=None, customer=None, override_now_dt: datetime=None):
+                  sales_channel: str='web', shown_total=None, customer=None, override_now_dt: datetime=None,
+                  api_meta: dict=None):
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             try:
                 return _perform_order(event, payments, positions, email, locale, address, meta_info,
-                                      sales_channel, shown_total, customer)
+                                      sales_channel, shown_total, customer, api_meta)
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):

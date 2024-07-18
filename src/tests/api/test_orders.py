@@ -291,6 +291,7 @@ TEST_ORDER_RES = {
     "payment_provider": "banktransfer",
     "total": "23.00",
     "comment": "",
+    "api_meta": {},
     "custom_followup_at": None,
     "checkin_attention": False,
     "checkin_text": None,

@@ -42,6 +42,8 @@ payment_date                          date                       **DEPRECATED AN
 payment_provider                      string                     **DEPRECATED AND INACCURATE** Payment provider used for this order
 total                                 money (string)             Total value of this order
 comment                               string                     Internal comment on this order
+api_meta                              object                     Meta data for that order. Only available through API, no guarantees
+                                                                 on the content structure. You can use this to save references to your system.
 custom_followup_at                    date                       Internal date for a custom follow-up action
 checkin_attention                     boolean                    If ``true``, the check-in app should show a warning
                                                                  that this ticket requires special attention if a ticket
@@ -562,6 +564,7 @@ Fetching individual orders
         "fees": [],
         "total": "23.00",
         "comment": "",
+        "api_meta": {},
         "custom_followup_at": null,
         "checkin_attention": false,
         "checkin_text": null,
@@ -741,6 +744,8 @@ Updating order fields
    * ``locale``
 
    * ``comment``
+
+   * ``api_meta``
 
    * ``custom_followup_at``
 
