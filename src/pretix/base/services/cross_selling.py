@@ -88,7 +88,7 @@ class CrossSellingService:
         potential_discounts_by_cartpos = defaultdict(list)
 
         from ..services.pricing import apply_discounts
-        apply_discounts(
+        self._discounted_prices = apply_discounts(
             self.event,
             self.sales_channel,
             [
