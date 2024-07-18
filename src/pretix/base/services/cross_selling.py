@@ -1,12 +1,12 @@
 from collections import defaultdict
 from decimal import Decimal
 from itertools import groupby
+from math import inf
 from typing import List
 
 from django.utils.functional import cached_property
-from math import inf
 
-from pretix.base.models import ItemCategory, CartPosition, SalesChannel
+from pretix.base.models import CartPosition, ItemCategory, SalesChannel
 from pretix.presale.views.event import get_grouped_items
 
 
@@ -163,8 +163,8 @@ class CrossSellingService:
                     item.original_price = item.original_price or item.display_price
                     previous_price = item.display_price
                     new_price = (
-                            previous_price * (
-                                (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'))
+                        previous_price * (
+                            (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'))
                     )
                     item.display_price = new_price
 
@@ -177,4 +177,3 @@ class CrossSellingService:
                 new_items.append(item)
 
         return new_items
-

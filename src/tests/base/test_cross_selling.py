@@ -28,7 +28,7 @@ import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Discount, Event, Organizer, CartPosition
+from pretix.base.models import CartPosition, Discount, Event, Organizer
 from pretix.base.services.cross_selling import CrossSellingService
 
 
@@ -41,32 +41,50 @@ def event():
     )
     return event
 
+
 def pattern(regex, **kwargs):
     return re.compile(regex), kwargs
 
+
+cond_suffix = [
+    pattern(r" in the same subevent$", subevent_mode=Discount.SUBEVENT_MODE_SAME),
+    pattern(r" in distinct subevents$", subevent_mode=Discount.SUBEVENT_MODE_DISTINCT),
+]
+cond_patterns = [
+    pattern(r"^Buy at least (?P<condition_min_count>\d+) of (?P<condition_limit_products>.+)$",
+            condition_all_products=False),
+    pattern(r"^Buy at least (?P<condition_min_count>\d+) products$",
+            condition_all_products=True),
+    pattern(r"^Spend at least (?P<condition_min_value>\d+)\$$",
+            condition_all_products=True),
+    pattern(r"^For every (?P<condition_min_count>\d+) of (?P<condition_limit_products>.+)$",
+            condition_all_products=False),
+    pattern(r"^For every (?P<condition_min_count>\d+) products$",
+            condition_all_products=True),
+]
+benefit_patterns = [
+    pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on them\.$",
+            benefit_same_products=True),
+    pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on everything\.$",
+            benefit_same_products=True),
+    pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on "
+            r"(?P<benefit_only_apply_to_cheapest_n_matches>\d+) of them\.$",
+            benefit_same_products=True),
+    pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on "
+            r"(?P<benefit_only_apply_to_cheapest_n_matches>\d+) of (?P<benefit_limit_products>.+)\.$",
+            benefit_same_products=False),
+    pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on "
+            r"(?P<benefit_limit_products>.+)\.$",
+            benefit_same_products=False),
+]
+
+
 def make_discount(description, event: Event):
-    cond_suffix = [
-        pattern(r" in the same subevent$", subevent_mode=Discount.SUBEVENT_MODE_SAME),
-        pattern(r" in distinct subevents$", subevent_mode=Discount.SUBEVENT_MODE_DISTINCT),
-    ]
-    cond_patterns = [
-        pattern(r"^Buy at least (?P<condition_min_count>\d+) of (?P<condition_limit_products>.+)$", condition_all_products=False),
-        pattern(r"^Buy at least (?P<condition_min_count>\d+) products$", condition_all_products=True),
-        pattern(r"^Spend at least (?P<condition_min_value>\d+)\$$", condition_all_products=True),
-        pattern(r"^For every (?P<condition_min_count>\d+) of (?P<condition_limit_products>.+)$", condition_all_products=False),
-        pattern(r"^For every (?P<condition_min_count>\d+) products$", condition_all_products=True),
-    ]
-    benefit_patterns = [
-        pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on them\.$", benefit_same_products=True),
-        pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on everything\.$", benefit_same_products=True),
-        pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on (?P<benefit_only_apply_to_cheapest_n_matches>\d+) of them\.$", benefit_same_products=True),
-        pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on (?P<benefit_only_apply_to_cheapest_n_matches>\d+) of (?P<benefit_limit_products>.+)\.$", benefit_same_products=False),
-        pattern(r"^get (?P<benefit_discount_matching_percent>\d+)% discount on (?P<benefit_limit_products>.+)\.$", benefit_same_products=False),
-    ]
     condition, benefit = description.split(', ')
 
     d = Discount(event=event, internal_name=description)
     d.save()
+
     def apply(patterns: List[Tuple[re.Pattern, dict]], input):
         for regex, options in patterns:
             m = regex.search(input)
@@ -224,7 +242,8 @@ def check_cart_behaviour(event, cart_contents, recommendations):
     positions = [
         CartPosition(
             item_id=event.items.get(name=item_name).pk,
-            subevent_id=1, line_price_gross=Decimal(regular_price), addon_to=None, is_bundled=False, listed_price=Decimal(regular_price), price_after_voucher=Decimal(regular_price)
+            subevent_id=1, line_price_gross=Decimal(regular_price), addon_to=None, is_bundled=False,
+            listed_price=Decimal(regular_price), price_after_voucher=Decimal(regular_price)
         ) for (item_name, regular_price, expected_discounted_price) in cart_contents
     ]
     expected_recommendations = split_table(recommendations)
@@ -232,13 +251,15 @@ def check_cart_behaviour(event, cart_contents, recommendations):
     service = CrossSellingService(event, event.organizer.sales_channels.get(identifier='web'), positions, None)
     result = service.get_data()
     result_recommendations = [
-        [str(category.name), str(item.name), str(item.original_price.gross.quantize(Decimal('0.00'))), str(item.display_price.gross.quantize(Decimal('0.00'))), str(item.order_max)]
+        [str(category.name), str(item.name), str(item.original_price.gross.quantize(Decimal('0.00'))),
+         str(item.display_price.gross.quantize(Decimal('0.00'))), str(item.order_max)]
         for category, items in result
         for item in items
     ]
 
     assert result_recommendations == expected_recommendations
-    assert [str(price) for price, discount in service._discounted_prices] == [disc for (name, reg, disc) in cart_contents]
+    assert [str(price) for price, discount in service._discounted_prices] == [
+        expected_discounted_price for (item_name, regular_price, expected_discounted_price) in cart_contents]
 
 
 @scopes_disabled()
@@ -250,7 +271,8 @@ def test_2f1r_discount_cross_selling(event):
                 )
     make_discount('For every 2 of Regular Ticket, get 50% discount on 1 of Reduced Ticket.', event)
 
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -259,7 +281,8 @@ def test_2f1r_discount_cross_selling(event):
         Tickets     Reduced Ticket      23.00                11.50            1
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -269,7 +292,8 @@ def test_2f1r_discount_cross_selling(event):
         recommendations='''             Price     Discounted Price    Max Count
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -280,7 +304,8 @@ def test_2f1r_discount_cross_selling(event):
         recommendations='''             Price     Discounted Price    Max Count
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -291,7 +316,8 @@ def test_2f1r_discount_cross_selling(event):
         Tickets     Reduced Ticket      23.00                11.50            2
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -304,7 +330,9 @@ def test_2f1r_discount_cross_selling(event):
         Tickets     Reduced Ticket      23.00                11.50            1
         '''
     )
-    check_cart_behaviour(event,
+    print("The interesting part:")
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -318,7 +346,8 @@ def test_2f1r_discount_cross_selling(event):
         Tickets     Reduced Ticket      23.00                11.50            1
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -348,7 +377,8 @@ def test_free_drinks(event):
                 )
     make_discount('Spend at least 100$, get 100% discount on 1 of Free Drinks.', event)
 
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -356,7 +386,8 @@ def test_free_drinks(event):
         recommendations='''             Price     Discounted Price    Max Count
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -366,7 +397,8 @@ def test_free_drinks(event):
         Free Drinks     Free Drinks     50.00                 0.00            1
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -388,7 +420,8 @@ def test_five_tickets_one_free(event):
     # we don't expect a recommendation here, as in the current implementation we only recommend based on discounts
     # where the condition is already completely satisfied but no (or not enough) benefitting products are in the
     # cart yet
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -398,7 +431,8 @@ def test_five_tickets_one_free(event):
         recommendations='''             Price     Discounted Price    Max Count
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00
@@ -409,7 +443,8 @@ def test_five_tickets_one_free(event):
         recommendations='''             Price     Discounted Price    Max Count
         '''
     )
-    check_cart_behaviour(event,
+    check_cart_behaviour(
+        event,
         cart_contents=''' Price     Discounted
         Regular Ticket    42.00          42.00
         Regular Ticket    42.00          42.00

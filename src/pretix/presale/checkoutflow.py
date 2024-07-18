@@ -515,7 +515,6 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         return request._checkoutflow_addons_applicable
 
-
     def is_completed(self, request, warn=False):
         if getattr(self, '_completed', None) is not None:
             return self._completed

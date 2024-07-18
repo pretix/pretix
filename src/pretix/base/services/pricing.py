@@ -31,7 +31,7 @@ from pretix.base.models import (
     AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation,
     SalesChannel, Voucher,
 )
-from pretix.base.models.discount import PositionInfo, Discount
+from pretix.base.models.discount import Discount, PositionInfo
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.timemachine import time_machine_now

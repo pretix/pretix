@@ -304,8 +304,8 @@ class Discount(LoggedModel):
                     # unused discount ("for each 1 ticket you buy, get 50% on 2 t-shirts", cart content: 1 ticket
                     # but 0 t-shirts) -> 2 shirt maybe potential discount (if the 1 ticket is not consumed by a later discount)
                     for i, idx in enumerate(condition_idx_group[
-                                                n_groups * self.condition_min_count:
-                                                possible_applications_cond * self.condition_min_count
+                                            n_groups * self.condition_min_count:
+                                            possible_applications_cond * self.condition_min_count
                                             ]):
                         print(i, idx)
                         collect_potential_discounts[idx] += [
