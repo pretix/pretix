@@ -757,14 +757,6 @@ class ItemUpdateForm(I18nModelForm):
 
         return d
 
-    def clean_picture(self):
-        value = self.cleaned_data.get('picture')
-        if isinstance(value, UploadedFile) and value.size > settings.FILE_UPLOAD_MAX_SIZE_IMAGE:
-            raise forms.ValidationError(_("Please do not upload files larger than {size}!").format(
-                size=SizeValidationMixin._sizeof_fmt(settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
-            ))
-        return value
-
     class Meta:
         model = Item
         localized_fields = '__all__'
