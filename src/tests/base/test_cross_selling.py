@@ -198,11 +198,12 @@ def split_table(txt):
 
 
 def check_cart_behaviour(event, cart_contents, recommendations):
+    cart_contents = split_table(cart_contents)
     positions = [
         CartPosition(
             item_id=event.items.get(name=item_name).pk,
             subevent_id=1, line_price_gross=Decimal(regular_price), addon_to=None, is_bundled=False, listed_price=Decimal(regular_price), price_after_voucher=Decimal(regular_price)
-        ) for (item_name, regular_price, expected_discounted_price) in split_table(cart_contents)
+        ) for (item_name, regular_price, expected_discounted_price) in cart_contents
     ]
     expected_recommendations = split_table(recommendations)
 
@@ -215,6 +216,7 @@ def check_cart_behaviour(event, cart_contents, recommendations):
     ]
 
     assert result_recommendations == expected_recommendations
+    assert [str(price) for price, discount in service._discounted_prices] == [disc for (name, reg, disc) in cart_contents]
 
 
 @scopes_disabled()
@@ -311,3 +313,90 @@ def test_2f1r_discount_cross_selling(event):
     )
 
 
+@scopes_disabled()
+@pytest.mark.django_db
+@pytest.mark.skip("currently unsupported (cannot give discount to specific product on minimum cart value)")
+def test_free_drinks(event):
+    setup_items(event, 'Tickets', 'normal', None,
+                ('Regular Ticket', '42.00'),
+                ('Reduced Ticket', '23.00'),
+                )
+    setup_items(event, 'Free Drinks', 'only', 'discounts',
+                ('Free Drinks', '50.00'),
+                )
+    make_discount('Spend at least 100$, get 100% discount on 1 of Free Drinks.', event)
+
+    check_cart_behaviour(event,
+        cart_contents=''' Price     Discounted
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        '''
+    )
+    check_cart_behaviour(event,
+        cart_contents=''' Price     Discounted
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        Free Drinks     Free Drinks     50.00                 0.00            1
+        '''
+    )
+    check_cart_behaviour(event,
+        cart_contents=''' Price     Discounted
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Free Drinks       50.00           0.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        '''
+    )
+
+
+@scopes_disabled()
+@pytest.mark.django_db
+def test_five_tickets_one_free(event):
+    setup_items(event, 'Tickets', 'both', 'discounts',
+                ('Regular Ticket', '42.00'),
+                )
+    make_discount('For every 5 of Regular Ticket, get 100% discount on 1 of them.', event)
+    # we don't expect a recommendation here, as in the current implementation we only recommend based on discounts
+    # where the condition is already completely satisfied but no (or not enough) benefitting products are in the
+    # cart yet
+    check_cart_behaviour(event,
+        cart_contents=''' Price     Discounted
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        '''
+    )
+    check_cart_behaviour(event,
+        cart_contents=''' Price     Discounted
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00           0.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        '''
+    )
+    check_cart_behaviour(event,
+        cart_contents=''' Price     Discounted
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00          42.00
+        Regular Ticket    42.00           0.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        '''
+    )
