@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-16 20:00+0000\n"
+"PO-Revision-Date: 2024-07-19 03:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -8953,17 +8953,20 @@ msgid ""
 "The expiration date will not be shown if the invoice is generated after the "
 "order is paid."
 msgstr ""
+"Udløbsdatoen vises ikke, hvis fakturaen genereres, efter at bestillingen er "
+"betalt."
 
 #: pretix/base/settings.py:649
-#, fuzzy
 msgid "Minimum length of invoice number after prefix"
-msgstr "Faktureringsnummerpræfiks"
+msgstr "Minimumslængde af fakturanummer efter præfiks"
 
 #: pretix/base/settings.py:650
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
+"Den del af fakturanummeret, der følger efter præfikset, vil blive udfyldt "
+"med foranstillede nuller op til denne længde, f.eks. INV-001 eller INV-00001."
 
 #: pretix/base/settings.py:661
 msgid "Generate invoices with consecutive numbers"
@@ -8988,11 +8991,19 @@ msgid ""
 "can use %Y (with century) %y (without century) to insert the year of the "
 "invoice, or %m and %d for the day of month."
 msgstr ""
+"Dette vil blive sat ind som præfiks til fakturanumre. Hvis du lader dette "
+"felt stå tomt, vil din event-slug blive efterfulgt af en bindestreg. Vær "
+"opmærksom på følgende: Hvis flere arrangementer i samme organisation bruger "
+"samme værdi i dette felt, vil de dele nummerinterval, dvs. at hvert fulde "
+"nummer højst vil blive brugt én gang for alle dine arrangementer. Denne "
+"indstilling påvirker kun fremtidige fakturaer. Du kan bruge %Y (med "
+"århundrede) %y (uden århundrede) til at indsætte årstallet for fakturaen "
+"eller %m og %d for dagen i måneden."
 
 #: pretix/base/settings.py:684 pretix/base/settings.py:706
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please only use the characters {allowed} in this field."
-msgstr "Indtast venligst dit navn."
+msgstr "Brug venligst kun tegnene {allowed} i dette felt."
 
 #: pretix/base/settings.py:697
 msgid "Invoice number prefix for cancellations"
@@ -9004,15 +9015,17 @@ msgid ""
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
 msgstr ""
+"Dette vil blive sat ind som præfiks til fakturanumre af annulleringer. Hvis "
+"du lader dette felt stå tomt, bruges den samme nummereringsordning, som du "
+"har konfigureret til almindelige fakturaer."
 
 #: pretix/base/settings.py:719
 msgid "Highlight order code to make it stand out visibly"
-msgstr ""
+msgstr "Fremhæv bestillingskoden for at gøre den mere synlig"
 
 #: pretix/base/settings.py:720 pretix/base/settings.py:731
-#, fuzzy
 msgid "Only respected by some invoice renderers."
-msgstr "Virker kun i moderne browsere."
+msgstr "Respekteres kun af nogle fakturarendere."
 
 #: pretix/base/settings.py:730 pretix/base/settings.py:2847
 #: pretix/control/templates/pretixcontrol/pdf/index.html:352
@@ -9020,9 +9033,8 @@ msgid "Font"
 msgstr "Skrift"
 
 #: pretix/base/settings.py:756
-#, fuzzy
 msgid "Length of ticket codes"
-msgstr "Gavekort"
+msgstr "Længde af billetkoder"
 
 #: pretix/base/settings.py:783
 msgid "Reservation period"
@@ -9039,11 +9051,12 @@ msgstr ""
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
+"Send direkte videre til betaling, når et produkt er blevet lagt i "
+"indkøbskurven."
 
 #: pretix/base/settings.py:803
-#, fuzzy
 msgid "End of presale text"
-msgstr "Slut af forsalg"
+msgstr "Slutning på forsalgstekst"
 
 #: pretix/base/settings.py:806
 msgid ""
@@ -9051,37 +9064,42 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
+"Denne tekst vil blive vist over billetshoppen, når det angivne salgstidsrum "
+"for dette arrangement er afsluttet. Du kan bruge den til at beskrive andre "
+"muligheder for at få en billet, f.eks. et billetkontor."
 
 #: pretix/base/settings.py:820
-#, fuzzy
 msgid "Guidance text"
-msgstr "Tekst (flere linjer)"
+msgstr "Vejledende tekst"
 
 #: pretix/base/settings.py:821
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
 msgstr ""
+"Denne tekst vil blive vist over betalingsmulighederne. Du kan forklare "
+"valgmulighederne for brugeren nærmere her, hvis du vil."
 
 #: pretix/base/settings.py:832 pretix/base/settings.py:841
-#, fuzzy
 msgid "in days"
-msgstr "Alle datoer"
+msgstr "i dage"
 
 #: pretix/base/settings.py:833 pretix/base/settings.py:842
 msgid "in minutes"
-msgstr ""
+msgstr "i minutter"
 
 #: pretix/base/settings.py:837
-#, fuzzy
 msgid "Set payment term"
-msgstr "Udvid betalingsfrist"
+msgstr "Konfigurer betalingsfrist"
 
 #: pretix/base/settings.py:844
 msgid ""
 "If using days, the order will expire at the end of the last day. Using "
 "minutes is more exact, but should only be used for real-time payment methods."
 msgstr ""
+"Hvis du bruger dage, udløber bestillingen ved udgangen af den sidste dag. "
+"Det er mere præcist at bruge minutter, men denne mulighed bør kun bruges til "
+"betalingsmetoder i realtid."
 
 #: pretix/base/settings.py:854
 msgid "Payment term in days"
@@ -9118,35 +9136,36 @@ msgstr ""
 "ingen indflydelse på den sidste betalingsdato, som kan tilpasses forneden."
 
 #: pretix/base/settings.py:896
-#, fuzzy
 msgid "Payment term in minutes"
-msgstr "Betalingsfrist i dage"
+msgstr "Betalingsfrist i minutter"
 
 #: pretix/base/settings.py:897
-#, fuzzy
 msgid ""
 "The number of minutes after placing an order the user has to pay to preserve "
 "their reservation. Only use this if you exclusively offer real-time payment "
 "methods. Please note that for technical reasons, the actual time frame might "
 "be a few minutes longer before the order is marked as expired."
 msgstr ""
-"Antal dage efter bestilling som en kunde har til at betale for sin "
-"bestilling."
+"Det antal minutter inden for hvilket brugeren skal have betalt efter "
+"bestillingen for at bevare sin reservation. Brug kun dette, hvis du "
+"udelukkende tilbyder betalingsmetoder i realtid. Bemærk, at den faktiske "
+"tidsramme af tekniske årsager kan være et par minutter længere, før ordren "
+"markeres som udløbet."
 
 #: pretix/base/settings.py:920
 msgid "Last date of payments"
 msgstr "Seneste betalingsdato"
 
 #: pretix/base/settings.py:921
-#, fuzzy
 msgid ""
 "The last date any payments are accepted. This has precedence over the terms "
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
 msgstr ""
-"Dato hvor brugeren senest kan ændre i bestillinger, fx deltagenavne og svar "
-"på spørgsmål. Hvis du bruger eventrækker og en bestilling indeholder "
-"billetter for flere datoer, så vil den tidligste dato blive brugt."
+"Den sidste dato, hvor betalinger accepteres. Dette har forrang for de "
+"betingelser, der er blevet konfigureret ovenfor. Hvis du bruger "
+"begivenhedsseriefunktionen, og en ordre indeholder billetter til flere "
+"datoer, vil den tidligste dato blive brugt."
 
 #: pretix/base/settings.py:932
 msgid "Automatically expire unpaid orders"
@@ -9158,11 +9177,13 @@ msgid ""
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
+"Hvis dette er markeret, vil alle ikke betalte bestillinger automatisk gå fra "
+"'afventende' til 'udløbet', når betalingsfristen er overskredet. Det "
+"betyder, at disse billetter går tilbage til puljen og kan bestilles af andre."
 
 #: pretix/base/settings.py:944
-#, fuzzy
 msgid "Expiration delay"
-msgstr "Udløbsdato"
+msgstr "Forsinkelse af udløb"
 
 #: pretix/base/settings.py:945
 msgid ""
@@ -9172,10 +9193,16 @@ msgid ""
 "beyond the \"last date of payments\" configured above, which is always "
 "enforced."
 msgstr ""
+"Bestillingen vil kun udløbe så mange dage som angivet efter den udløbsdato, "
+"som kunden har fået oplyst. Hvis du vælger »Afslut kun betalingsbetingelser "
+"på hverdage« ovenfor, vil dette også blive respekteret. Dette vil dog ikke "
+"udsætte ud over den »sidste betalingsdato«, der er konfigureret ovenfor, og "
+"som altid håndhæves."
 
 #: pretix/base/settings.py:966
 msgid "Hide \"payment pending\" state on customer-facing pages"
 msgstr ""
+"Skjul tilstanden »afventer betaling« på sider, der er tilgængelige for kunden"
 
 #: pretix/base/settings.py:967
 msgid ""
@@ -9183,6 +9210,9 @@ msgid ""
 "but no indication of missing payment will be visible on the ticket pages of "
 "attendees who did not buy the ticket themselves."
 msgstr ""
+"Panelet med betalingsinstruktioner vil stadig blive vist til den primære "
+"kunde, men der vil ikke være nogen indikation af manglende betaling på "
+"billetsiderne for deltagere, der ikke selv har købt billetten."
 
 #: pretix/base/settings.py:983
 msgid ""
@@ -9191,6 +9221,10 @@ msgid ""
 "shown this page again and you can either redeem another gift card or select "
 "a different payment method for the difference."
 msgstr ""
+"Hvis du har et gavekort, indtast venligst gavekortets kode her. Hvis "
+"gavekortet ikke har nok kredit til at betale for hele bestillingen, vil du "
+"få vist denne side igen, og du kan enten indløse et andet gavekort eller "
+"vælge en anden betalingsmetode for differencen."
 
 #: pretix/base/settings.py:999
 msgid "Accept late payments"
@@ -9202,6 +9236,10 @@ msgid ""
 "enough capacity is available. No payments will ever be accepted after the "
 "'Last date of payments' configured above."
 msgstr ""
+"Accepter betalinger for bestillinger, selv når de er i tilstanden »udløbet«, "
+"så længe der er nok kapacitet til rådighed. Ingen betalinger vil nogensinde "
+"blive accepteret efter den 'Sidste betalingsdato', der er blevet "
+"konfigureret ovenfor."
 
 #: pretix/base/settings.py:1011
 msgid "Show start date"
@@ -9212,14 +9250,12 @@ msgid "Show the presale start date before presale has started."
 msgstr "Vis startdato for forsalg før forsalget er startet."
 
 #: pretix/base/settings.py:1027 pretix/base/settings.py:1038
-#, fuzzy
 msgid "Do not generate invoices"
-msgstr "Generer fakturaer"
+msgstr "Generer ikke fakturaer"
 
 #: pretix/base/settings.py:1028 pretix/base/settings.py:1042
-#, fuzzy
 msgid "Only manually in admin panel"
-msgstr "Manuelt i kontrolpanel"
+msgstr "Kun manuelt i admin-panelet"
 
 #: pretix/base/settings.py:1029 pretix/base/settings.py:1041
 msgid "Automatically on user request"
@@ -9231,21 +9267,19 @@ msgstr "Autokatisk for alle oprettede bestillinger"
 
 #: pretix/base/settings.py:1031
 msgid "Automatically on payment or when required by payment method"
-msgstr ""
+msgstr "Automatisk ved betaling eller hvis påkrævet af betalingsmetode"
 
 #: pretix/base/settings.py:1035
 msgid "Generate invoices"
 msgstr "Generer fakturaer"
 
 #: pretix/base/settings.py:1039
-#, fuzzy
 msgid "Automatically after payment or when required by payment method"
-msgstr "Prøv at betale igen - eller vælg en anden betalingsmetode"
+msgstr "Automatisk efter betaling eller hvis påkrævet af betalingsmetode"
 
 #: pretix/base/settings.py:1040
-#, fuzzy
 msgid "Automatically before payment for all created orders"
-msgstr "Autokatisk for alle oprettede bestillinger"
+msgstr "Automatisk før betaling for alle oprettede bestillinger"
 
 #: pretix/base/settings.py:1044
 msgid "Invoices will never be automatically generated for free orders."
@@ -9255,7 +9289,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1053
 msgid "Automatically cancel and reissue invoice on address changes"
-msgstr ""
+msgstr "Annuller og genudsted faktura ved adresseændringer"
 
 #: pretix/base/settings.py:1054
 msgid ""
@@ -9263,10 +9297,13 @@ msgid ""
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
 msgstr ""
+"Hvis kunder ændrer deres fakturaadresse på en eksisterende bestilling, vil "
+"fakturaen automatisk blive annulleret, og en ny faktura vil blive udstedt. "
+"Denne indstilling påvirker ikke ændringer, der foretages via backend'et."
 
 #: pretix/base/settings.py:1065
 msgid "Allow to update existing invoices"
-msgstr ""
+msgstr "Tillad opdatering af eksisterende fakturaer"
 
 #: pretix/base/settings.py:1066
 msgid ""
@@ -9274,23 +9311,25 @@ msgid ""
 "most countries, we recommend to leave this option turned off and always "
 "issue a new invoice if a change needs to be made."
 msgstr ""
+"Som standard kan fakturaer aldrig ændres igen, når de først er udstedt. I de "
+"fleste lande anbefaler vi at lade denne mulighed være slået fra og altid at "
+"udstede en ny faktura, hvis der skal foretages en ændring."
 
 #: pretix/base/settings.py:1081
-#, fuzzy
 msgid "Address line"
-msgstr "Adresse"
+msgstr "Adresse-linje"
 
 #: pretix/base/settings.py:1085
 msgid "Albert Einstein Road 52"
-msgstr ""
+msgstr "Peter Hansens Vej 52"
 
 #: pretix/base/settings.py:1137
 msgid "Domestic tax ID"
-msgstr ""
+msgstr "National moms-ID"
 
 #: pretix/base/settings.py:1138
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "F.eks. CVR-Nr./moms-nr. i Danmark, MwSt.-Nummer i Tyskland…"
 
 #: pretix/base/settings.py:1147
 msgid "EU VAT ID"
@@ -9299,6 +9338,7 @@ msgstr "CVR-nr"
 #: pretix/base/settings.py:1160
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
 msgstr ""
+"F.eks. Med dette dokument sender vi dig regningen for din billetbestilling."
 
 #: pretix/base/settings.py:1163
 msgid "Introductory text"
@@ -9352,10 +9392,14 @@ msgid ""
 "on payment, they will be attached to the payment confirmation mail. If they "
 "are not automatically generated, they will not be attached to emails."
 msgstr ""
+"Hvis der automatisk genereres fakturaer for alle bestillinger, vedhæftes de "
+"til bekræftelsesmailen for bestillingen. Hvis de genereres automatisk ved "
+"betaling, vedhæftes de til bekræftelsesmailen for betalingen. Hvis de ikke "
+"genereres automatisk, vil de ikke blive vedhæftet til e-mails."
 
 #: pretix/base/settings.py:1224
 msgid "Email address to receive a copy of each invoice"
-msgstr ""
+msgstr "E-mail-adresse, som skal modtage en kopi af hver regning"
 
 #: pretix/base/settings.py:1225
 msgid ""
@@ -9363,6 +9407,10 @@ msgid ""
 "creation. You can use this for an automated import of invoices to your "
 "accounting system. The invoice will be the only attachment of the email."
 msgstr ""
+"En hver nyoprettet faktura vil blive sendt til denne e-mail-adresse kort "
+"efter oprettelsen. Du kan bruge dette til en automatisk import af fakturaer "
+"til dit regnskabssystem. Fakturaen vil være den eneste vedhæftede fil i "
+"mailen."
 
 #: pretix/base/settings.py:1236
 msgid "Show items outside presale period"
@@ -9383,7 +9431,7 @@ msgstr "Standardsprog"
 
 #: pretix/base/settings.py:1283
 msgid "Region"
-msgstr ""
+msgstr "Region"
 
 #: pretix/base/settings.py:1284
 msgid ""
@@ -9392,17 +9440,23 @@ msgid ""
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
 msgstr ""
+"Bruges til at bestemme dato- og tidsformatering samt standardland for "
+"kundeadresser og telefonnumre. For formatering har dette mindre prioritet "
+"end sproget og er derfor mest relevant for sprog, der bruges i forskellige "
+"regioner globalt (som f.eks. engelsk)."
 
 #: pretix/base/settings.py:1296
-#, fuzzy
 msgid "Show event times and dates on the ticket shop"
-msgstr "Gå til butikken"
+msgstr "Vis arrangementers tidspunkter og datoer i billet-shoppen"
 
 #: pretix/base/settings.py:1297
 msgid ""
 "If disabled, no date or time will be shown on the ticket shop's front page. "
 "This settings does however not affect the display in other locations."
 msgstr ""
+"Hvis dette er deaktiveret, vises der ingen datoer eller tidspunkter på "
+"billetbutikkens forside. Denne indstilling påvirker dog ikke visningen andre "
+"steder."
 
 #: pretix/base/settings.py:1307
 msgid "Show event end date"
@@ -9434,7 +9488,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1346
 msgid "Ask search engines not to index the ticket shop"
-msgstr ""
+msgstr "Bed søgemaskiner om ikke at indeksere billetshoppen"
 
 #: pretix/base/settings.py:1355
 msgid "Show variations of a product expanded by default"
@@ -9468,6 +9522,12 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
+"Hvis der bliver ledig billetkapacitet, oprettes der automatisk en voucher, "
+"som sendes til den første person på ventelisten for det pågældende produkt. "
+"Hvis denne indstilling ikke er aktiv, sendes der ikke automatisk mails, men "
+"du kan sende dem manuelt via kontrolpanelet. Hvis du deaktiverer "
+"ventelisten, men lader denne indstilling være aktiveret, vil der stadig "
+"blive sendt billetter ud."
 
 #: pretix/base/settings.py:1393
 msgid "Waiting list response time"
@@ -9484,9 +9544,8 @@ msgstr ""
 "kunde på listen."
 
 #: pretix/base/settings.py:1407
-#, fuzzy
 msgid "Disable waiting list"
-msgstr "Aktivér venteliste"
+msgstr "Deaktiver venteliste"
 
 #: pretix/base/settings.py:1408
 msgid ""
@@ -9496,46 +9555,43 @@ msgid ""
 "still people on the waiting list. Vouchers that have already been sent "
 "remain active."
 msgstr ""
+"Ventelisten vil blive fuldstændigt deaktiveret efter denne dato. Det "
+"betyder, at ingen længere kan skrive sig på ventelisten, men også at "
+"billetter vil blive sat til salg igen, hvis kvoten tillader det, selv om der "
+"stadig er folk på ventelisten. Vouchere, der allerede er blevet sendt, "
+"forbliver aktive."
 
 #: pretix/base/settings.py:1420
-#, fuzzy
 msgid "Ask for a name"
-msgstr "Spørg efter deltagernavn"
+msgstr "Spørg efter navn"
 
 #: pretix/base/settings.py:1421
-#, fuzzy
 msgid "Ask for a name when signing up to the waiting list."
-msgstr "En rabatkode er blevet sendt til en person på ventelisten."
+msgstr "Spørg efter navn når nogen skriver sig på ventelisten."
 
 #: pretix/base/settings.py:1430
-#, fuzzy
 msgid "Require name"
-msgstr "Kundenavn påkrævet"
+msgstr "Påkræv navn"
 
 #: pretix/base/settings.py:1431
-#, fuzzy
 msgid "Require a name when signing up to the waiting list.."
-msgstr "En rabatkode er blevet sendt til en person på ventelisten."
+msgstr "Påkræv et navn, når nogen skriver sig på ventelisten."
 
 #: pretix/base/settings.py:1441
-#, fuzzy
 msgid "Ask for a phone number"
-msgstr "Spørg efter deltagernavn"
+msgstr "Spørg efter telefonnummer"
 
 #: pretix/base/settings.py:1442
-#, fuzzy
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr "En rabatkode er blevet sendt til en person på ventelisten."
+msgstr "Spørg efter et telefonnummer, når nogen skriver sig på ventelisten."
 
 #: pretix/base/settings.py:1451
-#, fuzzy
 msgid "Require phone number"
-msgstr "Minimum antal"
+msgstr "Påkræv telefonnummer"
 
 #: pretix/base/settings.py:1452
-#, fuzzy
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr "En rabatkode er blevet sendt til en person på ventelisten."
+msgstr "Påkræv et telefonnummer, når nogen skriver sig på ventelisten."
 
 #: pretix/base/settings.py:1462
 msgid "Phone number explanation"
@@ -9546,16 +9602,16 @@ msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
+"Hvis du spørger efter et telefonnummer, forklar, hvorfor du gør det, og hvad "
+"du vil bruge telefonnummeret til."
 
 #: pretix/base/settings.py:1477
-#, fuzzy
 msgid "Maximum number of entries per email address for the same product"
-msgstr "Maksimalt antal produkter pr. bestilling"
+msgstr "Maksimalt antal pr. e-mailadresse for det samme produkt"
 
 #: pretix/base/settings.py:1489
-#, fuzzy
 msgid "Show number of check-ins to customer"
-msgstr "Vis antal resterende billetter"
+msgstr "Vis antal indtjekninger overfor kunder"
 
 #: pretix/base/settings.py:1490
 msgid ""
@@ -9566,15 +9622,20 @@ msgid ""
 "failed scans will not be counted, and the user will not see the different "
 "check-in lists."
 msgstr ""
+"Når denne mulighed er aktiveret, kan dine kunder se, hvor mange gange de er "
+"kommet ind til arrangementet. Dette er normalt ikke nødvendigt, men kan være "
+"nyttigt i kombination med billetter, der kan bruges et bestemt antal gange, "
+"så kunderne kan se, hvor mange gange billetten allerede er blevet brugt. "
+"Udgange eller mislykkede scanninger tælles ikke med, og brugeren kan ikke se "
+"de forskellige check-in-lister."
 
 #: pretix/base/settings.py:1503
-#, fuzzy
 msgid "Allow users to download tickets"
-msgstr "Påmindelse om download af billetter"
+msgstr "Tillad brugere at downloade billetter"
 
 #: pretix/base/settings.py:1504
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "Hvis dette er deaktiveret, er der ingen, der kan downloade billetter."
 
 #: pretix/base/settings.py:1513
 msgid "Download date"
@@ -9586,11 +9647,14 @@ msgid ""
 "feature and an order contains tickets for multiple event dates, download of "
 "all tickets will be available if at least one of the event dates allows it."
 msgstr ""
+"Download af billetter vil blive tilbudt efter denne dato. Hvis du bruger "
+"begivenhedsserie-funktionen, og en bestilling indeholder billetter til flere "
+"arrangementsdatoer, vil download af alle billetter være tilgængelig, hvis "
+"mindst en af datoerne tillader det."
 
 #: pretix/base/settings.py:1525
-#, fuzzy
 msgid "Generate tickets for add-on products and bundled products"
-msgstr "Generer billetter for produkter der ikke er adgangsgivende"
+msgstr "Generer billetter for add-on-produkter og produktpakker"
 
 #: pretix/base/settings.py:1526
 msgid ""
@@ -9598,11 +9662,14 @@ msgid ""
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
 msgstr ""
+"Som standard udstedes der kun billetter til produkter, der er valgt "
+"individuelt, ikke til tillægsprodukter eller produktpakker. Med denne "
+"indstilling udstedes der også en separat billet for hvert tillægsprodukt "
+"eller produktpakke."
 
 #: pretix/base/settings.py:1539
-#, fuzzy
 msgid "Generate tickets for all products"
-msgstr "Generer billetter for produkter der ikke er adgangsgivende"
+msgstr "Generer billetter for alle produkter"
 
 #: pretix/base/settings.py:1540
 msgid ""
@@ -9610,21 +9677,25 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
+"Hvis dette er slået fra, udstedes der kun billetter til produkter, der er "
+"markeret som en »adgangsgivende billet« i produktindstillingerne. Du kan "
+"også slå billetudstedelse fra for hvert enkelt produkt."
 
 #: pretix/base/settings.py:1552
-#, fuzzy
 msgid "Generate tickets for pending orders"
-msgstr "Generer billetter for produkter der ikke er adgangsgivende"
+msgstr "Generer billetter for afventende bestillinger"
 
 #: pretix/base/settings.py:1553
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
+"Hvis dette er slået fra, er det kun muligt at downloade billetter, efter at "
+"en bestilling er blevet markeret som betalt."
 
 #: pretix/base/settings.py:1564
 msgid "Do not issue ticket before email address is validated"
-msgstr ""
+msgstr "Udsted ikke billet, før mailadressen er blevet valideret"
 
 #: pretix/base/settings.py:1565
 msgid ""
@@ -9634,11 +9705,15 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
+"Hvis dette er slået til, vil billetterne ikke blive tilbudt til download "
+"direkte efter købet. De vedhæftes betalingsbekræftelsesmailen (hvis filen "
+"ikke er for stor), og kunden vil kunne downloade dem fra siden, så snart de "
+"har klikket på et link i mailen. Påvirker ikke bestillinger udført gennem "
+"andre salgskanaler."
 
 #: pretix/base/settings.py:1581
-#, fuzzy
 msgid "Low availability threshold"
-msgstr "Tilgængelige kvoter"
+msgstr "Tærskel for lav tilgængelighed"
 
 #: pretix/base/settings.py:1582
 msgid ""
@@ -9647,11 +9722,15 @@ msgid ""
 "in the event list or calendar. If you keep this option empty, low "
 "availability will not be shown publicly."
 msgstr ""
+"Hvis tilgængeligheden af billetter falder under denne procentdel, vil "
+"arrangementet (eller en dato, hvis det drejer sig om arrangementsserie) "
+"blive fremhævet som en begivenhed med lav tilgængelighed på "
+"begivenhedslisten eller i kalenderen. Hvis du lader denne indstilling stå "
+"tomt, vil lav tilgængelighed ikke blive vist offentligt."
 
 #: pretix/base/settings.py:1596
-#, fuzzy
 msgid "Show availability in event overviews"
-msgstr "Dato i arrangementsrække"
+msgstr "Vis tilgængelighed i arrangementsoversigterne"
 
 #: pretix/base/settings.py:1597
 msgid ""
@@ -9659,6 +9738,10 @@ msgid ""
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
 msgstr ""
+"Hvis dette er markeret, vil listen over arrangementer vise, når der er "
+"udsolgte arrangementer. Det kan give længere indlæsningstider for siden, når "
+"der er mange arrangementer, og den status, der vises, kan være forældet i op "
+"til to minutter."
 
 #: pretix/base/settings.py:1610 pretix/base/settings.py:1618
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:8
@@ -9666,14 +9749,12 @@ msgid "List"
 msgstr "Vis"
 
 #: pretix/base/settings.py:1611 pretix/base/settings.py:1619
-#, fuzzy
 msgid "Week calendar"
-msgstr "Kalender"
+msgstr "Ugevisning"
 
 #: pretix/base/settings.py:1612 pretix/base/settings.py:1620
-#, fuzzy
 msgid "Month calendar"
-msgstr "Kalender"
+msgstr "Månedsvisning"
 
 #: pretix/base/settings.py:1616
 msgid "Default overview style"
@@ -9684,31 +9765,36 @@ msgid ""
 "If your event series has more than 50 dates in the future, only the month or "
 "week calendar can be used."
 msgstr ""
+"Hvis din arrangementsserie har mere end 50 datoer i fremtiden, er det kun "
+"måneds- eller ugekalenderen, der kan bruges."
 
 #: pretix/base/settings.py:1631
 msgid "Show filter options for calendar or list view"
-msgstr ""
+msgstr "Vis filterindstillinger for kalender- eller listevisning"
 
 #: pretix/base/settings.py:1632
-#, fuzzy
 msgid ""
 "You can set up possible filters as meta properties in your organizer "
 "settings."
-msgstr "Det valgte produkt er ikke aktivt eller har ingen pris."
+msgstr ""
+"Du kan oprette mulige filtre som meta-egenskaber i dine "
+"arrangørindstillinger."
 
 #: pretix/base/settings.py:1641
 msgid "Hide all unavailable dates from calendar or list views"
-msgstr ""
+msgstr "Skjul alle utilgængelige datoer fra kalender- eller listevisninger"
 
 #: pretix/base/settings.py:1642 pretix/base/settings.py:1653
 msgid ""
 "This option currently only affects the calendar of this event series, not "
 "the organizer-wide calendar."
 msgstr ""
+"Denne mulighed påvirker i øjeblikket kun kalenderen for denne "
+"arrangementsserie, ikke kalenderen for hele arrangøren."
 
 #: pretix/base/settings.py:1652
 msgid "Hide all past dates from calendar"
-msgstr ""
+msgstr "Skjul alle tidligere datoer fra kalenderen"
 
 #: pretix/base/settings.py:1664 pretix/base/settings.py:1673
 msgid "No modifications after order was submitted"
