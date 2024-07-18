@@ -767,8 +767,10 @@ h1 .label {
     .plugin-container {
         flex-basis: 100%;
         flex-shrink: 0;
-        border-top: 1px solid #ccc;
         padding-top: 15px;
+    }
+    .plugin-container:not(.featured-plugin) + .plugin-container {
+        border-top: 1px solid #ccc;
     }
     h4 {
         margin-top: 0;
