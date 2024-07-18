@@ -8,7 +8,7 @@ import pretix.base.models.orders
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0264_order_internal_secret"),
+        ("pretixbase", "0268_remove_subevent_items_remove_subevent_variations_and_more"),
     ]
 
     operations = [
