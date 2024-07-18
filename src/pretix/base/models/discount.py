@@ -274,9 +274,6 @@ class Discount(LoggedModel):
             raise ValueError('Validation invariant violated.')
 
         if self.benefit_only_apply_to_cheapest_n_matches:
-            if not self.condition_min_count:
-                raise ValueError('Validation invariant violated.')
-
             # sort by line_price
             condition_idx_group = sorted(condition_idx_group, key=lambda idx: (positions[idx].line_price_gross, -idx))
             benefit_idx_group = sorted(benefit_idx_group, key=lambda idx: (positions[idx].line_price_gross, -idx))
