@@ -443,7 +443,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
         elif self.request.user.is_authenticated:
             qs = SubEvent.objects.filter(
                 event__organizer=self.request.organizer,
-                event__in=self.request.user.get_events_with_any_permission()
+                event__in=self.request.user.get_events_with_any_permission(request=self.request)
             )
 
         qs = filter_qs_by_attr(qs, self.request)
