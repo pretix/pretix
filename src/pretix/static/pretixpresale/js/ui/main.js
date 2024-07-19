@@ -386,12 +386,22 @@ $(function () {
             }
             var label = $("label[for=" + this.id +"]").first().contents().filter(function () {
                 return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
-            }).text();
+            }).text().trim();
             if (label) {
+                // match to placeholder and label
                 $first_ticket_form.find("[placeholder='" + label + "']").val(this.value);
+                var v = this.value;
+                $first_ticket_form.find("label").each(function() {
+                    var text = $(this).first().contents().filter(function () {
+                        return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
+                    }).text().trim();
+                    if (text == label) {
+                        $("#" + this.getAttribute("for")).val(v);
+                    }
+                });
             }
         }
-    });
+    }).trigger("change");
     attendee_address_fields.change(function () {
         copy_to_first_ticket = false;
     });
