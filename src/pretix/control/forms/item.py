@@ -40,7 +40,6 @@ from urllib.parse import urlencode
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.urls import reverse
@@ -64,8 +63,8 @@ from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
-    SalesChannelCheckboxSelectMultiple, SizeValidationMixin,
-    SplitDateTimeField, SplitDateTimePickerWidget,
+    SalesChannelCheckboxSelectMultiple, SplitDateTimeField,
+    SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2, Select2ItemVarMulti
 from pretix.helpers.models import modelcopy
@@ -563,11 +562,12 @@ class TicketNullBooleanSelect(forms.NullBooleanSelect):
 
 class ItemUpdateForm(I18nModelForm):
     picture = ExtFileField(
-        label = _('Product picture'),
-        ext_whitelist = settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
-        max_size = settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
-        required = False,
+        label=_('Product picture'),
+        ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
+        max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
+        required=False,
     )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
