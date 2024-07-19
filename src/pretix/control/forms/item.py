@@ -40,7 +40,6 @@ from urllib.parse import urlencode
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.urls import reverse
@@ -63,9 +62,9 @@ from pretix.base.models import (
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
-    ButtonGroupRadioSelect, ItemMultipleChoiceField,
-    SalesChannelCheckboxSelectMultiple, SizeValidationMixin,
-    SplitDateTimeField, SplitDateTimePickerWidget,
+    ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
+    SalesChannelCheckboxSelectMultiple, SplitDateTimeField,
+    SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2, Select2ItemVarMulti
 from pretix.helpers.models import modelcopy
@@ -562,6 +561,13 @@ class TicketNullBooleanSelect(forms.NullBooleanSelect):
 
 
 class ItemUpdateForm(I18nModelForm):
+    picture = ExtFileField(
+        label=_('Product picture'),
+        ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
+        max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
+        required=False,
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
@@ -750,14 +756,6 @@ class ItemUpdateForm(I18nModelForm):
         Item.clean_media_settings(self.event, d.get('media_policy'), d.get('media_type'), d.get('issue_giftcard'))
 
         return d
-
-    def clean_picture(self):
-        value = self.cleaned_data.get('picture')
-        if isinstance(value, UploadedFile) and value.size > settings.FILE_UPLOAD_MAX_SIZE_IMAGE:
-            raise forms.ValidationError(_("Please do not upload files larger than {size}!").format(
-                size=SizeValidationMixin._sizeof_fmt(settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
-            ))
-        return value
 
     class Meta:
         model = Item
