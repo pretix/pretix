@@ -28,9 +28,9 @@ from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 
 from pretix.base.modelimport import (
     BooleanColumnMixin, DatetimeColumnMixin, DecimalColumnMixin, ImportColumn,
-    IntegerColumnMixin, i18n_flat,
+    IntegerColumnMixin, SubeventColumnMixin, i18n_flat,
 )
-from pretix.base.models import ItemVariation, Quota, Seat, Voucher
+from pretix.base.models import ItemVariation, Quota, Seat, SubEvent, Voucher
 from pretix.base.signals import voucher_import_columns
 
 
@@ -55,11 +55,11 @@ class CodeColumn(ImportColumn):
         obj.code = value
 
 
-class SubeventColumn(ImportColumn):
+class SubeventColumn(SubeventColumnMixin, ImportColumn):
     identifier = 'subevent'
     verbose_name = pgettext_lazy('subevents', 'Date')
 
-    def assign(self, value, obj: Voucher, **kwargs):
+    def assign(self, value, obj: SubEvent, **kwargs):
         obj.subevent = value
 
 
