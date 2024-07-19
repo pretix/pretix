@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 08:20+0000\n"
-"PO-Revision-Date: 2024-07-19 03:00+0000\n"
+"PO-Revision-Date: 2024-07-19 08:56+0000\n"
 "Last-Translator: Reece Needham <nouveaureece@protonmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/es/>\n"
@@ -254,7 +254,7 @@ msgstr "Cancelar"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket not paid"
-msgstr "Ticket por pagar"
+msgstr "Entrada no pagada"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
@@ -274,7 +274,7 @@ msgstr "Salida registrada"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Ticket already used"
-msgstr "Este ticket ya fue utilizado"
+msgstr "Esta entrada ya fue utilizada"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Information required"
@@ -282,11 +282,11 @@ msgstr "Información requerida"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Unknown ticket"
-msgstr "Ticket no encontrado"
+msgstr "Entrada desconocida"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Ticket type not allowed here"
-msgstr "Tipo de ticket no está permitido"
+msgstr "Tipo de entrada no está permitido"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Entry not allowed"
@@ -294,15 +294,15 @@ msgstr "Entrada no permitida"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code revoked/changed"
-msgstr "Código de ticket revocado/cambiado"
+msgstr "Código de entrada revocada/cambiada"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
-msgstr "Ticket bloqueado"
+msgstr "Entrada bloqueada"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket not valid at this time"
-msgstr "Ticket no válido en este momento"
+msgstr "Entrada no válida en este momento"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order canceled"
@@ -591,7 +591,7 @@ msgstr "Objeto"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:673
 msgid "Ticket design"
-msgstr "Diseño del ticket"
+msgstr "Diseño del entrada"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:972
 msgid "Saving failed."
