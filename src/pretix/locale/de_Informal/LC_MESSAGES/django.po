@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-30 18:55+0000\n"
-"PO-Revision-Date: 2024-07-19 22:00+0000\n"
-"Last-Translator: bokor-rami-io <bokor@rami.io>\n"
+"PO-Revision-Date: 2024-07-20 13:00+0000\n"
+"Last-Translator: JnnisCanis <me@jnnis.de>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -6671,8 +6671,8 @@ msgid ""
 "rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
-"Wir empfehlen, diese Option zu aktivieren, wenn Du die Gebühren Ihres "
-"Zahlungsdienstleisters an Ihre Kunden weitergeben willst. Denk daran, oben "
+"Wir empfehlen, diese Option zu aktivieren, wenn Du die Gebühren deines "
+"Zahlungsdienstleisters an deine Kunden weitergeben willst. Denke daran, oben "
 "die richtigen Gebührensätze des Zahlungsanbieters einzustellen. <a href=\""
 "{docs_url}\" target=\"_blank\" rel=\"noopener\">Weitere Informationen</a>."
 
@@ -9238,9 +9238,9 @@ msgid ""
 msgstr ""
 "Anzahl an Minuten, die ein Benutzer nach Abschicken der Bestellung hat, um "
 "die Zahlung abzuschließen. Benutze dies nur, wenn du ausschließlich "
-"Zahlungsmethoden mit sofortiger Bestätigung anbietest. Bitte beachte das das "
-"tatsächliche Zeitfenster aus technischen Gründen einige Minuten länger sein "
-"kann."
+"Zahlungsmethoden mit sofortiger Bestätigung anbietest. Bitte beachte, dass "
+"das tatsächliche Zeitfenster aus technischen Gründen einige Minuten länger "
+"sein kann."
 
 #: pretix/base/settings.py:920
 msgid "Last date of payments"
@@ -9913,7 +9913,8 @@ msgstr "Keine Änderungen an bestehenden Bestellungen"
 #: pretix/base/settings.py:1665 pretix/base/settings.py:1674
 msgid "Only the person who ordered can make changes"
 msgstr ""
-"Nur die Person, die die Bestellung aufgegeben hat, kann Änderungen vornehmen"
+"Nur die Person, welche die Bestellung aufgegeben hat, kann Änderungen "
+"vornehmen"
 
 #: pretix/base/settings.py:1666 pretix/base/settings.py:1675
 msgid "Both the attendee and the person who ordered can make changes"
@@ -10853,7 +10854,7 @@ msgstr ""
 "Hallo,\n"
 "\n"
 "du hast dich auf die Warteliste für {event} \n"
-"für das Produkt {product} eingetragen.\n"
+"und das Produkt {product} eingetragen.\n"
 "\n"
 "Wir haben nun ein Ticket für dich! Du kannst es in unserem Ticketshop "
 "erwerben,\n"
@@ -10871,9 +10872,8 @@ msgstr ""
 "weitergeben,\n"
 "wenn du den Gutschein nicht in diesem Zeitraum einlöst.\n"
 "\n"
-"Wenn du das Ticket NICHT mehr möchtest, bitten wir dich folgenden Link zu "
-"klicken\n"
-"um uns Bescheid zu sagen. So können wir das Ticket schnellstmöglich an die "
+"Wenn du das Ticket NICHT mehr möchtest, sag uns bitte durch Klicken auf "
+"folgenden Link Bescheid. So können wir das Ticket schnellstmöglich an die "
 "nächste\n"
 "wartende Person auf der Warteliste weitergeben:\n"
 "\n"
@@ -13975,7 +13975,7 @@ msgid ""
 "set the name here."
 msgstr ""
 "Wenn du den \"powered by\"-Text in der Fußzeile anpassen willst, um den "
-"Namen Ihrer Firma oder Organisation aufzunehmen (wenn du Änderungen an "
+"Namen deiner Firma oder Organisation aufzunehmen (wenn du Änderungen an "
 "pretix vorgenommen hast), kannst du hier den Namen eintragen."
 
 #: pretix/control/forms/global_settings.py:205
@@ -14640,7 +14640,7 @@ msgstr ""
 "Erstattungen angezeigt. Wenn diese Option mit der Option für automatische "
 "Erstattungen kombiniert wird, werden ausschließlich Zahlungen mit einer "
 "Zahlungsart, die keine automatischen Erstattungen unterstützt, automatisch "
-"als manuelle Erstattungen auf Ihrer Erstattungsliste als \"zu erledigen\" "
+"als manuelle Erstattungen auf deiner Erstattungsliste als \"zu erledigen\" "
 "auftauchen. Wähle diese Option nicht, wenn du Bestellungen mit anderen "
 "Bestellungen verrechnen oder als Gutschein erstatten möchtest."
 
@@ -17465,7 +17465,7 @@ msgstr "Filter"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 msgid "Your search did not match any check-ins."
-msgstr "Ihre Filter treffen auf keine Check-ins zu."
+msgstr "Deine Filter treffen auf keine Check-ins zu."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:52
 msgid "You haven't scanned any tickets yet."
@@ -19806,7 +19806,7 @@ msgid ""
 "usage of pretix is in compliance with the Enterprise license you purchased."
 msgstr ""
 "Der Bericht dient zwei Zwecken: Dem Sammeln nützlicher Informationen um "
-"Probleme mit Ihrer pretix-Installation zu analysieren und um zu überprüfen, "
+"Probleme mit deiner pretix-Installation zu analysieren und um zu überprüfen, "
 "dass deine Nutzung von pretix von der erworbenen pretix-Enterprise-Lizenz "
 "abgedeckt ist."
 
@@ -30130,7 +30130,7 @@ msgid ""
 "generate you API keys with the recommended permission level for optimal "
 "usage with pretix."
 msgstr ""
-"Der Button oben wird unsere Stripe-App in Ihrem Stripe-Konto installieren "
+"Der obige Button wird unsere Stripe-App in deinem Stripe-Konto installieren "
 "und API-Schlüssel mit dem empfohlenen Berechtigungslevel für die Verwendung "
 "mit pretix generieren."
 
@@ -30381,7 +30381,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:992
 msgid "Your payment failed. Please try again."
-msgstr "Ihre Zahlung ist fehlgeschlagen, bitte erneut versuchen."
+msgstr "Deine Zahlung ist fehlgeschlagen. Bitte versuche es erneut."
 
 #: pretix/plugins/stripe/payment.py:998
 #, python-format
@@ -32465,7 +32465,7 @@ msgid ""
 "If you click the link in our email, you will be able to download your "
 "tickets here."
 msgstr ""
-"Wenn du den Link in Ihrer E-Mail anklickst, kannst du deine Tickets hier "
+"Wenn du den Link in deiner E-Mail anklickst, kannst du deine Tickets hier "
 "herunterladen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:30
@@ -33690,7 +33690,7 @@ msgstr "Konto erstellen"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
 msgid "Your membership"
-msgstr "Ihre Mitgliedschaft"
+msgstr "Deine Mitgliedschaft"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
