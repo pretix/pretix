@@ -307,11 +307,9 @@ class Discount(LoggedModel):
                                             n_groups * self.condition_min_count:
                                             possible_applications_cond * self.condition_min_count
                                             ]):
-                        print(i, idx)
                         collect_potential_discounts[idx] += [
                             (self, self.benefit_only_apply_to_cheapest_n_matches, i // self.condition_min_count)
                         ]
-                    print(collect_potential_discounts)
 
         else:
             consume_idx = condition_idx_group

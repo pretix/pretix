@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import re
+from collections import defaultdict
 from decimal import Decimal
 from typing import List, Optional, Tuple, Union
 
@@ -158,13 +159,16 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
 
 def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
                     positions: List[Tuple[int, Optional[int], Decimal, bool, bool, Decimal]],
-                    collect_potential_discounts=None) -> List[Tuple[Decimal, Optional[Discount]]]:
+                    collect_potential_discounts: Optional[defaultdict]=None) -> List[Tuple[Decimal, Optional[Discount]]]:
     """
     Applies any dynamic discounts to a cart
 
     :param event: Event the cart belongs to
     :param sales_channel: Sales channel the cart was created with
     :param positions: Tuple of the form ``(item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount)``
+    :param collect_potential_discounts: If a `defaultdict(list)` is supplied, all discounts that could be applied to the cart
+    based on the "consumed" items, but lack matching "benefitting" items will be collected in it.
+    
     :return: A list of ``(new_gross_price, discount)`` tuples in the same order as the input
     """
     if isinstance(sales_channel, SalesChannel):
