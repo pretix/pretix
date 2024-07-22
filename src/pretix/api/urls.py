@@ -96,6 +96,9 @@ event_router.register(r'exporters', exporters.EventExportersViewSet, basename='e
 event_router.register(r'shredders', shredders.EventShreddersViewSet, basename='shredders')
 event_router.register(r'item_meta_properties', event.ItemMetaPropertiesViewSet)
 
+subevent_router = routers.DefaultRouter()
+subevent_router.register(r'seats', event.SeatViewSet)
+
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet, basename='checkinlistpos')
 
@@ -133,6 +136,7 @@ urlpatterns = [
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/settings/$', event.EventSettingsView.as_view(),
             name="event.settings"),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/', include(event_router.urls)),
+    re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/subevents/(?P<subevent>\d+)/', include(subevent_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/teams/(?P<team>[^/]+)/', include(team_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/items/(?P<item>[^/]+)/', include(item_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/questions/(?P<question>[^/]+)/',

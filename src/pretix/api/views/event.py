@@ -40,7 +40,7 @@ from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import serializers, views, viewsets
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError, NotFound
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
@@ -674,16 +674,20 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
     queryset = Seat.objects.none()
     write_permission = 'can_change_event_settings'
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['subevent',
-                        'zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label',
+    filterset_fields = ['zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label',
                         'seat_guid', 'blocked',]
 
     def get_queryset(self):
-        if self.request.event.has_subevents:
-            subevent = self.request.event.subevents.get(pk=self.request.GET.get('subevent'))
+        if self.request.event.has_subevents and 'subevent' in self.request.resolver_match.kwargs:
+            try:
+                subevent = self.request.event.subevents.get(pk=self.request.resolver_match.kwargs['subevent'])
+            except SubEvent.DoesNotExist:
+                raise NotFound('Subevent not found')
             return Seat.annotated(event_id=self.request.event.id, subevent=subevent, qs=subevent.seats.all())
-        else:
+        elif not self.request.event.has_subevents and 'subevent' not in self.request.resolver_match.kwargs:
             return Seat.annotated(event_id=self.request.event.id, subevent=None, qs=self.request.event.seats.all())
+        else:
+            raise NotFound
 
     def perform_update(self, serializer):
         super().perform_update(serializer)
