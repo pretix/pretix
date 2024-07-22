@@ -681,9 +681,9 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         super().perform_update(serializer)
-        serializer.instance.log_action(
-            'pretix.event.seat.changed',
+        serializer.instance.event.log_action(
+            "pretix.event.seats.blocks.changed",
             user=self.request.user,
             auth=self.request.auth,
-            data=self.request.data
+            data={"seats": [serializer.instance.pk]},
         )
