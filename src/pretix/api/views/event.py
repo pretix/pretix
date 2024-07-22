@@ -683,9 +683,9 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
                 subevent = self.request.event.subevents.get(pk=self.request.resolver_match.kwargs['subevent'])
             except SubEvent.DoesNotExist:
                 raise NotFound('Subevent not found')
-            return Seat.annotated(event_id=self.request.event.id, subevent=subevent, qs=subevent.seats.all())
+            return Seat.annotated(event_id=self.request.event.id, subevent=subevent, qs=subevent.seats.all(), annotate_ids=True)
         elif not self.request.event.has_subevents and 'subevent' not in self.request.resolver_match.kwargs:
-            return Seat.annotated(event_id=self.request.event.id, subevent=None, qs=self.request.event.seats.all())
+            return Seat.annotated(event_id=self.request.event.id, subevent=None, qs=self.request.event.seats.all(), annotate_ids=True)
         else:
             raise NotFound
 
