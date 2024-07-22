@@ -52,7 +52,7 @@ from pretix.api.serializers import (
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import (
-    Device, Event, SalesChannel, TaxRule, TeamAPIToken,
+    Device, Event, SalesChannel, TaxRule, TeamAPIToken, Seat,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
@@ -969,3 +969,12 @@ class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
     class Meta:
         model = ItemMetaProperty
         fields = ('id', 'name', 'default', 'required', 'allowed_values')
+
+
+class SeatSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = Seat
+        read_only_fields = ('id', 'subevent', 'zone_name', 'row_name', 'row_label',
+                  'seat_number', 'seat_label', 'seat_guid', 'product', 'sorting_rank', 'x', 'y',)
+        fields = ('id', 'subevent', 'zone_name', 'row_name', 'row_label',
+                  'seat_number', 'seat_label', 'seat_guid', 'product', 'blocked', 'sorting_rank', 'x', 'y',)

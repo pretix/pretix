@@ -49,12 +49,12 @@ from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
     EventSettingsSerializer, ItemMetaPropertiesSerializer, SubEventSerializer,
-    TaxRuleSerializer,
+    TaxRuleSerializer, SeatSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
     CartPosition, Device, Event, ItemMetaProperty, SeatCategoryMapping,
-    TaxRule, TeamAPIToken,
+    TaxRule, TeamAPIToken, Seat,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.quotas import QuotaAvailability
@@ -667,3 +667,23 @@ class EventSettingsView(views.APIView):
                 'request': request
             })
         return Response(s.data)
+
+
+class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
+    serializer_class = SeatSerializer
+    queryset = Seat.objects.none()
+    write_permission = 'can_change_event_settings'
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label', 'seat_guid', 'blocked']
+
+    def get_queryset(self):
+        return self.request.event.seats.all()
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        serializer.instance.log_action(
+            'pretix.event.seat.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
