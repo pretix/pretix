@@ -674,10 +674,16 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
     queryset = Seat.objects.none()
     write_permission = 'can_change_event_settings'
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label', 'seat_guid', 'blocked']
+    filterset_fields = ['subevent',
+                        'zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label',
+                        'seat_guid', 'blocked',]
 
     def get_queryset(self):
-        return self.request.event.seats.all()
+        if self.request.event.has_subevents:
+            subevent = self.request.event.subevents.get(pk=self.request.GET.get('subevent'))
+            return Seat.annotated(event_id=self.request.event.id, subevent=subevent, qs=subevent.seats.all())
+        else:
+            return Seat.annotated(event_id=self.request.event.id, subevent=None, qs=self.request.event.seats.all())
 
     def perform_update(self, serializer):
         super().perform_update(serializer)

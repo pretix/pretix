@@ -972,9 +972,19 @@ class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
 
 
 class SeatSerializer(I18nAwareModelSerializer):
+    has_order = serializers.BooleanField()
+    has_cart = serializers.BooleanField()
+    has_voucher = serializers.BooleanField()
+
     class Meta:
         model = Seat
-        read_only_fields = ('id', 'subevent', 'zone_name', 'row_name', 'row_label',
-                  'seat_number', 'seat_label', 'seat_guid', 'product', 'sorting_rank', 'x', 'y',)
-        fields = ('id', 'subevent', 'zone_name', 'row_name', 'row_label',
-                  'seat_number', 'seat_label', 'seat_guid', 'product', 'blocked', 'sorting_rank', 'x', 'y',)
+        read_only_fields = (
+            'id', 'subevent', 'zone_name', 'row_name', 'row_label',
+            'seat_number', 'seat_label', 'seat_guid', 'product', 'sorting_rank', 'x', 'y',
+            'has_order', 'has_cart', 'has_voucher',
+        )
+        fields = (
+            'id', 'subevent', 'zone_name', 'row_name', 'row_label',
+            'seat_number', 'seat_label', 'seat_guid', 'product', 'blocked', 'sorting_rank', 'x', 'y',
+            'has_order', 'has_cart', 'has_voucher',
+        )
