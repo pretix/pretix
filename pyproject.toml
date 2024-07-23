@@ -44,7 +44,7 @@ dependencies = [
   "django-formset-js-improved==0.5.0.3",
   "django-formtools==2.5.1",
   "django-hierarkey==1.2.*",
-  "django-hijack==3.5.*",
+  "django-hijack==3.6.*",
   "django-i18nfield==1.9.*,>=1.9.4",
   "django-libsass==0.9",
   "django-localflavor==4.0",
@@ -83,7 +83,7 @@ dependencies = [
   "pycparser==2.22",
   "pycryptodome==3.20.*",
   "pypdf==4.3.*",
-  "python-bidi==0.4.*",  # Support for Arabic in reportlab
+  "python-bidi==0.5.*",  # Support for Arabic in reportlab
   "python-dateutil==2.9.*",
   "pytz",
   "pytz-deprecation-shim==0.1.*",

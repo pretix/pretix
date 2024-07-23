@@ -179,7 +179,7 @@ class TicketPageMixin:
         can_download = can_download and self.order.ticket_download_available
         ctx['download_email_required'] = can_download and (
             self.request.event.settings.ticket_download_require_validated_email and
-            self.order.sales_channel == 'web' and
+            self.order.sales_channel.type == 'web' and
             not self.order.email_known_to_work
         )
         ctx['can_download'] = can_download and not ctx['download_email_required']
@@ -1106,7 +1106,7 @@ class OrderDownloadMixin:
 
         if (
             self.request.event.settings.ticket_download_require_validated_email and
-            self.order.sales_channel == 'web' and
+            self.order.sales_channel.type == 'web' and
             not self.order.email_known_to_work
         ):
             return self.error(OrderError(_('Please click the link we sent you via email to download your tickets.')))

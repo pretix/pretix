@@ -41,6 +41,7 @@ The following values for ``action_types`` are valid with pretix core:
     * ``pretix.event.order.modified``
     * ``pretix.event.order.contact.changed``
     * ``pretix.event.order.changed.*``
+    * ``pretix.event.order.deleted`` (can only occur for test mode orders)
     * ``pretix.event.order.refund.created``
     * ``pretix.event.order.refund.created.externally``
     * ``pretix.event.order.refund.requested``

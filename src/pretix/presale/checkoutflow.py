@@ -85,7 +85,7 @@ from pretix.presale.forms.customer import AuthenticationForm, RegistrationForm
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
     contact_form_fields, contact_form_fields_overrides,
-    order_meta_from_request, question_form_fields,
+    order_api_meta_from_request, order_meta_from_request, question_form_fields,
     question_form_fields_overrides,
 )
 from pretix.presale.utils import customer_login
@@ -1544,11 +1544,14 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
                 str(m) for m in self.confirm_messages.values()
             ]
         }
+        api_meta = {}
         unlock_hashes = request.session.get('pretix_unlock_hashes', [])
         if unlock_hashes:
             meta_info['unlock_hashes'] = unlock_hashes
         for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
             meta_info.update(response)
+        for receiver, response in order_api_meta_from_request.send(sender=request.event, request=request):
+            api_meta.update(response)
 
         return self.do(
             self.request.event.id,
@@ -1562,6 +1565,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             shown_total=self.cart_session.get('shown_total'),
             customer=self.cart_session.get('customer'),
             override_now_dt=time_machine_now(default=None),
+            api_meta=api_meta,
         )
 
     def get_success_message(self, value):
