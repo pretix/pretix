@@ -49,7 +49,7 @@ from io import BytesIO
 
 import jsonschema
 import reportlab.rl_config
-from bidi.algorithm import get_display
+from bidi import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError

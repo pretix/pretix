@@ -30,7 +30,7 @@ from typing import Tuple
 
 import bleach
 import vat_moss.exchange_rates
-from bidi.algorithm import get_display
+from bidi import get_display
 from django.contrib.staticfiles import finders
 from django.db.models import Sum
 from django.dispatch import receiver
