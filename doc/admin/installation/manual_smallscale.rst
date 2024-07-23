@@ -65,7 +65,7 @@ Package dependencies
 To build and run pretix, you will need the following debian packages::
 
     # apt-get install git build-essential python3-dev python3-venv python3 python3-pip \
-                      libxml2-dev libxslt1-dev libffi-dev zlib1g-dev libssl-dev \
+                      python3-dev libxml2-dev libxslt1-dev libffi-dev zlib1g-dev libssl-dev \
                       gettext libpq-dev libjpeg-dev libopenjp2-7-dev
 
 Config file
