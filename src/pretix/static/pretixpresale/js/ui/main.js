@@ -380,23 +380,28 @@ $(function () {
         " #id_city, #id_country, #id_state").change(function () {
         if (copy_to_first_ticket) {
             var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
-            $first_ticket_form.find("input[id*=attendee_email]").val($("#id_email").val());
-            $first_ticket_form.find("input[id$=company]").val($("#id_company").val());
-            $first_ticket_form.find("textarea[id$=street]").val($("#id_street").val());
-            $first_ticket_form.find("input[id$=zipcode]").val($("#id_zipcode").val());
-            $first_ticket_form.find("input[id$=city]").val($("#id_city").val());
-
-            $first_ticket_form.find("select[id$=state]").val($("#id_state").val());
-            if ($first_ticket_form.find("select[id$=country]").val() !== $("#id_country").val()) {
-                $first_ticket_form.find("select[id$=country]").val($("#id_country").val()).trigger('change');
+            $first_ticket_form.find("[id$=" + this.id.substring(3) + "]").val(this.value);
+            if (this.placeholder) {
+                $first_ticket_form.find("[placeholder='" + this.placeholder + "']").val(this.value);
             }
-            $first_ticket_form.find("[id*=attendee_name_parts]").each(function () {
-                var parts = $(this).attr("id").split("_");
-                var num = parts[parts.length - 1];
-                $(this).val($("#id_name_parts_" + num).val());
-            });
+            var label = $("label[for=" + this.id +"]").first().contents().filter(function () {
+                return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
+            }).text().trim();
+            if (label) {
+                // match to placeholder and label
+                $first_ticket_form.find("[placeholder='" + label + "']").val(this.value);
+                var v = this.value;
+                $first_ticket_form.find("label").each(function() {
+                    var text = $(this).first().contents().filter(function () {
+                        return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
+                    }).text().trim();
+                    if (text == label) {
+                        $("#" + this.getAttribute("for")).val(v);
+                    }
+                });
+            }
         }
-    });
+    }).trigger("change");
     attendee_address_fields.change(function () {
         copy_to_first_ticket = false;
     });
