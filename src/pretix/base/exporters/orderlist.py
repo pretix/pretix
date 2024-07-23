@@ -560,7 +560,7 @@ class OrderListExporter(MultiSheetListExporter):
             ),
         ).select_related(
             'order', 'order__invoice_address', 'order__customer', 'item', 'variation',
-            'voucher', 'tax_rule'
+            'voucher', 'tax_rule', 'addon_to',
         ).prefetch_related(
             'subevent', 'subevent__meta_values',
             'answers', 'answers__question', 'answers__options'
@@ -619,6 +619,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Valid until'),
             _('Order comment'),
             _('Follow-up date'),
+            _('Add-on to position ID'),
         ]
 
         questions = list(Question.objects.filter(event__in=self.events))
@@ -652,7 +653,8 @@ class OrderListExporter(MultiSheetListExporter):
             _('VAT ID'),
         ]
         headers += [
-            _('Sales channel'), _('Order locale'),
+            _('Sales channel'),
+            _('Order locale'),
             _('E-mail address verified'),
             _('External customer ID'),
             _('Check-in lists'),
@@ -743,6 +745,7 @@ class OrderListExporter(MultiSheetListExporter):
                 ]
                 row.append(order.comment)
                 row.append(order.custom_followup_at.strftime("%Y-%m-%d") if order.custom_followup_at else "")
+                row.append(op.addon_to.positionid if op.addon_to_id else "")
                 acache = {}
                 for a in op.answers.all():
                     # We do not want to localize Date, Time and Datetime question answers, as those can lead
