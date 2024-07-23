@@ -216,9 +216,9 @@ class Seat(models.Model):
             cqs = cqs.exclude(cart_id=ignore_cart_id)
         if annotate_ids:
             qs_annotated = qs.annotate(
-                order=Subquery(opqs.values('order__code')),
-                cart=Subquery(cqs.values('id')),
-                voucher=Subquery(vqs.values('id')),
+                order_code=Subquery(opqs.values('order__code')),
+                cartposition_id=Subquery(cqs.values('id')),
+                voucher_id=Subquery(vqs.values('id')),
             )
         else:
             qs_annotated = qs.annotate(

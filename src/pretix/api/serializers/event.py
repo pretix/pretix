@@ -52,7 +52,7 @@ from pretix.api.serializers import (
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import (
-    Device, Event, SalesChannel, TaxRule, TeamAPIToken, Seat,
+    Device, Event, SalesChannel, TaxRule, TeamAPIToken, Seat, CartPosition, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
@@ -971,20 +971,67 @@ class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
         fields = ('id', 'name', 'default', 'required', 'allowed_values')
 
 
+def prefetch_by_id(items, manager, id_attr, id_filter, target_attr):
+    """
+    Prefetches a related object on each item in the given list of items by searching by id or another
+    unique field. The id value is read from the attribute on item specified in `id_attr`, searched on manager by the
+    field specified in `id_filter`, and the resulting prefetched model object is stored into `target_attr` on the item.
+    """
+    ids = [getattr(item, id_attr) for item in items if getattr(item, id_attr)]
+    if ids:
+        result = manager.order_by(id_filter).distinct(id_filter).in_bulk(id_list=ids, field_name=id_filter)
+        for item in items:
+            setattr(item, target_attr, result.get(getattr(item, id_attr)))
+
+
 class SeatSerializer(I18nAwareModelSerializer):
-    order = serializers.CharField()
-    cart = serializers.IntegerField()
-    voucher = serializers.IntegerField()
+    order = serializers.CharField(source='order_code')
+    cartposition = serializers.IntegerField(source='cartposition_id')
+    voucher = serializers.IntegerField(source='voucher_id')
 
     class Meta:
         model = Seat
         read_only_fields = (
             'id', 'subevent', 'zone_name', 'row_name', 'row_label',
             'seat_number', 'seat_label', 'seat_guid', 'product', 'sorting_rank', 'x', 'y',
-            'order', 'cart', 'voucher',
+            'order', 'cartposition', 'voucher',
         )
         fields = (
             'id', 'subevent', 'zone_name', 'row_name', 'row_label',
             'seat_number', 'seat_label', 'seat_guid', 'product', 'blocked', 'sorting_rank', 'x', 'y',
-            'order', 'cart', 'voucher',
+            'order', 'cartposition', 'voucher',
         )
+
+    def prefetch_expanded_data(self, items, expand_fields, event):
+        if 'order' in expand_fields:
+            prefetch_by_id(items, event.organizer.orders.prefetch_related('positions'), 'order_code', 'code', 'order')
+        if 'cartposition' in expand_fields:
+            prefetch_by_id(items, CartPosition.objects, 'cartposition_id', 'id', 'cartposition')
+        if 'voucher' in expand_fields:
+            prefetch_by_id(items, Voucher.objects, 'voucher_id', 'id', 'voucher')
+
+    def __init__(self, instance, *args, **kwargs):
+        if not kwargs.get('data'):
+            self.prefetch_expanded_data(instance if hasattr(instance, '__iter__') else [instance],
+                                        kwargs['context']['expand_fields'],
+                                        kwargs['context']['order_context']['event'])
+
+        super().__init__(instance, *args, **kwargs)
+
+        if 'order' in self.context['expand_fields']:
+            from pretix.api.serializers.order import OrderSerializer
+            self.fields['order'] = OrderSerializer(read_only=True, context=self.context['order_context'])
+            try:
+                del self.fields['order'].fields['positions'].child.fields['seat']
+            except KeyError:
+                pass
+
+        if 'cartposition' in self.context['expand_fields']:
+            from pretix.api.serializers.cart import CartPositionSerializer
+            self.fields['cartposition'] = CartPositionSerializer(read_only=True)
+            del self.fields['cartposition'].fields['seat']
+
+        if 'voucher' in self.context['expand_fields']:
+            from pretix.api.serializers.voucher import VoucherSerializer
+            self.fields['voucher'] = VoucherSerializer(read_only=True)
+            del self.fields['voucher'].fields['seat']

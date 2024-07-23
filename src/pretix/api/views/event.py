@@ -673,9 +673,8 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SeatSerializer
     queryset = Seat.objects.none()
     write_permission = 'can_change_event_settings'
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label',
-                        'seat_guid', 'blocked',]
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label', 'seat_guid', 'blocked',)
 
     def get_queryset(self):
         if self.request.event.has_subevents and 'subevent' in self.request.resolver_match.kwargs:
@@ -683,11 +682,25 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
                 subevent = self.request.event.subevents.get(pk=self.request.resolver_match.kwargs['subevent'])
             except SubEvent.DoesNotExist:
                 raise NotFound('Subevent not found')
-            return Seat.annotated(event_id=self.request.event.id, subevent=subevent, qs=subevent.seats.all(), annotate_ids=True)
+            qs = Seat.annotated(event_id=self.request.event.id, subevent=subevent, qs=subevent.seats.all(), annotate_ids=True)
         elif not self.request.event.has_subevents and 'subevent' not in self.request.resolver_match.kwargs:
-            return Seat.annotated(event_id=self.request.event.id, subevent=None, qs=self.request.event.seats.all(), annotate_ids=True)
+            qs = Seat.annotated(event_id=self.request.event.id, subevent=None, qs=self.request.event.seats.all(), annotate_ids=True)
         else:
-            raise NotFound
+            raise NotFound('Please use the subevent-specific endpoint' if self.request.event.has_subevents
+                           else 'This event has no subevents')
+
+        return qs
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['expand_fields'] = self.request.query_params.getlist('expand')
+        ctx['order_context'] = {
+            'event': self.request.event,
+            'pdf_data': None,
+            'include': self.request.query_params.getlist('order_include'),
+            'exclude': self.request.query_params.getlist('order_exclude'),
+        }
+        return ctx
 
     def perform_update(self, serializer):
         super().perform_update(serializer)
