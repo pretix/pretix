@@ -256,7 +256,7 @@ class ListExporter(BaseExporter):
         ws = wb.create_sheet()
         self.prepare_xlsx_sheet(ws)
         try:
-            ws.title = str(self.verbose_name)
+            ws.title = str(self.verbose_name)[:30]
         except:
             pass
         total = 0
@@ -374,7 +374,7 @@ class MultiSheetListExporter(ListExporter):
         wb = SafeWorkbook(write_only=True)
         n_sheets = len(self.sheets)
         for i_sheet, (s, l) in enumerate(self.sheets):
-            ws = wb.create_sheet(str(l))
+            ws = wb.create_sheet(str(l)[:30])
             if hasattr(self, 'prepare_xlsx_sheet_' + s):
                 getattr(self, 'prepare_xlsx_sheet_' + s)(ws)
 
