@@ -58,7 +58,8 @@ from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.customersso.oidc import oidc_validate_and_complete_config
 from pretix.base.forms import (
-    I18nMarkdownTextarea, I18nModelForm, PlaceholderValidator, SettingsForm,
+    SECRET_REDACTED, I18nMarkdownTextarea, I18nModelForm, PlaceholderValidator,
+    SecretKeySettingsField, SettingsForm,
 )
 from pretix.base.forms.questions import (
     NamePartsFormField, WrappedPhoneNumberPrefixWidget, get_country_by_locale,
@@ -958,7 +959,7 @@ class SSOProviderForm(I18nModelForm):
         label=pgettext_lazy('sso_oidc', 'Client ID'),
         required=False,
     )
-    config_oidc_client_secret = forms.CharField(
+    config_oidc_client_secret = SecretKeySettingsField(
         label=pgettext_lazy('sso_oidc', 'Client secret'),
         required=False,
     )
@@ -1015,7 +1016,13 @@ class SSOProviderForm(I18nModelForm):
                 if self.instance and self.instance.method == method:
                     f.initial = self.instance.configuration.get(suffix)
 
+    def _unmask_secret_fields(self):
+        for k, v in self.cleaned_data.items():
+            if isinstance(self.fields.get(k), SecretKeySettingsField) and self.cleaned_data.get(k) == SECRET_REDACTED:
+                self.cleaned_data[k] = self.fields[k].initial
+
     def clean(self):
+        self._unmask_secret_fields()
         data = self.cleaned_data
         if not data.get("method"):
             return data
