@@ -3363,7 +3363,9 @@ Your {organizer} team"""))  # noqa: W291
     },
     'seating_allow_blocked_seats_for_channel': {
         'default': [],
-        'type': list
+        'type': list,
+        'serializer_class': serializers.ListField,
+        'serializer_kwargs': lambda: dict(child=serializers.CharField()),
     },
     'seating_distance_within_row': {
         'default': 'False',
@@ -3800,6 +3802,16 @@ def validate_event_settings(event, settings_dict):
             raise ValidationError({
                 'payment_term_last': _('The last payment date cannot be before the end of presale.')
             })
+
+    if settings_dict.get('seating_allow_blocked_seats_for_channel'):
+        allowed_channels = set(event.organizer.sales_channels.values_list("identifier", flat=True))
+        for channel in settings_dict['seating_allow_blocked_seats_for_channel']:
+            if channel not in allowed_channels:
+                raise ValidationError({
+                    'seating_allow_blocked_seats_for_channel': _('The value "{identifier}" is not a valid sales channel.').format(
+                        identifier=channel
+                    )
+                })
 
     if isinstance(event, Event):
         validate_event_settings.send(sender=event, settings_dict=settings_dict)
