@@ -3,7 +3,7 @@ GetYourGuide
 
 .. note::
 
-    The GetYourGuide integration is currently in Beta. Please contact the support@pretix.eu to enable the integration
+    The GetYourGuide integration is currently in Beta. Please contact support@pretix.eu to enable the integration
     for your pretix.eu organizer account.
 
 Introduction
@@ -30,7 +30,7 @@ Preparing your event
 In order to now sell your events on GetYourGuide, you will need to configure each event in question.
 
 1. Enabling the plugin
-    Within your event, extend the ``Settings`` menu and navigate to ``Plugins``. Active the plugin in the
+    Within your event, extend the ``Settings`` menu and navigate to ``Plugins``. Activate the plugin in the
     ``Integrations`` tab.
 
 2. Sell the event on the sales channel
@@ -61,12 +61,12 @@ cases, this will reflect your current sales strategy within your pretix shop.
 - Individual tickets
     Every single person attending will need to purchase their own ticket. A family of two adults and two
     children will have to purchase and pay for a total of 4 tickets.
-    In this case, you will need to offer *at least* a ticket of the ``Adult`` type, but my offer any other ticket
+    In this case, you will need to offer *at least* a ticket of the ``Adult`` type, but may offer any other ticket
     category type (Child, Youth, Senior, ...) in addition. But you cannot offer a ``Group`` ticket.
 
 - Group tickets
     Two groups, consisting of 10 and 20 participants respectively, won't need to purchase a total of 30 tickets, but
-    rather two group tickets. It is up to you configure the group size limits within the GetYourGuide-settings of your
+    rather two group tickets. It is up to you to configure the group size limits within the GetYourGuide-settings of your
     product.
     Choosing this option, you cannot offer any other ticket categories besides ``Group``.
 
