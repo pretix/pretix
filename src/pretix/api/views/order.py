@@ -49,6 +49,7 @@ from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
+from pretix.api.filters import MultipleCharFilter
 from pretix.api.models import OAuthAccessToken
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.order import (
@@ -1825,16 +1826,13 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
 with scopes_disabled():
     class InvoiceFilter(FilterSet):
         refers = django_filters.CharFilter(method='refers_qs')
-        number = django_filters.CharFilter(method='nr_qs')
-        order = django_filters.CharFilter(field_name='order', lookup_expr='code__iexact')
+        number = MultipleCharFilter(field_name='nr', lookup_expr='iexact')
+        order = MultipleCharFilter(field_name='order', lookup_expr='code__iexact')
 
         def refers_qs(self, queryset, name, value):
             return queryset.annotate(
                 refers_nr=Concat('refers__prefix', 'refers__invoice_no')
             ).filter(refers_nr__iexact=value)
-
-        def nr_qs(self, queryset, name, value):
-            return queryset.filter(nr__iexact=value)
 
         class Meta:
             model = Invoice

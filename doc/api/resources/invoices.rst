@@ -217,6 +217,9 @@ List of all invoices
    :query boolean is_cancellation: If set to ``true`` or ``false``, only invoices with this value for the field
                                    ``is_cancellation`` will be returned.
    :query string order: If set, only invoices belonging to the order with the given order code will be returned.
+                        This parameter may be given multiple times. In this case, all invoices matching one of the inputs will be returned.
+   :query string number: If set, only invoices with the given invoice number will be returned.
+                        This parameter may be given multiple times. In this case, all invoices matching one of the inputs will be returned.
    :query string refers: If set, only invoices referring to the given invoice will be returned.
    :query string locale: If set, only invoices with the given locale will be returned.
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``date`` and
