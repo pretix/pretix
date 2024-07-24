@@ -1,0 +1,34 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Auto check-in rule" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Auto check-in rule" %}</h1>
+    {% block inner %}
+        <form class="form-horizontal" method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form_errors form %}
+
+            <fieldset>
+                <legend>{% trans "Auto check-in" %}</legend>
+                {% bootstrap_field form.mode layout='control' %}
+                {% bootstrap_field form.list layout='control' %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Conditions" %}</legend>
+                {% bootstrap_field form.all_sales_channels layout='control' %}
+                {% bootstrap_field form.limit_sales_channels layout='control' %}
+                {% bootstrap_field form.all_products layout='control' %}
+                {% bootstrap_field form.itemvars layout='control' %}
+                {% bootstrap_field form.all_payment_methods layout='control' %}
+                {% bootstrap_field form.limit_payment_methods layout='control' %}
+            </fieldset>
+
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        </form>
+    {% endblock %}
+{% endblock %}

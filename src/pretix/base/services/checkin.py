@@ -1154,7 +1154,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             )
 
 
-@receiver(order_placed, dispatch_uid="autocheckin_order_placed")
+@receiver(order_placed, dispatch_uid="legacy_autocheckin_order_placed")
 def order_placed(sender, **kwargs):
     order = kwargs['order']
     event = sender
@@ -1171,7 +1171,7 @@ def order_placed(sender, **kwargs):
                     checkin_created.send(event, checkin=ci)
 
 
-@receiver(periodic_task, dispatch_uid="autocheckin_exit_all")
+@receiver(periodic_task, dispatch_uid="autocheckout_exit_all")
 @scopes_disabled()
 def process_exit_all(sender, **kwargs):
     qs = CheckinList.objects.filter(

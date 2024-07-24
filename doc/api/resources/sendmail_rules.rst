@@ -1,6 +1,8 @@
 Scheduled email rules
 =====================
 
+This feature requires the bundled ``pretix.plugins.sendmail`` plugin to be active for the event in order to work properly.
+
 Resource description
 --------------------
 
@@ -48,6 +50,7 @@ send_to                               string                     Can be ``"order
                                                                  or ``"both"``.
                                                                  date. Otherwise it is relative to the event start date.
 ===================================== ========================== =======================================================
+
 .. versionchanged:: 2023.7
 
     The ``include_pending`` field has been  deprecated.

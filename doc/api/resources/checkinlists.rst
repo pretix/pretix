@@ -32,6 +32,7 @@ position_count                        integer                    Number of ticke
 checkin_count                         integer                    Number of check-ins performed on this list (read-only).
 include_pending                       boolean                    If ``true``, the check-in list also contains tickets from orders in pending state.
 auto_checkin_sales_channels           list of strings            All items on the check-in list will be automatically marked as checked-in when purchased through any of the listed sales channels.
+                                                                 **Deprecated, will be removed in pretix 2024.10.** Use :ref:`rest-autocheckinrules`: instead.
 allow_multiple_entries                boolean                    If ``true``, subsequent scans of a ticket on this list should not show a warning but instead be stored as an additional check-in.
 allow_entry_after_exit                boolean                    If ``true``, subsequent scans of a ticket on this list are valid if the last scan of the ticket was an exit scan.
 rules                                 object                     Custom check-in logic. The contents of this field are currently not considered a stable API and modifications through the API are highly discouraged.

@@ -44,5 +44,6 @@ at :ref:`plugin-docs`.
    scheduled_exports
    shredders
    sendmail_rules
+   auto_checkin_rules
    billing_invoices
    billing_var
