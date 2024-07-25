@@ -60,6 +60,11 @@ def test_hook_list(token_client, organizer, event, webhook):
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/webhooks/?enabled=true'.format(organizer.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/webhooks/?enabled=false'.format(organizer.slug))
+    assert [] == resp.data['results']
+
 
 @pytest.mark.django_db
 def test_hook_detail(token_client, organizer, event, webhook):
