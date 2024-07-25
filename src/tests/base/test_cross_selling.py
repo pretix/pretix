@@ -30,6 +30,7 @@ from django_scopes import scopes_disabled
 
 from pretix.base.models import CartPosition, Discount, Event, Organizer
 from pretix.base.services.cross_selling import CrossSellingService
+from tests import assert_num_queries
 
 
 @pytest.fixture
@@ -227,6 +228,7 @@ def setup_items(event, category_name, category_type, cross_selling_condition, *i
         item = cat.items.create(event=event, name=name, default_price=price)
         quota = event.quotas.create()
         quota.items.add(item)
+        quota.save()
 
 
 def split_table(txt):
@@ -237,7 +239,7 @@ def split_table(txt):
     ]
 
 
-def check_cart_behaviour(event, cart_contents, recommendations):
+def check_cart_behaviour(event, cart_contents, recommendations, expect_num_queries=None):
     cart_contents = split_table(cart_contents)
     positions = [
         CartPosition(
@@ -248,8 +250,15 @@ def check_cart_behaviour(event, cart_contents, recommendations):
     ]
     expected_recommendations = split_table(recommendations)
 
+    event.organizer.get_cache().clear()
+    event.get_cache().clear()
+    event = Event.objects.get(pk=event.pk)
     service = CrossSellingService(event, event.organizer.sales_channels.get(identifier='web'), positions, None)
-    result = service.get_data()
+    if expect_num_queries:
+        with assert_num_queries(expect_num_queries):
+            result = service.get_data()
+    else:
+        result = service.get_data()
     result_recommendations = [
         [str(category.name), str(item.name), str(item.original_price.gross.quantize(Decimal('0.00'))),
          str(item.display_price.gross.quantize(Decimal('0.00'))), str(item.order_max)]
@@ -456,4 +465,169 @@ def test_five_tickets_one_free(event):
         ''',
         recommendations='''             Price     Discounted Price    Max Count
         '''
+    )
+
+@scopes_disabled()
+@pytest.mark.django_db
+@pytest.mark.parametrize("itemcount", [3, 10, 50])
+def test_query_count_many_items(event, itemcount):
+    setup_items(event, 'Tickets', 'both', 'discounts',
+                *[(f'Ticket {n}', '42.00') for n in range(itemcount)]
+                )
+    make_discount('For every 5 of Ticket 1, get 100% discount on 1 of Ticket 2.', event)
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        ''',
+        expect_num_queries=8,
+    )
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        Tickets        Ticket 2         42.00                 0.00            1
+        ''',
+        expect_num_queries=13,
+    )
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        Ticket 1          42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        Tickets        Ticket 2         42.00                 0.00            1
+        ''',
+        expect_num_queries=13,
+    )
+
+
+@scopes_disabled()
+@pytest.mark.django_db
+@pytest.mark.parametrize("catcount", [1, 10, 50])
+def test_query_count_many_categories_and_discounts(event, catcount):
+    for n in range(1, catcount + 1):
+        setup_items(event, f'Category {n}', 'both', 'discounts',
+                    (f'Ticket {n}-A', '42.00'),
+                    (f'Ticket {n}-B', '42.00'),
+                    )
+        make_discount(f'For every 5 of Ticket {n}-A, get 100% discount on 1 of Ticket {n}-B.', event)
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        ''',
+        expect_num_queries=8,
+    )
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        Category 1     Ticket 1-B       42.00                 0.00            1
+        ''',
+        expect_num_queries=13,
+    )
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        Category 1     Ticket 1-B       42.00                 0.00            1
+        ''',
+        expect_num_queries=13,
+    )
+
+
+@scopes_disabled()
+@pytest.mark.django_db
+@pytest.mark.parametrize("catcount", [2, 10, 50])
+def test_query_count_many_cartpos(event, catcount):
+    for n in range(1, catcount + 1):
+        setup_items(event, f'Category {n}', 'both', 'discounts',
+                    (f'Ticket {n}-A', '42.00'),
+                    (f'Ticket {n}-B', '42.00'),
+                    )
+        make_discount(f'For every 5 of Ticket {n}-A, get 100% discount on 1 of Ticket {n}-B.', event)
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        ''',
+        expect_num_queries=8,
+    )
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        Category 1     Ticket 1-B       42.00                 0.00            1
+        ''',
+        expect_num_queries=13,
+    )
+    check_cart_behaviour(
+        event,
+        cart_contents=''' Price     Discounted
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 1-A        42.00          42.00
+        Ticket 2-A        42.00          42.00
+        Ticket 2-A        42.00          42.00
+        Ticket 2-A        42.00          42.00
+        Ticket 2-A        42.00          42.00
+        Ticket 2-A        42.00          42.00
+        ''',
+        recommendations='''             Price     Discounted Price    Max Count
+        Category 1     Ticket 1-B       42.00                 0.00            1
+        Category 2     Ticket 2-B       42.00                 0.00            1
+        ''',
+        expect_num_queries=18,
     )
