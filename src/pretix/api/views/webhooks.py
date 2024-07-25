@@ -28,7 +28,7 @@ from pretix.api.serializers.webhooks import WebHookSerializer
 from pretix.helpers.dicts import merge_dicts
 
 
-class EventFilter(FilterSet):
+class WebhookFilter(FilterSet):
     enabled = django_filters.rest_framework.BooleanFilter()
 
 
@@ -38,7 +38,7 @@ class WebHookViewSet(viewsets.ModelViewSet):
     permission = 'can_change_organizer_settings'
     write_permission = 'can_change_organizer_settings'
     filter_backends = (DjangoFilterBackend,)
-    filterset_class = EventFilter
+    filterset_class = WebhookFilter
 
     def get_queryset(self):
         return self.request.organizer.webhooks.prefetch_related('listeners')
