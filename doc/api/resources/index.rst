@@ -46,3 +46,4 @@ at :ref:`plugin-docs`.
    sendmail_rules
    billing_invoices
    billing_var
+   seats
