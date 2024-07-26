@@ -672,6 +672,7 @@ class EventSettingsView(views.APIView):
 class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SeatSerializer
     queryset = Seat.objects.none()
+    permission = 'can_view_orders'
     write_permission = 'can_change_event_settings'
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label', 'seat_guid', 'blocked',)
