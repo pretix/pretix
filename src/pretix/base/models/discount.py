@@ -337,6 +337,7 @@ class Discount(LoggedModel):
 
         :param positions: Dictionary mapping IDs to PositionInfo tuples.
                           Bundled positions may not be included.
+        :param collect_potential_discounts: For detailed description, see pretix.base.services.pricing.apply_discounts
 
         :return: A dictionary mapping keys from the input dictionary to new prices. All positions
                  contained in this dictionary are considered "consumed" and should not be considered
