@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import django_filters
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
 
 from pretix.api.models import WebHook
@@ -26,11 +28,17 @@ from pretix.api.serializers.webhooks import WebHookSerializer
 from pretix.helpers.dicts import merge_dicts
 
 
+class WebhookFilter(FilterSet):
+    enabled = django_filters.rest_framework.BooleanFilter()
+
+
 class WebHookViewSet(viewsets.ModelViewSet):
     serializer_class = WebHookSerializer
     queryset = WebHook.objects.none()
     permission = 'can_change_organizer_settings'
     write_permission = 'can_change_organizer_settings'
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = WebhookFilter
 
     def get_queryset(self):
         return self.request.organizer.webhooks.prefetch_related('listeners')

@@ -116,6 +116,7 @@ Endpoints
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
+   :query boolean enabled: Only show webhooks that are or are not enabled
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
