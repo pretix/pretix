@@ -697,8 +697,6 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
         ctx['order_context'] = {
             'event': self.request.event,
             'pdf_data': None,
-            'include': self.request.query_params.getlist('order_include'),
-            'exclude': self.request.query_params.getlist('order_exclude'),
         }
         return ctx
 

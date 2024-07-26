@@ -1,9 +1,9 @@
 .. _`rest-reusablemedia`:
 
 Seats
-==============
+=====
 
-Seat resources represent the seats in a seating plan in a specific event or subevent.
+The seat resource represents the seats in a seating plan in a specific event or subevent.
 
 Resource description
 --------------------
@@ -25,9 +25,6 @@ seat_label                            string                     Additional labe
 seat_guid                             string                     Identifier of the seat within the seating plan
 product                               integer
 blocked                               boolean                    Whether this seat is blocked manually.
-sorting_rank                          integer
-x                                     float
-y                                     float
 orderposition                         integer / object           Internal ID of an order position reserving this seat.
 cartposition                          integer / object           Internal ID of a cart position reserving this seat.
 voucher                               integer / object           Internal ID of a voucher reserving this seat.
@@ -88,6 +85,7 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
+   :statuscode 404: Endpoint without subevent id was used for event with subevents, or vice versa.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/seats/(id)/
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/subevents/(subevent_id)/seats/(id)/
@@ -126,6 +124,7 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
+   :statuscode 404: Seat does not exist; or the endpoint without subevent id was used for event with subevents, or vice versa.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/seats/(id)/
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/seats/(id)/
@@ -168,3 +167,4 @@ Endpoints
    :statuscode 400: The seat could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or event does not exist **or** you have no permission to change this resource.
+   :statuscode 404: Seat does not exist; or the endpoint without subevent id was used for event with subevents, or vice versa.
