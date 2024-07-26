@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import django_filters
-from django_filters.rest_framework import FilterSet, DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
 
 from pretix.api.models import WebHook
