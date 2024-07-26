@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-26 07:18+0000\n"
-"PO-Revision-Date: 2024-07-26 07:39+0000\n"
+"PO-Revision-Date: 2024-07-26 12:15+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -2287,7 +2287,7 @@ msgstr "Bestellkommentar"
 
 #: pretix/base/exporters/orderlist.py:622
 msgid "Add-on to position ID"
-msgstr "Zusatzprodukt zu Positions-ID"
+msgstr "Zusatzprodukt zu Position"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:340
 msgid "Invoice address street"
