@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-24 08:20+0000\n"
+"POT-Creation-Date: 2024-07-26 07:19+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -737,22 +737,22 @@ msgstr "由 %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:444
+#: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:480
+#: pretix/static/pretixpresale/js/ui/main.js:485
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "购物车已过期"
 
-#: pretix/static/pretixpresale/js/ui/main.js:583
-#: pretix/static/pretixpresale/js/ui/main.js:602
+#: pretix/static/pretixpresale/js/ui/main.js:588
+#: pretix/static/pretixpresale/js/ui/main.js:607
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:593
+#: pretix/static/pretixpresale/js/ui/main.js:598
 msgid "Your local time:"
 msgstr ""
 

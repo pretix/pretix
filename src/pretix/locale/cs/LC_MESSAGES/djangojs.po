@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-24 08:20+0000\n"
+"POT-Creation-Date: 2024-07-26 07:19+0000\n"
 "PO-Revision-Date: 2023-09-15 06:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -732,20 +732,20 @@ msgstr "Dostanete %(currency)s %(amount)s zpět"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Zadejte částku, kterou si organizátor může ponechat."
 
-#: pretix/static/pretixpresale/js/ui/main.js:444
+#: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Zadejte prosím množství pro jeden z typů vstupenek."
 
-#: pretix/static/pretixpresale/js/ui/main.js:480
+#: pretix/static/pretixpresale/js/ui/main.js:485
 msgid "required"
 msgstr "povinný"
 
-#: pretix/static/pretixpresale/js/ui/main.js:583
-#: pretix/static/pretixpresale/js/ui/main.js:602
+#: pretix/static/pretixpresale/js/ui/main.js:588
+#: pretix/static/pretixpresale/js/ui/main.js:607
 msgid "Time zone:"
 msgstr "Časové pásmo:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:593
+#: pretix/static/pretixpresale/js/ui/main.js:598
 msgid "Your local time:"
 msgstr "Místní čas:"
 
