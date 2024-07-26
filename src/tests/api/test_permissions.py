@@ -54,6 +54,7 @@ event_urls = [
     (None, 'taxrules/'),
     ('can_view_orders', 'waitinglistentries/'),
     ('can_view_orders', 'checkinlists/'),
+    (None, 'seats/'),
 ]
 
 event_permission_sub_urls = [
@@ -191,6 +192,8 @@ event_permission_sub_urls = [
     ('post', 'can_change_event_settings', 'item_meta_properties/', 400),
     ('patch', 'can_change_event_settings', 'item_meta_properties/0/', 404),
     ('delete', 'can_change_event_settings', 'item_meta_properties/0/', 404),
+    ('get', None, 'seats/1/', 404),
+    ('patch', 'can_change_event_settings', 'seats/1/', 404),
 ]
 
 org_permission_sub_urls = [

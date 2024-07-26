@@ -971,21 +971,21 @@ class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
         fields = ('id', 'name', 'default', 'required', 'allowed_values')
 
 
-def prefetch_by_id(items, qs, id_attr, id_filter, target_attr):
+def prefetch_by_id(items, qs, id_attr, target_attr):
     """
     Prefetches a related object on each item in the given list of items by searching by id or another
-    unique field. The id value is read from the attribute on item specified in `id_attr`, searched on queryset `qs` by the
-    field specified in `id_filter`, and the resulting prefetched model object is stored into `target_attr` on the item.
+    unique field. The id value is read from the attribute on item specified in `id_attr`, searched on queryset `qs` by
+    the primary key, and the resulting prefetched model object is stored into `target_attr` on the item.
     """
     ids = [getattr(item, id_attr) for item in items if getattr(item, id_attr)]
     if ids:
-        result = qs.order_by(id_filter).distinct(id_filter).in_bulk(id_list=ids, field_name=id_filter)
+        result = qs.in_bulk(id_list=ids)
         for item in items:
             setattr(item, target_attr, result.get(getattr(item, id_attr)))
 
 
 class SeatSerializer(I18nAwareModelSerializer):
-    orderposition = serializers.CharField(source='orderposition_id')
+    orderposition = serializers.IntegerField(source='orderposition_id')
     cartposition = serializers.IntegerField(source='cartposition_id')
     voucher = serializers.IntegerField(source='voucher_id')
 
@@ -1004,11 +1004,11 @@ class SeatSerializer(I18nAwareModelSerializer):
 
     def prefetch_expanded_data(self, items, expand_fields, event):
         if 'orderposition' in expand_fields:
-            prefetch_by_id(items, OrderPosition.objects.prefetch_related('order'), 'orderposition_id', 'id', 'orderposition')
+            prefetch_by_id(items, OrderPosition.objects.prefetch_related('order'), 'orderposition_id', 'orderposition')
         if 'cartposition' in expand_fields:
-            prefetch_by_id(items, CartPosition.objects, 'cartposition_id', 'id', 'cartposition')
+            prefetch_by_id(items, CartPosition.objects, 'cartposition_id', 'cartposition')
         if 'voucher' in expand_fields:
-            prefetch_by_id(items, Voucher.objects, 'voucher_id', 'id', 'voucher')
+            prefetch_by_id(items, Voucher.objects, 'voucher_id', 'voucher')
 
     def __init__(self, instance, *args, **kwargs):
         if not kwargs.get('data'):
