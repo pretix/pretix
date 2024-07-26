@@ -447,6 +447,18 @@ class ItemCategorySerializer(I18nAwareModelSerializer):
             'cross_selling_condition', 'cross_selling_match_products'
         )
 
+    def validate(self, data):
+        data = super().validate(data)
+
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        if full_data.get('is_addon') and full_data.get('cross_selling_mode'):
+            raise ValidationError('is_addon and cross_selling_mode are mutually exclusive')
+
+        return data
+
+
 
 class QuestionOptionSerializer(I18nAwareModelSerializer):
     identifier = serializers.CharField(allow_null=True)
