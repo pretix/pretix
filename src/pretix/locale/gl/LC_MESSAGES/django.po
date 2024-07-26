@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-26 07:18+0000\n"
-"PO-Revision-Date: 2023-02-15 07:46+0000\n"
+"PO-Revision-Date: 2024-07-26 11:54+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: pretix/_base_settings.py:78
 #, fuzzy
@@ -35573,12 +35573,6 @@ msgstr ""
 "para mercar un billete ata que llo asignemos á seguinte persoa na listaxe."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
-#, fuzzy
-#| msgid ""
-#| "Note that you will only receive one ticket. If you need multiple tickets, "
-#| "you need to add yourself to the waiting list multiple times with "
-#| "different email addresses. There is no guarantee that you will receive a "
-#| "certain number of tickets."
 msgid ""
 "Note that you will only receive one ticket. If you need multiple tickets, "
 "you need to add yourself to the waiting list multiple times. There is no "
