@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-26 07:18+0000\n"
-"PO-Revision-Date: 2024-07-20 13:00+0000\n"
-"Last-Translator: JnnisCanis <me@jnnis.de>\n"
+"PO-Revision-Date: 2024-07-26 07:39+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -257,10 +257,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Unbekannte Erweiterung: '{name}'."
 
 #: pretix/api/serializers/event.py:294
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Unbekannte Erweiterung: '{name}'."
+msgstr "Eingeschränkte Erweiterung: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
@@ -508,10 +507,8 @@ msgid "Order denied"
 msgstr "Bestellung abgelehnt"
 
 #: pretix/api/webhooks.py:313
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order deleted"
-msgstr "Bestellung abgelehnt"
+msgstr "Bestellung gelöscht"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -2289,10 +2286,8 @@ msgid "Order comment"
 msgstr "Bestellkommentar"
 
 #: pretix/base/exporters/orderlist.py:622
-#, fuzzy
-#| msgid "Add-On to position #%(posid)s"
 msgid "Add-on to position ID"
-msgstr "Zusatz zu Position #%(posid)s"
+msgstr "Zusatzprodukt zu Positions-ID"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:340
 msgid "Invoice address street"
@@ -5755,10 +5750,8 @@ msgid "Meta information"
 msgstr "Meta-Informationen"
 
 #: pretix/base/models/orders.py:303
-#, fuzzy
-#| msgid "Meta information"
 msgid "API meta information"
-msgstr "Meta-Informationen"
+msgstr "API-Meta-Informationen"
 
 #: pretix/base/models/orders.py:392 pretix/plugins/sendmail/forms.py:236
 #: pretix/plugins/sendmail/forms.py:391 pretix/plugins/sendmail/views.py:270
@@ -9756,6 +9749,11 @@ msgid ""
 "they want more than one ticket, as every entry only grants one single ticket "
 "at a time."
 msgstr ""
+"Mit einem erhöhten Limit kann ein Kunde mehr als ein Ticket für ein "
+"bestimmtes Produkt mit der gleichen E-Mail-Adresse anfordern. Unabhängig von "
+"dieser Einstellung muss der Kunde das Wartelistenformular mehrfach "
+"ausfüllen, wenn mehrere Tickets benötigt werden, da jeder Wartelisteneintrag "
+"nur ein Ticket freischaltet."
 
 #: pretix/base/settings.py:1493
 msgid "Show number of check-ins to customer"
@@ -28981,6 +28979,9 @@ msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
+"Die Erstattung über PayPal ist fehlgeschlagen: Die ursprüngliche Zahlung "
+"enthält nicht alle nötigen Informationen um eine automatische Erstattung "
+"durchzuführen."
 
 #: pretix/plugins/paypal2/payment.py:1087
 msgid "PayPal APM"
