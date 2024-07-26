@@ -78,7 +78,8 @@ Endpoints
                          shown as a nested value instead of just an ID.
                          The nested objects are identical to the respective resources, except that order positions
                          will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
-                         matching easier. The parameter can be given multiple times.
+                         matching easier, and won't include the `seat` attribute, as that would be redundant.
+                         The parameter can be given multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :param subevent_id: The ``id`` field of the subevent to fetch
@@ -120,7 +121,8 @@ Endpoints
                          shown as a nested value instead of just an ID.
                          The nested objects are identical to the respective resources, except that order positions
                          will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
-                         matching easier. The parameter can be given multiple times.
+                         matching easier, and won't include the `seat` attribute, as that would be redundant.
+                         The parameter can be given multiple times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
