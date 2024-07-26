@@ -52,7 +52,7 @@ from pretix.api.serializers import (
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import (
-    Device, Event, SalesChannel, TaxRule, TeamAPIToken, Seat, CartPosition, Voucher,
+    Device, Event, SalesChannel, TaxRule, TeamAPIToken, Seat, CartPosition, Voucher, OrderPosition,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
@@ -985,7 +985,7 @@ def prefetch_by_id(items, manager, id_attr, id_filter, target_attr):
 
 
 class SeatSerializer(I18nAwareModelSerializer):
-    order = serializers.CharField(source='order_code')
+    orderposition = serializers.CharField(source='orderposition_id')
     cartposition = serializers.IntegerField(source='cartposition_id')
     voucher = serializers.IntegerField(source='voucher_id')
 
@@ -994,17 +994,17 @@ class SeatSerializer(I18nAwareModelSerializer):
         read_only_fields = (
             'id', 'subevent', 'zone_name', 'row_name', 'row_label',
             'seat_number', 'seat_label', 'seat_guid', 'product', 'sorting_rank', 'x', 'y',
-            'order', 'cartposition', 'voucher',
+            'orderposition', 'cartposition', 'voucher',
         )
         fields = (
             'id', 'subevent', 'zone_name', 'row_name', 'row_label',
             'seat_number', 'seat_label', 'seat_guid', 'product', 'blocked', 'sorting_rank', 'x', 'y',
-            'order', 'cartposition', 'voucher',
+            'orderposition', 'cartposition', 'voucher',
         )
 
     def prefetch_expanded_data(self, items, expand_fields, event):
-        if 'order' in expand_fields:
-            prefetch_by_id(items, event.organizer.orders.prefetch_related('positions'), 'order_code', 'code', 'order')
+        if 'orderposition' in expand_fields:
+            prefetch_by_id(items, OrderPosition.objects.prefetch_related('order'), 'orderposition_id', 'id', 'orderposition')
         if 'cartposition' in expand_fields:
             prefetch_by_id(items, CartPosition.objects, 'cartposition_id', 'id', 'cartposition')
         if 'voucher' in expand_fields:
@@ -1018,11 +1018,11 @@ class SeatSerializer(I18nAwareModelSerializer):
 
         super().__init__(instance, *args, **kwargs)
 
-        if 'order' in self.context['expand_fields']:
-            from pretix.api.serializers.order import OrderSerializer
-            self.fields['order'] = OrderSerializer(read_only=True, context=self.context['order_context'])
+        if 'orderposition' in self.context['expand_fields']:
+            from pretix.api.serializers.media import NestedOrderPositionSerializer
+            self.fields['orderposition'] = NestedOrderPositionSerializer(read_only=True, context=self.context['order_context'])
             try:
-                del self.fields['order'].fields['positions'].child.fields['seat']
+                del self.fields['orderposition'].fields['seat']
             except KeyError:
                 pass
 
