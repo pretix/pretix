@@ -23,7 +23,7 @@ row_label                             string                     Additional labe
 seat_number                           string                     Number of the seat within the row
 seat_label                            string                     Additional label of the seat (or ``null``)
 seat_guid                             string                     Identifier of the seat within the seating plan
-product                               integer
+product                               integer                    Internal ID of the product that's mapped to this seat
 blocked                               boolean                    Whether this seat is blocked manually.
 orderposition                         integer / object           Internal ID of an order position reserving this seat.
 cartposition                          integer / object           Internal ID of a cart position reserving this seat.
