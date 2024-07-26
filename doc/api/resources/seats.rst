@@ -43,7 +43,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/demoevent/seats/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/seats/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json
 
@@ -51,20 +51,48 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
+        HTTP/1.1 200 OK
+        Vary: Accept
+        Content-Type: application/json
 
-      {
-        "count": 1,
-        "next": null,
-        "previous": null,
-        "results": [
-          {
-            ...TODO
-          }
-        ]
-      }
+        {
+            "count": 500,
+            "next": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/seats/?page=2",
+            "previous": null,
+            "results": [
+                {
+                    "id": 1633,
+                    "subevent": null,
+                    "zone_name": "Ground floor",
+                    "row_name": "1",
+                    "row_label": null,
+                    "seat_number": "1",
+                    "seat_label": null,
+                    "seat_guid": "b9746230-6f31-4f41-bbc9-d6b60bdb3342",
+                    "product": 104,
+                    "blocked": false,
+                    "orderposition": null,
+                    "cartposition": null,
+                    "voucher": 51
+                },
+                {
+                    "id": 1634,
+                    "subevent": null,
+                    "zone_name": "Ground floor",
+                    "row_name": "1",
+                    "row_label": null,
+                    "seat_number": "2",
+                    "seat_label": null,
+                    "seat_guid": "1d29fe20-8e1e-4984-b0ee-2773b0d07e07",
+                    "product": 104,
+                    "blocked": true,
+                    "orderposition": 4321,
+                    "cartposition": null,
+                    "voucher": null
+                },
+                // ...
+            ]
+        }
 
    :query integer page: The page number in case of a multi-page result set, default is 1.
    :query string zone_name: Only show seats with the given zone_name.
@@ -97,21 +125,71 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/demoevent/seats/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json
+        GET /api/v1/organizers/bigevents/events/sampleconf/seats/1634/?expand=orderposition HTTP/1.1
+        Host: pretix.eu
+        Accept: application/json
 
    **Example response**:
 
    .. sourcecode:: http
 
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
+        HTTP/1.1 200 OK
+        Vary: Accept
+        Content-Type: application/json
 
-      {
-        ...TODO
-      }
+        {
+            "id": 1634,
+            "subevent": null,
+            "zone_name": "Ground floor",
+            "row_name": "1",
+            "row_label": null,
+            "seat_number": "2",
+            "seat_label": null,
+            "seat_guid": "1d29fe20-8e1e-4984-b0ee-2773b0d07e07",
+            "product": 104,
+            "blocked": true,
+            "orderposition": {
+                "id": 134,
+                "order": {
+                    "code": "U0HW7",
+                    "event": "sampleconf"
+                },
+                "positionid": 1,
+                "item": 104,
+                "variation": 59,
+                "price": "60.00",
+                "attendee_name": "",
+                "attendee_name_parts": {
+                    "_scheme": "given_family"
+                },
+                "company": null,
+                "street": null,
+                "zipcode": null,
+                "city": null,
+                "country": null,
+                "state": null,
+                "discount": null,
+                "attendee_email": null,
+                "voucher": null,
+                "tax_rate": "0.00",
+                "tax_value": "0.00",
+                "secret": "4rfgp263jduratnsvwvy6cc6r6wnptbj",
+                "addon_to": null,
+                "subevent": null,
+                "checkins": [],
+                "downloads": [],
+                "answers": [],
+                "tax_rule": null,
+                "pseudonymization_id": "ZSNYSG3URZ",
+                "canceled": false,
+                "valid_from": null,
+                "valid_until": null,
+                "blocked": null,
+                "voucher_budget_use": null
+            },
+            "cartposition": null,
+            "voucher": null
+        }
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
@@ -139,27 +217,38 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/events/demoevent/seats/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-      Content-Type: application/json
-      Content-Length: TODO
+        PATCH /api/v1/organizers/bigevents/events/sampleconf/seats/1636/ HTTP/1.1
+        Host: pretix.eu
+        Accept: application/json, text/javascript
+        Content-Type: application/json
 
-      {
-        "blocked": true
-      }
+        {
+            "blocked": true
+        }
 
    **Example response**:
 
    .. sourcecode:: http
 
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
+        HTTP/1.1 200 OK
+        Vary: Accept
+        Content-Type: application/json
 
-      {
-        ...TODO
-      }
+        {
+            "id": 1636,
+            "subevent": null,
+            "zone_name": "Ground floor",
+            "row_name": "1",
+            "row_label": null,
+            "seat_number": "4",
+            "seat_label": null,
+            "seat_guid": "6c0e29e5-05d6-421f-99f3-afd01478ecad",
+            "product": 104,
+            "blocked": true,
+            "orderposition": null,
+            "cartposition": null,
+            "voucher": null
+        },
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to modify
