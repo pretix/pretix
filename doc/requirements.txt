@@ -7,5 +7,4 @@ sphinxcontrib-images
 sphinxcontrib-jquery
 sphinxcontrib-spelling==8.*
 sphinxemoji
-pygments-markdown-lexer
 pyenchant==3.2.*
