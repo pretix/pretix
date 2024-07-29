@@ -27844,7 +27844,7 @@ msgstr "Condition"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
 #| msgid "Delete check-in list"
-msgid "Delete auto-checkin rule"
+msgid "Delete auto-check-in rule"
 msgstr "Supprimer la liste d'enregistrement"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9

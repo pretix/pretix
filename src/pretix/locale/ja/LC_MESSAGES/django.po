@@ -24575,7 +24575,7 @@ msgstr "イベント開催地"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
 #| msgid "Ticket checked in"
-msgid "Delete auto-checkin rule"
+msgid "Delete auto-check-in rule"
 msgstr "チケットのチェックインが完了しました"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9

@@ -25175,7 +25175,7 @@ msgstr "Peruutukset"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
 #| msgid "Delete vouchers"
-msgid "Delete auto-checkin rule"
+msgid "Delete auto-check-in rule"
 msgstr "Poista kupongit"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9

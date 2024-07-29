@@ -29231,7 +29231,7 @@ msgstr "Confirmaciones"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
-msgid "Delete auto-checkin rule"
+msgid "Delete auto-check-in rule"
 msgstr "Borrar lista de registro"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9

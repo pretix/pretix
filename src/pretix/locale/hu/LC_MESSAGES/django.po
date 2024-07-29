@@ -24909,7 +24909,7 @@ msgstr "Elmúlt események"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
 #| msgid "Paid orders"
-msgid "Delete auto-checkin rule"
+msgid "Delete auto-check-in rule"
 msgstr "Kifizetett megrendelések"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9

@@ -26466,7 +26466,7 @@ msgstr "Pozicija"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
 #| msgid "Filter by status"
-msgid "Delete auto-checkin rule"
+msgid "Delete auto-check-in rule"
 msgstr "Filtriraj po statusu"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
