@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-29 10:52+0000\n"
-"PO-Revision-Date: 2024-07-26 12:15+0000\n"
+"PO-Revision-Date: 2024-07-29 11:22+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -3881,6 +3881,10 @@ msgid ""
 "replacement, our new plugin \"Auto check-in\" can be used. When we remove "
 "this option, we will automatically migrate your event to use the new plugin."
 msgstr ""
+"Diese Option ist veraltet und wird in den nächsten Monaten entfernt. Als "
+"Ersatz kann unsere neue Erweiterung \"Auto-Check-in\" verwendet werden. Wenn "
+"wir diese Option entfernen, migrieren wir diese Veranstaltung automatisch "
+"auf die neue Erweiterung."
 
 #: pretix/base/models/checkin.py:340
 msgid "Entry"
@@ -27383,133 +27387,99 @@ msgstr "Das pretix-Team"
 
 #: pretix/plugins/autocheckin/apps.py:39
 msgid "Automatically check-in specific tickets after they have been sold."
-msgstr ""
+msgstr "Bestimmte Tickets automatisch einchecken, nachdem sie verkauft wurden."
 
 #: pretix/plugins/autocheckin/forms.py:60
 #: pretix/plugins/autocheckin/models.py:82
-#, fuzzy
-#| msgid "All payment providers"
 msgid "Only including usage of payment providers"
-msgstr "Alle Zahlungsmethoden"
+msgstr "Nur bei Verwendung dieser Zahlungsmethoden"
 
 #: pretix/plugins/autocheckin/forms.py:120
-#, fuzzy
-#| msgid "All actions"
 msgid "All variations"
-msgstr "Alle Aktionen"
+msgstr "Alle Varianten"
 
 #: pretix/plugins/autocheckin/forms.py:248
 msgid ""
 "When restricting by payment method, the rule should run after the payment "
 "was received."
 msgstr ""
+"Wenn die Regel auf bestimmte Zahlungsmethoden eingeschränkt ist, sollte sie "
+"erst nach erfolgter Zahlung ausgeführt werden."
 
 #: pretix/plugins/autocheckin/models.py:36
-#, fuzzy
-#| msgid "New order placed"
 msgid "After order was placed"
-msgstr "Neue Bestellung eingegangen"
+msgstr "Nach Eingang der Bestellung"
 
 #: pretix/plugins/autocheckin/models.py:37
-#, fuzzy
-#| msgid "Mark order as paid"
 msgid "After order was paid"
-msgstr "Als bezahlt markieren"
+msgstr "Nach vollständiger Bezahlung der Bestellung"
 
 #: pretix/plugins/autocheckin/models.py:48
-#, fuzzy
-#| msgid "If you keep this empty, all input will be allowed."
 msgid ""
 "If you keep this empty, all lists that match the purchased product will be "
 "used."
 msgstr ""
-"Wenn Sie diesen Abschnitt leer lassen, sind beliebige Eingaben erlaubt."
+"Wenn Sie dieses Feld leer lassen, werden alle Listen, die auf das gekaufte "
+"Produkt passen, verwendet."
 
 #: pretix/plugins/autocheckin/models.py:59
-#, fuzzy
-#| msgid "Add sales channel"
 msgid "All sales channels"
-msgstr "Verkaufskanal hinzufügen"
+msgstr "Alle Verkaufskanäle"
 
 #: pretix/plugins/autocheckin/models.py:69
-#, fuzzy
-#| msgid "Product variations"
 msgid "All products and variations"
-msgstr "Varianten"
+msgstr "Alle Produkte und Varianten"
 
 #: pretix/plugins/autocheckin/models.py:78
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "All payment methods"
-msgstr "Aktiviere Zahlungsmethode"
+msgstr "Alle Zahlungsmethoden"
 
 #: pretix/plugins/autocheckin/signals.py:47
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:13
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:13
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Auto check-in"
-msgstr "Automatischer Check-In"
+msgstr "Auto-Check-in"
 
 #: pretix/plugins/autocheckin/signals.py:70
-#, fuzzy
-#| msgid "An email rule was created"
 msgid "An auto check-in rule was created"
-msgstr "Eine E-Mail-Automatisierung wurde erstellt"
+msgstr "Eine automatische Check-in-Regel wurde erstellt"
 
 #: pretix/plugins/autocheckin/signals.py:72
-#, fuzzy
-#| msgid "An email rule was updated"
 msgid "An auto check-in rule was updated"
-msgstr "Eine E-Mail-Automatisierung wurde geändert"
+msgstr "Eine automatische Check-in-Regel wurde geändert"
 
 #: pretix/plugins/autocheckin/signals.py:75
-#, fuzzy
-#| msgid "An email rule was deleted"
 msgid "An auto check-in rule was deleted"
-msgstr "Eine E-Mail-Automatisierung wurde gelöscht"
+msgstr "Eine automatische Check-in-Regel wurde gelöscht"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Create auto check-in rule"
-msgstr "Eigene Check-In-Regeln"
+msgstr "Auto-Check-in-Regel erstellen"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
-#, fuzzy
-#| msgctxt "discount"
-#| msgid "Condition"
 msgid "Conditions"
-msgstr "Bedingung"
+msgstr "Bedingungen"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
-#, fuzzy
-#| msgid "Delete check-in list"
 msgid "Delete auto-checkin rule"
-msgstr "Check-in-Liste löschen"
+msgstr "Auto-Check-in-Regel löschen"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete the auto check-in rule?"
-msgstr "Möchten Sie die Station wirklich löschen?"
+msgstr "Möchten Sie die Auto-Check-in-Regel wirklich löschen?"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Auto check-in rule"
-msgstr "Eigene Check-In-Regeln"
+msgstr "Auto-Check-In-Regel"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Auto check-in rules"
-msgstr "Eigene Check-In-Regeln"
+msgstr "Auto-Check-in-Regeln"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:11
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
@@ -27518,16 +27488,12 @@ msgstr "Sie haben bisher keine Regeln erstellt."
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:17
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:22
-#, fuzzy
-#| msgid "Create a new check-in list"
 msgid "Create a new check-in rule"
-msgstr "Neue Check-in-Liste erstellen"
+msgstr "Neue Auto-Check-in-Regel erstellen"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:32
-#, fuzzy
-#| msgid "Payment method"
 msgid "Payment methods"
-msgstr "Zahlungsmethode"
+msgstr "Zahlungsmethoden"
 
 #: pretix/plugins/autocheckin/views.py:119 pretix/plugins/sendmail/views.py:626
 msgid "Your rule has been created."
