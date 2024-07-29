@@ -35,7 +35,7 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.db import transaction
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -1004,6 +1004,8 @@ class SeatSerializer(I18nAwareModelSerializer):
 
     def prefetch_expanded_data(self, items, expand_fields, event):
         if 'orderposition' in expand_fields:
+            if 'can_view_orders' not in self.context['request'].eventpermset:
+                raise PermissionDenied()
             prefetch_by_id(items, OrderPosition.objects.prefetch_related('order'), 'orderposition_id', 'orderposition')
         if 'cartposition' in expand_fields:
             prefetch_by_id(items, CartPosition.objects, 'cartposition_id', 'cartposition')

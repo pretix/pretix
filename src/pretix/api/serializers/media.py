@@ -24,7 +24,7 @@ from decimal import Decimal
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, PermissionDenied
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import OrderPositionSerializer
@@ -77,6 +77,8 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             )
 
         if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
+            if 'can_view_orders' not in self.context['request'].eventpermset:
+                raise PermissionDenied()
             self.fields['linked_orderposition'] = NestedOrderPositionSerializer(read_only=True)
         else:
             self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
