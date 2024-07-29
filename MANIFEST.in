@@ -10,6 +10,8 @@ recursive-include src/pretix/helpers/locale *
 recursive-include src/pretix/base/templates *
 recursive-include src/pretix/control/templates *
 recursive-include src/pretix/presale/templates *
+recursive-include src/pretix/plugins/autocheckin/templates *
+recursive-include src/pretix/plugins/autocheckin/static *
 recursive-include src/pretix/plugins/banktransfer/templates *
 recursive-include src/pretix/plugins/banktransfer/static *
 recursive-include src/pretix/plugins/manualpayment/templates *
