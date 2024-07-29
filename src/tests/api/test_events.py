@@ -1554,7 +1554,9 @@ def test_event_block_unblock_seat(token_client, organizer, event, seatingplan, i
     assert resp.status_code == 200
     assert resp.data['blocked'] is True
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/{}/?expand=orderposition&expand=cartposition&expand=voucher'.format(organizer.slug, event.slug, seat_id))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/{}/'
+                            '?expand=orderposition&expand=cartposition&expand=voucher'
+                            .format(organizer.slug, event.slug, seat_id))
     assert resp.status_code == 200
     assert resp.data['blocked'] is True
 

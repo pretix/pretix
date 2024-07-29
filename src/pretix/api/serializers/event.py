@@ -35,7 +35,7 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -52,7 +52,8 @@ from pretix.api.serializers import (
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import (
-    Device, Event, SalesChannel, TaxRule, TeamAPIToken, Seat, CartPosition, Voucher, OrderPosition,
+    CartPosition, Device, Event, OrderPosition, SalesChannel, Seat, TaxRule,
+    TeamAPIToken, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
@@ -1021,7 +1022,9 @@ class SeatSerializer(I18nAwareModelSerializer):
         super().__init__(instance, *args, **kwargs)
 
         if 'orderposition' in self.context['expand_fields']:
-            from pretix.api.serializers.media import NestedOrderPositionSerializer
+            from pretix.api.serializers.media import (
+                NestedOrderPositionSerializer,
+            )
             self.fields['orderposition'] = NestedOrderPositionSerializer(read_only=True, context=self.context['order_context'])
             try:
                 del self.fields['orderposition'].fields['seat']

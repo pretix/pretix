@@ -2019,7 +2019,6 @@ def test_order_create_with_seat(token_client, organizer, event, item, quota, sea
     assert resp.data['orderposition']['id'] == p.pk
 
 
-
 @pytest.mark.django_db
 def test_order_create_with_blocked_seat_allowed(token_client, organizer, event, item, quota, seat, question):
     seat.blocked = True

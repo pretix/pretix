@@ -40,7 +40,9 @@ from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import serializers, views, viewsets
-from rest_framework.exceptions import PermissionDenied, ValidationError, NotFound
+from rest_framework.exceptions import (
+    NotFound, PermissionDenied, ValidationError,
+)
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
@@ -48,13 +50,13 @@ from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
-    EventSettingsSerializer, ItemMetaPropertiesSerializer, SubEventSerializer,
-    TaxRuleSerializer, SeatSerializer,
+    EventSettingsSerializer, ItemMetaPropertiesSerializer, SeatSerializer,
+    SubEventSerializer, TaxRuleSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    CartPosition, Device, Event, ItemMetaProperty, SeatCategoryMapping,
-    TaxRule, TeamAPIToken, Seat,
+    CartPosition, Device, Event, ItemMetaProperty, Seat, SeatCategoryMapping,
+    TaxRule, TeamAPIToken,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.quotas import QuotaAvailability
