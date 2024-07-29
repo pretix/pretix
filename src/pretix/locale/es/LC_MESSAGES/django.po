@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 07:18+0000\n"
+"POT-Creation-Date: 2024-07-29 10:52+0000\n"
 "PO-Revision-Date: 2024-07-23 10:22+0000\n"
 "Last-Translator: Alberto Ortega <ortega16.cieza@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -19,119 +19,119 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.2\n"
 
-#: pretix/_base_settings.py:78
+#: pretix/_base_settings.py:79
 msgid "English"
 msgstr "Inglés"
 
-#: pretix/_base_settings.py:79
+#: pretix/_base_settings.py:80
 msgid "German"
 msgstr "Alemán"
 
-#: pretix/_base_settings.py:80
+#: pretix/_base_settings.py:81
 msgid "German (informal)"
 msgstr "Alemán (informal)"
 
-#: pretix/_base_settings.py:81
+#: pretix/_base_settings.py:82
 msgid "Arabic"
 msgstr "Árabe"
 
-#: pretix/_base_settings.py:82
+#: pretix/_base_settings.py:83
 msgid "Catalan"
 msgstr "catalán"
 
-#: pretix/_base_settings.py:83
+#: pretix/_base_settings.py:84
 msgid "Chinese (simplified)"
 msgstr "Chino (simplificado)"
 
-#: pretix/_base_settings.py:84
+#: pretix/_base_settings.py:85
 msgid "Chinese (traditional)"
 msgstr "Chino (tradicional)"
 
-#: pretix/_base_settings.py:85
+#: pretix/_base_settings.py:86
 msgid "Czech"
 msgstr "Checo"
 
-#: pretix/_base_settings.py:86
+#: pretix/_base_settings.py:87
 msgid "Danish"
 msgstr "Danés"
 
-#: pretix/_base_settings.py:87
+#: pretix/_base_settings.py:88
 msgid "Dutch"
 msgstr "Holandés"
 
-#: pretix/_base_settings.py:88
+#: pretix/_base_settings.py:89
 msgid "Dutch (informal)"
 msgstr "Holandés (informal)"
 
-#: pretix/_base_settings.py:89
+#: pretix/_base_settings.py:90
 msgid "French"
 msgstr "Francés"
 
-#: pretix/_base_settings.py:90
+#: pretix/_base_settings.py:91
 msgid "Finnish"
 msgstr "Danés"
 
-#: pretix/_base_settings.py:91
+#: pretix/_base_settings.py:92
 msgid "Galician"
 msgstr "Gallego"
 
-#: pretix/_base_settings.py:92
+#: pretix/_base_settings.py:93
 msgid "Greek"
 msgstr "Griego"
 
-#: pretix/_base_settings.py:93
+#: pretix/_base_settings.py:94
 msgid "Indonesian"
 msgstr "Indonesio"
 
-#: pretix/_base_settings.py:94
+#: pretix/_base_settings.py:95
 msgid "Italian"
 msgstr "Italiano"
 
-#: pretix/_base_settings.py:95
+#: pretix/_base_settings.py:96
 msgid "Latvian"
 msgstr "Letón"
 
-#: pretix/_base_settings.py:96
+#: pretix/_base_settings.py:97
 msgid "Norwegian Bokmål"
 msgstr "Noruego Bokmål"
 
-#: pretix/_base_settings.py:97
+#: pretix/_base_settings.py:98
 msgid "Polish"
 msgstr "Polaco"
 
-#: pretix/_base_settings.py:98
+#: pretix/_base_settings.py:99
 msgid "Portuguese (Portugal)"
 msgstr "Portugués (Portugal)"
 
-#: pretix/_base_settings.py:99
+#: pretix/_base_settings.py:100
 msgid "Portuguese (Brazil)"
 msgstr "Portugués (Brasil)"
 
-#: pretix/_base_settings.py:100
+#: pretix/_base_settings.py:101
 msgid "Romanian"
 msgstr "Rumano"
 
-#: pretix/_base_settings.py:101
+#: pretix/_base_settings.py:102
 msgid "Russian"
 msgstr "Ruso"
 
-#: pretix/_base_settings.py:102
+#: pretix/_base_settings.py:103
 msgid "Slovak"
 msgstr "eslovaco"
 
-#: pretix/_base_settings.py:103
+#: pretix/_base_settings.py:104
 msgid "Swedish"
 msgstr "sueco"
 
-#: pretix/_base_settings.py:104
+#: pretix/_base_settings.py:105
 msgid "Spanish"
 msgstr "Español"
 
-#: pretix/_base_settings.py:105
+#: pretix/_base_settings.py:106
 msgid "Turkish"
 msgstr "Turko"
 
-#: pretix/_base_settings.py:106
+#: pretix/_base_settings.py:107
 msgid "Ukrainian"
 msgstr "Ucraniano"
 
@@ -405,23 +405,23 @@ msgstr ""
 "La aplicación \"{application_name}\" ha sido autorizada para acceder a tu "
 "cuenta."
 
-#: pretix/api/views/order.py:602 pretix/control/views/orders.py:1584
+#: pretix/api/views/order.py:603 pretix/control/views/orders.py:1584
 #: pretix/presale/views/order.py:741 pretix/presale/views/order.py:814
 msgid "You cannot generate an invoice for this order."
 msgstr "No se puede generar una factura para este pedido."
 
-#: pretix/api/views/order.py:607 pretix/control/views/orders.py:1586
+#: pretix/api/views/order.py:608 pretix/control/views/orders.py:1586
 #: pretix/presale/views/order.py:743 pretix/presale/views/order.py:816
 msgid "An invoice for this order already exists."
 msgstr "Ya existe una factura para este pedido."
 
-#: pretix/api/views/order.py:633 pretix/control/views/orders.py:1712
+#: pretix/api/views/order.py:634 pretix/control/views/orders.py:1712
 #: pretix/control/views/users.py:143
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
 "Hubo un error al enviar el correo. Por favor, inténtelo de nuevo más tarde."
 
-#: pretix/api/views/order.py:711 pretix/base/services/cart.py:215
+#: pretix/api/views/order.py:712 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:798
 msgid "One of the selected products is not available in the selected country."
 msgstr ""
@@ -1655,6 +1655,8 @@ msgstr "Activo"
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:73
 #: pretix/control/forms/event.py:969 pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:6
+#: pretix/plugins/autocheckin/models.py:64
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
 msgid "Sales channels"
 msgstr "Canal de ventas"
 
@@ -2721,6 +2723,9 @@ msgstr "De forma predeterminada es el momento del reporte."
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:147
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:61
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:52
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:43
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:62
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:76
 #: pretix/plugins/reports/accountingreport.py:104
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
@@ -3887,16 +3892,10 @@ msgstr "Canales de venta para registrarse automáticamente"
 
 #: pretix/base/models/checkin.py:105
 msgid ""
-"All items on this check-in list will be automatically marked as checked-in "
-"when purchased through any of the selected sales channels. This option can "
-"be useful when tickets sold at the box office are not checked again before "
-"entry and should be considered validated directly upon purchase."
+"This option is deprecated and will be removed in the next months. As a "
+"replacement, our new plugin \"Auto check-in\" can be used. When we remove "
+"this option, we will automatically migrate your event to use the new plugin."
 msgstr ""
-"Todos los artículos de esta lista de check-in se marcarán automáticamente "
-"como check-in cuando se compren a través de cualquiera de los canales de "
-"venta seleccionados. Esta opción puede resultar útil cuando las entradas "
-"vendidas en taquilla no se vuelven a comprobar antes de la entrada y deben "
-"considerarse validadas directamente en el momento de la compra."
 
 #: pretix/base/models/checkin.py:340
 msgid "Entry"
@@ -5091,6 +5090,9 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/index.html:8
 #: pretix/control/templates/pretixcontrol/items/questions.html:26
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
+#: pretix/plugins/autocheckin/forms.py:56
+#: pretix/plugins/autocheckin/models.py:72
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:31
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:32
 msgid "Products"
 msgstr "Productos"
@@ -5515,6 +5517,7 @@ msgid "Item"
 msgstr "Item"
 
 #: pretix/base/models/items.py:2007 pretix/control/forms/item.py:847
+#: pretix/plugins/autocheckin/models.py:74
 msgid "Variations"
 msgstr "Variaciones"
 
@@ -9810,9 +9813,9 @@ msgstr ""
 msgid ""
 "With an increased limit, a customer may request more than one ticket for a "
 "specific product using the same, unique email address. However, regardless "
-"of this setting, they will need to fill the waiting list form multiple times if "
-"they want more than one ticket, as every entry only grants one single ticket "
-"at a time."
+"of this setting, they will need to fill the waiting list form multiple times "
+"if they want more than one ticket, as every entry only grants one single "
+"ticket at a time."
 msgstr ""
 
 #: pretix/base/settings.py:1493
@@ -13850,6 +13853,10 @@ msgstr "Fecha de fin"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:10
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:25
+#: pretix/plugins/autocheckin/forms.py:179
+#: pretix/plugins/autocheckin/forms.py:183
+#: pretix/plugins/autocheckin/models.py:46
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:29
 #: pretix/plugins/checkinlists/exporters.py:80
 #: pretix/plugins/checkinlists/exporters.py:153
 #: pretix/plugins/checkinlists/exporters.py:472
@@ -17203,6 +17210,8 @@ msgstr "Establecer nueva contraseña"
 #: pretix/control/templates/pretixcontrol/users/form.html:80
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:140
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:126
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:29
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:29
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:24
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:61
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:87
@@ -17605,6 +17614,7 @@ msgstr[1] ""
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:12
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:33
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:16
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:12
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:13
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:12
@@ -17655,6 +17665,7 @@ msgstr "Cancelar"
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:15
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:36
 #: pretix/control/views/orders.py:357
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:15
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:16
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:15
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:15
@@ -18038,6 +18049,7 @@ msgid "Connected devices"
 msgstr "Dispositivos conectados"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:104
+#: pretix/plugins/autocheckin/apps.py:30 pretix/plugins/autocheckin/apps.py:33
 #, fuzzy
 msgid "Automated check-in"
 msgstr "No chequeado"
@@ -18047,6 +18059,7 @@ msgstr "No chequeado"
 #: pretix/control/templates/pretixcontrol/items/discounts.html:149
 #: pretix/control/templates/pretixcontrol/items/index.html:156
 #: pretix/control/templates/pretixcontrol/items/quotas.html:96
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:89
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:72
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:69
 #, fuzzy
@@ -19213,8 +19226,8 @@ msgstr ""
 #: pretix/control/views/organizer.py:3169 pretix/control/views/subevents.py:525
 #: pretix/control/views/subevents.py:1590 pretix/control/views/user.py:235
 #: pretix/control/views/users.py:112 pretix/control/views/vouchers.py:304
-#: pretix/plugins/badges/views.py:154 pretix/plugins/sendmail/views.py:668
-#: pretix/plugins/stripe/views.py:679
+#: pretix/plugins/autocheckin/views.py:164 pretix/plugins/badges/views.py:154
+#: pretix/plugins/sendmail/views.py:668 pretix/plugins/stripe/views.py:679
 #: pretix/plugins/ticketoutputpdf/views.py:172
 #: pretix/presale/views/customer.py:476 pretix/presale/views/customer.py:528
 msgid "Your changes have been saved."
@@ -25990,8 +26003,10 @@ msgstr "Se ha creado la nueva lista de registro."
 #: pretix/control/views/subevents.py:1492 pretix/control/views/user.py:357
 #: pretix/control/views/vouchers.py:276 pretix/control/views/vouchers.py:350
 #: pretix/control/views/vouchers.py:533 pretix/control/views/waitinglist.py:413
-#: pretix/plugins/badges/views.py:114 pretix/plugins/sendmail/views.py:597
-#: pretix/plugins/sendmail/views.py:674 pretix/plugins/stripe/views.py:682
+#: pretix/plugins/autocheckin/views.py:112
+#: pretix/plugins/autocheckin/views.py:174 pretix/plugins/badges/views.py:114
+#: pretix/plugins/sendmail/views.py:597 pretix/plugins/sendmail/views.py:674
+#: pretix/plugins/stripe/views.py:682
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
 msgstr "No podemos guardar tus cambios. Ver los detalles a continuación."
@@ -27774,17 +27789,8 @@ msgstr "Dominio conocido"
 msgid "Known domains"
 msgstr "Dominios conocidos"
 
-#: pretix/plugins/badges/apps.py:30 pretix/plugins/badges/apps.py:33
-#: pretix/plugins/badges/signals.py:55
-#: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:7
-#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:4
-#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:6
-#: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
-#: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
-msgid "Badges"
-msgstr "Insignias"
-
-#: pretix/plugins/badges/apps.py:34 pretix/plugins/banktransfer/apps.py:35
+#: pretix/plugins/autocheckin/apps.py:34 pretix/plugins/badges/apps.py:34
+#: pretix/plugins/banktransfer/apps.py:35
 #: pretix/plugins/checkinlists/apps.py:48
 #: pretix/plugins/manualpayment/apps.py:34 pretix/plugins/paypal/apps.py:48
 #: pretix/plugins/paypal2/apps.py:35 pretix/plugins/pretixdroid/apps.py:34
@@ -27794,6 +27800,168 @@ msgstr "Insignias"
 #: pretix/plugins/webcheckin/apps.py:34
 msgid "the pretix team"
 msgstr "el equipo de pretix"
+
+#: pretix/plugins/autocheckin/apps.py:39
+msgid "Automatically check-in specific tickets after they have been sold."
+msgstr ""
+
+#: pretix/plugins/autocheckin/forms.py:60
+#: pretix/plugins/autocheckin/models.py:82
+#, fuzzy
+#| msgid "All payment providers"
+msgid "Only including usage of payment providers"
+msgstr "Todos los proveedores de pago"
+
+#: pretix/plugins/autocheckin/forms.py:120
+#, fuzzy
+#| msgid "All actions"
+msgid "All variations"
+msgstr "Todas las acciones"
+
+#: pretix/plugins/autocheckin/forms.py:248
+msgid ""
+"When restricting by payment method, the rule should run after the payment "
+"was received."
+msgstr ""
+
+#: pretix/plugins/autocheckin/models.py:36
+#, fuzzy
+#| msgid "New order placed"
+msgid "After order was placed"
+msgstr "Se hizo nuevo pedido"
+
+#: pretix/plugins/autocheckin/models.py:37
+#, fuzzy
+#| msgid "Mark order as paid"
+msgid "After order was paid"
+msgstr "Marcar pedido como pagado"
+
+#: pretix/plugins/autocheckin/models.py:48
+#, fuzzy
+#| msgid "If you keep this empty, all input will be allowed."
+msgid ""
+"If you keep this empty, all lists that match the purchased product will be "
+"used."
+msgstr "Si lo mantiene vacío, se permitirán todas las entradas."
+
+#: pretix/plugins/autocheckin/models.py:59
+#, fuzzy
+#| msgid "Sales channel"
+msgid "All sales channels"
+msgstr "Canal de ventas"
+
+#: pretix/plugins/autocheckin/models.py:69
+#, fuzzy
+#| msgid "Product variations"
+msgid "All products and variations"
+msgstr "Variaciones de los productos"
+
+#: pretix/plugins/autocheckin/models.py:78
+#, fuzzy
+#| msgid "Enable payment method"
+msgid "All payment methods"
+msgstr "Habilitar método de pago"
+
+#: pretix/plugins/autocheckin/signals.py:47
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:13
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:13
+#, fuzzy
+msgid "Auto check-in"
+msgstr "No chequeado"
+
+#: pretix/plugins/autocheckin/signals.py:70
+#, fuzzy
+#| msgid "An email rule was created"
+msgid "An auto check-in rule was created"
+msgstr "Se creó una regla de correo electrónico"
+
+#: pretix/plugins/autocheckin/signals.py:72
+#, fuzzy
+#| msgid "An email rule was updated"
+msgid "An auto check-in rule was updated"
+msgstr "Se actualizó una regla de correo electrónico"
+
+#: pretix/plugins/autocheckin/signals.py:75
+#, fuzzy
+#| msgid "An email rule was deleted"
+msgid "An auto check-in rule was deleted"
+msgstr "Se eliminó una regla de correo electrónico"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
+#, fuzzy
+msgid "Create auto check-in rule"
+msgstr "No chequeado"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
+#, fuzzy
+#| msgctxt "discount"
+#| msgid "Condition"
+msgid "Conditions"
+msgstr "Condición"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
+#, fuzzy
+#| msgid "Delete check-in list"
+msgid "Delete auto-checkin rule"
+msgstr "Borrar lista de registro"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
+#, fuzzy
+#| msgid "Are you sure you want to delete the gate?"
+msgid "Are you sure you want to delete the auto check-in rule?"
+msgstr "¿Está seguro de que desea eliminar la puerta?"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
+#, fuzzy
+msgid "Auto check-in rule"
+msgstr "No chequeado"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
+#, fuzzy
+msgid "Auto check-in rules"
+msgstr "No chequeado"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:11
+#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
+msgid "You haven't created any rules yet."
+msgstr "Aún no has creado ninguna regla."
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:17
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:22
+#, fuzzy
+#| msgid "Create a new check-in list"
+msgid "Create a new check-in rule"
+msgstr "Crear una nueva lista de registro"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:32
+#, fuzzy
+#| msgid "Payment method"
+msgid "Payment methods"
+msgstr "Método de pago"
+
+#: pretix/plugins/autocheckin/views.py:119 pretix/plugins/sendmail/views.py:626
+#, fuzzy
+msgid "Your rule has been created."
+msgstr "Se ha creado el usuario."
+
+#: pretix/plugins/autocheckin/views.py:209 pretix/plugins/sendmail/views.py:755
+msgid "The selected rule has been deleted."
+msgstr "La regla seleccionada ha sido eliminada."
+
+#: pretix/plugins/badges/apps.py:30 pretix/plugins/badges/apps.py:33
+#: pretix/plugins/badges/signals.py:55
+#: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:7
+#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:4
+#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:6
+#: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
+#: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
+msgid "Badges"
+msgstr "Insignias"
 
 #: pretix/plugins/badges/apps.py:38
 msgid ""
@@ -30460,10 +30628,6 @@ msgstr "Inspeccionar los horarios programados"
 msgid "Use as a template for a new rule"
 msgstr "Usar como plantilla para una nueva fecha"
 
-#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
-msgid "You haven't created any rules yet."
-msgstr "Aún no has creado ninguna regla."
-
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:7
 #, fuzzy
@@ -30549,15 +30713,6 @@ msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
 msgstr[0] "%(number)s entrada en la lista de espera"
 msgstr[1] "%(number)s entradas en la lista de espera"
-
-#: pretix/plugins/sendmail/views.py:626
-#, fuzzy
-msgid "Your rule has been created."
-msgstr "Se ha creado el usuario."
-
-#: pretix/plugins/sendmail/views.py:755
-msgid "The selected rule has been deleted."
-msgstr "La regla seleccionada ha sido eliminada."
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
@@ -34951,6 +35106,18 @@ msgstr "Acceso de escritura"
 #: pretix/settings.py:760
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid ""
+#~ "All items on this check-in list will be automatically marked as checked-"
+#~ "in when purchased through any of the selected sales channels. This option "
+#~ "can be useful when tickets sold at the box office are not checked again "
+#~ "before entry and should be considered validated directly upon purchase."
+#~ msgstr ""
+#~ "Todos los artículos de esta lista de check-in se marcarán automáticamente "
+#~ "como check-in cuando se compren a través de cualquiera de los canales de "
+#~ "venta seleccionados. Esta opción puede resultar útil cuando las entradas "
+#~ "vendidas en taquilla no se vuelven a comprobar antes de la entrada y "
+#~ "deben considerarse validadas directamente en el momento de la compra."
 
 #~ msgid "Unknown sales channel."
 #~ msgstr "Canal de ventas desconocido."

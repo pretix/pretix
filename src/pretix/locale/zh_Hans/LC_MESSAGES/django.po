@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 07:18+0000\n"
+"POT-Creation-Date: 2024-07-29 10:52+0000\n"
 "PO-Revision-Date: 2024-04-10 23:00+0000\n"
 "Last-Translator: Shiiko <shiiko@xlclan.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -19,121 +19,121 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.4.3\n"
 
-#: pretix/_base_settings.py:78
+#: pretix/_base_settings.py:79
 msgid "English"
 msgstr "英语"
 
-#: pretix/_base_settings.py:79
+#: pretix/_base_settings.py:80
 msgid "German"
 msgstr "德语"
 
-#: pretix/_base_settings.py:80
+#: pretix/_base_settings.py:81
 msgid "German (informal)"
 msgstr "德语（非正式的）"
 
-#: pretix/_base_settings.py:81
+#: pretix/_base_settings.py:82
 msgid "Arabic"
 msgstr "阿拉伯语"
 
-#: pretix/_base_settings.py:82
+#: pretix/_base_settings.py:83
 msgid "Catalan"
 msgstr ""
 
-#: pretix/_base_settings.py:83
+#: pretix/_base_settings.py:84
 msgid "Chinese (simplified)"
 msgstr "简体中文"
 
-#: pretix/_base_settings.py:84
+#: pretix/_base_settings.py:85
 msgid "Chinese (traditional)"
 msgstr "繁体中文"
 
-#: pretix/_base_settings.py:85
+#: pretix/_base_settings.py:86
 msgid "Czech"
 msgstr "捷克语"
 
-#: pretix/_base_settings.py:86
+#: pretix/_base_settings.py:87
 msgid "Danish"
 msgstr "丹麦语"
 
-#: pretix/_base_settings.py:87
+#: pretix/_base_settings.py:88
 msgid "Dutch"
 msgstr "荷兰语"
 
-#: pretix/_base_settings.py:88
+#: pretix/_base_settings.py:89
 msgid "Dutch (informal)"
 msgstr "荷兰语（非正式的）"
 
-#: pretix/_base_settings.py:89
+#: pretix/_base_settings.py:90
 msgid "French"
 msgstr "法语"
 
-#: pretix/_base_settings.py:90
+#: pretix/_base_settings.py:91
 #, fuzzy
 #| msgid "Danish"
 msgid "Finnish"
 msgstr "芬兰语"
 
-#: pretix/_base_settings.py:91
+#: pretix/_base_settings.py:92
 msgid "Galician"
 msgstr "加利西亚语"
 
-#: pretix/_base_settings.py:92
+#: pretix/_base_settings.py:93
 msgid "Greek"
 msgstr "希腊语"
 
-#: pretix/_base_settings.py:93
+#: pretix/_base_settings.py:94
 msgid "Indonesian"
 msgstr "印度尼西亚语"
 
-#: pretix/_base_settings.py:94
+#: pretix/_base_settings.py:95
 msgid "Italian"
 msgstr "意大利语"
 
-#: pretix/_base_settings.py:95
+#: pretix/_base_settings.py:96
 msgid "Latvian"
 msgstr "拉脱维亚语"
 
-#: pretix/_base_settings.py:96
+#: pretix/_base_settings.py:97
 msgid "Norwegian Bokmål"
 msgstr ""
 
-#: pretix/_base_settings.py:97
+#: pretix/_base_settings.py:98
 msgid "Polish"
 msgstr "波兰语"
 
-#: pretix/_base_settings.py:98
+#: pretix/_base_settings.py:99
 msgid "Portuguese (Portugal)"
 msgstr "葡萄牙语（葡萄牙）"
 
-#: pretix/_base_settings.py:99
+#: pretix/_base_settings.py:100
 msgid "Portuguese (Brazil)"
 msgstr "葡萄牙语（巴西）"
 
-#: pretix/_base_settings.py:100
+#: pretix/_base_settings.py:101
 msgid "Romanian"
 msgstr "罗马尼亚语"
 
-#: pretix/_base_settings.py:101
+#: pretix/_base_settings.py:102
 msgid "Russian"
 msgstr "俄语"
 
-#: pretix/_base_settings.py:102
+#: pretix/_base_settings.py:103
 msgid "Slovak"
 msgstr ""
 
-#: pretix/_base_settings.py:103
+#: pretix/_base_settings.py:104
 msgid "Swedish"
 msgstr ""
 
-#: pretix/_base_settings.py:104
+#: pretix/_base_settings.py:105
 msgid "Spanish"
 msgstr "西班牙语"
 
-#: pretix/_base_settings.py:105
+#: pretix/_base_settings.py:106
 msgid "Turkish"
 msgstr "土耳其语"
 
-#: pretix/_base_settings.py:106
+#: pretix/_base_settings.py:107
 msgid "Ukrainian"
 msgstr "乌克兰语"
 
@@ -401,22 +401,22 @@ msgid ""
 "account."
 msgstr "应用程序“{application_name}”已被授权访问您的帐户。"
 
-#: pretix/api/views/order.py:602 pretix/control/views/orders.py:1584
+#: pretix/api/views/order.py:603 pretix/control/views/orders.py:1584
 #: pretix/presale/views/order.py:741 pretix/presale/views/order.py:814
 msgid "You cannot generate an invoice for this order."
 msgstr "您无法为此订单生成发票。"
 
-#: pretix/api/views/order.py:607 pretix/control/views/orders.py:1586
+#: pretix/api/views/order.py:608 pretix/control/views/orders.py:1586
 #: pretix/presale/views/order.py:743 pretix/presale/views/order.py:816
 msgid "An invoice for this order already exists."
 msgstr "此订单的发票已存在。"
 
-#: pretix/api/views/order.py:633 pretix/control/views/orders.py:1712
+#: pretix/api/views/order.py:634 pretix/control/views/orders.py:1712
 #: pretix/control/views/users.py:143
 msgid "There was an error sending the mail. Please try again later."
 msgstr "发送邮件时出错。请稍后再试。"
 
-#: pretix/api/views/order.py:711 pretix/base/services/cart.py:215
+#: pretix/api/views/order.py:712 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:798
 msgid "One of the selected products is not available in the selected country."
 msgstr "选中的一项产品在选择的地区不可用。"
@@ -1704,6 +1704,8 @@ msgstr "有效的"
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:73
 #: pretix/control/forms/event.py:969 pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:6
+#: pretix/plugins/autocheckin/models.py:64
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
 msgid "Sales channels"
 msgstr "销售渠道"
 
@@ -2835,6 +2837,9 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:147
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:61
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:52
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:43
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:62
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:76
 #: pretix/plugins/reports/accountingreport.py:104
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
@@ -4078,14 +4083,10 @@ msgstr "销售渠道自动签到"
 
 #: pretix/base/models/checkin.py:105
 msgid ""
-"All items on this check-in list will be automatically marked as checked-in "
-"when purchased through any of the selected sales channels. This option can "
-"be useful when tickets sold at the box office are not checked again before "
-"entry and should be considered validated directly upon purchase."
+"This option is deprecated and will be removed in the next months. As a "
+"replacement, our new plugin \"Auto check-in\" can be used. When we remove "
+"this option, we will automatically migrate your event to use the new plugin."
 msgstr ""
-"当通过任何选定的销售渠道购买时，此登记列表上的所有项目将自动标记为已登记。当"
-"在票房出售的门票在进入之前没有再次检查时，该选项会很有用，并且应该被认为是在"
-"购买时直接验证的。"
 
 #: pretix/base/models/checkin.py:340
 #, fuzzy
@@ -5280,6 +5281,9 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/index.html:8
 #: pretix/control/templates/pretixcontrol/items/questions.html:26
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
+#: pretix/plugins/autocheckin/forms.py:56
+#: pretix/plugins/autocheckin/models.py:72
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:31
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:32
 msgid "Products"
 msgstr "产品"
@@ -5717,6 +5721,7 @@ msgid "Item"
 msgstr "项目"
 
 #: pretix/base/models/items.py:2007 pretix/control/forms/item.py:847
+#: pretix/plugins/autocheckin/models.py:74
 msgid "Variations"
 msgstr "变动"
 
@@ -9923,9 +9928,9 @@ msgstr "每个订单的最大项目数"
 msgid ""
 "With an increased limit, a customer may request more than one ticket for a "
 "specific product using the same, unique email address. However, regardless "
-"of this setting, they will need to fill the waiting list form multiple times if "
-"they want more than one ticket, as every entry only grants one single ticket "
-"at a time."
+"of this setting, they will need to fill the waiting list form multiple times "
+"if they want more than one ticket, as every entry only grants one single "
+"ticket at a time."
 msgstr ""
 
 #: pretix/base/settings.py:1493
@@ -14009,6 +14014,10 @@ msgstr "结束日期"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:10
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:25
+#: pretix/plugins/autocheckin/forms.py:179
+#: pretix/plugins/autocheckin/forms.py:183
+#: pretix/plugins/autocheckin/models.py:46
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:29
 #: pretix/plugins/checkinlists/exporters.py:80
 #: pretix/plugins/checkinlists/exporters.py:153
 #: pretix/plugins/checkinlists/exporters.py:472
@@ -17434,6 +17443,8 @@ msgstr "设置新密码"
 #: pretix/control/templates/pretixcontrol/users/form.html:80
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:140
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:126
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:29
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:29
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:24
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:61
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:87
@@ -17829,6 +17840,7 @@ msgstr[0] "您确定要删除签入列表<strong>%(name)s</strong>？"
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:12
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:33
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:16
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:12
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:13
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:12
@@ -17879,6 +17891,7 @@ msgstr "取消"
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:15
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:36
 #: pretix/control/views/orders.py:357
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:15
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:16
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:15
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:15
@@ -18262,6 +18275,7 @@ msgid "Connected devices"
 msgstr "连接设备"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:104
+#: pretix/plugins/autocheckin/apps.py:30 pretix/plugins/autocheckin/apps.py:33
 #, fuzzy
 #| msgid "Not checked in"
 msgid "Automated check-in"
@@ -18272,6 +18286,7 @@ msgstr "未签入"
 #: pretix/control/templates/pretixcontrol/items/discounts.html:149
 #: pretix/control/templates/pretixcontrol/items/index.html:156
 #: pretix/control/templates/pretixcontrol/items/quotas.html:96
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:89
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:72
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:69
 #, fuzzy
@@ -19362,8 +19377,8 @@ msgstr ""
 #: pretix/control/views/organizer.py:3169 pretix/control/views/subevents.py:525
 #: pretix/control/views/subevents.py:1590 pretix/control/views/user.py:235
 #: pretix/control/views/users.py:112 pretix/control/views/vouchers.py:304
-#: pretix/plugins/badges/views.py:154 pretix/plugins/sendmail/views.py:668
-#: pretix/plugins/stripe/views.py:679
+#: pretix/plugins/autocheckin/views.py:164 pretix/plugins/badges/views.py:154
+#: pretix/plugins/sendmail/views.py:668 pretix/plugins/stripe/views.py:679
 #: pretix/plugins/ticketoutputpdf/views.py:172
 #: pretix/presale/views/customer.py:476 pretix/presale/views/customer.py:528
 msgid "Your changes have been saved."
@@ -26052,8 +26067,10 @@ msgstr "已创建新的签入列表。"
 #: pretix/control/views/subevents.py:1492 pretix/control/views/user.py:357
 #: pretix/control/views/vouchers.py:276 pretix/control/views/vouchers.py:350
 #: pretix/control/views/vouchers.py:533 pretix/control/views/waitinglist.py:413
-#: pretix/plugins/badges/views.py:114 pretix/plugins/sendmail/views.py:597
-#: pretix/plugins/sendmail/views.py:674 pretix/plugins/stripe/views.py:682
+#: pretix/plugins/autocheckin/views.py:112
+#: pretix/plugins/autocheckin/views.py:174 pretix/plugins/badges/views.py:114
+#: pretix/plugins/sendmail/views.py:597 pretix/plugins/sendmail/views.py:674
+#: pretix/plugins/stripe/views.py:682
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
 msgstr "我们无法保存您的更改。详见下文。"
@@ -27778,17 +27795,8 @@ msgstr "已知域名"
 msgid "Known domains"
 msgstr "已知域名"
 
-#: pretix/plugins/badges/apps.py:30 pretix/plugins/badges/apps.py:33
-#: pretix/plugins/badges/signals.py:55
-#: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:7
-#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:4
-#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:6
-#: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
-#: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
-msgid "Badges"
-msgstr "徽章"
-
-#: pretix/plugins/badges/apps.py:34 pretix/plugins/banktransfer/apps.py:35
+#: pretix/plugins/autocheckin/apps.py:34 pretix/plugins/badges/apps.py:34
+#: pretix/plugins/banktransfer/apps.py:35
 #: pretix/plugins/checkinlists/apps.py:48
 #: pretix/plugins/manualpayment/apps.py:34 pretix/plugins/paypal/apps.py:48
 #: pretix/plugins/paypal2/apps.py:35 pretix/plugins/pretixdroid/apps.py:34
@@ -27798,6 +27806,174 @@ msgstr "徽章"
 #: pretix/plugins/webcheckin/apps.py:34
 msgid "the pretix team"
 msgstr "pretix团队"
+
+#: pretix/plugins/autocheckin/apps.py:39
+msgid "Automatically check-in specific tickets after they have been sold."
+msgstr ""
+
+#: pretix/plugins/autocheckin/forms.py:60
+#: pretix/plugins/autocheckin/models.py:82
+#, fuzzy
+#| msgid "All payment providers"
+msgid "Only including usage of payment providers"
+msgstr "所有的支付供应商"
+
+#: pretix/plugins/autocheckin/forms.py:120
+#, fuzzy
+#| msgid "All actions"
+msgid "All variations"
+msgstr "所有行为"
+
+#: pretix/plugins/autocheckin/forms.py:248
+msgid ""
+"When restricting by payment method, the rule should run after the payment "
+"was received."
+msgstr ""
+
+#: pretix/plugins/autocheckin/models.py:36
+#, fuzzy
+#| msgid "New order placed"
+msgid "After order was placed"
+msgstr "新预约订单"
+
+#: pretix/plugins/autocheckin/models.py:37
+#, fuzzy
+#| msgid "Mark order as paid"
+msgid "After order was paid"
+msgstr "将订单标记为已付款"
+
+#: pretix/plugins/autocheckin/models.py:48
+msgid ""
+"If you keep this empty, all lists that match the purchased product will be "
+"used."
+msgstr ""
+
+#: pretix/plugins/autocheckin/models.py:59
+#, fuzzy
+#| msgid "Sales channel"
+msgid "All sales channels"
+msgstr "销售渠道"
+
+#: pretix/plugins/autocheckin/models.py:69
+#, fuzzy
+#| msgid "Product variations"
+msgid "All products and variations"
+msgstr "产品变化"
+
+#: pretix/plugins/autocheckin/models.py:78
+#, fuzzy
+#| msgid "Enable payment method"
+msgid "All payment methods"
+msgstr "启用付款方式"
+
+#: pretix/plugins/autocheckin/signals.py:47
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:13
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:13
+#, fuzzy
+#| msgid "Not checked in"
+msgid "Auto check-in"
+msgstr "未签入"
+
+#: pretix/plugins/autocheckin/signals.py:70
+#, fuzzy
+#| msgid "The tax rule has been deleted."
+msgid "An auto check-in rule was created"
+msgstr "已删除税收规则。"
+
+#: pretix/plugins/autocheckin/signals.py:72
+#, fuzzy
+#| msgid "The tax rule has been deleted."
+msgid "An auto check-in rule was updated"
+msgstr "已删除税收规则。"
+
+#: pretix/plugins/autocheckin/signals.py:75
+#, fuzzy
+#| msgid "The tax rule has been deleted."
+msgid "An auto check-in rule was deleted"
+msgstr "已删除税收规则。"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
+#, fuzzy
+#| msgid "Not checked in"
+msgid "Create auto check-in rule"
+msgstr "未签入"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
+#, fuzzy
+#| msgid "Confirmations"
+msgid "Conditions"
+msgstr "确认"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
+#, fuzzy
+#| msgid "Delete check-in list"
+msgid "Delete auto-checkin rule"
+msgstr "删除签入列表"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
+#, fuzzy
+#| msgid "Are you sure you want to delete the team?"
+msgid "Are you sure you want to delete the auto check-in rule?"
+msgstr "您确定要删除团队？"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
+#, fuzzy
+#| msgid "Not checked in"
+msgid "Auto check-in rule"
+msgstr "未签入"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
+#, fuzzy
+#| msgid "Not checked in"
+msgid "Auto check-in rules"
+msgstr "未签入"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:11
+#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
+#, fuzzy
+#| msgid "You haven't created any tax rules yet."
+msgid "You haven't created any rules yet."
+msgstr "您尚未创建任何税收规则。"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:17
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:22
+#, fuzzy
+#| msgid "Create a new check-in list"
+msgid "Create a new check-in rule"
+msgstr "新建签入列表"
+
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:32
+#, fuzzy
+#| msgid "Payment method"
+msgid "Payment methods"
+msgstr "支付方式"
+
+#: pretix/plugins/autocheckin/views.py:119 pretix/plugins/sendmail/views.py:626
+#, fuzzy
+#| msgid "The user has been created."
+msgid "Your rule has been created."
+msgstr "用户已创建。"
+
+#: pretix/plugins/autocheckin/views.py:209 pretix/plugins/sendmail/views.py:755
+#, fuzzy
+#| msgid "The selected tax rule has been deleted."
+msgid "The selected rule has been deleted."
+msgstr "所选的税务规则已被删除。"
+
+#: pretix/plugins/badges/apps.py:30 pretix/plugins/badges/apps.py:33
+#: pretix/plugins/badges/signals.py:55
+#: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:7
+#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:4
+#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:6
+#: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
+#: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
+msgid "Badges"
+msgstr "徽章"
 
 #: pretix/plugins/badges/apps.py:38
 msgid ""
@@ -30474,12 +30650,6 @@ msgstr "减少门票"
 msgid "Use as a template for a new rule"
 msgstr "用作新日期的模板"
 
-#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
-#, fuzzy
-#| msgid "You haven't created any tax rules yet."
-msgid "You haven't created any rules yet."
-msgstr "您尚未创建任何税收规则。"
-
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:7
 #, fuzzy
@@ -30562,18 +30732,6 @@ msgstr ""
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
 msgstr[0] "等待列表条目"
-
-#: pretix/plugins/sendmail/views.py:626
-#, fuzzy
-#| msgid "The user has been created."
-msgid "Your rule has been created."
-msgstr "用户已创建。"
-
-#: pretix/plugins/sendmail/views.py:755
-#, fuzzy
-#| msgid "The selected tax rule has been deleted."
-msgid "The selected rule has been deleted."
-msgstr "所选的税务规则已被删除。"
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
@@ -35041,6 +35199,16 @@ msgstr "录入权限"
 #: pretix/settings.py:760
 msgid "Kosovo"
 msgstr ""
+
+#~ msgid ""
+#~ "All items on this check-in list will be automatically marked as checked-"
+#~ "in when purchased through any of the selected sales channels. This option "
+#~ "can be useful when tickets sold at the box office are not checked again "
+#~ "before entry and should be considered validated directly upon purchase."
+#~ msgstr ""
+#~ "当通过任何选定的销售渠道购买时，此登记列表上的所有项目将自动标记为已登记。"
+#~ "当在票房出售的门票在进入之前没有再次检查时，该选项会很有用，并且应该被认为"
+#~ "是在购买时直接验证的。"
 
 #~ msgid "Unknown sales channel."
 #~ msgstr "未知的销售渠道。"
