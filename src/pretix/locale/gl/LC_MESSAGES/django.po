@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-26 07:18+0000\n"
-"PO-Revision-Date: 2024-07-26 11:54+0000\n"
+"PO-Revision-Date: 2024-07-29 10:37+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -11392,6 +11392,33 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Hola,\n"
+"\n"
+"presentácheste á lista de espera para {event},\n"
+"para o produto {product}.\n"
+"\n"
+"¡Xa temos unha entrada lista para ti! Podes canxealo na nosa billeteira\n"
+"dentro das próximas {hours} horas ingresando o seguinte código de cupón:\n"
+"\n"
+"{code}\n"
+"\n"
+"Alternativamente, podes simplemente facer clic na seguinte ligazón:\n"
+"\n"
+"{url}\n"
+"\n"
+"¡Ten en conta que esta ligazón só é válida dentro das próximas {hours} horas!"
+"\n"
+"Reasignaremos a entrada á seguinte persoa na lista se non canxeas o bono "
+"dentro dese prazo.\n"
+"\n"
+"Se xa NON necesitas unha entrada, rogámosche que fagas clic na seguinte "
+"ligazón para informarnos. Deste xeito poderemos enviar a entrada o máis "
+"rápido posible á seguinte persoa na lista de espera:\n"
+"\n"
+"{url_remove}\n"
+"\n"
+"Atentamente,\n"
+"O teu equipo de {event}"
 
 #: pretix/base/settings.py:2484
 #, fuzzy, python-brace-format
@@ -35518,9 +35545,8 @@ msgstr "Habilitar modo de prueba"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:34
 #: pretix/presale/templates/pretixpresale/event/voucher.html:36
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:9
-#, fuzzy
 msgid "Voucher redemption"
-msgstr "Canje de vales"
+msgstr "Canxe de vales"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:20
 #, fuzzy
