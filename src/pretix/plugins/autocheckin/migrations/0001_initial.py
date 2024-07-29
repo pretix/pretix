@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                         to="pretixbase.event",
                     ),
                 ),
-                ("limit_items", models.ManyToManyField(to="pretixbase.item")),
+                ("limit_products", models.ManyToManyField(to="pretixbase.item")),
                 (
                     "limit_sales_channels",
                     models.ManyToManyField(to="pretixbase.saleschannel"),

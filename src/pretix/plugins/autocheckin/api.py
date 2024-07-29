@@ -41,7 +41,7 @@ class AutoCheckinRuleSerializer(I18nAwareModelSerializer):
             "all_sales_channels",
             "limit_sales_channels",
             "all_products",
-            "limit_items",
+            "limit_products",
             "limit_variations",
             "all_payment_methods",
             "limit_payment_methods",
@@ -54,7 +54,7 @@ class AutoCheckinRuleSerializer(I18nAwareModelSerializer):
         self.fields["limit_sales_channels"].child_relation.queryset = self.context[
             "event"
         ].organizer.sales_channels.all()
-        self.fields["limit_items"].child_relation.queryset = self.context[
+        self.fields["limit_products"].child_relation.queryset = self.context[
             "event"
         ].items.all()
         self.fields["limit_variations"].child_relation.queryset = (

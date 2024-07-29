@@ -47,7 +47,7 @@ class IndexView(EventPermissionRequiredMixin, ListView):
             )
             .prefetch_related(
                 "limit_sales_channels",
-                "limit_items",
+                "limit_products",
                 "limit_variations",
                 "limit_variations__item",
             )
@@ -94,7 +94,7 @@ class RuleAddView(EventPermissionRequiredMixin, CreateView):
             kwargs["instance"] = i
             kwargs.setdefault("initial", {})
             kwargs["initial"]["itemvars"] = [
-                str(i.pk) for i in self.copy_from.limit_items.all()
+                str(i.pk) for i in self.copy_from.limit_products.all()
             ] + [
                 "{}-{}".format(v.item_id, v.pk)
                 for v in self.copy_from.limit_variations.all()

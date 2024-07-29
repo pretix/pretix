@@ -69,7 +69,7 @@ class AutoCheckinRule(LoggedModel):
         verbose_name=_("All products and variations"),
         default=True,
     )
-    limit_items = models.ManyToManyField(Item, verbose_name=_("Products"), blank=True)
+    limit_products = models.ManyToManyField(Item, verbose_name=_("Products"), blank=True)
     limit_variations = models.ManyToManyField(
         ItemVariation, blank=True, verbose_name=_("Variations")
     )

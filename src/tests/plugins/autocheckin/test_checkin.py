@@ -100,7 +100,7 @@ def test_items_limit(event, item, order, checkin_list):
     order_placed.send(event, order=order)
     assert not order.positions.first().checkins.exists()
 
-    acr.limit_items.add(item)
+    acr.limit_products.add(item)
 
     order_placed.send(event, order=order)
     assert order.positions.first().checkins.exists()
@@ -129,7 +129,7 @@ def test_variations_limit(event, item, order, checkin_list):
     assert order.positions.first().checkins.exists()
 
     order.positions.first().checkins.all().delete()
-    acr.limit_items.add(item)
+    acr.limit_products.add(item)
     acr.limit_variations.clear()
 
     order_placed.send(event, order=order)

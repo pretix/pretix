@@ -30,7 +30,7 @@ def acr(event, item):
     acr = event.autocheckinrule_set.create(
         all_products=False,
     )
-    acr.limit_items.add(item)
+    acr.limit_products.add(item)
     return acr
 
 
@@ -40,7 +40,7 @@ RES_RULE = {
     "all_sales_channels": True,
     "limit_sales_channels": [],
     "all_products": False,
-    "limit_items": [],
+    "limit_products": [],
     "limit_variations": [],
     "all_payment_methods": True,
     "limit_payment_methods": set(),
@@ -51,7 +51,7 @@ RES_RULE = {
 def test_api_list(event, acr, item, token_client):
     res = copy.copy(RES_RULE)
     res["id"] = acr.pk
-    res["limit_items"] = [item.pk]
+    res["limit_products"] = [item.pk]
     r = token_client.get(
         "/api/v1/organizers/{}/events/{}/auto_checkin_rules/".format(
             event.organizer.slug, event.slug
@@ -65,7 +65,7 @@ def test_api_list(event, acr, item, token_client):
 def test_api_detail(event, acr, item, token_client):
     res = copy.copy(RES_RULE)
     res["id"] = acr.pk
-    res["limit_items"] = [item.pk]
+    res["limit_products"] = [item.pk]
     r = token_client.get(
         "/api/v1/organizers/{}/events/{}/auto_checkin_rules/{}/".format(
             event.organizer.slug, event.slug, acr.pk
@@ -82,14 +82,14 @@ def test_api_create(event, acr, item, token_client):
         ),
         {
             "all_products": False,
-            "limit_items": [item.pk],
+            "limit_products": [item.pk],
         },
         format="json",
     )
     assert resp.status_code == 201
     with scopes_disabled():
         acr = event.autocheckinrule_set.get(pk=resp.data["id"])
-        assert list(acr.limit_items.all()) == [item]
+        assert list(acr.limit_products.all()) == [item]
 
 
 @pytest.mark.django_db

@@ -26,10 +26,10 @@ all_sales_channels                    boolean                    If ``true`` (de
 limit_sales_channels                  list of strings            List of sales channel identifiers the rule should apply to
                                                                  if ``all_sales_channels`` is ``false``.
 all_products                          boolean                    If ``true`` (default), the rule affects all products and variations.
-limit_items                           list of integers           List of product IDs, if ``all_products`` is not set. If the
+limit_products                        list of integers           List of item IDs, if ``all_products`` is not set. If the
                                                                  product listed here has variations, all variations will be matched.
 limit_variations                      list of integers           List of product variation IDs, if ``all_products`` is not set.
-                                                                 The parent product does not need to be part of ``limit_items``.
+                                                                 The parent product does not need to be part of ``limit_products``.
 all_payment_methods                   boolean                    If ``true`` (default), the rule applies to tickets paid with all payment methods.
 limit_payment_methods                 list of strings            List of payment method identifiers the rule should apply to
                                                                  if ``all_payment_methods`` is ``false``.
@@ -72,7 +72,7 @@ Endpoints
             "all_sales_channels": false,
             "limit_sales_channels": ["web"],
             "all_products": False,
-            "limit_items": [2, 3],
+            "limit_products": [2, 3],
             "limit_variations": [456],
             "all_payment_methods": true,
             "limit_payment_methods": []
@@ -114,7 +114,7 @@ Endpoints
         "all_sales_channels": false,
         "limit_sales_channels": ["web"],
         "all_products": False,
-        "limit_items": [2, 3],
+        "limit_products": [2, 3],
         "limit_variations": [456],
         "all_payment_methods": true,
         "limit_payment_methods": []
@@ -147,7 +147,7 @@ Endpoints
         "all_sales_channels": false,
         "limit_sales_channels": ["web"],
         "all_products": False,
-        "limit_items": [2, 3],
+        "limit_products": [2, 3],
         "limit_variations": [456],
         "all_payment_methods": true,
         "limit_payment_methods": []
@@ -168,7 +168,7 @@ Endpoints
         "all_sales_channels": false,
         "limit_sales_channels": ["web"],
         "all_products": False,
-        "limit_items": [2, 3],
+        "limit_products": [2, 3],
         "limit_variations": [456],
         "all_payment_methods": true,
         "limit_payment_methods": []
@@ -217,7 +217,7 @@ Endpoints
         "all_sales_channels": false,
         "limit_sales_channels": ["web"],
         "all_products": False,
-        "limit_items": [2, 3],
+        "limit_products": [2, 3],
         "limit_variations": [456],
         "all_payment_methods": true,
         "limit_payment_methods": []

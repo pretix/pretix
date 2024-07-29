@@ -62,7 +62,7 @@
                                 <em>{% trans "All" %}</em>
                             {% else %}
                                 <ul>
-                                    {% for i in r.limit_items.all %}
+                                    {% for i in r.limit_products.all %}
                                         <li>{{ i }}</li>
                                     {% endfor %}
                                     {% for v in r.limit_variations.all %}

@@ -81,8 +81,8 @@ def logentry_display_receiver(sender, logentry, **kwargs):
 
 @receiver(item_copy_data, dispatch_uid="autocheckin_item_copy")
 def item_copy_data_receiver(sender, source, target, **kwargs):
-    for acr in AutoCheckinRule.objects.filter(limit_items=source):
-        acr.limit_items.add(target)
+    for acr in AutoCheckinRule.objects.filter(limit_products=source):
+        acr.limit_products.add(target)
 
 
 @receiver(signal=event_copy_data, dispatch_uid="autocheckin_copy_data")
@@ -114,7 +114,7 @@ def event_copy_data_receiver(
             )
 
         if not acr.all_products:
-            acr.limit_items.set([item_map[o.pk] for o in oldacr.limit_items.all()])
+            acr.limit_products.set([item_map[o.pk] for o in oldacr.limit_products.all()])
             acr.limit_variations.set(
                 [variation_map[o.pk] for o in oldacr.limit_variations.all()]
             )
@@ -130,7 +130,7 @@ def perform_auto_checkin(sender, order, mode, payment_methods):
         sender.autocheckinrule_set.filter(
             Q(all_sales_channels=True) | Q(limit_sales_channels=order.sales_channel_id),
             Q(all_products=True)
-            | Q(limit_items__in=[op.item_id for op in positions])
+            | Q(limit_products__in=[op.item_id for op in positions])
             | Q(limit_variations__in=[op.variation_id for op in positions]),
             payment_q,
             mode=mode,

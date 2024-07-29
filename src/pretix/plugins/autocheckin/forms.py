@@ -87,7 +87,7 @@ class AutoCheckinRuleForm(forms.ModelForm):
         initial = kwargs.get("initial", {})
         if self.instance and self.instance.pk and "itemvars" not in initial:
             initial["itemvars"] = [
-                str(i.pk) for i in self.instance.limit_items.all()
+                str(i.pk) for i in self.instance.limit_products.all()
             ] + [
                 "{}-{}".format(v.item_id, v.pk)
                 for v in self.instance.limit_variations.all()
@@ -221,13 +221,13 @@ class AutoCheckinRuleForm(forms.ModelForm):
             )
         )
 
-        current_items = [] if creating else self.instance.limit_items.all()
+        current_items = [] if creating else self.instance.limit_products.all()
         current_variations = [] if creating else self.instance.limit_variations.all()
 
-        self.instance.limit_items.remove(
+        self.instance.limit_products.remove(
             *[i for i in current_items if i not in selected_items]
         )
-        self.instance.limit_items.add(
+        self.instance.limit_products.add(
             *[i for i in selected_items if i not in current_items]
         )
         self.instance.limit_variations.remove(

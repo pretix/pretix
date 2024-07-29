@@ -106,7 +106,7 @@ class AutoCheckinFormTest(SoupTest):
             acr = self.event1.autocheckinrule_set.create(
                 mode=AutoCheckinRule.MODE_PAID, all_products=False
             )
-            acr.limit_items.add(self.item1)
+            acr.limit_products.add(self.item1)
 
         self.client.post(
             "/control/event/%s/%s/items/add" % (self.orga1.slug, self.event1.slug),
@@ -121,7 +121,7 @@ class AutoCheckinFormTest(SoupTest):
         with scopes_disabled():
             acr.refresh_from_db()
             i_new = Item.objects.get(name__icontains="Intermediate")
-            assert i_new in acr.limit_items.all()
+            assert i_new in acr.limit_products.all()
 
     def test_copy_event(self):
         with scopes_disabled():
@@ -131,7 +131,7 @@ class AutoCheckinFormTest(SoupTest):
                 all_products=False,
                 all_sales_channels=False,
             )
-            acr.limit_items.add(self.item1)
+            acr.limit_products.add(self.item1)
             acr.limit_sales_channels.add(
                 self.orga1.sales_channels.get(identifier="web")
             )
@@ -177,7 +177,7 @@ class AutoCheckinFormTest(SoupTest):
             i_new = ev.items.first()
             acr_new = ev.autocheckinrule_set.get()
 
-            assert i_new in acr_new.limit_items.all()
+            assert i_new in acr_new.limit_products.all()
             assert list(acr_new.limit_sales_channels.all()) == [
                 self.orga2.sales_channels.get(identifier="web")
             ]
