@@ -769,6 +769,9 @@ function setup_basics(el) {
         var $this = $(this);
         var $panel = $this.closest("div.panel-collapse").collapse("show");
         var alert = el.find(".alert-danger").get(0);
+        if (alert === this) {
+            return;
+        }
         var label = "";
         var description = "";
         var scrollTarget = null;
