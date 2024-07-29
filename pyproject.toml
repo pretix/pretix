@@ -35,7 +35,6 @@ dependencies = [
   "cryptography>=3.4.2",
   "css-inline==0.14.*",
   "defusedcsv>=1.1.0",
-  "dj-static",
   "Django[argon2]==4.2.*",
   "django-bootstrap3==24.2",
   "django-compressor==4.5.1",
@@ -95,7 +94,6 @@ dependencies = [
   "sentry-sdk==2.10.*",
   "sepaxml==2.6.*",
   "slimit",
-  "static3==0.7.*",
   "stripe==7.9.*",
   "text-unidecode==1.*",
   "tlds>=2020041600",
@@ -139,7 +137,7 @@ build_ext = "pretix._build:CustomBuildExt"
 build-backend = "backend"
 backend-path = ["_build"]
 requires = [
-  "setuptools<72",  # until we remove static3
+  "setuptools",
   "setuptools-rust",
   "wheel",
   "importlib_metadata",
