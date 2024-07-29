@@ -44,7 +44,24 @@ from pretix.helpers.security import (
 )
 
 
+class RequireAll:
+    def __init__(self, *permissions):
+        self.permissions = permissions
+
+
 class EventPermission(BasePermission):
+    @staticmethod
+    def _check_required_permission(request, required_permission):
+        if isinstance(required_permission, RequireAll):
+            if any(p not in request.eventpermset for p in required_permission.permissions):
+                return False
+        elif isinstance(required_permission, (list, tuple)):
+            if not any(p in request.eventpermset for p in required_permission):
+                return False
+        else:
+            if required_permission and required_permission not in request.eventpermset:
+                return False
+        return True
 
     def has_permission(self, request, view):
         if not request.user.is_authenticated and not isinstance(request.auth, (Device, TeamAPIToken)):
@@ -87,12 +104,8 @@ class EventPermission(BasePermission):
             else:
                 request.eventpermset = perm_holder.get_event_permission_set(request.organizer, request.event)
 
-            if isinstance(required_permission, (list, tuple)):
-                if not any(p in request.eventpermset for p in required_permission):
-                    return False
-            else:
-                if required_permission and required_permission not in request.eventpermset:
-                    return False
+            if not self._check_required_permission(request, required_permission):
+                return False
 
         elif 'organizer' in request.resolver_match.kwargs:
             if not request.organizer or not perm_holder.has_organizer_permission(request.organizer, request=request):
@@ -102,12 +115,8 @@ class EventPermission(BasePermission):
             else:
                 request.orgapermset = perm_holder.get_organizer_permission_set(request.organizer)
 
-            if isinstance(required_permission, (list, tuple)):
-                if not any(p in request.eventpermset for p in required_permission):
-                    return False
-            else:
-                if required_permission and required_permission not in request.orgapermset:
-                    return False
+            if not self._check_required_permission(request, required_permission):
+                return False
 
         if isinstance(request.auth, OAuthAccessToken):
             if not request.auth.allow_scopes(['write']) and request.method not in SAFE_METHODS:

@@ -42,9 +42,10 @@ from django_scopes import scopes_disabled
 from rest_framework import serializers, views, viewsets
 from rest_framework.exceptions import PermissionDenied, ValidationError, NotFound
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
-from pretix.api.auth.permission import EventCRUDPermission
+from pretix.api.auth.permission import EventCRUDPermission, RequireAll
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
@@ -672,10 +673,16 @@ class EventSettingsView(views.APIView):
 class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SeatSerializer
     queryset = Seat.objects.none()
-    permission = 'can_view_orders'
-    write_permission = 'can_change_event_settings'
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label', 'seat_guid', 'blocked',)
+
+    def _get_permission_name(self, request):
+        perms = []
+        if 'orderposition' in request.query_params.getlist('expand'):
+            perms.append('can_view_orders')
+        if request.method not in SAFE_METHODS:
+            perms.append('can_change_event_settings')
+        return RequireAll(*perms)
 
     def get_queryset(self):
         if self.request.event.has_subevents and 'subevent' in self.request.resolver_match.kwargs:

@@ -34,6 +34,7 @@ from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
+from pretix.api.auth.permission import RequireAll
 from pretix.api.serializers.media import (
     MediaLookupInputSerializer, ReusableMediaSerializer,
 )
@@ -61,12 +62,16 @@ with scopes_disabled():
 class ReusableMediaViewSet(viewsets.ModelViewSet):
     serializer_class = ReusableMediaSerializer
     queryset = ReusableMedium.objects.none()
-    permission = 'can_manage_reusable_media'
-    write_permission = 'can_manage_reusable_media'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('-updated', '-id')
     ordering_fields = ('created', 'updated', 'identifier', 'type', 'id')
     filterset_class = ReusableMediumFilter
+
+    def _get_permission_name(self, request):
+        if 'linked_orderposition' in request.query_params.getlist('expand'):
+            return RequireAll(['can_manage_reusable_media', 'can_view_orders'])
+        else:
+            return 'can_manage_reusable_media'
 
     def get_queryset(self):
         s = GiftCardTransaction.objects.filter(
