@@ -139,7 +139,7 @@ build_ext = "pretix._build:CustomBuildExt"
 build-backend = "backend"
 backend-path = ["_build"]
 requires = [
-  "setuptools",
+  "setuptools<72",  # until we remove static3
   "setuptools-rust",
   "wheel",
   "importlib_metadata",
