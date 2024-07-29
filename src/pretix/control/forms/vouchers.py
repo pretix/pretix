@@ -41,7 +41,9 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import EmailValidator
 from django.db.models.functions import Upper
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from django.utils.translation import (
+    gettext_lazy as _, gettext_noop, pgettext_lazy,
+)
 from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.email import get_available_placeholders
@@ -49,6 +51,7 @@ from pretix.base.forms import (
     I18nModelForm, MarkdownTextarea, PlaceholderValidator,
 )
 from pretix.base.forms.widgets import format_placeholders_help_text
+from pretix.base.i18n import language
 from pretix.base.models import Item, Voucher
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
@@ -269,16 +272,16 @@ class VoucherBulkForm(VoucherForm):
         label=_("Subject"),
         widget=forms.TextInput(attrs={'data-display-dependency': '#id_send'}),
         required=False,
-        initial=_('Your voucher for {event}')
+        initial=gettext_noop('Your voucher for {event}')
     )
     send_message = forms.CharField(
         label=_("Message"),
         widget=MarkdownTextarea(attrs={'data-display-dependency': '#id_send'}),
         required=False,
-        initial=_('Hello,\n\n'
-                  'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
-                  'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,  \n'
-                  'Your {event} team')
+        initial=gettext_noop('Hello,\n\n'
+                             'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
+                             'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,  \n'
+                             'Your {event} team')
     )
     send_recipients = forms.CharField(
         label=_('Recipients'),
@@ -332,6 +335,12 @@ class VoucherBulkForm(VoucherForm):
         super().__init__(*args, **kwargs)
         self._set_field_placeholders('send_subject', ['event', 'name'])
         self._set_field_placeholders('send_message', ['event', 'voucher_list', 'name'])
+
+        with language(self.instance.event.settings.locale, self.instance.event.settings.region):
+            for f in ("send_subject", "send_message"):
+                print(repr(self.fields[f].initial), self.instance.event.settings.locale)
+                self.fields[f].initial = str(_(self.fields[f].initial))
+
         if 'seat' in self.fields:
             self.fields['seats'] = forms.CharField(
                 label=_("Specific seat IDs"),
