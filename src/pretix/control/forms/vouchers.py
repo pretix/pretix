@@ -49,6 +49,7 @@ from pretix.base.forms import (
     I18nModelForm, MarkdownTextarea, PlaceholderValidator,
 )
 from pretix.base.forms.widgets import format_placeholders_help_text
+from pretix.base.i18n import language
 from pretix.base.models import Item, Voucher
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
@@ -332,6 +333,11 @@ class VoucherBulkForm(VoucherForm):
         super().__init__(*args, **kwargs)
         self._set_field_placeholders('send_subject', ['event', 'name'])
         self._set_field_placeholders('send_message', ['event', 'voucher_list', 'name'])
+
+        with language(self.instance.event.settings.locale, self.instance.event.settings.region):
+            for f in ("send_subject", "send_message"):
+                self.fields[f].initial = str(self.fields[f].initial)
+
         if 'seat' in self.fields:
             self.fields['seats'] = forms.CharField(
                 label=_("Specific seat IDs"),
