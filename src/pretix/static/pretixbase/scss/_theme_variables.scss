@@ -1,4 +1,6 @@
+@import "https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap";
 @import "_contrast.scss";
+
 @function tint($color, $percentage) {
   @return mix(white, $color, $percentage);
 }
@@ -14,13 +16,14 @@
 $widget: false !default;
 
 // Input variables that may be overridden by event themes.
-$in-font-family-sans-serif: "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
-$in-brand-primary: #7f5a91 !default;
+$in-font-family-sans-serif: Quicksand, "OpenSans", "Helvetica Neue", Helvetica,
+  Arial, sans-serif !default;
+$in-brand-primary: #f5654b !default;
 $in-brand-success: #50a167 !default;
 $in-brand-info: #5f9cd4 !default;
 $in-brand-warning: #ffb419 !default;
 $in-brand-danger: #c44f4f !default;
-$in-body-bg: #FFFFFF !default;
+$in-body-bg: #fdfdfd !default;
 $in-border-radius-base: 3px !default;
 $in-border-radius-large: 4px !default;
 $in-border-radius-small: 2px !default;

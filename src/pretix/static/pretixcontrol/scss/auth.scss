@@ -15,14 +15,15 @@ footer {
 }
 
 .logo {
-    width: 200px;
-    margin: auto;
-    display: block;
-    margin-top: 10%;
+	width: 275px;
+	margin: auto;
+	display: block;
+	margin-top: 10%;
 	margin-bottom: 30px;
-    height: auto;
-    max-width: 100%;
+	height: auto;
+	max-width: 100%;
 }
+
 .form-signin {
 	@extend .well;
 

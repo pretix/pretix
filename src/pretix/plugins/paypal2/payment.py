@@ -320,7 +320,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                     "EXPRESS_CHECKOUT"
                 ],
                 "partner_config_override": {
-                    "partner_logo_url": urllib.parse.urljoin(settings.SITE_URL, static('pretixbase/img/pretix-logo.svg')),
+                    "partner_logo_url": urllib.parse.urljoin(settings.SITE_URL, static('pretixbase/img/social-dancing-logo.svg')),
                     "return_url": build_global_uri('plugins:paypal2:isu.return', kwargs={
                         'organizer': self.event.organizer.slug,
                         'event': self.event.slug,
