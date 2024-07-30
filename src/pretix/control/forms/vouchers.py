@@ -41,9 +41,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import EmailValidator
 from django.db.models.functions import Upper
 from django.urls import reverse
-from django.utils.translation import (
-    gettext_lazy as _, gettext_noop, pgettext_lazy,
-)
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.email import get_available_placeholders
@@ -279,9 +277,9 @@ class VoucherBulkForm(VoucherForm):
         widget=MarkdownTextarea(attrs={'data-display-dependency': '#id_send'}),
         required=False,
         initial=_('Hello,\n\n'
-                             'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
-                             'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,  \n'
-                             'Your {event} team')
+                  'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
+                  'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,  \n'
+                  'Your {event} team')
     )
     send_recipients = forms.CharField(
         label=_('Recipients'),
