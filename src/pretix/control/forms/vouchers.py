@@ -338,7 +338,6 @@ class VoucherBulkForm(VoucherForm):
 
         with language(self.instance.event.settings.locale, self.instance.event.settings.region):
             for f in ("send_subject", "send_message"):
-                print(repr(self.fields[f].initial), self.instance.event.settings.locale)
                 self.fields[f].initial = str(_(self.fields[f].initial))
 
         if 'seat' in self.fields:
