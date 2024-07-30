@@ -844,6 +844,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'reusable_media_type_nfc_mf0aes_autocreate_giftcard',
         'reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency',
         'reusable_media_type_nfc_mf0aes_random_uid',
+        'seating_allow_blocked_seats_for_channel',
     ]
     readonly_fields = [
         # These are read-only since they are currently only settable on organizers, not events
