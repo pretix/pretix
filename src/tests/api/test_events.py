@@ -1274,6 +1274,7 @@ def test_get_event_settings(token_client, organizer, event):
     )
     assert resp.status_code == 200
     assert resp.data['imprint_url'] == "https://example.org"
+    assert resp.data['seating_allow_blocked_seats_for_channel'] == []
 
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/settings/?explain=true'.format(organizer.slug, event.slug),
@@ -1301,14 +1302,17 @@ def test_patch_event_settings(token_client, organizer, event):
                 }
             ],
             'reusable_media_active': True,  # readonly, ignored
+            'seating_allow_blocked_seats_for_channel': ['web']
         },
         format='json'
     )
     assert resp.status_code == 200
     assert resp.data['imprint_url'] == "https://example.com"
+    assert resp.data['seating_allow_blocked_seats_for_channel'] == ['web']
     assert not resp.data['reusable_media_active']
     event.settings.flush()
     assert event.settings.imprint_url == 'https://example.com'
+    assert event.settings.seating_allow_blocked_seats_for_channel == ['web']
     assert not event.settings.reusable_media_active
     assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 1
 
@@ -1441,6 +1445,18 @@ def test_patch_event_settings_validation(token_client, organizer, event):
     assert resp.status_code == 400
     assert resp.data == {
         'cancel_allow_user_until': ['Invalid relative date']
+    }
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'seating_allow_blocked_seats_for_channel': ['lolnope'],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'seating_allow_blocked_seats_for_channel': ['The value \"lolnope\" is not a valid sales channel.']
     }
 
 
