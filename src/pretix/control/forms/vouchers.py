@@ -272,13 +272,13 @@ class VoucherBulkForm(VoucherForm):
         label=_("Subject"),
         widget=forms.TextInput(attrs={'data-display-dependency': '#id_send'}),
         required=False,
-        initial=gettext_noop('Your voucher for {event}')
+        initial=_('Your voucher for {event}')
     )
     send_message = forms.CharField(
         label=_("Message"),
         widget=MarkdownTextarea(attrs={'data-display-dependency': '#id_send'}),
         required=False,
-        initial=gettext_noop('Hello,\n\n'
+        initial=_('Hello,\n\n'
                              'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
                              'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,  \n'
                              'Your {event} team')
@@ -338,7 +338,7 @@ class VoucherBulkForm(VoucherForm):
 
         with language(self.instance.event.settings.locale, self.instance.event.settings.region):
             for f in ("send_subject", "send_message"):
-                self.fields[f].initial = str(_(self.fields[f].initial))
+                self.fields[f].initial = str(self.fields[f].initial)
 
         if 'seat' in self.fields:
             self.fields['seats'] = forms.CharField(
