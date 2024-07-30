@@ -61,3 +61,11 @@ the GNU AGPL license v3 with additional terms. See the LICENSE file for the comp
 .. _Code of Conduct: https://docs.pretix.eu/en/latest/development/contribution/codeofconduct.html
 .. _pretix.eu: https://pretix.eu
 .. _blog: https://pretix.eu/about/en/blog/
+
+Changes
+-------
+
+This fork of pretix includes modifications made in accordance with the GNU AGPLv3 license, with additional terms as 
+specified in the LICENSE file. The following changes have been applied:
+
+- Theme and logo updates to align with Social Dancing branding
