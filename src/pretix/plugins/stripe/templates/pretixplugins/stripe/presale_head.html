@@ -2,10 +2,10 @@
 {% load compress %}
 {% load i18n %}
 
-{% compress js %}
+{% compress js file stripe %}
     <script type="text/javascript" src="{% static "pretixplugins/stripe/pretix-stripe.js" %}"></script>
 {% endcompress %}
-{% compress css %}
+{% compress css file stripe %}
     <link type="text/css" rel="stylesheet" href="{% static "pretixplugins/stripe/pretix-stripe.css" %}">
 {% endcompress %}
 {% if testmode %}
