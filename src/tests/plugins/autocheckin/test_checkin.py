@@ -108,6 +108,29 @@ def test_items_limit(event, item, order, checkin_list):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def test_variations_limit_mixed_order(event, item, order, checkin_list):
+    var = item.variations.create(value="V1")
+    op = order.positions.first()
+    op.variation = var
+    op.save()
+
+    var2 = item.variations.create(value="V2")
+    order.positions.create(order=order, item=item, price=2, variation=var2)
+
+    acr = event.autocheckinrule_set.create(
+        list=checkin_list,
+        mode=AutoCheckinRule.MODE_PLACED,
+        all_products=False,
+    )
+    acr.limit_variations.add(var)
+
+    order_placed.send(event, order=order)
+    assert order.positions.first().checkins.exists()
+    assert not order.positions.last().checkins.exists()
+
+
+@pytest.mark.django_db
+@scopes_disabled()
 def test_variations_limit(event, item, order, checkin_list):
     var = item.variations.create(value="V1")
     op = order.positions.first()

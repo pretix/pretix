@@ -137,6 +137,7 @@ def perform_auto_checkin(sender, order, mode, payment_methods):
         )
         .distinct()
         .select_related("list")
+        .prefetch_related("limit_products", "limit_variations")
     )
 
     if any(r.list is None for r in rules):
@@ -148,6 +149,8 @@ def perform_auto_checkin(sender, order, mode, payment_methods):
         all_lists = []
 
     for r in rules:
+        r_item_ids = {i.pk for i in r.limit_products.all()}
+        r_variation_ids = {v.pk for v in r.limit_variations.all()}
         if r.list is not None:
             lists = [r.list]
         else:
@@ -159,6 +162,10 @@ def perform_auto_checkin(sender, order, mode, payment_methods):
                     i.pk for i in cl.limit_products.all()
                 }:
                     continue
+
+                if not (r.all_products or op.item_id in r_item_ids or op.variation_id in r_variation_ids):
+                    continue
+
                 if cl.subevent_id and cl.subevent_id != op.subevent_id:
                     continue
 
