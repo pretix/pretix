@@ -40,7 +40,6 @@ from urllib.parse import urlencode
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Max, Q
 from django.forms import ChoiceField, RadioSelect
 from django.forms.formsets import DELETION_FIELD_NAME

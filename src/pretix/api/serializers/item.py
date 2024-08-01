@@ -459,7 +459,6 @@ class ItemCategorySerializer(I18nAwareModelSerializer):
         return data
 
 
-
 class QuestionOptionSerializer(I18nAwareModelSerializer):
     identifier = serializers.CharField(allow_null=True)
 

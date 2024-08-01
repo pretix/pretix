@@ -96,7 +96,7 @@ class CrossSellingService:
             match = set(match.pk for match in category.cross_selling_match_products.only('pk'))  # TODO prefetch this
             return (category.items.all(), {}) if any(pos.item.pk in match for pos in self.cartpositions) else (None, {})
         if category.cross_selling_condition == 'discounts':
-            my_item_pks = [item.id for item in category.items.all()]  #category.items.values_list('pk', flat=True)
+            my_item_pks = [item.id for item in category.items.all()]
             potential_discount_items = {
                 item.pk: (max_count, discount_rule)
                 for item, max_count, discount_rule in self._potential_discounts_by_item_for_current_cart

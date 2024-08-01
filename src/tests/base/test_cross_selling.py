@@ -27,10 +27,10 @@ from typing import List, Tuple
 import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from tests import assert_num_queries
 
 from pretix.base.models import CartPosition, Discount, Event, Organizer
 from pretix.base.services.cross_selling import CrossSellingService
-from tests import assert_num_queries
 
 
 @pytest.fixture
@@ -466,6 +466,7 @@ def test_five_tickets_one_free(event):
         recommendations='''             Price     Discounted Price    Max Count
         '''
     )
+
 
 @scopes_disabled()
 @pytest.mark.django_db
