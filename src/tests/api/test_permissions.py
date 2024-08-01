@@ -192,6 +192,10 @@ event_permission_sub_urls = [
     ('post', 'can_change_event_settings', 'item_meta_properties/', 400),
     ('patch', 'can_change_event_settings', 'item_meta_properties/0/', 404),
     ('delete', 'can_change_event_settings', 'item_meta_properties/0/', 404),
+    ('get', None, 'seats/', 200),
+    ('get', 'can_view_orders', 'seats/?expand=orderposition', 200),
+    ('get', 'can_view_orders', 'seats/?expand=cartposition', 200),
+    ('get', 'can_view_vouchers', 'seats/?expand=voucher', 200),
     ('get', None, 'seats/1/', 404),
     ('patch', 'can_change_event_settings', 'seats/1/', 404),
 ]
