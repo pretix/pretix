@@ -23,7 +23,7 @@ row_label                             string                     Additional labe
 seat_number                           string                     Number of the seat within the row
 seat_label                            string                     Additional label of the seat (or ``null``)
 seat_guid                             string                     Identifier of the seat within the seating plan
-product                               integer                    Internal ID of the product that's mapped to this seat
+product                               integer                    Internal ID of the product that is mapped to this seat
 blocked                               boolean                    Whether this seat is blocked manually.
 orderposition                         integer / object           Internal ID of an order position reserving this seat.
 cartposition                          integer / object           Internal ID of a cart position reserving this seat.
@@ -103,7 +103,7 @@ Endpoints
    :query string seat_guid: Only show seats with the given seat_guid.
    :query string blocked: Only show seats with the given blocked status.
    :query string expand: If you pass ``"orderposition"``, ``"cartposition"``, or ``"voucher"``, the respective field will be
-                         shown as a nested value instead of just an ID.
+                         shown as a nested value instead of just an ID. This requires permission to access that object.
                          The nested objects are identical to the respective resources, except that order positions
                          will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
                          matching easier, and won't include the `seat` attribute, as that would be redundant.
@@ -196,7 +196,7 @@ Endpoints
    :param subevent_id: The ``id`` field of the subevent to fetch
    :param id: The ``id`` field of the seat to fetch
    :query string expand: If you pass ``"orderposition"``, ``"cartposition"``, or ``"voucher"``, the respective field will be
-                         shown as a nested value instead of just an ID.
+                         shown as a nested value instead of just an ID. This requires permission to access that object.
                          The nested objects are identical to the respective resources, except that order positions
                          will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
                          matching easier, and won't include the `seat` attribute, as that would be redundant.
