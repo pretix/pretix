@@ -1218,6 +1218,7 @@ def test_set_seat_ok(token_client, organizer, event, seatingplan, seat1, item):
     assert resp.status_code == 200
     assert resp.data['voucher']['id'] == v.pk
 
+
 @pytest.mark.django_db
 def test_save_set_seat(token_client, organizer, event, seatingplan, seat1, item):
     with scopes_disabled():

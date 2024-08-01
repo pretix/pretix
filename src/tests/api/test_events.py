@@ -42,8 +42,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
-from django_scopes import scopes_disabled, scope
-
+from django_scopes import scope, scopes_disabled
 from tests import assert_num_queries
 from tests.const import SAMPLE_PNG
 
@@ -1619,4 +1618,3 @@ def test_event_expand_seat_querycount(token_client, organizer, event, seatingpla
         assert resp.data['results'][0]['voucher']['id'] == v0.pk
         assert resp.data['results'][1]['voucher']['id'] == v1.pk
         assert resp.data['results'][2]['voucher']['id'] == v2.pk
-
