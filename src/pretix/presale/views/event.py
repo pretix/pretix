@@ -73,7 +73,9 @@ from pretix.base.models.items import (
 )
 from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.quotas import QuotaAvailability
-from pretix.base.timemachine import has_time_machine_permission
+from pretix.base.timemachine import (
+    has_time_machine_permission, time_machine_now,
+)
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
@@ -125,8 +127,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
         requires_seat = Value(0, output_field=IntegerField())
 
     variation_q = (
-        Q(Q(available_from__isnull=True) | Q(available_from__lte=now()) | Q(available_from_mode='info')) &
-        Q(Q(available_until__isnull=True) | Q(available_until__gte=now()) | Q(available_until_mode='info'))
+        Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()) | Q(available_from_mode='info')) &
+        Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()) | Q(available_until_mode='info'))
     )
     if not voucher or not voucher.show_hidden_items:
         variation_q &= Q(hide_without_voucher=False)
@@ -143,8 +145,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
             subevent_disabled=Exists(
                 SubEventItemVariation.objects.filter(
                     Q(disabled=True)
-                    | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
-                    | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
+                    | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=time_machine_now()))
+                    | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=time_machine_now())),
                     variation_id=OuterRef('pk'),
                     subevent=subevent,
                 )
