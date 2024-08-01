@@ -1794,10 +1794,6 @@ class StripeRevolutPay(StripeRedirectMethod):
         'available.'
     )
 
-    @property
-    def is_enabled(self) -> bool:
-        return self.settings.get('_enabled', as_type=bool) and self.settings.get('method_wechatpay', as_type=bool)
-
     def _payment_intent_kwargs(self, request, payment):
         return {
             "payment_method_data": {
