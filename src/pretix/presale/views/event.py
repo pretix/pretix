@@ -217,8 +217,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
         subevent_disabled=Exists(
             SubEventItem.objects.filter(
                 Q(disabled=True)
-                | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
-                | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
+                | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=time_machine_now()))
+                | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=time_machine_now())),
                 item_id=OuterRef('pk'),
                 subevent=subevent,
             )
