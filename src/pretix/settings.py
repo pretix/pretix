@@ -38,6 +38,7 @@ import logging
 import os
 import sys
 from json import loads
+from pathlib import Path
 from urllib.parse import urlparse
 
 import importlib_metadata as metadata
@@ -70,14 +71,10 @@ MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 PROFILE_DIR = os.path.join(DATA_DIR, 'profiles')
 CACHE_DIR = config.get('pretix', 'cachedir', fallback=os.path.join(DATA_DIR, 'cache'))
 
-if not os.path.exists(DATA_DIR):
-    os.mkdir(DATA_DIR)
-if not os.path.exists(LOG_DIR):
-    os.mkdir(LOG_DIR)
-if not os.path.exists(MEDIA_ROOT):
-    os.mkdir(MEDIA_ROOT)
-if not os.path.exists(CACHE_DIR):
-    os.mkdir(CACHE_DIR)
+Path(DATA_DIR).mkdir(parents=False, exist_ok=True)
+Path(LOG_DIR).mkdir(parents=False, exist_ok=True)
+Path(MEDIA_ROOT).mkdir(parents=False, exist_ok=True)
+Path(CACHE_DIR).mkdir(parents=False, exist_ok=True)
 
 if config.has_option('django', 'secret'):
     SECRET_KEY = config.get('django', 'secret')
