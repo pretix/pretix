@@ -435,6 +435,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
+                ('method_revolut_pay',
+                 forms.BooleanField(
+                     label='Revolut Pay',
+                     disabled=self.event.currency not in ['EUR', 'GBP'],
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
+                 )),
                 ('method_swish',
                  forms.BooleanField(
                      label=_('Swish'),
@@ -1773,6 +1781,24 @@ class StripeWeChatPay(StripeRedirectMethod):
                     "client": "web"
                 },
             }
+        }
+
+
+class StripeRevolutPay(StripeRedirectMethod):
+    verbose_name = _('Revolut Pay via Stripe')
+    public_name = _('Revolut Pay')
+    method = 'revolut_pay'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to users of the Revolut app. Please keep your login information '
+        'available.'
+    )
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "revolut_pay",
+            },
         }
 
 
