@@ -662,7 +662,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context = {}
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
-        if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
+        if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=time_machine_now()).count() > 50:
             if self.request.event.settings.event_list_type not in ("calendar", "week"):
                 self.request.event.settings.event_list_type = "calendar"
             context['list_type'] = "calendar"
@@ -675,7 +675,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
 
             if self.request.event.settings.event_calendar_future_only:
-                limit_before = now().astimezone(tz)
+                limit_before = time_machine_now().astimezone(tz)
             else:
                 limit_before = before
 
@@ -709,9 +709,9 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             if self.request.event.settings.event_calendar_future_only:
-                context['years'] = range(now().year, now().year + 3)
+                context['years'] = range(time_machine_now().year, time_machine_now().year + 3)
             else:
-                context['years'] = range(now().year - 2, now().year + 3)
+                context['years'] = range(time_machine_now().year - 2, time_machine_now().year + 3)
 
             context['has_before'], context['has_after'] = has_before_after(
                 Event.objects.none(),
@@ -734,7 +734,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             ) + timedelta(days=1)
 
             if self.request.event.settings.event_calendar_future_only:
-                limit_before = now().astimezone(tz)
+                limit_before = time_machine_now().astimezone(tz)
             else:
                 limit_before = before
 
@@ -772,7 +772,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     (date_fromisocalendar(year, i + 1, 1), date_fromisocalendar(year, i + 1, 7))
                     for i in range(53 if date(year, 12, 31).isocalendar()[1] == 53 else 52)
                     if not self.request.event.settings.event_calendar_future_only or
-                    date_fromisocalendar(year, i + 1, 7) > now().astimezone(tz).replace(tzinfo=None)
+                    date_fromisocalendar(year, i + 1, 7) > time_machine_now().astimezone(tz).replace(tzinfo=None)
                 ]
             context['weeks'] = [[w for w in weeks if w[0].year == year] for year in years]
             context['week_format'] = get_format('WEEK_FORMAT')
