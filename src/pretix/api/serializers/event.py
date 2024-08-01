@@ -1003,7 +1003,7 @@ class SeatSerializer(I18nAwareModelSerializer):
             'orderposition', 'cartposition', 'voucher',
         )
 
-    def prefetch_expanded_data(self, items, request, expand_fields, event):
+    def prefetch_expanded_data(self, items, request, expand_fields):
         if 'orderposition' in expand_fields:
             if 'can_view_orders' not in request.eventpermset:
                 raise PermissionDenied('can_view_orders permission required for expand=orderposition')
@@ -1021,8 +1021,7 @@ class SeatSerializer(I18nAwareModelSerializer):
         if not kwargs.get('data'):
             self.prefetch_expanded_data(instance if hasattr(instance, '__iter__') else [instance],
                                         kwargs['context']['request'],
-                                        kwargs['context']['expand_fields'],
-                                        kwargs['context']['order_context']['event'])
+                                        kwargs['context']['expand_fields'])
 
         super().__init__(instance, *args, **kwargs)
 
