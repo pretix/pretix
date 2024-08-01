@@ -207,10 +207,13 @@ class ListExporter(BaseExporter):
     def get_filename(self):
         return 'export'
 
+    def get_csv_encoding(self):
+        return 'utf-8'
+
     def _render_csv(self, form_data, output_file=None, **kwargs):
         if output_file:
             if 'b' in output_file.mode:
-                output_file = io.TextIOWrapper(output_file, encoding='utf-8', newline='')
+                output_file = io.TextIOWrapper(output_file, encoding=self.get_csv_encoding(), errors='replace', newline='')
             writer = csv.writer(output_file, **kwargs)
             total = 0
             counter = 0
@@ -246,7 +249,7 @@ class ListExporter(BaseExporter):
                     if counter % max(10, total // 100) == 0:
                         self.progress_callback(counter / total * 100)
                 writer.writerow(line)
-            return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
+            return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode(self.get_csv_encoding(), errors='replace')
 
     def prepare_xlsx_sheet(self, ws):
         pass
