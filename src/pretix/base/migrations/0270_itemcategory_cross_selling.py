@@ -15,12 +15,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="itemcategory",
             name="cross_selling_condition",
-            field=models.CharField(null=True),
+            field=models.CharField(null=True, max_length=10),
         ),
         migrations.AddField(
             model_name="itemcategory",
             name="cross_selling_mode",
-            field=models.CharField(null=True),
+            field=models.CharField(null=True, max_length=5),
         ),
         migrations.AddField(
             model_name="itemcategory",
