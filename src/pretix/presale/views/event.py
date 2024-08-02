@@ -73,7 +73,9 @@ from pretix.base.models.items import (
 )
 from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.quotas import QuotaAvailability
-from pretix.base.timemachine import has_time_machine_permission
+from pretix.base.timemachine import (
+    has_time_machine_permission, time_machine_now,
+)
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
@@ -125,8 +127,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
         requires_seat = Value(0, output_field=IntegerField())
 
     variation_q = (
-        Q(Q(available_from__isnull=True) | Q(available_from__lte=now()) | Q(available_from_mode='info')) &
-        Q(Q(available_until__isnull=True) | Q(available_until__gte=now()) | Q(available_until_mode='info'))
+        Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()) | Q(available_from_mode='info')) &
+        Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()) | Q(available_until_mode='info'))
     )
     if not voucher or not voucher.show_hidden_items:
         variation_q &= Q(hide_without_voucher=False)
@@ -143,8 +145,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
             subevent_disabled=Exists(
                 SubEventItemVariation.objects.filter(
                     Q(disabled=True)
-                    | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
-                    | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
+                    | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=time_machine_now()))
+                    | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=time_machine_now())),
                     variation_id=OuterRef('pk'),
                     subevent=subevent,
                 )
@@ -215,8 +217,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
         subevent_disabled=Exists(
             SubEventItem.objects.filter(
                 Q(disabled=True)
-                | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
-                | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
+                | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=time_machine_now()))
+                | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=time_machine_now())),
                 item_id=OuterRef('pk'),
                 subevent=subevent,
             )
@@ -660,7 +662,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context = {}
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
-        if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
+        if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=time_machine_now()).count() > 50:
             if self.request.event.settings.event_list_type not in ("calendar", "week"):
                 self.request.event.settings.event_list_type = "calendar"
             context['list_type'] = "calendar"
@@ -673,7 +675,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
 
             if self.request.event.settings.event_calendar_future_only:
-                limit_before = now().astimezone(tz)
+                limit_before = time_machine_now().astimezone(tz)
             else:
                 limit_before = before
 
@@ -707,9 +709,9 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             if self.request.event.settings.event_calendar_future_only:
-                context['years'] = range(now().year, now().year + 3)
+                context['years'] = range(time_machine_now().year, time_machine_now().year + 3)
             else:
-                context['years'] = range(now().year - 2, now().year + 3)
+                context['years'] = range(time_machine_now().year - 2, time_machine_now().year + 3)
 
             context['has_before'], context['has_after'] = has_before_after(
                 Event.objects.none(),
@@ -732,7 +734,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             ) + timedelta(days=1)
 
             if self.request.event.settings.event_calendar_future_only:
-                limit_before = now().astimezone(tz)
+                limit_before = time_machine_now().astimezone(tz)
             else:
                 limit_before = before
 
@@ -770,7 +772,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     (date_fromisocalendar(year, i + 1, 1), date_fromisocalendar(year, i + 1, 7))
                     for i in range(53 if date(year, 12, 31).isocalendar()[1] == 53 else 52)
                     if not self.request.event.settings.event_calendar_future_only or
-                    date_fromisocalendar(year, i + 1, 7) > now().astimezone(tz).replace(tzinfo=None)
+                    date_fromisocalendar(year, i + 1, 7) > time_machine_now().astimezone(tz).replace(tzinfo=None)
                 ]
             context['weeks'] = [[w for w in weeks if w[0].year == year] for year in years]
             context['week_format'] = get_format('WEEK_FORMAT')
