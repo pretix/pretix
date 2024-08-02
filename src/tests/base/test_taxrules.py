@@ -95,6 +95,7 @@ def test_reverse_charge_no_country(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -117,6 +118,7 @@ def test_reverse_charge_individual_same_country(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -139,6 +141,7 @@ def test_reverse_charge_individual_eu(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -161,6 +164,7 @@ def test_reverse_charge_individual_3rdc(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code='O',
     )
 
 
@@ -183,6 +187,7 @@ def test_reverse_charge_business_same_country(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -205,6 +210,7 @@ def test_reverse_charge_business_eu(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -227,6 +233,7 @@ def test_reverse_charge_business_3rdc(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code='O',
     )
 
 
@@ -251,6 +258,7 @@ def test_reverse_charge_valid_vat_id_business_same_country(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -275,6 +283,7 @@ def test_reverse_charge_valid_vat_id_business_eu(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code='AE',
     )
 
 
@@ -299,6 +308,7 @@ def test_reverse_charge_valid_vat_id_business_3rdc(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code='O',
     )
 
 
@@ -323,6 +333,7 @@ def test_reverse_charge_disabled(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -350,6 +361,7 @@ def test_custom_rules_override(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -378,6 +390,7 @@ def test_custom_rules_in_order(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -403,6 +416,7 @@ def test_custom_rules_any_country(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code=None,
     )
 
 
@@ -434,6 +448,7 @@ def test_custom_rules_eu_country(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -459,6 +474,7 @@ def test_custom_rules_specific_country(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code=None,
     )
 
     ia = InvoiceAddress(
@@ -474,6 +490,7 @@ def test_custom_rules_specific_country(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -501,6 +518,7 @@ def test_custom_rules_specific_state(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
     ia = InvoiceAddress(
@@ -517,6 +535,7 @@ def test_custom_rules_specific_state(event):
         tax=Decimal('30.00'),
         rate=Decimal('30.00'),
         name='',
+        code=None,
     )
 
     ia = InvoiceAddress(
@@ -533,6 +552,7 @@ def test_custom_rules_specific_state(event):
         tax=Decimal('20.00'),
         rate=Decimal('20.00'),
         name='',
+        code=None,
     )
 
     ia = InvoiceAddress(
@@ -549,6 +569,7 @@ def test_custom_rules_specific_state(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code=None,
     )
 
 
@@ -574,6 +595,7 @@ def test_custom_rules_individual(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code=None,
     )
 
     ia = InvoiceAddress(
@@ -589,6 +611,7 @@ def test_custom_rules_individual(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -614,6 +637,7 @@ def test_custom_rules_business(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code=None,
     )
 
     ia = InvoiceAddress(
@@ -629,6 +653,7 @@ def test_custom_rules_business(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
 
@@ -654,6 +679,7 @@ def test_custom_rules_vat_id(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
 
     ia = InvoiceAddress(
@@ -671,6 +697,7 @@ def test_custom_rules_vat_id(event):
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
+        code='AE',
     )
 
 
@@ -696,6 +723,7 @@ def test_custom_rules_country_rate(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -712,6 +740,7 @@ def test_custom_rules_country_rate(event):
         tax=Decimal('100.00'),
         rate=Decimal('100.00'),
         name='',
+        code=None,
     )
 
 
@@ -738,6 +767,7 @@ def test_custom_rules_country_rate_keep_gross_if_rate_changes(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
+        code=None,
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -754,6 +784,7 @@ def test_custom_rules_country_rate_keep_gross_if_rate_changes(event):
         tax=Decimal('55.00'),
         rate=Decimal('100.00'),
         name='',
+        code=None,
     )
 
 
@@ -781,6 +812,7 @@ def test_custom_rules_country_rate_subtract_from_gross(event):
         tax=Decimal('81.82'),
         rate=Decimal('100.00'),
         name='',
+        code=None,
     )
 
 

@@ -3270,6 +3270,7 @@ class OrderChangeManagerTests(TestCase):
         nop = self.order.positions.first()
         nop.tax_value = Decimal('0.00')
         nop.tax_rate = Decimal('0.00')
+        nop.tax_code = None
         nop.save()
         InvoiceAddress.objects.create(
             order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
