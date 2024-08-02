@@ -54,6 +54,7 @@ event_urls = [
     (None, 'taxrules/'),
     ('can_view_orders', 'waitinglistentries/'),
     ('can_view_orders', 'checkinlists/'),
+    (None, 'seats/'),
 ]
 
 event_permission_sub_urls = [
@@ -191,6 +192,12 @@ event_permission_sub_urls = [
     ('post', 'can_change_event_settings', 'item_meta_properties/', 400),
     ('patch', 'can_change_event_settings', 'item_meta_properties/0/', 404),
     ('delete', 'can_change_event_settings', 'item_meta_properties/0/', 404),
+    ('get', None, 'seats/', 200),
+    ('get', 'can_view_orders', 'seats/?expand=orderposition', 200),
+    ('get', 'can_view_orders', 'seats/?expand=cartposition', 200),
+    ('get', 'can_view_vouchers', 'seats/?expand=voucher', 200),
+    ('get', None, 'seats/1/', 404),
+    ('patch', 'can_change_event_settings', 'seats/1/', 404),
 ]
 
 org_permission_sub_urls = [
@@ -254,6 +261,7 @@ org_permission_sub_urls = [
     ('get', 'can_change_teams', 'teams/{team_id}/tokens/0/', 404),
     ('delete', 'can_change_teams', 'teams/{team_id}/tokens/0/', 404),
     ('post', 'can_change_teams', 'teams/{team_id}/tokens/', 400),
+    ('get', 'can_manage_reusable_media', 'reusablemedia/1/', 404),
 ]
 
 

@@ -2010,6 +2010,14 @@ def test_order_create_with_seat(token_client, organizer, event, item, quota, sea
         p = o.positions.first()
     assert p.seat == seat
 
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/{}/'.format(organizer.slug, event.slug, seat.pk))
+    assert resp.status_code == 200
+    assert resp.data['orderposition'] == p.pk
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/{}/?expand=orderposition'.format(organizer.slug, event.slug, seat.pk))
+    assert resp.status_code == 200
+    assert resp.data['orderposition']['id'] == p.pk
+
 
 @pytest.mark.django_db
 def test_order_create_with_blocked_seat_allowed(token_client, organizer, event, item, quota, seat, question):

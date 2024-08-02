@@ -47,3 +47,4 @@ at :ref:`plugin-docs`.
    auto_checkin_rules
    billing_invoices
    billing_var
+   seats

@@ -35,7 +35,7 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -52,7 +52,8 @@ from pretix.api.serializers import (
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import (
-    Device, Event, SalesChannel, TaxRule, TeamAPIToken,
+    CartPosition, Device, Event, OrderPosition, SalesChannel, Seat, TaxRule,
+    TeamAPIToken, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
@@ -970,3 +971,77 @@ class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
     class Meta:
         model = ItemMetaProperty
         fields = ('id', 'name', 'default', 'required', 'allowed_values')
+
+
+def prefetch_by_id(items, qs, id_attr, target_attr):
+    """
+    Prefetches a related object on each item in the given list of items by searching by id or another
+    unique field. The id value is read from the attribute on item specified in `id_attr`, searched on queryset `qs` by
+    the primary key, and the resulting prefetched model object is stored into `target_attr` on the item.
+    """
+    ids = [getattr(item, id_attr) for item in items if getattr(item, id_attr)]
+    if ids:
+        result = qs.in_bulk(id_list=ids)
+        for item in items:
+            setattr(item, target_attr, result.get(getattr(item, id_attr)))
+
+
+class SeatSerializer(I18nAwareModelSerializer):
+    orderposition = serializers.IntegerField(source='orderposition_id')
+    cartposition = serializers.IntegerField(source='cartposition_id')
+    voucher = serializers.IntegerField(source='voucher_id')
+
+    class Meta:
+        model = Seat
+        read_only_fields = (
+            'id', 'subevent', 'zone_name', 'row_name', 'row_label',
+            'seat_number', 'seat_label', 'seat_guid', 'product',
+            'orderposition', 'cartposition', 'voucher',
+        )
+        fields = (
+            'id', 'subevent', 'zone_name', 'row_name', 'row_label',
+            'seat_number', 'seat_label', 'seat_guid', 'product', 'blocked',
+            'orderposition', 'cartposition', 'voucher',
+        )
+
+    def prefetch_expanded_data(self, items, request, expand_fields):
+        if 'orderposition' in expand_fields:
+            if 'can_view_orders' not in request.eventpermset:
+                raise PermissionDenied('can_view_orders permission required for expand=orderposition')
+            prefetch_by_id(items, OrderPosition.objects.prefetch_related('order'), 'orderposition_id', 'orderposition')
+        if 'cartposition' in expand_fields:
+            if 'can_view_orders' not in request.eventpermset:
+                raise PermissionDenied('can_view_orders permission required for expand=cartposition')
+            prefetch_by_id(items, CartPosition.objects, 'cartposition_id', 'cartposition')
+        if 'voucher' in expand_fields:
+            if 'can_view_vouchers' not in request.eventpermset:
+                raise PermissionDenied('can_view_vouchers permission required for expand=voucher')
+            prefetch_by_id(items, Voucher.objects, 'voucher_id', 'voucher')
+
+    def __init__(self, instance, *args, **kwargs):
+        if not kwargs.get('data'):
+            self.prefetch_expanded_data(instance if hasattr(instance, '__iter__') else [instance],
+                                        kwargs['context']['request'],
+                                        kwargs['context']['expand_fields'])
+
+        super().__init__(instance, *args, **kwargs)
+
+        if 'orderposition' in self.context['expand_fields']:
+            from pretix.api.serializers.media import (
+                NestedOrderPositionSerializer,
+            )
+            self.fields['orderposition'] = NestedOrderPositionSerializer(read_only=True, context=self.context['order_context'])
+            try:
+                del self.fields['orderposition'].fields['seat']
+            except KeyError:
+                pass
+
+        if 'cartposition' in self.context['expand_fields']:
+            from pretix.api.serializers.cart import CartPositionSerializer
+            self.fields['cartposition'] = CartPositionSerializer(read_only=True)
+            del self.fields['cartposition'].fields['seat']
+
+        if 'voucher' in self.context['expand_fields']:
+            from pretix.api.serializers.voucher import VoucherSerializer
+            self.fields['voucher'] = VoucherSerializer(read_only=True)
+            del self.fields['voucher'].fields['seat']
