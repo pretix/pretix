@@ -19,6 +19,7 @@
             <th>{% trans "Date" %}</th>
             <th>{% trans "Product" %}</th>
             <th class="text-right flip">{% trans "Tax rate" %}</th>
+            <th>{% trans "Tax code" %}</th>
             <th class="text-right flip">{% trans "Quantity" %}</th>
             <th class="text-right flip">{% trans "Single price" %}</th>
             <th class="text-right flip">{% trans "Total tax value" %}</th>
@@ -52,6 +53,7 @@
                     {% endif %}
                 </td>
                 <td class="text-right flip">{{ t.tax_rate }} %</td>
+                <td>{{ t.get_tax_code_display }}</td>
                 <td class="text-right flip">{{ t.count }} &times;</td>
                 <td class="text-right flip">{{ t.price|money:request.event.currency }}</td>
                 <td class="text-right flip">{{ t.full_tax_value|money:request.event.currency }}</td>
@@ -64,8 +66,8 @@
         <td>
             <strong>{% trans "Sum" %}</strong>
         </td>
-        <td>
-        </td>
+        <td></td>
+        <td></td>
         <td></td>
         <td class="text-right flip">
             <strong>

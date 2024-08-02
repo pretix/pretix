@@ -31,6 +31,7 @@ TEST_TAXRULE_RES = {
     'keep_gross_if_rate_changes': False,
     'name': {'en': 'VAT'},
     'rate': '19.00',
+    'code': 'S/standard',
     'price_includes_tax': True,
     'eu_reverse_charge': False,
     'home_country': '',
