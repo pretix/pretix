@@ -414,6 +414,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'internal_type': '',
                 'tax_rate': '0.00',
                 'tax_value': '0.00',
+                'tax_code': None,
                 'tax_rule': None,
                 'canceled': False
             }
@@ -452,6 +453,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'voucher_budget_use': '1.50',
                 'tax_rate': '0.00',
                 'tax_value': '0.00',
+                'tax_code': None,
                 'addon_to': None,
                 'subevent': None,
                 'discount': None,
@@ -529,13 +531,13 @@ def test_order_create_positionids_addons_simulated(token_client, organizer, even
         {'id': 0, 'order': '', 'positionid': 1, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
-         'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
+         'voucher': None, 'tax_rate': '0.00', 'tax_code': None, 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
          'addon_to': None, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': None,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None},
         {'id': 0, 'order': '', 'positionid': 2, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
-         'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
+         'voucher': None, 'tax_rate': '0.00', 'tax_code': None, 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
          'addon_to': 1, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': None,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None}
     ]
