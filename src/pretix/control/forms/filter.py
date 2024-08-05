@@ -692,7 +692,6 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             kwargs = {
                 "label": q.question,
                 "required": False,
-                "help_text": _('Exact matches only'),
             }
             fname = 'question_{}'.format(q.pk)
             if q.type == Question.TYPE_NUMBER:
