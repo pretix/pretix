@@ -234,6 +234,7 @@ def test_reverse_charge_note(env):
     assert inv.foreign_currency_rate == Decimal("4.2408")
     assert inv.foreign_currency_rate_date == date.today()
     assert inv.foreign_currency_source == 'eu:ecb:eurofxref-daily'
+    assert inv.lines.first().tax_code == "AE"
 
 
 @pytest.mark.django_db
@@ -249,6 +250,7 @@ def test_custom_tax_note(env):
             'address_type': '',
             'action': 'vat',
             'rate': '20',
+            'code': 'S/reduced',
             'invoice_text': {
                 'de': 'Polnische Steuer anwendbar',
                 'en': 'Polish tax applies'
@@ -268,6 +270,7 @@ def test_custom_tax_note(env):
 
     inv = generate_invoice(order)
     assert "Polish tax applies" in inv.additional_text
+    assert inv.lines.first().tax_code == "S/reduced"
 
 
 @pytest.mark.django_db
