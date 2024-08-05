@@ -728,11 +728,13 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             elif q.type == Question.TYPE_DATE:
                 self.fields[fname] = forms.DateField(
                     widget=DatePickerWidget(),
+                    help_text=_('Exact matches only'),
                     **kwargs,
                 )
             elif q.type == Question.TYPE_TIME:
                 self.fields[fname] = forms.TimeField(
                     widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
+                    help_text=_('Exact matches only'),
                     **kwargs,
                 )
             elif q.type == Question.TYPE_DATETIME:
@@ -742,12 +744,16 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
                         min_date=q.valid_datetime_min,
                         max_date=q.valid_datetime_max
                     ),
+                    help_text=_('Exact matches only'),
                     **kwargs,
                 )
             elif q.type == Question.TYPE_FILE:
                 continue
             else:
-                self.fields[fname] = forms.CharField(**kwargs)
+                self.fields[fname] = forms.CharField(
+                    help_text=_('Exact matches only'),
+                    **kwargs,
+                )
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
