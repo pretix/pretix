@@ -1524,23 +1524,40 @@ class TaxRuleLineForm(I18nForm):
         })
     )
 
+    def __init__(self, *args, **kwargs):
+        self.parent_form = kwargs.pop("parent_form")
+        super().__init__(*args, **kwargs)
+
     def clean(self):
         d = super().clean()
+
+        parent_code = self.parent_form.cleaned_data.get("code")
+        parent_rate = self.parent_form.cleaned_data.get("rate")
+
+        code = d.get("code") or parent_code
+        rate = d.get("rate")
+        if rate is None:
+            rate = parent_rate
 
         if d.get("action") in ("reverse", "no", "block") and d.get("rate"):
             raise ValidationError(_("A combination of this calculation mode with a non-zero tax rate does not make sense."))
 
-        if d.get("action") == "reverse" and d.get("code") and d.get("code") != "AE":
-            # Reverse charge but code is not reverse charge
+        if d.get("action") == "reverse" and d.get("code") and code != "AE":
+            # Reverse charge but code is not reverse charge -- this is the one case we ignore if the "default code"
+            # is used because it is the one scenario we can auto-fix
             raise ValidationError(_("This combination of calculation mode and tax code does not make sense."))
 
-        if d.get("action") == "no" and d.get("code") and d["code"].split("/")[0] in ("S", "AE", "L", "M", "B"):
+        if d.get("action") == "no" and code and code.split("/")[0] in ("S", "AE", "L", "M", "B"):
             # No VAT but code indicates VAT
             raise ValidationError(_("This combination of calculation mode and tax code does not make sense."))
 
-        if d.get("action") == "vat" and d.get("code") and d.get("rate") != Decimal("0.00") and d["code"].split("/")[0] in ("O", "E", "Z", "G", "K"):
+        if d.get("action") == "vat" and code and rate != Decimal("0.00") and code.split("/")[0] in ("O", "E", "Z", "G", "K", "AE"):
             # VAT, but code indicates exempt
-            raise ValidationError(_("This combination of calculation mode and tax code does not make sense."))
+            raise ValidationError(_("A combination of this tax code with a non-zero tax rate does not make sense."))
+
+        if d.get("action") == "vat" and code and rate == Decimal("0.00") and code.split("/")[0] in ("S", "L", "M", "B"):
+            # no VAT, but code indicates non-exempt
+            raise ValidationError(_("A combination of this tax code with a zero tax rate does not make sense."))
 
         return d
 
@@ -1555,8 +1572,16 @@ class I18nBaseFormSet(I18nFormSetMixin, forms.BaseFormSet):
         super().__init__(*args, **kwargs)
 
 
+class BaseTaxRuleLineFormSet(I18nBaseFormSet):
+
+    def __init__(self, *args, **kwargs):
+        self.parent_form = kwargs.pop('parent_form')
+        super().__init__(*args, **kwargs)
+        self.form_kwargs['parent_form'] = self.parent_form
+
+
 TaxRuleLineFormSet = formset_factory(
-    TaxRuleLineForm, formset=I18nBaseFormSet,
+    TaxRuleLineForm, formset=BaseTaxRuleLineFormSet,
     can_order=True, can_delete=True, extra=0
 )
 

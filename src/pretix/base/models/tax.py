@@ -412,10 +412,14 @@ class TaxRule(LoggedModel):
             raise ValidationError(_('You need to set your home country to use the reverse charge feature.'))
 
         if self.rate != Decimal("0.00") and self.code and (self.code.split("/")[0] in ("O", "E", "Z", "G", "K", "AE")):
-            raise ValidationError(_("A combination of this tax code with a non-zero tax rate does not make sense."))
+            raise ValidationError({
+                "code": _("A combination of this tax code with a non-zero tax rate does not make sense.")
+            })
 
-        if self.rate == Decimal("0.00") and self.code and (self.code.split("/")[0] in ("S", "L", "M", "B", "AE")):
-            raise ValidationError(_("A combination of this tax code with a zero tax rate does not make sense."))
+        if self.rate == Decimal("0.00") and self.code and (self.code.split("/")[0] in ("S", "L", "M", "B")):
+            raise ValidationError({
+                "code": _("A combination of this tax code with a zero tax rate does not make sense.")
+            })
 
     def __str__(self):
         if self.price_includes_tax:
