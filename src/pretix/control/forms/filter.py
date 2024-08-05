@@ -695,7 +695,10 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             }
             fname = 'question_{}'.format(q.pk)
             if q.type == Question.TYPE_NUMBER:
-                self.fields[fname] = forms.DecimalField(**kwargs)
+                self.fields[fname] = forms.DecimalField(
+                    help_text=_('Exact matches only'),
+                    **kwargs,
+                )
             elif q.type == Question.TYPE_BOOLEAN:
                 self.fields[fname] = forms.ChoiceField(
                     choices=(
