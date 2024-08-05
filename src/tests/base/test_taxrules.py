@@ -46,64 +46,82 @@ def event():
 def test_from_gross_price(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=True
+        rate=Decimal('10.00'),
+        code='S/standard',
+        price_includes_tax=True
     )
     tp = tr.tax(Decimal('100.00'))
     assert tp.gross == Decimal('100')
     assert tp.net == Decimal('90.91')
     assert tp.tax == Decimal('100.00') - Decimal('90.91')
     assert tp.rate == Decimal('10.00')
+    assert tp.code == 'S/standard'
 
 
 @pytest.mark.django_db
 def test_from_net_price(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False
+        rate=Decimal('10.00'),
+        code=None,
+        price_includes_tax=False,
     )
     tp = tr.tax(Decimal('100.00'))
     assert tp.gross == Decimal('110.00')
     assert tp.net == Decimal('100.00')
     assert tp.tax == Decimal('10.00')
     assert tp.rate == Decimal('10.00')
+    assert tp.code is None
 
 
 @pytest.mark.django_db
 def test_reverse_charge_no_address(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True,
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False,
     )
     assert not tr.is_reverse_charge(None)
     assert tr._tax_applicable(None)
+    assert tr.tax_code_for(None) == "S/standard"
 
 
 @pytest.mark.django_db
 def test_reverse_charge_no_country(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True,
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        rate=Decimal('10.00'),
+        price_includes_tax=False,
+        code="S/standard",
     )
     ia = InvoiceAddress(
     )
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
 @pytest.mark.django_db
 def test_reverse_charge_individual_same_country(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False,
     )
     ia = InvoiceAddress(
         is_business=False,
@@ -112,21 +130,26 @@ def test_reverse_charge_individual_same_country(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
 @pytest.mark.django_db
 def test_reverse_charge_individual_eu(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=False,
@@ -135,21 +158,26 @@ def test_reverse_charge_individual_eu(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
 @pytest.mark.django_db
 def test_reverse_charge_individual_3rdc(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=False,
@@ -158,6 +186,7 @@ def test_reverse_charge_individual_3rdc(event):
     assert not tr.is_reverse_charge(ia)
     assert not tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax_code_for(ia) == "O"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('100.00'),
         net=Decimal('100.00'),
@@ -171,8 +200,12 @@ def test_reverse_charge_individual_3rdc(event):
 @pytest.mark.django_db
 def test_reverse_charge_business_same_country(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -181,21 +214,26 @@ def test_reverse_charge_business_same_country(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
 @pytest.mark.django_db
 def test_reverse_charge_business_eu(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -204,21 +242,26 @@ def test_reverse_charge_business_eu(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
 @pytest.mark.django_db
 def test_reverse_charge_business_3rdc(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -227,6 +270,7 @@ def test_reverse_charge_business_3rdc(event):
     assert not tr.is_reverse_charge(ia)
     assert not tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax_code_for(ia) == "O"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('100.00'),
         net=Decimal('100.00'),
@@ -240,8 +284,12 @@ def test_reverse_charge_business_3rdc(event):
 @pytest.mark.django_db
 def test_reverse_charge_valid_vat_id_business_same_country(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -252,21 +300,26 @@ def test_reverse_charge_valid_vat_id_business_same_country(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
 @pytest.mark.django_db
 def test_reverse_charge_valid_vat_id_business_eu(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -277,6 +330,7 @@ def test_reverse_charge_valid_vat_id_business_eu(event):
     assert tr.is_reverse_charge(ia)
     assert not tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax_code_for(ia) == "AE"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('100.00'),
         net=Decimal('100.00'),
@@ -290,8 +344,12 @@ def test_reverse_charge_valid_vat_id_business_eu(event):
 @pytest.mark.django_db
 def test_reverse_charge_valid_vat_id_business_3rdc(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -302,6 +360,7 @@ def test_reverse_charge_valid_vat_id_business_3rdc(event):
     assert not tr.is_reverse_charge(ia)
     assert not tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax_code_for(ia) == "O"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('100.00'),
         net=Decimal('100.00'),
@@ -315,8 +374,12 @@ def test_reverse_charge_valid_vat_id_business_3rdc(event):
 @pytest.mark.django_db
 def test_reverse_charge_disabled(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=False, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False
+        event=event,
+        eu_reverse_charge=False,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False
     )
     ia = InvoiceAddress(
         is_business=True,
@@ -327,21 +390,26 @@ def test_reverse_charge_disabled(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
 @pytest.mark.django_db
 def test_custom_rules_override(event):
     tr = TaxRule(
-        event=event, eu_reverse_charge=True, home_country=Country('DE'),
-        rate=Decimal('10.00'), price_includes_tax=False,
+        event=event,
+        eu_reverse_charge=True,
+        home_country=Country('DE'),
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False,
         custom_rules=json.dumps([
             {'country': 'ZZ', 'address_type': '', 'action': 'vat'}
         ])
@@ -355,13 +423,14 @@ def test_custom_rules_override(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
@@ -369,9 +438,11 @@ def test_custom_rules_override(event):
 def test_custom_rules_in_order(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False,
         custom_rules=json.dumps([
-            {'country': 'ZZ', 'address_type': '', 'action': 'vat'},
+            {'country': 'ZZ', 'address_type': '', 'action': 'vat', 'code': 'S/reduced'},
             {'country': 'ZZ', 'address_type': '', 'action': 'reverse'}
         ])
     )
@@ -384,13 +455,14 @@ def test_custom_rules_in_order(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/reduced"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/reduced",
     )
 
 
@@ -398,9 +470,11 @@ def test_custom_rules_in_order(event):
 def test_custom_rules_any_country(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False,
         custom_rules=json.dumps([
-            {'country': 'ZZ', 'address_type': '', 'action': 'no'},
+            {'country': 'ZZ', 'address_type': '', 'action': 'no', 'code': 'O'},
         ])
     )
     ia = InvoiceAddress(
@@ -410,13 +484,14 @@ def test_custom_rules_any_country(event):
     assert not tr.is_reverse_charge(ia)
     assert not tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax_code_for(ia) == "O"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('100.00'),
         net=Decimal('100.00'),
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
-        code=None,
+        code="O",
     )
 
 
@@ -424,9 +499,11 @@ def test_custom_rules_any_country(event):
 def test_custom_rules_eu_country(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False,
         custom_rules=json.dumps([
-            {'country': 'EU', 'address_type': '', 'action': 'no'},
+            {'country': 'EU', 'address_type': '', 'action': 'no', 'code': 'Z'},
         ])
     )
     ia = InvoiceAddress(
@@ -436,19 +513,21 @@ def test_custom_rules_eu_country(event):
     assert not tr.is_reverse_charge(ia)
     assert not tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax_code_for(ia) == "Z"
     ia = InvoiceAddress(
         is_business=True,
         country=Country('US')
     )
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
@@ -456,9 +535,11 @@ def test_custom_rules_eu_country(event):
 def test_custom_rules_specific_country(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        code="S/standard",
+        price_includes_tax=False,
         custom_rules=json.dumps([
-            {'country': 'AT', 'address_type': '', 'action': 'no'},
+            {'country': 'AT', 'address_type': '', 'action': 'no', 'code': 'Z'},
         ])
     )
     ia = InvoiceAddress(
@@ -468,13 +549,14 @@ def test_custom_rules_specific_country(event):
     assert not tr.is_reverse_charge(ia)
     assert not tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax_code_for(ia) == "Z"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('100.00'),
         net=Decimal('100.00'),
         tax=Decimal('0.00'),
         rate=Decimal('0.00'),
         name='',
-        code=None,
+        code="Z",
     )
 
     ia = InvoiceAddress(
@@ -490,7 +572,7 @@ def test_custom_rules_specific_country(event):
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
 
@@ -498,7 +580,8 @@ def test_custom_rules_specific_country(event):
 def test_custom_rules_specific_state(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        price_includes_tax=False,
         custom_rules=json.dumps([
             {'country': 'US-NY', 'address_type': '', 'action': 'vat', 'rate': '20.00'},
             {'country': 'US-DE', 'address_type': '', 'action': 'no'},
@@ -577,7 +660,8 @@ def test_custom_rules_specific_state(event):
 def test_custom_rules_individual(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        price_includes_tax=False,
         custom_rules=json.dumps([
             {'country': 'ZZ', 'address_type': 'individual', 'action': 'no'},
         ])
@@ -619,7 +703,8 @@ def test_custom_rules_individual(event):
 def test_custom_rules_business(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        price_includes_tax=False,
         custom_rules=json.dumps([
             {'country': 'ZZ', 'address_type': 'business', 'action': 'no'},
         ])
@@ -661,7 +746,9 @@ def test_custom_rules_business(event):
 def test_custom_rules_vat_id(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        price_includes_tax=False,
+        code="S/standard",
         custom_rules=json.dumps([
             {'country': 'EU', 'address_type': 'business_vat_id', 'action': 'reverse'},
         ])
@@ -673,13 +760,14 @@ def test_custom_rules_vat_id(event):
     assert not tr.is_reverse_charge(ia)
     assert tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax_code_for(ia) == "S/standard"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('110.00'),
         net=Decimal('100.00'),
         tax=Decimal('10.00'),
         rate=Decimal('10.00'),
         name='',
-        code=None,
+        code="S/standard",
     )
 
     ia = InvoiceAddress(
@@ -691,6 +779,7 @@ def test_custom_rules_vat_id(event):
     assert tr.is_reverse_charge(ia)
     assert not tr._tax_applicable(ia)
     assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax_code_for(ia) == "AE"
     assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
         gross=Decimal('100.00'),
         net=Decimal('100.00'),
@@ -705,7 +794,8 @@ def test_custom_rules_vat_id(event):
 def test_custom_rules_country_rate(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        price_includes_tax=False,
         custom_rules=json.dumps([
             {'country': 'EU', 'address_type': 'business_vat_id', 'action': 'vat', 'rate': '100.00'},
         ])
@@ -748,7 +838,8 @@ def test_custom_rules_country_rate(event):
 def test_custom_rules_country_rate_keep_gross_if_rate_changes(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        price_includes_tax=False,
         keep_gross_if_rate_changes=True,
         custom_rules=json.dumps([
             {'country': 'EU', 'address_type': 'business_vat_id', 'action': 'vat', 'rate': '100.00'},
@@ -792,7 +883,8 @@ def test_custom_rules_country_rate_keep_gross_if_rate_changes(event):
 def test_custom_rules_country_rate_subtract_from_gross(event):
     tr = TaxRule(
         event=event,
-        rate=Decimal('10.00'), price_includes_tax=False,
+        rate=Decimal('10.00'),
+        price_includes_tax=False,
         custom_rules=json.dumps([
             {'country': 'EU', 'address_type': 'business_vat_id', 'action': 'vat', 'rate': '100.00'},
         ])

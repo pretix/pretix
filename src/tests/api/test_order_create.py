@@ -42,18 +42,18 @@ from pretix.base.models.orders import CartPosition, OrderFee, QuestionAnswer
 
 
 @pytest.fixture
-def item(event):
-    return event.items.create(name="Budget Ticket", default_price=23)
+def taxrule(event):
+    return event.tax_rules.create(rate=Decimal('19.00'), code="S/standard")
+
+
+@pytest.fixture
+def item(event, taxrule):
+    return event.items.create(name="Budget Ticket", default_price=23, tax_rule=taxrule)
 
 
 @pytest.fixture
 def item2(event2):
     return event2.items.create(name="Budget Ticket", default_price=23)
-
-
-@pytest.fixture
-def taxrule(event):
-    return event.tax_rules.create(rate=Decimal('19.00'))
 
 
 @pytest.fixture
@@ -451,9 +451,9 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'attendee_email': None,
                 'voucher': voucher.pk,
                 'voucher_budget_use': '1.50',
-                'tax_rate': '0.00',
-                'tax_value': '0.00',
-                'tax_code': None,
+                'tax_rate': '19.00',
+                'tax_value': '3.43',
+                'tax_code': 'S/standard',
                 'addon_to': None,
                 'subevent': None,
                 'discount': None,
@@ -468,7 +468,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                      'options': [opt.pk],
                      'option_identifiers': [opt.identifier]}
                 ],
-                'tax_rule': None,
+                'tax_rule': item.tax_rule_id,
                 'pseudonymization_id': 'PREVIEW',
                 'seat': None,
                 'company': "FOOCORP",
@@ -531,14 +531,14 @@ def test_order_create_positionids_addons_simulated(token_client, organizer, even
         {'id': 0, 'order': '', 'positionid': 1, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
-         'voucher': None, 'tax_rate': '0.00', 'tax_code': None, 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
-         'addon_to': None, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': None,
+         'voucher': None, 'tax_rate': '19.00', 'tax_code': 'S/standard', 'tax_value': '3.67', 'discount': None, 'voucher_budget_use': None,
+         'addon_to': None, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': item.tax_rule_id,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None},
         {'id': 0, 'order': '', 'positionid': 2, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
-         'voucher': None, 'tax_rate': '0.00', 'tax_code': None, 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
-         'addon_to': 1, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': None,
+         'voucher': None, 'tax_rate': '19.00', 'tax_code': 'S/standard', 'tax_value': '3.67', 'discount': None, 'voucher_budget_use': None,
+         'addon_to': 1, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': item.tax_rule_id,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None}
     ]
 
