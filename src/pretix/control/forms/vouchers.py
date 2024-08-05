@@ -290,8 +290,9 @@ class VoucherBulkForm(VoucherForm):
             )
         }),
         required=False,
-        help_text=_('You can either supply a list of email addresses with one email address per line, or a CSV file with a title column '
-                    'and one or more of the columns "email", "number", "name", or "tag".')
+        help_text=_('You can either supply a list of email addresses with one email address per line, or the contents '
+                    'of a CSV file with a title column and one or more of the columns "email", "number", "name", '
+                    'or "tag".')
     )
     Recipient = namedtuple('Recipient', 'email number name tag')
 
