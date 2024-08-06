@@ -47,9 +47,7 @@ from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import SubEvent
-from pretix.base.models.log import (
-    EventLogEntryType, OrderLogEntryType, log_entry_types,
-)
+from pretix.base.logentrytypes import log_entry_types, EventLogEntryType, OrderLogEntryType
 from pretix.base.signals import (
     EventPluginSignal, event_copy_data, periodic_task,
 )

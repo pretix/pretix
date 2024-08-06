@@ -51,12 +51,9 @@ from pretix.base.models import (
     Checkin, CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
     TaxRule,
 )
-from pretix.base.models.log import (
-    DiscountLogEntryType, EventLogEntryType, ItemCategoryLogEntryType,
-    ItemLogEntryType, LogEntryType, OrderLogEntryType, QuestionLogEntryType,
-    QuotaLogEntryType, TaxRuleLogEntryType, VoucherLogEntryType,
-    log_entry_types,
-)
+from pretix.base.logentrytypes import log_entry_types, LogEntryType, EventLogEntryType, OrderLogEntryType, \
+    VoucherLogEntryType, ItemLogEntryType, QuotaLogEntryType, DiscountLogEntryType, ItemCategoryLogEntryType, \
+    QuestionLogEntryType, TaxRuleLogEntryType
 from pretix.base.signals import logentry_display, orderposition_blocked_display, app_cache
 from pretix.base.templatetags.money import money_filter
 
