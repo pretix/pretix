@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Event
-from pretix.base.models.log import EventLogEntryType, log_entry_types
+from pretix.base.logentrytypes import log_entry_types, EventLogEntryType
 from pretix.base.signals import (  # NOQA: legacy import
     EventPluginSignal, event_copy_data, item_copy_data, layout_text_variables,
     logentry_display, logentry_object_link, register_data_exporters,

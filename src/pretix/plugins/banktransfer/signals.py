@@ -25,11 +25,10 @@ from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _, gettext_noop
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models.log import OrderLogEntryType, log_entry_types
+from ...base.logentrytypes import log_entry_types, OrderLogEntryType, ClearDataShredderMixin
 from pretix.base.signals import register_payment_providers
 from pretix.control.signals import html_head, nav_event, nav_organizer
 
-from ...base.models.log import ClearDataShredderMixin
 from ...base.settings import settings_hierarkey
 from .payment import BankTransfer
 
