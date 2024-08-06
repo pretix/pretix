@@ -31,6 +31,7 @@
                 <thead>
                 <tr>
                     <th>{% trans "Product categories" %}</th>
+                    <th>{% trans "Category type" %}</th>
                     <th class="action-col-2"></th>
                 </tr>
                 </thead>
@@ -39,6 +40,9 @@
                     <tr data-dnd-id="{{ c.id }}">
                         <td>
                             <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.internal_name|default:c.name }}</a></strong>
+                        </td>
+                        <td>
+                            {{ c.get_category_type_display }}
                         </td>
                         <td class="text-right flip">
                             <button title="{% trans "Move up" %}" formaction="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
