@@ -506,7 +506,6 @@
                     </button>
                 </div>
             </div>
-
             <form method="post" action="" id="preview-form" target="_blank">
                 <div class="form-group submit-group">
                     {% csrf_token %}
@@ -522,6 +521,13 @@
                     </button>
                 </div>
             </form>
+            <p>&nbsp;</p>
+            <div class="alert alert-info" id="version-notice">
+                {% blocktrans trimmed with print_version="2.18" scan_version="1.22" %}
+                    This layout uses new features. If you print from your device, make sure you use pretixPRINT version
+                    {{ print_version }} (or newer) or pretixSCAN Desktop version {{ scan_version }} (or newer).
+                {% endblocktrans %}
+            </div>
         </div>
     </div>
     <script type="text/plain" id="schema-url">{% static "schema/pdf-layout.schema.json" %}</script>
