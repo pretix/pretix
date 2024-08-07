@@ -330,7 +330,10 @@ var form_handlers = function (el) {
         } else {
             $icon.html("<span class='fa fa-fw " + icon + " " + cls + "'></span>")
             $icon.attr("title", text);
-            $icon.tooltip('destroy').tooltip({"title": text})
+            $icon.tooltip('destroy');
+            window.setTimeout(function() {
+                $icon.tooltip({"title": text});
+            }, 250);
         }
     });
 
