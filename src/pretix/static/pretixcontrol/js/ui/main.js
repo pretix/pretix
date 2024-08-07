@@ -298,6 +298,9 @@ var form_handlers = function (el) {
             }
         }
     }).not(".no-contrast").on('changeColor create', function (e) {
+        if (e.type == 'changeColor' && !e.value) {
+            return;
+        }
         var rgb = $(this).colorpicker('color').toRGB();
         var c = contrast([255,255,255], [rgb.r, rgb.g, rgb.b]);
         var mark = 'times';
