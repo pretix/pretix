@@ -177,7 +177,7 @@
                     {% if name %}
                         <div class="row control-group pdf-info">
                             <div class="col-sm-12">
-                                <label>{% trans "Layout name" %}</label><br>
+                                <label for="pdf-info-name">{% trans "Layout name" %}</label><br>
                                 <input type="text" id="pdf-info-name" class="input-block-level form-control" name="name" value="{{ name }}">
                             </div>
                         </div>
@@ -185,11 +185,11 @@
                     <div class="row control-group pdf-info">
                         <hr/>
                         <div class="col-sm-6">
-                            <label>{% trans "Width (mm)" %}</label><br>
+                            <label for="pdf-info-width">{% trans "Width (mm)" %}</label><br>
                             <input type="number" id="pdf-info-width" class="input-block-level form-control">
                         </div>
                         <div class="col-sm-6">
-                            <label>{% trans "Height (mm)" %}</label><br>
+                            <label for="pdf-info-height">{% trans "Height (mm)" %}</label><br>
                             <input type="number" id="pdf-info-height" class="input-block-level form-control">
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                     <div class="row control-group pdf-info">
                         <hr/>
                         <div class="col-sm-12">
-                            <label>{% trans "Preferred language" %}</label><br>
+                            <label for="pdf-info-locale">{% trans "Preferred language" %}</label><br>
                             <select class="form-control" id="pdf-info-locale">
                                 <option value="">{% trans "Order locale" %}</option>
                                 {% for l in locales %}
@@ -238,7 +238,7 @@
                     </div>
                     <div class="row control-group poweredby">
                         <div class="col-sm-12">
-                            <label>{% trans "Style" %}</label><br>
+                            <label for="toolbox-poweredby-style">{% trans "Style" %}</label><br>
                             <select class="input-block-level form-control" id="toolbox-poweredby-style">
                                 <option value="dark">{% trans "Dark" %}</option>
                                 <option value="white">{% trans "Light" %}</option>
@@ -247,7 +247,7 @@
                     </div>
                     <div class="row control-group imagecontent">
                         <div class="col-sm-12">
-                            <label>{% trans "Image content" %}</label><br>
+                            <label for="toolbox-imagecontent">{% trans "Image content" %}</label><br>
                             <select class="input-block-level form-control" id="toolbox-imagecontent">
                                 <option value="">{% trans "Empty" %}</option>
                                 {% for varname, var in images.items %}
@@ -258,7 +258,7 @@
                     </div>
                     <div class="row control-group text textcontent">
                         <div class="col-sm-12">
-                            <label>{% trans "Content" %}</label><br>
+                            <label for="toolbox-content">{% trans "Content" %}</label><br>
                             <select class="input-block-level form-control" id="toolbox-content">
                                 {% for varname, var in variables.items %}
                                     {% if not var.hidden %}
@@ -293,31 +293,31 @@
                     <div class="row control-group position">
                         <hr/>
                         <div class="col-sm-6">
-                            <label>{% trans "x (mm)" %}</label><br>
+                            <label for="toolbox-position-x">{% trans "x (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
                                     id="toolbox-position-x">
                         </div>
                         <div class="col-sm-6">
-                            <label>{% trans "y (mm)" %}</label><br>
+                            <label for="toolbox-position-y">{% trans "y (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
                                     id="toolbox-position-y">
                         </div>
                     </div>
                     <div class="row control-group rectsize">
                         <div class="col-sm-6">
-                            <label>{% trans "Width (mm)" %}</label><br>
+                            <label for="toolbox-width">{% trans "Width (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
                                     id="toolbox-width">
                         </div>
                         <div class="col-sm-6">
-                            <label>{% trans "Height (mm)" %}</label><br>
+                            <label for="toolbox-height">{% trans "Height (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
                                     id="toolbox-height">
                         </div>
                     </div>
                     <div class="row control-group squaresize poweredby">
                         <div class="col-sm-12">
-                            <label>{% trans "Size (mm)" %}</label><br>
+                            <label for="toolbox-squaresize">{% trans "Size (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
                                     id="toolbox-squaresize">
                         </div>
@@ -335,13 +335,13 @@
                         </div>
                     </div>
                     <div class="row control-group text">
-                        <div class="col-sm-6">
-                            <label>{% trans "Width (mm)" %}</label><br>
+                        <div class="col-sm-6 textarea">
+                            <label for="toolbox-textwidth">{% trans "Width (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
                                     id="toolbox-textwidth">
                         </div>
                         <div class="col-sm-6">
-                            <label>{% trans "Rotation (°)" %}</label><br>
+                            <label for="toolbox-textrotation">{% trans "Rotation (°)" %}</label><br>
                             <input type="number" value="0" class="input-block-level form-control" step="0.1"
                                     id="toolbox-textrotation">
                         </div>
@@ -349,7 +349,7 @@
                     <div class="row control-group text">
                         <hr/>
                         <div class="col-sm-12">
-                            <label>{% trans "Font" %}</label><br>
+                            <label for="toolbox-fontfamily">{% trans "Font" %}</label><br>
                             <select class="input-block-level form-control" id="toolbox-fontfamily">
                                 <option>Open Sans</option>
                                 {% for family in fonts.keys %}
@@ -360,43 +360,50 @@
                     </div>
                     <div class="row control-group text">
                         <div class="col-sm-6">
-                            <label>{% trans "Font size (pt)" %}</label><br>
+                            <label for="toolbox-fontsize">{% trans "Font size (pt)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.1"
                                     id="toolbox-fontsize">
                         </div>
                         <div class="col-sm-6">
-                            <label>{% trans "Line height" %}</label><br>
+                            <label for="toolbox-lineheight">{% trans "Line height" %}</label><br>
                             <input type="number" value="1" class="input-block-level form-control" step="0.1"
                                     id="toolbox-lineheight">
                         </div>
                     </div>
                     <div class="row control-group text">
                         <div class="col-sm-6">
-                            <label>{% trans "Text color" %}</label><br>
-                            <input type="text" value="#000000" class="input-block-level form-control colorpickerfield"
-                                    id="toolbox-col">
+                            <label for="toolbox-col">{% trans "Text color" %}</label><br>
+                            <div class="input-group">
+                                <input type="text" value="#000000" class="input-block-level form-control colorpickerfield"
+                                       id="toolbox-col">
+                                <span class="input-group-addon contrast-icon">
+                                </span>
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <label>&nbsp;</label><br>
                             <div class="btn-group btn-group-justified" role="group">
-                                <div class="btn-group" role="group">
+                                <div class="btn-group text" role="group">
                                     <button type="button" class="btn btn-default toggling" data-action="bold">
                                         <span class="fa fa-bold"></span>
                                     </button>
                                 </div>
-                                <div class="btn-group" role="group">
+                                <div class="btn-group text" role="group">
                                     <button type="button" class="btn btn-default toggling" data-action="italic">
                                         <span class="fa fa-italic"></span>
                                     </button>
                                 </div>
-                                <div class="btn-group" role="group">
+                                <div class="btn-group textarea" role="group">
                                     <button type="button" class="btn btn-default toggling" data-action="downward"
-                                        data-toggle="tooltip" title="{% trans "Flow multiple lines downward from specified position" %}">
+                                            data-toggle="tooltip" title="{% trans "Flow multiple lines downward from specified position" %}">
                                         <span class="fa fa-caret-square-o-down"></span>
                                     </button>
                                 </div>
                             </div>
-                            <label>&nbsp;</label><br>
+                        </div>
+                    </div>
+                    <div class="row control-group text">
+                        <div class="col-sm-6">
                             <div class="btn-group btn-group-justified" id="toolbox-align">
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-default option toggling" data-action="left">
@@ -415,6 +422,45 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="textcontainer">
+                                <div class="btn-group btn-group-justified" id="toolbox-verticalalign">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default option toggling" data-action="top">
+                                            <span class="fa fa-toggle-down"></span>
+                                        </button>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default option toggling" data-action="middle">
+                                            <span class="fa fa-sort"></span>
+                                        </button>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default option toggling" data-action="bottom">
+                                            <span class="fa fa-toggle-up"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row control-group textcontainer">
+                        <div class="col-sm-6">
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group textcontainer" role="group">
+                                    <button type="button" class="btn btn-default toggling" data-action="autoresize"
+                                            data-toggle="tooltip" title="{% trans "Automatically reduce font size to fit content" %}">
+                                        <span class="fa fa-text-height"></span>
+                                    </button>
+                                </div>
+                                <div class="btn-group textcontainer" role="group">
+                                    <button type="button" class="btn btn-default toggling" data-action="splitlongwords"
+                                            data-toggle="tooltip" title="{% trans "Allow long words to be split (preview is not accurate)" %}">
+                                        <span class="fa fa-scissors fa-rotate-90"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -423,9 +469,13 @@
                     {% trans "Add a new object" %}
                 </div>
                 <div class="panel-body add-buttons">
+                    <button class="btn btn-default btn-block" id="editor-add-textcontainer" disabled>
+                        <span class="fa fa-font"></span>
+                        {% trans "Text box" %}
+                    </button>
                     <button class="btn btn-default btn-block" id="editor-add-text" disabled>
                         <span class="fa fa-font"></span>
-                        {% trans "Text" %}
+                        {% trans "Text (deprecated)" %}
                     </button>
                     <button class="btn btn-default btn-block" id="editor-add-qrcode" data-content="secret" disabled>
                         <span class="fa fa-qrcode"></span>
@@ -456,7 +506,6 @@
                     </button>
                 </div>
             </div>
-
             <form method="post" action="" id="preview-form" target="_blank">
                 <div class="form-group submit-group">
                     {% csrf_token %}
@@ -472,6 +521,13 @@
                     </button>
                 </div>
             </form>
+            <p>&nbsp;</p>
+            <div class="alert alert-info" id="version-notice">
+                {% blocktrans trimmed with print_version="2.18" scan_version="1.22" %}
+                    This layout uses new features. If you print from your device, make sure you use pretixPRINT version
+                    {{ print_version }} (or newer) or pretixSCAN Desktop version {{ scan_version }} (or newer).
+                {% endblocktrans %}
+            </div>
         </div>
     </div>
     <script type="text/plain" id="schema-url">{% static "schema/pdf-layout.schema.json" %}</script>

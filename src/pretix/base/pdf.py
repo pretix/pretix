@@ -956,7 +956,7 @@ class Renderer:
             )
             canvas.restoreState()
 
-    def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
+    def _text_paragraph(self, op: OrderPosition, order: Order, o: dict, legacy_lineheight=False, override_fontsize=None):
         font = o['fontfamily']
 
         # Since pdfmetrics.registerFont is global, we want to make sure that no one tries to sneak in a font, they
@@ -970,12 +970,13 @@ class Renderer:
         if o['italic']:
             font += ' I'
 
+        fontsize = override_fontsize if override_fontsize is not None else float(o['fontsize'])
         try:
-            ad = getAscentDescent(font, float(o['fontsize']))
+            ad = getAscentDescent(font, fontsize)
         except KeyError:  # font not known, fall back
             logger.warning(f'Use of unknown font "{font}"')
             font = 'Open Sans'
-            ad = getAscentDescent(font, float(o['fontsize']))
+            ad = getAscentDescent(font, fontsize)
 
         align_map = {
             'left': TA_LEFT,
@@ -985,16 +986,17 @@ class Renderer:
         # lineheight display differs from browser canvas. This calc is just empirical values to get
         # reportlab render similarly to browser canvas.
         # for backwards compatability use „uncorrected“ lineheight of 1.0 instead of 1.15
-        lineheight = float(o['lineheight']) * 1.15 if 'lineheight' in o else 1.0
+        lineheight = float(o['lineheight']) * 1.15 if not legacy_lineheight or 'lineheight' in o else 1.0
         style = ParagraphStyle(
             name=uuid.uuid4().hex,
             fontName=font,
-            fontSize=float(o['fontsize']),
-            leading=lineheight * float(o['fontsize']),
+            fontSize=fontsize,
+            leading=lineheight * fontsize,
             # for backwards compatability use autoLeading if no lineheight is given
-            autoLeading='off' if 'lineheight' in o else 'max',
+            autoLeading='off' if not legacy_lineheight or 'lineheight' in o else 'max',
             textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
-            alignment=align_map[o['align']]
+            alignment=align_map[o['align']],
+            splitLongWords=o.get('splitlongwords', True),
         )
         # add an almost-invisible space &hairsp; after hyphens as word-wrap in ReportLab only works on space chars
         text = conditional_escape(
@@ -1013,6 +1015,41 @@ class Renderer:
             logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
 
         p = Paragraph(text, style=style)
+        return p, ad, lineheight
+
+    def _draw_textcontainer(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
+        fontsize = float(o['fontsize'])
+        height = float(o['height']) * mm
+        width = float(o['width']) * mm
+        while True:
+            p, ad, lineheight = self._text_paragraph(op, order, o, override_fontsize=fontsize)
+            w, h = p.wrapOn(canvas, width, 1000 * mm)
+            widths = p.getActualLineWidths0()
+            if not widths:
+                break
+            actual_w = max(widths)
+            if not o.get('autoresize', False) or (h <= height and actual_w <= width) or fontsize <= 1.0:
+                break
+            if h > height:  # we can do larger steps for height
+                fontsize -= max(1.0, fontsize * .1)
+            else:
+                fontsize -= max(.25, fontsize * .025)
+
+        canvas.saveState()
+        # The ascent/descent offsets here are not really proven to be correct, they're just empirical values to get
+        # reportlab render similarly to browser canvas.
+        canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm + height)
+        canvas.rotate(o.get('rotation', 0) * -1)
+        if o.get('verticalalign', 'top') == 'top':
+            p.drawOn(canvas, 0, - h)
+        elif o.get('verticalalign', 'top') == 'middle':
+            p.drawOn(canvas, 0, (-height - h) / 2)
+        elif o.get('verticalalign', 'top') == 'bottom':
+            p.drawOn(canvas, 0, -height)
+        canvas.restoreState()
+
+    def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
+        p, ad, lineheight = self._text_paragraph(op, order, o, legacy_lineheight=True)
         w, h = p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
         # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
         canvas.saveState()
@@ -1051,6 +1088,8 @@ class Renderer:
                     self._draw_barcodearea(canvas, op, order, o)
                 elif o['type'] == "imagearea":
                     self._draw_imagearea(canvas, op, order, o)
+                elif o['type'] == "textcontainer":
+                    self._draw_textcontainer(canvas, op, order, o)
                 elif o['type'] == "textarea":
                     self._draw_textarea(canvas, op, order, o)
                 elif o['type'] == "poweredby":

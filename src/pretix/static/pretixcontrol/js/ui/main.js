@@ -298,29 +298,45 @@ var form_handlers = function (el) {
             }
         }
     }).not(".no-contrast").on('changeColor create', function (e) {
+        if (e.type == 'changeColor' && !e.value) {
+            return;
+        }
         var rgb = $(this).colorpicker('color').toRGB();
         var c = contrast([255,255,255], [rgb.r, rgb.g, rgb.b]);
         var mark = 'times';
-        if ($(this).parent().find(".contrast-state").length === 0) {
+        var $icon = $(this).parent().find(".contrast-icon");
+        if ($icon.length === 0 && $(this).parent().find(".contrast-state").length === 0) {
             $(this).parent().append("<div class='help-block contrast-state'></div>");
         }
         var $note = $(this).parent().find(".contrast-state");
         if ($(this).val() === "") {
             $note.remove();
         }
+        var icon, text, cls;
         if (c > 7) {
-            $note.html("<span class='fa fa-fw fa-check-circle'></span>")
-                .append(gettext('Your color has great contrast and is very easy to read!'));
-            $note.addClass("text-success").removeClass("text-warning").removeClass("text-danger");
+            icon = "fa-check-circle";
+            text = gettext('Your color has great contrast and is very easy to read!');
+            cls = "text-success";
         } else if (c > 2.5) {
-            $note.html("<span class='fa fa-fw fa-info-circle'></span>")
-                .append(gettext('Your color has decent contrast and is probably good-enough to read!'));
-            $note.removeClass("text-success").removeClass("text-warning").removeClass("text-danger");
+            icon = "fa-info-circle";
+            text = gettext('Your color has decent contrast and is probably good-enough to read!');
+            cls = "";
         } else {
-            $note.html("<span class='fa fa-fw fa-warning'></span>")
-                .append(gettext('Your color has bad contrast for text on white background, please choose a darker ' +
-                    'shade.'));
-            $note.addClass("text-danger").removeClass("text-success").removeClass("text-warning");
+            icon = "fa-warning";
+            text = gettext('Your color has bad contrast for text on white background, please choose a darker shade.');
+            cls = "text-danger";
+        }
+        if ($icon.length === 0) {
+            $note.html("<span class='fa fa-fw " + icon + "'></span>")
+                .append(text);
+            $note.removeClass("text-success").removeClass("text-danger").addClass(cls);
+        } else {
+            $icon.html("<span class='fa fa-fw " + icon + " " + cls + "'></span>")
+            $icon.attr("title", text);
+            $icon.tooltip('destroy');
+            window.setTimeout(function() {
+                $icon.tooltip({"title": text});
+            }, 250);
         }
     });
 
