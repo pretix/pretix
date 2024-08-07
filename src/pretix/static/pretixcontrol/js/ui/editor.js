@@ -963,7 +963,7 @@ var editor = {
             left: 100,
             top: 100,
             width: 300,
-            height: 28,
+            height: 29,
             lockRotation: false,
             fill: '#000',
             content: 'event_name',
