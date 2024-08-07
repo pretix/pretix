@@ -787,7 +787,7 @@ class Renderer:
         content = o.get('content', 'dark')
         if content not in ('dark', 'white'):
             content = 'dark'
-        img = finders.find('pretixpresale/pdf/powered_by_pretix_{}.png'.format(content))
+        img = finders.find('pretixpresale/pdf/powered_by_social_dancing_{}.png'.format(content))
 
         ir = ThumbnailingImageReader(img)
         try:
@@ -795,8 +795,11 @@ class Renderer:
         except:
             logger.exception("Can not resize image")
             pass
+    
+        # Calculate x position to center the image
+        x_center = (canvas._pagesize[0] - width) / 2
         canvas.drawImage(ir,
-                         float(o['left']) * mm, float(o['bottom']) * mm,
+                         x_center, float(o['bottom']) * mm,
                          width=width, height=height,
                          preserveAspectRatio=True, anchor='n',
                          mask='auto')
