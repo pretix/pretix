@@ -164,6 +164,190 @@
           "bottom",
           "content",
           "width",
+          "height",
+          "fontsize",
+          "fontfamily",
+          "bold",
+          "italic",
+          "align",
+          "verticalalign",
+          "color"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "textcontainer"
+          },
+          "page": {
+            "description": "Page number this will be shown on, defaults to 1.",
+            "type": "number"
+          },
+          "left": {
+            "description": "Position of the element on the x axis in millimeters.",
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+              }
+            ]
+          },
+          "bottom": {
+            "description": "Position of the element on the y axis in millimeters.",
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+              }
+            ]
+          },
+          "width": {
+            "description": "Width of the element in millimeters.",
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+              }
+            ]
+          },
+          "height": {
+            "description": "Width of the element in millimeters.",
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+              }
+            ]
+          },
+          "content": {
+            "description": "Name of a variable to use. The available values depend on event configuration and installed plugins.",
+            "type": "string"
+          },
+          "text": {
+            "description": "Custom text. Only used when 'content' is set to 'other'.",
+            "type": "string"
+          },
+          "text_i18n": {
+            "description": "Custom text in multiple languages. Only used when 'content' is set to 'other_i18n'.",
+            "type": "object",
+            "patternProperties": {
+              "[a-zA-Z-]+": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "locale": {
+            "description": "Locale to render the text in.",
+            "type": ["string", "null"],
+            "pattern": "[a-zA-Z-]*"
+          },
+          "fontsize": {
+            "description": "Font size",
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+              }
+            ]
+          },
+          "lineheight": {
+            "description": "Line height",
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+              }
+            ]
+          },
+          "fontfamily": {
+            "description": "Font family. The available values depend on installed plugins.",
+            "type": "string"
+          },
+          "bold": {
+            "description": "Use bold font variant.",
+            "type": "boolean"
+          },
+          "italic": {
+            "description": "Use italic font variant.",
+            "type": "boolean"
+          },
+          "autoresize": {
+            "description": "Auto-resize font to fit box.",
+            "type": "boolean"
+          },
+          "splitlongwords": {
+            "description": "Indicator for the box fitting algorithm whether long words are allowed to be broken in parts.",
+            "type": "boolean"
+          },
+          "align": {
+            "description": "Horizontal text alignment.",
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right"
+            ]
+          },
+          "verticalalign": {
+            "description": "Vertical text alignment.",
+            "type": "string",
+            "enum": [
+              "top",
+              "middle",
+              "bottom"
+            ]
+          },
+          "color": {
+            "description": "Text color as a tuple of three integers in the 0-255 range and one float in the 0-1 range. The last value (alpha) is ignored by the current implementation but might be used in the future.",
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "minItems": 3,
+            "maxItems": 4
+          },
+          "rotation": {
+            "description": "Rotation in degrees.",
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      {
+        "required": [
+          "type",
+          "left",
+          "bottom",
+          "content",
+          "width",
           "fontsize",
           "fontfamily",
           "bold",
