@@ -43,15 +43,15 @@ from pretix.helpers.daterange import daterange, datetimerange
 def test_same_day_german():
     with translation.override('de'):
         df = date(2003, 2, 1)
-        assert daterange(df, df) == "1. Februar 2003"
-        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">1. Februar 2003</time>'
+        assert daterange(df, df) == "Sa, 1. Februar 2003"
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">Sa, 1. Februar 2003</time>'
 
 
 def test_same_day_english():
     with translation.override('en'):
         df = date(2003, 2, 1)
-        assert daterange(df, df) == "Feb. 1st, 2003"
-        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">Feb. 1st, 2003</time>'
+        assert daterange(df, df) == "Sat, Feb. 1st, 2003"
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">Sat, Feb. 1st, 2003</time>'
 
 
 def test_same_day_spanish():
