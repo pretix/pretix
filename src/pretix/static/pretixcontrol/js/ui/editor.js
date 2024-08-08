@@ -608,14 +608,18 @@ var editor = {
                 $("#loading-initial").remove();
             });
         }
+        editor._update_version_notice();
     },
 
-    _update_toolbox_values: function () {
+    _update_version_notice: function () {
         $("#version-notice").toggle(
             editor._other_page_objects.some((o) => o.type === "textcontainer") ||
             editor.fabric.getObjects().some((o) => o.type === "textcontainer")
         );
+    },
 
+    _update_toolbox_values: function () {
+        editor._update_version_notice();
         var o = editor.fabric.getActiveObject();
         if (!o) {
             return;
@@ -1419,7 +1423,6 @@ var editor = {
             editor._update_save_button();
         });
         $("#pdf-info-width, #pdf-info-height").bind('change input', editor._paper_size_warning);
-        editor._update_toolbox_values();
 
         $.getJSON($("#schema-url").text(), function (data) {
             editor.schema = data;
