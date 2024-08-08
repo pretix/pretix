@@ -180,13 +180,7 @@ class EventMixin:
         """
         tz = tz or self.timezone
         if (not self.settings.show_date_to and not force_show_end) or not self.date_to:
-            if as_html:
-                return format_html(
-                    "<time datetime=\"{}\">{}</time>",
-                    _date(self.date_from.astimezone(tz), "Y-m-d"),
-                    _date(self.date_from.astimezone(tz), "DATE_FORMAT"),
-                )
-            return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
+            return daterange(self.date_from.astimezone(tz), self.date_from.astimezone(tz), as_html)
         return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz), as_html)
 
     def get_date_range_display_as_html(self, tz=None, force_show_end=False) -> str:
