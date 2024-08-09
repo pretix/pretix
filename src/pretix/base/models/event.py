@@ -60,7 +60,6 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
-from django.utils.html import format_html
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
@@ -180,14 +179,10 @@ class EventMixin:
         """
         tz = tz or self.timezone
         if (not self.settings.show_date_to and not force_show_end) or not self.date_to:
-            if as_html:
-                return format_html(
-                    "<time datetime=\"{}\">{}</time>",
-                    _date(self.date_from.astimezone(tz), "Y-m-d"),
-                    _date(self.date_from.astimezone(tz), "DATE_FORMAT"),
-                )
-            return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
-        return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz), as_html)
+            df, dt = self.date_from, self.date_from
+        else:
+            df, dt = self.date_from, self.date_to
+        return daterange(df.astimezone(tz), dt.astimezone(tz), as_html)
 
     def get_date_range_display_as_html(self, tz=None, force_show_end=False) -> str:
         return self.get_date_range_display(tz, force_show_end, as_html=True)
