@@ -2652,6 +2652,9 @@ class DeviceFilterForm(FilterForm):
         if fdata.get('gate'):
             qs = qs.filter(gate=fdata['gate'])
 
+        if fdata.get('software_brand'):
+            qs = qs.filter(software_brand=fdata['software_brand'])
+
         if fdata.get('state') == 'active':
             qs = qs.filter(revoked=False)
         elif fdata.get('state') == 'revoked':
