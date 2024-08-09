@@ -84,6 +84,7 @@ fees                                  list of objects            List of fees in
 ├ tax_rate                            decimal (string)           VAT rate applied for this fee
 ├ tax_value                           money (string)             VAT included in this fee
 ├ tax_rule                            integer                    The ID of the used tax rule (or ``null``)
+├ tax_code                            string                     Codified reason for tax rate (or ``null``), see :ref:`rest-taxcodes`.
 └ canceled                            boolean                    Whether or not this fee has been canceled.
 downloads                             list of objects            List of ticket download options for order-wise ticket
                                                                  downloading. This might be a multi-page PDF or a ZIP
@@ -151,6 +152,10 @@ last_modified                         datetime                   Last modificati
 
    The ``expires`` attribute can now be passed during order creation.
 
+.. versionchanged:: 2024.8
+
+   The ``tax_code`` attribute has been added.
+
 
 .. _order-position-resource:
 
@@ -188,6 +193,7 @@ voucher_budget_use                    money (string)             Amount of money
                                                                  are changed *after* the order was created. Can be ``null``.
 tax_rate                              decimal (string)           VAT rate applied for this position
 tax_value                             money (string)             VAT included in this position
+tax_code                              string                     Codified reason for tax rate (or ``null``), see :ref:`rest-taxcodes`.
 tax_rule                              integer                    The ID of the used tax rule (or ``null``)
 secret                                string                     Secret code printed on the tickets for validation
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
@@ -231,6 +237,10 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 4.16
 
    The attributes ``blocked``, ``valid_from`` and ``valid_until`` have been added.
+
+.. versionchanged:: 2024.8
+
+   The ``tax_code`` attribute has been added.
 
 .. _order-payment-resource:
 
@@ -383,6 +393,7 @@ List of all orders
                 "tax_rate": "0.00",
                 "tax_value": "0.00",
                 "tax_rule": null,
+                "tax_code": null,
                 "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
                 "addon_to": null,
                 "subevent": null,
@@ -610,6 +621,7 @@ Fetching individual orders
             "tax_rate": "0.00",
             "tax_rule": null,
             "tax_value": "0.00",
+            "tax_code": null,
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "addon_to": null,
             "subevent": null,
@@ -1565,6 +1577,7 @@ List of all order positions
             "tax_rate": "0.00",
             "tax_rule": null,
             "tax_value": "0.00",
+            "tax_code": null,
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "discount": null,
             "pseudonymization_id": "MQLJvANO3B",
@@ -1679,6 +1692,7 @@ Fetching individual positions
         "tax_rate": "0.00",
         "tax_rule": null,
         "tax_value": "0.00",
+        "tax_code": null,
         "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
         "addon_to": null,
         "subevent": null,

@@ -98,7 +98,8 @@ class OrderPositionChangeForm(forms.Form):
                 new_price = get_price(i, v, voucher=instance.voucher, subevent=instance.subevent,
                                       invoice_address=invoice_address)
                 current_price = TaxedPrice(tax=instance.tax_value, gross=instance.price, net=instance.price - instance.tax_value,
-                                           name=instance.tax_rule.name if instance.tax_rule else '', rate=instance.tax_rate)
+                                           name=instance.tax_rule.name if instance.tax_rule else '', rate=instance.tax_rate,
+                                           code=instance.tax_code)
                 if new_price.gross < current_price.gross and event.settings.change_allow_user_price == 'gte':
                     continue
                 if new_price.gross <= current_price.gross and event.settings.change_allow_user_price == 'gt':
