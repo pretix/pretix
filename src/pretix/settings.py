@@ -96,7 +96,7 @@ else:
 
 # Adjustable settings
 
-debug_fallback = "runserver" in sys.argv
+debug_fallback = "runserver" in sys.argv or "runserver_plus" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 LOG_CSP = config.getboolean('pretix', 'csp_log', fallback=False)
 CSP_ADDITIONAL_HEADER = config.get('pretix', 'csp_additional_header', fallback='')
