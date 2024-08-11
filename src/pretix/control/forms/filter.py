@@ -403,7 +403,7 @@ class OrderFilterForm(FilterForm):
             qs = qs.annotate(
                 has_payment_with_provider=Exists(
                     OrderPayment.objects.filter(
-                        Q(order=OuterRef('pk')) & Q(provider=fdata.get('provider'))
+                        Q(order=OuterRef('pk')) & Q(provider=fdata.get('provider')) & Q(state='confirmed')
                     )
                 )
             )
