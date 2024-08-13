@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-29 10:52+0000\n"
-"PO-Revision-Date: 2024-08-09 07:55+0000\n"
+"PO-Revision-Date: 2024-08-13 20:00+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -140,8 +140,8 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
-"Full enhetstillgång (läsning och ändring av beställningar och presentkort, "
-"läsning av produkter och inställningar)"
+"Full enhetstillgång (läsning och ändring av anmälan och presentkort, läsning "
+"av produkter och inställningar)"
 
 #: pretix/api/auth/devicesecurity.py:53
 msgid "pretixSCAN"
@@ -402,12 +402,12 @@ msgstr ""
 #: pretix/api/views/order.py:603 pretix/control/views/orders.py:1584
 #: pretix/presale/views/order.py:741 pretix/presale/views/order.py:814
 msgid "You cannot generate an invoice for this order."
-msgstr "Du kan inte skapa en faktura för denna beställning."
+msgstr "Du kan inte skapa en faktura för denna anmälan."
 
 #: pretix/api/views/order.py:608 pretix/control/views/orders.py:1586
 #: pretix/presale/views/order.py:743 pretix/presale/views/order.py:816
 msgid "An invoice for this order already exists."
-msgstr "En faktura för denna beställning finns redan."
+msgstr "En faktura för denna anmälan finns redan."
 
 #: pretix/api/views/order.py:634 pretix/control/views/orders.py:1712
 #: pretix/control/views/users.py:143
@@ -422,30 +422,30 @@ msgstr "En utav de valda produkterna är inte tillgänglig i det valda landet."
 
 #: pretix/api/webhooks.py:237 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr "Ny beställning utförd"
+msgstr "Ny anmälan genomförd"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr "Ny beställning kräver godkännande"
+msgstr "Ny anmälan kräver godkännande"
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr "Beställning markerad som betald"
+msgstr "Anmälan markerad som betald"
 
 #: pretix/api/webhooks.py:249 pretix/base/models/checkin.py:358
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1545
 msgid "Order canceled"
-msgstr "Beställningen har avbokats"
+msgstr "Anmälan har avbokats"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr "Beställningen återaktiverad"
+msgstr "Anmälan återaktiverad"
 
 #: pretix/api/webhooks.py:257 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr "Beställning har löpt ut"
+msgstr "Anmälan har löpt ut"
 
 #: pretix/api/webhooks.py:261
 msgid "Order expiry date changed"
@@ -453,16 +453,16 @@ msgstr "Utgångsdatumet har ändrats"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr "Beställningsinformationen har uppdaterats"
+msgstr "Anmälningsinformationen har uppdaterats"
 
 #: pretix/api/webhooks.py:269 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr "Kontaktadressen för beställningen har uppdaterats"
+msgstr "Kontaktadressen för anmälan har uppdaterats"
 
 #: pretix/api/webhooks.py:273 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr "Beställningen har uppdaterats"
+msgstr "Anmälan har uppdaterats"
 
 #: pretix/api/webhooks.py:277
 msgid "Refund of payment created"
@@ -494,17 +494,15 @@ msgstr "Betalningen bekräftad"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
-msgstr "Beställningen har godkänts"
+msgstr "Anmälan har godkänts"
 
 #: pretix/api/webhooks.py:309
 msgid "Order denied"
-msgstr "Beställningen har nekats"
+msgstr "Anmälan har nekats"
 
 #: pretix/api/webhooks.py:313
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order deleted"
-msgstr "Beställningen har nekats"
+msgstr "Anmälan har nekats"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -790,7 +788,7 @@ msgid ""
 "customers while creating an order."
 msgstr ""
 "Ladda ner en ZIP-fil inklusive alla filer som har laddats upp av dina kunder "
-"när beställningarna skapades."
+"när anmälan skapades."
 
 #: pretix/base/exporters/answers.py:66 pretix/base/models/items.py:1714
 #: pretix/control/navigation.py:182
@@ -1090,7 +1088,7 @@ msgid ""
 "does not always correspond to the order or payment date."
 msgstr ""
 "Inkludera endast fakturor skapade i detta tidspannet. Observera att "
-"fakturadatum inte alltid motsvarar beställnings- eller betalningsdatum."
+"fakturadatum inte alltid motsvarar anmälan- eller betalningsdatum."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
@@ -1219,10 +1217,10 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
-"Inkludera endast fakturor för beställningar som har minst ett "
-"betalningsförsök hos denna betalningsleverantör. Observera att detta kan "
-"inkludera vissa fakturor för beställningar som slutligen har betalats helt "
-"eller delvis med en annan leverantör."
+"Inkludera endast fakturor för anmälningar som har minst ett betalningsförsök "
+"hos denna betalningsleverantör. Observera att detta kan inkludera vissa "
+"fakturor för beställningar som slutligen har betalats helt eller delvis med "
+"en annan leverantör."
 
 #: pretix/base/exporters/invoices.py:126
 msgid "All invoices"
@@ -1307,7 +1305,7 @@ msgstr "Datum"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:70
 msgid "Order code"
-msgstr "Beställningsnummer"
+msgstr "Anmälningsnummer"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/modelimport_orders.py:59 pretix/base/models/customers.py:384
@@ -1748,7 +1746,7 @@ msgstr "Minimal mängd per order"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:599
 msgid "Maximum amount per order"
-msgstr "Maximal mängd per beställning"
+msgstr "Maximal mängd per anmälan"
 
 #: pretix/base/exporters/items.py:89 pretix/base/exporters/orderlist.py:282
 #: pretix/base/models/items.py:607 pretix/base/models/items.py:1190
@@ -1787,7 +1785,7 @@ msgstr "Dölj utan giltigt medlemskap"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:86
 msgid "Order data"
-msgstr "Beställningsdata"
+msgstr "Anmälningsinformation"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
@@ -1835,20 +1833,20 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:657
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
 msgid "Orders"
-msgstr "Beställningar"
+msgstr "Anmälningar"
 
 #: pretix/base/exporters/orderlist.py:101 pretix/base/models/orders.py:2499
 #: pretix/base/notifications.py:205
 msgid "Order positions"
-msgstr "Beställningsrad"
+msgstr "Anmälningsrad"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Order fees"
-msgstr "Beställningsavgifter"
+msgstr "Anmälningsavgifter"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Only paid orders"
-msgstr "Bara betalda beställningar"
+msgstr "Bara betalda anmälningar"
 
 #: pretix/base/exporters/orderlist.py:116
 msgid "Include payment amounts"
@@ -1861,7 +1859,7 @@ msgstr "Visa flersvarsalternativ grupperade i en kolumn"
 #: pretix/base/exporters/orderlist.py:131
 #: pretix/plugins/reports/exporters.py:701
 msgid "Only include orders created within this date range."
-msgstr "Inkludera endast beställningar skapade inom detta datumintervall."
+msgstr "Inkludera endast anmälningar skapade inom detta datumintervall."
 
 #: pretix/base/exporters/orderlist.py:135 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:234 pretix/plugins/badges/exporters.py:484
@@ -1876,7 +1874,7 @@ msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
-"Inkludera endast beställningar som innehåller minst en biljett för ett datum "
+"Inkludera endast anmälningar som innehåller minst en biljett för ett datum "
 "inom detta intervall. Andra datum kommer också att inkluderas vid blandade "
 "beställningar!"
 
@@ -1898,7 +1896,7 @@ msgstr "Förkortning för evenemanget"
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:73
 msgid "Order total"
-msgstr "Beställningstotal"
+msgstr "Totalt antal anmälningar"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:443
@@ -6485,7 +6483,7 @@ msgstr "En ny beställning som kräver godkännande har lagts: {order.code}"
 #: pretix/base/notifications.py:246
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr "Beställning {order.code} har markerats som betald."
+msgstr "Anmälan {order.code} har markerats som betald."
 
 #: pretix/base/notifications.py:252
 #, python-brace-format
@@ -6519,7 +6517,7 @@ msgstr "Beställning {order.code} har ändrats."
 
 #: pretix/base/notifications.py:287
 msgid "Order has been overpaid"
-msgstr "Beställningen har blivit överbetald"
+msgstr "Anmälan har blivit överbetald"
 
 #: pretix/base/notifications.py:288
 #, python-brace-format
@@ -6646,8 +6644,8 @@ msgid ""
 msgstr ""
 "Kommer att skrivas ut precis under betalningssiffrorna och ovanför "
 "sluttexten på fakturor. Detta kommer endast att användas om fakturan "
-"genereras innan beställningen betalas. Om fakturan genereras senare kommer "
-"den att visa en text om att den redan är betald."
+"genereras innan anmälan betalas. Om fakturan genereras senare kommer den att "
+"visa en text om att den redan är betald."
 
 #: pretix/base/payment.py:404
 msgid "Restrict to countries"
@@ -6738,8 +6736,8 @@ msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
-"I testläge kan du manuellt markera denna beställning som betald i backend "
-"efter att den har skapats."
+"I testläge kan du manuellt markera denna anmälan som betald i backend efter "
+"att den har skapats."
 
 #: pretix/base/payment.py:1181 pretix/base/payment.py:1322
 #: pretix/plugins/banktransfer/payment.py:156
@@ -7874,7 +7872,7 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:1068
 msgid "This order is not marked as paid."
-msgstr "Denna beställning är inte markerad som betald."
+msgstr "Denna anmälan är inte markerad som betald."
 
 #: pretix/base/services/checkin.py:1080
 msgid "Evaluation of custom rules has failed."
@@ -9188,7 +9186,7 @@ msgstr ""
 
 #: pretix/base/settings.py:932
 msgid "Automatically expire unpaid orders"
-msgstr "Automatiskt löpa ut obetalda beställningar"
+msgstr "Automatiskt löpa ut obetalda anmälan"
 
 #: pretix/base/settings.py:933
 msgid ""
@@ -9196,7 +9194,7 @@ msgid ""
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
-"Om markerat, kommer alla obetalda beställningar automatiskt att gå från "
+"Om markerat, kommer alla obetalda anmälningar automatiskt att gå från "
 "'avvaktande' till 'utgånget' efter slutet av deras betalningsdeadline. Det "
 "innebär att biljetterna återgår till poolen och kan beställas av andra "
 "personer."
@@ -9967,7 +9965,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1793
 msgid "Customers can cancel their unpaid orders"
-msgstr "Kunder kan avbryta sina obetalda beställningar"
+msgstr "Kunder kan avbryta sina obetalda anmälningar"
 
 #: pretix/base/settings.py:1805
 msgid "Charge a fixed cancellation fee"
@@ -9998,7 +9996,7 @@ msgstr "Tillåt inte avbokningar efter"
 
 #: pretix/base/settings.py:1850
 msgid "Customers can cancel their paid orders"
-msgstr "Kunder kan avbryta sina betalda beställningar"
+msgstr "Kunder kan avbryta sina betalda anmälningar"
 
 #: pretix/base/settings.py:1851
 msgid ""
@@ -10118,7 +10116,7 @@ msgid ""
 "empty if you want pretix to automatically generate the terms of cancellation "
 "based on your settings."
 msgstr ""
-"Detta meddelande visas när avbokning är tillåten för en betald beställning. "
+"Detta meddelande visas när avbokning är tillåten för en betald anmälan. "
 "Lämna det tomt om du vill att pretix automatiskt ska generera "
 "avbokningsvillkoren baserat på dina inställningar."
 
@@ -10129,7 +10127,7 @@ msgid ""
 "cancellation based on your settings."
 msgstr ""
 "Detta meddelande visas när avbokning är tillåten för en obetald eller gratis "
-"beställning. Lämna det tomt om du vill att pretix automatiskt ska generera "
+"anmälan. Lämna det tomt om du vill att pretix automatiskt ska generera "
 "avbokningsvillkoren baserat på dina inställningar."
 
 #: pretix/base/settings.py:2015 pretix/control/forms/event.py:1632
@@ -10453,7 +10451,7 @@ msgid ""
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "Denna fil kommer att bifogas till det första e-postmeddelandet som skickas "
-"för varje ny beställning. Den kommer därför att kombineras med texterna "
+"för varje ny anmälan. Den kommer därför att kombineras med texterna "
 "\"Placerad beställning\", \"Gratis beställning\" eller \"Mottagen "
 "beställning\" ovan. Den skickas till både beställningskontakter och "
 "deltagare. Du kan använda den här filen t.ex. för att skicka dina "
@@ -10673,13 +10671,13 @@ msgid ""
 msgstr ""
 "Hej,\n"
 "\n"
-"Vi har mottagit en betalning för din beställning för {event}.\n"
+"Vi har mottagit en betalning för din anmälan för {event}.\n"
 "\n"
 "Tyvärr är det mottagna beloppet mindre än det fulla beloppet som krävs. Din "
-"beställning betraktas därför fortfarande som obetald, eftersom det saknas "
+"anmälan betraktas därför fortfarande som obetald, eftersom det saknas "
 "ytterligare betalning på **{pending_sum}**.\n"
 "\n"
-"Du kan se betalningsinformationen och statusen för din beställning på\n"
+"Du kan se betalningsinformationen och statusen för din anmälan på\n"
 "{url}\n"
 "\n"
 "Vänliga hälsningar,\n"
@@ -12348,12 +12346,12 @@ msgstr "Biljetter kan laddas ner"
 #: pretix/base/timeline.py:143
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
-msgstr "Kunder kan inte längre avbryta gratis eller obetalda beställningar"
+msgstr "Kunder kan inte längre avbryta gratis eller obetalda anmälningar"
 
 #: pretix/base/timeline.py:155
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
-msgstr "Kunder kan inte längre avbryta betalda beställningar"
+msgstr "Kunder kan inte längre avbryta betalda anmälningar"
 
 #: pretix/base/timeline.py:167
 msgctxt "timeline"
@@ -12527,8 +12525,7 @@ msgstr "Incheckningstyp"
 #: pretix/control/forms/checkin.py:195
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
 msgstr ""
-"Tillåt incheckning av obetald beställning (om incheckningslistan tillåter "
-"det)"
+"Tillåt incheckning av obetald anmälan (om incheckningslistan tillåter det)"
 
 #: pretix/control/forms/checkin.py:199
 msgid "Support for check-in questions"
@@ -12779,7 +12776,7 @@ msgid ""
 "sales channels. The online shop must be enabled."
 msgstr ""
 "E-postmeddelandena för \"order placerad\" och \"betald\" skickas endast till "
-"beställningar från dessa försäljningskanaler. Onlinebutiken måste vara "
+"anmälningar från dessa försäljningskanaler. Onlinebutiken måste vara "
 "aktiverad."
 
 #: pretix/control/forms/event.py:970
@@ -14184,7 +14181,7 @@ msgstr "Skapa en order med en position per rad"
 
 #: pretix/control/forms/modelimport.py:83
 msgid "Create orders as fully paid"
-msgstr "Skapa beställningar som är helt betalda"
+msgstr "Skapa anmälningar som är helt betalda"
 
 #: pretix/control/forms/modelimport.py:84
 msgid "Create orders as pending and still require payment"
@@ -14287,8 +14284,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:227
 msgid "A mail will only be sent if the order is fully paid after this."
 msgstr ""
-"Ett mejl kommer endast att skickas om beställningen är helt betald efter "
-"detta."
+"Ett mejl kommer endast att skickas om anmälan är helt betald efter detta."
 
 #: pretix/control/forms/orders.py:234
 msgid "Payment amount"
@@ -15529,7 +15525,7 @@ msgstr "Orderdetaljerna har ändrats."
 
 #: pretix/control/logdisplay.py:383
 msgid "The order has been marked as unpaid."
-msgstr "Beställningen har markerats som obetald."
+msgstr "Anmälan har markerats som obetald."
 
 #: pretix/control/logdisplay.py:384
 msgid "The order's secret has been changed."
@@ -15541,8 +15537,7 @@ msgstr "Beställningens utgångsdatum har ändrats."
 
 #: pretix/control/logdisplay.py:386
 msgid "The order has been set to be usable before it is paid."
-msgstr ""
-"Beställningen har ställts in så att den kan användas innan den är betald."
+msgstr "Anmälan har ställts in så att den kan användas innan den är betald."
 
 #: pretix/control/logdisplay.py:387
 msgid "The order has been set to require payment before use."
@@ -15555,7 +15550,7 @@ msgstr "Beställningen har markerats som utgången."
 
 #: pretix/control/logdisplay.py:389 pretix/control/views/orders.py:1451
 msgid "The order has been marked as paid."
-msgstr "Beställningen har markerats som betald."
+msgstr "Anmälan har markerats som betald."
 
 #: pretix/control/logdisplay.py:390
 msgid "The cancellation request has been deleted."
@@ -15803,11 +15798,11 @@ msgstr "Betalningen {local_id} har misslyckats."
 #: pretix/control/logdisplay.py:447
 #, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr "Beställningen kunde inte markeras som betald: {message}"
+msgstr "Anmälan kunde inte markeras som betald: {message}"
 
 #: pretix/control/logdisplay.py:448
 msgid "The order has been overpaid."
-msgstr "Beställningen har blivit överbetald."
+msgstr "Anmälan har blivit överbetald."
 
 #: pretix/control/logdisplay.py:449
 #, python-brace-format
@@ -18046,8 +18041,8 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
-"Om en användare begär att avbryta en betald beställning och pengarna inte "
-"kan återbetalas automatiskt, t.ex. på grund av det valda betalningsmedlet, "
+"Om en användare begär att avbryta en betald anmälan och pengarna inte kan "
+"återbetalas automatiskt, t.ex. på grund av det valda betalningsmedlet, "
 "kommer du behöva vidta manuella åtgärder. Dock har du för närvarande stängt "
 "av aviseringar för detta händelsefall."
 
@@ -18344,13 +18339,13 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
-"Det här evenemanget innehåller <strong>överbetalda beställningar</strong>, "
+"Det här evenemanget innehåller <strong>överbetalda anmälningar</strong>, "
 "till exempel på grund av dubbla betalningsförsök. Du bör granska fallen och "
 "överväga att återbetala det överbetalda beloppet till användaren."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:41
 msgid "Show overpaid orders"
-msgstr "Visa överbetalda beställningar"
+msgstr "Visa överbetalda anmälningar"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:46
 msgid ""
@@ -18395,7 +18390,7 @@ msgid ""
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"Det här evenemanget innehåller <strong>fullt betalda beställningar</strong> "
+"Det här evenemanget innehåller <strong>fullt betalda anmälningar</strong> "
 "som inte är markerade som betalda, troligen eftersom inga kvoter var kvar "
 "när deras betalning kom. Du bör granska fallen och överväga antingen att "
 "återbetala kunden eller skapa mer utrymme."
@@ -18645,11 +18640,11 @@ msgstr "E-postinnehåll"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:90
 msgid "Placed order"
-msgstr "Placerad beställning"
+msgstr "Genomförd anmälan"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:93
 msgid "Paid order"
-msgstr "Betald beställning"
+msgstr "Betald anmälan"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:96
 msgid "Free order"
@@ -21891,12 +21886,11 @@ msgid ""
 "orders can be created. Make sure that you check afterwards for any overpaid "
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
-"Du kan använda den här sidan för att avbryta och återbetala alla "
-"beställningar på en gång om du behöver ställa in ditt evenemang. Detta "
-"kommer också att inaktivera alla produkter så att inga nya beställningar kan "
-"skapas. Se till att du kontrollerar efter eventuella överbetalda "
-"beställningar eller väntande återbetalningar som du måste hantera manuellt "
-"efteråt."
+"Du kan använda den här sidan för att avbryta och återbetala alla anmälningar "
+"på en gång om du behöver ställa in ditt evenemang. Detta kommer också att "
+"inaktivera alla produkter så att inga nya beställningar kan skapas. Se till "
+"att du kontrollerar efter eventuella överbetalda anmälningar eller väntande "
+"återbetalningar som du måste hantera manuellt efteråt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
 msgid ""
@@ -22303,7 +22297,7 @@ msgstr "Ta bort filter"
 #: pretix/control/templates/pretixcontrol/orders/index.html:146
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:207
 msgid "Order paid / total"
-msgstr "Beställning betald / total"
+msgstr "Anmälan betald / total"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:177
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:109
@@ -22549,7 +22543,7 @@ msgstr "Skicka länk för återställning av lösenord"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:79
 msgid "This includes all paid orders by this customer across all your events."
 msgstr ""
-"Detta inkluderar alla betalda beställningar av denna kund över alla dina "
+"Detta inkluderar alla betalda anmälningar av denna kund över alla dina "
 "evenemang."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:80
@@ -26256,7 +26250,7 @@ msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
 msgstr ""
-"Beställningen har markerats som betald, men vi kunde inte skicka ett "
+"Anmälan har markerats som betald, men vi kunde inte skicka ett "
 "bekräftelsemejl."
 
 #: pretix/control/views/orders.py:1521
@@ -27935,7 +27929,7 @@ msgid ""
 msgstr ""
 "I betalningsinställningarna för ditt evenemang har du satt %(date)s som "
 "sista datum för betalningar. Därför kommer du inte kunna markera någon "
-"beställning som betald här."
+"anmälan som betald här."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
@@ -28028,7 +28022,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr "Beställningar markerade som betalda"
+msgstr "Anmälan markerade som betalda"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
@@ -28255,11 +28249,11 @@ msgstr "Fel vid bearbetning"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:104
 msgid "The order is already marked as paid"
-msgstr "Beställningen är redan markerad som betald"
+msgstr "Anmälan är redan markerad som betald"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:106
 msgid "Order already paid"
-msgstr "Beställningen är redan betald"
+msgstr "Anmälan är redan betald"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:123
 msgid "Discard"
@@ -28369,8 +28363,8 @@ msgid ""
 "No pending bank transfer payment found. Maybe the order has been paid "
 "already?"
 msgstr ""
-"Ingen väntande banköverföringsbetalning hittades. Kanske har beställningen "
-"redan blivit betald?"
+"Ingen väntande banköverföringsbetalning hittades. Kanske har anmälan redan "
+"blivit betald?"
 
 #: pretix/plugins/banktransfer/views.py:915
 msgid "Sending invoices via email is disabled by the event organizer."
@@ -29913,7 +29907,7 @@ msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
 msgstr ""
-"Endast fullt betalda beställningar räknas. Beställningar som betalas i flera "
+"Endast fullt betalda anmälningar räknas. Beställningar som betalas i flera "
 "omgångar visas med datumet för deras sista betalning."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:67
@@ -32367,8 +32361,8 @@ msgstr ""
 msgid ""
 "Your entire order will be considered unpaid until you paid this difference."
 msgstr ""
-"Hela din beställning kommer att betraktas som obetald tills du har betalat "
-"denna differens."
+"Hela din anmälan kommer att betraktas som obetald tills du har betalat denna "
+"differens."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:186
 msgid ""
