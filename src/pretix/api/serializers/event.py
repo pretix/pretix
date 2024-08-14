@@ -488,7 +488,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
         model = SubEvent
         fields = ('id', 'name', 'date_from', 'date_to', 'active', 'date_admission',
                   'presale_start', 'presale_end', 'location', 'geo_lat', 'geo_lon', 'event', 'is_public',
-                  'frontpage_text', 'seating_plan', 'item_price_overrides', 'variation_price_overrides',
+                  'frontpage_text', 'crowd', 'seating_plan', 'item_price_overrides', 'variation_price_overrides',
                   'meta_data', 'seat_category_mapping', 'last_modified', 'best_availability_state',
                   'comment')
 
@@ -728,6 +728,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'event_list_filters',
         'event_calendar_future_only',
         'frontpage_text',
+        'crowd',
         'event_info_text',
         'attendee_names_asked',
         'attendee_names_required',

@@ -610,6 +610,15 @@ $(function () {
         }
     });
 
+    $("span[data-crowd], small[data-crowd]").each(function() {
+        var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
+
+        $(this).tooltip({
+            "title": 'Verwachte drukte: ' + $(this).attr("data-crowd"),
+            "template": tpl
+        });
+    });
+
     // For a very weird reason, window width is 0 on an initial load of the widget
     if ($(window).width() > 0) {
         setup_week_calendar()

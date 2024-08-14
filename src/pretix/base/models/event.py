@@ -1509,6 +1509,13 @@ class SubEvent(EventMixin, LoggedModel):
         null=True, blank=True,
         verbose_name=_("Frontpage text"),
     )
+
+    crowd = I18nCharField(
+            max_length=200,
+            null=True, blank=True,
+            verbose_name=_("Crowd"),
+    )
+
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
                                      related_name='subevents', verbose_name=_('Seating plan'))
 

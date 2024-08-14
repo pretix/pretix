@@ -4431,6 +4431,10 @@ msgstr ""
 msgid "Frontpage text"
 msgstr "Voorpaginatekst"
 
+#: pretix/base/models/event.py:1510 pretix/base/settings.py:3006
+msgid "Crowd"
+msgstr "Drukte"
+
 #: pretix/base/models/event.py:1527
 msgid "Date in event series"
 msgstr "Datum in evenementenreeks"
