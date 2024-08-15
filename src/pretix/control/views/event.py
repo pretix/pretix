@@ -98,6 +98,7 @@ from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
+from ...base.services.mail import prefix_subject
 from ...base.settings import LazyI18nStringList
 from ...helpers.compat import CompatDeleteView
 from ...helpers.format import format_map
@@ -746,9 +747,9 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                     with language(self.supported_locale[idx], self.request.event.settings.region):
                         try:
                             if k.startswith('mail_subject_'):
-                                msgs[self.supported_locale[idx]] = format_map(
+                                msgs[self.supported_locale[idx]] = prefix_subject(self.request.event, format_map(
                                     bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
-                                )
+                                ), highlight=True)
                             else:
                                 msgs[self.supported_locale[idx]] = markdown_compile_email(
                                     format_map(v, self.placeholders(preview_item), raise_on_missing=True)

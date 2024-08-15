@@ -90,7 +90,7 @@ from pretix.base.models.orders import CancellationRequest
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import multiexport, scheduled_organizer_export
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.mail import SendMailException, mail, prefix_subject
 from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
@@ -351,8 +351,11 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.organizer.settings.region):
                         if k.startswith('mail_subject_'):
-                            msgs[self.supported_locale[idx]] = format_map(bleach.clean(v),
-                                                                          self.placeholders(preview_item))
+                            msgs[self.supported_locale[idx]] = prefix_subject(
+                                self.request.organizer,
+                                format_map(bleach.clean(v), self.placeholders(preview_item)),
+                                highlight=True,
+                            )
                         else:
                             msgs[self.supported_locale[idx]] = markdown_compile_email(
                                 format_map(v, self.placeholders(preview_item))

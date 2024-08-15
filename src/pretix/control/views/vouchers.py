@@ -64,6 +64,7 @@ from pretix.base.models import (
     CartPosition, LogEntry, Voucher, WaitingListEntry,
 )
 from pretix.base.models.vouchers import generate_codes
+from pretix.base.services.mail import prefix_subject
 from pretix.base.services.vouchers import vouchers_send
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncFormView
@@ -572,7 +573,11 @@ class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
             return HttpResponseBadRequest(_('invalid item'))
         msgs = {}
         if "subject" in preview_item:
-            msgs["all"] = format_map(bleach.clean(request.POST.get(preview_item, "")), self.placeholders(preview_item))
+            msgs["all"] = prefix_subject(
+                self.request.event,
+                format_map(bleach.clean(request.POST.get(preview_item, "")), self.placeholders(preview_item)),
+                highlight=True
+            )
         else:
             msgs["all"] = markdown_compile_email(
                 format_map(request.POST.get(preview_item), self.placeholders(preview_item))

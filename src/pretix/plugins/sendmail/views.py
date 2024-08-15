@@ -61,6 +61,7 @@ from pretix.plugins.sendmail.tasks import (
     send_mails_to_orders, send_mails_to_waitinglist,
 )
 
+from ...base.services.mail import prefix_subject
 from ...helpers.format import format_map
 from ...helpers.models import modelcopy
 from . import forms
@@ -197,7 +198,7 @@ class BaseSenderView(EventPermissionRequiredMixin, FormView):
                         )
 
                     subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
-                    preview_subject = format_map(subject, context_dict)
+                    preview_subject = prefix_subject(self.request.event, format_map(subject, context_dict), highlight=True)
                     message = form.cleaned_data['message'].localize(l)
                     preview_text = markdown_compile_email(format_map(message, context_dict))
 
@@ -612,7 +613,7 @@ class CreateRule(EventPermissionRequiredMixin, CreateView):
                         )
 
                     subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
-                    preview_subject = format_map(subject, context_dict)
+                    preview_subject = prefix_subject(self.request.event, format_map(subject, context_dict), highlight=True)
                     template = form.cleaned_data['template'].localize(l)
                     preview_text = markdown_compile_email(format_map(template, context_dict))
 
@@ -688,7 +689,7 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
                     )
 
                 subject = bleach.clean(self.object.subject.localize(lang), tags=[])
-                preview_subject = format_map(subject, placeholders)
+                preview_subject = prefix_subject(self.request.event, format_map(subject, placeholders), highlight=True)
                 template = self.object.template.localize(lang)
                 preview_text = markdown_compile_email(format_map(template, placeholders))
 
