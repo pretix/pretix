@@ -136,9 +136,7 @@ It is a good idea to put this command into your git hook ``.git/hooks/pre-commit
 for example, to check for any errors in any staged files when committing::
 
     #!/bin/bash
-    cd $GIT_DIR/../src
-    export GIT_WORK_TREE=../
-    export GIT_DIR=../.git
+
     source ../env/bin/activate  # Adjust to however you activate your virtual environment
     for file in $(git diff --cached --name-only | grep -E '\.py$' | grep -Ev "migrations|mt940\.py|pretix/settings\.py|make_testdata\.py|testutils/settings\.py|tests/settings\.py|pretix/base/models/__init__\.py|.*_pb2\.py")
     do
