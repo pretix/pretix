@@ -372,6 +372,19 @@
                 </div>
                 {% bootstrap_field sform.waiting_list_enabled layout="control" %}
                 {% bootstrap_field sform.waiting_list_auto layout="control" %}
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                        {% trans "Waiting customers" %}
+                    </label>
+                    <div class="col-md-9 static-form-row">
+                        <p>
+                            <a href="{% url "control:event.orders.waitinglist" event=request.event.slug organizer=request.organizer.slug %}#tab-0-1-open"
+                               target="_blank">
+                                {% trans "Manage waiting list" %}
+                            </a>
+                        </p>
+                    </div>
+                </div>
                 {% bootstrap_field sform.waiting_list_hours layout="control" %}
                 {% bootstrap_field sform.waiting_list_auto_disable layout="control" %}
                 {% bootstrap_field sform.waiting_list_names_asked_required layout="control" %}
