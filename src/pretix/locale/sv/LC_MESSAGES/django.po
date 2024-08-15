@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-29 10:52+0000\n"
-"PO-Revision-Date: 2024-08-13 20:00+0000\n"
+"PO-Revision-Date: 2024-08-15 23:00+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -32731,7 +32731,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:256
 msgid "Resend order link"
-msgstr "Skicka orderlänk igen"
+msgstr "Skicka mig min länk på nytt"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:4
 #: pretix/presale/templates/pretixpresale/event/offline.html:8
