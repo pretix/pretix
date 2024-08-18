@@ -1167,6 +1167,8 @@ Vue.component('pretix-widget-event-list-filter-form', {
 Vue.component('pretix-widget-event-list-entry', {
     template: ('<a :class="classObject" @click.prevent.stop="select">'
         + '<div class="pretix-widget-event-list-entry-name">{{ event.name }}</div>'
+        + '<div v-if="event.crowd" class="pretix-widget-event-list-entry-crowd">Verwachte drukte: {{ event.crowd }}</div>'
+        + '<div v-else class="pretix-widget-event-list-entry-crowd"></div>'
         + '<div class="pretix-widget-event-list-entry-date">{{ event.date_range }}</div>'
         + '<div class="pretix-widget-event-list-entry-location">{{ location }}</div>'  // hidden by css for now, but
                                                                                        // used by a few people
