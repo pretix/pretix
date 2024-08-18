@@ -993,7 +993,11 @@
 
   .pretix-widget-event-list-entry {
     .pretix-widget-event-list-entry-name {
-      width: 100%;
+      width: 50%;
+    }
+    .pretix-widget-event-list-entry-crowd {
+      width: 50%;
+      text-align: right;
     }
     .pretix-widget-event-list-entry-location {
       width: 100%;

@@ -482,6 +482,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 'time': time,
                 'continued': e['continued'],
                 'location': str(ev.location),
+                'crowd': str(ev.crowd),
                 'date_range': self._get_date_range(ev, event, tz=tz),
                 'availability': self._get_availability(ev, event, tz=tz),
                 'event_url': build_absolute_uri(event, 'presale:event.index'),
@@ -539,9 +540,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 limit_before = min(after, now().astimezone(tz))
             else:
                 limit_before = before
-
             ebd = defaultdict(list)
-
             if hasattr(self.request, 'event'):
                 add_subevents_for_days(
                     filter_qs_by_attr(
@@ -573,7 +572,6 @@ class WidgetAPIProductList(EventListMixin, View):
                 ).prefetch_related(
                     'event___settings_objects', 'event__organizer___settings_objects'
                 ), self.request.sales_channel), self.request), limit_before, after, ebd, timezones)
-
             data['weeks'] = weeks_for_template(ebd, self.year, self.month)
             for w in data['weeks']:
                 for d in w:

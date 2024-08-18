@@ -34,6 +34,7 @@ date_admission                        datetime                   The sub-event's
 presale_start                         datetime                   The sub-date at which the ticket shop opens (or ``null``)
 presale_end                           datetime                   The sub-date at which the ticket shop closes (or ``null``)
 frontpage_text                        multi-lingual string       The description of the event (or ``null``)
+crowd                                 string                     The crowd-indication of the sub-event
 location                              multi-lingual string       The sub-event location (or ``null``)
 geo_lat                               float                      Latitude of the location (or ``null``)
 geo_lon                               float                      Longitude of the location (or ``null``)

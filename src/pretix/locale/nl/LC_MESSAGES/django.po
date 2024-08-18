@@ -4385,6 +4385,10 @@ msgstr ""
 msgid "Frontpage text"
 msgstr "Voorpaginatekst"
 
+#: pretix/base/models/event.py:1510 pretix/base/settings.py:3006
+msgid "Crowd"
+msgstr "Drukte"
+
 #: pretix/base/models/event.py:1527
 msgid "Date in event series"
 msgstr "Datum in evenementenreeks"
@@ -12334,7 +12338,7 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "mogelijk gemaakt door <a %(a_attr)s>pretix</a>"
+msgstr "mogelijk gemaakt door <a %(a_attr)s>Caught</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:2
 #, fuzzy
