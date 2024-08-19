@@ -87,9 +87,6 @@ Android 7                   Support planned until at least 06/2025.
 Android 6                   Support planned until at least 06/2025.
 Android 5                   | Support planned until at least 06/2025.
                             | No support for Evolis printers on some devices.
-Android 4.4                 | Support planned until at least 06/2024.
-                            | No support for USB printers.
-                            | No support for Evolis printers.
 Android 4                   Support dropped.
 =========================== ==========================================================
 
