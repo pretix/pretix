@@ -450,6 +450,19 @@ Further reading:
 * `Stripe Payment Method Domain registration`_
 
 
+Content Security Policy
+-----------------------
+
+When using a Content Security Policy (CSP) on your website, you may need to make some adjustments. If your pretix
+shop is running under a custom domain, you need to add the following rules:
+
+* ``script-src``: ``'unsafe-eval' https://pretix.eu`` (adjust to your domain for self-hosted pretix)
+* ``style-src``: ``https://pretix.eu`` (adjust to your domain for self-hosted pretix **and** for custom domain on pretix Hosted)
+* ``connect-src``: ``https://pretix.eu`` (adjust to your domain for self-hosted pretix **and** for custom domain on pretix Hosted)
+* ``frame-src``: ``https://pretix.eu`` (adjust to your domain for self-hosted pretix **and** for custom domain on pretix Hosted)
+* ``img-src``: ``https://pretix.eu`` (adjust to your domain for self-hosted pretix **and** for custom domain on pretix Hosted) and for pretix Hosted additionally add ``https://cdn.pretix.space``
+
+
 External payment providers and Cross-Origin-Opener-Policy
 ---------------------------------------------------------
 
