@@ -5,7 +5,13 @@
 {% load urlreplace %}
 {% block title %}{% trans "Waiting list" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Waiting list" %}</h1>
+    <h1>
+        {% trans "Waiting list" %}
+        <a href="{% url "control:event.settings" event=request.event.slug organizer=request.organizer.slug %}#waiting-list-open" class="btn btn-default">
+            <span class="fa fa-cog"></span>
+            {% trans "Settings" %}
+        </a>
+    </h1>
     {% if not request.event.settings.waiting_list_enabled %}
         <div class="alert alert-danger">
             {% trans "The waiting list is disabled, so if the event is sold out, people cannot add themselves to this list. If you want to enable it, go to the event settings." %}
