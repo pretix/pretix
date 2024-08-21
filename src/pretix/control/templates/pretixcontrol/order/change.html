@@ -151,6 +151,12 @@
                             </div>
                             <div class="col-sm-4">
                                 {% bootstrap_field position.form.itemvar layout='inline' %}
+                                {% if position.granted_memberships.all %}
+                                    <span class="text-muted">
+                                        <span class="fa fa-warning text-warning" aria-hidden="true"></span>
+                                        {% trans "The sale of this position created a membership. Changing the product here will not affect the membership. Memberships can be managed in the customer account." %}
+                                    </span>
+                                {% endif %}
                             </div>
                         </div>
 
@@ -254,6 +260,12 @@
                                     {% trans "–" %}
                                 </div>
                                 {% bootstrap_field position.form.valid_until layout='inline' %}
+                                {% if position.granted_memberships.all %}
+                                    <span class="text-muted">
+                                        <span class="fa fa-warning text-warning" aria-hidden="true"></span>
+                                        {% trans "The sale of this position created a membership. Changing the validity of the ticket here will not affect the membership. Memberships can be managed in the customer account." %}
+                                    </span>
+                                {% endif %}
                             </div>
                         </div>
 
