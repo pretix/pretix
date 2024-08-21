@@ -1589,7 +1589,9 @@ def test_event_block_unblock_seat(token_client, organizer, event, seatingplan, i
 
 
 @pytest.mark.django_db
-def test_event_expand_seat_querycount(token_client, organizer, event, seatingplan, item):
+def test_event_expand_seat_filter_and_querycount(token_client, organizer, event, seatingplan, item):
+    event.settings.seating_minimal_distance = 2
+
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
@@ -1603,9 +1605,9 @@ def test_event_expand_seat_querycount(token_client, organizer, event, seatingpla
     assert resp.status_code == 200
     event.refresh_from_db()
 
-    with assert_num_queries(9):
+    with assert_num_queries(12):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
-                                '?expand=orderposition&expand=cartposition&expand=voucher'
+                                '?expand=orderposition&expand=cartposition&expand=voucher&is_available=true'
                                 .format(organizer.slug, event.slug))
         assert resp.status_code == 200
         assert len(resp.data['results']) == 3
@@ -1613,24 +1615,31 @@ def test_event_expand_seat_querycount(token_client, organizer, event, seatingpla
     with scope(organizer=organizer):
         v0 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-0'))
 
-    with assert_num_queries(10):
+    with assert_num_queries(13):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
-                                '?expand=orderposition&expand=cartposition&expand=voucher'
+                                '?expand=orderposition&expand=cartposition&expand=voucher&is_available=false'
                                 .format(organizer.slug, event.slug))
         assert resp.status_code == 200
+        assert len(resp.data['results']) == 1
         assert resp.data['results'][0]['voucher']['id'] == v0.pk
-        assert resp.data['results'][1]['voucher'] is None
-        assert resp.data['results'][2]['voucher'] is None
+
+    with assert_num_queries(12):
+        resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
+                                '?expand=orderposition&expand=cartposition&expand=voucher&is_available=true'
+                                .format(organizer.slug, event.slug))
+        assert resp.status_code == 200
+        assert len(resp.data['results']) == 2
 
     with scope(organizer=organizer):
         v1 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-1'))
         v2 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-2'))
 
-    with assert_num_queries(10):
+    with assert_num_queries(13):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
-                                '?expand=orderposition&expand=cartposition&expand=voucher'
+                                '?expand=orderposition&expand=cartposition&expand=voucher&is_available=false'
                                 .format(organizer.slug, event.slug))
         assert resp.status_code == 200
+        assert len(resp.data['results']) == 3
         assert resp.data['results'][0]['voucher']['id'] == v0.pk
         assert resp.data['results'][1]['voucher']['id'] == v1.pk
         assert resp.data['results'][2]['voucher']['id'] == v2.pk

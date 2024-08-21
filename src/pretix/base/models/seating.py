@@ -242,7 +242,11 @@ class Seat(models.Model):
                     Power(F('y') - OuterRef('y'), Value(2), output_field=models.FloatField())
                 )
             ).filter(
-                Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True),
+                (
+                    (Q(orderposition_id__isnull=False) | Q(cartposition_id__isnull=False) | Q(voucher_id__isnull=False))
+                    if annotate_ids else
+                    (Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True))
+                ),
                 distance__lt=minimal_distance ** 2
             )
             if distance_only_within_row:

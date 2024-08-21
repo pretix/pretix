@@ -671,12 +671,31 @@ class EventSettingsView(views.APIView):
         return Response(s.data)
 
 
+class SeatFilter(FilterSet):
+    is_available = django_filters.BooleanFilter(method="is_available_qs")
+
+    def is_available_qs(self, queryset, name, value):
+        expr = (
+            Q(orderposition_id__isnull=True, cartposition_id__isnull=True, voucher_id__isnull=True)
+        )
+        if self.request.event.settings.seating_minimal_distance:
+            expr = expr & Q(has_closeby_taken=False)
+        if value:
+            return queryset.filter(expr)
+        else:
+            return queryset.exclude(expr)
+
+    class Meta:
+        model = Seat
+        fields = ('zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label', 'seat_guid', 'blocked',)
+
+
 class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SeatSerializer
     queryset = Seat.objects.none()
     write_permission = 'can_change_event_settings'
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label', 'seat_guid', 'blocked',)
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = SeatFilter
 
     def get_queryset(self):
         if self.request.event.has_subevents and 'subevent' in self.request.resolver_match.kwargs:
@@ -684,9 +703,23 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
                 subevent = self.request.event.subevents.get(pk=self.request.resolver_match.kwargs['subevent'])
             except SubEvent.DoesNotExist:
                 raise NotFound('Subevent not found')
-            qs = Seat.annotated(event_id=self.request.event.id, subevent=subevent, qs=subevent.seats.all(), annotate_ids=True)
+            qs = Seat.annotated(
+                event_id=self.request.event.id,
+                subevent=subevent,
+                qs=subevent.seats.all(),
+                annotate_ids=True,
+                minimal_distance=self.request.event.settings.seating_minimal_distance,
+                distance_only_within_row=self.request.event.settings.seating_distance_only_within_row,
+            )
         elif not self.request.event.has_subevents and 'subevent' not in self.request.resolver_match.kwargs:
-            qs = Seat.annotated(event_id=self.request.event.id, subevent=None, qs=self.request.event.seats.all(), annotate_ids=True)
+            qs = Seat.annotated(
+                event_id=self.request.event.id,
+                subevent=None,
+                qs=self.request.event.seats.all(),
+                annotate_ids=True,
+                minimal_distance=self.request.event.settings.seating_minimal_distance,
+                distance_only_within_row=self.request.event.settings.seating_distance_only_within_row,
+            )
         else:
             raise NotFound('Please use the subevent-specific endpoint' if self.request.event.has_subevents
                            else 'This event has no subevents')
