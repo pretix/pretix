@@ -101,7 +101,8 @@ Endpoints
    :query string seat_number: Only show seats with the given seat_number.
    :query string seat_label: Only show seats with the given seat_label.
    :query string seat_guid: Only show seats with the given seat_guid.
-   :query string blocked: Only show seats with the given blocked status.
+   :query boolean blocked: Only show seats with the given blocked status.
+   :query boolean is_available: Only show seats that are (not) currently available.
    :query string expand: If you pass ``"orderposition"``, ``"cartposition"``, or ``"voucher"``, the respective field will be
                          shown as a nested value instead of just an ID. This requires permission to access that object.
                          The nested objects are identical to the respective resources, except that order positions
