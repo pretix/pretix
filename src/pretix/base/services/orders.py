@@ -3152,7 +3152,7 @@ def signal_listener_issue_memberships(sender: Event, order: Order, **kwargs):
     if order.status != Order.STATUS_PAID or not order.customer:
         return
     for p in order.positions.all():
-        if p.item.grant_membership_type_id:
+        if p.item.grant_membership_type_id and not p.granted_memberships.exists():
             create_membership(order.customer, p)
 
 

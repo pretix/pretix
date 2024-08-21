@@ -1662,7 +1662,7 @@ class OrderChangeManagerTests(TestCase):
         mt = self.event.organizer.membership_types.create(name="foo")
         customer = self.event.organizer.customers.create()
         self.order.customer = customer
-        self.o.save()
+        self.order.save()
         m = customer.memberships.create(
             membership_type=mt,
             date_start=now(),
@@ -1673,6 +1673,37 @@ class OrderChangeManagerTests(TestCase):
         self.ocm.commit()
         m.refresh_from_db()
         assert m.canceled
+
+    @classscope(attr='o')
+    def test_create_membership_after_change(self):
+        mt = self.event.organizer.membership_types.create(name="foo")
+        customer = self.event.organizer.customers.create()
+        self.ticket.grant_membership_type = mt
+        self.ticket.save()
+        self.ticket2.grant_membership_type = mt
+        self.ticket2.save()
+        self.order.customer = customer
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        assert customer.memberships.count() == 0
+        self.ocm.change_item(self.op1, item=self.ticket2, variation=None)
+        self.ocm.cancel(self.op2)
+        self.ocm.commit()
+
+        self.order.refresh_from_db()
+        self.op1.refresh_from_db()
+        customer.refresh_from_db()
+        assert self.op1.granted_memberships.count() == 1
+        assert customer.memberships.count() == 1
+
+        # But only once
+        self.ocm = OrderChangeManager(self.order, None)
+        self.ocm.change_item(self.op1, item=self.ticket, variation=None)
+        self.ocm.commit()
+
+        customer.refresh_from_db()
+        assert self.op1.granted_memberships.count() == 1
+        assert customer.memberships.count() == 1
 
     @classscope(attr='o')
     def test_cancel_issued_giftcard_used(self):

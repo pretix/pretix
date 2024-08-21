@@ -1900,7 +1900,7 @@ class OrderChange(OrderView):
         positions = list(self.order.positions.select_related(
             'item', 'item__tax_rule', 'used_membership', 'used_membership__membership_type', 'tax_rule',
             'seat', 'subevent',
-        ))
+        ).prefetch_related('granted_memberships'))
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p, items=self.items,
                                              initial={'seat': p.seat.seat_guid if p.seat else None},
