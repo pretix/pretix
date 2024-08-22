@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-29 10:52+0000\n"
-"PO-Revision-Date: 2024-08-21 18:01+0000\n"
+"PO-Revision-Date: 2024-08-22 15:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -57,149 +57,151 @@ msgstr "Daniera"
 
 #: pretix/_base_settings.py:88
 msgid "Dutch"
-msgstr ""
+msgstr "Nederlandera"
 
 #: pretix/_base_settings.py:89
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Nederlandera (ez formala)"
 
 #: pretix/_base_settings.py:90
 msgid "French"
-msgstr ""
+msgstr "Frantsesa"
 
 #: pretix/_base_settings.py:91
 msgid "Finnish"
-msgstr ""
+msgstr "Finlandiera"
 
 #: pretix/_base_settings.py:92
 msgid "Galician"
-msgstr ""
+msgstr "Galegoa"
 
 #: pretix/_base_settings.py:93
 msgid "Greek"
-msgstr ""
+msgstr "Greziera"
 
 #: pretix/_base_settings.py:94
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesiera"
 
 #: pretix/_base_settings.py:95
 msgid "Italian"
-msgstr ""
+msgstr "Italiera"
 
 #: pretix/_base_settings.py:96
 msgid "Latvian"
-msgstr ""
+msgstr "Letoniera"
 
 #: pretix/_base_settings.py:97
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norvegiera Bokmål"
 
 #: pretix/_base_settings.py:98
 msgid "Polish"
-msgstr ""
+msgstr "Poloniera"
 
 #: pretix/_base_settings.py:99
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portugesa (Portugal)"
 
 #: pretix/_base_settings.py:100
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugesa (Brasil)"
 
 #: pretix/_base_settings.py:101
 msgid "Romanian"
-msgstr ""
+msgstr "Errumaniera"
 
 #: pretix/_base_settings.py:102
 msgid "Russian"
-msgstr ""
+msgstr "Errusiera"
 
 #: pretix/_base_settings.py:103
 msgid "Slovak"
-msgstr ""
+msgstr "Eslovakiera"
 
 #: pretix/_base_settings.py:104
 msgid "Swedish"
-msgstr ""
+msgstr "Suediera"
 
 #: pretix/_base_settings.py:105
 msgid "Spanish"
-msgstr ""
+msgstr "Gaztelania"
 
 #: pretix/_base_settings.py:106
 msgid "Turkish"
-msgstr ""
+msgstr "Turkiera"
 
 #: pretix/_base_settings.py:107
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrainera"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Gailurako erabateko sarbidea (eskaerak eta opari-txartelak bistaratu eta "
+"aldatzea, produktuak bistaratzea eta ezarpenak)"
 
 #: pretix/api/auth/devicesecurity.py:53
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:90
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (kiosko modua, eskaerak sinkronizatu gabe, bilaketarik gabe)"
 
 #: pretix/api/auth/devicesecurity.py:124
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (online bakarrik, eskaerak sinkronizatu gabe)"
 
 #: pretix/api/auth/devicesecurity.py:159
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:391
 msgid "Application name"
-msgstr ""
+msgstr "Eskaeraren izena"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:410
 msgid "Redirection URIs"
-msgstr ""
+msgstr "URI birbideraketa"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:411
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Baimendutako URIen zerrenda, tarteka bereizita"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr ""
+msgstr "Baimendutako Saio-Itxierako URIen zerrenda, tarteka bereizita"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:395
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
 msgid "Client ID"
-msgstr ""
+msgstr "Bezeroaren ID"
 
 #: pretix/api/models.py:55
 msgid "Client secret"
-msgstr ""
+msgstr "Bezero sekretua"
 
 #: pretix/api/models.py:116
 msgid "Enable webhook"
-msgstr ""
+msgstr "Webhook gaitu"
 
 #: pretix/api/models.py:117
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Xede URLa"
 
 #: pretix/api/models.py:118 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:286
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Ekitaldi guztiak (sortu berriak barne)"
 
 #: pretix/api/models.py:119 pretix/base/models/devices.py:124
 #: pretix/base/models/organizer.py:287
 msgid "Limit to events"
-msgstr ""
+msgstr "Ekitaldien muga"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:1077
@@ -213,135 +215,146 @@ msgstr ""
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:521
 msgid "Comment"
-msgstr ""
+msgstr "Iruzkina"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1355
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "\"{}\" produktua ez dago kuota bati esleitua."
 
 #: pretix/api/serializers/checkin.py:74 pretix/base/models/event.py:1667
 #: pretix/base/models/items.py:1864 pretix/base/models/items.py:2122
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Elementu bat edo gehiago ez dira ekitaldi honetakoak."
 
 #: pretix/api/serializers/checkin.py:78 pretix/api/serializers/checkin.py:81
 #: pretix/base/models/items.py:2133 pretix/base/models/items.py:2136
 #: pretix/base/models/waitinglist.py:305 pretix/base/models/waitinglist.py:308
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "Azpigertaera ez da ekitaldi honetakoa."
 
 #: pretix/api/serializers/event.py:229
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Ekitaldiak ezin dira sortu «zuzenean» bezala. Kuotak eta ordainketa gehitu "
+"behar zaizkio ekitaldiari, salmentak martxan jarri aurretik."
 
 #: pretix/api/serializers/event.py:244 pretix/api/serializers/event.py:547
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "'{name}' metadatuen propietatea ez da existitzen."
 
 #: pretix/api/serializers/event.py:247 pretix/api/serializers/event.py:550
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr ""
+msgstr "'{name}' metadatuen propietateak ez du uzten '{value}' balioa."
 
 #: pretix/api/serializers/event.py:291
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Plugin ezezaguna: '{name}'."
 
 #: pretix/api/serializers/event.py:294
 #, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr ""
+msgstr "Plugin mugatua: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "'{name}' elementuaren metadatuen propietatea ez da existitzen."
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:1212
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr ""
+"Multzokatutako artikuluak eta multzokatzaileak ez dute berdinak izan behar."
 
 #: pretix/api/serializers/item.py:210 pretix/control/forms/item.py:1214
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Multzokatutako artikuluak ez du multzokatzerik izan behar berez."
 
 #: pretix/api/serializers/item.py:298
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Ezin dira osagarriak, paketeak edo aldaketak eguneratu PATCH/PUT bidez. "
+"Erabili habiaratutako azken puntu espezifikoa."
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Onarpen-produktuak bakarrik pertsonaliza daitezke."
 
 #: pretix/api/serializers/item.py:317
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Opari-txartelen produktuek ez dute lotuta egon behar zerga-tasa ez-nuluekin, "
+"opari-txartela trukatzean aplikatuko baita salmenten gaineko zerga."
 
 #: pretix/api/serializers/item.py:322 pretix/control/forms/item.py:714
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "Opari-txartelen produktuak ez dira aldi berean onartzekoak izan behar."
 
 #: pretix/api/serializers/item.py:504
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Ez da onartzen PATCH/PUT bidez eguneratzeko aukerarik. Mesedez, erabili "
+"amaierako puntu habiaratu espezifikoa."
 
 #: pretix/api/serializers/item.py:518 pretix/control/forms/item.py:120
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "Galdera ezin da erregistroan egindako galdera baten araberakoa izan."
 
 #: pretix/api/serializers/item.py:523 pretix/control/forms/item.py:125
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Antzemandako galderen arteko mendekotasun zirkularra."
 
 #: pretix/api/serializers/item.py:528 pretix/control/forms/item.py:134
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Horrelako galderak ezin dira egin erregistroan."
 
 #: pretix/api/serializers/item.py:531 pretix/control/forms/item.py:142
 msgid "This type of question cannot be shown during check-in."
-msgstr ""
+msgstr "Horrelako galderak ezin dira erregistroan erakutsi."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
+"Identifikatzaile eta mota bereko bitarteko bat badago zure antolatzaile "
+"kontuan."
 
 #: pretix/api/serializers/order.py:78
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "\"{input}\" ez da baliozko aukera bat."
 
 #: pretix/api/serializers/order.py:1316 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1530
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "\"{seat}\" hautatutako idazpena ez dago erabilgarri."
 
 #: pretix/api/serializers/order.py:1342 pretix/api/serializers/order.py:1349
 msgid "The product \"{}\" is not available on this date."
-msgstr ""
+msgstr "Data honetan ez dago eskuragarri \"{}\" produktua."
 
 #: pretix/api/serializers/order.py:1364 pretix/api/views/cart.py:200
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "Ez dago nahikoa kuota erabilgarri\"{}\" kuotan eragiketa egiteko."
 
 #: pretix/api/serializers/organizer.py:102
 #: pretix/control/forms/organizer.py:832 pretix/presale/forms/customer.py:439
 msgid "An account with this email address is already registered."
-msgstr ""
+msgstr "Helbide elektroniko hori duen kontu bat erregistratuta dago."
 
 #: pretix/api/serializers/organizer.py:235
 #: pretix/control/forms/organizer.py:681
@@ -349,226 +362,232 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Sekretu bera duen opari-txartel bat badago zure kontuan edo antolatzaile-"
+"kontu afiliatu batean."
 
 #: pretix/api/serializers/organizer.py:321
 #: pretix/control/views/organizer.py:729
 msgid "pretix account invitation"
-msgstr ""
+msgstr "pretix kontuaren gonbidapena"
 
 #: pretix/api/serializers/organizer.py:343
 #: pretix/control/views/organizer.py:828
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Erabiltzaile hau talde honetarako gonbidatua izan da."
 
 #: pretix/api/serializers/organizer.py:359
 #: pretix/control/views/organizer.py:845
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Erabiltzaile honek dagoeneko baditu talde honetarako baimenak."
 
 #: pretix/api/views/cart.py:209
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr ""
+msgstr "Zehaztutako kupoia dagoeneko iritsi da gehienezko aldi-kopurura."
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Bitartekaria beste ekitaldi batera konektatuta dago"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:475
 #, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr ""
+msgstr "\"{application_name}\" eskaera zure kontura sartzeko baimendu da."
 
 #: pretix/api/views/order.py:603 pretix/control/views/orders.py:1584
 #: pretix/presale/views/order.py:741 pretix/presale/views/order.py:814
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Ezin da fakturarik sortu eskaera honentzat."
 
 #: pretix/api/views/order.py:608 pretix/control/views/orders.py:1586
 #: pretix/presale/views/order.py:743 pretix/presale/views/order.py:816
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Lehendik ere badago faktura bat eskaera horretarako."
 
 #: pretix/api/views/order.py:634 pretix/control/views/orders.py:1712
 #: pretix/control/views/users.py:143
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
+"Errore bat gertatu zen posta bidaltzean. Mesedez, saiatu berriro geroago."
 
 #: pretix/api/views/order.py:712 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:798
 msgid "One of the selected products is not available in the selected country."
 msgstr ""
+"Hautatutako produktuetako bat ez dago erabilgarri hautatutako herrialdean."
 
 #: pretix/api/webhooks.py:237 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr ""
+msgstr "Eskaera berria gauzatu da"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr ""
+msgstr "Eskaera berria onartu behar da"
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Eskaera ordainduta bezala markatu da"
 
 #: pretix/api/webhooks.py:249 pretix/base/models/checkin.py:358
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1545
 msgid "Order canceled"
-msgstr ""
+msgstr "Eskaera ezeztatua"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr ""
+msgstr "Eskaera berriz aktibatu da"
 
 #: pretix/api/webhooks.py:257 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr ""
+msgstr "Eskaera iraungi da"
 
 #: pretix/api/webhooks.py:261
 msgid "Order expiry date changed"
-msgstr ""
+msgstr "Eskaeraren iraungitze-data aldatuta"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr ""
+msgstr "Eskaeraren informazioa aldatuta"
 
 #: pretix/api/webhooks.py:269 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Eskaeraren harremanetarako helbidea aldatuta"
 
 #: pretix/api/webhooks.py:273 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr ""
+msgstr "Eskaera aldatuta"
 
 #: pretix/api/webhooks.py:277
 msgid "Refund of payment created"
-msgstr ""
+msgstr "Ordainketaren itzulketa sortuta"
 
 #: pretix/api/webhooks.py:281 pretix/base/notifications.py:293
 msgid "External refund of payment"
-msgstr ""
+msgstr "Ordainketaren kanpo-itzulketa"
 
 #: pretix/api/webhooks.py:285
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "Bezeroak eskatutako ordainketaren itzulketa"
 
 #: pretix/api/webhooks.py:289
 msgid "Refund of payment completed"
-msgstr ""
+msgstr "Ordainketaren itzulketa gauzatuta"
 
 #: pretix/api/webhooks.py:293
 msgid "Refund of payment canceled"
-msgstr ""
+msgstr "Ordainketaren itzulketa baliogabetuta"
 
 #: pretix/api/webhooks.py:297
 msgid "Refund of payment failed"
-msgstr ""
+msgstr "Ordainketaren itzulketak huts egin du"
 
 #: pretix/api/webhooks.py:301
 msgid "Payment confirmed"
-msgstr ""
+msgstr "Ordainketa baieztatuta"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
-msgstr ""
+msgstr "Eskaera onartuta"
 
 #: pretix/api/webhooks.py:309
 msgid "Order denied"
-msgstr ""
+msgstr "Ukatutako eskaera"
 
 #: pretix/api/webhooks.py:313
 msgid "Order deleted"
-msgstr ""
+msgstr "Ezabatutako eskaera"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
-msgstr ""
+msgstr "Sarrera erregistratuta"
 
 #: pretix/api/webhooks.py:321
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "Sarreren erregistroa atzera bota da"
 
 #: pretix/api/webhooks.py:325
 msgid "Event created"
-msgstr ""
+msgstr "Ekitaldia sortuta"
 
 #: pretix/api/webhooks.py:329
 msgid "Event details changed"
-msgstr ""
+msgstr "Ekitaldiaren xehetasunak aldatuta"
 
 #: pretix/api/webhooks.py:333
 msgid "Event deleted"
-msgstr ""
+msgstr "Ekitaldia ezabatuta"
 
 #: pretix/api/webhooks.py:337
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr ""
+msgstr "Ekitaldi-segidaren data gehituta"
 
 #: pretix/api/webhooks.py:341
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr ""
+msgstr "Ekitaldi-segidaren data aldatuta"
 
 #: pretix/api/webhooks.py:345
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr ""
+msgstr "Ekitaldi-segidaren data ezabatuta"
 
 #: pretix/api/webhooks.py:349
 msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produktua aldatuta (gehitutako edo ezabatutako produktuak eta habiaratutako "
+"objektuetan egindako aldaketak barne (aldaketak edo paketeak, adibidez))"
 
 #: pretix/api/webhooks.py:354
 msgid "Shop taken live"
-msgstr ""
+msgstr "Denda zabalik"
 
 #: pretix/api/webhooks.py:358
 msgid "Shop taken offline"
-msgstr ""
+msgstr "Konexiorik gabeko denda"
 
 #: pretix/api/webhooks.py:362
 msgid "Test-Mode of shop has been activated"
-msgstr ""
+msgstr "Dendako proba-modua aktibatu da"
 
 #: pretix/api/webhooks.py:366
 msgid "Test-Mode of shop has been deactivated"
-msgstr ""
+msgstr "Dendako proba-modua desaktibatu egin da"
 
 #: pretix/api/webhooks.py:370
 msgid "Waiting list entry added"
-msgstr ""
+msgstr "Itxarote-zerrenda gehituta"
 
 #: pretix/api/webhooks.py:374
 msgid "Waiting list entry changed"
-msgstr ""
+msgstr "Itxarote-zerrenda aldatuta"
 
 #: pretix/api/webhooks.py:378
 msgid "Waiting list entry deleted"
-msgstr ""
+msgstr "Itxarote-zerrenda ezabatuta"
 
 #: pretix/api/webhooks.py:382
 msgid "Waiting list entry received voucher"
-msgstr ""
+msgstr "Itxaron zerrendan izena emateko txartela"
 
 #: pretix/api/webhooks.py:386
 msgid "Customer account created"
-msgstr ""
+msgstr "Bezero-kontua sortu da"
 
 #: pretix/api/webhooks.py:390
 msgid "Customer account changed"
-msgstr ""
+msgstr "Bezero-kontua aldatu da"
 
 #: pretix/api/webhooks.py:394
 msgid "Customer account anonymized"
-msgstr ""
+msgstr "Bezero-kontu anonimoa"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:953
@@ -580,20 +599,20 @@ msgstr ""
 #: pretix/plugins/banktransfer/payment.py:679
 #: pretix/presale/forms/customer.py:139
 msgid "This field is required."
-msgstr ""
+msgstr "Eremu hau beharrezkoa da."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Sartu posta-kodea XXX formatuan."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Sartu posta-kodea XXXX formatuan."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system} Erabiltzailea"
 
 #: pretix/base/auth.py:152 pretix/base/exporters/customers.py:67
 #: pretix/base/forms/auth.py:257 pretix/base/models/auth.py:244
@@ -610,65 +629,68 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
 msgid "E-mail"
-msgstr ""
+msgstr "E-maila"
 
 #: pretix/base/auth.py:154 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/customers.py:96
 #: pretix/control/forms/mailsetup.py:55 pretix/presale/forms/customer.py:59
 #: pretix/presale/forms/customer.py:284
 msgid "Password"
-msgstr ""
+msgstr "Pasahitza"
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
-msgstr ""
+msgstr "Online denda"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"API salmenta-kanalek ez dute inolako funtzionalitaterik, baina integrazio "
+"pertsonalizatuetarako erabil daitezke."
 
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr ""
+msgstr "{name}-ek bultzatua eta <a {a_attr}>pretix</a> -an oinarritua"
 
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s> pretix</a>- ek bultzatutako tiket-sistema"
 
 #: pretix/base/context.py:61
 msgid "source code"
-msgstr ""
+msgstr "iturri kodea"
 
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "{name} konfigurazio-aukera falta da."
 
 #: pretix/base/customersso/oidc.py:67 pretix/base/customersso/oidc.py:72
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
 msgstr ""
+"Ezin du \"{url}\" konfigurazioa berreskuratu. Errore-mezua: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:78 pretix/base/customersso/oidc.py:83
 #: pretix/base/customersso/oidc.py:88 pretix/base/customersso/oidc.py:93
 #: pretix/base/customersso/oidc.py:98 pretix/base/customersso/oidc.py:103
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "SSO hornitzailea ez da bateragarria: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
 #, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr ""
+msgstr "Ez zara \"{scope}\" eskatzen ari."
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
@@ -676,6 +698,8 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
+"\"{scope}\" eremua eskatzen ari zara, baina hornitzaileak hauek bakarrik "
+"onartzen ditu: {scopes}."
 
 #: pretix/base/customersso/oidc.py:125
 #, python-brace-format
@@ -683,6 +707,8 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
+"\"{field}\" eremua eskatzen ari zara, baina hornitzaileak hauek bakarrik "
+"onartzen ditu: {fields}."
 
 #: pretix/base/customersso/oidc.py:171 pretix/base/customersso/oidc.py:178
 #: pretix/base/customersso/oidc.py:197 pretix/base/customersso/oidc.py:214
@@ -691,13 +717,15 @@ msgstr ""
 #: pretix/presale/views/customer.py:811
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "Ezin izan da saioa hasi. Errore-mezua: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:204
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
+"Kontu honetako helbide elektronikoa ez da egiaztatu oraindik. Mesedez, "
+"berretsi lehenengo helbide elektronikoa zure bezero-kontuan."
 
 #: pretix/base/email.py:199 pretix/base/exporters/items.py:157
 #: pretix/base/exporters/items.py:205 pretix/control/views/main.py:311
@@ -708,39 +736,39 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "Lehenespenez"
 
 #: pretix/base/email.py:206
 msgid "Simple with logo"
-msgstr ""
+msgstr "Soila logotipoarekin"
 
 #: pretix/base/exporter.py:187 pretix/base/exporter.py:317
 msgid "Export format"
-msgstr ""
+msgstr "Esportatzeko formatua"
 
 #: pretix/base/exporter.py:189
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:190 pretix/base/exporter.py:309
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (komekin)"
 
 #: pretix/base/exporter.py:191 pretix/base/exporter.py:310
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (Excel-style)"
 
 #: pretix/base/exporter.py:192 pretix/base/exporter.py:311
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (puntu eta komekin)"
 
 #: pretix/base/exporter.py:305
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "Excel konbinatuak (.xlsx)"
 
 #: pretix/base/exporters/answers.py:54
 msgid "Question answer file uploads"
-msgstr ""
+msgstr "Galderen-erantzun fitxategia kargatzea"
 
 #: pretix/base/exporters/answers.py:55 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:87
@@ -751,20 +779,22 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:651
 msgctxt "export_category"
 msgid "Order data"
-msgstr ""
+msgstr "Eskaeraren datuak"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Deskargatu ZIP fitxategi bat, zure bezeroek eskaera bat sortzean kargatu "
+"dituzten fitxategi guztiak biltzen dituena."
 
 #: pretix/base/exporters/answers.py:66 pretix/base/models/items.py:1714
 #: pretix/control/navigation.py:182
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "Galderak"
 
 #: pretix/base/exporters/answers.py:76 pretix/base/exporters/orderlist.py:583
 #: pretix/base/exporters/orderlist.py:898
@@ -798,7 +828,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html:20
 msgctxt "subevent"
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: pretix/base/exporters/answers.py:79 pretix/base/exporters/answers.py:88
 #: pretix/control/forms/checkin.py:89 pretix/control/forms/event.py:1533
@@ -816,21 +846,23 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:351
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "Data guztiak"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:604
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
 msgid "Customer accounts"
-msgstr ""
+msgstr "Bezeroen kontuak"
 
 #: pretix/base/exporters/customers.py:51
 msgctxt "export_category"
 msgid "Customer accounts"
-msgstr ""
+msgstr "Bezeroen kontuak"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
 msgstr ""
+"Deskargatu kalkulu-orri bat egun erregistratuta dauden bezeroen kontu "
+"guztiekin."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:82
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:29
@@ -838,19 +870,19 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
 msgid "Customer ID"
-msgstr ""
+msgstr "Bezeroaren IDa"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:32
 msgid "SSO provider"
-msgstr ""
+msgstr "SSO hornitzailea"
 
 #: pretix/base/exporters/customers.py:66 pretix/base/models/customers.py:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:36
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:49
 msgid "External identifier"
-msgstr ""
+msgstr "Kanpo identifikatzailea"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:445
@@ -868,14 +900,14 @@ msgstr ""
 #: pretix/presale/forms/waitinglist.py:106
 #: pretix/presale/templates/pretixpresale/event/order.html:303
 msgid "Phone number"
-msgstr ""
+msgstr "Telefono zenbakia"
 
 #: pretix/base/exporters/customers.py:69 pretix/base/models/auth.py:246
 #: pretix/base/models/customers.py:97 pretix/base/models/orders.py:3176
 #: pretix/base/settings.py:3578 pretix/base/settings.py:3590
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Full name"
-msgstr ""
+msgstr "Izen osoa"
 
 #: pretix/base/exporters/customers.py:74 pretix/base/exporters/invoices.py:206
 #: pretix/base/exporters/invoices.py:214 pretix/base/exporters/invoices.py:332
@@ -921,25 +953,25 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:29
 #: pretix/presale/templates/pretixpresale/organizers/index.html:41
 msgid "Name"
-msgstr ""
+msgstr "Izena"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:99
 msgid "Account active"
-msgstr ""
+msgstr "Kontua aktibo"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:100
 msgid "Verified email address"
-msgstr ""
+msgstr "Helbide elektroniko egiaztatua"
 
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:68
 msgid "Last login"
-msgstr ""
+msgstr "Azken saio-hasiera"
 
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:102
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:66
 msgid "Registration date"
-msgstr ""
+msgstr "Erregistro-data"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
@@ -947,7 +979,7 @@ msgstr ""
 #: pretix/control/forms/event.py:1538 pretix/control/forms/exports.py:49
 #: pretix/control/forms/exports.py:88 pretix/control/views/waitinglist.py:308
 msgid "Language"
-msgstr ""
+msgstr "Hizkuntza"
 
 #: pretix/base/exporters/customers.py:82
 #: pretix/base/exporters/reusablemedia.py:53
@@ -955,7 +987,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:72
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:68
 msgid "Notes"
-msgstr ""
+msgstr "Oharrak"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -995,7 +1027,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:815
 #: pretix/plugins/checkinlists/exporters.py:816
 msgid "Yes"
-msgstr ""
+msgstr "Bai"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -1018,23 +1050,25 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:815
 #: pretix/plugins/checkinlists/exporters.py:816
 msgid "No"
-msgstr ""
+msgstr "Ez"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
 msgctxt "export_category"
 msgid "Invoices"
-msgstr ""
+msgstr "Fakturak"
 
 #: pretix/base/exporters/dekodi.py:43
 msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
 msgstr ""
+"Deskargatu fakturak dekodi NREI bihurketa-softwareak erabil dezakeen formatu "
+"batean."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "Ekitaldiaren sarrera {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:74
 #: pretix/base/exporters/orderlist.py:128
@@ -1047,28 +1081,32 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:698
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
 msgid "Date range"
-msgstr ""
+msgstr "Data-tartea"
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
+"Epe horretan jaulkitako fakturak bakarrik sartzen dira. Kontuan izan "
+"fakturaren data ez datorrela beti bat eskaera- edo ordainketa-datarekin."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
-msgstr ""
+msgstr "Ekitaldiaren data"
 
 #: pretix/base/exporters/events.py:48
 msgctxt "export_category"
 msgid "Event data"
-msgstr ""
+msgstr "Ekitaldiaren data"
 
 #: pretix/base/exporters/events.py:49
 msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Deskargatu ekitaldi guztiei buruzko informazioa duen kalkulu-orria "
+"administratzaile-kontu honetan."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:441
@@ -1080,78 +1118,78 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:68
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 msgid "Event name"
-msgstr ""
+msgstr "Ekitaldiaren izena"
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:580
 #: pretix/base/models/organizer.py:91
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr ""
+msgstr "Forma laburra"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:582
 msgid "Shop is live"
-msgstr ""
+msgstr "Denda zabalik dago"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:584
 msgid "Event currency"
-msgstr ""
+msgstr "Ekitaldiaren moneta"
 
 #: pretix/base/exporters/events.py:61 pretix/base/models/auth.py:261
 #: pretix/base/models/exports.py:133 pretix/control/forms/exports.py:93
 msgid "Timezone"
-msgstr ""
+msgstr "Ordu-eremua"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:587
 #: pretix/base/models/event.py:1471 pretix/base/settings.py:3205
 #: pretix/base/settings.py:3215 pretix/control/forms/subevents.py:480
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
-msgstr ""
+msgstr "Ekitaldiaren hasiera ordua"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:589
 #: pretix/base/models/event.py:1473 pretix/base/pdf.py:286
 #: pretix/control/forms/subevents.py:485
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
-msgstr ""
+msgstr "Ekitaldiaren amaiera ordua"
 
 #: pretix/base/exporters/events.py:64 pretix/base/models/event.py:591
 #: pretix/base/models/event.py:1475 pretix/control/forms/subevents.py:490
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr ""
+msgstr "Onarpen ordua"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:603
 #: pretix/base/models/event.py:1484 pretix/control/forms/subevents.py:93
 msgid "Start of presale"
-msgstr ""
+msgstr "Aurresalmentaren hasiera"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:597
 #: pretix/base/models/event.py:1478 pretix/control/forms/subevents.py:99
 msgid "End of presale"
-msgstr ""
+msgstr "Aurresalmentaren amaiera"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:351
 #: pretix/base/models/event.py:609 pretix/base/models/event.py:1490
 msgid "Location"
-msgstr ""
+msgstr "Kokapena"
 
 #: pretix/base/exporters/events.py:68 pretix/base/models/event.py:612
 #: pretix/base/models/event.py:1493
 msgid "Latitude"
-msgstr ""
+msgstr "Latitudea"
 
 #: pretix/base/exporters/events.py:69 pretix/base/models/event.py:620
 #: pretix/base/models/event.py:1501
 msgid "Longitude"
-msgstr ""
+msgstr "Longitudea"
 
 #: pretix/base/exporters/events.py:70 pretix/base/models/event.py:632
 #: pretix/base/models/event.py:1516
 #: pretix/control/templates/pretixcontrol/event/index.html:128
 #: pretix/control/templates/pretixcontrol/order/index.html:997
 msgid "Internal comment"
-msgstr ""
+msgstr "Barne iruzkina"
 
 #: pretix/base/exporters/invoices.py:82 pretix/base/models/orders.py:1728
 #: pretix/base/models/orders.py:2137 pretix/control/forms/filter.py:202
@@ -1166,13 +1204,13 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
-msgstr ""
+msgstr "Ordainketa hornitzailea"
 
 #: pretix/base/exporters/invoices.py:84 pretix/base/exporters/invoices.py:86
 #: pretix/control/forms/filter.py:204 pretix/control/forms/filter.py:945
 #: pretix/control/forms/filter.py:2209
 msgid "All payment providers"
-msgstr ""
+msgstr "Ordainketa hornitzaile guztiak"
 
 #: pretix/base/exporters/invoices.py:92
 msgid ""
@@ -1180,18 +1218,24 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
+"Ordainketa-hornitzaile honekin gutxienez ordainketa-saiakera bat duten "
+"eskaerentzako fakturak baino ez dira sartzen. Kontuan izan horrek barnean "
+"har ditzakeela eskaeren faktura batzuk, azkenean beste hornitzaile batekin "
+"guztiz edo partzialki ordaindu direnak."
 
 #: pretix/base/exporters/invoices.py:126
 msgid "All invoices"
-msgstr ""
+msgstr "Faktura guztiak"
 
 #: pretix/base/exporters/invoices.py:127
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
+"Deskargatu sistemak sortutako faktura guztiak PDF fitxategien ZIP fitxategi "
+"gisa."
 
 #: pretix/base/exporters/invoices.py:178
 msgid "Invoice data"
-msgstr ""
+msgstr "Fakturaren data"
 
 #: pretix/base/exporters/invoices.py:179
 msgid ""
@@ -1199,6 +1243,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Deskargatu sistemak sortutako faktura guztien datuak dituen kalkulu-orria. "
+"Kalkulu-orriak bi orri ditu: batean, lerro bat faktura bakoitzerako, eta "
+"bestean, lerro bat faktura bakoitzaren posizio bakoitzerako."
 
 #: pretix/base/exporters/invoices.py:191 pretix/base/shredder.py:576
 #: pretix/control/templates/pretixcontrol/order/index.html:267
@@ -1207,15 +1254,15 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:235
 #: pretix/presale/templates/pretixpresale/event/order.html:256
 msgid "Invoices"
-msgstr ""
+msgstr "Fakturak"
 
 #: pretix/base/exporters/invoices.py:192
 msgid "Invoice lines"
-msgstr ""
+msgstr "Fakturazio-lerroak"
 
 #: pretix/base/exporters/invoices.py:199 pretix/base/exporters/invoices.py:318
 msgid "Invoice number"
-msgstr ""
+msgstr "Faktura zenbakia"
 
 #: pretix/base/exporters/invoices.py:200 pretix/base/exporters/invoices.py:327
 #: pretix/base/exporters/orderlist.py:1214
@@ -1231,7 +1278,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:6
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: pretix/base/exporters/invoices.py:201 pretix/base/exporters/invoices.py:328
 #: pretix/base/exporters/orderlist.py:261
@@ -1260,7 +1307,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:70
 msgid "Order code"
-msgstr ""
+msgstr "Eskaera kodea"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/modelimport_orders.py:59 pretix/base/models/customers.py:384
@@ -1268,15 +1315,15 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:307
 msgid "E-mail address"
-msgstr ""
+msgstr "Helbide elektronikoa"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
-msgstr ""
+msgstr "Faktura mota"
 
 #: pretix/base/exporters/invoices.py:204 pretix/base/exporters/invoices.py:331
 msgid "Cancellation of"
-msgstr ""
+msgstr "-en deuseztapena"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:207
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:209
@@ -1286,7 +1333,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:336
 #: pretix/base/exporters/invoices.py:337 pretix/base/exporters/invoices.py:338
 msgid "Invoice sender:"
-msgstr ""
+msgstr "Faktura igorlea:"
 
 #: pretix/base/exporters/invoices.py:207 pretix/base/exporters/invoices.py:333
 #: pretix/base/exporters/orderlist.py:269
@@ -1303,7 +1350,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:315
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:189
 msgid "Address"
-msgstr ""
+msgstr "Helbidea"
 
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:216
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:342
@@ -1318,7 +1365,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:533
 #: pretix/plugins/reports/exporters.py:841
 msgid "ZIP code"
-msgstr ""
+msgstr "ZIP kodea"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -1333,7 +1380,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:534
 #: pretix/plugins/reports/exporters.py:842
 msgid "City"
-msgstr ""
+msgstr "Herria"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -1354,11 +1401,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:96
 #: pretix/presale/templates/pretixpresale/event/order.html:319
 msgid "Country"
-msgstr ""
+msgstr "Herrialdea"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
 msgid "Tax ID"
-msgstr ""
+msgstr "IFZ (Identifikazio Fiskaleko Zenbakia)"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
@@ -1372,7 +1419,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:103
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid "VAT ID"
-msgstr ""
+msgstr "IFZ (Identifikazio Fiskaleko Zenbakia)"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:216
@@ -1385,7 +1432,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:345 pretix/base/exporters/invoices.py:346
 #: pretix/base/exporters/invoices.py:347 pretix/base/exporters/invoices.py:348
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "Faktura hartzailea:"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:339
 #: pretix/base/exporters/orderlist.py:262
@@ -1402,11 +1449,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:87
 #: pretix/presale/templates/pretixpresale/event/order.html:307
 msgid "Company"
-msgstr ""
+msgstr "Erakundea"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
 msgid "Street address"
-msgstr ""
+msgstr "Kalearen helbidea"
 
 #: pretix/base/exporters/invoices.py:219 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/orderlist.py:269
@@ -1422,44 +1469,44 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:322
 msgctxt "address"
 msgid "State"
-msgstr ""
+msgstr "Herrialdea"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
 #: pretix/base/models/orders.py:3194 pretix/base/models/orders.py:3229
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:107
 msgid "Beneficiary"
-msgstr ""
+msgstr "Onuraduna"
 
 #: pretix/base/exporters/invoices.py:222 pretix/base/exporters/invoices.py:348
 #: pretix/base/modelimport_orders.py:299 pretix/base/models/orders.py:3189
 #: pretix/control/templates/pretixcontrol/order/index.html:986
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:115
 msgid "Internal reference"
-msgstr ""
+msgstr "Barne erreferentzia"
 
 #: pretix/base/exporters/invoices.py:223 pretix/control/forms/event.py:1487
 msgid "Reverse charge"
-msgstr ""
+msgstr "Ordainketa itzuli"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "Erakutsitako atzerriko moneta"
 
 #: pretix/base/exporters/invoices.py:225
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "Atzerriko monetaren kanbio-tasa"
 
 #: pretix/base/exporters/invoices.py:226
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "Zenbatekoa guztira (zergak barne)"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Zenbatekoa guztira (zergak kontuan hartu gabe)"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Payment matching IDs"
-msgstr ""
+msgstr "Ordainketa-korrespondentziaren identifikazioa"
 
 #: pretix/base/exporters/invoices.py:229 pretix/base/exporters/invoices.py:349
 #: pretix/base/exporters/orderlist.py:289
@@ -1468,42 +1515,42 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/payment.html:11
 #: pretix/control/views/event.py:354
 msgid "Payment providers"
-msgstr ""
+msgstr "Ordainketa hornitzaileak"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 msgid "Cancellation"
-msgstr ""
+msgstr "Baliogabetzea"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 #: pretix/control/templates/pretixcontrol/order/index.html:271
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgid "Invoice"
-msgstr ""
+msgstr "Faktura"
 
 #: pretix/base/exporters/invoices.py:319
 msgid "Line number"
-msgstr ""
+msgstr "Lerro zenbakia"
 
 #: pretix/base/exporters/invoices.py:320 pretix/base/exporters/orderlist.py:449
 #: pretix/base/models/items.py:448 pretix/base/models/items.py:1103
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:32
 msgid "Description"
-msgstr ""
+msgstr "Deskribapena"
 
 #: pretix/base/exporters/invoices.py:321 pretix/control/forms/orders.py:341
 msgid "Gross price"
-msgstr ""
+msgstr "Prezio gordina"
 
 #: pretix/base/exporters/invoices.py:322
 msgid "Net price"
-msgstr ""
+msgstr "Prezio garbia"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:453
 #: pretix/base/exporters/orderlist.py:594
 #: pretix/base/exporters/orderlist.py:904 pretix/base/models/orders.py:2295
 #: pretix/base/models/orders.py:2450 pretix/base/models/orders.py:2946
 msgid "Tax value"
-msgstr ""
+msgstr "Balio fiskala"
 
 #: pretix/base/exporters/invoices.py:324 pretix/base/exporters/orderlist.py:451
 #: pretix/base/exporters/orderlist.py:592
@@ -1515,60 +1562,62 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:793
 #: pretix/plugins/reports/exporters.py:838
 msgid "Tax rate"
-msgstr ""
+msgstr "Zerga-tasa"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Tax name"
-msgstr ""
+msgstr "Zergaren izena"
 
 #: pretix/base/exporters/invoices.py:326
 msgid "Event start date"
-msgstr ""
+msgstr "Ekitaldiaren hasiera-data"
 
 #: pretix/base/exporters/invoices.py:350 pretix/base/pdf.py:278
 msgid "Event end date"
-msgstr ""
+msgstr "Ekitaldiaren amaiera-data"
 
 #: pretix/base/exporters/items.py:49
 msgid "Product data"
-msgstr ""
+msgstr "Produktuaren data"
 
 #: pretix/base/exporters/items.py:50 pretix/base/exporters/orderlist.py:1128
 msgctxt "export_category"
 msgid "Product data"
-msgstr ""
+msgstr "Produktuaren data"
 
 #: pretix/base/exporters/items.py:51
 msgid "Download a spreadsheet with details about all products and variations."
 msgstr ""
+"Deskargatu kalkulu-orri bat produktu eta aldaketa guztiei buruzko "
+"xehetasunekin."
 
 #: pretix/base/exporters/items.py:57 pretix/base/exporters/orderlist.py:588
 #: pretix/base/exporters/orderlist.py:890
 msgid "Product ID"
-msgstr ""
+msgstr "Produktuaren IDa"
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:590
 #: pretix/base/exporters/orderlist.py:892
 msgid "Variation ID"
-msgstr ""
+msgstr "Aldakuntzaren IDa"
 
 #: pretix/base/exporters/items.py:59 pretix/base/models/items.py:116
 #: pretix/base/pdf.py:151
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr ""
+msgstr "Produktuen kategoria"
 
 #: pretix/base/exporters/items.py:60 pretix/base/models/discount.py:60
 #: pretix/base/models/items.py:97 pretix/base/models/items.py:439
 #: pretix/base/models/tax.py:163 pretix/control/forms/organizer.py:218
 #: pretix/control/templates/pretixcontrol/items/discounts.html:57
 msgid "Internal name"
-msgstr ""
+msgstr "Barne izena"
 
 #: pretix/base/exporters/items.py:64 pretix/base/models/items.py:436
 msgid "Item name"
-msgstr ""
+msgstr "Artikuluaren izena"
 
 #: pretix/base/exporters/items.py:68 pretix/base/exporters/orderlist.py:589
 #: pretix/base/exporters/orderlist.py:893
@@ -1576,7 +1625,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1470 pretix/base/models/orders.py:2922
 #: pretix/plugins/checkinlists/exporters.py:693
 msgid "Variation"
-msgstr ""
+msgstr "Aldakuntza"
 
 #: pretix/base/exporters/items.py:71 pretix/base/exporters/reusablemedia.py:48
 #: pretix/base/models/customers.py:57 pretix/base/models/customers.py:392
@@ -1588,7 +1637,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/plugins.html:55
 #: pretix/control/templates/pretixcontrol/users/index.html:51
 msgid "Active"
-msgstr ""
+msgstr "Aktibo"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:73
 #: pretix/control/forms/event.py:969 pretix/control/navigation.py:506
@@ -1596,36 +1645,36 @@ msgstr ""
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
 msgid "Sales channels"
-msgstr ""
+msgstr "Salmenta kanalak"
 
 #: pretix/base/exporters/items.py:73 pretix/base/models/items.py:453
 #: pretix/base/models/items.py:1114
 #: pretix/control/templates/pretixcontrol/items/index.html:43
 msgid "Default price"
-msgstr ""
+msgstr "Prezio lehenetsia"
 
 #: pretix/base/exporters/items.py:74 pretix/base/models/items.py:461
 #: pretix/control/templates/pretixcontrol/items/index.html:131
 msgid "Free price input"
-msgstr ""
+msgstr "Sarrera doan"
 
 #: pretix/base/exporters/items.py:75 pretix/base/models/items.py:476
 msgid "Sales tax"
-msgstr ""
+msgstr "Salmenten zerga"
 
 #: pretix/base/exporters/items.py:76 pretix/base/models/items.py:481
 msgid "Is an admission ticket"
-msgstr ""
+msgstr "Onarpen sarrera bat da"
 
 #: pretix/base/exporters/items.py:77
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
 msgid "Personalized ticket"
-msgstr ""
+msgstr "Sarrera pertsonalizatua"
 
 #: pretix/base/exporters/items.py:78 pretix/base/models/items.py:495
 msgid "Generate tickets"
-msgstr ""
+msgstr "Sarrerak sortu"
 
 #: pretix/base/exporters/items.py:79 pretix/base/exporters/orderlist.py:1135
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:367
@@ -1649,7 +1698,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:103
 #: pretix/presale/views/widget.py:422
 msgid "Waiting list"
-msgstr ""
+msgstr "Itxaron zerrenda"
 
 #: pretix/base/exporters/items.py:80 pretix/base/models/discount.py:78
 #: pretix/base/models/items.py:186 pretix/base/models/items.py:242
@@ -1660,7 +1709,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:171
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:149
 msgid "Available from"
-msgstr ""
+msgstr "Galdetegia eskuragarri"
 
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:83
 #: pretix/base/models/items.py:191 pretix/base/models/items.py:247
@@ -1670,97 +1719,103 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:176
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:154
 msgid "Available until"
-msgstr ""
+msgstr "Erabilgarri data honetara arte"
 
 #: pretix/base/exporters/items.py:82 pretix/base/models/items.py:560
 msgid "This product can only be bought using a voucher."
-msgstr ""
+msgstr "Produktu hau kupoi batekin bakarrik eros daiteke."
 
 #: pretix/base/exporters/items.py:83 pretix/base/models/items.py:573
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
+"Produktuarekin bat datorren kupoi bat trukatzen bada bakarrik bistaratuko da "
+"produktu hau."
 
 #: pretix/base/exporters/items.py:84 pretix/base/models/items.py:566
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "Produktu hau erosteko onespena behar da"
 
 #: pretix/base/exporters/items.py:85 pretix/base/models/items.py:579
 msgid "Only sell this product as part of a bundle"
-msgstr ""
+msgstr "Produktu hau pakete baten zati gisa bakarrik saldu"
 
 #: pretix/base/exporters/items.py:86 pretix/base/models/items.py:586
 msgid "Allow product to be canceled or changed"
-msgstr ""
+msgstr "Utzi produktua ezeztatzen edo aldatzen"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:592
 msgid "Minimum amount per order"
-msgstr ""
+msgstr "Gutxieneko zenbatekoa eskaerako"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:599
 msgid "Maximum amount per order"
-msgstr ""
+msgstr "Gehieneko zenbatekoa eskaerako"
 
 #: pretix/base/exporters/items.py:89 pretix/base/exporters/orderlist.py:282
 #: pretix/base/models/items.py:607 pretix/base/models/items.py:1190
 #: pretix/base/models/orders.py:280
 #: pretix/plugins/checkinlists/exporters.py:520
 msgid "Requires special attention"
-msgstr ""
+msgstr "Arreta berezia eskatzen du"
 
 #: pretix/base/exporters/items.py:90 pretix/base/exporters/orderlist.py:283
 #: pretix/base/models/items.py:614 pretix/base/models/items.py:1197
 #: pretix/base/models/orders.py:287
 #: pretix/plugins/checkinlists/exporters.py:522
 msgid "Check-in text"
-msgstr ""
+msgstr "Erregistro-testua"
 
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:619
 #: pretix/base/models/items.py:1117
 msgid "Original price"
-msgstr ""
+msgstr "Jatorrizko prezioa"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:636
 msgid "This product is a gift card"
-msgstr ""
+msgstr "Produktu hau opari-txartel bat da"
 
 #: pretix/base/exporters/items.py:93 pretix/base/models/items.py:642
 #: pretix/base/models/items.py:1138
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:41
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:155
 msgid "Require a valid membership"
-msgstr ""
+msgstr "Baliozko afiliazioa behar da"
 
 #: pretix/base/exporters/items.py:94 pretix/base/models/items.py:651
 #: pretix/base/models/items.py:1147
 msgid "Hide without a valid membership"
-msgstr ""
+msgstr "Baliozko afiliaziorik gabe ezkutatzea"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:86
 msgid "Order data"
-msgstr ""
+msgstr "Eskaeraren datuak"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Eskaera guztien JSON irudikapen egituratua deskargatu. Hori baliagarria izan "
+"liteke hirugarrenen sistemetan inportatzeko."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
-msgstr ""
+msgstr "Helbide elektronikoak (testuaren fitxategia)"
 
 #: pretix/base/exporters/mail.py:54
 msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Deskargatu testu-fitxategi bat, erosleen edo sarrera-edukitzaileen helbide "
+"elektroniko guztiekin."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:487
 #: pretix/plugins/reports/exporters.py:669
 msgid "Filter by status"
-msgstr ""
+msgstr "Egoeraren arabera filtratu"
 
 #: pretix/base/exporters/orderlist.py:88
 msgid ""
@@ -1768,6 +1823,9 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Deskargatu eskaera guztien kalkulu-orria. Kalkulu-orriak hiru orri izango "
+"ditu: eskaera bakoitzerako lerro bat, eskaera-posizio bakoitzerako lerro bat "
+"eta eskaera batean kobratutako tarifa gehigarri bakoitzerako lerro bat."
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:330
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -1779,33 +1837,33 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:657
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
 msgid "Orders"
-msgstr ""
+msgstr "Eskaerak"
 
 #: pretix/base/exporters/orderlist.py:101 pretix/base/models/orders.py:2499
 #: pretix/base/notifications.py:205
 msgid "Order positions"
-msgstr ""
+msgstr "Eskaeraren posizioak"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Order fees"
-msgstr ""
+msgstr "Eskaeraren tasak"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Only paid orders"
-msgstr ""
+msgstr "Ordaindutako eskaerak bakarrik"
 
 #: pretix/base/exporters/orderlist.py:116
 msgid "Include payment amounts"
-msgstr ""
+msgstr "Ordainketa-zenbatekoak barne"
 
 #: pretix/base/exporters/orderlist.py:122
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "Bistaratu aukera anitzeko erantzunak zutabe batean multzokatuta"
 
 #: pretix/base/exporters/orderlist.py:131
 #: pretix/plugins/reports/exporters.py:701
 msgid "Only include orders created within this date range."
-msgstr ""
+msgstr "Sartu data-tarte horretan sortutako eskaerak bakarrik."
 
 #: pretix/base/exporters/orderlist.py:135 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:234 pretix/plugins/badges/exporters.py:484
@@ -1813,13 +1871,15 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:454
 #: pretix/plugins/ticketoutputpdf/exporters.py:97
 msgid "Event date"
-msgstr ""
+msgstr "Ekitaldiaren data"
 
 #: pretix/base/exporters/orderlist.py:138
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
+"Tarte honetako data baterako gutxienez sarrera bat duten eskaerak bakarrik "
+"sartzen dira. Eskaera mistoen kasuan, beste data batzuk ere sartuko dira!"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:440
@@ -1830,7 +1890,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1584
 #: pretix/control/forms/organizer.py:115
 msgid "Event slug"
-msgstr ""
+msgstr "Ekitaldia"
 
 #: pretix/base/exporters/orderlist.py:261 pretix/base/notifications.py:201
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:25
@@ -1839,7 +1899,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:73
 msgid "Order total"
-msgstr ""
+msgstr "Eskaerak guztira"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:443
@@ -1882,7 +1942,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:75
 #: pretix/presale/templates/pretixpresale/organizers/index.html:47
 msgid "Status"
-msgstr ""
+msgstr "Egoera"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:444
@@ -1894,7 +1954,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:150
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:34
 msgid "Email"
-msgstr ""
+msgstr "E-maila"
 
 #: pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:446
@@ -1917,7 +1977,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:46
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:72
 msgid "Order date"
-msgstr ""
+msgstr "Eskaeraren data"
 
 #: pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:447
@@ -1925,65 +1985,65 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:881
 #: pretix/plugins/checkinlists/exporters.py:519
 msgid "Order time"
-msgstr ""
+msgstr "Eskaeraren ordua"
 
 #: pretix/base/exporters/orderlist.py:270
 msgid "Custom address field"
-msgstr ""
+msgstr "Helbide-eremu pertsonalizatua"
 
 #: pretix/base/exporters/orderlist.py:270
 msgid "Date of last payment"
-msgstr ""
+msgstr "Azken ordainketaren data"
 
 #: pretix/base/exporters/orderlist.py:270 pretix/base/services/stats.py:237
 msgid "Fees"
-msgstr ""
+msgstr "Tasak"
 
 #: pretix/base/exporters/orderlist.py:270
 #: pretix/base/exporters/orderlist.py:657 pretix/base/modelimport_orders.py:471
 #: pretix/control/templates/pretixcontrol/order/index.html:192
 #: pretix/control/templates/pretixcontrol/pdf/index.html:232
 msgid "Order locale"
-msgstr ""
+msgstr "Eskaeraren udalerria"
 
 #: pretix/base/exporters/orderlist.py:275
 #, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr ""
+msgstr "Gordina: zergen % {rate}"
 
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr ""
+msgstr "Garbia: zergen % {rate}"
 
 #: pretix/base/exporters/orderlist.py:277
 #, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr ""
+msgstr "Balio fiskala: zergaren % {rate}"
 
 #: pretix/base/exporters/orderlist.py:280
 msgid "Invoice numbers"
-msgstr ""
+msgstr "Faktura zenbakiak"
 
 #: pretix/base/exporters/orderlist.py:281
 #: pretix/base/exporters/orderlist.py:656 pretix/base/modelimport_orders.py:539
 #: pretix/control/forms/filter.py:582
 #: pretix/control/templates/pretixcontrol/order/index.html:189
 msgid "Sales channel"
-msgstr ""
+msgstr "Salmenta kanalak"
 
 #: pretix/base/exporters/orderlist.py:285
 #: pretix/base/exporters/orderlist.py:621 pretix/base/models/orders.py:275
 #: pretix/control/forms/filter.py:238
 msgid "Follow-up date"
-msgstr ""
+msgstr "Jarraipen-data"
 
 #: pretix/base/exporters/orderlist.py:286
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:208
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:74
 msgid "Positions"
-msgstr ""
+msgstr "Posizioak"
 
 #: pretix/base/exporters/orderlist.py:287
 #: pretix/base/exporters/orderlist.py:658 pretix/base/models/orders.py:319
@@ -2110,7 +2170,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
 msgid "Product"
-msgstr ""
+msgstr "Produktua"
 
 #: pretix/base/exporters/orderlist.py:595
 #: pretix/base/exporters/orderlist.py:600 pretix/base/forms/questions.py:655
@@ -2476,7 +2536,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:20
 #: pretix/control/views/item.py:949
 msgid "Paid orders"
-msgstr ""
+msgstr "Ordaindutako eskaerak"
 
 #: pretix/base/exporters/orderlist.py:1134 pretix/control/views/item.py:954
 msgid "Pending orders"
@@ -3358,7 +3418,7 @@ msgstr ""
 #: pretix/base/modelimport_vouchers.py:205 pretix/base/models/items.py:1205
 #: pretix/base/models/vouchers.py:263 pretix/base/models/waitinglist.py:99
 msgid "Product variation"
-msgstr ""
+msgstr "Produktuen aniztasuna"
 
 #: pretix/base/modelimport_orders.py:159
 #: pretix/base/modelimport_vouchers.py:225
@@ -3740,19 +3800,19 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:340
 msgid "Entry"
-msgstr ""
+msgstr "Sarbidea"
 
 #: pretix/base/models/checkin.py:341
 msgid "Exit"
-msgstr ""
+msgstr "Irteera"
 
 #: pretix/base/models/checkin.py:359
 msgid "Unknown ticket"
-msgstr ""
+msgstr "Tiket ezezaguna"
 
 #: pretix/base/models/checkin.py:360
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Tiketa ordaindu gabe"
 
 #: pretix/base/models/checkin.py:361
 msgid "Forbidden by custom rule"
@@ -3760,23 +3820,23 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:362
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Baliogabetutako/aldatutako tiketaren kodea"
 
 #: pretix/base/models/checkin.py:363
 msgid "Information required"
-msgstr ""
+msgstr "Beharrezko informazioa"
 
 #: pretix/base/models/checkin.py:364
 msgid "Ticket already used"
-msgstr ""
+msgstr "Erabilitako tiketa"
 
 #: pretix/base/models/checkin.py:365
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "Tiket mota hau ez da onartzen hemen"
 
 #: pretix/base/models/checkin.py:366
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Tiketaren kodea anbiguoa da zerrendan"
 
 #: pretix/base/models/checkin.py:367
 msgid "Server error"
@@ -3784,15 +3844,15 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:368
 msgid "Ticket blocked"
-msgstr ""
+msgstr "Tiketa blokeatuta"
 
 #: pretix/base/models/checkin.py:369
 msgid "Order not approved"
-msgstr ""
+msgstr "Ez da onartu eskaera"
 
 #: pretix/base/models/checkin.py:370
 msgid "Ticket not valid at this time"
-msgstr ""
+msgstr "Tiketa ez dago erabilgarri momentu honetan"
 
 #: pretix/base/models/customers.py:55
 msgid "Provider name"
@@ -3889,7 +3949,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:763
 msgid "Gate"
-msgstr ""
+msgstr "Sarrera"
 
 #: pretix/base/models/devices.py:132
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:83
@@ -5289,7 +5349,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:30
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:78
 msgid "Canceled"
-msgstr ""
+msgstr "Ezeztatua"
 
 #: pretix/base/models/memberships.py:134
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:116
@@ -5821,7 +5881,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:201 pretix/control/views/vouchers.py:119
 msgid "Redeemed"
-msgstr ""
+msgstr "Berrerosia"
 
 #: pretix/base/models/vouchers.py:206
 msgid ""
@@ -11733,7 +11793,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:380
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:6
 msgid "Approval pending"
-msgstr ""
+msgstr "Onartzeko zain"
 
 #: pretix/control/forms/filter.py:239
 msgid "Follow-up configured"
@@ -12005,7 +12065,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:2018
 msgid "Valid"
-msgstr ""
+msgstr "Baliozkoa"
 
 #: pretix/control/forms/filter.py:2019
 msgid "Unredeemed"
@@ -12345,7 +12405,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:154
 msgid "This field is required"
-msgstr ""
+msgstr "Atal hau derrigorrezkoa da"
 
 #: pretix/control/forms/item.py:156
 msgid "Dependencies between questions are not supported during check-in."
@@ -14951,7 +15011,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:67
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
 msgid "Continue"
-msgstr ""
+msgstr "Jarraitu"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -15062,7 +15122,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:20
 msgid "Save"
-msgstr ""
+msgstr "Gorde"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
@@ -15415,7 +15475,7 @@ msgstr[1] ""
 #: pretix/presale/templates/pretixpresale/event/position_change.html:24
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:44
 msgid "Cancel"
-msgstr ""
+msgstr "Ezeztatu"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:27
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:24
@@ -15528,7 +15588,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:764
 msgid "Result"
-msgstr ""
+msgstr "Emaitza"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:391
@@ -15829,7 +15889,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:68
 msgid "Additional information required"
-msgstr ""
+msgstr "Beharrezko informazio gehigarria"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
@@ -19104,7 +19164,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:957
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:449
 msgid "Total"
-msgstr ""
+msgstr "Guztira"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:712
 #: pretix/presale/templates/pretixpresale/event/order.html:209
@@ -20380,6 +20440,9 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
+"Jurisdikzio batzuek, Europar Batasuna barne, erabiltzailearen baimena behar "
+"dute cookieak edo antzeko teknologiak analisi-, jarraipen-, ordainketa- edo "
+"antzeko helburuetarako erabiltzeko baimena eman aurretik."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:172
 msgid ""
@@ -20404,6 +20467,11 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
+"Azken batean, zure ardura da dagozkion lege guztiak betetzen dituzula "
+"ziurtatzea. Ezarpen horiek emanez laguntzen saiatzen gara, baina ezin dugu "
+"erantzukizunik hartu, ez baitakigu pretix erabileraren konfigurazio zehatza, "
+"zure jurisdikzio espezifikoko xehetasun legalak edo hirugarrenekin dituzun "
+"akordioak ordainketa- edo jarraipen-hornitzaile gisa."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:210
 msgid "Barcode media"
@@ -25128,7 +25196,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr ""
+msgstr "Iruzkina:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
@@ -25395,7 +25463,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:138 pretix/plugins/paypal2/payment.py:1080
 #: pretix/plugins/paypal2/payment.py:1081 pretix/plugins/stripe/payment.py:1782
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
@@ -26845,7 +26913,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1523
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:344 pretix/plugins/stripe/payment.py:352
 #: pretix/plugins/stripe/payment.py:360 pretix/plugins/stripe/payment.py:410
@@ -26864,11 +26932,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1560
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:366
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA Zuzeneko Zordunketa"
 
 #: pretix/plugins/stripe/payment.py:369
 msgid ""
@@ -26896,7 +26964,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:393
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/stripe/payment.py:396
 msgid ""
@@ -26922,11 +26990,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:424 pretix/plugins/stripe/payment.py:1715
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:432 pretix/plugins/stripe/payment.py:1754
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:440 pretix/plugins/stripe/payment.py:1789
 msgid "Swish"
@@ -27062,7 +27130,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1476
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:1479
 msgid ""
@@ -30109,7 +30177,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Zure eskaera prozesatzen ari gara …"
 
 #: pretix/presale/utils.py:256 pretix/presale/utils.py:389
 #: pretix/presale/utils.py:390
