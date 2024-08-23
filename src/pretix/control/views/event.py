@@ -62,6 +62,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.html import escape
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
@@ -736,7 +737,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             else:
                 ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
                     _('This value will be replaced based on dynamic parameters.'),
-                    s
+                    escape(s)
                 )
         return ctx
 
@@ -786,7 +787,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
     def placeholders(self, item):
         ctx = {}
         for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item]).values():
-            ctx[p.identifier] = str(p.render_sample(self.request.event))
+            ctx[p.identifier] = escape(str(p.render_sample(self.request.event)))
         return ctx
 
     def get(self, request, *args, **kwargs):

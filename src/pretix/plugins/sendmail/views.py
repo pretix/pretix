@@ -46,6 +46,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.html import escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, ngettext
 from django.views.generic import DeleteView, FormView, ListView, TemplateView
@@ -193,7 +194,7 @@ class BaseSenderView(EventPermissionRequiredMixin, FormView):
                     for k, v in get_available_placeholders(self.request.event, self.context_parameters).items():
                         context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
                             _('This value will be replaced based on dynamic parameters.'),
-                            v.render_sample(self.request.event)
+                            escape(v.render_sample(self.request.event))
                         )
 
                     subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
@@ -608,7 +609,7 @@ class CreateRule(EventPermissionRequiredMixin, CreateView):
                                                                                 'position_or_address']).items():
                         context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
                             _('This value will be replaced based on dynamic parameters.'),
-                            v.render_sample(self.request.event)
+                            escape(v.render_sample(self.request.event))
                         )
 
                     subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
@@ -684,7 +685,7 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
                 for k, v in get_available_placeholders(self.request.event, ['event', 'order', 'position_or_address']).items():
                     placeholders[k] = '<span class="placeholder" title="{}">{}</span>'.format(
                         _('This value will be replaced based on dynamic parameters.'),
-                        v.render_sample(self.request.event)
+                        escape(v.render_sample(self.request.event))
                     )
 
                 subject = bleach.clean(self.object.subject.localize(lang), tags=[])

@@ -50,7 +50,7 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
-from django.utils.html import format_html
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -562,7 +562,7 @@ class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
             else:
                 ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
                     _('This value will be replaced based on dynamic parameters.'),
-                    s
+                    escape(s)
                 )
         return self.SafeDict(ctx)
 
