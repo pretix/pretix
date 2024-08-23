@@ -3,136 +3,137 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-26 07:19+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2024-08-23 11:42+0000\n"
+"Last-Translator: Albizuri <oier@puntu.eus>\n"
+"Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix-js/"
+"eu/>\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.7\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr ""
+msgstr "Ordaindutzat markatua"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr ""
+msgstr "Iruzkina:"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
 msgid "Venmo"
-msgstr ""
+msgstr "Venmo"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
 #: pretix/static/pretixpresale/js/walletdetection.js:38
 msgid "Apple Pay"
-msgstr ""
+msgstr "Apple Pay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:37
 msgid "Itaú"
-msgstr ""
+msgstr "Itaú"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
 msgid "PayPal Credit"
-msgstr ""
+msgstr "PayPal Credit"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
 msgid "Credit Card"
-msgstr ""
+msgstr "Kreditu txartela"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
 msgid "PayPal Pay Later"
-msgstr ""
+msgstr "PayPal Pay Later"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA Zuzeneko Zordunketa"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
 msgid "eps"
-msgstr ""
+msgstr "eps"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
 msgid "MyBank"
-msgstr ""
+msgstr "MyBank"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
 msgid "Verkkopankki"
-msgstr ""
+msgstr "Verkkopankki"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
 msgid "PayU"
-msgstr ""
+msgstr "PayU"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
 msgid "BLIK"
-msgstr ""
+msgstr "BLIK"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
 msgid "Trustly"
-msgstr ""
+msgstr "Trustly"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
 msgid "Zimpler"
-msgstr ""
+msgstr "Zimpler"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
 msgid "Maxima"
-msgstr ""
+msgstr "Maxima"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
 msgid "OXXO"
-msgstr ""
+msgstr "OXXO"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
 msgid "Boleto"
-msgstr ""
+msgstr "Boleto"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
 msgid "Mercado Pago"
-msgstr ""
+msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "Continue"
-msgstr ""
+msgstr "Jarraitu"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:244
@@ -141,207 +142,207 @@ msgstr ""
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "Ordainketa egiaztatzen …"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:254
 msgid "Payment method unavailable"
-msgstr ""
+msgstr "Ordainketa-modu hau ez dago erabilgarri"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr ""
+msgstr "Egindako eskaerak"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr ""
+msgstr "Ordaindutako eskaerak"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr ""
+msgstr "Diru-sarrerak guztira"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
-msgstr ""
+msgstr "Stripe-ekin kontaktatzen …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
 msgid "Total"
-msgstr ""
+msgstr "Guztira"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
 msgid "Contacting your bank …"
-msgstr ""
+msgstr "Zure bankuarekin kontaktatzen …"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr ""
+msgstr "Hautatu erregistro-zerrenda bat"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr ""
+msgstr "Ez da aurkitu erregistro-zerrenda aktiborik."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
-msgstr ""
+msgstr "Erregistro-zerrenda aldatu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
-msgstr ""
+msgstr "Emaitzak bilatu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
 msgid "No tickets found"
-msgstr ""
+msgstr "Ez da tiketik aurkitu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
 msgid "Result"
-msgstr ""
+msgstr "Emaitza"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
-msgstr ""
+msgstr "Tiket honek arreta berezia eskatzen du"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
 msgid "Switch direction"
-msgstr ""
+msgstr "Helbidea aldatu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr ""
+msgstr "Sarbidea"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
-msgstr ""
+msgstr "Irteera"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
-msgstr ""
+msgstr "Eskaneatu tiket bat edo bilatu eta sakatu itzuli…"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
-msgstr ""
+msgstr "Gehiago kargatu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
 msgid "Valid"
-msgstr ""
+msgstr "Baliozkoa"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
 msgid "Unpaid"
-msgstr ""
+msgstr "Ordaindu gabea"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
 msgid "Canceled"
-msgstr ""
+msgstr "Ezeztatua"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Confirmed"
-msgstr ""
+msgstr "Baieztatua"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Approval pending"
-msgstr ""
+msgstr "Onartzeko zain"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
-msgstr ""
+msgstr "Berrerosia"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 msgid "Cancel"
-msgstr ""
+msgstr "Ezeztatu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Tiketa ordaindu gabe"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
+msgstr "Tiket hori oraindik ordaindu gabe dago. Jarraitu nahi duzu, dena den?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Additional information required"
-msgstr ""
+msgstr "Beharrezko informazio gehigarria"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Valid ticket"
-msgstr ""
+msgstr "Baliozko tiketa"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Exit recorded"
-msgstr ""
+msgstr "Irteera erregistratua"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Ticket already used"
-msgstr ""
+msgstr "Erabilitako tiketa"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Information required"
-msgstr ""
+msgstr "Beharrezko informazioa"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Unknown ticket"
-msgstr ""
+msgstr "Tiket ezezaguna"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "Tiket mota hau ez da onartzen hemen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Entry not allowed"
-msgstr ""
+msgstr "Ezin da sartu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Baliogabetutako/aldatutako tiketaren kodea"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
-msgstr ""
+msgstr "Tiketa blokeatuta"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket not valid at this time"
-msgstr ""
+msgstr "Tiketa ez dago erabilgarri momentu honetan"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order canceled"
-msgstr ""
+msgstr "Eskaera ezeztatua"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Tiketaren kodea anbiguoa da zerrendan"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
-msgstr ""
+msgstr "Ez da onartu eskaera"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Checked-in Tickets"
-msgstr ""
+msgstr "Tiketak erosita"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
 msgid "Valid Tickets"
-msgstr ""
+msgstr "Baliozko tiketak"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
 msgid "Currently inside"
-msgstr ""
+msgstr "Barruan orain bertan"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
-msgstr ""
+msgstr "Bai"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:138
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "No"
-msgstr ""
+msgstr "Ez"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
-msgstr ""
+msgstr "itxi"
 
 #: pretix/static/pretixbase/js/asynctask.js:58
 #: pretix/static/pretixbase/js/asynctask.js:135
@@ -349,11 +350,13 @@ msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
 msgstr ""
+"Zure eskaera prozesatzen ari dira. Gertaeraren tamainaren arabera, baliteke "
+"minutu batzuk behar izatea."
 
 #: pretix/static/pretixbase/js/asynctask.js:63
 #: pretix/static/pretixbase/js/asynctask.js:140
 msgid "Your request has been queued on the server and will soon be processed."
-msgstr ""
+msgstr "Zure eskaera zerbitzarian gorde da eta laster prozesatuko da."
 
 #: pretix/static/pretixbase/js/asynctask.js:69
 #: pretix/static/pretixbase/js/asynctask.js:146
@@ -362,34 +365,41 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
+"Zure eskaera zerbitzarira iritsi da, baina oraindik prozesatzea espero dugu. "
+"Bi minutu baino gehiago irauten badu, mesedez, jarri gurekin harremanetan "
+"edo itzuli zure nabigatzailera eta saiatu berriro."
 
 #: pretix/static/pretixbase/js/asynctask.js:105
 #: pretix/static/pretixbase/js/asynctask.js:193
 #: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "{kode} motako errore bat gertatu da."
 
 #: pretix/static/pretixbase/js/asynctask.js:108
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
+"Orain bertan ezin gara zerbitzarira iritsi, baina saiatzen jarraitzen dugu. "
+"Azken errore-kodea: {kodea}"
 
 #: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
-msgstr ""
+msgstr "Gehiegi luzatu da eskaera. Mesedez, saiatu berriro."
 
 #: pretix/static/pretixbase/js/asynctask.js:201
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
+"Une honetan ezin gara zerbitzarira iritsi. Mesedez, saiatu berriro. Errore-"
+"kodea: {kodea}"
 
 #: pretix/static/pretixbase/js/asynctask.js:230
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Zure eskaera prozesatzen ari gara …"
 
 #: pretix/static/pretixbase/js/asynctask.js:238
 msgid ""
@@ -397,81 +407,84 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"Une honetan zure eskaera zerbitzarira bidaltzen ari gara. Honek minutu bat "
+"baino gehiago irauten badu, mesedez, berrikusi zure Interneteko konexioa eta "
+"gero kargatu berriro orri hau eta saiatu berriro."
 
 #: pretix/static/pretixbase/js/asynctask.js:301
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
-msgstr ""
+msgstr "Mezua itxi"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr ""
+msgstr "Kopiatuta!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "Sakatu Ctrl-C kopiatzeko!"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
 msgid "is one of"
-msgstr ""
+msgstr "-ko bat da"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
 msgid "is before"
-msgstr ""
+msgstr "lehenago da"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
 msgid "is after"
-msgstr ""
+msgstr "ondoren da"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
 msgid "="
-msgstr ""
+msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
-msgstr ""
+msgstr "Produktua"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
-msgstr ""
+msgstr "Produktuen aniztasuna"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
-msgstr ""
+msgstr "Atea"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
-msgstr ""
+msgstr "Uneko data eta ordua"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr ""
+msgstr "Asteko uneko eguna (1 = astelehena, 7 = igandea)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Current entry status"
-msgstr ""
+msgstr "Egungo sarrera-egoera"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
-msgstr ""
+msgstr "Aurreko sarreren kopurua"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "Number of previous entries since midnight"
-msgstr ""
+msgstr "Aurreko sarrera kopurua gauerditik aurrera"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
 msgid "Number of previous entries since"
-msgstr ""
+msgstr "Aurreko sarrera-kopurua, orduz geroztik"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
 msgid "Number of previous entries before"
-msgstr ""
+msgstr "Aurreko sarreren kopurua"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
-msgstr ""
+msgstr "Aurreko sarrera bat duten egunen kopurua"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
 msgid "Number of days with a previous entry since"
@@ -625,7 +638,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:493
 msgid "All"
-msgstr ""
+msgstr "Guztiak"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:494
 msgid "None"
