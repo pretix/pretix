@@ -38,6 +38,7 @@ from datetime import datetime
 from django import forms
 from django.utils.formats import get_format
 from django.utils.functional import lazy
+from django.utils.html import escape
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _
 
@@ -64,7 +65,7 @@ def format_placeholders_help_text(placeholders, event=None):
     placeholders = [(k, v.render_sample(event) if event else v) for k, v in placeholders.items()]
     placeholders.sort(key=lambda x: x[0])
     phs = [
-        '<button type="button" class="content-placeholder" title="%s">{%s}</button>' % (_("Sample: %s") % v if v else "", k)
+        '<button type="button" class="content-placeholder" title="%s">{%s}</button>' % (escape(_("Sample: %s") % v) if v else "", escape(k))
         for k, v in placeholders
     ]
     return _('Available placeholders: {list}').format(
