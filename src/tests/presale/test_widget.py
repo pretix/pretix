@@ -773,7 +773,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
                 'events': [
                     {'availability': {'color': 'none', 'text': 'Event series'},
-                     'date_range': 'Dec. 29, 2018 – Jan. 4, 2019',
+                     'date_range': 'Jan. 1st – 4th, 2019',
                      'event_url': 'http://example.com/ccc/30c3/',
                      'location': '',
                      'name': '30C3'},
