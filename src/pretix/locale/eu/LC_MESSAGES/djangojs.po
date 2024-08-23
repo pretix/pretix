@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-26 07:19+0000\n"
-"PO-Revision-Date: 2024-08-22 15:00+0000\n"
+"PO-Revision-Date: 2024-08-23 11:42+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "eu/>\n"
@@ -452,7 +452,7 @@ msgstr "Produktuen aniztasuna"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
-msgstr "Sarrera"
+msgstr "Atea"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
@@ -638,7 +638,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:493
 msgid "All"
-msgstr ""
+msgstr "Guztiak"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:494
 msgid "None"
