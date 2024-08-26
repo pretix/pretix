@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-29 10:52+0000\n"
-"PO-Revision-Date: 2024-08-23 11:42+0000\n"
+"PO-Revision-Date: 2024-08-26 15:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -5363,92 +5363,94 @@ msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Markatuta badago, fitxategiek 3:4 itxura erlazioa duten irudiak izan behar "
+"dute. Hau normalean intsignietan inprimatutako argazkietarako erabiltzen da."
 
 #: pretix/base/models/items.py:1761
 msgid "An answer to this question is required to proceed."
-msgstr ""
+msgstr "Aurrera jarraitzeko, galdera horri erantzun behar zaio."
 
 #: pretix/base/models/items.py:1771
 msgid "Invalid input type."
-msgstr ""
+msgstr "Sarrera-mota ez da baliozkoa."
 
 #: pretix/base/models/items.py:1805
 msgid "The number is to low."
-msgstr ""
+msgstr "Zenbakia baxuegia da."
 
 #: pretix/base/models/items.py:1807
 msgid "The number is to high."
-msgstr ""
+msgstr "Zenbakia altuegia da."
 
 #: pretix/base/models/items.py:1810
 msgid "Invalid number input."
-msgstr ""
+msgstr "Zenbakiak ez du balio."
 
 #: pretix/base/models/items.py:1817 pretix/base/models/items.py:1841
 msgid "Please choose a later date."
-msgstr ""
+msgstr "Mesedez, hautatu geroagoko data bat."
 
 #: pretix/base/models/items.py:1819 pretix/base/models/items.py:1843
 msgid "Please choose an earlier date."
-msgstr ""
+msgstr "Mesedez, hautatu lehenagoko data bat."
 
 #: pretix/base/models/items.py:1822
 msgid "Invalid date input."
-msgstr ""
+msgstr "Data ez da baliozkoa."
 
 #: pretix/base/models/items.py:1829
 msgid "Invalid time input."
-msgstr ""
+msgstr "Orduak ez du balio."
 
 #: pretix/base/models/items.py:1838
 msgid "Invalid datetime input."
-msgstr ""
+msgstr "Data ez da baliozkoa."
 
 #: pretix/base/models/items.py:1850
 msgid "Unknown country code."
-msgstr ""
+msgstr "Herrialde-kode ezezaguna."
 
 #: pretix/base/models/items.py:1880
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Answer"
-msgstr ""
+msgstr "Erantzuna"
 
 #: pretix/base/models/items.py:1904
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr ""
+msgstr "\"{}\" identifikatzailea beste aukera baterako erabiltzen da."
 
 #: pretix/base/models/items.py:1907
 msgid "Question option"
-msgstr ""
+msgstr "Galderaren aukera"
 
 #: pretix/base/models/items.py:1908
 msgid "Question options"
-msgstr ""
+msgstr "Galderaren aukerak"
 
 #: pretix/base/models/items.py:1993 pretix/control/forms/event.py:1637
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
-msgstr ""
+msgstr "Edukiera osoa"
 
 #: pretix/base/models/items.py:1995 pretix/control/forms/item.py:391
 msgid "Leave empty for an unlimited number of tickets."
-msgstr ""
+msgstr "Hutsik utzi sarrera kopuru mugagabe baterako."
 
 #: pretix/base/models/items.py:1999 pretix/base/models/orders.py:1464
 #: pretix/base/models/orders.py:2916
 #: pretix/control/templates/pretixcontrol/checkin/index.html:97
 msgid "Item"
-msgstr ""
+msgstr "Artikulua"
 
 #: pretix/base/models/items.py:2007 pretix/control/forms/item.py:847
 #: pretix/plugins/autocheckin/models.py:74
 msgid "Variations"
-msgstr ""
+msgstr "Bariazioak"
 
 #: pretix/base/models/items.py:2011
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Kuota horri kasurik ez egin ekitaldiaren eskuragarritasuna zehaztean"
 
 #: pretix/base/models/items.py:2012
 msgid ""
@@ -5457,10 +5459,14 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Aukera hori aktibatzen baduzu, kuota hori ez da kontuan hartuko zure "
+"ekitaldien egutegian ekitaldia erabilgarri dagoen ala ez erabakitzean. Hori "
+"baliagarria da, adibidez, ekitaldi bakoitzari gehitzen zaion salgaiarentzat, "
+"baina ez du eragotzi behar ekitaldia agortuta bezala agertzea."
 
 #: pretix/base/models/items.py:2019
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "Behin agortutakoan, kontingente hori behin betiko itxi"
 
 #: pretix/base/models/items.py:2020
 msgid ""
@@ -5468,10 +5474,13 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
+"Aukera hori aktibatuz gero, kupoa behin agortzen denean, ez dira sarrera "
+"gehiago salduko, nahiz eta berriro eskuragarri egon baliogabetzeen edo "
+"iraungitzen diren eskaeren bidez. Jakina, beti eskuz ireki dezakezu berriro."
 
 #: pretix/base/models/items.py:2028
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "Jendea kutxatik pasatu ondoren sarrera gehiago saltzeko aukera eman"
 
 #: pretix/base/models/items.py:2029
 msgid ""
@@ -5482,6 +5491,12 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
+"Aukera honekin, kuota libratu egingo da pertsonak eskaneatu bezain laster, "
+"ekitalditik irtetean. Hori gertatuko da sarreran zein irteeran eskaneatu "
+"badituzte eta irteera eskaneatze berriena bada. Ez du axola zein erregistro-"
+"zerrendatan egin den eskaneatze bakoitza, baina erregistro-zerrendak ez dira "
+"ezagutzen «Utzi berriz sartzen irteerako eskaneatze baten ondoren» "
+"konfiguratuta badaude, ustekabeko overbooking-a saihesteko."
 
 #: pretix/base/models/items.py:2041 pretix/control/navigation.py:166
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -5490,97 +5505,107 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:184
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:59
 msgid "Quotas"
-msgstr ""
+msgstr "Kuotak"
 
 #: pretix/base/models/items.py:2114
 msgid "All variations must belong to an item contained in the items list."
 msgstr ""
+"Bariazio guztiek artikuluen zerrendako artikulu batenak izan behar dute."
 
 #: pretix/base/models/items.py:2125
 msgid ""
 "One or more items has variations but none of these are in the variations "
 "list."
 msgstr ""
+"Artikulu batek edo gehiagok bariazioak dituzte, baina horietako bat bera ere "
+"ez da ageri bariazioen zerrendan."
 
 #: pretix/base/models/items.py:2131 pretix/base/models/waitinglist.py:303
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "Azpigertaera ezin da baliogabea izan gertaera-serieetarako."
 
 #: pretix/base/models/items.py:2167
 msgid "Required for products"
-msgstr ""
+msgstr "Beharrezkoa produktuentzat"
 
 #: pretix/base/models/items.py:2168
 msgid ""
 "If checked, this property must be set in each product. Does not apply if a "
 "default value is set."
 msgstr ""
+"Markatuta badago, propietate hori produktu bakoitzean ezarri behar da. Ez da "
+"aplikatzen lehenetsitako balio bat ezartzen bada."
 
 #: pretix/base/models/items.py:2173
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Hutsik uzten badu, edozein balio onartzen da. Bestela, sartu lerro "
+"bakoitzeko balio posible bat."
 
 #: pretix/base/models/log.py:144
 #, python-brace-format
 msgid "Order {val}"
-msgstr ""
+msgstr "Eskaera {val}"
 
 #: pretix/base/models/log.py:154
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr ""
+msgstr "Kupoia {val}…"
 
 #: pretix/base/models/log.py:164
 #, python-brace-format
 msgid "Product {val}"
-msgstr ""
+msgstr "Produktua {val}"
 
 #: pretix/base/models/log.py:174
 #, python-brace-format
 msgctxt "subevent"
 msgid "Date {val}"
-msgstr ""
+msgstr "Data {val}"
 
 #: pretix/base/models/log.py:184
 #, python-brace-format
 msgid "Quota {val}"
-msgstr ""
+msgstr "Kuota {val}"
 
 #: pretix/base/models/log.py:194
 #, python-brace-format
 msgid "Discount {val}"
-msgstr ""
+msgstr "Deskontua {val}"
 
 #: pretix/base/models/log.py:204
 #, python-brace-format
 msgid "Category {val}"
-msgstr ""
+msgstr "Kategoria {val}"
 
 #: pretix/base/models/log.py:214
 #, python-brace-format
 msgid "Question {val}"
-msgstr ""
+msgstr "Galdera {val}"
 
 #: pretix/base/models/log.py:224
 #, python-brace-format
 msgid "Tax rule {val}"
-msgstr ""
+msgstr "Arau fiskala {val}"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
-msgstr ""
+msgstr "Afiliazioa transferigarria da"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"Aukera hori hautatuz gero, afiliazioa hainbat pertsonarentzako sarrerak "
+"erosteko erabil daiteke. Bestela, bertaratuko den pertsonaren izena bera "
+"izango da beti."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "Paraleloan erabil daiteke"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -5590,10 +5615,15 @@ msgid ""
 "overlap check will be performed if there is a product-level validity of the "
 "ticket."
 msgstr ""
+"Aukera hau hautatuz gero, aldi berean egiten diren ekitaldietarako sarrerak "
+"erosteko erabil daiteke afiliazioa. Kontuan izan ekitaldien hasiera-ordua "
+"berdina den ala ez bakarrik egiaztatuko dela, eta ez ekitaldien artean "
+"gainjartzerik dagoen. Gainjartze-egiaztapen bat egingo da sarreraren "
+"produktuaren mailako baliagarritasunik baldin badago."
 
 #: pretix/base/models/memberships.py:58
 msgid "Number of times this membership can be used in a purchase."
-msgstr ""
+msgstr "Abonu hau erosketa batean zenbat aldiz erabil daitekeen."
 
 #: pretix/base/models/memberships.py:124
 #: pretix/control/templates/pretixcontrol/items/question.html:27
@@ -5611,41 +5641,43 @@ msgstr "Ezeztatua"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:130
 msgid "Membership type"
-msgstr ""
+msgstr "Afiliazio mota"
 
 #: pretix/base/models/orders.py:200
 msgid "pending"
-msgstr ""
+msgstr "ordaindu gabe"
 
 #: pretix/base/models/orders.py:201 pretix/base/payment.py:511
 #: pretix/base/services/invoices.py:472
 msgid "paid"
-msgstr ""
+msgstr "ordainduta"
 
 #: pretix/base/models/orders.py:202 pretix/control/forms/filter.py:1497
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:37
 msgid "expired"
-msgstr ""
+msgstr "iraungita"
 
 #: pretix/base/models/orders.py:252 pretix/control/forms/filter.py:558
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:64
 msgid "Locale"
-msgstr ""
+msgstr "Kokapena"
 
 #: pretix/base/models/orders.py:267 pretix/control/forms/filter.py:569
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr ""
+msgstr "Kopurua guztira"
 
 #: pretix/base/models/orders.py:271 pretix/base/models/vouchers.py:293
 msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
 msgstr ""
+"Eremu honetan sartutako testua ez da ikusiko erabiltzailearentzat, eta "
+"eskuragarri dago zuretzat."
 
 #: pretix/base/models/orders.py:276
 msgid "We'll show you this order to be due for a follow-up on this day."
-msgstr ""
+msgstr "Eskaera hau erakutsiko dizugu, egun honetan jarraipena egin dezazun."
 
 #: pretix/base/models/orders.py:282
 msgid ""
@@ -5654,163 +5686,173 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
+"Aukera hori ezartzen baduzu, fakturazio-aplikazioak ohar bat bistaratuko du, "
+"eskaera horretako sarrerek arreta berezia behar dutela ohartarazteko. Ez du "
+"xehetasunik erakutsiko, ezta mezu pertsonalizaturik ere; beraz, fakturazioko "
+"langileei jakinarazi beharko die kasu horiek nola tratatu."
 
 #: pretix/base/models/orders.py:289
 msgid ""
 "This text will be shown by the check-in app if a ticket of this order is "
 "scanned."
 msgstr ""
+"Testu hori fakturazio-aplikazioan bistaratuko da, eskaera horretako sarrera "
+"bat eskaneatzen bada."
 
 #: pretix/base/models/orders.py:299 pretix/base/models/orders.py:1501
 msgid "Meta information"
-msgstr ""
+msgstr "Meta informazioa"
 
 #: pretix/base/models/orders.py:303
 msgid "API meta information"
-msgstr ""
+msgstr "API meta informazioa"
 
 #: pretix/base/models/orders.py:392 pretix/plugins/sendmail/forms.py:236
 #: pretix/plugins/sendmail/forms.py:391 pretix/plugins/sendmail/views.py:270
 msgid "approval pending"
-msgstr ""
+msgstr "onartzeke"
 
 #: pretix/base/models/orders.py:394
 msgctxt "order state"
 msgid "pending (confirmed)"
-msgstr ""
+msgstr "zain (konfirmatuta)"
 
 #: pretix/base/models/orders.py:396
 msgid "canceled (paid fee)"
-msgstr ""
+msgstr "ezeztatuta (tasa ordainduta)"
 
 #: pretix/base/models/orders.py:1009
 msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
 msgstr ""
+"Ordainketa ezin da onartu, ordainketa-ezarpenetan konfiguratutako azken "
+"ordainketa-data amaitu delako."
 
 #: pretix/base/models/orders.py:1011
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
+"Ezin da ordainketa onartu, eskaera iraungi delako eta ordainketa-ezarpenetan "
+"epez kanpoko ordainketarik ez onartzeko konfiguratu duzulako."
 
 #: pretix/base/models/orders.py:1013
 msgid "This order is not yet approved by the event organizer."
-msgstr ""
+msgstr "Eskaera hori oraindik ez du onartu ekitaldiaren antolatzaileak."
 
 #: pretix/base/models/orders.py:1038
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr ""
+msgstr "Eskatutako \"{item}\" produktua ez dago jada eskuragarri."
 
 #: pretix/base/models/orders.py:1039
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr ""
+msgstr "\"{seat}\" eserlekua jada ez dago eskuragarri."
 
 #: pretix/base/models/orders.py:1040
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "\"{voucher}\" kupoiak ez dauka behar adina aurrekontu."
 
 #: pretix/base/models/orders.py:1041
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr ""
+msgstr "\"{voucher}\" kupoia erabili da tarte honetan."
 
 #: pretix/base/models/orders.py:1380
 msgid "<file>"
-msgstr ""
+msgstr "<fitxategia>"
 
 #: pretix/base/models/orders.py:1481 pretix/base/models/orders.py:1489
 msgid "Empty, if this product is not an admission ticket"
-msgstr ""
+msgstr "Hutsa, produktu hau ez bada onartutako sarrera bat"
 
 #: pretix/base/models/orders.py:1698
 msgctxt "payment_state"
 msgid "created"
-msgstr ""
+msgstr "sortuta"
 
 #: pretix/base/models/orders.py:1699
 msgctxt "payment_state"
 msgid "pending"
-msgstr ""
+msgstr "zain"
 
 #: pretix/base/models/orders.py:1700
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr ""
+msgstr "konfirmatuta"
 
 #: pretix/base/models/orders.py:1701
 msgctxt "payment_state"
 msgid "canceled"
-msgstr ""
+msgstr "ezeztatuta"
 
 #: pretix/base/models/orders.py:1702
 msgctxt "payment_state"
 msgid "failed"
-msgstr ""
+msgstr "huts egin du"
 
 #: pretix/base/models/orders.py:1703
 msgctxt "payment_state"
 msgid "refunded"
-msgstr ""
+msgstr "dirua itzulita"
 
 #: pretix/base/models/orders.py:1731 pretix/base/models/orders.py:2145
 #: pretix/base/shredder.py:629
 msgid "Payment information"
-msgstr ""
+msgstr "Ordainketaren informazioa"
 
 #: pretix/base/models/orders.py:2086
 msgctxt "refund_state"
 msgid "started externally"
-msgstr ""
+msgstr "kanpotik hasia"
 
 #: pretix/base/models/orders.py:2087
 msgctxt "refund_state"
 msgid "created"
-msgstr ""
+msgstr "sortuta"
 
 #: pretix/base/models/orders.py:2088
 msgctxt "refund_state"
 msgid "in transit"
-msgstr ""
+msgstr "abian"
 
 #: pretix/base/models/orders.py:2089
 msgctxt "refund_state"
 msgid "done"
-msgstr ""
+msgstr "eginda"
 
 #: pretix/base/models/orders.py:2090
 msgctxt "refund_state"
 msgid "failed"
-msgstr ""
+msgstr "huts egin du"
 
 #: pretix/base/models/orders.py:2092
 msgctxt "refund_state"
 msgid "canceled"
-msgstr ""
+msgstr "ezeztatuta"
 
 #: pretix/base/models/orders.py:2100
 msgctxt "refund_source"
 msgid "Organizer"
-msgstr ""
+msgstr "Antolatzailea"
 
 #: pretix/base/models/orders.py:2101
 msgctxt "refund_source"
 msgid "Customer"
-msgstr ""
+msgstr "Bezeroa"
 
 #: pretix/base/models/orders.py:2102
 msgctxt "refund_source"
 msgid "External"
-msgstr ""
+msgstr "Kanpokoa"
 
 #: pretix/base/models/orders.py:2140
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:198
 msgid "Refund reason"
-msgstr ""
+msgstr "Diru itzulketaren zergatia"
 
 #: pretix/base/models/orders.py:2141
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:199
@@ -5818,31 +5860,33 @@ msgstr ""
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
+"Azken erabiltzaileari erakuts dakioke edo, adibidez, ordainketa-"
+"erreferentzia baten zati gisa erabil daiteke."
 
 #: pretix/base/models/orders.py:2260
 msgid "Payment fee"
-msgstr ""
+msgstr "Ordainketaren tasa"
 
 #: pretix/base/models/orders.py:2261
 msgid "Shipping fee"
-msgstr ""
+msgstr "Bidalketa-gastua"
 
 #: pretix/base/models/orders.py:2262
 msgid "Service fee"
-msgstr ""
+msgstr "Zerbitzu-gastua"
 
 #: pretix/base/models/orders.py:2263
 #: pretix/control/templates/pretixcontrol/order/index.html:156
 msgid "Cancellation fee"
-msgstr ""
+msgstr "Baliogabetze-tasa"
 
 #: pretix/base/models/orders.py:2264
 msgid "Insurance fee"
-msgstr ""
+msgstr "Aseguru-tasa"
 
 #: pretix/base/models/orders.py:2265
 msgid "Other fees"
-msgstr ""
+msgstr "Bestelako tasak"
 
 #: pretix/base/models/orders.py:2266 pretix/base/payment.py:1310
 #: pretix/base/payment.py:1314 pretix/base/settings.py:978
@@ -5853,7 +5897,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:7
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:7
 msgid "Gift card"
-msgstr ""
+msgstr "Opari-txartela"
 
 #: pretix/base/models/orders.py:2271
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:74
@@ -5861,31 +5905,31 @@ msgstr ""
 #: pretix/control/views/vouchers.py:119
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:8
 msgid "Value"
-msgstr ""
+msgstr "Balioa"
 
 #: pretix/base/models/orders.py:2498
 msgid "Order position"
-msgstr ""
+msgstr "Eskaeraren posizioa"
 
 #: pretix/base/models/orders.py:3007
 msgid "Cart ID (e.g. session key)"
-msgstr ""
+msgstr "Orgaren IDa (adibidez, saio-gakoa)"
 
 #: pretix/base/models/orders.py:3044
 msgid "Cart position"
-msgstr ""
+msgstr "Orgaren posizioa"
 
 #: pretix/base/models/orders.py:3045
 msgid "Cart positions"
-msgstr ""
+msgstr "Orgaren posizioak"
 
 #: pretix/base/models/orders.py:3174
 msgid "Business customer"
-msgstr ""
+msgstr "Bezero komertziala"
 
 #: pretix/base/models/orders.py:3190
 msgid "This reference will be printed on your invoice for your convenience."
-msgstr ""
+msgstr "Erreferentzia hori zure fakturan inprimatuko da, erosoagoa izan dadin."
 
 #: pretix/base/models/organizer.py:79
 msgid ""
@@ -5893,27 +5937,33 @@ msgid ""
 "Every slug can only be used once. This is being used in URLs to refer to "
 "your organizer accounts and your events."
 msgstr ""
+"Laburra izan behar du, eta letra xeheak, zenbakiak, puntuak eta gidoiak "
+"baino ez ditu izan behar. Slug-ak behin bakarrik erabil daitezke. URLetan "
+"erabiltzen da, zure antolatzaile-kontuei eta ekitaldiei erreferentzia "
+"egiteko."
 
 #: pretix/base/models/organizer.py:97 pretix/control/navigation.py:348
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:19
 #: pretix/control/templates/pretixcontrol/organizers/index.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:8
 msgid "Organizers"
-msgstr ""
+msgstr "Antolatzaileak"
 
 #: pretix/base/models/organizer.py:284
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:35
 msgid "Team name"
-msgstr ""
+msgstr "Taldearen izena"
 
 #: pretix/base/models/organizer.py:285
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:13
 msgid "Team members"
-msgstr ""
+msgstr "Taldeko kideak"
 
 #: pretix/base/models/organizer.py:289
 msgid "Require all members of this team to use two-factor authentication"
 msgstr ""
+"Talde honetako kide guztiei bi faktoreren autentifikazioa erabiltzeko "
+"eskatzea"
 
 #: pretix/base/models/organizer.py:290
 msgid ""
@@ -5921,56 +5971,62 @@ msgid ""
 "up two-factor authentication or leave the team. The setting may take a few "
 "minutes to become effective for all users."
 msgstr ""
+"Aukera hau aktibatzen baduzu, taldeko kide guztiek faktore bikoitzaren "
+"autentifikazioa konfiguratu beharko dute edo taldea utzi. Konfigurazioak "
+"minutu batzuk behar izan ditzake erabiltzaile guztientzat."
 
 #: pretix/base/models/organizer.py:297
 msgid "Can create events"
-msgstr ""
+msgstr "Ekitaldiak sortu ditzake"
 
 #: pretix/base/models/organizer.py:301
 msgid "Can change teams and permissions"
-msgstr ""
+msgstr "Taldeak eta baimenak aldatu ditzake"
 
 #: pretix/base/models/organizer.py:305
 msgid "Can change organizer settings"
-msgstr ""
+msgstr "Antolatzailearen ezarpenak aldatu ditzake"
 
 #: pretix/base/models/organizer.py:306
 msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
+"Konfigurazio hori duen norbaitek zure ekitaldi guztietako datu gehienak ikus "
+"ditzake, adibidez, pribatutasun-txostenen bidez. Beraz, kontuz ibili talde "
+"honetan nor sartzen duzun!"
 
 #: pretix/base/models/organizer.py:311
 msgid "Can manage customer accounts"
-msgstr ""
+msgstr "Bezeroen kontuak kudeatu ditzake"
 
 #: pretix/base/models/organizer.py:315
 msgid "Can manage reusable media"
-msgstr ""
+msgstr "Euskarri berrerabilgarriak kudea ditzake"
 
 #: pretix/base/models/organizer.py:319
 msgid "Can manage gift cards"
-msgstr ""
+msgstr "Opari-txartelak kudea ditzake"
 
 #: pretix/base/models/organizer.py:323
 msgid "Can change event settings"
-msgstr ""
+msgstr "Ekitaldiaren ezarpenak alda ditzake"
 
 #: pretix/base/models/organizer.py:327
 msgid "Can change product settings"
-msgstr ""
+msgstr "Produktuaren ezarpenak alda ditzake"
 
 #: pretix/base/models/organizer.py:331
 msgid "Can view orders"
-msgstr ""
+msgstr "Eskaerak bistaratu ditzake"
 
 #: pretix/base/models/organizer.py:335
 msgid "Can change orders"
-msgstr ""
+msgstr "Eskaerak alda ditzake"
 
 #: pretix/base/models/organizer.py:339
 msgid "Can perform check-ins"
-msgstr ""
+msgstr "Erregistroak gauza ditzake"
 
 #: pretix/base/models/organizer.py:340
 msgid ""
@@ -5978,90 +6034,96 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"Horren barruan, parte-hartzaileak bilatzea sartzen da, eta bertaratutakoei "
+"buruzko informazio pertsonala lortzeko erabil daiteke. \" Eskaerak alda "
+"ditzakete\" duten erabiltzaileek ere check-in-ak egin ditzakete."
 
 #: pretix/base/models/organizer.py:345
 msgid "Can view vouchers"
-msgstr ""
+msgstr "Kupoiak bistaratu ditzake"
 
 #: pretix/base/models/organizer.py:349
 msgid "Can change vouchers"
-msgstr ""
+msgstr "Kupoiak alda ditzake"
 
 #: pretix/base/models/organizer.py:353
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr ""
+msgstr "%(object)s %(name)s -an"
 
 #: pretix/base/models/organizer.py:385
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:61
 msgid "Team"
-msgstr ""
+msgstr "Taldea"
 
 #: pretix/base/models/organizer.py:386 pretix/control/navigation.py:525
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:6
 msgid "Teams"
-msgstr ""
+msgstr "Taldeak"
 
 #: pretix/base/models/organizer.py:406
 #, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr ""
+msgstr "'{email}'{team} taldera gonbidatu"
 
 #: pretix/base/models/organizer.py:538
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
 msgid "Identifier"
-msgstr ""
+msgstr "Identifikatzailea"
 
 #: pretix/base/models/organizer.py:548
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:54
 #: pretix/control/templates/pretixcontrol/items/questions.html:22
 msgid "Type"
-msgstr ""
+msgstr "Mota"
 
 #: pretix/base/models/seating.py:45 pretix/base/models/tax.py:148
 #: pretix/base/pdf.py:1226
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "Zure diseinu-fitxategia ez da baliozko JSON fitxategia."
 
 #: pretix/base/models/seating.py:54
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr ""
+msgstr "Antolaketa-fitxategia ez da banaketa-plano baliozkoa. Errore-mezua: {}"
 
 #: pretix/base/models/seating.py:175
 #, python-brace-format
 msgid "Row {number}"
-msgstr ""
+msgstr "Ilara {number}"
 
 #: pretix/base/models/seating.py:180
 #, python-brace-format
 msgid "Seat {number}"
-msgstr ""
+msgstr "Eserlekua {number}"
 
 #: pretix/base/models/tax.py:157
 msgid "Your set of rules is not valid. Error message: {}"
-msgstr ""
+msgstr "Zure arau-multzoa ez da baliozkoa. Errore-mezua: {}"
 
 #: pretix/base/models/tax.py:168
 msgid "Official name"
-msgstr ""
+msgstr "Izen ofiziala"
 
 #: pretix/base/models/tax.py:169
 msgid "Should be short, e.g. \"VAT\""
-msgstr ""
+msgstr "Laburra izan behar du, adibidez, \"BEZ\""
 
 #: pretix/base/models/tax.py:186
 msgid "The configured product prices include the tax amount"
 msgstr ""
+"Konfiguratutako produktuen prezioek zergen zenbatekoa barne hartzen dute"
 
 #: pretix/base/models/tax.py:190
 msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
+"Zenbateko gordina konstante mantentzea zerga-tasa fakturaren helbidearen "
+"arabera aldatzen bada"
 
 #: pretix/base/models/tax.py:194
 msgid "Use EU reverse charge taxation rules"
-msgstr ""
+msgstr "EBko zerga-inbertsioko arauak aplikatzea"
 
 #: pretix/base/models/tax.py:196
 msgid ""
@@ -6072,35 +6134,46 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"Ez da gomendatzen. Ekitaldi gehienak EZIN izango dira subjektu pasiboaren "
+"inbertsiora bildu, ezarpen-lekua ekitaldiaren kokalekua delako. Aukera "
+"horrek BEZaren kobrantza desgaitzen die EBtik kanpoko bezero guztiei eta "
+"EBko herrialde desberdinetako enpresa-bezeroei, baldin eta BEZaren "
+"ondorioetarako EBn baliozko identifikazio-zenbaki bat sartu badute. Aktibatu "
+"aukera hau aholkulari fiskal bati kontsultatu ondoren soilik. Ez da "
+"bermatzen zergen kalkulu zuzena. ERABIL EZAZU ZEURE ARDURAPEAN."
 
 #: pretix/base/models/tax.py:203 pretix/plugins/stripe/payment.py:299
 msgid "Merchant country"
-msgstr ""
+msgstr "Merkantzia-herrialdea"
 
 #: pretix/base/models/tax.py:205
 msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
+"Bizilekua duen herrialdea. Herrialde horretan ez da aplikatuko EBko subjektu "
+"pasiboaren inbertsio araua, aurretik konfiguratu bada."
 
 #: pretix/base/models/tax.py:241
 msgid "You need to set your home country to use the reverse charge feature."
 msgstr ""
+"Jatorrizko herrialdea konfiguratu behar duzu hartzaileak ordaintzeko "
+"funtzioa erabiltzeko."
 
 #: pretix/base/models/tax.py:245
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr ""
+msgstr "incl. {rate}% {name}"
 
 #: pretix/base/models/tax.py:247
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr ""
+msgstr "gehi {rate}% {name}"
 
 #: pretix/base/models/tax.py:249
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:46
 msgid "reverse charge enabled"
-msgstr ""
+msgstr "alderantzizko karga aktibatu"
 
 #: pretix/base/models/tax.py:373
 msgctxt "invoice"
@@ -6108,31 +6181,34 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
+"Subjektu pasiboaren inbertsioa: Kontseiluaren 2006/112/EEE Zuzentarauaren "
+"194. eta 196. artikuluen arabera, BEZaren erantzukizuna zerbitzuaren "
+"hartzailearena da."
 
 #: pretix/base/models/tax.py:379
 msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
-msgstr ""
+msgstr "BEZaren erantzukizuna zerbitzuaren hartzailearena da."
 
 #: pretix/base/models/vouchers.py:171
 msgid "No effect"
-msgstr ""
+msgstr "Eraginik gabe"
 
 #: pretix/base/models/vouchers.py:172
 msgid "Set product price to"
-msgstr ""
+msgstr "Finkatu produktuaren prezioa hemen"
 
 #: pretix/base/models/vouchers.py:173
 msgid "Subtract from product price"
-msgstr ""
+msgstr "Produktuaren preziotik kendu"
 
 #: pretix/base/models/vouchers.py:174
 msgid "Reduce product price by (%)"
-msgstr ""
+msgstr "Produktuaren prezioa (%) murriztea"
 
 #: pretix/base/models/vouchers.py:197
 msgid "Number of times this voucher can be redeemed."
-msgstr ""
+msgstr "Zenbat aldiz truka daitekeen kupoi hau."
 
 #: pretix/base/models/vouchers.py:201 pretix/control/views/vouchers.py:119
 msgid "Redeemed"
@@ -6146,6 +6222,11 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
+"Bat baino gehiagotan ezartzen bada, kupoia produktu kopuru horrekin trukatu "
+"behar da lehen aldiz erabiltzen denean. Ondorengo erabileretan, produktu "
+"kopuru txikiagorako ere erabil daiteke. Kontuan izan horrek esan nahi duela "
+"zenbait kasutan erabilera kopuru osoa muga hori baino txikiagoa izan "
+"daitekeela, adibidez, baliogabetzeen kasuan."
 
 #: pretix/base/models/vouchers.py:214
 msgid ""
@@ -6153,6 +6234,8 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
+"Hori da kupoi hau erabiliz erabilera guztietan deskontatuko den gehieneko "
+"kopurua. Zenbateko horretara iritsiz gero, kupoia ezingo da erabili."
 
 #: pretix/base/models/vouchers.py:227
 msgid ""
@@ -6160,12 +6243,16 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
+"Aktibatzen bada, kupoi hori produktuaren kuotetatik kenduko da, eta horrela, "
+"kupoi-kode hori duen edonork sarrera bat jasoko duela bermatzen da."
 
 #: pretix/base/models/vouchers.py:235
 msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
+"Aktibatuz gero, kupoi-kode horren titularrak sarrerak eros ditzake, nahiz "
+"eta jada ez egon."
 
 #: pretix/base/models/vouchers.py:254 pretix/control/forms/vouchers.py:68
 msgid ""
@@ -6173,19 +6260,24 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
+"Produktu hau erabiltzailearen saskira gehitzen da kupoia trukatuz gero. "
+"Produktu jakin baten ordez, kuota bat hauta dezakezu. Kasu horretan, kuota "
+"horri esleitutako produktu guztiak hauta daitezke."
 
 #: pretix/base/models/vouchers.py:265
 msgid "This variation of the product select above is being used."
-msgstr ""
+msgstr "Aurrez hautatutako produktuaren bariazio hori erabiltzen ari da."
 
 #: pretix/base/models/vouchers.py:274
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
+"Aktibatzen bada, kupoiak kuota horrek eragiten dion edozein produkturentzat "
+"balio du."
 
 #: pretix/base/models/vouchers.py:281
 msgid "Specific seat"
-msgstr ""
+msgstr "Eserleku espezifikoa"
 
 #: pretix/base/models/vouchers.py:288
 msgid ""
@@ -6193,20 +6285,23 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
+"Eremu hau hainbat kupoi biltzeko erabil dezakezu. Balio bera hainbat "
+"kupoietarako sartzen baduzu, horietako zenbat trukatu diren eta abarri "
+"buruzko estatistikak lortu ahal izango dituzu."
 
 #: pretix/base/models/vouchers.py:313 pretix/control/navigation.py:265
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:8
 msgid "Vouchers"
-msgstr ""
+msgstr "Kupoiak"
 
 #: pretix/base/models/vouchers.py:339
 msgid "You cannot select a quota that belongs to a different event."
-msgstr ""
+msgstr "Ezin duzu hautatu beste gertaera bati dagokion kuota."
 
 #: pretix/base/models/vouchers.py:341
 msgid "You cannot select a quota and a specific product at the same time."
-msgstr ""
+msgstr "Ezin duzu kuota eta produktu jakin bat aldi berean hautatu."
 
 #: pretix/base/models/vouchers.py:344
 msgid ""
@@ -6214,30 +6309,37 @@ msgid ""
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
 msgstr ""
+"Ezin duzu hautatu produktu osagarri gisa edo pakete baten zati gisa bakarrik "
+"erabilgarri dagoen produktu bat, kupoiak ezin baitira aplikatu produktu "
+"osagarrietan edo produktu-paketeetan."
 
 #: pretix/base/models/vouchers.py:348
 msgid "You cannot select a product that belongs to a different event."
-msgstr ""
+msgstr "Ezin duzu hautatu beste ekitaldi batekoa den produkturik."
 
 #: pretix/base/models/vouchers.py:350 pretix/base/models/vouchers.py:360
 msgid ""
 "You cannot select a variation without having selected a product that "
 "provides variations."
 msgstr ""
+"Ezin duzu bariazio bat hautatu bariazioak ematen dituen produktu bat hautatu "
+"gabe."
 
 #: pretix/base/models/vouchers.py:353
 msgid "This variation does not belong to this product."
-msgstr ""
+msgstr "Bariazio hau ez dagokio produktu honi."
 
 #: pretix/base/models/vouchers.py:355
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr ""
+msgstr "Gaur egun, ezin da produktu osagarrietarako kupoirik sortu."
 
 #: pretix/base/models/vouchers.py:357 pretix/base/models/vouchers.py:469
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
 msgstr ""
+"Produktu edo kupo jakin bat hautatu behar duzu, kupoi horrek sarrerak "
+"erreserbatu behar baditu."
 
 #: pretix/base/models/vouchers.py:367
 #, python-format
@@ -6245,32 +6347,41 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
+"Kupoi hau %(redeemed)s aldiz trukatu da. Ezin du gehienezko erabilera "
+"kopurua kopuru horretatik behera murriztu."
 
 #: pretix/base/models/vouchers.py:376
 msgid ""
 "The maximum number of usages may not be lower than the minimum number of "
 "usages."
 msgstr ""
+"Erabilera-kopuru maximoa ezin da izan erabilera-kopuru minimoa baino "
+"txikiagoa."
 
 #: pretix/base/models/vouchers.py:382 pretix/base/models/vouchers.py:451
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
+"Kupoi honek kuota blokeatzea nahi baduzu, data jakin bat hautatu behar duzu."
 
 #: pretix/base/models/vouchers.py:384
 msgid "You can not select a subevent if your event is not an event series."
 msgstr ""
+"Ezin duzu azpigertaera bat hautatu zure gertaera gertaera-serie bat ez bada."
 
 #: pretix/base/models/vouchers.py:482
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
+"Ezin duzu kupoia blokeatzen duen kupoirik sortu, hautatutako produktua edo "
+"kupoa agortuta edo erabat erreserbatuta baitago."
 
 #: pretix/base/models/vouchers.py:504
 #, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
 msgstr ""
+"Zehaztutako eserlekuaren IDa \"({id})\" ez da existitzen gertaera honetarako."
 
 #: pretix/base/models/vouchers.py:508
 #, python-brace-format
@@ -6278,65 +6389,70 @@ msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
 msgstr ""
+"«{id}» eserlekua ez dago erabilgarri une honetan (blokeatuta, salduta edo "
+"beste kupoi bat)."
 
 #: pretix/base/models/waitinglist.py:64
 msgid "On waiting list since"
-msgstr ""
+msgstr "Itxarote-zerrendan noiztik"
 
 #: pretix/base/models/waitinglist.py:84
 msgid "Assigned voucher"
-msgstr ""
+msgstr "Kupoia esleituta"
 
 #: pretix/base/models/waitinglist.py:93
 msgid "The product the user waits for."
-msgstr ""
+msgstr "Erabiltzaileak espero duen produktua."
 
 #: pretix/base/models/waitinglist.py:101
 msgid "The variation of the product selected above."
-msgstr ""
+msgstr "Lehenago hautatutako produktuaren bariazioa."
 
 #: pretix/base/models/waitinglist.py:113
 msgid "Waiting list entry"
-msgstr ""
+msgstr "Itxaron zerrendan izena ematea"
 
 #: pretix/base/models/waitinglist.py:114
 msgid "Waiting list entries"
-msgstr ""
+msgstr "Sarrerak itxarote-zerrendan"
 
 #: pretix/base/models/waitinglist.py:159
 msgid "This product is currently not available."
-msgstr ""
+msgstr "Produktu hau ez dago eskuragarri."
 
 #: pretix/base/models/waitinglist.py:186
 msgid "No seat with this product is currently available."
-msgstr ""
+msgstr "Gaur egun ez dago produktu honekin eskuragarri dagoen eserlekurik."
 
 #: pretix/base/models/waitinglist.py:189
 msgid "A voucher has already been sent to this person."
-msgstr ""
+msgstr "Kupoi bat bidali zaio pertsona horri."
 
 #: pretix/base/models/waitinglist.py:191
 msgid "This entry is anonymized and can no longer be used."
-msgstr ""
+msgstr "Sarrera hau anonimoa da eta ezin da erabili."
 
 #: pretix/base/models/waitinglist.py:204
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
 msgstr ""
+"Automatikoki sortua, itxarote-zerrendako sarreratik abiatuta, {email}-erako"
 
 #: pretix/base/models/waitinglist.py:295
 msgid "The selected item does not belong to this event."
-msgstr ""
+msgstr "Hautatutako elementua ez da gertaera honetakoa."
 
 #: pretix/base/models/waitinglist.py:297
 msgid "Please select a specific variation of this product."
-msgstr ""
+msgstr "Hautatu produktu honen bariazio espezifiko bat."
 
 #: pretix/base/models/waitinglist.py:315
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
 msgstr ""
+"Itxaron zerrendan zaude jada! Zuretzako sarrera eskuragarri dugunean "
+"jakinaraziko dizugu."
 
 #: pretix/base/notifications.py:192 pretix/control/navigation.py:137
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:20
@@ -6345,133 +6461,137 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:94
 msgctxt "subevent"
 msgid "Dates"
-msgstr ""
+msgstr "Datak"
 
 #: pretix/base/notifications.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:684
 #: pretix/plugins/reports/accountingreport.py:317
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:426
 msgid "Net total"
-msgstr ""
+msgstr "Garbia guztira"
 
 #: pretix/base/notifications.py:202
 msgid "Pending amount"
-msgstr ""
+msgstr "Ordaindu gabeko zenbatekoa"
 
 #: pretix/base/notifications.py:204 pretix/control/forms/filter.py:209
 #: pretix/control/forms/modelimport.py:81
 msgid "Order status"
-msgstr ""
+msgstr "Eskaeraren egoera"
 
 #: pretix/base/notifications.py:222
 msgid "Purchased products"
-msgstr ""
+msgstr "Erositako produktuak"
 
 #: pretix/base/notifications.py:223
 #: pretix/base/templates/pretixbase/email/order_details.html:147
 msgid "View order details"
-msgstr ""
+msgstr "Eskaeraren xehetasunak ikusi"
 
 #: pretix/base/notifications.py:234
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr ""
+msgstr "Eskaera berri bat egin da: {order.code}"
 
 #: pretix/base/notifications.py:240
 #, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr ""
+msgstr "Onespena behar duen eskaera berri bat egin da: {order.code}"
 
 #: pretix/base/notifications.py:246
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr ""
+msgstr "{order.code} eskaera ordaindu gisa markatu da."
 
 #: pretix/base/notifications.py:252
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr ""
+msgstr "{order.code} eskaera ezeztatu egin da."
 
 #: pretix/base/notifications.py:258
 #, python-brace-format
 msgid "Order {order.code} has been reactivated."
-msgstr ""
+msgstr "{order.code} eskaera berriro aktibatu da."
 
 #: pretix/base/notifications.py:264
 #, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr ""
+msgstr "{order.code} eskaera iraungitzat markatu da."
 
 #: pretix/base/notifications.py:270
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr ""
+msgstr "Eskaeraren tiketaren informazioa {order.code} aldatu egin da."
 
 #: pretix/base/notifications.py:276
 #, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr ""
+msgstr "Eskaeraren harremanetarako helbidea {order.code} aldatu egin da."
 
 #: pretix/base/notifications.py:282
 #, python-brace-format
 msgid "Order {order.code} has been changed."
-msgstr ""
+msgstr "{order.code} eskaera aldatu egin da."
 
 #: pretix/base/notifications.py:287
 msgid "Order has been overpaid"
-msgstr ""
+msgstr "Ordainketa eskaeraren zenbatekoa baino altuagoa da"
 
 #: pretix/base/notifications.py:288
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr ""
+msgstr "Ordainketa eskaeraren zenbatekoa {order.code} baino altuagoa da."
 
 #: pretix/base/notifications.py:294
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr ""
+msgstr "{order.code}(e)rako kanpo-itzulketa egin da."
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
-msgstr ""
+msgstr "Diru-itzulketa eskatuta"
 
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr ""
+msgstr "{order.code}(e)rako diru-itzulketa egiteko eskatu zaizu."
 
 #: pretix/base/payment.py:86
 msgctxt "payment"
 msgid "Apple Pay"
-msgstr ""
+msgstr "Apple Pay"
 
 #: pretix/base/payment.py:87
 msgctxt "payment"
 msgid "Google Pay"
-msgstr ""
+msgstr "Google Pay"
 
 #: pretix/base/payment.py:256
 #: pretix/presale/templates/pretixpresale/event/order.html:115
 msgid "Pay now"
-msgstr ""
+msgstr "Ordaindu orain"
 
 #: pretix/base/payment.py:330
 msgid "Enable payment method"
-msgstr ""
+msgstr "Gaitu ordainketa-metodoa"
 
 #: pretix/base/payment.py:336
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
+"Erabiltzaileek ezingo dute ordainketa-hornitzaile hori aukeratu adierazitako "
+"dataren ondoren."
 
 #: pretix/base/payment.py:342
 msgid ""
 "Users will not be able to choose this payment provider before the given date."
 msgstr ""
+"Erabiltzaileek ezingo dute ordainketa-hornitzaile hori aukeratu adierazitako "
+"data baino lehen."
 
 #: pretix/base/payment.py:347
 msgid "Minimum order total"
-msgstr ""
+msgstr "Gutxieneko eskaerak guztira"
 
 #: pretix/base/payment.py:348
 msgid ""
@@ -6479,10 +6599,14 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Ordainketa hori eskaeraren guztizkoa adierazitako balioaren berdina edo "
+"handiagoa denean bakarrik erabili ahal izango da. Ondorio horietarako, "
+"eskaeraren guztizkoa kalkulatzeko, ez dira kontuan hartuko ordainketa-metodo "
+"horren bidez ezarritako komisioak."
 
 #: pretix/base/payment.py:358
 msgid "Maximum order total"
-msgstr ""
+msgstr "Gehienezko eskaerak guztira"
 
 #: pretix/base/payment.py:359
 msgid ""
@@ -6490,22 +6614,26 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Eskaeraren guztizkoa adierazitako balioaren berdina edo txikiagoa bada "
+"bakarrik egongo da erabilgarri ordainketa hori. Ondorio horietarako, "
+"eskaeraren guztizkoa kalkulatzeko, ez dira kontuan hartuko ordainketa-metodo "
+"horren bidez ezarritako komisioak."
 
 #: pretix/base/payment.py:369 pretix/base/payment.py:378
 msgid "Additional fee"
-msgstr ""
+msgstr "Tasa gehigarria"
 
 #: pretix/base/payment.py:370
 msgid "Absolute value"
-msgstr ""
+msgstr "Balio absolutua"
 
 #: pretix/base/payment.py:379
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Eskaera osoaren ehunekoa."
 
 #: pretix/base/payment.py:385
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Kalkulatu tasa guztizko baliotik abiatuta, tasa barne."
 
 #: pretix/base/payment.py:386
 #, python-brace-format
@@ -6515,10 +6643,15 @@ msgid ""
 "rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"Hau gaitzea gomendatzen dizugu zure erabiltzaileek zure ordainketa "
+"hornitzailearen ordainketa kuotak ordaintzea nahi baduzu. <a href=\""
+"{docs_url}\" target=\"_blank\" rel=\"noopener\">Egin klik hemen horri "
+"buruzko informazio zehatza izateko.</a> Ez ahaztu tarifa zuzenak ezartzea "
+"goian!"
 
 #: pretix/base/payment.py:394
 msgid "Text on invoices"
-msgstr ""
+msgstr "Testua fakturetan"
 
 #: pretix/base/payment.py:395
 msgid ""
@@ -6527,10 +6660,14 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Ordainketa-zifren azpian eta fakturen itxiera-testuaren gainean inprimatuko "
+"da. Faktura eskaera ordaindu aurretik sortzen bada bakarrik erabiliko da. "
+"Faktura geroago sortzen bada, testu bat bistaratuko da, eta ordaindu dela "
+"adieraziko du."
 
 #: pretix/base/payment.py:404
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Herrialdeetara mugatuta"
 
 #: pretix/base/payment.py:406
 msgid ""
@@ -6538,93 +6675,114 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
+"Ordainketa-hornitzaile hori hautatutako herrialdeetako fakturazio-"
+"helbideetarako bakarrik hauta daiteke. Herrialderik aukeratzen ez baduzu, "
+"herrialde guztiak onartzen dira. Fakturazio-helbidea behar denean soilik "
+"gaitzen da."
 
 #: pretix/base/payment.py:425
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
 msgstr ""
+"Ordainketa-hornitzaile hori hautatutako salmenta-kanaletan bakarrik erabil "
+"daiteke."
 
 #: pretix/base/payment.py:429
 msgid "Hide payment method"
-msgstr ""
+msgstr "Ordainketa metodoa ezkutatu"
 
 #: pretix/base/payment.py:432
 msgid ""
 "The payment method will not be shown by default but only to people who enter "
 "the shop through a special link."
 msgstr ""
+"Ordainketa metodoa ez da berez agertuko, esteka berezi baten bidez dendara "
+"sartzen diren pertsonei bakarrik erakutsiko zaie."
 
 #: pretix/base/payment.py:438
 msgid "Link to enable payment method"
-msgstr ""
+msgstr "Ordainketa metodoa gaitzeko esteka"
 
 #: pretix/base/payment.py:447
 msgid "Share this link with customers who should use this payment method."
 msgstr ""
+"Partekatu esteka hau ordainketa metodo hau erabili behar duten bezeroekin."
 
 #: pretix/base/payment.py:452
 msgid "Do not send a payment reminder mail"
-msgstr ""
+msgstr "Ez bidali ordainketa gogorarazteko mezu bat"
 
 #: pretix/base/payment.py:453
 msgid ""
 "Users will not receive a reminder mail to pay for their order before it "
 "expires if they have chosen this payment method."
 msgstr ""
+"Erabiltzaileek ez dute gogorarazpen-mezurik jasoko eskaera iraungi baino "
+"lehen ordaintzeko, ordainketa metodo hori hautatu badute."
 
 #: pretix/base/payment.py:500
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Jaso dugu faktura honen ordainketa."
 
 #: pretix/base/payment.py:977
 msgid "Automatic refunds are not supported by this payment provider."
 msgstr ""
+"Ordainketa-zerbitzuen hornitzaile honek ez du itzulketa automatikorik "
+"onartzen."
 
 #: pretix/base/payment.py:1068
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
 msgstr ""
+"Ez da inolako ordainketarik egin behar, eskaera horretan doako produktuak "
+"bakarrik sartzen baitira."
 
 #: pretix/base/payment.py:1075
 msgid "Free of charge"
-msgstr ""
+msgstr "Doakoa"
 
 #: pretix/base/payment.py:1107
 msgid "Box office"
-msgstr ""
+msgstr "Txarteldegia"
 
 #: pretix/base/payment.py:1155 pretix/base/payment.py:1174
 #: pretix/plugins/manualpayment/apps.py:30
 #: pretix/plugins/manualpayment/apps.py:33
 msgid "Manual payment"
-msgstr ""
+msgstr "Eskuzko ordainketa"
 
 #: pretix/base/payment.py:1160 pretix/plugins/banktransfer/payment.py:202
 msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
+"Probako moduan, eskuz marka dezakezu eskaera hori backend-ean ordaindu gisa, "
+"sortu ondoren."
 
 #: pretix/base/payment.py:1181 pretix/base/payment.py:1322
 #: pretix/plugins/banktransfer/payment.py:156
 msgid "Payment method name"
-msgstr ""
+msgstr "Ordainketa metodoaren izena"
 
 #: pretix/base/payment.py:1185
 msgid "Payment process description during checkout"
-msgstr ""
+msgstr "Erosketa-aldiko ordainketa-prozesuaren deskribapena"
 
 #: pretix/base/payment.py:1186
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
+"Testu hori ordainketan zehar agertuko da, erabiltzaileak ordainketa-metodo "
+"hori hautatzen duenean. Ordainketa-metodo honi buruzko azalpen labur bat "
+"eman behar duzu."
 
 #: pretix/base/payment.py:1191
 msgid "Payment process description in order confirmation emails"
 msgstr ""
+"Ordainketa-prozesuaren deskribapena eskaera berresteko mezu elektronikoetan"
 
 #: pretix/base/payment.py:1192
 #, python-brace-format
@@ -6634,10 +6792,14 @@ msgid ""
 "payment. You can use the placeholders {order}, {amount}, {currency} and "
 "{amount_with_currency}."
 msgstr ""
+"Testu hau eskaera berresteko mezuetan sartuko da {payment_info} posizio-"
+"markatzailerako. Erabiltzaileari ordainketa nola egin behar duen adierazi "
+"behar dio. {order}, {amount}, {currency} eta {amount_with_currency} posizio-"
+"markatzaileak erabil ditzakezu."
 
 #: pretix/base/payment.py:1199
 msgid "Payment process description for pending orders"
-msgstr ""
+msgstr "Ordaintzeko dauden eskaeren ordainketa-prozesuaren deskribapena"
 
 #: pretix/base/payment.py:1200
 #, python-brace-format
@@ -6646,152 +6808,163 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
+"Testu hori zain dauden eskaerak berresteko orrian bistaratuko da. "
+"Erabiltzaileari ordainketa nola egin behar duen adierazi behar dio. {order}, "
+"{amount}, {currency} eta {amount_with_currency} posizio-markatzaileak erabil "
+"ditzakezu."
 
 #: pretix/base/payment.py:1208 pretix/plugins/banktransfer/payment.py:151
 msgid ""
 "Create an invoice for orders using bank transfer immediately if the event is "
 "otherwise configured to create invoices after payment is completed."
 msgstr ""
+"Sortu berehala banku-transferentzia bidezko eskaerentzako faktura, "
+"ordainketa egin ondoren fakturak sortzeko beste modu batean konfiguratuta "
+"badago gertaera."
 
 #: pretix/base/payment.py:1259
 msgid "Offsetting"
-msgstr ""
+msgstr "Konpentsazioa"
 
 #: pretix/base/payment.py:1273 pretix/control/views/orders.py:1240
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Aurkitu ezin izan den eskaera bat sartu duzu."
 
 #: pretix/base/payment.py:1302
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr ""
+msgstr "Eskaeren saldoa: %s"
 
 #: pretix/base/payment.py:1328
 msgid "Payment method description"
-msgstr ""
+msgstr "Ordainketa metodoaren deskribapena"
 
 #: pretix/base/payment.py:1345
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "Proba moduan, proba txartelak bakarrik funtzionatuko dute."
 
 #: pretix/base/payment.py:1427 pretix/base/payment.py:1478
 #: pretix/base/payment.py:1521
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr ""
+msgstr "Ezin duzu opari-txartel bat opari-txartelekin ordaindu."
 
 #: pretix/base/payment.py:1436 pretix/base/payment.py:1486
 #: pretix/base/payment.py:1531 pretix/base/payment.py:1533
 msgid "This gift card does not support this currency."
-msgstr ""
+msgstr "Opari-txartel honek ez du moneta hau onartzen."
 
 #: pretix/base/payment.py:1439 pretix/base/payment.py:1489
 #: pretix/base/payment.py:1539
 msgid "This gift card can only be used in test mode."
-msgstr ""
+msgstr "Opari-txartel hau proba moduan bakarrik erabil daiteke."
 
 #: pretix/base/payment.py:1442 pretix/base/payment.py:1492
 #: pretix/base/payment.py:1541
 msgid "Only test gift cards can be used in test mode."
-msgstr ""
+msgstr "Probako opari-txartelak bakarrik erabil daitezke probako moduan."
 
 #: pretix/base/payment.py:1445 pretix/base/payment.py:1495
 #: pretix/base/payment.py:1543
 msgid "This gift card is no longer valid."
-msgstr ""
+msgstr "Opari-txartel hau ez da baliozkoa."
 
 #: pretix/base/payment.py:1448 pretix/base/payment.py:1498
 msgid "All credit on this gift card has been used."
-msgstr ""
+msgstr "Opari-txartel honetako kreditu guztia erabili da."
 
 #: pretix/base/payment.py:1453
 msgid "This gift card is already used for your payment."
-msgstr ""
+msgstr "Opari-txartel hau dagoeneko erabili da ordaintzeko."
 
 #: pretix/base/payment.py:1468 pretix/base/payment.py:1511
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
+"Opari-txartel baten ordez, kupoi bat sartu duzu. Kupoiak dendaren lehen "
+"orrian baino ezin dira sartu, produktuen aukeraketaren azpian."
 
 #: pretix/base/payment.py:1471 pretix/base/payment.py:1514
 msgid "This gift card is not known."
-msgstr ""
+msgstr "Opari-txartel hau ezin da identifikatu."
 
 #: pretix/base/payment.py:1473 pretix/base/payment.py:1516
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
+"Opari-txartel hau ezin da trukatu, kodea ez baita bakarra. Jarri "
+"harremanetan ekitaldiaren antolatzailearekin."
 
 #: pretix/base/payment.py:1535
 msgid "This gift card is not accepted by this event organizer."
-msgstr ""
+msgstr "Opari-txartel hau ez du onartzen ekitaldi-antolatzaile honek."
 
 #: pretix/base/payment.py:1537
 msgid "This gift card was used in the meantime. Please try again."
-msgstr ""
+msgstr "Bien bitartean erabili da opari-txartel hori. Mesedez, saiatu berriro."
 
 #: pretix/base/pdf.py:96
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Sarreraren kodea (barra-kodearen edukia)"
 
 #: pretix/base/pdf.py:108
 msgid "Order position number"
-msgstr ""
+msgstr "Eskaeraren posizio-zenbakia"
 
 #: pretix/base/pdf.py:116
 msgid "Order code and position number"
-msgstr ""
+msgstr "Eskaera-kodea eta posizio-zenbakia"
 
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:100
 #: pretix/control/views/event.py:793 pretix/control/views/pdf.py:94
 msgid "Sample product"
-msgstr ""
+msgstr "Produktuaren lagina"
 
 #: pretix/base/pdf.py:126
 msgid "Variation name"
-msgstr ""
+msgstr "Bariazioaren izena"
 
 #: pretix/base/pdf.py:127
 msgid "Sample variation"
-msgstr ""
+msgstr "Bariazioaren lagina"
 
 #: pretix/base/pdf.py:131
 msgid "Product description"
-msgstr ""
+msgstr "Produktuaren deskribapena"
 
 #: pretix/base/pdf.py:132 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:794 pretix/control/views/pdf.py:95
 msgid "Sample product description"
-msgstr ""
+msgstr "Produktuaren deskribapenaren adibidea"
 
 #: pretix/base/pdf.py:136
 msgid "Product name and variation"
-msgstr ""
+msgstr "Produktuaren izena eta bariazioa"
 
 #: pretix/base/pdf.py:137
 msgid "Sample product – sample variation"
-msgstr ""
+msgstr "Produktuaren adibidiea - bariazioaren adibidiea"
 
 #: pretix/base/pdf.py:144
 msgid "Product variation description"
-msgstr ""
+msgstr "Produktuaren bariazioaren deskribapena"
 
 #: pretix/base/pdf.py:145
 msgid "Sample product variation description"
-msgstr ""
+msgstr "Produktu-bariazioaren deskribapenaren adibidea"
 
 #: pretix/base/pdf.py:152
 msgid "Ticket category"
-msgstr ""
+msgstr "Sarreraren kategoria"
 
 #: pretix/base/pdf.py:159 pretix/base/pdf.py:164
 msgid "123.45 EUR"
-msgstr ""
+msgstr "123.45 EUR"
 
 #: pretix/base/pdf.py:163
 msgid "Price including add-ons"
-msgstr ""
+msgstr "Osagarriak barne dituen prezioa"
 
 #: pretix/base/pdf.py:173 pretix/base/pdf.py:331
 #: pretix/base/services/invoices.py:473
@@ -6800,7 +6973,7 @@ msgstr ""
 #: pretix/base/services/placeholders.py:529
 #: pretix/base/services/placeholders.py:538 pretix/control/views/event.py:795
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/pdf.py:177
 #: pretix/control/templates/pretixcontrol/order/index.html:549
@@ -6809,16 +6982,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:186
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:189
 msgid "Attendee company"
-msgstr ""
+msgstr "Bertaratuko den erakundea"
 
 #: pretix/base/pdf.py:178 pretix/base/pdf.py:336
 #: pretix/base/services/tickets.py:118 pretix/control/views/pdf.py:111
 msgid "Sample company"
-msgstr ""
+msgstr "Erakundearen adibidea"
 
 #: pretix/base/pdf.py:182
 msgid "Full attendee address"
-msgstr ""
+msgstr "Bertaratuko den pertsonaren helbide osoa"
 
 #: pretix/base/pdf.py:183
 msgid ""
@@ -6828,298 +7001,305 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"John Doe\n"
+"Sample company\n"
+"Sesame Street 42\n"
+"12345 Any City\n"
+"Atlantis"
 
 #: pretix/base/pdf.py:187
 msgid "Attendee street"
-msgstr ""
+msgstr "Bertaratuko den pertsonaren kalea"
 
 #: pretix/base/pdf.py:192
 msgid "Attendee ZIP code"
-msgstr ""
+msgstr "Bertaratuko den pertsonaren posta-kodea"
 
 #: pretix/base/pdf.py:197
 msgid "Attendee city"
-msgstr ""
+msgstr "Bertaratuko den pertsonaren herria"
 
 #: pretix/base/pdf.py:202
 msgid "Attendee state"
-msgstr ""
+msgstr "Bertaratuko den pertsonaren herrialdea"
 
 #: pretix/base/pdf.py:207
 msgid "Attendee country"
-msgstr ""
+msgstr "Bertaratuko den pertsonaren probintzia"
 
 #: pretix/base/pdf.py:219
 msgid "Pseudonymization ID (lead scanning)"
-msgstr ""
+msgstr "Seudonimizazioaren IDa (pisten azterketa)"
 
 #: pretix/base/pdf.py:225 pretix/base/pdf.py:230
 msgid "Sample event name"
-msgstr ""
+msgstr "Ekitaldiaren izenaren adibidea"
 
 #: pretix/base/pdf.py:235
 msgid "May 31st, 2017"
-msgstr ""
+msgstr "Maiatzak 31, 2017"
 
 #: pretix/base/pdf.py:239
 msgid "Event date range"
-msgstr ""
+msgstr "Ekitaldiaren daten tartea"
 
 #: pretix/base/pdf.py:240
 msgid "May 31st – June 4th, 2017"
-msgstr ""
+msgstr "Maiatzak 31 – Ekainak 4, 2017"
 
 #: pretix/base/pdf.py:244
 msgid "Event begin date and time"
-msgstr ""
+msgstr "Ekitaldiaren hasiera-data eta hasiera-ordua"
 
 #: pretix/base/pdf.py:245
 msgid "2017-05-31 20:00"
-msgstr ""
+msgstr "2017-05-31 20:00"
 
 #: pretix/base/pdf.py:252
 msgid "Event begin date"
-msgstr ""
+msgstr "Ekitaldiaren hasiera-data"
 
 #: pretix/base/pdf.py:253 pretix/base/pdf.py:279 pretix/base/pdf.py:388
 #: pretix/base/pdf.py:412 pretix/base/pdf.py:436 pretix/base/pdf.py:460
 #: pretix/base/pdf.py:517 pretix/base/pdf.py:522
 msgid "2017-05-31"
-msgstr ""
+msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:260
 msgid "Event begin time"
-msgstr ""
+msgstr "Ekitaldiaren hasiera-ordua"
 
 #: pretix/base/pdf.py:261
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:265
 msgid "Event begin weekday"
-msgstr ""
+msgstr "Ekitaldiaren hasiera-eguna"
 
 #: pretix/base/pdf.py:266 pretix/base/pdf.py:295
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1159
 msgid "Friday"
-msgstr ""
+msgstr "Ostirala"
 
 #: pretix/base/pdf.py:270
 msgid "Event end date and time"
-msgstr ""
+msgstr "Ekitaldiaren amaiera-data eta amaiera-ordua"
 
 #: pretix/base/pdf.py:271
 msgid "2017-05-31 22:00"
-msgstr ""
+msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:287
 msgid "22:00"
-msgstr ""
+msgstr "22:00"
 
 #: pretix/base/pdf.py:294
 msgid "Event end weekday"
-msgstr ""
+msgstr "Ekitaldia amaitzen den asteko eguna"
 
 #: pretix/base/pdf.py:299
 msgid "Event admission date and time"
-msgstr ""
+msgstr "Ekitaldia onartzeko data eta ordua"
 
 #: pretix/base/pdf.py:300 pretix/base/pdf.py:396 pretix/base/pdf.py:420
 #: pretix/base/pdf.py:444 pretix/base/pdf.py:468 pretix/base/pdf.py:511
 msgid "2017-05-31 19:00"
-msgstr ""
+msgstr "2017-05-31 19:00"
 
 #: pretix/base/pdf.py:307
 msgid "Event admission time"
-msgstr ""
+msgstr "Ekitaldiaren onarpen-ordua"
 
 #: pretix/base/pdf.py:308 pretix/base/pdf.py:404 pretix/base/pdf.py:428
 #: pretix/base/pdf.py:452 pretix/base/pdf.py:476
 msgid "19:00"
-msgstr ""
+msgstr "19:00"
 
 #: pretix/base/pdf.py:315
 msgid "Event location"
-msgstr ""
+msgstr "Ekitaldiaren kokapena"
 
 #: pretix/base/pdf.py:316 pretix/base/settings.py:1118
 msgid "Random City"
-msgstr ""
+msgstr "Ausazko herria"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
-msgstr ""
+msgstr "Enpresaren fakturazio-helbidea"
 
 #: pretix/base/pdf.py:341
 msgid "Sesame Street 42"
-msgstr ""
+msgstr "Sesame Kalea 42"
 
 #: pretix/base/pdf.py:346
 msgid "12345"
-msgstr ""
+msgstr "12345"
 
 #: pretix/base/pdf.py:351 pretix/base/services/invoices.py:476
 msgid "Sample city"
-msgstr ""
+msgstr "Herriaren adibidea"
 
 #: pretix/base/pdf.py:355
 msgid "Invoice address state"
-msgstr ""
+msgstr "Fakturazio-helbidearen herrialdea"
 
 #: pretix/base/pdf.py:356
 msgid "Sample State"
-msgstr ""
+msgstr "Herrialdearen adibidea"
 
 #: pretix/base/pdf.py:361
 msgid "Atlantis"
-msgstr ""
+msgstr "Atlantis"
 
 #: pretix/base/pdf.py:365
 msgid "List of Add-Ons"
-msgstr ""
+msgstr "Osagarrien zerrenda"
 
 #: pretix/base/pdf.py:366
 msgid ""
 "Add-on 1\n"
 "2x Add-on 2"
 msgstr ""
+"Osagarria 1\n"
+"2x Osagarria 2"
 
 #: pretix/base/pdf.py:372 pretix/control/forms/filter.py:1300
 #: pretix/control/forms/filter.py:1302
 #: pretix/control/templates/pretixcontrol/organizers/index.html:42
 msgid "Organizer name"
-msgstr ""
+msgstr "Antolatzailearen izena"
 
 #: pretix/base/pdf.py:373
 msgid "Event organizer company"
-msgstr ""
+msgstr "Ekitaldiaren erakunde antolatzailea"
 
 #: pretix/base/pdf.py:377
 msgid "Organizer info text"
-msgstr ""
+msgstr "Antolatzailearen informazio testua"
 
 #: pretix/base/pdf.py:378
 msgid "Event organizer info text"
-msgstr ""
+msgstr "Ekitaldiaren antolatzailearen informazio testua"
 
 #: pretix/base/pdf.py:382 pretix/base/pdf.py:383
 msgid "Event info text"
-msgstr ""
+msgstr "Ekitaldiaren informazio testua"
 
 #: pretix/base/pdf.py:387
 msgid "Printing date"
-msgstr ""
+msgstr "Inprimatze-data"
 
 #: pretix/base/pdf.py:395
 msgid "Printing date and time"
-msgstr ""
+msgstr "Inprimatze-data eta ordua"
 
 #: pretix/base/pdf.py:403
 msgid "Printing time"
-msgstr ""
+msgstr "Inprimatze-ordua"
 
 #: pretix/base/pdf.py:411 pretix/control/forms/item.py:671
 msgid "Purchase date"
-msgstr ""
+msgstr "Erosketa-data"
 
 #: pretix/base/pdf.py:419
 msgid "Purchase date and time"
-msgstr ""
+msgstr "Erosketa-data eta ordua"
 
 #: pretix/base/pdf.py:427
 msgid "Purchase time"
-msgstr ""
+msgstr "Erosketa-ordua"
 
 #: pretix/base/pdf.py:435
 msgid "Validity start date"
-msgstr ""
+msgstr "Baliozkotasunaren hasiera-data"
 
 #: pretix/base/pdf.py:443
 msgid "Validity start date and time"
-msgstr ""
+msgstr "Baliozkotasunaren hasiera-data eta ordua"
 
 #: pretix/base/pdf.py:451
 msgid "Validity start time"
-msgstr ""
+msgstr "Baliozkotasunaren hasiera-ordua"
 
 #: pretix/base/pdf.py:459
 msgid "Validity end date"
-msgstr ""
+msgstr "Baliozkotasunaren amaiera-data"
 
 #: pretix/base/pdf.py:467
 msgid "Validity end date and time"
-msgstr ""
+msgstr "Baliozkotasunaren amaiera-data eta ordua"
 
 #: pretix/base/pdf.py:475
 msgid "Validity end time"
-msgstr ""
+msgstr "Baliozkotasunaren amaiera-data"
 
 #: pretix/base/pdf.py:483
 msgid "Reusable Medium ID"
-msgstr ""
+msgstr "Berriz erabil daitekeen Bitartekariaren IDa"
 
 #: pretix/base/pdf.py:488
 msgid "Seat: Full name"
-msgstr ""
+msgstr "Eserlekua: Izen osoa"
 
 #: pretix/base/pdf.py:489
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "Beheko solairua, 3. ilara, 4. eserlekua"
 
 #: pretix/base/pdf.py:491 pretix/base/pdf.py:497
 #: pretix/control/forms/orders.py:330
 msgid "General admission"
-msgstr ""
+msgstr "Onarpen orokorra"
 
 #: pretix/base/pdf.py:494
 msgid "Seat: zone"
-msgstr ""
+msgstr "Eserlekua: eremua"
 
 #: pretix/base/pdf.py:495
 msgid "Ground floor"
-msgstr ""
+msgstr "Beheko solairua"
 
 #: pretix/base/pdf.py:500
 msgid "Seat: row"
-msgstr ""
+msgstr "Eserlekua: ilara"
 
 #: pretix/base/pdf.py:505
 msgid "Seat: seat number"
-msgstr ""
+msgstr "Eserlekua: eserlekuaren zenbakia"
 
 #: pretix/base/pdf.py:510
 msgid "Date and time of first scan"
-msgstr ""
+msgstr "Lehen eskaneatzearen data eta ordua"
 
 #: pretix/base/pdf.py:516
 msgid "Gift card: Issuance date"
-msgstr ""
+msgstr "Opari-txartela: Jaulkipen-data"
 
 #: pretix/base/pdf.py:521
 msgid "Gift card: Expiration date"
-msgstr ""
+msgstr "Opari-txartela: Iraungitze-data"
 
 #: pretix/base/pdf.py:562 pretix/base/pdf.py:600 pretix/base/pdf.py:606
 #: pretix/plugins/badges/exporters.py:489
 #: pretix/plugins/ticketoutputpdf/exporters.py:102
 #, python-brace-format
 msgid "Question: {question}"
-msgstr ""
+msgstr "Galdera: {question}"
 
 #: pretix/base/pdf.py:601 pretix/base/pdf.py:607
 #, python-brace-format
 msgid "<Answer: {question}>"
-msgstr ""
+msgstr "<Erantzuna: {question}>"
 
 #: pretix/base/pdf.py:648
 msgid "Attendee name for salutation"
-msgstr ""
+msgstr "Agurrerako bertaratuko den pertsonaren izena"
 
 #: pretix/base/pdf.py:649 pretix/base/pdf.py:672
 #: pretix/base/services/placeholders.py:556
 #: pretix/control/forms/organizer.py:601
 msgid "Mr Doe"
-msgstr ""
+msgstr "Mr Doe"
 
 #: pretix/base/pdf.py:655 pretix/base/pdf.py:662
 #: pretix/plugins/badges/exporters.py:486
@@ -7128,86 +7308,89 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/exporters.py:99
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr ""
+msgstr "Bertaratuko den pertsonaren izena: {part}"
 
 #: pretix/base/pdf.py:671
 msgid "Invoice address name for salutation"
-msgstr ""
+msgstr "Agurrerako fakturazio-helbidearen izena"
 
 #: pretix/base/pdf.py:678
 #, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr ""
+msgstr "Fakturazio-helbidearen izena: {part}"
 
 #: pretix/base/pdf.py:1070 pretix/control/forms/organizer.py:721
 #: pretix/control/forms/organizer.py:757
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
-msgstr ""
+msgstr "Sarrera"
 
 #: pretix/base/pdf.py:1235
 msgid "Your layout file is not a valid layout. Error message: {}"
-msgstr ""
+msgstr "Zure diseinu-fitxategia ez da baliozko diseinua. Errore-mezua: {}"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
-msgstr ""
+msgstr "Ekitaldiaren hasiera"
 
 #: pretix/base/reldate.py:36
 msgid "Event end"
-msgstr ""
+msgstr "Ekitaldiaren amaiera"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
-msgstr ""
+msgstr "Ekitaldiaren onarpena"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
-msgstr ""
+msgstr "Aurresalmentaren hasiera"
 
 #: pretix/base/reldate.py:39
 msgid "Presale end"
-msgstr ""
+msgstr "Aurresalmentaren amaiera"
 
 #: pretix/base/reldate.py:183
 msgid "before"
-msgstr ""
+msgstr "aurrekoa"
 
 #: pretix/base/reldate.py:184
 msgid "after"
-msgstr ""
+msgstr "hurrengoa"
 
 #: pretix/base/reldate.py:231 pretix/base/reldate.py:359
 msgid "Fixed date:"
-msgstr ""
+msgstr "Finkatutako data:"
 
 #: pretix/base/reldate.py:232 pretix/base/reldate.py:360
 msgid "Relative date:"
-msgstr ""
+msgstr "Data erlatiboa:"
 
 #: pretix/base/reldate.py:233
 msgid "Relative time:"
-msgstr ""
+msgstr "Ordu erlatiboa:"
 
 #: pretix/base/reldate.py:241 pretix/base/reldate.py:363
 msgid "Not set"
-msgstr ""
+msgstr "Finkatu gabe"
 
 #: pretix/base/secrets.py:119
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "Ausazkoa (lehenespenez, pretix aplikazio guztiekin funtzionatzen du)"
 
 #: pretix/base/secrets.py:150
 msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
+"pretix signature scheme 1 (oso gertaera handietarako, aldatu offline "
+"eskaneatzearen semantika - mesedez, kontsultatu dokumentazioa edo euskarria "
+"xehetasun gehiagorako)"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
 msgid "Event canceled"
-msgstr ""
+msgstr "Ekitaldia bertan behera geratu da"
 
 #: pretix/base/services/cart.py:101 pretix/base/services/modelimport.py:194
 #: pretix/base/services/orders.py:150
@@ -7215,35 +7398,41 @@ msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
+"Ezin izan dugu zure eskaera guztiz prozesatu, zerbitzaria lanpetuegia "
+"zegoelako. Mesedez, saiatu berriro."
 
 #: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:249
 msgid "You did not select any products."
-msgstr ""
+msgstr "Ez duzu produkturik hautatu."
 
 #: pretix/base/services/cart.py:105
 msgid "Unknown cart position."
-msgstr ""
+msgstr "Orgaren posizio ezezaguna."
 
 #: pretix/base/services/cart.py:106
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr ""
+msgstr "Ez da datarik zehaztu."
 
 #: pretix/base/services/cart.py:107 pretix/base/services/orders.py:187
 msgid "You selected a product which is not available for sale."
-msgstr ""
+msgstr "Salmentarako erabilgarri ez dagoen produktu bat hautatu duzu."
 
 #: pretix/base/services/cart.py:109
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
 msgstr ""
+"Hautatu dituzun produktuetako batzuk ez daude erabilgarri dagoeneko. "
+"Kontsultatu xehetasunak jarraian."
 
 #: pretix/base/services/cart.py:113
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Hautatu dituzun produktuetako batzuk ez daude erabilgarri zehaztutako "
+"kantitatean. Kontsultatu xehetasunak jarraian."
 
 #: pretix/base/services/cart.py:117
 #, python-format
@@ -7251,6 +7440,8 @@ msgid ""
 "Some of the products you selected are no longer available. The following "
 "products are affected and have not been added to your cart: %s"
 msgstr ""
+"Hautatu dituzun produktuetako batzuk ez daude erabilgarri dagoeneko. "
+"Produktu hauek ez dira zure saskira gehitu: %s"
 
 #: pretix/base/services/cart.py:121
 #, python-format
@@ -7259,13 +7450,15 @@ msgid ""
 "you selected. The following products are affected and have not been added to "
 "your cart: %s"
 msgstr ""
+"Hautatu dituzun produktuetako batzuk ez daude erabilgarri zehaztutako "
+"kantitatean. Produktu hauek ez dira zure saskira gehitu: %s"
 
 #: pretix/base/services/cart.py:126
 #, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ezin duzu %s artikulu baino gehiago hautatu eskaera bakoitzeko."
+msgstr[1] "Ezin dituzu %s artikulu baino gehiago hautatu eskaera bakoitzeko."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1539
 #, python-format
@@ -7273,15 +7466,18 @@ msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
 msgstr[0] ""
+"Ezin duzu %(max)s produktu baino gehiago hautatu %(product)s produktuan."
 msgstr[1] ""
+"Ezin dituzu %(max)s produktu baino gehiago hautatu %(product)s produktuan."
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1544
 #, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] ""
+msgstr[0] "%(product)s produktuaren %(min)s artikulu hautatu behar duzu gutxienez."
 msgstr[1] ""
+"%(product)s produktuaren %(min)s artikulu hautatu behar dituzu gutxienez."
 
 #: pretix/base/services/cart.py:140
 #, python-format
@@ -7292,47 +7488,57 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
+"%(product)s ezabatu dugu zure saskitik, ezin baituzu saskiko %(min)s baino "
+"gutxiago erosi."
 msgstr[1] ""
+"%(product)s ezabatu dugu zure saskitik, ezin baitituzu saskiko %(min)s baino "
+"gutxiago erosi."
 
 #: pretix/base/services/cart.py:144 pretix/base/services/orders.py:153
 #: pretix/presale/templates/pretixpresale/event/index.html:157
 #: pretix/presale/views/waiting.py:106 pretix/presale/views/widget.py:763
 msgid "The booking period for this event has not yet started."
-msgstr ""
+msgstr "Ekitaldi honetarako erreserba epea oraindik ez da hasi."
 
 #: pretix/base/services/cart.py:145
 msgid "The booking period for this event has ended."
-msgstr ""
+msgstr "Ekitaldi honetarako erreserba epea amaitu da."
 
 #: pretix/base/services/cart.py:146
 msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
 msgstr ""
+"Ekitaldi honetarako ordainketa guztiek baieztatuta egon behar dute, beraz, "
+"ezin da eskaera berririk sortu."
 
 #: pretix/base/services/cart.py:148
 msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"Ekitaldi honetarako erreserba-epea oraindik ez da hasi. Aukeratutako postuak "
+"zure orgatxotik kendu dira."
 
 #: pretix/base/services/cart.py:151 pretix/base/services/orders.py:181
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
+"Zure orgatxoko ekitaldietako baten erreserba-epea amaitu da. Aukeratutako "
+"postuak zure orgatxotik kendu dira."
 
 #: pretix/base/services/cart.py:153
 msgid "The entered price is not a number."
-msgstr ""
+msgstr "Sartutako prezioa ez da zenbaki bat."
 
 #: pretix/base/services/cart.py:154
 msgid "The entered price is to high."
-msgstr ""
+msgstr "Sartutako prezioa altuegia da."
 
 #: pretix/base/services/cart.py:155
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "Kupoi-kode hori ez dago gure datu-basean."
 
 #: pretix/base/services/cart.py:157 pretix/base/services/orders.py:156
 #, python-format
@@ -7343,7 +7549,11 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
+"\"%(voucher)s\" kupoiaren kodea gutxienez %(number)s bat datozen produktuak "
+"hautatzen badituzu soilik erabil daiteke."
 msgstr[1] ""
+"\"%(voucher)s\" kupoiaren kodea gutxienez %(number)s bat datozen produktuak "
+"hautatzen badituzu soilik erabil daiteke."
 
 #: pretix/base/services/cart.py:162
 #, python-format
@@ -7356,12 +7566,19 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"\"%(voucher)s\" txartelaren kodea gutxienez %(number)s bat datozen "
+"produktuak hautatzen badituzu soilik erabil daiteke. Beraz, zure orgatxoko "
+"posizio batzuk kendu ditugu, jada horrela erosi ezin direnak."
 msgstr[1] ""
+"\"%(voucher)s\" txartelaren kodea gutxienez %(number)s bat datozen "
+"produktuak hautatzen badituzu soilik erabil daiteke. Beraz, zure orgatxoko "
+"posizio batzuk kendu ditugu, jada horrela erosi ezin direnak."
 
 #: pretix/base/services/cart.py:168
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
 msgstr ""
+"Kupoi-kode hori baimendutako gehienezko aldi-kopurua erabili da dagoeneko."
 
 #: pretix/base/services/cart.py:170
 #, python-format
@@ -7371,35 +7588,43 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Kupoiaren kode hori blokeatuta dago orain, orgatxo batean sartuta baitago. "
+"Horrek esan nahi du beste pertsona bat ari dela une honetan kupoi hau "
+"trukatzen, edo lehenago saiatu zarela trukatzen baina ez duzula erosketa-"
+"prozesua amaitu. %d minututan berriz erabiltzen saia zaitezke."
 
 #: pretix/base/services/cart.py:175
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "Kupoi-kode hori %d aldiz gehiago bakarrik truka daiteke."
 
 #: pretix/base/services/cart.py:176
 msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
+"Kupoi bat saski osoari aplikatzea ez da beste eragiketa batzuekin konbinatu "
+"behar."
 
 #: pretix/base/services/cart.py:178
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
+"Kupoi-kode hori erabili duzu dagoeneko. Ezabatu zure saskiari lotutako "
+"lerroa, beste produktu baterako erabili nahi baduzu."
 
 #: pretix/base/services/cart.py:181
 msgid "This voucher is expired."
-msgstr ""
+msgstr "Kupoi hau iraungita dago."
 
 #: pretix/base/services/cart.py:182
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "Kupoi honek ez du produktu honetarako balio."
 
 #: pretix/base/services/cart.py:183
 msgid "This voucher is not valid for this seat."
-msgstr ""
+msgstr "Kupoi honek ez du eserleku honetarako balio."
 
 #: pretix/base/services/cart.py:185
 msgid ""
@@ -7407,32 +7632,35 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"Zure saskian ez dugu aurkitu kupoi hau erabiltzeko posiziorik. Kupoi hori "
+"erabiliz zure saskira zerbait berria gehitu nahi baduzu, orrialdearen "
+"behealdeko kupoiak trukatzeko aukerarekin egin dezakezu."
 
 #: pretix/base/services/cart.py:190
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr ""
+msgstr "Zure kupoiak gaur egun salgai ez dagoen produktu baterako balio du."
 
 #: pretix/base/services/cart.py:191
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "Kupoi honek ez du balio ekitaldiaren egun honetarako."
 
 #: pretix/base/services/cart.py:192
 msgid "You need a valid voucher code to order this product."
-msgstr ""
+msgstr "Baliozko kupoi-kode bat behar duzu produktu hau eskatzeko."
 
 #: pretix/base/services/cart.py:193
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "Aukeratutako ekitaldiaren data ez dago aktibo."
 
 #: pretix/base/services/cart.py:194 pretix/base/services/orders.py:188
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "Ezin duzu osagarri bat hautatu produktu honetarako."
 
 #: pretix/base/services/cart.py:195 pretix/base/services/orders.py:189
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "Ezin dituzu hautatu produktu osagarri beraren bi bariazio."
 
 #: pretix/base/services/cart.py:197 pretix/base/services/orders.py:191
 #, python-format
@@ -7443,7 +7671,11 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
+"%(max)s gehienez %(cat)s kategoriako osagarria hauta dezakezu %(base)s "
+"produkturako."
 msgstr[1] ""
+"%(max)s gehienez %(cat)s kategoriako osagarriak hauta ditzakezu %(base)s "
+"produkturako."
 
 #: pretix/base/services/cart.py:202 pretix/base/services/orders.py:196
 #, python-format
@@ -7454,7 +7686,11 @@ msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr[0] ""
+"%(cat)s kategoriako %(min)s osagarria hautatu behar duzu gutxienez %(base)s "
+"produkturako."
 msgstr[1] ""
+"%(cat)s kategoriako %(min)s osagarriak hautatu behar dituzu gutxienez %(base)"
+"s produkturako."
 
 #: pretix/base/services/cart.py:206 pretix/base/services/orders.py:200
 #, python-format
@@ -7462,245 +7698,260 @@ msgid ""
 "You can select every add-on from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
+"%(base)s produkturako %(cat)s kategoriako osagarri bakoitza behin hauta "
+"dezakezu gehienez."
 
 #: pretix/base/services/cart.py:207
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "product."
 msgstr ""
+"Hautatu duzun produktuetako bat beste produktu baten osagarri gisa baino "
+"ezin da erosi."
 
 #: pretix/base/services/cart.py:208
 msgid "One of the products you selected can only be bought part of a bundle."
 msgstr ""
+"Hautatu duzun produktuetako bat pakete baten zati gisa baino ezin da erosi."
 
 #: pretix/base/services/cart.py:210
 msgid "Please select a valid seat."
-msgstr ""
+msgstr "Mesedez aukeratu eskuragarri dagoen eserleku bat."
 
 #: pretix/base/services/cart.py:211
 msgid "You can not select a seat for this position."
-msgstr ""
+msgstr "Ezin da eserleku bat hautatu posizio horretarako."
 
 #: pretix/base/services/cart.py:213
 msgid "You can not select the same seat multiple times."
-msgstr ""
+msgstr "Ezin duzu eserleku bera behin baino gehiagotan hautatu."
 
 #: pretix/base/services/cart.py:214
 msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
+"Opari-txartel bat sartu duzu kupoi baten ordez. Opari-txartelak geroago sar "
+"daitezke, ordainketa-datuak eskatzen zaizkizunean."
 
 #: pretix/base/services/cart.py:216
 msgid ""
 "The configuration of this product requires mapping to a physical medium, "
 "which is currently not available online."
 msgstr ""
+"Produktu hau konfiguratzeko, euskarri fisiko bat esleitu behar da, eta gaur "
+"egun ez dago eskuragarri online."
 
 #: pretix/base/services/checkin.py:217
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:69
 msgid "Unknown reason"
-msgstr ""
+msgstr "Zergati ezezaguna"
 
 #: pretix/base/services/checkin.py:273
 #, python-brace-format
 msgid "Only allowed before {datetime}"
-msgstr ""
+msgstr "{datetime} baino lehen bakarrik onartzen da"
 
 #: pretix/base/services/checkin.py:275
 #, python-brace-format
 msgid "Only allowed after {datetime}"
-msgstr ""
+msgstr "{datetime}-aren ondoren bakarrik onartzen da"
 
 #: pretix/base/services/checkin.py:279
 msgid "Attendee is checked out"
-msgstr ""
+msgstr "Bertaratuko den pertsonak baja eman du"
 
 #: pretix/base/services/checkin.py:281
 msgid "Attendee is already checked in"
-msgstr ""
+msgstr "Bertaratuko den pertsonak izena eman du dagoeneko"
 
 #: pretix/base/services/checkin.py:286
 msgid "Ticket type not allowed"
-msgstr ""
+msgstr "Sarrera mota ez dago eskuragarri"
 
 #: pretix/base/services/checkin.py:289
 msgid "Wrong entrance gate"
-msgstr ""
+msgstr "Sarrera-data okerra"
 
 #: pretix/base/services/checkin.py:313
 msgid "time since last entry"
-msgstr ""
+msgstr "azken sarreratik igarotako denbora"
 
 #: pretix/base/services/checkin.py:314
 msgid "time since first entry"
-msgstr ""
+msgstr "lehen sarreratik igarotako denbora"
 
 #: pretix/base/services/checkin.py:315
 msgid "number of days with an entry"
-msgstr ""
+msgstr "sarrera bat duten egunen kopurua"
 
 #: pretix/base/services/checkin.py:316
 msgid "number of entries"
-msgstr ""
+msgstr "sarrera kopurua"
 
 #: pretix/base/services/checkin.py:317
 msgid "number of entries today"
-msgstr ""
+msgstr "sarrera kopurua gaur"
 
 #: pretix/base/services/checkin.py:318
 #, python-brace-format
 msgid "number of entries since {datetime}"
-msgstr ""
+msgstr "{datetime}(e)tik aurrerako sarrera-kopurua"
 
 #: pretix/base/services/checkin.py:319
 #, python-brace-format
 msgid "number of entries before {datetime}"
-msgstr ""
+msgstr "{datetime}(e)tik lehenagoko sarrera-kopurua"
 
 #: pretix/base/services/checkin.py:320
 #, python-brace-format
 msgid "number of days with an entry since {datetime}"
-msgstr ""
+msgstr "sarrera bat duten egunen kopurua {datetime}-etik"
 
 #: pretix/base/services/checkin.py:321
 #, python-brace-format
 msgid "number of days with an entry before {datetime}"
-msgstr ""
+msgstr "sarrera bat {datetime} baino lehen duten egunen kopurua"
 
 #: pretix/base/services/checkin.py:322
 msgid "week day"
-msgstr ""
+msgstr "asteko eguna"
 
 #: pretix/base/services/checkin.py:358 pretix/control/forms/filter.py:1155
 msgid "Monday"
-msgstr ""
+msgstr "Astelehena"
 
 #: pretix/base/services/checkin.py:359 pretix/control/forms/filter.py:1156
 msgid "Tuesday"
-msgstr ""
+msgstr "Asteartea"
 
 #: pretix/base/services/checkin.py:360 pretix/control/forms/filter.py:1157
 msgid "Wednesday"
-msgstr ""
+msgstr "Asteazkena"
 
 #: pretix/base/services/checkin.py:361 pretix/control/forms/filter.py:1158
 msgid "Thursday"
-msgstr ""
+msgstr "Osteguna"
 
 #: pretix/base/services/checkin.py:363 pretix/control/forms/filter.py:1160
 msgid "Saturday"
-msgstr ""
+msgstr "Larunbata"
 
 #: pretix/base/services/checkin.py:364 pretix/control/forms/filter.py:1161
 msgid "Sunday"
-msgstr ""
+msgstr "Igandea"
 
 #: pretix/base/services/checkin.py:368
 #, python-brace-format
 msgid "{variable} is not {value}"
-msgstr ""
+msgstr "{variable} ez da {value}"
 
 #: pretix/base/services/checkin.py:370
 #, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr ""
+msgstr "Gainditu egin da gehienezko {variable}"
 
 #: pretix/base/services/checkin.py:372
 #, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr ""
+msgstr "Gutxienezko {variable} gaindituta"
 
 #: pretix/base/services/checkin.py:374
 #, python-brace-format
 msgid "{variable} is {value}"
-msgstr ""
+msgstr "{variable} {value} da"
 
 #: pretix/base/services/checkin.py:972
 msgid "This order position has been canceled."
-msgstr ""
+msgstr "Eskaera-posizio hori bertan behera utzi da."
 
 #: pretix/base/services/checkin.py:981
 msgid "This ticket has been blocked."
-msgstr ""
+msgstr "Sarrera hau blokeatu egin da."
 
 #: pretix/base/services/checkin.py:990
 msgid "This order is not yet approved."
-msgstr ""
+msgstr "Eskaera hau oraindik ez dago onartuta."
 
 #: pretix/base/services/checkin.py:999 pretix/base/services/checkin.py:1003
 #, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr ""
+msgstr "Sarrera hau {datetime}(e)tik aurrera baino ez da baliozkoa."
 
 #: pretix/base/services/checkin.py:1013 pretix/base/services/checkin.py:1017
 #, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr ""
+msgstr "Sarrera honek {datetime} baino lehen bakarrik balio zuen."
 
 #: pretix/base/services/checkin.py:1048
 msgid "This order position has an invalid product for this check-in list."
 msgstr ""
+"Eskaera-posizio honek erregistro-zerrenda honetarako balio ez duen produktu "
+"bat du."
 
 #: pretix/base/services/checkin.py:1057
 msgid "This order position has an invalid date for this check-in list."
 msgstr ""
+"Eskaera-posizio honek fakturazio-zerrenda honetarako balio ez duen data bat "
+"du."
 
 #: pretix/base/services/checkin.py:1068
 msgid "This order is not marked as paid."
-msgstr ""
+msgstr "Eskaera hau ez dago ordainduta bezala markatuta."
 
 #: pretix/base/services/checkin.py:1080
 msgid "Evaluation of custom rules has failed."
-msgstr ""
+msgstr "Arau pertsonalizatuen ebaluazioak huts egin du."
 
 #: pretix/base/services/checkin.py:1090
 #, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr ""
+msgstr "Sarrera ez onartuta: {explanation}."
 
 #: pretix/base/services/checkin.py:1099
 msgid "You need to answer questions to complete this check-in."
-msgstr ""
+msgstr "Erregistro hori osatzeko galderei erantzun behar diezu."
 
 #: pretix/base/services/checkin.py:1152
 msgid "This ticket has already been redeemed."
-msgstr ""
+msgstr "Sarrera hau dagoeneko trukatu da."
 
 #: pretix/base/services/currencies.py:38 pretix/base/services/currencies.py:39
 msgid "European Central Bank"
-msgstr ""
+msgstr "Europako Banku Zentrala"
 
 #: pretix/base/services/currencies.py:40
 msgid "Czech National Bank"
-msgstr ""
+msgstr "Txekiako Banku Nazionala"
 
 #: pretix/base/services/export.py:86 pretix/base/services/export.py:157
 #: pretix/base/services/export.py:215
 msgid "Your export did not contain any data."
-msgstr ""
+msgstr "Zure esportazioak ez dauka inolako daturik."
 
 #: pretix/base/services/export.py:151
 msgid "You do not have sufficient permission to perform this export."
-msgstr ""
+msgstr "Ez duzu esportazio hori egiteko baimen nahikorik."
 
 #: pretix/base/services/export.py:189
 msgid "Export failed"
-msgstr ""
+msgstr "Esportazioak huts egin du"
 
 #: pretix/base/services/export.py:206
 msgid "Permission denied."
-msgstr ""
+msgstr "Baimena ukatu da."
 
 #: pretix/base/services/export.py:221
 msgid "Your exported data exceeded the size limit for scheduled exports."
 msgstr ""
+"Esportatutako datuek gainditu egin dute programatutako esportazioen tamaina "
+"muga."
 
 #: pretix/base/services/invoices.py:103
 #, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr ""
+msgstr "Mesedez egin ordainketa {expire_date} baino lehen."
 
 #: pretix/base/services/invoices.py:115
 #, python-brace-format
@@ -7712,48 +7963,53 @@ msgid ""
 "{i.zipcode} {i.city} {state}\n"
 "{country}"
 msgstr ""
+"{i.company}\n"
+"{i.name}\n"
+"{i.street}\n"
+"{i.zipcode} {i.city} {state}\n"
+"{country}"
 
 #: pretix/base/services/invoices.py:220 pretix/base/services/invoices.py:257
 #, python-brace-format
 msgctxt "invoice"
 msgid "Event location: {location}"
-msgstr ""
+msgstr "Ekitaldiaren kokapena: {location}"
 
 #: pretix/base/services/invoices.py:236
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr ""
+msgstr "Bertaratuko den pertsona: {name}"
 
 #: pretix/base/services/invoices.py:254 pretix/plugins/reports/exporters.py:298
 msgctxt "subevent"
 msgid "Date: {}"
-msgstr ""
+msgstr "Data: {}"
 
 #: pretix/base/services/invoices.py:466
 msgid "A payment provider specific text might appear here."
-msgstr ""
+msgstr "Ordainketa-hornitzailearen testu espezifiko bat ager daiteke hemen."
 
 #: pretix/base/services/invoices.py:474
 msgid "214th Example Street"
-msgstr ""
+msgstr "214 Kale adibidea"
 
 #: pretix/base/services/invoices.py:475
 msgid "012345"
-msgstr ""
+msgstr "012345"
 
 #: pretix/base/services/invoices.py:492
 msgid "Sample product {}"
-msgstr ""
+msgstr "Produktu adibidea {}"
 
 #: pretix/base/services/invoices.py:499
 msgid "Sample product A"
-msgstr ""
+msgstr "A produktu adibidea"
 
 #: pretix/base/services/invoices.py:526
 #, python-brace-format
 msgid "New invoice: {number}"
-msgstr ""
+msgstr "Faktura berria: {number}"
 
 #: pretix/base/services/invoices.py:528
 #, python-brace-format
@@ -7765,6 +8021,12 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"Kaixo,\n"
+"\n"
+"faktura berri bat sortu da {order} eskaerarako {event}(e)n (ikus erantsia).\n"
+"\n"
+"Mezu elektroniko hau bidaltzen dizugu, zure gertaeraren ezarpenetan hala "
+"konfiguratu duzulako."
 
 #: pretix/base/services/mail.py:265
 #, python-brace-format
@@ -7772,6 +8034,8 @@ msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
+"Mezu elektroniko hau jasotzen ari zara norbaitek {event}(r)en eskaera bat "
+"egin duelako zuretzat."
 
 #: pretix/base/services/mail.py:269 pretix/base/services/mail.py:285
 #, python-brace-format
@@ -7779,16 +8043,20 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"Zure eskaeraren xehetasunak URL honetan kontsulta ditzakezu:\n"
+"{orderurl}."
 
 #: pretix/base/services/mail.py:281
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
 msgstr ""
+"Mezu elektroniko hau jasotzen ari zara eskaera bat egin duzulako "
+"{event}(e)rako."
 
 #: pretix/base/services/mail.py:457
 msgctxt "attachment_filename"
 msgid "Calendar invite"
-msgstr ""
+msgstr "Egutegirako gonbidapena"
 
 #: pretix/base/services/memberships.py:108
 #, python-brace-format
@@ -7796,6 +8064,8 @@ msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
 msgstr ""
+"Afiliaziorik behar ez duen \"{product}\" produkturako afiliazio bat hautatu "
+"duzu."
 
 #: pretix/base/services/memberships.py:116
 #, python-brace-format
@@ -7803,26 +8073,32 @@ msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
 msgstr ""
+"Hautatu duzun \"{product}\" produktuak afiliazio aktiboa behar du hautatua "
+"izateko."
 
 #: pretix/base/services/memberships.py:149
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr ""
+msgstr "Beste bezero-kontu batera konektatuta dagoen abonu bat hautatu duzu."
 
 #: pretix/base/services/memberships.py:154
 msgid "You selected membership that has been canceled."
-msgstr ""
+msgstr "Bertan behera utzi den afiliazio bat hautatu duzu."
 
 #: pretix/base/services/memberships.py:159
 msgid ""
 "You can not use a test mode membership for tickets that are not in test mode."
 msgstr ""
+"Ezin duzu afiliazio bat proba moduan erabili proba moduan ez dauden "
+"sarreretarako."
 
 #: pretix/base/services/memberships.py:163
 msgid ""
 "You need to add a test mode membership to the customer account to use it in "
 "test mode."
 msgstr ""
+"Bezeroaren kontuari harpidetza bat gehitu behar zaio proba moduan, proba "
+"moduan erabiltzeko."
 
 #: pretix/base/services/memberships.py:179
 #, python-brace-format
@@ -7830,6 +8106,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "a ticket that starts to be valid on {date}."
 msgstr ""
+"{start}(e)tik {end}(e)ra balio duen abonu bat hautatu duzu, baina {date}(e)"
+"an baliozkoa izaten hasiko den sarrera bat hautatu duzu."
 
 #: pretix/base/services/memberships.py:188
 #, python-brace-format
@@ -7837,6 +8115,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"{start}(e)tik {end}(e)ra balio duen abonu bat hautatu duzu, baina {date}(e)"
+"an gertaera bat hautatu duzu."
 
 #: pretix/base/services/memberships.py:203
 #, python-brace-format
@@ -7844,6 +8124,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"\"{type}\" motako afiliazio bat hautatu duzu, eta ez dago baimenduta \""
+"{product}\" produkturako."
 
 #: pretix/base/services/memberships.py:212
 #, python-brace-format
@@ -7851,6 +8133,8 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
+"\"{type}\" motako afiliazio bat {number} aldiz baino gehiago erabiltzen "
+"saiatzen ari zara, hau da, kantitate maximoa."
 
 #: pretix/base/services/memberships.py:227
 #, python-brace-format
@@ -7860,16 +8144,20 @@ msgid ""
 "membership for a different ticket that overlaps with this time frame "
 "({conflict_from} – {conflict_until})."
 msgstr ""
+"\"{type}\" motako afiliazio bat erabiltzen saiatzen ari zara {valid_from}(e)"
+"tik {valid_until}(e)ra balio duen sarrera baterako. Hala ere, afiliazio bera "
+"erabili duzu sarrera desberdin baterako, eta denbora-tarte horretan "
+"gainjartzen da ({conflict_from} - {conflict_until})."
 
 #: pretix/base/services/memberships.py:231
 #: pretix/base/services/memberships.py:233
 msgid "start"
-msgstr ""
+msgstr "hasiera"
 
 #: pretix/base/services/memberships.py:232
 #: pretix/base/services/memberships.py:234
 msgid "open end"
-msgstr ""
+msgstr "irekiera bukatzen da"
 
 #: pretix/base/services/memberships.py:244
 #, python-brace-format
@@ -7878,11 +8166,16 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"\"{type}\" motako abonu bat erabiltzen saiatzen ari zara {date}(e)an egingo "
+"den ekitaldi baterako, baina abonu bera erabili duzu ordu bereko beste "
+"sarrera baterako."
 
 #: pretix/base/services/modelimport.py:53
 #, python-brace-format
 msgid "Error decoding special characters in your file: {message}"
 msgstr ""
+"Errore bat gertatu da zure fitxategian karaktere bereziak deskodetzean: "
+"{message}"
 
 #: pretix/base/services/modelimport.py:71
 #, python-brace-format
@@ -7890,53 +8183,63 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
+"Errore bat gertatu da {line} lerroko «{column}» zutaberako «{value}» balioa "
+"inportatzean: {message}"
 
 #: pretix/base/services/modelimport.py:89 pretix/base/services/orders.py:1548
 #, python-format
 msgid "Orders cannot have more than %(max)s positions."
-msgstr ""
+msgstr "Eskaerek ezin dute %(max)s posizio baino gehiago izan."
 
 #: pretix/base/services/modelimport.py:124
 #: pretix/base/services/modelimport.py:236
 #, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr ""
+msgstr "Datu horiek ez dute balio {row} errenkadan: {message}"
 
 #: pretix/base/services/modelimport.py:217
 msgid "A voucher cannot be created without a code."
-msgstr ""
+msgstr "Ezin da kupoi bat sortu koderik gabe."
 
 #: pretix/base/services/orders.py:129
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
 msgstr ""
+"Hautatu dituzun produktuetako batzuk ez daude erabilgarri dagoeneko. "
+"Kontsultatu xehetasunak jarraian."
 
 #: pretix/base/services/orders.py:133
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Hautatu dituzun produktuetako batzuk ez daude erabilgarri hautatutako "
+"kantitatean. Kontsultatu xehetasunak jarraian."
 
 #: pretix/base/services/orders.py:137
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
+"Bien bitartean, zure saskiko artikulu batzuen prezioa aldatu egin da. "
+"Kontsultatu xehetasunak jarraian."
 
 #: pretix/base/services/orders.py:140
 msgid "An internal error occurred, please try again."
-msgstr ""
+msgstr "Barne-errore bat gertatu da, mesedez saiatu berriro."
 
 #: pretix/base/services/orders.py:141
 msgid ""
 "This order was changed by someone else simultaneously. Please check if your "
 "changes are still accurate and try again."
 msgstr ""
+"Eskaera hau beste pertsona batek aldatu du aldi berean. Mesedez, egiaztatu "
+"aldaketak zuzenak direla eta saiatu berriro."
 
 #: pretix/base/services/orders.py:143
 msgid "Your cart is empty."
-msgstr ""
+msgstr "Saskia hutsik dago."
 
 #: pretix/base/services/orders.py:145
 #, python-format
@@ -7947,17 +8250,23 @@ msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr[0] ""
+"Ezin duzu %(max)s artikulu baino gehiago hautatu %(product)s produktuan. "
+"Zure saskitik soberan dituzun artikuluak ezabatu ditugu."
 msgstr[1] ""
+"Ezin duzu %(max)s artikulu baino gehiago hautatu %(product)s produktuan. "
+"Zure saskitik soberan dituzun artikuluak ezabatu ditugu."
 
 #: pretix/base/services/orders.py:154
 msgid "The booking period has ended."
-msgstr ""
+msgstr "Erreserba epea amaitu da."
 
 #: pretix/base/services/orders.py:160
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
+"Zure saskiko artikuluetako baterako erabilitako kupoiaren kodea ez dago gure "
+"datu-basean."
 
 #: pretix/base/services/orders.py:162
 msgid ""
@@ -7965,74 +8274,88 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
+"Zure saskiko artikuluetako baterako erabilitako kupoiaren kodea dagoeneko "
+"erabili da baimendutako gehienezko aldi-kopurua. Artikulu hau zure saskitik "
+"kendu dugu."
 
 #: pretix/base/services/orders.py:166
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
+"Zure saskian erabilitako kupoiaren kodea dagoeneko sarriegi erabili da. "
+"Aldatu dugu produktuaren prezioa zure saskian."
 
 #: pretix/base/services/orders.py:170
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
+"Zure saskiko artikuluetako baterako erabilitako kupoiaren kodea iraungi egin "
+"da. Artikulu hau zure saskitik kendu dugu."
 
 #: pretix/base/services/orders.py:173
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
+"Zure saskiko artikuluetako baterako erabilitako kupoi-kodeak ez du balio "
+"artikulu honetarako. Artikulu hau zure saskitik kendu dugu."
 
 #: pretix/base/services/orders.py:175
 msgid "You need a valid voucher code to order one of the products."
-msgstr ""
+msgstr "Baliozko kupoi-kode bat behar duzu produktuetako bat eskatzeko."
 
 #: pretix/base/services/orders.py:177
 msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
+"Zure orgatxoko ekitaldietako baterako erreserba-epea oraindik ez da hasi. "
+"Aukeratutako postuak zure orgatxotik kendu dira."
 
 #: pretix/base/services/orders.py:184
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
+"Zure eskaerako eserleku batek ez zuen balio eta zure saskitik kendu dugu."
 
 #: pretix/base/services/orders.py:185
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
+"Zure eskaerako eserleku bat okupatua izan da bitartean, zure saskiko "
+"posizioa kendu dugu."
 
 #: pretix/base/services/orders.py:201
 #, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr ""
+msgstr "Ezin duzu ezabatu %(addon)s posizioa, dagoeneko erregistratuta baitago."
 
 #: pretix/base/services/orders.py:202
 msgid "Paid products not supported without a valid currency."
-msgstr ""
+msgstr "Ez da onartzen ordainpeko produkturik monetarik gabe."
 
 #: pretix/base/services/orders.py:218
 msgid "The order was not canceled."
-msgstr ""
+msgstr "Eskaera ez da bertan behera utzi."
 
 #: pretix/base/services/orders.py:272 pretix/control/forms/orders.py:124
 msgid "The new expiry date needs to be in the future."
-msgstr ""
+msgstr "Iraungitze-data berriak gerokoa izan behar du."
 
 #: pretix/base/services/orders.py:365 pretix/base/services/orders.py:451
 msgid "This order is not pending approval."
-msgstr ""
+msgstr "Eskaera hori ez dago onartzeke."
 
 #: pretix/base/services/orders.py:509 pretix/presale/views/order.py:938
 #: pretix/presale/views/order.py:987
 msgid "You cannot cancel this order."
-msgstr ""
+msgstr "Ezin duzu eskaera hau bertan behera utzi."
 
 #: pretix/base/services/orders.py:521
 #, python-brace-format
@@ -8040,15 +8363,19 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Eskaera hau ezin da ezeztatu, eskaera honetan erositako {card} opari-"
+"txartela trukatu baita dagoeneko."
 
 #: pretix/base/services/orders.py:561 pretix/control/forms/orders.py:205
 msgid ""
 "The cancellation fee cannot be higher than the total amount of this order."
 msgstr ""
+"Baliogabetze-gastuek ezin dute eskaeraren zenbateko osoa baino handiagoak "
+"izan."
 
 #: pretix/base/services/orders.py:955
 msgid "The selected payment methods do not cover the total balance."
-msgstr ""
+msgstr "Hautatutako ordainketa-metodoak ez dira saldo osoaren parekoak."
 
 #: pretix/base/services/orders.py:1023
 msgid ""
@@ -8056,52 +8383,64 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
+"Zure eskaera bideratzen saiatzen ari ginen bitartean, eskaeraren guztizkoa "
+"aldatu egin dela konturatu gara. Edo prezioetako bat aldatu berri duzu, edo "
+"erabili duzun opari-txartel bat erabili duzu. Egiaztatu prezioak, eta saiatu "
+"berriro."
 
 #: pretix/base/services/orders.py:1518
 msgid "You need to select a variation of the product."
-msgstr ""
+msgstr "Produktuaren bariazio bat hautatu behar duzu."
 
 #: pretix/base/services/orders.py:1519
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
-msgstr ""
+msgstr "{name} kuotari ez zaio geratzen eragiketa egiteko ahalmen nahikorik."
 
 #: pretix/base/services/orders.py:1520
 msgid "There is no quota defined that allows this operation."
-msgstr ""
+msgstr "Ez dago eragiketa hori egiteko aukera ematen duen kuotarik definituta."
 
 #: pretix/base/services/orders.py:1521
 msgid "The selected product is not active or has no price set."
-msgstr ""
+msgstr "Hautatutako produktua ez dago aktibo edo ez du preziorik ezarrita."
 
 #: pretix/base/services/orders.py:1522
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
 msgstr ""
+"Eragiketa horrek eskaera hutsik utziko luke. Mesedez, utzi bertan behera "
+"zure eskaera."
 
 #: pretix/base/services/orders.py:1524
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
 msgstr ""
+"Operazio horren ondorioz, eskaera libre geratuko litzateke, eta, ondorioz, "
+"berehala ordaindu beharko litzateke, nahiz eta kuotarik ez izan."
 
 #: pretix/base/services/orders.py:1527
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
 msgstr ""
+"Produktu hau gehigarria da. Mesedez, hautatu zer oinarrizko posiziotan "
+"erantsi behar den."
 
 #: pretix/base/services/orders.py:1528
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
 msgstr ""
+"Hautatutako oinarrizko posizioak ez du uzten produktu hau osagarri gisa "
+"gehitzen."
 
 #: pretix/base/services/orders.py:1529
 msgid "You need to choose a subevent for the new position."
-msgstr ""
+msgstr "Posizio berrirako azpigertaera bat hautatu behar duzu."
 
 #: pretix/base/services/orders.py:1532
 #, python-brace-format
@@ -8109,24 +8448,27 @@ msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr ""
+"\"{seat}\" eserlekua hautatu duzu sarrerarako hautatutako datarekin bat ez "
+"datorren data baterako. Hautatu berriro eserleku bat."
 
 #: pretix/base/services/orders.py:1534
 msgid "The selected product requires you to select a seat."
-msgstr ""
+msgstr "Hautatutako produktuak eserleku bat hautatzea eskatzen du."
 
 #: pretix/base/services/orders.py:1535
 msgid "The selected product does not allow to select a seat."
-msgstr ""
+msgstr "Hautatutako produktuak ez du uzten eserleku bat hautatzen."
 
 #: pretix/base/services/orders.py:1536
 msgid "The selected country is blocked by your tax rule."
-msgstr ""
+msgstr "Hautatutako herrialdea blokeatuta dago bere arau fiskalaren arabera."
 
 #: pretix/base/services/orders.py:1537
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
 msgstr ""
+"Ezin duzu opari-txartel bat emateko erabili den posizio baten prezioa aldatu."
 
 #: pretix/base/services/orders.py:2339 pretix/base/services/orders.py:2355
 #, python-brace-format
@@ -8134,32 +8476,36 @@ msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Posizio bat ezin da bertan behera utzi, eskaera honetan erositako {card} "
+"opari-txartela trukatu baita dagoeneko."
 
 #: pretix/base/services/orders.py:3005
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
 msgstr ""
+"Errore bat gertatu da dirua itzultzen saiatzean. Informazio gehiago nahi "
+"izanez gero, jarri harremanetan antolatzailearekin."
 
 #: pretix/base/services/placeholders.py:435
 msgid "Sample Corporation"
-msgstr ""
+msgstr "Erakundearen adibidea"
 
 #: pretix/base/services/placeholders.py:475
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "Onarpen sarreraren adibidea"
 
 #: pretix/base/services/placeholders.py:517
 msgid "An individual text with a reason can be inserted here."
-msgstr ""
+msgstr "Hemen, zergati bat duen bakarkako testua txerta daiteke."
 
 #: pretix/base/services/placeholders.py:521
 msgid "The amount has been charged to your card."
-msgstr ""
+msgstr "Zenbatekoa zure txartelean kargatu da."
 
 #: pretix/base/services/placeholders.py:525
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "Mesedez, transferitu dirua banku-kontu honetara 9999-9999-9999-9999"
 
 #: pretix/base/services/seating.py:61 pretix/base/services/seating.py:128
 #, python-format
@@ -8167,6 +8513,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
+"Ezin da plana aldatu, «%s» eserlekua ez baitago plan berrian eta salduta "
+"baitago."
 
 #: pretix/base/services/seating.py:131
 #, python-format
@@ -8174,32 +8522,36 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
+"Ezin da plana aldatu, «%s» eserlekua ez baitago plan berrian eta bonu batean "
+"erabiltzen baita."
 
 #: pretix/base/services/shredder.py:126 pretix/control/views/shredder.py:96
 msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
-msgstr ""
+msgstr "Deskarga-fitxategia ez dago zerbitzarian, mesedez, saiatu berriro."
 
 #: pretix/base/services/shredder.py:130 pretix/control/views/shredder.py:102
 msgid "This file is from a different event."
-msgstr ""
+msgstr "Fitxategi hau ekitaldi ezberdin batekoa da."
 
 #: pretix/base/services/shredder.py:139
 msgid "The confirm code you entered was incorrect."
-msgstr ""
+msgstr "Sartutako berrespen-kodea ez da zuzena."
 
 #: pretix/base/services/shredder.py:141
 msgid "Something happened in your event after the export, please try again."
 msgstr ""
+"Zerbait gertatu da zure ekitaldian esportazioaren ondoren, mesedez, saiatu "
+"berriro."
 
 #: pretix/base/services/shredder.py:177
 msgid "Data shredding completed"
-msgstr ""
+msgstr "Datuen ezabatzea gauzatu da"
 
 #: pretix/base/services/stats.py:215
 msgid "Uncategorized"
-msgstr ""
+msgstr "Kategorizatu gabe"
 
 #: pretix/base/services/tax.py:40 pretix/base/services/tax.py:206
 msgid ""
@@ -8208,15 +8560,19 @@ msgid ""
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
+"Ezin izan da zure IFZ egiaztatu, zure herrialdeko BEZa egiaztatzeko "
+"zerbitzua ez baitago erabilgarri gaur egun. Beraz, BEZa zure fakturan "
+"kargatu beharko dugu. Zergaren zenbatekoa berreskuratu dezakezu BEZa "
+"itzultzeko prozesuaren bidez."
 
 #: pretix/base/services/tax.py:45 pretix/base/services/tax.py:186
 #: pretix/base/services/tax.py:213
 msgid "This VAT ID is not valid. Please re-check your input."
-msgstr ""
+msgstr "IFK horrek ez du balio. Mesedez, egiaztatu berriro zure sarrera."
 
 #: pretix/base/services/tax.py:46 pretix/base/services/tax.py:171
 msgid "Your VAT ID does not match the selected country."
-msgstr ""
+msgstr "Zure IFZ ez dator bat hautatutako herrialdearekin."
 
 #: pretix/base/services/tax.py:190 pretix/base/services/tax.py:198
 msgid ""
@@ -8224,14 +8580,17 @@ msgid ""
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
+"Ezin izan da zure IFZ egiaztatu, zure herrialdeko BEZa egiaztatzeko "
+"zerbitzuak emaitza okerra itzuli baitu. Beraz, BEZa zure fakturan kargatu "
+"beharko dugu. Jarri harremanetan laguntza-zerbitzuarekin, eskuz konpontzeko."
 
 #: pretix/base/services/tickets.py:102 pretix/control/views/pdf.py:96
 msgid "Sample workshop"
-msgstr ""
+msgstr "Dendaren adibidea"
 
 #: pretix/base/services/update_check.py:113
 msgid "pretix update available"
-msgstr ""
+msgstr "pretix-en eguneratzea eskuragarri"
 
 #: pretix/base/services/update_check.py:116
 #, python-brace-format
@@ -8253,54 +8612,78 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
+"Kaixo!\n"
+"\n"
+"pretix-erako edo pretix-instalazioan instalatu dituzun plugin-etako baterako "
+"bertsio bat dago eskuragarri. Egin klik esteka honetan informazio gehiago "
+"lortzeko:\n"
+"\n"
+"{url}\n"
+"\n"
+"Azken eguneraketei buruzko informazioa beti aurki dezakezu pretix.eu blogean:"
+"\n"
+"\n"
+"https://pretix.eu/about/en/blog/\n"
+"\n"
+"Agur bat,\n"
+"\n"
+"pretix garatzaileak"
 
 #: pretix/base/services/update_check.py:145
 #: pretix/base/services/update_check.py:147
 #, python-format
 msgid "Plugin: %s"
-msgstr ""
+msgstr "Plugina: %s"
 
 #: pretix/base/services/vouchers.py:56 pretix/control/logdisplay.py:483
 #, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr ""
+msgstr "{recipient}-ra bidali da kupoia."
 
 #: pretix/base/settings.py:124
 msgid "Allow usage of restricted plugins"
-msgstr ""
+msgstr "Plugin mugatuak erabiltzen uztea"
 
 #: pretix/base/settings.py:157
 msgid "Allow customers to create accounts"
-msgstr ""
+msgstr "Ahalbide bezeroei kontuak sortzea"
 
 #: pretix/base/settings.py:158
 msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
+"Horri esker, bezeroek izena eman ahal izango dute beren sarrera-dendan kontu "
+"bat lortzeko. Funtzio aurreratu batzuetarako aurretiko baldintza da, "
+"afiliazioetarako, adibidez."
 
 #: pretix/base/settings.py:168
 msgid "Allow customers to log in with email address and password"
-msgstr ""
+msgstr "Utzi bezeroei saioa hastea helbide elektronikoarekin eta pasahitzarekin"
 
 #: pretix/base/settings.py:169
 msgid ""
 "If disabled, you will need to connect one or more single-sign-on providers."
 msgstr ""
+"Desaktibatuta badago, saio-hasiera bakarraren hornitzaile bat edo gehiago "
+"konektatu beharko dituzu."
 
 #: pretix/base/settings.py:179
 msgid "Match orders based on email address"
-msgstr ""
+msgstr "Eskaerak helbide elektronikoaren arabera baterarazi"
 
 #: pretix/base/settings.py:180
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"Horrek aukera emango die erregistratutako bezeroei helbide elektroniko "
+"berarekin egindako eskaerak eskuratzeko, nahiz eta bezeroak saioa hasi ez "
+"izan erosketa egin bitartean."
 
 #: pretix/base/settings.py:190
 msgid "Activate re-usable media"
-msgstr ""
+msgstr "Bitarteko berrerabilgarriak aktibatu"
 
 #: pretix/base/settings.py:191
 msgid ""
@@ -8308,51 +8691,62 @@ msgid ""
 "with physical media such as wristbands or chip cards that may be re-used for "
 "different tickets or gift cards later."
 msgstr ""
+"Euskarri berrerabilgarrien funtzioak sarrerak eta opari-txartelak euskarri "
+"fisikoekin (eskumuturrekoak edo txipa duten txartelak, adibidez) konektatzea "
+"ahalbidetzen du, ondoren beste sarrera edo opari-txartel batzuetarako "
+"berrerabili ahal izateko."
 
 #: pretix/base/settings.py:217
 msgid "Length of barcodes"
-msgstr ""
+msgstr "Barra-kodeen luzera"
 
 #: pretix/base/settings.py:246
 msgid ""
 "Automatically create a new gift card if a previously unknown chip is seen"
 msgstr ""
+"Sortu automatikoki opari-txartel berri bat lehen ezagutzen ez zen txip bat "
+"ikusten bada"
 
 #: pretix/base/settings.py:259 pretix/base/settings.py:290
 msgid "Gift card currency"
-msgstr ""
+msgstr "Opari-txartelaren moneta"
 
 #: pretix/base/settings.py:277
 msgid "Automatically create a new gift card if a new chip is encoded"
 msgstr ""
+"Automatikoki opari-txartel berri bat sortu, txip berri bat kodetzen bada"
 
 #: pretix/base/settings.py:299
 msgid "Use UID protection feature of NFC chip"
-msgstr ""
+msgstr "NFC txiparen UID babes-funtzioa erabili"
 
 #: pretix/base/settings.py:315
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "Eskaera bakoitzeko gehienezko artikulu-kopurua"
 
 #: pretix/base/settings.py:316
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "Produktu osagarriak ez dira kontuan hartuko."
 
 #: pretix/base/settings.py:325
 msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
 msgstr ""
+"Produktuen zerrendan prezio garbiak erakutsi, prezio gordinen ordez (ez da "
+"gomendagarria!)"
 
 #: pretix/base/settings.py:326
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
+"Edozein aukera eginda ere, orgatxoak prezio gordinak erakutsiko ditu, hori "
+"baita ordaindu beharreko prezioa."
 
 #: pretix/base/settings.py:337
 msgid "Hide prices on attendee ticket page"
-msgstr ""
+msgstr "Ezkutatu prezioak bertaratzen direnentzako sarreren orrian"
 
 #: pretix/base/settings.py:338
 msgid ""
@@ -8361,26 +8755,30 @@ msgid ""
 "page of the individual attendees. The ticket buyer will of course see the "
 "price."
 msgstr ""
+"Pertsona batek sarrera bat baino gehiago erosten baditu eta zuk "
+"bertaratutako guztiei mezu elektronikoak bidaltzen badizkiezu, aukera "
+"honekin sarreraren prezioa ez da banakako parte-hartzaileen sarreren orrian "
+"agertuko. Sarreraren erosleak, noski, ikusiko du prezioa."
 
 #: pretix/base/settings.py:356
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "Bertaratuko diren pertsonen izenak eskatu"
 
 #: pretix/base/settings.py:357
 msgid "Ask for a name for all personalized tickets."
-msgstr ""
+msgstr "Eskatu izen bat sarrera pertsonalizatu guztietarako."
 
 #: pretix/base/settings.py:366
 msgid "Require attendee names"
-msgstr ""
+msgstr "Bertaratuko diren pertsonen izenak beharrezkoak dira"
 
 #: pretix/base/settings.py:367
 msgid "Require customers to fill in the names of all attendees."
-msgstr ""
+msgstr "Eskatu bezeroei bertaratuko diren pertsona guztien izenak betetzeko."
 
 #: pretix/base/settings.py:377
 msgid "Ask for email addresses per ticket"
-msgstr ""
+msgstr "Posta elektronikoko helbideak eskatu sarrera bakoitzeko"
 
 #: pretix/base/settings.py:378
 msgid ""
@@ -8393,10 +8791,19 @@ msgid ""
 "primary email address, not to the per-attendee addresses. You can however "
 "enable this in the email settings."
 msgstr ""
+"Normalean, eskaera bakoitzeko helbide elektroniko bat eskatzen du Pretix-ek, "
+"eta eskaeraren berrespena helbide elektroniko horretara bakarrik bidaliko "
+"da. Aukera hau aktibatzen baduzu, sistemak banakako helbide elektronikoak "
+"ere eskatuko dizkizu sarrera pertsonalizatu bakoitzerako. Hau erabilgarria "
+"izan daiteke banakako helbideak lortu nahi badituzu laguntzaile "
+"bakoitzarentzat, baita taldeko eskaeren kasuan ere. Hala ere, Pretix-ek "
+"eskaeraren berrespena helbide elektroniko nagusira bidaliko du, ez "
+"bertaratuko diren pertsonako helbideetara. Hala ere, aukera hau aktiba "
+"dezakezu posta elektronikoaren konfigurazioan."
 
 #: pretix/base/settings.py:392
 msgid "Require email addresses per ticket"
-msgstr ""
+msgstr "Helbide elektronikoa eskatu sarrera bakoitzeko"
 
 #: pretix/base/settings.py:393
 msgid ""
@@ -8404,59 +8811,65 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
+"Eskatu bezeroei banakako helbide elektronikoak bete ditzatela sarrera "
+"pertsonalizatu guztietarako. Ikus aurreko aukera xehetasun gehiago izateko. "
+"Posta elektronikoko helbide bat beharko da beti eskaera berresteko, "
+"konfigurazio hori edozein dela ere."
 
 #: pretix/base/settings.py:405
 msgid "Ask for company per ticket"
-msgstr ""
+msgstr "Galdetu erakundea sarrera bakoitzeko"
 
 #: pretix/base/settings.py:414
 msgid "Require company per ticket"
-msgstr ""
+msgstr "Eskatu erakundea sarrera bakoitzeko"
 
 #: pretix/base/settings.py:424
 msgid "Ask for postal addresses per ticket"
-msgstr ""
+msgstr "Galdetu posta-helbidea sarrera bakoitzeko"
 
 #: pretix/base/settings.py:433
 msgid "Require postal addresses per ticket"
-msgstr ""
+msgstr "Eskatu posta-helbidea sarrera bakoitzeko"
 
 #: pretix/base/settings.py:443
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "Eskatu bi aldiz eskaeraren helbide elektronikoa"
 
 #: pretix/base/settings.py:444
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
 msgstr ""
+"Eskatu bezeroei helbide elektroniko nagusia bi aldiz betetzeko, akatsak "
+"saihesteko."
 
 #: pretix/base/settings.py:453
 msgid "Ask for a phone number per order"
-msgstr ""
+msgstr "Galdetu telefono zenbakia eskaera bakoitzeko"
 
 #: pretix/base/settings.py:462
 msgid "Require a phone number per order"
-msgstr ""
+msgstr "Eskatu telefono zenbakia eskaera bakoitzeko"
 
 #: pretix/base/settings.py:472
 msgid "Ask for invoice address"
-msgstr ""
+msgstr "Galdetu fakturazio-helbidea"
 
 #: pretix/base/settings.py:481
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
+msgstr "Ez eskatu fakturazio-helbidea, eskaera bat doakoa bada"
 
 #: pretix/base/settings.py:490
 msgid "Require customer name"
-msgstr ""
+msgstr "Eskatu bezeroaren izena"
 
 #: pretix/base/settings.py:499
 msgid "Show attendee names on invoices"
-msgstr ""
+msgstr "Fakturan bertaratuko diren pertsonen izenak erakutsi"
 
 #: pretix/base/settings.py:508
 msgid "Show event location on invoices"
-msgstr ""
+msgstr "Fakturan ekitaldiaren kokapena erakutsi"
 
 #: pretix/base/settings.py:509
 msgid ""
@@ -8464,47 +8877,54 @@ msgid ""
 "same for all lines. It will be shown on every line if there are different "
 "locations."
 msgstr ""
+"Ekitaldiaren kokapena produktuen zerrendaren azpian bistaratuko da, lerro "
+"guztietarako berdina bada. Lerro bakoitzean kokapen desberdinak dauden "
+"erakutsiko da."
 
 #: pretix/base/settings.py:519
 msgid "Show exchange rates"
-msgstr ""
+msgstr "Erakutsi kanbio-tasak"
 
 #: pretix/base/settings.py:522 pretix/base/settings.py:530
 #: pretix/control/forms/item.py:558
 msgid "Never"
-msgstr ""
+msgstr "Inoiz ez"
 
 #: pretix/base/settings.py:523 pretix/base/settings.py:531
 msgid ""
 "Based on European Central Bank daily rates, whenever the invoice recipient "
 "is in an EU country that uses a different currency."
 msgstr ""
+"Europako Banku Zentralaren eguneroko tasetan oinarrituta, betiere fakturaren "
+"hartzailea beste moneta bat erabiltzen duen EBko herrialde batean badago."
 
 #: pretix/base/settings.py:525 pretix/base/settings.py:533
 msgid ""
 "Based on Czech National Bank daily rates, whenever the invoice amount is not "
 "in CZK."
 msgstr ""
+"Txekiako Banku Nazionalaren eguneroko tasen arabera, baldin eta fakturaren "
+"zenbatekoa ez badago CZK."
 
 #: pretix/base/settings.py:543
 msgid "Require invoice address"
-msgstr ""
+msgstr "Fakturazio-helbidea eskatu"
 
 #: pretix/base/settings.py:553
 msgid "Require a business addresses"
-msgstr ""
+msgstr "Enpresa-helbidea eskatu"
 
 #: pretix/base/settings.py:554
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "Horretarako, erabiltzaileak enpresaren izena adierazi beharko du."
 
 #: pretix/base/settings.py:564
 msgid "Ask for beneficiary"
-msgstr ""
+msgstr "Galdetu onuraduna"
 
 #: pretix/base/settings.py:574
 msgid "Custom recipient field"
-msgstr ""
+msgstr "Hartzaile pertsonalizatuaren eremua"
 
 #: pretix/base/settings.py:576
 msgid ""
@@ -8514,10 +8934,15 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
+"Fakturaren helbidearen formularioari testu-eremu pertsonalizatu bat gehitu "
+"nahi badiozu, adibidez, herrialde bateko erregistro-zenbaki jakin baterako, "
+"bete hemen etiketa. Etiketa hori erabiliko da bai erabiltzaileari bere "
+"datuak sar ditzan eskatzeko, bai fakturan balioa erakusteko. Fakturan, "
+"goiburuaren azpian agertuko da. eremua ez da nahitaezkoa izango."
 
 #: pretix/base/settings.py:589
 msgid "Ask for VAT ID"
-msgstr ""
+msgstr "BEZ IDa galdetu"
 
 #: pretix/base/settings.py:591
 #, python-brace-format
@@ -8526,66 +8951,79 @@ msgid ""
 "only requested from business customers in the following countries: "
 "{countries}"
 msgstr ""
+"Fakturazio-helbide bat eskatzen bada bakarrik funtzionatzen du. IFZ ez da "
+"inoiz beharrezkoa, eta herrialde hauetako bezero komertzialei bakarrik "
+"eskatzen zaie: {countries}"
 
 #: pretix/base/settings.py:604
 msgid "Invoice address explanation"
-msgstr ""
+msgstr "Fakturazio-helbidearen azalpena"
 
 #: pretix/base/settings.py:607
 msgid "This text will be shown above the invoice address form during checkout."
 msgstr ""
+"Testu hori fakturazio-helbidearen formularioaren gainean agertuko da "
+"ordainketa-prozesuan."
 
 #: pretix/base/settings.py:616
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "Bistaratu ordaindutako zenbatekoa partzialki ordaindutako fakturetan"
 
 #: pretix/base/settings.py:617
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
+"Faktura baten zati bat ordaindu bada, ordaindutako eta ordaindu gabeko "
+"zenbatekoa gehituko dio aukera horrek fakturari."
 
 #: pretix/base/settings.py:627
 msgid "Show free products on invoices"
-msgstr ""
+msgstr "Erakutsi doako produktuak fakturetan"
 
 #: pretix/base/settings.py:628
 msgid ""
 "Note that invoices will never be generated for orders that contain only free "
 "products."
 msgstr ""
+"Kontuan izan ez dela inoiz fakturarik sortuko doako produktuak bakarrik "
+"dituzten eskaerentzat."
 
 #: pretix/base/settings.py:638
 msgid "Show expiration date of order"
-msgstr ""
+msgstr "Bistaratu eskaeraren iraungitze-data"
 
 #: pretix/base/settings.py:639
 msgid ""
 "The expiration date will not be shown if the invoice is generated after the "
 "order is paid."
 msgstr ""
+"Iraungitze-data ez da bistaratuko faktura eskaera ordaindu ondoren sortzen "
+"bada."
 
 #: pretix/base/settings.py:649
 msgid "Minimum length of invoice number after prefix"
-msgstr ""
+msgstr "Faktura zenbakiaren gutxieneko luzera aurrezenbakiaren ondoren"
 
 #: pretix/base/settings.py:650
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
+"Aurrezenbakiaren ondorengo faktura-zenbakia ezkerrean zeroekin beteko da "
+"luzera horretara arte, adibidez, INV-001 edo INV-00001."
 
 #: pretix/base/settings.py:661
 msgid "Generate invoices with consecutive numbers"
-msgstr ""
+msgstr "Sortu fakturak ondoz ondoko zenbakiekin"
 
 #: pretix/base/settings.py:662
 msgid "If deactivated, the order code will be used in the invoice number."
-msgstr ""
+msgstr "Desaktibatzen bada, eskaera-kodea faktura-zenbakian erabiliko da."
 
 #: pretix/base/settings.py:671
 msgid "Invoice number prefix"
-msgstr ""
+msgstr "Faktura-zenbakiaren aurrezenbakia"
 
 #: pretix/base/settings.py:672
 msgid ""
@@ -8597,15 +9035,22 @@ msgid ""
 "can use %Y (with century) %y (without century) to insert the year of the "
 "invoice, or %m and %d for the day of month."
 msgstr ""
+"Faktura-zenbakiei gehituko zaie. Eremu hori hutsik uzten baduzu, gertaeraren "
+"slug-a eta marratxoa erabiliko dira. Kontuz: Erakunde bereko hainbat "
+"gertaerek balio bera erabiltzen badute eremu honetan, beren zenbaki-tartea "
+"partekatuko dute, hau da, zenbaki oso bakoitza gehienez behin erabiliko da "
+"bere gertaera guztietan. Konfigurazio honek etorkizuneko fakturei bakarrik "
+"eragiten die. %Y (mendearekin) %y (menderik gabe) erabil dezakezu fakturaren "
+"urtea sartzeko, edo %m eta %d hileko egunerako."
 
 #: pretix/base/settings.py:684 pretix/base/settings.py:706
 #, python-brace-format
 msgid "Please only use the characters {allowed} in this field."
-msgstr ""
+msgstr "Mesedez, erabili eremu honetako {allowed} karaktereak bakarrik."
 
 #: pretix/base/settings.py:697
 msgid "Invoice number prefix for cancellations"
-msgstr ""
+msgstr "Baliogabetzeetarako faktura-zenbakiaren aurrezenbakia"
 
 #: pretix/base/settings.py:698
 msgid ""
@@ -8613,27 +9058,30 @@ msgid ""
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
 msgstr ""
+"Deuseztapenen faktura-zenbakien aurretik jarriko da. Eremu hori hutsik uzten "
+"baduzu, faktura arruntetarako konfiguratutako zenbaki-eskema bera erabiliko "
+"da."
 
 #: pretix/base/settings.py:719
 msgid "Highlight order code to make it stand out visibly"
-msgstr ""
+msgstr "Nabarmendu eskaera-kodea, ikus dadin"
 
 #: pretix/base/settings.py:720 pretix/base/settings.py:731
 msgid "Only respected by some invoice renderers."
-msgstr ""
+msgstr "Faktura-errendatzaile batzuek bakarrik errespetatzen dute."
 
 #: pretix/base/settings.py:730 pretix/base/settings.py:2851
 #: pretix/control/templates/pretixcontrol/pdf/index.html:352
 msgid "Font"
-msgstr ""
+msgstr "Iturria"
 
 #: pretix/base/settings.py:756
 msgid "Length of ticket codes"
-msgstr ""
+msgstr "Sarreren kodeen luzera"
 
 #: pretix/base/settings.py:783
 msgid "Reservation period"
-msgstr ""
+msgstr "Erreserba-aldia"
 
 #: pretix/base/settings.py:785
 msgid ""
