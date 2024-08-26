@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-29 10:52+0000\n"
-"PO-Revision-Date: 2024-07-29 11:22+0000\n"
+"PO-Revision-Date: 2024-08-26 15:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:79
@@ -1640,7 +1640,7 @@ msgstr "Variante"
 #: pretix/control/templates/pretixcontrol/event/plugins.html:55
 #: pretix/control/templates/pretixcontrol/users/index.html:51
 msgid "Active"
-msgstr "aktiviert"
+msgstr "aktiv"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:73
 #: pretix/control/forms/event.py:969 pretix/control/navigation.py:506
