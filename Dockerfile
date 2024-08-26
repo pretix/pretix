@@ -60,6 +60,9 @@ RUN pip3 install -U \
         gunicorn django-extensions ipython && \
     rm -rf ~/.cache/pip
 
+# Install any plugins
+RUN pip3 install pretix-servicefees pretix-cashpayment
+
 RUN chmod +x /usr/local/bin/pretix && \
     rm /etc/nginx/sites-enabled/default && \
     cd /pretix/src && \

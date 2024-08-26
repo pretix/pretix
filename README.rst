@@ -69,3 +69,4 @@ This fork of pretix includes modifications made in accordance with the GNU AGPLv
 specified in the LICENSE file. The following changes have been applied:
 
 - Theme and logo updates to align with Social Dancing branding
+- Customized Dockerfile to support specific setup requirements
