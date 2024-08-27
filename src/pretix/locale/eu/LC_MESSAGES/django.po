@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-26 15:00+0000\n"
+"PO-Revision-Date: 2024-08-27 16:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -26402,7 +26402,7 @@ msgstr ""
 #: pretix/plugins/badges/templates.py:104 pretix/plugins/badges/templates.py:97
 #, python-brace-format
 msgid "{width} x {height} mm butterfly badge"
-msgstr ""
+msgstr "{width} x {height} mm tximeleta-intsignia"
 
 #: pretix/plugins/badges/templates.py:203
 #: pretix/plugins/badges/templates.py:208
@@ -26422,63 +26422,65 @@ msgstr ""
 #: pretix/plugins/badges/templates.py:198
 #, python-brace-format
 msgid "{width} x {height} mm label"
-msgstr ""
+msgstr "{width} x {height} mm etiketa"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
 msgid "Print badges"
-msgstr ""
+msgstr "Intsigniak inprimatu"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
 msgid "Badge"
-msgstr ""
+msgstr "Intsignia"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Ziur zaude <strong>%(layout)s</strong> intsigniaren diseinua ezabatu nahi "
+"duzula?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr ""
+msgstr "Intsigniaren txantiloia: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:26
 msgid "Save & continue"
-msgstr ""
+msgstr "Gorde eta jarraitu"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
-msgstr ""
+msgstr "Oraindik ez duzu sortu intsignia-txantiloirik."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
 msgid "Create a new badge layout"
-msgstr ""
+msgstr "Intsignia-txantiloi berria sortu"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:63
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
 msgid "Make default"
-msgstr ""
+msgstr "Lehenetsi"
 
 #: pretix/plugins/badges/views.py:89
 msgid "The new badge layout has been created."
-msgstr ""
+msgstr "Intsignia-txantiloi berria sortu da."
 
 #: pretix/plugins/badges/views.py:150 pretix/plugins/badges/views.py:180
 #: pretix/plugins/badges/views.py:210
 msgid "The requested badge layout does not exist."
-msgstr ""
+msgstr "Eskatutako intsignia-txantiloia ez da existitzen."
 
 #: pretix/plugins/badges/views.py:192
 msgid "The selected badge layout been deleted."
-msgstr ""
+msgstr "Aukeratutako intsignia-txantiloia ezabatu egin da."
 
 #: pretix/plugins/badges/views.py:214
 msgid "Badge layout: {}"
-msgstr ""
+msgstr "Intsignia-txantiloia: {}"
 
 #: pretix/plugins/banktransfer/apps.py:31
 #: pretix/plugins/banktransfer/apps.py:34
@@ -26486,18 +26488,21 @@ msgstr ""
 #: pretix/plugins/banktransfer/signals.py:47
 #: pretix/plugins/banktransfer/signals.py:84
 msgid "Bank transfer"
-msgstr ""
+msgstr "Banku transferentzia"
 
 #: pretix/plugins/banktransfer/apps.py:39
 msgid ""
 "Accept payments from your customers using classical wire transfer methods "
 "with your own bank account."
 msgstr ""
+"Onartu zure bezeroen ordainketak, zure banku-kontuarekin kablea "
+"transferitzeko metodo klasikoak erabiliz."
 
 #: pretix/plugins/banktransfer/apps.py:53
 msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
 msgstr ""
+"Instalatu python 'chardet' paketea CSVren inportazio-ahalmena hobetzeko."
 
 #: pretix/plugins/banktransfer/payment.py:75
 msgid ""
@@ -26507,28 +26512,35 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"Ulertu dut jendeak zuzenean ordainduko duela sarreraren prezioa nire banku "
+"kontura, eta Pretixek ezin du automatikoki jakin zer ordainketa iritsi "
+"ziren. Beraz, edo ordainketak osorik bezala markatuko ditut eskuz, edo "
+"bankuko aitorpen digital bat inportatuko dut aldian-aldian, behar den "
+"informazioa a priori emateko."
 
 #: pretix/plugins/banktransfer/payment.py:82
 msgid "Bank account type"
-msgstr ""
+msgstr "Banku-kontu mota"
 
 #: pretix/plugins/banktransfer/payment.py:85
 msgid "SEPA bank account"
-msgstr ""
+msgstr "SEPA banku-kontua"
 
 #: pretix/plugins/banktransfer/payment.py:86
 msgid "Other bank account"
-msgstr ""
+msgstr "Beste banku kontu bat"
 
 #: pretix/plugins/banktransfer/payment.py:91
 msgid "Name of account holder"
-msgstr ""
+msgstr "Kontuaren titularraren izena"
 
 #: pretix/plugins/banktransfer/payment.py:93
 msgid ""
 "Please note: special characters other than letters, numbers, and some "
 "punctuation can cause problems with some banks."
 msgstr ""
+"Kontuan izan: letrak ez diren karaktere bereziak, zenbakiak, eta "
+"puntuazioren batek arazoak sor ditzake banku batzuekin."
 
 #: pretix/plugins/banktransfer/payment.py:103
 #: pretix/plugins/banktransfer/payment.py:466
@@ -26538,7 +26550,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:113
 #: pretix/plugins/banktransfer/payment.py:467
@@ -26547,15 +26559,15 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:123
 msgid "Name of bank"
-msgstr ""
+msgstr "Bankuaren izena"
 
 #: pretix/plugins/banktransfer/payment.py:133
 msgid "Bank account details"
-msgstr ""
+msgstr "Banku kontuaren xehetasunak"
 
 #: pretix/plugins/banktransfer/payment.py:136
 msgid ""
@@ -26563,6 +26575,9 @@ msgid ""
 "transfer payment. If you have lots of international customers, they might "
 "need your full address and your bank's full address."
 msgstr ""
+"Sartu zure bezeroek banku-transferentziako ordainketa bat bidaltzeko behar "
+"duten gainerako guztia. Nazioarteko bezero asko badituzu, baliteke zure "
+"helbide osoa eta zure bankuaren helbide osoa behar izatea."
 
 #: pretix/plugins/banktransfer/payment.py:142
 msgid ""
@@ -26570,36 +26585,41 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
+"SEPAren kontuetarako, hutsik utz dezakezu. Bestela, mesedez, gehitu zure "
+"bezeroek dirua transferitzeko behar duten guztia, adibidez, kontu-zenbakiak, "
+"bide-zenbakiak, helbideak, etab."
 
 #: pretix/plugins/banktransfer/payment.py:161
 msgid "Do not include hyphens in the payment reference."
-msgstr ""
+msgstr "Ez sartu hyphens-ak ordainketa-erreferentzian."
 
 #: pretix/plugins/banktransfer/payment.py:162
 msgid "This is required in some countries."
-msgstr ""
+msgstr "Hori beharrezkoa da herrialde batzuetan."
 
 #: pretix/plugins/banktransfer/payment.py:166
 msgid "Include invoice number in the payment reference."
-msgstr ""
+msgstr "Sartu faktura-zenbakia ordainketa-erreferentzian."
 
 #: pretix/plugins/banktransfer/payment.py:170
 msgid "Prefix for the payment reference"
-msgstr ""
+msgstr "Pretix ordainketa-erreferentziatzat"
 
 #: pretix/plugins/banktransfer/payment.py:174
 msgid "Additional text to show on pending orders"
-msgstr ""
+msgstr "Egiteke dauden eskaeretan erakutsi beharreko testu gehigarria"
 
 #: pretix/plugins/banktransfer/payment.py:175
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
 msgstr ""
+"Testu estandarra ez ezik, egiteke dauden eskaeretarako eskaerak berresteko "
+"orrian ere agertuko da testu hau."
 
 #: pretix/plugins/banktransfer/payment.py:184
 msgid "IBAN blocklist for refunds"
-msgstr ""
+msgstr "Itzulketetarako IBAN kodeen zerrenda"
 
 #: pretix/plugins/banktransfer/payment.py:187
 msgid ""
@@ -26611,12 +26631,22 @@ msgid ""
 "can e.g. ban DE0012345 to ban all German IBANs with the bank identifier "
 "starting with 12345."
 msgstr ""
+"Jarri IBAN edo IBAN aurrezenbakia lerro bakoitzeko. Sistema ez da saiatuko "
+"itzulketak bidaltzen IBAN horietako bakar batera ere. Tresna (e.g.) "
+"hirugarrenen ordainketa-hornitzaile batek \"bidalitako ordainketa\" mordoa "
+"jasotzen baduzu. Herrialde-kodeak ere zerrendatu ditzakezu, adibidez, \"GB\""
+", herrialde jakin bateko IBAN bati diru-itzulketarik bidali nahi ez badiozu. "
+"Egiaztatze-digituak ez dira kontuan hartuko konparazioa egiteko; beraz, "
+"baliteke e.g. debekatu DE0012345 12345etik aurrera Alemaniako IBAN guztia "
+"banku-identifikatzailearekin debekatzea."
 
 #: pretix/plugins/banktransfer/payment.py:218
 msgid ""
 "Allow users to enter an additional email address that the invoice will be "
 "sent to."
 msgstr ""
+"Utzi erabiltzaileei faktura bidaliko zaien helbide elektroniko gehigarria "
+"sartzen."
 
 #: pretix/plugins/banktransfer/payment.py:220
 msgid ""
@@ -26625,32 +26655,40 @@ msgid ""
 "sent to this email address, subsequent invoice corrections will not be sent "
 "automatically. Only the invoice will be sent, no additional information."
 msgstr ""
+"Horretarako, fakturak sortzeko konfigurazioak aukera eman behar du faktura "
+"ordainketa-metodoa hautatu eta berehala sortzeko. Faktura helbide "
+"elektroniko honetara bakarrik bidaliko da, ondorengo fakturen zuzenketak ez "
+"dira automatikoki bidaliko. Faktura bakarrik bidaliko da, informazio "
+"gehigarririk gabe."
 
 #: pretix/plugins/banktransfer/payment.py:229
 msgid "Invoice email subject"
-msgstr ""
+msgstr "Faktura e-mailaren gaia"
 
 #: pretix/plugins/banktransfer/payment.py:241
 msgid "Invoice email text"
-msgstr ""
+msgstr "Faktura e-mailaren testua"
 
 #: pretix/plugins/banktransfer/payment.py:256
 msgid "Restrict to business customers"
-msgstr ""
+msgstr "Bezero komertzialetara mugatu"
 
 #: pretix/plugins/banktransfer/payment.py:257
 msgid ""
 "Only allow choosing this payment provider for customers who enter an invoice "
 "address and select \"Business or institutional customer\"."
 msgstr ""
+"Ordainketa-hornitzaile hori faktura-helbide batera sartzen diren eta "
+"\"Enpresa- edo erakunde-bezeroa\" hautatzen duten bezeroentzat bakarrik "
+"aukera dezakezu."
 
 #: pretix/plugins/banktransfer/payment.py:288
 msgid "Please fill out your bank account details."
-msgstr ""
+msgstr "Mesedez, bete zure banku-kontuaren datuak."
 
 #: pretix/plugins/banktransfer/payment.py:292
 msgid "Please enter your bank account details."
-msgstr ""
+msgstr "Mesedez, sartu zure banku-kontuaren datuak."
 
 #: pretix/plugins/banktransfer/payment.py:332
 msgid ""
