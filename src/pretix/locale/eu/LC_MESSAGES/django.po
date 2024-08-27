@@ -32525,8 +32525,3 @@ msgid ""
 "line, or a CSV file with a title column and one or more of the columns "
 "\"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
-
-#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
-#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
-msgid "Delete auto check-in rule"
-msgstr "Auto izen-emate araua ezabatu"
