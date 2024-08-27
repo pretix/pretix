@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 07:19+0000\n"
+"POT-Creation-Date: 2024-08-27 13:34+0000\n"
 "PO-Revision-Date: 2023-09-15 06:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -564,52 +564,60 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:72
+#: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "Check-in QR kód"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:387
+#: pretix/static/pretixcontrol/js/ui/editor.js:543
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Pozadí PDF nemohl být načten:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:894
 msgid "Group of objects"
 msgstr "Skupina objektů"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
-msgid "Text object"
+#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#, fuzzy
+#| msgid "Text object"
+msgid "Text object (deprecated)"
 msgstr "Textový objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:663
+#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#, fuzzy
+#| msgid "Text object"
+msgid "Text box"
+msgstr "Textový objekt"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
 msgstr "Oblast s QR kódem"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:905
 msgid "Image area"
 msgstr "Oblast obrazu"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:667
+#: pretix/static/pretixcontrol/js/ui/editor.js:907
 msgid "Powered by pretix"
 msgstr "Poháněno společností pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:669
+#: pretix/static/pretixcontrol/js/ui/editor.js:909
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:673
+#: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Ticket design"
 msgstr "Design vstupenky"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:972
+#: pretix/static/pretixcontrol/js/ui/editor.js:1250
 msgid "Saving failed."
 msgstr "Uložení se nepodařilo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1041
-#: pretix/static/pretixcontrol/js/ui/editor.js:1091
+#: pretix/static/pretixcontrol/js/ui/editor.js:1319
+#: pretix/static/pretixcontrol/js/ui/editor.js:1370
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Při nahrávání souboru PDF došlo k problému, zkuste to prosím znovu."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1074
+#: pretix/static/pretixcontrol/js/ui/editor.js:1353
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Opravdu chcete opustit editor bez uložení změn?"
 
@@ -625,16 +633,16 @@ msgstr "Vytváření zpráv…"
 msgid "Unknown error."
 msgstr "Neznámá chyba."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:313
+#: pretix/static/pretixcontrol/js/ui/main.js:318
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Tato barva má velmi dobrý kontrast a je velmi dobře čitelná!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:317
+#: pretix/static/pretixcontrol/js/ui/main.js:322
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Tato barva má slušný kontrast a pravděpodobně je dostatečně dobře čitelná!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:321
+#: pretix/static/pretixcontrol/js/ui/main.js:326
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -642,40 +650,40 @@ msgstr ""
 "Tato barva je pro text na bílém pozadí špatně kontrastní, zvolte prosím "
 "tmavší odstín."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:475
-#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:511
 msgid "Search query"
 msgstr "Hledaný výraz"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:493
+#: pretix/static/pretixcontrol/js/ui/main.js:509
 msgid "All"
 msgstr "Všechny"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:494
+#: pretix/static/pretixcontrol/js/ui/main.js:510
 msgid "None"
 msgstr "Žádný"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:498
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "Selected only"
 msgstr "Pouze vybrané"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:828
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:831
+#: pretix/static/pretixcontrol/js/ui/main.js:850
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:989
+#: pretix/static/pretixcontrol/js/ui/main.js:1008
 msgid "Use a different name internally"
 msgstr "Interně používat jiný název"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1029
+#: pretix/static/pretixcontrol/js/ui/main.js:1048
 msgid "Click to close"
 msgstr "Kliknutím zavřete"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1104
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr "Máte neuložené změny!"
 

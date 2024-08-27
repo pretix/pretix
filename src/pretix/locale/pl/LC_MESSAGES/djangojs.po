@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-26 07:19+0000\n"
+"POT-Creation-Date: 2024-08-27 13:34+0000\n"
 "PO-Revision-Date: 2024-06-27 17:00+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -559,52 +559,60 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr "nieobecny"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:72
+#: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "QR zameldowania"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:387
+#: pretix/static/pretixcontrol/js/ui/editor.js:543
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Błąd ładowania pliku PDF tła:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:894
 msgid "Group of objects"
 msgstr "Grupa obiektów"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
-msgid "Text object"
+#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#, fuzzy
+#| msgid "Text object"
+msgid "Text object (deprecated)"
 msgstr "Obiekt tekstowy"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:663
+#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#, fuzzy
+#| msgid "Text object"
+msgid "Text box"
+msgstr "Obiekt tekstowy"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
 msgstr "Miejsce na kod kreskowy"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:905
 msgid "Image area"
 msgstr "Obszar obrazu"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:667
+#: pretix/static/pretixcontrol/js/ui/editor.js:907
 msgid "Powered by pretix"
 msgstr "Wygenerowane przez pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:669
+#: pretix/static/pretixcontrol/js/ui/editor.js:909
 msgid "Object"
 msgstr "Obiekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:673
+#: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Ticket design"
 msgstr "Projekt biletu"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:972
+#: pretix/static/pretixcontrol/js/ui/editor.js:1250
 msgid "Saving failed."
 msgstr "Błąd zapisu."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1041
-#: pretix/static/pretixcontrol/js/ui/editor.js:1091
+#: pretix/static/pretixcontrol/js/ui/editor.js:1319
+#: pretix/static/pretixcontrol/js/ui/editor.js:1370
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Błąd uploadu pliku PDF, prosimy spróbować ponownie."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1074
+#: pretix/static/pretixcontrol/js/ui/editor.js:1353
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Czy na pewno opuścić edytor bez zapisania zmian?"
 
@@ -620,16 +628,16 @@ msgstr "Generowanie wiadomości…"
 msgid "Unknown error."
 msgstr "Nieznany błąd."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:313
+#: pretix/static/pretixcontrol/js/ui/main.js:318
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Wybrany kolor ma wysoki kontrast i zapewnia doskonałą czytelność!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:317
+#: pretix/static/pretixcontrol/js/ui/main.js:322
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Wybrany kolor ma odpowiedni kontrast i zapewnia wystarczającą czytelność!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:321
+#: pretix/static/pretixcontrol/js/ui/main.js:326
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -637,40 +645,40 @@ msgstr ""
 "Wybrany kolor ma za słaby kontrast dla tekstu na białym tle, prosimy wybrać "
 "ciemniejszy odcień."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:475
-#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:511
 msgid "Search query"
 msgstr "Wyszukiwana fraza"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:493
+#: pretix/static/pretixcontrol/js/ui/main.js:509
 msgid "All"
 msgstr "Zaznacz wszystko"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:494
+#: pretix/static/pretixcontrol/js/ui/main.js:510
 msgid "None"
 msgstr "Odznacz wszystko"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:498
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "Selected only"
 msgstr "Tylko wybrane"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:828
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Wprowadź numer strony między 1 a %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:831
+#: pretix/static/pretixcontrol/js/ui/main.js:850
 msgid "Invalid page number."
 msgstr "Niepoprawny numer strony."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:989
+#: pretix/static/pretixcontrol/js/ui/main.js:1008
 msgid "Use a different name internally"
 msgstr "Użyj innej nazwy wewnętrznie"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1029
+#: pretix/static/pretixcontrol/js/ui/main.js:1048
 msgid "Click to close"
 msgstr "Zamknij"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1104
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr "Masz niezapisane zmiany!"
 
