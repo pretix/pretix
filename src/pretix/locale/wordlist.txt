@@ -123,6 +123,7 @@ redemptions
 Referer
 renderer
 renderers
+Revolut
 Sa
 Samplecity
 SAQ
