@@ -540,7 +540,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
 msgid "minutes"
-msgstr ""
+msgstr "minutuak"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
 msgid "Duplicate"
@@ -557,14 +557,17 @@ msgid "absent"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
+#: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:543
+#: pretix/static/pretixcontrol/js/ui/editor.js:387
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:894
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
 msgid "Group of objects"
 msgstr ""
 
@@ -577,35 +580,44 @@ msgid "Text box"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:903
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Barcode area"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:905
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Image area"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:907
+#: pretix/static/pretixcontrol/js/ui/editor.js:667
 msgid "Powered by pretix"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:909
+#: pretix/static/pretixcontrol/js/ui/editor.js:669
 msgid "Object"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:913
+#: pretix/static/pretixcontrol/js/ui/editor.js:673
 msgid "Ticket design"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1250
+#: pretix/static/pretixcontrol/js/ui/editor.js:972
 msgid "Saving failed."
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1319
 #: pretix/static/pretixcontrol/js/ui/editor.js:1370
+#: pretix/static/pretixcontrol/js/ui/editor.js:1041
+#: pretix/static/pretixcontrol/js/ui/editor.js:1091
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1353
+#: pretix/static/pretixcontrol/js/ui/editor.js:1074
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 
@@ -622,14 +634,17 @@ msgid "Unknown error."
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:318
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid "Your color has great contrast and is very easy to read!"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:322
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:326
+#: pretix/static/pretixcontrol/js/ui/main.js:321
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -637,38 +652,48 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:491
 #: pretix/static/pretixcontrol/js/ui/main.js:511
+#: pretix/static/pretixcontrol/js/ui/main.js:475
+#: pretix/static/pretixcontrol/js/ui/main.js:495
 msgid "Search query"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:509
+#: pretix/static/pretixcontrol/js/ui/main.js:493
 msgid "All"
 msgstr "Guztiak"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:510
+#: pretix/static/pretixcontrol/js/ui/main.js:494
 msgid "None"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:514
+#: pretix/static/pretixcontrol/js/ui/main.js:498
 msgid "Selected only"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:847
+#: pretix/static/pretixcontrol/js/ui/main.js:828
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:850
+#: pretix/static/pretixcontrol/js/ui/main.js:831
 msgid "Invalid page number."
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1008
+#: pretix/static/pretixcontrol/js/ui/main.js:989
 msgid "Use a different name internally"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1048
+#: pretix/static/pretixcontrol/js/ui/main.js:1029
 msgid "Click to close"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1123
+#: pretix/static/pretixcontrol/js/ui/main.js:1104
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -1071,4 +1096,8 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:89
 msgid "December"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
+msgid "Text object"
 msgstr ""
