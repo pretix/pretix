@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-26 15:00+0000\n"
+"PO-Revision-Date: 2024-08-27 16:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -8094,12 +8094,10 @@ msgstr ""
 "angegeben hast."
 
 #: pretix/base/services/mail.py:121
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid "This prefix has been set in your event or organizer settings."
 msgstr ""
-"Der ausgewählte Medientyp ist in den Veranstalter-Einstellungen nicht "
-"aktiviert."
+"Dieser Prefix wurde in den Veranstaltungs- oder Veranstalter-Einstellungen "
+"festgelegt."
 
 #: pretix/base/services/mail.py:278
 #, python-brace-format
@@ -11824,10 +11822,9 @@ msgstr ""
 "Das letzte Zahlungsdatum kann nicht vor dem Ende des Vorverkaufs liegen."
 
 #: pretix/base/settings.py:3811
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "The value \"{identifier}\" is not a valid sales channel."
-msgstr "Bitte gib einen gültigen Verkaufskanal ein."
+msgstr "Der Wert \"{identifier}\" ist kein gültiger Verkaufskanal."
 
 #: pretix/base/settings.py:3826
 msgid "This needs to be disabled if other NFC-based types are active."
@@ -15176,19 +15173,14 @@ msgid "or"
 msgstr "oder"
 
 #: pretix/control/forms/vouchers.py:293
-#, fuzzy
-#| msgid ""
-#| "You can either supply a list of email addresses with one email address "
-#| "per line, or a CSV file with a title column and one or more of the "
-#| "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgid ""
 "You can either supply a list of email addresses with one email address per "
 "line, or the contents of a CSV file with a title column and one or more of "
 "the columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
 "Du kannst entweder eine Liste von E-Mail-Adressen mit einer Adresse pro "
-"Zeile angeben, oder eine CSV-Datei mit einer Kopfzeile und einer oder "
-"mehrerer der Spalten \"email\", \"number\", \"name\" und \"tag\"."
+"Zeile angeben, oder den Inhalt einer CSV-Datei mit einer Kopfzeile und einer "
+"oder mehrerer der Spalten \"email\", \"number\", \"name\" und \"tag\"."
 
 #: pretix/control/forms/vouchers.py:327
 msgid "Maximum usages per voucher"
@@ -19337,17 +19329,12 @@ msgstr ""
 "Mindestabstands-Funktion unseres Sitzplanmoduls zu nutzen."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:377
-#, fuzzy
-#| msgctxt "sendmail_form"
-#| msgid "Waiting for"
 msgid "Waiting customers"
-msgstr "Wartende auf"
+msgstr "Wartende Kunden"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:383
-#, fuzzy
-#| msgid "Enable waiting list"
 msgid "Manage waiting list"
-msgstr "Warteliste aktivieren"
+msgstr "Warteliste verwalten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:396
 msgid "Item metadata"
@@ -21284,6 +21271,9 @@ msgid ""
 "will not affect the membership. Memberships can be managed in the customer "
 "account."
 msgstr ""
+"Der Verkauf dieses Produkts hat eine Mitgliedschaft erzeugt. Änderungen hier "
+"am Produkt beeinflussen die Mitgliedschaft nicht. Mitgliedschaften können im "
+"Kundenkonto bearbeitet werden."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:208
 #: pretix/control/templates/pretixcontrol/order/change.html:426
@@ -21334,6 +21324,9 @@ msgid ""
 "ticket here will not affect the membership. Memberships can be managed in "
 "the customer account."
 msgstr ""
+"Der Verkauf dieses Produkts hat eine Mitgliedschaft erzeugt. Änderungen hier "
+"and er Gültigkeit beeinflussen die Mitgliedschaft nicht. Mitgliedschaften "
+"können im Kundenkonto bearbeitet werden."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:290
 msgid ""
@@ -24115,30 +24108,24 @@ msgid "Flow multiple lines downward from specified position"
 msgstr "Mehrere Zeilen abwärts fließen lassen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:452
-#, fuzzy
-#| msgid "Automatically refund money if possible"
 msgid "Automatically reduce font size to fit content"
-msgstr "Geld automatisch zurückerstatten wenn möglich"
+msgstr "Schriftgröße automatisch reduzieren, sodass Inhalt passt"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:458
 msgid "Allow long words to be split (preview is not accurate)"
-msgstr ""
+msgstr "Trennen langer Wörter erlauben (Vorschau ist nicht akkurat)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:469
 msgid "Add a new object"
 msgstr "Neues Objekt hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:474
-#, fuzzy
-#| msgid "Text color"
 msgid "Text box"
-msgstr "Textfarbe"
+msgstr "Textbox"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:478
-#, fuzzy
-#| msgid "Event created"
 msgid "Text (deprecated)"
-msgstr "Veranstaltung erstellt"
+msgstr "Text (veraltet)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:482
 msgid "QR code for Check-In"
@@ -24177,6 +24164,9 @@ msgid ""
 "use pretixPRINT version %(print_version)s (or newer) or pretixSCAN Desktop "
 "version %(scan_version)s (or newer)."
 msgstr ""
+"Dieses Layout verwendet neue Funktionen. Wenn Sie mit einem Gerät drucken, "
+"stellen Sie sicher, dass pretixPRINT-Version %(print_version)s (oder neuer) "
+"oder pretixSCAN Desktop Version %(scan_version)s (oder neuer) im Einsatz ist."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
 msgid "Available placeholders"
@@ -27494,8 +27484,6 @@ msgstr "Bedingungen"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
-#, fuzzy
-#| msgid "Delete auto-check-in rule"
 msgid "Delete auto-checkin rule"
 msgstr "Auto-Check-in-Regel löschen"
 
@@ -30842,26 +30830,20 @@ msgstr ""
 "Verfügung. Bitte halte deine Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1788
-#, fuzzy
-#| msgid "WeChat Pay via Stripe"
 msgid "Revolut Pay via Stripe"
-msgstr "WeChat Pay über Stripe"
+msgstr "Revolut Pay über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1789
 msgid "Revolut Pay"
-msgstr ""
+msgstr "Revolut Pay"
 
 #: pretix/plugins/stripe/payment.py:1793
-#, fuzzy
-#| msgid ""
-#| "This payment method is available to users of the Chinese app WeChat. "
-#| "Please keep your login information available."
 msgid ""
 "This payment method is available to users of the Revolut app. Please keep "
 "your login information available."
 msgstr ""
-"Diese Zahlungsmethode steht den Nutzern der chinesischen App WeChat zur "
-"Verfügung. Bitte halte deine Zugangsdaten bereit."
+"Diese Zahlungsmethode steht den Nutzern der Revolut-App zur Verfügung. Bitte "
+"halte deine Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1807
 msgid "PayPal via Stripe"
