@@ -26063,7 +26063,7 @@ msgstr "條件"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
 #| msgid "Delete check-in list"
-msgid "Delete auto-checkin rule"
+msgid "Delete auto check-in rule"
 msgstr "刪除簽到清單"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9

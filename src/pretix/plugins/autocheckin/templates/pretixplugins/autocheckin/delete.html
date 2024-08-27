@@ -1,9 +1,9 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans "Delete auto-checkin rule" %}{% endblock %}
+{% block title %}{% trans "Delete auto check-in rule" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Delete auto-checkin rule" %}</h1>
+    <h1>{% trans "Delete auto check-in rule" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         <p>{% blocktrans %}Are you sure you want to delete the auto check-in rule?{% endblocktrans %}</p>

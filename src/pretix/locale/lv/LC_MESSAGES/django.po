@@ -25834,7 +25834,7 @@ msgstr "Apstiprinājumi"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
 #| msgid "All check-ins"
-msgid "Delete auto-checkin rule"
+msgid "Delete auto check-in rule"
 msgstr "Visas reģistrācijas"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9

@@ -26532,7 +26532,7 @@ msgstr "Stav"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
 #| msgid "Delete check-in list"
-msgid "Delete auto-checkin rule"
+msgid "Delete auto check-in rule"
 msgstr "Odstranit seznam odbavení"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
