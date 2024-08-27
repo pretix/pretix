@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-26 15:00+0000\n"
+"PO-Revision-Date: 2024-08-27 16:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -8105,12 +8105,10 @@ msgstr ""
 "angegeben haben."
 
 #: pretix/base/services/mail.py:121
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid "This prefix has been set in your event or organizer settings."
 msgstr ""
-"Der ausgewählte Medientyp ist in den Veranstalter-Einstellungen nicht "
-"aktiviert."
+"Dieser Prefix wurde in den Veranstaltungs- oder Veranstalter-Einstellungen "
+"festgelegt."
 
 #: pretix/base/services/mail.py:278
 #, python-brace-format
@@ -11845,10 +11843,9 @@ msgstr ""
 "Das letzte Zahlungsdatum kann nicht vor dem Ende des Vorverkaufs liegen."
 
 #: pretix/base/settings.py:3811
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "The value \"{identifier}\" is not a valid sales channel."
-msgstr "Bitte geben Sie einen gültigen Verkaufskanal ein."
+msgstr "Der Wert \"{identifier}\" ist kein gültiger Verkaufskanal."
 
 #: pretix/base/settings.py:3826
 msgid "This needs to be disabled if other NFC-based types are active."
