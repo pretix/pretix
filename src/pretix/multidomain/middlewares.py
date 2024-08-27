@@ -33,15 +33,20 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import time
+import requests
+import logging
 from urllib.parse import urlparse
 
 from django.conf import settings
+from pretix.base.models import User
+from pretix.control.views.auth import process_login
 from django.contrib.sessions.middleware import (
     SessionMiddleware as BaseSessionMiddleware,
 )
 from django.core.cache import cache
 from django.core.exceptions import DisallowedHost, ImproperlyConfigured
 from django.http.request import split_domain_port
+from django.http import HttpResponseRedirect
 from django.middleware.csrf import (
     CSRF_SESSION_KEY, CSRF_TOKEN_LENGTH,
     CsrfViewMiddleware as BaseCsrfMiddleware, _check_token_format,
@@ -56,9 +61,10 @@ from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Organizer
 from pretix.helpers.cookies import set_cookie_without_samesite
+from pretix.helpers.security import assert_session_valid
 from pretix.multidomain.models import KnownDomain
 
-LOCAL_HOST_NAMES = ('testserver', 'localhost')
+logger = logging.getLogger(__name__)
 
 
 class MultiDomainMiddleware(MiddlewareMixin):
@@ -146,12 +152,72 @@ class SessionMiddleware(BaseSessionMiddleware):
     a custom domain.
     """
 
+    def validate_sso_session(self, request, token):
+        """
+        Validate the SSO session token by communicating with the Social Dancing server.
+        Returns user data if the session is valid, otherwise None.
+        """
+        try:
+            is_secure = request.scheme == "https"
+            cookie_key = (
+                "__Secure-next-auth.session-token"
+                if is_secure
+                else "next-auth.session-token"
+            )
+            response = requests.get(
+                f"{settings.PRETIX_CORE_SYSTEM_URL}/api/auth/session",
+                cookies={cookie_key: token},
+            )
+
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return None
+        except Exception as e:
+            logger.error(f"Failed to validate SSO session token: {e}")
+            return None
+
     def process_request(self, request):
-        session_key = request.COOKIES.get(
-            '__Host-' + settings.SESSION_COOKIE_NAME,
-            request.COOKIES.get(settings.SESSION_COOKIE_NAME)
-        )
-        request.session = self.SessionStore(session_key)
+        """
+        Middleware method to handle user authentication via Social Dancing SSO.
+        Validates the SSO session and manages user sessions in Pretix.
+        Redirects to the Social Dancing sign-in page if validation fails or user is not found.
+        """
+        sd_token = request.COOKIES.get("next-auth.session-token")
+        redirect_url = f"{settings.PRETIX_CORE_SYSTEM_URL}/signin"
+
+        if not sd_token:
+            return HttpResponseRedirect(redirect_url)
+
+        user_data = self.validate_sso_session(request, sd_token)
+        if not user_data:
+            return HttpResponseRedirect(redirect_url)
+
+        # Assumes that the user's email address is consistent between Social
+        # Dancing and Pretix. This synchronization is critical for correctly
+        # identifying and authenticating the user across both systems.
+        email = user_data.get("user", {}).get("email")
+        if not email:
+            return HttpResponseRedirect(redirect_url)
+
+        try:
+            user = User.objects.get(email=email)
+            pretix_session_key = request.COOKIES.get(
+                "__Host-" + settings.SESSION_COOKIE_NAME,
+                request.COOKIES.get(settings.SESSION_COOKIE_NAME),
+            )
+            request.session = self.SessionStore(pretix_session_key)
+            request.user = user
+
+            try:
+                assert_session_valid(request)
+            except Exception as e:
+                logger.error(f"Invalid Pretix session found: {e}")
+                process_login(request, user, True)
+
+        except User.DoesNotExist:
+            logger.error(f"User not found: {e}")
+            return HttpResponseRedirect(redirect_url)
 
     def process_response(self, request, response):
         try:

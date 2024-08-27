@@ -180,6 +180,7 @@ STATIC_URL = config.get('urls', 'static', fallback='/static/')
 MEDIA_URL = config.get('urls', 'media', fallback='/media/')
 
 PRETIX_INSTANCE_NAME = config.get('pretix', 'instance_name', fallback='pretix.de')
+PRETIX_CORE_SYSTEM_URL = config.get('pretix', 'core_system_url', fallback='https://socialdancing.events')
 PRETIX_REGISTRATION = config.getboolean('pretix', 'registration', fallback=False)
 PRETIX_PASSWORD_RESET = config.getboolean('pretix', 'password_reset', fallback=True)
 PRETIX_LONG_SESSIONS = config.getboolean('pretix', 'long_sessions', fallback=True)
