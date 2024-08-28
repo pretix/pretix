@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-27 16:00+0000\n"
+"PO-Revision-Date: 2024-08-28 10:03+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -26693,22 +26693,24 @@ msgstr "Mesedez, sartu zure banku-kontuaren datuak."
 #: pretix/plugins/banktransfer/payment.py:332
 msgid ""
 "Please additionally send my invoice directly to our accounting department"
-msgstr ""
+msgstr "Mesedez, bidali nire faktura zuzenean gure kontabilitate sailera"
 
 #: pretix/plugins/banktransfer/payment.py:336
 msgid "Invoice recipient e-mail"
-msgstr ""
+msgstr "Fakturaren hartzailearen helbide elektronikoa"
 
 #: pretix/plugins/banktransfer/payment.py:338
 msgid ""
 "The invoice recipient will receive an email which includes the invoice and "
 "your email address so they know who placed this order."
 msgstr ""
+"Fakturaren hartzaileak mezu elektroniko bat jasoko du fakturarekin eta zure "
+"helbide elektronikoarekin, eskaera nork egin duen jakin dezan."
 
 #: pretix/plugins/banktransfer/payment.py:457
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
 msgid "Please transfer the full amount to the following bank account:"
-msgstr ""
+msgstr "Mesedez, transferitu zenbateko osoa banku-kontu honetara:"
 
 #: pretix/plugins/banktransfer/payment.py:465
 #: pretix/plugins/banktransfer/payment.py:654
@@ -26721,7 +26723,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:35
 #: pretix/plugins/stripe/payment.py:1454
 msgid "Account holder"
-msgstr ""
+msgstr "Kontuaren titularra"
 
 #: pretix/plugins/banktransfer/payment.py:468
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:17
@@ -26733,28 +26735,32 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:47
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:55
 msgid "Bank"
-msgstr ""
+msgstr "Bankua"
 
 #: pretix/plugins/banktransfer/payment.py:548
 msgid "Invalid IBAN/BIC"
-msgstr ""
+msgstr "IBAN/BIC okerra"
 
 #: pretix/plugins/banktransfer/payment.py:624
 #, python-brace-format
 msgid "Bank account {iban}"
-msgstr ""
+msgstr "Banku kontua {iban}"
 
 #: pretix/plugins/banktransfer/payment.py:640
 msgid "Can only create a bank transfer refund from an existing payment."
 msgstr ""
+"Banku-transferentzia bidezko itzulketa bat lehendik dagoen ordainketa "
+"batetik abiatuta soilik sor daiteke."
 
 #: pretix/plugins/banktransfer/payment.py:660
 msgid "BIC (optional)"
-msgstr ""
+msgstr "BIC (hautazkoa)"
 
 #: pretix/plugins/banktransfer/payment.py:699
 msgid "Your input was invalid, please see below for details."
 msgstr ""
+"Zure sarrera ez zen baliozkoa. Xehetasun gehiago nahi izanez gero, begiratu "
+"hemen."
 
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:10
@@ -26763,7 +26769,7 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:12
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:9
 msgid "Payer"
-msgstr ""
+msgstr "Ordaintzailea"
 
 #: pretix/plugins/banktransfer/signals.py:55
 #: pretix/plugins/banktransfer/signals.py:91
@@ -26772,21 +26778,21 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:4
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:7
 msgid "Import bank data"
-msgstr ""
+msgstr "Bankuko datuak inportatu"
 
 #: pretix/plugins/banktransfer/signals.py:63
 #: pretix/plugins/banktransfer/signals.py:99
 msgid "Export refunds"
-msgstr ""
+msgstr "Itzulketak esportatu"
 
 #: pretix/plugins/banktransfer/signals.py:123
 msgid "The invoice was sent to the designated email address."
-msgstr ""
+msgstr "Faktura izendatutako helbide elektronikora bidali da."
 
 #: pretix/plugins/banktransfer/signals.py:132
 #, python-brace-format
 msgid "Invoice {invoice_number}"
-msgstr ""
+msgstr "Faktura {invoice_number}"
 
 #: pretix/plugins/banktransfer/signals.py:137
 #, python-brace-format
@@ -26800,20 +26806,28 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Kaixo,\n"
+"\n"
+"mezu hau jaso duzu {order_email}(e)k eskaera bat egin duelako {event}(r)"
+"entzat, eta faktura bidaltzeko eskatu digutelako.\n"
+"\n"
+"Agur bero bat,\n"
+"\n"
+"{event} taldea"
 
 #: pretix/plugins/banktransfer/tasks.py:172
 msgid "The order has already been canceled."
-msgstr ""
+msgstr "Eskaera bertan behera utzi da."
 
 #: pretix/plugins/banktransfer/tasks.py:178
 #: pretix/plugins/banktransfer/views.py:106
 #: pretix/plugins/banktransfer/views.py:193
 msgid "Currencies do not match."
-msgstr ""
+msgstr "Monetak ez datoz bat."
 
 #: pretix/plugins/banktransfer/tasks.py:188
 msgid "Automatic split to multiple orders not possible."
-msgstr ""
+msgstr "Ezin da automatikoki zatitu eskaera bat baino gehiagotan."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:6
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:6
@@ -26821,6 +26835,8 @@ msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
+"Erosketa egin ondoren, dirua banku-kontu honetara transferitzeko eskatuko "
+"dizugu, erreferentzia-kode pertsonal bat erabiliz:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
@@ -26828,12 +26844,14 @@ msgid ""
 "Please do not yet start a payment. We'll assign you a personal reference "
 "code after you completed the order."
 msgstr ""
+"Mesedez, ez hasi oraindik ordaintzen. Erreferentzia-kode pertsonal bat "
+"esleituko dizugu eskaera amaitu ondoren."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:39
 msgid "Reference code (important):"
-msgstr ""
+msgstr "Erreferentzia kodea (garrantzitsua):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:31
@@ -26841,6 +26859,8 @@ msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
 msgstr ""
+"Erreferentzia-kode pertsonal bat esleituko dizugu, eskaera amaitu ondoren "
+"erabil dezazun."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
@@ -26848,27 +26868,29 @@ msgid ""
 "After completing your purchase, we will ask you to transfer the money to our "
 "bank account, using a personal reference code."
 msgstr ""
+"Erosketa amaitu ondoren, dirua gure banku-kontura transferitzeko eskatuko "
+"dizugu, erreferentzia-kode pertsonal bat erabiliz."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:43
 #, python-format
 msgid "We will send a copy of your invoice directly to %(recipient)s."
-msgstr ""
+msgstr "Zure fakturaren kopia bat bidaliko dizugu zuzenean %(recipient)s-era."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:6
 msgid "Send invoice to"
-msgstr ""
+msgstr "Faktura bidali hona"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
 msgid "Account"
-msgstr ""
+msgstr "Kontua"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:28
 msgid "Transfer amount"
-msgstr ""
+msgstr "Transferentziaren zenbatekoa"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:38
 msgid "Reference code"
-msgstr ""
+msgstr "Erreferentzia-kodea"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -26876,22 +26898,27 @@ msgid ""
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
 msgstr ""
+"Ezin izan dugu automatikoki zehaztu nola lerrokatuta dauden zure "
+"fitxategiaren zutabeak. Mesedez, lagundu iezaguzu zein zutabe duen datu-mota "
+"aukeratuz."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:95
 msgid ""
 "More data was uploaded but is not shown here. It will still be processed"
 msgstr ""
+"Datu gehiago kargatu dira, baina ez dira hemen erakusten. Prozesatzen "
+"jarraituko dira"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:9
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:9
 msgid "Import currently running…"
-msgstr ""
+msgstr "Inportazioa bidean da…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:11
 #, python-format
 msgid "Last import: %(date)s"
-msgstr ""
+msgstr "Azken inportazioa: %(date)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:8
 #, python-format
@@ -26899,123 +26926,137 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
+"Zure ekitaldiaren ordainketa-ezarpenetan, %(date)s ezartzen duzu edozein "
+"ordainketaren azken data gisa. Beraz, hemen ezin duzu eskaerarik ordaindu "
+"gisa markatu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
 msgstr ""
+"Orrialde honek banku-laburpenen fitxategiak kargatzeko aukera ematen dizu, "
+"jasotako ordainketak prozesatzeko."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
 msgstr ""
+"Gaur egun, funtzio honek <code>.csv</code> fitxategiak eta MT940 formatuko "
+"fitxategiak onartzen ditu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:29
 #: pretix/plugins/banktransfer/views.py:561
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
-msgstr ""
+msgstr "Inportazio bat prozesatzen ari da. Saiatu berriro minutu batzuk barru."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:51
 msgid "Start upload"
-msgstr ""
+msgstr "Hasi kargatzen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:61
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "Konpondu gabeko transakzioak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:66
 msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
 msgstr ""
+"Orri honetan banketxeko datuak inporta ditzakezu ekitaldi bakoitzeko. "
+"Zuzenean gertaera horretara inportatutako bat ez datozen transakzioak ere "
+"ikus ditzakezu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:71
 msgid "Go to organizer-level import"
-msgstr ""
+msgstr "Inportaziora joan antolatzaile mailan"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:78
 msgid "Amount from"
-msgstr ""
+msgstr "Zenbatekoa nondik"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:86
 msgid "up to"
-msgstr ""
+msgstr "-ra arte"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:92
 msgid "Clear"
-msgstr ""
+msgstr "Garbitu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:101
 msgid "Discard all"
-msgstr ""
+msgstr "Denak baztertu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:113
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "Zure bilaketak ez du transakziorik aurkitu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "Inportazioaren emaitza"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
 msgstr ""
+"Inportazioaren emaitza martxan dago. Mesedez, pazientzia izan datuak "
+"prozesatzen ditugun bitartean…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
+msgstr "Barneko errore bat gertatu da zure datuen tratamenduan."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try to re-import the file."
 msgstr ""
+"Baliteke transakzio batzuk falta izatea. Saiatu fitxategia berriz "
+"inportatzen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr ""
+msgstr "Zure inportazioak ez du aurrez inportatu gabeko transakziorik."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr ""
+msgstr "Ordainduta bezala markatuta eskaera"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
-msgstr ""
+msgstr "Ordainketa okerrak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:38
 msgid "Ignored payments"
-msgstr ""
+msgstr "Baztertutako ordainketak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:44
 msgid "Review invalid and ignored payments"
-msgstr ""
+msgstr "Berrikusi baliozkoak ez diren eta kontuan hartu ez diren ordainketak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:38
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:27
 msgid "Amount:"
-msgstr ""
+msgstr "Zenbatekoa:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:42
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:30
 msgid "There is no further action required on this website."
-msgstr ""
+msgstr "Ez da beharrezkoa webgune honetan beste ekintzarik egitea."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:43
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:31
 msgid "We will send you an email as soon as we received your payment."
-msgstr ""
+msgstr "Mezu elektroniko bat bidaliko dizugu ordainketa jaso bezain laster."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:61
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:72
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:92
 msgid "Scan the qr-code with your banking app"
-msgstr ""
+msgstr "Eskaneatu QR kodea zure banku-aplikazioarekin"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:65
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:75
@@ -27024,39 +27065,43 @@ msgid ""
 "Scan this image with your banking app’s QR-Reader to start the payment "
 "process."
 msgstr ""
+"Eskaneatu irudi hau zure banku aplikazioaren QR irakurgailuarekin ordainketa "
+"prozesua hasteko."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:95
 msgid "Open BezahlCode in your banking app to start the payment process."
-msgstr ""
+msgstr "Ireki BezahlCode zure banku aplikazioan ordainketa prozesua hasteko."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:112
 #, python-format
 msgid "At your request, we sent the invoice directly to %(recipient)s."
-msgstr ""
+msgstr "Zuk hala eskatuta, %(recipient)s(e)ra bidaltzen dugu faktura, zuzenean."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:117
 msgid "Send again or somewhere else"
-msgstr ""
+msgstr "Bidali berriro edo beste leku batera"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:126
 msgid ""
 "To send the invoice directly to your accounting department, please enter "
 "their email address:"
 msgstr ""
+"Faktura zure kontabilitate-sailera zuzenean bidaltzeko, sartu zure helbide "
+"elektronikoa:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:132
 msgid "Invoice recipient email"
-msgstr ""
+msgstr "Fakturaren hartzailearen helbide elektronikoa"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:139
 msgid "Send invoice via email"
-msgstr ""
+msgstr "Faktura e-mailetik bidali"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:7
 msgid "Export bank transfer refunds"
-msgstr ""
+msgstr "Banku-transferentzia bidezko itzulketak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:9
 #, python-format
@@ -27064,28 +27109,34 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
+"<strong>%(num_new)s</strong> Banku-transferentzia bidezko itzulketak egin "
+"dira, eta oraindik ez dira esportazio baten parte."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
 msgstr ""
+"Proba moduan, zure esportazioek proba moduan bakarrik jasoko dituzte "
+"eskaerak."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:19
 msgid ""
 "If you want, you can now also create these exports for multiple events "
 "combined."
 msgstr ""
+"Nahi izanez gero, orain esportazio horiek sor ditzakezu hainbat ekitaldi "
+"konbinatuetarako."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
 msgid "Go to organizer-level exports"
-msgstr ""
+msgstr "Esportazioetara joan antolatzaile mailan"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:32
 msgid "Create new export file"
-msgstr ""
+msgstr "Esportazio-fitxategi berri bat sortu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:38
 msgid "Aggregate transactions to the same bank account"
-msgstr ""
+msgstr "Banku-kontu berari erantsitako transakzioak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:43
 msgid ""
@@ -27096,40 +27147,45 @@ msgid ""
 "refunds.\n"
 "                "
 msgstr ""
+"\n"
+"                    Kontuan izan itzulketak eginda bezala markatuko direla "
+"esportazioa sortu ondoren.\n"
+"Ziurtatu esportazioa deskargatu eta itzulketak egin dituzula.\n"
+"                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
 msgid "Exported files"
-msgstr ""
+msgstr "Esportatutako fitxategiak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:55
 msgid "Export date"
-msgstr ""
+msgstr "Esportazioaren data"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:56
 msgid "Number of orders"
-msgstr ""
+msgstr "Eskaera kopurua"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:80
 msgid "not downloaded"
-msgstr ""
+msgstr "ez dago deskargatua"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:85
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:96
 msgid "Download CSV"
-msgstr ""
+msgstr "CSVa deskargatu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:90
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:101
 msgid "SEPA XML"
-msgstr ""
+msgstr "SEPA XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:110
 msgid "No exports have been created yet."
-msgstr ""
+msgstr "Oraindik ez da esportaziorik sortu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
-msgstr ""
+msgstr "SEPA xml esportatu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:13
 #, python-format
@@ -27140,34 +27196,38 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
+"%(date)s diru-itzulketen esportazio bat deskargatu nahian zabiltza, eskaera "
+"batekin eta %(sum)s guztira."
 msgstr[1] ""
+"%(date)s diru-itzulketen esportazio bat deskargatu nahian zabiltza, %(cnt)s "
+"eskaerarekin eta %(sum)s guztira."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr ""
+msgstr "Adierazi zer banku-kontutatik transferitu behar diren diru-itzulketak."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
-msgstr ""
+msgstr "Deskargatu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
-msgstr ""
+msgstr "Ordaintzailea eta erreferentzia"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr ""
+msgstr "Onartu hala ere"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:44
 msgid "Assign to order"
-msgstr ""
+msgstr "Esleitu eskaerari"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:49
 msgid "Retry"
-msgstr ""
+msgstr "Birmoldaketak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
@@ -27175,100 +27235,108 @@ msgstr "Iruzkina:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
-msgstr ""
+msgstr "Ez da eskaera-koderik detektatu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:100
 msgid "Invalid for this order"
-msgstr ""
+msgstr "Ez du balio eskaera honetarako"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:102
 msgid "Error while processing"
-msgstr ""
+msgstr "Errorea prozesatzean"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:104
 msgid "The order is already marked as paid"
-msgstr ""
+msgstr "Eskaera ordainduta bezala markatuta dago"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:106
 msgid "Order already paid"
-msgstr ""
+msgstr "Eskaera ordainduta dago"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:123
 msgid "Discard"
-msgstr ""
+msgstr "Baztertu"
 
 #: pretix/plugins/banktransfer/views.py:146
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
 msgstr ""
+"Zenbatekoa negatiboa da, baina ezin da itzulketa erregistratu. Mesedez, "
+"lehendabizi, sortu eskuzko itzulketa bat."
 
 #: pretix/plugins/banktransfer/views.py:172
 msgid "Problem sending email."
-msgstr ""
+msgstr "Arazoak e-maila bidaltzeko."
 
 #: pretix/plugins/banktransfer/views.py:198
 msgid "Unknown order code"
-msgstr ""
+msgstr "Eskaera kode ezezaguna"
 
 #: pretix/plugins/banktransfer/views.py:355
 msgid "Search text"
-msgstr ""
+msgstr "Testua bilatu"
 
 #: pretix/plugins/banktransfer/views.py:356
 msgid "min"
-msgstr ""
+msgstr "min"
 
 #: pretix/plugins/banktransfer/views.py:357
 msgid "max"
-msgstr ""
+msgstr "max"
 
 #: pretix/plugins/banktransfer/views.py:366
 msgid "Filter form is not valid."
-msgstr ""
+msgstr "Filtratzeko moduak ez du balio."
 
 #: pretix/plugins/banktransfer/views.py:409
 msgid "All unresolved transactions have been discarded."
-msgstr ""
+msgstr "Konpondu gabeko transakzio guztiak baztertu dira."
 
 #: pretix/plugins/banktransfer/views.py:429
 msgid "You must choose a file to import."
-msgstr ""
+msgstr "Inportatzeko fitxategi bat hautatu behar duzu."
 
 #: pretix/plugins/banktransfer/views.py:433
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
 msgstr ""
+"Ezin izan dugu detektatu inportazio horren fitxategi-mota. Jarri "
+"harremanetan laguntza-zerbitzuarekin laguntza lortzeko."
 
 #: pretix/plugins/banktransfer/views.py:446
 #: pretix/plugins/banktransfer/views.py:495
 msgid "We were unable to process your input."
-msgstr ""
+msgstr "Ezin izan dugu zure sarrera prozesatu."
 
 #: pretix/plugins/banktransfer/views.py:460
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
 msgstr ""
+"Sentitzen dut, baina ezin izan dugu CSV fitxategi hau inportatu. Jarri "
+"harremanetan laguntza-zerbitzuarekin laguntza lortzeko."
 
 #: pretix/plugins/banktransfer/views.py:465
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
 msgstr ""
+"Sentitzen dut, baina fitxategi hau hutsik dagoela antzeman dugu. Jarri "
+"harremanetan laguntza-zerbitzuarekin laguntza lortzeko."
 
 #: pretix/plugins/banktransfer/views.py:485
 msgid "Invalid input data."
-msgstr ""
+msgstr "Sarrerako datuak ez dira baliozkoak."
 
 #: pretix/plugins/banktransfer/views.py:489
 msgid "You need to select the column containing the payment reference."
-msgstr ""
+msgstr "Ordainketaren erreferentzia duen zutabea hautatu behar duzu."
 
 #: pretix/plugins/banktransfer/views.py:570
 msgid "No currency has been selected."
-msgstr ""
+msgstr "Ez da monetarik aukeratu."
 
 #: pretix/plugins/banktransfer/views.py:718
 #, python-brace-format
@@ -27276,63 +27344,71 @@ msgid ""
 "We could not find bank account information for the refund {refund_id}. It "
 "was marked as failed."
 msgstr ""
+"Ezin izan dugu aurkitu {refund_id} itzulketarako banku-kontuaren "
+"informazioa. Huts egin duela adierazi du."
 
 #: pretix/plugins/banktransfer/views.py:751
 msgid "No valid orders have been found."
-msgstr ""
+msgstr "Ez da baliozko eskaerarik aurkitu."
 
 #: pretix/plugins/banktransfer/views.py:905 pretix/presale/checkoutflow.py:969
 #: pretix/presale/checkoutflow.py:975
 msgid "Please enter a valid email address."
-msgstr ""
+msgstr "Sartu baliozko helbide elektroniko bat."
 
 #: pretix/plugins/banktransfer/views.py:912
 msgid ""
 "No pending bank transfer payment found. Maybe the order has been paid "
 "already?"
 msgstr ""
+"Ez da aurkitu banku-transferentzia bidez ordaintzeko dagoen ordainketarik. "
+"Baliteke eskaera ordainduta egotea?"
 
 #: pretix/plugins/banktransfer/views.py:915
 msgid "Sending invoices via email is disabled by the event organizer."
 msgstr ""
+"Ekitaldiaren antolatzaileak desaktibatu egin du fakturak posta elektronikoz "
+"bidaltzeko aukera."
 
 #: pretix/plugins/banktransfer/views.py:920
 msgid "No invoice found, please request an invoice first."
-msgstr ""
+msgstr "Ez da fakturarik aurkitu. Mesedez, eskatu lehenengo faktura bat."
 
 #: pretix/plugins/banktransfer/views.py:932
 #, python-brace-format
 msgid "Sending the latest invoice via e-mail to {email}."
-msgstr ""
+msgstr "Azken faktura posta elektronikoz bidaltzen, {email} helbidera."
 
 #: pretix/plugins/checkinlists/apps.py:47
 msgid "Check-in list exporter"
-msgstr ""
+msgstr "Fakturazio-zerrenden esportatzailea"
 
 #: pretix/plugins/checkinlists/apps.py:51
 msgid "This plugin allows you to generate check-in lists for your conference."
 msgstr ""
+"Plugin honek zure konferentziarako erregistro-zerrendak sortzeko aukera "
+"ematen dizu."
 
 #: pretix/plugins/checkinlists/exporters.py:91
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
 msgid "Only include tickets for dates within this range."
-msgstr ""
+msgstr "Tarte honetako datetarako sarrerak bakarrik sartu."
 
 #: pretix/plugins/checkinlists/exporters.py:95
 msgid "Include QR-code secret"
-msgstr ""
+msgstr "QR kode sekretua sartu"
 
 #: pretix/plugins/checkinlists/exporters.py:100
 msgid "Only tickets requiring special attention"
-msgstr ""
+msgstr "Arreta berezia behar duten sarrerak bakarrik"
 
 #: pretix/plugins/checkinlists/exporters.py:133
 msgid "Include questions"
-msgstr ""
+msgstr "Galderak sartu"
 
 #: pretix/plugins/checkinlists/exporters.py:301
 msgid "Check-in list (PDF)"
-msgstr ""
+msgstr "Izen-emate zerrenda (PDF)"
 
 #: pretix/plugins/checkinlists/exporters.py:302
 #: pretix/plugins/checkinlists/exporters.py:473
@@ -27340,98 +27416,107 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:740
 msgctxt "export_category"
 msgid "Check-in"
-msgstr ""
+msgstr "Izena eman"
 
 #: pretix/plugins/checkinlists/exporters.py:303
 msgid ""
 "Download a PDF version of a check-in list that can be used to check people "
 "in at the event without digital methods."
 msgstr ""
+"Deskargatu erregistro-zerrenda baten PDF bertsio bat, metodo digitalik gabe "
+"ekitaldian pertsonak erregistratzeko erabil daitekeena."
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:371
 msgctxt "tablehead"
 msgid "paid"
-msgstr ""
+msgstr "ordainduta"
 
 #: pretix/plugins/checkinlists/exporters.py:474
 msgid ""
 "Download a spreadsheet with all attendees that are included in a check-in "
 "list."
 msgstr ""
+"Deskargatu kalkulu-orri bat erregistro-zerrenda bateko parte-hartzaile "
+"guztiekin."
 
 #: pretix/plugins/checkinlists/exporters.py:497
 msgid "Checked out"
-msgstr ""
+msgstr "Egiaztatua"
 
 #: pretix/plugins/checkinlists/exporters.py:497
 #: pretix/plugins/checkinlists/exporters.py:762
 msgid "Automatically checked in"
-msgstr ""
+msgstr "Erregistro automatikoa"
 
 #: pretix/plugins/checkinlists/exporters.py:503
 #: pretix/plugins/checkinlists/exporters.py:691
 #: pretix/plugins/checkinlists/exporters.py:756
 #: pretix/plugins/paypal/payment.py:123 pretix/plugins/paypal2/payment.py:120
 msgid "Secret"
-msgstr ""
+msgstr "Sekretua"
 
 #: pretix/plugins/checkinlists/exporters.py:669
 msgid "Valid check-in codes"
-msgstr ""
+msgstr "Fakturazio-kode baliodunak"
 
 #: pretix/plugins/checkinlists/exporters.py:671
 msgid ""
 "Download a spreadsheet with all valid check-in barcodes e.g. for import into "
 "a different system. Does not included blocked codes or personal data."
 msgstr ""
+"Deskargatu kalkulu-orri bat baliozko fakturazio-barren kode guztiekin, "
+"adibidez, beste sistema batera inportatzeko. Ez ditu blokeatutako kodeak eta "
+"datu pertsonalak barne hartzen."
 
 #: pretix/plugins/checkinlists/exporters.py:739
 msgid "Check-in log (all scans)"
-msgstr ""
+msgstr "Sarrera erregistroa (eskaneatze guztiak)"
 
 #: pretix/plugins/checkinlists/exporters.py:741
 msgid ""
 "Download a spreadsheet with one line for every scan that happened at your "
 "check-in stations."
 msgstr ""
+"Fakturazio-postuetan egindako eskaneatze bakoitzeko lerro bat duen kalkulu-"
+"orria deskargatu."
 
 #: pretix/plugins/checkinlists/exporters.py:760
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 #: pretix/plugins/checkinlists/exporters.py:761
 msgid "Offline override"
-msgstr ""
+msgstr "Offline ezeztatzea"
 
 #: pretix/plugins/checkinlists/exporters.py:765
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:83
 msgid "Error message"
-msgstr ""
+msgstr "Errore-mezua"
 
 #: pretix/plugins/checkinlists/exporters.py:766
 msgid "Upload date"
-msgstr ""
+msgstr "Karga-data"
 
 #: pretix/plugins/checkinlists/exporters.py:767
 msgid "Upload time"
-msgstr ""
+msgstr "Karga-ordua"
 
 #: pretix/plugins/checkinlists/exporters.py:818
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: pretix/plugins/checkinlists/exporters.py:850
 msgid "Successful scans only"
-msgstr ""
+msgstr "Eskaneatze zuzenak bakarrik"
 
 #: pretix/plugins/checkinlists/exporters.py:871
 msgid "All check-in lists"
-msgstr ""
+msgstr "Erregistro zerrenda guztiak"
 
 #: pretix/plugins/manualpayment/apps.py:37
 msgid "A fully customizable payment method for manual processing."
-msgstr ""
+msgstr "Eskuz prozesatzeko ordainketa-metodo guztiz pertsonalizagarria."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
 #: pretix/plugins/paypal/payment.py:75 pretix/plugins/paypal2/payment.py:82
@@ -27446,54 +27531,65 @@ msgid ""
 "Accept payments with your PayPal account. PayPal is one of the most popular "
 "payment methods world-wide."
 msgstr ""
+"Onartu ordainketak PayPal kontuarekin. PayPal mundu osoko ordainketa-metodo "
+"ezagunenetako bat da."
 
 #: pretix/plugins/paypal/payment.py:91 pretix/plugins/paypal2/payment.py:376
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
 msgstr ""
+"PayPal-en sandbox-a erabiltzen ari da. Proba egin dezakezu dirurik bidali "
+"gabe, baina PayPal-en sandbox-aren erabiltzaile bat beharko duzu saioa "
+"hasteko."
 
 #: pretix/plugins/paypal/payment.py:103
 msgid "PayPal account"
-msgstr ""
+msgstr "PayPal kontua"
 
 #: pretix/plugins/paypal/payment.py:116 pretix/plugins/paypal2/payment.py:113
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr ""
+msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #: pretix/plugins/paypal/payment.py:117 pretix/plugins/paypal2/payment.py:114
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr ""
+"Egin klik hemen gakoak nola lortu behar direnaren inguruko tutorial bat "
+"ikusteko"
 
 #: pretix/plugins/paypal/payment.py:129 pretix/plugins/paypal2/payment.py:126
 #: pretix/plugins/stripe/payment.py:258
 msgid "Endpoint"
-msgstr ""
+msgstr "Amaiera puntua"
 
 #: pretix/plugins/paypal/payment.py:141 pretix/plugins/paypal2/payment.py:200
 msgid "Reference prefix"
-msgstr ""
+msgstr "Erreferentzia-aurrezenbakia"
 
 #: pretix/plugins/paypal/payment.py:142 pretix/plugins/paypal2/payment.py:201
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
 msgstr ""
+"Hemen sartutako edozein balio eskaera-zenbakiak duen erreserba-erreferentzia "
+"arruntaren aurrean gehituko da."
 
 #: pretix/plugins/paypal/payment.py:148 pretix/plugins/paypal2/payment.py:207
 msgid "Reference postfix"
-msgstr ""
+msgstr "Erreferentzia ondorengo zenbakia"
 
 #: pretix/plugins/paypal/payment.py:149 pretix/plugins/paypal2/payment.py:208
 msgid ""
 "Any value entered here will be added behind the regular booking reference "
 "containing the order number."
 msgstr ""
+"Hemen sartutako edozein balio eskaera-zenbakiak duen ohiko erreserba-"
+"erreferentziaren atzean gehituko da."
 
 #: pretix/plugins/paypal/payment.py:187 pretix/plugins/paypal2/payment.py:261
 msgid "Disconnect from PayPal"
-msgstr ""
+msgstr "PayPal-etik deskonektatu"
 
 #: pretix/plugins/paypal/payment.py:241 pretix/plugins/paypal/payment.py:307
 #: pretix/plugins/paypal/payment.py:345 pretix/plugins/paypal/payment.py:360
@@ -27506,7 +27602,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:1014
 #: pretix/plugins/paypal2/payment.py:1110
 msgid "We had trouble communicating with PayPal"
-msgstr ""
+msgstr "PayPalekin komunikatzeko arazoak izan ditugu"
 
 #: pretix/plugins/paypal/payment.py:374 pretix/plugins/paypal/payment.py:383
 #: pretix/plugins/paypal/payment.py:457 pretix/plugins/paypal2/payment.py:637
@@ -27516,6 +27612,7 @@ msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
+"Ezin izan dugu zure ordainketa prozesatu. Ikus, ondoren, zer egin behar den."
 
 #: pretix/plugins/paypal/payment.py:438 pretix/plugins/paypal/payment.py:447
 #: pretix/plugins/paypal2/payment.py:783
@@ -27523,32 +27620,34 @@ msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"PayPalek oraindik ez du ordainketa onartu. Ordainketa amaitu bezain laster "
+"jakinaraziko dizugu."
 
 #: pretix/plugins/paypal/payment.py:472 pretix/plugins/paypal2/payment.py:811
 #: pretix/plugins/stripe/payment.py:989 pretix/plugins/stripe/payment.py:981
 msgid "There was an error sending the confirmation mail."
-msgstr ""
+msgstr "Errore bat gertatu da berrespen-mezua bidaltzean."
 
 #: pretix/plugins/paypal/payment.py:565 pretix/plugins/paypal/payment.py:572
 #: pretix/plugins/paypal2/payment.py:962 pretix/plugins/paypal2/payment.py:983
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr ""
+msgstr "PayPal bidez dirua itzultzeak huts egin du: {}"
 
 #: pretix/plugins/paypal/payment.py:707 pretix/plugins/paypal/payment.py:715
 #: pretix/plugins/paypal2/payment.py:1060
 #: pretix/plugins/paypal2/payment.py:1068
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Jaso dugu faktura honen ordainketa."
 
 #: pretix/plugins/paypal/payment.py:708 pretix/plugins/paypal/payment.py:716
 #: pretix/plugins/paypal2/payment.py:1061
 #: pretix/plugins/paypal2/payment.py:1069
 msgid "PayPal payment ID"
-msgstr ""
+msgstr "PayPal ordainketaren IDa"
 
 #: pretix/plugins/paypal/payment.py:710 pretix/plugins/paypal2/payment.py:1063
 msgid "PayPal sale ID"
-msgstr ""
+msgstr "PayPal salmentaren IDa"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:19
@@ -27556,6 +27655,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Adierazitako zenbateko osoa zure PayPal kontutik kenduko da erosketa "
+"berretsi ondoren."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -27563,31 +27664,36 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
+"Jarraitu botoian klik egin ondoren, PayPal-era bideratuko zaitugu zure "
+"ordainketa-datuak bete ditzan. Ondoren, berriro ere hona bideratuko zaitugu "
+"zure eskaera berrikusteko eta berresteko."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:6
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:7
 msgid "Sale ID"
-msgstr ""
+msgstr "Salmenta IDa"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:35
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:11
 msgid "Last update"
-msgstr ""
+msgstr "Azken eguneratzea"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:37
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:71
 msgid "Total value"
-msgstr ""
+msgstr "Balioa guztira"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Ordainketa PayPal bidez egiteko gure saiakerak huts egin du. Mesedez, saiatu "
+"berriro edo jarri gurekin harremanetan."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:15
@@ -27595,39 +27701,42 @@ msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"PayPal-en erantzunaren zain gaude zure ordainketari dagokionez. Mesedez, jar "
+"zaitez gurekin harremanetan, honek ordu gutxi batzuk baino gehiago irauten "
+"badu."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "Ordainketa prozesua leiho berri batean hasi da."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr ""
+msgstr "Zure ordainketa-datuak sartzeko leihoa ez da ireki edo itxi egin da?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:25
 msgid "Click here in order to open the window."
-msgstr ""
+msgstr "Egin klik hemen leihoa irekitzeko."
 
 #: pretix/plugins/paypal/views.py:107 pretix/plugins/paypal2/views.py:319
 #: pretix/plugins/paypal2/views.py:315
 msgid "Invalid response from PayPal received."
-msgstr ""
+msgstr "Jasotako PayPal-en erantzuna ez da baliozkoa."
 
 #: pretix/plugins/paypal/views.py:123 pretix/plugins/paypal2/views.py:340
 #: pretix/plugins/paypal2/views.py:336
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "PayPal ordainketa bertan behera utzi duzula dirudi"
 
 #: pretix/plugins/paypal/views.py:255 pretix/plugins/paypal2/views.py:525
 #: pretix/plugins/paypal2/views.py:521
 msgid "Your PayPal account has been disconnected."
-msgstr ""
+msgstr "Zure PayPal kontua deskonektatu egin da."
 
 #: pretix/plugins/paypal2/apps.py:40
 msgid ""
@@ -27637,10 +27746,14 @@ msgid ""
 "even need a PayPal account. PayPal is one of the most popular payment "
 "methods world-wide."
 msgstr ""
+"Onartu ordainketak PayPal kontuarekin. PayPal-ekin egin ohi dituzun "
+"ordainketez gain, orain zure bezeroei tokiko ordainketa-metodo ugari "
+"eskaintzen dizkiezu, hala nola EPS, iDEAL eta beste asko; PayPal konturik "
+"ere ez dute behar. PayPal mundu osoko ordainketa-metodo ezagunenetako bat da."
 
 #: pretix/plugins/paypal2/payment.py:99
 msgid "PayPal Merchant ID"
-msgstr ""
+msgstr "PayPal saltzailearen IDa"
 
 #: pretix/plugins/paypal2/payment.py:141
 msgid ""
@@ -27648,10 +27761,13 @@ msgid ""
 "have the option to revert back to paying with their PayPal account. For this "
 "reason, this payment method is always active."
 msgstr ""
+"Bezero batek ordaintzeko modu alternatibo bat aukeratzen badu ere, beti "
+"izango du PayPal kontuarekin ordaintzeko aukera. Horregatik, ordaintzeko "
+"modu hori beti dago aktibo."
 
 #: pretix/plugins/paypal2/payment.py:149
 msgid "Alternative Payment Methods"
-msgstr ""
+msgstr "Ordaintzeko beste metodo batzuk"
 
 #: pretix/plugins/paypal2/payment.py:151
 msgid ""
@@ -27662,10 +27778,15 @@ msgid ""
 "shoppers location. For German merchants, this is the direct successor of "
 "PayPal Plus."
 msgstr ""
+"PayPal kontu baten bidezko ordainketez gain, kreditu-txartelekin eta tokiko "
+"beste ordainketa-modu batzuekin (EPS, iDEAL eta beste asko) ordaintzeko "
+"aukera ere eskain diezaiekezu bezeroei, baita PayPal konturik ez badute ere. "
+"Ordaintzeko modu hautagarriak eroslearen kokapenaren arabera zehaztuko dira. "
+"Alemaniako saltzaileentzat, PayPal Plus-en oinordeko zuzena da."
 
 #: pretix/plugins/paypal2/payment.py:166
 msgid "Disable SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA Direct Debit desgaitu"
 
 #: pretix/plugins/paypal2/payment.py:168
 msgid ""
@@ -27675,10 +27796,15 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
+"Bezero batek ezin ditu ordainketa-metodo gehienak kendu saltzaileei kexa "
+"zehatza adierazi gabe, baina SEPA Zuzeneko Zordunketa botoi bat sakatze "
+"hutsarekin ken daiteke. Hori dela eta, eta zure ekitaldiaren izaeraren "
+"arabera, baliteke SEPA zuzeneko zordunketaren bidezko ordainketen aukera "
+"desaktibatu nahi izatea, itzulketa garestien arriskua murrizteko."
 
 #: pretix/plugins/paypal2/payment.py:182
 msgid "Enable Buy Now Pay Later"
-msgstr ""
+msgstr "Buy Now Pay Later gaitu"
 
 #: pretix/plugins/paypal2/payment.py:184
 msgid ""
@@ -27686,14 +27812,17 @@ msgid ""
 "pay in multiple installments or within 30 days. You, as the merchant, are "
 "getting your money right away."
 msgstr ""
+"Eskaini zure bezeroei orain erosteko aukera (muga bateraino) eta hainbat "
+"epetan edo 30 egunetan ordaintzeko aukera. Zuk, saltzaile gisa, berehala "
+"jasotzen duzu zure dirua."
 
 #: pretix/plugins/paypal2/payment.py:216
 msgid "-- Automatic --"
-msgstr ""
+msgstr "-- Automatikoa --"
 
 #: pretix/plugins/paypal2/payment.py:222
 msgid "Buyer country"
-msgstr ""
+msgstr "Eroslearen herrialdea"
 
 #: pretix/plugins/paypal2/payment.py:246
 msgid ""
@@ -27701,26 +27830,31 @@ msgid ""
 "clicking on the following button, you can either create a new PayPal account "
 "or connect pretix to an existing one."
 msgstr ""
+"PayPal bidez ordainketak onartzeko, PayPal-en kontu bat beharko duzu. "
+"Hurrengo botoian klik eginez, PayPal kontu berri bat sor dezakezu edo "
+"lehendik dagoen bati pretix konektatu."
 
 #: pretix/plugins/paypal2/payment.py:251
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr ""
+msgstr "PayPal {icon}-ekin konektatu"
 
 #: pretix/plugins/paypal2/payment.py:265
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
+"Konfiguratu PayPal-en Webhook bat hurrengo amaiera-puntuan, ordainketak "
+"kanpotik itzultzen direnean eskaerak automatikoki bertan behera uzteko."
 
 #: pretix/plugins/paypal2/payment.py:276
 msgid "PayPal does not process payments in your event's currency."
-msgstr ""
+msgstr "PayPalek ez ditu ordainketak prozesatzen zure ekitaldiaren monetan."
 
 #: pretix/plugins/paypal2/payment.py:277
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
-msgstr ""
+msgstr "Kontsultatu PayPal orri hau onartutako moneten zerrenda osoa lortzeko."
 
 #: pretix/plugins/paypal2/payment.py:282
 msgid ""
@@ -27730,11 +27864,16 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
+"PayPal-ek zure ekitaldiaren moneta onartzen du ordainketa-moneta gisa eta "
+"kontu nazionaletarako soilik. Horrek esan nahi du PayPal kontu hartzaileak "
+"eta igorleak herrialde berean sortuak izan behar dutela eta moneta bera "
+"erabili behar dutela. Beste herrialdeetako kontuek ezingo dute ordainketarik "
+"bidali."
 
 #: pretix/plugins/paypal2/payment.py:334 pretix/plugins/paypal2/views.py:248
 #: pretix/plugins/paypal2/views.py:244
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr ""
+msgstr "Errore bat gertatu da PayPal-ekin konektatzean. Saiatu berriro."
 
 #: pretix/plugins/paypal2/payment.py:466 pretix/plugins/paypal2/payment.py:598
 #: pretix/plugins/paypal2/payment.py:658 pretix/plugins/paypal2/payment.py:721
@@ -27745,124 +27884,138 @@ msgid ""
 "again, there is a high chance of the payment succeeding on a second or third "
 "attempt. You can also try other payment methods, if available."
 msgstr ""
+"Zure ordainketak huts egin du PayPal-en ezagutzen den arazo baten ondorioz. "
+"Mesedez, saiatu berriro, ordainketak bigarren edo hirugarren saiakeran "
+"arrakasta izateko aukera handia dago. Beste ordainketa-metodo batzuk ere "
+"proba ditzakezu, eskuragarri badaude."
 
 #: pretix/plugins/paypal2/payment.py:476 pretix/plugins/paypal2/payment.py:1010
 msgid ""
 "Something went wrong when requesting the payment status. Please try again."
 msgstr ""
+"Zerbait gaizki joan da ordainketaren egoera eskatzean. Mesedez, saiatu "
+"berriro."
 
 #: pretix/plugins/paypal2/payment.py:485 pretix/plugins/paypal2/payment.py:1019
 msgid "You may need to enable JavaScript for PayPal payments."
-msgstr ""
+msgstr "Baliteke JavaScript aktibatu behar izatea PayPal ordaintzeko."
 
 #: pretix/plugins/paypal2/payment.py:953
 msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
+"PayPal bidez dirua itzultzeak huts egin du: Jatorrizko ordainketak ez du "
+"itzulketa automatikoa egiteko behar den informazioa."
 
 #: pretix/plugins/paypal2/payment.py:1087
 msgid "PayPal APM"
-msgstr ""
+msgstr "PayPal APM"
 
 #: pretix/plugins/paypal2/payment.py:1088
 msgid "PayPal Alternative Payment Methods"
-msgstr ""
+msgstr "PayPal-en ordezko ordainketa moduak"
 
 #: pretix/plugins/paypal2/signals.py:59
 msgid "Payment completed."
-msgstr ""
+msgstr "Ordainketa egin da."
 
 #: pretix/plugins/paypal2/signals.py:60
 msgid "Payment denied."
-msgstr ""
+msgstr "Ordainketa ukatu da."
 
 #: pretix/plugins/paypal2/signals.py:61
 msgid "Payment refunded."
-msgstr ""
+msgstr "Ordainketa itzuli da."
 
 #: pretix/plugins/paypal2/signals.py:62
 msgid "Payment reversed."
-msgstr ""
+msgstr "Ordainketa itzulia."
 
 #: pretix/plugins/paypal2/signals.py:63
 msgid "Payment pending."
-msgstr ""
+msgstr "Ordaintzeke."
 
 #: pretix/plugins/paypal2/signals.py:64
 msgctxt "paypal"
 msgid "Order approved."
-msgstr ""
+msgstr "Eskaera onartuta."
 
 #: pretix/plugins/paypal2/signals.py:65
 msgctxt "paypal"
 msgid "Order completed."
-msgstr ""
+msgstr "Eskaera osatu da."
 
 #: pretix/plugins/paypal2/signals.py:66
 msgctxt "paypal"
 msgid "Capture completed."
-msgstr ""
+msgstr "Kaptura burutu da."
 
 #: pretix/plugins/paypal2/signals.py:67
 msgctxt "paypal"
 msgid "Capture pending."
-msgstr ""
+msgstr "Kaptura egiteke."
 
 #: pretix/plugins/paypal2/signals.py:76
 msgid "PayPal reported an event: {}"
-msgstr ""
+msgstr "PayPalek gertakari baten berri eman du: {}"
 
 #: pretix/plugins/paypal2/signals.py:83
 msgid "PayPal ISU/Connect: Client ID"
-msgstr ""
+msgstr "PayPal ISU/Connect: Bezeroaren IDa"
 
 #: pretix/plugins/paypal2/signals.py:87
 msgid "PayPal ISU/Connect: Secret key"
-msgstr ""
+msgstr "PayPal ISU/Connect: Gako sekretua"
 
 #: pretix/plugins/paypal2/signals.py:91
 msgid "PayPal ISU/Connect: Partner Merchant ID"
-msgstr ""
+msgstr "PayPal ISU/Connect: Merkatari elkartuaren ID"
 
 #: pretix/plugins/paypal2/signals.py:92
 msgid ""
 "This is not the BN-code, but rather the ID of the merchant account which "
 "holds branding information for ISU."
 msgstr ""
+"Ez da BN kodea, ISUrako markaren informazioa duen kontu komertzialaren IDa "
+"baizik."
 
 #: pretix/plugins/paypal2/signals.py:96
 msgid "PayPal ISU/Connect Endpoint"
-msgstr ""
+msgstr "PayPal ISU/Connect amaiera puntua"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:9
 msgid "Almost done …"
-msgstr ""
+msgstr "Ia eginda …"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:12
 msgid "Please click on the \"Pay now\" button below to confirm your payment."
-msgstr ""
+msgstr "Egin klik «Ordaindu orain» botoian, ordainketa berresteko."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:15
 msgid "We will then charge your PayPal account and finalize the order."
-msgstr ""
+msgstr "Ondoren, zure PayPal kontuan kargatuko dugu eta eskaera amaituko dugu."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:27
 msgid ""
 "After placing your order, you will be able to select your desired payment "
 "method, including PayPal."
 msgstr ""
+"Eskaera egin ondoren, nahi duzun ordainketa-metodoa aukeratu ahal izango "
+"duzu, PayPal barne."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:5
 msgid ""
 "A PayPal account is required to use this online payment method. Please keep "
 "your account information ready to enter in the next step."
 msgstr ""
+"PayPal kontu bat behar da online ordainketa-metodo hau erabiltzeko. Izan "
+"eskura zure kontuaren informazioa hurrengo urratsean sartzeko."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
-msgstr ""
+msgstr "Egin klik «Ordaindu PayPal-ekin» botoian ordainketa hasteko."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:13
 msgid ""
@@ -27870,6 +28023,9 @@ msgid ""
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
+"Jarraitu botoian klik egin ondoren, nola ordaindu nahi duzun aukeratu eta "
+"zure ordainketa-datuak bete ahal izango dituzu. Ondoren, berriro ere hona "
+"bideratuko zaitugu zure eskaera berrikusteko eta berresteko."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:22
 msgid ""
@@ -27877,21 +28033,26 @@ msgid ""
 "fail. If your payment fails, please just try again. You can also try with a "
 "different payment method, if you prefer."
 msgstr ""
+"Gaur egun, PayPal-ekin arazo ezagun bat dago, eta, horren ondorioz, "
+"ordainketa batzuek huts egiten dute. Ordainketak huts egiten badu, saiatu "
+"berriro. Nahiago baduzu, beste ordainketa-metodo batekin ere saia zaitezke."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
 msgid "Error"
-msgstr ""
+msgstr "Errorea"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:24
 msgid "Capture status"
-msgstr ""
+msgstr "Egoeraren kaptura"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:27
 msgid ""
 "This payment is being reviewed by PayPal. Until the review is lifted, the "
 "money will not be disbursed and the order remain in its pending state."
 msgstr ""
+"Ordainketa hori berrikusten ari da PayPal. Berrikuspena egin arte, dirua ez "
+"da ordainduko, eta eskaera egiteke egongo da."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:5
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
@@ -27899,100 +28060,116 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:5
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
 msgid "Pay order"
-msgstr ""
+msgstr "Eskaera ordaindu"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:16
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:8
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr ""
+msgstr "Eskaera ordaindu: %(code)s"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:26
 msgid "Please turn on JavaScript."
-msgstr ""
+msgstr "Mesedez aktibatu JavaScript."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:29
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:55
 msgid "Please select how you want to pay."
-msgstr ""
+msgstr "Hautatu nola ordaindu nahi duzun."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:10
 msgid ""
 "Our attempt to execute your payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Ordainketa PayPal bidez egiteko gure saiakerak huts egin du. Mesedez saiatu "
+"berriro edo jarri gurekin harremanetan."
 
 #: pretix/plugins/paypal2/views.py:221 pretix/plugins/paypal2/views.py:217
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
+"Errore bat gertatu da PayPal itzultzean: eskaera-parametroak falta dira. "
+"Mesedez, saiatu berriro."
 
 #: pretix/plugins/paypal2/views.py:257 pretix/plugins/paypal2/views.py:253
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
 msgstr ""
+"Errore bat gertatu da PayPal-etik itzultzean: emaitzaren parametroak falta "
+"dira. Mesedez, saiatu berriro."
 
 #: pretix/plugins/paypal2/views.py:262 pretix/plugins/paypal2/views.py:258
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
+"Errore bat gertatu da PayPal-etik itzultzean: saioaren parametroa ez dator "
+"bat. Mesedez, saiatu berriro."
 
 #: pretix/plugins/paypal2/views.py:267 pretix/plugins/paypal2/views.py:263
 msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
+"Oraindik ez da baieztatu PayPal kontuaren helbide elektronikoa. Ordainketak "
+"onartzen hasi aurretik egin beharko duzu."
 
 #: pretix/plugins/paypal2/views.py:273 pretix/plugins/paypal2/views.py:269
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Zure PayPal kontua orain pretix-era konektatuta dago. Konfigurazioa xehatuta "
+"alda dezakezu ondoren."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 msgid "Old check-in device API"
-msgstr ""
+msgstr "Fakturazio-gailuaren API zaharra"
 
 #: pretix/plugins/pretixdroid/apps.py:39
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
 msgstr ""
+"Plugin honek zure ekitaldirako pretixdroid eta pretixdesk aplikazioak "
+"erabiltzeko aukera ematen dizu."
 
 #: pretix/plugins/reports/accountingreport.py:58
 msgid "Accounting report"
-msgstr ""
+msgstr "Kontabilitate-txostenak"
 
 #: pretix/plugins/reports/accountingreport.py:60
 msgid ""
 "Download a PDF report of all sales and payments within a given time frame."
 msgstr ""
+"Deskarga ezazu salmenta eta ordainketa guztien txostena PDF formatuan epe "
+"jakin batean."
 
 #: pretix/plugins/reports/accountingreport.py:62
 #: pretix/plugins/reports/exporters.py:246
 msgctxt "export_category"
 msgid "Analysis"
-msgstr ""
+msgstr "Analisiak"
 
 #: pretix/plugins/reports/accountingreport.py:82
 msgid "Ignore test mode orders"
-msgstr ""
+msgstr "Ez egin kasurik proba moduko eskaerei"
 
 #: pretix/plugins/reports/accountingreport.py:90
 msgid "Split event series by date"
-msgstr ""
+msgstr "Ekitaldien seriea dataren arabera banatu"
 
 #: pretix/plugins/reports/accountingreport.py:128
 msgid "End"
-msgstr ""
+msgstr "Amaiera"
 
 #: pretix/plugins/reports/accountingreport.py:139
 msgid "Report includes test orders which may be deleted later!"
-msgstr ""
+msgstr "Txostenak probako eskaerak jasotzen ditu, geroago ezaba daitezkeenak!"
 
 #: pretix/plugins/reports/accountingreport.py:144
 msgid ""
@@ -28001,80 +28178,85 @@ msgid ""
 "might therefore be inaccurate with regards to orders that were changed in "
 "the time frame."
 msgstr ""
+"Txostenaren denbora-esparruan softwarearen bertsio zaharrarekin sortutako "
+"datuak sartzen dira; bertsio horrek oraindik ez zituen biltzen txosten hori "
+"sortzeko behar diren datu guztiak. Beraz, baliteke txostena okerra izatea "
+"denbora-esparruan aldatu ziren eskaerei dagokienez."
 
 #: pretix/plugins/reports/accountingreport.py:644
 #: pretix/plugins/reports/accountingreport.py:694
 #, python-brace-format
 msgid "Pending payments at {datetime}"
-msgstr ""
+msgstr "{datetime}-n egiteke dauden ordainketak"
 
 #: pretix/plugins/reports/accountingreport.py:751
 #: pretix/plugins/reports/accountingreport.py:789
 #, python-brace-format
 msgid "Total gift card value at {datetime}"
-msgstr ""
+msgstr "{datetime}- opari-txartelen guztizko balioa"
 
 #: pretix/plugins/reports/accountingreport.py:770
 msgid "Gift card transactions (credit)"
-msgstr ""
+msgstr "Opari-txartel bidezko transakzioak (kreditua)"
 
 #: pretix/plugins/reports/accountingreport.py:780
 msgid "Gift card transactions (debit)"
-msgstr ""
+msgstr "Opari-txartel bidezko transakzioak (debitua)"
 
 #: pretix/plugins/reports/accountingreport.py:882
 msgid "Open items"
-msgstr ""
+msgstr "Artikulu irekiak"
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
-msgstr ""
+msgstr "Txostenen esportatzailea"
 
 #: pretix/plugins/reports/apps.py:51
 msgid "Generate printable reports about your sales."
-msgstr ""
+msgstr "Sortu zure salmentei buruzko txosten inprimagarriak."
 
 #: pretix/plugins/reports/exporters.py:97
 #, python-format
 msgid "Page %d of %d"
-msgstr ""
+msgstr "%d%d-etik orrialdea"
 
 #: pretix/plugins/reports/exporters.py:200
 #, python-format
 msgid "Page %d"
-msgstr ""
+msgstr "%d orrialdea"
 
 #: pretix/plugins/reports/exporters.py:202
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "Sortuta: %s"
 
 #: pretix/plugins/reports/exporters.py:245
 msgid "Order overview (PDF)"
-msgstr ""
+msgstr "Eskaeraren aurrebista (PDF)"
 
 #: pretix/plugins/reports/exporters.py:247
 msgid "Download a PDF version of the key sales numbers per ticket type."
 msgstr ""
+"Deskargatu sarrera motaren araberako salmenta-zifra nagusien PDF bertsioa."
 
 #: pretix/plugins/reports/exporters.py:275
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:58
 msgid "Orders by product"
-msgstr ""
+msgstr "Eskaerak produktuka"
 
 #: pretix/plugins/reports/exporters.py:275
 msgid "(excl. taxes)"
-msgstr ""
+msgstr "(zergak kanpo)"
 
 #: pretix/plugins/reports/exporters.py:275
 msgid "(incl. taxes)"
-msgstr ""
+msgstr "(zergak barne)"
 
 #: pretix/plugins/reports/exporters.py:285
 #: pretix/plugins/reports/exporters.py:304
 #, python-brace-format
 msgid "{axis} between {start} and {end}"
-msgstr ""
+msgstr "{axis} {start} eta {end} tartean"
 
 #: pretix/plugins/reports/exporters.py:390
 #: pretix/plugins/reports/exporters.py:391
@@ -28083,80 +28265,89 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:394
 #: pretix/plugins/reports/exporters.py:395
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:477
 msgid "Tax split list (PDF)"
-msgstr ""
+msgstr "Zerga-zatikapenen zerrenda (PDF)"
 
 #: pretix/plugins/reports/exporters.py:479
 msgid "Download a PDF list with the tax amounts included in each order."
 msgstr ""
+"Deskargatu PDF zerrenda bat eskaera bakoitzean sartutako zergen "
+"zenbatekoekin."
 
 #: pretix/plugins/reports/exporters.py:556
 #, python-brace-format
 msgid "Orders by tax rate ({currency})"
-msgstr ""
+msgstr "Eskaerak zerga-tasaren arabera {currency}"
 
 #: pretix/plugins/reports/exporters.py:565
 #: pretix/plugins/reports/exporters.py:794
 #: pretix/plugins/reports/exporters.py:846
 #: pretix/plugins/reports/exporters.py:887
 msgid "Gross"
-msgstr ""
+msgstr "Gordina"
 
 #: pretix/plugins/reports/exporters.py:565
 #: pretix/plugins/reports/exporters.py:795
 #: pretix/plugins/reports/exporters.py:847
 #: pretix/plugins/reports/exporters.py:887
 msgid "Tax"
-msgstr ""
+msgstr "Zerga"
 
 #: pretix/plugins/reports/exporters.py:650
 msgid "Tax split list"
-msgstr ""
+msgstr "Zerga-zatikapenen zerrenda"
 
 #: pretix/plugins/reports/exporters.py:652
 msgid "Download a spreadsheet with the tax amounts included in each order."
 msgstr ""
+"Deskargatu kalkulu-orri bat eskaera bakoitzean sartutako zergen "
+"zenbatekoekin."
 
 #: pretix/plugins/reports/exporters.py:658
 msgid "Taxes by country"
-msgstr ""
+msgstr "Zergak herrialdeka"
 
 #: pretix/plugins/reports/exporters.py:659
 msgid "Business customers"
-msgstr ""
+msgstr "Bezero komertzialak"
 
 #: pretix/plugins/reports/exporters.py:791
 #: pretix/plugins/reports/exporters.py:836
 msgid "Country code"
-msgstr ""
+msgstr "Herrialdearen kodea"
 
 #: pretix/plugins/returnurl/apps.py:30 pretix/plugins/returnurl/apps.py:33
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:5
 msgid "Redirection from order page"
-msgstr ""
+msgstr "Eskaera-orritik birbideratzea"
 
 #: pretix/plugins/returnurl/apps.py:37
 msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
+"Plugin honen bidez, ordainketak lotu daitezke eta gero berriro bideratu. "
+"Hori baliagarria da gure APIarekin batera."
 
 #: pretix/plugins/returnurl/signals.py:90
 msgid "Redirection"
-msgstr ""
+msgstr "Birbideraketa"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:7
 msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
+"Funtzio hau erabilgarria da soilik pretix ordainketa osagaia erabiltzen "
+"baduzu baina beste pauso batzuetarako ordainketa interfaze propioa sortzen "
+"baduzu."
 
 #: pretix/plugins/returnurl/views.py:37
 msgid "Base redirection URLs"
-msgstr ""
+msgstr "Oinarria birbideratzeko URLa"
 
 #: pretix/plugins/returnurl/views.py:38
 msgid ""
@@ -28164,14 +28355,18 @@ msgid ""
 "prefixes. Enter one or more allowed URL prefix per line. URL prefixes must "
 "include a slash after the hostname."
 msgstr ""
+"Birbideratzea aurrizki horietako batekin hasten diren URLei bakarrik "
+"onartuko zaie. Sartu lerroko URL aurrizki baimendu bat edo gehiago. URL "
+"aurrizkiek barra bat izan behar dute ostalariaren izenaren ondoren."
 
 #: pretix/plugins/sendmail/apps.py:38
 msgid "Send out emails to all your customers or specific groups of customers."
 msgstr ""
+"Bidali mezu elektronikoak zure bezero guztiei edo bezero-talde espezifikoei."
 
 #: pretix/plugins/sendmail/forms.py:60
 msgid "Attachment"
-msgstr ""
+msgstr "Atxikimendua"
 
 #: pretix/plugins/sendmail/forms.py:63
 msgid ""
@@ -28179,309 +28374,324 @@ msgid ""
 "being sorted into spam folders. We recommend only using PDFs of no more than "
 "2 MB in size."
 msgstr ""
+"Fitxategi erantsi bat bidaltzeak zure posta elektronikoa ez iristeko edo "
+"spam karpetetan ez sailkatzeko aukerak areagotzen ditu. Gehienez 2 MB-ko "
+"tamaina duen PDFa bakarrik erabiltzea gomendatzen dizugu."
 
 #: pretix/plugins/sendmail/forms.py:91
 msgctxt "sendmail_form"
 msgid "Waiting for"
-msgstr ""
+msgstr "Itxaroten"
 
 #: pretix/plugins/sendmail/forms.py:97 pretix/plugins/sendmail/forms.py:171
 #: pretix/plugins/sendmail/forms.py:349
 msgctxt "sendmail_form"
 msgid "Restrict to a specific event date"
-msgstr ""
+msgstr "Mugatu data jakin batera"
 
 #: pretix/plugins/sendmail/forms.py:103 pretix/plugins/sendmail/forms.py:177
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting at or after"
-msgstr ""
+msgstr "Mugatu hemendik aurrerako ekitaldi-datetara"
 
 #: pretix/plugins/sendmail/forms.py:108 pretix/plugins/sendmail/forms.py:182
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting before"
-msgstr ""
+msgstr "Data hau baino lehen hasten diren ekitaldien datetara mugatzea"
 
 #: pretix/plugins/sendmail/forms.py:149
 msgctxt "sendmail_form"
 msgid "Send to"
-msgstr ""
+msgstr "Bidali"
 
 #: pretix/plugins/sendmail/forms.py:159
 msgctxt "sendmail_form"
 msgid "Restrict to products"
-msgstr ""
+msgstr "Produktuetara mugatu"
 
 #: pretix/plugins/sendmail/forms.py:164
 msgid "Filter check-in status"
-msgstr ""
+msgstr "Iragazi fakturazio-egoera"
 
 #: pretix/plugins/sendmail/forms.py:168
 msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in on any list"
-msgstr ""
+msgstr "Mugatu zerrenda batean ere erregistratu gabe dauden hartzaileetara"
 
 #: pretix/plugins/sendmail/forms.py:187
 msgctxt "sendmail_form"
 msgid "Restrict to orders created at or after"
-msgstr ""
+msgstr "Mugatu lehenago edo geroago sortutako eskaeretara"
 
 #: pretix/plugins/sendmail/forms.py:192
 msgctxt "sendmail_form"
 msgid "Restrict to orders created before"
-msgstr ""
+msgstr "Mugatu lehenago sortutako eskaeretara"
 
 #: pretix/plugins/sendmail/forms.py:218
 msgid "Everyone who placed an order"
-msgstr ""
+msgstr "Eskaera bat egin duten guztiak"
 
 #: pretix/plugins/sendmail/forms.py:222 pretix/plugins/sendmail/models.py:218
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr ""
+"Bertaratuko den pertsona oro (eskaeraren kontaktura itzultzeko, bertaratuko "
+"den pertsonaren helbide elektronikoa adierazten ez denean)"
 
 #: pretix/plugins/sendmail/forms.py:224 pretix/plugins/sendmail/models.py:219
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr ""
+"Biak (eskaeraren harremanetarako helbide guztiak eta bertaratuko diren "
+"pertsonen helbide elektroniko guztiak)"
 
 #: pretix/plugins/sendmail/forms.py:230
 msgid "Attachment of tickets is disabled in this event's email settings."
 msgstr ""
+"Sarrerak eranstea desaktibatuta dago ekitaldi honen posta elektronikoaren "
+"konfigurazioan."
 
 #: pretix/plugins/sendmail/forms.py:234 pretix/plugins/sendmail/forms.py:388
 #: pretix/plugins/sendmail/views.py:270 pretix/plugins/sendmail/views.py:268
 msgid "payment pending but already confirmed"
-msgstr ""
+msgstr "ordainketa egin gabe, baina dagoeneko berretsita"
 
 #: pretix/plugins/sendmail/forms.py:235 pretix/plugins/sendmail/forms.py:390
 #: pretix/plugins/sendmail/views.py:271 pretix/plugins/sendmail/views.py:269
 msgid "payment pending (except unapproved or already confirmed)"
-msgstr ""
+msgstr "ordaindu gabe (ez bada onartu edo berretsi)"
 
 #: pretix/plugins/sendmail/forms.py:239 pretix/plugins/sendmail/forms.py:394
 #: pretix/plugins/sendmail/views.py:269 pretix/plugins/sendmail/views.py:267
 msgid "pending with payment overdue"
-msgstr ""
+msgstr "ordaindu gabe, ordainketa atzeratuarekin"
 
 #: pretix/plugins/sendmail/forms.py:242
 msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
-msgstr ""
+msgstr "Egoera duten eskaeretara mugatu"
 
 #: pretix/plugins/sendmail/forms.py:267 pretix/plugins/sendmail/forms.py:271
 msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
-msgstr ""
+msgstr "Mugatu check-in zerrendan duten hartzaileetara"
 
 #: pretix/plugins/sendmail/forms.py:373
 msgid "Type of schedule time"
-msgstr ""
+msgstr "Ordutegi-mota"
 
 #: pretix/plugins/sendmail/forms.py:376
 msgid "Absolute"
-msgstr ""
+msgstr "Absolutua"
 
 #: pretix/plugins/sendmail/forms.py:377
 msgid "Relative, before event start"
-msgstr ""
+msgstr "Erlatiboa, ekitaldia hasi aurretik"
 
 #: pretix/plugins/sendmail/forms.py:378
 msgid "Relative, before event end"
-msgstr ""
+msgstr "Erlatiboa, ekitaldia amaitu aurretik"
 
 #: pretix/plugins/sendmail/forms.py:379
 msgid "Relative, after event start"
-msgstr ""
+msgstr "Erlatiboa, ekitaldia hasi ondoren"
 
 #: pretix/plugins/sendmail/forms.py:380
 msgid "Relative, after event end"
-msgstr ""
+msgstr "Erlatiboa, ekitaldia amaitu ondoren"
 
 #: pretix/plugins/sendmail/forms.py:397
 msgctxt "sendmail_from"
 msgid "Restrict to orders with status"
-msgstr ""
+msgstr "Egoera duten eskaeretara mugatu"
 
 #: pretix/plugins/sendmail/forms.py:412
 msgid "Please specify the send date"
-msgstr ""
+msgstr "Zehaztu bidalketa-data"
 
 #: pretix/plugins/sendmail/forms.py:417
 msgid "Please specify the offset days and time"
-msgstr ""
+msgstr "Zehaztu bidaiaren egunak eta ordua"
 
 #: pretix/plugins/sendmail/forms.py:428
 msgid "Please specify a product"
-msgstr ""
+msgstr "Mesedez zehaztu produktu bat"
 
 #: pretix/plugins/sendmail/models.py:51
 msgid "scheduled"
-msgstr ""
+msgstr "programatuta"
 
 #: pretix/plugins/sendmail/models.py:52
 msgid "failed"
-msgstr ""
+msgstr "huts egin du"
 
 #: pretix/plugins/sendmail/models.py:53
 msgid "completed"
-msgstr ""
+msgstr "osatuta"
 
 #: pretix/plugins/sendmail/models.py:54
 msgid "missed"
-msgstr ""
+msgstr "huts egin du"
 
 #: pretix/plugins/sendmail/models.py:217
 msgid "Everyone who created a ticket order"
-msgstr ""
+msgstr "Sarrera eskaera bat sortu duten guztiak"
 
 #: pretix/plugins/sendmail/models.py:223
 msgid "Everyone"
-msgstr ""
+msgstr "Guztiak"
 
 #: pretix/plugins/sendmail/models.py:224
 msgid "Anyone who is or was checked in"
-msgstr ""
+msgstr "Erregistratuta dagoen edo egon den edozein pertsona"
 
 #: pretix/plugins/sendmail/models.py:225
 msgid "Anyone who never checked in before"
-msgstr ""
+msgstr "Aurretik erregistratu ez den edonor"
 
 #: pretix/plugins/sendmail/models.py:236
 msgid "Limit products"
-msgstr ""
+msgstr "Produktuak mugatu"
 
 #: pretix/plugins/sendmail/models.py:239
 msgid "Restrict to orders with status"
-msgstr ""
+msgstr "Egoera duten eskaeretara mugatu"
 
 #: pretix/plugins/sendmail/models.py:244
 msgid "Restrict to check-in status"
-msgstr ""
+msgstr "Mugatu fakturazio-egoerara"
 
 #: pretix/plugins/sendmail/models.py:258
 msgid "Send date"
-msgstr ""
+msgstr "Bidali data"
 
 #: pretix/plugins/sendmail/models.py:260
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
 msgid "Time of day"
-msgstr ""
+msgstr "Eguneko ordua"
 
 #: pretix/plugins/sendmail/models.py:266
 msgid "Send email to"
-msgstr ""
+msgstr "E-maila bidali"
 
 #: pretix/plugins/sendmail/models.py:271
 msgid "Only enabled rules are actually sent"
-msgstr ""
+msgstr "Aktibatutako arauak bakarrik bidaltzen dira"
 
 #: pretix/plugins/sendmail/models.py:318
 #, python-brace-format
 msgid "on {date} at {time}"
-msgstr ""
+msgstr "{date}n {time}n"
 
 #: pretix/plugins/sendmail/models.py:324
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d ekitaldia amaitu eta hurrengo egunean, %(time)s-etan"
+msgstr[1] "%(count)d ekitaldia amaitu eta hurrengo egunetan, %(time)s-etan"
 
 #: pretix/plugins/sendmail/models.py:333
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d ekitaldia amaitu eta aurreko egunean, %(time)s-etan"
+msgstr[1] "%(count)d ekitaldia amaitu eta aurreko egunetan, %(time)s-etan"
 
 #: pretix/plugins/sendmail/models.py:343
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d ekitaldia hasi eta hurrengo egunean, %(time)s-etan"
+msgstr[1] "%(count)d ekitaldia hasi eta hurrengo egunetan, %(time)s-etan"
 
 #: pretix/plugins/sendmail/models.py:352
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d ekitaldia hasi eta aurreko egunean, %(time)s-etan"
+msgstr[1] "%(count)d ekitaldia hasi eta aurreko egunetan, %(time)s-etan"
 
 #: pretix/plugins/sendmail/signals.py:99
 msgid "Scheduled emails"
-msgstr ""
+msgstr "Programatutako e-mailak"
 
 #: pretix/plugins/sendmail/signals.py:122
 msgid "Mass email was sent to customers or attendees."
 msgstr ""
+"Mezu elektroniko masiboak bidali zaizkien bezero edo bertaratuko diren "
+"pertsonei."
 
 #: pretix/plugins/sendmail/signals.py:123
 msgid "Mass email was sent to waiting list entries."
 msgstr ""
+"Itxarote-zerrendan izena eman dutenei mezu elektroniko masibo bat bidali "
+"zaie."
 
 #: pretix/plugins/sendmail/signals.py:124
 msgid "The order received a mass email."
-msgstr ""
+msgstr "Eskaerak mezu elektroniko masibo bat jaso du."
 
 #: pretix/plugins/sendmail/signals.py:125
 msgid "A ticket holder of this order received a mass email."
-msgstr ""
+msgstr "Eskaera horren titular batek mezu elektroniko masibo bat jaso du."
 
 #: pretix/plugins/sendmail/signals.py:126
 msgid "An email rule was created"
-msgstr ""
+msgstr "Posta elektronikoko arau bat sortu da"
 
 #: pretix/plugins/sendmail/signals.py:127
 msgid "An email rule was updated"
-msgstr ""
+msgstr "Posta elektronikoko arau bat eguneratu da"
 
 #: pretix/plugins/sendmail/signals.py:128
 msgid "A scheduled email was sent to the order"
-msgstr ""
+msgstr "Mezu elektroniko programatu bat bidali da eskaerara"
 
 #: pretix/plugins/sendmail/signals.py:129
 msgid "A scheduled email was sent to a ticket holder"
-msgstr ""
+msgstr "Mezu elektroniko programatu bat bidali zaio sarreren titular bati"
 
 #: pretix/plugins/sendmail/signals.py:130
 msgid "An email rule was deleted"
-msgstr ""
+msgstr "E-mail arau bat ezabatu da"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:8
 msgid ""
 "This page shows you all mass emails you sent out manually. It does not "
 "include emails sent out automatically."
 msgstr ""
+"Orri honek eskuz bidalitako mezu elektroniko masibo guztiak erakusten ditu. "
+"Ez dira sartzen automatikoki bidalitako mezu elektronikoak."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:35
 msgid "Send a new email based on this"
-msgstr ""
+msgstr "Bidali mezu elektroniko berri bat honetan oinarrituta"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:2
 msgid "Sent to orders:"
-msgstr ""
+msgstr "Eskaeretara bidali:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:11
 msgid "All customers not checked in"
-msgstr ""
+msgstr "Izena eman ez duten bezero guztiak"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:23
 msgid "Attendee contact addresses"
-msgstr ""
+msgstr "Bertaratuko den pertsonaren harremanetarako helbidea"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:25
 msgid "All contact addresses"
-msgstr ""
+msgstr "Harremanetarako helbide guztiak"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:27
 msgid "Order contact addresses"
-msgstr ""
+msgstr "Eskaeren harremanetarako helbideak"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:6
 msgid "Create Email Rule"
-msgstr ""
+msgstr "Email araua sortu"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:9
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
@@ -28489,6 +28699,8 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
 msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr ""
+"Programatutako mezu elektronikoak ez dira bidaltzen sarrera-denda "
+"deskonektatuta dagoen bitartean."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:63
@@ -28497,96 +28709,108 @@ msgid ""
 "your configured date. Typically, this will not be more than 10 minutes. Your "
 "email will never be sent earlier than the time you configured."
 msgstr ""
+"Arrazoi teknikoak direla eta, baliteke posta elektronikoa konfiguratutako "
+"data baino beranduago bidaltzea. Normalean, ez dira 10 minutu baino gehiago "
+"izango. Posta elektronikoa ez da inoiz bidaliko konfiguratutako ordua baino "
+"lehen."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:6
 msgid "Delete Email Rule"
-msgstr ""
+msgstr "Email araua ezabatu"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the rule <strong>%(subject)s</strong>?"
-msgstr ""
+msgstr "Ziur zaude <strong>%(subject)s</strong> araua ezabatu nahi duzula?"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:6
 msgid "Inspect Email Rule"
-msgstr ""
+msgstr "Email araua arakatu"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:8
 msgid "This page shows when your rule is planned to be sent."
-msgstr ""
+msgstr "Orri honek zure araua noiz bidaltzea aurreikusten den erakusten du."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:18
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:29
 msgid "Email subject"
-msgstr ""
+msgstr "E-mailaren gaia"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:30
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:31
 msgid "Scheduled time"
-msgstr ""
+msgstr "Programatutako ordua"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:35
 msgid "Last schedule computation"
-msgstr ""
+msgstr "Azken ordu-zenbaketa"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
 msgid "Scheduled email rules"
-msgstr ""
+msgstr "Programatutako posta elektronikoaren arauak"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
 "Email rules allow you to automatically send emails to your customers at a "
 "specific time before or after your event."
 msgstr ""
+"Posta elektronikoko arauen bidez, automatikoki bidal diezazkiekezu mezu "
+"elektronikoak bezeroei, ekitaldia izan baino ordu jakin bat lehenago edo "
+"geroago."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:101
 msgid "Create a new rule"
-msgstr ""
+msgstr "Arau berria sortu"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:33
 msgctxt "subevent"
 msgid "Sent / Total dates"
-msgstr ""
+msgstr "Bidalita / Datak guztira"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:52
 msgid "Next execution:"
-msgstr ""
+msgstr "Hurrengo bidalketa:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:56
 msgid "unknown"
-msgstr ""
+msgstr "ezezaguna"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:60
 msgid "Last execution:"
-msgstr ""
+msgstr "Azken bidalketa:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:82
 msgid "Inspect scheduled times"
-msgstr ""
+msgstr "Programatutako orduak arakatu"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:83
 msgid "Use as a template for a new rule"
-msgstr ""
+msgstr "Erabili arau berri baterako txantiloitzat"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:7
 msgid "Update Email Rule"
-msgstr ""
+msgstr "E-mail araua eguneratu"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:21
 msgid ""
 "This email has already been sent for all existing dates. Changing it will "
 "have no effect unless you create additional dates in this event series."
 msgstr ""
+"Mezu elektroniko hau dagoeneko bidali da egun guztietarako. Aldatzeak ez du "
+"inolako eraginik izango, ekitaldi-serie honetan data gehigarriak sortzen ez "
+"badituzu."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:23
 msgid "This email has already been sent. Changing it will have no effect."
 msgstr ""
+"Mezu elektroniko hau dagoeneko bidali da. Aldatzeak ez du inolako eraginik "
+"izango."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:28
 msgid ""
@@ -28594,18 +28818,21 @@ msgid ""
 "Changing it will only have an effect on dates for which the email has not "
 "yet been sent."
 msgstr ""
+"Mezu elektroniko hau dagoeneko bidali da zure serieko data batzuetarako. "
+"Aldatzeak oraindik posta elektronikoa bidali ez den egunetan bakarrik izango "
+"du eragina."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:76
 msgid "You need to preview your email before you can send it."
-msgstr ""
+msgstr "Zure posta elektronikoa aurrez bistaratu behar duzu bidali aurretik."
 
 #: pretix/plugins/sendmail/views.py:173 pretix/plugins/sendmail/views.py:171
 msgid "You supplied an invalid log entry ID"
-msgstr ""
+msgstr "Erregistro-sarreran balio ez duen ID bat sartu duzu"
 
 #: pretix/plugins/sendmail/views.py:186 pretix/plugins/sendmail/views.py:184
 msgid "There are no matching recipients for your selection."
-msgstr ""
+msgstr "Ez dago zure hautaketarekin bat datorren hartzailerik."
 
 #: pretix/plugins/sendmail/views.py:223 pretix/plugins/sendmail/views.py:221
 #, python-format
@@ -28613,61 +28840,70 @@ msgid ""
 "Your message has been queued and will be sent to the contact addresses of %s "
 "in the next few minutes."
 msgstr ""
+"Zure mezua ilaran jarri da eta %s-(r)en harremanetarako helbideetara "
+"bidaliko da datozen minutuetan."
 
 #: pretix/plugins/sendmail/views.py:253 pretix/plugins/sendmail/views.py:251
 msgid "Orders or attendees"
-msgstr ""
+msgstr "Eskaerak edo bertaratuko diren pertsonak"
 
 #: pretix/plugins/sendmail/views.py:254 pretix/plugins/sendmail/views.py:252
 msgid ""
 "Send an email to every customer, or to every person a ticket has been "
 "purchased for, or a combination of both."
 msgstr ""
+"Bidali mezu elektroniko bat bezero bakoitzari, edo sarrera bat erosi diozun "
+"pertsona bakoitzari, edo bien arteko konbinazioa."
 
 #: pretix/plugins/sendmail/views.py:420 pretix/plugins/sendmail/views.py:418
 #, python-format
 msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s eskaerarekin bat egiten dute"
+msgstr[1] "%(number)s eskaerekin bat egiten dute"
 
 #: pretix/plugins/sendmail/views.py:449 pretix/plugins/sendmail/views.py:447
 msgid ""
 "Send an email to every person currently waiting to receive a voucher through "
 "the waiting list feature."
 msgstr ""
+"Bidali mezu elektroniko bat itxarote-zerrendaren funtzioaren bidez sarrera "
+"bat jasotzeko zain dauden pertsona guztiei."
 
 #: pretix/plugins/sendmail/views.py:516 pretix/plugins/sendmail/views.py:514
 #, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s itxaron-zerrendako sarrera"
+msgstr[1] "%(number)s itxaron-zerrendako sarrerak"
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:8
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:10
 msgid "Statistics"
-msgstr ""
+msgstr "Estatistikak"
 
 #: pretix/plugins/statistics/apps.py:37
 msgid "Get a birds-eye view of your event sales with graphical statistics."
 msgstr ""
+"Lortu zure ekitaldiko salmenten txori-ikuspegia estatistika grafikoekin."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:19
 msgid "Orders by day"
-msgstr ""
+msgstr "Eskaerak egunka"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:25
 msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
 "payment."
 msgstr ""
+"Hainbat ordainketatan ordaindutako eskaerak azken ordainketaren datarekin "
+"bistaratzen dira."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:34
 msgid "Revenue over time"
-msgstr ""
+msgstr "Irabaziak denboran zehar"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:40
 msgctxt "subevent"
@@ -28675,72 +28911,79 @@ msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
 msgstr ""
+"Data bakarra aukeratzen baduzu, ordainketa-metodoen tasak ez dira hemen "
+"agertuko, agian ez baitago argi zein egunetakoak diren."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:48
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
 msgstr ""
+"Osorik ordaindutako eskaerak bakarrik kontabilizatzen dira. Hainbat "
+"ordainketatan ordaindutako eskaerak azken ordainketaren datarekin "
+"bistaratzen dira."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:67
 msgid "Seating Overview"
-msgstr ""
+msgstr "Eserlekuak Bistaratu"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
 msgid "Sold Seats"
-msgstr ""
+msgstr "Saldutako Eserlekuak"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:80
 msgid "Blocked Seats"
-msgstr ""
+msgstr "Eserlekuak Blokeatuta"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:86
 msgid "Free Seats"
-msgstr ""
+msgstr "Eserlekuak Libre"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:94
 msgid "Seating Sales Potentials"
-msgstr ""
+msgstr "Eserlekuen salmenta-potentzialak"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:102
 msgid "Unsold Seats"
-msgstr ""
+msgstr "Saldu gabeko eserlekuak"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:103
 msgid "Potential Profits"
-msgstr ""
+msgstr "Mozkin potentzialak"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:107
 msgid "Minimum Price"
-msgstr ""
+msgstr "Gutxieneko prezioa"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
 msgid "Available"
-msgstr ""
+msgstr "Eskuragarri"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
 msgid "On Sale"
-msgstr ""
+msgstr "Salgai"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:136
 msgid "Not on Sale"
-msgstr ""
+msgstr "Ez dago salgai"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:146
 msgid "Seats not attributed to any specific product"
-msgstr ""
+msgstr "Produktu jakin bati esleitu gabeko lanpostuak"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:172
 msgid ""
 "We will show you a variety of statistics about your sales right here, as "
 "soon as the first orders are submitted!"
 msgstr ""
+"Zure salmentei buruzko hainbat estatistika erakutsiko dizkizugu hemen "
+"bertan, lehen eskaerak bidali bezain laster!"
 
 #: pretix/plugins/stripe/apps.py:31 pretix/plugins/stripe/apps.py:34
 #: pretix/plugins/stripe/payment.py:163
 msgid "Stripe"
-msgstr ""
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/apps.py:40
 msgid ""
@@ -28748,6 +28991,10 @@ msgid ""
 "Stripe supports payments via credit cards as well as many local payment "
 "methods such as iDEAL, Alipay,and many more."
 msgstr ""
+"Onartu ordainketak Stripe bitartez, mundu osoan oso ezaguna den ordainketa-"
+"zerbitzuen hornitzailea. Stripek kreditu-txartelarekin ordaintzeko aukera "
+"ematen du, eta tokiko ordainketa-metodo asko ere bai, hala nola iDEAL, "
+"Alipay eta beste asko."
 
 #: pretix/plugins/stripe/forms.py:40
 #, python-format
@@ -28755,18 +29002,20 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
+"\"%(value)s\" emandako gakoak ez dirudi baliozkoa. \"%(prefix)s\"-tik hasi "
+"beharko luke."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:159
 msgid "Stripe Connect: App fee (percent)"
-msgstr ""
+msgstr "Stripe Connect: App-aren tasa (ehunekoa)"
 
 #: pretix/plugins/stripe/forms.py:55 pretix/plugins/stripe/signals.py:163
 msgid "Stripe Connect: App fee (max)"
-msgstr ""
+msgstr "Stripe Connect: App-aren tasa (max)"
 
 #: pretix/plugins/stripe/forms.py:59 pretix/plugins/stripe/signals.py:167
 msgid "Stripe Connect: App fee (min)"
-msgstr ""
+msgstr "Stripe Connect: App-aren tasa (min)"
 
 #: pretix/plugins/stripe/payment.py:192
 msgid ""
@@ -28774,14 +29023,17 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
+"Stripe bidez ordainketak onartzeko, Stripen kontu bat beharko duzu. Hurrengo "
+"botoian klik eginez, Stripe kontu berri bat sortu eta lehendik dagoen batera "
+"konekta zaitezke."
 
 #: pretix/plugins/stripe/payment.py:196
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "Stripe-ekin konektatu"
 
 #: pretix/plugins/stripe/payment.py:206
 msgid "Disconnect from Stripe"
-msgstr ""
+msgstr "Stripe-etik deskonektatu"
 
 #: pretix/plugins/stripe/payment.py:210
 msgid ""
@@ -28790,19 +29042,23 @@ msgid ""
 "automatically cancel orders when charges are refunded externally and to "
 "process asynchronous payment methods like SOFORT."
 msgstr ""
+"Mesedez, konfiguratu <a href=\"https://dashboard.stripe.com/account/"
+"webhooks\">Stripe Webhook</a> bat hurrengo amaiera puntura karguak kanpoan "
+"ordaintzen direnean eskaerak automatikoki ezeztatzeko eta SOFORT bezalako "
+"ordainketa-metodo asinkronoak prozesatzeko."
 
 #: pretix/plugins/stripe/payment.py:222
 msgid "Enable MOTO payments for resellers"
-msgstr ""
+msgstr "Birsaltzaileentzako MOTO ordainketak gaitu"
 
 #: pretix/plugins/stripe/payment.py:224
 msgid ""
 "Gated feature (needs to be enabled for your account by Stripe support first)"
-msgstr ""
+msgstr "Gated funtzioa (Stripe-ek gaitu behar du zure konturako)"
 
 #: pretix/plugins/stripe/payment.py:232
 msgid "Stripe Integration security guide"
-msgstr ""
+msgstr "Stripe Integration segurtasun-gida"
 
 #: pretix/plugins/stripe/payment.py:226
 #, python-format
@@ -28814,34 +29070,42 @@ msgid ""
 "like the 40 page SAQ D. Please consult the %s for further information on "
 "this subject."
 msgstr ""
+"Birsaltzailearen interfazearen bidez egiten duzun kreditu-txartel bidezko "
+"transakzioa MOTO gisa marka dezakegu (posta bidezko eskaera / telefono "
+"bidezko eskaera), eta horrek bezeroaren autentifikazio-eskakizun sendoetatik "
+"salbuetsiko ditu (SCA). Hala ere: Funtzio hau aktibatzean, PCI-DSS "
+"autoebaluazio formularioak bete beharko dituzu urtero, 40 orrialdeko SAQ D "
+"bezala. Gai honi buruzko informazio gehiago nahi izanez gero, ikus %s."
 
 #: pretix/plugins/stripe/payment.py:248 pretix/plugins/stripe/payment.py:253
 msgid "Stripe account"
-msgstr ""
+msgstr "Stripe kontua"
 
 #: pretix/plugins/stripe/payment.py:261
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "Zuzenean"
 
 #: pretix/plugins/stripe/payment.py:262
 msgctxt "stripe"
 msgid "Testing"
-msgstr ""
+msgstr "Probatzen"
 
 #: pretix/plugins/stripe/payment.py:264
 msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
 msgstr ""
+"Zure gertaera proba moduan badago, beti erabiliko dugu Stripe probako APIa, "
+"konfigurazio hori edozein dela ere."
 
 #: pretix/plugins/stripe/payment.py:277
 msgid "Publishable key"
-msgstr ""
+msgstr "Gako publikagarria"
 
 #: pretix/plugins/stripe/payment.py:280
 msgid "Generate API keys"
-msgstr ""
+msgstr "API gakoak sortu"
 
 #: pretix/plugins/stripe/payment.py:282
 msgid ""
@@ -28849,20 +29113,25 @@ msgid ""
 "generate you API keys with the recommended permission level for optimal "
 "usage with pretix."
 msgstr ""
+"Goiko botoiak gure Stripe aplikazioa zure kontuan instalatuko du eta API "
+"gakoak sortuko dizkizu, pretix-en erabilera optimorako gomendatutako baimen "
+"mailarekin."
 
 #: pretix/plugins/stripe/payment.py:291
 msgid "Secret key"
-msgstr ""
+msgstr "Gako sekretua"
 
 #: pretix/plugins/stripe/payment.py:300
 msgid ""
 "The country in which your Stripe-account is registered in. Usually, this is "
 "your country of residence."
 msgstr ""
+"Stripeko kontua erregistratuta dagoen herrialdea. Normalean, hau da haien "
+"bizilekua."
 
 #: pretix/plugins/stripe/payment.py:309
 msgid "Check for Apple Pay/Google Pay"
-msgstr ""
+msgstr "Apple Pay/Google Pay egiaztatu"
 
 #: pretix/plugins/stripe/payment.py:313
 msgid ""
@@ -28872,10 +29141,15 @@ msgid ""
 "take into consideration if Google Pay/Apple Pay has been disabled in the "
 "Stripe Dashboard."
 msgstr ""
+"Bezeroaren web-nabigatzaileak diru-zorroan oinarritutako ordainketa-metodoak "
+"(Apple Pay edo Google Pay, adibidez) onartzen dituen egiaztatzen saiatuko da "
+"Pretix, eta kreditu-txartelarekin ordaintzeko metodoarekin batera "
+"nabarmenduko ditu. Detekzio horrek ez du kontuan hartzen Google Pay/Apple "
+"Pay desaktibatu den Stripe kontrol panelean."
 
 #: pretix/plugins/stripe/payment.py:322
 msgid "Statement descriptor postfix"
-msgstr ""
+msgstr "Postfix deklarazioaren deskribatzailea"
 
 #: pretix/plugins/stripe/payment.py:323
 #, python-brace-format
@@ -28886,10 +29160,15 @@ msgid ""
 "of characters is allowed. We do not recommend entering more than {cnt} "
 "characters into this field."
 msgstr ""
+"Hemen sartutako edozein balio kreditu-txartelaren fakturan edo bezeroaren "
+"banku-kontuaren transakzioan agertuko da. Automatikoki gehituko dugu eskaera-"
+"kodea aurrean. Kontuan izan, ordainketa-metodoaren arabera, karaktere-kopuru "
+"oso mugatua onartzen dela. Ez dugu gomendatzen eremu honetan {cnt} karaktere "
+"baino gehiago sartzea."
 
 #: pretix/plugins/stripe/payment.py:337
 msgid "Credit card payments"
-msgstr ""
+msgstr "Kreditu txartelaren ordainketak"
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1531
 #: pretix/plugins/stripe/payment.py:1523
@@ -28907,11 +29186,13 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before they work properly."
 msgstr ""
+"Baliteke ordainketa-metodo batzuk zure Stripe kontuaren konfigurazioan gaitu "
+"behar izatea, behar bezala funtziona dezaten."
 
 #: pretix/plugins/stripe/payment.py:350 pretix/plugins/stripe/payment.py:1556
 #: pretix/plugins/stripe/payment.py:1548
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1568
 #: pretix/plugins/stripe/payment.py:1560
@@ -28927,6 +29208,8 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before work properly."
 msgstr ""
+"Baliteke ordainketa-metodo batzuk zure Stripe kontuaren konfigurazioan gaitu "
+"behar izatea, behar bezala funtziona dezaten."
 
 #: pretix/plugins/stripe/payment.py:372
 msgid ""
@@ -28935,16 +29218,22 @@ msgid ""
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
+"SEPAk Stripe bidez egindako zuzeneko zordunketa-ordainketak <strong>ez</"
+"strong> berehala prozesatzen dira, baina <strong>14 egun</strong> ere har "
+"ditzakete zenbait kasutan berresteko. Mesedez, ordainketa-metodo hau soilik "
+"aktibatu zure ordainketa-epeak atzerapen hori ahalbidetzen badu."
 
 #: pretix/plugins/stripe/payment.py:380
 msgid "SEPA Creditor Mandate Name"
-msgstr ""
+msgstr "SEPA Hartzekoduna Agindua Izena"
 
 #: pretix/plugins/stripe/payment.py:382
 msgid ""
 "Please provide your SEPA Creditor Mandate Name, that will be displayed to "
 "the user."
 msgstr ""
+"Adierazi zure SEPA hartzekodun-aginduaren izena, eta erabiltzaileari "
+"erakutsiko zaio."
 
 #: pretix/plugins/stripe/payment.py:393
 msgid "SOFORT"
@@ -28955,6 +29244,8 @@ msgid ""
 "Stripe is in the process of removing this payment method. If you created "
 "your Stripe account after November 2023, you cannot use this payment method."
 msgstr ""
+"Ordainketa metodo hori ezabatzeko bidean da Stripe. Stripe kontua 2023ko "
+"azaroaren ondoren sortu baduzu, ezingo duzu ordainketa metodo hau erabili."
 
 #: pretix/plugins/stripe/payment.py:399
 msgid ""
@@ -28963,16 +29254,20 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
+"Izena gorabehera, Stripe bidezko Sofort ordainketak <strong>ez</strong> "
+"berehala prozesatzen dira, eta, kasu batzuetan, <strong>14 egun</strong> "
+"behar izaten dira berresteko. Mesedez, aktibatu ordainketa-metodo hau soilik "
+"zure ordainketa-epeak atzerapen hori onartzen badu."
 
 #: pretix/plugins/stripe/payment.py:408 pretix/plugins/stripe/payment.py:1670
 #: pretix/plugins/stripe/payment.py:1662
 msgid "EPS"
-msgstr ""
+msgstr "EPS"
 
 #: pretix/plugins/stripe/payment.py:416 pretix/plugins/stripe/payment.py:1701
 #: pretix/plugins/stripe/payment.py:1693
 msgid "Multibanco"
-msgstr ""
+msgstr "Multibanco"
 
 #: pretix/plugins/stripe/payment.py:424 pretix/plugins/stripe/payment.py:1723
 #: pretix/plugins/stripe/payment.py:1715
@@ -28987,37 +29282,41 @@ msgstr "WeChat Pay"
 #: pretix/plugins/stripe/payment.py:448 pretix/plugins/stripe/payment.py:1815
 #: pretix/plugins/stripe/payment.py:440 pretix/plugins/stripe/payment.py:1789
 msgid "Swish"
-msgstr ""
+msgstr "Swish"
 
 #: pretix/plugins/stripe/payment.py:464 pretix/plugins/stripe/payment.py:1322
 #: pretix/plugins/stripe/payment.py:456 pretix/plugins/stripe/payment.py:1314
 msgid "Affirm"
-msgstr ""
+msgstr "Affirm"
 
 #: pretix/plugins/stripe/payment.py:469 pretix/plugins/stripe/payment.py:461
 msgid "Only available for payments between $50 and $30,000."
-msgstr ""
+msgstr "50 eta 30.000 $ arteko ordainketetarako bakarrik dago erabilgarri."
 
 #: pretix/plugins/stripe/payment.py:475 pretix/plugins/stripe/payment.py:1367
 #: pretix/plugins/stripe/payment.py:467 pretix/plugins/stripe/payment.py:1359
 msgid "Klarna"
-msgstr ""
+msgstr "Klarna"
 
 #: pretix/plugins/stripe/payment.py:482 pretix/plugins/stripe/payment.py:474
 msgid ""
 "Klarna and Stripe will decide which of the payment methods offered by Klarna "
 "are available to the user."
 msgstr ""
+"Klarnak eta Stripek erabakiko dute Klarnak eskaintzen dituen ordainketa "
+"metodoetatik zeintzuk dauden eskuragarri erabiltzailearentzat."
 
 #: pretix/plugins/stripe/payment.py:484 pretix/plugins/stripe/payment.py:476
 msgid ""
 "Klarna's terms of services do not allow it to be used by charities or "
 "political organizations."
 msgstr ""
+"Klarnaren zerbitzu baldintzek ez dute baimentzen erakunde ongile edo "
+"politikoek erabiltzea."
 
 #: pretix/plugins/stripe/payment.py:501 pretix/plugins/stripe/payment.py:493
 msgid "Destination"
-msgstr ""
+msgstr "Hartzailea"
 
 #: pretix/plugins/stripe/payment.py:531 pretix/plugins/stripe/payment.py:1437
 #: pretix/plugins/stripe/payment.py:523 pretix/plugins/stripe/payment.py:1429
