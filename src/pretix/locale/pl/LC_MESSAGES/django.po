@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-07-01 16:00+0000\n"
+"PO-Revision-Date: 2024-08-28 10:03+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: Weblate 5.7\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -259,10 +259,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Nieznany plugin: '{name}'."
 
 #: pretix/api/serializers/event.py:295
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Nieznany plugin: '{name}'."
+msgstr "Plugin z ograniczeniami: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
@@ -505,10 +504,8 @@ msgid "Order denied"
 msgstr "Zamówienie odrzucone"
 
 #: pretix/api/webhooks.py:313
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order deleted"
-msgstr "Zamówienie odrzucone"
+msgstr "Zamówienie skasowane"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -2287,10 +2284,8 @@ msgid "Order comment"
 msgstr "Komentarz do zamówienia"
 
 #: pretix/base/exporters/orderlist.py:622
-#, fuzzy
-#| msgid "Add-On to position #%(posid)s"
 msgid "Add-on to position ID"
-msgstr "Dodatek do pozycji #%(posid)s"
+msgstr "Dodatek do pozycji ID"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:340
 msgid "Invoice address street"
@@ -3873,6 +3868,10 @@ msgid ""
 "replacement, our new plugin \"Auto check-in\" can be used. When we remove "
 "this option, we will automatically migrate your event to use the new plugin."
 msgstr ""
+"Ta opcja jest przestarzała i zostanie usunięta w ciągu najbliższych "
+"miesięcy. Jako zamiennik można użyć naszej nowej wtyczki „Auto check-in”. "
+"Gdy usuniemy tę opcję, automatycznie zmigrujemy Twoje wydarzenie do "
+"korzystania z nowej wtyczki."
 
 #: pretix/base/models/checkin.py:340
 msgid "Entry"
@@ -5711,10 +5710,8 @@ msgid "Meta information"
 msgstr "Metadane"
 
 #: pretix/base/models/orders.py:303
-#, fuzzy
-#| msgid "Meta information"
 msgid "API meta information"
-msgstr "Metadane"
+msgstr "Metadane API"
 
 #: pretix/base/models/orders.py:392 pretix/plugins/sendmail/forms.py:236
 #: pretix/plugins/sendmail/forms.py:391 pretix/plugins/sendmail/views.py:272
@@ -8041,10 +8038,9 @@ msgstr ""
 "wydarzenia."
 
 #: pretix/base/services/mail.py:121
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid "This prefix has been set in your event or organizer settings."
-msgstr "Wybrany typ nośnika nie jest włączony w ustawieniach organizatora."
+msgstr ""
+"Prefiks ten został ustawiony w ustawieniach wydarzenia lub organizatora."
 
 #: pretix/base/services/mail.py:278
 #, python-brace-format
@@ -9675,6 +9671,11 @@ msgid ""
 "if they want more than one ticket, as every entry only grants one single "
 "ticket at a time."
 msgstr ""
+"Przy zwiększonym limicie klient może poprosić o więcej niż jeden bilet na "
+"konkretny produkt przy użyciu tego samego, unikalnego adresu e-mail. Jednak "
+"niezależnie od tego ustawienia, klient będzie musiał wypełnić formularz "
+"listy oczekujących wielokrotnie, jeśli chce otrzymać więcej niż jeden bilet, "
+"ponieważ każdy wpis przyznaje tylko jeden bilet na raz."
 
 #: pretix/base/settings.py:1493
 msgid "Show number of check-ins to customer"
@@ -11705,10 +11706,9 @@ msgstr ""
 "Data ostatniej płatności nie może przypadać przed końcem przedsprzedaży."
 
 #: pretix/base/settings.py:3811
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "The value \"{identifier}\" is not a valid sales channel."
-msgstr "Wprowadź dostępny kanał sprzedaży."
+msgstr "Wartość \"{identifier} nie jest prawidłowym kanałem sprzedaży."
 
 #: pretix/base/settings.py:3826
 msgid "This needs to be disabled if other NFC-based types are active."
@@ -15034,19 +15034,14 @@ msgid "or"
 msgstr "lub"
 
 #: pretix/control/forms/vouchers.py:293
-#, fuzzy
-#| msgid ""
-#| "You can either supply a list of email addresses with one email address "
-#| "per line, or a CSV file with a title column and one or more of the "
-#| "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgid ""
 "You can either supply a list of email addresses with one email address per "
 "line, or the contents of a CSV file with a title column and one or more of "
 "the columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
 "Możesz dostarczyć listę adresów e-mail z jednym adresem e-mail na wiersz lub "
-"plik CSV z kolumną tytułu i jedną lub kilkoma kolumnami \"e-mail\", "
-"\"numer\", \"nazwa\" lub \"tag\"."
+"zawartość pliku CSV z kolumną tytułu i jedną lub kilkoma kolumnami \"e-mail\""
+", \"numer\", \"nazwa\" lub \"tag\"."
 
 #: pretix/control/forms/vouchers.py:327
 msgid "Maximum usages per voucher"
@@ -19187,17 +19182,12 @@ msgstr ""
 "używana razem z funkcją minimalnej odległości w naszym module planu miejsc."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:377
-#, fuzzy
-#| msgctxt "sendmail_form"
-#| msgid "Waiting for"
 msgid "Waiting customers"
-msgstr "Oczekiwanie na"
+msgstr "Oczekujący klienci"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:383
-#, fuzzy
-#| msgid "Enable waiting list"
 msgid "Manage waiting list"
-msgstr "Włącz listę oczekujących"
+msgstr "Zarządzaj listą oczekujących"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:396
 msgid "Item metadata"
@@ -21128,6 +21118,9 @@ msgid ""
 "will not affect the membership. Memberships can be managed in the customer "
 "account."
 msgstr ""
+"Sprzedaż tej pozycji spowodowała utworzenie członkostwa. Zmiana produktu w "
+"tym miejscu nie wpłynie na członkostwo. Członkostwem można zarządzać na "
+"koncie klienta."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:208
 #: pretix/control/templates/pretixcontrol/order/change.html:426
@@ -21178,6 +21171,9 @@ msgid ""
 "ticket here will not affect the membership. Memberships can be managed in "
 "the customer account."
 msgstr ""
+"Sprzedaż tej pozycji spowodowała utworzenie członkostwa. Zmiana ważności "
+"biletu w tym miejscu nie wpłynie na członkostwo. Członkostwem można "
+"zarządzać na koncie klienta."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:290
 msgid ""
@@ -23943,30 +23939,24 @@ msgid "Flow multiple lines downward from specified position"
 msgstr "Wypełnij wiele linii w dół od określonej pozycji"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:452
-#, fuzzy
-#| msgid "Automatically refund money if possible"
 msgid "Automatically reduce font size to fit content"
-msgstr "Automatycznie zwróć pieniądze, jeśli to możliwe"
+msgstr "Automatyczne zmniejsz rozmiar czcionki w celu dopasowania do treści"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:458
 msgid "Allow long words to be split (preview is not accurate)"
-msgstr ""
+msgstr "Zezwalaj na dzielenie długich słów (podgląd nie jest dokładny)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:469
 msgid "Add a new object"
 msgstr "Dodaj nowy obiekt"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:474
-#, fuzzy
-#| msgid "Text color"
 msgid "Text box"
-msgstr "Kolor tekstu"
+msgstr "Pole tekstowe"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:478
-#, fuzzy
-#| msgid "Event created"
 msgid "Text (deprecated)"
-msgstr "Wydarzenie utworzone"
+msgstr "Tekst (przestarzałe)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:482
 msgid "QR code for Check-In"
@@ -24005,6 +23995,9 @@ msgid ""
 "use pretixPRINT version %(print_version)s (or newer) or pretixSCAN Desktop "
 "version %(scan_version)s (or newer)."
 msgstr ""
+"Ten układ wykorzystuje nowe funkcje. Jeśli drukujesz ze swojego urządzenia, "
+"upewnij się, że używasz pretixPRINT w wersji %(print_version)s (lub nowszej) "
+"lub pretixSCAN Desktop w wersji %(scan_version)s (lub nowszej)."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
 msgid "Available placeholders"
@@ -27223,133 +27216,99 @@ msgstr "Zespół Pretix"
 
 #: pretix/plugins/autocheckin/apps.py:39
 msgid "Automatically check-in specific tickets after they have been sold."
-msgstr ""
+msgstr "Automatycznie odpraw określone bilety po ich sprzedaży."
 
 #: pretix/plugins/autocheckin/forms.py:60
 #: pretix/plugins/autocheckin/models.py:82
-#, fuzzy
-#| msgid "All payment providers"
 msgid "Only including usage of payment providers"
-msgstr "Wszyscy dostawcy płatności"
+msgstr "Tylko z uwzględnieniem korzystania z dostawców usług płatniczych"
 
 #: pretix/plugins/autocheckin/forms.py:120
-#, fuzzy
-#| msgid "All actions"
 msgid "All variations"
-msgstr "Wszystkie działania"
+msgstr "Wszystkie warianty"
 
 #: pretix/plugins/autocheckin/forms.py:248
 msgid ""
 "When restricting by payment method, the rule should run after the payment "
 "was received."
 msgstr ""
+"W przypadku ograniczenia według metody płatności reguła powinna zostać "
+"uruchomiona po otrzymaniu płatności."
 
 #: pretix/plugins/autocheckin/models.py:36
-#, fuzzy
-#| msgid "New order placed"
 msgid "After order was placed"
-msgstr "Złożono zamówienie"
+msgstr "Po złożeniu zamówienia"
 
 #: pretix/plugins/autocheckin/models.py:37
-#, fuzzy
-#| msgid "Mark order as paid"
 msgid "After order was paid"
-msgstr "Oznacz zamówienie jako opłacone"
+msgstr "Po opłaceniu zamówienia"
 
 #: pretix/plugins/autocheckin/models.py:48
-#, fuzzy
-#| msgid "If you keep this empty, all input will be allowed."
 msgid ""
 "If you keep this empty, all lists that match the purchased product will be "
 "used."
 msgstr ""
-"Jeśli pozostawisz to pole puste, wszystkie dane wejściowe będą dozwolone."
+"Jeśli to pole pozostanie puste, użyte zostaną wszystkie listy pasujące do "
+"zakupionego produktu."
 
 #: pretix/plugins/autocheckin/models.py:59
-#, fuzzy
-#| msgid "Add sales channel"
 msgid "All sales channels"
-msgstr "Dodaj kanał sprzedaży"
+msgstr "Wszystkie kanały sprzedaży"
 
 #: pretix/plugins/autocheckin/models.py:69
-#, fuzzy
-#| msgid "Product variations"
 msgid "All products and variations"
-msgstr "Warianty produktu"
+msgstr "Wszystkie produkty i warianty produktu"
 
 #: pretix/plugins/autocheckin/models.py:78
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "All payment methods"
-msgstr "Aktywuj metodę płatności"
+msgstr "Wszystkie metody płatności"
 
 #: pretix/plugins/autocheckin/signals.py:47
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:13
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:13
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Auto check-in"
-msgstr "Automatyczna odprawa"
+msgstr "Auto-odprawa"
 
 #: pretix/plugins/autocheckin/signals.py:70
-#, fuzzy
-#| msgid "An email rule was created"
 msgid "An auto check-in rule was created"
-msgstr "Utworzono regułę wiadomości e-mail"
+msgstr "Utworzono regułę auto-odprawy"
 
 #: pretix/plugins/autocheckin/signals.py:72
-#, fuzzy
-#| msgid "An email rule was updated"
 msgid "An auto check-in rule was updated"
-msgstr "Zaktualizowano regułę wiadomości e-mail"
+msgstr "Zaktualizowano regułę auto-odprawy"
 
 #: pretix/plugins/autocheckin/signals.py:75
-#, fuzzy
-#| msgid "An email rule was deleted"
 msgid "An auto check-in rule was deleted"
-msgstr "Usunięto regułę wiadomości e-mail"
+msgstr "Usunięto regułę auto-odprawy"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Create auto check-in rule"
-msgstr "Niestandardowa reguła odprawy"
+msgstr "Utwórz regułę auto-odprawy"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
-#, fuzzy
-#| msgctxt "discount"
-#| msgid "Condition"
 msgid "Conditions"
-msgstr "Stan"
+msgstr "Warunki"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
-#, fuzzy
-#| msgid "Delete check-in list"
 msgid "Delete auto check-in rule"
-msgstr "Usuń listę odpraw"
+msgstr "Usuń regułę auto-odprawy"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete the auto check-in rule?"
-msgstr "Czy na pewno chcesz usunąć bramkę?"
+msgstr "Czy na pewno chcesz usunąć regułę auto-odprawy?"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Auto check-in rule"
-msgstr "Niestandardowa reguła odprawy"
+msgstr "Reguła auto-odprawy"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Auto check-in rules"
-msgstr "Niestandardowa reguła odprawy"
+msgstr "Reguły auto-odprawy"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:11
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
@@ -27358,16 +27317,12 @@ msgstr "Nie stworzyłeś jeszcze żadnych zasad."
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:17
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:22
-#, fuzzy
-#| msgid "Create a new check-in list"
 msgid "Create a new check-in rule"
-msgstr "Utwórz nową listę odpraw"
+msgstr "Utwórz nową regułę odpraw"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:32
-#, fuzzy
-#| msgid "Payment method"
 msgid "Payment methods"
-msgstr "Metoda płatności"
+msgstr "Metody płatności"
 
 #: pretix/plugins/autocheckin/views.py:119 pretix/plugins/sendmail/views.py:628
 msgid "Your rule has been created."
@@ -29040,6 +28995,9 @@ msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
+"Zwrot kwoty za pośrednictwem systemu PayPal nie powiódł się: Oryginalna "
+"płatność nie zawiera informacji wymaganych do automatycznego zwrotu "
+"pieniędzy."
 
 #: pretix/plugins/paypal2/payment.py:1087
 msgid "PayPal APM"
@@ -30684,26 +30642,20 @@ msgstr ""
 "WeChat. Prosimy o zachowanie danych logowania."
 
 #: pretix/plugins/stripe/payment.py:1788
-#, fuzzy
-#| msgid "WeChat Pay via Stripe"
 msgid "Revolut Pay via Stripe"
-msgstr "WeChat Pay przez Stripe"
+msgstr "Revolut Pay przez Stripe"
 
 #: pretix/plugins/stripe/payment.py:1789
 msgid "Revolut Pay"
-msgstr ""
+msgstr "Revolut Pay"
 
 #: pretix/plugins/stripe/payment.py:1793
-#, fuzzy
-#| msgid ""
-#| "This payment method is available to users of the Chinese app WeChat. "
-#| "Please keep your login information available."
 msgid ""
 "This payment method is available to users of the Revolut app. Please keep "
 "your login information available."
 msgstr ""
-"Ta metoda płatności jest dostępna dla użytkowników chińskiej aplikacji "
-"WeChat. Prosimy o zachowanie danych logowania."
+"Ta metoda płatności jest dostępna dla użytkowników aplikacji Revolut. "
+"Prosimy o zachowanie danych logowania."
 
 #: pretix/plugins/stripe/payment.py:1807
 msgid "PayPal via Stripe"
