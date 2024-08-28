@@ -258,7 +258,7 @@ class OrderViewSetMixin:
             return Prefetch(
                 'positions',
                 opq.all().prefetch_related(
-                    Prefetch('checkins', queryset=Checkin.objects.all()),
+                    Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                     Prefetch('item', queryset=self.request.event.items.prefetch_related(
                         Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
@@ -279,7 +279,7 @@ class OrderViewSetMixin:
             return Prefetch(
                 'positions',
                 opq.all().prefetch_related(
-                    Prefetch('checkins', queryset=Checkin.objects.all()),
+                    Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                     'item', 'variation',
                     Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
                     'seat',
@@ -1092,7 +1092,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                 'item_meta_properties',
             )
             qs = qs.prefetch_related(
-                Prefetch('checkins', queryset=Checkin.objects.all()),
+                Prefetch('checkins', queryset=Checkin.objects.select_related("device")),
                 Prefetch('item', queryset=self.request.event.items.prefetch_related(
                     Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
                              to_attr='meta_values_cached')
@@ -1111,7 +1111,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                     Prefetch(
                         'positions',
                         qs.prefetch_related(
-                            Prefetch('checkins', queryset=Checkin.objects.all()),
+                            Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                             Prefetch('item', queryset=self.request.event.items.prefetch_related(
                                 Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
                                          to_attr='meta_values_cached')
@@ -1135,7 +1135,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             )
         else:
             qs = qs.prefetch_related(
-                Prefetch('checkins', queryset=Checkin.objects.all()),
+                Prefetch('checkins', queryset=Checkin.objects.select_related("device")),
                 'answers', 'answers__options', 'answers__question',
             ).select_related(
                 'item', 'order', 'order__event', 'order__event__organizer', 'seat'

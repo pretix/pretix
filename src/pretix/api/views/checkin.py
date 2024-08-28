@@ -377,7 +377,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
                 Prefetch(
                     'positions',
                     OrderPosition.objects.prefetch_related(
-                        Prefetch('checkins', queryset=Checkin.objects.all()),
+                        Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                         'item', 'variation', 'answers', 'answers__options', 'answers__question',
                     )
                 )

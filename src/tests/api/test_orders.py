@@ -959,7 +959,7 @@ def test_refund_cancel(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
-def test_orderposition_list(token_client, organizer, event, order, item, subevent, subevent2, question):
+def test_orderposition_list(token_client, organizer, device, event, order, item, subevent, subevent2, question, django_assert_num_queries):
     i2 = copy.copy(item)
     i2.pk = None
     i2.save()
@@ -1060,19 +1060,22 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
 
     with scopes_disabled():
         cl = event.checkin_lists.create(name="Default")
-        c = op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=datetime.timezone.utc), list=cl)
+        c = op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=datetime.timezone.utc), list=cl, device=device)
         op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=datetime.timezone.utc), list=cl, successful=False)
     res['checkins'] = [{  # successful only
         'id': c.pk,
         'datetime': '2017-12-26T10:00:00Z',
         'list': cl.pk,
         'auto_checked_in': False,
-        'device': None,
+        'device': device.pk,
+        'device_id': device.device_id,
         'gate': None,
         'type': 'entry'
     }]
-    resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
+    with django_assert_num_queries(15):
+        resp = token_client.get(
+            '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug)
+        )
     assert [res] == resp.data['results']
 
     op.subevent = subevent
