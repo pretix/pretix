@@ -102,16 +102,24 @@
             </tr>
             </thead>
             <tbody>
-            {% for t in team.active_tokens %}
+            {% for t in tokens %}
                 <tr>
-                    <td>
+                    <td {% if not t.active %}class="text-muted"{% endif %}>
+                        {% if not t.active %}
+                            <del>
+                        {% endif %}
                         {{ t.name }}
+                        {% if not t.active %}
+                            </del>
+                        {% endif %}
                     </td>
                     <td class="text-right flip">
-                        <button type="submit" name="remove-token" value="{{ t.id }}"
-                                class="btn btn-danger btn-sm btn-block">
-                            <i class="fa fa-times"></i> {% trans "Remove" %}
-                        </button>
+                        {% if t.active %}
+                            <button type="submit" name="remove-token" value="{{ t.id }}"
+                                    class="btn btn-danger btn-sm btn-block">
+                                <i class="fa fa-times"></i> {% trans "Remove" %}
+                            </button>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

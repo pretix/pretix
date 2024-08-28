@@ -686,14 +686,24 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         try:
             self.object.log_action('pretix.team.deleted', user=self.request.user)
             self.object.delete()
-        except ProtectedError:
-            messages.error(
-                self.request,
-                _(
-                    'The team could not be deleted as some constraints (e.g. data created by '
-                    'plug-ins) do not allow it.'
+        except ProtectedError as e:
+            is_logs = any(isinstance(e, LogEntry) for e in e.protected_objects)
+            if is_logs:
+                messages.error(
+                    self.request,
+                    _(
+                        "The team could not be deleted because the team or one of its API tokens is part of "
+                        "historical audit logs."
+                    )
                 )
-            )
+            else:
+                messages.error(
+                    self.request,
+                    _(
+                        'The team could not be deleted as some constraints (e.g. data created by '
+                        'plug-ins) do not allow it.'
+                    )
+                )
             return redirect(success_url)
 
         messages.success(request, _('The selected team has been deleted.'))
@@ -723,6 +733,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         ctx = super().get_context_data(**kwargs)
         ctx['add_form'] = self.add_form
         ctx['add_token_form'] = self.add_token_form
+        ctx['tokens'] = self.object.tokens.order_by("-active", "name", "pk")
         return ctx
 
     def _send_invite(self, instance):
