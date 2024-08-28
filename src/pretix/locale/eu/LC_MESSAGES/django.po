@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-28 10:03+0000\n"
+"PO-Revision-Date: 2024-08-28 19:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -29326,30 +29326,34 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"Stripe plugina proba moduan ari da. <a {args}>proba txartel asko</a> erabil "
+"ditzakezu transakzio bat egiteko. Egia esan, ez da dirurik transferituko."
 
 #: pretix/plugins/stripe/payment.py:724 pretix/plugins/stripe/payment.py:716
 msgid "No payment information found."
-msgstr ""
+msgstr "Ez da ordainketa-daturik aurkitu."
 
 #: pretix/plugins/stripe/payment.py:762 pretix/plugins/stripe/payment.py:754
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
 msgstr ""
+"Stripekin komunikatzeko arazoak izan ditugu. Saiatu berriro, eta jarri "
+"harremanetan laguntza-zerbitzuarekin arazoak bere horretan jarraitzen badu."
 
 #: pretix/plugins/stripe/payment.py:766 pretix/plugins/stripe/payment.py:758
 msgid "Stripe returned an error"
-msgstr ""
+msgstr "Stripek akats bat itzuli du"
 
 #: pretix/plugins/stripe/payment.py:838 pretix/plugins/stripe/payment.py:830
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr ""
+msgstr "Baliteke JavaScript aktibatu behar izatea Stripe ordaintzeko."
 
 #: pretix/plugins/stripe/payment.py:933 pretix/plugins/stripe/payment.py:1055
 #: pretix/plugins/stripe/payment.py:925 pretix/plugins/stripe/payment.py:1047
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr ""
+msgstr "Stripek errore baten berri eman du zure txartelarekin: %s"
 
 #: pretix/plugins/stripe/payment.py:951 pretix/plugins/stripe/payment.py:1067
 #: pretix/plugins/stripe/payment.py:943 pretix/plugins/stripe/payment.py:1059
@@ -29357,69 +29361,73 @@ msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
+"Stripekin komunikatzeko arazoak izan ditugu. Saiatu berriro eta jarri "
+"gurekin harremanetan arazoak jarraitzen badu."
 
 #: pretix/plugins/stripe/payment.py:992 pretix/plugins/stripe/payment.py:984
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"Ordainketa osatzeko dago. Ordainketa amaitu bezain laster jakinaraziko "
+"dizugu."
 
 #: pretix/plugins/stripe/payment.py:1000 pretix/plugins/stripe/payment.py:992
 msgid "Your payment failed. Please try again."
-msgstr ""
+msgstr "Zure ordainketak huts egin du. Mesedez, saiatu berriro."
 
 #: pretix/plugins/stripe/payment.py:1006 pretix/plugins/stripe/payment.py:998
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr ""
+msgstr "Stripek errore baten berri eman du: %s"
 
 #: pretix/plugins/stripe/payment.py:1107 pretix/plugins/stripe/payment.py:1099
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "Stripe bidezko kreditu txartela"
 
 #: pretix/plugins/stripe/payment.py:1108 pretix/plugins/stripe/payment.py:1100
 msgid "Credit card"
-msgstr ""
+msgstr "Kreditu txartela"
 
 #: pretix/plugins/stripe/payment.py:1195 pretix/plugins/stripe/payment.py:1187
 msgid "SEPA Debit via Stripe"
-msgstr ""
+msgstr "Stripe bidezko SEPA Debitua"
 
 #: pretix/plugins/stripe/payment.py:1196 pretix/plugins/stripe/payment.py:1188
 msgid "SEPA Debit"
-msgstr ""
+msgstr "SEPA Debitua"
 
 #: pretix/plugins/stripe/payment.py:1236 pretix/plugins/stripe/payment.py:1228
 msgid "Account Holder Name"
-msgstr ""
+msgstr "Kontuaren titularraren izena"
 
 #: pretix/plugins/stripe/payment.py:1241 pretix/plugins/stripe/payment.py:1233
 msgid "Account Holder Street"
-msgstr ""
+msgstr "Kontuaren titularraren kalea"
 
 #: pretix/plugins/stripe/payment.py:1253 pretix/plugins/stripe/payment.py:1245
 msgid "Account Holder Postal Code"
-msgstr ""
+msgstr "Kontuaren titularraren posta kodea"
 
 #: pretix/plugins/stripe/payment.py:1265 pretix/plugins/stripe/payment.py:1257
 msgid "Account Holder City"
-msgstr ""
+msgstr "Kontuaren titularraren herria"
 
 #: pretix/plugins/stripe/payment.py:1277 pretix/plugins/stripe/payment.py:1269
 msgid "Account Holder Country"
-msgstr ""
+msgstr "Kontuaren titularraren probintzia"
 
 #: pretix/plugins/stripe/payment.py:1321 pretix/plugins/stripe/payment.py:1313
 msgid "Affirm via Stripe"
-msgstr ""
+msgstr "Stripe bidezko Affirm"
 
 #: pretix/plugins/stripe/payment.py:1366 pretix/plugins/stripe/payment.py:1358
 msgid "Klarna via Stripe"
-msgstr ""
+msgstr "Stripe bidezko Klarna"
 
 #: pretix/plugins/stripe/payment.py:1483 pretix/plugins/stripe/payment.py:1475
 msgid "giropay via Stripe"
-msgstr ""
+msgstr "Stripe bidezko giropay"
 
 #: pretix/plugins/stripe/payment.py:1484 pretix/plugins/stripe/payment.py:1476
 msgid "giropay"
@@ -29431,12 +29439,15 @@ msgid ""
 "German banks, usually after one-time activation. Please keep your online "
 "banking account and login information available."
 msgstr ""
+"giropay Alemaniako banku gehienetako bezero guztientzat eskuragarri dagoen "
+"online ordainketa metodoa da, normalean aktibazio bakar baten ondoren. "
+"Mesedez, eskura izan zure online banku-kontua eta sarbide-datuak."
 
 #: pretix/plugins/stripe/payment.py:1509 pretix/plugins/stripe/payment.py:1577
 #: pretix/plugins/stripe/payment.py:1679 pretix/plugins/stripe/payment.py:1501
 #: pretix/plugins/stripe/payment.py:1569 pretix/plugins/stripe/payment.py:1671
 msgid "unknown name"
-msgstr ""
+msgstr "izen ezezaguna"
 
 #: pretix/plugins/stripe/payment.py:1517 pretix/plugins/stripe/payment.py:1542
 #: pretix/plugins/stripe/payment.py:1585 pretix/plugins/stripe/payment.py:1687
@@ -29445,85 +29456,92 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:1679 pretix/plugins/stripe/payment.py:1740
 #, python-brace-format
 msgid "Bank account at {bank}"
-msgstr ""
+msgstr "{bank}-en banku kontua"
 
 #: pretix/plugins/stripe/payment.py:1530 pretix/plugins/stripe/payment.py:1522
 msgid "iDEAL via Stripe"
-msgstr ""
+msgstr "Stripe bidezko iDEAL"
 
 #: pretix/plugins/stripe/payment.py:1534 pretix/plugins/stripe/payment.py:1526
 msgid ""
 "iDEAL is an online payment method available to customers of Dutch banks. "
 "Please keep your online banking account and login information available."
 msgstr ""
+"iDEAL Holandako bankuetako bezeroentzat eskuragarri dagoen online ordainketa "
+"metodo bat da. Mesedez, eskura izan zure online banku-kontua eta sarbide-"
+"datuak."
 
 #: pretix/plugins/stripe/payment.py:1555 pretix/plugins/stripe/payment.py:1547
 msgid "Alipay via Stripe"
-msgstr ""
+msgstr "Stripe bidezko Alipay"
 
 #: pretix/plugins/stripe/payment.py:1560 pretix/plugins/stripe/payment.py:1552
 msgid ""
 "This payment method is available to customers of the Chinese payment system "
 "Alipay. Please keep your login information available."
 msgstr ""
+"Ordainketa metodo hau Txinako Alipay ordainketa sistemaren bezeroentzat "
+"eskuragarri dago. Mesedez, eskura izan zure sarbide-datuak."
 
 #: pretix/plugins/stripe/payment.py:1567 pretix/plugins/stripe/payment.py:1559
 msgid "Bancontact via Stripe"
-msgstr ""
+msgstr "Stripe bidezko Bancontact"
 
 #: pretix/plugins/stripe/payment.py:1598 pretix/plugins/stripe/payment.py:1590
 msgid "SOFORT via Stripe"
-msgstr ""
+msgstr "Stripe bidezko SOFORT"
 
 #: pretix/plugins/stripe/payment.py:1599 pretix/plugins/stripe/payment.py:1591
 msgid "SOFORT (instant bank transfer)"
-msgstr ""
+msgstr "SOFORT (momentuko banku transferentzia)"
 
 #: pretix/plugins/stripe/payment.py:1617 pretix/plugins/stripe/payment.py:1609
 msgid "Country of your bank"
-msgstr ""
+msgstr "Zure bankuaren herrialdea"
 
 #: pretix/plugins/stripe/payment.py:1618 pretix/plugins/stripe/payment.py:1610
 msgid "Germany"
-msgstr ""
+msgstr "Alemania"
 
 #: pretix/plugins/stripe/payment.py:1619 pretix/plugins/stripe/payment.py:1611
 msgid "Austria"
-msgstr ""
+msgstr "Austria"
 
 #: pretix/plugins/stripe/payment.py:1620 pretix/plugins/stripe/payment.py:1612
 msgid "Belgium"
-msgstr ""
+msgstr "Belgika"
 
 #: pretix/plugins/stripe/payment.py:1621 pretix/plugins/stripe/payment.py:1613
 msgid "Netherlands"
-msgstr ""
+msgstr "Herbehereak"
 
 #: pretix/plugins/stripe/payment.py:1622 pretix/plugins/stripe/payment.py:1614
 msgid "Spain"
-msgstr ""
+msgstr "Espainia"
 
 #: pretix/plugins/stripe/payment.py:1658 pretix/plugins/stripe/payment.py:1650
 #, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr ""
+msgstr "{iban} {bank}-n banku kontua"
 
 #: pretix/plugins/stripe/payment.py:1669 pretix/plugins/stripe/payment.py:1661
 msgid "EPS via Stripe"
-msgstr ""
+msgstr "Stripe bidezko EPS"
 
 #: pretix/plugins/stripe/payment.py:1700 pretix/plugins/stripe/payment.py:1692
 msgid "Multibanco via Stripe"
-msgstr ""
+msgstr "Stripe bidezko Multibanco"
 
 #: pretix/plugins/stripe/payment.py:1704 pretix/plugins/stripe/payment.py:1696
 msgid ""
 "Multibanco is a payment method available to Portuguese bank account holders."
 msgstr ""
+"Multibanco Portugalgo banku-kontuen titularrek eskura duten ordainketa-"
+"bitarteko bat da."
 
 #: pretix/plugins/stripe/payment.py:1722 pretix/plugins/stripe/payment.py:1714
 msgid "Przelewy24 via Stripe"
-msgstr ""
+msgstr "Stripe bidezko Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:1726 pretix/plugins/stripe/payment.py:1718
 msgid ""
@@ -29531,122 +29549,133 @@ msgid ""
 "banks. Please keep your online banking account and login information "
 "available."
 msgstr ""
+"Przelewy24 Poloniako bankuetako bezeroentzat eskuragarri dagoen online "
+"ordainketa metodoa da. Mesedez, eskura izan zure online banku-kontua eta "
+"zure sarbide-datuak."
 
 #: pretix/plugins/stripe/payment.py:1761 pretix/plugins/stripe/payment.py:1753
 msgid "WeChat Pay via Stripe"
-msgstr ""
+msgstr "Stripe bidezko WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:1766 pretix/plugins/stripe/payment.py:1758
 msgid ""
 "This payment method is available to users of the Chinese app WeChat. Please "
 "keep your login information available."
 msgstr ""
+"Ordainketa metodo hau Txinako WeChat aplikazioaren erabiltzaileentzat "
+"eskuragarri dago. Eskura izan zure sarbide-datuak."
 
 #: pretix/plugins/stripe/payment.py:1788
 msgid "Revolut Pay via Stripe"
-msgstr ""
+msgstr "Stripe bidezko Revolut Pay"
 
 #: pretix/plugins/stripe/payment.py:1789
 msgid "Revolut Pay"
-msgstr ""
+msgstr "Revolut Pay"
 
 #: pretix/plugins/stripe/payment.py:1793
 msgid ""
 "This payment method is available to users of the Revolut app. Please keep "
 "your login information available."
 msgstr ""
+"Ordainketa metodo hau Revolut app-aren erabiltzaileentzat eskuragarri dago. "
+"Mesedez, eskura izan zure sarbide informazioa."
 
 #: pretix/plugins/stripe/payment.py:1807 pretix/plugins/stripe/payment.py:1781
 msgid "PayPal via Stripe"
-msgstr ""
+msgstr "Stripe bidezko PayPal"
 
 #: pretix/plugins/stripe/payment.py:1814 pretix/plugins/stripe/payment.py:1788
 msgid "Swish via Stripe"
-msgstr ""
+msgstr "Stripe bidezko Swish"
 
 #: pretix/plugins/stripe/payment.py:1819 pretix/plugins/stripe/payment.py:1793
 msgid ""
 "This payment method is available to users of the Swedish apps Swish and "
 "BankID. Please have your app ready."
 msgstr ""
+"Suediako Swish eta BankID aplikazioen erabiltzaileek erabil dezakete "
+"ordainketa metodo hau. Mesedez, prest izan zure aplikazioa."
 
 #: pretix/plugins/stripe/payment.py:1838 pretix/plugins/stripe/payment.py:1812
 msgid "TWINT via Stripe"
-msgstr ""
+msgstr "Stripe bidezko TWINT"
 
 #: pretix/plugins/stripe/payment.py:1843 pretix/plugins/stripe/payment.py:1817
 msgid ""
 "This payment method is available to users of the Swiss app TWINT. Please "
 "have your app ready."
 msgstr ""
+"Ordainketa metodo hau Suitzako TWINT aplikazioaren erabiltzaileentzat "
+"eskuragarri dago. Mesedez, izan zure aplikazioa prest."
 
 #: pretix/plugins/stripe/signals.py:92
 msgid "Charge succeeded."
-msgstr ""
+msgstr "Karga arrakastatsua."
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge refunded."
-msgstr ""
+msgstr "Karga itzulia."
 
 #: pretix/plugins/stripe/signals.py:94
 msgid "Charge updated."
-msgstr ""
+msgstr "Karga eguneratua."
 
 #: pretix/plugins/stripe/signals.py:95
 msgid "Charge pending"
-msgstr ""
+msgstr "Kargatzeke"
 
 #: pretix/plugins/stripe/signals.py:96
 msgid "Payment authorized."
-msgstr ""
+msgstr "Ordainketa baimendua."
 
 #: pretix/plugins/stripe/signals.py:97
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "Ordainketa baimena ukatua."
 
 #: pretix/plugins/stripe/signals.py:98
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "Ordainketa baimenak huts egin du."
 
 #: pretix/plugins/stripe/signals.py:104
 msgid "Charge failed. Reason: {}"
-msgstr ""
+msgstr "Kargak huts egin du: Zergatia {}"
 
 #: pretix/plugins/stripe/signals.py:106
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "Gatazka sortua: Zergatia {}"
 
 #: pretix/plugins/stripe/signals.py:108
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "Gatazka eguneratua: Zergatia {}"
 
 #: pretix/plugins/stripe/signals.py:110
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "Gatazka itxia: Egoera {}"
 
 #: pretix/plugins/stripe/signals.py:113
 msgid "Stripe reported an event: {}"
-msgstr ""
+msgstr "Stripek ekitaldi baten berri eman du: {}"
 
 #: pretix/plugins/stripe/signals.py:124
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Stripe Connect: Bezeroaren ID"
 
 #: pretix/plugins/stripe/signals.py:131
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Stripe Connect: Gako sekretua"
 
 #: pretix/plugins/stripe/signals.py:138
 msgid "Stripe Connect: Publishable key"
-msgstr ""
+msgstr "Stripe Connect: Gako publikagarria"
 
 #: pretix/plugins/stripe/signals.py:145
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Stripe Connect: Gako sekretua (proba)"
 
 #: pretix/plugins/stripe/signals.py:152
 msgid "Stripe Connect: Publishable key (test)"
-msgstr ""
+msgstr "Stripe Connect: Gako publikagarria (proba)"
 
 #: pretix/plugins/stripe/signals.py:178
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:3
@@ -29654,31 +29683,31 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:6
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:9
 msgid "Stripe Connect"
-msgstr ""
+msgstr "Stripe Connect"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "Zenbateko osoa zure kreditu-txarteletik kenduko da."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:12
 msgid "Card type"
-msgstr ""
+msgstr "Txartel mota"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 msgid "The total amount will be withdrawn from your bank account."
-msgstr ""
+msgstr "Zenbateko osoa zure banku-kontutik kenduko da."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:23
 msgid "Banking Institution"
-msgstr ""
+msgstr "Banku Erakundea"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:25
 msgid "Account number"
-msgstr ""
+msgstr "Kontu zenbakia"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:7
@@ -29689,46 +29718,59 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
+"Zure eskaera bidali ondoren, ordainketa-zerbitzuen hornitzailearengana "
+"bideratuko zaitugu ordainketa burutzeko. Ondoren, berriro ere hona "
+"bideratuko zaitugu sarrerak lortzeko."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
 "This transaction will be marked as Mail Order/Telephone Order, exempting it "
 "from Strong Customer Authentication (SCA) whenever possible"
 msgstr ""
+"Transakzio hori Posta bidezko eskaera/Telefono bidezko eskaera gisa "
+"markatuko da, eta, ahal den guztietan, Bezeroaren Autentifikazio Sendotik "
+"(SCA) salbuetsiko da"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:19
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr ""
+msgstr "Kreditu-txartelarekin ordaintzeko, aktibatu JavaScript."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:25
 msgid ""
 "You already entered a card number that we will use to charge the payment "
 "amount."
 msgstr ""
+"Dagoeneko sartu duzu ordainketaren zenbatekoa kargatzeko erabiliko dugun "
+"txartel-zenbakia."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:36
 msgid "Use a different card"
-msgstr ""
+msgstr "Txartel desberdin bat erabili"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:66
 msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"Zure ordainketa Stripe, Inc.-k prozesatuko du. Zure kreditu-txartelaren "
+"datuak zuzenean Stripe-ri transmitituko zaizkio eta ez dute inoiz gure "
+"zerbitzaririk ukituko."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
 msgid "For a SEPA Debit payment, please turn on JavaScript."
-msgstr ""
+msgstr "SEPA zordunketa bidezko ordainketa egiteko, aktibatu JavaScript."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:19
 msgid ""
 "You already entered a bank account that we will use to charge the payment "
 "amount."
 msgstr ""
+"Dagoeneko sartu duzu ordainketaren zenbatekoa kargatzeko erabiliko dugun "
+"banku-kontu bat."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:30
 msgid "Use a different account"
-msgstr ""
+msgstr "Kontu desberdin bat erabili"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:54
 #, python-format
@@ -29744,14 +29786,25 @@ msgid ""
 "statement that you can obtain from your bank. You agree to receive "
 "notifications for future debits up to 2 days before they occur."
 msgstr ""
+"Zure ordainketa-informazioa ematean eta ordainketa berrestean, baimena "
+"ematen diezu (A) %(sepa_creditor_name)s eta Stripe ordainketa-zerbitzuen "
+"gure hornitzaileari eta/edo PPRO tokiko zerbitzuen hornitzaileari zure "
+"bankuari aginduak bidaltzeko zure kontuan zordunketa egiteko, eta (B) zure "
+"bankuari zure kontuan zordunketa egiteko, jarraibide horien arabera. Zure "
+"eskubideen parte gisa, zure bankutik diru-itzulketa bat jasotzeko eskubidea "
+"duzu, zure bankuarekin duzun akordioaren baldintzen arabera. Itzulketa 8 "
+"asteko epean erreklamatu behar da, kontuan zordunketa egin zen egunetik "
+"zenbatzen hasita. Zure eskubideak zure bankuan lor dezakezun aitorpen batean "
+"azaltzen dira. Onartzen du etorkizuneko karguen jakinarazpenak jasotzea "
+"horiek gertatu baino 2 egun lehenago."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:7
 msgid "Charge ID"
-msgstr ""
+msgstr "Kargaren IDa"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:18
 msgid "MOTO"
-msgstr ""
+msgstr "MOTO"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:26
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:34
@@ -29761,96 +29814,107 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:64
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:67
 msgid "Payer name"
-msgstr ""
+msgstr "Ordaintzailearen izena"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
 msgid "Do you really want to disconnect your Stripe account?"
-msgstr ""
+msgstr "Ziur zaude zure Stripe kontua deskonektatu nahi duzula?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
 msgid "Disconnect"
-msgstr ""
+msgstr "Deskonektatu"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:6
 msgid "Payment instructions"
-msgstr ""
+msgstr "Ordainketa jarraibideak"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
 "In your online bank account or from an ATM, choose \"Payment and other "
 "services\"."
 msgstr ""
+"Online banku-kontuan edo kutxazain automatiko batetik, aukeratu «Ordainketa "
+"eta beste zerbitzu batzuk»."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:14
 msgid "Click \"Payments of services/shopping\"."
-msgstr ""
+msgstr "Egin klik «Zerbitzuen/erosketen ordainketak» aukeran."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:19
 msgid "Enter the entity number, reference number, and amount."
-msgstr ""
+msgstr "Sartu erakundearen zenbakia, erreferentzia-zenbakia eta zenbatekoa."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
 msgid "Entity number:"
-msgstr ""
+msgstr "Entitatearen zenbakia:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
 msgid "Reference number:"
-msgstr ""
+msgstr "Erreferentziazko zenbakia:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:35
 msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
+"Ordainketa-hornitzailearen erantzunaren zain gaude, zure ordainketari "
+"dagokionez. Jarri gurekin harremanetan honek pare bat egun baino gehiago "
+"irauten badu."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:42
 msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
+"Ordainketa berretsi behar duzu. Egin klik hurrengo estekan hori egiteko edo "
+"hasi ordainketa berri bat."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:48
 msgid "Confirm payment"
-msgstr ""
+msgstr "Ordainketa konfirmatu"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:54
 msgid ""
 "Please scan the barcode below to complete your WeChat payment. Once you have "
 "completed your payment, you can refresh this page."
 msgstr ""
+"Mesedez, eskaneatu beheko barra-kodea zure WeChat ordainketa osatzeko. "
+"Ordainketa burutu ondoren, orria freskatu dezakezu."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:62
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr ""
+msgstr "Ezin izan da ordainketa transakzioa burutu ondorengo arrazoiagatik:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
 msgid "Confirm payment: %(code)s"
-msgstr ""
+msgstr "Ordainketa konfirmatu: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:20
 msgid "Confirming your payment…"
-msgstr ""
+msgstr "Zure ordainketa konfirmatzen …"
 
 #: pretix/plugins/stripe/views.py:104 pretix/plugins/stripe/views.py:110
 #: pretix/plugins/stripe/views.py:137 pretix/plugins/stripe/views.py:149
 msgid "An error occurred during connecting with Stripe, please try again."
-msgstr ""
+msgstr "Stripe-ekin konektatzean errore bat gertatu da, mesedez saiatu geroago."
 
 #: pretix/plugins/stripe/views.py:157 pretix/plugins/stripe/views.py:159
 msgid "Stripe returned an error: {}"
-msgstr ""
+msgstr "Stripe-k errorea itzuli du: {}"
 
 #: pretix/plugins/stripe/views.py:162
 msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Zure Stripe kontua pretix-era konektatuta dago orain. Jarraian, ezarpenak "
+"xehetasun gehiagorekin alda ditzakezu."
 
 #: pretix/plugins/stripe/views.py:476
 msgid "Your Stripe account has been disconnected."
-msgstr ""
+msgstr "Zure Stripe-eko kontua deskonektatu egin da."
 
 #: pretix/plugins/stripe/views.py:506 pretix/plugins/stripe/views.py:525
 #: pretix/plugins/stripe/views.py:530
@@ -29858,99 +29922,109 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Barkatu, ordainketa prozesuan errore bat egon da. Mesedez, egiaztatu zure "
+"postan dagoen esteka jarraitzeko."
 
 #: pretix/plugins/stripe/views.py:562
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
 msgstr ""
+"Zure txartelaren ordainketa baimentzeko arazoak izan ditugu. Mesedez, saiatu "
+"berriro eta jarri gurekin harremanetan arazo honek jarraitzen badu."
 
 #: pretix/plugins/stripe/views.py:590 pretix/plugins/stripe/views.py:593
 msgid "Sorry, there was an error in the payment process."
-msgstr ""
+msgstr "Barkatu, akats bat egon da ordainketa prozesuan."
 
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
 msgid "PDF ticket output"
-msgstr ""
+msgstr "PDF sarreraren irteera"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:52
 msgid ""
 "Issue tickets as PDF files, usable on any device. Our drag-and-drop editor "
 "allows you to customize the layout of the PDF files to your brand."
 msgstr ""
+"Emititu txartelak PDF fitxategi gisa, edozein gailutan erabilgarriak. Gure "
+"drag-and-drop editoreak PDF fitxategien diseinua zure markara egokitzeko "
+"aukera ematen dizu."
 
 #: pretix/plugins/ticketoutputpdf/apps.py:71
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
 #: pretix/plugins/ticketoutputpdf/views.py:227
 msgid "Default layout"
-msgstr ""
+msgstr "Txantiloi lehenetsia"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:70
 msgid ""
 "Download PDF versions of all tickets in your event as one large PDF file."
 msgstr ""
+"Deskargatu zure ekitaldiko txartel guztien PDF bertsioak PDF fitxategi handi "
+"batean."
 
 #: pretix/plugins/ticketoutputpdf/forms.py:49
 #, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr ""
+msgstr "PDF sarrera txantiloia {channel}-entzako"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:52
 msgid "(Same as PDF ticket layout)"
-msgstr ""
+msgstr "(PDF txartelaren txantiloiaren berdina)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:54
 msgid "PDF ticket layout"
-msgstr ""
+msgstr "PDF txartelaren txantiloia"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:143
 msgid "Ticket layout created."
-msgstr ""
+msgstr "Sarrera txantiloia sortuta."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:144
 msgid "Ticket layout deleted."
-msgstr ""
+msgstr "Sarrera txantiloia ezabatuta."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:145
 msgid "Ticket layout changed."
-msgstr ""
+msgstr "Sarrera txantiloia aldatuta."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:158
 #, python-brace-format
 msgid "Ticket layout {val}"
-msgstr ""
+msgstr "Sarrera txantiloia {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/control_order_position_buttons.html:7
 msgid "Alternative ticket"
-msgstr ""
+msgstr "Bestelako sarrera"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr ""
+msgstr "Sarrera txantiloia"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Ziur al zaude <strong>%(layout)s</strong> txantiloia ezabatu nahi duzula?"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
 #, python-format
 msgid "Ticket layout: %(name)s"
-msgstr ""
+msgstr "Sarrera txantiloia: %(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
-msgstr ""
+msgstr "Sarrera diseinua"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
 msgid "You can modify the design after you saved this page."
-msgstr ""
+msgstr "Orri hau gorde ondoren diseinua aldatu dezakezu."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:3
 msgid ""
@@ -29960,108 +30034,117 @@ msgid ""
 "choice. The editor is easy to use thanks to its drag-and-drop user "
 "interface, but it requires a modern browser and a decent internet connection."
 msgstr ""
+"PDF sarreraren editorearekin sarreraren diseinua pertsonaliza dezakezu. Han, "
+"PDF fitxategi bat igo dezakezu sarrerentzako atzeko plano gisa eta gero, "
+"testu desberdinak eta QR kodeak kokatu ditzakezu atzeko planean nahi dituzun "
+"posizioetan. Editorea erabilerraza da bere drag-and-drop interfazearen "
+"bidez, baina nabigatzaile moderno bat eta interneterako konexio ona eskatzen "
+"ditu."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
 msgid "Open Layout Designer"
-msgstr ""
+msgstr "Ireki Diseinuaren Editorea"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Advanced mode (multiple layouts)"
-msgstr ""
+msgstr "Modu aurreratua (txantiloi ugari)"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:6
 msgid "Ticket layouts"
-msgstr ""
+msgstr "Sarrera txantiloiak"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:10
 msgid "You haven't created any layouts yet."
-msgstr ""
+msgstr "Oraindik ez duzu inongo txantiloirik sortu."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:17
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:24
 msgid "Create a new layout"
-msgstr ""
+msgstr "Txantiloi berria sortu"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:63
 msgid "PDF output"
-msgstr ""
+msgstr "PDF irteera"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:65
 msgid "Download tickets (PDF)"
-msgstr ""
+msgstr "Deskargatu sarrerak (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:66
 msgid "Download ticket (PDF)"
-msgstr ""
+msgstr "Deskargatu sarrera (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:62
 msgid "Default ticket layout"
-msgstr ""
+msgstr "Sarreren txantiloia lehenespenez"
 
 #: pretix/plugins/ticketoutputpdf/views.py:119
 msgid "The new ticket layout has been created."
-msgstr ""
+msgstr "Sarrera txantiloi berria sortu da."
 
 #: pretix/plugins/ticketoutputpdf/views.py:168
 #: pretix/plugins/ticketoutputpdf/views.py:198
 #: pretix/plugins/ticketoutputpdf/views.py:246
 msgid "The requested layout does not exist."
-msgstr ""
+msgstr "Eskatutako txantiloia ez da existitzen."
 
 #: pretix/plugins/ticketoutputpdf/views.py:210
 msgid "The selected ticket layout been deleted."
-msgstr ""
+msgstr "Aukeratutako sarrera txantiloia ezabatu egin da."
 
 #: pretix/plugins/ticketoutputpdf/views.py:250
 msgid "Ticket PDF layout: {}"
-msgstr ""
+msgstr "PDF sarrera txantiloia: {}"
 
 #: pretix/plugins/webcheckin/apps.py:30 pretix/plugins/webcheckin/apps.py:33
 msgid "Web-based check-in"
-msgstr ""
+msgstr "Web bidezko erregistroa"
 
 #: pretix/plugins/webcheckin/apps.py:38
 msgid "Turn your browser into a check-in device to perform access control."
 msgstr ""
+"Zure nabigatzailea sarrera gailu bihurtu dezakezu sarbide kontrola egiteko."
 
 #: pretix/plugins/webcheckin/signals.py:36
 msgid "Web Check-in"
-msgstr ""
+msgstr "Web bidezko erregistroa"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
 msgid "Check-in"
-msgstr ""
+msgstr "Erregistroa"
 
 #: pretix/presale/checkoutflow.py:116
 msgctxt "checkoutflow"
 msgid "Step"
-msgstr ""
+msgstr "Urratsa"
 
 #: pretix/presale/checkoutflow.py:248
 msgctxt "checkoutflow"
 msgid "Customer account"
-msgstr ""
+msgstr "Bezeroaren kontua"
 
 #: pretix/presale/checkoutflow.py:335
 msgid "We failed to process your authentication request, please try again."
 msgstr ""
+"Zure autentifikazio eskaerak prozesatzen huts egin dugu, mesedez saiatu "
+"berriro."
 
 #: pretix/presale/checkoutflow.py:398
 msgctxt "checkoutflow"
 msgid "Membership"
-msgstr ""
+msgstr "Bazkidetza"
 
 #: pretix/presale/checkoutflow.py:446 pretix/presale/checkoutflow.py:467
 msgid ""
 "Your cart includes a product that requires an active membership to be "
 "selected."
-msgstr ""
+msgstr "Zure saskian aktibo den bazkidetza bat eskatzen duen produktua dago."
 
 #: pretix/presale/checkoutflow.py:486
 msgctxt "checkoutflow"
 msgid "Add-on products"
-msgstr ""
+msgstr "Produktu gehigarriak"
 
 #: pretix/presale/checkoutflow.py:637 pretix/presale/checkoutflow.py:645
 #: pretix/presale/views/cart.py:183 pretix/presale/views/cart.py:188
@@ -30069,18 +30152,20 @@ msgstr ""
 #: pretix/presale/views/order.py:1490 pretix/presale/views/order.py:1498
 #: pretix/presale/views/order.py:1488 pretix/presale/views/order.py:1496
 msgid "Please enter numbers only."
-msgstr ""
+msgstr "Mesedez zenbakiak soilik sartu."
 
 #: pretix/presale/checkoutflow.py:717
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "Zure informazioa"
 
 #: pretix/presale/checkoutflow.py:943
 msgid ""
 "Unfortunately, based on the invoice address you entered, we're not able to "
 "sell you the selected products for tax-related legal reasons."
 msgstr ""
+"Zoritxarrez, sartu duzun faktura helbidearen arabera, ezin dizkizugu "
+"aukeratutako produktuak saldu zerga-gaiei buruzko lege-arrazoiak direla eta."
 
 #: pretix/presale/checkoutflow.py:949
 msgid ""
@@ -30088,53 +30173,58 @@ msgid ""
 "rate to your purchase and the price of the products in your cart has changed "
 "accordingly."
 msgstr ""
+"Sartu duzun faktura helbidearen ondorioz, zure erosketari tasa fiskal "
+"desberdin bat aplikatu behar diogu eta zure saskiko produktuen prezioa "
+"aldatuta dago."
 
 #: pretix/presale/checkoutflow.py:982
 msgid "Please enter your invoicing address."
-msgstr ""
+msgstr "Mesedez sartu zure fakturazio helbidea."
 
 #: pretix/presale/checkoutflow.py:986
 msgid "Please enter your name."
-msgstr ""
+msgstr "Mesedez sartu zure izena."
 
 #: pretix/presale/checkoutflow.py:1021 pretix/presale/checkoutflow.py:1026
 #: pretix/presale/checkoutflow.py:1031 pretix/presale/checkoutflow.py:1036
 #: pretix/presale/checkoutflow.py:1041
 msgid "Please fill in answers to all required questions."
-msgstr ""
+msgstr "Mesedez, bete beharrezkoak diren galdera guztiak."
 
 #: pretix/presale/checkoutflow.py:1202
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "Ordainketa"
 
 #: pretix/presale/checkoutflow.py:1315 pretix/presale/checkoutflow.py:1314
 msgid ""
 "Your payment method has been applied, but {} still need to be paid. Please "
 "select a payment method for the remainder."
 msgstr ""
+"Zure ordainketa metodoa aplikatu da, baina {} oraindik ordaindu behar da. "
+"Mesedez, hautatu ordainketa metodo bat gainerakoaren ordainketarako."
 
 #: pretix/presale/checkoutflow.py:1340 pretix/presale/views/order.py:688
 #: pretix/presale/checkoutflow.py:1339 pretix/presale/views/order.py:686
 msgid "Please select a payment method."
-msgstr ""
+msgstr "Mesedez aukeratu ordainketa modu bat."
 
 #: pretix/presale/checkoutflow.py:1367 pretix/presale/checkoutflow.py:1381
 #: pretix/presale/checkoutflow.py:1392 pretix/presale/checkoutflow.py:1366
 #: pretix/presale/checkoutflow.py:1380 pretix/presale/checkoutflow.py:1391
 msgid "Please select a payment method to proceed."
-msgstr ""
+msgstr "Mesedez aukeratu ordainketa modu bat jarraitzeko."
 
 #: pretix/presale/checkoutflow.py:1397 pretix/presale/views/order.py:438
 #: pretix/presale/views/order.py:519 pretix/presale/checkoutflow.py:1396
 #: pretix/presale/views/order.py:437 pretix/presale/views/order.py:518
 msgid "The payment information you entered was incomplete."
-msgstr ""
+msgstr "Sartu duzun ordainketa informazioa guztiz osatzeke dago."
 
 #: pretix/presale/checkoutflow.py:1442 pretix/presale/checkoutflow.py:1437
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr ""
+msgstr "Eskaera berrikusi"
 
 #: pretix/presale/checkoutflow.py:1536 pretix/presale/checkoutflow.py:1531
 msgid "You need to check all checkboxes on the bottom of the page."
