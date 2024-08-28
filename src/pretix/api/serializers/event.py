@@ -896,6 +896,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'locale',
         'last_order_modification_date',
         'show_quota_left',
+        'show_dates_on_frontpage',
         'max_items_per_order',
         'attendee_names_asked',
         'attendee_names_required',
