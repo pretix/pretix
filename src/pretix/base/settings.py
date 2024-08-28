@@ -1295,7 +1295,8 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Show event times and dates on the ticket shop"),
             help_text=_("If disabled, no date or time will be shown on the ticket shop's front page. This settings "
-                        "does however not affect the display in other locations."),
+                        "also affects a few other locations, however it should not be expected that the date of the "
+                        "event is shown nowhere to users."),
         )
     },
     'show_date_to': {
