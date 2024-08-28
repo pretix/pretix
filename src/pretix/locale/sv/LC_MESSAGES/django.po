@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-15 23:00+0000\n"
+"PO-Revision-Date: 2024-08-28 10:03+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -3151,7 +3151,7 @@ msgstr "Tid"
 
 #: pretix/base/forms/widgets.py:234 pretix/base/forms/widgets.py:239
 msgid "Business or institutional customer"
-msgstr "Företag eller institutionell kund"
+msgstr "Företag, förening eller organisation"
 
 #: pretix/base/forms/widgets.py:238
 msgid "Individual customer"
@@ -4778,10 +4778,9 @@ msgid ""
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
-"Om denna produkt är del av en beställning, kommer beställningen behöva "
-"godkännas av dig innan den kan betalas och slutföras. Du kan t.ex. använda "
-"detta för rabatterade biljetter som endast är tillgängliga för en specifik "
-"grupp."
+"Om denna produkt är del av en bokning, kommer bokningen behöva godkännas av "
+"dig innan den kan betalas och slutföras. Du kan t.ex. använda detta för "
+"rabatterade biljetter som endast är tillgängliga för en specifik grupp."
 
 #: pretix/base/models/items.py:575
 msgid ""
@@ -5094,9 +5093,9 @@ msgid ""
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
-"Om denna variant är del av en beställning, kommer beställningen behöva "
-"godkännas av dig innan den kan betalas och slutföras. Du kan t.ex. använda "
-"detta för rabatterade biljetter som endast är tillgängliga för vissa grupper."
+"Om denna variant är del av en bokning, kommer bokningen behöva godkännas av "
+"dig innan den kan betalas och slutföras. Du kan t.ex. använda detta för "
+"rabatterade biljetter som endast är tillgängliga för vissa grupper."
 
 #: pretix/base/models/items.py:1143 pretix/control/navigation.py:577
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
@@ -6794,7 +6793,7 @@ msgid ""
 "Create an invoice for orders using bank transfer immediately if the event is "
 "otherwise configured to create invoices after payment is completed."
 msgstr ""
-"Skapa en faktura för beställningar som använder banköverföring omedelbart om "
+"Skapa en faktura för bokningen som använder banköverföring omedelbart om "
 "evenemanget annars är konfigurerat att skapa fakturor efter att betalningen "
 "är slutförd."
 
@@ -10429,13 +10428,12 @@ msgid ""
 msgstr ""
 "Hej,\n"
 "\n"
-"vi fick mottagit din beställning för {event} med ett totalt värde\n"
+"vi fick mottagit din bokning för {event} med ett totalt värde\n"
 "av {total_with_currency}. Slutför din betalning före {expire_date}.\n"
 "\n"
 "{payment_info}\n"
 "\n"
-"Du kan ändra din beställningsinformation och se status för din beställning "
-"på\n"
+"Du kan ändra din bokningsinformation och se status för din bokning på\n"
 "{url}\n"
 "\n"
 "Med vänliga hälsningar,  \n"
@@ -10713,13 +10711,13 @@ msgid ""
 msgstr ""
 "Hej,\n"
 "\n"
-"Ditt betalningsförsök för din beställning för {event} har misslyckats.\n"
+"Ditt betalningsförsök för din bokning för {event} har misslyckats.\n"
 "\n"
-"Din beställning är fortfarande giltig och du kan försöka betala igen med "
-"samma eller en annan betalningsmetod. Vänligen slutför din betalning före "
+"Din bokning är fortfarande giltig och du kan försöka betala igen med samma "
+"eller en annan betalningsmetod. Vänligen slutför din betalning före "
 "{expire_date}.\n"
 "\n"
-"Du kan försöka betala igen och se statusen för din beställning på\n"
+"Du kan försöka betala igen och se statusen för din bokning på\n"
 "{url}\n"
 "\n"
 "Vänliga hälsningar,\n"
@@ -10842,10 +10840,10 @@ msgid ""
 msgstr ""
 "Hej,\n"
 "\n"
-"Vi godkände din beställning för {event} och välkomnar dig gärna\n"
+"Vi godkände din bokning för {event} och välkomnar dig gärna\n"
 "vid vårt evenemang.\n"
 "\n"
-"Slutför beställningen genom att betala före {expire_date}.\n"
+"Slutför bokningen genom att betala före {expire_date}.\n"
 "\n"
 "Du kan välja en betalningsmetod och utföra betalningen här:\n"
 "\n"
@@ -27759,7 +27757,7 @@ msgid ""
 "address and select \"Business or institutional customer\"."
 msgstr ""
 "Tillåt endast val av denna betalningsleverantör för kunder som anger en "
-"fakturaadress och väljer \"Företags- eller institutionell kund\"."
+"fakturaadress och väljer \"Företag, förening eller organisation\"."
 
 #: pretix/plugins/banktransfer/payment.py:288
 msgid "Please fill out your bank account details."
@@ -27921,7 +27919,7 @@ msgid ""
 "code after you completed the order."
 msgstr ""
 "Vänligen påbörja inte en betalning ännu. Vi kommer tilldela dig en personlig "
-"referenskod efter att du har slutfört beställningen."
+"referenskod efter att du har slutfört bokningen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
@@ -27936,7 +27934,7 @@ msgid ""
 "order."
 msgstr ""
 "Vi kommer tilldela dig en personlig referenskod att använda efter att du har "
-"slutfört beställningen."
+"slutfört bokningen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
@@ -28736,7 +28734,7 @@ msgid ""
 msgstr ""
 "Efter att du har klickat på fortsätt kommer vi att dirigera dig till PayPal "
 "för att fylla i dina betalningsuppgifter. Du kommer sedan att dirigeras "
-"tillbaka hit för att granska och bekräfta din beställning."
+"tillbaka hit för att granska och bekräfta din bokning."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:6
@@ -29009,7 +29007,7 @@ msgstr "Beställningen godkänd."
 #: pretix/plugins/paypal2/signals.py:65
 msgctxt "paypal"
 msgid "Order completed."
-msgstr "Beställningen slutförd."
+msgstr "Bokningen slutförd."
 
 #: pretix/plugins/paypal2/signals.py:66
 msgctxt "paypal"
@@ -29061,8 +29059,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:15
 msgid "We will then charge your PayPal account and finalize the order."
-msgstr ""
-"Vi kommer sedan att debitera ditt PayPal-konto och slutföra beställningen."
+msgstr "Vi kommer sedan att debitera ditt PayPal-konto och slutföra bokningen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:27
 msgid ""
@@ -29122,8 +29119,7 @@ msgid ""
 "money will not be disbursed and the order remain in its pending state."
 msgstr ""
 "Denna betalning granskas av PayPal. Tills granskningen är avslutad kommer "
-"pengarna inte att utbetalas och beställningen förblir i sitt väntande "
-"tillstånd."
+"pengarna inte att utbetalas och bokningen förblir väntande."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:5
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
@@ -30771,9 +30767,9 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
-"Efter att du har skickat in din beställning, kommer vi att omdirigera dig "
-"till betaltjänstleverantören för att slutföra din betalning. Du kommer sedan "
-"att omdirigeras tillbaka hit för att hämta dina biljetter."
+"Efter att du har skickat in din bokning, kommer vi att omdirigera dig till "
+"betaltjänstleverantören för att slutföra din betalning. Du kommer sedan att "
+"omdirigeras tillbaka hit för att hämta dina biljetter."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
@@ -31270,7 +31266,7 @@ msgstr "Uppgifterna för betalning är inte kompletta."
 #: pretix/presale/checkoutflow.py:1442
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr "Granska beställning"
+msgstr "Granska bokning"
 
 #: pretix/presale/checkoutflow.py:1536
 msgid "You need to check all checkboxes on the bottom of the page."
@@ -31629,15 +31625,15 @@ msgstr "Lägg till biljetter för ett annat datum"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:9
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:10
 msgid "Review order"
-msgstr "Granska beställning"
+msgstr "Granska bokning"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please review the details below and confirm your order."
-msgstr "Kontrollera uppgifterna nedan och slutför din beställning."
+msgstr "Kontrollera uppgifterna nedan och slutför din bokning."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:14
 msgid "Please hang tight, we're finalizing your order!"
-msgstr "Vänligen vänta, vi slutför din beställning!"
+msgstr "Vänligen vänta, vi slutför din bokning!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:22
 msgid "Add or remove tickets"
@@ -31698,7 +31694,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:207
 msgid "Place binding order"
-msgstr "Slutför beställning"
+msgstr "Slutför bokningen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:209
 msgid "Submit registration"
@@ -31831,14 +31827,14 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid "Before we continue, we need you to answer some questions."
-msgstr "Innan vi kan fortsätta, måste du svara på några frågor."
+msgstr "För att fortsätta registreringen fyller du i formuläret nedan."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:10
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
 "Du måste svara på alla frågor som är markerade med <span>*</span> för att "
-"fortsätta."
+"komma vidare."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:51
 msgid "Auto-fill with address"
@@ -32249,7 +32245,7 @@ msgid ""
 "your purchase."
 msgstr ""
 "När varorna lagts i din varukorg, så har du %(time)s minuter att slutföra "
-"beställning."
+"bokningen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:321
 #, python-format
@@ -32882,7 +32878,7 @@ msgid ""
 "can pay and complete this order."
 msgstr ""
 "Observera att vi fortfarande väntar på godkännande från evenemangsarrangören "
-"innan du kan betala och slutföra denna beställning."
+"innan du kan betala och slutföra denna bokning."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
