@@ -78,6 +78,11 @@ of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
+
+**Note:** If PCI DSS compliance is important to you and you keep an inventory according to
+rule 6.4.3 of PCI DSS, all plugins that are not required to load on a payment page should
+not return additional JavaScripts if ``getattr(request, 'pci_dss_payment_page', False)``
+is ``True``.
 """
 
 seatingframe_html_head = EventPluginSignal()
@@ -112,6 +117,11 @@ of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
+
+**Note:** If PCI DSS compliance is important to you and you keep an inventory according to
+rule 6.4.3 of PCI DSS, all plugins that are not required to load on a payment page should
+not return additional JavaScripts if ``getattr(request, 'pci_dss_payment_page', False)``
+is ``True``.
 """
 
 footer_link = EventPluginSignal()

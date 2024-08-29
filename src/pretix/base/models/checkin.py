@@ -102,9 +102,9 @@ class CheckinList(LoggedModel):
     auto_checkin_sales_channels = models.ManyToManyField(
         "SalesChannel",
         verbose_name=_('Sales channels to automatically check in'),
-        help_text=_('All items on this check-in list will be automatically marked as checked-in when purchased through '
-                    'any of the selected sales channels. This option can be useful when tickets sold at the box office '
-                    'are not checked again before entry and should be considered validated directly upon purchase.'),
+        help_text=_('This option is deprecated and will be removed in the next months. As a replacement, our new plugin '
+                    '"Auto check-in" can be used. When we remove this option, we will automatically migrate your event '
+                    'to use the new plugin.'),
         blank=True,
     )
     rules = models.JSONField(default=dict, blank=True)

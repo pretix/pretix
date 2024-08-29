@@ -90,7 +90,7 @@ from pretix.base.models.orders import CancellationRequest
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import multiexport, scheduled_organizer_export
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.mail import SendMailException, mail, prefix_subject
 from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
@@ -351,8 +351,11 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.organizer.settings.region):
                         if k.startswith('mail_subject_'):
-                            msgs[self.supported_locale[idx]] = format_map(bleach.clean(v),
-                                                                          self.placeholders(preview_item))
+                            msgs[self.supported_locale[idx]] = prefix_subject(
+                                self.request.organizer,
+                                format_map(bleach.clean(v), self.placeholders(preview_item)),
+                                highlight=True,
+                            )
                         else:
                             msgs[self.supported_locale[idx]] = markdown_compile_email(
                                 format_map(v, self.placeholders(preview_item))
@@ -683,14 +686,24 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         try:
             self.object.log_action('pretix.team.deleted', user=self.request.user)
             self.object.delete()
-        except ProtectedError:
-            messages.error(
-                self.request,
-                _(
-                    'The team could not be deleted as some constraints (e.g. data created by '
-                    'plug-ins) do not allow it.'
+        except ProtectedError as e:
+            is_logs = any(isinstance(e, LogEntry) for e in e.protected_objects)
+            if is_logs:
+                messages.error(
+                    self.request,
+                    _(
+                        "The team could not be deleted because the team or one of its API tokens is part of "
+                        "historical audit logs."
+                    )
                 )
-            )
+            else:
+                messages.error(
+                    self.request,
+                    _(
+                        'The team could not be deleted as some constraints (e.g. data created by '
+                        'plug-ins) do not allow it.'
+                    )
+                )
             return redirect(success_url)
 
         messages.success(request, _('The selected team has been deleted.'))
@@ -720,6 +733,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         ctx = super().get_context_data(**kwargs)
         ctx['add_form'] = self.add_form
         ctx['add_token_form'] = self.add_token_form
+        ctx['tokens'] = self.object.tokens.order_by("-active", "name", "pk")
         return ctx
 
     def _send_invite(self, instance):

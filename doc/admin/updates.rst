@@ -73,4 +73,11 @@ This release includes a migration that changes retroactively fills an `organizer
 `pretixbase_logentry`. If you have a large database, the migration step of the upgrade might take significantly
 longer than usual, so plan the update accordingly.
 
+Upgrade to 2024.7.0 or newer
+"""""""""""""""""""""""""""""
+
+This release includes a migration that changes how sales channels are referred on orders.
+If you have a large database, the migration step of the upgrade might take significantly longer than usual, so plan
+the update accordingly.
+
 .. _blog: https://pretix.eu/about/en/blog/

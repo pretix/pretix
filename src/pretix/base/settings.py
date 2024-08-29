@@ -1295,7 +1295,8 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Show event times and dates on the ticket shop"),
             help_text=_("If disabled, no date or time will be shown on the ticket shop's front page. This settings "
-                        "does however not affect the display in other locations."),
+                        "also affects a few other locations, however it should not be expected that the date of the "
+                        "event is shown nowhere to users."),
         )
     },
     'show_date_to': {
@@ -1480,7 +1481,7 @@ DEFAULTS = {
             widget=forms.NumberInput(),
             help_text=_('With an increased limit, a customer may request more than one ticket for a specific product '
                         'using the same, unique email address. However, regardless of this setting, they will need to '
-                        'fill the waitlist form multiple times if they want more than one ticket, as every entry only '
+                        'fill the waiting list form multiple times if they want more than one ticket, as every entry only '
                         'grants one single ticket at a time.'),
         )
     },
@@ -3363,7 +3364,9 @@ Your {organizer} team"""))  # noqa: W291
     },
     'seating_allow_blocked_seats_for_channel': {
         'default': [],
-        'type': list
+        'type': list,
+        'serializer_class': serializers.ListField,
+        'serializer_kwargs': lambda: dict(child=serializers.CharField()),
     },
     'seating_distance_within_row': {
         'default': 'False',
@@ -3800,6 +3803,16 @@ def validate_event_settings(event, settings_dict):
             raise ValidationError({
                 'payment_term_last': _('The last payment date cannot be before the end of presale.')
             })
+
+    if settings_dict.get('seating_allow_blocked_seats_for_channel'):
+        allowed_channels = set(event.organizer.sales_channels.values_list("identifier", flat=True))
+        for channel in settings_dict['seating_allow_blocked_seats_for_channel']:
+            if channel not in allowed_channels:
+                raise ValidationError({
+                    'seating_allow_blocked_seats_for_channel': _('The value "{identifier}" is not a valid sales channel.').format(
+                        identifier=channel
+                    )
+                })
 
     if isinstance(event, Event):
         validate_event_settings.send(sender=event, settings_dict=settings_dict)

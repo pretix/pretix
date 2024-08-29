@@ -312,6 +312,20 @@ def test_invoice_list(token_client, organizer, event, order, item, invoice):
 
 
 @pytest.mark.django_db
+def test_invoice_list_multi_filter(token_client, organizer, event, order, order2, item, invoice, invoice2):
+    order2.event = event
+    order2.save()
+    invoice2.event = event
+    invoice2.save()
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?order=FOO'.format(organizer.slug, event.slug))
+    assert len(resp.data['results']) == 1
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?order=BAR'.format(organizer.slug, event.slug))
+    assert len(resp.data['results']) == 1
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?order=FOO&order=BAR'.format(organizer.slug, event.slug))
+    assert len(resp.data['results']) == 2
+
+
+@pytest.mark.django_db
 def test_organizer_level(token_client, organizer, team, event, event2, invoice, invoice2):
     resp = token_client.get('/api/v1/organizers/{}/invoices/'.format(organizer.slug))
     assert resp.status_code == 200

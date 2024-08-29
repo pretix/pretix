@@ -62,8 +62,9 @@ from django.urls import reverse
 from django.utils import formats
 from django.utils.formats import date_format, get_format
 from django.utils.functional import cached_property
-from django.utils.html import conditional_escape
+from django.utils.html import conditional_escape, escape
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.views.generic import (
@@ -94,7 +95,9 @@ from pretix.base.services.invoices import (
     invoice_qualified, regenerate_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException, render_mail
+from pretix.base.services.mail import (
+    SendMailException, prefix_subject, render_mail,
+)
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
@@ -1900,7 +1903,7 @@ class OrderChange(OrderView):
         positions = list(self.order.positions.select_related(
             'item', 'item__tax_rule', 'used_membership', 'used_membership__membership_type', 'tax_rule',
             'seat', 'subevent',
-        ))
+        ).prefetch_related('granted_memberships'))
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p, items=self.items,
                                              initial={'seat': p.seat.seat_guid if p.seat else None},
@@ -2304,7 +2307,9 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
             self.preview_output = {
-                'subject': _('Subject: {subject}').format(subject=email_subject),
+                'subject': mark_safe(_('Subject: {subject}').format(
+                    subject=prefix_subject(order.event, escape(email_subject), highlight=True)
+                )),
                 'html': markdown_compile_email(email_content)
             }
             return self.get(self.request, *self.args, **self.kwargs)
@@ -2369,7 +2374,9 @@ class OrderPositionSendMail(OrderSendMail):
         email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
             self.preview_output = {
-                'subject': _('Subject: {subject}').format(subject=email_subject),
+                'subject': mark_safe(_('Subject: {subject}').format(
+                    subject=prefix_subject(position.order.event, escape(email_subject), highlight=True))
+                ),
                 'html': markdown_compile_email(email_content)
             }
             return self.get(self.request, *self.args, **self.kwargs)

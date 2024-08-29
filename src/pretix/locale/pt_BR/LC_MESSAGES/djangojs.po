@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-24 08:20+0000\n"
+"POT-Creation-Date: 2024-08-27 13:34+0000\n"
 "PO-Revision-Date: 2019-03-19 09:00+0000\n"
 "Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -596,54 +596,62 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:72
+#: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "QR Check-in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:387
+#: pretix/static/pretixcontrol/js/ui/editor.js:543
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "O arquivo de fundo PDF não pôde ser carregado pelo seguinte motivo:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:894
 msgid "Group of objects"
 msgstr "Grupo de objetos"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
-msgid "Text object"
+#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#, fuzzy
+#| msgid "Text object"
+msgid "Text object (deprecated)"
 msgstr "Objeto de texto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:663
+#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#, fuzzy
+#| msgid "Text object"
+msgid "Text box"
+msgstr "Objeto de texto"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
 msgstr "Área de código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:905
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Área de código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:667
+#: pretix/static/pretixcontrol/js/ui/editor.js:907
 msgid "Powered by pretix"
 msgstr "Distribuído por pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:669
+#: pretix/static/pretixcontrol/js/ui/editor.js:909
 msgid "Object"
 msgstr "Objeto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:673
+#: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Ticket design"
 msgstr "Design de bilhetes"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:972
+#: pretix/static/pretixcontrol/js/ui/editor.js:1250
 msgid "Saving failed."
 msgstr "Erro ao salvar."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1041
-#: pretix/static/pretixcontrol/js/ui/editor.js:1091
+#: pretix/static/pretixcontrol/js/ui/editor.js:1319
+#: pretix/static/pretixcontrol/js/ui/editor.js:1370
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Erro durante o upload do seu arquivo PDF, tente novamente."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1074
+#: pretix/static/pretixcontrol/js/ui/editor.js:1353
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Você realmente quer deixar o editor sem salvar suas mudanças?"
 
@@ -659,17 +667,17 @@ msgstr "Gerando mensagens …"
 msgid "Unknown error."
 msgstr "Erro desconhecido."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:313
+#: pretix/static/pretixcontrol/js/ui/main.js:318
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Sua cor tem grande contraste e é muito fácil de ler!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:317
+#: pretix/static/pretixcontrol/js/ui/main.js:322
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Sua cor tem um contraste aceitável e provavelmente é boa o suficiente para "
 "ler!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:321
+#: pretix/static/pretixcontrol/js/ui/main.js:326
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -677,40 +685,40 @@ msgstr ""
 "Sua cor tem um contraste ruim para o texto sobre fundo branco, por favor, "
 "escolha um tom mais escuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:475
-#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:511
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:493
+#: pretix/static/pretixcontrol/js/ui/main.js:509
 msgid "All"
 msgstr "Todos"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:494
+#: pretix/static/pretixcontrol/js/ui/main.js:510
 msgid "None"
 msgstr "Nenhum"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:498
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:828
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:831
+#: pretix/static/pretixcontrol/js/ui/main.js:850
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:989
+#: pretix/static/pretixcontrol/js/ui/main.js:1008
 msgid "Use a different name internally"
 msgstr "Use um nome diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1029
+#: pretix/static/pretixcontrol/js/ui/main.js:1048
 msgid "Click to close"
 msgstr "Clique para fechar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1104
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -775,22 +783,22 @@ msgstr "A partir de %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:444
+#: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:480
+#: pretix/static/pretixpresale/js/ui/main.js:485
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "O carrinho expirou"
 
-#: pretix/static/pretixpresale/js/ui/main.js:583
-#: pretix/static/pretixpresale/js/ui/main.js:602
+#: pretix/static/pretixpresale/js/ui/main.js:588
+#: pretix/static/pretixpresale/js/ui/main.js:607
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:593
+#: pretix/static/pretixpresale/js/ui/main.js:598
 msgid "Your local time:"
 msgstr ""
 

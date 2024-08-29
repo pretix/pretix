@@ -1,0 +1,100 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load money %}
+{% load static %}
+{% block title %}{% trans "Auto check-in rules" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Auto check-in rules" %}</h1>
+    {% if rules|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any rules yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "plugins:autocheckin:add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new check-in rule" %}
+            </a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "plugins:autocheckin:add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new check-in rule" %}
+            </a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Check-in list" %}</th>
+                    <th>{% trans "Sales channels" %}</th>
+                    <th>{% trans "Products" %}</th>
+                    <th>{% trans "Payment methods" %}</th>
+                    <th class="action-col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for r in rules %}
+                    <tr>
+                        <td>
+                            {% if r.list %}
+                                {{ r.list }}
+                            {% else %}
+                                <em>{% trans "All" %}</em>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for c in sales_channels %}
+                                {% if r.all_sales_channels or c in r.limit_sales_channels.all %}
+                                    {% if "." in c.icon %}
+                                        <img src="{% static c.icon %}" class="fa-like-image"
+                                             data-toggle="tooltip" title="{{ c.label }}">
+                                    {% else %}
+                                        <span class="fa fa-fw fa-{{ c.icon }} text-muted"
+                                              data-toggle="tooltip" title="{{ c.label }}"></span>
+                                    {% endif %}
+                                {% else %}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if r.all_products %}
+                                <em>{% trans "All" %}</em>
+                            {% else %}
+                                <ul>
+                                    {% for i in r.limit_products.all %}
+                                        <li>{{ i }}</li>
+                                    {% endfor %}
+                                    {% for v in r.limit_variations.all %}
+                                        <li>{{ v.item }} – {{ v.value }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if r.all_payment_methods %}
+                                <em>{% trans "All" %}</em>
+                            {% else %}
+                                <ul>
+                                    {% for p in r.pprovs %}
+                                        <li>{{ p.verbose_name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td class="text-right flip">
+                            {% if "can_change_event_settings" in request.eventpermset %}
+                                <a href="{% url "plugins:autocheckin:edit" organizer=request.event.organizer.slug event=request.event.slug rule=r.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "plugins:autocheckin:add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ r.id }}"
+                                        class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
+                                <a href="{% url "plugins:autocheckin:delete" organizer=request.event.organizer.slug event=request.event.slug rule=r.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

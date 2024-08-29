@@ -49,6 +49,7 @@ from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
+from pretix.api.filters import MultipleCharFilter
 from pretix.api.models import OAuthAccessToken
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.order import (
@@ -257,7 +258,7 @@ class OrderViewSetMixin:
             return Prefetch(
                 'positions',
                 opq.all().prefetch_related(
-                    Prefetch('checkins', queryset=Checkin.objects.all()),
+                    Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                     Prefetch('item', queryset=self.request.event.items.prefetch_related(
                         Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
@@ -278,7 +279,7 @@ class OrderViewSetMixin:
             return Prefetch(
                 'positions',
                 opq.all().prefetch_related(
-                    Prefetch('checkins', queryset=Checkin.objects.all()),
+                    Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                     'item', 'variation',
                     Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
                     'seat',
@@ -1091,7 +1092,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                 'item_meta_properties',
             )
             qs = qs.prefetch_related(
-                Prefetch('checkins', queryset=Checkin.objects.all()),
+                Prefetch('checkins', queryset=Checkin.objects.select_related("device")),
                 Prefetch('item', queryset=self.request.event.items.prefetch_related(
                     Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
                              to_attr='meta_values_cached')
@@ -1110,7 +1111,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                     Prefetch(
                         'positions',
                         qs.prefetch_related(
-                            Prefetch('checkins', queryset=Checkin.objects.all()),
+                            Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                             Prefetch('item', queryset=self.request.event.items.prefetch_related(
                                 Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
                                          to_attr='meta_values_cached')
@@ -1134,7 +1135,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             )
         else:
             qs = qs.prefetch_related(
-                Prefetch('checkins', queryset=Checkin.objects.all()),
+                Prefetch('checkins', queryset=Checkin.objects.select_related("device")),
                 'answers', 'answers__options', 'answers__question',
             ).select_related(
                 'item', 'order', 'order__event', 'order__event__organizer', 'seat'
@@ -1825,16 +1826,13 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
 with scopes_disabled():
     class InvoiceFilter(FilterSet):
         refers = django_filters.CharFilter(method='refers_qs')
-        number = django_filters.CharFilter(method='nr_qs')
-        order = django_filters.CharFilter(field_name='order', lookup_expr='code__iexact')
+        number = MultipleCharFilter(field_name='nr', lookup_expr='iexact')
+        order = MultipleCharFilter(field_name='order', lookup_expr='code__iexact')
 
         def refers_qs(self, queryset, name, value):
             return queryset.annotate(
                 refers_nr=Concat('refers__prefix', 'refers__invoice_no')
             ).filter(refers_nr__iexact=value)
-
-        def nr_qs(self, queryset, name, value):
-            return queryset.filter(nr__iexact=value)
 
         class Meta:
             model = Invoice

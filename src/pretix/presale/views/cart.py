@@ -663,10 +663,11 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
             context['show_cart'] = context['cart']['positions']
             return render(request, 'pretixpresale/event/voucher_form.html', context)
 
-        if request.event.presale_has_ended or (request.event.presale_end and now() > request.event.presale_end):
+        if request.event.presale_has_ended or (
+                request.event.presale_end and time_machine_now() > request.event.presale_end):
             err = error_messages['ended']
         elif not request.event.presale_is_running or (
-                request.event.presale_start and now() < request.event.presale_start):
+                request.event.presale_start and time_machine_now() < request.event.presale_start):
             err = error_messages['not_started']
 
         self.subevent = None

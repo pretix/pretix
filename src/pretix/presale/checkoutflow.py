@@ -1300,6 +1300,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
     def post(self, request):
         self.request = request
+        self.request.pci_dss_payment_page = True
 
         if "remove_payment" in request.POST:
             self._remove_payment(request.POST["remove_payment"])
@@ -1463,6 +1464,10 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                     self.cart_session['payments'] = [p for p in self.cart_session['payments'] if p['provider'] != provider.identifier]
 
         return True
+
+    def get(self, request):
+        self.request.pci_dss_payment_page = True
+        return super().get(request)
 
 
 class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):

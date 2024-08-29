@@ -58,6 +58,7 @@ from django.core.mail import (
 from django.core.mail.message import SafeMIMEText
 from django.db import transaction
 from django.template.loader import get_template
+from django.utils.html import escape
 from django.utils.timezone import now, override
 from django.utils.translation import gettext as _, pgettext
 from django_scopes import scope, scopes_disabled
@@ -107,6 +108,22 @@ def clean_sender_name(sender_name: str) -> str:
         sender_name = sender_name[:75] + "..."
 
     return sender_name
+
+
+def prefix_subject(settings_holder, subject, highlight=False):
+    prefix = settings_holder.settings.get('mail_prefix')
+    if prefix and prefix.startswith('[') and prefix.endswith(']'):
+        prefix = prefix[1:-1]
+    if prefix:
+        prefix = f"[{prefix}]"
+        if highlight:
+            prefix = '<span class="placeholder" title="{}">{}</span>'.format(
+                _('This prefix has been set in your event or organizer settings.'),
+                escape(prefix)
+            )
+
+        subject = f"{prefix} {subject}"
+    return subject
 
 
 def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, LazyI18nString],
@@ -240,11 +257,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                     and settings_holder.settings.contact_mail and not headers.get('Reply-To'):
                 headers['Reply-To'] = settings_holder.settings.contact_mail
 
-            prefix = settings_holder.settings.get('mail_prefix')
-            if prefix and prefix.startswith('[') and prefix.endswith(']'):
-                prefix = prefix[1:-1]
-            if prefix:
-                subject = "[%s] %s" % (prefix, subject)
+            subject = prefix_subject(settings_holder, subject)
 
             body_plain += "\r\n\r\n-- \r\n"
 

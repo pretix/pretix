@@ -46,6 +46,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.html import escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, ngettext
 from django.views.generic import DeleteView, FormView, ListView, TemplateView
@@ -61,6 +62,7 @@ from pretix.plugins.sendmail.tasks import (
     send_mails_to_orders, send_mails_to_waitinglist,
 )
 
+from ...base.services.mail import prefix_subject
 from ...helpers.format import format_map
 from ...helpers.models import modelcopy
 from . import forms
@@ -193,11 +195,11 @@ class BaseSenderView(EventPermissionRequiredMixin, FormView):
                     for k, v in get_available_placeholders(self.request.event, self.context_parameters).items():
                         context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
                             _('This value will be replaced based on dynamic parameters.'),
-                            v.render_sample(self.request.event)
+                            escape(v.render_sample(self.request.event))
                         )
 
                     subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
-                    preview_subject = format_map(subject, context_dict)
+                    preview_subject = prefix_subject(self.request.event, format_map(subject, context_dict), highlight=True)
                     message = form.cleaned_data['message'].localize(l)
                     preview_text = markdown_compile_email(format_map(message, context_dict))
 
@@ -608,11 +610,11 @@ class CreateRule(EventPermissionRequiredMixin, CreateView):
                                                                                 'position_or_address']).items():
                         context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
                             _('This value will be replaced based on dynamic parameters.'),
-                            v.render_sample(self.request.event)
+                            escape(v.render_sample(self.request.event))
                         )
 
                     subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
-                    preview_subject = format_map(subject, context_dict)
+                    preview_subject = prefix_subject(self.request.event, format_map(subject, context_dict), highlight=True)
                     template = form.cleaned_data['template'].localize(l)
                     preview_text = markdown_compile_email(format_map(template, context_dict))
 
@@ -684,11 +686,11 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
                 for k, v in get_available_placeholders(self.request.event, ['event', 'order', 'position_or_address']).items():
                     placeholders[k] = '<span class="placeholder" title="{}">{}</span>'.format(
                         _('This value will be replaced based on dynamic parameters.'),
-                        v.render_sample(self.request.event)
+                        escape(v.render_sample(self.request.event))
                     )
 
                 subject = bleach.clean(self.object.subject.localize(lang), tags=[])
-                preview_subject = format_map(subject, placeholders)
+                preview_subject = prefix_subject(self.request.event, format_map(subject, placeholders), highlight=True)
                 template = self.object.template.localize(lang)
                 preview_text = markdown_compile_email(format_map(template, placeholders))
 

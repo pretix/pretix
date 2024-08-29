@@ -48,6 +48,7 @@ from django.utils.formats import date_format, localize
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
+from django_countries.fields import CountryField
 from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.forms.widgets import (
@@ -60,6 +61,7 @@ from pretix.base.models import (
     SubEvent, SubEventMetaValue, Team, TeamAPIToken, TeamInvite, Voucher,
 )
 from pretix.base.signals import register_payment_providers
+from pretix.control.forms import SplitDateTimeField
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 from pretix.control.signals import order_search_filter_q
 from pretix.helpers.countries import CachedCountries
@@ -67,7 +69,7 @@ from pretix.helpers.database import (
     get_deterministic_ordering, rolledback_transaction,
 )
 from pretix.helpers.dicts import move_to_end
-from pretix.helpers.i18n import i18ncomp
+from pretix.helpers.i18n import get_format_without_seconds, i18ncomp
 
 PAYMENT_PROVIDERS = []
 
@@ -687,11 +689,71 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         )
         self.fields['quota'].widget.choices = self.fields['quota'].choices
         for q in self.event.questions.all():
-            self.fields['question_{}'.format(q.pk)] = forms.CharField(
-                label=q.question,
-                required=False,
-                help_text=_('Exact matches only')
-            )
+            kwargs = {
+                "label": q.question,
+                "required": False,
+            }
+            fname = 'question_{}'.format(q.pk)
+            if q.type == Question.TYPE_NUMBER:
+                self.fields[fname] = forms.DecimalField(
+                    help_text=_('Exact matches only'),
+                    **kwargs,
+                )
+            elif q.type == Question.TYPE_BOOLEAN:
+                self.fields[fname] = forms.ChoiceField(
+                    choices=(
+                        ("", ""),
+                        ("True", _("Yes")),
+                        ("False", _("No")),
+                    ),
+                    **kwargs,
+                )
+            elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+                self.fields[fname] = forms.ModelChoiceField(
+                    queryset=q.options,
+                    widget=forms.Select,
+                    to_field_name='identifier',
+                    empty_label='',
+                    **kwargs,
+                )
+            elif q.type == Question.TYPE_COUNTRYCODE:
+                self.fields[fname] = CountryField(
+                    countries=CachedCountries,
+                    blank=True, null=True, blank_label=' ',
+                ).formfield(
+                    **kwargs,
+                    widget=forms.Select,
+                    empty_label=' ',
+                )
+            elif q.type == Question.TYPE_DATE:
+                self.fields[fname] = forms.DateField(
+                    widget=DatePickerWidget(),
+                    help_text=_('Exact matches only'),
+                    **kwargs,
+                )
+            elif q.type == Question.TYPE_TIME:
+                self.fields[fname] = forms.TimeField(
+                    widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
+                    help_text=_('Exact matches only'),
+                    **kwargs,
+                )
+            elif q.type == Question.TYPE_DATETIME:
+                self.fields[fname] = SplitDateTimeField(
+                    widget=SplitDateTimePickerWidget(
+                        time_format=get_format_without_seconds('TIME_INPUT_FORMATS'),
+                        min_date=q.valid_datetime_min,
+                        max_date=q.valid_datetime_max
+                    ),
+                    help_text=_('Exact matches only'),
+                    **kwargs,
+                )
+            elif q.type == Question.TYPE_FILE:
+                continue
+            else:
+                self.fields[fname] = forms.CharField(
+                    help_text=_('Exact matches only'),
+                    **kwargs,
+                )
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
@@ -787,11 +849,24 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             ).distinct()
         for q in self.event.questions.all():
             if fdata.get(f'question_{q.pk}'):
-                answers = QuestionAnswer.objects.filter(
-                    question_id=q.pk,
-                    orderposition__order_id=OuterRef('pk'),
-                    answer__iexact=fdata.get(f'question_{q.pk}')
-                )
+                if q.type == Question.TYPE_BOOLEAN:
+                    answers = QuestionAnswer.objects.filter(
+                        question_id=q.pk,
+                        orderposition__order_id=OuterRef('pk'),
+                        answer__exact=fdata.get(f'question_{q.pk}')
+                    )
+                elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+                    answers = QuestionAnswer.objects.filter(
+                        question_id=q.pk,
+                        orderposition__order_id=OuterRef('pk'),
+                        options=fdata.get(f'question_{q.pk}')
+                    )
+                else:
+                    answers = QuestionAnswer.objects.filter(
+                        question_id=q.pk,
+                        orderposition__order_id=OuterRef('pk'),
+                        answer__iexact=fdata.get(f'question_{q.pk}')
+                    )
                 qs = qs.annotate(**{f'q_{q.pk}': Exists(answers)}).filter(**{f'q_{q.pk}': True})
 
         return qs
@@ -2576,6 +2651,9 @@ class DeviceFilterForm(FilterForm):
 
         if fdata.get('gate'):
             qs = qs.filter(gate=fdata['gate'])
+
+        if fdata.get('software_brand'):
+            qs = qs.filter(software_brand=fdata['software_brand'])
 
         if fdata.get('state') == 'active':
             qs = qs.filter(revoked=False)

@@ -587,7 +587,7 @@ class BasePaymentProvider:
             return rel_date.datetime(self.event).date()
 
     def _is_available_by_time(self, now_dt=None, cart_id=None, order=None):
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         tz = ZoneInfo(self.event.settings.timezone)
 
         try:

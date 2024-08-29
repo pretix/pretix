@@ -237,7 +237,7 @@ def _render_nup_page(nup_pdf: PdfWriter, input_pages: PageObject, opt: dict) -> 
             Decimal('%.5f' % (page.mediabox.right.as_numeric() + tx)),
             Decimal('%.5f' % (page.mediabox.top.as_numeric() + ty))
         ))
-        page.trimbox = page.mediabox
+        page.trimbox = page.cropbox = page.mediabox
         nup_page.merge_page(page)
     return nup_page
 

@@ -50,7 +50,7 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
-from django.utils.html import format_html
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -64,6 +64,7 @@ from pretix.base.models import (
     CartPosition, LogEntry, Voucher, WaitingListEntry,
 )
 from pretix.base.models.vouchers import generate_codes
+from pretix.base.services.mail import prefix_subject
 from pretix.base.services.vouchers import vouchers_send
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncFormView
@@ -562,7 +563,7 @@ class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
             else:
                 ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
                     _('This value will be replaced based on dynamic parameters.'),
-                    s
+                    escape(s)
                 )
         return self.SafeDict(ctx)
 
@@ -572,7 +573,11 @@ class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
             return HttpResponseBadRequest(_('invalid item'))
         msgs = {}
         if "subject" in preview_item:
-            msgs["all"] = format_map(bleach.clean(request.POST.get(preview_item, "")), self.placeholders(preview_item))
+            msgs["all"] = prefix_subject(
+                self.request.event,
+                format_map(bleach.clean(request.POST.get(preview_item, "")), self.placeholders(preview_item)),
+                highlight=True
+            )
         else:
             msgs["all"] = markdown_compile_email(
                 format_map(request.POST.get(preview_item), self.placeholders(preview_item))

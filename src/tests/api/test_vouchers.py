@@ -1210,6 +1210,14 @@ def test_set_seat_ok(token_client, organizer, event, seatingplan, seat1, item):
         v.refresh_from_db()
         assert v.seat == seat1
 
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/{}/'.format(organizer.slug, event.slug, seat1.pk))
+    assert resp.status_code == 200
+    assert resp.data['voucher'] == v.pk
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/{}/?expand=voucher'.format(organizer.slug, event.slug, seat1.pk))
+    assert resp.status_code == 200
+    assert resp.data['voucher']['id'] == v.pk
+
 
 @pytest.mark.django_db
 def test_save_set_seat(token_client, organizer, event, seatingplan, seat1, item):

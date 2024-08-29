@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-24 08:20+0000\n"
+"POT-Creation-Date: 2024-08-27 13:34+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -593,55 +593,63 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:72
+#: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "Έλεγχος QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:387
+#: pretix/static/pretixcontrol/js/ui/editor.js:543
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 "Το αρχείο φόντου PDF δεν ήταν δυνατό να φορτωθεί για τον ακόλουθο λόγο:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:894
 msgid "Group of objects"
 msgstr "Ομάδα αντικειμένων"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
-msgid "Text object"
+#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#, fuzzy
+#| msgid "Text object"
+msgid "Text object (deprecated)"
 msgstr "Αντικείμενο κειμένου"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:663
+#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#, fuzzy
+#| msgid "Text object"
+msgid "Text box"
+msgstr "Αντικείμενο κειμένου"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
 msgstr "Περιοχή Barcode"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:905
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Περιοχή Barcode"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:667
+#: pretix/static/pretixcontrol/js/ui/editor.js:907
 msgid "Powered by pretix"
 msgstr "Υποστηρίζεται από το Pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:669
+#: pretix/static/pretixcontrol/js/ui/editor.js:909
 msgid "Object"
 msgstr "Αντικείμενο"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:673
+#: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Ticket design"
 msgstr "Σχεδιασμός εισιτηρίων"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:972
+#: pretix/static/pretixcontrol/js/ui/editor.js:1250
 msgid "Saving failed."
 msgstr "Η αποθήκευση απέτυχε."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1041
-#: pretix/static/pretixcontrol/js/ui/editor.js:1091
+#: pretix/static/pretixcontrol/js/ui/editor.js:1319
+#: pretix/static/pretixcontrol/js/ui/editor.js:1370
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Σφάλμα κατά τη μεταφόρτωση του αρχείου PDF, δοκιμάστε ξανά."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1074
+#: pretix/static/pretixcontrol/js/ui/editor.js:1353
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Θέλετε πραγματικά να αφήσετε τον επεξεργαστή χωρίς να αποθηκεύσετε τις "
@@ -659,18 +667,18 @@ msgstr "Δημιουργία μηνυμάτων …"
 msgid "Unknown error."
 msgstr "Άγνωστο σφάλμα."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:313
+#: pretix/static/pretixcontrol/js/ui/main.js:318
 msgid "Your color has great contrast and is very easy to read!"
 msgstr ""
 "Το χρώμα σας έχει μεγάλη αντίθεση και είναι πολύ εύκολο να το διαβάσετε!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:317
+#: pretix/static/pretixcontrol/js/ui/main.js:322
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Το χρώμα σας έχει αξιοπρεπή αντίθεση και είναι ίσως αρκετά καλό για να "
 "διαβάσετε!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:321
+#: pretix/static/pretixcontrol/js/ui/main.js:326
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -678,40 +686,40 @@ msgstr ""
 "Το χρώμα σας έχει κακή αντίθεση για κείμενο σε λευκό φόντο, επιλέξτε μια πιο "
 "σκούρα σκιά."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:475
-#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:511
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:493
+#: pretix/static/pretixcontrol/js/ui/main.js:509
 msgid "All"
 msgstr "Όλα"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:494
+#: pretix/static/pretixcontrol/js/ui/main.js:510
 msgid "None"
 msgstr "Κανένας"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:498
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:828
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:831
+#: pretix/static/pretixcontrol/js/ui/main.js:850
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:989
+#: pretix/static/pretixcontrol/js/ui/main.js:1008
 msgid "Use a different name internally"
 msgstr "Χρησιμοποιήστε διαφορετικό όνομα εσωτερικά"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1029
+#: pretix/static/pretixcontrol/js/ui/main.js:1048
 msgid "Click to close"
 msgstr "Κάντε κλικ για να κλείσετε"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1104
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -773,22 +781,22 @@ msgstr "απο %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:444
+#: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Εισαγάγετε μια ποσότητα για έναν από τους τύπους εισιτηρίων."
 
-#: pretix/static/pretixpresale/js/ui/main.js:480
+#: pretix/static/pretixpresale/js/ui/main.js:485
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Το καλάθι έληξε"
 
-#: pretix/static/pretixpresale/js/ui/main.js:583
-#: pretix/static/pretixpresale/js/ui/main.js:602
+#: pretix/static/pretixpresale/js/ui/main.js:588
+#: pretix/static/pretixpresale/js/ui/main.js:607
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:593
+#: pretix/static/pretixpresale/js/ui/main.js:598
 msgid "Your local time:"
 msgstr ""
 

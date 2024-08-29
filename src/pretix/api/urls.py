@@ -87,6 +87,7 @@ event_router.register(r'invoices', order.InvoiceViewSet)
 event_router.register(r'revokedsecrets', order.RevokedSecretViewSet, basename='revokedsecrets')
 event_router.register(r'blockedsecrets', order.BlockedSecretViewSet, basename='blockedsecrets')
 event_router.register(r'taxrules', event.TaxRuleViewSet)
+event_router.register(r'seats', event.SeatViewSet)
 event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
 event_router.register(r'checkinlists', checkin.CheckinListViewSet)
 event_router.register(r'cartpositions', cart.CartPositionViewSet)
@@ -94,6 +95,9 @@ event_router.register(r'scheduled_exports', exporters.ScheduledEventExportViewSe
 event_router.register(r'exporters', exporters.EventExportersViewSet, basename='exporters')
 event_router.register(r'shredders', shredders.EventShreddersViewSet, basename='shredders')
 event_router.register(r'item_meta_properties', event.ItemMetaPropertiesViewSet)
+
+subevent_router = routers.DefaultRouter()
+subevent_router.register(r'seats', event.SeatViewSet)
 
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet, basename='checkinlistpos')
@@ -132,6 +136,7 @@ urlpatterns = [
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/settings/$', event.EventSettingsView.as_view(),
             name="event.settings"),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/', include(event_router.urls)),
+    re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/subevents/(?P<subevent>\d+)/', include(subevent_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/teams/(?P<team>[^/]+)/', include(team_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/items/(?P<item>[^/]+)/', include(item_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/questions/(?P<question>[^/]+)/',

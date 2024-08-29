@@ -6,13 +6,16 @@
 {% load eventsignal %}
 {% load rich_text %}
 {% for tup in items_by_category %}{% with category=tup.0 items=tup.1 id_prefix=tup.2 %}
-    <section {% if category %}aria-labelledby="{{ id_prefix }}category-{{ category.id }}"{% else %}aria-label="{% trans "Uncategorized items" %}"{% endif %}{% if category.description %} aria-describedby="{{ id_prefix }}category-info-{{ category.id }}"{% endif %}>
-        {% if category %}
+    {% if category %}
+        <section aria-labelledby="{{ id_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ id_prefix }}category-info-{{ category.id }}"{% endif %}>
             <h3 id="{{ id_prefix }}category-{{ category.id }}">{{ category.name }}</h3>
             {% if category.description %}
                 <div id="{{ id_prefix }}category-info-{{ category.id }}">{{ category.description|localize|rich_text }}</div>
             {% endif %}
-        {% endif %}
+    {% else %}
+        <section aria-labelledby="{{ id_prefix }}category-none">
+            <h3 id="{{ id_prefix }}category-none" class="sr-only">{% trans "Uncategorized items" %}</h3>
+    {% endif %}
         {% for item in items %}
             {% if item.has_variations %}
                 <article aria-labelledby="{{ id_prefix }}item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="{{ id_prefix }}item-{{ item.pk }}-description"{% endif %} class="item-with-variations{% if event.settings.show_variations_expanded %} details-open{% endif %}" id="{{ id_prefix }}item-{{ item.pk }}">

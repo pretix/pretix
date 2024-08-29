@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-24 08:20+0000\n"
+"POT-Creation-Date: 2024-08-27 13:34+0000\n"
 "PO-Revision-Date: 2024-03-10 03:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -558,52 +558,60 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:72
+#: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "Sjekk-in QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:387
+#: pretix/static/pretixcontrol/js/ui/editor.js:543
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "PDF bakgrunnsfilen kunne ikke lastes av følgende årsak:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:894
 msgid "Group of objects"
 msgstr "Gruppe med objekter"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
-msgid "Text object"
+#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#, fuzzy
+#| msgid "Text object"
+msgid "Text object (deprecated)"
 msgstr "Tekst objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:663
+#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#, fuzzy
+#| msgid "Text object"
+msgid "Text box"
+msgstr "Tekst objekt"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
 msgstr "Strekkodeområde"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:905
 msgid "Image area"
 msgstr "Bildeområde"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:667
+#: pretix/static/pretixcontrol/js/ui/editor.js:907
 msgid "Powered by pretix"
 msgstr "Drevet av pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:669
+#: pretix/static/pretixcontrol/js/ui/editor.js:909
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:673
+#: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Ticket design"
 msgstr "Billett design"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:972
+#: pretix/static/pretixcontrol/js/ui/editor.js:1250
 msgid "Saving failed."
 msgstr "Lagring feilet."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1041
-#: pretix/static/pretixcontrol/js/ui/editor.js:1091
+#: pretix/static/pretixcontrol/js/ui/editor.js:1319
+#: pretix/static/pretixcontrol/js/ui/editor.js:1370
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Feil ved opplasting av PDF fil, prøv på nytt."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1074
+#: pretix/static/pretixcontrol/js/ui/editor.js:1353
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Vil du avslutte editoren uten å lagre endringene?"
 
@@ -619,54 +627,54 @@ msgstr "Genererer meldinger…"
 msgid "Unknown error."
 msgstr "Ukjent feil."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:313
+#: pretix/static/pretixcontrol/js/ui/main.js:318
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Fargen du valgte har høy kontrast og er veldig enkel å lese!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:317
+#: pretix/static/pretixcontrol/js/ui/main.js:322
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "Fargen du valgte har grei kontrast og er ganske enkel å lese!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:321
+#: pretix/static/pretixcontrol/js/ui/main.js:326
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr "Fargen du valgte har dårlig kontrast mot hvit, velg en mørkere farge."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:475
-#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:511
 msgid "Search query"
 msgstr "Søkeord"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:493
+#: pretix/static/pretixcontrol/js/ui/main.js:509
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:494
+#: pretix/static/pretixcontrol/js/ui/main.js:510
 msgid "None"
 msgstr "Ingen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:498
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "Selected only"
 msgstr "Kun valgte"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:828
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:831
+#: pretix/static/pretixcontrol/js/ui/main.js:850
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:989
+#: pretix/static/pretixcontrol/js/ui/main.js:1008
 msgid "Use a different name internally"
 msgstr "Bruk et annet navn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1029
+#: pretix/static/pretixcontrol/js/ui/main.js:1048
 msgid "Click to close"
 msgstr "Klikk for å lukke"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1104
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr "Du har ikke-lagrede endringer!"
 
@@ -718,20 +726,20 @@ msgstr "Du mottar %(currency)s %(amount)s tilbake"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Vennligst skriv inn beløpet arrangøren kan beholde."
 
-#: pretix/static/pretixpresale/js/ui/main.js:444
+#: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Vennligst skriv inn et antall for en av billetttypene."
 
-#: pretix/static/pretixpresale/js/ui/main.js:480
+#: pretix/static/pretixpresale/js/ui/main.js:485
 msgid "required"
 msgstr "nødvendig"
 
-#: pretix/static/pretixpresale/js/ui/main.js:583
-#: pretix/static/pretixpresale/js/ui/main.js:602
+#: pretix/static/pretixpresale/js/ui/main.js:588
+#: pretix/static/pretixpresale/js/ui/main.js:607
 msgid "Time zone:"
 msgstr "Tidssone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:593
+#: pretix/static/pretixpresale/js/ui/main.js:598
 msgid "Your local time:"
 msgstr "Din lokale tid:"
 

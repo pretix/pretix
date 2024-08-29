@@ -259,6 +259,7 @@ Requests
 Reservierungszeitraum
 reverse
 Revisionssicherheit
+Revolut
 rückabgewickelt
 Rundungsdifferenzen
 Sa

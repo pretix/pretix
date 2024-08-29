@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load rich_text %}
 {% load money %}
 {% block title %}{% trans "Change payment method" %}{% endblock %}
 {% block custom_header %}
@@ -23,6 +24,9 @@
     {% endif %}
     <form method="post">
         {% csrf_token %}
+        {% if event.settings.payment_explanation %}
+            {{ event.settings.payment_explanation|rich_text }}
+        {% endif %}
         <div class="panel-group" id="payment_accordion">
             {% for p in providers %}
                 <div class="panel panel-default" data-total="{{ p.total|money_numberfield:request.event.currency }}">

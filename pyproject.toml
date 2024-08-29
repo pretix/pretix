@@ -22,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
-  "Framework :: Django :: 4.1",
+  "Framework :: Django :: 4.2",
 ]
 
 dependencies = [
@@ -35,12 +35,11 @@ dependencies = [
   "cryptography>=3.4.2",
   "css-inline==0.14.*",
   "defusedcsv>=1.1.0",
-  "dj-static",
-  "Django[argon2]==4.2.*",
+  "Django[argon2]==4.2.*,>=4.2.15",
   "django-bootstrap3==24.2",
-  "django-compressor==4.5",
+  "django-compressor==4.5.1",
   "django-countries==7.6.*",
-  "django-filter==24.2",
+  "django-filter==24.3",
   "django-formset-js-improved==0.5.0.3",
   "django-formtools==2.5.1",
   "django-hierarkey==1.2.*",
@@ -62,10 +61,10 @@ dependencies = [
   "importlib_metadata==8.*",  # Polyfill, we can probably drop this once we require Python 3.10+
   "isoweek",
   "jsonschema",
-  "kombu==5.3.*",
+  "kombu==5.4.*",
   "libsass==0.23.*",
   "lxml",
-  "markdown==3.6",  # 3.3.5 requires importlib-metadata>=4.4, but django-bootstrap3 requires importlib-metadata<3.
+  "markdown==3.7",  # 3.3.5 requires importlib-metadata>=4.4, but django-bootstrap3 requires importlib-metadata<3.
   # We can upgrade markdown again once django-bootstrap3 upgrades or once we drop Python 3.6 and 3.7
   "mt-940==4.30.*",
   "oauthlib==3.2.*",
@@ -73,7 +72,7 @@ dependencies = [
   "packaging",
   "paypalrestsdk==1.13.*",
   "paypal-checkout-serversdk==1.0.*",
-  "PyJWT==2.8.*",
+  "PyJWT==2.9.*",
   "phonenumberslite==8.13.*",
   "Pillow==10.4.*",
   "pretix-plugin-build",
@@ -82,8 +81,8 @@ dependencies = [
   "pycountry",
   "pycparser==2.22",
   "pycryptodome==3.20.*",
-  "pypdf==4.2.*",
-  "python-bidi==0.4.*",  # Support for Arabic in reportlab
+  "pypdf==4.3.*",
+  "python-bidi==0.6.*",  # Support for Arabic in reportlab
   "python-dateutil==2.9.*",
   "pytz",
   "pytz-deprecation-shim==0.1.*",
@@ -92,10 +91,9 @@ dependencies = [
   "redis==5.0.*",
   "reportlab==4.2.*",
   "requests==2.31.*",
-  "sentry-sdk==2.5.*",
+  "sentry-sdk==2.13.*",
   "sepaxml==2.6.*",
   "slimit",
-  "static3==0.7.*",
   "stripe==7.9.*",
   "text-unidecode==1.*",
   "tlds>=2020041600",
@@ -110,10 +108,10 @@ dependencies = [
 [project.optional-dependencies]
 memcached = ["pylibmc"]
 dev = [
-  "aiohttp==3.9.*",
+  "aiohttp==3.10.*",
   "coverage",
   "coveralls",
-  "fakeredis==2.23.*",
+  "fakeredis==2.24.*",
   "flake8==7.1.*",
   "freezegun",
   "isort==5.13.*",
@@ -127,7 +125,7 @@ dev = [
   "pytest-rerunfailures==14.*",
   "pytest-sugar",
   "pytest-xdist==3.6.*",
-  "pytest==8.2.*",
+  "pytest==8.3.*",
   "responses",
 ]
 

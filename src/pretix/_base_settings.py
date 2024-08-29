@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'pretix.plugins.badges',
     'pretix.plugins.manualpayment',
     'pretix.plugins.returnurl',
+    'pretix.plugins.autocheckin',
     'pretix.plugins.webcheckin',
     'django_countries',
     'oauth2_provider',

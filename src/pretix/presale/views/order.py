@@ -179,7 +179,7 @@ class TicketPageMixin:
         can_download = can_download and self.order.ticket_download_available
         ctx['download_email_required'] = can_download and (
             self.request.event.settings.ticket_download_require_validated_email and
-            self.order.sales_channel == 'web' and
+            self.order.sales_channel.type == 'web' and
             not self.order.email_known_to_work
         )
         ctx['can_download'] = can_download and not ctx['download_email_required']
@@ -359,6 +359,7 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
+        self.request.pci_dss_payment_page = True
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if (self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED)
@@ -553,6 +554,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
+        self.request.pci_dss_payment_page = True
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or self.order._can_be_paid() is not True:
@@ -1106,7 +1108,7 @@ class OrderDownloadMixin:
 
         if (
             self.request.event.settings.ticket_download_require_validated_email and
-            self.order.sales_channel == 'web' and
+            self.order.sales_channel.type == 'web' and
             not self.order.email_known_to_work
         ):
             return self.error(OrderError(_('Please click the link we sent you via email to download your tickets.')))

@@ -62,6 +62,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.html import escape
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
@@ -98,6 +99,7 @@ from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
+from ...base.services.mail import prefix_subject
 from ...base.settings import LazyI18nStringList
 from ...helpers.compat import CompatDeleteView
 from ...helpers.format import format_map
@@ -726,7 +728,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             else:
                 ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
                     _('This value will be replaced based on dynamic parameters.'),
-                    s
+                    escape(s)
                 )
         return ctx
 
@@ -746,9 +748,9 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                     with language(self.supported_locale[idx], self.request.event.settings.region):
                         try:
                             if k.startswith('mail_subject_'):
-                                msgs[self.supported_locale[idx]] = format_map(
+                                msgs[self.supported_locale[idx]] = prefix_subject(self.request.event, format_map(
                                     bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
-                                )
+                                ), highlight=True)
                             else:
                                 msgs[self.supported_locale[idx]] = markdown_compile_email(
                                     format_map(v, self.placeholders(preview_item), raise_on_missing=True)
@@ -776,7 +778,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
     def placeholders(self, item):
         ctx = {}
         for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item]).values():
-            ctx[p.identifier] = str(p.render_sample(self.request.event))
+            ctx[p.identifier] = escape(str(p.render_sample(self.request.event)))
         return ctx
 
     def get(self, request, *args, **kwargs):

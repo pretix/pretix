@@ -38,6 +38,7 @@ import logging
 import os
 import sys
 from json import loads
+from pathlib import Path
 from urllib.parse import urlparse
 
 import importlib_metadata as metadata
@@ -70,14 +71,10 @@ MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 PROFILE_DIR = os.path.join(DATA_DIR, 'profiles')
 CACHE_DIR = config.get('pretix', 'cachedir', fallback=os.path.join(DATA_DIR, 'cache'))
 
-if not os.path.exists(DATA_DIR):
-    os.mkdir(DATA_DIR)
-if not os.path.exists(LOG_DIR):
-    os.mkdir(LOG_DIR)
-if not os.path.exists(MEDIA_ROOT):
-    os.mkdir(MEDIA_ROOT)
-if not os.path.exists(CACHE_DIR):
-    os.mkdir(CACHE_DIR)
+Path(DATA_DIR).mkdir(parents=False, exist_ok=True)
+Path(LOG_DIR).mkdir(parents=False, exist_ok=True)
+Path(MEDIA_ROOT).mkdir(parents=False, exist_ok=True)
+Path(CACHE_DIR).mkdir(parents=False, exist_ok=True)
 
 if config.has_option('django', 'secret'):
     SECRET_KEY = config.get('django', 'secret')
@@ -99,7 +96,7 @@ else:
 
 # Adjustable settings
 
-debug_fallback = "runserver" in sys.argv
+debug_fallback = "runserver" in sys.argv or "runserver_plus" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 LOG_CSP = config.getboolean('pretix', 'csp_log', fallback=False)
 CSP_ADDITIONAL_HEADER = config.get('pretix', 'csp_additional_header', fallback='')
@@ -212,7 +209,7 @@ if config.getboolean('pretix', 'trust_x_forwarded_proto', fallback=False):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
-                                    fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin')
+                                    fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists')
 PRETIX_PLUGINS_EXCLUDE = config.get('pretix', 'plugins_exclude', fallback='').split(',')
 PRETIX_PLUGINS_SHOW_META = config.getboolean('pretix', 'plugins_show_meta', fallback=True)
 

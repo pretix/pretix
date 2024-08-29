@@ -185,7 +185,7 @@ class Seat(models.Model):
 
     @classmethod
     def annotated(cls, qs, event_id, subevent, ignore_voucher_id=None, minimal_distance=0,
-                  ignore_order_id=None, ignore_cart_id=None, distance_only_within_row=False):
+                  ignore_order_id=None, ignore_cart_id=None, distance_only_within_row=False, annotate_ids=False):
         from . import CartPosition, Order, OrderPosition, Voucher
 
         vqs = Voucher.objects.filter(
@@ -214,17 +214,24 @@ class Seat(models.Model):
         )
         if ignore_cart_id:
             cqs = cqs.exclude(cart_id=ignore_cart_id)
-        qs_annotated = qs.annotate(
-            has_order=Exists(
-                opqs
-            ),
-            has_cart=Exists(
-                cqs
-            ),
-            has_voucher=Exists(
-                vqs
+        if annotate_ids:
+            qs_annotated = qs.annotate(
+                orderposition_id=Subquery(opqs.values('id')),
+                cartposition_id=Subquery(cqs.values('id')),
+                voucher_id=Subquery(vqs.values('id')),
             )
-        )
+        else:
+            qs_annotated = qs.annotate(
+                has_order=Exists(
+                    opqs
+                ),
+                has_cart=Exists(
+                    cqs
+                ),
+                has_voucher=Exists(
+                    vqs
+                )
+            )
 
         if minimal_distance > 0:
             # TODO: Is there a more performant implementation on PostgreSQL using
@@ -235,7 +242,11 @@ class Seat(models.Model):
                     Power(F('y') - OuterRef('y'), Value(2), output_field=models.FloatField())
                 )
             ).filter(
-                Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True),
+                (
+                    (Q(orderposition_id__isnull=False) | Q(cartposition_id__isnull=False) | Q(voucher_id__isnull=False))
+                    if annotate_ids else
+                    (Q(has_order=True) | Q(has_cart=True) | Q(has_voucher=True))
+                ),
                 distance__lt=minimal_distance ** 2
             )
             if distance_only_within_row:

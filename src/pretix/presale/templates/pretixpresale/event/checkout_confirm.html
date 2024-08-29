@@ -50,19 +50,15 @@
                 <ul class="list-group">
                     {% for payment, rendered_block in payments %}
                         <li class="list-group-item payment">
-                            {% if payments|length > 1 %}
-                                <div class="row">
-                                    <div class="col-sm-10 col-xs-12">
-                                        <h4>{{ payment.provider_name }}</h4>
-                                        {{ rendered_block }}
-                                    </div>
-                                    <div class="col-sm-2 col-xs-12 text-right">
-                                        <h4>{{ payment.payment_amount|money:request.event.currency }}</h4>
-                                    </div>
+                            <div class="row">
+                                <div class="{% if payments|length > 1 %}col-sm-10 {% endif %}col-xs-12">
+                                    <h4 {% if payments|length == 1 %}class="sr-only"{% endif %}>{{ payment.provider_name }}</h4>
+                                    {{ rendered_block }}
                                 </div>
-                            {% else %}
-                                {{ rendered_block }}
-                            {% endif %}
+                                <div class="col-sm-2 col-xs-12 text-right {% if payments|length == 1 %}sr-only{% endif %}">
+                                    <h4>{{ payment.payment_amount|money:request.event.currency }}</h4>
+                                </div>
+                            </div>
                         </li>
                     {% endfor %}
                 </ul>
