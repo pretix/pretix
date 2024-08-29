@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-29 11:58+0000\n"
+"PO-Revision-Date: 2024-08-29 21:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -32655,153 +32655,153 @@ msgstr "Helbidea ezabatu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
 msgid "Do you really want to delete the following address from your account?"
-msgstr ""
+msgstr "Benetan ezabatu nahi duzu helbide hau zure kontutik?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
 msgid "Account information"
-msgstr ""
+msgstr "Kontuaren informazioa"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
 msgid "Update your account information"
-msgstr ""
+msgstr "Zure kontuaren informazioa eguneratu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:11
 #, python-format
 msgid "Sign in to your account at %(org)s"
-msgstr ""
+msgstr "Hasi saioa zure kontuan %(org)s(e)n"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:38
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:20
 msgid "Create account"
-msgstr ""
+msgstr "Kontua sortu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
 msgid "Your membership"
-msgstr ""
+msgstr "Zure bazkidetza"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:6
 msgid "Password reset"
-msgstr ""
+msgstr "Pasahitzaren berrezarpena"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
 msgid "Set a new password for your account"
-msgstr ""
+msgstr "Zure kontuarentzako pasahitz berri bat ezarri"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
 msgid "Your account"
-msgstr ""
+msgstr "Zure kontua"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:23
 msgid "Login method"
-msgstr ""
+msgstr "Saioa hasteko metodoa"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:39
 msgid "Change account information"
-msgstr ""
+msgstr "Kontuaren informazioa aldatu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:44
 msgid "Change password"
-msgstr ""
+msgstr "Pasahitza aldatu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:59
 msgid "Addresses"
-msgstr ""
+msgstr "Helbideak"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:62
 msgid "Attendee profiles"
-msgstr ""
+msgstr "Bertaratuko diren pertsonen profilak"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:179
 msgid "No memberships are stored in your account."
-msgstr ""
+msgstr "Ez dago bazkidetzarik zure kontuan gordeta."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:211
 msgid "No addresses are stored in your account."
-msgstr ""
+msgstr "Ez dago helbiderik zure kontuan gordeta."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:222
 msgid "Profile"
-msgstr ""
+msgstr "Profila"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:244
 msgid "No attendee profiles are stored in your account."
-msgstr ""
+msgstr "Ez dago bertaratuko diren pertsonen profilik gordeta zure kontuan."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
 msgid "Delete profile"
-msgstr ""
+msgstr "Profila ezabatu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
 msgid "Do you really want to delete the following profile from your account?"
-msgstr ""
+msgstr "Benetan ezabatu nahi duzu zure kontuaren profil hau?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
-msgstr ""
+msgstr "Erregistroa"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
 #, python-format
 msgid "Create a new account at %(org)s"
-msgstr ""
+msgstr "%(org)s-en kontu berri bat sortu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
 msgid "Log in to an existing account"
-msgstr ""
+msgstr "Lehendik dagoen kontu batean saioa hasi"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:20
 msgid "Request a new password"
-msgstr ""
+msgstr "Pasahitz berri bat eskatu"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
-msgstr ""
+msgstr "Ekitaldien zerrenda"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
-msgstr ""
+msgstr "Igarotako ekitaldiak"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
-msgstr ""
+msgstr "Hurrengo ekitaldiak"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:65
 msgctxt "subevent"
 msgid "Multiple dates"
-msgstr ""
+msgstr "Askotariko datak"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 #: pretix/presale/views/widget.py:437
 msgid "More info"
-msgstr ""
+msgstr "Informazio gehiago"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:142
 msgid "No archived events found."
-msgstr ""
+msgstr "Ez da aurkitu artxibatutako ekitaldirik."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:142
 msgid "Show upcoming"
-msgstr ""
+msgstr "Erakutsi hurrengoa"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:144
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "Ez da ekitaldi publikorik aurkitu inguruan."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:144
 msgid "Show past events"
-msgstr ""
+msgstr "Erakutsi igarotako ekitaldiak"
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr ""
+msgstr "%(of)s-etik %(page)s orrialdea"
 
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
@@ -32811,15 +32811,15 @@ msgstr "Zure eskaera prozesatzen ari gara …"
 #: pretix/presale/utils.py:256 pretix/presale/utils.py:389
 #: pretix/presale/utils.py:390
 msgid "The selected event was not found."
-msgstr ""
+msgstr "Aukeratutako ekitaldia ez da aurkitu."
 
 #: pretix/presale/utils.py:355
 msgid "This feature is not enabled."
-msgstr ""
+msgstr "Ezaugarri hori ez dago gaituta."
 
 #: pretix/presale/utils.py:398 pretix/presale/utils.py:404
 msgid "The selected organizer was not found."
-msgstr ""
+msgstr "Hautatutako antolatzailea ez da aurkitu."
 
 #: pretix/presale/views/__init__.py:271
 #, python-brace-format
@@ -32827,64 +32827,70 @@ msgid ""
 "Your selected payment method can only be used for a payment of at least "
 "{amount}."
 msgstr ""
+"Hautatutako ordainketa-metodoa gutxienez {amount} ordaintzeko bakarrik "
+"erabil daiteke."
 
 #: pretix/presale/views/cart.py:190
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "Mesedez, sartu zenbaki positiboak bakarrik."
 
 #: pretix/presale/views/cart.py:428
 msgid "We applied the voucher to as many products in your cart as we could."
-msgstr ""
+msgstr "Kupoia zure orgatxoan ahalik eta produktu gehienei aplikatu diegu."
 
 #: pretix/presale/views/cart.py:451
 msgid "Your cart has been updated."
-msgstr ""
+msgstr "Zure saskia eguneratu da."
 
 #: pretix/presale/views/cart.py:454 pretix/presale/views/cart.py:480
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "Zure saskia hutsik dago orain."
 
 #: pretix/presale/views/cart.py:495
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Produktuak arrakastaz gehitu dira zure saskira."
 
 #: pretix/presale/views/cart.py:519 pretix/presale/views/event.py:532
 #: pretix/presale/views/widget.py:377 pretix/presale/views/event.py:530
 msgid "Tickets for this event cannot be purchased on this sales channel."
-msgstr ""
+msgstr "Ekitaldi honetarako tiketak ezin dira salmenta-kanal honen bidez erosi."
 
 #: pretix/presale/views/cart.py:670 pretix/presale/views/cart.py:669
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
-msgstr ""
+msgstr "Ezin izan dugu zehaztutako data aurkitu."
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
-msgstr ""
+msgstr "Zure saskia hutsik dago"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The booking period for this event is over or has not yet started."
-msgstr ""
+msgstr "Ekitaldi honetarako erreserba-epea amaitu da edo oraindik ez da hasi."
 
 #: pretix/presale/views/customer.py:247
 msgid ""
 "Your account has been created. Please follow the link in the email we sent "
 "you to activate your account and choose a password."
 msgstr ""
+"Zure kontua sortu da. Mesedez, jarraitu zure kontua aktibatzeko eta "
+"pasahitza aukeratzeko bidaltzen dizugun e-maileko estekari."
 
 #: pretix/presale/views/customer.py:268 pretix/presale/views/customer.py:271
 #: pretix/presale/views/customer.py:556 pretix/presale/views/customer.py:562
 msgid "You clicked an invalid link."
-msgstr ""
+msgstr "Esteka baliogabe batean egin duzu klik."
 
 #: pretix/presale/views/customer.py:291
 msgid "Your new password has been set! You can now use it to log in."
-msgstr ""
+msgstr "Zure pasahitz berria ezarri da! Orain saioa hasteko erabil dezakezu."
 
 #: pretix/presale/views/customer.py:331
 msgid ""
 "We've sent you an email with further instructions on resetting your password."
 msgstr ""
+"E-mail bat bidali dizugu, zure pasahitza berrezartzeko jarraibide "
+"osagarriekin."
 
 #: pretix/presale/views/customer.py:524
 msgid ""
@@ -32892,16 +32898,21 @@ msgid ""
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
 msgstr ""
+"Zure aldaketak gorde dira. E-mail bat bidali dizugu zure helbide "
+"elektronikoa eguneratzeko esteka batekin. Zure kontuaren helbide "
+"elektronikoa aldatu egingo da esteka horretan klik egin bezain laster."
 
 #: pretix/presale/views/customer.py:573
 msgid ""
 "Your email address has not been updated since the address is already in use "
 "for another customer account."
 msgstr ""
+"Zure helbide elektronikoa ez da eguneratu, helbidea beste bezero-kontu "
+"baterako erabiltzen ari delako."
 
 #: pretix/presale/views/customer.py:576
 msgid "Your email address has been updated."
-msgstr ""
+msgstr "Zure helbide elektronikoa eguneratu da."
 
 #: pretix/presale/views/customer.py:789 pretix/presale/views/customer.py:800
 #, python-brace-format
@@ -32909,94 +32920,100 @@ msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
 msgstr ""
+"Ezin izan dugu erabili zure saio-hasiera, {email} helbide elektronikoa "
+"dagoeneko erabiltzen ari baita sistema honetako beste kontu baterako."
 
 #: pretix/presale/views/event.py:890 pretix/presale/views/event.py:888
 msgid "Unknown event code or not authorized to access this event."
 msgstr ""
+"Ekitaldiaren kodea ezezaguna da edo ez du baimenik ekitaldi horretara "
+"sartzeko."
 
 #: pretix/presale/views/event.py:897 pretix/presale/views/event.py:895
 msgctxt "subevent"
 msgid "No date selected."
-msgstr ""
+msgstr "Ez dago datarik aukeratuta."
 
 #: pretix/presale/views/event.py:900 pretix/presale/views/event.py:898
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr ""
+msgstr "Data ezezaguna aukeratuta."
 
 #: pretix/presale/views/event.py:925 pretix/presale/views/event.py:933
 #: pretix/presale/views/event.py:936 pretix/presale/views/event.py:923
 #: pretix/presale/views/event.py:931 pretix/presale/views/event.py:934
 msgid "Please go back and try again."
-msgstr ""
+msgstr "Mesedez itzuli eta saiatu berriro."
 
 #: pretix/presale/views/event.py:949 pretix/presale/views/event.py:947
 msgid "Fake date time"
-msgstr ""
+msgstr "Data ordu faltsua"
 
 #: pretix/presale/views/event.py:961 pretix/presale/views/event.py:959
 msgid "You are not allowed to access time machine mode."
-msgstr ""
+msgstr "Ez duzu denbora-aparatu modurako sarbiderik."
 
 #: pretix/presale/views/event.py:963 pretix/presale/views/event.py:961
 msgid "This feature is only available in test mode."
-msgstr ""
+msgstr "Funtzio hau proba moduan bakarrik dago erabilgarri."
 
 #: pretix/presale/views/event.py:980 pretix/presale/views/event.py:978
 msgid "Time machine disabled!"
-msgstr ""
+msgstr "Denbora-aparatua desgaituta!"
 
 #: pretix/presale/views/order.py:369 pretix/presale/views/order.py:434
 #: pretix/presale/views/order.py:515 pretix/presale/views/order.py:368
 #: pretix/presale/views/order.py:433 pretix/presale/views/order.py:514
 msgid "The payment for this order cannot be continued."
-msgstr ""
+msgstr "Eskaera honen ordainketak ezin du jarraitu."
 
 #: pretix/presale/views/order.py:374 pretix/presale/views/order.py:443
 #: pretix/presale/views/order.py:524 pretix/presale/views/order.py:566
 #: pretix/presale/views/order.py:373 pretix/presale/views/order.py:442
 #: pretix/presale/views/order.py:523 pretix/presale/views/order.py:564
 msgid "The payment is too late to be accepted."
-msgstr ""
+msgstr "Beranduegi da ordainketa onartua izateko."
 
 #: pretix/presale/views/order.py:463 pretix/presale/views/order.py:462
 msgid "An invoice has been generated."
-msgstr ""
+msgstr "Faktura bat sortu da."
 
 #: pretix/presale/views/order.py:561 pretix/presale/views/order.py:559
 msgid "The payment method for this order cannot be changed."
-msgstr ""
+msgstr "Ezin da eskaera honen ordainketa-metodoa aldatu."
 
 #: pretix/presale/views/order.py:572 pretix/presale/views/order.py:570
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "Une honetan, eskaera horretarako ordainketa bat dago egiteke."
 
 #: pretix/presale/views/order.py:853 pretix/presale/views/order.py:925
 #: pretix/presale/views/order.py:851 pretix/presale/views/order.py:923
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "Ezin duzu eskaera hau aldatu"
 
 #: pretix/presale/views/order.py:1015 pretix/presale/views/order.py:1020
 #: pretix/presale/views/order.py:1025 pretix/presale/views/order.py:1013
 #: pretix/presale/views/order.py:1018 pretix/presale/views/order.py:1023
 msgid "You chose an invalid cancellation fee."
-msgstr ""
+msgstr "Ezeztatze-tarifa baliogabea aukeratu duzu."
 
 #: pretix/presale/views/order.py:1041 pretix/presale/views/order.py:1039
 msgid "Canceled by customer"
-msgstr ""
+msgstr "Bezeroak ezeztatua"
 
 #: pretix/presale/views/order.py:1052 pretix/presale/views/order.py:1050
 msgid "The cancellation has been requested."
-msgstr ""
+msgstr "Ezeztatzea eskatu da."
 
 #: pretix/presale/views/order.py:1105 pretix/presale/views/order.py:1103
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr ""
+msgstr "Tiketaren deskarga ez dago (oraindik) eskaera honetarako gaituta."
 
 #: pretix/presale/views/order.py:1114 pretix/presale/views/order.py:1112
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
+"Mesedez, egin klik posta elektronikoz bidaliko dizugun estekan zure sarrerak "
+"deskargatzeko."
 
 #: pretix/presale/views/order.py:1595 pretix/presale/views/order.py:1593
 #, python-brace-format
@@ -33004,41 +33021,45 @@ msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
+"Eskaera aldatu egin da. Ordaindu gabe duzun {amount} zenbatekoa ordainduz "
+"jarrai dezakezu."
 
 #: pretix/presale/views/order.py:1607 pretix/presale/views/order.py:1605
 msgid "You did not make any changes."
-msgstr ""
+msgstr "Ez duzu aldaketarik egin."
 
 #: pretix/presale/views/order.py:1631 pretix/presale/views/order.py:1629
 msgid "You may not change your order in a way that reduces the total price."
-msgstr ""
+msgstr "Ezin duzu zure eskaera aldatu prezio totala murrizteko."
 
 #: pretix/presale/views/order.py:1633 pretix/presale/views/order.py:1631
 msgid "You may only change your order in a way that increases the total price."
-msgstr ""
+msgstr "Zure eskaera aldatzeko, prezio totala igo behar duzu."
 
 #: pretix/presale/views/order.py:1635 pretix/presale/views/order.py:1633
 msgid "You may not change your order in a way that changes the total price."
-msgstr ""
+msgstr "Ezin duzu zure eskaera aldatu prezio totala aldatzeko moduan."
 
 #: pretix/presale/views/order.py:1637 pretix/presale/views/order.py:1635
 msgid "You may not change your order in a way that would require a refund."
-msgstr ""
+msgstr "Ezin duzu zure eskaera aldatu dirua itzultzeko."
 
 #: pretix/presale/views/order.py:1645 pretix/presale/views/order.py:1643
 msgid ""
 "You may not change your order in a way that increases the total price since "
 "payments are no longer being accepted for this event."
 msgstr ""
+"Ezin duzu zure eskaera aldatu prezio osoa igotzeko moduan, ekitaldi "
+"honetarako ordainketak jada ez baitira onartzen."
 
 #: pretix/presale/views/order.py:1660 pretix/presale/views/order.py:1691
 #: pretix/presale/views/order.py:1658 pretix/presale/views/order.py:1689
 msgid "You cannot change this order."
-msgstr ""
+msgstr "Ezin duzu eskaera hau aldatu."
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
-msgstr ""
+msgstr "Zure sarrera prozesatzen zailtasunak ditugu."
 
 #: pretix/presale/views/user.py:70
 #, python-brace-format
@@ -33048,26 +33069,36 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Sartu duzun helbide elektronikoa baliozkoa bada eta sarrera bati lotuta "
+"badago, e-mail bat bidali dizugu zure sarreraren esteka batekin azken "
+"{number} orduetan. E-maila ez bada iritsi, mesedez, berrikusi zure spam "
+"karpeta eta egiaztatu helbide elektroniko zuzena erabili duzula."
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
+"Arazoak izaten ari gara e-mailak bidaltzeko une honetan, mesedez, egiaztatu "
+"geroago."
 
 #: pretix/presale/views/user.py:94
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
+"Erabiltzaile honek eskaeraren bat egin badu, e-mail bat jasoko du bere "
+"eskaeren kodeekin."
 
 #: pretix/presale/views/waiting.py:98 pretix/presale/views/waiting.py:122
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "Itxaron-zerrendak desgaituta daude ekitaldi honetarako."
 
 #: pretix/presale/views/waiting.py:134
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"Ezin zara itxarote-zerrendan sartu, produktu hau une honetan erabilgarri "
+"baitago."
 
 #: pretix/presale/views/waiting.py:141
 #, python-brace-format
@@ -33075,51 +33106,57 @@ msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
+"Itxarote-zerrendan sartu zaitugu. Mezu elektroniko bat bidaliko dizugu "
+"{email}(e)ra produktu hau berriz erabilgarri egon bezain laster."
 
 #: pretix/presale/views/waiting.py:169
 msgid "We could not find you on our waiting list."
-msgstr ""
+msgstr "Ezin izan zaitugu aurkitu gure itxaron-zerrendan."
 
 #: pretix/presale/views/waiting.py:173
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
 msgstr ""
+"Itxarote-zerrendan duzun lekua ez da baliozkoa edo dagoeneko erabili da. "
+"Hemen ez dago beste ezer egiterik."
 
 #: pretix/presale/views/waiting.py:183
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
 msgstr ""
+"Eskerrik asko! Itxarote-zerrendan zure lekua beste pertsona bati esleituko "
+"diogu."
 
 #: pretix/presale/views/widget.py:372
 msgid "This ticket shop is currently disabled."
-msgstr ""
+msgstr "Sarreren denda desgaituta dago une honetan."
 
 #: pretix/presale/views/widget.py:386
 msgid "The selected date does not exist in this event series."
-msgstr ""
+msgstr "Hautatutako data ez dago ekitaldi-multzo honetan."
 
 #: pretix/presale/views/widget.py:449
 #, python-format
 msgid "from %(start_date)s"
-msgstr ""
+msgstr "%(start_date)s-etik"
 
 #: pretix/settings.py:744 pretix/settings.py:747
 msgid "User profile only"
-msgstr ""
+msgstr "Erabiltzailearen profila soilik"
 
 #: pretix/settings.py:745 pretix/settings.py:748
 msgid "Read access"
-msgstr ""
+msgstr "Irakurri sarbidea"
 
 #: pretix/settings.py:746 pretix/settings.py:749
 msgid "Write access"
-msgstr ""
+msgstr "Idatzi sarbidea"
 
 #: pretix/settings.py:757 pretix/settings.py:760
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #: pretix/control/forms/vouchers.py:292
 msgid ""
