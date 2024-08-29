@@ -472,6 +472,33 @@ def test_split_payment_success(env, orga_job):
 
 
 @pytest.mark.django_db
+def test_valid_plus_invalid_match(env, orga_job):
+    with scopes_disabled():
+        o4 = Order.objects.create(
+            code='99999', event=env[0],
+            status=Order.STATUS_PAID,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=12,
+            sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
+        )
+        o4.payments.create(
+            provider='paypal',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=o4.total
+        )
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellungen DUMMY-1Z3AS DUMMY-99999',
+        'date': '2016-01-26',
+        'amount': '.00'
+    }])
+    with scopes_disabled():
+        job = BankImportJob.objects.last()
+        t = job.transactions.last()
+        assert t.state == BankTransaction.STATE_NOMATCH
+
+
+@pytest.mark.django_db
 def test_split_payment_mismatch(env, orga_job):
     with scopes_disabled():
         o4 = Order.objects.create(
