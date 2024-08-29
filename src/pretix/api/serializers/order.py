@@ -273,9 +273,15 @@ class AnswerSerializer(I18nAwareModelSerializer):
 
 
 class CheckinSerializer(I18nAwareModelSerializer):
+    device_id = serializers.SlugRelatedField(
+        source='device',
+        slug_field='device_id',
+        read_only=True,
+    )
+
     class Meta:
         model = Checkin
-        fields = ('id', 'datetime', 'list', 'auto_checked_in', 'gate', 'device', 'type')
+        fields = ('id', 'datetime', 'list', 'auto_checked_in', 'gate', 'device', 'device_id', 'type')
 
 
 class FailedCheckinSerializer(I18nAwareModelSerializer):

@@ -78,7 +78,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
                 queryset=OrderPosition.objects.select_related(
                     'order', 'order__event', 'order__event__organizer', 'seat',
                 ).prefetch_related(
-                    Prefetch('checkins', queryset=Checkin.objects.all()),
+                    Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                     'answers', 'answers__options', 'answers__question',
                 )
             ),

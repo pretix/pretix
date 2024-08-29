@@ -203,7 +203,8 @@ checkins                              list of objects            List of **succe
 ├ datetime                            datetime                   Time of check-in
 ├ type                                string                     Type of scan (defaults to ``entry``)
 ├ gate                                integer                    Internal ID of the gate. Can be ``null``.
-├ device                              integer                    Internal ID of the device. Can be ``null``.
+├ device                              integer                    Internal ID of the device. Can be ``null``. **Deprecated**, since this ID is not otherwise used in the API and is therefore not very useful.
+├ device_id                           integer                    Attribute ``device_id`` of the device. Can be ``null``.
 └ auto_checked_in                     boolean                    Indicates if this check-in been performed automatically by the system
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)

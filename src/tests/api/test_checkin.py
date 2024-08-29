@@ -498,6 +498,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
             'auto_checked_in': False,
             'device': None,
+            'device_id': None,
             'gate': None,
             'type': 'entry',
         }
@@ -540,6 +541,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
             'auto_checked_in': False,
             'device': None,
+            'device_id': None,
             'gate': None,
             'type': 'entry',
         }
