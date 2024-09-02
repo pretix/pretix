@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-07-23 10:22+0000\n"
+"PO-Revision-Date: 2024-09-03 00:00+0000\n"
 "Last-Translator: Alberto Ortega <ortega16.cieza@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.7\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -3984,8 +3984,9 @@ msgstr ""
 
 #: pretix/base/models/customers.py:299 pretix/base/models/orders.py:1513
 #: pretix/base/models/orders.py:3175 pretix/base/settings.py:1096
+#, fuzzy
 msgid "Company name"
-msgstr "Nombre de la Compañía"
+msgstr "Razón Social / Organización"
 
 #: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1517
 #: pretix/base/models/orders.py:3182 pretix/base/settings.py:81
