@@ -43,7 +43,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.logentrytypes import log_entry_types
-from pretix.base.signals import logentry_object_link, is_app_active
+from pretix.base.signals import is_app_active, logentry_object_link
 
 
 class VisibleOnlyManager(models.Manager):
@@ -56,7 +56,10 @@ def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
         if is_active:
             a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
         elif event and plugin_name:
-            a_map['val'] = '<i>{val}</i> <a href="{plugin_href}"><span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span></a>'.format_map({
+            a_map['val'] = (
+                '<i>{val}</i> <a href="{plugin_href}">'
+                '<span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span></a>'
+            ).format_map({
                 **a_map,
                 "errmes": _("The relevant plugin is currently not active. To activate it, click here to go to the plugin settings."),
                 "plugin_href": reverse('control:event.settings.plugins', kwargs={
@@ -152,8 +155,7 @@ class LogEntry(models.Model):
     @cached_property
     def display_object(self):
         from . import (
-            Discount, Event, Item, Order, Question, Quota,
-            SubEvent, Voucher,
+            Discount, Event, Item, Order, Question, Quota, SubEvent, Voucher,
         )
 
         log_entry_type, meta = log_entry_types.find(action_type=self.action_type)

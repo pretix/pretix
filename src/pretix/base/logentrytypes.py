@@ -22,8 +22,10 @@ log_entry_types = LogEntryTypeRegistry({'action_type': lambda o: getattr(o, 'act
 class LogEntryType:
     def __init__(self, action_type=None, plain=None):
         assert self.__module__ != LogEntryType.__module__  # must not instantiate base classes, only derived ones
-        if action_type: self.action_type = action_type
-        if plain: self.plain = plain
+        if action_type:
+            self.action_type = action_type
+        if plain:
+            self.plain = plain
 
     def display(self, logentry):
         if hasattr(self, 'plain'):

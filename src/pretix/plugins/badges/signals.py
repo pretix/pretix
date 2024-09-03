@@ -28,8 +28,8 @@ from django.template.loader import get_template
 from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
 
+from pretix.base.logentrytypes import EventLogEntryType, log_entry_types
 from pretix.base.models import Event, Order
-from pretix.base.logentrytypes import log_entry_types, EventLogEntryType
 from pretix.base.signals import (
     event_copy_data, item_copy_data, register_data_exporters,
 )

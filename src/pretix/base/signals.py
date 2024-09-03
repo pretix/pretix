@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import warnings
-from typing import Any, Callable, List, Tuple, Optional
+from typing import Any, Callable, List, Tuple
 
 import django.dispatch
 from django.apps import apps

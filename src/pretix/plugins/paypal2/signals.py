@@ -31,8 +31,8 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.forms import SecretKeySettingsField
+from pretix.base.logentrytypes import EventLogEntryType, log_entry_types
 from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
-from pretix.base.logentrytypes import log_entry_types, EventLogEntryType
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     register_global_settings, register_payment_providers,

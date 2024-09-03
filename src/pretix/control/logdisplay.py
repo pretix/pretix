@@ -47,14 +47,19 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.logentrytypes import (
+    DiscountLogEntryType, EventLogEntryType, ItemCategoryLogEntryType,
+    ItemLogEntryType, LogEntryType, OrderLogEntryType, QuestionLogEntryType,
+    QuotaLogEntryType, TaxRuleLogEntryType, VoucherLogEntryType,
+    log_entry_types,
+)
 from pretix.base.models import (
     Checkin, CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
     TaxRule,
 )
-from pretix.base.logentrytypes import log_entry_types, LogEntryType, EventLogEntryType, OrderLogEntryType, \
-    VoucherLogEntryType, ItemLogEntryType, QuotaLogEntryType, DiscountLogEntryType, ItemCategoryLogEntryType, \
-    QuestionLogEntryType, TaxRuleLogEntryType
-from pretix.base.signals import logentry_display, orderposition_blocked_display, app_cache
+from pretix.base.signals import (
+    app_cache, logentry_display, orderposition_blocked_display,
+)
 from pretix.base.templatetags.money import money_filter
 
 OVERVIEW_BANLIST = [
@@ -771,7 +776,7 @@ class VariationLogEntryType(ItemLogEntryType):
     'pretix.event.order.refund.canceled': _('Refund {local_id} has been canceled.'),
     'pretix.event.order.refund.failed': _('Refund {local_id} has failed.'),
 })
-class CoreOrderLogEntryType(OrderLogEntryType):
+class CoreOrderPaymentLogEntryType(OrderLogEntryType):
     pass
 
 
