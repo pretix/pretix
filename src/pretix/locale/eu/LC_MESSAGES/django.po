@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-06 08:47+0000\n"
+"PO-Revision-Date: 2024-09-06 19:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -1414,7 +1414,7 @@ msgstr "Helbidea"
 #: pretix/plugins/reports/exporters.py:841 pretix/control/forms/filter.py:630
 #: pretix/control/forms/filter.py:661
 msgid "ZIP code"
-msgstr "ZIP kodea"
+msgstr "Posta-kodea"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -2372,7 +2372,7 @@ msgstr "Fakturaren helbidea kalea"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:345
 msgid "Invoice address ZIP code"
-msgstr "Fakturaren helbidea posta kodea"
+msgstr "Fakturaren helbidea posta-kodea"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:350
 msgid "Invoice address city"
@@ -3015,7 +3015,7 @@ msgstr "Lehentasuna"
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:19
 #: pretix/control/views/vouchers.py:118
 msgid "Voucher code"
-msgstr "Kupoiaren kodea"
+msgstr "Kupoia"
 
 #: pretix/base/forms/__init__.py:95 pretix/base/forms/__init__.py:106
 #: pretix/base/forms/__init__.py:118
@@ -3270,11 +3270,11 @@ msgstr "Ordua"
 #: pretix/base/forms/widgets.py:234 pretix/base/forms/widgets.py:239
 #: pretix/base/forms/widgets.py:233 pretix/base/forms/widgets.py:238
 msgid "Business or institutional customer"
-msgstr "Enpresa- edo erakunde-bezeroa"
+msgstr "Enpresa edo erakundea"
 
 #: pretix/base/forms/widgets.py:238 pretix/base/forms/widgets.py:237
 msgid "Individual customer"
-msgstr "Norbanako bezeroa"
+msgstr "Norbanakoa"
 
 #: pretix/base/invoice.py:86
 #, python-format
@@ -7729,8 +7729,7 @@ msgstr[1] ""
 #: pretix/base/services/cart.py:168
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
-"Kupoi-kode hori baimendutako gehienezko aldi-kopurua erabili da dagoeneko."
+msgstr "Kupoi hori baimendutako gehienezko aldi-kopurua erabili da dagoeneko."
 
 #: pretix/base/services/cart.py:170
 #, python-format
@@ -10480,7 +10479,7 @@ msgid "Your event registration: {code}"
 msgstr "Zure ekitaldiaren erregistroa: {code}"
 
 #: pretix/base/settings.py:2159
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10502,7 +10501,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Adeitasunez,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2172
 #, python-brace-format
@@ -10510,7 +10509,7 @@ msgid "Your orders for {event}"
 msgstr "Zure eskaerak {event}-rako"
 
 #: pretix/base/settings.py:2176
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10530,10 +10529,10 @@ msgstr ""
 "{orders}\n"
 "\n"
 "Adeitasunez,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2192
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -10553,7 +10552,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2212
 #, fuzzy, python-brace-format
@@ -10571,7 +10570,7 @@ msgid ""
 msgstr ""
 "Kaixo,\n"
 "\n"
-"{event}-erako izena eman duzu. Doako produktuak eskatu dituzunez,\n"
+"{event}-rako sarrerak eskuratu dituzu. Doakoak direnez,\n"
 "ez duzu ezer ordaindu behar.\n"
 "\n"
 "Eskaeraren xehetasunak aldatu eta eskaeraren egoera ikus dezakezu hemen\n"
@@ -10581,7 +10580,7 @@ msgstr ""
 "PUNTUEUS"
 
 #: pretix/base/settings.py:2229
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10606,10 +10605,10 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2247
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10636,7 +10635,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2265
 msgid "Attachment for new orders"
@@ -10663,7 +10662,7 @@ msgstr ""
 "dadin, MB {size} arteko PDF fitxategiak baino ezin dituzu kargatu."
 
 #: pretix/base/settings.py:2297
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -10683,7 +10682,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Adeitasunez,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2309
 #, python-brace-format
@@ -10691,7 +10690,7 @@ msgid "Your order has been changed: {code}"
 msgstr "Zure eskera aldatu egin da: {code}"
 
 #: pretix/base/settings.py:2313
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10711,7 +10710,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Adeitasunez,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2325
 #, python-brace-format
@@ -10719,7 +10718,7 @@ msgid "Payment received for your order: {code}"
 msgstr "Zure eskaeraren ordainketa jaso dugu: {code}"
 
 #: pretix/base/settings.py:2329
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10743,7 +10742,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2347
 #, python-brace-format
@@ -10751,7 +10750,7 @@ msgid "Event registration confirmed: {code}"
 msgstr "Ekitaldiko izen-ematea konfirmatuta: {code}"
 
 #: pretix/base/settings.py:2351
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -10771,7 +10770,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bat,\n"
-"{event} zure ekipoa"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2368 pretix/control/forms/event.py:1119
 #: pretix/control/forms/event.py:1219 pretix/plugins/sendmail/models.py:259
@@ -10792,7 +10791,7 @@ msgid "Your order is about to expire: {code}"
 msgstr "Zure eskaera iraungitzear dago: {code}"
 
 #: pretix/base/settings.py:2382
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10817,7 +10816,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2396
 #, python-brace-format
@@ -10825,7 +10824,7 @@ msgid "Your order is pending payment: {code}"
 msgstr "Zure eskaera ordaintzeke dago: {code}"
 
 #: pretix/base/settings.py:2400
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10847,7 +10846,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Adeitasunez,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2413
 #, python-brace-format
@@ -10855,7 +10854,7 @@ msgid "Incomplete payment received: {code}"
 msgstr "Ordainketaren zati bat jaso da: {code}"
 
 #: pretix/base/settings.py:2417
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10883,7 +10882,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2433
 #, python-brace-format
@@ -10891,7 +10890,7 @@ msgid "Payment failed for your order: {code}"
 msgstr "Zure eskeraren ordainketak huts egin du: {code}"
 
 #: pretix/base/settings.py:2437
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10908,8 +10907,8 @@ msgid ""
 "Your {event} team"
 msgstr ""
 "Kaixo,\n"
-"{event} ekitaldirako egin duzun eskaeraren ordainketa-saiakerak huts egin "
-"du.\n"
+"{event} ekitaldirako egin duzun eskaeraren ordainketa-saiakerak huts egin du."
+"\n"
 "\n"
 "Zure eskaera oraindik baliozkoa da, eta ordainketa berdinarekin edo beste "
 "ordainketa-metodo batekin berriro saiatu zaitezke. Mesedez, osatu ordainketa "
@@ -10919,7 +10918,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2451
 #, python-brace-format
@@ -10927,7 +10926,7 @@ msgid "You have been selected from the waitinglist for {event}"
 msgstr "{event} ekitaldirako itxaron-zerrendatik hautatu zaituzte"
 
 #: pretix/base/settings.py:2455
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10971,8 +10970,8 @@ msgstr ""
 "\n"
 "{url}\n"
 "\n"
-"Kontuan izan esteka hau hurrengo {hours} orduetan baino ez dela "
-"baliogarria!\n"
+"Kontuan izan esteka hau hurrengo {hours} orduetan baino ez dela baliogarria!"
+"\n"
 "Denbora tarte horretan bonua trukatzen ez baduzu, sarrera itxaron-zerrendan "
 "dagoen\n"
 "hurrengo pertsonari esleituko diogu.\n"
@@ -10985,7 +10984,7 @@ msgstr ""
 "{url_remove}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2484
 #, python-brace-format
@@ -10993,7 +10992,7 @@ msgid "Order canceled: {code}"
 msgstr "Eskaera ezeztatua: {code}"
 
 #: pretix/base/settings.py:2488
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11017,7 +11016,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2502
 #, python-brace-format
@@ -11025,7 +11024,7 @@ msgid "Order approved and awaiting payment: {code}"
 msgstr "Eskaera onartuta eta ordainketaren zain: {code}"
 
 #: pretix/base/settings.py:2506
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11053,10 +11052,10 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2530 pretix/base/settings.py:2567
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11076,7 +11075,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2542
 #, python-brace-format
@@ -11084,7 +11083,7 @@ msgid "Order approved and confirmed: {code}"
 msgstr "Eskaera onartuta eta konfirmatuta: {code}"
 
 #: pretix/base/settings.py:2546
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11107,7 +11106,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2579
 #, python-brace-format
@@ -11115,7 +11114,7 @@ msgid "Order denied: {code}"
 msgstr "Eskaera ukatua: {code}"
 
 #: pretix/base/settings.py:2583
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11140,10 +11139,10 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat, \n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2598
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11159,7 +11158,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat, \n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2616 pretix/base/settings.py:2632
 #, python-brace-format
@@ -11167,7 +11166,7 @@ msgid "Your ticket is ready for download: {code}"
 msgstr "Zure sarrera deskargatzeko prest dago: {code}"
 
 #: pretix/base/settings.py:2620
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -11187,10 +11186,10 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat, \n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2636
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11210,7 +11209,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bero bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2648
 #, python-brace-format
@@ -11218,7 +11217,7 @@ msgid "Activate your account at {organizer}"
 msgstr "Zure kontua aktibatu {organizer}-en"
 
 #: pretix/base/settings.py:2652
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -11249,7 +11248,7 @@ msgstr ""
 "Zure izen-ematea zuk egin ez baduzu, mesedez, baztertu mezu hau.\n"
 "\n"
 "Agur bero bat,\n"
-"{organizer} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2670
 #, python-brace-format
@@ -11257,7 +11256,7 @@ msgid "Confirm email address for your account at {organizer}"
 msgstr "Zure kontuaren e-posta helbidea berretsi {organizer}-en"
 
 #: pretix/base/settings.py:2674
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -11288,7 +11287,7 @@ msgstr ""
 "Aldaketa hori zuk eskatu ez baduzu, mesedez, baztertu mezu hau.\n"
 "\n"
 "Agur bero bat,\n"
-"{organizer} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2692
 #, python-brace-format
@@ -11296,7 +11295,7 @@ msgid "Set a new password for your account at {organizer}"
 msgstr "Ezarri pasahitz berria zure {organizer} konturako"
 
 #: pretix/base/settings.py:2696
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -11327,7 +11326,7 @@ msgstr ""
 "Pasahitz berri bat eskatu ez baduzu, mesedez, baztertu mezu hau.\n"
 "\n"
 "Agur bero bat,\n"
-"{organizer} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2748 pretix/base/settings.py:2755
 #: pretix/base/settings.py:2769 pretix/base/settings.py:2777
@@ -11559,9 +11558,8 @@ msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
-"Ziurtatu baliozko e-posta helbidea sartzen duzula. Eskaera konfirmazio bat "
-"bidaliko dizugu, eta eskaerara gero sartzeko beharrezkoa den esteka bat "
-"izango du."
+"Ziurtatu baliozko e-posta helbidea sartzen duzula. Eskaeraren konfirmazio "
+"bat bidaliko dizugu eskaerara sartzeko beharrezkoa den estekarekin."
 
 #: pretix/base/settings.py:3107
 msgid "Help text of the email field"
@@ -12487,12 +12485,12 @@ msgstr "Iragan guztia (gaurko eguna barne)"
 #: pretix/base/timeframes.py:284
 msgctxt "timeframe"
 msgid "Start"
-msgstr "Hasiera"
+msgstr "Hasiera-ordua:"
 
 #: pretix/base/timeframes.py:285
 msgctxt "timeframe"
 msgid "End"
-msgstr "Amaiera"
+msgstr "Amaiera-ordua"
 
 #: pretix/base/timeframes.py:318
 msgid "The end date must be after the start date."
@@ -16240,7 +16238,7 @@ msgstr ""
 #: pretix/presale/views/order.py:1054 pretix/control/views/orders.py:1548
 #: pretix/presale/views/order.py:1052
 msgid "The order has been canceled."
-msgstr ""
+msgstr "Sarrerak bertan behera utzi dira."
 
 #: pretix/control/logdisplay.py:634
 #, python-brace-format
@@ -20331,7 +20329,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:27
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:212
 msgid "No, take me back"
-msgstr ""
+msgstr "Ez, itzuli"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:25
 msgid "Yes, approve order"
@@ -20344,7 +20342,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:478
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
-msgstr "Eskaera ezeztatu"
+msgstr "Sarrerak ezeztatu"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:12
 #: pretix/control/templates/pretixcontrol/order/deny.html:11
@@ -20368,7 +20366,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:220
 msgid "Yes, cancel order"
-msgstr ""
+msgstr "Bai, sarrerak bertan behera utzi"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:4
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:8
@@ -20818,7 +20816,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:369
 #: pretix/presale/templates/pretixpresale/event/order.html:196
 msgid "Ordered items"
-msgstr "Eskatutako produktuak"
+msgstr "Sarrerak"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:388
 #, python-format
@@ -31083,7 +31081,7 @@ msgstr "Ez dago produktu honetarako osagarririk."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
 msgid "Enter a voucher code below to buy this product."
-msgstr "Sartu kupoiaren kodea behean produktu hau erosteko."
+msgstr "Sarrera hau eskuratzeko sartu kupoia beheko laukian."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
 msgid "Not available yet."
@@ -31167,7 +31165,7 @@ msgstr[1] "Sarrera hau %(count)s aldiz erabili da."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:170
 msgid "No attendee name provided"
-msgstr "Ez dago bertaratuko den pertsonaren izena ahalbidetuta"
+msgstr "Ez da bertaratuko den pertsonaren izena adierazi"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:223
 msgid "The image you previously uploaded"
@@ -31291,7 +31289,7 @@ msgstr "Saskia hustu"
 #: pretix/presale/templates/pretixpresale/event/index.html:236
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
-msgstr "Kupoi bat trukatu"
+msgstr "Kupoia erabili"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 msgid "We're applying this voucher to your cart..."
@@ -31300,7 +31298,7 @@ msgstr "Kupoi hau zure saskiari aplikatzen ari gara..."
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
 msgid "Redeem voucher"
-msgstr "Kupoia trukatu"
+msgstr "Kupoia erabili"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:10
 msgid "Change summary"
@@ -31835,7 +31833,7 @@ msgstr "Zure eskaera ongi gauzatu da. Ikus beherago xehetasun gehiagorako."
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "Your order has been processed successfully! See below for details."
-msgstr "Zure eskaera ongi prozesatu da! Ikus beherago xehetasun gehiagorako."
+msgstr "Zure eskaera ongi gauzatu da! Behean dituzu xehetasun gehiago."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
@@ -31869,9 +31867,8 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
-"Mesedez, gorde orri zehatz honetarako esteka zure eskaera aurrerago ikusi "
-"nahi baduzu. E-mail bat ere bidali dizugu, zehaztutako helbidera lotura "
-"duena."
+"Mesedez, gorde orri honetarako esteka zure eskaera geroago ikusi nahi "
+"baduzu. E-mail bat ere bidali dizugu, zehaztutako helbidera lotura duena."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
@@ -31955,7 +31952,7 @@ msgstr "Eskatutako produktuak aldatu"
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 #: pretix/presale/templates/pretixpresale/event/position.html:34
 msgid "Change details"
-msgstr "Xehetasunak aldatu"
+msgstr "Editatu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:262
 msgid ""
@@ -31993,7 +31990,7 @@ msgstr "Zure eskaera aldatu"
 #: pretix/presale/templates/pretixpresale/event/order.html:353
 msgctxt "action"
 msgid "Cancel your order"
-msgstr "Zure eskaera ezeztatu"
+msgstr "Zure sarrerak ezeztatu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:361
 msgid ""
@@ -32104,7 +32101,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:467
 msgid "You can cancel this order using the following button."
-msgstr "Eskaera hori bertan behera utz dezakezu hurrengo botoiarekin."
+msgstr "Sarrera hauek bertan behera utz ditzakezu hurrengo botoian klik eginez."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
@@ -32325,9 +32322,9 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
-"Zure eskaerarako edo eskaeretarako esteka galdu baduzu, sartu eskaerarako "
-"erabili zenuen helbide elektronikoa. E-mail bat bidaliko dizugu, e-mail hau "
-"erabiliz egin dituzun eskaera guztietarako estekekin."
+"Zure eskaerarako edo eskaeretarako esteka galdu baduzu, idatzi eskaera "
+"egiteko erabili zenuen helbide elektronikoa. E-mail bat bidaliko dizugu, "
+"helbide elektroniko hau erabiliz egin dituzun eskaera guztietarako estekekin."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
@@ -32376,9 +32373,7 @@ msgstr "Une honetan ez dago kupoi honekin eros daitekeen produkturik."
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
-msgstr ""
-"Deskontu-kode bat sartu duzu, produktu hauetako bat zehaztutako prezioan "
-"erosteko:"
+msgstr "Kupoi bat sartu duzu, produktu hauetako bat eskuratzeko:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:113
 #, python-format
