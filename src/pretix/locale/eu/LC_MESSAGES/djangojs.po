@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-29 10:36+0000\n"
+"PO-Revision-Date: 2024-09-06 08:47+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "eu/>\n"
@@ -720,7 +720,7 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"Zure saskiko artikuluak ez daude zuretzat erreserbatuta. Oraindik ere zure "
+"Zure saskiko produktuak ez daude zuretzat erreserbatuta. Oraindik ere zure "
 "eskaera bete dezakezu, baldin eta eskuragarri badaude."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
@@ -730,8 +730,8 @@ msgstr "Saskia iraungita"
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Zure saskiko produktuak minutu  -ez erreserbatuta daude zuretzat."
+msgstr[1] "Zure saskiko produktuak {num}  minutuz erreserbatuta daude zuretzat."
 
 #: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
