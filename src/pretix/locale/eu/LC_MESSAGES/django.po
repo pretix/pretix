@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-29 21:00+0000\n"
+"PO-Revision-Date: 2024-09-06 08:47+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: pretix/_base_settings.py:79
 msgid "English"
-msgstr "Ingelesa"
+msgstr "Euskara"
 
 #: pretix/_base_settings.py:80
 msgid "German"
@@ -10556,7 +10556,7 @@ msgstr ""
 "{event} taldea"
 
 #: pretix/base/settings.py:2212
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10578,7 +10578,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bat,\n"
-"{event} taldea"
+"PUNTUEUS"
 
 #: pretix/base/settings.py:2229
 #, python-brace-format
@@ -20344,7 +20344,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:478
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
-msgstr ""
+msgstr "Eskaera ezeztatu"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:12
 #: pretix/control/templates/pretixcontrol/order/deny.html:11
@@ -20607,13 +20607,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:29
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:78
 msgid "Invoice information"
-msgstr ""
+msgstr "Fakturazio datuak"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:26
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:40
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
-msgstr ""
+msgstr "(hautazkoa)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
@@ -20818,7 +20818,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:369
 #: pretix/presale/templates/pretixpresale/event/order.html:196
 msgid "Ordered items"
-msgstr ""
+msgstr "Eskatutako produktuak"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:388
 #, python-format
@@ -20838,7 +20838,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:422
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:54
 msgid "Voucher code used:"
-msgstr ""
+msgstr "Erabilitako kupoia:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:424
 #, python-format
@@ -20981,7 +20981,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:317
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:94
 msgid "ZIP code and city"
-msgstr ""
+msgstr "Posta-kodea eta herria"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:970
 msgid "Valid EU VAT ID"
@@ -22172,7 +22172,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:161
 msgid "Privacy"
-msgstr ""
+msgstr "Pribatutasuna"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:165
 msgid ""
@@ -30672,7 +30672,7 @@ msgstr "Eskaera loteslea egin"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:209
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:213
 msgid "Submit registration"
-msgstr "Izen-ematea bidali"
+msgstr "Erosketarekin amaitu"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
@@ -31266,7 +31266,7 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"Zure saskiko artikuluak ez daude zuretzat erreserbatuta. Oraindik ere zure "
+"Zure saskiko produktuak ez daude zuretzat erreserbatuta. Oraindik ere zure "
 "eskaera bete dezakezu, baldin eta eskuragarri badaude."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:490
@@ -31285,7 +31285,7 @@ msgstr "Erosketari ekin"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:40
 msgid "Empty cart"
-msgstr "Saski hutsa"
+msgstr "Saskia hustu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:236
@@ -31458,7 +31458,7 @@ msgstr "Une honetan:"
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:26
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr "Eskaera konfirmatuta"
+msgstr "Eskaera konfirmatu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:14
 msgid "Please check your email account, we've sent you your tickets."
@@ -31799,7 +31799,7 @@ msgstr ""
 "Zure eskaeraren egoera eta xehetasunak ikusi edo aldatu nahi badituzu, egin "
 "klik eskaera-prozesuan bidaltzen dizkizugun mezu elektronikoetako baten "
 "estekan. Esteka aurkitu ezin baduzu, egin klik hurrengo botoian, berriro "
-"bidaltzeko zure eskaerarako esteka eskatzeko."
+"bidal diezazugun."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:256
 msgid "Resend order link"
@@ -31869,9 +31869,9 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
-"Mesedez, markatu edo gorde orri zehatz honetarako esteka zure eskaera "
-"aurrerago ikusi nahi baduzu. E-mail bat ere bidali dizugu, zehaztutako "
-"helbidera lotura duena."
+"Mesedez, gorde orri zehatz honetarako esteka zure eskaera aurrerago ikusi "
+"nahi baduzu. E-mail bat ere bidali dizugu, zehaztutako helbidera lotura "
+"duena."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
@@ -31949,7 +31949,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 #: pretix/presale/templates/pretixpresale/event/position.html:33
 msgid "Change ordered items"
-msgstr "Eskatutako artikuluak aldatu"
+msgstr "Eskatutako produktuak aldatu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/order.html:290
