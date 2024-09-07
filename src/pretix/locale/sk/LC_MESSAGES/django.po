@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-06-26 22:00+0000\n"
+"PO-Revision-Date: 2024-09-08 03:00+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
 ">\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: Weblate 5.7\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -508,7 +508,7 @@ msgstr "Zamietnutie objednávky"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
-msgstr "Odbavený lístok"
+msgstr "Odbavená vstupenka"
 
 #: pretix/api/webhooks.py:321
 msgid "Ticket check-in reverted"
@@ -954,7 +954,7 @@ msgstr "Celé meno"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:29
 #: pretix/presale/templates/pretixpresale/organizers/index.html:41
 msgid "Name"
-msgstr "Názov"
+msgstr "Meno"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:99
 msgid "Account active"
@@ -1670,7 +1670,7 @@ msgstr "Je vstupenka"
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
 msgid "Personalized ticket"
-msgstr "Personalizovaný lístok"
+msgstr "Personalizovaná vstupenka"
 
 #: pretix/base/exporters/items.py:78 pretix/base/models/items.py:495
 msgid "Generate tickets"
@@ -1879,7 +1879,7 @@ msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
-"Zahrňte len objednávky obsahujúce aspoň jeden lístok na dátum v tomto "
+"Zahrňte len objednávky obsahujúce aspoň jednu vstupenku na dátum v tomto "
 "rozsahu. V prípade zmiešaných objednávok budú zahrnuté aj iné dátumy!"
 
 #: pretix/base/exporters/orderlist.py:261
@@ -2228,7 +2228,7 @@ msgstr "ID sedadla"
 #: pretix/base/exporters/orderlist.py:613
 #: pretix/plugins/checkinlists/exporters.py:524
 msgid "Seat name"
-msgstr "Názov sídla"
+msgstr "Názov sedadla"
 
 #: pretix/base/exporters/orderlist.py:614
 #: pretix/plugins/checkinlists/exporters.py:525
@@ -2348,7 +2348,7 @@ msgstr "Zahrňte len transakcie vytvorené v tomto rozsahu dátumov."
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:71
 msgid "Event"
-msgstr "Udalosť"
+msgstr "Podujatie"
 
 #: pretix/base/exporters/orderlist.py:877
 #: pretix/base/exporters/orderlist.py:1216
@@ -2546,7 +2546,7 @@ msgstr "Celková kvóta"
 #: pretix/control/templates/pretixcontrol/event/cancel.html:20
 #: pretix/control/views/item.py:949
 msgid "Paid orders"
-msgstr "Platené objednávky"
+msgstr "Zaplatené objednávky"
 
 #: pretix/base/exporters/orderlist.py:1134 pretix/control/views/item.py:954
 msgid "Pending orders"
@@ -2558,7 +2558,7 @@ msgstr "Blokovanie poukazov"
 
 #: pretix/base/exporters/orderlist.py:1135 pretix/control/views/item.py:973
 msgid "Current user's carts"
-msgstr "Vozíky aktuálneho používateľa"
+msgstr "Nákupné košíky aktuálneho používateľa"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Exited orders"
@@ -2821,7 +2821,7 @@ msgstr "Účet zákazníka"
 
 #: pretix/base/exporters/reusablemedia.py:51 pretix/base/models/media.py:97
 msgid "Linked ticket"
-msgstr "Prepojený lístok"
+msgstr "Prepojená vstupenka"
 
 #: pretix/base/exporters/reusablemedia.py:52 pretix/base/models/media.py:104
 msgid "Linked gift card"
@@ -3008,7 +3008,7 @@ msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
-"Ak tento údaj necháte prázdny, lístok bude platný od okamihu zakúpenia."
+"Ak tento údaj necháte prázdny, vstupenka bude platná od okamihu zakúpenia."
 
 #: pretix/base/forms/questions.py:683 pretix/base/forms/questions.py:1007
 msgid "Street and Number"
@@ -3213,7 +3213,7 @@ msgstr "Dátum faktúry"
 #: pretix/base/invoice.py:458
 msgctxt "invoice"
 msgid "Event"
-msgstr "Udalosť"
+msgstr "Podujatie"
 
 #: pretix/base/invoice.py:484
 #, python-brace-format
@@ -3324,7 +3324,7 @@ msgstr "Neuhradené platby"
 #: pretix/base/invoice.py:715
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Platené darčekovou kartou"
+msgstr "Zaplatené darčekovou kartou"
 
 #: pretix/base/invoice.py:720
 msgctxt "invoice"
@@ -3622,7 +3622,7 @@ msgstr "Maximálny rozpočet na zľavu"
 #: pretix/base/modelimport_vouchers.py:119 pretix/base/models/vouchers.py:225
 #: pretix/control/forms/filter.py:2106
 msgid "Reserve ticket from quota"
-msgstr "Rezervovať lístok z kvóty"
+msgstr "Rezervovať vstupenku z kvóty"
 
 #: pretix/base/modelimport_vouchers.py:127 pretix/base/models/vouchers.py:233
 msgid "Allow to bypass quota"
@@ -3781,7 +3781,7 @@ msgstr "Ignorovanie kontrolných hlásení v tomto zozname v štatistikách"
 msgctxt "checkin"
 msgid "Tickets with a check-in on this list should be considered \"used\""
 msgstr ""
-"Lístky s odbavením na tomto zozname by sa mali považovať za \"použité\""
+"Vstupenky s odbavením na tomto zozname by sa mali považovať za \"použité\""
 
 #: pretix/base/models/checkin.py:70
 msgid ""
@@ -3789,7 +3789,7 @@ msgid ""
 "still be canceled by the customer."
 msgstr ""
 "To je dôležité v rôznych situáciách, napr. pri rozhodovaní, či zákazník môže "
-"ešte letenku stornovať."
+"ešte vstupenku stornovať."
 
 #: pretix/base/models/checkin.py:74
 msgctxt "checkin"
@@ -3815,7 +3815,7 @@ msgid ""
 "rejected.."
 msgstr ""
 "Skenovanie bude možné len vtedy, ak je zoznam na odbavenie nakonfigurovaný "
-"tak, že v ňom bude vždy presne jeden zodpovedajúci doplnkový lístok. "
+"tak, že v ňom bude vždy presne jedna zodpovedajúca doplnková vstupenka. "
 "Nejednoznačné skenovanie bude zamietnuté.."
 
 #: pretix/base/models/checkin.py:85 pretix/control/navigation.py:638
@@ -3828,7 +3828,7 @@ msgid ""
 "Does not have any effect for the validation of tickets, only for the "
 "automatic configuration of check-in devices."
 msgstr ""
-"Nemá žiadny vplyv na validáciu lístkov, iba na automatickú konfiguráciu "
+"Nemá žiadny vplyv na validáciu vstupeniek, iba na automatickú konfiguráciu "
 "odbavovacích zariadení."
 
 #: pretix/base/models/checkin.py:90
@@ -3871,7 +3871,7 @@ msgstr "Odchod"
 
 #: pretix/base/models/checkin.py:359
 msgid "Unknown ticket"
-msgstr "Neznámy lístok"
+msgstr "Neznáma vstupenka"
 
 #: pretix/base/models/checkin.py:360
 msgid "Ticket not paid"
@@ -3891,7 +3891,7 @@ msgstr "Požadované informácie"
 
 #: pretix/base/models/checkin.py:364
 msgid "Ticket already used"
-msgstr "Už použitý lístok"
+msgstr "Už použitá vstupenka"
 
 #: pretix/base/models/checkin.py:365
 msgid "Ticket type not allowed here"
@@ -4328,11 +4328,11 @@ msgstr "URL identifikátor podujatia nie je možné zmeniť."
 
 #: pretix/base/models/event.py:1419
 msgid "This slug has already been used for a different event."
-msgstr "Tento slimák už bol použitý pre inú udalosť."
+msgstr "Tento slug už bol použitý pre iné podujatie."
 
 #: pretix/base/models/event.py:1425
 msgid "The event cannot end before it starts."
-msgstr "Udalosť sa nemôže skončiť skôr, ako sa začne."
+msgstr "Podujatie sa nemôže skončiť skôr, ako sa začne."
 
 #: pretix/base/models/event.py:1431
 msgid "The event's presale cannot end before it starts."
@@ -4351,8 +4351,8 @@ msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr ""
-"Ak je táto možnosť vybraná, táto udalosť sa zobrazí verejne v zozname "
-"dátumov pre vašu udalosť."
+"Ak je táto možnosť vybraná, toto podujatie sa zobrazí verejne v zozname "
+"dátumov pre vaše podujatie."
 
 #: pretix/base/models/event.py:1510 pretix/base/settings.py:3006
 msgid "Frontpage text"
@@ -4623,8 +4623,8 @@ msgstr "Zobraziť informačný text, ak nie je k dispozícii"
 #: pretix/base/models/items.py:412 pretix/base/models/items.py:732
 msgid "Don't use re-usable media, use regular one-off tickets"
 msgstr ""
-"Nepoužívajte opakovane použiteľné médiá, používajte pravidelné jednorazové "
-"lístky"
+"Nepoužívajte opakovane použiteľné médiá, použite obyčajné jednorazové "
+"vstupenky"
 
 #: pretix/base/models/items.py:413
 msgid "Require an existing medium to be re-used"
@@ -4697,7 +4697,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:488
 msgid "Is a personalized ticket"
-msgstr "Je personalizovaný lístok"
+msgstr "Je personalizovaná vstupenka"
 
 #: pretix/base/models/items.py:490
 msgid "Whether or not buying this product allows to enter attendee information"
@@ -4705,7 +4705,7 @@ msgstr "Či zakúpenie tohto produktu umožňuje zadávať informácie o účast
 
 #: pretix/base/models/items.py:499
 msgid "Show a waiting list for this ticket"
-msgstr "Zobraziť zoznam čakateľov na tento lístok"
+msgstr "Zobraziť zoznam čakateľov na túto vstupenku"
 
 #: pretix/base/models/items.py:500
 msgid "This will only work if waiting lists are enabled for this event."
@@ -4720,7 +4720,7 @@ msgstr "Zobraziť počet zostávajúcich vstupeniek"
 
 #: pretix/base/models/items.py:505
 msgid "Publicly show how many tickets are still available."
-msgstr "Zverejnite, koľko lístkov je ešte k dispozícii."
+msgstr "Zverejnite, koľko vstupeniek je ešte k dispozícii."
 
 #: pretix/base/models/items.py:512 pretix/control/forms/item.py:565
 msgid "Product picture"
@@ -4839,17 +4839,17 @@ msgid ""
 "needs to be checked."
 msgstr ""
 "Ak to nastavíte, v aplikácii na odbavenie sa zobrazí viditeľné upozornenie, "
-"že tento tip si vyžaduje osobitnú pozornosť. Môžete to použiť napríklad pri "
-"študentských lístkoch, aby ste upozornili osobu pri odbavení, že je potrebné "
-"ešte skontrolovať študentský preukaz."
+"že tento typ si vyžaduje osobitnú pozornosť. Môžete to použiť napríklad pri "
+"študentských vstupenkách, aby ste upozornili osobu pri odbavení, že je "
+"potrebné ešte skontrolovať študentský preukaz."
 
 #: pretix/base/models/items.py:616 pretix/base/models/items.py:1199
 msgid ""
 "This text will be shown by the check-in app if a ticket of this type is "
 "scanned."
 msgstr ""
-"Tento text sa zobrazí v aplikácii na odbavenie, ak sa naskenuje lístok tohto "
-"typu."
+"Tento text sa zobrazí v aplikácii na odbavenie, ak sa naskenuje vstupenka "
+"tohto typu."
 
 #: pretix/base/models/items.py:622 pretix/base/models/items.py:1120
 msgid ""
@@ -4927,9 +4927,9 @@ msgstr ""
 "čase platnosti vstupeniek nebude rozhodovať produkt, ale konfigurácia "
 "podujatia a registrácie. Ostatné možnosti použite len v prípade, že ich "
 "potrebujete na realizáciu napr. rezervácie celoročnej vstupenky s dynamickým "
-"dátumom začiatku platnosti. Upozorňujeme, že platnosť bude uložená spolu s "
-"lístkom, takže ak tu neskôr zmeníte nastavenia, existujúce lístky nebudú "
-"zmenou ovplyvnené, ale zachovajú si svoju aktuálnu platnosť."
+"dátumom začiatku platnosti. Upozorňujeme, že platnosť bude uložená spolu so "
+"vstupenkou, takže ak tu neskôr zmeníte nastavenia, existujúce vstupenky "
+"nebudú zmenou ovplyvnené, ale zachovajú si svoju aktuálnu platnosť."
 
 #: pretix/base/models/items.py:689 pretix/control/forms/item.py:669
 msgid "Start of validity"
@@ -5145,8 +5145,8 @@ msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
-"Ak je táto možnosť zvolená, pridanie doplnkov k tomuto lístku je bezplatné, "
-"aj keď by za normálnych okolností stáli peniaze."
+"Ak je táto možnosť zvolená, pridanie doplnkov k tejto vstupenke je "
+"bezplatné, aj keď by za normálnych okolností stáli peniaze."
 
 #: pretix/base/models/items.py:1424
 msgid "Allow the same product to be selected multiple times"
@@ -5281,7 +5281,7 @@ msgstr "Táto otázka bude položená kupujúcim vybraných výrobkov"
 
 #: pretix/base/models/items.py:1658
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr "Pýtajte sa pri registrácii namiesto pri kúpe letenky"
+msgstr "Pýtajte sa pri registrácii namiesto pri kúpe vstupenky"
 
 #: pretix/base/models/items.py:1659 pretix/base/models/items.py:1664
 msgid "Not supported by all check-in apps for all question types."
@@ -5406,7 +5406,7 @@ msgstr "Celková kapacita"
 
 #: pretix/base/models/items.py:1995 pretix/control/forms/item.py:391
 msgid "Leave empty for an unlimited number of tickets."
-msgstr "Nechajte prázdne pre neobmedzený počet lístkov."
+msgstr "Nechajte prázdne pre neobmedzený počet vstupeniek."
 
 #: pretix/base/models/items.py:1999 pretix/base/models/orders.py:1464
 #: pretix/base/models/orders.py:2916
@@ -5620,7 +5620,7 @@ msgstr "čaká sa na"
 #: pretix/base/models/orders.py:201 pretix/base/payment.py:511
 #: pretix/base/services/invoices.py:472
 msgid "paid"
-msgstr "platené"
+msgstr "zaplatené"
 
 #: pretix/base/models/orders.py:202 pretix/control/forms/filter.py:1572
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:37
@@ -5657,17 +5657,17 @@ msgid ""
 "cases."
 msgstr ""
 "Ak to nastavíte, v aplikácii na odbavenie sa zobrazí viditeľné upozornenie, "
-"že letenky tohto poradia si vyžadujú osobitnú pozornosť. Nezobrazia sa "
+"že vstupenky tejto objednávky si vyžadujú osobitnú pozornosť. Nezobrazia sa "
 "žiadne podrobnosti ani vlastná správa, takže musíte informovať svojich "
-"pracovníkov pri registrácii, ako majú v týchto prípadoch postupovať."
+"pracovníkov pri kontrole, ako majú v týchto prípadoch postupovať."
 
 #: pretix/base/models/orders.py:289
 msgid ""
 "This text will be shown by the check-in app if a ticket of this order is "
 "scanned."
 msgstr ""
-"Tento text sa zobrazí v aplikácii na odbavenie, ak sa naskenuje lístok tejto "
-"objednávky."
+"Tento text sa zobrazí v aplikácii na odbavenie, ak sa naskenuje vstupenka "
+"tejto objednávky."
 
 #: pretix/base/models/orders.py:299 pretix/base/models/orders.py:1501
 msgid "Meta information"
@@ -5838,7 +5838,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:2260
 msgid "Payment fee"
-msgstr "Platba poplatku"
+msgstr "Poplatok za platbu"
 
 #: pretix/base/models/orders.py:2261
 msgid "Shipping fee"
@@ -5890,11 +5890,11 @@ msgstr "ID košíka (napr. kľúč relácie)"
 
 #: pretix/base/models/orders.py:3044
 msgid "Cart position"
-msgstr "Poloha vozíka"
+msgstr "Poloha nákupného košíka"
 
 #: pretix/base/models/orders.py:3045
 msgid "Cart positions"
-msgstr "Pozície vozíka"
+msgstr "Pozície nákupného košíka"
 
 #: pretix/base/models/orders.py:3174
 msgid "Business customer"
@@ -6214,7 +6214,7 @@ msgid ""
 "receive a ticket."
 msgstr ""
 "Ak je tento kupón aktivovaný, odpočíta sa od kvót dotknutého produktu, takže "
-"je zaručené, že každý, kto má tento kód kupónu, dostane letenku."
+"je zaručené, že každý, kto má tento kód kupónu, získa vstupenku."
 
 #: pretix/base/models/vouchers.py:235
 msgid ""
@@ -6488,7 +6488,7 @@ msgstr "Objednávka {order.code} bola označená ako neplatná."
 #: pretix/base/notifications.py:270
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr "Informácie o lístku v objednávke {order.code} boli zmenené."
+msgstr "Informácie o vstupenke v objednávke {order.code} boli zmenené."
 
 #: pretix/base/notifications.py:276
 #, python-brace-format
@@ -7204,7 +7204,7 @@ msgstr "Prízemie, rad 3, sedadlo 4"
 #: pretix/base/pdf.py:491 pretix/base/pdf.py:497
 #: pretix/control/forms/orders.py:330
 msgid "General admission"
-msgstr "Všeobecný vstup"
+msgstr "Bežný vstup"
 
 #: pretix/base/pdf.py:494
 msgid "Seat: zone"
@@ -7361,7 +7361,7 @@ msgstr "Nevybrali ste žiadne produkty."
 
 #: pretix/base/services/cart.py:105
 msgid "Unknown cart position."
-msgstr "Neznáma pozícia vozíka."
+msgstr "Neznáma pozícia nákupného košíka."
 
 #: pretix/base/services/cart.py:106
 msgctxt "subevent"
@@ -7540,7 +7540,8 @@ msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
-"Uplatnenie poukazu na celý vozík by sa nemalo kombinovať s inými operáciami."
+"Uplatnenie poukazu na celý nákupný košík by sa nemalo kombinovať s inými "
+"operáciami."
 
 #: pretix/base/services/cart.py:178
 msgid ""
@@ -7694,7 +7695,7 @@ msgstr "Účastník je už prihlásený"
 
 #: pretix/base/services/checkin.py:286
 msgid "Ticket type not allowed"
-msgstr "Typ lístka nie je povolený"
+msgstr "Typ vstupenky nie je povolený"
 
 #: pretix/base/services/checkin.py:289
 msgid "Wrong entrance gate"
@@ -7803,12 +7804,12 @@ msgstr "Táto objednávka ešte nie je schválená."
 #: pretix/base/services/checkin.py:999 pretix/base/services/checkin.py:1003
 #, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr "Tento lístok je platný len po {datetime}."
+msgstr "Táto vstupenka je platná len po {datetime}."
 
 #: pretix/base/services/checkin.py:1013 pretix/base/services/checkin.py:1017
 #, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr "Tento lístok bol platný len pred dátumom {datetime}."
+msgstr "Táto vstupenka bola platná len pred dátumom {datetime}."
 
 #: pretix/base/services/checkin.py:1048
 msgid "This order position has an invalid product for this check-in list."
@@ -7838,7 +7839,7 @@ msgstr "Na dokončenie tejto kontroly musíte odpovedať na otázky."
 
 #: pretix/base/services/checkin.py:1152
 msgid "This ticket has already been redeemed."
-msgstr "Tento lístok už bol uplatnený."
+msgstr "Táto vstupenka už bola uplatnená."
 
 #: pretix/base/services/currencies.py:38 pretix/base/services/currencies.py:39
 msgid "European Central Bank"
@@ -8031,7 +8032,7 @@ msgid ""
 "a ticket that starts to be valid on {date}."
 msgstr ""
 "Vybrali ste si členstvo, ktoré je platné od {start} do {end}, ale vybrali "
-"ste si lístok, ktorý začína platiť od {date}."
+"ste si vstupenku, ktorá začína platiť od {date}."
 
 #: pretix/base/services/memberships.py:188
 #, python-brace-format
@@ -8359,7 +8360,7 @@ msgid ""
 "ticket date. Please choose a seat again."
 msgstr ""
 "Vybrali ste sedadlo \"{seat}\" pre dátum, ktorý sa nezhoduje s vybraným "
-"dátumom letenky. Prosím, vyberte si miesto znova."
+"dátumom na vstupenke. Prosím, vyberte si miesto znova."
 
 #: pretix/base/services/orders.py:1534
 msgid "The selected product requires you to select a seat."
@@ -8562,7 +8563,7 @@ msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
-"To umožní zákazníkom zaregistrovať si účet v obchode s letenkami. To je "
+"To umožní zákazníkom zaregistrovať si účet v obchode so vstupenkami. To je "
 "predpokladom pre niektoré pokročilé funkcie, ako je členstvo."
 
 #: pretix/base/settings.py:168
@@ -8683,7 +8684,7 @@ msgstr "Vyžadujte od zákazníkov, aby vyplnili mená všetkých účastníkov.
 
 #: pretix/base/settings.py:377
 msgid "Ask for email addresses per ticket"
-msgstr "Požiadajte o e-mailové adresy na lístok"
+msgstr "Požiadajte o e-mailové adresy pre každú jednu vstupenku"
 
 #: pretix/base/settings.py:378
 msgid ""
@@ -8722,19 +8723,19 @@ msgstr ""
 
 #: pretix/base/settings.py:405
 msgid "Ask for company per ticket"
-msgstr "Požiadajte o spoločnosť na lístok"
+msgstr "Požiadajte o spoločnosť pre každú jednu vstupenku"
 
 #: pretix/base/settings.py:414
 msgid "Require company per ticket"
-msgstr "Vyžadovať spoločnosť na lístok"
+msgstr "Vyžadovať spoločnosť pre káždú jednu vstupenku"
 
 #: pretix/base/settings.py:424
 msgid "Ask for postal addresses per ticket"
-msgstr "Požiadajte o poštové adresy na lístok"
+msgstr "Požiadajte o poštovú adresu pre každú jednu vstupenku"
 
 #: pretix/base/settings.py:433
 msgid "Require postal addresses per ticket"
-msgstr "Vyžadovať poštové adresy na lístok"
+msgstr "Vyžadovať poštovú adresu pre každú jednu vstupenku"
 
 #: pretix/base/settings.py:443
 msgid "Ask for the order email address twice"
@@ -8979,7 +8980,7 @@ msgstr "Písmo"
 
 #: pretix/base/settings.py:756
 msgid "Length of ticket codes"
-msgstr "Dĺžka kódov leteniek"
+msgstr "Dĺžka kódov vstupeniek"
 
 #: pretix/base/settings.py:783
 msgid "Reservation period"
@@ -9183,7 +9184,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1011
 msgid "Show start date"
-msgstr "Dátum začiatku výstavy"
+msgstr "Zobraziť dátum začiatku"
 
 #: pretix/base/settings.py:1012
 msgid "Show the presale start date before presale has started."
@@ -9384,7 +9385,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1296
 msgid "Show event times and dates on the ticket shop"
-msgstr "Zobraziť časy a dátumy podujatí v obchode s lístkami"
+msgstr "Zobraziť časy a dátumy podujatí v obchode o vstupenkami"
 
 #: pretix/base/settings.py:1297
 msgid ""
@@ -9462,7 +9463,7 @@ msgstr ""
 "prvej osobe na čakacom zozname na daný produkt. Ak táto funkcia nie je "
 "aktívna, maily sa nebudú odosielať automaticky, ale môžete ich odoslať ručne "
 "prostredníctvom ovládacieho panela. Ak vypnete zoznam čakateľov, ale "
-"ponecháte túto možnosť aktívnu, lístky sa budú odosielať aj naďalej."
+"ponecháte túto možnosť aktívnu, vstupenky sa budú odosielať aj naďalej."
 
 #: pretix/base/settings.py:1393
 msgid "Waiting list response time"
@@ -9491,9 +9492,9 @@ msgid ""
 "remain active."
 msgstr ""
 "Po tomto dátume bude zoznam čakateľov úplne vypnutý. To znamená, že sa už "
-"nikto nebude môcť pridať na čakaciu listinu, ale aj to, že lístky budú opäť "
-"k dispozícii na predaj, ak to kvóty dovolia, aj keď sú na čakacej listine "
-"ešte stále ľudia. Poukazy, ktoré už boli odoslané, zostávajú aktívne."
+"nikto nebude môcť pridať na čakaciu listinu, ale aj to, že vstupenky budú "
+"opäť k dispozícii na predaj, ak to kvóty dovolia, aj keď sú na čakacej "
+"listine ešte stále ľudia. Poukazy, ktoré už boli odoslané, zostávajú aktívne."
 
 #: pretix/base/settings.py:1420
 msgid "Ask for a name"
@@ -9578,7 +9579,7 @@ msgstr "Umožniť používateľom sťahovať vstupenky"
 
 #: pretix/base/settings.py:1508
 msgid "If this is off, nobody can download a ticket."
-msgstr "Ak je táto funkcia vypnutá, nikto si nemôže stiahnuť lístok."
+msgstr "Ak je táto funkcia vypnutá, nikto si nemôže stiahnuť vstupenku."
 
 #: pretix/base/settings.py:1517
 msgid "Download date"
@@ -9597,7 +9598,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1529
 msgid "Generate tickets for add-on products and bundled products"
-msgstr "Generovanie lístkov pre doplnkové produkty a balíky produktov"
+msgstr "Generovanie vstupeniek pre doplnkové produkty a balíky produktov"
 
 #: pretix/base/settings.py:1530
 msgid ""
@@ -9605,14 +9606,14 @@ msgid ""
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
 msgstr ""
-"V predvolenom nastavení sa lístky vystavujú len pre samostatne vybrané "
+"V predvolenom nastavení sa vstupenky vystavujú len pre samostatne vybrané "
 "produkty, nie pre doplnkové produkty alebo balíky produktov. Pri tejto "
 "možnosti sa pre každý doplnkový produkt alebo balíček produktov vystaví aj "
-"samostatný lístok."
+"samostatná vstupenka."
 
 #: pretix/base/settings.py:1543
 msgid "Generate tickets for all products"
-msgstr "Generovanie lístkov pre všetky produkty"
+msgstr "Generovanie vstupeniek pre všetky produkty"
 
 #: pretix/base/settings.py:1544
 msgid ""
@@ -9626,19 +9627,19 @@ msgstr ""
 
 #: pretix/base/settings.py:1556
 msgid "Generate tickets for pending orders"
-msgstr "Generovanie lístkov pre čakajúce objednávky"
+msgstr "Generovanie vstupeniek pre čakajúce objednávky"
 
 #: pretix/base/settings.py:1557
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
-"Ak je vypnuté, sťahovanie lístkov je možné až po označení objednávky ako "
+"Ak je vypnuté, sťahovanie vstupeniek je možné až po označení objednávky ako "
 "zaplatenej."
 
 #: pretix/base/settings.py:1568
 msgid "Do not issue ticket before email address is validated"
-msgstr "Nevydávať lístok pred overením e-mailovej adresy"
+msgstr "Nevydávať vstupenku pred overením e-mailovej adresy"
 
 #: pretix/base/settings.py:1569
 msgid ""
@@ -9833,7 +9834,7 @@ msgstr "Nepovoľte zmeny po"
 
 #: pretix/base/settings.py:1767
 msgid "Allow change even though the ticket has already been checked in"
-msgstr "Povolenie zmeny, aj keď bol lístok už zaevidovaný"
+msgstr "Povolenie zmeny, aj keď bola vstupenka už odbavená"
 
 #: pretix/base/settings.py:1768
 msgid ""
@@ -9862,7 +9863,7 @@ msgid ""
 "customer."
 msgstr ""
 "V predvolenom nastavení môže akékoľvek zmeny vykonávať len osoba, ktorá si "
-"lístky objednala. Ak toto políčko začiarknete, zmeny môžu vykonávať aj "
+"vstupenky objednala. Ak toto políčko zaškrtnete, zmeny môžu vykonávať aj "
 "jednotliví účastníci. Jednotliví účastníci však môžu vždy vykonať len zmeny, "
 "ktoré nemenia celkovú cenu objednávky. Takéto zmeny môže vždy vykonať len "
 "hlavný objednávateľ."
@@ -10067,7 +10068,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2058
 msgid "Attach ticket files"
-msgstr "Pripojenie súborov lístka"
+msgstr "Pripojenie súborov vstupenky"
 
 #: pretix/base/settings.py:2060
 #, python-brace-format
@@ -10436,7 +10437,7 @@ msgid ""
 msgstr ""
 "Dobrý deň,\n"
 "\n"
-"úspešne sme prijali vašu platbu za {event}. Ďakujeme!\n"
+"úspešne sme prijali platbu za {event}. Ďakujeme!\n"
 "\n"
 "{payment_info}\n"
 "\n"
@@ -10662,10 +10663,10 @@ msgstr ""
 "Dobrý deň,\n"
 "\n"
 "prihlásili ste sa na čakaciu listinu na {event},\n"
-"na produkt {product}.\n"
+" produkt {product}.\n"
 "\n"
-"Teraz máme pre vás pripravený lístok! Môžete si ju uplatniť v našom obchode "
-"so vstupenkami\n"
+"Teraz máme pre vás pripravenú vstupenku! Môžete si ju uplatniť v našom "
+"obchode so vstupenkami\n"
 "v priebehu nasledujúcich {hours} hodín zadaním nasledujúceho kódu kupónu:\n"
 "\n"
 "{code}\n"
@@ -10674,14 +10675,13 @@ msgstr ""
 "\n"
 "{url}\n"
 "\n"
-"Upozorňujeme, že tento odkaz je platný len počas nasledujúcich {hours} "
-"hodín!\n"
-"V prípade, že lístok nepridelíte ďalšej osobe na zozname, prepošleme ho\n"
-"poukážku v tomto časovom rámci neuplatníte.\n"
+"Upozorňujeme, že tento odkaz je platný len počas nasledujúcich {hours} hodín!"
+"\n"
+"V prípade, že vstupenku nevyužijete v stanovenej lehote,\n"
+"pridelíme ju ďalšej osobe na zozname.\n"
 "\n"
 "Ak už vstupenku NEpotrebujete, prosíme vás, aby ste klikli na\n"
-"nasledujúci odkaz, aby ste nás o tom informovali. Takto vám môžeme lístok "
-"poslať čo najrýchlejšie\n"
+"nasledujúci odkaz, aby ste nás o tom informovali. Takto môžeme vstupenku\n"
 "čo najskôr poslať ďalšej osobe na zozname čakateľov:\n"
 "\n"
 "{url_remove}\n"
@@ -10772,7 +10772,7 @@ msgid ""
 msgstr ""
 "Dobrý deň,\n"
 "\n"
-"schválili sme pre vás objednaný lístok na {event}.\n"
+"schválili sme pre vás objednanú vstupenku na {event}.\n"
 "\n"
 "Podrobnosti a stav vašej vstupenky si môžete pozrieť tu:\n"
 "{url}.\n"
@@ -10868,7 +10868,7 @@ msgstr ""
 #: pretix/base/settings.py:2616 pretix/base/settings.py:2632
 #, python-brace-format
 msgid "Your ticket is ready for download: {code}"
-msgstr "Váš lístok je pripravený na stiahnutie: {code}"
+msgstr "Váša vstupenka je pripravený na stiahnutie: {code}"
 
 #: pretix/base/settings.py:2620
 #, python-brace-format
@@ -10919,7 +10919,7 @@ msgstr ""
 #: pretix/base/settings.py:2648
 #, python-brace-format
 msgid "Activate your account at {organizer}"
-msgstr "Aktivujte si konto na adrese {organizer}"
+msgstr "Aktivujte si konto {organizer}"
 
 #: pretix/base/settings.py:2652
 #, python-brace-format
@@ -10948,7 +10948,7 @@ msgstr ""
 "\n"
 "{url}\n"
 "\n"
-"Toto prepojenie je platné jeden deň.\n"
+"Tentoodkaz je platný jeden deň.\n"
 "\n"
 "Ak ste sa nezaregistrovali sami, ignorujte tento e-mail.\n"
 "\n"
@@ -11455,7 +11455,7 @@ msgstr "Meno"
 #: pretix/base/settings.py:3607 pretix/base/settings.py:3628
 #: pretix/base/settings.py:3650
 msgid "Family name"
-msgstr "Rodinné meno"
+msgstr "Priezvisko"
 
 #: pretix/base/settings.py:3452 pretix/base/settings.py:3468
 #: pretix/base/settings.py:3484 pretix/base/settings.py:3499
@@ -11584,7 +11584,7 @@ msgstr "Ak chcete túto funkciu použiť, vaša udalosť musí byť ukončená."
 #: pretix/base/shredder.py:79
 msgid "Your ticket shop needs to be offline to use this feature."
 msgstr ""
-"Ak chcete používať túto funkciu, váš obchod s lístkami musí byť offline."
+"Ak chcete používať túto funkciu, váš obchod so vstupenkami musí byť offline."
 
 #: pretix/base/shredder.py:257
 msgid "Phone numbers"
@@ -11662,7 +11662,7 @@ msgstr ""
 
 #: pretix/base/shredder.py:608
 msgid "Cached ticket files"
-msgstr "Súbory lístkov v medzipamäti"
+msgstr "Súbory vstupeniek v medzipamäti"
 
 #: pretix/base/shredder.py:610
 msgid "This will remove all cached ticket files. No download will be offered."
@@ -11748,8 +11748,8 @@ msgid ""
 "If you just configured this as a domain for your ticket shop, you now need "
 "to set this up as a \"custom domain\" in your organizer account."
 msgstr ""
-"Ak ste práve nakonfigurovali túto doménu ako doménu pre svoj obchod s "
-"letenkami, musíte ju teraz nastaviť ako \"vlastnú doménu\" v účte "
+"Ak ste práve nakonfigurovali túto doménu ako doménu pre svoj obchod so "
+"vstupenkami, musíte ju teraz nastaviť ako \"vlastnú doménu\" v účte "
 "organizátora."
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
@@ -11900,7 +11900,9 @@ msgstr "Zobraziť podrobnosti registrácie"
 msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
-msgstr "Tento e-mail dostávate, pretože ste si objednali nasledujúcu udalosť:"
+msgstr ""
+"Tento e-mail ste dostali, pretože ste si objednali vstupenku na nasledujúce "
+"podujatie:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:86
 msgid "Details:"
@@ -11995,7 +11997,7 @@ msgstr ""
 
 #: pretix/base/ticketoutput.py:182
 msgid "Enable ticket format"
-msgstr "Povolenie formátu lístka"
+msgstr "Povolenie formátu vstupenky"
 
 #: pretix/base/ticketoutput.py:200
 msgid "Download ticket"
@@ -12397,9 +12399,9 @@ msgid ""
 "must select a specific set of products for this check-in list, only "
 "including the possible add-on products."
 msgstr ""
-"Ak povolíte odbavenie prídavných lístkov skenovaním hlavného lístka, musíte "
-"pre tento zoznam odbavení vybrať konkrétnu sadu produktov, ktorá zahŕňa len "
-"možné prídavné produkty."
+"Ak povolíte odbavenie doplnkových vstupeniek skenovaním hlavnej vstupenky, "
+"musíte pre tento zoznam odbavení vybrať konkrétnu sadu produktov, ktorá "
+"zahŕňa len možné doplnkové produkty."
 
 #: pretix/control/forms/checkin.py:184
 msgid "Barcode"
@@ -13088,7 +13090,7 @@ msgstr "Čiastočne zaplatené"
 
 #: pretix/control/forms/filter.py:232
 msgid "Underpaid (but confirmed)"
-msgstr "Nedostatočne platené (ale potvrdené)"
+msgstr "Nedostatočne zaplatené (ale potvrdené)"
 
 #: pretix/control/forms/filter.py:233
 msgid "Pending (but fully paid)"
@@ -13166,7 +13168,7 @@ msgstr "Maximálna suma platieb a náhrad"
 
 #: pretix/control/forms/filter.py:592
 msgid "At least one ticket with check-in"
-msgstr "Aspoň jeden cestovný lístok s registráciou"
+msgstr "Aspoň jedna vstupenka s registráciou"
 
 #: pretix/control/forms/filter.py:596
 msgid "Affected quota"
@@ -13208,7 +13210,7 @@ msgstr "Platené od"
 
 #: pretix/control/forms/filter.py:1040
 msgid "Paid until"
-msgstr "Vyplatené do"
+msgstr "Platené do"
 
 #: pretix/control/forms/filter.py:1196 pretix/control/forms/filter.py:1671
 msgid "Shop live and presale running"
@@ -13402,7 +13404,7 @@ msgstr "Úplne vykúpené"
 
 #: pretix/control/forms/filter.py:2098
 msgid "Redeemed and checked in with ticket"
-msgstr "Vykúpený a odbavený lístok"
+msgstr "Uplatnená a odbavená vstupenka"
 
 #: pretix/control/forms/filter.py:2103
 msgid "Quota handling"
@@ -13855,7 +13857,7 @@ msgstr "Automatická voľba v závislosti od nastavení podujatia"
 
 #: pretix/control/forms/item.py:557
 msgid "Yes, if ticket generation is enabled in general"
-msgstr "Áno, ak je generovanie lístkov povolené všeobecne"
+msgstr "Áno, ak je generovanie vstupeniek povolené všeobecne"
 
 #: pretix/control/forms/item.py:575
 msgid ""
@@ -14230,7 +14232,7 @@ msgstr "Doplnok k"
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:23
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:100
 msgid "Seat"
-msgstr "Sídlo"
+msgstr "Sedadlo"
 
 #: pretix/control/forms/orders.py:334
 #: pretix/control/templates/pretixcontrol/order/change.html:182
@@ -14301,9 +14303,9 @@ msgid ""
 "to the order page to the user and the user will need to download his tickets "
 "again. The old versions will be invalid."
 msgstr ""
-"Regeneruje tajomstvo objednávky a lístka. Používateľovi bude potrebné znovu "
-"poslať odkaz na stránku s objednávkou a používateľ si bude musieť znovu "
-"stiahnuť svoje vstupenky. Staré verzie budú neplatné."
+"Znovu vygeneruje kódy objednávok a vstupeniek. Používateľovi bude potrebné "
+"znovu poslať odkaz na stránku s objednávkou a používateľ si bude musieť "
+"znovu stiahnuť svoje vstupenky. Staré verzie budú neplatné."
 
 #: pretix/control/forms/orders.py:671 pretix/plugins/sendmail/forms.py:196
 msgid "Attach tickets"
@@ -14331,8 +14333,8 @@ msgstr "Príjemca"
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
-"Zrušiť objednávku. Všetky lístky už nebudú fungovať. Toto nie je možné "
-"vrátiť späť."
+"Zrušiť objednávku. Všetky vstupenky sa zneplatnia. Toto nie je možné vrátiť "
+"späť."
 
 #: pretix/control/forms/orders.py:735
 msgid ""
@@ -14404,7 +14406,7 @@ msgstr "Platnosť darčekovej karty"
 
 #: pretix/control/forms/orders.py:842
 msgid "Keep a fixed cancellation fee per ticket"
-msgstr "Zachovať fixný storno poplatok za letenku"
+msgstr "Zachovať fixný storno poplatok za vstupenku"
 
 #: pretix/control/forms/orders.py:843
 msgid "Free tickets and add-on products are not counted"
@@ -15353,7 +15355,7 @@ msgstr "Opakovane použiteľné médium bolo vymenené."
 
 #: pretix/control/logdisplay.py:374
 msgid "The medium has been connected to a new ticket."
-msgstr "Médium bolo pripojené k novému lístku."
+msgstr "Médium bolo pripojené k novéj vstupenke."
 
 #: pretix/control/logdisplay.py:375
 msgid "The medium has been connected to a new gift card."
@@ -15528,7 +15530,7 @@ msgid ""
 "The email has been sent without attached tickets since they would have been "
 "too large to be likely to arrive."
 msgstr ""
-"E-mail bol odoslaný bez priložených leteniek, pretože by boli príliš veľké "
+"E-mail bol odoslaný bez priložených vstupeniek, pretože by boli príliš veľké "
 "na to, aby mohli byť doručené."
 
 #: pretix/control/logdisplay.py:421
@@ -15544,7 +15546,8 @@ msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
 msgstr ""
-"Bol odoslaný e-mail s upozornením, že lístok je k dispozícii na stiahnutie."
+"Bol odoslaný e-mail s upozornením, že vstupenka je k dispozícii na "
+"stiahnutie."
 
 #: pretix/control/logdisplay.py:425
 msgid ""
@@ -17172,7 +17175,7 @@ msgstr "Vaše vyhľadávanie nezodpovedalo žiadnemu prihláseniu."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:52
 msgid "You haven't scanned any tickets yet."
-msgstr "Zatiaľ ste neskenovali žiadne lístky."
+msgstr "Zatiaľ ste neskenovali žiadne vstupenky."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:63
 msgid "Time of scan"
@@ -18255,7 +18258,7 @@ msgstr ""
 msgid ""
 "To publish your ticket shop, you first need to resolve the following issues:"
 msgstr ""
-"Ak chcete zverejniť svoj obchod s lístkami, musíte najprv vyriešiť "
+"Ak chcete zverejniť svoj obchod so vstupenkami, musíte najprv vyriešiť "
 "nasledujúce problémy:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:51
@@ -18466,7 +18469,7 @@ msgstr "Povolené"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:166
 #: pretix/control/templates/pretixcontrol/user/settings.html:53
 msgid "Disabled"
-msgstr "Bezbariérový"
+msgstr "Zakázané"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:55
 #, python-format
@@ -18630,7 +18633,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:36
 msgid "Create ticket types"
-msgstr "Vytvorenie typov lístkov"
+msgstr "Vytvorenie typov vstupeniek"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:42
 msgid "Ticket name"
@@ -18840,7 +18843,7 @@ msgid ""
 "privacy policy will be linked automatically (if you configured them), so you "
 "do not need to add them here."
 msgstr ""
-"Tieto odkazy sa zobrazia v pätičke vášho obchodu s lístkami. Môžete tu "
+"Tieto odkazy sa zobrazia v pätičke vášho obchodu so vstupenkami. Môžete tu "
 "napríklad uviesť odkaz na vaše podmienky poskytovania služieb. Vaša "
 "kontaktná adresa, právne informácie a zásady ochrany osobných údajov budú "
 "prepojené automaticky (ak ste ich nakonfigurovali), takže ich sem nemusíte "
@@ -18909,7 +18912,7 @@ msgid ""
 msgstr ""
 "Tu môžete definovať sadu vlastností metadát (t. j. premenných), ktoré môžete "
 "neskôr nastaviť pre svoje položky a opätovne použiť na miestach, ako sú "
-"napríklad rozloženia lístkov. Toto je užitočná úspora času, ak vytvárate "
+"napríklad rozloženia vstupeniek. Toto je užitočná úspora času, ak vytvárate "
 "veľmi veľa položiek."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:418
@@ -18975,7 +18978,7 @@ msgid ""
 msgstr ""
 "Tieto nastavenia sú určené pre pokročilých používateľov. Viac informácií "
 "nájdete v <a href=\"%(docs)s\">dokumentácii</a>. Upozorňujeme, že "
-"nezodpovedáme za správne spracovanie daní vo Vašom obchode s lístkami. V "
+"nezodpovedáme za správne spracovanie daní vo Vašom obchode so vstupenkami. V "
 "prípade pochybností sa obráťte na právnika alebo daňového poradcu."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
@@ -19262,7 +19265,7 @@ msgstr "Momentálne nemáte prístup k žiadnym podujatiam."
 #: pretix/control/templates/pretixcontrol/events/index.html:87
 #: pretix/control/templates/pretixcontrol/subevents/index.html:101
 msgid "Paid tickets per quota"
-msgstr "Zaplatené lístky na kvótu"
+msgstr "Uhradené vstupenky na kvótu"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:118
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:94
@@ -19278,7 +19281,7 @@ msgstr "Viac kvót"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:110
 #: pretix/control/views/dashboards.py:529
 msgid "Shop disabled"
-msgstr "Obchod so zdravotne postihnutými"
+msgstr "Predaj je zakázaný"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:152
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:116
@@ -19593,8 +19596,8 @@ msgid ""
 "people (e.g. group bundles)."
 msgstr ""
 "Táto možnosť by mala byť nastavená pre väčšinu vecí, ktoré sa nazývajú "
-"\"lístok\". V prípade doplnkových produktov alebo balíkov by mala byť "
-"nastavená na hlavnom lístku, okrem prípadov, keď doplnkové produkty alebo "
+"\"vstupenka\". V prípade doplnkových produktov alebo balíkov by mala byť "
+"nastavená na hlavnej vstupenke, okrem prípadov, keď doplnkové produkty alebo "
 "balíky produktov predstavujú ďalšie osoby (napr. skupinové balíky)."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:50
@@ -19629,7 +19632,7 @@ msgid ""
 "When this ticket is purchased, the system will ask for a name or other "
 "details according to your event settings."
 msgstr ""
-"Pri zakúpení tohto lístka sa systém opýta na meno alebo iné údaje podľa "
+"Pri zakúpení tejto vstupenky sa systém opýta na meno alebo iné údaje podľa "
 "nastavení podujatia."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:84
@@ -19649,7 +19652,7 @@ msgstr "Zmena nastavení"
 #: pretix/control/templates/pretixcontrol/item/create.html:96
 #: pretix/control/templates/pretixcontrol/item/index.html:109
 msgid "Non-personalized ticket"
-msgstr "Nepersonalizovaný lístok"
+msgstr "Nepersonalizovaná vstupenka"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
 #: pretix/control/templates/pretixcontrol/item/index.html:111
@@ -19752,8 +19755,8 @@ msgstr ""
 "základnou vstupenkou na konferenciu a niekoľkými workshopmi, môžete "
 "definovať workshopy ako doplnky k vstupenke na konferenciu. Pri tejto "
 "konfigurácii nie je možné zakúpiť workshopy samostatne, ale len v kombinácii "
-"s lístkom na konferenciu. Tu môžete určiť kategórie produktov, ktoré možno "
-"použiť ako doplnky k tomuto produktu. Môžete tiež určiť minimálny a "
+"o vstupenkou na konferenciu. Tu môžete určiť kategórie produktov, ktoré "
+"možno použiť ako doplnky k tomuto produktu. Môžete tiež určiť minimálny a "
 "maximálny počet doplnkov danej kategórie, ktoré možno alebo treba vybrať."
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:28
@@ -19844,7 +19847,7 @@ msgstr ""
 "Ak vyberiete trvanie uvedené v dňoch, mesiacoch alebo rokoch, platnosť sa "
 "vždy skončí na konci celého dňa (o polnoci) plus počet minút a hodín "
 "vybraných vyššie. Dátum začiatku platnosti je zahrnutý do výpočtu, takže ak "
-"zadáte \"1 deň\", lístok bude platiť do konca dňa, v ktorom sa začne."
+"zadáte \"1 deň\", vstupenka bude platiť do konca dňa, v ktorom sa začne."
 
 #: pretix/control/templates/pretixcontrol/item/index.html:242
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:617
@@ -20110,7 +20113,7 @@ msgstr "Vytvorenie nového produktu"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:101
 msgid "Personalized admission ticket"
-msgstr "Personalizovaný vstupný lístok"
+msgstr "Personalizovaná vstupenka na podujatie"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:103
 msgid "Admission ticket without personalization"
@@ -20171,7 +20174,7 @@ msgstr "Upraviť otázku"
 #: pretix/plugins/reports/exporters.py:386
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:25
 msgid "Paid"
-msgstr "Platené"
+msgstr "Zaplatené"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:45
 msgid "No matching answers found."
@@ -21887,11 +21890,11 @@ msgstr "Spustenie importu"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:14
 msgid "Nobody ordered a ticket yet."
-msgstr "Nikto si ešte neobjednal lístok."
+msgstr "Nikto si ešte neobjednal vstupenku."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:22
 msgid "Take your shop live"
-msgstr "Vezmite si svoj obchod naživo"
+msgstr "Spustite svoj obchod naživo"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:27
 msgid "Go to the ticket shop"
@@ -23264,7 +23267,7 @@ msgstr "Nahrávanie nového pozadia PDF…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:96
 msgid "Welcome to the PDF ticket editor!"
-msgstr "Vitajte v editore lístkov PDF!"
+msgstr "Vitajte v PDF editore vstupeniek!"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:98
 msgid ""
@@ -24449,7 +24452,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:6
 msgid "Delete carts"
-msgstr "Odstránenie vozíkov"
+msgstr "Vymazanie nákupných košíkov"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
 #, python-format
@@ -24485,7 +24488,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
 msgid "Remove cart positions"
-msgstr "Odstránenie pozícií vozíka"
+msgstr "Odstránenie pozícií nákupného košíka"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:43
 msgid "Voucher link"
@@ -24868,7 +24871,7 @@ msgstr "Vybrané vstupenky boli označené ako odkontrolované."
 
 #: pretix/control/views/checkin.py:280
 msgid "The selected tickets have been marked as checked in."
-msgstr "Vybrané letenky boli označené ako odbavené."
+msgstr "Vybrané vstupenky boli označené ako odbavené."
 
 #: pretix/control/views/checkin.py:369
 msgid "The new check-in list has been created."
@@ -24938,7 +24941,7 @@ msgstr "{quota} vľavo"
 
 #: pretix/control/views/dashboards.py:269
 msgid "Your ticket shop is"
-msgstr "Váš obchod s lístkami je"
+msgstr "Váš obchod so vstupenkami je"
 
 #: pretix/control/views/dashboards.py:269
 msgid "Click here to change"
@@ -25185,11 +25188,11 @@ msgstr ""
 
 #: pretix/control/views/event.py:1521
 msgid "Regular ticket"
-msgstr "Bežný lístok"
+msgstr "Bežná vstupenka"
 
 #: pretix/control/views/event.py:1526
 msgid "Reduced ticket"
-msgstr "Znížený lístok"
+msgstr "Zľavnená vstupenka"
 
 #: pretix/control/views/global_settings.py:67
 #: pretix/control/views/global_settings.py:90
@@ -25627,6 +25630,11 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Dobrý deň,\n"
+"\n"
+"bohužiaľ sme nemohli vyhovieť vašej žiadosti a zrušiť vašu objednávku.\n"
+"\n"
+"Váš tím {event}"
 
 #: pretix/control/views/orders.py:1051
 msgid ""
@@ -26405,7 +26413,7 @@ msgstr "Požadovaný poukaz neexistuje."
 
 #: pretix/control/views/vouchers.py:218
 msgid "The selected cart positions have been removed."
-msgstr "Vybrané pozície vozíka boli odstránené."
+msgstr "Vybrané pozície nákupného košíka boli odstránené."
 
 #: pretix/control/views/vouchers.py:244 pretix/control/views/vouchers.py:254
 msgid "A voucher can not be deleted if it already has been redeemed."
@@ -26765,8 +26773,8 @@ msgstr "Zahŕňajte len vstupenky na dátumy v tento deň alebo po ňom."
 #: pretix/plugins/badges/exporters.py:475
 msgid "Only include tickets for dates on or before this date."
 msgstr ""
-"Zahŕňajte len lístky na dátumy, ktoré sa uskutočnia v tento deň alebo pred "
-"ním."
+"Zahŕňajte len vstupenky na dátumy, ktoré sa uskutočnia v tento deň alebo "
+"pred ním."
 
 #: pretix/plugins/badges/exporters.py:479
 #: pretix/plugins/checkinlists/exporters.py:117
@@ -27761,7 +27769,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:91
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
 msgid "Only include tickets for dates within this range."
-msgstr "Zahrňte len lístky na dátumy v tomto rozsahu."
+msgstr "Zahrňte len vstupenky na dátumy v tomto rozsahu."
 
 #: pretix/plugins/checkinlists/exporters.py:95
 msgid "Include QR-code secret"
@@ -27769,7 +27777,7 @@ msgstr "Zahrnúť tajný kód QR"
 
 #: pretix/plugins/checkinlists/exporters.py:100
 msgid "Only tickets requiring special attention"
-msgstr "Len lístky, ktoré si vyžadujú osobitnú pozornosť"
+msgstr "Iba vstupenky, ktoré si vyžadujú osobitnú pozornosť"
 
 #: pretix/plugins/checkinlists/exporters.py:133
 msgid "Include questions"
@@ -29018,7 +29026,8 @@ msgstr "Vytvorenie e-mailového pravidla"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
 msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr ""
-"Naplánované e-maily sa neodosielajú, kým je váš obchod s letenkami offline."
+"Naplánované e-maily sa neodosielajú, kým je váš obchod so vstupenkami "
+"offline."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:63
@@ -29160,8 +29169,8 @@ msgid ""
 "Send an email to every customer, or to every person a ticket has been "
 "purchased for, or a combination of both."
 msgstr ""
-"Odoslať e-mail každému zákazníkovi alebo každej osobe, pre ktorú bol lístok "
-"zakúpený, prípadne kombináciu oboch."
+"Odoslať e-mail každému zákazníkovi alebo každej osobe, pre ktorú bola "
+"vstupenka zakúpená, prípadne kombináciu oboch."
 
 #: pretix/plugins/sendmail/views.py:420
 #, python-format
@@ -29289,7 +29298,7 @@ msgstr ""
 #: pretix/plugins/stripe/apps.py:31 pretix/plugins/stripe/apps.py:34
 #: pretix/plugins/stripe/payment.py:163
 msgid "Stripe"
-msgstr "Pruh"
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/apps.py:40
 msgid ""
@@ -29590,6 +29599,9 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"Plugin Stripe pracuje v testovacom režime. Na vykonanie transakcie môžete "
+"použiť jednu z <a {args}>mnohých testovacích kariet</a>. V skutočnosti sa "
+"neprevedú žiadne peniaze."
 
 #: pretix/plugins/stripe/payment.py:724
 msgid "No payment information found."
@@ -29925,7 +29937,7 @@ msgstr "Stripe Connect"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr "Celková suma bude stiahnutá z vašej kreditnej karty."
+msgstr "Celková suma bude stiahnutá z vašej karty."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
@@ -29987,8 +29999,8 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
-"Vašu platbu spracuje spoločnosť Stripe, Inc. Údaje o vašej kreditnej karte "
-"sa prenášajú priamo spoločnosti Stripe a nikdy sa nedotknú našich serverov."
+"Vašu platbu spracuje spoločnosť Stripe, Inc. Údaje o Vašej karte sa "
+"prenášajú priamo spoločnosti Stripe a nikdy sa nedotknú našich serverov."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
 msgid "For a SEPA Debit payment, please turn on JavaScript."
@@ -30160,14 +30172,14 @@ msgstr "Ospravedlňujeme sa, v procese platby došlo k chybe."
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
 msgid "PDF ticket output"
-msgstr "Výstup lístka vo formáte PDF"
+msgstr "Výstup vstupenky vo formáte PDF"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:52
 msgid ""
 "Issue tickets as PDF files, usable on any device. Our drag-and-drop editor "
 "allows you to customize the layout of the PDF files to your brand."
 msgstr ""
-"Vystavujte lístky vo formáte PDF, ktorý je použiteľný na akomkoľvek "
+"Vystavujte vstupenky vo formáte PDF, ktorý je použiteľný na akomkoľvek "
 "zariadení. Náš drag-and-drop editor umožňuje prispôsobiť rozloženie súborov "
 "PDF vašej značke."
 
@@ -30188,23 +30200,23 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/forms.py:49
 #, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr "Rozloženie lístka PDF pre {channel}"
+msgstr "Rozloženie vstupenky PDF pre {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:52
 msgid "(Same as PDF ticket layout)"
-msgstr "(Rovnaké ako rozloženie lístka PDF)"
+msgstr "(Rovnaké ako PDF rozloženie vstupenky)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:54
 msgid "PDF ticket layout"
-msgstr "Rozloženie lístka PDF"
+msgstr "PDF rozloženie vstupenky"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:143
 msgid "Ticket layout created."
-msgstr "Vytvorené rozloženie lístka."
+msgstr "Rozloženie vstupenky bolo vytvorené."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:144
 msgid "Ticket layout deleted."
-msgstr "Rozloženie lístka odstránené."
+msgstr "Rozloženie vstupenky bolo odstránené."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:145
 msgid "Ticket layout changed."
@@ -30213,11 +30225,11 @@ msgstr "Zmena rozloženia vstupeniek."
 #: pretix/plugins/ticketoutputpdf/signals.py:158
 #, python-brace-format
 msgid "Ticket layout {val}"
-msgstr "Rozloženie lístka {val}"
+msgstr "Rozloženie vstupenky {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/control_order_position_buttons.html:7
 msgid "Alternative ticket"
-msgstr "Alternatívny lístok"
+msgstr "Alternatívna vstupenka"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
@@ -30253,11 +30265,11 @@ msgid ""
 "choice. The editor is easy to use thanks to its drag-and-drop user "
 "interface, but it requires a modern browser and a decent internet connection."
 msgstr ""
-"Dizajn lístka si môžete prispôsobiť pomocou nášho editora lístkov PDF. Tam "
-"môžete nahrať súbor PDF, ktorý sa používa ako pozadie vstupeniek, a potom na "
-"pozadie umiestniť rôzne texty a QR kódy na vami zvolené pozície. Editor sa "
-"ľahko používa vďaka používateľskému rozhraniu typu \"ťahaj a pusť\", "
-"vyžaduje však moderný prehliadač a slušné internetové pripojenie."
+"Dizajn vstupenky si môžete prispôsobiť pomocou nášho PDF editora vstupeniek. "
+"Tam môžete nahrať súbor PDF, ktorý sa používa ako pozadie vstupeniek, a "
+"potom na pozadie umiestniť rôzne texty a QR kódy na vami zvolené pozície. "
+"Editor sa ľahko používa vďaka používateľskému rozhraniu typu \"ťahaj a pusť\""
+", vyžaduje však moderný prehliadač a slušné internetové pripojenie."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
 msgid "Open Layout Designer"
@@ -30295,11 +30307,11 @@ msgstr "Stiahnite si vstupenku (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:62
 msgid "Default ticket layout"
-msgstr "Predvolené rozloženie letenky"
+msgstr "Predvolené rozloženie vstupenky"
 
 #: pretix/plugins/ticketoutputpdf/views.py:119
 msgid "The new ticket layout has been created."
-msgstr "Bolo vytvorené nové rozloženie lístka."
+msgstr "Nové rozloženie vstupenky bolo vytvorené."
 
 #: pretix/plugins/ticketoutputpdf/views.py:168
 #: pretix/plugins/ticketoutputpdf/views.py:198
@@ -30340,7 +30352,7 @@ msgstr "Krok"
 #: pretix/presale/checkoutflow.py:248
 msgctxt "checkoutflow"
 msgid "Customer account"
-msgstr ""
+msgstr "Zákaznícky účet"
 
 #: pretix/presale/checkoutflow.py:335
 msgid "We failed to process your authentication request, please try again."
@@ -30373,7 +30385,7 @@ msgstr "Zadávajte len čísla."
 #: pretix/presale/checkoutflow.py:717
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "Informácie o vás"
 
 #: pretix/presale/checkoutflow.py:943
 msgid ""
@@ -30409,7 +30421,7 @@ msgstr "Vyplňte odpovede na všetky požadované otázky."
 #: pretix/presale/checkoutflow.py:1202
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "Platba"
 
 #: pretix/presale/checkoutflow.py:1315
 msgid ""
@@ -30436,7 +30448,7 @@ msgstr "Zadané platobné údaje boli neúplné."
 #: pretix/presale/checkoutflow.py:1442
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr ""
+msgstr "Zhrnutie objednávky"
 
 #: pretix/presale/checkoutflow.py:1536
 msgid "You need to check all checkboxes on the bottom of the page."
@@ -30615,7 +30627,7 @@ msgstr "Tento obchod je v súčasnosti viditeľný len pre vás a váš tím."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:34
 msgid "Take it live now"
-msgstr "Vezmite si ho naživo teraz"
+msgstr "Spustite ho naživo"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:44
 #: pretix/presale/templates/pretixpresale/event/base.html:105
@@ -30655,7 +30667,7 @@ msgstr "Upozornenie"
 #: pretix/presale/templates/pretixpresale/event/base.html:127
 #: pretix/presale/templates/pretixpresale/event/base.html:201
 msgid "This ticket shop is currently in test mode."
-msgstr "Tento obchod s lístkami je v súčasnosti v testovacom režime."
+msgstr "Tento obchod so vstupenkami je v súčasnosti v testovacom režime."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:130
 #: pretix/presale/templates/pretixpresale/event/base.html:204
@@ -30672,6 +30684,8 @@ msgid ""
 "You are currently using the time machine. The ticket shop is rendered as if "
 "it were %(datetime)s."
 msgstr ""
+"Práve používate stroj času. Obchod so vstupenkami sa vykresľuje, akoby bolo "
+"%(datetime)s."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:142
 #: pretix/presale/templates/pretixpresale/event/base.html:152
@@ -30681,6 +30695,9 @@ msgid ""
 "href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
 "hidden=\"true\"></span>time machine</a>."
 msgstr ""
+"Ak chcete zobraziť svoj obchod v rôznych časových bodoch, môžete povoliť <a "
+"href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-hidden="
+"\"true\"></span>stroj času</a>."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:163
 #: pretix/presale/templates/pretixpresale/event/base.html:210
@@ -30721,7 +30738,7 @@ msgstr "Nastavenia súborov cookie"
 #: pretix/presale/templates/pretixpresale/event/base.html:227
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
 msgid "Imprint"
-msgstr "Odtlačok"
+msgstr "Impressum"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:10
 msgid ""
@@ -30788,7 +30805,7 @@ msgstr "Pridanie vstupeniek na iný dátum"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:9
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:10
 msgid "Review order"
-msgstr "Objednávka na preskúmanie"
+msgstr "Prehľad objednávky"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please review the details below and confirm your order."
@@ -30998,7 +31015,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:10
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
-msgstr ""
+msgstr "Prosíme, vyplňte všetky polia, ktoré sú označené <span>*</span>."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:51
 msgid "Auto-fill with address"
@@ -31034,8 +31051,9 @@ msgid ""
 msgstr ""
 "Váš prehliadač je nakonfigurovaný tak, aby blokoval súbory cookie z prvkov "
 "webových stránok tretích strán. To bohužiaľ znamená, že vám nemôžeme "
-"zobraziť tento obchod s lístkami vložený do webovej stránky. Skúste otvoriť "
-"obchod so vstupenkami v novej karte alebo zmeňte nastavenia prehliadača."
+"zobraziť tento obchod so vstupenkami vložený do webovej stránky. Skúste "
+"otvoriť obchod so vstupenkami v novej karte alebo zmeňte nastavenia "
+"prehliadača."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:17
 msgid "We apologize for the inconvenience!"
@@ -31432,8 +31450,9 @@ msgstr "Aktuálna hodnota:"
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Jedna vstupenka"
+msgstr[1] "%(num)s vstupenky"
+msgstr[2] "%(num)s vstupeniek"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
 #, python-format
@@ -31465,11 +31484,11 @@ msgstr "Pokračovanie v procese objednávky"
 #: pretix/presale/templates/pretixpresale/event/index.html:219
 #: pretix/presale/templates/pretixpresale/event/voucher.html:439
 msgid "Proceed with checkout"
-msgstr "Pokračujte v pokladni"
+msgstr "Pokračujte k pokladni"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:40
 msgid "Empty cart"
-msgstr "Prázdny vozík"
+msgstr "Vyprázdniť nákupný košík"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:236
@@ -31617,8 +31636,8 @@ msgid ""
 "You might not be able to use any of the tickets in your order until this "
 "payment has been received."
 msgstr ""
-"Je možné, že nebudete môcť použiť žiadnu z leteniek vo vašej objednávke, kým "
-"nebude táto platba prijatá."
+"Je možné, že nebudete môcť použiť žiadnu zo vstupeniek vo vašej objednávke, "
+"kým nebude táto platba prijatá."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 msgctxt "checkoutflow"
@@ -31909,7 +31928,7 @@ msgstr "Zobraziť iný dátum"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:87
 msgid "Choose date to book a ticket"
-msgstr "Výber dátumu rezervácie letenky"
+msgstr "Výber dátumu rezervácie vstupenky"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:92
 msgctxt "subevent"
@@ -31919,13 +31938,13 @@ msgstr "Ďalšie termíny"
 #: pretix/presale/templates/pretixpresale/event/index.html:142
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:756
 msgid "The booking period for this event is over."
-msgstr "Rezervačné obdobie na toto podujatie sa skončilo."
+msgstr "Predpredaj na toto podujatie sa skončil."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:150
 #: pretix/presale/views/widget.py:758
 #, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
-msgstr "Rezervačné obdobie pre túto udalosť sa začne v %(date)s o %(time)s."
+msgstr "Predpredaj na toto podujatie sa začne %(date)s o %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:172
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
@@ -31960,7 +31979,7 @@ msgstr "Pridať do košíka"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:243
 msgid "If you already ordered a ticket"
-msgstr "Ak ste si už objednali lístok"
+msgstr "Ak ste si už objednali vstupenku"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 msgid ""
@@ -31985,7 +32004,7 @@ msgstr "Obchod offline"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
 msgid "This ticket shop is currently turned off."
-msgstr "Tento obchod s lístkami je v súčasnosti vypnutý."
+msgstr "Tento obchod so vstupenkami je v súčasnosti vypnutý."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
@@ -32013,7 +32032,7 @@ msgstr "Vaša objednávka bola úspešne spracovaná! Podrobnosti nájdete niž�
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "We successfully received your payment. See below for details."
-msgstr "Úspešne sme prijali vašu platbu. Podrobnosti nájdete nižšie."
+msgstr "Úspešne sme prijali platbu. Podrobnosti nájdete nižšie."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
@@ -32236,6 +32255,9 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
+"Môžete požiadať o zrušenie tejto objednávky. Ak bude vaša žiadosť schválená, "
+"storno poplatok vo výške <strong>%(fee)s</strong> bude ponechaný a zvyšná "
+"suma vám bude vrátená."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:420
 #, python-format
@@ -32434,7 +32456,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position.html:63
 msgctxt "action"
 msgid "Change your ticket"
-msgstr "Zmena letenky"
+msgstr "Zmena vstupenky"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:68
 msgid ""
@@ -32451,8 +32473,8 @@ msgid ""
 "changes, please get in touch with the person who bought the ticket "
 "(%(email)s)."
 msgstr ""
-"Niektoré zmeny v tomto tipe môžete vykonať len sami. V prípade ďalších zmien "
-"sa obráťte na osobu, ktorá si lístok zakúpila (%(email)s)."
+"Niektoré zmeny v tejto vstupenke môžete vykonať len sami. V prípade ďalších "
+"zmien sa obráťte na osobu, ktorá vstupenku zakúpila (%(email)s)."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:82
 #: pretix/presale/templates/pretixpresale/event/position_change.html:5
@@ -32460,24 +32482,24 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:11
 msgid "Change ticket"
-msgstr "Zmeniť lístok"
+msgstr "Zmeniť vstupenku"
 
 #: pretix/presale/templates/pretixpresale/event/position_change.html:16
 msgid ""
 "Please select the desired changes to your ticket. Note that you can only "
 "perform changes that do not change the total price of the ticket."
 msgstr ""
-"Vyberte požadované zmeny v letenke. Upozorňujeme, že môžete vykonať len "
-"zmeny, ktoré nemenia celkovú cenu letenky."
+"Vyberte požadované zmeny v vstupenke. Upozorňujeme, že môžete vykonať len "
+"zmeny, ktoré nemenia celkovú cenu vstupenky."
 
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:19
 msgid "Please confirm the following changes to your ticket."
-msgstr "Potvrďte, prosím, nasledujúce zmeny v letenke."
+msgstr "Potvrďte, prosím, nasledujúce zmeny v vstupenke."
 
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:5
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:8
 msgid "Modify ticket"
-msgstr "Upraviť lístok"
+msgstr "Upraviť vstupenku"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
@@ -32571,7 +32593,7 @@ msgid ""
 msgstr ""
 "Ak budú vstupenky opäť k dispozícii, budeme informovať prvých záujemcov na "
 "čakacom zozname. Ak vás budeme informovať, budete mať %(hours)s hodín na "
-"zakúpenie lístka, kým ho nepridelíme ďalšej osobe na zozname."
+"zakúpenie vstupenky, kým ho nepridelíme ďalšej osobe na zozname."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
@@ -32579,9 +32601,9 @@ msgid ""
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
-"Upozorňujeme, že dostanete len jeden lístok. Ak potrebujete viac vstupeniek, "
-"musíte sa viackrát pridať do zoznamu čakateľov. Neexistuje žiadna záruka, že "
-"dostanete určitý počet vstupeniek."
+"Upozorňujeme, že dostanete len jednu vstupenku. Ak potrebujete viac "
+"vstupeniek, musíte sa viackrát pridať do zoznamu čakateľov. Neexistuje "
+"žiadna záruka, že dostanete určitý počet vstupeniek."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
@@ -32590,9 +32612,10 @@ msgid ""
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
 msgstr ""
-"Upozorňujeme, že dostanete len jeden lístok. Ak potrebujete viac vstupeniek, "
-"musíte sa do zoznamu čakateľov pridať viackrát s rôznymi e-mailovými "
-"adresami. Neexistuje žiadna záruka, že dostanete určitý počet vstupeniek."
+"Upozorňujeme, že dostanete len jednu vstupenku. Ak potrebujete viac "
+"vstupeniek, musíte sa do zoznamu čakateľov pridať viackrát s rôznymi e-"
+"mailovými adresami. Neexistuje žiadna záruka, že dostanete určitý počet "
+"vstupeniek."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:38
 msgid ""
@@ -32615,14 +32638,14 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
-"Boli ste vybraní z nášho zoznamu čakateľov na kúpu lístka. Ak už lístok "
-"nepotrebujete, buďte takí láskaví a odstráňte svoj lístok zo zoznamu, aby "
-"sme ho mohli čo najrýchlejšie odovzdať ďalšiemu čakateľovi!"
+"Boli ste vybraní z nášho zoznamu čakateľov na kúpu vstupenky. Ak už "
+"vstupenku nepotrebujete, buďte takí láskaví a odstráňte svoju vstupenku zo "
+"zoznamu, aby sme ju mohli čo najrýchlejšie odovzdať ďalšiemu čakateľovi!"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr "Áno, odstráňte môj lístok"
+msgstr "Áno, odstráňte moju vstupenku"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:6
 msgid "Calendar"
@@ -33028,8 +33051,7 @@ msgstr "Váš košík je prázdny"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The booking period for this event is over or has not yet started."
-msgstr ""
-"Rezervačné obdobie pre toto podujatie sa skončilo alebo sa ešte nezačalo."
+msgstr "Predpredaj na toto podujatie sa skončil alebo sa ešte nezačal."
 
 #: pretix/presale/views/customer.py:247
 msgid ""
@@ -33224,10 +33246,10 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
-"Ak je zadaná e-mailová adresa platná a priradená k lístku, v priebehu "
-"posledných {number} hodín sme vám už poslali e-mail s odkazom na váš lístok. "
-"Ak e-mail neprišiel, skontrolujte priečinok so spamom a tiež dvakrát "
-"skontrolujte, či ste použili správnu e-mailovú adresu."
+"Ak je zadaná e-mailová adresa platná a priradená u vstupenke, v priebehu "
+"posledných {number} hodín sme vám už poslali e-mail s odkazom na vášu "
+"vstupenku. Ak e-mail neprišiel, skontrolujte priečinok so spamom a tiež "
+"dvakrát skontrolujte, či ste použili správnu e-mailovú adresu."
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
@@ -33285,7 +33307,7 @@ msgstr ""
 
 #: pretix/presale/views/widget.py:372
 msgid "This ticket shop is currently disabled."
-msgstr "Tento obchod s lístkami je momentálne vypnutý."
+msgstr "Tento obchod so vstupenkami je momentálne vypnutý."
 
 #: pretix/presale/views/widget.py:386
 msgid "The selected date does not exist in this event series."
