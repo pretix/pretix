@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-08 21:52+0000\n"
+"PO-Revision-Date: 2024-09-09 06:00+0000\n"
 "Last-Translator: Ayden Jahola <info@aydenjahola.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -409,7 +409,7 @@ msgstr "توجد فاتورة مصدرة لهذا الطلب مسبقاً."
 #: pretix/api/views/order.py:634 pretix/control/views/orders.py:1715
 #: pretix/control/views/users.py:143
 msgid "There was an error sending the mail. Please try again later."
-msgstr "حدث خطأ اثناء ارسال البريد. الرجا المحاولة مرة أخرى لاحقاً."
+msgstr "حدث خطأ اثناء ارسال البريد الاكتروني. الرجاء المحاولة مرة أخرى لاحقاً."
 
 #: pretix/api/views/order.py:712 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:800
