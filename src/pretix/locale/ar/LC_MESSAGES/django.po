@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
 "PO-Revision-Date: 2024-09-09 06:00+0000\n"
-"Last-Translator: Ayden Jahola <info@aydenjahola.com>\n"
+"Last-Translator: Ahmad AlHarthi <to.ahmad@pm.me>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -418,11 +418,11 @@ msgstr "أحد المنتجات المختارة غير متوفر في البل
 
 #: pretix/api/webhooks.py:237 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr "تم تقديم طلب جديد"
+msgstr "تم وضع طلب جديد"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr "طلب جديد يتطلب الموافقة"
+msgstr "الطلب الجديد بحاجة إلى موافقة"
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:245
 msgid "Order marked as paid"
