@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
 "PO-Revision-Date: 2024-09-08 21:52+0000\n"
-"Last-Translator: Ahmad AlHarthi <to.ahmad@pm.me>\n"
+"Last-Translator: Ayden Jahola <info@aydenjahola.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -38,7 +38,7 @@ msgstr "العربية"
 
 #: pretix/_base_settings.py:83
 msgid "Catalan"
-msgstr ""
+msgstr "الكتالانية"
 
 #: pretix/_base_settings.py:84
 msgid "Chinese (simplified)"
@@ -46,7 +46,7 @@ msgstr "الصينية (المبسطة)"
 
 #: pretix/_base_settings.py:85
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "الصينية (التقليدية)"
 
 #: pretix/_base_settings.py:86
 msgid "Czech"
@@ -74,7 +74,7 @@ msgstr "الفنلندية"
 
 #: pretix/_base_settings.py:92
 msgid "Galician"
-msgstr ""
+msgstr "الجاليكية"
 
 #: pretix/_base_settings.py:93
 msgid "Greek"
@@ -94,7 +94,7 @@ msgstr "لاتفيفية"
 
 #: pretix/_base_settings.py:97
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "النرويجية"
 
 #: pretix/_base_settings.py:98
 msgid "Polish"
@@ -110,7 +110,7 @@ msgstr "البرتغالية (البرازيل)"
 
 #: pretix/_base_settings.py:101
 msgid "Romanian"
-msgstr ""
+msgstr "الرومانية"
 
 #: pretix/_base_settings.py:102
 msgid "Russian"
@@ -118,11 +118,11 @@ msgstr "الروسية"
 
 #: pretix/_base_settings.py:103
 msgid "Slovak"
-msgstr ""
+msgstr "السلوفاكية"
 
 #: pretix/_base_settings.py:104
 msgid "Swedish"
-msgstr ""
+msgstr "السويدية"
 
 #: pretix/_base_settings.py:105
 msgid "Spanish"
@@ -134,7 +134,7 @@ msgstr "التركية"
 
 #: pretix/_base_settings.py:107
 msgid "Ukrainian"
-msgstr ""
+msgstr "الأوكرانية"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -149,16 +149,12 @@ msgid "pretixSCAN"
 msgstr "بريتكس pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:90
-#, fuzzy
-#| msgid "pretixSCAN (kiosk mode, online only)"
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretixSCAN (وضع kiosk، عبر الانترنت فقط)"
+msgstr "pretixSCAN (وضع kiosk، لا مزامنة للطلبات ولا بحث)"
 
 #: pretix/api/auth/devicesecurity.py:124
-#, fuzzy
-#| msgid "pretixSCAN (kiosk mode, online only)"
 msgid "pretixSCAN (online only, no order sync)"
-msgstr "pretixSCAN (وضع kiosk، عبر الانترنت فقط)"
+msgstr "pretixSCAN (وضع kiosk، لا مزامنة للطلبات)"
 
 #: pretix/api/auth/devicesecurity.py:159
 msgid "pretixPOS"
@@ -177,10 +173,8 @@ msgid "Allowed URIs list, space separated"
 msgstr "قائمة العناوين المسموح بها, مفصولة بمسافة"
 
 #: pretix/api/models.py:47
-#, fuzzy
-#| msgid "Allowed URIs list, space separated"
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "قائمة العناوين المسموح بها، مفصولة بمسافة"
+msgstr "قائمة العناوين المسموح بها بعد تسجيل الخروج، مفصولة بمسافة"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:395
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
@@ -263,10 +257,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "إضافة غير معروفة: '{name}'."
 
 #: pretix/api/serializers/event.py:295
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "إضافة غير معروفة: '{name}'."
+msgstr "إضافة مقيدة: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
@@ -292,7 +285,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "يمكن حاليًا تخصيص منتجات القبول فقط."
 
 #: pretix/api/serializers/item.py:317
 msgid ""
@@ -327,26 +320,19 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "لا يمكن طرح هذا النوع من الأسئلة أثناء تسجيل الدخول."
 
 #: pretix/api/serializers/item.py:531 pretix/control/forms/item.py:142
-#, fuzzy
-#| msgid "This type of question cannot be asked during check-in."
 msgid "This type of question cannot be shown during check-in."
-msgstr "لا يمكن طرح هذا النوع من الأسئلة أثناء تسجيل الدخول."
+msgstr "لا يمكن عرض هذا النوع من الأسئلة أثناء تسجيل الدخول."
 
 #: pretix/api/serializers/media.py:108
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
-msgstr "توجد مسبقا بطاقة هدايا بنفس السر في حسابك أو حساب منظم تابع."
+msgstr "توجد وسيلة بنفس المعرف والنوع في حساب المنظم الخاص بك."
 
 #: pretix/api/serializers/order.py:78
-#, fuzzy, python-brace-format
-#| msgid "Your input was invalid, please try again."
+#, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "كان الإدخال غير صالحة، يرجى المحاولة مرة أخرى."
+msgstr "\"{input}\" ادخال غير صالحة، يرجى المحاولة مرة أخرى."
 
 #: pretix/api/serializers/order.py:1316 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1530
@@ -401,7 +387,7 @@ msgstr "تم استخدام رمز كود الخصم هذا سابقا لأقص�
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "الوسيط متصل بحدث آخر"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:475
 #, python-brace-format
@@ -436,7 +422,7 @@ msgstr "تم تقديم طلب جديد"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr "طلب جديد يتطلب الموافقة."
+msgstr "طلب جديد يتطلب الموافقة"
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:245
 msgid "Order marked as paid"
