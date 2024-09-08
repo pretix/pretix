@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-06 19:00+0000\n"
-"Last-Translator: Ronisson Cabral <caldasnovasreditec@gmail.com>\n"
+"PO-Revision-Date: 2024-09-08 10:55+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -7940,28 +7940,24 @@ msgid "number of entries today"
 msgstr "número de entradas hoje"
 
 #: pretix/base/services/checkin.py:318
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of entries since {datetime}"
-msgstr "número de entradas hoje"
+msgstr "número de entradas hoje {datetime}"
 
 #: pretix/base/services/checkin.py:319
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of entries before {datetime}"
-msgstr "número de entradas hoje"
+msgstr "número de entradas hoje {datetime}"
 
 #: pretix/base/services/checkin.py:320
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of days with an entry since {datetime}"
-msgstr "número de entradas hoje"
+msgstr "número de entradas hoje {datetime}"
 
 #: pretix/base/services/checkin.py:321
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of days with an entry before {datetime}"
-msgstr "número de entradas hoje"
+msgstr "número de entradas hoje {datetime}"
 
 #: pretix/base/services/checkin.py:322
 msgid "week day"
@@ -8029,16 +8025,14 @@ msgid "This order is not yet approved."
 msgstr "Esta encomenda não está pendente de aprovação."
 
 #: pretix/base/services/checkin.py:999 pretix/base/services/checkin.py:1003
-#, fuzzy, python-brace-format
-#| msgid "Only allowed after {datetime}"
+#, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr "Permitido após {datetime}"
+msgstr "Permitido após {datetime}."
 
 #: pretix/base/services/checkin.py:1013 pretix/base/services/checkin.py:1017
-#, fuzzy, python-brace-format
-#| msgid "This ticket has already been redeemed."
+#, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr "Este bilhete já foi resgatado."
+msgstr "Este bilhete já foi resgatado {datetime}."
 
 #: pretix/base/services/checkin.py:1048
 msgid "This order position has an invalid product for this check-in list."
@@ -8098,10 +8092,8 @@ msgid "Export failed"
 msgstr "Ficheiros exportados"
 
 #: pretix/base/services/export.py:206
-#, fuzzy
-#| msgid "Permission denied"
 msgid "Permission denied."
-msgstr "Permissão negada"
+msgstr "Permissão negada."
 
 #: pretix/base/services/export.py:221
 msgid "Your exported data exceeded the size limit for scheduled exports."
@@ -8172,14 +8164,7 @@ msgid "New invoice: {number}"
 msgstr "Nova fatura: {number}"
 
 #: pretix/base/services/invoices.py:528
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "a new invoice for {event} has been created, see attached.\n"
-#| "\n"
-#| "We are sending this email because you configured us to do so in your "
-#| "event settings."
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8190,7 +8175,7 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"Uma nova fatura para {event} foi criada, consulte anexo.\n"
+"Uma nova fatura a ordem {order} em {event} foi criada, consulte anexo.\n"
 "\n"
 "Estamos a enviar este e -mail porque configurou para fazê -lo nas suas "
 "configurações de evento."
@@ -8314,20 +8299,17 @@ msgstr ""
 "vezes, que é o valor máximo."
 
 #: pretix/base/services/memberships.py:227
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "You are trying to use a membership of type \"{type}\" for an event taking "
-#| "place at {date}, however you already used the same membership for a "
-#| "different ticket at the same time."
+#, python-brace-format
 msgid ""
 "You are trying to use a membership of type \"{type}\" for a ticket valid "
 "from {valid_from} until {valid_until}, however you already used the same "
 "membership for a different ticket that overlaps with this time frame "
 "({conflict_from} – {conflict_until})."
 msgstr ""
-"Está a tentar usar uma associação do tipo \"{type}\" para um evento que "
-"ocorre em {date}, no entanto, já usou a mesma associação para um ticket "
-"diferente ao mesmo tempo."
+"Está a tentar utilizar uma adesão do tipo \"{type}\" para um bilhete válido "
+"de {valid_from} até {valid_until}, no entanto já usou a mesma adesão para um "
+"bilhete diferente que se sobrepõe a este prazo ({conflict_from} – "
+"{conflict_until})."
 
 #: pretix/base/services/memberships.py:231
 #: pretix/base/services/memberships.py:233
@@ -8736,10 +8718,8 @@ msgstr ""
 "Algo aconteceu no seu evento após a exportação, por favor tente novamente."
 
 #: pretix/base/services/shredder.py:177
-#, fuzzy
-#| msgid "Payment completed."
 msgid "Data shredding completed"
-msgstr "Pagamento completo."
+msgstr "Pagamento completo"
 
 #: pretix/base/services/stats.py:215
 msgid "Uncategorized"
@@ -9248,10 +9228,9 @@ msgstr ""
 "%y (sem século) para inserir o ano da factura, ou %m e %d para o dia do mês."
 
 #: pretix/base/settings.py:684 pretix/base/settings.py:706
-#, fuzzy, python-brace-format
-#| msgid "Please do not use special characters in names."
+#, python-brace-format
 msgid "Please only use the characters {allowed} in this field."
-msgstr "Por favor não use caracteres especiais em nomes."
+msgstr "Por favor, utilize apenas os caracteres {allowed} neste campo."
 
 #: pretix/base/settings.py:697
 msgid "Invoice number prefix for cancellations"
@@ -10085,21 +10064,16 @@ msgid "No modifications after order was submitted"
 msgstr ""
 
 #: pretix/base/settings.py:1669 pretix/base/settings.py:1678
-#, fuzzy
-#| msgid "Only pending or paid orders can be changed."
 msgid "Only the person who ordered can make changes"
-msgstr "Apenas encomendas pendentes ou pagas podem ser alteradas."
+msgstr "Apenas encomendas pendentes ou pagas podem ser alteradas"
 
 #: pretix/base/settings.py:1670 pretix/base/settings.py:1679
 msgid "Both the attendee and the person who ordered can make changes"
 msgstr ""
 
 #: pretix/base/settings.py:1674
-#, fuzzy
-#| msgid "Allow customers to modify their information after they checked in."
 msgid "Allow customers to modify their information"
-msgstr ""
-"Permitir que os clientes modifiquem as suas informações após o check -in."
+msgstr "Permitir que os clientes modifique as suas informações"
 
 #: pretix/base/settings.py:1689
 msgid "Allow customers to modify their information after they checked in."
@@ -11089,17 +11063,7 @@ msgstr ""
 "A sua equipa {event}"
 
 #: pretix/base/settings.py:2530 pretix/base/settings.py:2567
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "a ticket for {event} has been ordered for you.\n"
-#| "\n"
-#| "You can view the details and status of your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11111,7 +11075,7 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Olá {attendee_name},\n"
+"Olá,\n"
 "\n"
 "um bilhete para {event} foi pedido para si.\n"
 "\n"
@@ -11928,10 +11892,9 @@ msgid "The last payment date cannot be before the end of presale."
 msgstr "A última data de pagamento não pode ser antes do final da pré-venda."
 
 #: pretix/base/settings.py:3811
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "The value \"{identifier}\" is not a valid sales channel."
-msgstr "Por favor, indique um canal de vendas válido."
+msgstr "O valor \"{identifier}\" não é um canal de vendas válido."
 
 #: pretix/base/settings.py:3826
 msgid "This needs to be disabled if other NFC-based types are active."
@@ -15480,18 +15443,20 @@ msgid "A new secret has been generated for position #{posid}."
 msgstr "Um novo segredo foi gerado para a posição #{posid}."
 
 #: pretix/control/logdisplay.py:165
-#, fuzzy, python-brace-format
-#| msgid "This order position has been canceled."
+#, python-brace-format
 msgid ""
 "The validity start date for position #{posid} has been changed to {value}."
-msgstr "Esta posição encomenda foi cancelada."
+msgstr ""
+"A data de início de validade para a posição #{posid} foi alterada para "
+"{value}."
 
 #: pretix/control/logdisplay.py:171
-#, fuzzy, python-brace-format
-#| msgid "This order position has been canceled."
+#, python-brace-format
 msgid ""
 "The validity end date for position #{posid} has been changed to {value}."
-msgstr "Esta posição encomenda foi cancelada."
+msgstr ""
+"A data de final de validade para a posição #{posid} foi alterada para "
+"{value}."
 
 #: pretix/control/logdisplay.py:176
 #, fuzzy, python-brace-format
@@ -17536,10 +17501,7 @@ msgid "Delete check-ins"
 msgstr "Excluir lista de check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the check-in list <strong>%(name)s</"
-#| "strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to permanently delete the check-ins of <strong>one "
 "ticket</strong>."
@@ -17547,11 +17509,11 @@ msgid_plural ""
 "Are you sure you want to permanently delete the check-ins of "
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] ""
-"Tem certeza de que deseja apagar a lista de check-in <strong>%(name)s</"
-"strong>?"
+"Tem certeza de que deseja apagar a lista de check-in "
+"<strong>%(count)s</strong>?"
 msgstr[1] ""
-"Tem certeza de que deseja apagar a lista de check-in <strong>%(name)s</"
-"strong>?"
+"Tem certeza de que deseja apagar a lista de check-in "
+"<strong>%(count)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:24
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
@@ -20761,11 +20723,8 @@ msgstr ""
 "produto foi definido"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:111
-#, fuzzy
-#| msgctxt "discount"
-#| msgid "Condition"
 msgid "Condition:"
-msgstr "Doença"
+msgstr "Doença:"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:126
 msgid "Applies to:"
@@ -22936,10 +22895,8 @@ msgid "Channel type"
 msgstr "Tipo de digitalização"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:5
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Delete sales channel:"
-msgstr "Canal de vendas"
+msgstr "Canal de vendas:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:10
 #, fuzzy
@@ -22960,10 +22917,8 @@ msgstr ""
 "sua data de término para o passado."
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:6
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Sales channel:"
-msgstr "Canal de vendas"
+msgstr "Canal de vendas:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:8
 msgid ""
@@ -26957,10 +26912,9 @@ msgid "Your export schedule has been saved, but no next export is planned."
 msgstr ""
 
 #: pretix/control/views/orders.py:2704 pretix/control/views/organizer.py:1859
-#, fuzzy, python-brace-format
-#| msgid "Export date"
+#, python-brace-format
 msgid "Export: {title}"
-msgstr "Data de Exportação"
+msgstr "Exportação: {title}"
 
 #: pretix/control/views/orders.py:2705 pretix/control/views/organizer.py:1861
 #, python-brace-format
@@ -28336,10 +28290,9 @@ msgid "The invoice was sent to the designated email address."
 msgstr "Digite o mesmo endereço de e-mail duas vezes."
 
 #: pretix/plugins/banktransfer/signals.py:132
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "Invoice {invoice_number}"
-msgstr "Número da factura"
+msgstr "Factura {invoice_number}"
 
 #: pretix/plugins/banktransfer/signals.py:137
 #, python-brace-format
@@ -29761,10 +29714,9 @@ msgstr ""
 
 #: pretix/plugins/reports/accountingreport.py:644
 #: pretix/plugins/reports/accountingreport.py:694
-#, fuzzy, python-brace-format
-#| msgid "Extend payment term"
+#, python-brace-format
 msgid "Pending payments at {datetime}"
-msgstr "Estender prazo de pagamento"
+msgstr "Pagamentos pendentes em {datetime}"
 
 #: pretix/plugins/reports/accountingreport.py:751
 #: pretix/plugins/reports/accountingreport.py:789
@@ -30441,16 +30393,13 @@ msgid "There are no matching recipients for your selection."
 msgstr "Não há encomendas correspondentes a esta selecção."
 
 #: pretix/plugins/sendmail/views.py:223
-#, fuzzy, python-format
-#| msgid ""
-#| "Your message has been queued and will be sent to the contact addresses of "
-#| "%d orders in the next few minutes."
+#, python-format
 msgid ""
 "Your message has been queued and will be sent to the contact addresses of %s "
 "in the next few minutes."
 msgstr ""
 "A sua mensagem foi colocada na fila e será enviada para os endereços de "
-"contato de %d pedidos nos próximos minutos."
+"contato de %s pedidos nos próximos minutos."
 
 #: pretix/plugins/sendmail/views.py:253
 #, fuzzy
@@ -30478,12 +30427,11 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/sendmail/views.py:516
-#, fuzzy, python-format
-#| msgid "Waiting list entry"
+#, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] "Entrada em fila de espera"
-msgstr[1] "Entrada em fila de espera"
+msgstr[0] "%(number)s entrada em fila de espera"
+msgstr[1] "%(number)s entrada em fila de espera"
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
@@ -31438,16 +31386,12 @@ msgid "Enter the entity number, reference number, and amount."
 msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Entity number:"
-msgstr "Número da factura"
+msgstr "Número da factura:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
-#, fuzzy
-#| msgid "Reference code"
 msgid "Reference number:"
-msgstr "Código de referência"
+msgstr "Código de referência:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:35
 msgid ""
@@ -34741,16 +34685,13 @@ msgstr ""
 "disponível atualmente."
 
 #: pretix/presale/views/waiting.py:141
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "We've added you to the waiting list. You will receive an email as soon as "
-#| "this product gets available again."
+#, python-brace-format
 msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
-"Adicionamos você à lista de espera. Você receberá um email assim que este "
-"produto estiver disponível novamente."
+"Adicionámos à lista de espera. Enviaremos um e-mail para {email} assim que "
+"este produto estiver novamente disponível."
 
 #: pretix/presale/views/waiting.py:169
 msgid "We could not find you on our waiting list."
