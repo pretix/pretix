@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-30 22:00+0000\n"
+"PO-Revision-Date: 2024-09-10 03:00+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -140,7 +140,7 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
-"Full enhetstillgång (läsning och ändring av anmälan och presentkort, läsning "
+"Full enhetstillgång (läsning och ändring av bokning och presentkort, läsning "
 "av produkter och inställningar)"
 
 #: pretix/api/auth/devicesecurity.py:53
@@ -402,12 +402,12 @@ msgstr ""
 #: pretix/api/views/order.py:603 pretix/control/views/orders.py:1587
 #: pretix/presale/views/order.py:743 pretix/presale/views/order.py:816
 msgid "You cannot generate an invoice for this order."
-msgstr "Du kan inte skapa en faktura för denna anmälan."
+msgstr "Du kan inte skapa en faktura för denna bokning."
 
 #: pretix/api/views/order.py:608 pretix/control/views/orders.py:1589
 #: pretix/presale/views/order.py:745 pretix/presale/views/order.py:818
 msgid "An invoice for this order already exists."
-msgstr "En faktura för denna anmälan finns redan."
+msgstr "En faktura för denna bokning finns redan."
 
 #: pretix/api/views/order.py:634 pretix/control/views/orders.py:1715
 #: pretix/control/views/users.py:143
@@ -422,30 +422,30 @@ msgstr "En utav de valda produkterna är inte tillgänglig i det valda landet."
 
 #: pretix/api/webhooks.py:237 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr "Ny anmälan genomförd"
+msgstr "Ny bokning skapad"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr "Ny anmälan kräver godkännande"
+msgstr "Den nya bokningen kräver godkännande"
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr "Anmälan markerad som betald"
+msgstr "Bokningen markerad som betald"
 
 #: pretix/api/webhooks.py:249 pretix/base/models/checkin.py:358
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1548
 msgid "Order canceled"
-msgstr "Anmälan har avbokats"
+msgstr "Bokningen har avbokats"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr "Anmälan återaktiverad"
+msgstr "Bokningen är återaktiverad"
 
 #: pretix/api/webhooks.py:257 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr "Anmälan har löpt ut"
+msgstr "Bokningen har löpt ut"
 
 #: pretix/api/webhooks.py:261
 msgid "Order expiry date changed"
@@ -453,16 +453,16 @@ msgstr "Utgångsdatumet har ändrats"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr "Anmälningsinformationen har uppdaterats"
+msgstr "Bokningsinformationen har uppdaterats"
 
 #: pretix/api/webhooks.py:269 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr "Kontaktadressen för anmälan har uppdaterats"
+msgstr "Kontaktadressen för boknignen har uppdaterats"
 
 #: pretix/api/webhooks.py:273 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr "Anmälan har uppdaterats"
+msgstr "Bokningen har uppdaterats"
 
 #: pretix/api/webhooks.py:277
 msgid "Refund of payment created"
@@ -494,15 +494,15 @@ msgstr "Betalningen bekräftad"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
-msgstr "Anmälan har godkänts"
+msgstr "Bokningen har godkänts"
 
 #: pretix/api/webhooks.py:309
 msgid "Order denied"
-msgstr "Anmälan har nekats"
+msgstr "Bokningen har nekats"
 
 #: pretix/api/webhooks.py:313
 msgid "Order deleted"
-msgstr "Anmälan har nekats"
+msgstr "Bokningen är raderad"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -577,7 +577,7 @@ msgstr "Väntelistan är raderad"
 
 #: pretix/api/webhooks.py:382
 msgid "Waiting list entry received voucher"
-msgstr "Kupong mottogs för anmälan till väntelistan"
+msgstr "Kupong mottogs för bokningen till väntelistan"
 
 #: pretix/api/webhooks.py:386
 msgid "Customer account created"
@@ -788,7 +788,7 @@ msgid ""
 "customers while creating an order."
 msgstr ""
 "Ladda ner en ZIP-fil inklusive alla filer som har laddats upp av dina kunder "
-"när anmälan skapades."
+"när bokningen skapades."
 
 #: pretix/base/exporters/answers.py:66 pretix/base/models/items.py:1714
 #: pretix/control/navigation.py:182
@@ -1088,7 +1088,7 @@ msgid ""
 "does not always correspond to the order or payment date."
 msgstr ""
 "Inkludera endast fakturor skapade i detta tidspannet. Observera att "
-"fakturadatum inte alltid motsvarar anmälan- eller betalningsdatum."
+"fakturadatum inte alltid motsvarar boknings- eller betalningsdatum."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
@@ -1305,7 +1305,7 @@ msgstr "Datum"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:70
 msgid "Order code"
-msgstr "Anmälningsnummer"
+msgstr "Bokningsnummer"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/modelimport_orders.py:59 pretix/base/models/customers.py:384
@@ -1746,7 +1746,7 @@ msgstr "Minimal mängd per order"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:599
 msgid "Maximum amount per order"
-msgstr "Maximal mängd per anmälan"
+msgstr "Maximalt antal per bokning"
 
 #: pretix/base/exporters/items.py:89 pretix/base/exporters/orderlist.py:282
 #: pretix/base/models/items.py:607 pretix/base/models/items.py:1190
@@ -1785,7 +1785,7 @@ msgstr "Dölj utan giltigt medlemskap"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:86
 msgid "Order data"
-msgstr "Anmälningsinformation"
+msgstr "Bokningsinformation"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
@@ -1833,20 +1833,20 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:657
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
 msgid "Orders"
-msgstr "Anmälningar"
+msgstr "Bokningar"
 
 #: pretix/base/exporters/orderlist.py:101 pretix/base/models/orders.py:2499
 #: pretix/base/notifications.py:205
 msgid "Order positions"
-msgstr "Anmälningsrad"
+msgstr "Bokningspost"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Order fees"
-msgstr "Anmälningsavgifter"
+msgstr "Bokningsavgifter"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Only paid orders"
-msgstr "Bara betalda anmälningar"
+msgstr "Endast betalda bokningar"
 
 #: pretix/base/exporters/orderlist.py:116
 msgid "Include payment amounts"
@@ -1859,7 +1859,7 @@ msgstr "Visa flersvarsalternativ grupperade i en kolumn"
 #: pretix/base/exporters/orderlist.py:131
 #: pretix/plugins/reports/exporters.py:701
 msgid "Only include orders created within this date range."
-msgstr "Inkludera endast anmälningar skapade inom detta datumintervall."
+msgstr "Inkludera endast bokningar skapade inom detta datumintervall."
 
 #: pretix/base/exporters/orderlist.py:135 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:234 pretix/plugins/badges/exporters.py:484
@@ -1896,7 +1896,7 @@ msgstr "Förkortning för evenemanget"
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:73
 msgid "Order total"
-msgstr "Totalt antal anmälningar"
+msgstr "Totalt antal bokningar"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:443
@@ -2559,7 +2559,7 @@ msgstr "Blockerar kuponger"
 
 #: pretix/base/exporters/orderlist.py:1135 pretix/control/views/item.py:973
 msgid "Current user's carts"
-msgstr "Användarens nuvarande varukorg"
+msgstr "Användarens nuvarande bokning"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Exited orders"
@@ -2742,7 +2742,7 @@ msgstr "Utgången"
 
 #: pretix/base/exporters/orderlist.py:1356 pretix/base/models/giftcards.py:98
 msgid "Test mode card"
-msgstr "Test mode varukorg"
+msgstr "Test mode bokning"
 
 #: pretix/base/exporters/orderlist.py:1358
 #: pretix/base/modelimport_orders.py:515 pretix/base/models/giftcards.py:102
@@ -4135,7 +4135,7 @@ msgid ""
 msgstr ""
 "Denna inställning låter dig skapa rabatter av typen \"köp X få Y rabatterat/"
 "gratis\". Till exempel, om du ställer in \"Minimum number of matching "
-"products\" till fyra och detta värde till två, kommer kundens varukorg att "
+"products\" till fyra och detta värde till två, kommer kundens bokning att "
 "delas upp i grupper om fyra biljetter och de billigaste två biljetterna inom "
 "varje grupp kommer att få rabatt. Om du vill ge rabatten på alla matchande "
 "produkter, håll detta fält tomt."
@@ -5159,7 +5159,7 @@ msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
-"Om vald är Add-Ons till den här biljetten gratis även om de vanligtvis "
+"Om vald är Add-Ons till den här biljetten är gratis även om de vanligtvis "
 "kostar pengar."
 
 #: pretix/base/models/items.py:1424
@@ -5898,15 +5898,15 @@ msgstr "Bokad produkt"
 
 #: pretix/base/models/orders.py:3007
 msgid "Cart ID (e.g. session key)"
-msgstr "Varukorgs-ID (t.ex. sessions-ID)"
+msgstr "Boknings-ID (t.ex. sessions-ID)"
 
 #: pretix/base/models/orders.py:3044
 msgid "Cart position"
-msgstr "Produkt i varukorgen"
+msgstr "Produkt i bokning"
 
 #: pretix/base/models/orders.py:3045
 msgid "Cart positions"
-msgstr "Produkter i varukorgen"
+msgstr "Produkter i bokningen"
 
 #: pretix/base/models/orders.py:3174
 msgid "Business customer"
@@ -6481,7 +6481,7 @@ msgstr "En ny bokning som kräver godkännande har lagts: {order.code}"
 #: pretix/base/notifications.py:246
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr "Anmälan {order.code} har markerats som betald."
+msgstr "Bokningen {order.code} har markerats som betald."
 
 #: pretix/base/notifications.py:252
 #, python-brace-format
@@ -6515,7 +6515,7 @@ msgstr "Bokning {order.code} har ändrats."
 
 #: pretix/base/notifications.py:287
 msgid "Order has been overpaid"
-msgstr "Anmälan har blivit överbetald"
+msgstr "Bokningen har blivit överbetald"
 
 #: pretix/base/notifications.py:288
 #, python-brace-format
@@ -6642,8 +6642,8 @@ msgid ""
 msgstr ""
 "Kommer att skrivas ut precis under betalningssiffrorna och ovanför "
 "sluttexten på fakturor. Detta kommer endast att användas om fakturan "
-"genereras innan anmälan betalas. Om fakturan genereras senare kommer den att "
-"visa en text om att den redan är betald."
+"genereras innan bokningen betalas. Om fakturan genereras senare kommer den "
+"att visa en text om att den redan är betald."
 
 #: pretix/base/payment.py:404
 msgid "Restrict to countries"
@@ -6734,7 +6734,7 @@ msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
-"I testläge kan du manuellt markera denna anmälan som betald i backend efter "
+"I testläge kan du manuellt markera denna bokning som betald i backend efter "
 "att den har skapats."
 
 #: pretix/base/payment.py:1181 pretix/base/payment.py:1322
@@ -7380,7 +7380,7 @@ msgstr "Du valde ingen av produkterna."
 
 #: pretix/base/services/cart.py:105
 msgid "Unknown cart position."
-msgstr "Okänt varukorgsläge."
+msgstr "Okänt bokningsläge."
 
 #: pretix/base/services/cart.py:106
 msgctxt "subevent"
@@ -7414,7 +7414,7 @@ msgid ""
 "products are affected and have not been added to your cart: %s"
 msgstr ""
 "Några av de produkter du valt är inte längre tillgängliga. Följande "
-"produkter påverkas och har inte lagts till i din varukorg: %s"
+"produkter påverkas och har inte lagts till i din bokning: %s"
 
 #: pretix/base/services/cart.py:121
 #, python-format
@@ -7424,7 +7424,7 @@ msgid ""
 "your cart: %s"
 msgstr ""
 "Några av de produkter du valt är inte längre tillgängliga i den kvantitet du "
-"valt. Följande produkter påverkas och har inte lagts till i din varukorg: %s"
+"valt. Följande produkter påverkas och har inte lagts till i din bokning: %s"
 
 #: pretix/base/services/cart.py:126
 #, python-format
@@ -7458,7 +7458,7 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-"Vi har tagit bort %(product)s från din varukorg eftersom du inte kan köpa "
+"Vi har tagit bort %(product)s från din bokning eftersom du inte kan köpa "
 "färre än %(min)s stycken av den."
 msgstr[1] ""
 "Vi har tagit bort %(product)s från din varukorg eftersom du inte kan köpa "
@@ -7495,8 +7495,8 @@ msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
-"Bokningsperioden för ett av evenemangen i din varukorg har gått ut. De "
-"berörda platserna har tagits bort från din kundvagn."
+"Bokningsperioden för ett av evenemangen i din bokning har gått ut. De "
+"berörda platserna har tagits bort från din bokning."
 
 #: pretix/base/services/cart.py:153
 msgid "The entered price is not a number."
@@ -7538,7 +7538,7 @@ msgid_plural ""
 msgstr[0] ""
 "Verifikationskoden \"%(voucher)s\" kan endast användas om du väljer minst "
 "%(number)s matchande produkter. Vi har därför tagit bort några positioner "
-"från din varukorg som inte längre går att köpa så här."
+"från din bokning som inte längre går att köpa så här."
 msgstr[1] ""
 "Verifikationskoderna \"%(voucher)s\" kan endast användas om du väljer minst "
 "%(number)s matchande produkter. Vi har därför tagit bort några positioner "
@@ -7573,7 +7573,7 @@ msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
-"Att tillämpa en rabattkod på hela varukorgen bör inte kombineras med andra "
+"Att tillämpa en rabattkod på hela bokningen bör inte kombineras med andra "
 "operationer."
 
 #: pretix/base/services/cart.py:178
@@ -7582,7 +7582,7 @@ msgid ""
 "cart if you want to use it for a different product."
 msgstr ""
 "Du har redan använt denna rabattkod. Ta bort den associerade raden från din "
-"varukorg om du vill använda den för en annan produkt."
+"bokningen om du vill använda den för en annan produkt."
 
 #: pretix/base/services/cart.py:181
 msgid "This voucher is expired."
@@ -7602,8 +7602,8 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
-"Vi hittade ingen position i din varukorg där vi kunde använda denna "
-"rabattkod. Om du vill lägga till något nytt i din varukorg med hjälp av den "
+"Vi hittade ingen position i din bokningen där vi kunde använda denna "
+"rabattkod. Om du vill lägga till något nytt i din bokningen med hjälp av den "
 "här rabattkoden kan du göra det med alternativet för rabattkodsinlösning "
 "längst ner på sidan."
 
@@ -7867,7 +7867,7 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:1068
 msgid "This order is not marked as paid."
-msgstr "Denna anmälan är inte markerad som betald."
+msgstr "Denna bokning är inte markerad som betald."
 
 #: pretix/base/services/checkin.py:1080
 msgid "Evaluation of custom rules has failed."
@@ -8224,7 +8224,7 @@ msgid_plural ""
 "removed the surplus items from your cart."
 msgstr[0] ""
 "Du kan inte välja fler än %(max)s produkter %(product)s. Vi har tagit bort "
-"överskottet från din kundvagn."
+"överskottet från din bokning."
 msgstr[1] ""
 "Du kan inte välja fler än %(max)s artiklar av produkten %(product)s. Vi har "
 "tagit bort överskottet från din kundvagn."
@@ -9058,7 +9058,7 @@ msgstr "Reservationsperiod"
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
 msgstr ""
-"Antalet minuter som objekten i en användares varukorg är reserverade för "
+"Antalet minuter som objekten i en användares bokning är reserverade för "
 "denne användare."
 
 #: pretix/base/settings.py:794
@@ -9066,7 +9066,7 @@ msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
 "Omdirigera direkt till kassan efter att en produkt har lagts till i "
-"varukorgen."
+"bokningen."
 
 #: pretix/base/settings.py:803
 msgid "End of presale text"
@@ -9184,7 +9184,7 @@ msgstr ""
 
 #: pretix/base/settings.py:932
 msgid "Automatically expire unpaid orders"
-msgstr "Automatiskt löpa ut obetalda anmälan"
+msgstr "Låt obetalda bokningar löpa ut"
 
 #: pretix/base/settings.py:933
 msgid ""
@@ -9192,9 +9192,9 @@ msgid ""
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
-"Om markerat, kommer alla obetalda anmälningar automatiskt att gå från "
-"'avvaktande' till 'utgånget' efter slutet av deras betalningsdeadline. Det "
-"innebär att biljetterna återgår till kvoten och kan bokas av andra personer."
+"Om markerat, kommer alla obetalda bokningar automatiskt att gå från "
+"'avvaktande' till 'utgångna' vid dess sista dag för betalning. Det innebär "
+"att biljetterna återgår till kvoten och kan bokas av andra personer."
 
 #: pretix/base/settings.py:944
 msgid "Expiration delay"
@@ -9589,7 +9589,7 @@ msgstr "Fråga efter ett namn"
 
 #: pretix/base/settings.py:1421
 msgid "Ask for a name when signing up to the waiting list."
-msgstr "Ange ditt namn när du anmäler dig till väntelistan."
+msgstr "Ange ditt namn när du anmälar dig till väntelistan."
 
 #: pretix/base/settings.py:1430
 msgid "Require name"
@@ -9957,7 +9957,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1793
 msgid "Customers can cancel their unpaid orders"
-msgstr "Kunder kan avbryta sina obetalda anmälningar"
+msgstr "Kunder kan avbryta sina obetalda bokningar"
 
 #: pretix/base/settings.py:1805
 msgid "Charge a fixed cancellation fee"
@@ -9988,7 +9988,7 @@ msgstr "Tillåt inte avbokningar efter"
 
 #: pretix/base/settings.py:1850
 msgid "Customers can cancel their paid orders"
-msgstr "Kunder kan avbryta sina betalda anmälningar"
+msgstr "Kunder kan avbryta sina betalda bokningar"
 
 #: pretix/base/settings.py:1851
 msgid ""
@@ -10107,7 +10107,7 @@ msgid ""
 "empty if you want pretix to automatically generate the terms of cancellation "
 "based on your settings."
 msgstr ""
-"Detta meddelande visas när avbokning är tillåten för en betald anmälan. "
+"Detta meddelande visas när avbokning är tillåten för en betald bokning. "
 "Lämna det tomt om du vill att pretix automatiskt ska generera "
 "avbokningsvillkoren baserat på dina inställningar."
 
@@ -10118,7 +10118,7 @@ msgid ""
 "cancellation based on your settings."
 msgstr ""
 "Detta meddelande visas när avbokning är tillåten för en obetald eller gratis "
-"anmälan. Lämna det tomt om du vill att pretix automatiskt ska generera "
+"bokning. Lämna det tomt om du vill att pretix automatiskt ska generera "
 "avbokningsvillkoren baserat på dina inställningar."
 
 #: pretix/base/settings.py:2015 pretix/control/forms/event.py:1632
@@ -10331,9 +10331,9 @@ msgid ""
 msgstr ""
 "Hej {attendee_name},\n"
 "\n"
-"du har registrerats för {event}.\n"
+"Du har  bokad på {event}.\n"
 "\n"
-"Du kan se detaljer och status för din biljett här:\n"
+"Du kan se detaljer och status för din bokning här:\n"
 "{url}\n"
 "\n"
 "Med vänliga hälsningar,  \n"
@@ -10355,8 +10355,7 @@ msgid ""
 msgstr ""
 "Hej,\n"
 "\n"
-"din bokning av {event} lyckades. Eftersom du bara beställde gratisprodukter,"
-"\n"
+"Din bokning av {event} lyckades. Eftersom du bara bokade gratisprodukter,\n"
 "så krävs ingen betalning.\n"
 "\n"
 "Du kan ändra din bokningsinformation och se status för din bokning på\n"
@@ -10438,7 +10437,7 @@ msgid ""
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "Denna fil kommer att bifogas till det första e-postmeddelandet som skickas "
-"för varje ny anmälan. Den kommer därför att kombineras med texterna "
+"för varje ny bokning. Den kommer därför att kombineras med texterna "
 "\"Placerad bokning\", \"Gratis bokning\" eller \"Mottagen bokning\" ovan. "
 "Den skickas till både beställningskontakter och deltagare. Du kan använda "
 "den här filen t.ex. för att skicka dina användarvillkor. Använd inte den för "
@@ -10657,13 +10656,13 @@ msgid ""
 msgstr ""
 "Hej,\n"
 "\n"
-"Vi har mottagit en betalning för din anmälan för {event}.\n"
+"Vi har mottagit en betalning för din bokning på {event}.\n"
 "\n"
 "Tyvärr är det mottagna beloppet mindre än det fulla beloppet som krävs. Din "
-"anmälan betraktas därför fortfarande som obetald, eftersom det saknas "
+"bokning betraktas därför fortfarande som obetald, eftersom det saknas "
 "ytterligare betalning på **{pending_sum}**.\n"
 "\n"
-"Du kan se betalningsinformationen och statusen för din anmälan på\n"
+"Du kan se betalningsinformationen och statusen för din bokning på\n"
 "{url}\n"
 "\n"
 "Vänliga hälsningar,\n"
@@ -10961,7 +10960,7 @@ msgid ""
 msgstr ""
 "Hej {attendee_name},\n"
 "\n"
-"du är registrerad för {event}.\n"
+"Du är bokad på {event}.\n"
 "\n"
 "Om du inte redan har gjort det kan du ladda ner din biljett här:\n"
 "{url}\n"
@@ -11018,10 +11017,10 @@ msgid ""
 msgstr ""
 "Hej {name},\n"
 "\n"
-"tack för att du registrerade ett konto hos {organizer}!\n"
+"Tack för att du registrerade ett konto hos {organizer}!\n"
 "\n"
-"För att aktivera ditt konto och ställa in ett lösenord, vänligen klicka "
-"här:\n"
+"För att aktivera ditt konto och ställa in ett lösenord, vänligen klicka här:"
+"\n"
 "\n"
 "{url}\n"
 "\n"
@@ -11951,8 +11950,8 @@ msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
 msgstr ""
-"Du får detta e-postmeddelande eftersom någon har registrerat dig för "
-"följande evenemang:"
+"Du får detta e-postmeddelande eftersom någon har bokat dig för följande "
+"evenemang:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
@@ -12337,12 +12336,12 @@ msgstr "Biljetter kan laddas ner"
 #: pretix/base/timeline.py:143
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
-msgstr "Kunder kan inte längre avbryta gratis eller obetalda anmälningar"
+msgstr "Kunder kan inte längre avboka gratis eller obetalda bokningar"
 
 #: pretix/base/timeline.py:155
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
-msgstr "Kunder kan inte längre avbryta betalda anmälningar"
+msgstr "Kunder kan inte längre avbryta betalda bokningar"
 
 #: pretix/base/timeline.py:167
 msgctxt "timeline"
@@ -12516,7 +12515,7 @@ msgstr "Incheckningstyp"
 #: pretix/control/forms/checkin.py:195
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
 msgstr ""
-"Tillåt incheckning av obetald anmälan (om incheckningslistan tillåter det)"
+"Tillåt incheckning av obetald bokning (om incheckningslistan tillåter det)"
 
 #: pretix/control/forms/checkin.py:199
 msgid "Support for check-in questions"
@@ -12766,9 +12765,9 @@ msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
 msgstr ""
-"E-postmeddelandena för \"order placerad\" och \"betald\" skickas endast till "
-"anmälningar från dessa försäljningskanaler. Onlinebutiken måste vara "
-"aktiverad."
+"E-postmeddelandena för \"genomförd bokning\" och \"betald bokning\" skickas "
+"endast till bokningar från dessa försäljningskanaler. Onlinebutiken måste "
+"vara aktiverad."
 
 #: pretix/control/forms/event.py:970
 msgid ""
@@ -13108,7 +13107,7 @@ msgstr "Pris (valfritt)"
 
 #: pretix/control/forms/event.py:1699
 msgid "Free"
-msgstr "Gratis"
+msgstr "Antal"
 
 #: pretix/control/forms/event.py:1704
 msgid "Quantity available"
@@ -14173,7 +14172,7 @@ msgstr "Skapa en order med en position per rad"
 
 #: pretix/control/forms/modelimport.py:83
 msgid "Create orders as fully paid"
-msgstr "Skapa anmälningar som är helt betalda"
+msgstr "Markera bokningar som är helt betalda"
 
 #: pretix/control/forms/modelimport.py:84
 msgid "Create orders as pending and still require payment"
@@ -14276,7 +14275,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:227
 msgid "A mail will only be sent if the order is fully paid after this."
 msgstr ""
-"Ett mejl kommer endast att skickas om anmälan är helt betald efter detta."
+"Ett mejl kommer endast att skickas om bokningen är helt betald efter detta."
 
 #: pretix/control/forms/orders.py:234
 msgid "Payment amount"
@@ -15522,7 +15521,7 @@ msgstr "Orderdetaljerna har ändrats."
 
 #: pretix/control/logdisplay.py:383
 msgid "The order has been marked as unpaid."
-msgstr "Anmälan har markerats som obetald."
+msgstr "Bokningen har markerats som obetald."
 
 #: pretix/control/logdisplay.py:384
 msgid "The order's secret has been changed."
@@ -15534,7 +15533,7 @@ msgstr "Bokningens utgångsdatum har ändrats."
 
 #: pretix/control/logdisplay.py:386
 msgid "The order has been set to be usable before it is paid."
-msgstr "Anmälan har ställts in så att den kan användas innan den är betald."
+msgstr "Bokningen har ställts in så att den kan användas innan den är betald."
 
 #: pretix/control/logdisplay.py:387
 msgid "The order has been set to require payment before use."
@@ -15546,7 +15545,7 @@ msgstr "Bokningen har markerats som utgången."
 
 #: pretix/control/logdisplay.py:389 pretix/control/views/orders.py:1454
 msgid "The order has been marked as paid."
-msgstr "Anmälan har markerats som betald."
+msgstr "Bokningen har markerats som betald."
 
 #: pretix/control/logdisplay.py:390
 msgid "The cancellation request has been deleted."
@@ -15794,11 +15793,11 @@ msgstr "Betalningen {local_id} har misslyckats."
 #: pretix/control/logdisplay.py:447
 #, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr "Anmälan kunde inte markeras som betald: {message}"
+msgstr "Bokningen kunde inte markeras som betald: {message}"
 
 #: pretix/control/logdisplay.py:448
 msgid "The order has been overpaid."
-msgstr "Anmälan har blivit överbetald."
+msgstr "Bokningen har blivit överbetald."
 
 #: pretix/control/logdisplay.py:449
 #, python-brace-format
@@ -16677,7 +16676,7 @@ msgstr "Inloggning"
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr "Registrera"
+msgstr "Boka"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -18038,7 +18037,7 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
-"Om en användare begär att avbryta en betald anmälan och pengarna inte kan "
+"Om en användare begär att avbryta en betald bokning och pengarna inte kan "
 "återbetalas automatiskt, t.ex. på grund av det valda betalningsmedlet, "
 "kommer du behöva vidta manuella åtgärder. Dock har du för närvarande stängt "
 "av aviseringar för detta händelsefall."
@@ -18336,13 +18335,13 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
-"Det här evenemanget innehåller <strong>överbetalda anmälningar</strong>, "
-"till exempel på grund av dubbla betalningsförsök. Du bör granska fallen och "
+"Det här evenemanget innehåller <strong>överbetalda bokningar</strong>, till "
+"exempel på grund av dubbla betalningsförsök. Du bör granska fallen och "
 "överväga att återbetala det överbetalda beloppet till användaren."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:41
 msgid "Show overpaid orders"
-msgstr "Visa överbetalda anmälningar"
+msgstr "Visa överbetalda bokningar"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:46
 msgid ""
@@ -18387,9 +18386,9 @@ msgid ""
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"Det här evenemanget innehåller <strong>fullt betalda anmälningar</strong> "
-"som inte är markerade som betalda, troligen eftersom inga kvoter var kvar "
-"när deras betalning kom. Du bör granska fallen och överväga antingen att "
+"Det här evenemanget innehåller <strong>fullt betalda bokningar</strong> som "
+"inte är markerade som betalda, troligen eftersom inga kvoter var kvar när "
+"deras betalning kom. Du bör granska fallen och överväga antingen att "
 "återbetala kunden eller skapa mer utrymme."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:79
@@ -18637,11 +18636,11 @@ msgstr "E-postinnehåll"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:90
 msgid "Placed order"
-msgstr "Genomförd anmälan"
+msgstr "Genomförd bokning"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:93
 msgid "Paid order"
-msgstr "Betald anmälan"
+msgstr "Bokningen betald"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:96
 msgid "Free order"
@@ -20083,7 +20082,7 @@ msgid ""
 "as add-ons in the cart for this product."
 msgstr ""
 "Med paket kan du specificera produkter som alltid automatiskt läggs till som "
-"tillägg i varukorgen för den här produkten."
+"tillägg i bokningen för den här produkten."
 
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:68
 msgid "Add a new bundled product"
@@ -20244,7 +20243,7 @@ msgstr "Villkor"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:32
 msgid "Minimum cart content"
-msgstr "Minsta varukorgsinnehåll"
+msgstr "Minsta bokningsinnehåll"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:41
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:53
@@ -20338,7 +20337,7 @@ msgid ""
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
 msgstr ""
-"Varje produkt i varukorgen kan endast påverkas av en rabatt. Om det finns "
+"Varje produkt i bokningen kan endast påverkas av en rabatt. Om det finns "
 "överlappande rabatter tillämpas den första i listan nedan."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:37
@@ -21913,7 +21912,7 @@ msgstr ""
 "Du kan använda den här sidan för att avbryta och återbetala alla bokningar "
 "på en gång om du behöver ställa in ditt evenemang. Detta kommer också att "
 "inaktivera alla produkter så att inga nya bokningar kan skapas. Se till att "
-"du kontrollerar efter eventuella överbetalda anmälningar eller väntande "
+"du kontrollerar efter eventuella överbetalda bokningar eller väntande "
 "återbetalningar som du måste hantera manuellt efteråt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
@@ -22321,7 +22320,7 @@ msgstr "Ta bort filter"
 #: pretix/control/templates/pretixcontrol/orders/index.html:146
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:207
 msgid "Order paid / total"
-msgstr "Anmälan betald / total"
+msgstr "Bokningen betald / total"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:177
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:109
@@ -22567,7 +22566,7 @@ msgstr "Skicka länk för återställning av lösenord"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:79
 msgid "This includes all paid orders by this customer across all your events."
 msgstr ""
-"Detta inkluderar alla betalda anmälningar av denna kund över alla dina "
+"Detta inkluderar alla betalda bokningar av denna kund över alla dina "
 "evenemang."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:80
@@ -24924,7 +24923,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:6
 msgid "Delete carts"
-msgstr "Radera varukorg"
+msgstr "Radera bokning"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
 #, python-format
@@ -24932,7 +24931,7 @@ msgid ""
 "Are you sure you want to delete any cart positions with voucher "
 "<strong>%(voucher)s</strong>?"
 msgstr ""
-"Är du säker på att du vill ta bort alla varukorgsposter med kupongen "
+"Är du säker på att du vill ta bort alla poster med kupongen "
 "<strong>%(voucher)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
@@ -24941,7 +24940,7 @@ msgid ""
 "a purchase. This can be really confusing. Only use this if you know that the "
 "session is no longer in use."
 msgstr ""
-"Detta kommer tyst ta bort produkter från en användares varukorg som för "
+"Detta kommer tyst ta bort produkter från en användares bokningen som för "
 "närvarande gör ett köp. Det kan bli väldigt förvirrande. Använd endast detta "
 "om du vet att sessionen inte längre är i användning."
 
@@ -24961,13 +24960,12 @@ msgid ""
 "This voucher is currently used in %(number)s cart sessions and might not be "
 "free to use until the cart sessions expire."
 msgstr ""
-"Denna kupong används för närvarande i %(number)s varukorgssessioner och "
-"kanske inte är tillgänglig för användning förrän varukorgssessionerna har "
-"löpt ut."
+"Denna kupong används för närvarande i %(number)s bokningssessioner och "
+"kanske inte är tillgänglig för användning förrän sessionerna har löpt ut."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
 msgid "Remove cart positions"
-msgstr "Ta bort varukorgsposter"
+msgstr "Ta bort poster från bokningen"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:43
 msgid "Voucher link"
@@ -26302,7 +26300,7 @@ msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
 msgstr ""
-"Anmälan har markerats som betald, men vi kunde inte skicka ett "
+"Bokningen har markerats som betald, men vi kunde inte skicka något "
 "bekräftelsemejl."
 
 #: pretix/control/views/orders.py:1524
@@ -27976,7 +27974,7 @@ msgid ""
 msgstr ""
 "I betalningsinställningarna för ditt evenemang har du satt %(date)s som "
 "sista datum för betalningar. Därför kommer du inte kunna markera någon "
-"anmälan som betald här."
+"bokning som betald här."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
@@ -28069,7 +28067,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr "Anmälan markerade som betalda"
+msgstr "Bokningar markerade som betalda"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
@@ -28296,11 +28294,11 @@ msgstr "Fel vid bearbetning"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:104
 msgid "The order is already marked as paid"
-msgstr "Anmälan är redan markerad som betald"
+msgstr "Bokningen är redan markerad som betald"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:106
 msgid "Order already paid"
-msgstr "Anmälan är redan betald"
+msgstr "Bokningen är redan betald"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:123
 msgid "Discard"
@@ -29948,8 +29946,8 @@ msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
 msgstr ""
-"Endast fullt betalda anmälningar räknas. Bokningar som betalas i flera "
-"omgångar visas med datumet för deras sista betalning."
+"Endast fullt betalda bokninar räknas. Bokningar som betalas i flera omgångar "
+"visas med datumet för deras sista betalning."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:67
 msgid "Seating Overview"
@@ -31534,7 +31532,7 @@ msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
-"För vissa av produkterna i din varukorg, kan du välja extra tillval innan du "
+"För vissa produkter i din bokningen kan du göra extra tillval innan du "
 "fortsätter."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:13
@@ -31573,17 +31571,17 @@ msgstr "Kassa"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:11
 msgid "Your cart"
-msgstr "Din varukorg"
+msgstr "Din bokning"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:17
 msgid "Cart expired"
-msgstr "Varukorgen har gått ut"
+msgstr "Bokning har löpt ut"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
 msgid "Show full cart"
-msgstr "Visa hela varukorgen"
+msgstr "Visa hela bokningen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:78
@@ -31728,7 +31726,7 @@ msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
 msgstr ""
-"Vissa av produkterna i din varukorg kan endast köpas om det finns ett aktivt "
+"Vissa av produkterna i din bokning kan endast köpas om det finns ett aktivt "
 "medlemskap på ditt konto."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:37
@@ -31860,7 +31858,7 @@ msgid ""
 "browser settings accordingly."
 msgstr ""
 "Din webbläsare accepterar inte cookies från oss. Vi behöver dock ställa in "
-"en cookie för att komma ihåg vem du är och vad som finns i din varukorg. "
+"en cookie för att komma ihåg vem du är och vad som finns i din bokning. "
 "Vänligen ändra dina webbläsarinställningar därefter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:16
@@ -31907,7 +31905,7 @@ msgstr "minsta ordersumma: %(num)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:341
 msgctxt "price"
 msgid "free"
-msgstr "gratis"
+msgstr "Antal"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:77
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
@@ -32018,7 +32016,7 @@ msgstr "inkl. %(rate)s%% %(name)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:251
 #, python-format
 msgid "Add %(item)s, %(var)s to cart"
-msgstr "Lägg till %(item)s, %(var)s i varukorgen"
+msgstr "Lägg till %(item)s, %(var)s i bokningen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:201
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:346
@@ -32061,7 +32059,7 @@ msgstr "Öka antalet"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:407
 #, python-format
 msgid "Add %(item)s to cart"
-msgstr "Lägg till %(item)s i varukorgen"
+msgstr "Lägg till %(item)s i bokningen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:359
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:371
@@ -32183,12 +32181,12 @@ msgstr "OK, vi tar bort denna…"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:288
 #, python-format
 msgid "Remove %(item)s from your cart"
-msgstr "Ta bort %(item)s från din varukorg"
+msgstr "Ta bort %(item)s från din bokning"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:291
 #, python-format
 msgid "Remove one %(item)s from your cart"
-msgstr "Ta bort en %(item)s från din varukorg"
+msgstr "Ta bort en %(item)s från din bokning"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:293
 #, python-format
@@ -32196,8 +32194,8 @@ msgid ""
 "Remove one %(item)s from your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
-"Ta bort en %(item)s från din varukorg. Du har för närvarande %(count)s i din "
-"varukorg."
+"Ta bort en %(item)s från din bokning. Du har för närvarande %(count)s i din "
+"bokning."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 msgid "We're trying to reserve another one for you!"
@@ -32212,13 +32210,13 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
-"När varorna lagts i din varukorg, så har du %(time)s minuter att slutföra "
+"När varorna lagts i din bokning, så har du %(time)s minuter att slutföra "
 "bokningen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:321
 #, python-format
 msgid "Add one more %(item)s to your cart"
-msgstr "Lägg till en till %(item)s i din varukorg"
+msgstr "Lägg till en till %(item)s i din bokning"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:323
 #, python-format
@@ -32226,8 +32224,8 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
-"Lägg till en till %(item)s i din varukorg. Du har för närvarande %(count)s i "
-"din varukorg."
+"Lägg till en till %(item)s i din bokning. Du har för närvarande %(count)s i "
+"din bokning."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
@@ -32250,15 +32248,15 @@ msgstr "inkl. %(tax_sum)s skatter"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:482
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr "Varorna i din varukorg är reserverade för dig i %(minutes)s minuter."
+msgstr "Produkterna i din bokning är reserverade för dig i %(minutes)s minuter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:486
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"Varorna i din varukorg är inte längre reserverade för dig. Du kan dock "
-"genomföra din order så länge varorna fortfarande är tillgängliga."
+"Produkterna i din bokning är inte längre reserverade för dig. Du kan dock "
+"genomföra din order så länge produkterna fortfarande är tillgängliga."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:490
 msgid "Overview of your ordered products."
@@ -32272,11 +32270,11 @@ msgstr "Fortsätt med bokningsprocessen"
 #: pretix/presale/templates/pretixpresale/event/index.html:219
 #: pretix/presale/templates/pretixpresale/event/voucher.html:439
 msgid "Proceed with checkout"
-msgstr "Fortsätt med köpet"
+msgstr "Fortsätt med din bokning"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:40
 msgid "Empty cart"
-msgstr "Töm varukorg"
+msgstr "Avbryt bokning"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:236
@@ -32286,7 +32284,7 @@ msgstr "Lösa in en rabattkod"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 msgid "We're applying this voucher to your cart..."
-msgstr "Vi applicerar denna rabattkod på din varukorg..."
+msgstr "Vi applicerar denna rabattkod på din bokning..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
@@ -32423,7 +32421,7 @@ msgstr ""
 msgid ""
 "Your entire order will be considered unpaid until you paid this difference."
 msgstr ""
-"Hela din anmälan kommer att betraktas som obetald tills du har betalat denna "
+"Hela din bokning kommer att betraktas som obetald tills du har betalat denna "
 "differens."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:186
@@ -32768,16 +32766,16 @@ msgstr "Gå med i väntelistan"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:437
 msgctxt "free_tickets"
 msgid "Register"
-msgstr "Registrera"
+msgstr "Boka"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:222
 #: pretix/presale/templates/pretixpresale/event/voucher.html:442
 msgid "Add to cart"
-msgstr "Lägg i varukorg"
+msgstr "Lägg till i bokning"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:243
 msgid "If you already ordered a ticket"
-msgstr "Om du redan har beställt en biljett"
+msgstr "Om du redan har bokat en biljett"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 msgid ""
@@ -33570,7 +33568,7 @@ msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
-"Funktionscookies (t.ex. varukorg, inloggning, betalning, språkpreferens) och "
+"Funktionscookies (t.ex. bokning, inloggning, betalning, språkpreferens) och "
 "tekniska cookies (t.ex. för säkerhetsändamål)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:89
@@ -33854,7 +33852,7 @@ msgstr "Din kundvagn är nu tom."
 
 #: pretix/presale/views/cart.py:495
 msgid "The products have been successfully added to your cart."
-msgstr "Produkterna har lagts till i din varukorg."
+msgstr "Produkterna har lagts till i din bokning."
 
 #: pretix/presale/views/cart.py:519 pretix/presale/views/event.py:532
 #: pretix/presale/views/widget.py:377
