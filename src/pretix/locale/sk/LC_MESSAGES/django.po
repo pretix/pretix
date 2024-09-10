@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-10 03:00+0000\n"
+"PO-Revision-Date: 2024-09-10 16:00+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
 ">\n"
@@ -10327,7 +10327,7 @@ msgstr ""
 "Dobrý deň,\n"
 "\n"
 "úspešne sme prijali vašu objednávku na {event} v celkovej hodnote\n"
-"vo výške{total_with_currency}. Prosím, dokončite svoju platbu do "
+"vo výške {total_with_currency}. Prosím, dokončite svoju platbu do "
 "{expire_date}.\n"
 "\n"
 "{payment_info}\n"
@@ -17941,7 +17941,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/live.html:131
 #: pretix/control/templates/pretixcontrol/event/settings.html:478
 msgid "Cancel or delete event"
-msgstr "Zrušenie alebo odstránenie podujatí"
+msgstr "Zrušenie alebo odstránenie podujatia"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
@@ -18929,7 +18929,7 @@ msgstr "Pridať vlastnosť"
 #: pretix/control/templates/pretixcontrol/events/index.html:162
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:127
 msgid "Clone event"
-msgstr "Udalosť klonovania"
+msgstr "Klonovať podujatie"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:15
 msgid ""
@@ -19107,6 +19107,9 @@ msgid ""
 "JavaScript is disabled in your browser. To access our ticket shop without "
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
+"JavaScript je vo vašom prehliadači vypnutý. Ak chcete získať prístup do "
+"nášho obchodu so vstupenkami bez JavaScriptu, &lt;a %(a_attr)s&gt;kliknite "
+"sem&lt;/a&gt;."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:15
