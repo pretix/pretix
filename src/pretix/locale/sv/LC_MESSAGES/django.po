@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-10 03:00+0000\n"
+"PO-Revision-Date: 2024-09-11 13:57+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -970,7 +970,7 @@ msgstr "Senast inloggad"
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:102
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:66
 msgid "Registration date"
-msgstr "Registrerings datum"
+msgstr "Bokningsdatum"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
@@ -5056,7 +5056,7 @@ msgid ""
 msgstr ""
 "Du kan för närvarande inte skapa presentkort med en återanvändbar "
 "mediepolicy. Istället kan presentkort för vissa återanvändbara medietyper "
-"skapas eller laddas om direkt vid kassan (POS)."
+"skapas eller laddas om direkt vid bokning (POS)."
 
 #: pretix/base/models/items.py:954
 msgid ""
@@ -6717,7 +6717,7 @@ msgstr ""
 
 #: pretix/base/payment.py:1075
 msgid "Free of charge"
-msgstr "Gratis"
+msgstr "Antal"
 
 #: pretix/base/payment.py:1107
 msgid "Box office"
@@ -9065,7 +9065,7 @@ msgstr ""
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
-"Omdirigera direkt till kassan efter att en produkt har lagts till i "
+"Omdirigera direkt till bokning efter att en produkt har lagts till i "
 "bokningen."
 
 #: pretix/base/settings.py:803
@@ -9078,10 +9078,10 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
-"Denna text kommer att visas ovanför biljettbutiken när den angivna "
+"Denna text kommer att visas ovanför biljettbokningen när den angivna "
 "försäljningstiden för evenemanget är över. Du kan använda den för att "
-"beskriva andra alternativ för att få en biljett, som exempelvis "
-"biljettkassan på plats."
+"beskriva andra alternativ för att få en biljett, som exempelvis bokningens "
+"på plats."
 
 #: pretix/base/settings.py:820
 msgid "Guidance text"
@@ -10261,7 +10261,7 @@ msgstr "Din bokning: {code}"
 #: pretix/base/settings.py:2563
 #, python-brace-format
 msgid "Your event registration: {code}"
-msgstr "Din registrering: {code}"
+msgstr "Din bokning: {code}"
 
 #: pretix/base/settings.py:2159
 #, python-brace-format
@@ -18529,7 +18529,7 @@ msgid ""
 "as production orders."
 msgstr ""
 "Dessutom täcker testläget endast den huvudsakliga webbshopen. Bokningar "
-"skapade genom andra försäljningskanaler som biljettkassan eller "
+"skapade genom andra försäljningskanaler som biljettbokning eller "
 "återförsäljarmodulen skapas fortfarande som produktionsbokningar."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:112
@@ -26919,7 +26919,7 @@ msgstr "Din enhet har blivit verifierad och kan nu användas."
 
 #: pretix/control/views/user.py:503
 msgid "The registration could not be completed. Please try again."
-msgstr "Registreringen kunde inte färdigställas. Var snäll och testa igen."
+msgstr "Bokningen kunde inte slutföras. Var snäll och testa igen."
 
 #: pretix/control/views/user.py:563
 msgid ""
@@ -29376,7 +29376,7 @@ msgid ""
 "build your own checkout interface for other steps."
 msgstr ""
 "Denna funktion är användbar om du endast använder betalningskomponenten i "
-"pretix men bygger din egen kassagränssnitt för andra steg."
+"pretix men bygger ditt eget bokningsgränssnitt för andra steg."
 
 #: pretix/plugins/returnurl/views.py:37
 msgid "Base redirection URLs"
@@ -31563,7 +31563,7 @@ msgstr "Steg %(current)s av %(total)s: %(label)s"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:52
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:53
 msgid "Checkout"
-msgstr "Kassa"
+msgstr "Bokning"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:15
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:21
@@ -31664,7 +31664,7 @@ msgstr "Slutför bokningen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:209
 msgid "Submit registration"
-msgstr "Skicka registrering"
+msgstr "Genomför bokning"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
@@ -31793,7 +31793,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid "Before we continue, we need you to answer some questions."
-msgstr "För att fortsätta registreringen fyller du i formuläret nedan."
+msgstr "För att fortsätta bokningen fyller du i formuläret nedan."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:10
 msgid ""
@@ -32435,7 +32435,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 msgctxt "checkoutflow"
 msgid "Checkout steps"
-msgstr "Kassasteg"
+msgstr "Bokningsteg"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:12
 msgid "Completed:"
@@ -33243,11 +33243,11 @@ msgstr "Totalt: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
 msgid "Registration details"
-msgstr "Registreringsuppgifter"
+msgstr "Bokningsdetaljer"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:10
 msgid "Your registration"
-msgstr "Din registrering"
+msgstr "Din bokning"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:31
 msgid "Your items"
@@ -33748,7 +33748,7 @@ msgstr "Vill du verkligen ta bort följande profil från ditt konto?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
-msgstr "Registrering"
+msgstr "Boka"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
 #, python-format
