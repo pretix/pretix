@@ -153,6 +153,8 @@ def oidc_validate_authorization(provider, code, redirect_uri):
         'grant_type': 'authorization_code',
         'code': code,
         'redirect_uri': redirect_uri,
+        'client_id': provider.configuration['client_id'],
+        'client_secret': provider.configuration['client_secret'],
     }
     try:
         resp = requests.post(
