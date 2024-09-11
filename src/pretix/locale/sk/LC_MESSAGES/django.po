@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-10 16:00+0000\n"
+"PO-Revision-Date: 2024-09-11 13:57+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
 ">\n"
@@ -2418,11 +2418,12 @@ msgstr "Konvertované zo staršej verzie"
 
 #: pretix/base/exporters/orderlist.py:1001
 msgid "Payments and refunds"
-msgstr "Platby a náhrady"
+msgstr "Platby a refundácie"
 
 #: pretix/base/exporters/orderlist.py:1003
 msgid "Download a spreadsheet of all payments or refunds of every order."
-msgstr "Stiahnite si tabuľku všetkých platieb alebo náhrad každej objednávky."
+msgstr ""
+"Stiahnite si tabuľku všetkých platieb alebo refundácií každej objednávky."
 
 #: pretix/base/exporters/orderlist.py:1012
 msgid "Date range (payment date)"
@@ -2434,7 +2435,7 @@ msgid ""
 "completed refunds."
 msgstr ""
 "Upozorňujeme, že pri použití tejto funkcie sa vylúčia všetky nepotvrdené "
-"platby alebo neukončené náhrady."
+"platby alebo neukončené refundácie."
 
 #: pretix/base/exporters/orderlist.py:1019
 msgid "Date range (start of transaction)"
@@ -2661,7 +2662,7 @@ msgstr "Uplatňovanie darčekových kariet"
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
-"Stiahnite si tabuľku všetkých platieb alebo náhrad, ktoré sa týkajú "
+"Stiahnite si tabuľku všetkých platieb alebo refundácií, ktoré sa týkajú "
 "darčekových kariet."
 
 #: pretix/base/exporters/orderlist.py:1259
@@ -9925,7 +9926,7 @@ msgstr "Ponechajte si percentuálny storno poplatok"
 
 #: pretix/base/settings.py:1894
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr "Umožniť zákazníkom dobrovoľne si zvoliť nižšiu náhradu"
+msgstr "Umožniť zákazníkom dobrovoľne si zvoliť nižšiu refundáciu"
 
 #: pretix/base/settings.py:1895
 msgid ""
@@ -9946,7 +9947,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1907
 msgid "Voluntary lower refund explanation"
-msgstr "Dobrovoľné vysvetlenie nižšej náhrady"
+msgstr "Vysvetlenie dobrovoľne nižšej refundácie"
 
 #: pretix/base/settings.py:1910
 msgid ""
@@ -9955,9 +9956,9 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organization."
 msgstr ""
-"Tento text sa zobrazí medzi vysvetlením fungovania náhrad a posuvníkom, "
+"Tento text sa zobrazí medzi vysvetlením fungovania refundácií a posuvníkom, "
 "pomocou ktorého si zákazníci môžu vybrať sumu, ktorú chcú dostať. Môžete ho "
-"použiť napr. na vysvetlenie, že výber nižšej náhrady pomôže vašej "
+"použiť napr. na vysvetlenie, že výber nižšej refundácie pomôže vašej "
 "organizácii."
 
 #: pretix/base/settings.py:1925
@@ -9990,7 +9991,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1955 pretix/base/settings.py:1965
 msgid "All refunds are issued to the original payment method"
-msgstr "Všetky náhrady sa vydávajú na pôvodný spôsob platby"
+msgstr "Všetky refundácie sa zasielajú na pôvodný spôsob platby"
 
 #: pretix/base/settings.py:1956 pretix/base/settings.py:1966
 msgid ""
@@ -10001,11 +10002,11 @@ msgstr ""
 
 #: pretix/base/settings.py:1957 pretix/base/settings.py:1967
 msgid "All refunds are issued as gift cards"
-msgstr "Všetky náhrady sa vydávajú ako darčekové karty"
+msgstr "Všetky refundácie sa vydávajú ako darčekové karty"
 
 #: pretix/base/settings.py:1958 pretix/base/settings.py:1968
 msgid "Do not handle refunds automatically at all"
-msgstr "Vôbec nespracúvajte náhrady automaticky"
+msgstr "Vôbec nespracúvať refundácie automaticky"
 
 #: pretix/base/settings.py:1963
 #: pretix/control/templates/pretixcontrol/order/index.html:148
@@ -13160,11 +13161,11 @@ msgstr "Objednávka podaná pred"
 
 #: pretix/control/forms/filter.py:576
 msgid "Minimal sum of payments and refunds"
-msgstr "Minimálna suma platieb a náhrad"
+msgstr "Minimálna suma platieb a refundácií"
 
 #: pretix/control/forms/filter.py:581
 msgid "Maximal sum of payments and refunds"
-msgstr "Maximálna suma platieb a náhrad"
+msgstr "Maximálna suma platieb a refundácií"
 
 #: pretix/control/forms/filter.py:592
 msgid "At least one ticket with check-in"
@@ -13435,11 +13436,11 @@ msgstr "Stav vrátenia peňazí"
 
 #: pretix/control/forms/filter.py:2291
 msgid "All open refunds"
-msgstr "Všetky otvorené náhrady"
+msgstr "Všetky nespracované refundácie"
 
 #: pretix/control/forms/filter.py:2292
 msgid "All refunds"
-msgstr "Všetky náhrady"
+msgstr "Všetky refundácie"
 
 #: pretix/control/forms/filter.py:2330 pretix/plugins/reports/exporters.py:688
 msgid "Date filter"
@@ -14350,7 +14351,7 @@ msgstr "Nerobte nič a zachovajte súčasný poriadok."
 
 #: pretix/control/forms/orders.py:764
 msgid "The refund amount needs to be positive and less than {}."
-msgstr "Suma náhrady musí byť kladná a menšia ako {}."
+msgstr "Suma refundácie musí byť kladná a menšia ako {}."
 
 #: pretix/control/forms/orders.py:770
 msgid "You need to specify an amount for a partial refund."
@@ -14376,7 +14377,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:808
 msgid "Create refund in the manual refund to-do list"
-msgstr "Vytvorenie náhrady v zozname úloh na ručné vrátenie"
+msgstr "Vytvorenie refundácie do zoznamu na ručné vrátenie"
 
 #: pretix/control/forms/orders.py:811
 msgid ""
@@ -14386,9 +14387,9 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
-"Vytvoria sa ručné náhrady, ktoré budú uvedené v zozname úloh na ručné "
-"vrátenie. V kombinácii s funkciou automatického vrátenia budú v zozname úloh "
-"na ručné vrátenie uvedené len platby so spôsobom platby, ktorý nepodporuje "
+"Vytvoria sa ručné refundácie, ktoré budú uvedené v zozname na ručné "
+"vrátenie. V kombinácii s funkciou automatického vrátenia budú v zozname na "
+"ručné vrátenie uvedené len platby so spôsobom platby, ktorý nepodporuje "
 "automatické vrátenie. Nezaškrtávajte, ak chcete niektoré príkazy vrátiť "
 "započítaním s inými príkazmi alebo vydaním darčekových kariet."
 
@@ -15659,7 +15660,7 @@ msgstr "Objednávka bola preplatená."
 #: pretix/control/logdisplay.py:449
 #, python-brace-format
 msgid "Refund {local_id} has been created."
-msgstr "Bola vytvorená náhrada {local_id}."
+msgstr "Bola vytvorená refundácia {local_id}."
 
 #: pretix/control/logdisplay.py:450
 #, python-brace-format
@@ -16357,7 +16358,7 @@ msgstr "Prehľad"
 #: pretix/plugins/reports/accountingreport.py:684
 #: pretix/presale/templates/pretixpresale/event/order.html:136
 msgid "Refunds"
-msgstr "Náhrady"
+msgstr "Refundácie"
 
 #: pretix/control/navigation.py:245
 msgid "Import"
@@ -18152,7 +18153,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html:50
 msgid "Show pending refunds"
-msgstr "Zobraziť čakajúce náhrady"
+msgstr "Zobraziť čakajúce refundácie"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:55
 msgid ""
@@ -20550,7 +20551,7 @@ msgstr "Naozaj chcete schváliť túto objednávku?"
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:27
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:212
 msgid "No, take me back"
-msgstr "Nie, vezmite ma späť"
+msgstr "Nie, poďme späť"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:25
 msgid "Yes, approve order"
@@ -20568,7 +20569,7 @@ msgstr "Zrušiť objednávku"
 #: pretix/control/templates/pretixcontrol/order/cancel.html:12
 #: pretix/control/templates/pretixcontrol/order/deny.html:11
 msgid "Do you really want to cancel this order? You cannot revert this action."
-msgstr ""
+msgstr "Naozaj chcete zrušiť túto objednávku? Táto akcia sa nedá vrátiť späť."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:16
 msgid ""
@@ -21183,7 +21184,7 @@ msgstr "Potvrdiť ako zaplatené"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:821
 msgid "Create a refund"
-msgstr "Vytvorenie náhrady"
+msgstr "Vytvorenie refundácie"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:842
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:60
@@ -21208,7 +21209,7 @@ msgstr "Ignorovať"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:58
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:123
 msgid "Process refund"
-msgstr "Spracovanie náhrady"
+msgstr "Spracovanie refundácie"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:941
 #: pretix/presale/templates/pretixpresale/event/base.html:137
@@ -21348,7 +21349,7 @@ msgstr "Nevrátená suma"
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:40
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:87
 msgid "Refund amount"
-msgstr "Výška náhrady"
+msgstr "Výška refundácie"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:68
 msgid "Full amount"
@@ -22079,7 +22080,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:34
 msgid "No refunds are currently open."
-msgstr "V súčasnosti nie sú k dispozícii žiadne náhrady."
+msgstr "V súčasnosti nie sú k dispozícii žiadne refundácie."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 msgid "Actions"
@@ -25605,7 +25606,7 @@ msgstr "Túto refundáciu nie je možné v súčasnosti zrušiť."
 
 #: pretix/control/views/orders.py:935
 msgid "The refund has been processed."
-msgstr "Náhrada bola spracovaná."
+msgstr "Refundácia bola spracovaná."
 
 #: pretix/control/views/orders.py:937 pretix/control/views/orders.py:963
 msgid "This refund can not be processed at the moment."
@@ -25613,7 +25614,7 @@ msgstr "Túto refundáciu momentálne nie je možné spracovať."
 
 #: pretix/control/views/orders.py:961
 msgid "The refund has been marked as done."
-msgstr "Náhrada bola označená ako hotová."
+msgstr "Refundácia bola označená ako hotová."
 
 #: pretix/control/views/orders.py:987
 msgid "The request has been removed. If you want, you can now inform the user."
@@ -25688,7 +25689,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1339
 msgid "A refund of {} has been processed."
-msgstr "Bola spracovaná náhrada vo výške {}."
+msgstr "Bola spracovaná refundácia vo výške {}."
 
 #: pretix/control/views/orders.py:1343
 msgid ""
@@ -25720,7 +25721,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1393
 msgid "The refunds you selected do not match the selected total refund amount."
-msgstr "Vybrané náhrady sa nezhodujú s vybranou celkovou sumou náhrad."
+msgstr "Vybrané refundácie sa nezhodujú s vybranou celkovou sumou refundácií."
 
 #: pretix/control/views/orders.py:1521
 msgid ""
@@ -27056,7 +27057,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:184
 msgid "IBAN blocklist for refunds"
-msgstr "Zoznam blokov IBAN pre náhrady"
+msgstr "Zoznam blokovaných IBAN pre refundácie"
 
 #: pretix/plugins/banktransfer/payment.py:187
 msgid ""
@@ -27068,11 +27069,11 @@ msgid ""
 "can e.g. ban DE0012345 to ban all German IBANs with the bank identifier "
 "starting with 12345."
 msgstr ""
-"Na každý riadok uveďte jeden IBAN alebo prefix IBAN. Systém sa nepokúsi "
-"odoslať náhrady na žiadny z týchto IBAN. Užitočné napr. ak dostávate veľa "
+"Na každý riadok uveďte jeden IBAN alebo IBAN prefix. Systém nebude odosielať "
+"refundácie na žiadny z týchto IBAN. Užitočné napr. ak dostávate veľa "
 "\"preposlaných platieb\" od poskytovateľa platieb tretej strany. Môžete tiež "
-"uviesť kódy krajín, napríklad \"GB\", ak nikdy nechcete posielať náhrady na "
-"IBAN z konkrétnej krajiny. Kontrolné číslice sa budú pri porovnávaní "
+"uviesť kódy krajín, napríklad \"CZ\", ak nikdy nechcete posielať refundácie "
+"na IBAN z konkrétnej krajiny. Kontrolné číslice sa budú pri porovnávaní "
 "ignorovať, takže môžete napr. zakázať DE0012345, aby ste zakázali všetky "
 "nemecké IBAN s identifikátorom banky začínajúcim na 12345."
 
@@ -27598,7 +27599,7 @@ msgstr[1] ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr "Uveďte, z ktorého bankového účtu sa majú náhrady previesť."
+msgstr "Uveďte, z ktorého bankového účtu sa majú refundácie odoslať."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
@@ -31613,9 +31614,9 @@ msgid ""
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
-"Vrátená suma bude automaticky zaslaná späť na váš pôvodný spôsob platby. V "
-"závislosti od spôsobu platby počkajte, prosím, až dva týždne, kým sa táto "
-"suma objaví na vašom výpise."
+"Vrátená suma bude automaticky zaslaná späť na Váš pôvodný spôsob platby. V "
+"závislosti od spôsobu platby to môže trvať až dva týždne, kým sa táto suma "
+"objaví na Vašom účte."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:161
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:165
@@ -32136,8 +32137,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
-"Bola vám zaslaná náhrada vo výške %(amount)s. V závislosti od spôsobu platby "
-"počkajte, prosím, až 14 dní, kým sa objaví na vašom výpise."
+"Bola vám zaslaná refundácia vo výške %(amount)s. V závislosti od spôsobu "
+"platby to môže trvať až 14 dní, kým sa objaví na vašom účte."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 #: pretix/presale/templates/pretixpresale/event/position.html:33
@@ -32240,7 +32241,7 @@ msgstr "Vrátenie peňazí sa uskutoční na váš pôvodný spôsob platby."
 #: pretix/presale/templates/pretixpresale/event/order.html:465
 #: pretix/presale/templates/pretixpresale/event/order.html:470
 msgid "This will invalidate all tickets in this order."
-msgstr "Tým sa zneplatnia všetky tipy v tomto poradí."
+msgstr "Tým sa zneplatnia všetky vstupenky v tejto objednávke."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:401
 msgid ""
@@ -32269,6 +32270,8 @@ msgid ""
 "<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
 "remainder."
 msgstr ""
+"Túto objednávku môžete zrušiť. V takom prípade Vám bude účtovaný storno "
+"poplatok <strong>%(fee)s</strong> a zvyšná suma Vám bude vrátená."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:437
 msgid ""
@@ -32289,6 +32292,8 @@ msgid ""
 "You can cancel this order. As per our cancellation policy, you will still be "
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
+"Túto objednávku môžete zrušiť. Podľa našich pravidiel stornovania Vám bude "
+"účtovaný storno poplatok vo výške <strong>%(fee)s</strong>."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:467
 msgid "You can cancel this order using the following button."
@@ -32341,7 +32346,7 @@ msgstr "Zadajte vlastnú sumu"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 msgid "Refund amount:"
-msgstr "Výška náhrady:"
+msgstr "Výška refundácie:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:117
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:138
