@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-11 13:57+0000\n"
+"PO-Revision-Date: 2024-09-13 21:00+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -6717,7 +6717,7 @@ msgstr ""
 
 #: pretix/base/payment.py:1075
 msgid "Free of charge"
-msgstr "Antal"
+msgstr "-->"
 
 #: pretix/base/payment.py:1107
 msgid "Box office"
@@ -13107,7 +13107,7 @@ msgstr "Pris (valfritt)"
 
 #: pretix/control/forms/event.py:1699
 msgid "Free"
-msgstr "Antal"
+msgstr "-->"
 
 #: pretix/control/forms/event.py:1704
 msgid "Quantity available"
@@ -24858,7 +24858,7 @@ msgstr "Prefix (valfritt)"
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
 msgctxt "number_of_things"
 msgid "Number"
-msgstr "Antal"
+msgstr "-->"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
@@ -31905,7 +31905,7 @@ msgstr "minsta ordersumma: %(num)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:341
 msgctxt "price"
 msgid "free"
-msgstr "Antal"
+msgstr "-->"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:77
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
