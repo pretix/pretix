@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-11 13:57+0000\n"
+"PO-Revision-Date: 2024-09-15 18:00+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
 ">\n"
@@ -311,7 +311,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:518 pretix/control/forms/item.py:120
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "Otázka nemôže závisieť od otázky položenej počas registrácie."
+msgstr "Otázka nemôže závisieť od otázky položenej počas odbavenia."
 
 #: pretix/api/serializers/item.py:523 pretix/control/forms/item.py:125
 msgid "Circular dependency between questions detected."
@@ -319,11 +319,11 @@ msgstr "Zistená kruhová závislosť medzi otázkami."
 
 #: pretix/api/serializers/item.py:528 pretix/control/forms/item.py:134
 msgid "This type of question cannot be asked during check-in."
-msgstr "Tento typ otázky nie je možné položiť počas registrácie."
+msgstr "Tento typ otázky nie je možné položiť počas odbavenia."
 
 #: pretix/api/serializers/item.py:531 pretix/control/forms/item.py:142
 msgid "This type of question cannot be shown during check-in."
-msgstr "Tento typ otázky nie je možné zobraziť počas registrácie."
+msgstr "Tento typ otázky nie je možné zobraziť počas odbavenia."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
@@ -512,7 +512,7 @@ msgstr "Odbavená vstupenka"
 
 #: pretix/api/webhooks.py:321
 msgid "Ticket check-in reverted"
-msgstr "Odhlásenie vstupeniek sa vrátilo"
+msgstr "Odbavenie vstupenky bolo vrátené späť"
 
 #: pretix/api/webhooks.py:325
 msgid "Event created"
@@ -1765,7 +1765,7 @@ msgstr "Vyžaduje si osobitnú pozornosť"
 #: pretix/base/models/orders.py:287
 #: pretix/plugins/checkinlists/exporters.py:522
 msgid "Check-in text"
-msgstr "Text prihlásenia"
+msgstr "Text odbavenia"
 
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:619
 #: pretix/base/models/items.py:1117
@@ -3769,14 +3769,14 @@ msgid ""
 "can limit their validity through the advanced check-in rules, though."
 msgstr ""
 "Ak si vyberiete možnosť \"všetky dátumy\", vstupenky budú považované za "
-"súčasť tohto zoznamu a budú platné pri registrácii bez ohľadu na to, na "
-"ktorý dátum boli zakúpené. Ich platnosť však môžete obmedziť prostredníctvom "
+"súčasť tohto zoznamu a budú platné pri odbavení bez ohľadu na to, na ktorý "
+"dátum boli zakúpené. Ich platnosť však môžete obmedziť prostredníctvom "
 "rozšírených pravidiel odbavenia."
 
 #: pretix/base/models/checkin.py:65
 msgctxt "checkin"
 msgid "Ignore check-ins on this list in statistics"
-msgstr "Ignorovanie kontrolných hlásení v tomto zozname v štatistikách"
+msgstr "Ignorovanie odbavení v tomto zozname v štatistikách"
 
 #: pretix/base/models/checkin.py:69
 msgctxt "checkin"
@@ -3795,19 +3795,19 @@ msgstr ""
 #: pretix/base/models/checkin.py:74
 msgctxt "checkin"
 msgid "Include pending orders"
-msgstr ""
+msgstr "Zahrnúť nedokončené objednávky"
 
 #: pretix/base/models/checkin.py:76
 msgid ""
 "With this option, people will be able to check in even if the order has not "
 "been paid."
 msgstr ""
-"Vďaka tejto možnosti sa budú môcť ľudia prihlásiť, aj keď objednávka nebola "
+"Vďaka tejto možnosti budú môcť buť ľudia odbavený, aj keď objednávka nebola "
 "zaplatená."
 
 #: pretix/base/models/checkin.py:79
 msgid "Allow checking in add-on tickets by scanning the main ticket"
-msgstr "Umožniť kontrolu doplnkových tipov naskenovaním hlavného tipu"
+msgstr "Umožniť odbavenie doplnkových vstupeniek naskenovaním hlavnej vstupenky"
 
 #: pretix/base/models/checkin.py:81
 msgid ""
@@ -3849,11 +3849,11 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:99
 msgid "Automatically check out everyone at"
-msgstr "Automaticky skontrolujte všetkých na"
+msgstr "Automatické odhlásenie všetkých v"
 
 #: pretix/base/models/checkin.py:104
 msgid "Sales channels to automatically check in"
-msgstr "Predajné kanály na automatické prihlásenie"
+msgstr "Predajné kanály na automatické odbavenie"
 
 #: pretix/base/models/checkin.py:105
 msgid ""
@@ -4926,7 +4926,7 @@ msgstr ""
 "Pri nastavovaní bežného podujatia alebo série podujatí s časovými intervalmi "
 "túto hodnotu zvyčajne NEMUSÍTE meniť. Predvolené nastavenie znamená, že o "
 "čase platnosti vstupeniek nebude rozhodovať produkt, ale konfigurácia "
-"podujatia a registrácie. Ostatné možnosti použite len v prípade, že ich "
+"podujatia a odbavenia. Ostatné možnosti použite len v prípade, že ich "
 "potrebujete na realizáciu napr. rezervácie celoročnej vstupenky s dynamickým "
 "dátumom začiatku platnosti. Upozorňujeme, že platnosť bude uložená spolu so "
 "vstupenkou, takže ak tu neskôr zmeníte nastavenia, existujúce vstupenky "
@@ -5282,7 +5282,7 @@ msgstr "Táto otázka bude položená kupujúcim vybraných výrobkov"
 
 #: pretix/base/models/items.py:1658
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr "Pýtajte sa pri registrácii namiesto pri kúpe vstupenky"
+msgstr "Pýtajte sa pri odbavení namiesto pri kúpe vstupenky"
 
 #: pretix/base/models/items.py:1659 pretix/base/models/items.py:1664
 msgid "Not supported by all check-in apps for all question types."
@@ -5290,7 +5290,7 @@ msgstr "Nie všetky aplikácie na odbavenie podporujú všetky typy otázok."
 
 #: pretix/base/models/items.py:1663
 msgid "Show answer during check-in"
-msgstr "Ukážte odpoveď počas registrácie"
+msgstr "Ukážte odpoveď počas odbavenia"
 
 #: pretix/base/models/items.py:1668
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
@@ -5315,8 +5315,7 @@ msgstr "Minimálna hodnota"
 #: pretix/base/models/items.py:1694 pretix/base/models/items.py:1697
 #: pretix/base/models/items.py:1701
 msgid "Currently not supported in our apps and during check-in"
-msgstr ""
-"V súčasnosti nie je podporovaná v našich aplikáciách a počas registrácie"
+msgstr "V súčasnosti nie je podporovaná v našich aplikáciách a počas odbavenia"
 
 #: pretix/base/models/items.py:1684 pretix/base/models/items.py:1690
 #: pretix/base/models/items.py:1696
@@ -5468,8 +5467,8 @@ msgstr ""
 "Pri tejto možnosti sa kvóta uvoľní hneď, ako budú ľudia naskenovaní pri "
 "východe z podujatia. Stane sa tak len vtedy, ak boli skenovaní pri vstupe aj "
 "výstupe a výstup je novším skenovaním. Nezáleží na tom, na ktorom zo "
-"zoznamov prihlásených osôb bolo jedno z týchto skenovaní, ale zoznamy "
-"prihlásených osôb sa ignorujú, ak sú nastavené na možnosť \"Povoliť opätovný "
+"zoznamov odbavených osôb bolo jedno z týchto skenovaní, ale zoznamy "
+"odbavených osôb sa ignorujú, ak sú nastavené na možnosť \"Povoliť opätovný "
 "vstup po skenovaní pri výstupe\", aby sa zabránilo náhodnému prečerpaniu."
 
 #: pretix/base/models/items.py:2041 pretix/control/navigation.py:166
@@ -5660,7 +5659,7 @@ msgstr ""
 "Ak to nastavíte, v aplikácii na odbavenie sa zobrazí viditeľné upozornenie, "
 "že vstupenky tejto objednávky si vyžadujú osobitnú pozornosť. Nezobrazia sa "
 "žiadne podrobnosti ani vlastná správa, takže musíte informovať svojich "
-"pracovníkov pri kontrole, ako majú v týchto prípadoch postupovať."
+"pracovníkov na odbavení, ako majú v týchto prípadoch postupovať."
 
 #: pretix/base/models/orders.py:289
 msgid ""
@@ -5996,7 +5995,7 @@ msgstr "Môže zmeniť objednávky"
 
 #: pretix/base/models/organizer.py:339
 msgid "Can perform check-ins"
-msgstr "Môže vykonávať kontrolné vstupy"
+msgstr "Môže vykonávať odbavenie"
 
 #: pretix/base/models/organizer.py:340
 msgid ""
@@ -6006,7 +6005,7 @@ msgid ""
 msgstr ""
 "To zahŕňa vyhľadávanie účastníkov, ktoré možno použiť na získanie osobných "
 "informácií o účastníkoch. Používatelia s funkciou \"môže meniť objednávky\" "
-"môžu tiež vykonávať registrácie."
+"môžu tiež vykonávať odbavenia."
 
 #: pretix/base/models/organizer.py:345
 msgid "Can view vouchers"
@@ -6727,7 +6726,7 @@ msgstr "Názov platobnej metódy"
 
 #: pretix/base/payment.py:1185
 msgid "Payment process description during checkout"
-msgstr "Popis platobného procesu počas pokladnice"
+msgstr "Popis platobného procesu počas objednávky"
 
 #: pretix/base/payment.py:1186
 msgid ""
@@ -7836,7 +7835,7 @@ msgstr "Vstup nie je povolený: {explanation}."
 
 #: pretix/base/services/checkin.py:1099
 msgid "You need to answer questions to complete this check-in."
-msgstr "Na dokončenie tejto kontroly musíte odpovedať na otázky."
+msgstr "Pre dokončenie odbavenia musíte odpovedať na otázky."
 
 #: pretix/base/services/checkin.py:1152
 msgid "This ticket has already been redeemed."
@@ -8157,6 +8156,8 @@ msgid ""
 "This order was changed by someone else simultaneously. Please check if your "
 "changes are still accurate and try again."
 msgstr ""
+"Túto objednávku súčasne zmenil niekto iný. Skontrolujte, či sú vaše zmeny "
+"stále správne, a skúste to znova."
 
 #: pretix/base/services/orders.py:143
 msgid "Your cart is empty."
@@ -9557,7 +9558,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1493
 msgid "Show number of check-ins to customer"
-msgstr "Zobrazenie počtu check-inov pre zákazníka"
+msgstr "Zobraziť počet odbavení zákazníkovi"
 
 #: pretix/base/settings.py:1494
 msgid ""
@@ -9572,7 +9573,7 @@ msgstr ""
 "vstúpili na podujatie. Zvyčajne to nie je potrebné, ale môže to byť užitočné "
 "v kombinácii so vstupenkami, ktoré sa dajú použiť určitý počet krát, takže "
 "zákazníci môžu vidieť, koľkokrát už boli použité. Odchody alebo neúspešné "
-"skenovania sa nebudú počítať a používateľ neuvidí rôzne zoznamy prihlásených."
+"skenovania sa nebudú počítať a používateľ neuvidí rôzne zoznamy odbavených."
 
 #: pretix/base/settings.py:1507
 msgid "Allow users to download tickets"
@@ -9757,7 +9758,7 @@ msgstr "Umožniť zákazníkom upravovať svoje údaje"
 
 #: pretix/base/settings.py:1689
 msgid "Allow customers to modify their information after they checked in."
-msgstr "Umožnite zákazníkom upraviť svoje údaje po prihlásení."
+msgstr "Umožnite zákazníkom upraviť svoje údaje po odbavení."
 
 #: pretix/base/settings.py:1690
 msgid ""
@@ -9765,7 +9766,7 @@ msgid ""
 "of the tickets in the order has been checked in."
 msgstr ""
 "V predvolenom nastavení nie sú možné žiadne ďalšie úpravy objednávky, "
-"akonáhle je jeden z tipov v objednávke zaevidovaný."
+"akonáhle je jedna zo vstupeniek odbavená."
 
 #: pretix/base/settings.py:1700
 msgid "Last date of modifications"
@@ -12410,11 +12411,11 @@ msgstr "Čiarový kód"
 
 #: pretix/control/forms/checkin.py:187
 msgid "Check-in time"
-msgstr "Čas registrácie"
+msgstr "Čas odbavenia"
 
 #: pretix/control/forms/checkin.py:191
 msgid "Check-in type"
-msgstr "Typ registrácie"
+msgstr "Typ odbavenia"
 
 #: pretix/control/forms/checkin.py:195
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
@@ -12423,7 +12424,7 @@ msgstr ""
 
 #: pretix/control/forms/checkin.py:199
 msgid "Support for check-in questions"
-msgstr "Podpora pre kontrolné otázky"
+msgstr "Podpora pre otázky pri odbavení"
 
 #: pretix/control/forms/checkin.py:205 pretix/control/forms/checkin.py:221
 #: pretix/control/forms/filter.py:2399 pretix/control/forms/filter.py:2441
@@ -13169,7 +13170,7 @@ msgstr "Maximálna suma platieb a refundácií"
 
 #: pretix/control/forms/filter.py:592
 msgid "At least one ticket with check-in"
-msgstr "Aspoň jedna vstupenka s registráciou"
+msgstr "Aspoň jedna vstupenka s odbavením"
 
 #: pretix/control/forms/filter.py:596
 msgid "Affected quota"
@@ -13335,7 +13336,7 @@ msgstr "Vyhľadávanie účastníkov…"
 #: pretix/control/forms/filter.py:1886
 #: pretix/plugins/checkinlists/exporters.py:105
 msgid "Check-in status"
-msgstr "Stav prihlásenia"
+msgstr "Stav odbavenia"
 
 #: pretix/control/forms/filter.py:1888
 #: pretix/plugins/checkinlists/exporters.py:107
@@ -13348,25 +13349,25 @@ msgstr "Všetci účastníci"
 #: pretix/plugins/checkinlists/exporters.py:108
 #: pretix/plugins/checkinlists/exporters.py:497
 msgid "Checked in"
-msgstr "Odhlásený"
+msgstr "Odbavený"
 
 #: pretix/control/forms/filter.py:1890
 #: pretix/plugins/checkinlists/exporters.py:109
 msgctxt "checkin state"
 msgid "Present"
-msgstr "Súčasnosť"
+msgstr "Prítomný"
 
 #: pretix/control/forms/filter.py:1891
 #: pretix/plugins/checkinlists/exporters.py:110
 msgctxt "checkin state"
 msgid "Checked in but left"
-msgstr ""
+msgstr "Odbavený ale odišiel"
 
 #: pretix/control/forms/filter.py:1892
 #: pretix/control/templates/pretixcontrol/checkin/index.html:178
 #: pretix/plugins/checkinlists/exporters.py:111
 msgid "Not checked in"
-msgstr "Neodhlásené"
+msgstr "Neodbavený"
 
 #: pretix/control/forms/filter.py:1911
 msgctxt "subevent"
@@ -13456,15 +13457,15 @@ msgstr "Dátum poslednej úspešnej platby"
 
 #: pretix/control/forms/filter.py:2374
 msgid "All check-ins"
-msgstr "Všetky registrácie"
+msgstr "Všetky odbavenia"
 
 #: pretix/control/forms/filter.py:2375
 msgid "Successful check-ins"
-msgstr "Úspešné kontroly"
+msgstr "Úspešné odbavenia"
 
 #: pretix/control/forms/filter.py:2376
 msgid "Unsuccessful check-ins"
-msgstr "Neúspešné registrácie"
+msgstr "Neúspešné odbavenia"
 
 #: pretix/control/forms/filter.py:2381
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
@@ -13511,7 +13512,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:752
 #: pretix/plugins/checkinlists/exporters.py:834
 msgid "Check-in list"
-msgstr "Zoznam prihlásených"
+msgstr "Zoznam odbavených"
 
 #: pretix/control/forms/filter.py:2611
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:82
@@ -13777,7 +13778,7 @@ msgstr "Toto pole je povinné"
 
 #: pretix/control/forms/item.py:156
 msgid "Dependencies between questions are not supported during check-in."
-msgstr "Závislosti medzi otázkami nie sú počas registrácie podporované."
+msgstr "Závislosti medzi otázkami nie sú počas odbavenia podporované."
 
 #: pretix/control/forms/item.py:251
 msgid "No products"
@@ -15505,11 +15506,11 @@ msgstr "Dátum následnej kontroly objednávky bol aktualizovaný."
 #: pretix/control/logdisplay.py:411
 msgid "The order's flag to require attention at check-in has been toggled."
 msgstr ""
-"Príznak objednávky, ktorý vyžaduje pozornosť pri registrácii, bol prepnutý."
+"Príznak objednávky, ktorý vyžaduje pozornosť pri odbavení, bol prepnutý."
 
 #: pretix/control/logdisplay.py:413
 msgid "The order's check-in text has been changed."
-msgstr "Text prihlásenia objednávky bol zmenený."
+msgstr "Text odbavenia objednávky bol zmenený."
 
 #: pretix/control/logdisplay.py:414
 msgid ""
@@ -15949,11 +15950,11 @@ msgstr "Bol pridaný zoznam na odbavenie."
 
 #: pretix/control/logdisplay.py:525 pretix/control/logdisplay.py:526
 msgid "The check-in list has been deleted."
-msgstr "Zoznam prihlásených bol vymazaný."
+msgstr "Zoznam odbavenia bol vymazaný."
 
 #: pretix/control/logdisplay.py:527
 msgid "The check-in list has been changed."
-msgstr "Zoznam prihlásených bol zmenený."
+msgstr "Zoznam odbavenia bol zmenený."
 
 #: pretix/control/logdisplay.py:528
 msgid "The event settings have been changed."
@@ -16163,7 +16164,7 @@ msgstr "Objednávka bola zrušená."
 #: pretix/control/logdisplay.py:634
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "Odhlásenie pozície #{posid} v zozname \"{list}\" bolo vrátené."
+msgstr "Odbavené pozície #{posid} v zozname \"{list}\" bolo vrátené."
 
 #: pretix/control/logdisplay.py:656
 #, python-brace-format
@@ -16375,13 +16376,13 @@ msgstr "Značky"
 #: pretix/control/navigation.py:294
 msgctxt "navigation"
 msgid "Check-in"
-msgstr ""
+msgstr "Odbavenie"
 
 #: pretix/control/navigation.py:311
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:6
 msgid "Check-in history"
-msgstr "História prihlásenia"
+msgstr "História odbavenia"
 
 #: pretix/control/navigation.py:354
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
@@ -16992,7 +16993,7 @@ msgstr "Hotovosť"
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:4
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:6
 msgid "Delete check-ins"
-msgstr "Odstránenie kontrolných hlásení"
+msgstr "Odstránenie odbavení"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
 #, python-format
@@ -17003,7 +17004,14 @@ msgid_plural ""
 "Are you sure you want to permanently delete the check-ins of "
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] ""
+"Ste si istí, že chcete natrvalo vymazať odbavenia <strong>jednej "
+"vstupenky</strong>."
 msgstr[1] ""
+"Ste si istí, že chcete natrvalo vymazať odbavenia <strong>%(count)s "
+"vstupeniek</strong>?"
+msgstr[2] ""
+"Ste si istí, že chcete natrvalo vymazať odbavenia <strong>%(count)s "
+"vstupeniek</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:24
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
@@ -17172,7 +17180,7 @@ msgstr "Filter"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 msgid "Your search did not match any check-ins."
-msgstr "Vaše vyhľadávanie nezodpovedalo žiadnemu prihláseniu."
+msgstr "Vaše vyhľadávanie nezodpovedalo žiadnemu odbaveniu."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:52
 msgid "You haven't scanned any tickets yet."
@@ -17210,7 +17218,7 @@ msgstr "Skenovanie offline. Čas nahrávania: %(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:398
 #, python-format
 msgid "Automatically checked in: %(date)s"
-msgstr "Automaticky sa prihlásil: %(date)s"
+msgstr "Automaticky sa odbavil: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:92
 msgid "Failed in offline mode"
@@ -17238,7 +17246,7 @@ msgstr "Kopírovanie do schránky"
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:11
 #, python-format
 msgid "Check-in list: %(name)s"
-msgstr "Zoznam na prihlásenie: %(name)s"
+msgstr "Zoznam odbavení: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:16
@@ -17295,7 +17303,7 @@ msgstr "nezaplatené"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:181
 msgid "Checked in but left"
-msgstr "Zaregistrovali ste sa, ale odišli ste"
+msgstr "Odbavený, ale odišiel"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:186
 msgid "Checked in automatically"
@@ -17308,7 +17316,7 @@ msgstr "Ukončenie: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:212
 msgid "Check-In selected attendees"
-msgstr "Registrácia vybraných účastníkov"
+msgstr "Odbavenie vybraných účastníkov"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:216
 msgid "Check-Out selected attendees"
@@ -17316,29 +17324,30 @@ msgstr "Odhlásenie vybraných účastníkov"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:225
 msgid "Delete all check-ins of selected attendees"
-msgstr "Odstránenie všetkých check-inov vybraných účastníkov"
+msgstr "Odstránenie všetkých odbavení vybraných účastníkov"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
 msgid "Delete check-in list"
-msgstr "Odstránenie zoznamu prihlásených"
+msgstr "Odstránenie zoznamu odbavení"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
+"Ste si istí, že chcete odstrániť zoznam odbavení <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
 msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
-msgstr ""
+msgstr "Tým sa odstránia aj informácie o <strong>%(num)s</strong> odbaveniach."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:22
 msgid "Delete list and all check-ins"
-msgstr "Odstránenie zoznamu a všetkých kontrolných hlásení"
+msgstr "Odstránenie zoznamu a všetkých odbavení"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:48
 #: pretix/control/templates/pretixcontrol/event/payment.html:80
@@ -17354,7 +17363,7 @@ msgid ""
 "questions about setting this up."
 msgstr ""
 "Tieto nastavenia na tejto stránke sú určené pre profesionálnych používateľov "
-"s veľmi špecifickými situáciami pri odhlasovaní. Ak máte otázky týkajúce sa "
+"s veľmi špecifickými situáciami pri odbavovaní. Ak máte otázky týkajúce sa "
 "tohto nastavenia, obráťte sa na podporu."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:57
@@ -17375,7 +17384,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:77
 msgid "Custom check-in rule"
-msgstr "Vlastné pravidlo registrácie"
+msgstr "Vlastné pravidlo odbavenia"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:84
 #: pretix/control/templates/pretixcontrol/event/mail.html:33
@@ -17426,7 +17435,7 @@ msgid ""
 "do this process by printing out the list on paper, using this web interface "
 "or by using one of our mobile or desktop apps to automatically scan tickets."
 msgstr ""
-"Môžete vytvoriť registračné zoznamy, ktoré môžete použiť napr. pri vstupe na "
+"Môžete vytvoriť zoznamy odbavenia, ktoré môžete použiť napr. pri vstupe na "
 "podujatie a sledovať, kto prichádza a či si skutočne kúpil vstupenku. Tento "
 "proces môžete vykonať vytlačením zoznamu na papier, pomocou tohto webového "
 "rozhrania alebo pomocou jednej z našich mobilných alebo počítačových "
@@ -17443,7 +17452,7 @@ msgid ""
 msgstr ""
 "Môžete vytvoriť viacero zoznamov na odbavenie, aby ste oddelili viacero "
 "častí podujatia, napríklad ak máte samostatné položky pre viacero typov "
-"vstupeniek. Rôzne check-in zoznamy sú úplne nezávislé: Ak sa vstupenka "
+"vstupeniek. Rôzne zoznamy odbavenia sú úplne nezávislé: Ak sa vstupenka "
 "zobrazí v dvoch zoznamoch, platí v každom zozname raz. To môže byť užitočné, "
 "ak prevádzkujete festival s festivalovými vstupenkami, ktoré umožňujú vstup "
 "na každé alebo viacero predstavení, ako aj so vstupenkami platnými len na "
@@ -17463,7 +17472,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:58
 msgid "Your search did not match any check-in lists."
-msgstr "Vaše vyhľadávanie nezodpovedalo žiadnemu zoznamu prihlásených."
+msgstr "Vaše vyhľadávanie nezodpovedalo žiadnemu zoznamu odbavení."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:60
 msgid "You haven't created any check-in lists yet."
@@ -17503,6 +17512,10 @@ msgid ""
 "the check-in list. No actual check-in will be performed and no modification "
 "to the system state is made."
 msgstr ""
+"Tento nástroj umožňuje overiť konfiguráciu odbavenia. Môžete zadať čiarový "
+"kód a niekoľko voliteľných parametrov a my vám zobrazíme odpoveď zoznamu "
+"odbavení. Nevykoná sa žiadne skutočné odbavenie a nedôjde k žiadnej zmene "
+"stavu systému."
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:40
 msgid "Simulate"
@@ -17510,7 +17523,7 @@ msgstr "Simulujte"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:66
 msgid "Valid check-in"
-msgstr "Platné prihlásenie"
+msgstr "Platné odbavenie"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:68
 msgid "Additional information required"
@@ -17519,8 +17532,7 @@ msgstr "Ďalšie požadované informácie"
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
 "The following questions must be answered before check-in can be completed:"
-msgstr ""
-"Pred dokončením registrácie je potrebné odpovedať na nasledujúce otázky:"
+msgstr "Pred dokončením odbavenia je potrebné odpovedať na nasledujúce otázky:"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:92
 msgid "Special attention required"
@@ -19821,7 +19833,7 @@ msgstr "Vstupenky a preukazky"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:203
 msgid "Check-in & Validity"
-msgstr "Registrácia a platnosť"
+msgstr "Odbavenie a platnosť"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:214
 msgid "Duration"
@@ -20297,7 +20309,7 @@ msgstr "Systémová otázka"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:60
 msgid "Ask during check-in"
-msgstr "Spýtajte sa počas registrácie"
+msgstr "Spýtajte sa počas odbavenia"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:79
 msgid "All personalized products"
@@ -20435,7 +20447,7 @@ msgstr "Vytvorenie novej kvóty"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:60
 msgid "Capacity left"
-msgstr "Kapacita vľavo"
+msgstr "Zostávajúca kapacita"
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:12
 msgid ""
@@ -21112,7 +21124,7 @@ msgstr "neodpovedal"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:576
 msgid "This question will be asked during check-in."
-msgstr "Táto otázka bude položená počas registrácie."
+msgstr "Táto otázka bude položená počas odbavenia."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:588
 msgid ""
@@ -22340,6 +22352,9 @@ msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
+"Stiahnite si aplikáciu, ktorá je kompatibilná s aplikáciou pretix. Napríklad "
+"naša aplikácia na odbavenie <strong>pretixSCAN</strong> je k dispozícii na "
+"všetkých významných platformách."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
 msgid "Download pretixSCAN"
@@ -22420,7 +22435,7 @@ msgid ""
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
 "Ak boli v tomto zariadení vytvorené údaje (napr. transakcie POS alebo "
-"registrácie), ktoré neboli odoslané, už ich nebudete môcť odoslať."
+"odbavenia), ktoré neboli odoslané, už ich nebudete môcť odoslať."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:16
 msgid ""
@@ -23477,7 +23492,7 @@ msgstr "Vytvorená udalosť"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:482
 msgid "QR code for Check-In"
-msgstr "QR kód pre Check-In"
+msgstr "QR kód pre odbavenie"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:488
 msgid "QR code for Lead Scanning"
@@ -23766,7 +23781,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:357
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:243
 msgid "Add a new check-in list"
-msgstr "Pridanie nového zoznamu na odbavenie"
+msgstr "Pridanie nového zoznamu odbavení"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:11
@@ -24867,11 +24882,11 @@ msgstr "Neplatný kód, skúste to prosím znova."
 
 #: pretix/control/views/checkin.py:276
 msgid "The selected check-ins have been reverted."
-msgstr "Vybrané registrácie boli vrátené späť."
+msgstr "Vybrané odbavenia boli vrátené späť."
 
 #: pretix/control/views/checkin.py:278
 msgid "The selected tickets have been marked as checked out."
-msgstr "Vybrané vstupenky boli označené ako odkontrolované."
+msgstr "Vybrané vstupenky boli označené ako odhlásené."
 
 #: pretix/control/views/checkin.py:280
 msgid "The selected tickets have been marked as checked in."
@@ -24879,7 +24894,7 @@ msgstr "Vybrané vstupenky boli označené ako odbavené."
 
 #: pretix/control/views/checkin.py:369
 msgid "The new check-in list has been created."
-msgstr "Bol vytvorený nový zoznam na odbavenie."
+msgstr "Bol vytvorený nový zoznam odbavení."
 
 #: pretix/control/views/checkin.py:376 pretix/control/views/checkin.py:436
 #: pretix/control/views/discounts.py:134 pretix/control/views/discounts.py:182
@@ -24915,11 +24930,11 @@ msgstr "Vybraný zoznam bol odstránený."
 
 #: pretix/control/views/dashboards.py:114
 msgid "Attendees (ordered)"
-msgstr "Účastníci (podľa poradia)"
+msgstr "Účastníci (objednaní)"
 
 #: pretix/control/views/dashboards.py:124
 msgid "Attendees (paid)"
-msgstr "Účastníci (platené)"
+msgstr "Účastníci (s úhradou)"
 
 #: pretix/control/views/dashboards.py:135
 #, python-brace-format
@@ -24941,7 +24956,7 @@ msgstr "celková dĺžka čakacieho zoznamu"
 #: pretix/control/views/dashboards.py:249
 #, python-brace-format
 msgid "{quota} left"
-msgstr "{quota} vľavo"
+msgstr "Zostáva v {quota}"
 
 #: pretix/control/views/dashboards.py:269
 msgid "Your ticket shop is"
@@ -24970,7 +24985,7 @@ msgstr "v súkromnom testovacom režime"
 #: pretix/control/views/dashboards.py:301
 #, python-brace-format
 msgid "Present – {list}"
-msgstr "Darček - {list}"
+msgstr "Prítomní - {list}"
 
 #: pretix/control/views/dashboards.py:319
 msgid "Welcome to pretix!"
@@ -26540,7 +26555,7 @@ msgstr "tím pretix"
 
 #: pretix/plugins/autocheckin/apps.py:39
 msgid "Automatically check-in specific tickets after they have been sold."
-msgstr ""
+msgstr "Automaticky odbaviť konkrétne vstupenky po ich predaji."
 
 #: pretix/plugins/autocheckin/forms.py:60
 #: pretix/plugins/autocheckin/models.py:82
@@ -26602,35 +26617,25 @@ msgstr "Povolenie spôsobu platby"
 #: pretix/plugins/autocheckin/signals.py:47
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:13
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:13
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Auto check-in"
 msgstr "Automatizované odbavenie"
 
 #: pretix/plugins/autocheckin/signals.py:70
-#, fuzzy
-#| msgid "An email rule was created"
 msgid "An auto check-in rule was created"
-msgstr "Bolo vytvorené e-mailové pravidlo"
+msgstr "Bolo vytvorené pravidlo automatického odbavenia"
 
 #: pretix/plugins/autocheckin/signals.py:72
-#, fuzzy
-#| msgid "An email rule was updated"
 msgid "An auto check-in rule was updated"
-msgstr "Bolo aktualizované e-mailové pravidlo"
+msgstr "Bolo aktualizované pravidlo automatického odbavenia"
 
 #: pretix/plugins/autocheckin/signals.py:75
-#, fuzzy
-#| msgid "An email rule was deleted"
 msgid "An auto check-in rule was deleted"
-msgstr "Pravidlo e-mailu bolo odstránené"
+msgstr "Bolo odstránené pravidlo automatického odbavenia"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Create auto check-in rule"
-msgstr "Vlastné pravidlo registrácie"
+msgstr "Vytvorenie pravidla automatického odbavenia"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
@@ -26642,30 +26647,22 @@ msgstr "Stav"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
-#, fuzzy
-#| msgid "Delete check-in list"
 msgid "Delete auto check-in rule"
-msgstr "Odstránenie zoznamu prihlásených"
+msgstr "Odstránenie pravidla automatického odbavenia"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete the auto check-in rule?"
-msgstr "Ste si istí, že chcete odstrániť bránu?"
+msgstr "Ste si istí, že chcete odstrániť pravidlo automatického prihlasovania?"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Auto check-in rule"
-msgstr "Vlastné pravidlo registrácie"
+msgstr "Pravidlo automatického odbavenia"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Auto check-in rules"
-msgstr "Vlastné pravidlo registrácie"
+msgstr "Pravidlá automatického odbavenia"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:11
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
@@ -26674,10 +26671,8 @@ msgstr "Zatiaľ ste nevytvorili žiadne pravidlá."
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:17
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:22
-#, fuzzy
-#| msgid "Create a new check-in list"
 msgid "Create a new check-in rule"
-msgstr "Vytvorenie nového zoznamu na odbavenie"
+msgstr "Vytvorenie nového pravidla odbavenia"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:32
 #, fuzzy
@@ -26709,6 +26704,9 @@ msgid ""
 "download the badges in the backend or automatically print them with our "
 "check-in apps."
 msgstr ""
+"Automaticky generujte odznaky alebo menovky pre účastníkov. Preukazy si "
+"môžete stiahnuť z backendu alebo ich automaticky vytlačiť pomocou našich "
+"aplikácií na odbavenie."
 
 #: pretix/plugins/badges/exporters.py:89
 msgid "One badge per page"
@@ -27763,12 +27761,13 @@ msgstr "Odoslanie poslednej faktúry e-mailom na adresu {email}."
 
 #: pretix/plugins/checkinlists/apps.py:47
 msgid "Check-in list exporter"
-msgstr "Exportér zoznamu prihlásených"
+msgstr "Exportér zoznamu odbavení"
 
 #: pretix/plugins/checkinlists/apps.py:51
 msgid "This plugin allows you to generate check-in lists for your conference."
 msgstr ""
-"Tento zásuvný modul umožňuje vytvárať zoznamy prihlásených na konferenciu."
+"Tento zásuvný modul umožňuje vytvárať zoznamy na odbavenie pre vašu "
+"konferenciu."
 
 #: pretix/plugins/checkinlists/exporters.py:91
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
@@ -27789,7 +27788,7 @@ msgstr "Zahrňte otázky"
 
 #: pretix/plugins/checkinlists/exporters.py:301
 msgid "Check-in list (PDF)"
-msgstr "Zoznam prihlásených (PDF)"
+msgstr "Zoznam odbavení (PDF)"
 
 #: pretix/plugins/checkinlists/exporters.py:302
 #: pretix/plugins/checkinlists/exporters.py:473
@@ -27797,15 +27796,15 @@ msgstr "Zoznam prihlásených (PDF)"
 #: pretix/plugins/checkinlists/exporters.py:740
 msgctxt "export_category"
 msgid "Check-in"
-msgstr ""
+msgstr "Odbavenie"
 
 #: pretix/plugins/checkinlists/exporters.py:303
 msgid ""
 "Download a PDF version of a check-in list that can be used to check people "
 "in at the event without digital methods."
 msgstr ""
-"Stiahnite si PDF verziu zoznamu na registráciu, ktorý sa dá použiť na "
-"registráciu ľudí na podujatí bez digitálnych metód."
+"Stiahnite si PDF verziu zoznamu odbavení, ktorý sa dá použiť na odbavenie "
+"ľudí na podujatí bez digitálnych metód."
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:371
@@ -27819,16 +27818,16 @@ msgid ""
 "list."
 msgstr ""
 "Stiahnite si tabuľku so všetkými účastníkmi, ktorí sú zahrnutí do zoznamu na "
-"registráciu."
+"odbavenie."
 
 #: pretix/plugins/checkinlists/exporters.py:497
 msgid "Checked out"
-msgstr "Skontrolované"
+msgstr "Odhlásený"
 
 #: pretix/plugins/checkinlists/exporters.py:497
 #: pretix/plugins/checkinlists/exporters.py:762
 msgid "Automatically checked in"
-msgstr "Automatické prihlásenie"
+msgstr "Automaticky odbavený"
 
 #: pretix/plugins/checkinlists/exporters.py:503
 #: pretix/plugins/checkinlists/exporters.py:691
@@ -27839,17 +27838,19 @@ msgstr "Tajné"
 
 #: pretix/plugins/checkinlists/exporters.py:669
 msgid "Valid check-in codes"
-msgstr "Platné kódy na prihlásenie"
+msgstr "Platné kódy na odbavenie"
 
 #: pretix/plugins/checkinlists/exporters.py:671
 msgid ""
 "Download a spreadsheet with all valid check-in barcodes e.g. for import into "
 "a different system. Does not included blocked codes or personal data."
 msgstr ""
+"Stiahnite si tabuľku so všetkými platnými odbavovacími čiarovými kódmi, "
+"napr. na import do iného systému. Neobsahuje blokované kódy ani osobné údaje."
 
 #: pretix/plugins/checkinlists/exporters.py:739
 msgid "Check-in log (all scans)"
-msgstr "Denník prihlásenia (všetky skenovania)"
+msgstr "Denník odbavení (všetky skenovania)"
 
 #: pretix/plugins/checkinlists/exporters.py:741
 msgid ""
@@ -28749,12 +28750,12 @@ msgstr "Obmedzenie na produkty"
 
 #: pretix/plugins/sendmail/forms.py:164
 msgid "Filter check-in status"
-msgstr "Filtrovanie stavu prihlásenia"
+msgstr "Filtrovanie stavu odbavenia"
 
 #: pretix/plugins/sendmail/forms.py:168
 msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in on any list"
-msgstr "Obmedzenie na príjemcov bez prihlásenia v akomkoľvek zozname"
+msgstr "Obmedzenie na príjemcov bez odbavenia v akomkoľvek zozname"
 
 #: pretix/plugins/sendmail/forms.py:187
 msgctxt "sendmail_form"
@@ -28810,7 +28811,7 @@ msgstr "Obmedziť na objednávky so stavom"
 #: pretix/plugins/sendmail/forms.py:267 pretix/plugins/sendmail/forms.py:271
 msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
-msgstr "Obmedziť na príjemcov s registráciou v zozname"
+msgstr "Obmedziť na príjemcov s odbavením v zozname"
 
 #: pretix/plugins/sendmail/forms.py:373
 msgid "Type of schedule time"
@@ -28879,11 +28880,11 @@ msgstr "Každý"
 
 #: pretix/plugins/sendmail/models.py:224
 msgid "Anyone who is or was checked in"
-msgstr "Každý, kto je alebo bol zaregistrovaný"
+msgstr "Každý, kto je alebo bol odbavený"
 
 #: pretix/plugins/sendmail/models.py:225
 msgid "Anyone who never checked in before"
-msgstr "Každý, kto sa nikdy predtým neprihlásil"
+msgstr "Každý, kto sa nikdy predtým neodbavil"
 
 #: pretix/plugins/sendmail/models.py:236
 msgid "Limit products"
@@ -28895,7 +28896,7 @@ msgstr "Obmedziť na objednávky so stavom"
 
 #: pretix/plugins/sendmail/models.py:244
 msgid "Restrict to check-in status"
-msgstr "Obmedzenie na stav prihlásenia"
+msgstr "Obmedzenie na stav odbavenia"
 
 #: pretix/plugins/sendmail/models.py:258
 msgid "Send date"
@@ -29005,7 +29006,7 @@ msgstr "Odoslané na objednávky:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:11
 msgid "All customers not checked in"
-msgstr "Všetci neodhlásení zákazníci"
+msgstr "Všetci neodbavení zákazníci"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:23
 msgid "Attendee contact addresses"
@@ -30338,15 +30339,15 @@ msgstr "Webové odbavenie"
 #: pretix/plugins/webcheckin/apps.py:38
 msgid "Turn your browser into a check-in device to perform access control."
 msgstr ""
-"Premeniť prehliadač na registračné zariadenie a vykonávať kontrolu prístupu."
+"Premeniť prehliadač na odbavovacie zariadenie a vykonávať kontrolu prístupu."
 
 #: pretix/plugins/webcheckin/signals.py:36
 msgid "Web Check-in"
-msgstr "Webové prihlásenie"
+msgstr "Webové odbavenie"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
 msgid "Check-in"
-msgstr "Check-in"
+msgstr "Odbavenie"
 
 #: pretix/presale/checkoutflow.py:116
 msgctxt "checkoutflow"
@@ -30366,7 +30367,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:398
 msgctxt "checkoutflow"
 msgid "Membership"
-msgstr ""
+msgstr "Členstvo"
 
 #: pretix/presale/checkoutflow.py:446 pretix/presale/checkoutflow.py:467
 msgid ""
