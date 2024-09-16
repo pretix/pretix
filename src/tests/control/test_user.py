@@ -112,8 +112,8 @@ class UserSettingsTest(SoupTest):
         self.user.auth_backend = 'test_request'
         self.user.save()
         self.save({
-            'new_pw': 'foobarbar',
-            'new_pw_repeat': 'foobarbar',
+            'new_pw': 'f00barbarbar',
+            'new_pw_repeat': 'f00barbarbar',
             'old_pw': 'barfoofoo',
         })
         pw = self.user.password
@@ -122,13 +122,13 @@ class UserSettingsTest(SoupTest):
 
     def test_change_password_success(self):
         doc = self.save({
-            'new_pw': 'foobarbar',
-            'new_pw_repeat': 'foobarbar',
+            'new_pw': 'f00barbarbar',
+            'new_pw_repeat': 'f00barbarbar',
             'old_pw': 'barfoofoo',
         })
         assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
-        assert self.user.check_password("foobarbar")
+        assert self.user.check_password("f00barbarbar")
 
     def test_change_password_short(self):
         doc = self.save({
@@ -171,6 +171,28 @@ class UserSettingsTest(SoupTest):
         })
         assert doc.select(".alert-danger")
 
+    def test_change_password_history(self):
+        doc = self.save({
+            'new_pw': 'qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
+            'new_pw_repeat': 'qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
+            'old_pw': 'barfoofoo',
+        })
+        assert doc.select(".alert-success")
+
+        doc = self.save({
+            'new_pw': '9UQl4lSwHLMVUIMgw0L1X8XEFmyvdn',
+            'new_pw_repeat': '9UQl4lSwHLMVUIMgw0L1X8XEFmyvdn',
+            'old_pw': 'qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
+        })
+        assert doc.select(".alert-success")
+
+        doc = self.save({
+            'new_pw': 'qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
+            'new_pw_repeat': 'qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
+            'old_pw': '9UQl4lSwHLMVUIMgw0L1X8XEFmyvdn',
+        })
+        assert doc.select(".alert-danger")
+
     def test_needs_password_change(self):
         self.user.needs_password_change = True
         self.user.save()
@@ -187,8 +209,8 @@ class UserSettingsTest(SoupTest):
         self.user.needs_password_change = True
         self.user.save()
         self.save({
-            'new_pw': 'foobarbar',
-            'new_pw_repeat': 'foobarbar',
+            'new_pw': 'f00barbarbar',
+            'new_pw_repeat': 'f00barbarbar',
             'old_pw': 'barfoofoo'
         })
         self.user.refresh_from_db()

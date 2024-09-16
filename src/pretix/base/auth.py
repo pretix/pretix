@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -32,13 +31,16 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import string
 from collections import OrderedDict
 from importlib import import_module
 
 from django import forms
 from django.conf import settings
 from django.contrib.auth import authenticate
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.hashers import check_password, make_password
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _, ngettext
 
 
 def get_auth_backends():
@@ -160,3 +162,62 @@ class NativeAuthBackend(BaseAuthBackend):
         u = authenticate(request=request, email=form_data['email'].lower(), password=form_data['password'])
         if u and u.auth_backend == self.identifier:
             return u
+
+
+class NumericAndAlphabeticPasswordValidator:
+
+    def validate(self, password, user=None):
+        has_numeric = any(c in string.digits for c in password)
+        has_alpha = any(c in string.ascii_letters for c in password)
+        if not has_numeric or not has_alpha:
+            raise ValidationError(
+                _(
+                    "Your password must contain both numeric and alphabetic characters.",
+                ),
+                code="password_numeric_and_alphabetic",
+            )
+
+    def get_help_text(self):
+        return _(
+            "Your password must contain both numeric and alphabetic characters.",
+        )
+
+
+class HistoryPasswordValidator:
+
+    def __init__(self, history_length=4):
+        self.history_length = history_length
+
+    def validate(self, password, user=None):
+        from pretix.base.models import User
+
+        if not user or not user.pk or not isinstance(user, User):
+            return
+
+        for hp in user.historic_passwords.order_by("-created")[:4]:
+            if check_password(password, hp.password):
+                raise ValidationError(
+                    ngettext(
+                        "Your password may not be the same as your previous password.",
+                        "Your password may not be the same as one of your %(history_length)s previous passwords.",
+                        self.history_length,
+                    ),
+                    code="password_history",
+                    params={"history_length": self.history_length},
+                )
+
+    def get_help_text(self):
+        return ngettext(
+            "Your password may not be the same as your previous password.",
+            "Your password may not be the same as one of your %(history_length)s previous passwords.",
+            self.history_length,
+        ) % {"history_length": self.history_length}
+
+    def password_changed(self, password, user=None):
+        if not user:
+            pass
+
+        user.historic_passwords.create(password=make_password(password))
+        user.historic_passwords.filter(
+            pk__in=user.historic_passwords.order_by("-created")[4:].values_list("pk", flat=True),
+        ).delete()
