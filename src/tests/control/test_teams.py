@@ -349,8 +349,8 @@ def test_invite_new_user(event, admin_team, client):
     assert b'<form' in resp.content
     resp = client.post('/control/invite/{}'.format(i.token), {
         'email': 'dummy@example.org',
-        'password': 'asdsdgfgjh',
-        'password_repeat': 'asdsdgfgjh'
+        'password': 'asdsdgfgjh1234567',
+        'password_repeat': 'asdsdgfgjh1234567'
     }, follow=True)
 
     assert b'alert-success' in resp.content

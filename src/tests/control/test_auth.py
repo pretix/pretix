@@ -337,7 +337,7 @@ class RegistrationFormTest(TestCase):
 
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
-            'password': 'foobarbar',
+            'password': 'f00barbarbar',
             'password_repeat': ''
         })
         self.assertEqual(response.status_code, 200)
@@ -347,8 +347,8 @@ class RegistrationFormTest(TestCase):
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
-            'password': 'foobarbar',
-            'password_repeat': 'foobarbar'
+            'password': 'f00barbarbar',
+            'password_repeat': 'f00barbarbar'
         })
         self.assertEqual(response.status_code, 200)
 
@@ -356,8 +356,8 @@ class RegistrationFormTest(TestCase):
     def test_success(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
-            'password': 'foobarbar',
-            'password_repeat': 'foobarbar'
+            'password': 'f00barbarbar',
+            'password_repeat': 'f00barbarbar'
         })
         self.assertEqual(response.status_code, 302)
         assert time.time() - self.client.session['pretix_auth_login_time'] < 60
@@ -367,8 +367,8 @@ class RegistrationFormTest(TestCase):
     def test_disabled(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
-            'password': 'foobarbar',
-            'password_repeat': 'foobarbar'
+            'password': 'f00barbarbar',
+            'password_repeat': 'f00barbarbar'
         })
         self.assertEqual(response.status_code, 403)
 
@@ -376,8 +376,8 @@ class RegistrationFormTest(TestCase):
     def test_no_native_auth(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
-            'password': 'foobarbar',
-            'password_repeat': 'foobarbar'
+            'password': 'f00barbarbar',
+            'password_repeat': 'f00barbarbar'
         })
         self.assertEqual(response.status_code, 403)
 
@@ -593,8 +593,8 @@ class PasswordRecoveryFormTest(TestCase):
         response = self.client.post(
             '/control/forgot/recover?id=%d&token=foo' % self.user.id,
             {
-                'password': 'foobarbar',
-                'password_repeat': 'foobarbar'
+                'password': 'f00barbarbar',
+                'password_repeat': 'f00barbarbar'
             }
         )
         self.assertEqual(response.status_code, 302)
@@ -615,8 +615,8 @@ class PasswordRecoveryFormTest(TestCase):
         response = self.client.post(
             '/control/forgot/recover?id=%d&token=%s' % (self.user.id, token),
             {
-                'password': 'foobarbar',
-                'password_repeat': 'foobarbar'
+                'password': 'f00barbarbar',
+                'password_repeat': 'f00barbarbar'
             }
         )
         self.assertEqual(response.status_code, 302)
@@ -630,13 +630,13 @@ class PasswordRecoveryFormTest(TestCase):
         response = self.client.post(
             '/control/forgot/recover?id=%d&token=%s' % (self.user.id, token),
             {
-                'password': 'foobarbar',
-                'password_repeat': 'foobarbar'
+                'password': 'f00barbarbar',
+                'password_repeat': 'f00barbarbar'
             }
         )
         self.assertEqual(response.status_code, 302)
         self.user = User.objects.get(id=self.user.id)
-        self.assertTrue(self.user.check_password('foobarbar'))
+        self.assertTrue(self.user.check_password('f00barbarbar'))
 
     def test_recovery_valid_token_empty_passwords(self):
         token = default_token_generator.make_token(self.user)
@@ -645,7 +645,7 @@ class PasswordRecoveryFormTest(TestCase):
         response = self.client.post(
             '/control/forgot/recover?id=%d&token=%s' % (self.user.id, token),
             {
-                'password': 'foobarbar',
+                'password': 'f00barbarbar',
                 'password_repeat': ''
             }
         )
@@ -660,7 +660,7 @@ class PasswordRecoveryFormTest(TestCase):
             '/control/forgot/recover?id=%d&token=%s' % (self.user.id, token),
             {
                 'password': '',
-                'password_repeat': 'foobarbar'
+                'password_repeat': 'f00barbarbar'
             }
         )
         self.assertEqual(response.status_code, 200)
@@ -697,6 +697,48 @@ class PasswordRecoveryFormTest(TestCase):
         self.user = User.objects.get(id=self.user.id)
         self.assertTrue(self.user.check_password('demo'))
 
+    def test_recovery_valid_token_password_reuse(self):
+        self.user.set_password("GsvdU4gGZDb4J9WgIhLNcZT9PO7CZ3")
+        self.user.save()
+        self.user.set_password("hLPqPpuZIjouGBk9xTLu1aXYqjpRYS")
+        self.user.save()
+        self.user.set_password("Jn2nQSa25ZJAc5GUI1HblrneWCXotD")
+        self.user.save()
+        self.user.set_password("cboaBj3yIfgnQeKClDgvKNvWC69cV1")
+        self.user.save()
+        self.user.set_password("Kkj8f3kGXbXmbgcwHBgf3WKmzkUOhM")
+        self.user.save()
+
+        assert self.user.historic_passwords.count() == 4
+
+        token = default_token_generator.make_token(self.user)
+        response = self.client.get('/control/forgot/recover?id=%d&token=%s' % (self.user.id, token))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            '/control/forgot/recover?id=%d&token=%s' % (self.user.id, token),
+            {
+                'password': 'cboaBj3yIfgnQeKClDgvKNvWC69cV1',
+                'password_repeat': 'cboaBj3yIfgnQeKClDgvKNvWC69cV1'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.user = User.objects.get(id=self.user.id)
+        self.assertTrue(self.user.check_password('Kkj8f3kGXbXmbgcwHBgf3WKmzkUOhM'))
+
+        token = default_token_generator.make_token(self.user)
+        response = self.client.get('/control/forgot/recover?id=%d&token=%s' % (self.user.id, token))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            '/control/forgot/recover?id=%d&token=%s' % (self.user.id, token),
+            {
+                'password': 'GsvdU4gGZDb4J9WgIhLNcZT9PO7CZ3',
+                'password_repeat': 'GsvdU4gGZDb4J9WgIhLNcZT9PO7CZ3'
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        self.user = User.objects.get(id=self.user.id)
+        self.assertTrue(self.user.check_password('GsvdU4gGZDb4J9WgIhLNcZT9PO7CZ3'))
+
     def test_recovery_valid_token_short_passwords(self):
         token = default_token_generator.make_token(self.user)
         response = self.client.get('/control/forgot/recover?id=%d&token=%s' % (self.user.id, token))
@@ -704,8 +746,8 @@ class PasswordRecoveryFormTest(TestCase):
         response = self.client.post(
             '/control/forgot/recover?id=%d&token=%s' % (self.user.id, token),
             {
-                'password': 'foobar',
-                'password_repeat': 'foobar'
+                'password': 'foobarfooba',
+                'password_repeat': 'foobarfooba'
             }
         )
         self.assertEqual(response.status_code, 200)
