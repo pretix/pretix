@@ -40,8 +40,8 @@ from phonenumbers import SUPPORTED_REGIONS
 
 from pretix.base.forms.questions import guess_country
 from pretix.base.modelimport import (
-    DatetimeColumnMixin, DecimalColumnMixin, ImportColumn, SubeventColumnMixin,
-    i18n_flat,
+    BooleanColumnMixin, DatetimeColumnMixin, DecimalColumnMixin, ImportColumn,
+    SubeventColumnMixin, i18n_flat,
 )
 from pretix.base.models import (
     Customer, ItemVariation, OrderPosition, Question, QuestionAnswer,
@@ -604,6 +604,22 @@ class Comment(ImportColumn):
         order.comment = value or ''
 
 
+class CheckinAttentionColumn(BooleanColumnMixin, ImportColumn):
+    identifier = 'checkin_attention'
+    verbose_name = gettext_lazy('Requires special attention')
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        order.checkin_attention = value
+
+
+class CheckinTextColumn(ImportColumn):
+    identifier = 'checkin_text'
+    verbose_name = gettext_lazy('Check-in text')
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        order.checkin_text = value
+
+
 class QuestionColumn(ImportColumn):
     def __init__(self, event, q):
         self.q = q
@@ -742,6 +758,8 @@ def get_order_import_columns(event):
         ValidUntil(event),
         Locale(event),
         Saleschannel(event),
+        CheckinAttentionColumn(event),
+        CheckinTextColumn(event),
         Expires(event),
         Comment(event),
     ]
