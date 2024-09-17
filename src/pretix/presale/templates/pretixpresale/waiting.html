@@ -27,12 +27,14 @@
                 </div>
             </div>
             {% if steps %}
-                <p class="steps">
+                <ol class="steps">
                     {% for step in steps %}
-                        <span class="fa fa-fw {% if step.done %}fa-check text-success{% else %}fa-cog fa-spin text-muted{% endif %}"></span>
-                        {{ step.label }}<br>
+                        <li>
+                            <span class="fa fa-fw {% if step.done %}fa-check text-success{% else %}fa-cog fa-spin text-muted{% endif %}"></span>
+                            {{ step.label }}
+                        </li>
                     {% endfor %}
-                </p>
+                </ol>
             {% endif %}
         {% endif %}
 
