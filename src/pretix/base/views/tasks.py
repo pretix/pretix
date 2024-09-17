@@ -144,7 +144,12 @@ class AsyncMixin:
                     return self.success(res.info)
                 else:
                     return self.error(res.info)
-            return render(request, 'pretixpresale/waiting.html')
+            state, info = res.state, res.info
+            return render(request, 'pretixpresale/waiting.html', {
+                'started': state in ('PROGRESS', 'STARTED'),
+                'percentage': info.get('value', 0) if isinstance(info, dict) else 0,
+                'steps': info.get('steps', []) if isinstance(info, dict) else None,
+            })
 
     def success(self, value):
         smes = self.get_success_message(value)
