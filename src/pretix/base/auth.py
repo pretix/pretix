@@ -194,7 +194,7 @@ class HistoryPasswordValidator:
         if not user or not user.pk or not isinstance(user, User):
             return
 
-        for hp in user.historic_passwords.order_by("-created")[:4]:
+        for hp in user.historic_passwords.order_by("-created")[:self.history_length]:
             if check_password(password, hp.password):
                 raise ValidationError(
                     ngettext(
@@ -219,5 +219,5 @@ class HistoryPasswordValidator:
 
         user.historic_passwords.create(password=make_password(password))
         user.historic_passwords.filter(
-            pk__in=user.historic_passwords.order_by("-created")[4:].values_list("pk", flat=True),
+            pk__in=user.historic_passwords.order_by("-created")[self.history_length:].values_list("pk", flat=True),
         ).delete()
