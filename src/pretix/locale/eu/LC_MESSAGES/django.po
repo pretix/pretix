@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-06 19:00+0000\n"
+"PO-Revision-Date: 2024-09-18 14:02+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -10555,7 +10555,7 @@ msgstr ""
 "PUNTUEUS"
 
 #: pretix/base/settings.py:2212
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10577,7 +10577,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Agur bat,\n"
-"PUNTUEUS"
+"{event}eko lantaldea"
 
 #: pretix/base/settings.py:2229
 #, fuzzy, python-brace-format
@@ -14968,10 +14968,10 @@ msgstr ""
 #: pretix/control/forms/vouchers.py:273 pretix/control/forms/vouchers.py:272
 #, python-brace-format
 msgid "Your voucher for {event}"
-msgstr ""
+msgstr "{event}erako zure kupoia"
 
 #: pretix/control/forms/vouchers.py:279 pretix/control/forms/vouchers.py:278
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -14986,6 +14986,18 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Kaixo,\n"
+"\n"
+"Mezu honetan, {event}erako kupoi bat edo gehiago bidaltzen dizkizugu:\n"
+"\n"
+"{voucher_list}\n"
+"\n"
+"Kupoiak orrialde honetan erabil ditzakezu:\n"
+"\n"
+"{url}\n"
+"\n"
+"Agur bat,  \n"
+"PUNTUEUS"
 
 #: pretix/control/forms/vouchers.py:285
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:28
@@ -18221,6 +18233,9 @@ msgid ""
 "vouchers and might perform actual payments. The only difference is that you "
 "can delete test orders. Use at your own risk!"
 msgstr ""
+"Kontuan izan proba-eskaerek kuotetan kontatzen jarraitzen dutela, kupoiak "
+"erabiltzen dituztela eta ordainketak egin ditzaketela. Ezberdintasun bakarra "
+"da probako aginduak ezaba ditzakezula. Erabil itzazu zeure ardurapean!"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:108
 msgid ""
@@ -24071,6 +24086,9 @@ msgid ""
 "Vouchers allow you to assign tickets to specific persons for a lower price. "
 "They also enable you to reserve some quota for your very special guests."
 msgstr ""
+"Kupoiek aukera ematen diote pertsona jakin batzuei sarrerak prezio baxuagoan "
+"esleitzeko. Gonbidatu oso berezientzat kuotaren bat erreserbatzeko aukera "
+"ere ematen diote."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:67
 msgid "Your search did not match any vouchers."
