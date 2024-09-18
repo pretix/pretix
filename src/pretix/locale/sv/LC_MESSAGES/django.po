@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-16 10:52+0000\n"
+"PO-Revision-Date: 2024-09-18 14:02+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -1417,7 +1417,7 @@ msgstr "Organisationsnummer"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid "VAT ID"
-msgstr "Momsnr"
+msgstr "Organisationsnummer"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:216
@@ -1994,7 +1994,7 @@ msgstr "Sista betalningsdag"
 
 #: pretix/base/exporters/orderlist.py:270 pretix/base/services/stats.py:237
 msgid "Fees"
-msgstr "Avgifter"
+msgstr "Moms"
 
 #: pretix/base/exporters/orderlist.py:270
 #: pretix/base/exporters/orderlist.py:657 pretix/base/modelimport_orders.py:471
@@ -3023,13 +3023,11 @@ msgstr "Välj region"
 msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
-msgstr ""
-"Valfritt, men beroende på ditt bosättningsland kan vi behöva debitera "
-"ytterligare skatter om du inte anger det."
+msgstr "Vänligen ange"
 
 #: pretix/base/forms/questions.py:1048 pretix/base/forms/questions.py:1054
 msgid "If you are registered in Switzerland, you can enter your UID instead."
-msgstr "Om du är registrerad i Schweiz kan du ange ditt UID istället."
+msgstr "."
 
 #: pretix/base/forms/questions.py:1052
 msgid ""
@@ -3243,7 +3241,7 @@ msgstr "Kundreferens: {reference}"
 #: pretix/base/invoice.py:568
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Kundens moms-ID"
+msgstr "Kundens organisationsnummer"
 
 #: pretix/base/invoice.py:575
 msgctxt "invoice"
@@ -3253,7 +3251,7 @@ msgstr "Förmånstagare"
 #: pretix/base/invoice.py:596
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "Moms Faktura"
+msgstr "Moms fakturan"
 
 #: pretix/base/invoice.py:597
 msgctxt "invoice"
@@ -4533,7 +4531,7 @@ msgstr "skatt-ID: %s"
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr "moms-ID: %s"
+msgstr "Moms-ID: %s"
 
 #: pretix/base/models/items.py:94
 msgid "Category name"
@@ -8912,7 +8910,7 @@ msgstr ""
 
 #: pretix/base/settings.py:589
 msgid "Ask for VAT ID"
-msgstr "Fråga efter momsregistreringsnummer"
+msgstr "Fråga efter organisationsnummer"
 
 #: pretix/base/settings.py:591
 #, python-brace-format
@@ -12987,7 +12985,7 @@ msgstr "Företag"
 
 #: pretix/control/forms/event.py:1480
 msgid "Business with valid VAT ID"
-msgstr "Företag med giltigt momsregistreringsnummer"
+msgstr "Företag med giltigt organisationsnummer"
 
 #: pretix/control/forms/event.py:1486
 msgid "Charge VAT"
@@ -20400,7 +20398,7 @@ msgstr "Utsålt"
 #: pretix/control/templates/pretixcontrol/order/index.html:18
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:7
 msgid "taxes"
-msgstr "avgifter"
+msgstr "moms"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:10
 msgid ""
@@ -21482,7 +21480,7 @@ msgstr "OSÄKER"
 #: pretix/control/templates/pretixcontrol/order/index.html:693
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:437
 msgid "Taxes"
-msgstr "Avgifter"
+msgstr "Moms"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:702
 #: pretix/control/templates/pretixcontrol/orders/overview.html:89
@@ -21578,7 +21576,7 @@ msgstr "Postkod och stad"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:970
 msgid "Valid EU VAT ID"
-msgstr "Giltigt EU MOMS-ID"
+msgstr "Giltigt organisationsnummer"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:976
 msgid "Check"
@@ -26317,7 +26315,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1609 pretix/control/views/orders.py:1613
 msgid "No VAT ID specified."
-msgstr "Inget momsregistreringsnummer (VAT ID) angivet."
+msgstr "Inget organisationsnummer angivet."
 
 #: pretix/control/views/orders.py:1617
 msgid "No country specified."
@@ -26326,20 +26324,19 @@ msgstr "Inget land angivet."
 #: pretix/control/views/orders.py:1621
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
-"Momsregistreringsnumret (VAT ID) kunde inte kontrolleras eftersom detta land "
-"inte stöds."
+"Organisationsnummer  kunde inte kontrolleras eftersom detta land inte stöds."
 
 #: pretix/control/views/orders.py:1632
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
-"Momsregistreringsnumret (VAT ID) kunde inte kontrolleras eftersom moms "
-"kontrolltjänsten för landet för tillfället inte är tillgänglig."
+"Organisationsnummer kunde inte kontrolleras eftersom moms kontrolltjänsten "
+"för landet för tillfället inte är tillgänglig."
 
 #: pretix/control/views/orders.py:1635
 msgid "This VAT ID is valid."
-msgstr "Det här momsregistreringsnumret (VAT ID) är giltigt."
+msgstr "Det här organisationsnumret är giltigt."
 
 #: pretix/control/views/orders.py:1649 pretix/control/views/orders.py:1682
 msgid "Unknown invoice."
@@ -30621,9 +30618,7 @@ msgstr "TWINT via Stripe"
 msgid ""
 "This payment method is available to users of the Swiss app TWINT. Please "
 "have your app ready."
-msgstr ""
-"Denna betalningsmetod är tillgänglig för användare av den schweiziska appen "
-"TWINT. Vänligen ha din app redo."
+msgstr "."
 
 #: pretix/plugins/stripe/signals.py:92
 msgid "Charge succeeded."
@@ -31361,7 +31356,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:199
 #: pretix/presale/templates/pretixpresale/event/voucher.html:353
 msgid "plus taxes"
-msgstr "exkl. avgifter"
+msgstr "exkl. moms"
 
 #: pretix/presale/forms/order.py:132
 msgid "No other variation of this product is currently available for you."
