@@ -76,7 +76,7 @@ def quota(event, item):
 
 
 @pytest.fixture
-def order(event, item, taxrule, question):
+def order(event, item, device, taxrule, question):
     testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
     event.plugins += ",pretix.plugins.stripe"
     event.save()
@@ -136,6 +136,13 @@ def order(event, item, taxrule, question):
             pseudonymization_id="JKLM",
             canceled=True,
             positionid=2,
+        )
+        op.print_logs.create(
+            device=device,
+            type="badge",
+            source="pretixpos",
+            info={"cashier": 1234},
+            datetime=datetime.datetime(2017, 12, 1, 12, 0, 0, tzinfo=datetime.timezone.utc),
         )
         op.answers.create(question=question, answer='S')
         return o
@@ -200,6 +207,18 @@ TEST_ORDERPOSITION_RES = {
     "addon_to": None,
     "pseudonymization_id": "ABCDEFGHKL",
     "checkins": [],
+    "print_logs": [
+        {
+            "id": -1,
+            "device_id": -1,
+            "datetime": "2017-12-01T12:00:00Z",
+            "source": "pretixpos",
+            "type": "badge",
+            "info": {
+                "cashier": 1234
+            },
+        }
+    ],
     "downloads": [],
     "seat": None,
     "company": None,
@@ -321,7 +340,7 @@ TEST_ORDER_RES = {
 
 
 @pytest.mark.django_db
-def test_order_list_filter_subevent_date(token_client, organizer, event, order, item, taxrule, subevent, question):
+def test_order_list_filter_subevent_date(token_client, device, organizer, event, order, item, taxrule, subevent, question):
     res = copy.deepcopy(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
@@ -329,6 +348,9 @@ def test_order_list_filter_subevent_date(token_client, organizer, event, order, 
         p.subevent = subevent
         p.save()
         fee = order.fees.first()
+        pl = p.print_logs.first()
+    res["positions"][0]["print_logs"][0]["id"] = pl.pk
+    res["positions"][0]["print_logs"][0]["device_id"] = device.device_id
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["subevent"] = subevent.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
@@ -379,11 +401,13 @@ def test_order_list_filter_subevent_date(token_client, organizer, event, order, 
 
 
 @pytest.mark.django_db
-def test_order_list(token_client, organizer, event, order, item, taxrule, question):
+def test_order_list(token_client, organizer, event, order, item, taxrule, question, device):
     res = dict(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
         res["fees"][0]["id"] = order.fees.first().pk
+        res["positions"][0]["print_logs"][0]["id"] = order.positions.first().print_logs.first().pk
+        res["positions"][0]["print_logs"][0]["device_id"] = device.device_id
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
@@ -968,12 +992,14 @@ def test_orderposition_list(token_client, organizer, device, event, order, item,
         var2 = item.variations.create(value="Children")
         res = copy.copy(TEST_ORDERPOSITION_RES)
         op = order.positions.first()
-    op.variation = var
-    op.save()
-    res["id"] = op.pk
-    res["item"] = item.pk
-    res["variation"] = var.pk
-    res["answers"][0]["question"] = question.pk
+        op.variation = var
+        op.save()
+        res["id"] = op.pk
+        res["item"] = item.pk
+        res["variation"] = var.pk
+        res["answers"][0]["question"] = question.pk
+        res["print_logs"][0]["id"] = op.print_logs.first().pk
+        res["print_logs"][0]["device_id"] = device.device_id
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -1072,7 +1098,7 @@ def test_orderposition_list(token_client, organizer, device, event, order, item,
         'gate': None,
         'type': 'entry'
     }]
-    with django_assert_num_queries(15):
+    with django_assert_num_queries(16):
         resp = token_client.get(
             '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug)
         )
@@ -1169,6 +1195,30 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
         assert order.all_positions.count() == 3
     order.refresh_from_db()
     assert order.total == Decimal('23.25')
+
+
+@pytest.mark.django_db
+def test_orderposition_printlog(token_client, team, organizer, event, order, item, question):
+    with scopes_disabled():
+        op = order.positions.first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orderpositions/{}/printlog/'.format(
+        organizer.slug, event.slug, op.pk
+    ), data={
+        "datetime": "2023-09-04T12:23:45+02:00",
+        "source": "pretixscan",
+        "type": "badge",
+        "info": {
+            "cashier": 1234,
+        }
+    }, format='json')
+    assert resp.status_code == 201
+
+    with scopes_disabled():
+        l = op.print_logs.get(source="pretixscan")
+        assert l.type == "badge"
+        assert l.info == {"cashier": 1234}
+        assert l.api_token.team == team
+        assert l.datetime.isoformat() == "2023-09-04T10:23:45+00:00"
 
 
 @pytest.mark.django_db
@@ -1920,7 +1970,7 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     assert not resp.data['positions'][0].get('pdf_data')
 
     # order list
-    with django_assert_max_num_queries(30):
+    with django_assert_max_num_queries(31):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
@@ -1935,7 +1985,7 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     assert not resp.data['results'][0]['positions'][0].get('pdf_data')
 
     # position list
-    with django_assert_max_num_queries(33):
+    with django_assert_max_num_queries(34):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))

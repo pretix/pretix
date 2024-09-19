@@ -42,6 +42,7 @@ from pretix.base.models import (
     Checkin, GiftCard, GiftCardAcceptance, GiftCardTransaction, OrderPosition,
     ReusableMedium,
 )
+from pretix.base.models.orders import PrintLog
 from pretix.helpers import OF_SELF
 from pretix.helpers.dicts import merge_dicts
 
@@ -79,6 +80,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
                     'order', 'order__event', 'order__event__organizer', 'seat',
                 ).prefetch_related(
                     Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
+                    Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                     'answers', 'answers__options', 'answers__question',
                 )
             ),

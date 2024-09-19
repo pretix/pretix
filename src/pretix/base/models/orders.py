@@ -3391,6 +3391,71 @@ class BlockedTicketSecret(models.Model):
         unique_together = (('event', 'secret'),)
 
 
+class PrintLog(models.Model):
+    """
+    A print log object is created when a ticket or badge is printed with our apps.
+    """
+    TYPE_BADGE = 'badge'
+    TYPE_TICKET = 'ticket'
+    TYPE_CERTIFICATE = 'certificate'
+    TYPE_OTHER = 'other'
+    PRINT_TYPES = (
+        (TYPE_BADGE, _('Badge')),
+        (TYPE_TICKET, _('Ticket')),
+        (TYPE_CERTIFICATE, _('Certificate')),
+        (TYPE_OTHER, _('Other')),
+    )
+
+    position = models.ForeignKey(
+        'pretixbase.OrderPosition',
+        related_name='print_logs',
+        on_delete=models.CASCADE,
+    )
+
+    # Datetime of checkin, might be different from created if past scans are uploaded
+    datetime = models.DateTimeField(default=now)
+
+    # Datetime of creation on server
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    # Who printed?
+    device = models.ForeignKey('Device', related_name='print_logs', null=True, blank=True, on_delete=models.PROTECT)
+    user = models.ForeignKey('User', related_name='print_logs', null=True, blank=True, on_delete=models.PROTECT)
+    api_token = models.ForeignKey('TeamAPIToken', null=True, blank=True, on_delete=models.PROTECT)
+    oauth_application = models.ForeignKey('pretixapi.OAuthApplication', null=True, blank=True, on_delete=models.PROTECT)
+
+    # Source = Tag field with undefined values, e.g. name of app ("pretixscan")
+    source = models.CharField(max_length=255)
+
+    # Type = Type of object printed ("badge", "ticket")
+    type = models.CharField(max_length=255, choices=PRINT_TYPES)
+
+    info = models.JSONField(default=dict)
+
+    objects = ScopedManager(organizer='position__order__event__organizer')
+
+    class Meta:
+        ordering = (('-datetime'),)
+
+    def __repr__(self):
+        return "<PrintLog: pos {} at {} from {}>".format(
+            self.position, self.datetime, self.source
+        )
+
+    def save(self, **kwargs):
+        super().save(**kwargs)
+        if self.position:
+            self.position.order.touch()
+
+    def delete(self, **kwargs):
+        super().delete(**kwargs)
+        self.position.order.touch()
+
+    @property
+    def is_late_upload(self):
+        return self.created and abs(self.created - self.datetime) > timedelta(minutes=2)
+
+
 @receiver(post_delete, sender=CachedTicket)
 def cachedticket_delete(sender, instance, **kwargs):
     if instance.file:

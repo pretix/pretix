@@ -206,6 +206,13 @@ checkins                              list of objects            List of **succe
 ├ device                              integer                    Internal ID of the device. Can be ``null``. **Deprecated**, since this ID is not otherwise used in the API and is therefore not very useful.
 ├ device_id                           integer                    Attribute ``device_id`` of the device. Can be ``null``.
 └ auto_checked_in                     boolean                    Indicates if this check-in been performed automatically by the system
+print_logs                            list of objects            List of print jobs recorded e.g. by the pretix apps
+├ id                                  integer                    Internal ID of the print job
+├ device_id                           integer                    Attribute ``device_id`` of the device that recorded the print. Can be ``null``.
+├ datetime                            datetime                   Time of printing
+├ source                              string                     Source of print job, e.g. name of the app used.
+├ type                                string                     Type of print (currently ``badge``, ``ticket``, ``certificate``, or ``other``)
+└ info                                object                     Additional data with client-dependent structure.
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
@@ -232,6 +239,10 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 4.16
 
    The attributes ``blocked``, ``valid_from`` and ``valid_until`` have been added.
+
+.. versionchanged:: 2024.9
+
+   The attribute ``print_logs`` has been added.
 
 .. _order-payment-resource:
 
@@ -399,8 +410,19 @@ List of all orders
                     "type": "entry",
                     "gate": null,
                     "device": 2,
+                    "device_id": 1,
                     "datetime": "2017-12-25T12:45:23Z",
                     "auto_checked_in": false
+                  }
+                ],
+                "print_logs": [
+                  {
+                    "id": 1,
+                    "type": "badge",
+                    "datetime": "2017-12-25T12:45:23Z",
+                    "device_id": 1,
+                    "source": "pretixSCAN",
+                    "info": {}
                   }
                 ],
                 "answers": [
@@ -626,8 +648,19 @@ Fetching individual orders
                 "type": "entry",
                 "gate": null,
                 "device": 2,
+                "device_id": 1,
                 "datetime": "2017-12-25T12:45:23Z",
                 "auto_checked_in": false
+              }
+            ],
+            "print_logs": [
+              {
+                "id": 1,
+                "type": "badge",
+                "datetime": "2017-12-25T12:45:23Z",
+                "device_id": 1,
+                "source": "pretixSCAN",
+                "info": {}
               }
             ],
             "answers": [
@@ -1581,8 +1614,19 @@ List of all order positions
                 "type": "entry",
                 "gate": null,
                 "device": 2,
+                "device_id": 1,
                 "datetime": "2017-12-25T12:45:23Z",
                 "auto_checked_in": false
+              }
+            ],
+            "print_logs": [
+              {
+                "id": 1,
+                "type": "badge",
+                "datetime": "2017-12-25T12:45:23Z",
+                "device_id": 1,
+                "source": "pretixSCAN",
+                "info": {}
               }
             ],
             "answers": [
@@ -1695,8 +1739,19 @@ Fetching individual positions
             "type": "entry",
             "gate": null,
             "device": 2,
+            "device_id": 1,
             "datetime": "2017-12-25T12:45:23Z",
             "auto_checked_in": false
+          }
+        ],
+        "print_logs": [
+          {
+            "id": 1,
+            "type": "badge",
+            "datetime": "2017-12-25T12:45:23Z",
+            "device_id": 1,
+            "source": "pretixSCAN",
+            "info": {}
           }
         ],
         "answers": [
@@ -1794,6 +1849,10 @@ Manipulating individual positions
 .. versionadded:: 4.16
 
    The endpoints to manage blocks have been added.
+
+.. versionchanged:: 2024.9
+
+   The API now supports logging ticket and badge prints.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 
@@ -2053,6 +2112,59 @@ Manipulating individual positions
    :statuscode 400: The order position could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/printlog/
+
+   Creates a print log, stating that this ticket has been printed.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/printlog/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+     {
+       "datetime": "2024-09-19T13:37:00+02:00",
+       "source": "pretixPOS",
+       "type": "badge",
+       "info": {
+         "cashier": 1234
+       }
+     }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/pdf
+
+     {
+       "id": 1234,
+       "device_id": null,
+       "datetime": "2024-09-19T13:37:00+02:00",
+       "source": "pretixPOS",
+       "type": "badge",
+       "info": {
+         "cashier": 1234
+       }
+     }
+
+   :param organizer: The ``slug`` field of the organizer to create a log for
+   :param event: The ``slug`` field of the event to create a log for
+   :param id: The ``id`` field of the order position to create a log for
+   :statuscode 201: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource
+                    **or** downloads are not available for this order position at this time. The response content will
+                    contain more details.
+   :statuscode 404: The requested order position or download provider does not exist.
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
+                    seconds.
 
 Changing order contents
 -----------------------

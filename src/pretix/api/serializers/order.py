@@ -55,7 +55,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
-    RevokedTicketSecret,
+    PrintLog, RevokedTicketSecret,
 )
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
@@ -284,6 +284,25 @@ class CheckinSerializer(I18nAwareModelSerializer):
         fields = ('id', 'datetime', 'list', 'auto_checked_in', 'gate', 'device', 'device_id', 'type')
 
 
+class PrintLogSerializer(serializers.ModelSerializer):
+    device_id = serializers.SlugRelatedField(
+        source='device',
+        slug_field='device_id',
+        read_only=True,
+    )
+
+    class Meta:
+        model = PrintLog
+        fields = (
+            "id",
+            "datetime",
+            "source",
+            "type",
+            "device_id",
+            "info",
+        )
+
+
 class FailedCheckinSerializer(I18nAwareModelSerializer):
     error_reason = serializers.ChoiceField(choices=Checkin.REASONS, required=True, allow_null=False)
     raw_barcode = serializers.CharField(required=True, allow_null=False)
@@ -476,6 +495,7 @@ class OrderPositionListSerializer(serializers.ListSerializer):
 
 class OrderPositionSerializer(I18nAwareModelSerializer):
     checkins = CheckinSerializer(many=True, read_only=True)
+    print_logs = PrintLogSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True)
     downloads = PositionDownloadsField(source='*', read_only=True)
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
@@ -490,7 +510,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
+                  'print_logs', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
                   'valid_from', 'valid_until', 'blocked', 'voucher_budget_use')
         read_only_fields = (
             'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
@@ -577,9 +597,9 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'require_attention',
-                  'order__status', 'order__valid_if_pending', 'order__require_approval', 'valid_from', 'valid_until',
-                  'blocked')
+                  'print_logs', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat',
+                  'require_attention', 'order__status', 'order__valid_if_pending', 'order__require_approval',
+                  'valid_from', 'valid_until', 'blocked')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1494,6 +1514,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos.answers = answers
                 pos.pseudonymization_id = "PREVIEW"
                 pos.checkins = []
+                pos.print_logs = []
                 pos_map[pos.positionid] = pos
             else:
                 if pos.voucher:

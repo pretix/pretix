@@ -155,6 +155,7 @@ def test_giftcard_detail_expand(token_client, organizer, event, giftcard):
         "addon_to": None,
         "subevent": None,
         "checkins": [],
+        "print_logs": [],
         "downloads": [],
         "answers": [],
         "tax_rule": None,
