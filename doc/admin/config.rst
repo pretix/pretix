@@ -294,6 +294,10 @@ Example::
     setting is not provided, pretix will generate a random secret on the first start
     and will store it in the filesystem for later usage.
 
+``secret_fallback0`` ... ``secret_fallback9``
+    Prior versions of the secret to be used by Django for signing and verification purposes that will still
+    be accepted but no longer be used for new signing.
+
 ``debug``
     Whether or not to run in debug mode. Default is ``False``.
 

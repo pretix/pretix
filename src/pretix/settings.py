@@ -94,6 +94,13 @@ else:
                 pass  # os.chown is not available on Windows
             f.write(SECRET_KEY)
 
+
+SECRET_KEY_FALLBACKS = []
+for i in range(10):
+    if config.has_option('django', f'secret_fallback{i}'):
+        SECRET_KEY_FALLBACKS.append(config.get('django', f'secret_fallback{i}'))
+
+
 # Adjustable settings
 
 debug_fallback = "runserver" in sys.argv or "runserver_plus" in sys.argv
