@@ -42,37 +42,13 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.logentrytypes import log_entry_types
+from pretix.base.logentrytypes import log_entry_types, make_link
 from pretix.base.signals import is_app_active, logentry_object_link
 
 
 class VisibleOnlyManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(visible=True)
-
-
-def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
-    if a_map:
-        if is_active:
-            a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
-        elif event and plugin_name:
-            a_map['val'] = (
-                '<i>{val}</i> <a href="{plugin_href}">'
-                '<span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span></a>'
-            ).format_map({
-                **a_map,
-                "errmes": _("The relevant plugin is currently not active. To activate it, click here to go to the plugin settings."),
-                "plugin_href": reverse('control:event.settings.plugins', kwargs={
-                    'organizer': event.organizer.slug,
-                    'event': event.slug,
-                }) + '#plugin_' + plugin_name,
-            })
-        else:
-            a_map['val'] = '<i>{val}</i> <span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span>'.format_map({
-                **a_map,
-                "errmes": _("The relevant plugin is currently not active."),
-            })
-        return wrapper.format_map(a_map)
 
 
 class LogEntry(models.Model):
