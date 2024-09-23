@@ -381,8 +381,23 @@ class Order(LockModel, LoggedModel):
         self.event.cache.delete('complain_testmode_orders')
         self.delete()
 
-    def email_confirm_hash(self):
-        return hashlib.sha256(settings.SECRET_KEY.encode() + self.secret.encode()).hexdigest()[:9]
+    def email_confirm_secret(self):
+        return self.tagged_secret("email_confirm", 9)
+
+    def check_email_confirm_secret(self, received_secret):
+        return (
+            hmac.compare_digest(
+                self.tagged_secret("email_confirm", 9),
+                received_secret[:9].lower()
+            ) or any(
+                # TODO: remove this clause after a while (compatibility with old secrets currently in flight)
+                hmac.compare_digest(
+                    hashlib.sha256(sk.encode() + self.secret.encode()).hexdigest()[:9],
+                    received_secret
+                )
+                for sk in [settings.SECRET_KEY, *settings.SECRET_KEY_FALLBACKS]
+            )
+        )
 
     def get_extended_status_display(self):
         # Changes in this method should to be replicated in pretixcontrol/orders/fragment_order_status.html
