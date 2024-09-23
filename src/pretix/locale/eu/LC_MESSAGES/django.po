@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-09-18 14:02+0000\n"
+"PO-Revision-Date: 2024-09-23 18:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
 ">\n"
@@ -3044,7 +3044,8 @@ msgstr "Gure sistemak ez du ezagutzen kredentzialen konbinazio hori."
 #: pretix/presale/forms/customer.py:366 pretix/presale/forms/customer.py:438
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
-"Segurtasun-arrazoiak direla eta, itxaron 5 minutu berriro saiatu baino lehen."
+"Segurtasun arrazoiengatik, mesedez itxaron 5 minutu berriro saiatu baino "
+"lehen."
 
 #: pretix/base/forms/auth.py:67 pretix/base/forms/auth.py:273
 msgid "This account is inactive."
@@ -30526,7 +30527,7 @@ msgstr "Ekitaldiaren antolatzailearekin harremanetan jarri"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:129
 #: pretix/presale/templates/pretixpresale/organizers/base.html:100
 msgid "Privacy policy"
-msgstr "Pribatutasun politika"
+msgstr "Pribatutasun-politika"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:224
 #: pretix/presale/templates/pretixpresale/organizers/base.html:103
