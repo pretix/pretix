@@ -2836,12 +2836,12 @@ class OrderPosition(AbstractPosition):
         )
 
     @property
-    def full_code(self):
+    def code(self):
         """
         A ticket code which is unique among all events of a single organizer,
-        built by concatenating the event slug and the order code.
+        built by the order code and the position number.
         """
-        return '{order}-{position}'.format(order=self.order.full_code, position=self.positionid)
+        return '{order_code}-{position}'.format(order_code=self.order.code, position=self.positionid)
 
 
 class Transaction(models.Model):
