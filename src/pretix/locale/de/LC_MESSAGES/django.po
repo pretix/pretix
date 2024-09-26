@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-26 11:22+0000\n"
-"PO-Revision-Date: 2024-09-13 21:00+0000\n"
-"Last-Translator: Wikinaut <mail@tgries.de>\n"
+"PO-Revision-Date: 2024-09-26 11:52+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.7.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:79
@@ -35,7 +35,7 @@ msgstr "Arabisch"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "Baskisch"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
@@ -651,7 +651,7 @@ msgstr "Passwort"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "Ihr Passwort muss sowohl Zahlen als auch Buchstaben enthalten."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -659,8 +659,10 @@ msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "Ihr Passwort darf nicht das selbe wie Ihr vorheriges sein."
 msgstr[1] ""
+"Das Passwort darf nicht das selbe wie eines Ihrer vorherigen "
+"%(history_length)s Passwörter sein."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -741,6 +743,8 @@ msgid ""
 "No supported Token Endpoint Auth Methods supported: "
 "{token_endpoint_auth_methods_supported}"
 msgstr ""
+"Keine unterstützte Authentifizierungsmethode für den Token-Endpunkt gefunden:"
+" {token_endpoint_auth_methods_supported}"
 
 #: pretix/base/customersso/oidc.py:203 pretix/base/customersso/oidc.py:210
 #: pretix/base/customersso/oidc.py:229 pretix/base/customersso/oidc.py:246
@@ -6213,10 +6217,13 @@ msgid ""
 "business customers in other EU countries in a way that works for all "
 "organizers. Use custom rules instead."
 msgstr ""
+"Diese Funktion wird in Zukunft entfernt, da sie die Mehrwertsteuer für "
+"Privatkunden in anderen EU-Ländern auf eine Weise behandelt, die nicht für "
+"alle Veranstalter passt. Bitte nutzen Sie stattdessen eigene Regeln."
 
 #: pretix/base/models/tax.py:204
 msgid "DEPRECATED"
-msgstr ""
+msgstr "ABGEKÜNDIGT"
 
 #: pretix/base/models/tax.py:205
 msgid ""
@@ -9634,20 +9641,15 @@ msgid "Show event times and dates on the ticket shop"
 msgstr "Zeige Event-Uhrzeit und -Datum im Ticketshop an"
 
 #: pretix/base/settings.py:1297
-#, fuzzy
-#| msgid ""
-#| "If disabled, no date or time will be shown on the ticket shop's front "
-#| "page. This settings does however not affect the display in other "
-#| "locations."
 msgid ""
 "If disabled, no date or time will be shown on the ticket shop's front page. "
 "This settings also affects a few other locations, however it should not be "
 "expected that the date of the event is shown nowhere to users."
 msgstr ""
 "Wenn diese Option deaktiviert ist, werden Datum und Uhrzeit der "
-"Veranstaltung auf der Startseite des Shops nicht angezeigt. An anderen "
-"Orten, z.B. in der Liste der Veranstaltungen, werden diese ggf. trotzdem "
-"weiter angezeigt."
+"Veranstaltung auf der Startseite des Shops und an einigen anderen Orten "
+"nicht angezeigt. An anderen Orten, z.B. in der Liste der Veranstaltungen, "
+"werden diese ggf. trotzdem weiter angezeigt."
 
 #: pretix/base/settings.py:1308
 msgid "Show event end date"
@@ -13134,16 +13136,12 @@ msgid "Subject (if order will not expire automatically)"
 msgstr "Betreff (wenn Bestellung nicht automatisch abläuft)"
 
 #: pretix/control/forms/event.py:1146
-#, fuzzy
-#| msgid "Incomplete payment received: {code}"
 msgid "Subject (if an incomplete payment was received)"
-msgstr "Unvollständige Zahlung erhalten: {code}"
+msgstr "Betreff (wenn eine unvollständige Zahlung erhalten wurde)"
 
 #: pretix/control/forms/event.py:1151
-#, fuzzy
-#| msgid "Incomplete payment received: {code}"
 msgid "Text (if an incomplete payment was received)"
-msgstr "Unvollständige Zahlung erhalten: {code}"
+msgstr "Text (wenn eine unvollständige Zahlung erhalten wurde)"
 
 #: pretix/control/forms/event.py:1154
 msgid ""
@@ -19506,10 +19504,8 @@ msgstr ""
 "Steuerberater oder Anwalt."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
-#, fuzzy
-#| msgid "Customers"
 msgid "Custom rules"
-msgstr "Kunden"
+msgstr "Eigene Regeln"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:46
 msgid ""
@@ -26962,6 +26958,8 @@ msgid ""
 "The team could not be deleted because the team or one of its API tokens is "
 "part of historical audit logs."
 msgstr ""
+"Dieses Team kann nicht gelöscht werden, da einer der verbunden API-Token "
+"Teil der Systemprotokolle ist."
 
 #: pretix/control/views/organizer.py:703
 msgid ""
