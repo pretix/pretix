@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         (
             "pretixbase",
-            "0268_remove_subevent_items_remove_subevent_variations_and_more",
+            "0270_historicpassword",
         ),
     ]
 
