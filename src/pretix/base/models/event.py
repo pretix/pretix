@@ -313,38 +313,9 @@ class EventMixin:
             items=GroupConcat('pk', delimiter=',')
         ).values('items')
 
-        q_variation = (
-            Q(active=True)
-            & Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()))
-            & Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()))
-            & Q(item__active=True)
-            & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=time_machine_now()))
-            & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=time_machine_now()))
-            & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
-            & Q(item__require_bundling=False)
-            & Q(quotas__pk=OuterRef('pk'))
-        )
-
-        if isinstance(channel, str):
-            q_variation &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
-            q_variation &= Q(Q(item__all_sales_channels=True) | Q(item__limit_sales_channels__identifier=channel))
-        else:
-            q_variation &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels=channel))
-            q_variation &= Q(Q(item__all_sales_channels=True) | Q(item__limit_sales_channels=channel))
-
-        if voucher:
-            if voucher.variation_id:
-                q_variation &= Q(pk=voucher.variation_id)
-            elif voucher.item_id:
-                q_variation &= Q(item_id=voucher.item_id)
-            elif voucher.quota_id:
-                q_variation &= Q(quotas__in=[voucher.quota_id])
-
-        if not voucher or not voucher.show_hidden_items:
-            q_variation &= Q(hide_without_voucher=False)
-            q_variation &= Q(item__hide_without_voucher=False)
-
-        sq_active_variation = ItemVariation.objects.filter(q_variation).order_by().values_list('quotas__pk').annotate(
+        sq_active_variation = ItemVariation.objects.filter_available(channel=channel, voucher=voucher).filter(
+            Q(quotas__pk=OuterRef('pk'))
+        ).order_by().values_list('quotas__pk').annotate(
             items=GroupConcat('pk', delimiter=',')
         ).values('items')
         quota_base_qs = Quota.objects.using(settings.DATABASE_REPLICA).filter(

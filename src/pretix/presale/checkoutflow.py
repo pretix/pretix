@@ -56,7 +56,7 @@ from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Customer, Membership, Order
-from pretix.base.models.items import Question
+from pretix.base.models.items import ItemAddOn, ItemVariation, Question
 from pretix.base.models.orders import (
     InvoiceAddress, OrderPayment, QuestionAnswer,
 )
@@ -486,9 +486,33 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     label = pgettext_lazy('checkoutflow', 'Add-on products')
     icon = 'puzzle-piece'
 
+    def _is_applicable(self, request):
+        categories = set(ItemAddOn.objects.filter(
+            base_item_id__in=get_cart(request).values_list("item_id", flat=True)
+        ).values_list("addon_category_id", flat=True))
+        if not categories:
+            return False
+
+        has_available_addons = (
+            self.event.items.filter_available(
+                channel=request.sales_channel,
+                allow_addons=True
+            ).filter(
+                variations__isnull=True,
+                category__in=categories,
+            ).exists() or ItemVariation.objects.filter_available(
+                channel=request.sales_channel,
+                allow_addons=True
+            ).filter(
+                item__event=self.event,
+                item__category__in=categories,
+            )
+        )
+        return has_available_addons
+
     def is_applicable(self, request):
         if not hasattr(request, '_checkoutflow_addons_applicable'):
-            request._checkoutflow_addons_applicable = get_cart(request).filter(item__addons__isnull=False).exists()
+            request._checkoutflow_addons_applicable = self._is_applicable(request)
         return request._checkoutflow_addons_applicable
 
     def is_completed(self, request, warn=False):
