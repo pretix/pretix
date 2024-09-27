@@ -8,7 +8,7 @@ import pretix.base.models.orders
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0269_order_api_meta"),
+        ("pretixbase", "0270_historicpassword"),
     ]
 
     operations = [
