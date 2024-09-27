@@ -31,6 +31,8 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+from datetime import datetime
+
 from django.db.models import Exists, OuterRef, Q
 from i18nfield.strings import LazyI18nString
 
@@ -45,6 +47,7 @@ from pretix.helpers.format import format_map
 
 @app.task(base=ProfiledEventTask, acks_late=True)
 def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, objects: list, items: list,
+                         subevent: int, subevents_from: datetime, subevents_to: datetime,
                          recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list,
                          attachments: list = None, attach_tickets: bool = False,
                          attach_ical: bool = False) -> None:
@@ -76,7 +79,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                         list_id__in=checkin_lists or []
                     )
                 ),
-            ).prefetch_related('addons'):
+            ).prefetch_related('addons', 'subevent'):
                 if p.addon_to_id is not None:
                     continue
 
@@ -97,6 +100,15 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     continue
 
                 if p.attendee_email == o.email and send_to_order:
+                    continue
+
+                if subevent and p.subevent_id != subevent:
+                    continue
+
+                if subevents_from and p.subevent.date_from < subevents_from:
+                    continue
+
+                if subevents_to and p.subevent.date_from >= subevents_to:
                     continue
 
                 try:

@@ -2835,6 +2835,14 @@ class OrderPosition(AbstractPosition):
             (self.order.event.settings.change_allow_user_addons and ItemAddOn.objects.filter(base_item_id__in=[op.item_id for op in positions]).exists())
         )
 
+    @property
+    def code(self):
+        """
+        A ticket code which is unique among all events of a single organizer,
+        built by the order code and the position number.
+        """
+        return '{order_code}-{position}'.format(order_code=self.order.code, position=self.positionid)
+
 
 class Transaction(models.Model):
     """

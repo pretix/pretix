@@ -982,6 +982,11 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
     def get_error_url(self):
         return self.get_order_url()
 
+    def get(self, request, *args, **kwargs):
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        return super().get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))

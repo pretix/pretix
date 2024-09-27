@@ -50,6 +50,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--tasks', action='store', type=str, help='Only execute the tasks with this name '
                                                                       '(dotted path, comma separation)')
+        parser.add_argument('--list-tasks', action='store_true', help='Only list all tasks')
         parser.add_argument('--exclude', action='store', type=str, help='Exclude the tasks with this name '
                                                                         '(dotted path, comma separation)')
 
@@ -61,6 +62,9 @@ class Command(BaseCommand):
 
         for receiver in periodic_task._live_receivers(self):
             name = f'{receiver.__module__}.{receiver.__name__}'
+            if options['list_tasks']:
+                print(name)
+                continue
             if options.get('tasks'):
                 if name not in options.get('tasks').split(','):
                     continue

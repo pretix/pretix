@@ -407,6 +407,79 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
 
 
 @pytest.mark.django_db
+def test_sendmail_attendee_subevent_filter(logged_in_client, sendmail_url, event, item, order, pos):
+    event.settings.attendee_emails_asked = True
+    event.has_subevents = True
+    event.save()
+    with scopes_disabled():
+        se1 = event.subevents.create(name='Subevent FOO', date_from=now())
+        se2 = event.subevents.create(name='Bar', date_from=now())
+        pos.attendee_email = 'attendee1@dummy.test'
+        pos.subevent = se1
+        pos.save()
+        with scopes_disabled():
+            order.positions.create(
+                item=item, price=0, attendee_email='attendee2@dummy.test', subevent=se2
+            )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': item.pk,
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          'subevent': se2.pk,
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee2@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_subevent_range_filter(logged_in_client, sendmail_url, event, item, order, pos):
+    event.settings.attendee_emails_asked = True
+    event.has_subevents = True
+    event.save()
+    with scopes_disabled():
+        se1 = event.subevents.create(name='Subevent FOO', date_from=datetime.datetime(2023, 7, 6, 1, 2, 3, tzinfo=event.timezone))
+        se2 = event.subevents.create(name='Bar', date_from=datetime.datetime(2023, 8, 9, 1, 2, 3, tzinfo=event.timezone))
+        pos.attendee_email = 'attendee1@dummy.test'
+        pos.subevent = se1
+        pos.save()
+        with scopes_disabled():
+            order.positions.create(
+                item=item, price=0, attendee_email='attendee2@dummy.test', subevent=se2
+            )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': item.pk,
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          'subevents_from_0': '2023-07-01',
+                                          'subevents_from_1': '00:00:00',
+                                          'subevents_to_0': '2023-08-01',
+                                          'subevents_to_1': '00:00:00',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee1@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
 def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event, order, checkin_list, item, pos):
     event.settings.attendee_emails_asked = True
     with scopes_disabled():

@@ -20,8 +20,9 @@ internal_name                         string                     An optional nam
 rate                                  decimal (string)           Tax rate in percent
 price_includes_tax                    boolean                    If ``true`` (default), tax is assumed to be included in
                                                                  the specified product price
-eu_reverse_charge                     boolean                    If ``true``, EU reverse charge rules are applied. Will
-                                                                 be ignored if custom rules are set.
+eu_reverse_charge                     boolean                    **DEPRECATED**. If ``true``, EU reverse charge rules
+                                                                 are applied. Will be ignored if custom rules are set.
+                                                                 Use custom rules instead.
 home_country                          string                     Merchant country (required for reverse charge), can be
                                                                  ``null`` or empty string
 keep_gross_if_rate_changes            boolean                    If ``true``, changes of the tax rate based on custom

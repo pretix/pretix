@@ -66,7 +66,7 @@ def inputfile_factory(multiplier=1):
             'A': 'GHIJK432',
             'B': 'Ticket',
             'C': 'False',
-            'D': '2021-05-28 11:00:00',
+            'D': '2021-05-28T11:00:00+00:00',
             'E': '2',
             'F': '1',
         },

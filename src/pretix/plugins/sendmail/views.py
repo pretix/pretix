@@ -429,6 +429,9 @@ class OrderSendView(BaseSenderView):
         kwargs.update({
             'recipients': form.cleaned_data['recipients'],
             'items': [i.pk for i in form.cleaned_data.get('items')],
+            'subevent': form.cleaned_data['subevent'].pk if form.cleaned_data.get('subevent') else None,
+            'subevents_from': form.cleaned_data.get('subevents_from'),
+            'subevents_to': form.cleaned_data.get('subevents_to'),
             'not_checked_in': form.cleaned_data.get('not_checked_in'),
             'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
             'filter_checkins': form.cleaned_data.get('filter_checkins'),

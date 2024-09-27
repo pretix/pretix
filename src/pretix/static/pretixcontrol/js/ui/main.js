@@ -557,6 +557,16 @@ var form_handlers = function (el) {
         language: $("body").attr("data-select2-locale"),
     });
 
+    el.find('[data-model-select2=json_script]').each(function() {
+        const selectedValue = this.value;
+        this.replaceChildren();
+        $(this).select2({
+            theme: "bootstrap",
+            language: $("body").attr("data-select2-locale"),
+            data: JSON.parse($(this.getAttribute('data-select2-src')).text()),
+        }).val(selectedValue).trigger('change');
+    });
+
     el.find('input[data-typeahead-url]').each(function () {
         var $inp = $(this);
         if ($inp.data("ttTypeahead") || $inp.hasClass("tt-hint")) {

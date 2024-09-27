@@ -654,3 +654,9 @@ class WebAuthnDevice(Device):
     @property
     def webauthnpubkey(self):
         return websafe_decode(self.pub_key)
+
+
+class HistoricPassword(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="historic_passwords")
+    created = models.DateTimeField(auto_now_add=True)
+    password = models.CharField(verbose_name=_("Password"), max_length=128)

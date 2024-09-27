@@ -80,6 +80,7 @@ ALL_LANGUAGES = [
     ('de', _('German')),
     ('de-informal', _('German (informal)')),
     ('ar', _('Arabic')),
+    ('eu', _('Basque')),
     ('ca', _('Catalan')),
     ('zh-hans', _('Chinese (simplified)')),
     ('zh-hant', _('Chinese (traditional)')),

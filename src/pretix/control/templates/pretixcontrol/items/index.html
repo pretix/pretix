@@ -133,7 +133,7 @@
                                 {% endif %}
                                 {{ i.default_price|money:request.event.currency }}
                                 {% if i.original_price %}<strike class="text-muted">{{ i.original_price|money:request.event.currency }}</strike>{% endif %}
-                                {% if i.tax_rule and i.default_price %}
+                                {% if i.tax_rule %}
                                     <br/>
                                     <small class="text-muted">
                                         {% if not i.tax_rule.price_includes_tax %}

@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import functools
 import hashlib
 import ipaddress
 import random
@@ -27,7 +28,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import (
-    password_validators_help_texts, validate_password,
+    get_password_validators, password_validators_help_texts, validate_password,
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
@@ -271,6 +272,11 @@ class RegistrationForm(forms.Form):
         return customer
 
 
+@functools.lru_cache(maxsize=None)
+def get_customer_password_validators():
+    return get_password_validators(settings.CUSTOMER_AUTH_PASSWORD_VALIDATORS)
+
+
 class SetPasswordForm(forms.Form):
     required_css_class = 'required'
     error_messages = {
@@ -311,7 +317,7 @@ class SetPasswordForm(forms.Form):
 
     def clean_password(self):
         password1 = self.cleaned_data.get('password', '')
-        if validate_password(password1, user=self.customer) is not None:
+        if validate_password(password1, user=self.customer, password_validators=get_customer_password_validators()) is not None:
             raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
         return password1
 
@@ -405,7 +411,7 @@ class ChangePasswordForm(forms.Form):
 
     def clean_password(self):
         password1 = self.cleaned_data.get('password', '')
-        if validate_password(password1, user=self.customer) is not None:
+        if validate_password(password1, user=self.customer, password_validators=get_customer_password_validators()) is not None:
             raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
         return password1
 

@@ -340,6 +340,7 @@ if HAS_CELERY:
         CELERY_BROKER_TRANSPORT_OPTIONS = loads(config.get('celery', 'broker_transport_options'))
     if HAS_CELERY_BACKEND_TRANSPORT_OPTS:
         CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = loads(config.get('celery', 'backend_transport_options'))
+    CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 else:
     CELERY_TASK_ALWAYS_EAGER = True
 
@@ -714,6 +715,10 @@ BOOTSTRAP3 = {
 }
 
 PASSWORD_HASHERS = [
+    # Note that when updating this, all user passwords will be re-hashed on next login, however,
+    # the HistoricPassword model will not be changed automatically. In case a serious issue with a hasher
+    # comes to light, dropping the contents of the HistoricPassword table might be the more risk-adequate
+    # decision.
     "django.contrib.auth.hashers.Argon2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
@@ -725,7 +730,44 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            # To fulfill per PCI DSS requirement 8.3.6
+            "min_length": 12,
+        },
+    },
+    {
+        # To fulfill per PCI DSS requirement 8.3.6
+        'NAME': 'pretix.base.auth.NumericAndAlphabeticPasswordValidator',
+    },
+    {
+        "NAME": "pretix.base.auth.HistoryPasswordValidator",
+        "OPTIONS": {
+            # To fulfill per PCI DSS requirement 8.3.7
+            "history_length": 4,
+        },
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+CUSTOMER_AUTH_PASSWORD_VALIDATORS = [
+    # For customer accounts, we apply a little less strict requirements to provide a risk-adequate
+    # user experience.
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": 8,
+        },
+    },
+    {
+        'NAME': 'pretix.base.auth.NumericAndAlphabeticPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
