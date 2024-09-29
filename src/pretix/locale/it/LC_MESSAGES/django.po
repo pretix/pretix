@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-26 11:22+0000\n"
-"PO-Revision-Date: 2024-08-22 15:00+0000\n"
-"Last-Translator: Michelangelo <michelangelo.morrillo@gmail.com>\n"
+"PO-Revision-Date: 2024-09-30 05:00+0000\n"
+"Last-Translator: Rosariocastellana <rosariocastellana@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -37,7 +37,7 @@ msgstr "Arabo"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "Basco"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
@@ -121,7 +121,7 @@ msgstr "Russo"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "Slovacco"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
@@ -31767,7 +31767,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
-msgstr ""
+msgstr "Eventi passati"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
@@ -31832,7 +31832,7 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:190
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "Inserisci solo numeri positivi."
 
 #: pretix/presale/views/cart.py:428
 msgid "We applied the voucher to as many products in your cart as we could."
@@ -31901,11 +31901,12 @@ msgid ""
 "Your email address has not been updated since the address is already in use "
 "for another customer account."
 msgstr ""
+"Il tuo indirizzo email non è stato aggiornato perché è già in uso per un "
+"altro account cliente."
 
 #: pretix/presale/views/customer.py:576
-#, fuzzy
 msgid "Your email address has been updated."
-msgstr "La tua gift card è stata applicata."
+msgstr "Il tuo indirizzo email è stato aggiornato."
 
 #: pretix/presale/views/customer.py:789 pretix/presale/views/customer.py:800
 #, python-brace-format
@@ -31913,43 +31914,41 @@ msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
 msgstr ""
+"Non siamo riusciti a utilizzare le tue credenziali di accesso poiché "
+"l'indirizzo email {email} è già utilizzato per un altro account in questo "
+"sistema."
 
 #: pretix/presale/views/event.py:890
 msgid "Unknown event code or not authorized to access this event."
 msgstr ""
+"Codice evento sconosciuto o non autorizzato ad accedere a questo evento."
 
 #: pretix/presale/views/event.py:897
 msgctxt "subevent"
 msgid "No date selected."
-msgstr ""
+msgstr "Nessuna data selezionata."
 
 #: pretix/presale/views/event.py:900
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr ""
+msgstr "Data selezionata sconosciuta."
 
 #: pretix/presale/views/event.py:925 pretix/presale/views/event.py:933
 #: pretix/presale/views/event.py:936
 msgid "Please go back and try again."
-msgstr ""
+msgstr "Torna indietro e riprova."
 
 #: pretix/presale/views/event.py:949
-#, fuzzy
-#| msgid "Purchased"
 msgid "Fake date time"
-msgstr "Acquistato"
+msgstr "Data e ora errati"
 
 #: pretix/presale/views/event.py:961
-#, fuzzy
-#| msgid "Unknown order code or not authorized to access this order."
 msgid "You are not allowed to access time machine mode."
-msgstr "Numero di ordine sconosciuto oppure non autorizzato ad accedere."
+msgstr "Non ti è consentito accedere alla modalità macchina del tempo."
 
 #: pretix/presale/views/event.py:963
-#, fuzzy
-#| msgid "This gift card can only be used in test mode."
 msgid "This feature is only available in test mode."
-msgstr "Questa gift card può essere utilizzata solo in modalità test."
+msgstr "This feature is only available in test mode."
 
 #: pretix/presale/views/event.py:980
 #, fuzzy
@@ -31967,17 +31966,16 @@ msgid "The payment is too late to be accepted."
 msgstr "Il pagamento è troppo in ritardo per essere accettato."
 
 #: pretix/presale/views/order.py:463
-#, fuzzy
 msgid "An invoice has been generated."
-msgstr "Il dispositivo è statao creato."
+msgstr "È stata generata una fattura."
 
 #: pretix/presale/views/order.py:561
 msgid "The payment method for this order cannot be changed."
-msgstr ""
+msgstr "Il metodo di pagamento per questo ordine non può essere modificato."
 
 #: pretix/presale/views/order.py:572
 msgid "A payment is currently pending for this order."
-msgstr "Il pagamento è in attesa per questo ordine."
+msgstr "Al momento è in sospeso un pagamento per questo ordine."
 
 #: pretix/presale/views/order.py:853 pretix/presale/views/order.py:925
 msgid "You cannot modify this order"
@@ -32004,6 +32002,8 @@ msgstr ""
 #: pretix/presale/views/order.py:1119
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
+"Clicca sul link che ti abbiamo inviato via email per scaricare i tuoi "
+"biglietti."
 
 #: pretix/presale/views/order.py:1600
 #, python-brace-format
@@ -32011,22 +32011,28 @@ msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
+"L'ordine è stato modificato. Ora puoi procedere pagando l'importo scoperto "
+"di {amount}."
 
 #: pretix/presale/views/order.py:1612
 msgid "You did not make any changes."
-msgstr ""
+msgstr "Non hai apportato nessuna modifica."
 
 #: pretix/presale/views/order.py:1636
 msgid "You may not change your order in a way that reduces the total price."
 msgstr ""
+"Non è possibile modificare l'ordine in modo da ridurre il prezzo totale."
 
 #: pretix/presale/views/order.py:1638
 msgid "You may only change your order in a way that increases the total price."
 msgstr ""
+"È possibile modificare l'ordine solo in modo da aumentare il prezzo totale."
 
 #: pretix/presale/views/order.py:1640
 msgid "You may not change your order in a way that changes the total price."
 msgstr ""
+"Non è possibile modificare l'ordine in modo tale da modificare il prezzo "
+"totale."
 
 #: pretix/presale/views/order.py:1642
 msgid "You may not change your order in a way that would require a refund."
@@ -32055,10 +32061,14 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Se l'indirizzo email inserito è valido e associato a un ticket, ti abbiamo "
+"già inviato un'email con un link al tuo ticket nelle ultime {number} ore. Se "
+"l'email non è arrivata, controlla la cartella spam e verifica di aver "
+"utilizzato l'indirizzo email corretto."
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
-msgstr ""
+msgstr "Al momento abbiamo problemi con l'invio delle email. Riprova più tardi."
 
 #: pretix/presale/views/user.py:94
 msgid ""
@@ -32079,13 +32089,13 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/waiting.py:141
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
-"Ti abbiamo aggiunto alla lista d'attesa. Riceverai un'email non appena i "
-"biglietti saranno di nuovo disponibili."
+"Ti abbiamo aggiunto alla lista d'attesa. Ti invieremo un'email a {email} non "
+"appena i biglietti saranno di nuovo disponibili."
 
 #: pretix/presale/views/waiting.py:169
 msgid "We could not find you on our waiting list."
@@ -32129,7 +32139,7 @@ msgstr ""
 
 #: pretix/settings.py:788
 msgid "Write access"
-msgstr ""
+msgstr "Accesso in scrittura"
 
 #: pretix/settings.py:799
 msgid "Kosovo"
