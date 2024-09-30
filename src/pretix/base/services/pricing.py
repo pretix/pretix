@@ -169,9 +169,9 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
     :param collect_potential_discounts: If a `defaultdict(list)` is supplied, all discounts that could be applied to the cart
     based on the "consumed" items, but lack matching "benefitting" items will be collected therein.
     The dict will contain a mapping from index in the `positions` list of the item that could be consumed, to a list
-    of tuples describing the discounts that could be applied in the form (discount, max_count, grouping_id).
-    max_count is either the maximum number of benefitting items that the discount would apply to, or `inf` if that number
-    is not limited. The grouping_id can be used to distinguish several occurrences of the same discount.
+    of tuples describing the discounts that could be applied in the form `(discount, max_count, grouping_id)`.
+    `max_count` is either the maximum number of benefitting items that the discount would apply to, or `inf` if that number
+    is not limited. The `grouping_id` can be used to distinguish several occurrences of the same discount.
 
     :return: A list of ``(new_gross_price, discount)`` tuples in the same order as the input
     """

@@ -250,9 +250,9 @@ def check_cart_behaviour(event, cart_contents, recommendations, expect_num_queri
     ]
     expected_recommendations = split_table(recommendations)
 
-    event.organizer.get_cache().clear()
-    event.get_cache().clear()
-    event = Event.objects.get(pk=event.pk)
+    event.organizer.cache.clear()
+    event.cache.clear()
+    event.refresh_from_db()
     service = CrossSellingService(event, event.organizer.sales_channels.get(identifier='web'), positions, None)
     if expect_num_queries:
         with assert_num_queries(expect_num_queries):
@@ -339,7 +339,6 @@ def test_2f1r_discount_cross_selling(event):
         Tickets     Reduced Ticket      23.00                11.50            1
         '''
     )
-    print("The interesting part:")
     check_cart_behaviour(
         event,
         cart_contents=''' Price     Discounted
