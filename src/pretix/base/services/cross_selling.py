@@ -160,7 +160,7 @@ class CrossSellingService:
             voucher=None,
             channel=self.sales_channel,
             base_qs=items_qs,
-            allow_addons=True,
+            allow_addons=False,
             allow_cross_sell=True,
             memberships=(
                 self.customer.usable_memberships(
