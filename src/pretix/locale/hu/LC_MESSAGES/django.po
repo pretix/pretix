@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-26 11:22+0000\n"
-"PO-Revision-Date: 2024-05-20 20:00+0000\n"
-"Last-Translator: Krisztián Henrik Papp <pkh@henky.me>\n"
+"PO-Revision-Date: 2024-09-30 22:00+0000\n"
+"Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -657,7 +657,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:662
@@ -941,7 +941,7 @@ msgstr ""
 #: pretix/presale/forms/waitinglist.py:106
 #: pretix/presale/templates/pretixpresale/event/order.html:303
 msgid "Phone number"
-msgstr ""
+msgstr "Telefonszám"
 
 #: pretix/base/exporters/customers.py:69 pretix/base/models/auth.py:246
 #: pretix/base/models/customers.py:97 pretix/base/models/orders.py:3176
@@ -994,7 +994,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:29
 #: pretix/presale/templates/pretixpresale/organizers/index.html:41
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:99
 #, fuzzy
@@ -1288,7 +1288,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:235
 #: pretix/presale/templates/pretixpresale/event/order.html:256
 msgid "Invoices"
-msgstr ""
+msgstr "Számlák"
 
 #: pretix/base/exporters/invoices.py:192
 msgid "Invoice lines"
@@ -1384,7 +1384,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:315
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:189
 msgid "Address"
-msgstr ""
+msgstr "Cím"
 
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:216
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:342
@@ -1435,7 +1435,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:92
 #: pretix/presale/templates/pretixpresale/event/order.html:319
 msgid "Country"
-msgstr ""
+msgstr "Ország"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
 msgid "Tax ID"
@@ -1453,7 +1453,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid "VAT ID"
-msgstr ""
+msgstr "Adószám"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:216
@@ -1483,7 +1483,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
 #: pretix/presale/templates/pretixpresale/event/order.html:307
 msgid "Company"
-msgstr ""
+msgstr "Cég"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
 msgid "Street address"
@@ -1503,7 +1503,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:322
 msgctxt "address"
 msgid "State"
-msgstr ""
+msgstr "Állam"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
 #: pretix/base/models/orders.py:3194 pretix/base/models/orders.py:3229
@@ -1559,7 +1559,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:271
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgid "Invoice"
-msgstr ""
+msgstr "Számla"
 
 #: pretix/base/exporters/invoices.py:319
 msgid "Line number"
@@ -2503,7 +2503,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:372
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 msgid "Order"
-msgstr ""
+msgstr "Rendelés"
 
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1259
@@ -2698,7 +2698,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:89
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:145
 msgid "TEST MODE"
-msgstr ""
+msgstr "TESZT ÜZEMMÓD"
 
 #: pretix/base/exporters/orderlist.py:1240
 msgid "Gift card redemptions"
@@ -3293,7 +3293,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr ""
+msgstr "Lemondás"
 
 #: pretix/base/invoice.py:620 pretix/base/invoice.py:628
 msgctxt "invoice"
@@ -6357,7 +6357,7 @@ msgstr ""
 #: pretix/base/payment.py:256
 #: pretix/presale/templates/pretixpresale/event/order.html:115
 msgid "Pay now"
-msgstr ""
+msgstr "Fizetés"
 
 #: pretix/base/payment.py:330
 msgid "Enable payment method"
@@ -15180,7 +15180,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:42
 #: pretix/presale/templates/pretixpresale/event/order.html:85
 msgid "Payment"
-msgstr ""
+msgstr "Fizetés"
 
 #: pretix/control/navigation.py:73 pretix/control/views/event.py:1456
 #: pretix/control/views/event.py:1458 pretix/control/views/event.py:1490
@@ -15241,7 +15241,7 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:684
 #: pretix/presale/templates/pretixpresale/event/order.html:136
 msgid "Refunds"
-msgstr ""
+msgstr "Visszatérítések"
 
 #: pretix/control/navigation.py:245
 msgid "Import"
@@ -17559,7 +17559,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:175
 #: pretix/presale/templates/pretixpresale/event/order.html:21
 msgid "Order details"
-msgstr ""
+msgstr "Rendelésadatok"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:272
 msgid "Other settings"
@@ -19175,7 +19175,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:478
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
-msgstr ""
+msgstr "Rendelés lemondása"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:12
 #: pretix/control/templates/pretixcontrol/order/deny.html:11
@@ -19642,7 +19642,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:369
 #: pretix/presale/templates/pretixpresale/event/order.html:196
 msgid "Ordered items"
-msgstr ""
+msgstr "Megrendelt tételek"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:388
 #, python-format
@@ -19732,12 +19732,12 @@ msgstr "Teljes"
 #: pretix/control/templates/pretixcontrol/order/index.html:712
 #: pretix/presale/templates/pretixpresale/event/order.html:209
 msgid "Successful payments"
-msgstr ""
+msgstr "Sikeres fizetések"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:721
 #: pretix/presale/templates/pretixpresale/event/order.html:218
 msgid "Pending total"
-msgstr ""
+msgstr "Jelenlegi összeg"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:747
 #: pretix/control/templates/pretixcontrol/search/payments.html:88
@@ -19805,7 +19805,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:90
 #: pretix/presale/templates/pretixpresale/event/order.html:317
 msgid "ZIP code and city"
-msgstr ""
+msgstr "Irányítószám és város"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:970
 msgid "Valid EU VAT ID"
@@ -29797,6 +29797,8 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
+"A visszatérítést egy ajándékutalvány formájában kapod meg amit használhatsz "
+"vásárláshoz a jövőben."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:155
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:147
@@ -30199,38 +30201,42 @@ msgstr "Menj vissza és próbáld újra."
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Thank you!"
-msgstr ""
+msgstr "Köszönjük!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
+msgstr "A rendelésedet megkaptuk, lásd a részleteket lejjebb."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "A rendelésedet sikeresen feldolgoztuk, lásd a részleteket lejjebb."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Megkaptuk a befizetésed, lásd a részleteket lejjebb."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
 msgstr ""
+"A rendelésedet még jóvá kell hagynia egy szervezőnek mielőtt véglegesíteni "
+"tudjuk."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
 msgstr ""
+"A rendelésedet még jóvá kell hagynia egy szervezőnek mielőtt fizetni tudsz "
+"és véglegesíteni tudjuk."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
-msgstr ""
+msgstr "Még várunk a rendelés kifizetésre."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 msgid ""
@@ -30238,46 +30244,51 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Kérlek mentsd el ezt az oldal címét vagy készíts egy könyvjelzőt, hogy meg "
+"tudd találni később. A megadott e-mail címedre is elküldtük a linket."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
+"Kérlek mentsd el a következő linket, hogy meg tudd találni később. A "
+"megadott e-mail címedre is elküldtük a linket."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:73
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
-msgstr ""
+msgstr "Megtekintés a backend-ben"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:90
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "A következő befizetés még nem valósult meg: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:95
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr ""
+msgstr "Kérjük a következő dátum előtt fizesd ki a rendelést:  %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:107
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "Próbáld újra  a fizetést, vagy válassz egy másik fizetési módszert"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:125
 msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
+"Megkaptuk a lemondási kérésedet. Kérjük várj amíg egy szervező dönt róla."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:143
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
-msgstr ""
+msgstr "A következő visszatérítés hamarosan ki lesz küldve:  %(amount)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
-msgstr ""
+msgstr "Nyomtatás"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
@@ -30285,16 +30296,19 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
+"Kiküldtük a visszatérítést egy ajándékutalványként a következő értékkel: "
+"%(amount)s. Ha szeretnél vele fizetni, a következő rendelésednél használd a "
+"következő kódot vásárlásnál:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:162
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "Az ajándékutalványod jelenlegi értéke: %(value)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:169
 #, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr ""
+msgstr "Az ajándékutalványod a következő dátumig érvényes: %(expiry)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:180
 #, python-format
@@ -30302,80 +30316,72 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
+"Következő értékű visszatérítést küldtünk neked:  %(amount)s. A fizetési "
+"módszertől függően 14 napig tarthat amíg megkapod."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 #: pretix/presale/templates/pretixpresale/event/position.html:33
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Change ordered items"
-msgstr "Kifizetett megrendelések"
+msgstr "Megrendelt tételek módosítása"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 #: pretix/presale/templates/pretixpresale/event/position.html:34
 msgid "Change details"
-msgstr ""
+msgstr "Személyes adatok módosítása"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:262
 msgid ""
 "You need to select a payment method above before you can request an invoice."
-msgstr ""
+msgstr "Ki kell választanod egy fizetési módszert számla igénylés előtt."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:267
 #: pretix/presale/templates/pretixpresale/event/order.html:274
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
-msgstr ""
+msgstr "Számlaigénylés"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:286
 msgid "Your information"
-msgstr ""
+msgstr "Személyes adatok"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:289
 msgid "Change your information"
-msgstr ""
+msgstr "Személyes adatok módosítása"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
 msgid "Internal Reference"
-msgstr ""
+msgstr "Megjegyzés"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:349
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr ""
+msgstr "Rendelés módosítása vagy lemondása"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:351
-#, fuzzy
-#| msgid "Paid orders"
 msgctxt "action"
 msgid "Change your order"
-msgstr "Kifizetett megrendelések"
+msgstr "Rendelés módosítása"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:353
-#, fuzzy
-#| msgid "Paid orders"
 msgctxt "action"
 msgid "Cancel your order"
-msgstr "Kifizetett megrendelések"
+msgstr "Rendelés lemondása"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:361
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
-msgstr ""
+msgstr "Ha szeretnéd módosítani a megrendelt termékeket, kattints a gombra."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:369
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Change order"
-msgstr "Kifizetett megrendelések"
+msgstr "Rendelés módosítása"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:381
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
-#, fuzzy
-#| msgid "You cannot modify this order"
 msgid "You can request to cancel this order."
-msgstr "Nem módosíthatod ezt a rendelést"
+msgstr "Kérheted a rendelés lemondását."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:384
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
