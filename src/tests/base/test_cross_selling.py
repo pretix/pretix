@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import datetime
 import re
 from decimal import Decimal
 from typing import List, Tuple
@@ -40,6 +40,19 @@ def event():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now()
     )
+    return event
+
+
+@pytest.fixture
+def eventseries():
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=o, name='Dummy', slug='dummy',
+        date_from=now(), has_subevents=True
+    )
+    s1 = event.subevents.create(name='Date1', date_from=datetime.datetime(2024, 10, 1, 11, 0, 0, 0, tzinfo=event.timezone), active=True)
+    s2 = event.subevents.create(name='Date2', date_from=datetime.datetime(2024, 10, 1, 12, 0, 0, 0, tzinfo=event.timezone), active=True)
+    s3 = event.subevents.create(name='Date3', date_from=datetime.datetime(2024, 10, 1, 13, 0, 0, 0, tzinfo=event.timezone), active=True)
     return event
 
 
@@ -244,9 +257,10 @@ def check_cart_behaviour(event, cart_contents, recommendations, expect_num_queri
     positions = [
         CartPosition(
             item_id=event.items.get(name=item_name).pk,
-            subevent_id=1, line_price_gross=Decimal(regular_price), addon_to=None, is_bundled=False,
+            subevent_id=int(subevent_id),
+            line_price_gross=Decimal(regular_price), addon_to=None, is_bundled=False,
             listed_price=Decimal(regular_price), price_after_voucher=Decimal(regular_price)
-        ) for (item_name, regular_price, expected_discounted_price) in cart_contents
+        ) for (item_name, regular_price, expected_discounted_price, subevent_id) in cart_contents
     ]
     expected_recommendations = split_table(recommendations)
 
@@ -261,14 +275,15 @@ def check_cart_behaviour(event, cart_contents, recommendations, expect_num_queri
         result = service.get_data()
     result_recommendations = [
         [str(category.name), str(item.name), str(item.original_price.gross.quantize(Decimal('0.00'))),
-         str(item.display_price.gross.quantize(Decimal('0.00'))), str(item.order_max)]
-        for category, items in result
+         str(item.display_price.gross.quantize(Decimal('0.00'))), str(item.order_max),
+         form_prefix or '-']
+        for category, items, form_prefix in result
         for item in items
     ]
 
     assert result_recommendations == expected_recommendations
     assert [str(price) for price, discount in service._discounted_prices] == [
-        expected_discounted_price for (item_name, regular_price, expected_discounted_price) in cart_contents]
+        expected_discounted_price for (item_name, regular_price, expected_discounted_price, form_prefix) in cart_contents]
 
 
 @scopes_disabled()
@@ -282,92 +297,92 @@ def test_2f1r_discount_cross_selling(event):
 
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Tickets     Reduced Ticket      23.00                11.50            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Tickets     Reduced Ticket      23.00                11.50            1       -
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
 
-        Reduced Ticket    23.00          11.50
+        Reduced Ticket    23.00          11.50       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
 
-        Reduced Ticket    23.00          11.50
+        Reduced Ticket    23.00          11.50       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Tickets     Reduced Ticket      23.00                11.50            2
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Tickets     Reduced Ticket      23.00                11.50            2       -
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
 
-        Reduced Ticket    23.00          11.50
+        Reduced Ticket    23.00          11.50       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Tickets     Reduced Ticket      23.00                11.50            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Tickets     Reduced Ticket      23.00                11.50            1       -
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
 
-        Reduced Ticket    23.00          11.50
+        Reduced Ticket    23.00          11.50       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Tickets     Reduced Ticket      23.00                11.50            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Tickets     Reduced Ticket      23.00                11.50            1       -
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
 
-        Reduced Ticket    23.00          11.50
+        Reduced Ticket    23.00          11.50       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Tickets     Reduced Ticket      23.00                11.50            2
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Tickets     Reduced Ticket      23.00                11.50            2       -
         '''
     )
 
@@ -387,33 +402,33 @@ def test_free_drinks(event):
 
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Free Drinks     Free Drinks     50.00                 0.00            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Free Drinks     Free Drinks     50.00                 0.00            1        -
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Free Drinks       50.00           0.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Free Drinks       50.00           0.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         '''
     )
 
@@ -430,39 +445,39 @@ def test_five_tickets_one_free(event):
     # cart yet
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00           0.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00           0.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         '''
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00          42.00
-        Regular Ticket    42.00           0.00
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00          42.00       0
+        Regular Ticket    42.00           0.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         '''
     )
 
@@ -477,43 +492,43 @@ def test_query_count_many_items(event, itemcount):
     make_discount('For every 5 of Ticket 1, get 100% discount on 1 of Ticket 2.', event)
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         ''',
         expect_num_queries=8,
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Tickets        Ticket 2         42.00                 0.00            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Tickets        Ticket 2         42.00                 0.00            1        -
         ''',
         expect_num_queries=12,
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
-        Ticket 1          42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
+        Ticket 1          42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Tickets        Ticket 2         42.00                 0.00            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Tickets        Ticket 2         42.00                 0.00            1        -
         ''',
         expect_num_queries=12,
     )
@@ -531,43 +546,43 @@ def test_query_count_many_categories_and_discounts(event, catcount):
         make_discount(f'For every 5 of Ticket {n}-A, get 100% discount on 1 of Ticket {n}-B.', event)
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         ''',
         expect_num_queries=8,
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Category 1     Ticket 1-B       42.00                 0.00            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Category 1     Ticket 1-B       42.00                 0.00            1        -
         ''',
         expect_num_queries=12,
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Category 1     Ticket 1-B       42.00                 0.00            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Category 1     Ticket 1-B       42.00                 0.00            1        -
         ''',
         expect_num_queries=12,
     )
@@ -585,49 +600,49 @@ def test_query_count_many_cartpos(event, catcount):
         make_discount(f'For every 5 of Ticket {n}-A, get 100% discount on 1 of Ticket {n}-B.', event)
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
         ''',
         expect_num_queries=8,
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Category 1     Ticket 1-B       42.00                 0.00            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Category 1     Ticket 1-B       42.00                 0.00            1        -
         ''',
         expect_num_queries=12,
     )
     check_cart_behaviour(
         event,
-        cart_contents=''' Price     Discounted
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 1-A        42.00          42.00
-        Ticket 2-A        42.00          42.00
-        Ticket 2-A        42.00          42.00
-        Ticket 2-A        42.00          42.00
-        Ticket 2-A        42.00          42.00
-        Ticket 2-A        42.00          42.00
+        cart_contents=''' Price     Discounted   Subev
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 1-A        42.00          42.00       0
+        Ticket 2-A        42.00          42.00       0
+        Ticket 2-A        42.00          42.00       0
+        Ticket 2-A        42.00          42.00       0
+        Ticket 2-A        42.00          42.00       0
+        Ticket 2-A        42.00          42.00       0
         ''',
-        recommendations='''             Price     Discounted Price    Max Count
-        Category 1     Ticket 1-B       42.00                 0.00            1
-        Category 2     Ticket 2-B       42.00                 0.00            1
+        recommendations='''             Price     Discounted Price    Max Count   Prefix
+        Category 1     Ticket 1-B       42.00                 0.00            1        -
+        Category 2     Ticket 2-B       42.00                 0.00            1        -
         ''',
         expect_num_queries=16,
     )
