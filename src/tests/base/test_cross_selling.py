@@ -589,6 +589,48 @@ def test_2f1r_discount_cross_selling_eventseries_same(eventseries):
 
 @scopes_disabled()
 @pytest.mark.django_db
+def test_50percentoff_discount_cross_selling_eventseries_distinct(eventseries):
+    setup_items(eventseries, 'Tickets', 'both', 'discounts',
+                ('Regular Ticket', '42.00'),
+                ('Reduced Ticket', '23.00'),
+                )
+    make_discount('For every 2 of Regular Ticket in distinct subevents, get 50% discount on them.', eventseries)
+
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          21.00   Date1
+        Regular Ticket    42.00          21.00   Date2
+        Regular Ticket    42.00          21.00   Date3
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          21.00   Date1
+        Regular Ticket    42.00          21.00   Date2
+        Regular Ticket    42.00          21.00   Date3
+        Reduced Ticket    23.00          23.00   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        '''
+    )
+
+
+@scopes_disabled()
+@pytest.mark.django_db
 @pytest.mark.skip("currently unsupported (cannot give discount to specific product on minimum cart value)")
 def test_free_drinks(event):
     setup_items(event, 'Tickets', 'normal', None,

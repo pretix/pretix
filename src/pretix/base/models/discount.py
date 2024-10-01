@@ -470,6 +470,7 @@ class Discount(LoggedModel):
                     [idx for idx in g if idx in condition_candidates],
                     [idx for idx in g if idx in benefit_candidates],
                     result,
-                    collect_potential_discounts
+                    None,
+                    None
                 )
         return result
