@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-26 11:22+0000\n"
-"PO-Revision-Date: 2024-10-01 22:52+0000\n"
+"PO-Revision-Date: 2024-10-02 08:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -701,7 +701,7 @@ msgstr ""
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s>pretix jegykezelő rendszer</a>"
 
 #: pretix/base/context.py:61
 msgid "source code"
@@ -9990,7 +9990,7 @@ msgid "Order approved and confirmed: {code}"
 msgstr ""
 
 #: pretix/base/settings.py:2547
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10003,6 +10003,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Szia!\n"
+"\n"
+"elfogadtuk a rendelésedet a \"{event}\"  című eseményre és örömmel várunk!\n"
+"Mivel csak ingyenes termékeket rendeltél, nem kell fizetned.\n"
+"\n"
+"Módosíthatod a rendelésed részleteit és megtekintheted az állapotát a "
+"következő címen:\n"
+"{url}\n"
+"\n"
+"Üdvözlettel:  \n"
+"A szervezők"
 
 #: pretix/base/settings.py:2580
 #, python-brace-format
@@ -11001,6 +11012,9 @@ msgid ""
 "This site is powered by free software. If you want to read the license terms "
 "or obtain the source code, follow these links or instructions:"
 msgstr ""
+"Ezt az oldalt ingyenes szoftver üzemelteti. Ha el szeretnéd olvasni a "
+"licencfeltételeket vagy be szeretnéd szerezni a forráskódot, kövessed az "
+"alábbi hivatkozásokat vagy utasításokat:"
 
 #: pretix/base/ticketoutput.py:182
 msgid "Enable ticket format"
@@ -29973,7 +29987,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr "%(num)s jelenleg elérhető"
+msgstr "%(num)s maradt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:5
