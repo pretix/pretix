@@ -183,20 +183,45 @@ class CrossSellingService:
 
                 # calculate discounted price
                 if discount_rule:
-                    item.original_price = item.original_price or item.display_price
-                    previous_price = item.display_price
-                    new_price = (
-                        previous_price * (
-                            (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'))
-                    )
-                    item.display_price = new_price
+                    if not item.has_variations:
+                        item.original_price = item.original_price or item.display_price
+                        previous_price = item.display_price
+                        new_price = (
+                            previous_price * (
+                                (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'))
+                        )
+                        item.display_price = new_price
+                    else:
+                        for var in item.available_variations:
+                            var.original_price = var.original_price or var.display_price
+                            previous_price = var.display_price
+                            new_price = (
+                                    previous_price * (
+                                    (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal(
+                                '100.00'))
+                            )
+                            var.display_price = new_price
 
-            # reduce order_max by number of items already in cart (prevent recommending a product the user can't add anyway)
-            item.order_max = min(
-                item.order_max - sum(1 for pos in self.cartpositions if pos.item_id == item.pk),
-                max_count
-            )
-            if item.order_max > 0:
-                new_items.append(item)
+            if not item.has_variations:
+                # reduce order_max by number of items already in cart (prevent recommending a product the user can't add anyway)
+                item.order_max = min(
+                    item.order_max - sum(1 for pos in self.cartpositions if pos.item_id == item.pk),
+                    max_count
+                )
+                if item.order_max > 0:
+                    new_items.append(item)
+            else:
+                new_vars = list()
+                for var in item.available_variations:
+                    # reduce order_max by number of items already in cart (prevent recommending a product the user can't add anyway)
+                    var.order_max = min(
+                        var.order_max - sum(1 for pos in self.cartpositions if pos.item_id == item.pk and pos.variation_id == var.pk),
+                        max_count
+                    )
+                    if var.order_max > 0:
+                        new_vars.append(var)
+                if len(new_vars):
+                    item.available_variations = new_vars
+                    new_items.append(item)
 
         return new_items
