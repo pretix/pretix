@@ -27,6 +27,8 @@ from typing import List, Tuple
 import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from freezegun import freeze_time
+
 from tests import assert_num_queries
 
 from pretix.base.models import CartPosition, Discount, Event, Organizer
@@ -44,15 +46,17 @@ def event():
 
 
 @pytest.fixture
+@freeze_time("2020-01-01 10:00:00+01:00")
 def eventseries():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
+    start = now()
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now(), has_subevents=True
+        date_from=start, has_subevents=True
     )
-    s1 = event.subevents.create(name='Date1', date_from=datetime.datetime(2024, 10, 1, 11, 0, 0, 0, tzinfo=event.timezone), active=True)
-    s2 = event.subevents.create(name='Date2', date_from=datetime.datetime(2024, 10, 1, 12, 0, 0, 0, tzinfo=event.timezone), active=True)
-    s3 = event.subevents.create(name='Date3', date_from=datetime.datetime(2024, 10, 1, 13, 0, 0, 0, tzinfo=event.timezone), active=True)
+    s1 = event.subevents.create(name='Date1', date_from=start + datetime.timedelta(hours=1), active=True)
+    s2 = event.subevents.create(name='Date2', date_from=start + datetime.timedelta(hours=2), active=True)
+    s3 = event.subevents.create(name='Date3', date_from=start + datetime.timedelta(hours=3), active=True)
     return event
 
 
@@ -239,9 +243,10 @@ def setup_items(event, category_name, category_type, cross_selling_condition, *i
     cat.save()
     for name, price in items:
         item = cat.items.create(event=event, name=name, default_price=price)
-        quota = event.quotas.create()
-        quota.items.add(item)
-        quota.save()
+        for subevent in event.subevents.all() if event.has_subevents else [None]:
+            quota = event.quotas.create(subevent=subevent)
+            quota.items.add(item)
+            quota.save()
 
 
 def split_table(txt):
@@ -254,13 +259,14 @@ def split_table(txt):
 
 def check_cart_behaviour(event, cart_contents, recommendations, expect_num_queries=None):
     cart_contents = split_table(cart_contents)
+    subevent_map = {str(se.name): se.pk for se in event.subevents.all()}
     positions = [
         CartPosition(
             item_id=event.items.get(name=item_name).pk,
-            subevent_id=int(subevent_id),
+            subevent_id=subevent_map.get(subevent_name),
             line_price_gross=Decimal(regular_price), addon_to=None, is_bundled=False,
             listed_price=Decimal(regular_price), price_after_voucher=Decimal(regular_price)
-        ) for (item_name, regular_price, expected_discounted_price, subevent_id) in cart_contents
+        ) for (item_name, regular_price, expected_discounted_price, subevent_name) in cart_contents
     ]
     expected_recommendations = split_table(recommendations)
 
@@ -383,6 +389,186 @@ def test_2f1r_discount_cross_selling(event):
         ''',
         recommendations='''             Price     Discounted Price    Max Count   Prefix
         Tickets     Reduced Ticket      23.00                11.50            2       -
+        '''
+    )
+
+
+@scopes_disabled()
+@pytest.mark.django_db
+@freeze_time("2020-01-01 10:00:00+01:00")
+def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
+    setup_items(eventseries, 'Tickets', 'both', 'discounts',
+                ('Regular Ticket', '42.00'),
+                ('Reduced Ticket', '23.00'),
+                )
+    make_discount('For every 2 of Regular Ticket, get 50% discount on 1 of Reduced Ticket.', eventseries)
+
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   subevent_2_
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+        Regular Ticket    42.00          42.00   Date1
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            2   subevent_1_
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            2   subevent_2_
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            2   subevent_1_
+        '''
+    )
+
+
+@scopes_disabled()
+@pytest.mark.django_db
+def test_2f1r_discount_cross_selling_eventseries_same(eventseries):
+    setup_items(eventseries, 'Tickets', 'both', 'discounts',
+                ('Regular Ticket', '42.00'),
+                ('Reduced Ticket', '23.00'),
+                )
+    make_discount('For every 2 of Regular Ticket in the same subevent, get 50% discount on 1 of Reduced Ticket.', eventseries)
+
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   subevent_2_
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+        Regular Ticket    42.00          42.00   Date2
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   subevent_2_
         '''
     )
 
