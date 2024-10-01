@@ -247,7 +247,7 @@ class Discount(LoggedModel):
             return False
         return True
 
-    def _apply_min_value(self, positions, condition_idx_group, benefit_idx_group, result, collect_potential_discounts):
+    def _apply_min_value(self, positions, condition_idx_group, benefit_idx_group, result, collect_potential_discounts, subevent_id):
         if self.condition_min_value and sum(positions[idx].line_price_gross for idx in condition_idx_group) < self.condition_min_value:
             return
 
@@ -264,9 +264,9 @@ class Discount(LoggedModel):
 
         if collect_potential_discounts is not None:
             for idx in condition_idx_group:
-                collect_potential_discounts[idx] = [(self, inf, -1)]
+                collect_potential_discounts[idx] = [(self, inf, -1, subevent_id)]
 
-    def _apply_min_count(self, positions, condition_idx_group, benefit_idx_group, result, collect_potential_discounts):
+    def _apply_min_count(self, positions, condition_idx_group, benefit_idx_group, result, collect_potential_discounts, subevent_id):
         if len(condition_idx_group) < self.condition_min_count:
             return
 
@@ -297,7 +297,7 @@ class Discount(LoggedModel):
                     # but only 1 t-shirt) -> 1 shirt definitiv potential discount
                     for idx in consume_idx:
                         collect_potential_discounts[idx] = [
-                            (self, n_groups * self.benefit_only_apply_to_cheapest_n_matches - len(benefit_idx_group), -1)
+                            (self, n_groups * self.benefit_only_apply_to_cheapest_n_matches - len(benefit_idx_group), -1, subevent_id)
                         ]
 
                 if possible_applications_cond * self.benefit_only_apply_to_cheapest_n_matches > len(benefit_idx_group):
@@ -308,7 +308,7 @@ class Discount(LoggedModel):
                                             possible_applications_cond * self.condition_min_count
                                             ]):
                         collect_potential_discounts[idx] += [
-                            (self, self.benefit_only_apply_to_cheapest_n_matches, i // self.condition_min_count)
+                            (self, self.benefit_only_apply_to_cheapest_n_matches, i // self.condition_min_count, subevent_id)
                         ]
 
         else:
@@ -317,7 +317,7 @@ class Discount(LoggedModel):
 
             if collect_potential_discounts is not None:
                 for idx in consume_idx:
-                    collect_potential_discounts[idx] = [(self, inf, -1)]
+                    collect_potential_discounts[idx] = [(self, inf, -1, subevent_id)]
 
         for idx in benefit_idx:
             previous_price = positions[idx].line_price_gross
@@ -379,9 +379,9 @@ class Discount(LoggedModel):
 
         if self.subevent_mode == self.SUBEVENT_MODE_MIXED:  # also applies to non-series events
             if self.condition_min_count:
-                self._apply_min_count(positions, condition_candidates, benefit_candidates, result, collect_potential_discounts)
+                self._apply_min_count(positions, condition_candidates, benefit_candidates, result, collect_potential_discounts, None)
             else:
-                self._apply_min_value(positions, condition_candidates, benefit_candidates, result, collect_potential_discounts)
+                self._apply_min_value(positions, condition_candidates, benefit_candidates, result, collect_potential_discounts, None)
 
         elif self.subevent_mode == self.SUBEVENT_MODE_SAME:
             def key(idx):
@@ -396,9 +396,9 @@ class Discount(LoggedModel):
             for subevent_id, g in candidate_groups:
                 benefit_g = [idx for idx in benefit_candidates if positions[idx].subevent_id == subevent_id]
                 if self.condition_min_count:
-                    self._apply_min_count(positions, g, benefit_g, result, collect_potential_discounts)
+                    self._apply_min_count(positions, g, benefit_g, result, collect_potential_discounts, subevent_id)
                 else:
-                    self._apply_min_value(positions, g, benefit_g, result, collect_potential_discounts)
+                    self._apply_min_value(positions, g, benefit_g, result, collect_potential_discounts, subevent_id)
 
         elif self.subevent_mode == self.SUBEVENT_MODE_DISTINCT:
             if self.condition_min_value or not self.benefit_same_products:

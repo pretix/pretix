@@ -38,9 +38,9 @@ class DummyCategory:
     once for each subevent
     """
 
-    def __init__(self, category: ItemCategory, subevent=None):
+    def __init__(self, category: ItemCategory, subevent):
         self.id = category.id
-        self.name = str(category.name) + (f" ({subevent})" if subevent else "")
+        self.name = f"{category.name} ({subevent})"
         self.description = category.description
 
 
@@ -58,35 +58,34 @@ class CrossSellingService:
                 (DummyCategory(category, subevent),
                  self._prepare_items(subevent, items_qs, discount_info),
                  f'subevent_{subevent.pk}_')
-                for (category, items_qs, discount_info) in self._applicable_categories
                 for subevent in subevents
+                for (category, items_qs, discount_info) in self._applicable_categories(subevent.pk)
             )
         else:
             result = (
                 (category,
                  self._prepare_items(None, items_qs, discount_info),
                  None)
-                for (category, items_qs, discount_info) in self._applicable_categories
+                for (category, items_qs, discount_info) in self._applicable_categories(0)
             )
         return [(category, items, form_prefix) for (category, items, form_prefix) in result if len(items) > 0]
 
-    @property
-    def _applicable_categories(self):
+    def _applicable_categories(self, subevent_id):
         return [
             (c, products_qs, discount_info) for (c, products_qs, discount_info) in
             (
-                (c, *self._get_visible_items_for_category(c))
+                (c, *self._get_visible_items_for_category(subevent_id, c))
                 for c in self.event.categories.filter(cross_selling_mode__isnull=False).prefetch_related('items')
             )
             if products_qs is not None
         ]
 
-    def _get_visible_items_for_category(self, category: ItemCategory):
+    def _get_visible_items_for_category(self, filter_subevent_id, category: ItemCategory):
         """
         If this category should be visible in the cross-selling step for a given cart and sales_channel, this method
         returns a queryset of the items that should be displayed, as well as a dict giving additional information on them.
 
-        :returns: (QuerySet<Item>, dict<item_pk: (max_count, discount_rule)>)
+        :returns: (QuerySet<Item>, dict<(subevent_id, item_pk): (max_count, discount_rule)>)
             max_count is `inf` if the item should not be limited
             discount_rule is None if the item will not be discounted
         """
@@ -101,14 +100,13 @@ class CrossSellingService:
             my_item_pks = [item.id for item in category.items.all()]
             potential_discount_items = {
                 item.pk: (max_count, discount_rule)
-                for item, max_count, discount_rule in self._potential_discounts_by_item_for_current_cart
-                if max_count > 0 and item.pk in my_item_pks and item.is_available()
+                for subevent_id, item, max_count, discount_rule in self._potential_discounts_by_subevent_and_item_for_current_cart
+                if max_count > 0 and item.pk in my_item_pks and item.is_available() and (subevent_id == filter_subevent_id or subevent_id is None)
             }
-
             return category.items.filter(pk__in=potential_discount_items), potential_discount_items
 
     @cached_property
-    def _potential_discounts_by_item_for_current_cart(self):
+    def _potential_discounts_by_subevent_and_item_for_current_cart(self):
         potential_discounts_by_cartpos = defaultdict(list)
 
         from ..services.pricing import apply_discounts
@@ -133,26 +131,27 @@ class CrossSellingService:
         # - max_count for product: sum up max_counts
         # - discount_rule for product: take first discount_rule
 
-        def discount_info(item, infos_for_item):
+        def discount_info(subevent_id, item, infos_for_item):
             infos_for_item = list(infos_for_item)
             return (
+                subevent_id,
                 item,
-                sum(max_count for (item, discount_rule, max_count, i) in infos_for_item),
-                next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item)
+                sum(max_count for (subevent_id, item, discount_rule, max_count, i) in infos_for_item),
+                next(discount_rule for (subevent_id, item, discount_rule, max_count, i) in infos_for_item),
             )
 
         return [
-            discount_info(item, infos_for_item) for item, infos_for_item in
+            discount_info(subevent_id, item, infos_for_item) for (subevent_id, item), infos_for_item in
             groupby(
                 sorted(
                     (
-                        (item, discount_rule, max_count, i)
-                        for (discount_rule, max_count, i) in potential_discount_set.keys()
+                        (subevent_id, item, discount_rule, max_count, i)
+                        for (discount_rule, max_count, i, subevent_id) in potential_discount_set.keys()
                         for item in discount_rule.benefit_limit_products.all()
                     ),
-                    key=lambda tup: tup[0].pk
+                    key=lambda tup: (tup[0], tup[1].pk)
                 ),
-                lambda tup: tup[0])
+                lambda tup: (tup[0], tup[1]))
         ]
 
     def _prepare_items(self, subevent, items_qs, discount_info):
