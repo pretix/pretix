@@ -196,9 +196,8 @@ class CrossSellingService:
                             var.original_price = var.original_price or var.display_price
                             previous_price = var.display_price
                             new_price = (
-                                    previous_price * (
-                                    (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal(
-                                '100.00'))
+                                previous_price * (
+                                    (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'))
                             )
                             var.display_price = new_price
 

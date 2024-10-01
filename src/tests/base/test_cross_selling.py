@@ -28,7 +28,6 @@ import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from freezegun import freeze_time
-
 from tests import assert_num_queries
 
 from pretix.base.models import CartPosition, Discount, Event, Organizer
