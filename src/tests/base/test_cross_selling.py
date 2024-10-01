@@ -54,9 +54,9 @@ def eventseries():
         organizer=o, name='Dummy', slug='dummy',
         date_from=start, has_subevents=True
     )
-    s1 = event.subevents.create(name='Date1', date_from=start + datetime.timedelta(hours=1), active=True)
-    s2 = event.subevents.create(name='Date2', date_from=start + datetime.timedelta(hours=2), active=True)
-    s3 = event.subevents.create(name='Date3', date_from=start + datetime.timedelta(hours=3), active=True)
+    event.subevents.create(name='Date1', date_from=start + datetime.timedelta(hours=1), active=True)
+    event.subevents.create(name='Date2', date_from=start + datetime.timedelta(hours=2), active=True)
+    event.subevents.create(name='Date3', date_from=start + datetime.timedelta(hours=3), active=True)
     return event
 
 
