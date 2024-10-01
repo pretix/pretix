@@ -631,7 +631,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     @cached_property
     def cross_selling_is_applicable(self):
-        return any(len(items) > 0 for (category, items) in self.cross_selling_data)
+        return any(len(items) > 0 for (category, items, form_prefix) in self.cross_selling_data)
 
     @cached_property
     def cross_selling_data(self):

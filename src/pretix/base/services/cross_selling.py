@@ -65,7 +65,7 @@ class CrossSellingService:
             result = (
                 (category,
                  self._prepare_items(None, items_qs, discount_info),
-                 None)
+                 '')
                 for (category, items_qs, discount_info) in self._applicable_categories(0)
             )
         return [(category, items, form_prefix) for (category, items, form_prefix) in result if len(items) > 0]
