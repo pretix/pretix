@@ -514,7 +514,7 @@ def test_query_count_many_items(event, itemcount):
         recommendations='''             Price     Discounted Price    Max Count   Prefix
         Tickets        Ticket 2         42.00                 0.00            1        -
         ''',
-        expect_num_queries=12,
+        expect_num_queries=9,
     )
     check_cart_behaviour(
         event,
@@ -530,7 +530,7 @@ def test_query_count_many_items(event, itemcount):
         recommendations='''             Price     Discounted Price    Max Count   Prefix
         Tickets        Ticket 2         42.00                 0.00            1        -
         ''',
-        expect_num_queries=12,
+        expect_num_queries=9,
     )
 
 
@@ -568,7 +568,7 @@ def test_query_count_many_categories_and_discounts(event, catcount):
         recommendations='''             Price     Discounted Price    Max Count   Prefix
         Category 1     Ticket 1-B       42.00                 0.00            1        -
         ''',
-        expect_num_queries=12,
+        expect_num_queries=9,
     )
     check_cart_behaviour(
         event,
@@ -584,7 +584,7 @@ def test_query_count_many_categories_and_discounts(event, catcount):
         recommendations='''             Price     Discounted Price    Max Count   Prefix
         Category 1     Ticket 1-B       42.00                 0.00            1        -
         ''',
-        expect_num_queries=12,
+        expect_num_queries=9,
     )
 
 
@@ -622,7 +622,7 @@ def test_query_count_many_cartpos(event, catcount):
         recommendations='''             Price     Discounted Price    Max Count   Prefix
         Category 1     Ticket 1-B       42.00                 0.00            1        -
         ''',
-        expect_num_queries=12,
+        expect_num_queries=9,
     )
     check_cart_behaviour(
         event,
@@ -644,5 +644,5 @@ def test_query_count_many_cartpos(event, catcount):
         Category 1     Ticket 1-B       42.00                 0.00            1        -
         Category 2     Ticket 2-B       42.00                 0.00            1        -
         ''',
-        expect_num_queries=16,
+        expect_num_queries=13,
     )
