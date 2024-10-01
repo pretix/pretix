@@ -20,10 +20,12 @@
                 <details class="panel panel-default" open>
                     <summary class="panel-heading">
                         <h3 class="panel-title">
-                            <span class="sr-only">{% trans "Add-ons:" %}</span>
-                            <strong>{{ form.item.name }}{% if form.variation %}
-                                – {{ form.variation }}
-                            {% endif %}</strong>
+                            <span>
+                                {% trans "Additional options for" %}
+                                <strong>{{ form.item.name }}{% if form.variation %}
+                                    – {{ form.variation }}
+                                {% endif %}</strong>
+                            </span>
                         </h3>
                     </summary>
                     <div id="cp{{ form.pos.pk }}">
@@ -50,7 +52,18 @@
             {% endfor %}
         </div>
 
-        {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event %}
+        {% if cross_selling_data %}
+            <details class="panel panel-default cross-selling" open>
+                <summary class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "More recommendations" %}
+                    </h3>
+                </summary>
+                <div class="panel-body">
+                    {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event %}
+                </div>
+            </details>
+        {% endif %}
 
         <div class="row checkout-button-row">
             <div class="col-md-4 col-sm-6">
