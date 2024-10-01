@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-26 11:22+0000\n"
-"PO-Revision-Date: 2024-10-01 07:00+0000\n"
+"PO-Revision-Date: 2024-10-01 22:52+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -704,10 +704,8 @@ msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
 msgstr ""
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Ticket design"
 msgid "source code"
-msgstr "Jegy design"
+msgstr "forráskód"
 
 #: pretix/base/customersso/oidc.py:61
 #, python-brace-format
@@ -1013,10 +1011,8 @@ msgstr ""
 
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:102
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:66
-#, fuzzy
-#| msgid "Past events"
 msgid "Registration date"
-msgstr "Elmúlt események"
+msgstr "Regisztrációs dátum"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
@@ -1399,7 +1395,7 @@ msgstr "Cím"
 #: pretix/plugins/checkinlists/exporters.py:533
 #: pretix/plugins/reports/exporters.py:841
 msgid "ZIP code"
-msgstr ""
+msgstr "Irányítószám"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -1414,7 +1410,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:534
 #: pretix/plugins/reports/exporters.py:842
 msgid "City"
-msgstr ""
+msgstr "Város"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -2322,11 +2318,11 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:345
 msgid "Invoice address ZIP code"
-msgstr ""
+msgstr "Számla cím irányítószám"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:350
 msgid "Invoice address city"
-msgstr ""
+msgstr "Számla cím város"
 
 #: pretix/base/exporters/orderlist.py:651 pretix/base/pdf.py:360
 msgid "Invoice address country"
@@ -3053,7 +3049,7 @@ msgstr ""
 
 #: pretix/base/forms/questions.py:683 pretix/base/forms/questions.py:1007
 msgid "Street and Number"
-msgstr ""
+msgstr "Cím és házszám"
 
 #: pretix/base/forms/questions.py:717 pretix/base/forms/questions.py:1059
 msgctxt "address"
@@ -3183,7 +3179,7 @@ msgstr ""
 
 #: pretix/base/forms/widgets.py:238
 msgid "Individual customer"
-msgstr ""
+msgstr "Magánszemély"
 
 #: pretix/base/invoice.py:86
 #, python-format
@@ -3907,10 +3903,8 @@ msgid "Ticket code revoked/changed"
 msgstr "Jegy design"
 
 #: pretix/base/models/checkin.py:363
-#, fuzzy
-#| msgid "Past events"
 msgid "Information required"
-msgstr "Elmúlt események"
+msgstr "Információ szükséges"
 
 #: pretix/base/models/checkin.py:364
 msgid "Ticket already used"
@@ -5307,7 +5301,7 @@ msgstr ""
 #: pretix/base/models/items.py:1993 pretix/control/forms/event.py:1637
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
-msgstr ""
+msgstr "Összes férőhely"
 
 #: pretix/base/models/items.py:1995 pretix/control/forms/item.py:391
 msgid "Leave empty for an unlimited number of tickets."
@@ -5547,10 +5541,8 @@ msgid "Meta information"
 msgstr ""
 
 #: pretix/base/models/orders.py:303
-#, fuzzy
-#| msgid "Past events"
 msgid "API meta information"
-msgstr "Elmúlt események"
+msgstr "API meta-információ"
 
 #: pretix/base/models/orders.py:392 pretix/plugins/sendmail/forms.py:236
 #: pretix/plugins/sendmail/forms.py:391 pretix/plugins/sendmail/views.py:272
@@ -6732,6 +6724,11 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"Gipsz Jakab\n"
+"Példa Kft.\n"
+"Szezám utca 42.\n"
+"1234 Mucsaröcsöge\n"
+"Csodaország"
 
 #: pretix/base/pdf.py:187
 msgid "Attendee street"
@@ -6739,11 +6736,11 @@ msgstr ""
 
 #: pretix/base/pdf.py:192
 msgid "Attendee ZIP code"
-msgstr ""
+msgstr "Látogató irányítószáma"
 
 #: pretix/base/pdf.py:197
 msgid "Attendee city"
-msgstr ""
+msgstr "Látogató városa"
 
 #: pretix/base/pdf.py:202
 msgid "Attendee state"
@@ -6852,7 +6849,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:316 pretix/base/settings.py:1118
 msgid "Random City"
-msgstr ""
+msgstr "Randomváros"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
@@ -6868,7 +6865,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:351 pretix/base/services/invoices.py:476
 msgid "Sample city"
-msgstr ""
+msgstr "Példa város"
 
 #: pretix/base/pdf.py:355
 msgid "Invoice address state"
@@ -7875,7 +7872,7 @@ msgstr ""
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
-msgstr ""
+msgstr "Bizonyos tételek ára megváltozott. Lásd lejjebb a részleteket."
 
 #: pretix/base/services/orders.py:140
 msgid "An internal error occurred, please try again."
@@ -7912,7 +7909,7 @@ msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
-msgstr ""
+msgstr "A felhasznált kuponkód nincs az adatbázisunkban."
 
 #: pretix/base/services/orders.py:162
 msgid ""
@@ -7920,6 +7917,8 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
+"Az egyik felhasznált kuponkód már elérte a maximális felhasználások számát. "
+"A tételt amire használtad eltávolítottuk a kosárból."
 
 #: pretix/base/services/orders.py:166
 msgid ""
@@ -9466,10 +9465,8 @@ msgid "Refund method"
 msgstr ""
 
 #: pretix/base/settings.py:1990 pretix/base/settings.py:2003
-#, fuzzy
-#| msgid "Past events"
 msgid "Terms of cancellation"
-msgstr "Elmúlt események"
+msgstr "Lemondási feltételek"
 
 #: pretix/base/settings.py:1993
 msgid ""
@@ -10340,6 +10337,8 @@ msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
+"Kérjük helyes e-mail címet adjál meg. Küldeni fogunk egy linket amire "
+"szükséged lesz, hogy hozzáférjél késöbb a rendelésedhez."
 
 #: pretix/base/settings.py:3108
 msgid "Help text of the email field"
@@ -10994,10 +10993,8 @@ msgid "Proceed to %(host)s"
 msgstr ""
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Source code"
-msgstr "Jegy design"
+msgstr "Forráskód"
 
 #: pretix/base/templates/source.html:10
 msgid ""
@@ -11057,11 +11054,9 @@ msgid "Next 14 days"
 msgstr ""
 
 #: pretix/base/timeframes.py:112
-#, fuzzy
-#| msgid "Comment:"
 msgctxt "reporting_timeframe"
 msgid "Current week"
-msgstr "Megjegyzés:"
+msgstr "Aktuális hét"
 
 #: pretix/base/timeframes.py:116 pretix/base/timeframes.py:125
 #: pretix/base/timeframes.py:134 pretix/base/timeframes.py:143
@@ -11082,14 +11077,12 @@ msgstr ""
 #: pretix/base/timeframes.py:139
 msgctxt "reporting_timeframe"
 msgid "Next week"
-msgstr ""
+msgstr "Előző hét"
 
 #: pretix/base/timeframes.py:148
-#, fuzzy
-#| msgid "Comment:"
 msgctxt "reporting_timeframe"
 msgid "Current month"
-msgstr "Megjegyzés:"
+msgstr "Aktuális hónap"
 
 #: pretix/base/timeframes.py:152 pretix/base/timeframes.py:161
 #: pretix/base/timeframes.py:170 pretix/base/timeframes.py:179
@@ -12007,10 +12000,8 @@ msgid "Pending or paid"
 msgstr ""
 
 #: pretix/control/forms/filter.py:220
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancellations"
-msgstr "Elmúlt események"
+msgstr "Lemondások"
 
 #: pretix/control/forms/filter.py:221
 msgid "Canceled (fully)"
@@ -12607,6 +12598,8 @@ msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr ""
+"Ez a pretix installáció forráskódja módosításokat vagy kiegészítéseket "
+"tartalmaz."
 
 #: pretix/control/forms/global_settings.py:155
 msgid "Usage of pretix"
@@ -13242,10 +13235,8 @@ msgid "You need to specify an amount for a partial refund."
 msgstr ""
 
 #: pretix/control/forms/orders.py:782
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancel all dates"
-msgstr "Elmúlt események"
+msgstr "Összes időpont lemondása"
 
 #: pretix/control/forms/orders.py:801
 msgid "Automatically refund money if possible"
@@ -15735,11 +15726,9 @@ msgid "ZVT Terminal"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:17
-#, fuzzy
-#| msgid "Past events"
 msgctxt "terminal_zvt"
 msgid "Confirmation mode"
-msgstr "Elmúlt események"
+msgstr "Visszajelzési mód"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
 msgctxt "terminal_zvt"
@@ -16375,10 +16364,8 @@ msgid "Valid check-in"
 msgstr "Kifizetett megrendelések"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:68
-#, fuzzy
-#| msgid "Past events"
 msgid "Additional information required"
-msgstr "Elmúlt események"
+msgstr "Több információ szükséges"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
@@ -16386,10 +16373,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:92
-#, fuzzy
-#| msgid "Past events"
 msgid "Special attention required"
-msgstr "Elmúlt események"
+msgstr "Külön figyelem szükséges"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
@@ -16730,10 +16715,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancel event"
-msgstr "Elmúlt események"
+msgstr "Esemény lemondása"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
 msgid ""
@@ -18479,10 +18462,8 @@ msgid "Check-in & Validity"
 msgstr "Kifizetett megrendelések"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:214
-#, fuzzy
-#| msgid "Past events"
 msgid "Duration"
-msgstr "Elmúlt események"
+msgstr "Időtartam"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:217
 msgid "hours"
@@ -18682,10 +18663,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:111
-#, fuzzy
-#| msgid "Past events"
 msgid "Condition:"
-msgstr "Elmúlt események"
+msgstr "Feltétel:"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:126
 msgid "Applies to:"
@@ -19422,7 +19401,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:39
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:29
 msgid "Invoice information"
-msgstr "Számla információ"
+msgstr "Számlainformáció"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:26
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:40
@@ -19538,10 +19517,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:142
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancellation request"
-msgstr "Elmúlt események"
+msgstr "Lemondási kérelem"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:146
 msgid "The customer asked you to cancel the order with the following settings:"
@@ -19556,10 +19533,8 @@ msgid "Delete request"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:185
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancellation date"
-msgstr "Elmúlt események"
+msgstr "Lemondási dátum"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:207
 msgid ""
@@ -20850,10 +20825,8 @@ msgid "Organizer: %(name)s"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:6
-#, fuzzy
-#| msgid "Past events"
 msgid "Change multiple devices"
-msgstr "Elmúlt események"
+msgstr "Több eszköz módosítása"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:13
@@ -21401,11 +21374,9 @@ msgstr "Elővétel nem kezdődött el"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:59
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:42
-#, fuzzy
-#| msgid "Past events"
 msgctxt "reusable_media"
 msgid "Connections"
-msgstr "Elmúlt események"
+msgstr "Kapcsolatok"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:12
@@ -22227,11 +22198,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:11
-#, fuzzy
-#| msgid "Past events"
 msgctxt "subevent"
 msgid "Change multiple dates"
-msgstr "Elmúlt események"
+msgstr "Több időpont módosítása"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:153
 msgid "Item prices"
@@ -25010,10 +24979,8 @@ msgstr "Kifizetett megrendelések"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
-#, fuzzy
-#| msgid "Past events"
 msgid "Conditions"
-msgstr "Elmúlt események"
+msgstr "Feltételek"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
@@ -28527,7 +28494,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:65
 msgid "Download tickets (PDF)"
-msgstr ""
+msgstr "Összes jegy letöltése (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:66
 msgid "Download ticket (PDF)"
@@ -29101,7 +29068,7 @@ msgstr "Végleges rendelés leadása"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:209
 msgid "Submit registration"
-msgstr "Regisztrálás"
+msgstr "Beküldés"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
@@ -29623,7 +29590,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 msgid "We're trying to reserve another one for you!"
-msgstr "Próbálunk mégegyet foglalni neked!"
+msgstr "Foglalunk még egyet..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:302
 #: pretix/presale/templates/pretixpresale/event/index.html:173
@@ -29671,18 +29638,17 @@ msgid "incl. %(tax_sum)s taxes"
 msgstr "%(tax_sum)s adót tartalmaz"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:482
-#, fuzzy, python-format
-#| msgid "The items in your cart are no longer reserved for you."
+#, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr "A kosárba helyezett termékek tovább nincsenek tovább foglalva."
+msgstr "A kosárba helyezett termékek még %(minutes)s percig vannak foglalva."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:486
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "A kosárba helyezett termékek tovább nincsenek tovább foglalva."
+msgstr ""
+"A kosárba helyezett tételek tovább már nincsenek lefoglalva. Még "
+"megpróbálhatod befejezni a rendelést, ha még elérhetőek."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:490
 msgid "Overview of your ordered products."
@@ -29700,7 +29666,7 @@ msgstr "Véglegesítés"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:40
 msgid "Empty cart"
-msgstr "Üres kosár"
+msgstr "Kosár törlése"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:236
@@ -30163,7 +30129,7 @@ msgstr "A foglalási időszak kezdete erre az eseményre: %(date)s %(time)s."
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:61
 msgid "We're now trying to reserve this for you!"
-msgstr "Próbáljuk lefoglalni!"
+msgstr "Foglaljuk a jegyet..."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:192
 msgid ""
@@ -30198,6 +30164,9 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Ha szeretnéd látni vagy megváltoztatni a rendelésed részleteit, kattints a "
+"linkre amit küldtünk a rendelésed során. Ha nem találod a linket, nyomd meg "
+"a következő gombot, és újra elküldjük a címedre."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:256
 msgid "Resend order link"
@@ -30219,10 +30188,8 @@ msgid "It is only accessible to authenticated team members."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:11
-#, fuzzy
-#| msgid "Please go back and try again."
 msgid "Please try again later."
-msgstr "Menj vissza és próbáld újra."
+msgstr "Kérjük próbáld meg újra."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
@@ -30298,7 +30265,7 @@ msgstr "Kérjük a következő dátum előtt fizesd ki a rendelést:  %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:107
 msgid "Re-try payment or choose another payment method"
-msgstr "Próbáld újra  a fizetést, vagy válassz egy másik fizetési módszert"
+msgstr "Próbáld újra a fizetést, vagy válassz egy másik fizetési módszert"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:125
 msgid ""
@@ -30852,12 +30819,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
 msgid "Week"
-msgstr ""
+msgstr "Hét"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:17
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
 msgid "Month"
-msgstr ""
+msgstr "Hónap"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
@@ -31123,18 +31090,16 @@ msgstr "Eseménylista"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
-msgstr "Elmúlt események"
+msgstr "Múltbéli események"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
 msgstr "Következő események"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:65
-#, fuzzy
-#| msgid "Past events"
 msgctxt "subevent"
 msgid "Multiple dates"
-msgstr "Elmúlt események"
+msgstr "Több időpont"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 #: pretix/presale/views/widget.py:437
@@ -31155,7 +31120,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:144
 msgid "Show past events"
-msgstr "Elmúlt események megjelenítése"
+msgstr "Múltbéli események megjelenítése"
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
