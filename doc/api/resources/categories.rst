@@ -29,11 +29,11 @@ cross_selling_mode                    string                     If ``null``, cr
                                                                  If ``"both"``, it is visible on the normal index page
                                                                  as well.
 cross_selling_condition               string                     Only relevant if ``cross_selling_mode`` is not ``null``.
-                                                                 If ``"always"``, Always show in cross-selling step.
-                                                                 If ``"products"``, Only if the cart contains one of
+                                                                 If ``"always"``, always show in cross-selling step.
+                                                                 If ``"products"``, only show if the cart contains one of
                                                                  these products.
-                                                                 If ``"discounts"``, Only show products affected by
-                                                                 discount rules.
+                                                                 If ``"discounts"``, only show products that qualify for
+                                                                 a discount according to discount rules.
 cross_selling_match_products          list of integer            Only relevant if ``cross_selling_condition`` is
                                                                  ``"products"``. Internal ID of the items of which at
                                                                  least one needs to be in the cart for this category to
