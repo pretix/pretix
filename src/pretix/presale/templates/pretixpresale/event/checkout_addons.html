@@ -60,7 +60,7 @@
                     </h3>
                 </summary>
                 <div class="panel-body">
-                    {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event %}
+                    {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event is_cross_selling=True %}
                 </div>
             </details>
         {% endif %}

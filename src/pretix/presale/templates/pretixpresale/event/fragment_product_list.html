@@ -8,7 +8,11 @@
 {% for tup in items_by_category %}{% with category=tup.0 items=tup.1 form_prefix=tup.2 %}
     {% if category %}
         <section aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
-            <h3 id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}</h3>
+            <h3 id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}
+                {% if is_cross_selling and category.cross_selling_condition == 'discounts' %}
+                    <small><span class="label label-success"><i class="fa fa-star"></i> {% trans "Your order qualifies for a discount" %}</span></small>
+                {% endif %}
+            </h3>
             {% if category.description %}
                 <div id="{{ form_prefix }}category-info-{{ category.id }}">{{ category.description|localize|rich_text }}</div>
             {% endif %}
