@@ -870,10 +870,12 @@ class Event(EventMixin, LoggedModel):
         for i in Item.objects.filter(event=other).prefetch_related(
             'variations', 'limit_sales_channels', 'require_membership_types',
             'variations__limit_sales_channels', 'variations__require_membership_types',
+            'matched_by_cross_selling_categories',
         ):
             vars = list(i.variations.all())
             require_membership_types = list(i.require_membership_types.all())
             limit_sales_channels = list(i.limit_sales_channels.all())
+            matched_by_cross_selling_categories = list(i.matched_by_cross_selling_categories.all())
             item_map[i.pk] = i
             i.pk = None
             i.event = self
@@ -910,6 +912,9 @@ class Event(EventMixin, LoggedModel):
                     v.require_membership_types.set(require_membership_types)
                 if not v.all_sales_channels:
                     v.limit_sales_channels.set(self.organizer.sales_channels.filter(identifier__in=[s.identifier for s in limit_sales_channels]))
+
+            if matched_by_cross_selling_categories:
+                i.matched_by_cross_selling_categories.set([category_map[c.pk] for c in matched_by_cross_selling_categories])
 
         for i in self.items.filter(hidden_if_item_available__isnull=False):
             i.hidden_if_item_available = item_map[i.hidden_if_item_available_id]
@@ -1077,7 +1082,7 @@ class Event(EventMixin, LoggedModel):
 
             s.object = self
             s.pk = None
-            if s.value.startswith('file://') and settings_hierarkey.get_declared_type(s.key) == File:
+            if s.value.startswith('file://') and secross_sell_categoryttings_hierarkey.get_declared_type(s.key) == File:
                 fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
                 fname_base = clean_filename(os.path.basename(s.value))
