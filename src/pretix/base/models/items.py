@@ -112,7 +112,7 @@ class ItemCategory(LoggedModel):
     )
     CROSS_SELLING_MODES = (
         (None, _('Normal category')),
-        ('both', _('Combined category')),
+        ('both', _('Combined cross-selling category')),
         ('only', _('Cross-selling category')),
     )
     cross_selling_mode = models.CharField(
