@@ -103,7 +103,7 @@ def timeline_for_event(event, subevent=None):
         tl.append(TimelineEvent(
             event=event, subevent=subevent,
             datetime=rd.datetime(ev),
-            description=pgettext_lazy('timeline', 'Customers can no longer modify their orders'),
+            description=pgettext_lazy('timeline', 'Customers can no longer modify their order information'),
             edit_url=ev_edit_url
         ))
 
@@ -153,6 +153,18 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=rd.datetime(ev),
             description=pgettext_lazy('timeline', 'Customers can no longer cancel paid orders'),
+            edit_url=reverse('control:event.settings.cancel', kwargs={
+                'event': event.slug,
+                'organizer': event.organizer.slug
+            })
+        ))
+
+    rd = event.settings.get('change_allow_user_until', as_type=RelativeDateWrapper)
+    if rd and event.settings.change_allow_user_until:
+        tl.append(TimelineEvent(
+            event=event, subevent=subevent,
+            datetime=rd.datetime(ev),
+            description=pgettext_lazy('timeline', 'Customers can no longer make changes to their orders'),
             edit_url=reverse('control:event.settings.cancel', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
