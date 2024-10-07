@@ -239,11 +239,14 @@ class VoucherForm(I18nModelForm):
                 self.instance.event, self.instance.quota, self.instance.item, self.instance.variation
             )
         Voucher.clean_voucher_code(data, self.instance.event, self.instance.pk)
-        if 'seat' in self.fields and data.get('seat'):
-            self.instance.seat = Voucher.clean_seat_id(
-                data, self.instance.item, self.instance.quota, self.instance.event, self.instance.pk
-            )
-            self.instance.item = self.instance.seat.product
+        if 'seat' in self.fields:
+            if data.get('seat'):
+                self.instance.seat = Voucher.clean_seat_id(
+                    data, self.instance.item, self.instance.quota, self.instance.event, self.instance.pk
+                )
+                self.instance.item = self.instance.seat.product
+            else:
+                self.instance.seat = None
 
         voucher_form_validation.send(sender=self.instance.event, form=self, data=data)
 
