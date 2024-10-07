@@ -262,7 +262,7 @@ def base_placeholders(sender, **kwargs):
                 'presale:event.order.open', kwargs={
                     'order': order.code,
                     'secret': order.secret,
-                    'hash': order.email_confirm_hash()
+                    'hash': order.email_confirm_secret()
                 }
             ), lambda event: build_absolute_uri(
                 event,
@@ -443,7 +443,7 @@ def base_placeholders(sender, **kwargs):
                         'organizer': event.organizer.slug,
                         'order': order.code,
                         'secret': order.secret,
-                        'hash': order.email_confirm_hash(),
+                        'hash': order.email_confirm_secret(),
                     }),
                 )
                 for order in orders
