@@ -571,13 +571,23 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     def get_session_auth_hash(self):
         """
-        Return an HMAC that needs to
+        Return an HMAC that needs to be the same throughout the session, used e.g. for forced
+        logout after every password change.
+        """
+        return self._get_session_auth_hash(secret=settings.SECRET_KEY)
+
+    def get_session_auth_fallback_hash(self):
+        for fallback_secret in settings.SECRET_KEY_FALLBACKS:
+            yield self._get_session_auth_hash(secret=fallback_secret)
+
+    def _get_session_auth_hash(self, secret):
+        """
         """
         key_salt = "pretix.base.models.User.get_session_auth_hash"
         payload = self.password
         payload += self.email
         payload += self.session_token
-        return salted_hmac(key_salt, payload).hexdigest()
+        return salted_hmac(key_salt, payload, secret=secret).hexdigest()
 
     def update_session_token(self):
         self.session_token = generate_session_token()

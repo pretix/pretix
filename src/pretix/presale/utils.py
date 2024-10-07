@@ -100,10 +100,23 @@ def get_customer(request):
                 request._cached_customer = None
             else:
                 session_hash = session.get(hash_session_key)
+                session_auth_hash = customer.get_session_auth_hash()
                 session_hash_verified = session_hash and constant_time_compare(
                     session_hash,
-                    customer.get_session_auth_hash()
+                    session_auth_hash,
                 )
+                if not session_hash_verified:
+                    # If the current secret does not verify the session, try
+                    # with the fallback secrets and stop when a matching one is
+                    # found.
+                    if session_hash and any(
+                        constant_time_compare(session_hash, fallback_auth_hash)
+                        for fallback_auth_hash in customer.get_session_auth_fallback_hash()
+                    ):
+                        request.session.cycle_key()
+                        request.session[hash_session_key] = session_auth_hash
+                        session_hash_verified = True
+
                 if session_hash_verified:
                     request._cached_customer = customer
                 else:
