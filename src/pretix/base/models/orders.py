@@ -40,6 +40,7 @@ import json
 import logging
 import operator
 import string
+import warnings
 from collections import Counter
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -383,6 +384,11 @@ class Order(LockModel, LoggedModel):
 
     def email_confirm_secret(self):
         return self.tagged_secret("email_confirm", 9)
+
+    def email_confirm_hash(self):
+        warnings.warn('Use email_confirm_secret() instead of email_confirm_hash().',
+                      DeprecationWarning)
+        return self.email_confirm_secret()
 
     def check_email_confirm_secret(self, received_secret):
         return (
