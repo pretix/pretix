@@ -102,8 +102,13 @@
     }
   }
 }
-.cross-selling .panel-body > section:first-child > h3 {
-  margin-top: 10px; font-size: 21px;
+.cross-selling .panel-body h3 {
+  font-size: 21px;
+  line-height: inherit;
+  margin-top: 20px;
+}
+.cross-selling .panel-body > *:first-child > h3:first-child {
+  margin-top: 0;
 }
 
 
