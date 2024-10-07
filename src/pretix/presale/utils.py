@@ -114,7 +114,7 @@ def get_customer(request):
                         for fallback_auth_hash in customer.get_session_auth_fallback_hash()
                     ):
                         request.session.cycle_key()
-                        request.session[hash_session_key] = customer.get_session_auth_hash()
+                        request.session[hash_session_key] = session_auth_hash
                         session_hash_verified = True
 
                 if session_hash_verified:
