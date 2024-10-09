@@ -1082,7 +1082,7 @@ class Event(EventMixin, LoggedModel):
 
             s.object = self
             s.pk = None
-            if s.value.startswith('file://') and secross_sell_categoryttings_hierarkey.get_declared_type(s.key) == File:
+            if s.value.startswith('file://') and settings_hierarkey.get_declared_type(s.key) == File:
                 fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
                 fname_base = clean_filename(os.path.basename(s.value))
