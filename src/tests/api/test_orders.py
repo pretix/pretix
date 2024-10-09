@@ -211,6 +211,7 @@ TEST_ORDERPOSITION_RES = {
         {
             "id": -1,
             "device_id": -1,
+            "successful": True,
             "datetime": "2017-12-01T12:00:00Z",
             "source": "pretixpos",
             "type": "badge",

@@ -25,6 +25,7 @@ class Migration(migrations.Migration):
                 ),
                 ("datetime", models.DateTimeField(default=django.utils.timezone.now)),
                 ("created", models.DateTimeField(auto_now_add=True, null=True)),
+                ("successful", models.BooleanField(default=True)),
                 ("source", models.CharField(max_length=255)),
                 ("type", models.CharField(max_length=255)),
                 ("info", models.JSONField(default=dict)),

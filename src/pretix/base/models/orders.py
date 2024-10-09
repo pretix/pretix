@@ -3411,6 +3411,9 @@ class PrintLog(models.Model):
         related_name='print_logs',
         on_delete=models.CASCADE,
     )
+    successful = models.BooleanField(
+        default=True,
+    )
 
     # Datetime of checkin, might be different from created if past scans are uploaded
     datetime = models.DateTimeField(default=now)

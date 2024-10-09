@@ -208,6 +208,10 @@ checkins                              list of objects            List of **succe
 └ auto_checked_in                     boolean                    Indicates if this check-in been performed automatically by the system
 print_logs                            list of objects            List of print jobs recorded e.g. by the pretix apps
 ├ id                                  integer                    Internal ID of the print job
+├ successful                          boolean                    Whether the print job successfully resulted in a print.
+                                                                 This is not expected to be 100 % reliable information (since
+                                                                 printer feedback is never perfect) and there is no guarantee
+                                                                 that unsuccessful jobs will be logged.
 ├ device_id                           integer                    Attribute ``device_id`` of the device that recorded the print. Can be ``null``.
 ├ datetime                            datetime                   Time of printing
 ├ source                              string                     Source of print job, e.g. name of the app used.
@@ -657,6 +661,7 @@ Fetching individual orders
               {
                 "id": 1,
                 "type": "badge",
+                "successful": true,
                 "datetime": "2017-12-25T12:45:23Z",
                 "device_id": 1,
                 "source": "pretixSCAN",
@@ -1623,6 +1628,7 @@ List of all order positions
               {
                 "id": 1,
                 "type": "badge",
+                "successful": true,
                 "datetime": "2017-12-25T12:45:23Z",
                 "device_id": 1,
                 "source": "pretixSCAN",
@@ -1748,6 +1754,7 @@ Fetching individual positions
           {
             "id": 1,
             "type": "badge",
+            "successful": true,
             "datetime": "2017-12-25T12:45:23Z",
             "device_id": 1,
             "source": "pretixSCAN",

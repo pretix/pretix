@@ -295,6 +295,7 @@ class PrintLogSerializer(serializers.ModelSerializer):
         model = PrintLog
         fields = (
             "id",
+            "successful",
             "datetime",
             "source",
             "type",
