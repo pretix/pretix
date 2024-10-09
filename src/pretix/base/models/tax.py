@@ -306,8 +306,11 @@ class TaxRule(LoggedModel):
 
         if rate == Decimal('0.00'):
             return TaxedPrice(
-                net=base_price - subtract_from_gross, gross=base_price - subtract_from_gross, tax=Decimal('0.00'),
-                rate=rate, name=self.name
+                net=max(Decimal('0.00'), base_price - subtract_from_gross),
+                gross=max(Decimal('0.00'), base_price - subtract_from_gross),
+                tax=Decimal('0.00'),
+                rate=rate,
+                name=self.name,
             )
 
         if base_price_is == 'auto':
