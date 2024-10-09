@@ -54,22 +54,22 @@ class CrossSellingService:
     def get_data(self):
         if self.event.has_subevents:
             subevents = set(pos.subevent for pos in self.cartpositions)
-            result = (
+            result = [
                 (DummyCategory(category, subevent),
                  self._prepare_items(subevent, items_qs, discount_info),
                  f'subevent_{subevent.pk}_')
                 for subevent in subevents
                 for (category, items_qs, discount_info) in self._applicable_categories(subevent.pk)
-            )
+            ]
         else:
-            result = (
+            result = [
                 (category,
                  self._prepare_items(None, items_qs, discount_info),
                  '')
                 for (category, items_qs, discount_info) in self._applicable_categories(0)
-            )
+            ]
         for category, items, form_prefix in result:
-            category.has_discount = any(item.original_price for item in items)
+            category.category_has_discount = any(item.original_price for item in items)
         return [(category, items, form_prefix) for (category, items, form_prefix) in result if len(items) > 0]
 
     def _applicable_categories(self, subevent_id):

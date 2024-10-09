@@ -9,7 +9,7 @@
     {% if category %}
         <section aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
             <h3 id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}
-                {% if category.has_discount %}
+                {% if category.category_has_discount %}
                     <small class="text-success"><i class="fa fa-star"></i> {% trans "Your order qualifies for a discount" %}</small>
                 {% endif %}
             </h3>
