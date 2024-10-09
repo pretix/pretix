@@ -807,6 +807,19 @@ def test_event_update_plugins_validation(token_client, organizer, event, item, m
     )
     assert resp.status_code == 200
 
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "all_sales_channels": False,
+            "limit_sales_channels": ["web"],
+            "sales_channels": ["bar"],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == ('{"limit_sales_channels":["If \'limit_sales_channels\' is set, the legacy '
+                                     'attribute \'sales_channels\' must not be set or set to the same list."]}')
+
 
 @pytest.mark.django_db
 def test_event_test_mode(token_client, organizer, event):
