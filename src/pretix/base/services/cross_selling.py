@@ -68,6 +68,8 @@ class CrossSellingService:
                  '')
                 for (category, items_qs, discount_info) in self._applicable_categories(0)
             )
+        for category, items, form_prefix in result:
+            category.has_discount = any(item.original_price for item in items)
         return [(category, items, form_prefix) for (category, items, form_prefix) in result if len(items) > 0]
 
     def _applicable_categories(self, subevent_id):
@@ -182,7 +184,7 @@ class CrossSellingService:
                     max_count = inf
 
                 # calculate discounted price
-                if discount_rule:
+                if discount_rule and discount_rule.benefit_discount_matching_percent > 0:
                     if not item.has_variations:
                         item.original_price = item.original_price or item.display_price
                         previous_price = item.display_price
@@ -192,6 +194,8 @@ class CrossSellingService:
                         )
                         item.display_price = new_price
                     else:
+                        # discounts always match "whole" items, not specific variations -> we apply the discount to all
+                        # available variations of the item
                         for var in item.available_variations:
                             var.original_price = var.original_price or var.display_price
                             previous_price = var.display_price
