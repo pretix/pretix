@@ -112,7 +112,7 @@ class ItemCategory(LoggedModel):
     )
     CROSS_SELLING_MODES = (
         (None, _('Normal category')),
-        ('both', _('Combined cross-selling category')),
+        ('both', _('Normal + cross-selling category')),
         ('only', _('Cross-selling category')),
     )
     cross_selling_mode = models.CharField(
@@ -152,7 +152,7 @@ class ItemCategory(LoggedModel):
 
     def get_category_type_display(self):
         if self.is_addon:
-            return _('Add-on products')
+            return _('Add-on category')
         elif self.cross_selling_mode:
             return self.get_cross_selling_mode_display()
         else:
