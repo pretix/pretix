@@ -41,7 +41,7 @@ from django.contrib.auth.tokens import (
     PasswordResetTokenGenerator, default_token_generator,
 )
 from django.core import mail as djmail
-from django.test import TestCase, override_settings
+from django.test import RequestFactory, TestCase, override_settings
 from django.utils.timezone import now
 from django_otp.oath import TOTP
 from django_otp.plugins.otp_totp.models import TOTPDevice
@@ -50,6 +50,7 @@ from webauthn.authentication.verify_authentication_response import (
 )
 
 from pretix.base.models import Organizer, Team, U2FDevice, User
+from pretix.control.views.auth import process_login
 from pretix.helpers import security
 
 
@@ -891,6 +892,19 @@ class SessionTimeOutTest(TestCase):
         self.client.get('/control/reauth/?next=/control/')
         response = self.client.get('/control/')
         self.assertEqual(response.status_code, 302)
+
+    def test_plugin_auth_updates_auth_last_used(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = True
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 5
+        session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 - 60
+        session.save()
+
+        request = RequestFactory().get("/")
+        request.session = self.client.session
+        process_login(request, self.user, keep_logged_in=True)
+
+        assert request.session['pretix_auth_last_used'] >= int(time.time()) - 60
 
     def test_update_session_activity(self):
         t1 = int(time.time()) - 5

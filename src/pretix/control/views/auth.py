@@ -94,7 +94,9 @@ def process_login(request, user, keep_logged_in):
         pretix_successful_logins.inc(1)
         handle_login_source(user, request)
         auth_login(request, user)
-        request.session['pretix_auth_login_time'] = int(time.time())
+        t = int(time.time())
+        request.session['pretix_auth_login_time'] = t
+        request.session['pretix_auth_last_used'] = t
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
             return redirect_to_url(next_url)
         return redirect('control:index')
