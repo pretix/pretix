@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-26 11:22+0000\n"
-"PO-Revision-Date: 2024-10-02 17:00+0000\n"
+"PO-Revision-Date: 2024-10-10 07:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -3048,7 +3048,7 @@ msgstr ""
 
 #: pretix/base/forms/questions.py:1144
 msgid "You need to provide a company name."
-msgstr ""
+msgstr "Meg kell adnod céget."
 
 #: pretix/base/forms/questions.py:1146
 msgid "You need to provide your name."
@@ -3149,7 +3149,7 @@ msgstr ""
 
 #: pretix/base/forms/widgets.py:234 pretix/base/forms/widgets.py:239
 msgid "Business or institutional customer"
-msgstr ""
+msgstr "Cég"
 
 #: pretix/base/forms/widgets.py:238
 msgid "Individual customer"
@@ -3942,7 +3942,7 @@ msgstr ""
 #: pretix/base/models/customers.py:299 pretix/base/models/orders.py:1513
 #: pretix/base/models/orders.py:3175 pretix/base/settings.py:1096
 msgid "Company name"
-msgstr ""
+msgstr "Cég"
 
 #: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1517
 #: pretix/base/models/orders.py:3182 pretix/base/settings.py:81
@@ -5734,7 +5734,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:3190
 msgid "This reference will be printed on your invoice for your convenience."
-msgstr ""
+msgstr "Ezt a megjegyzést feltüntetjük neked a számlán."
 
 #: pretix/base/models/organizer.py:79
 msgid ""
@@ -7972,7 +7972,7 @@ msgstr ""
 #: pretix/base/services/orders.py:561 pretix/control/forms/orders.py:205
 msgid ""
 "The cancellation fee cannot be higher than the total amount of this order."
-msgstr ""
+msgstr "A lemondási díj nem lehet magasabb a rendelés áránál."
 
 #: pretix/base/services/orders.py:955
 #, fuzzy
@@ -16058,7 +16058,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:30
 msgctxt "terminal_zvt"
 msgid "Card type"
-msgstr ""
+msgstr "Kártytípus"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:37
 #, fuzzy
@@ -16095,7 +16095,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:31
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:14
 msgid "Card number"
-msgstr ""
+msgstr "Kártyaszám"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65
 msgid "Client Transaction Code"
@@ -26626,6 +26626,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"A teljes összeg levonásra kerül a PayPal fiókodról miután megerősítjük a "
+"rendelésedet."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -28457,11 +28459,11 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:12
 msgid "Card type"
-msgstr ""
+msgstr "Kártyatípus"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 msgid "The total amount will be withdrawn from your bank account."
-msgstr ""
+msgstr "A teljes összeg levonásra kerül a bankszámládról."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:23
@@ -28510,6 +28512,8 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"A fizetésedet a Stripe fogja feldolgozni. A kártyaadataid egyenesen a Stripe-"
+"hoz mennek és nem érintik a szervereinket."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
 msgid "For a SEPA Debit payment, please turn on JavaScript."
@@ -28874,7 +28878,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:717
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "Az adataid"
 
 #: pretix/presale/checkoutflow.py:943
 msgid ""
@@ -28906,7 +28910,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:1202
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "Fizetés"
 
 #: pretix/presale/checkoutflow.py:1315
 msgid ""
@@ -28931,7 +28935,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:1442
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr ""
+msgstr "Rendelés ellenőrzése"
 
 #: pretix/presale/checkoutflow.py:1536
 msgid "You need to check all checkboxes on the bottom of the page."
@@ -30630,7 +30634,7 @@ msgstr "Számlaigénylés"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:286
 msgid "Your information"
-msgstr "Személyes adatok"
+msgstr "Az adataid"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:289
 msgid "Change your information"
