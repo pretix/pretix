@@ -2311,6 +2311,10 @@ class OrderFee(models.Model):
         on_delete=models.PROTECT,
         null=True, blank=True
     )
+    tax_code = models.CharField(
+        max_length=190,
+        null=True, blank=True,
+    )
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
         verbose_name=_('Tax value')
@@ -2465,6 +2469,10 @@ class OrderPosition(AbstractPosition):
         'TaxRule',
         on_delete=models.PROTECT,
         null=True, blank=True
+    )
+    tax_code = models.CharField(
+        max_length=190,
+        null=True, blank=True,
     )
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
@@ -2970,6 +2978,10 @@ class Transaction(models.Model):
         on_delete=models.PROTECT,
         null=True, blank=True
     )
+    tax_code = models.CharField(
+        max_length=190,
+        null=True, blank=True,
+    )
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
         verbose_name=_('Tax value')
@@ -2994,13 +3006,13 @@ class Transaction(models.Model):
     def key(obj):
         if isinstance(obj, Transaction):
             return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
+                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type, obj.tax_code)
         elif isinstance(obj, OrderPosition):
             return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, None, None)
+                    obj.tax_rule_id, obj.tax_value, None, None, obj.tax_code)
         elif isinstance(obj, OrderFee):
             return (None, None, None, None, obj.value, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
+                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type, obj.tax_code)
         raise ValueError('invalid state')  # noqa
 
     @property
