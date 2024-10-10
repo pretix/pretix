@@ -200,6 +200,11 @@ class UpdateView(APIView):
         device.save()
         device.log_action('pretix.device.updated', data=serializer.validated_data, auth=device)
 
+        from ...base.signals import device_info_updated
+        device_info_updated.send(
+            sender=Device, old_device=request.auth, new_device=device
+        )
+
         serializer = DeviceSerializer(device)
         return Response(serializer.data)
 

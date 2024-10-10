@@ -838,3 +838,12 @@ is given as the first argument.
 
 The ``sender`` keyword argument will contain the organizer.
 """
+
+device_info_updated = django.dispatch.Signal()
+"""
+Arguments: ``old_device``, ``new_device``
+
+This signal is sent out each time the information for a Device is modified.
+Both the original and updated versions of the Device are included to allow
+receivers to see what has been updated.
+"""
