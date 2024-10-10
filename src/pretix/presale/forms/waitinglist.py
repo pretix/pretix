@@ -28,9 +28,8 @@ from pretix.base.forms.questions import (
     NamePartsFormField, WrappedPhoneNumberPrefixWidget,
     guess_phone_prefix_from_request,
 )
-from pretix.base.models import Quota, WaitingListEntry
+from pretix.base.models import WaitingListEntry
 from pretix.base.templatetags.rich_text import rich_text
-from pretix.presale.views.event import get_grouped_items
 
 
 class WaitingListForm(forms.ModelForm):
@@ -43,40 +42,13 @@ class WaitingListForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request')
         self.event = kwargs.pop('event')
-        self.channel = kwargs.pop('channel')
-        customer = kwargs.pop('customer')
+        itemvars = kwargs.pop('itemvars')
         super().__init__(*args, **kwargs)
 
         choices = [
-            ('', '')
+            ('', ''),
+            *itemvars,
         ]
-        items, display_add_to_cart = get_grouped_items(
-            self.event,
-            subevent=self.instance.subevent,
-            require_seat=None,
-            channel=self.event.organizer.sales_channels.get(identifier="web"),
-            memberships=(
-                customer.usable_memberships(
-                    for_event=self.instance.subevent or self.event,
-                    testmode=self.event.testmode
-                )
-                if customer else None
-            ),
-        )
-        for i in items:
-            if not i.allow_waitinglist:
-                continue
-
-            if i.has_variations:
-                for v in i.available_variations:
-                    if v.cached_availability[0] == Quota.AVAILABILITY_OK:
-                        continue
-                    choices.append((f'{i.pk}-{v.pk}', f'{i.name} – {v.value}'))
-
-            else:
-                if i.cached_availability[0] == Quota.AVAILABILITY_OK:
-                    continue
-                choices.append((f'{i.pk}', f'{i.name}'))
 
         self.fields['itemvar'] = forms.ChoiceField(
             label=_('Product'),
