@@ -567,7 +567,7 @@ table td > .checkbox input[type="checkbox"] {
     }
   }
 }
-.form-horizontal .big-radio {
+.form-horizontal .big-radio, .form-horizontal .big-radio-wrapper .radio {
   border: 1px solid #ccc;
   border-bottom: 0;
   padding: 0;
@@ -587,6 +587,9 @@ table td > .checkbox input[type="checkbox"] {
     border-bottom-right-radius: $border-radius-base;
     border-bottom: 1px solid #ccc;
   }
+}
+.form-horizontal .big-radio-wrapper .radio label > span {
+  display: block;
 }
 .accordion-radio {
   display: block;

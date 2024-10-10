@@ -128,7 +128,10 @@ TEST_CATEGORY_RES = {
     "description": {"en": ""},
     "internal_name": None,
     "position": 0,
-    "is_addon": False
+    "is_addon": False,
+    "cross_selling_mode": None,
+    "cross_selling_condition": None,
+    "cross_selling_match_products": [],
 }
 
 
@@ -209,6 +212,44 @@ def test_category_update(token_client, organizer, event, team, category):
     assert resp.status_code == 200
     with scopes_disabled():
         assert ItemCategory.objects.get(pk=category.pk).name == {"en": "Test"}
+
+
+@pytest.mark.django_db
+def test_category_update_cross_selling_options(token_client, organizer, event, team, category):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event.slug, category.pk),
+        {
+            "cross_selling_mode": "both",
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert ItemCategory.objects.get(pk=category.pk).cross_selling_mode == 'both'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event.slug, category.pk),
+        {
+            "cross_selling_mode": "something",
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    with scopes_disabled():
+        assert ItemCategory.objects.get(pk=category.pk).cross_selling_mode == 'both'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event.slug, category.pk),
+        {
+            "is_addon": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert 'mutually exclusive' in str(resp.data)
+    with scopes_disabled():
+        assert ItemCategory.objects.get(pk=category.pk).cross_selling_mode == 'both'
+        assert ItemCategory.objects.get(pk=category.pk).is_addon is False
 
 
 @pytest.mark.django_db
