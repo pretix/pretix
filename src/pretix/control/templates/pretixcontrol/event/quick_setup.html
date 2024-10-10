@@ -160,10 +160,10 @@
                 {% bootstrap_field form.payment_banktransfer__enabled layout="control" label_class="sr-only" field_class="col-md-12" %}
                 <div data-display-dependency="#id_payment_banktransfer__enabled">
                     {% bootstrap_field form.payment_banktransfer_bank_details_type layout="control" %}
-                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_name layout="control" %}
-                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_iban layout="control" %}
-                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_bic layout="control" %}
-                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_bank layout="control" %}
+                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_name layout="horizontal" %}
+                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_iban layout="horizontal" %}
+                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_bic layout="horizontal" %}
+                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_bank layout="horizontal" %}
                     {% bootstrap_field form.payment_banktransfer_bank_details layout="control" %}
                 </div>
                 {% if form.payment_stripe__enabled %}
