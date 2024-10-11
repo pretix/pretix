@@ -93,17 +93,26 @@ class CategoryForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        tpl = '{} &nbsp; <span class="text-muted">{}</span>'
         self.fields['category_type'] = ChoiceField(widget=RadioSelect, choices=(
-            ('normal', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
-                _('Normal category'), _('Products in this category are regular products displayed on the front page.'))),),
-            ('addon', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
-                _('Add-on product category'), _('Products in this category are add-on products and can only be bought as add-ons.'))),),
-            ('only', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
-                _('Cross-selling category'), _('Products in this category are regular products, but are only shown '
-                                               'in the cross-selling step, according to the configuration below.'))),),
-            ('both', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
-                _('Normal + cross-selling category'), _('Products in this category are regular products displayed on the front page, '
-                                          'but are additionally shown in the cross-selling step, according to the configuration below.'))),),
+            ('normal', mark_safe(tpl.format(
+                _('Normal category'),
+                _('Products in this category are regular products displayed on the front page.')
+            )),),
+            ('addon', mark_safe(tpl.format(
+                _('Add-on product category'),
+                _('Products in this category are add-on products and can only be bought as add-ons.')
+            )),),
+            ('only', mark_safe(tpl.format(
+                _('Cross-selling category'),
+                _('Products in this category are regular products, but are only shown in the cross-selling step, '
+                  'according to the configuration below.')
+            )),),
+            ('both', mark_safe(tpl.format(
+                _('Normal + cross-selling category'),
+                _('Products in this category are regular products displayed on the front page, but are additionally '
+                  'shown in the cross-selling step, according to the configuration below.')
+            )),),
         ))
         self.fields['category_type'].initial = self.instance.category_type
 
