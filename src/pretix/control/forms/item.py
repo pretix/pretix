@@ -124,7 +124,7 @@ class CategoryForm(I18nModelForm):
         self.fields['cross_selling_match_products'].widget = forms.CheckboxSelectMultiple(
             attrs={
                 'class': 'scrolling-multiple-choice',
-                'data-display-dependency': '#id_cross_selling_condition_1'
+                'data-display-dependency': '#id_cross_selling_condition_2'
             }
         )
         self.fields['cross_selling_match_products'].queryset = self.event.items.filter(
