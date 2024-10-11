@@ -782,3 +782,59 @@ def test_custom_rules_country_rate_subtract_from_gross(event):
         rate=Decimal('100.00'),
         name='',
     )
+
+
+@pytest.mark.django_db
+def test_no_negative_due_to_subtract_from_gross(event):
+    tr = TaxRule(
+        event=event,
+        rate=Decimal("19.00"),
+        price_includes_tax=True,
+    )
+    assert tr.tax(Decimal('100.00'), subtract_from_gross=Decimal('200.00')).gross == Decimal("0.00")
+    tr = TaxRule(
+        event=event,
+        rate=Decimal("0.00"),
+        price_includes_tax=True,
+    )
+    assert tr.tax(Decimal('100.00'), subtract_from_gross=Decimal('200.00')).gross == Decimal("0.00")
+    tr = TaxRule(
+        event=event,
+        rate=Decimal("19.00"),
+        price_includes_tax=False,
+    )
+    assert tr.tax(Decimal('100.00'), subtract_from_gross=Decimal('200.00')).gross == Decimal("0.00")
+    tr = TaxRule(
+        event=event,
+        rate=Decimal("19.00"),
+        price_includes_tax=True,
+    )
+    assert tr.tax(Decimal('100.00'), subtract_from_gross=Decimal('200.00')).gross == Decimal("0.00")
+
+
+@pytest.mark.django_db
+def test_allow_negative(event):
+    tr = TaxRule(
+        event=event,
+        rate=Decimal("19.00"),
+        price_includes_tax=True,
+    )
+    assert tr.tax(Decimal('-100.00')).gross == Decimal("-100.00")
+    tr = TaxRule(
+        event=event,
+        rate=Decimal("0.00"),
+        price_includes_tax=True,
+    )
+    assert tr.tax(Decimal('-100.00')).gross == Decimal("-100.00")
+    tr = TaxRule(
+        event=event,
+        rate=Decimal("19.00"),
+        price_includes_tax=False,
+    )
+    assert tr.tax(Decimal('-100.00')).gross == Decimal("-119.00")
+    tr = TaxRule(
+        event=event,
+        rate=Decimal("19.00"),
+        price_includes_tax=True,
+    )
+    assert tr.tax(Decimal('-100.00')).gross == Decimal("-100.00")
