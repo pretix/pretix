@@ -1122,6 +1122,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         if event.settings.invoice_address_custom_field:
             self.fields['custom_field'].label = event.settings.invoice_address_custom_field
+            self.fields['custom_field'].help_text = event.settings.invoice_address_custom_field_helptext
         else:
             del self.fields['custom_field']
 
