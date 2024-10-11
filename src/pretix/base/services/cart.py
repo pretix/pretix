@@ -1617,6 +1617,7 @@ def set_cart_addons(self, event: Event, addons: List[dict], add_to_cart_items: L
     ensure the requested addon state.
     :param event: The event ID in question
     :param addons: A list of dicts with the keys addon_to, item, variation
+    :param add_to_cart_items: A list of dicts with the keys item, variation, count, custom_price, voucher, seat ID
     :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):

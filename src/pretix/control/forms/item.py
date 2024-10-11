@@ -102,7 +102,7 @@ class CategoryForm(I18nModelForm):
                 _('Cross-selling category'), _('Products in this category are regular products, but are only shown '
                                                'in the cross-selling step, according to the configuration below.'))),),
             ('both', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
-                _('Combined category'), _('Products in this category are regular products displayed on the front page, '
+                _('Normal + cross-selling category'), _('Products in this category are regular products displayed on the front page, '
                                           'but are additionally shown in the cross-selling step, according to the configuration below.'))),),
         ))
         self.fields['category_type'].initial = self.instance.category_type

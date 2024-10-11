@@ -122,8 +122,8 @@ class ItemCategory(LoggedModel):
     )
     CROSS_SELLING_CONDITION = (
         ('always', _('Always show in cross-selling step')),
-        ('products', _('Only if the cart contains one of these products')),
         ('discounts', _('Only show products that qualify for a discount according to discount rules')),
+        ('products', _('Only show if the cart contains one of the following products')),
     )
     cross_selling_condition = models.CharField(
         verbose_name=_("Cross-selling condition"),
