@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
-from pretix.base.signals import PluginRegistry
+from pretix.base.signals import EventPluginRegistry
 
 
 def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
@@ -31,7 +31,7 @@ def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
         return wrapper.format_map(a_map)
 
 
-class LogEntryTypeRegistry(PluginRegistry):
+class LogEntryTypeRegistry(EventPluginRegistry):
     def new_from_dict(self, data):
         def reg(clz):
             for action_type, plain in data.items():
