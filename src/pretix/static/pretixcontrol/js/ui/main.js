@@ -415,8 +415,7 @@ var form_handlers = function (el) {
             };
         update();
         dependency.each(function() {
-            $(this).closest('.form-group').find('[name=' + $(this).attr("name") + ']').on("change", update);
-            $(this).closest('.form-group').find('[name=' + $(this).attr("name") + ']').on("dp.change", update);
+            $(this).closest('.form-group').find('[name=' + $(this).attr("name") + ']').on("change dp.change", update);
         })
     });
 
