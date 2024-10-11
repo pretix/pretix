@@ -40,7 +40,8 @@ class DummyCategory:
 
     def __init__(self, category: ItemCategory, subevent):
         self.id = category.id
-        self.name = f"{category.name} ({subevent})"
+        self.name = str(category.name)
+        self.subevent_name = str(subevent)
         self.description = category.description
 
 

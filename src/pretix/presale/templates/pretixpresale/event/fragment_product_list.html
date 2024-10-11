@@ -9,6 +9,9 @@
     {% if category %}
         <section aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
             <h3 id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}
+                {% if category.subevent_name %}
+                    <small class="text-muted"><i class="fa fa-calendar"></i> {{ category.subevent_name }}</small>
+                {% endif %}
                 {% if category.category_has_discount %}
                     <small class="text-success">
                         <i class="fa fa-star" aria-hidden="true"></i>
