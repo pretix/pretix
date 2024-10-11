@@ -669,7 +669,7 @@ class OrganizerActionView(OrganizerBanktransferView, OrganizerPermissionRequired
 
 
 def _row_key_func(row):
-    return row['iban'], row['bic']
+    return row['iban'], row.get('bic') or ''
 
 
 def _unite_transaction_rows(transaction_rows):

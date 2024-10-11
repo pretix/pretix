@@ -3655,6 +3655,31 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert b.price == Decimal('1.50')
 
     @classscope(attr='orga')
+    def test_voucher_apply_multiple_reduce_beyond_designated_price_no_tax_rules(self):
+        self.ticket.tax_rule = None
+        self.ticket.save()
+        self.trans.tax_rule = None
+        self.trans.save()
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() + timedelta(minutes=10)
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
+        )
+        v = Voucher.objects.create(
+            event=self.event, price_mode='set', value=Decimal('0.00'), max_usages=100
+        )
+
+        self.cm.apply_voucher(v.code)
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        assert cp.price == Decimal('0.00')
+        assert b.price == Decimal('1.50')
+
+    @classscope(attr='orga')
     def test_voucher_apply_affect_bundled(self):
         cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,

@@ -263,6 +263,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
 
     quotas_to_compute = []
     for item in items:
+        assert item.event_id == event.pk
+        item.event = event  # save a database query if this is looked up
         if item.has_variations:
             for v in item.available_variations:
                 for q in v._subevent_quotas:

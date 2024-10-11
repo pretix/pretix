@@ -30,7 +30,9 @@ from celery import states
 from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import (
+    BadRequest, PermissionDenied, ValidationError,
+)
 from django.core.files.uploadedfile import UploadedFile
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse, QueryDict
@@ -131,6 +133,8 @@ class AsyncMixin:
         return data
 
     def get_result(self, request):
+        if not request.GET.get('async_id'):
+            raise BadRequest("No async_id given")
         res = AsyncResult(request.GET.get('async_id'))
         if 'ajax' in self.request.GET:
             return JsonResponse(self._return_ajax_result(res, timeout=0.25))
@@ -140,7 +144,12 @@ class AsyncMixin:
                     return self.success(res.info)
                 else:
                     return self.error(res.info)
-            return render(request, 'pretixpresale/waiting.html')
+            state, info = res.state, res.info
+            return render(request, 'pretixpresale/waiting.html', {
+                'started': state in ('PROGRESS', 'STARTED'),
+                'percentage': info.get('value', 0) if isinstance(info, dict) else 0,
+                'steps': info.get('steps', []) if isinstance(info, dict) else None,
+            })
 
     def success(self, value):
         smes = self.get_success_message(value)
@@ -208,6 +217,8 @@ class AsyncAction(AsyncMixin):
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
+            if not request.GET.get('async_id'):
+                raise BadRequest("No async_id given")
             return self.get_result(request)
         return self.http_method_not_allowed(request)
 

@@ -1182,10 +1182,11 @@ def process_exit_all(sender, **kwargs):
         positions = cl.positions_inside_query(ignore_status=True, at_time=cl.exit_all_at)
         for p in positions:
             with scope(organizer=cl.event.organizer):
-                ci = Checkin.objects.create(
+                ci, created = Checkin.objects.get_or_create(
                     position=p, list=cl, auto_checked_in=True, type=Checkin.TYPE_EXIT, datetime=cl.exit_all_at
                 )
-                checkin_created.send(cl.event, checkin=ci)
+                if created:
+                    checkin_created.send(cl.event, checkin=ci)
         d = cl.exit_all_at.astimezone(cl.event.timezone)
         if cl.event.settings.get(f'autocheckin_dst_hack_{cl.pk}'):  # move time back if yesterday was DST switch
             d -= timedelta(hours=1)

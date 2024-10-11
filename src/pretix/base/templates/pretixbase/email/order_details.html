@@ -143,7 +143,7 @@
         </tr>
     </table>
     <div class="order-button">
-        <a href="{% abseventurl event "presale:event.order.open" hash=order.email_confirm_hash order=order.code secret=order.secret %}" class="button">
+        <a href="{% abseventurl event "presale:event.order.open" hash=order.email_confirm_secret order=order.code secret=order.secret %}" class="button">
             {% trans "View order details" %}
         </a>
     </div>

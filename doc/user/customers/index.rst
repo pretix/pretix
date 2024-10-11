@@ -175,7 +175,7 @@ without any special behavior.
 Connecting SSO providers (pretix as the SSO client)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To connect an external application as a SSO client, go to "Customer accounts" → "SSO providers" → "Create a new SSO provider"
+To connect an external application as a SSO provider, go to "Customer accounts" → "SSO providers" → "Create a new SSO provider"
 in your organizer account.
 
 .. thumbnail:: ../../screens/organizer/customer_ssoprovider_add.png

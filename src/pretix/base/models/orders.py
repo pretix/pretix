@@ -40,6 +40,7 @@ import json
 import logging
 import operator
 import string
+import warnings
 from collections import Counter
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -381,8 +382,28 @@ class Order(LockModel, LoggedModel):
         self.event.cache.delete('complain_testmode_orders')
         self.delete()
 
+    def email_confirm_secret(self):
+        return self.tagged_secret("email_confirm", 9)
+
     def email_confirm_hash(self):
-        return hashlib.sha256(settings.SECRET_KEY.encode() + self.secret.encode()).hexdigest()[:9]
+        warnings.warn('Use email_confirm_secret() instead of email_confirm_hash().',
+                      DeprecationWarning)
+        return self.email_confirm_secret()
+
+    def check_email_confirm_secret(self, received_secret):
+        return (
+            hmac.compare_digest(
+                self.tagged_secret("email_confirm", 9),
+                received_secret[:9].lower()
+            ) or any(
+                # TODO: remove this clause after a while (compatibility with old secrets currently in flight)
+                hmac.compare_digest(
+                    hashlib.sha256(sk.encode() + self.secret.encode()).hexdigest()[:9],
+                    received_secret
+                )
+                for sk in [settings.SECRET_KEY, *settings.SECRET_KEY_FALLBACKS]
+            )
+        )
 
     def get_extended_status_display(self):
         # Changes in this method should to be replicated in pretixcontrol/orders/fragment_order_status.html
@@ -2834,6 +2855,14 @@ class OrderPosition(AbstractPosition):
             (self.order.event.settings.change_allow_user_variation and any([op.has_variations for op in positions])) or
             (self.order.event.settings.change_allow_user_addons and ItemAddOn.objects.filter(base_item_id__in=[op.item_id for op in positions]).exists())
         )
+
+    @property
+    def code(self):
+        """
+        A ticket code which is unique among all events of a single organizer,
+        built by the order code and the position number.
+        """
+        return '{order_code}-{position}'.format(order_code=self.order.code, position=self.positionid)
 
 
 class Transaction(models.Model):

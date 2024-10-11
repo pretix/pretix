@@ -31,7 +31,7 @@
                                 <span class="label label-success">{% trans "Book now" %}</span>
                             {% endif %}
                         {% endif %}
-                    {% elif event.waiting_list_active and subev.best_availability_state >= 0 %}
+                    {% elif subev.waiting_list_active and subev.best_availability_state >= 0 %}
                         <span class="label label-warning">{% trans "Waiting list" %}</span>
                     {% elif subev.best_availability_state == 20 %}
                         <span class="label label-danger">{% trans "Reserved" %}</span>

@@ -21,6 +21,11 @@
             {% trans "The waiting list is no longer active for this event. The waiting list no longer affects quotas and no longer notifies waiting users." %}
         </div>
     {% endif %}
+    {% if request.event.settings.hide_sold_out %}
+        <div class="alert alert-warning">
+            {% trans "According to your event settings, sold out products are hidden from customers. This way, customers will not be able to discovere the waiting list." %}
+        </div>
+    {% endif %}
     <div class="row">
         {% if 'can_change_orders' in request.eventpermset %}
             <form method="post" class="col-md-6"

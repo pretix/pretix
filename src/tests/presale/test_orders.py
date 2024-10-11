@@ -221,7 +221,7 @@ class OrdersTest(BaseOrdersTest):
         assert not self.order.email_known_to_work
 
         response = self.client.get(
-            '/%s/%s/order/%s/%s/open/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, self.order.email_confirm_hash())
+            '/%s/%s/order/%s/%s/open/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, self.order.email_confirm_secret())
         )
         assert response.status_code == 302
         self.order.refresh_from_db()

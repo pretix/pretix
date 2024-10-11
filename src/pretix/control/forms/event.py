@@ -1143,12 +1143,12 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         widget=I18nTextInput,
     )
     mail_subject_order_incomplete_payment = I18nFormField(
-        label=_("Subject"),
+        label=_("Subject (if an incomplete payment was received)"),
         required=False,
         widget=I18nTextInput,
     )
     mail_text_order_incomplete_payment = I18nFormField(
-        label=_("Text"),
+        label=_("Text (if an incomplete payment was received)"),
         required=False,
         widget=I18nMarkdownTextarea,
         help_text=_("This email only applies to payment methods that can receive incomplete payments, "

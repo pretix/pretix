@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-06-26 22:00+0000\n"
+"PO-Revision-Date: 2024-09-15 18:00+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "sk/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: Weblate 5.7\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -156,7 +156,7 @@ msgstr ""
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr ""
+msgstr "Zaplatené objednávky"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -176,15 +176,15 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr ""
+msgstr "Vyberte zoznam na odbavenie"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr ""
+msgstr "Nenašli sa žiadne aktívne zoznamy na odbavenie."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
-msgstr ""
+msgstr "Prepnúť zoznam odbavení"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
@@ -274,7 +274,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Ticket already used"
-msgstr ""
+msgstr "Už použitá vstupenka"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Information required"
@@ -282,7 +282,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Unknown ticket"
-msgstr ""
+msgstr "Neznáma vstupenka"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Ticket type not allowed here"
@@ -318,7 +318,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Checked-in Tickets"
-msgstr ""
+msgstr "Odbavené vstupenky"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
 msgid "Valid Tickets"
@@ -398,6 +398,9 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"Momentálne odosielame vašu požiadavku na server. Ak to trvá dlhšie ako jednu "
+"minútu, skontrolujte svoje internetové pripojenie a potom znovu načítajte "
+"túto stránku a skúste to znova."
 
 #: pretix/static/pretixbase/js/asynctask.js:301
 #: pretix/static/pretixcontrol/js/ui/main.js:71
@@ -546,7 +549,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
-msgstr ""
+msgstr "QR na odbavenie"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:543
 msgid "The PDF background file could not be loaded for the following reason:"
@@ -683,6 +686,8 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Vstupenky v košíku už nie sú pre Vás rezervované. Objednávku môžete "
+"dokončiť, ak sú stále k dispozícii."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
@@ -691,8 +696,9 @@ msgstr ""
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vstupenky v košíku sú pre Vás rezervované jednu minútu."
+msgstr[1] "Vstupenky v košíku sú pre Vás rezervované {num} minúty."
+msgstr[2] "Vstupenky v košíku sú pre Vás rezervované {num} minút."
 
 #: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -704,11 +710,11 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:227
 msgid "Please enter the amount the organizer can keep."
-msgstr ""
+msgstr "Zadajte sumu, ktorú si organizátor môže ponechať."
 
 #: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "Vyberte si prosím aspoň jednu vstupenku."
 
 #: pretix/static/pretixpresale/js/ui/main.js:485
 msgid "required"
@@ -730,131 +736,131 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "Počet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Znížiť počet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "Zvýšiť počet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Cena"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Select"
-msgstr ""
+msgstr "Vybrať"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr ""
+msgstr "Vybrať %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr ""
+msgstr "Vybrať variantu %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Vypredané"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Kúpiť"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Registrovať sa"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Rezervované"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "ZADARMO"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "z %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "vrátane %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "plus %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "vrátane dane"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "plus daň"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "aktuálne k dispozícii: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "K dispozícii len s poukážkou"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "Not yet available"
-msgstr ""
+msgstr "Zatiaľ nedostupné"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "Už nie je k dispozícii"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Currently not available"
-msgstr ""
+msgstr "Momentálne nie je k dispozícii"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "minimálna suma na objednávku: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Zatvoriť obchod so vstupenkami"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Obchod so vstupenkami sa nepodarilo načítať."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
@@ -862,16 +868,18 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
+"V súčasnosti je v tomto obchode so vstupenkami veľa používateľov. Ak chcete "
+"pokračovať, otvorte obchod v novej karte."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr ""
+msgstr "Otvoriť obchod so vstupenkami"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Nákupný košík sa nepodarilo vytvoriť. Skúste to prosím neskôr"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
@@ -879,11 +887,14 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
+"Nepodarilo sa nám vytvoriť Váš nákupný košík, pretože v tomto obchode je "
+"momentálne príliš veľa používateľov. Kliknutím na tlačidlo „Pokračovať“ to "
+"skúste znova v novej karte."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Čakací zoznam"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
@@ -891,86 +902,88 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
+"V súčasnosti máte aktívny nákupný košík pre toto podujatie. Ak si vyberiete "
+"ďalšie vstupenky, pridajú sa do vášho existujúceho košíka."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Pokračovať v objednávke"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Uplatnenie poukážky"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Uplatniť"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Kód poukážky"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "Zatvoriť"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Pokračovať"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Show variants"
-msgstr ""
+msgstr "Zobraziť varianty"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
 msgid "Hide variants"
-msgstr ""
+msgstr "Skryť varianty"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr ""
+msgstr "Vybrať iné podujatie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "Vybrať iný dátum"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Späť"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Nasledujúci mesiac"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Predchádzajúci mesiac"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "Next week"
-msgstr ""
+msgstr "Nasledujúci týždeň"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
 msgid "Previous week"
-msgstr ""
+msgstr "Predchádzajúci týždeň"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Zobraziť výber sedadiel"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgctxt "widget"
@@ -979,11 +992,14 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"Niektoré alebo všetky kategórie vstupeniek sú v súčasnosti vypredané. Ak "
+"chcete, môžete sa pridať na zoznam čakateľov. Budeme vás informovať, ak sa "
+"miesta uvoľnia."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
 msgid "Load more"
-msgstr ""
+msgstr "Načítať viac"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "Mo"

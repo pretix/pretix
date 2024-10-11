@@ -628,13 +628,19 @@ def test_change_email(env, client):
 
 
 @pytest.mark.django_db
-def test_change_pw(env, client):
+def test_change_pw(env, client, client2):
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=True)
         customer.set_password('foo')
         customer.save()
 
     r = client.post('/bigevents/account/login', {
+        'email': 'john@example.org',
+        'password': 'foo',
+    })
+    assert r.status_code == 302
+
+    r = client2.post('/bigevents/account/login', {
         'email': 'john@example.org',
         'password': 'foo',
     })
@@ -657,6 +663,13 @@ def test_change_pw(env, client):
     assert r.status_code == 302
     customer.refresh_from_db()
     assert customer.check_password('aYLBRNg4')
+
+    r = client.get('/bigevents/account/password')
+    assert r.status_code == 200
+
+    # Client 2 got logged out
+    r = client2.post('/bigevents/account/password')
+    assert r.status_code == 302
 
 
 @pytest.mark.django_db

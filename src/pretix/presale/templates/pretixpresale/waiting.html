@@ -21,6 +21,23 @@
 
         <h1>{% trans "We are processing your request …" %}</h1>
 
+        {% if percentage %}
+            <div class="progress">
+                <div class="progress-bar progress-bar-success progress-bar-{{ percentage|floatformat:0 }}">
+                </div>
+            </div>
+            {% if steps %}
+                <ol class="steps">
+                    {% for step in steps %}
+                        <li>
+                            <span class="fa fa-fw {% if step.done %}fa-check text-success{% else %}fa-cog fa-spin text-muted{% endif %}"></span>
+                            {{ step.label }}
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        {% endif %}
+
         <p>
             {% trans "If this takes longer than a few minutes, please contact us." %}
         </p>

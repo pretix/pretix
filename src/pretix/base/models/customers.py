@@ -220,12 +220,23 @@ class Customer(LoggedModel):
 
     def get_session_auth_hash(self):
         """
+        Return an HMAC that needs to be the same throughout the session, used e.g. for forced
+        logout after every password change.
+        """
+        return self._get_session_auth_hash(secret=settings.SECRET_KEY)
+
+    def get_session_auth_fallback_hash(self):
+        for fallback_secret in settings.SECRET_KEY_FALLBACKS:
+            yield self._get_session_auth_hash(secret=fallback_secret)
+
+    def _get_session_auth_hash(self, secret):
+        """
         Return an HMAC of the password field.
         """
         key_salt = "pretix.base.models.customers.Customer.get_session_auth_hash"
         payload = self.password
         payload += self.email
-        return salted_hmac(key_salt, payload).hexdigest()
+        return salted_hmac(key_salt, payload, secret=secret).hexdigest()
 
     def get_email_context(self):
         from pretix.base.settings import get_name_parts_localized

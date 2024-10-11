@@ -9,6 +9,7 @@ acceptor
 analytics
 anonymize
 anonymized
+Auth
 authenticator
 automatical
 availabilities

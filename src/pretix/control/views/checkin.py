@@ -39,7 +39,7 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Exists, Max, OuterRef, Prefetch, Q, Subquery
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -192,6 +192,9 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
 
 class CheckInListBulkRevertConfirmView(CheckInListQueryMixin, EventPermissionRequiredMixin, TemplateView):
     template_name = "pretixcontrol/checkin/bulk_revert_confirm.html"
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(permitted_methods=["POST"])
 
     def post(self, request, *args, **kwargs):
         self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))

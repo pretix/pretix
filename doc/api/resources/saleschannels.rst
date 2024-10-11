@@ -51,7 +51,7 @@ Endpoints
         "results": [
           {
             "identifier": "web",
-            "name": {
+            "label": {
               "en": "Online shop"
             },
             "type": "web",
@@ -88,7 +88,7 @@ Endpoints
 
       {
         "identifier": "web",
-        "name": {
+        "label": {
           "en": "Online shop"
         },
         "type": "web",
@@ -116,7 +116,7 @@ Endpoints
 
       {
         "identifier": "api.custom",
-        "name": {
+        "label": {
           "en": "Custom integration"
         },
         "type": "api",
@@ -133,7 +133,7 @@ Endpoints
 
       {
         "identifier": "api.custom",
-        "name": {
+        "label": {
           "en": "Custom integration"
         },
         "type": "api",
@@ -178,7 +178,7 @@ Endpoints
 
       {
         "identifier": "web",
-        "name": {
+        "label": {
           "en": "Online shop"
         },
         "type": "web",

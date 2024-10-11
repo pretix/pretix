@@ -18,3 +18,18 @@ body {
     font-size: 200px;
     color: $brand-primary;
 }
+
+.progress {
+    max-width: 450px;
+    margin: 0 auto 20px;
+}
+.steps {
+    max-width: 450px;
+    text-align: left;
+    margin: 0 auto 20px;
+    list-style-type: none;
+    padding: 0;
+}
+@for $i from 0 through 100 {
+    .progress-bar-#{$i} { width: 1% * $i; }
+}

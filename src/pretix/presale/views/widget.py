@@ -417,7 +417,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     else:
                         availability['text'] = gettext('Book now')
                     availability['reason'] = 'ok'
-            elif event.waiting_list_active and (ev.best_availability_state is not None and ev.best_availability_state >= 0):
+            elif ev.waiting_list_active and (ev.best_availability_state is not None and ev.best_availability_state >= 0):
                 availability['color'] = 'orange'
                 availability['text'] = gettext('Waiting list')
                 availability['reason'] = 'waitinglist'
@@ -719,7 +719,7 @@ class WidgetAPIProductList(EventListMixin, View):
             'display_net_prices': request.event.settings.display_net_prices,
             'use_native_spinners': request.event.settings.widget_use_native_spinners,
             'show_variations_expanded': request.event.settings.show_variations_expanded,
-            'waiting_list_enabled': request.event.waiting_list_active,
+            'waiting_list_enabled': (self.subevent or request.event).waiting_list_active,
             'voucher_explanation_text': str(rich_text(request.event.settings.voucher_explanation_text, safelinks=False)),
             'error': None,
             'cart_exists': False

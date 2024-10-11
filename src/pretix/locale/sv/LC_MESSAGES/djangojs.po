@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-06-27 17:00+0000\n"
-"Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
-"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/sv/>\n"
+"PO-Revision-Date: 2024-09-12 03:00+0000\n"
+"Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
+"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: Weblate 5.7\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -727,8 +727,8 @@ msgstr "Varukorgen har gått ut"
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "Artiklarna i din varukorg är reserverade för dig i en minut."
-msgstr[1] "Artiklarna i din varukorg är reserverade för dig i {num} minuter."
+msgstr[0] "Produkterna i din bokning är reserverade för dig i en minut."
+msgstr[1] "Produkterna i din bokning är reserverade för dig i {num} minuter."
 
 #: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -819,7 +819,7 @@ msgstr "Köp"
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Register"
-msgstr "Registrera"
+msgstr "BOKA"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
@@ -829,7 +829,7 @@ msgstr "Reserverad"
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "FREE"
-msgstr "GRATIS"
+msgstr "ANTAL"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
@@ -921,7 +921,7 @@ msgstr "Öppna biljettbutik"
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "Varukorgen kunde inte skapas. Vänligen försök senare"
+msgstr "Bokningen kunde inte skapas. Vänligen försök senare."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
@@ -929,9 +929,8 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
-"Vi kunde inte skapa din varukorg, då det just nu är många användare i den "
-"här biljettbutiken. Klicka på \"Fortsätt\" för att försöka på nytt i en ny "
-"flik."
+"Vi kunde inte skapa din bokning, då det just nu är många användare i den här "
+"biljettbutiken. Klicka på \"Fortsätt\" för att försöka på nytt i en ny flik."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
@@ -944,13 +943,13 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
-"Du har för tillfället en aktiv varukorg för den här eventet. Om du väljer "
-"fler artiklar, kommer de att läggas till din befintliga varukorg."
+"Du har för tillfället en pågående bokning för den här eventet. Om du väljer "
+"fler produkter, kommer de att läggas till din befintliga bokning."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr "Fortsätt med ditt köp"
+msgstr "Fortsätt med ditt bokningen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"

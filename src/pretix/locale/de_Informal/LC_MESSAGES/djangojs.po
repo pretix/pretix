@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-08-27 16:00+0000\n"
+"PO-Revision-Date: 2024-09-10 07:17+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
@@ -571,10 +571,8 @@ msgid "Group of objects"
 msgstr "Gruppe von Objekten"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:899
-#, fuzzy
-#| msgid "Text object"
 msgid "Text object (deprecated)"
-msgstr "Text-Objekt"
+msgstr "Text-Objekt (veraltet)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:901
 msgid "Text box"
