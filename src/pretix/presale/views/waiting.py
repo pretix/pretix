@@ -124,7 +124,7 @@ class WaitingView(EventViewMixin, FormView):
             return r
 
         if not self.itemvars:
-            messages.success(request, _("No ticket types are available for the waiting list, have a look at the "
+            messages.info(request, _("No ticket types are available for the waiting list, have a look at the "
                                         "ticket shop instead."))
             return redirect(self.get_index_url())
 
