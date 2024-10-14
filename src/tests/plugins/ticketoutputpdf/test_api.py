@@ -90,7 +90,7 @@ RES_LAYOUT = {
     'name': 'Foo',
     'default': True,
     'item_assignments': [{'item': 1, 'sales_channel': 'web'}],
-    'layout': [{'a': 2}],
+    'layout': [{"type": "poweredby", "left": "0", "bottom": "0", "size": "1.00", "content": "dark"}],
     'background': 'http://example.com/static/pretixpresale/pdf/ticket_default_a4.pdf'
 }
 
