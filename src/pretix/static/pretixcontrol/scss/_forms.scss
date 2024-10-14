@@ -567,7 +567,7 @@ table td > .checkbox input[type="checkbox"] {
     }
   }
 }
-.form-horizontal .big-radio {
+.form-horizontal .big-radio, .form-horizontal .big-radio-wrapper .radio {
   border: 1px solid #ccc;
   border-bottom: 0;
   padding: 0;
@@ -587,6 +587,17 @@ table td > .checkbox input[type="checkbox"] {
     border-bottom-right-radius: $border-radius-base;
     border-bottom: 1px solid #ccc;
   }
+}
+.form-horizontal .control-label:has(+.big-radio-wrapper),
+.form-horizontal .control-label:has(+div > .big-radio) {
+  padding-top: 16px;
+}
+.form-horizontal .big-radio-wrapper .radio label {
+  font-weight: bold;
+}
+.form-horizontal .big-radio-wrapper .radio label > span {
+  display: block;
+  font-weight: normal;
 }
 .accordion-radio {
   display: block;

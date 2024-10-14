@@ -23,6 +23,22 @@ position                              integer                    An integer, use
 is_addon                              boolean                    If ``true``, items within this category are not on sale
                                                                  on their own but the category provides a source for
                                                                  defining add-ons for other products.
+cross_selling_mode                    string                     If ``null``, cross-selling is disabled for this category.
+                                                                 If ``"only"``, it is only visible in the cross-selling
+                                                                 step.
+                                                                 If ``"both"``, it is visible on the normal index page
+                                                                 as well.
+                                                                 Only available if ``is_addon`` is ``false``.
+cross_selling_condition               string                     Only relevant if ``cross_selling_mode`` is not ``null``.
+                                                                 If ``"always"``, always show in cross-selling step.
+                                                                 If ``"products"``, only show if the cart contains one of
+                                                                 the products listed in ``cross_selling_match_products``.
+                                                                 If ``"discounts"``, only show products that qualify for
+                                                                 a discount according to discount rules.
+cross_selling_match_products          list of integer            Only relevant if ``cross_selling_condition`` is
+                                                                 ``"products"``. Internal ID of the items of which at
+                                                                 least one needs to be in the cart for this category to
+                                                                 be shown.
 ===================================== ========================== =======================================================
 
 
@@ -60,7 +76,10 @@ Endpoints
             "internal_name": "",
             "description": {"en": "Tickets are what you need to get in."},
             "position": 1,
-            "is_addon": false
+            "is_addon": false,
+            "cross_selling_mode": null,
+            "cross_selling_condition": null,
+            "cross_selling_match_products": []
           }
         ]
       }
@@ -102,7 +121,10 @@ Endpoints
         "internal_name": "",
         "description": {"en": "Tickets are what you need to get in."},
         "position": 1,
-        "is_addon": false
+        "is_addon": false,
+        "cross_selling_mode": null,
+        "cross_selling_condition": null,
+        "cross_selling_match_products": []
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -130,7 +152,10 @@ Endpoints
         "internal_name": "",
         "description": {"en": "Tickets are what you need to get in."},
         "position": 1,
-        "is_addon": false
+        "is_addon": false,
+        "cross_selling_mode": null,
+        "cross_selling_condition": null,
+        "cross_selling_match_products": []
       }
 
    **Example response**:
@@ -147,7 +172,10 @@ Endpoints
         "internal_name": "",
         "description": {"en": "Tickets are what you need to get in."},
         "position": 1,
-        "is_addon": false
+        "is_addon": false,
+        "cross_selling_mode": null,
+        "cross_selling_condition": null,
+        "cross_selling_match_products": []
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to create a category for
@@ -193,7 +221,10 @@ Endpoints
         "internal_name": "",
         "description": {"en": "Tickets are what you need to get in."},
         "position": 1,
-        "is_addon": true
+        "is_addon": true,
+        "cross_selling_mode": null,
+        "cross_selling_condition": null,
+        "cross_selling_match_products": []
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
