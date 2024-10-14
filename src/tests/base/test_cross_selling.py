@@ -25,6 +25,7 @@ from decimal import Decimal
 from typing import List, Tuple
 
 import pytest
+from celery.bin.events import events
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from freezegun import freeze_time
@@ -279,8 +280,11 @@ def check_cart_behaviour(event, cart_contents, recommendations, expect_num_queri
     else:
         result = service.get_data()
     result_recommendations = [
-        [str(category.name), str(item.name), str(item.original_price.gross.quantize(Decimal('0.00'))) if item.original_price else '-',
-         str(item.display_price.gross.quantize(Decimal('0.00'))), str(item.order_max),
+        [str(category.name) + (f' ({category.subevent_name})' if hasattr(category, 'subevent_name') else ''),
+         str(item.name),
+         str(item.original_price.gross.quantize(Decimal('0.00'))) if item.original_price else '-',
+         str(item.display_price.gross.quantize(Decimal('0.00'))),
+         str(item.order_max),
          form_prefix or '-']
         for category, items, form_prefix in result
         for item in items
@@ -401,6 +405,8 @@ def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
                 ('Reduced Ticket', '23.00'),
                 )
     make_discount('For every 2 of Regular Ticket, get 50% discount on 1 of Reduced Ticket.', eventseries)
+    prefix_date1 = f'subevent_{eventseries.subevents.get(name='Date1').pk}_'
+    prefix_date2 = f'subevent_{eventseries.subevents.get(name='Date2').pk}_'
 
     check_cart_behaviour(
         eventseries,
@@ -408,8 +414,8 @@ def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
         Regular Ticket    42.00          42.00   Date1
         Regular Ticket    42.00          42.00   Date1
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   {prefix_date1}
         '''
     )
     check_cart_behaviour(
@@ -418,9 +424,9 @@ def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
         Regular Ticket    42.00          42.00   Date1
         Regular Ticket    42.00          42.00   Date2
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
-        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   subevent_2_
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   {prefix_date1}
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   {prefix_date2}
         '''
     )
     check_cart_behaviour(
@@ -454,9 +460,9 @@ def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
         Regular Ticket    42.00          42.00   Date1
         Regular Ticket    42.00          42.00   Date2
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            2   subevent_1_
-        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            2   subevent_2_
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            2   {prefix_date1}
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            2   {prefix_date2}
         '''
     )
     check_cart_behaviour(
@@ -469,8 +475,8 @@ def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
 
         Reduced Ticket    23.00          11.50   Date1
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   {prefix_date1}
         '''
     )
     check_cart_behaviour(
@@ -484,8 +490,8 @@ def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
 
         Reduced Ticket    23.00          11.50   Date1
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   {prefix_date1}
         '''
     )
     check_cart_behaviour(
@@ -500,8 +506,8 @@ def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
 
         Reduced Ticket    23.00          11.50   Date1
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            2   subevent_1_
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            2   {prefix_date1}
         '''
     )
 
@@ -514,6 +520,8 @@ def test_2f1r_discount_cross_selling_eventseries_same(eventseries):
                 ('Reduced Ticket', '23.00'),
                 )
     make_discount('For every 2 of Regular Ticket in the same subevent, get 50% discount on 1 of Reduced Ticket.', eventseries)
+    prefix_date1 = f'subevent_{eventseries.subevents.get(name='Date1').pk}_'
+    prefix_date2 = f'subevent_{eventseries.subevents.get(name='Date2').pk}_'
 
     check_cart_behaviour(
         eventseries,
@@ -523,9 +531,9 @@ def test_2f1r_discount_cross_selling_eventseries_same(eventseries):
         Regular Ticket    42.00          42.00   Date1
         Regular Ticket    42.00          42.00   Date2
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
-        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   subevent_2_
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   {prefix_date1}
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   {prefix_date2}
         '''
     )
     check_cart_behaviour(
@@ -538,9 +546,9 @@ def test_2f1r_discount_cross_selling_eventseries_same(eventseries):
         Regular Ticket    42.00          42.00   Date2
         Regular Ticket    42.00          42.00   Date2
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
-        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            2   subevent_2_
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   {prefix_date1}
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            2   {prefix_date2}
         '''
     )
     check_cart_behaviour(
@@ -550,24 +558,11 @@ def test_2f1r_discount_cross_selling_eventseries_same(eventseries):
         Regular Ticket    42.00          42.00   Date1
         Regular Ticket    42.00          42.00   Date1
         Regular Ticket    42.00          42.00   Date1
-
-        Reduced Ticket    23.00          11.50   Date1
-        ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   subevent_1_
-        '''
-    )
-    check_cart_behaviour(
-        eventseries,
-        cart_contents=''' Price     Discounted   Subev
-        Regular Ticket    42.00          42.00   Date1
-        Regular Ticket    42.00          42.00   Date1
-        Regular Ticket    42.00          42.00   Date1
-        Regular Ticket    42.00          42.00   Date2
 
         Reduced Ticket    23.00          11.50   Date1
         ''',
-        recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date1 - Wed, Jan. 1st, 2020 10:00)     Reduced Ticket      23.00                11.50            1   {prefix_date1}
         '''
     )
     check_cart_behaviour(
@@ -576,13 +571,26 @@ def test_2f1r_discount_cross_selling_eventseries_same(eventseries):
         Regular Ticket    42.00          42.00   Date1
         Regular Ticket    42.00          42.00   Date1
         Regular Ticket    42.00          42.00   Date1
-        Regular Ticket    42.00          42.00   Date2
         Regular Ticket    42.00          42.00   Date2
 
         Reduced Ticket    23.00          11.50   Date1
         ''',
         recommendations='''                                                 Price     Discounted Price    Max Count   Prefix
-        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   subevent_2_
+        '''
+    )
+    check_cart_behaviour(
+        eventseries,
+        cart_contents=''' Price     Discounted   Subev
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date1
+        Regular Ticket    42.00          42.00   Date2
+        Regular Ticket    42.00          42.00   Date2
+
+        Reduced Ticket    23.00          11.50   Date1
+        ''',
+        recommendations=f'''                                                 Price     Discounted Price    Max Count   Prefix
+        Tickets (Date2 - Wed, Jan. 1st, 2020 11:00)     Reduced Ticket      23.00                11.50            1   {prefix_date2}
         '''
     )
 
