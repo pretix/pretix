@@ -436,7 +436,7 @@ class PaypalMethod(BasePaymentProvider):
 
         known_issue_failures = cache.get_or_set(
             'paypal2_known_issue_failures',
-            count_known_failures(),
+            count_known_failures,
             600
         )
 
