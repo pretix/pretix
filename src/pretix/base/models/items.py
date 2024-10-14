@@ -303,6 +303,48 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
     return qs.filter(q)
 
 
+def filter_variations_available(qs, channel='web', voucher=None, allow_addons=False):
+    # Channel can currently be a SalesChannel or a str, since we need that compatibility, but a SalesChannel
+    # makes the query SIGNIFICANTLY faster
+    from .organizer import SalesChannel
+
+    assert isinstance(channel, (SalesChannel, str))
+    q = (
+        Q(active=True)
+        & Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()))
+        & Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()))
+        & Q(item__active=True)
+        & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=time_machine_now()))
+        & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=time_machine_now()))
+        & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
+        & Q(item__require_bundling=False)
+    )
+
+    if isinstance(channel, str):
+        q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
+        q &= Q(Q(item__all_sales_channels=True) | Q(item__limit_sales_channels__identifier=channel))
+    else:
+        q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels=channel))
+        q &= Q(Q(item__all_sales_channels=True) | Q(item__limit_sales_channels=channel))
+
+    if not allow_addons:
+        q &= Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
+
+    if voucher:
+        if voucher.variation_id:
+            q &= Q(pk=voucher.variation_id)
+        elif voucher.item_id:
+            q &= Q(item_id=voucher.item_id)
+        elif voucher.quota_id:
+            q &= Q(quotas__in=[voucher.quota_id])
+
+    if not voucher or not voucher.show_hidden_items:
+        q &= Q(hide_without_voucher=False)
+        q &= Q(item__hide_without_voucher=False)
+
+    return qs.filter(q)
+
+
 class ItemQuerySet(models.QuerySet):
     def filter_available(self, channel='web', voucher=None, allow_addons=False):
         return filter_available(self, channel, voucher, allow_addons)
@@ -315,6 +357,20 @@ class ItemQuerySetManager(ScopedManager(organizer='event__organizer').__class__)
 
     def filter_available(self, channel='web', voucher=None, allow_addons=False):
         return filter_available(self.get_queryset(), channel, voucher, allow_addons)
+
+
+class ItemVariationQuerySet(models.QuerySet):
+    def filter_available(self, channel='web', voucher=None, allow_addons=False):
+        return filter_variations_available(self, channel, voucher, allow_addons)
+
+
+class ItemVariationQuerySetManager(ScopedManager(organizer='item__event__organizer').__class__):
+    def __init__(self):
+        super().__init__()
+        self._queryset_class = ItemVariationQuerySet
+
+    def filter_available(self, channel='web', voucher=None, allow_addons=False):
+        return filter_variations_available(self.get_queryset(), channel, voucher, allow_addons)
 
 
 class Item(LoggedModel):
@@ -1199,7 +1255,7 @@ class ItemVariation(models.Model):
         help_text=_('This text will be shown by the check-in app if a ticket of this type is scanned.')
     )
 
-    objects = ScopedManager(organizer='item__event__organizer')
+    objects = ItemVariationQuerySetManager()
 
     class Meta:
         verbose_name = _("Product variation")
