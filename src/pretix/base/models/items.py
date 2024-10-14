@@ -145,9 +145,9 @@ class ItemCategory(LoggedModel):
 
     def __str__(self):
         name = self.internal_name or self.name
-        category_type = self.get_category_type_display()
-        if category_type:
-            return _('{category} ({category_type})').format(category=str(name), category_type=category_type)
+        if self.category_type != 'normal':
+            return _('{category} ({category_type})').format(category=str(name),
+                                                            category_type=self.get_category_type_display())
         return str(name)
 
     def get_category_type_display(self):
@@ -156,7 +156,7 @@ class ItemCategory(LoggedModel):
         elif self.cross_selling_mode:
             return self.get_cross_selling_mode_display()
         else:
-            return None
+            return _('Normal category')
 
     @property
     def category_type(self):
