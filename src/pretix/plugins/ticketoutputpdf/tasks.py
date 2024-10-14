@@ -140,6 +140,7 @@ def bulk_render(event: Event, fileid: int, parts: list) -> int:
     merger.close()
     outbuffer.seek(0)
 
+    file.type = "application/pdf"
     file.file.save(cachedfile_name(file, file.filename), ContentFile(outbuffer.getvalue()))
     file.save()
     return file.pk

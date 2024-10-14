@@ -201,7 +201,7 @@ class RenderJobSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         if len(attrs["parts"]) > 1000:
-            raise ValidationError("Please do not submit more than 1000 parts.")
+            raise ValidationError({"parts": ["Please do not submit more than 1000 parts."]})
         return super().validate(attrs)
 
 
