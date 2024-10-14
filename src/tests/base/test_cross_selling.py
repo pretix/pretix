@@ -25,7 +25,6 @@ from decimal import Decimal
 from typing import List, Tuple
 
 import pytest
-from celery.bin.events import events
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from freezegun import freeze_time
@@ -405,8 +404,8 @@ def test_2f1r_discount_cross_selling_eventseries_mixed(eventseries):
                 ('Reduced Ticket', '23.00'),
                 )
     make_discount('For every 2 of Regular Ticket, get 50% discount on 1 of Reduced Ticket.', eventseries)
-    prefix_date1 = f'subevent_{eventseries.subevents.get(name='Date1').pk}_'
-    prefix_date2 = f'subevent_{eventseries.subevents.get(name='Date2').pk}_'
+    prefix_date1 = f"subevent_{eventseries.subevents.get(name='Date1').pk}_"
+    prefix_date2 = f"subevent_{eventseries.subevents.get(name='Date2').pk}_"
 
     check_cart_behaviour(
         eventseries,
@@ -520,8 +519,8 @@ def test_2f1r_discount_cross_selling_eventseries_same(eventseries):
                 ('Reduced Ticket', '23.00'),
                 )
     make_discount('For every 2 of Regular Ticket in the same subevent, get 50% discount on 1 of Reduced Ticket.', eventseries)
-    prefix_date1 = f'subevent_{eventseries.subevents.get(name='Date1').pk}_'
-    prefix_date2 = f'subevent_{eventseries.subevents.get(name='Date2').pk}_'
+    prefix_date1 = f"subevent_{eventseries.subevents.get(name='Date1').pk}_"
+    prefix_date2 = f"subevent_{eventseries.subevents.get(name='Date2').pk}_"
 
     check_cart_behaviour(
         eventseries,
