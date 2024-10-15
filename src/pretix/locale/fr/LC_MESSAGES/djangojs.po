@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 13:34+0000\n"
+"POT-Creation-Date: 2024-10-15 11:06+0000\n"
 "PO-Revision-Date: 2024-06-12 03:00+0000\n"
 "Last-Translator: simonD <simon.dalvy@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -656,41 +656,41 @@ msgstr ""
 "Votre choix de couleur n'a pas un bon contraste avec du texte sur un fond "
 "blanc, SVP choisissez un ton plus sombre."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
-#: pretix/static/pretixcontrol/js/ui/main.js:511
+#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:515
 msgid "Search query"
 msgstr "Recherche"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:509
+#: pretix/static/pretixcontrol/js/ui/main.js:513
 msgid "All"
 msgstr "Tous"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:510
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "None"
 msgstr "Aucun"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:514
+#: pretix/static/pretixcontrol/js/ui/main.js:518
 msgid "Selected only"
 msgstr "Seuls les sélectionnés"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:847
+#: pretix/static/pretixcontrol/js/ui/main.js:861
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:850
+#: pretix/static/pretixcontrol/js/ui/main.js:864
 #, fuzzy
 msgid "Invalid page number."
 msgstr "Numéro de page invalide."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1008
+#: pretix/static/pretixcontrol/js/ui/main.js:1022
 msgid "Use a different name internally"
 msgstr "Utiliser un nom différent en interne"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1048
+#: pretix/static/pretixcontrol/js/ui/main.js:1062
 msgid "Click to close"
 msgstr "Cliquez pour fermer"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1123
+#: pretix/static/pretixcontrol/js/ui/main.js:1137
 msgid "You have unsaved changes!"
 msgstr "Vous avez des modifications non sauvegardées !"
 

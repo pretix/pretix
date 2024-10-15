@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 13:34+0000\n"
+"POT-Creation-Date: 2024-10-15 11:06+0000\n"
 "PO-Revision-Date: 2021-11-10 05:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -651,40 +651,40 @@ msgid ""
 "darker shade."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
-#: pretix/static/pretixcontrol/js/ui/main.js:511
+#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:515
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:509
+#: pretix/static/pretixcontrol/js/ui/main.js:513
 msgid "All"
 msgstr "Kaikki"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:510
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "None"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:514
+#: pretix/static/pretixcontrol/js/ui/main.js:518
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:847
+#: pretix/static/pretixcontrol/js/ui/main.js:861
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:850
+#: pretix/static/pretixcontrol/js/ui/main.js:864
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1008
+#: pretix/static/pretixcontrol/js/ui/main.js:1022
 msgid "Use a different name internally"
 msgstr "Käytä toista nimeä sisäisesti"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1048
+#: pretix/static/pretixcontrol/js/ui/main.js:1062
 msgid "Click to close"
 msgstr "Sulje klikkaamalla"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1123
+#: pretix/static/pretixcontrol/js/ui/main.js:1137
 msgid "You have unsaved changes!"
 msgstr "Sinulla on tallentamattomia muutoksia!"
 

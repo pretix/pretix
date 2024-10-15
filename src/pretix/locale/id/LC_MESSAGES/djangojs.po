@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 13:34+0000\n"
+"POT-Creation-Date: 2024-10-15 11:06+0000\n"
 "PO-Revision-Date: 2023-09-20 14:01+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
@@ -657,40 +657,40 @@ msgstr ""
 "Warna Anda memiliki kontras yang buruk untuk teks dengan latar belakang "
 "putih, harap pilih warna yang lebih gelap."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
-#: pretix/static/pretixcontrol/js/ui/main.js:511
+#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:515
 msgid "Search query"
 msgstr "Permintaan pencarian"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:509
+#: pretix/static/pretixcontrol/js/ui/main.js:513
 msgid "All"
 msgstr "Semua"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:510
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "None"
 msgstr "Tidak ada"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:514
+#: pretix/static/pretixcontrol/js/ui/main.js:518
 msgid "Selected only"
 msgstr "Hanya dipilih"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:847
+#: pretix/static/pretixcontrol/js/ui/main.js:861
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:850
+#: pretix/static/pretixcontrol/js/ui/main.js:864
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1008
+#: pretix/static/pretixcontrol/js/ui/main.js:1022
 msgid "Use a different name internally"
 msgstr "Gunakan nama yang berbeda secara internal"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1048
+#: pretix/static/pretixcontrol/js/ui/main.js:1062
 msgid "Click to close"
 msgstr "Klik untuk menutup"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1123
+#: pretix/static/pretixcontrol/js/ui/main.js:1137
 msgid "You have unsaved changes!"
 msgstr "Anda memiliki perubahan yang belum disimpan!"
 

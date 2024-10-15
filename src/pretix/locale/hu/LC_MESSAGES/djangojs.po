@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 13:34+0000\n"
+"POT-Creation-Date: 2024-10-15 11:06+0000\n"
 "PO-Revision-Date: 2024-10-01 22:52+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
-"Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/hu/>\n"
+"Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -671,40 +671,40 @@ msgstr ""
 "A választott színek kontrasztja elégtelen, kérjük válassz sötétebb "
 "árnyalatot."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
-#: pretix/static/pretixcontrol/js/ui/main.js:511
+#: pretix/static/pretixcontrol/js/ui/main.js:495
+#: pretix/static/pretixcontrol/js/ui/main.js:515
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:509
+#: pretix/static/pretixcontrol/js/ui/main.js:513
 msgid "All"
 msgstr "Összes"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:510
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "None"
 msgstr "Semmi"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:514
+#: pretix/static/pretixcontrol/js/ui/main.js:518
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:847
+#: pretix/static/pretixcontrol/js/ui/main.js:861
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:850
+#: pretix/static/pretixcontrol/js/ui/main.js:864
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1008
+#: pretix/static/pretixcontrol/js/ui/main.js:1022
 msgid "Use a different name internally"
 msgstr "Használj másik nevet"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1048
+#: pretix/static/pretixcontrol/js/ui/main.js:1062
 msgid "Click to close"
 msgstr "Bezárásért kattints"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1123
+#: pretix/static/pretixcontrol/js/ui/main.js:1137
 msgid "You have unsaved changes!"
 msgstr "Mentetlen változtatások!"
 
