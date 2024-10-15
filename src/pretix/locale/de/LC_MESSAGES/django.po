@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
-"PO-Revision-Date: 2024-09-26 11:52+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2024-10-15 12:00+0000\n"
+"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -4629,43 +4629,37 @@ msgstr ""
 
 #: pretix/base/models/items.py:114 pretix/base/models/items.py:159
 #: pretix/control/forms/item.py:99
-#, fuzzy
-#| msgid "No category"
 msgid "Normal category"
-msgstr "Keine Kategorie"
+msgstr "Normale Kategorie"
 
 #: pretix/base/models/items.py:115 pretix/control/forms/item.py:112
 msgid "Normal + cross-selling category"
-msgstr ""
+msgstr "Normale und Cross-Selling-Kategorie"
 
 #: pretix/base/models/items.py:116 pretix/control/forms/item.py:107
-#, fuzzy
-#| msgid "No category"
 msgid "Cross-selling category"
-msgstr "Keine Kategorie"
+msgstr "Cross-Selling-Kategorie"
 
 #: pretix/base/models/items.py:124
 msgid "Always show in cross-selling step"
-msgstr ""
+msgstr "Immer im Cross-Selling-Schritt anzeigen"
 
 #: pretix/base/models/items.py:125
 msgid ""
 "Only show products that qualify for a discount according to discount rules"
-msgstr ""
+msgstr "Nur Produkte anzeigen, die durch eine Rabattregel rabattiert würden"
 
 #: pretix/base/models/items.py:126
 msgid "Only show if the cart contains one of the following products"
-msgstr ""
+msgstr "Nur anzeigen, wenn der Warenkorb eines der folgenden Produkte enthält"
 
 #: pretix/base/models/items.py:129
 msgid "Cross-selling condition"
-msgstr ""
+msgstr "Cross-Selling-Bedingung"
 
 #: pretix/base/models/items.py:137
-#, fuzzy
-#| msgid "Count add-on products"
 msgid "Cross-selling condition products"
-msgstr "Zusatzprodukte einbeziehen"
+msgstr "Produktauswahl für die Cross-Selling-Bedingung"
 
 #: pretix/base/models/items.py:143
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
@@ -4677,13 +4671,11 @@ msgstr "Produktkategorien"
 #: pretix/base/models/items.py:149
 #, python-brace-format
 msgid "{category} ({category_type})"
-msgstr ""
+msgstr "{category} ({category_type})"
 
 #: pretix/base/models/items.py:155
-#, fuzzy
-#| msgid "No category"
 msgid "Add-on category"
-msgstr "Keine Kategorie"
+msgstr "Zusatzprodukt-Kategorie"
 
 #: pretix/base/models/items.py:222 pretix/base/models/items.py:278
 msgid "Disable product for this date"
@@ -8434,7 +8426,7 @@ msgid ""
 "database."
 msgstr ""
 "Der Gutscheincode, der für eins der Produkte in Ihrem Warenkorb benutzt "
-"wurde, wurde nicht gefunden."
+"wurde, ist uns nicht bekannt."
 
 #: pretix/base/services/orders.py:162
 msgid ""
@@ -9100,8 +9092,6 @@ msgid "Ask for beneficiary"
 msgstr "Nach abweichendem Leistungsempfänger fragen"
 
 #: pretix/base/settings.py:574
-#, fuzzy
-#| msgid "Custom recipient field"
 msgid "Custom recipient field label"
 msgstr "Zusätzliches Empfängerfeld"
 
@@ -9121,10 +9111,8 @@ msgstr ""
 "Überschrift angezeigt. Das Feld ist kein Pflichtfeld."
 
 #: pretix/base/settings.py:589
-#, fuzzy
-#| msgid "Custom recipient field"
 msgid "Custom recipient field help text"
-msgstr "Zusätzliches Empfängerfeld"
+msgstr "Hilfetext zum zusätzlichen Empfängerfeld"
 
 #: pretix/base/settings.py:591
 msgid ""
@@ -9132,6 +9120,9 @@ msgid ""
 "will be displayed underneath the field. It will not be displayed on the "
 "invoice."
 msgstr ""
+"Wenn Sie das zusätzliche Empfängerfeld verwenden, können Sie hier einen "
+"Erklärungstext angeben, der unter dem Feld dargestellt wird. Er wird nicht "
+"auf der Rechnung ausgegeben."
 
 #: pretix/base/settings.py:601
 msgid "Ask for VAT ID"
@@ -12622,12 +12613,9 @@ msgstr ""
 "konfiguriert wurde"
 
 #: pretix/base/timeline.py:106
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "Customers can no longer modify their orders"
 msgctxt "timeline"
 msgid "Customers can no longer modify their order information"
-msgstr "Kunden können ihre Bestellungen nicht mehr bearbeiten"
+msgstr "Kunden können ihre Bestellinformationen nicht mehr bearbeiten"
 
 #: pretix/base/timeline.py:119
 msgctxt "timeline"
@@ -12651,9 +12639,6 @@ msgid "Customers can no longer cancel paid orders"
 msgstr "Kunden können bezahlte Bestellungen nicht mehr stornieren"
 
 #: pretix/base/timeline.py:167
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "Customers can no longer modify their orders"
 msgctxt "timeline"
 msgid "Customers can no longer make changes to their orders"
 msgstr "Kunden können ihre Bestellungen nicht mehr bearbeiten"
@@ -14206,31 +14191,32 @@ msgstr ""
 "gemacht. Bitte stellen Sie sicher, dass Sie sie aktuell halten!"
 
 #: pretix/control/forms/item.py:100
-#, fuzzy
-#| msgid "Products in this category are add-on products"
 msgid ""
 "Products in this category are regular products displayed on the front page."
-msgstr "Produkte in dieser Kategorie sind Zusatzprodukte"
+msgstr ""
+"Produkte in dieser Kategorie sind normale Produkte, die auf der Startseite "
+"angezeigt werden."
 
 #: pretix/control/forms/item.py:103
-#, fuzzy
-#| msgid "Product category"
 msgid "Add-on product category"
-msgstr "Produktkategorie"
+msgstr "Zusatzprodukt-Kategorie"
 
 #: pretix/control/forms/item.py:104
-#, fuzzy
-#| msgid "Products in this category are add-on products"
 msgid ""
 "Products in this category are add-on products and can only be bought as add-"
 "ons."
-msgstr "Produkte in dieser Kategorie sind Zusatzprodukte"
+msgstr ""
+"Produkte in dieser Kategorie sind Zusatzprodukte und können nicht einzeln "
+"gekauft werden."
 
 #: pretix/control/forms/item.py:108
 msgid ""
 "Products in this category are regular products, but are only shown in the "
 "cross-selling step, according to the configuration below."
 msgstr ""
+"Produkte in dieser Kategorie sind reguläre Produkte, werden aber - "
+"entsprechend der untenstehenden Bedingung - nur im Cross-Selling-Schritt "
+"angezeigt."
 
 #: pretix/control/forms/item.py:113
 msgid ""
@@ -14238,6 +14224,9 @@ msgid ""
 "but are additionally shown in the cross-selling step, according to the "
 "configuration below."
 msgstr ""
+"Produkte in dieser Kategorie werden regulär auf der Startseite angezeigt, "
+"werden aber - entsprechend der untenstehenden Bedingung - zusätzlich im "
+"Cross-Selling-Schritt beworben."
 
 #: pretix/control/forms/item.py:141 pretix/control/forms/item.py:211
 msgid "This field is required"
@@ -14340,7 +14329,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:664
 msgid "Show product with info on why it’s unavailable"
-msgstr "Zeige das Produkt mit einer Information, warum es nicht verfügbar ist."
+msgstr "Zeige das Produkt mit einer Information, warum es nicht verfügbar ist"
 
 #: pretix/control/forms/item.py:677
 msgid ""
@@ -20579,10 +20568,8 @@ msgid "Create a new category"
 msgstr "Kategorie erstellen"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:34
-#, fuzzy
-#| msgid "Category name"
 msgid "Category type"
-msgstr "Bezeichnung"
+msgstr "Art der Kategorie"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:48
 #: pretix/control/templates/pretixcontrol/items/discounts.html:138
@@ -25558,6 +25545,9 @@ msgid ""
 "According to your event settings, sold out products are hidden from "
 "customers. This way, customers will not be able to discover the waiting list."
 msgstr ""
+"Entsprechend Ihrer Veranstaltungseinstellungen werden ausverkaufte Produkte "
+"nicht angezeigt. Dies führt dazu, dass Kund*innen die Warteliste nicht "
+"finden können."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:36
 msgid "Send vouchers"
@@ -32003,16 +31993,12 @@ msgid "We're now trying to book these add-ons for you!"
 msgstr "Wir versuchen nun, diese Zusatzprodukte für Sie zu buchen!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:24
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional options for"
-msgstr "Zusätzliche Einstellungen"
+msgstr "Zusätzliche Einstellungen für"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:59
-#, fuzzy
-#| msgid "Top recommendation"
 msgid "More recommendations"
-msgstr "Empfohlene Erweiterung"
+msgstr "Empfehlungen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:72
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:201
@@ -33039,10 +33025,8 @@ msgid "Payment pending"
 msgstr "Zahlung ausstehend"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:19
-#, fuzzy
-#| msgid "Your orders for {event}"
 msgid "Your order qualifies for a discount"
-msgstr "Ihre Bestellungen für {event}"
+msgstr "Zu Ihrer Bestellung ist ein Rabatt verfügbar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:28
 #: pretix/presale/templates/pretixpresale/event/voucher.html:78
@@ -34618,6 +34602,8 @@ msgid ""
 "No ticket types are available for the waiting list, have a look at the "
 "ticket shop instead."
 msgstr ""
+"Es wird aktuell keine Warteliste geführt, schauen Sie doch stattdessen "
+"einmal im Ticket-Shop vorbei."
 
 #: pretix/presale/views/waiting.py:137 pretix/presale/views/waiting.py:161
 msgid "Waiting lists are disabled for this event."
