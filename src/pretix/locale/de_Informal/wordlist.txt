@@ -82,6 +82,7 @@ Connect
 Consent
 Copyleft
 Cronjob
+Cross-Selling
 csv
 Customer
 CZK
