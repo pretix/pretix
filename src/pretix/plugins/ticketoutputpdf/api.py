@@ -19,21 +19,33 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from datetime import timedelta
+
+from celery.result import AsyncResult
 from django.conf import settings
 from django.db import transaction
 from django.db.models import QuerySet
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.utils.functional import lazy
-from rest_framework import serializers, viewsets
+from django.utils.timezone import now
+from django_scopes import scopes_disabled
+from rest_framework import serializers, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 
 from ...api.serializers.fields import UploadedFileField
-from ...base.models import SalesChannel
+from ...base.models import CachedFile, OrderPosition, SalesChannel
 from ...base.pdf import PdfLayoutValidator
+from ...helpers.http import ChunkBasedFileResponse
 from ...multidomain.utils import static_absolute
 from .models import TicketLayout, TicketLayoutItem
+from .tasks import bulk_render
 
 
 class ItemAssignmentSerializer(I18nAwareModelSerializer):
@@ -156,3 +168,123 @@ class TicketLayoutItemViewSet(viewsets.ReadOnlyModelViewSet):
             **super().get_serializer_context(),
             'event': self.request.event,
         }
+
+
+with scopes_disabled():
+    class RenderJobPartSerializer(serializers.Serializer):
+        orderposition = serializers.PrimaryKeyRelatedField(
+            queryset=OrderPosition.objects.none(),
+            required=True,
+            allow_null=False,
+        )
+        override_layout = serializers.PrimaryKeyRelatedField(
+            queryset=TicketLayout.objects.none(),
+            required=False,
+            allow_null=True,
+        )
+        override_channel = serializers.SlugRelatedField(
+            queryset=SalesChannel.objects.none(),
+            slug_field='identifier',
+            required=False,
+            allow_null=True,
+        )
+
+
+class RenderJobSerializer(serializers.Serializer):
+    parts = RenderJobPartSerializer(many=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['parts'].child.fields['orderposition'].queryset = OrderPosition.objects.filter(order__event=self.context['event'])
+        self.fields['parts'].child.fields['override_layout'].queryset = self.context['event'].ticket_layouts.all()
+        self.fields['parts'].child.fields['override_channel'].queryset = self.context['event'].organizer.sales_channels.all()
+
+    def validate(self, attrs):
+        if len(attrs["parts"]) > 1000:
+            raise ValidationError({"parts": ["Please do not submit more than 1000 parts."]})
+        return super().validate(attrs)
+
+
+class TicketRendererViewSet(viewsets.ViewSet):
+    permission = 'can_view_orders'
+
+    def get_serializer_kwargs(self):
+        return {}
+
+    def list(self, request, *args, **kwargs):
+        raise Http404()
+
+    def retrieve(self, request, *args, **kwargs):
+        raise Http404()
+
+    def update(self, request, *args, **kwargs):
+        raise Http404()
+
+    def partial_update(self, request, *args, **kwargs):
+        raise Http404()
+
+    def destroy(self, request, *args, **kwargs):
+        raise Http404()
+
+    @action(detail=False, methods=['GET'], url_name='download', url_path='download/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
+    def download(self, *args, **kwargs):
+        cf = get_object_or_404(CachedFile, id=kwargs['cfid'])
+        if cf.file:
+            resp = ChunkBasedFileResponse(cf.file.file, content_type=cf.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(cf.filename).encode("ascii", "ignore")
+            return resp
+        elif not settings.HAS_CELERY:
+            return Response(
+                {'status': 'failed', 'message': 'Unknown file ID or export failed'},
+                status=status.HTTP_410_GONE
+            )
+
+        res = AsyncResult(kwargs['asyncid'])
+        if res.failed():
+            if isinstance(res.info, dict) and res.info['exc_type'] == 'ExportError':
+                msg = res.info['exc_message']
+            else:
+                msg = 'Internal error'
+            return Response(
+                {'status': 'failed', 'message': msg},
+                status=status.HTTP_410_GONE
+            )
+
+        return Response(
+            {
+                'status': 'running' if res.state in ('PROGRESS', 'STARTED', 'SUCCESS') else 'waiting',
+            },
+            status=status.HTTP_409_CONFLICT
+        )
+
+    @action(detail=False, methods=['POST'])
+    def render_batch(self, *args, **kwargs):
+        serializer = RenderJobSerializer(data=self.request.data, context={
+            "event": self.request.event,
+        })
+        serializer.is_valid(raise_exception=True)
+
+        cf = CachedFile(web_download=False)
+        cf.date = now()
+        cf.expires = now() + timedelta(hours=24)
+        cf.save()
+        async_result = bulk_render.apply_async(args=(
+            self.request.event.id,
+            str(cf.id),
+            [
+                {
+                    "orderposition": r["orderposition"].id,
+                    "override_layout": r["override_layout"].id if r.get("override_layout") else None,
+                    "override_channel": r["override_channel"].id if r.get("override_channel") else None,
+                } for r in serializer.validated_data["parts"]
+            ]
+        ))
+
+        url_kwargs = {
+            'asyncid': str(async_result.id),
+            'cfid': str(cf.id),
+        }
+        url_kwargs.update(self.kwargs)
+        return Response({
+            'download': reverse('api-v1:ticketpdfrenderer-download', kwargs=url_kwargs, request=self.request)
+        }, status=status.HTTP_202_ACCEPTED)
