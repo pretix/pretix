@@ -253,7 +253,6 @@ class TicketRendererViewSet(viewsets.ViewSet):
         return Response(
             {
                 'status': 'running' if res.state in ('PROGRESS', 'STARTED', 'SUCCESS') else 'waiting',
-                'percentage': res.result.get('value', None) if res.result else None,
             },
             status=status.HTTP_409_CONFLICT
         )

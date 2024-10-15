@@ -268,8 +268,8 @@ Layout endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
 
-API ticket rendering
---------------------
+Ticket rendering endpoint
+-----------------------------
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/ticketpdfrenderer/render_batch/
 
@@ -283,10 +283,10 @@ API ticket rendering
 
    If your input parameters validate correctly, a ``202 Accepted`` status code is returned.
    The body points you to the download URL of the result. Running a ``GET`` request on that result URL will
-    yield one of the following status codes:
+   yield one of the following status codes:
 
     * ``200 OK`` – The export succeeded. The body will be your resulting file. Might be large!
-    * ``409 Conflict`` – Your export is still running. The body will be JSON with the structure ``{"status": "running", "percentage": 40}``. ``percentage`` can be ``null`` if it is not known and ``status`` can be ``waiting`` before the task is actually being processed. Please retry, but wait at least one second before you do.
+    * ``409 Conflict`` – Your export is still running. The body will be JSON with the structure ``{"status": "running"}``. ``status`` can be ``waiting`` before the task is actually being processed. Please retry, but wait at least one second before you do.
     * ``410 Gone`` – Running the export has failed permanently. The body will be JSON with the structure ``{"status": "failed", "message": "Error message"}``
     * ``404 Not Found`` – The export does not exist / is expired.
 
