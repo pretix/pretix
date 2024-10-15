@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
-"PO-Revision-Date: 2024-06-18 20:00+0000\n"
-"Last-Translator: simonD <simon.dalvy@gmail.com>\n"
+"PO-Revision-Date: 2024-10-15 12:01+0000\n"
+"Last-Translator: Mira <weller@rami.io>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -259,10 +259,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Plugin inconnu : '{name}'."
 
 #: pretix/api/serializers/event.py:295
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Plugin inconnu : '{name}'."
+msgstr "Plugin limité : '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
@@ -511,10 +510,8 @@ msgid "Order denied"
 msgstr "Commande rejeté"
 
 #: pretix/api/webhooks.py:313
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order deleted"
-msgstr "Commande rejeté"
+msgstr "Commande supprimé"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -2317,10 +2314,8 @@ msgid "Order comment"
 msgstr "Commentaire de commande"
 
 #: pretix/base/exporters/orderlist.py:622
-#, fuzzy
-#| msgid "Add-On to position #%(posid)s"
 msgid "Add-on to position ID"
-msgstr "Add-On à la position #%(posid)s"
+msgstr "Add-on à la position ID"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:340
 msgid "Invoice address street"
