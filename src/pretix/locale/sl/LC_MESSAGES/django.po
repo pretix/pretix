@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-15 11:06+0000\n"
+"POT-Creation-Date: 2024-10-15 11:14+0000\n"
 "PO-Revision-Date: 2022-05-23 11:21+0000\n"
 "Last-Translator: Emanat Institute <info@emanat.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -24673,8 +24673,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:26
 msgid ""
 "According to your event settings, sold out products are hidden from "
-"customers. This way, customers will not be able to discovere the waiting "
-"list."
+"customers. This way, customers will not be able to discover the waiting list."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:36
