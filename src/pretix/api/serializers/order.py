@@ -1728,3 +1728,8 @@ class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
     class Meta:
         model = BlockedTicketSecret
         fields = ('id', 'secret', 'updated', 'blocked')
+
+
+class EmailSerializer(serializers.Serializer):
+    subject = serializers.CharField()
+    message = serializers.CharField()
