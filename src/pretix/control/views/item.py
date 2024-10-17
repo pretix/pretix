@@ -302,6 +302,8 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
             i = modelcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
+            kwargs.setdefault('initial', {})
+            kwargs['initial']['cross_selling_match_products'] = [str(i.pk) for i in self.copy_from.cross_selling_match_products.all()]
         else:
             kwargs['instance'] = ItemCategory(event=self.request.event)
         return kwargs
