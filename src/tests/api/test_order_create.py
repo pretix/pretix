@@ -463,6 +463,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'subevent': None,
                 'discount': None,
                 'checkins': [],
+                'print_logs': [],
                 'downloads': [],
                 "valid_from": None,
                 "valid_until": None,
@@ -535,13 +536,13 @@ def test_order_create_positionids_addons_simulated(token_client, organizer, even
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
          'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
-         'addon_to': None, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
+         'addon_to': None, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': None,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None},
         {'id': 0, 'order': '', 'positionid': 2, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
          'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
-         'addon_to': 1, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
+         'addon_to': 1, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': None,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None}
     ]
 

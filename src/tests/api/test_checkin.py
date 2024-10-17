@@ -123,6 +123,7 @@ TEST_ORDERPOSITION1_RES = {
     "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
     "addon_to": None,
     "checkins": [],
+    "print_logs": [],
     "downloads": [],
     "answers": [],
     "seat": None,
@@ -160,6 +161,7 @@ TEST_ORDERPOSITION2_RES = {
     "secret": "sf4HZG73fU6kwddgjg2QOusFbYZwVKpK",
     "addon_to": None,
     "checkins": [],
+    "print_logs": [],
     "downloads": [],
     "answers": [],
     "seat": None,
@@ -197,6 +199,7 @@ TEST_ORDERPOSITION3_RES = {
     "secret": "3u4ez6vrrbgb3wvezxhq446p548dt2wn",
     "addon_to": None,
     "checkins": [],
+    "print_logs": [],
     "downloads": [],
     "answers": [],
     "seat": None,
@@ -467,7 +470,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         p3["addon_to"] = p1["id"]
 
     # All items
-    with django_assert_num_queries(23):
+    with django_assert_num_queries(24):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
             organizer.slug, event.slug, clist_all.pk
         ))
@@ -1359,7 +1362,7 @@ def test_search(token_client, organizer, event, clist, clist_all, item, other_it
         p1["id"] = order.positions.get(positionid=1).pk
         p1["item"] = item.pk
 
-    with django_assert_max_num_queries(17):
+    with django_assert_max_num_queries(18):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?search=z3fsn8jyu'.format(
             organizer.slug, event.slug, clist_all.pk
         ))
