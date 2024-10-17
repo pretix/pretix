@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
-"PO-Revision-Date: 2024-10-10 07:00+0000\n"
+"PO-Revision-Date: 2024-10-18 06:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -20289,7 +20289,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:40
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:87
 msgid "Refund amount"
-msgstr ""
+msgstr "Visszatérített összeg"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:68
 msgid "Full amount"
@@ -30856,7 +30856,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "Rendelés lemondása: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:38
 msgid ""
@@ -30890,7 +30890,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 msgid "Refund amount:"
-msgstr ""
+msgstr "Visszatérített összeg:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:117
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:138
@@ -30909,7 +30909,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:185
 msgid "The following payment methods will be used to refund the money to you:"
-msgstr ""
+msgstr "A következő fizetőeszközökre fogjuk visszautalni a pénzt:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:218
 msgid "Yes, request cancellation"
@@ -31050,7 +31050,7 @@ msgstr "Kifizetett megrendelések"
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
-msgstr ""
+msgstr "Rendelés linkek újraküldése"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
 msgid ""
@@ -31058,6 +31058,9 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"Ha nincs meg az rendelésed linkje, kérjük add meg a rendeléshez használt "
+"email címet, és újra elküldjük az összes vele készült rendeléshez kapcsolódó "
+"linkeket."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
