@@ -924,6 +924,9 @@ class QuotaCreate(EventPermissionRequiredMixin, CreateView):
             ]
         else:
             kwargs['instance'] = Quota(event=self.request.event)
+            if 'product' in self.request.GET:
+                kwargs['initial']['itemvars'] = self.request.GET.getlist('product')
+
         return kwargs
 
     def form_invalid(self, form):
