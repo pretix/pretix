@@ -12,10 +12,22 @@
     {% endif %}
     {% if object.id and not object.quotas.exists %}
         <div class="alert alert-warning">
-            {% blocktrans trimmed %}
-                Please note that your product will <strong>not</strong> be available for sale until you have added your
-                item to an existing or newly created quota.
-            {% endblocktrans %}
+            <div class="row">
+                <div class="col-lg-8">
+                    {% blocktrans trimmed %}
+                        Please note that your product will <strong>not</strong> be available for sale until you have added your
+                        item to an existing or newly created quota.
+                    {% endblocktrans %}
+                </div>
+                <div class="col-lg-4 text-right">
+                    <a class="btn btn-default btn-sm" href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}">
+                        <i class="fa fa-wrench"></i> {% trans "Manage quotas" %}
+                    </a>
+                    <a class="btn btn-default btn-sm" href="{% url "control:event.items.quotas.add" organizer=request.event.organizer.slug event=request.event.slug %}?{% if object.has_variations %}{% for var in object.variations.all %}product={{ object.pk }}-{{ var.pk }}&{% endfor %}{% else %}product={{ object.pk }}{% endif %}">
+                        <i class="fa fa-plus"></i> {% trans "Create a new quota" %}
+                    </a>
+                </div>
+            </div>
         </div>
     {% elif object.pk and not object.is_available_by_time %}
         <div class="alert alert-warning">
