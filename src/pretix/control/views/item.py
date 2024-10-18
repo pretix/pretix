@@ -661,6 +661,10 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             question=self.object, orderposition__isnull=False,
             orderposition__order__event=self.request.event
         )
+
+        if self.request.GET.get("subevent", "") != "":
+            qs = qs.filter(orderposition__subevent=self.request.GET["subevent"])
+
         s = self.request.GET.get("status", "np")
         if s != "":
             if s == 'o':
