@@ -71,7 +71,9 @@ class CrossSellingService:
             )
         result = [(category, items, form_prefix) for (category, items, form_prefix) in result if len(items) > 0]
         for category, items, form_prefix in result:
-            category.category_has_discount = any(item.original_price for item in items)
+            category.category_has_discount = any(item.original_price or (
+                item.has_variations and any(var.original_price for var in item.available_variations)
+            ) for item in items)
         return result
 
     def _applicable_categories(self, subevent_id):
