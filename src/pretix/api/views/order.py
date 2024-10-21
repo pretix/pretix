@@ -57,7 +57,8 @@ from pretix.api.serializers.order import (
     OrderPaymentCreateSerializer, OrderPaymentSerializer,
     OrderPositionSerializer, OrderRefundCreateSerializer,
     OrderRefundSerializer, OrderSerializer, PriceCalcSerializer,
-    RevokedTicketSecretSerializer, SimulatedOrderSerializer,
+    PrintLogSerializer, RevokedTicketSecretSerializer,
+    SimulatedOrderSerializer,
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
@@ -75,7 +76,7 @@ from pretix.base.models import (
     TeamAPIToken, generate_secret,
 )
 from pretix.base.models.orders import (
-    BlockedTicketSecret, QuestionAnswer, RevokedTicketSecret,
+    BlockedTicketSecret, PrintLog, QuestionAnswer, RevokedTicketSecret,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.pdf import get_images
@@ -259,6 +260,7 @@ class OrderViewSetMixin:
                 'positions',
                 opq.all().prefetch_related(
                     Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
+                    Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                     Prefetch('item', queryset=self.request.event.items.prefetch_related(
                         Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
@@ -280,6 +282,7 @@ class OrderViewSetMixin:
                 'positions',
                 opq.all().prefetch_related(
                     Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
+                    Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                     'item', 'variation',
                     Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
                     'seat',
@@ -1093,6 +1096,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             )
             qs = qs.prefetch_related(
                 Prefetch('checkins', queryset=Checkin.objects.select_related("device")),
+                Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                 Prefetch('item', queryset=self.request.event.items.prefetch_related(
                     Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
                              to_attr='meta_values_cached')
@@ -1136,6 +1140,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         else:
             qs = qs.prefetch_related(
                 Prefetch('checkins', queryset=Checkin.objects.select_related("device")),
+                Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                 'answers', 'answers__options', 'answers__question',
             ).select_related(
                 'item', 'order', 'order__event', 'order__event__organizer', 'seat'
@@ -1253,6 +1258,34 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             os.path.basename(answer.file.name).split('.', 1)[1]
         )
         return resp
+
+    @action(detail=True, url_name="printlog", url_path="printlog", methods=["POST"])
+    def printlog(self, request, **kwargs):
+        pos = self.get_object()
+        serializer = PrintLogSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+            serializer.save(
+                position=pos,
+                device=request.auth if isinstance(request.auth, Device) else None,
+                user=request.user if request.user.is_authenticated else None,
+                api_token=request.auth if isinstance(request.auth, TeamAPIToken) else None,
+                oauth_application=request.auth.application if isinstance(request.auth, OAuthAccessToken) else None,
+            )
+
+            pos.order.log_action(
+                "pretix.event.order.print",
+                data={
+                    "position": pos.pk,
+                    "positionid": pos.positionid,
+                    **serializer.validated_data,
+                },
+                auth=request.auth,
+                user=request.user,
+            )
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, url_name='pdf_image', url_path=r'pdf_image/(?P<key>[^/]+)')
     def pdf_image(self, request, key, **kwargs):
