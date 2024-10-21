@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
-"PO-Revision-Date: 2022-05-23 11:21+0000\n"
-"Last-Translator: Emanat Institute <info@emanat.si>\n"
+"PO-Revision-Date: 2024-10-20 05:00+0000\n"
+"Last-Translator: Lovro <lovrogrilc@gmail.com>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
 "Language: sl\n"
@@ -18,127 +18,127 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 4.12\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
-msgstr ""
+msgstr "angleščina"
 
 #: pretix/_base_settings.py:80
 msgid "German"
-msgstr ""
+msgstr "nemščina"
 
 #: pretix/_base_settings.py:81
 msgid "German (informal)"
-msgstr ""
+msgstr "Nemško (Neformalno)"
 
 #: pretix/_base_settings.py:82
 msgid "Arabic"
-msgstr ""
+msgstr "Arabsko"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "baskovščina"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
-msgstr ""
+msgstr "katalonski"
 
 #: pretix/_base_settings.py:85
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Kitajščina (poenostavljena)"
 
 #: pretix/_base_settings.py:86
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Kitajščina (tradicionalna)"
 
 #: pretix/_base_settings.py:87
 msgid "Czech"
-msgstr ""
+msgstr "Češko"
 
 #: pretix/_base_settings.py:88
 msgid "Danish"
-msgstr ""
+msgstr "Dansko"
 
 #: pretix/_base_settings.py:89
 msgid "Dutch"
-msgstr ""
+msgstr "Nizozemsko"
 
 #: pretix/_base_settings.py:90
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Nizozemsko (Neformalno)"
 
 #: pretix/_base_settings.py:91
 msgid "French"
-msgstr ""
+msgstr "Francosko"
 
 #: pretix/_base_settings.py:92
 msgid "Finnish"
-msgstr ""
+msgstr "Finsko"
 
 #: pretix/_base_settings.py:93
 msgid "Galician"
-msgstr ""
+msgstr "galicijski"
 
 #: pretix/_base_settings.py:94
 msgid "Greek"
-msgstr ""
+msgstr "Grško"
 
 #: pretix/_base_settings.py:95
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonezijsko"
 
 #: pretix/_base_settings.py:96
 msgid "Italian"
-msgstr ""
+msgstr "Italijansko"
 
 #: pretix/_base_settings.py:97
 msgid "Latvian"
-msgstr ""
+msgstr "Latvijsko"
 
 #: pretix/_base_settings.py:98
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norveško"
 
 #: pretix/_base_settings.py:99
 msgid "Polish"
-msgstr ""
+msgstr "Poljsko"
 
 #: pretix/_base_settings.py:100
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portugalsko (Portugalska)"
 
 #: pretix/_base_settings.py:101
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugalsko (Brazilija)"
 
 #: pretix/_base_settings.py:102
 msgid "Romanian"
-msgstr ""
+msgstr "Romansko"
 
 #: pretix/_base_settings.py:103
 msgid "Russian"
-msgstr ""
+msgstr "Rusko"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "Slovaško"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
-msgstr ""
+msgstr "Švedsko"
 
 #: pretix/_base_settings.py:106
 msgid "Spanish"
-msgstr ""
+msgstr "Špansko"
 
 #: pretix/_base_settings.py:107
 msgid "Turkish"
-msgstr ""
+msgstr "Turško"
 
 #: pretix/_base_settings.py:108
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrajinsko"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -150,13 +150,12 @@ msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:53
 msgid "pretixSCAN"
-msgstr "pretixSCAN"
+msgstr "pretixSKEN"
 
 #: pretix/api/auth/devicesecurity.py:90
-#, fuzzy
-#| msgid "pretixSCAN (kiosk mode, online only)"
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretixSCAN (način kiosk, samo na spletu)"
+msgstr ""
+"pretixSCAN (kiosk način, samo na spletu, brez sinhronizacije, brez iskanja)"
 
 #: pretix/api/auth/devicesecurity.py:124
 #, fuzzy
@@ -166,7 +165,7 @@ msgstr "pretixSCAN (način kiosk, samo na spletu)"
 
 #: pretix/api/auth/devicesecurity.py:159
 msgid "pretixPOS"
-msgstr "pretixPOS"
+msgstr "pretixBLAGAJNA"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:402
 msgid "Application name"
@@ -181,10 +180,8 @@ msgid "Allowed URIs list, space separated"
 msgstr "Seznam dovoljenih URI naslovov, ločenih s presledkom"
 
 #: pretix/api/models.py:47
-#, fuzzy
-#| msgid "Allowed URIs list, space separated"
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Seznam dovoljenih URI naslovov, ločenih s presledkom"
+msgstr "Seznam dovoljenih odjavnih URI naslovov, ločenih s presledkom"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
@@ -296,7 +293,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Trenutno je mogoče personalizirati le vstopnine."
 
 #: pretix/api/serializers/item.py:317
 msgid ""
@@ -332,27 +329,21 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Te vrste vprašanj ni mogoče zastaviti med prijavo."
 
 #: pretix/api/serializers/item.py:546 pretix/control/forms/item.py:199
-#, fuzzy
-#| msgid "This type of question cannot be asked during check-in."
 msgid "This type of question cannot be shown during check-in."
-msgstr "Te vrste vprašanj ni mogoče zastaviti med prijavo."
+msgstr "Te vrste vprašanj ni mogoče pokazati med prijavo."
 
 #: pretix/api/serializers/media.py:108
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Darilna kartica z isto skrivnostjo že obstaja na vašem ali povezanem računu "
+"Medij z istim identifikatorjem in vrsto že obstaja v vašem računu "
 "organizatorja."
 
 #: pretix/api/serializers/order.py:78
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "\"{input}\" ni dovoljena izbira."
 
 #: pretix/api/serializers/order.py:1322 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1530
@@ -371,10 +362,8 @@ msgstr "Na kvoti \"{}\" ni dovolj kvote za izvedbo operacije."
 
 #: pretix/api/serializers/organizer.py:102
 #: pretix/control/forms/organizer.py:832 pretix/presale/forms/customer.py:445
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "An account with this email address is already registered."
-msgstr "Vaučer s to kodo že obstaja."
+msgstr "Račun z to kodo že obstaja."
 
 #: pretix/api/serializers/organizer.py:235
 #: pretix/control/forms/organizer.py:681
@@ -401,17 +390,13 @@ msgid "This user already has permissions for this team."
 msgstr "Ta uporabnik že ima dovoljenja za to ekipo."
 
 #: pretix/api/views/cart.py:209
-#, fuzzy
-#| msgid ""
-#| "This voucher code has already been used the maximum number of times "
-#| "allowed."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr "Ta koda bona je že bila uporabljena največje dovoljeno številokrat."
+msgstr "Ta koda bona je že bila uporabljena največkrat dovoljeno."
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Medij povezan z drugim dogodkom"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:475
 #, python-brace-format
@@ -469,10 +454,8 @@ msgid "Order expired"
 msgstr "Naročilo je poteklo"
 
 #: pretix/api/webhooks.py:261
-#, fuzzy
-#| msgid "Order information changed"
 msgid "Order expiry date changed"
-msgstr "Podatki naročila so spremenjeni"
+msgstr "Spremenjen datum poteka naročila"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -488,10 +471,8 @@ msgid "Order changed"
 msgstr "Naročilo spremenjeno"
 
 #: pretix/api/webhooks.py:277
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Refund of payment created"
-msgstr "Omogoči način plačila"
+msgstr "Storno plačila ustvarjeno"
 
 #: pretix/api/webhooks.py:281 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -499,31 +480,23 @@ msgstr "Zunanje vračilo plačila"
 
 #: pretix/api/webhooks.py:285
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "Storno plačila zahteva kupec"
 
 #: pretix/api/webhooks.py:289
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Refund of payment completed"
-msgstr "Omogoči način plačila"
+msgstr "Storno Plačila zaključeno"
 
 #: pretix/api/webhooks.py:293
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment canceled"
-msgstr "Zunanje vračilo plačila"
+msgstr "Storno plačila preklicano"
 
 #: pretix/api/webhooks.py:297
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment failed"
-msgstr "Zunanje vračilo plačila"
+msgstr "Storno plačila ni uspelo"
 
 #: pretix/api/webhooks.py:301
-#, fuzzy
-#| msgid "Pending orders"
 msgid "Payment confirmed"
-msgstr "Čakajoča naročila"
+msgstr "Plačilo potrjeno"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
@@ -534,10 +507,8 @@ msgid "Order denied"
 msgstr "Naročilo zavrnjeno"
 
 #: pretix/api/webhooks.py:313
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order deleted"
-msgstr "Naročilo zavrnjeno"
+msgstr "Naročilo izbrisano"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -579,6 +550,8 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Spremenjen izdelek (vključno z dodanim ali izbrisanim izdelkom in vključno s "
+"spremembami ugnezdenih predmetov, kot so različice ali svežnji)"
 
 #: pretix/api/webhooks.py:354
 #, fuzzy
@@ -587,53 +560,36 @@ msgid "Shop taken live"
 msgstr "Trgovina je aktivna"
 
 #: pretix/api/webhooks.py:358
-#, fuzzy
-#| msgid "The shop has been taken offline."
 msgid "Shop taken offline"
-msgstr "Trgovina ni aktivna."
+msgstr "Trgovina ni aktivna"
 
 #: pretix/api/webhooks.py:362
-#, fuzzy
-#| msgid "This entry is anonymized and can no longer be used."
 msgid "Test-Mode of shop has been activated"
-msgstr "Ta vnos je anonimiziran in ga ni več mogoče uporabljati."
+msgstr "Testni-Način trgovine je bil aktiviran"
 
 #: pretix/api/webhooks.py:366
-#, fuzzy
-#| msgid "This entry is anonymized and can no longer be used."
 msgid "Test-Mode of shop has been deactivated"
-msgstr "Ta vnos je anonimiziran in ga ni več mogoče uporabljati."
+msgstr "Testni-Način trgovine je bil deaktiviran"
 
 #: pretix/api/webhooks.py:370
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry added"
-msgstr "Vpis v čakalni seznam"
+msgstr "Zapis dodan na čakalni listo"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry changed"
-msgstr "Vpis v čakalni seznam"
+msgstr "Spremeba vnosa na čakalni listi"
 
 #: pretix/api/webhooks.py:378
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry deleted"
-msgstr "Vpis v čakalni seznam"
+msgstr "Zapis v čakalni listi izbrisan"
 
 #: pretix/api/webhooks.py:382
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list entry received voucher"
-msgstr "Vnosi v čakalni seznam"
+msgstr "Vpis na čakalno listo z vavčarjem"
 
 #: pretix/api/webhooks.py:386
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customer account created"
-msgstr "Stranka"
+msgstr "Ustvarjen račun stranke"
 
 #: pretix/api/webhooks.py:390
 #, fuzzy
@@ -642,10 +598,8 @@ msgid "Customer account changed"
 msgstr "Podatki o profilu so spremenjeni"
 
 #: pretix/api/webhooks.py:394
-#, fuzzy
-#| msgid "Your account has been enabled."
 msgid "Customer account anonymized"
-msgstr "Račun je omogočen."
+msgstr "Račun je omogočen"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:953
@@ -661,11 +615,11 @@ msgstr "To polje je obvezno."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Vnesite poštno številko v formatu XXXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Vnesite poštno številko v formatu XXXX ."
 
 #: pretix/base/auth.py:146
 #, python-brace-format
@@ -698,18 +652,18 @@ msgstr "Geslo"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "Vaše geslo mora vsebovati numerične in abecedne znake."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, python-format
+#, fuzzy, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Vaše geslo ne sme biti enako kot vaše prejšnje geslo."
+msgstr[1] "Vaši gesli ne smeta biti enaki kakor prejšnji gesli."
+msgstr[2] "Vaša gesla ne smejo biti enaka kot vaša prejšnja gesla."
+msgstr[3] "Vaše geslo ne sme biti enako kot vaše prejšnje geslo."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -717,13 +671,15 @@ msgstr "Spletna trgovina"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"API prodajni kanal pride brez built-in funkcionalnosti, ampak ga lahko "
+"uporabljate za svoje integracije."
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -742,40 +698,40 @@ msgstr "izvorna koda"
 #: pretix/base/customersso/oidc.py:61
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "Konfiguracijska opcija \"{name}\" manjka."
 
 #: pretix/base/customersso/oidc.py:69 pretix/base/customersso/oidc.py:74
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
 msgstr ""
+"Ne morem pridobiti configuracije iz \"{url}\". Sporočilo napake: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:80 pretix/base/customersso/oidc.py:85
 #: pretix/base/customersso/oidc.py:90 pretix/base/customersso/oidc.py:95
 #: pretix/base/customersso/oidc.py:100 pretix/base/customersso/oidc.py:105
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "Ne kompatibilni SSO ponudnik: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:111
-#, fuzzy, python-brace-format
-#| msgid "Your event registration: {code}"
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Registracija vašega dogodka: {code}"
+msgstr "Ne zahtevate \"{scope}\"."
 
 #: pretix/base/customersso/oidc.py:117
 #, python-brace-format
 msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
-msgstr ""
+msgstr "Zahtevate obseg \"{scope}\", vendar ponudnik podpira samo to: {scopes}."
 
 #: pretix/base/customersso/oidc.py:127
 #, python-brace-format
 msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
-msgstr ""
+msgstr "Zahtevate polje \"{field}\", vendar ponudnik podpira le ta: {fields}."
 
 #: pretix/base/customersso/oidc.py:137
 #, python-brace-format
@@ -783,6 +739,8 @@ msgid ""
 "No supported Token Endpoint Auth Methods supported: "
 "{token_endpoint_auth_methods_supported}"
 msgstr ""
+"Nobena podprta metoda za preverjanje končne točke žetona ni podprta: "
+"{token_endpoint_auth_methods_supported}"
 
 #: pretix/base/customersso/oidc.py:203 pretix/base/customersso/oidc.py:210
 #: pretix/base/customersso/oidc.py:229 pretix/base/customersso/oidc.py:246
@@ -791,13 +749,15 @@ msgstr ""
 #: pretix/presale/views/customer.py:811
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "Prijava ni bila uspešna. Sporočilo o napaki: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:236
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
+"E-poštni naslov na tem računu še ni preverjen. Najprej potrdite e-poštni "
+"naslov v svojem računu stranke."
 
 #: pretix/base/email.py:199 pretix/base/exporters/items.py:157
 #: pretix/base/exporters/items.py:205 pretix/control/views/main.py:311
@@ -820,7 +780,7 @@ msgstr "Izvozni format"
 
 #: pretix/base/exporter.py:189
 msgid "Excel (.xlsx)"
-msgstr "Excel (.xlsx)"
+msgstr "Microsoft Excel (.xlsx)"
 
 #: pretix/base/exporter.py:190 pretix/base/exporter.py:312
 msgid "CSV (with commas)"
@@ -839,10 +799,8 @@ msgid "Combined Excel (.xlsx)"
 msgstr "Kombiniran Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:54
-#, fuzzy
-#| msgid "Answers to file upload questions"
 msgid "Question answer file uploads"
-msgstr "Odgovori na vprašanja o nalaganju datotek"
+msgstr "Nalaganje datotek z odgovori na vprašanja"
 
 #: pretix/base/exporters/answers.py:55 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:87
@@ -862,6 +820,8 @@ msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Prenesite datoteko ZIP, vključno z vsemi datotekami, ki so jih naložile vaše "
+"stranke med ustvarjanjem naročila."
 
 #: pretix/base/exporters/answers.py:66 pretix/base/models/items.py:1754
 #: pretix/control/navigation.py:182
@@ -924,48 +884,37 @@ msgstr "Vsi datumi"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:604
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
-#, fuzzy
-#| msgid "Cart positions"
 msgid "Customer accounts"
-msgstr "Pozicije košarice"
+msgstr "Računi strank"
 
 #: pretix/base/exporters/customers.py:51
-#, fuzzy
-#| msgid "Cart positions"
 msgctxt "export_category"
 msgid "Customer accounts"
-msgstr "Pozicije košarice"
+msgstr "Računi strank"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
-msgstr ""
+msgstr "Prenesite preglednico vseh trenutno registriranih računov strank."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:82
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:29
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:54
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Customer VAT ID"
 msgid "Customer ID"
-msgstr "ID za DDV kupca"
+msgstr "ID kupca"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:32
-#, fuzzy
-#| msgid "Payment provider"
 msgid "SSO provider"
-msgstr "Ponudnik plačil"
+msgstr "SSO ponudnik"
 
 #: pretix/base/exporters/customers.py:66 pretix/base/models/customers.py:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:36
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:49
-#, fuzzy
-#| msgid "Internal identifier"
 msgid "External identifier"
-msgstr "Interna oznaka"
+msgstr "Zunanja oznaka"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:445
@@ -1043,10 +992,8 @@ msgid "Account active"
 msgstr "Račun je aktiven"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:100
-#, fuzzy
-#| msgid "Attendee e-mail address"
 msgid "Verified email address"
-msgstr "E-poštni naslov udeleženca"
+msgstr "Potrjen e-poštni naslov"
 
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:68
@@ -1055,10 +1002,8 @@ msgstr "Zadnja prijava"
 
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:102
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:66
-#, fuzzy
-#| msgid "Expiration date"
 msgid "Registration date"
-msgstr "Datum poteka"
+msgstr "Registracijski datum"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
@@ -1074,7 +1019,7 @@ msgstr "Jezik"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:72
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:68
 msgid "Notes"
-msgstr ""
+msgstr "Zapiski"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -1140,8 +1085,6 @@ msgid "No"
 msgstr "Ne"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
-#, fuzzy
-#| msgid "Invoices"
 msgctxt "export_category"
 msgid "Invoices"
 msgstr "Računi"
@@ -1151,6 +1094,8 @@ msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
 msgstr ""
+"Prenesite račune v obliki, ki jo lahko uporablja programska oprema za "
+"pretvorbo dekodi NREI."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -1167,22 +1112,16 @@ msgstr "Vstopnica za dogodek {event}-{code}"
 #: pretix/plugins/reports/exporters.py:461
 #: pretix/plugins/reports/exporters.py:698
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date range"
-msgstr "Datum in ura"
+msgstr "Datumski razpon"
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
-#, fuzzy
-#| msgid ""
-#| "Only include invoices issued on or after this date. Note that the invoice "
-#| "date does not always correspond to the order or payment date."
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"Vključi samo račune izdane na ali po izbranem datumu. Upoštevajte, da datum "
-"računa ni vedno enak datumu naročila ali plačila."
+"Vključi samo račune izdane na  izbran datum. Upoštevajte, da datum računa ni "
+"vedno enak datumu naročila ali plačila."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
@@ -1200,6 +1139,8 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Prenesite preglednico z informacijami o vseh dogodkih v tem računu "
+"organizatorja."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:441
@@ -1322,10 +1263,11 @@ msgstr "Vsi računi"
 #: pretix/base/exporters/invoices.py:127
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
+"Prenesite vse račune, ki jih ustvari sistem, kot ZIP datoteko datotek PDF."
 
 #: pretix/base/exporters/invoices.py:178
 msgid "Invoice data"
-msgstr "Datum računa"
+msgstr "Podatki računa"
 
 #: pretix/base/exporters/invoices.py:179
 msgid ""
@@ -1333,6 +1275,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Prenesite preglednico s podatki vseh računov, ki jih ustvari sistem. "
+"Preglednica vključuje dva lista, enega s črto za vsak račun in drugega s "
+"črto za vsako mesto vsakega računa."
 
 #: pretix/base/exporters/invoices.py:191 pretix/base/shredder.py:576
 #: pretix/control/templates/pretixcontrol/order/index.html:267
@@ -1410,7 +1355,7 @@ msgstr "Tip računa"
 
 #: pretix/base/exporters/invoices.py:204 pretix/base/exporters/invoices.py:331
 msgid "Cancellation of"
-msgstr "Preklic"
+msgstr "Preklic od"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:207
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:209
@@ -1606,7 +1551,7 @@ msgstr "Ponudniki plačila"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 msgid "Cancellation"
-msgstr "Preklic"
+msgstr "Preklicano"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 #: pretix/control/templates/pretixcontrol/order/index.html:271
@@ -1664,21 +1609,17 @@ msgid "Event end date"
 msgstr "Končni datum dogodka"
 
 #: pretix/base/exporters/items.py:49
-#, fuzzy
-#| msgid "Product name"
 msgid "Product data"
-msgstr "Ime izdelka"
+msgstr "Podatki izdelka"
 
 #: pretix/base/exporters/items.py:50 pretix/base/exporters/orderlist.py:1128
-#, fuzzy
-#| msgid "Product name"
 msgctxt "export_category"
 msgid "Product data"
-msgstr "Ime izdelka"
+msgstr "Podatki izdelka"
 
 #: pretix/base/exporters/items.py:51
 msgid "Download a spreadsheet with details about all products and variations."
-msgstr ""
+msgstr "Prenesite preglednico s podrobnostmi o vseh izdelkih in različicah."
 
 #: pretix/base/exporters/items.py:57 pretix/base/exporters/orderlist.py:588
 #: pretix/base/exporters/orderlist.py:890
@@ -1894,6 +1835,8 @@ msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Prenesite strukturirano predstavitev JSON vseh naročil. To je lahko uporabno "
+"za uvoz v sisteme tretjih oseb."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1904,6 +1847,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Prenesite besedilno datoteko z vsemi e-poštnimi naslovi, zbranimi od kupcev "
+"ali imetnikov vstopnic."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:487
 #: pretix/plugins/reports/exporters.py:669
@@ -1916,6 +1861,9 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Prenesite preglednico vseh naročil. Preglednica bo vključevala tri liste, "
+"eno z vrstico za vsako naročilo, eno z vrstico za vsako pozicijo naročila in "
+"eno z vrstico za vsako dodatno provizijo, zaračunano v naročilu."
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:331
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -2318,7 +2266,7 @@ msgstr "ID psevdonimizacije"
 #: pretix/base/exporters/orderlist.py:611 pretix/control/forms/filter.py:677
 #: pretix/control/templates/pretixcontrol/order/change.html:274
 msgid "Ticket secret"
-msgstr ""
+msgstr "Skrivnost vstopnice"
 
 #: pretix/base/exporters/orderlist.py:612 pretix/base/modelimport_orders.py:569
 #: pretix/base/modelimport_vouchers.py:272
@@ -2353,7 +2301,7 @@ msgstr "Številka sedeža"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Blokirano"
 
 #: pretix/base/exporters/orderlist.py:618 pretix/base/modelimport_orders.py:499
 #: pretix/base/models/orders.py:2487
@@ -2420,7 +2368,7 @@ msgstr "Zvezna država za naslov na računu"
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:162
 #: pretix/plugins/checkinlists/apps.py:44
 msgid "Check-in lists"
-msgstr ""
+msgstr "Check-in liste"
 
 #: pretix/base/exporters/orderlist.py:822
 #, fuzzy
@@ -2434,6 +2382,9 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Prenesite preglednico vseh bistvenih sprememb naročil, tj. vseh sprememb "
+"izdelkov, cen ali davčnih stopenj. Podatki so točni le za spremembe, "
+"narejene z različicami pretix, izdanimi po oktobru 2021."
 
 #: pretix/base/exporters/orderlist.py:840
 #, fuzzy
@@ -2491,7 +2442,7 @@ msgstr "Podatki o naročilu"
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/items.py:1542
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Quantity"
-msgstr ""
+msgstr "količina"
 
 #: pretix/base/exporters/orderlist.py:895
 #, fuzzy
@@ -2532,10 +2483,12 @@ msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Ta vrednost je podana v informativne namene, ni del izvirnih podatkov o "
+"transakciji in se je od transakcije morda spremenila."
 
 #: pretix/base/exporters/orderlist.py:939
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Pretvorjeno iz starejše različice"
 
 #: pretix/base/exporters/orderlist.py:1001
 #, fuzzy
@@ -2545,7 +2498,7 @@ msgstr "Plačila in vračila"
 
 #: pretix/base/exporters/orderlist.py:1003
 msgid "Download a spreadsheet of all payments or refunds of every order."
-msgstr ""
+msgstr "Prenesite preglednico vseh plačil ali povračil za vsako naročilo."
 
 #: pretix/base/exporters/orderlist.py:1012
 #, fuzzy
@@ -3089,7 +3042,7 @@ msgstr "S tem email naslovom ste že registrirani. Prijavite se."
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:283 pretix/presale/forms/customer.py:371
 msgid "Please enter the same password twice"
-msgstr "Geslo vnesite dvakrat"
+msgstr "Prosim vnesite isto geslo dvakrat"
 
 #: pretix/base/forms/auth.py:160
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:134
@@ -3404,7 +3357,7 @@ msgstr "Račun"
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr "Preklic"
+msgstr "preklic"
 
 #: pretix/base/invoice.py:620 pretix/base/invoice.py:628
 msgctxt "invoice"
@@ -7773,14 +7726,13 @@ msgstr ""
 "Za podrobnosti glejte spodaj."
 
 #: pretix/base/services/cart.py:126
-#, fuzzy, python-format
-#| msgid "You cannot select more than %s items per order."
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "Za naročilo ne morete izbrati več kot %s izdelkov."
+msgstr[0] "Za naročilo ne morete izbrati več kot %s izdelka."
 msgstr[1] "Za naročilo ne morete izbrati več kot %s izdelkov."
-msgstr[2] "Za naročilo ne morete izbrati več kot %s izdelkov."
-msgstr[3] "Za naročilo ne morete izbrati več kot %s izdelkov."
+msgstr[2] "Za naročilo ne morete izbrati več kot %s izdelki."
+msgstr[3] "Za naročilo ne morete izbrati več kot %s izdelki."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1539
 #, fuzzy, python-format
@@ -17693,10 +17645,8 @@ msgid "Valid check-in"
 msgstr "Filtriraj po statusu"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:68
-#, fuzzy
-#| msgid "Administrative action required"
 msgid "Additional information required"
-msgstr "Potrebni so upravni ukrepi"
+msgstr "Potrebne so dodatne informacije"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
@@ -21588,10 +21538,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:71
-#, fuzzy
-#| msgid "Add-on products will not be counted."
 msgid "Do you want to continue?"
-msgstr "Dodatni izdelki se ne upoštevajo."
+msgstr "Želite Nadaljevati?"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:77
 #, fuzzy
@@ -25149,10 +25097,9 @@ msgid "invalid item"
 msgstr ""
 
 #: pretix/control/views/event.py:802
-#, fuzzy, python-format
-#| msgid "Your order: {code}"
+#, python-format
 msgid "Your order: %(code)s"
-msgstr "Vaše naročilo: {code}"
+msgstr "Vaše naročilo: %(code)s"
 
 #: pretix/control/views/event.py:810
 msgid "Unknown e-mail renderer."
@@ -32793,7 +32740,7 @@ msgstr "Mesec"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
-msgstr "iCal"
+msgstr "iCal koledar"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:24
 #, fuzzy
@@ -33278,10 +33225,8 @@ msgid "This feature is only available in test mode."
 msgstr "To darilno kartico lahko uporabljate samo v preskusnem načinu."
 
 #: pretix/presale/views/event.py:985
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Time machine disabled!"
-msgstr "Ta račun je neaktiven."
+msgstr "Time machine je onemogočena!"
 
 #: pretix/presale/views/order.py:368 pretix/presale/views/order.py:433
 #: pretix/presale/views/order.py:514
