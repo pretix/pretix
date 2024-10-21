@@ -11,6 +11,10 @@
         <p>
             {% trans "For some of the products in your cart, you can choose additional options before you continue." %}
         </p>
+    {% elif incomplete %}
+        <div class="alert alert-danger">
+            {% trans "A product in your cart is only sold in combination with add-on products that are no longer available. Please contact the event organizer." %}
+        </div>
     {% endif %}
     <form class="form-horizontal" method="post" data-asynctask
             data-asynctask-headline="{% trans "We're now trying to book these add-ons for you!" %}">
