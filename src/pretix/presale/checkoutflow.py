@@ -645,6 +645,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['forms'] = self.forms
         ctx['cart'] = self.get_cart()
         ctx['cross_selling_data'] = self.cross_selling_data
+        ctx['incomplete'] = not self.is_completed(self.request)
         return ctx
 
     def get_success_message(self, value):
@@ -660,7 +661,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         self.request = request
         if 'async_id' in request.GET and settings.HAS_CELERY:
             return self.get_result(request)
-        if len(self.forms) == 0 and len(self.cross_selling_data) == 0:
+        if len(self.forms) == 0 and len(self.cross_selling_data) == 0 and self.is_completed(request):
             return redirect(self.get_next_url(request))
         return TemplateFlowStep.get(self, request)
 
