@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
-"PO-Revision-Date: 2024-10-21 11:25+0000\n"
+"PO-Revision-Date: 2024-10-21 11:26+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -26730,9 +26730,8 @@ msgid "Team {event}"
 msgstr "Equipo {event}"
 
 #: pretix/control/views/modelimport.py:76
-#, fuzzy
 msgid "Please only upload CSV files."
-msgstr "Por favor, cargue sólo archivos PDF."
+msgstr "Solo admiten archivos CSV."
 
 #: pretix/control/views/modelimport.py:79
 #, fuzzy
