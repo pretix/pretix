@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
 "PO-Revision-Date: 2024-10-21 11:25+0000\n"
-"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
+"Last-Translator: Ryo <saremba@rami.io>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -75,7 +75,7 @@ msgstr "フランス語"
 
 #: pretix/_base_settings.py:92
 msgid "Finnish"
-msgstr "フィンランド語"
+msgstr "フィンニッシュ"
 
 #: pretix/_base_settings.py:93
 msgid "Galician"
