@@ -261,7 +261,6 @@ msgstr "不明なプラグイン： '{name}'。"
 
 #: pretix/api/serializers/event.py:295
 #, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
 msgid "Restricted plugin: '{name}'."
 msgstr "不明なプラグイン： '{name}'。"
 
@@ -328,9 +327,6 @@ msgstr "このタイプの質問は、チェックイン時に表示すること
 
 #: pretix/api/serializers/media.py:108
 #, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
@@ -450,7 +446,6 @@ msgstr "注文の有効期限が切れました"
 
 #: pretix/api/webhooks.py:261
 #, fuzzy
-#| msgid "Order information changed"
 msgid "Order expiry date changed"
 msgstr "注文情報が変更されました"
 
@@ -469,7 +464,6 @@ msgstr "注文が変更されました"
 
 #: pretix/api/webhooks.py:277
 #, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment created"
 msgstr "外部からの払い戻し"
 
@@ -483,19 +477,16 @@ msgstr ""
 
 #: pretix/api/webhooks.py:289
 #, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment completed"
 msgstr "外部からの払い戻し"
 
 #: pretix/api/webhooks.py:293
 #, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment canceled"
 msgstr "外部からの払い戻し"
 
 #: pretix/api/webhooks.py:297
 #, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment failed"
 msgstr "外部からの払い戻し"
 
@@ -514,7 +505,6 @@ msgstr "注文が中断されました"
 
 #: pretix/api/webhooks.py:313
 #, fuzzy
-#| msgid "Order denied"
 msgid "Order deleted"
 msgstr "注文が中断されました"
 
@@ -561,25 +551,21 @@ msgstr ""
 
 #: pretix/api/webhooks.py:354
 #, fuzzy
-#| msgid "Shop is live"
 msgid "Shop taken live"
 msgstr "ショップがオープン"
 
 #: pretix/api/webhooks.py:358
 #, fuzzy
-#| msgid "Shop is live"
 msgid "Shop taken offline"
 msgstr "ショップがオープン"
 
 #: pretix/api/webhooks.py:362
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "Test-Mode of shop has been activated"
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/api/webhooks.py:366
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "Test-Mode of shop has been deactivated"
 msgstr "その金額がカードに請求されました。"
 
@@ -589,13 +575,11 @@ msgstr ""
 
 #: pretix/api/webhooks.py:374
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "Waiting list entry changed"
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/api/webhooks.py:378
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "Waiting list entry deleted"
 msgstr "その金額がカードに請求されました。"
 
@@ -605,19 +589,16 @@ msgstr ""
 
 #: pretix/api/webhooks.py:386
 #, fuzzy
-#| msgid "Country"
 msgid "Customer account created"
 msgstr "国"
 
 #: pretix/api/webhooks.py:390
 #, fuzzy
-#| msgid "Country"
 msgid "Customer account changed"
 msgstr "国"
 
 #: pretix/api/webhooks.py:394
 #, fuzzy
-#| msgid "Country"
 msgid "Customer account anonymized"
 msgstr "国"
 
@@ -810,7 +791,6 @@ msgstr "結合されたエクセル（.xlsx）"
 
 #: pretix/base/exporters/answers.py:54
 #, fuzzy
-#| msgid "Answers to file upload questions"
 msgid "Question answer file uploads"
 msgstr "ファイルアップロードによる質問への回答"
 
@@ -822,7 +802,6 @@ msgstr "ファイルアップロードによる質問への回答"
 #: pretix/plugins/reports/exporters.py:478
 #: pretix/plugins/reports/exporters.py:651
 #, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Order data"
 msgstr "ご注文日"
@@ -899,7 +878,6 @@ msgstr ""
 
 #: pretix/base/exporters/customers.py:51
 #, fuzzy
-#| msgid "Country"
 msgctxt "export_category"
 msgid "Customer accounts"
 msgstr "国"
@@ -919,7 +897,6 @@ msgstr ""
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:32
 #, fuzzy
-#| msgid "Payment provider"
 msgid "SSO provider"
 msgstr "支払い方法"
 
@@ -1100,7 +1077,6 @@ msgstr "いいえ"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
 #, fuzzy
-#| msgid "Invoices"
 msgctxt "export_category"
 msgid "Invoices"
 msgstr "請求書"
@@ -1131,9 +1107,6 @@ msgstr ""
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
 #, fuzzy
-#| msgid ""
-#| "Only include invoices issued on or after this date. Note that the invoice "
-#| "date does not always correspond to the order or payment date."
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
@@ -1147,7 +1120,6 @@ msgstr "イベント情報"
 
 #: pretix/base/exporters/events.py:48
 #, fuzzy
-#| msgid "Event data"
 msgctxt "export_category"
 msgid "Event data"
 msgstr "イベント情報"
@@ -1621,13 +1593,11 @@ msgstr "イベント終了日"
 
 #: pretix/base/exporters/items.py:49
 #, fuzzy
-#| msgid "Order data"
 msgid "Product data"
 msgstr "ご注文日"
 
 #: pretix/base/exporters/items.py:50 pretix/base/exporters/orderlist.py:1128
 #, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Product data"
 msgstr "ご注文日"
@@ -1808,7 +1778,6 @@ msgstr ""
 #: pretix/base/models/items.py:1237 pretix/base/models/orders.py:288
 #: pretix/plugins/checkinlists/exporters.py:522
 #, fuzzy
-#| msgid "Client ID"
 msgid "Check-in text"
 msgstr "クライアントID"
 
@@ -1901,7 +1870,6 @@ msgstr "多肢選択問題を1列にまとめる"
 #: pretix/base/exporters/orderlist.py:131
 #: pretix/plugins/reports/exporters.py:701
 #, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include orders created within this date range."
 msgstr "この日以降に作成された注文に限る。"
 
@@ -1915,9 +1883,6 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:138
 #, fuzzy
-#| msgid ""
-#| "Only include orders including at least one ticket for a date on or after "
-#| "this date. Will also include other dates in case of mixed orders!"
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
@@ -2099,7 +2064,6 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:465
 #: pretix/base/exporters/orderlist.py:659
 #, fuzzy
-#| msgid "Internal comment"
 msgid "External customer ID"
 msgstr "内部コメント"
 
@@ -2347,7 +2311,6 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:652
 #, fuzzy
-#| msgid "Invoice data"
 msgctxt "address"
 msgid "Invoice address state"
 msgstr "請求日"
@@ -2364,7 +2327,6 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:822
 #, fuzzy
-#| msgid "Order reactivated"
 msgid "Order transaction data"
 msgstr "注文が再開されました"
 
@@ -2377,7 +2339,6 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:840
 #, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include transactions created within this date range."
 msgstr "この日以降に作成された注文に限る。"
 
@@ -2416,13 +2377,11 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:884
 #, fuzzy
-#| msgid "Admission time"
 msgid "Transaction time"
 msgstr "入場時間"
 
 #: pretix/base/exporters/orderlist.py:885
 #, fuzzy
-#| msgid "Order data"
 msgid "Old data"
 msgstr "ご注文日"
 
@@ -2433,34 +2392,29 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:895
 #, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
 msgstr "内部参考資料"
 
 #: pretix/base/exporters/orderlist.py:897
 #, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
 msgstr "日付"
 
 #: pretix/base/exporters/orderlist.py:902
 #, fuzzy
-#| msgid "Tax ID"
 msgid "Tax rule ID"
 msgstr "税番号"
 
 #: pretix/base/exporters/orderlist.py:905
 #: pretix/plugins/reports/accountingreport.py:319
 #, fuzzy
-#| msgid "Order total"
 msgid "Gross total"
 msgstr "ご注文合計"
 
 #: pretix/base/exporters/orderlist.py:906
 #: pretix/plugins/reports/accountingreport.py:318
 #, fuzzy
-#| msgid "Tax value"
 msgid "Tax total"
 msgstr "税"
 
@@ -2573,7 +2527,6 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1077
 #, fuzzy
-#| msgid "Payment matching IDs"
 msgid "Matching ID"
 msgstr "支払い割り当てのためのID"
 
@@ -3411,8 +3364,6 @@ msgstr ""
 
 #: pretix/base/invoice.py:1013
 #, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "Event series date changed"
 msgctxt "invoice"
 msgid "Event date: {date_range}"
 msgstr "イベンt情報の日程が変更されました"
@@ -3915,13 +3866,11 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:368
 #, fuzzy
-#| msgid "Ticket checked in"
 msgid "Ticket blocked"
 msgstr "チケットのチェックインが完了しました"
 
 #: pretix/base/models/checkin.py:369
 #, fuzzy
-#| msgid "Order approved"
 msgid "Order not approved"
 msgstr "注文初が発行されました"
 
@@ -3931,7 +3880,6 @@ msgstr ""
 
 #: pretix/base/models/customers.py:55
 #, fuzzy
-#| msgid "Event name"
 msgid "Provider name"
 msgstr "イベント名"
 
@@ -3997,7 +3945,6 @@ msgstr ""
 
 #: pretix/base/models/customers.py:414
 #, fuzzy
-#| msgid "Client ID"
 msgid "Client type"
 msgstr "クライアントID"
 
@@ -4062,20 +4009,16 @@ msgstr ""
 
 #: pretix/base/models/discount.py:70
 #, fuzzy
-#| msgid "Unknown sales channel."
 msgid "All supported sales channels"
 msgstr "不明な販路。"
 
 #: pretix/base/models/discount.py:91
 #, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date changed"
 msgid "Event series handling"
 msgstr "イベンt情報の日程が変更されました"
 
 #: pretix/base/models/discount.py:99
 #, fuzzy
-#| msgid "All events (including newly created ones)"
 msgid "Apply to all products (including newly created ones)"
 msgstr "すべてのイベント（最近作成されたイベントを含む）"
 
@@ -4249,7 +4192,6 @@ msgstr ""
 
 #: pretix/base/models/event.py:642 pretix/base/models/items.py:666
 #, fuzzy
-#| msgid "Unknown sales channel."
 msgid "Sell on all sales channels"
 msgstr "不明な販路。"
 
@@ -4455,7 +4397,6 @@ msgstr ""
 
 #: pretix/base/models/exports.py:85
 #, fuzzy
-#| msgid "Event start time"
 msgid "Requested start time"
 msgstr "イベント開始時間"
 
@@ -4588,7 +4529,6 @@ msgstr ""
 
 #: pretix/base/models/items.py:436
 #, fuzzy
-#| msgid "Event start date"
 msgid "Event validity (default)"
 msgstr "イベント開始日"
 
@@ -4658,7 +4598,6 @@ msgstr ""
 
 #: pretix/base/models/items.py:508 pretix/base/models/items.py:1164
 #, fuzzy
-#| msgid "Net price"
 msgid "Suggested price"
 msgstr "正味金額"
 
@@ -4857,13 +4796,11 @@ msgstr ""
 
 #: pretix/base/models/items.py:729 pretix/control/forms/item.py:726
 #, fuzzy
-#| msgid "Start of presale"
 msgid "Start of validity"
 msgstr "先行販売開始"
 
 #: pretix/base/models/items.py:730
 #, fuzzy
-#| msgid "End of presale"
 msgid "End of validity"
 msgstr "先行販売終了"
 
@@ -5247,7 +5184,6 @@ msgstr ""
 
 #: pretix/base/models/items.py:1811
 #, fuzzy
-#| msgid "Client ID"
 msgid "Invalid input type."
 msgstr "クライアントID"
 
@@ -5546,7 +5482,6 @@ msgstr ""
 
 #: pretix/base/models/orders.py:304
 #, fuzzy
-#| msgid "Location"
 msgid "API meta information"
 msgstr "イベント開催地"
 
@@ -6110,7 +6045,6 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:348
 #, fuzzy
-#| msgid "You cannot generate an invoice for this order."
 msgid "You cannot select a product that belongs to a different event."
 msgstr "この注文には請求書を発行することができません。"
 
@@ -6792,7 +6726,6 @@ msgstr ""
 
 #: pretix/base/pdf.py:265
 #, fuzzy
-#| msgid "Event end date"
 msgid "Event begin weekday"
 msgstr "イベント終了日"
 
@@ -6815,7 +6748,6 @@ msgstr ""
 
 #: pretix/base/pdf.py:294
 #, fuzzy
-#| msgid "Event end date"
 msgid "Event end weekday"
 msgstr "イベント終了日"
 
@@ -6931,7 +6863,6 @@ msgstr ""
 
 #: pretix/base/pdf.py:435
 #, fuzzy
-#| msgid "Event start date"
 msgid "Validity start date"
 msgstr "イベント開始日"
 
@@ -6941,13 +6872,11 @@ msgstr ""
 
 #: pretix/base/pdf.py:451
 #, fuzzy
-#| msgid "Event start time"
 msgid "Validity start time"
 msgstr "イベント開始時間"
 
 #: pretix/base/pdf.py:459
 #, fuzzy
-#| msgid "Event end date"
 msgid "Validity end date"
 msgstr "イベント終了日"
 
@@ -6957,7 +6886,6 @@ msgstr ""
 
 #: pretix/base/pdf.py:475
 #, fuzzy
-#| msgid "Event end time"
 msgid "Validity end time"
 msgstr "イベント終了時間"
 
@@ -7169,7 +7097,6 @@ msgstr ""
 
 #: pretix/base/services/cart.py:126
 #, fuzzy, python-format
-#| msgid "You cannot generate an invoice for this order."
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
 msgstr[0] "この注文には請求書を発行することができません。"
@@ -7206,7 +7133,6 @@ msgstr ""
 
 #: pretix/base/services/cart.py:145
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The booking period for this event has ended."
 msgstr "その金額がカードに請求されました。"
 
@@ -7524,13 +7450,11 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:981
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "This ticket has been blocked."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/base/services/checkin.py:990
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "This order is not yet approved."
 msgstr "その金額がカードに請求されました。"
 
@@ -7592,13 +7516,11 @@ msgstr ""
 
 #: pretix/base/services/export.py:189
 #, fuzzy
-#| msgid "Export format"
 msgid "Export failed"
 msgstr "エクスポート形式"
 
 #: pretix/base/services/export.py:206
 #, fuzzy
-#| msgid "Admission time"
 msgid "Permission denied."
 msgstr "入場時間"
 
@@ -7778,7 +7700,6 @@ msgstr ""
 #: pretix/base/services/memberships.py:231
 #: pretix/base/services/memberships.py:233
 #, fuzzy
-#| msgid "Start date"
 msgid "start"
 msgstr "開始日"
 
@@ -7866,7 +7787,6 @@ msgstr[0] ""
 
 #: pretix/base/services/orders.py:154
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The booking period has ended."
 msgstr "その金額がカードに請求されました。"
 
@@ -7936,7 +7856,6 @@ msgstr ""
 
 #: pretix/base/services/orders.py:218
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The order was not canceled."
 msgstr "その金額がカードに請求されました。"
 
@@ -8239,7 +8158,6 @@ msgstr ""
 
 #: pretix/base/settings.py:259 pretix/base/settings.py:290
 #, fuzzy
-#| msgid "Event currency"
 msgid "Gift card currency"
 msgstr "イベント通貨"
 
@@ -9306,7 +9224,6 @@ msgstr ""
 
 #: pretix/base/settings.py:1818
 #, fuzzy
-#| msgid "Cancellation of"
 msgid "Charge a fixed cancellation fee"
 msgstr "のキャンセル"
 
@@ -9426,7 +9343,6 @@ msgstr ""
 
 #: pretix/base/settings.py:2002 pretix/base/settings.py:2015
 #, fuzzy
-#| msgid "Cancellation"
 msgid "Terms of cancellation"
 msgstr "取り消し"
 
@@ -9693,7 +9609,6 @@ msgstr ""
 
 #: pretix/base/settings.py:2322
 #, fuzzy, python-brace-format
-#| msgid "The amount has been charged to your card."
 msgid "Your order has been changed: {code}"
 msgstr "その金額がカードに請求されました。"
 
@@ -9887,7 +9802,6 @@ msgstr ""
 
 #: pretix/base/settings.py:2497
 #, fuzzy, python-brace-format
-#| msgid "Order canceled"
 msgid "Order canceled: {code}"
 msgstr "注文がキャンセルされました"
 
@@ -9966,7 +9880,6 @@ msgstr ""
 
 #: pretix/base/settings.py:2592
 #, fuzzy, python-brace-format
-#| msgid "Order denied"
 msgid "Order denied: {code}"
 msgstr "注文が中断されました"
 
@@ -10572,7 +10485,6 @@ msgstr ""
 
 #: pretix/base/settings.py:3824
 #, fuzzy, python-brace-format
-#| msgid "\"{input}\" is not a valid choice."
 msgid "The value \"{identifier}\" is not a valid sales channel."
 msgstr "\"{input}\" は選択することができません。"
 
@@ -11019,7 +10931,6 @@ msgstr ""
 
 #: pretix/base/timeframes.py:121
 #, fuzzy
-#| msgid "Start event date"
 msgctxt "reporting_timeframe"
 msgid "Current week to date"
 msgstr "一番初めの日付"
@@ -11073,7 +10984,6 @@ msgstr ""
 
 #: pretix/base/timeframes.py:193
 #, fuzzy
-#| msgid "Event start date"
 msgctxt "reporting_timeframe"
 msgid "Current quarter to date"
 msgstr "イベント開始日"
@@ -11090,7 +11000,6 @@ msgstr ""
 
 #: pretix/base/timeframes.py:222
 #, fuzzy
-#| msgid "Client ID"
 msgctxt "reporting_timeframe"
 msgid "Current year"
 msgstr "クライアントID"
@@ -11103,7 +11012,6 @@ msgstr ""
 
 #: pretix/base/timeframes.py:231
 #, fuzzy
-#| msgid "Event start date"
 msgctxt "reporting_timeframe"
 msgid "Current year to date"
 msgstr "イベント開始日"
@@ -11135,7 +11043,6 @@ msgstr ""
 
 #: pretix/base/timeframes.py:284
 #, fuzzy
-#| msgid "Start date"
 msgctxt "timeframe"
 msgid "Start"
 msgstr "開始日"
@@ -11155,7 +11062,6 @@ msgstr ""
 
 #: pretix/base/timeframes.py:326
 #, fuzzy
-#| msgid "All invoices"
 msgctxt "reporting_timeframe"
 msgid "All time"
 msgstr "全ての請求書"
@@ -11224,7 +11130,6 @@ msgstr ""
 
 #: pretix/base/timeline.py:179
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgctxt "timeline"
 msgid "Waiting list is disabled"
 msgstr "その金額がカードに請求されました。"
@@ -11368,7 +11273,6 @@ msgstr ""
 
 #: pretix/control/forms/checkin.py:191
 #, fuzzy
-#| msgid "Client ID"
 msgid "Check-in type"
 msgstr "クライアントID"
 
@@ -11628,7 +11532,6 @@ msgstr ""
 #: pretix/control/forms/event.py:1004 pretix/control/forms/event.py:1031
 #: pretix/control/forms/event.py:1058 pretix/control/forms/event.py:1194
 #, fuzzy
-#| msgid "Order contact address changed"
 msgid "Subject sent to order contact address"
 msgstr "注文のEメールアドレスが変更されました"
 
@@ -13112,7 +13015,6 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:471
 #, fuzzy
-#| msgid "Ticket checked in"
 msgid "Ticket is blocked"
 msgstr "チケットのチェックインが完了しました"
 
@@ -13377,21 +13279,18 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:955
 #, fuzzy
-#| msgid "Target URL"
 msgctxt "sso_oidc"
 msgid "Base URL"
 msgstr "ターゲット URL"
 
 #: pretix/control/forms/organizer.py:959
 #, fuzzy
-#| msgid "Client ID"
 msgctxt "sso_oidc"
 msgid "Client ID"
 msgstr "クライアントID"
 
 #: pretix/control/forms/organizer.py:963
 #, fuzzy
-#| msgid "Client secret"
 msgctxt "sso_oidc"
 msgid "Client secret"
 msgstr "クライアントシークレット"
@@ -13473,9 +13372,6 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:1135
 #, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid "A sales channel with the same identifier already exists."
 msgstr "同じコードの引換券が既にイベントカートにあります。"
 
@@ -13931,31 +13827,26 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:335 pretix/control/logdisplay.py:538
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The footer links have been changed."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:336 pretix/control/logdisplay.py:455
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "A scheduled export has been added."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:337 pretix/control/logdisplay.py:456
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "A scheduled export has been changed."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:338 pretix/control/logdisplay.py:457
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "A scheduled export has been deleted."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:339 pretix/control/logdisplay.py:458
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "A scheduled export has been executed."
 msgstr "その金額がカードに請求されました。"
 
@@ -13978,19 +13869,16 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:344
 #, fuzzy
-#| msgid "This user already has been invited for this team."
 msgid "A gift card acceptor has been removed."
 msgstr "このユーザーは既にチームへの招待を受け取っています。"
 
 #: pretix/control/logdisplay.py:345
 #, fuzzy
-#| msgid "This user already has been invited for this team."
 msgid "A gift card issuer has been removed or declined."
 msgstr "このユーザーは既にチームへの招待を受け取っています。"
 
 #: pretix/control/logdisplay.py:346
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "A new gift card issuer has been accepted."
 msgstr "その金額がカードに請求されました。"
 
@@ -14012,37 +13900,31 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:351
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The SSO provider has been created."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:352
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The SSO provider has been changed."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:353
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The SSO provider has been deleted."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:354
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The SSO client has been created."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:355
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The SSO client has been changed."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:356
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The SSO client has been deleted."
 msgstr "その金額がカードに請求されました。"
 
@@ -14060,19 +13942,16 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:360 pretix/control/views/organizer.py:3133
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The sales channel has been created."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:361
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The sales channel has been changed."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:362
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The sales channel has been deleted."
 msgstr "その金額がカードに請求されました。"
 
@@ -14110,31 +13989,26 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:371
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The reusable medium has been created."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:372
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The reusable medium has been created automatically."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:373
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The reusable medium has been changed."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:374
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The medium has been connected to a new ticket."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:375
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The medium has been connected to a new gift card."
 msgstr "その金額がカードに請求されました。"
 
@@ -14282,7 +14156,6 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:413
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The order's check-in text has been changed."
 msgstr "その金額がカードに請求されました。"
 
@@ -14471,7 +14344,6 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:466
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "A two-factor emergency code has been generated."
 msgstr "その金額がカードに請求されました。"
 
@@ -14561,7 +14433,6 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:491
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The product has been reordered."
 msgstr "その金額がカードに請求されました。"
 
@@ -14610,19 +14481,16 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:502
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "A meta property has been added to this event."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:503
 #, fuzzy
-#| msgid "This user already has been invited for this team."
 msgid "A meta property has been removed from this event."
 msgstr "このユーザーは既にチームへの招待を受け取っています。"
 
 #: pretix/control/logdisplay.py:504
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "A meta property has been changed on this event."
 msgstr "その金額がカードに請求されました。"
 
@@ -14660,7 +14528,6 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:513
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The category has been reordered."
 msgstr "その金額がカードに請求されました。"
 
@@ -14678,25 +14545,21 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:517
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The question has been reordered."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:518
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The discount has been added."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:519
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The discount has been deleted."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/logdisplay.py:520
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The discount has been changed."
 msgstr "その金額がカードに請求されました。"
 
@@ -15212,7 +15075,6 @@ msgstr ""
 
 #: pretix/control/navigation.py:448
 #, fuzzy
-#| msgid "{system} User"
 msgid "System report"
 msgstr "{system} ユーザー"
 
@@ -15246,7 +15108,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:6
 #, fuzzy
-#| msgid "Payment providers"
 msgid "SSO providers"
 msgstr "お支払方法"
 
@@ -15729,7 +15590,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:108
 #, fuzzy
-#| msgid "Order positions"
 msgid "Card expiration"
 msgstr "受注ライン"
 
@@ -15744,7 +15604,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:4
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:6
 #, fuzzy
-#| msgid "Ticket checked in"
 msgid "Delete check-ins"
 msgstr "チケットのチェックインが完了しました"
 
@@ -17399,7 +17258,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:243
 #, fuzzy
-#| msgid "Order data"
 msgid "Product list"
 msgstr "ご注文日"
 
@@ -17540,7 +17398,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
 #, fuzzy
-#| msgid "Country"
 msgid "Custom rules"
 msgstr "国"
 
@@ -18318,7 +18175,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/index.html:214
 #, fuzzy
-#| msgid "Description"
 msgid "Duration"
 msgstr "概要"
 
@@ -18375,7 +18231,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:34
 #, fuzzy
-#| msgid "Client ID"
 msgid "Category type"
 msgstr "クライアントID"
 
@@ -18437,7 +18292,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:51
 #, fuzzy
-#| msgid "Beneficiary"
 msgctxt "discount"
 msgid "Benefit"
 msgstr "受益者"
@@ -18525,7 +18379,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:111
 #, fuzzy
-#| msgid "Location"
 msgid "Condition:"
 msgstr "イベント開催地"
 
@@ -18589,7 +18442,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/index.html:101
 #, fuzzy
-#| msgid "Sample Admission Ticket"
 msgid "Personalized admission ticket"
 msgstr "サンプル用チケット"
 
@@ -19164,7 +19016,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html:214
 #, fuzzy
-#| msgid "Ticket checked in"
 msgid "Ticket block"
 msgstr "チケットのチェックインが完了しました"
 
@@ -19918,7 +19769,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
 #, fuzzy
-#| msgid "Paid orders"
 msgid "Modify orders"
 msgstr "支払い済みの注文"
 
@@ -19936,7 +19786,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:77
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "This operation cannot be reversed."
 msgstr "その金額がカードに請求されました。"
 
@@ -20019,7 +19868,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/export.html:11
 #: pretix/control/templates/pretixcontrol/organizers/export.html:11
 #, fuzzy
-#| msgid "Order expired"
 msgid "Scheduled exports"
 msgstr "注文の有効期限が切れました"
 
@@ -20062,7 +19910,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/export.html:95
 #: pretix/control/templates/pretixcontrol/organizers/export.html:95
 #, fuzzy
-#| msgid "Order expired"
 msgid "Other exports"
 msgstr "注文の有効期限が切れました"
 
@@ -20089,7 +19936,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
 #, fuzzy
-#| msgid "Export format"
 msgid "Export options"
 msgstr "エクスポート形式"
 
@@ -20108,7 +19954,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:57
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:58
 #, fuzzy
-#| msgid "Order expired"
 msgid "Schedule export"
 msgstr "注文の有効期限が切れました"
 
@@ -20483,7 +20328,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/channel_add.html:6
 #: pretix/control/templates/pretixcontrol/organizers/channel_add_choice.html:6
 #, fuzzy
-#| msgid "Unknown sales channel."
 msgid "Add sales channel"
 msgstr "不明な販路。"
 
@@ -20491,13 +20335,11 @@ msgstr "不明な販路。"
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:13
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:24
 #, fuzzy
-#| msgid "Client ID"
 msgid "Channel type"
 msgstr "クライアントID"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:5
 #, fuzzy
-#| msgid "Unknown sales channel."
 msgid "Delete sales channel:"
 msgstr "不明な販路。"
 
@@ -20513,7 +20355,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:6
 #, fuzzy
-#| msgid "Unknown sales channel."
 msgid "Sales channel:"
 msgstr "不明な販路。"
 
@@ -20972,7 +20813,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:73
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:7
 #, fuzzy
-#| msgid "Location"
 msgid "Information"
 msgstr "イベント開催地"
 
@@ -20996,7 +20836,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:8
 #, fuzzy
-#| msgid "Event currency"
 msgid "Gift cards acceptance"
 msgstr "イベント通貨"
 
@@ -21087,7 +20926,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
 #, fuzzy
-#| msgid "Order reactivated"
 msgid "Last transaction"
 msgstr "注文が再開されました"
 
@@ -21178,7 +21016,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:26
 #, fuzzy
-#| msgid "Cancellation"
 msgid "Validation"
 msgstr "取り消し"
 
@@ -21196,7 +21033,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "No media have been created yet."
 msgstr "その金額がカードに請求されました。"
 
@@ -21220,7 +21056,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:59
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:42
 #, fuzzy
-#| msgid "Location"
 msgctxt "reusable_media"
 msgid "Connections"
 msgstr "イベント開催地"
@@ -21275,7 +21110,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:5
 #, fuzzy
-#| msgid "Payment provider"
 msgid "Delete SSO provider:"
 msgstr "支払い方法"
 
@@ -21289,7 +21123,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:6
 #, fuzzy
-#| msgid "Payment provider"
 msgid "SSO provider:"
 msgstr "支払い方法"
 
@@ -21300,7 +21133,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:16
 #, fuzzy
-#| msgid "Redirection URIs"
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "リダイレクト先URI"
@@ -21612,7 +21444,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:180
 #, fuzzy
-#| msgid "Tax name"
 msgid "Layout name"
 msgstr "制御ルール"
 
@@ -21759,7 +21590,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:478
 #, fuzzy
-#| msgid "Event created"
 msgid "Text (deprecated)"
 msgstr "イベントが作成されました"
 
@@ -22136,7 +21966,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:176
 #, fuzzy
-#| msgid "Paid orders"
 msgid "Show orders"
 msgstr "支払い済みの注文"
 
@@ -23245,7 +23074,6 @@ msgstr ""
 
 #: pretix/control/views/discounts.py:176
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The new discount has been created."
 msgstr "その金額がカードに請求されました。"
 
@@ -24239,20 +24067,17 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:1375
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The selected organizer has been invited."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/views/organizer.py:1412
 #: pretix/control/views/organizer.py:1423
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The selected connection has been removed."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/views/organizer.py:1434
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The selected connection has been accepted."
 msgstr "その金額がカードに請求されました。"
 
@@ -24303,7 +24128,6 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:2203
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The order of properties has been updated."
 msgstr "その金額がカードに請求されました。"
 
@@ -24316,7 +24140,6 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:2414
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The provider has been created."
 msgstr "その金額がカードに請求されました。"
 
@@ -24346,13 +24169,11 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:3215
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "This channel can not be deleted."
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/control/views/organizer.py:3220
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The selected sales channel has been deleted."
 msgstr "その金額がカードに請求されました。"
 
@@ -24364,7 +24185,6 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:3246
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The order of sales channels has been updated."
 msgstr "その金額がカードに請求されました。"
 
@@ -24639,7 +24459,6 @@ msgstr ""
 
 #: pretix/control/views/waitinglist.py:403
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The waitinglist entry has been transferred."
 msgstr "その金額がカードに請求されました。"
 
@@ -24670,7 +24489,6 @@ msgstr ""
 #: pretix/plugins/autocheckin/forms.py:60
 #: pretix/plugins/autocheckin/models.py:82
 #, fuzzy
-#| msgid "All payment providers"
 msgid "Only including usage of payment providers"
 msgstr "全てのお支払方法"
 
@@ -24686,13 +24504,11 @@ msgstr ""
 
 #: pretix/plugins/autocheckin/models.py:36
 #, fuzzy
-#| msgid "New order placed"
 msgid "After order was placed"
 msgstr "新しい注文が入りました"
 
 #: pretix/plugins/autocheckin/models.py:37
 #, fuzzy
-#| msgid "Order marked as paid"
 msgid "After order was paid"
 msgstr "支払い済みと表示された商品"
 
@@ -24704,7 +24520,6 @@ msgstr ""
 
 #: pretix/plugins/autocheckin/models.py:59
 #, fuzzy
-#| msgid "Unknown sales channel."
 msgid "All sales channels"
 msgstr "不明な販路。"
 
@@ -24714,7 +24529,6 @@ msgstr ""
 
 #: pretix/plugins/autocheckin/models.py:78
 #, fuzzy
-#| msgid "All payment providers"
 msgid "All payment methods"
 msgstr "全てのお支払方法"
 
@@ -24722,7 +24536,6 @@ msgstr "全てのお支払方法"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:13
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:13
 #, fuzzy
-#| msgid "Ticket checked in"
 msgid "Auto check-in"
 msgstr "チケットのチェックインが完了しました"
 
@@ -24741,21 +24554,18 @@ msgstr ""
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
 #, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Create auto check-in rule"
 msgstr "この日以降に作成された注文に限る。"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
 #, fuzzy
-#| msgid "Location"
 msgid "Conditions"
 msgstr "イベント開催地"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 #, fuzzy
-#| msgid "Ticket checked in"
 msgid "Delete auto check-in rule"
 msgstr "チケットのチェックインが完了しました"
 
@@ -24766,14 +24576,12 @@ msgstr ""
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
 #, fuzzy
-#| msgid "Ticket check-in reverted"
 msgid "Auto check-in rule"
 msgstr "チケットのチェックインが取り消されました"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
 #, fuzzy
-#| msgid "Ticket checked in"
 msgid "Auto check-in rules"
 msgstr "チケットのチェックインが完了しました"
 
@@ -25178,13 +24986,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:229
 #, fuzzy
-#| msgid "Invoice number"
 msgid "Invoice email subject"
 msgstr "インボイス番号"
 
 #: pretix/plugins/banktransfer/payment.py:241
 #, fuzzy
-#| msgid "Invoice data"
 msgid "Invoice email text"
 msgstr "請求日"
 
@@ -25213,7 +25019,6 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:336
 #, fuzzy
-#| msgid "Invoice recipient:"
 msgid "Invoice recipient e-mail"
 msgstr "請求書の受取り手"
 
@@ -25302,7 +25107,6 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/signals.py:132
 #, fuzzy, python-brace-format
-#| msgid "Invoice number"
 msgid "Invoice {invoice_number}"
 msgstr "インボイス番号"
 
@@ -25564,13 +25368,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:132
 #, fuzzy
-#| msgid "Invoice recipient:"
 msgid "Invoice recipient email"
 msgstr "請求書の受取り手"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:139
 #, fuzzy
-#| msgid "Invoice recipient:"
 msgid "Send invoice via email"
 msgstr "請求書の受取り手"
 
@@ -25789,7 +25591,6 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:570
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "No currency has been selected."
 msgstr "その金額がカードに請求されました。"
 
@@ -25839,7 +25640,6 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:91
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
 #, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include tickets for dates within this range."
 msgstr "この日以降に作成された注文に限る。"
 
@@ -26214,7 +26014,6 @@ msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:222
 #, fuzzy
-#| msgid "Country"
 msgid "Buyer country"
 msgstr "国"
 
@@ -26313,14 +26112,12 @@ msgstr ""
 
 #: pretix/plugins/paypal2/signals.py:64
 #, fuzzy
-#| msgid "Order approved"
 msgctxt "paypal"
 msgid "Order approved."
 msgstr "注文初が発行されました"
 
 #: pretix/plugins/paypal2/signals.py:65
 #, fuzzy
-#| msgid "Order code"
 msgctxt "paypal"
 msgid "Order completed."
 msgstr "注文番号"
@@ -26411,7 +26208,6 @@ msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:24
 #, fuzzy
-#| msgid "Filter by status"
 msgid "Capture status"
 msgstr "ステータスによる絞り込み"
 
@@ -26512,8 +26308,6 @@ msgstr ""
 
 #: pretix/plugins/reports/accountingreport.py:90
 #, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date added"
 msgid "Split event series by date"
 msgstr "イベント情報にデータが追加されました"
 
@@ -26547,13 +26341,11 @@ msgstr ""
 
 #: pretix/plugins/reports/accountingreport.py:770
 #, fuzzy
-#| msgid "Order reactivated"
 msgid "Gift card transactions (credit)"
 msgstr "注文が再開されました"
 
 #: pretix/plugins/reports/accountingreport.py:780
 #, fuzzy
-#| msgid "Order reactivated"
 msgid "Gift card transactions (debit)"
 msgstr "注文が再開されました"
 
@@ -26691,7 +26483,6 @@ msgstr ""
 
 #: pretix/plugins/returnurl/views.py:37
 #, fuzzy
-#| msgid "Redirection URIs"
 msgid "Base redirection URLs"
 msgstr "リダイレクト先URI"
 
@@ -26759,7 +26550,6 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:187
 #, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgctxt "sendmail_form"
 msgid "Restrict to orders created at or after"
 msgstr "この日以降に作成された注文に限る。"
@@ -26804,7 +26594,6 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:242
 #, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
 msgstr "この日以降に作成された注文に限る。"
@@ -26893,13 +26682,11 @@ msgstr ""
 
 #: pretix/plugins/sendmail/models.py:239
 #, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Restrict to orders with status"
 msgstr "この日以降に作成された注文に限る。"
 
 #: pretix/plugins/sendmail/models.py:244
 #, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Restrict to check-in status"
 msgstr "この日以降に作成された注文に限る。"
 
@@ -27157,7 +26944,6 @@ msgstr ""
 
 #: pretix/plugins/sendmail/views.py:253
 #, fuzzy
-#| msgid "Order reactivated"
 msgid "Orders or attendees"
 msgstr "注文が再開されました"
 
@@ -27903,7 +27689,6 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:25
 #, fuzzy
-#| msgid "Line number"
 msgid "Account number"
 msgstr "行番号"
 
@@ -28000,7 +27785,6 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:6
 #, fuzzy
-#| msgid "Payment matching IDs"
 msgid "Payment instructions"
 msgstr "支払い割り当てのためのID"
 
@@ -28020,13 +27804,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
 #, fuzzy
-#| msgid "Invoice number"
 msgid "Entity number:"
 msgstr "インボイス番号"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
 #, fuzzy
-#| msgid "Invoice number"
 msgid "Reference number:"
 msgstr "インボイス番号"
 
@@ -28570,7 +28352,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:127
 #: pretix/presale/templates/pretixpresale/event/base.html:201
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "This ticket shop is currently in test mode."
 msgstr "その金額がカードに請求されました。"
 
@@ -29298,7 +29079,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:20
 #, fuzzy
-#| msgid "Client ID"
 msgid "Current value:"
 msgstr "クライアントID"
 
@@ -29618,7 +29398,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:210
 #: pretix/presale/templates/pretixpresale/event/voucher.html:364
 #, fuzzy, python-format
-#| msgid "Total value (without taxes)"
 msgid "%(value)s without taxes"
 msgstr "合計金額（税抜き）"
 
@@ -29828,13 +29607,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/offline.html:4
 #: pretix/presale/templates/pretixpresale/event/offline.html:8
 #, fuzzy
-#| msgid "Shop is live"
 msgid "Shop offline"
 msgstr "ショップがオープン"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
 #, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "This ticket shop is currently turned off."
 msgstr "その金額がカードに請求されました。"
 
@@ -30015,7 +29792,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:381
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
 #, fuzzy
-#| msgid "You cannot generate an invoice for this order."
 msgid "You can request to cancel this order."
 msgstr "この注文には請求書を発行することができません。"
 
@@ -30282,7 +30058,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:5
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:8
 #, fuzzy
-#| msgid "Paid orders"
 msgid "Modify ticket"
 msgstr "支払い済みの注文"
 
@@ -30862,7 +30637,6 @@ msgstr ""
 
 #: pretix/presale/views/event.py:954
 #, fuzzy
-#| msgid "Event start time"
 msgid "Fake date time"
 msgstr "イベント開始時間"
 
@@ -30872,7 +30646,6 @@ msgstr ""
 
 #: pretix/presale/views/event.py:968
 #, fuzzy
-#| msgid "The product \"{}\" is not available on this date."
 msgid "This feature is only available in test mode."
 msgstr "その日程に製品\"{}\"のお取り扱いはありません。"
 
@@ -31080,7 +30853,6 @@ msgstr ""
 #~ msgstr "内部参考資料"
 
 #, fuzzy
-#~| msgid "Orders"
 #~ msgid "Order ID"
 #~ msgstr "ご注文内容"
 
