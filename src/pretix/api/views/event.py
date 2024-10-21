@@ -370,7 +370,7 @@ with scopes_disabled():
 
         class Meta:
             model = SubEvent
-            fields = ['active', 'event__live']
+            fields = ['is_public', 'active', 'event__live']
 
         def ends_after_qs(self, queryset, name, value):
             expr = Q(

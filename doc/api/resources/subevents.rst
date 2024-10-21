@@ -136,6 +136,7 @@ Endpoints
       }
 
    :query page: The page number in case of a multi-page result set, default is 1
+   :query is_public: If set to ``true``/``false``, only subevents with a matching value of ``is_public`` are returned.
    :query active: If set to ``true``/``false``, only events with a matching value of ``active`` are returned.
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned.
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned.
@@ -467,6 +468,7 @@ Endpoints
       }
 
    :query page: The page number in case of a multi-page result set, default is 1
+   :query is_public: If set to ``true``/``false``, only subevents with a matching value of ``is_public`` are returned.
    :query active: If set to ``true``/``false``, only events with a matching value of ``active`` are returned.
    :query event__live: If set to ``true``/``false``, only events with a matching value of ``live`` on the parent event are returned.
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned.
