@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
-"PO-Revision-Date: 2024-10-15 12:01+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2024-10-21 11:25+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -33,11 +33,11 @@ msgstr "Arabe"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "Basque"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
-msgstr ""
+msgstr "Catalan"
 
 #: pretix/_base_settings.py:85
 msgid "Chinese (simplified)"
@@ -117,11 +117,11 @@ msgstr "Russe"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "Slovaque"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
-msgstr ""
+msgstr "Suédois"
 
 #: pretix/_base_settings.py:106
 msgid "Spanish"
@@ -653,15 +653,18 @@ msgstr "Mot de passe"
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
 msgstr ""
+"Votre mot de passe doit contenir des caractères numériques et alphabétiques."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, python-format
+#, fuzzy, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "Votre mot de passe doit être différent de votre mot de passe précédent."
 msgstr[1] ""
+"Votre mot de passe doit être différent de vos %(history_length) derniers mot "
+"de passe."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -669,7 +672,7 @@ msgstr "Boutique en ligne"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
