@@ -564,7 +564,7 @@ class PaypalMethod(BasePaymentProvider):
             )
             request.session['payment_paypal_payment'] = None
         else:
-            pass
+            return None
 
         try:
             paymentreq = OrdersCreateRequest()
