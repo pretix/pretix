@@ -94,7 +94,6 @@ class CategoriesTest(ItemFormTest):
 
         doc = self.get_doc('/control/event/%s/%s/categories/add?copy_from=%d' % (self.orga1.slug, self.event1.slug, c.pk))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
-        print(form_data)
         assert form_data['name_0'] == 'Cross-Selling'
         assert form_data['category_type'] == 'only'
         assert form_data['cross_selling_condition'] == 'products'
