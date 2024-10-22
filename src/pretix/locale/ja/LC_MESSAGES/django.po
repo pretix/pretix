@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
 "PO-Revision-Date: 2024-10-22 17:00+0000\n"
-"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -742,7 +742,7 @@ msgstr ""
 #: pretix/presale/views/customer.py:811
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "ログインできませんでした。エラーメッセージ: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:236
 msgid ""
