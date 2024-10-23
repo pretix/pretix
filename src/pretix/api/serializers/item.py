@@ -369,7 +369,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         require_membership_types = validated_data.pop('require_membership_types', [])
         limit_sales_channels = validated_data.pop('limit_sales_channels', [])
         item = Item.objects.create(**validated_data)
-        if limit_sales_channels:
+        if limit_sales_channels and not validated_data.get('all_sales_channels'):
             item.limit_sales_channels.add(*limit_sales_channels)
         if picture:
             item.picture.save(os.path.basename(picture.name), picture)
