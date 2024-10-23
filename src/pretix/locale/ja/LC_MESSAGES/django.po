@@ -29,7 +29,7 @@ msgstr "ドイツ語"
 
 #: pretix/_base_settings.py:81
 msgid "German (informal)"
-msgstr "ドイツ語 (口語)"
+msgstr "ドイツ語(口語)"
 
 #: pretix/_base_settings.py:82
 msgid "Arabic"
@@ -37,24 +37,24 @@ msgstr "アラビア語"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "バスク語"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
-msgstr ""
+msgstr "カタルーニャ語"
 
 #: pretix/_base_settings.py:85
 #, fuzzy
 msgid "Chinese (simplified)"
-msgstr "中国語（簡体字)"
+msgstr "中国語(簡体字)"
 
 #: pretix/_base_settings.py:86
 msgid "Chinese (traditional)"
-msgstr "中国語（繁体字）"
+msgstr "中国語(繁体字)"
 
 #: pretix/_base_settings.py:87
 msgid "Czech"
-msgstr "チェコ"
+msgstr "チェコ語"
 
 #: pretix/_base_settings.py:88
 #, fuzzy
@@ -67,7 +67,7 @@ msgstr "オランダ語"
 
 #: pretix/_base_settings.py:90
 msgid "Dutch (informal)"
-msgstr "オランダ語 (口語)"
+msgstr "オランダ語(口語)"
 
 #: pretix/_base_settings.py:91
 msgid "French"
@@ -75,7 +75,7 @@ msgstr "フランス語"
 
 #: pretix/_base_settings.py:92
 msgid "Finnish"
-msgstr "フィンニッシュ"
+msgstr "フィンランド語"
 
 #: pretix/_base_settings.py:93
 msgid "Galician"
@@ -99,7 +99,7 @@ msgstr "ラトビア語"
 
 #: pretix/_base_settings.py:98
 msgid "Norwegian Bokmål"
-msgstr "ノルウェー語 (ブークモール)"
+msgstr "ノルウェー語(ブークモール)"
 
 #: pretix/_base_settings.py:99
 msgid "Polish"
@@ -107,11 +107,11 @@ msgstr "ポーランド語"
 
 #: pretix/_base_settings.py:100
 msgid "Portuguese (Portugal)"
-msgstr "ポルトガル語 (ポルトガル)"
+msgstr "ポルトガル語(ポルトガル)"
 
 #: pretix/_base_settings.py:101
 msgid "Portuguese (Brazil)"
-msgstr "ポルトガル語 (ブラジル)"
+msgstr "ポルトガル語(ブラジル)"
 
 #: pretix/_base_settings.py:102
 msgid "Romanian"
@@ -123,11 +123,11 @@ msgstr "ロシア語"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "スロバキア語"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
-msgstr ""
+msgstr "スウェーデン語"
 
 #: pretix/_base_settings.py:106
 msgid "Spanish"
@@ -145,7 +145,7 @@ msgstr "ウクライナ語"
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
-msgstr "フルアクセス権限（読み出し・書き出しを含むすべての操作を許可）"
+msgstr "フルアクセス権限(オーダーとギフトカードの確認・変更、プロダクトと設定の確認)"
 
 #: pretix/api/auth/devicesecurity.py:53
 msgid "pretixSCAN"
@@ -153,11 +153,11 @@ msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:90
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretixSCAN (キオスク・モード, 注文シンクなし,検索なし)"
+msgstr "pretixSCAN(キオスクモード、オーダー同期なし、検索なし)"
 
 #: pretix/api/auth/devicesecurity.py:124
 msgid "pretixSCAN (online only, no order sync)"
-msgstr "pretixSCAN (オンラインのみ, 注文シンクなし)"
+msgstr "pretixSCAN (オンラインのみ、オーダー同期なし)"
 
 #: pretix/api/auth/devicesecurity.py:159
 msgid "pretixPOS"
@@ -173,11 +173,11 @@ msgstr "リダイレクト先URI"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:422
 msgid "Allowed URIs list, space separated"
-msgstr "ホワイトURI（スペース区切り）"
+msgstr "許可されたURIリスト(スペース区切り)"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "ログアウト後のURIリスト (スペース区切り)"
+msgstr "許可されたログアウト後のURIリスト(スペース区切り)"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
@@ -195,17 +195,17 @@ msgstr "Webhookを有効化"
 #: pretix/api/models.py:117
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr "ターゲット URL"
+msgstr "ターゲットURL"
 
 #: pretix/api/models.py:118 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:286
 msgid "All events (including newly created ones)"
-msgstr "すべてのイベント（最近作成されたイベントを含む）"
+msgstr "すべてのイベント(最近作成されたイベントを含む)"
 
 #: pretix/api/models.py:119 pretix/base/models/devices.py:124
 #: pretix/base/models/organizer.py:287
 msgid "Limit to events"
-msgstr "イベント上限"
+msgstr "このイベントに限定する"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:1077
@@ -223,12 +223,12 @@ msgstr "コメント"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1361
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "この商品（\"{}\"）は割り当てられていません。"
+msgstr "このプロダクト(\"{}\")はクォータに割り当てられていません。"
 
 #: pretix/api/serializers/checkin.py:74 pretix/base/models/event.py:1667
 #: pretix/base/models/items.py:1904 pretix/base/models/items.py:2162
 msgid "One or more items do not belong to this event."
-msgstr "本イベントにおける一つ又は複数の製品のお取り扱いはございません。"
+msgstr "ひとつ以上のアイテムがこのイベントに属していません。"
 
 #: pretix/api/serializers/checkin.py:78 pretix/api/serializers/checkin.py:81
 #: pretix/base/models/items.py:2173 pretix/base/models/items.py:2176
@@ -241,90 +241,91 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"在庫数や支払いの設定が完了していないため、イベントを「公開」することができま"
-"せん。"
+"イベントを「公開」することができません。"
+"販売を開始する前にクォータや支払い方法をイベントに追加する必要があります。"
 
 #: pretix/api/serializers/event.py:245 pretix/api/serializers/event.py:548
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "メタデータ'{name}'が見つかりません。"
+msgstr "メタデータのプロパティ'{name}'が見つかりません。"
 
 #: pretix/api/serializers/event.py:248 pretix/api/serializers/event.py:551
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "メタデータ'{name}'が '{value}'を許可していません。"
+msgstr "メタデータのプロパティ'{name}'は'{value}'を許可していません。"
 
 #: pretix/api/serializers/event.py:292
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr "不明なプラグイン： '{name}'。"
+msgstr "不明なプラグイン: '{name}'。"
 
 #: pretix/api/serializers/event.py:295
 #, fuzzy, python-brace-format
 #| msgid "Unknown plugin: '{name}'."
 msgid "Restricted plugin: '{name}'."
-msgstr "不明なプラグイン： '{name}'。"
+msgstr "制限されたプラグイン: '{name}'。"
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "アイテムのメタデータ '{name}'は見つかりません。"
+msgstr "アイテムのメタデータのプロパティ'{name}'が見つかりません。"
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:1269
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "製品自体を含むことはできません。"
+msgstr "バンドルされるアイテムはバンドルするアイテムと同じにはできません。"
 
 #: pretix/api/serializers/item.py:210 pretix/control/forms/item.py:1271
 msgid "The bundled item must not have bundles on its own."
-msgstr "製品は、他の製品を含む製品を含むことはできません。"
+msgstr "バンドルされるアイテムはバンドルしているアイテムを持っていてはいけません。"
 
 #: pretix/api/serializers/item.py:298
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"種類、追加製品及び同梱物のPATCH/PUT による変更は無効です。別のリソースを利用"
-"してください。"
+"アドオン、バンドル、バリエーションをPATCH/PUTでは変更できません。"
+"専用のネストされたエンドポイントをご利用ください。"
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "パーソナライズできるのは入場券となるプロダクトだけです。"
 
 #: pretix/api/serializers/item.py:317
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
-"引換券をご利用の際には、付加価値税が課されるため、税率を0％に設定する必要があ"
-"ります。"
+"消費税はギフトカードを利用する際に適用されるため、"
+"ギフトカードは税率が0%でないプロダクトには紐づけられません。"
 
 #: pretix/api/serializers/item.py:322 pretix/control/forms/item.py:771
 msgid "Gift card products should not be admission products at the same time."
-msgstr "引換券をお持ちの方は、同時に入場することはできません。"
+msgstr "ギフトカードは入場券となるプロダクトにはできません。"
 
 #: pretix/api/serializers/item.py:519
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"PATCH/PUTによるオプションの変更はできません。別のリソースを使用してください。"
+"オプションをPATCH/PUTでは変更できません。"
+"専用のネストされたエンドポイントをご利用ください。"
 
 #: pretix/api/serializers/item.py:533 pretix/control/forms/item.py:177
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "質問は、チェックイン時に問われた質問に依存してはなりません。"
+msgstr "質問は、チェックインの際の質問に依存してはなりません。"
 
 #: pretix/api/serializers/item.py:538 pretix/control/forms/item.py:182
 msgid "Circular dependency between questions detected."
-msgstr "課題間の相互依存性が認識された。"
+msgstr "質問同士の循環依存が検出されました。"
 
 #: pretix/api/serializers/item.py:543 pretix/control/forms/item.py:191
 msgid "This type of question cannot be asked during check-in."
-msgstr "このタイプの質問は、チェックイン時に行うことはできません。"
+msgstr "このタイプの質問は、チェックインの際の質問にはできません。"
 
 #: pretix/api/serializers/item.py:546 pretix/control/forms/item.py:199
 msgid "This type of question cannot be shown during check-in."
-msgstr "このタイプの質問は、チェックイン時に表示することはできません。"
+msgstr "このタイプの質問は、チェックインの際に表示することはできません。"
 
 #: pretix/api/serializers/media.py:108
 #, fuzzy
@@ -334,27 +335,27 @@ msgstr "このタイプの質問は、チェックイン時に表示すること
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
-msgstr "同じコードの引換券が既にイベントカートにあります。"
+msgstr "識別子と種類が同じ物理媒体がオーガナイザーアカウントに存在しています。"
 
 #: pretix/api/serializers/order.py:78
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "\"{input}\" は選択することができません。"
+msgstr "\"{input}\"は正しい選択肢ではありません。"
 
 #: pretix/api/serializers/order.py:1322 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1530
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "選択した \"{seat}\"はご利用になれません。"
+msgstr "選択した席\"{seat}\"は空いていません。"
 
 #: pretix/api/serializers/order.py:1348 pretix/api/serializers/order.py:1355
 msgid "The product \"{}\" is not available on this date."
-msgstr "その日程に製品\"{}\"のお取り扱いはありません。"
+msgstr "その日はプロダクト\"{}\"のお取り扱いはありません。"
 
 #: pretix/api/serializers/order.py:1370 pretix/api/views/cart.py:200
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr "\"{name}\"には、この変更を実行するための十分な容量が残っていません。"
+msgstr "クォータ\"{name}\"には、この変更をするためのクォータが残っていません。"
 
 #: pretix/api/serializers/organizer.py:102
 #: pretix/control/forms/organizer.py:832 pretix/presale/forms/customer.py:445
@@ -366,7 +367,8 @@ msgstr "このメールアドレスを持つアカウントは既に登録され
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
-msgstr "同じコードの引換券が既にイベントカートにあります。"
+msgstr "同じシークレットのギフトカードが"
+"このオーガナイザーアカウントあるいは関連するオーガナイザーアカウントに存在します。"
 
 #: pretix/api/serializers/organizer.py:321
 #: pretix/control/views/organizer.py:743
