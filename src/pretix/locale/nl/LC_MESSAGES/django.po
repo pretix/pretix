@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
-"PO-Revision-Date: 2024-07-11 02:00+0000\n"
-"Last-Translator: Dirk-jan mollema <dirkjan@outsidersecurity.nl>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2024-10-23 14:30+0000\n"
+"Last-Translator: arjan-s <github@anymore.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.1\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -36,11 +36,11 @@ msgstr "Arabisch"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "Baskisch"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
-msgstr ""
+msgstr "Catalaans"
 
 #: pretix/_base_settings.py:85
 msgid "Chinese (simplified)"
@@ -120,11 +120,11 @@ msgstr "Russisch"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "Slowaaks"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
-msgstr ""
+msgstr "Zweeds"
 
 #: pretix/_base_settings.py:106
 msgid "Spanish"
@@ -260,10 +260,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Onbekende plug-in: '{name}'."
 
 #: pretix/api/serializers/event.py:295
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Onbekende plug-in: '{name}'."
+msgstr "Beperkte plug-in: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
@@ -507,10 +506,8 @@ msgid "Order denied"
 msgstr "Bestelling geweigerd"
 
 #: pretix/api/webhooks.py:313
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order deleted"
-msgstr "Bestelling geweigerd"
+msgstr "Bestelling verwijderd"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -650,7 +647,7 @@ msgstr "Wachtwoord"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "Uw wachtwoord moet zowel getallen als letters bevatten."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -658,8 +655,10 @@ msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "Uw wachtwoord mag niet gelijk zijn aan uw vorige wachtwoord."
 msgstr[1] ""
+"Uw wachtwoord mag niet gelijk zijn aan een van uw laatste %(history_length)s "
+"wachtwoorden."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -667,13 +666,15 @@ msgstr "Online winkel"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"API-verkoopkanalen hebben standaard geen functionaliteit, maar kunnen "
+"gebruikt worden door integraties."
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -2306,10 +2307,8 @@ msgid "Order comment"
 msgstr "Opmerking bestelling"
 
 #: pretix/base/exporters/orderlist.py:622
-#, fuzzy
-#| msgid "Add-On to position #%(posid)s"
 msgid "Add-on to position ID"
-msgstr "Add-on voor plaats #%(posid)s"
+msgstr "Add-on naar plaats ID"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:340
 msgid "Invoice address street"
@@ -2932,7 +2931,7 @@ msgstr "Vouchercode"
 #: pretix/base/forms/__init__.py:118
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "U kunt {markup_name} gebruiken in dit veld."
 
 #: pretix/base/forms/__init__.py:178
 #, python-format
@@ -3942,7 +3941,7 @@ msgstr "Tickettype hier niet toegestaan"
 
 #: pretix/base/models/checkin.py:366
 msgid "Ticket code is ambiguous on list"
-msgstr "Ticketcode is niet uniek in de lijst"
+msgstr "Ticket-code op de lijst is niet eenduidig"
 
 #: pretix/base/models/checkin.py:367
 msgid "Server error"
@@ -4060,7 +4059,7 @@ msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:763
 msgid "Gate"
-msgstr "Toegangslocatie"
+msgstr "Ingang"
 
 #: pretix/base/models/devices.py:132
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:83
@@ -13987,10 +13986,8 @@ msgid "All payments"
 msgstr "Alle betalingsproviders"
 
 #: pretix/control/forms/filter.py:1025
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment created from"
-msgstr "Betaaldatum"
+msgstr "Betaling aangemaakt op"
 
 #: pretix/control/forms/filter.py:1030
 #, fuzzy
@@ -18094,10 +18091,7 @@ msgid "Delete check-ins"
 msgstr "Verwijder inchecklijst"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the check-in list <strong>%(name)s</"
-#| "strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to permanently delete the check-ins of <strong>one "
 "ticket</strong>."
@@ -18105,11 +18099,11 @@ msgid_plural ""
 "Are you sure you want to permanently delete the check-ins of "
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] ""
-"Weet u zeker dat u de inchecklijst <strong>%(name)s</strong> wilt "
-"verwijderen?"
+"Weet u zeker dat u de check-ins van <strong>één ticket</strong> permanent "
+"wilt verwijderen?"
 msgstr[1] ""
-"Weet u zeker dat u de inchecklijst <strong>%(name)s</strong> wilt "
-"verwijderen?"
+"Weet u zeker dat u de check-ins van <strong>%(count)s tickets</strong> "
+"permanent wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:24
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
@@ -24719,12 +24713,11 @@ msgstr ""
 "Deze pagina toont alle aanroepen naar uw webhook in de afgelopen 30 dagen."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:14
-#, fuzzy, python-format
-#| msgid "The webhook has been created."
+#, python-format
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
-msgstr[0] "De webhook is aangemaakt."
-msgstr[1] "De webhook is aangemaakt."
+msgstr[0] "Één webhook is gepland om opnieuw geprobeerd te worden."
+msgstr[1] "%(count)s webhooks zijn gepland om opnieuw geprobeerd te worden."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
 #, fuzzy
@@ -31383,12 +31376,11 @@ msgstr ""
 "is op een voucher."
 
 #: pretix/plugins/sendmail/views.py:519
-#, fuzzy, python-format
-#| msgid "Waiting list entry"
+#, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] "Wachtlijstitem"
-msgstr[1] "Wachtlijstitem"
+msgstr[0] "%(number)s regel op de wachtlijst"
+msgstr[1] "%(number)s regels op de wachtlijst"
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
@@ -35690,10 +35682,8 @@ msgid "This feature is only available in test mode."
 msgstr "Deze cadeaubon kan alleen in de testmodus worden gebruikt."
 
 #: pretix/presale/views/event.py:985
-#, fuzzy
-#| msgid "This account is disabled."
 msgid "Time machine disabled!"
-msgstr "Dit account is uitgeschakeld."
+msgstr "Tijdmachine is uitgeschakeld!"
 
 #: pretix/presale/views/order.py:368 pretix/presale/views/order.py:433
 #: pretix/presale/views/order.py:514
