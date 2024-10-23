@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:14+0000\n"
-"PO-Revision-Date: 2024-10-23 14:30+0000\n"
+"PO-Revision-Date: 2024-10-23 23:00+0000\n"
 "Last-Translator: arjan-s <github@anymore.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.1\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -13075,12 +13075,7 @@ msgid "Community translations"
 msgstr "Onofficiële vertaling"
 
 #: pretix/control/forms/__init__.py:332
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This translation is not maintained by the pretix team. We cannot vouch "
-#| "for its correctness and new or recently changed features might not be "
-#| "translated and will show in English instead. You can help translating at "
-#| "translate.pretix.eu."
+#, python-brace-format
 msgid ""
 "These translations are not maintained by the pretix team. We cannot vouch "
 "for their correctness and new or recently changed features might not be "
@@ -13090,7 +13085,8 @@ msgstr ""
 "Deze vertaling wordt niet onderhouden door het pretix-team. We kunnen de "
 "juistheid niet garanderen, en nieuwe of recent veranderde functies kunnen "
 "mogelijk niet vertaald zijn, en zullen dan in plaats hiervan in Engels "
-"worden weergegeven. U kunt helpen met vertalen op translate.pretix.eu."
+"worden weergegeven. U kunt <a href=\"{translate_url}\" target=\"_blank\""
+">helpen met vertalen</a>."
 
 #: pretix/control/forms/__init__.py:343
 msgid "Development only"
