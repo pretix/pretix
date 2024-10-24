@@ -35,7 +35,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system packages
-        run: sudo apt update && sudo apt install gettext
+        run: sudo apt update && sudo apt install -y gettext
       - name: Install Dependencies
         run: pip3 install -e ".[dev]"
       - name: Compile messages
@@ -60,7 +60,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system packages
-        run: sudo apt update && sudo apt install enchant-2 hunspell hunspell-de-de aspell-en aspell-de
+        run: sudo apt update && sudo apt install -y enchant-2 hunspell hunspell-de-de aspell-en aspell-de
       - name: Install Dependencies
         run: pip3 install -e ".[dev]"
       - name: Spellcheck translations

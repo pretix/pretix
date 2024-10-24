@@ -38,7 +38,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system dependencies
-        run: sudo apt update && sudo apt install gettext unzip
+        run: sudo apt update && sudo apt install -y gettext unzip
       - name: Install Python dependencies
         run: pip3 install -U setuptools build pip check-manifest
       - name: Run check-manifest
