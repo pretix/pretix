@@ -51,6 +51,7 @@ from pretix.base.models import (
     Checkin, CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
     TaxRule,
 )
+from pretix.base.models.orders import PrintLog
 from pretix.base.signals import logentry_display, orderposition_blocked_display
 from pretix.base.templatetags.money import money_filter
 
@@ -638,6 +639,15 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if sender and logentry.action_type.startswith('pretix.event.checkin'):
         return _display_checkin(sender, logentry)
+
+    if logentry.action_type == 'pretix.event.order.print':
+        return _('Position #{posid} has been printed at {datetime} with type "{type}".').format(
+            posid=data.get('positionid'),
+            datetime=date_format(
+                dateutil.parser.parse(data["datetime"]), "SHORT_DATETIME_FORMAT"
+            ),
+            type=dict(PrintLog.PRINT_TYPES)[data["type"]],
+        )
 
     if logentry.action_type == 'pretix.control.views.checkin':
         # deprecated
