@@ -920,16 +920,19 @@ class QuotaCreate(EventPermissionRequiredMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
 
+        kwargs.setdefault('initial', {})
         if self.copy_from:
             i = modelcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
-            kwargs.setdefault('initial', {})
             kwargs['initial']['itemvars'] = [str(i.pk) for i in self.copy_from.items.all()] + [
                 '{}-{}'.format(v.item_id, v.pk) for v in self.copy_from.variations.all()
             ]
         else:
             kwargs['instance'] = Quota(event=self.request.event)
+            if 'product' in self.request.GET:
+                kwargs['initial']['itemvars'] = self.request.GET.getlist('product')
+
         return kwargs
 
     def form_invalid(self, form):
