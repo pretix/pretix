@@ -209,9 +209,9 @@ checkins                              list of objects            List of **succe
 print_logs                            list of objects            List of print jobs recorded e.g. by the pretix apps
 ├ id                                  integer                    Internal ID of the print job
 ├ successful                          boolean                    Whether the print job successfully resulted in a print.
-                                                                 This is not expected to be 100 % reliable information (since
-                                                                 printer feedback is never perfect) and there is no guarantee
-                                                                 that unsuccessful jobs will be logged.
+│                                                                This is not expected to be 100 % reliable information (since
+│                                                                printer feedback is never perfect) and there is no guarantee
+│                                                                that unsuccessful jobs will be logged.
 ├ device_id                           integer                    Attribute ``device_id`` of the device that recorded the print. Can be ``null``.
 ├ datetime                            datetime                   Time of printing
 ├ source                              string                     Source of print job, e.g. name of the app used.
@@ -2128,10 +2128,10 @@ Manipulating individual positions
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/printlog/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-      Content-Type: application/json
+     POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/printlog/ HTTP/1.1
+     Host: pretix.eu
+     Accept: application/json, text/javascript
+     Content-Type: application/json
 
      {
        "datetime": "2024-09-19T13:37:00+02:00",
@@ -2146,9 +2146,9 @@ Manipulating individual positions
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 Created
-      Vary: Accept
-      Content-Type: application/pdf
+     HTTP/1.1 201 Created
+     Vary: Accept
+     Content-Type: application/json
 
      {
        "id": 1234,
