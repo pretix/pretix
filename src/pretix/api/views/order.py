@@ -1279,7 +1279,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                 data={
                     "position": pos.pk,
                     "positionid": pos.positionid,
-                    "datetime": inst.datetime,
+                    "datetime": now(),
                     **serializer.validated_data,
                 },
                 auth=request.auth,
