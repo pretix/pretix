@@ -421,6 +421,14 @@
                             </a>
                         </div>
                     {% endif %}
+                    {% if warning_cronjob %}
+                        <div class="alert alert-warning">
+                            {% blocktrans trimmed %}
+                                The cronjob component of pretix was not executed in the last hours. Please check that
+                                you have completed all installation steps and your cronjob is executed correctly.
+                            {% endblocktrans %}
+                        </div>
+                    {% endif %}
 
                     {% if debug_warning %}
                         <div class="alert alert-danger">
