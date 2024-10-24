@@ -52,7 +52,7 @@ jobs:
       - name: Install system dependencies
         run: sudo apt update && sudo apt install gettext
       - name: Install Python dependencies
-        run: pip3 install --ignore-requires-python -e ".[dev]" psycopg2-binary  # We ignore that flake8 needs newer python as we don't run flake8 during tests
+        run: pip3 install uv && uv pip install --system -e ".[dev]" psycopg2-binary
       - name: Run checks
         run: python manage.py check
         working-directory: ./src
