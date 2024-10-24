@@ -37,7 +37,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system packages
-        run: sudo apt update && sudo apt install enchant-2 hunspell aspell-en
+        run: sudo apt update && sudo apt install -y enchant-2 hunspell aspell-en
       - name: Install Dependencies
         run: pip3 install -Ur requirements.txt
         working-directory: ./doc
