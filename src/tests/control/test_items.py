@@ -97,7 +97,7 @@ class CategoriesTest(ItemFormTest):
         assert form_data['name_0'] == 'Cross-Selling'
         assert form_data['category_type'] == 'only'
         assert form_data['cross_selling_condition'] == 'products'
-        assert form_data['cross_selling_match_products'] == ['1', '2']
+        assert form_data['cross_selling_match_products'] == [str(self.item1.pk), str(i2.pk)]
         form_data['name_0'] = 'Recommendations'
         doc = self.post_doc('/control/event/%s/%s/categories/add' % (self.orga1.slug, self.event1.slug), form_data)
         assert doc.select(".alert-success")
