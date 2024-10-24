@@ -36,6 +36,7 @@ import sys
 from importlib import import_module
 
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Q
 from django.urls import Resolver404, get_script_prefix, resolve
 from django.utils.translation import get_language
@@ -152,6 +153,8 @@ def _default_context(request):
             ctx['warning_update_available'] = True
         if not gs.settings.update_check_ack and 'runserver' not in sys.argv:
             ctx['warning_update_check_active'] = True
+        if not cache.get('pretix_runperiodic_executed') and not settings.DEBUG:
+            ctx['warning_cronjob'] = True
 
     ctx['ie_deprecation_warning'] = 'MSIE' in request.headers.get('User-Agent', '') or 'Trident/' in request.headers.get('User-Agent', '')
 

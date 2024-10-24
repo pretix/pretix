@@ -36,6 +36,7 @@ import time
 import traceback
 
 from django.conf import settings
+from django.core.cache import cache
 from django.core.management.base import BaseCommand
 from django.dispatch.dispatcher import NO_RECEIVERS
 
@@ -56,6 +57,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         verbosity = int(options['verbosity'])
+
+        cache.set("pretix_runperiodic_executed", True, 3600 * 12)
 
         if not periodic_task.receivers or periodic_task.sender_receivers_cache.get(self) is NO_RECEIVERS:
             return
