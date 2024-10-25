@@ -30,15 +30,21 @@ jobs:
             python-version: "3.9"
           - database: sqlite
             python-version: "3.10"
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pretix
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
-      - uses: harmon758/postgresql-action@v1
-        with:
-          postgresql version: '15'
-          postgresql db: 'pretix'
-          postgresql user: 'postgres'
-          postgresql password: 'postgres'
-        if: matrix.database == 'postgres'
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
