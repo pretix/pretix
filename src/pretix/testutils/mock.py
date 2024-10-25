@@ -39,5 +39,9 @@ def mocker_context():
 
 
 def get_redis_connection(alias="default", write=True):
-    xdist_id = os.environ.get("PYTEST_XDIST_WORKER") or "None"
-    return fakeredis.FakeStrictRedis(server=fakeredis.FakeServer.get_server(f"127.0.0.1:None:v(7,0):{xdist_id}", (7, 0), server_type="redis"))
+    worker_id = os.environ.get("PYTEST_XDIST_WORKER")
+    if worker_id.startswith("gw"):
+        redis_port = 1000 + int(worker_id.replace("gw", ""))
+    else:
+        redis_port = 1000
+    return fakeredis.FakeStrictRedis(server=fakeredis.FakeServer.get_server(f"127.0.0.1:{redis_port}:redis:v(7, 0)", (7, 0), server_type="redis"))

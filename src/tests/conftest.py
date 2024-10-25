@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import inspect
+import os
 
 import pytest
 from django.test import override_settings
@@ -82,27 +83,32 @@ def reset_locale():
 
 @pytest.fixture
 def fakeredis_client(monkeypatch):
+    worker_id = os.environ.get("PYTEST_XDIST_WORKER")
+    if worker_id.startswith("gw"):
+        redis_port = 1000 + int(worker_id.replace("gw", ""))
+    else:
+        redis_port = 1000
     with override_settings(
         HAS_REDIS=True,
         REAL_CACHE_USED=True,
         CACHES={
             'redis': {
                 'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-                'LOCATION': 'redis://127.0.0.1',
+                'LOCATION': f'redis://127.0.0.1:{redis_port}',
                 'OPTIONS': {
                     'connection_class': FakeConnection
                 }
             },
             'redis_session': {
                 'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-                'LOCATION': 'redis://127.0.0.1',
+                'LOCATION': f'redis://127.0.0.1:{redis_port}',
                 'OPTIONS': {
                     'connection_class': FakeConnection
                 }
             },
             'default': {
                 'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-                'LOCATION': 'redis://127.0.0.1',
+                'LOCATION': f'redis://127.0.0.1:{redis_port}',
                 'OPTIONS': {
                     'connection_class': FakeConnection
                 }
