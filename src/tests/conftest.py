@@ -124,8 +124,8 @@ def fakeredis_client(monkeypatch):
 @pytest.fixture(autouse=True)
 def set_lock_namespaces(request):
     worker_id = os.environ.get("PYTEST_XDIST_WORKER")
-    if worker_id is not None:
-        with override_settings(DATABASE_ADVISORY_LOCK_INDEX=int(worker_id)):
+    if worker_id.startswith("gw"):
+        with override_settings(DATABASE_ADVISORY_LOCK_INDEX=int(worker_id.replace("gw", ""))):
             yield
     else:
         yield
