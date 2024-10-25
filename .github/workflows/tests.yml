@@ -36,8 +36,9 @@ jobs:
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: pretix
+        user: postgres
         options: >-
-          --health-cmd "sudo -u postgres pg_isready"
+          --health-cmd "pg_isready"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
