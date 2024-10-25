@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import os
 from contextlib import contextmanager
 
 import fakeredis
@@ -38,4 +39,5 @@ def mocker_context():
 
 
 def get_redis_connection(alias="default", write=True):
-    return fakeredis.FakeStrictRedis(server=fakeredis.FakeServer.get_server("127.0.0.1:None:v(7, 0)", (7, 0), server_type="redis"))
+    xdist_id = os.environ.get("PYTEST_XDIST_WORKER") or "None"
+    return fakeredis.FakeStrictRedis(server=fakeredis.FakeServer.get_server(f"127.0.0.1:None:v(7,0):{xdist_id}", (7, 0), server_type="redis"))
