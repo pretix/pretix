@@ -20,8 +20,11 @@
 # <https://www.gnu.org/licenses/>.
 #
 import inspect
+import os
+import time
 
 import pytest
+from django.db import connection
 from django.test import override_settings
 from django.utils import translation
 from django_scopes import scopes_disabled
@@ -113,3 +116,32 @@ def fakeredis_client(monkeypatch):
         redis.flushall()
         monkeypatch.setattr('django_redis.get_redis_connection', get_redis_connection, raising=False)
         yield redis
+
+
+
+
+# XXXXXXXXXXXXXXXXXXX for test only
+
+f = open("/tmp/test.txt","w")
+
+if os.environ.get("GITHUB_WORKFLOW", ""):
+    @pytest.fixture(autouse=True)
+    def ensure_healthy_connection(request, worker_id):
+        # We have no idea why this is neccessary. It shouldn't be, and it costs some performance.
+        # However, in ~August 2024 our tests became really flake on GitHub Actions (failing more than 80% of the time)
+        # for no apparent reason with some error messages related to PostgreSQL connection issues. This appears to
+        # work around it...
+
+        # Check if the test even has DB access
+        marker = request.node.get_closest_marker("django_db")
+        f.write(str(time.time())+"\t"+ str(worker_id)+"\t"+str(request.path)+"\t"+ str(request.module)+"\t"+ str(request.function)+"\tstart\n")
+        # Run actual test
+        yield
+        f.write(str(time.time())+"\t"+ str(worker_id)+"\t"+str(request.path)+"\t"+ str(request.module)+"\t"+ str(request.function)+"\tend\n")
+
+        # If yes, do a dummy query at the end of the test
+        #if marker:
+        #    with connection.cursor() as cursor:
+        #        cursor.execute("SELECT 1")
+
+

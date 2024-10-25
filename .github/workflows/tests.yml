@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-22.04
     name: Tests
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
         database: [sqlite, postgres]
@@ -65,6 +66,12 @@ jobs:
       - name: Run tests
         working-directory: ./src
         run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test -n 3 -p no:sugar --cov=./ --cov-report=xml --reruns 3 tests --maxfail=100
+
+        # XXXXXXXXXXXXXX for test only
+      - name: print debug output
+        working-directory: ./src
+        run: cat /tmp/test.txt
+
       - name: Run concurrency tests
         working-directory: ./src
         run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test tests/concurrency_tests/ --reruns 0 --reuse-db
