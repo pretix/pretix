@@ -35,7 +35,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system packages
-        run: sudo apt update && sudo apt install gettext
+        run: sudo apt update && sudo apt -y install gettext
       - name: Install Dependencies
         run: pip3 install -e ".[dev]"
       - name: Compile messages
