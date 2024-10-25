@@ -135,10 +135,11 @@ if os.environ.get("GITHUB_WORKFLOW", ""):
         # Check if the test even has DB access
         marker = request.node.get_closest_marker("django_db")
         f.write(str(time.time())+"\t"+ str(worker_id)+"\t"+str(request.path)+"\t"+ str(request.module)+"\t"+ str(request.function)+"\tstart\n")
+        f.flush()
         # Run actual test
         yield
         f.write(str(time.time())+"\t"+ str(worker_id)+"\t"+str(request.path)+"\t"+ str(request.module)+"\t"+ str(request.function)+"\tend\n")
-
+        f.flush()
         # If yes, do a dummy query at the end of the test
         #if marker:
         #    with connection.cursor() as cursor:
