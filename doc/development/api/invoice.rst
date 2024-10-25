@@ -84,8 +84,6 @@ convenient to you:
 
    .. automethod:: _register_fonts
 
-   .. automethod:: _register_event_fonts
-
    .. automethod:: _on_first_page
 
    .. automethod:: _on_other_page

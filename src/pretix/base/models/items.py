@@ -1118,13 +1118,12 @@ class ItemVariation(models.Model):
     :param original_price: The item's "original" price. Will not be used for any calculations, will just be shown.
     :type original_price: decimal.Decimal
     :param require_approval: If set to ``True``, orders containing this variation can only be processed and paid after
-    approval by an administrator
+                             approval by an administrator
     :type require_approval: bool
     :param all_sales_channels: A flag indicating that this variation is available on all channels and limit_sales_channels will be ignored.
     :type all_sales_channels: bool
     :param limit_sales_channels: A list of sales channel identifiers, that this variation is available for sale on.
     :type limit_sales_channels: list
-
     """
     item = models.ForeignKey(
         Item,

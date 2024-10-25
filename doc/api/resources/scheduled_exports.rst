@@ -313,7 +313,7 @@ Endpoints for event exports
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
 
 Endpoints for organizer exports
----------------------------
+-------------------------------
 
 .. http:get:: /api/v1/organizers/(organizer)/scheduled_exports/
 

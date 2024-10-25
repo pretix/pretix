@@ -1,4 +1,4 @@
-.. _`rest-reusablemedia`:
+.. _`rest-seats`:
 
 Seats
 =====
