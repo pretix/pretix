@@ -51,7 +51,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system dependencies
-        run: sudo apt update && sudo apt install gettext
+        run: sudo apt update && sudo apt install -y gettext
       - name: Install Python dependencies
         run: pip3 install uv && uv pip install --system -e ".[dev]" psycopg2-binary
       - name: Run checks
