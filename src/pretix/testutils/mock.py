@@ -38,4 +38,4 @@ def mocker_context():
 
 
 def get_redis_connection(alias="default", write=True):
-    return fakeredis.FakeStrictRedis(server=fakeredis.FakeServer.get_server("127.0.0.1:None:v(7, 0)", (7, 0)))
+    return fakeredis.FakeStrictRedis(server=fakeredis.FakeServer.get_server("127.0.0.1:None:v(7, 0)", (7, 0), server_type="redis"))
