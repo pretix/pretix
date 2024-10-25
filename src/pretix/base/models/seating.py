@@ -53,6 +53,30 @@ class SeatingPlanLayoutValidator:
             e = str(e).replace('%', '%%')
             raise ValidationError(_('Your layout file is not a valid seating plan. Error message: {}').format(e))
 
+        try:
+            seat_guids = set()
+            for z in val["zones"]:
+                for r in z["rows"]:
+                    for s in r["seats"]:
+                        if not s.get("seat_guid"):
+                            raise ValidationError(
+                                _("Seat with zone {zone}, row {row}, and number {number} has no seat ID.").format(
+                                    zone=z["name"],
+                                    row=r["row_number"],
+                                    number=s["seat_number"],
+                                )
+                            )
+                        elif s["seat_guid"] in seat_guids:
+                            raise ValidationError(
+                                _("Multiple seats have the same ID: {id}").format(
+                                    id=s["seat_guid"],
+                                )
+                            )
+
+                        seat_guids.add(s["seat_guid"])
+        except ValidationError as e:
+            raise ValidationError(_('Your layout file is not a valid seating plan. Error message: {}').format(", ".join(e.message for e in e.error_list)))
+
 
 class SeatingPlan(LoggedModel):
     """
