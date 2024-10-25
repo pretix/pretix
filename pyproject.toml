@@ -74,7 +74,7 @@ dependencies = [
   "paypal-checkout-serversdk==1.0.*",
   "PyJWT==2.9.*",
   "phonenumberslite==8.13.*",
-  "Pillow==10.4.*",
+  "Pillow==11.0.*",
   "pretix-plugin-build",
   "protobuf==5.28.*",
   "psycopg2-binary",
@@ -88,7 +88,7 @@ dependencies = [
   "pytz-deprecation-shim==0.1.*",
   "pyuca",
   "qrcode==8.0",
-  "redis==5.1.*",
+  "redis==5.2.*",
   "reportlab==4.2.*",
   "requests==2.31.*",
   "sentry-sdk==2.17.*",
@@ -102,7 +102,7 @@ dependencies = [
   "vat_moss_forked==2020.3.20.0.11.0",
   "vobject==0.9.*",
   "webauthn==2.2.*",
-  "zeep==4.2.*"
+  "zeep==4.3.*"
 ]
 
 [project.optional-dependencies]
