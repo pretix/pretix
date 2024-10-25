@@ -210,7 +210,7 @@ class EventListMixin:
                 )
             ).annotate(
                 order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
-            ).order_by('-order_to')
+            ).order_by('-order_to', 'name', 'slug')
         else:
             date_q = Q(date_to__gte=now()) | (Q(date_to__isnull=True) & Q(date_from__gte=now()))
             qs = qs.filter(
@@ -219,7 +219,7 @@ class EventListMixin:
                 )
             ).annotate(
                 order_from=Coalesce('min_from', 'date_from'),
-            ).order_by('order_from')
+            ).order_by('order_from', 'name', 'slug')
         qs = Event.annotated(filter_qs_by_attr(
             qs, self.request, match_subevents_with_conditions=Q(active=True) & Q(is_public=True) & date_q
         ), self.request.sales_channel)
