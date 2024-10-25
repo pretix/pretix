@@ -451,7 +451,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         "invoice_to_vat_id": "DE123",
         "invoice_to_beneficiary": "",
         "custom_field": None,
-        'date': now().date().isoformat(),
+        'date': now().astimezone(event.timezone).date().isoformat(),
         'refers': None,
         'locale': 'en',
         'introductory_text': '',
