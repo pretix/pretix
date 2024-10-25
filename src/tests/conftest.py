@@ -37,8 +37,8 @@ CRASHED_ITEMS = set()
 @pytest.hookimpl(trylast=True)
 def pytest_configure(config):
     """
-    Somehow, somewhere, our test suite causes a segfault in SQLite, but only when run
-    on Travis CI in full. Therefore, we monkeypatch pytest-xdist to retry segfaulted
+    Somehow, somewhere, our test suite causes a segfault in SQLite in the past, but only when run
+    on CI in full. Therefore, we monkeypatch pytest-xdist to retry segfaulted
     tests and keep fingers crossed that this doesn't turn into an infinite loop.
     """
 
