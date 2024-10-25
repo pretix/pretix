@@ -156,7 +156,7 @@ def event_list(request):
         max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
     ).annotate(
         order_from=Coalesce('min_from', 'date_from'),
-    ).order_by('-order_from')
+    ).order_by('-order_from', 'slug')
 
     total = qs.count()
     pagesize = 20
@@ -318,7 +318,7 @@ def nav_context_list(request):
         max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
     ).annotate(
         order_from=Coalesce('min_from', 'date_from'),
-    ).order_by('-order_from')
+    ).order_by('-order_from', 'slug')
 
     if request.user.has_active_staff_session(request.session.session_key):
         qs_orga = Organizer.objects.all()
