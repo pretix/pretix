@@ -80,5 +80,5 @@ jobs:
         with:
           file: src/coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false
         if: matrix.database == 'postgres' && matrix.python-version == '3.11'
