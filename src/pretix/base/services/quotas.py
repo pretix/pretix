@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import json
+import logging
 import sys
 import time
 from collections import Counter, defaultdict
@@ -39,6 +41,8 @@ from pretix.base.models import (
 )
 
 from ..signals import quota_availability
+
+quota_logger = logging.getLogger("pretix_quota")
 
 
 class QuotaAvailability:
@@ -146,6 +150,10 @@ class QuotaAvailability:
                                     self.results[q] = int(data[0]), None
                                 else:
                                     self.results[q] = int(data[0]), int(data[1])
+                quota_logger.debug(json.dumps({
+                    "op": "quota_from_cache",
+                    "objects": [{"pk": q.pk, "str": str(q), "result": r} for q, r in self.results.items()],
+                }))
 
         if not quota_ids_set:
             return
@@ -160,6 +168,11 @@ class QuotaAvailability:
             for recv, resp in quota_availability.send(sender=q.event, quota=q, result=self.results[q],
                                                       count_waitinglist=self.count_waitinglist):
                 self.results[q] = resp
+
+        quota_logger.debug(json.dumps({
+            "op": "quota_results",
+            "objects": [{"pk": q.pk, "str": str(q), "result": r} for q, r in self.results.items()],
+        }))
 
         self._close(quotas)
         self._write_cache(quotas, now_dt)

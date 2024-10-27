@@ -203,6 +203,7 @@ error_messages = {
 }
 
 logger = logging.getLogger(__name__)
+quota_logger = logging.getLogger("pretix_quota")
 
 
 def mark_order_paid(*args, **kwargs):
@@ -694,6 +695,10 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
                 [op.seat for op in sorted_positions if op.seat],
                 shared_lock_objects=[event]
             )
+    else:
+        quota_logger.debug(json.dumps({
+            "op": "_check_items lock skipped due to trust window",
+        }))
 
     # Check availability
     for i, cp in enumerate(sorted_positions):
@@ -811,6 +816,10 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
                 cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)
             )
         )
+        if ignore_all_quotas:
+            quota_logger.debug(json.dumps({
+                "op": "quotas skipped due to trust window or voucher",
+            }))
 
         if not ignore_all_quotas:
             for quota in quotas:
@@ -827,7 +836,15 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
 
         if not quota_ok:
             # Sorry, can't let you keep that!
+            quota_logger.debug(json.dumps({
+                "op": "_check_items quota not ok",
+            }))
             delete(cp)
+        else:
+            quota_logger.debug(json.dumps({
+                "op": "_check_items ok",
+                "q_avail_after": [{"id": q.pk, "str": q.name, "avail": v} for q, v in q_avail.items()]
+            }))
 
     for voucher, cnt in v_usages.items():
         if 0 < cnt < voucher.min_usages_remaining:
@@ -1135,6 +1152,18 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
     ).filter(
         id__in=position_ids, event=event
     )
+    quota_logger.debug(json.dumps({
+        "op": "perform_order positions",
+        "positions": [
+            {
+                "item_id": p.item_id,
+                "variation_id": p.variation_id,
+                "id": p.pk,
+                "addon_to": p.addon_to_id,
+                "expires": p.expires.isoformat(),
+            } for p in positions
+        ]
+    }))
 
     if shown_total is not None and Decimal(shown_total) > Decimal("0.00") and event.currency == "XXX":
         raise OrderError(error_messages['currency_XXX'])
@@ -2806,6 +2835,16 @@ class OrderChangeManager:
             # Do nothing
             return
 
+        quota_logger.debug(json.dumps({
+            "op": "OrderChangeManager.commit start",
+        }))
+        for op in self._operations:
+            quota_logger.debug(json.dumps({
+                "op": "OrderChangeManager.commit operation",
+                "operation_type": str(type(op)),
+                "repr": repr(op),
+            }))
+
         # Clear prefetched objects cache of order. We're going to modify the positions and fees and we have no guarantee
         # that every operation tuple points to a position/fee instance that has been fetched from the same object cache,
         # so it's dangerous to keep the cache around.
@@ -2854,6 +2893,15 @@ class OrderChangeManager:
                 )
 
         order_changed.send(self.order.event, order=self.order)
+        for op in self._operations:
+            quota_logger.debug(json.dumps({
+                "op": "OrderChangeManager.commit operation done",
+                "operation_type": str(type(op)),
+                "repr": repr(op),
+            }))
+        quota_logger.debug(json.dumps({
+            "op": "OrderChangeManager.commit end",
+        }))
 
     def _clear_tickets_cache(self):
         tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
@@ -2877,11 +2925,18 @@ def perform_order(self, event: Event, payments: List[dict], positions: List[str]
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
                   sales_channel: str='web', shown_total=None, customer=None, override_now_dt: datetime=None,
                   api_meta: dict=None):
+    quota_logger.debug(json.dumps({
+        "op": "perform_order start",
+    }))
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             try:
-                return _perform_order(event, payments, positions, email, locale, address, meta_info,
-                                      sales_channel, shown_total, customer, api_meta)
+                r = _perform_order(event, payments, positions, email, locale, address, meta_info,
+                                   sales_channel, shown_total, customer, api_meta)
+                quota_logger.debug(json.dumps({
+                    "op": "perform_order end",
+                }))
+                return r
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
@@ -3012,6 +3067,9 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
                  device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False,
                  email_comment=None, refund_comment=None, cancel_invoice=True):
+    quota_logger.debug(json.dumps({
+        "op": "cancel_order start",
+    }))
     try:
         try:
             ret = _cancel_order(order, user, send_mail, api_token, device, oauth_application,
@@ -3019,6 +3077,9 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
             if try_auto_refund:
                 _try_auto_refund(order, refund_as_giftcard=refund_as_giftcard,
                                  comment=refund_comment)
+            quota_logger.debug(json.dumps({
+                "op": "cancel_order end",
+            }))
             return ret
         except LockTimeoutException:
             self.retry()

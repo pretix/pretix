@@ -556,6 +556,13 @@ LOGGING = {
                 else '%(levelname)s %(asctime)s %(name)s %(module)s %(message)s'
             )
         },
+        'quota_default': {
+            'format': (
+                '%(levelname)s %(asctime)s %(thread)d %(threadName)s RequestId=%(request_id)s %(name)s %(module)s %(message)s'
+                if REQUEST_ID_HEADER
+                else '%(levelname)s %(asctime)s %(thread)d %(threadName)s %(name)s %(module)s %(message)s'
+            )
+        },
     },
     'filters': {
         'require_admin_enabled': {
@@ -586,6 +593,13 @@ LOGGING = {
             'formatter': 'default',
             'filters': ['request_id'],
         },
+        'quota_file': {
+            'level': logging.DEBUG,
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'quota.log'),
+            'formatter': 'quota_default',
+            'filters': ['request_id'],
+        },
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
@@ -599,6 +613,11 @@ LOGGING = {
         '': {
             'handlers': ['file', 'console'],
             'level': loglevel,
+            'propagate': True,
+        },
+        'pretix_quota': {
+            'handlers': ['quota_file'],
+            'level': logging.DEBUG,
             'propagate': True,
         },
         'django.request': {

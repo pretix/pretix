@@ -19,18 +19,19 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import json
 import logging
 from itertools import groupby
 
 from django.conf import settings
-from django.db import DatabaseError, connection
+from django.db import DatabaseError, connection, transaction
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Membership, Quota, Seat, Voucher
 from pretix.testutils.middleware import debugflags_var
 
 logger = logging.getLogger('pretix.base.locking')
+quota_logger = logging.getLogger("pretix_quota")
 
 # A lock acquisition is aborted if it takes longer than LOCK_ACQUISITION_TIMEOUT to prevent connection starvation
 LOCK_ACQUISITION_TIMEOUT = 3
@@ -97,6 +98,10 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
             "You cannot create locks outside of an transaction"
         )
 
+    quota_logger.debug(json.dumps({
+        "op": "lock_objects",
+        "objects": [{"type": str(type(o)), "pk": o.pk, "str": str(o)} for o in objects],
+    }))
     if 'postgresql' in settings.DATABASES['default']['ENGINE']:
         shared_keys = set(pg_lock_key(obj) for obj in shared_lock_objects) if shared_lock_objects else set()
         exclusive_keys = set(pg_lock_key(obj) for obj in objects)
@@ -120,6 +125,14 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
     else:
         for model, instances in groupby(objects, key=lambda o: type(o)):
             model.objects.select_for_update().filter(pk__in=[o.pk for o in instances])
+    quota_logger.debug(json.dumps({
+        "op": "lock_objects acquired",
+        "objects": [{"type": str(type(o)), "pk": o.pk, "str": str(o)} for o in objects],
+    }))
+    transaction.on_commit(lambda: quota_logger.debug(json.dumps({
+        "op": "lock_objects released",
+        "reason": "transaction.on_commit",
+    })))
 
 
 class NoLockManager:

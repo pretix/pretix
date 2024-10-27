@@ -31,6 +31,8 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+import json
+import logging
 import re
 import uuid
 from collections import Counter, defaultdict, namedtuple
@@ -79,6 +81,8 @@ from pretix.presale.signals import (
     checkout_confirm_messages, fee_calculation_for_cart,
 )
 from pretix.testutils.middleware import debugflags_var
+
+quota_logger = logging.getLogger("pretix_quota")
 
 
 class CartError(Exception):
@@ -1123,6 +1127,11 @@ class CartManager:
             )
         vouchers_ok = self._get_voucher_availability()
         quotas_ok = _get_quota_availability(self._quota_diff, self.real_now_dt)
+        quota_logger.debug(json.dumps({
+            "op": "CartManager._perform_operations",
+            "quota_diff": {q.name: d for q, d in self._quota_diff.items()},
+            "quotas_ok": {q.name: d for q, d in quotas_ok.items()},
+        }))
         err = None
         new_cart_positions = []
         deleted_positions = set()
@@ -1408,6 +1417,16 @@ class CartManager:
         return diff
 
     def commit(self):
+        quota_logger.debug(json.dumps({
+            "op": "CartManager.commit start",
+        }))
+        for op in self._operations:
+            quota_logger.debug(json.dumps({
+                "op": "CartManager.commit operation",
+                "operation_type": str(type(op)),
+                "count": getattr(op, "count", 1) if isinstance(op, (self.AddOperation, self.ExtendOperation)) else None,
+                "repr": repr(op),
+            }))
         self._check_presale_dates()
         self._check_max_cart_size()
         self._calculate_expiry()
@@ -1424,6 +1443,16 @@ class CartManager:
 
         if err:
             raise CartError(err)
+        for op in self._operations:
+            quota_logger.debug(json.dumps({
+                "op": "CartManager.commit operation done",
+                "operation_type": str(type(op)),
+                "count": getattr(op, "count", 1) if isinstance(op, (self.AddOperation, self.ExtendOperation)) else None,
+                "repr": repr(op),
+            }))
+        quota_logger.debug(json.dumps({
+            "op": "CartManager.commit done",
+        }))
 
 
 def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):
@@ -1516,6 +1545,11 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
     :param cart_id: Session ID of a guest
     :raises CartError: On any error that occurred
     """
+    quota_logger.debug(json.dumps({
+        "op": "add_items_to_cart start",
+        "cart_id": cart_id,
+        "items": items,
+    }))
     with language(locale), time_machine_now_assigned(override_now_dt):
         ia = False
         if invoice_address:
@@ -1540,6 +1574,10 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
             raise CartError(error_messages['busy'])
+    quota_logger.debug(json.dumps({
+        "op": "add_items_to_cart end",
+        "cart_id": cart_id,
+    }))
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
@@ -1549,6 +1587,10 @@ def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='e
     :param voucher: A voucher code
     :param cart_id: The cart ID of the cart to modify
     """
+    quota_logger.debug(json.dumps({
+        "op": "apply_voucher start",
+        "cart_id": cart_id,
+    }))
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
@@ -1563,6 +1605,10 @@ def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='e
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
             raise CartError(error_messages['busy'])
+    quota_logger.debug(json.dumps({
+        "op": "apply_voucher end",
+        "cart_id": cart_id,
+    }))
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
@@ -1573,6 +1619,11 @@ def remove_cart_position(self, event: Event, position: int, cart_id: str=None, l
     :param position: A cart position ID
     :param cart_id: The cart ID of the cart to modify
     """
+    quota_logger.debug(json.dumps({
+        "op": "remove_cart_position start",
+        "cart_id": cart_id,
+        "position": position,
+    }))
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
@@ -1587,6 +1638,11 @@ def remove_cart_position(self, event: Event, position: int, cart_id: str=None, l
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
             raise CartError(error_messages['busy'])
+    quota_logger.debug(json.dumps({
+        "op": "remove_cart_position end",
+        "cart_id": cart_id,
+        "position": position,
+    }))
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
@@ -1596,6 +1652,10 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
     :param event: The event ID in question
     :param cart_id: The cart ID of the cart to modify
     """
+    quota_logger.debug(json.dumps({
+        "op": "clear_cart start",
+        "cart_id": cart_id,
+    }))
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
@@ -1610,6 +1670,10 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
             raise CartError(error_messages['busy'])
+    quota_logger.debug(json.dumps({
+        "op": "clear_cart end",
+        "cart_id": cart_id,
+    }))
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
