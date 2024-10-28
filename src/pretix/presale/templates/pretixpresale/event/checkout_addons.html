@@ -16,7 +16,7 @@
             {% trans "A product in your cart is only sold in combination with add-on products that are no longer available. Please contact the event organizer." %}
         </div>
     {% endif %}
-    <form class="form-horizontal" method="post" data-asynctask
+    <div class="form-horizontal" method="post" data-asynctask
             data-asynctask-headline="{% trans "We're now trying to book these add-ons for you!" %}">
         {% csrf_token %}
         <div class="panel-group addons" id="questions_group">
@@ -57,16 +57,28 @@
         </div>
 
         {% if cross_selling_data %}
-            <details class="panel panel-default cross-selling" open>
+            {% if forms %}
+                <details class="panel panel-default cross-selling" open>
+            {% else %}
+                <div class="panel panel-default cross-selling">
+            {% endif %}
                 <summary class="panel-heading">
                     <h3 class="panel-title">
-                        {% trans "More recommendations" %}
+                        {% if forms %}
+                            {% trans "More recommendations" %}
+                        {% else %}
+                            {% trans "Our recommendations" %}
+                        {% endif %}
                     </h3>
                 </summary>
                 <div class="panel-body">
                     {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event %}
                 </div>
-            </details>
+            {% if forms %}
+                </details>
+            {% else %}
+                </div>
+            {% endif %}
         {% endif %}
 
         <div class="row checkout-button-row">
