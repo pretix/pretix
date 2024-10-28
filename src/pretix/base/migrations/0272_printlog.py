@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.OAUTH2_PROVIDER_APPLICATION_MODEL),
-        ("pretixbase", "0270_historicpassword"),
+        ("pretixbase", "0271_itemcategory_cross_selling"),
     ]
 
     operations = [
