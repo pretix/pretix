@@ -25,12 +25,19 @@ from rest_framework import serializers, viewsets
 
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
-from pretix.base.models import ItemVariation
+from pretix.base.models import ItemVariation, SalesChannel
 from pretix.plugins.autocheckin.models import AutoCheckinRule
 from pretix.plugins.sendmail.models import Rule
 
 
 class AutoCheckinRuleSerializer(I18nAwareModelSerializer):
+    limit_sales_channels = serializers.SlugRelatedField(
+        slug_field="identifier",
+        queryset=SalesChannel.objects.none(),
+        required=False,
+        allow_empty=True,
+        many=True,
+    )
 
     class Meta:
         model = AutoCheckinRule
