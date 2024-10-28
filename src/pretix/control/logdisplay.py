@@ -644,7 +644,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         return _('Position #{posid} has been printed at {datetime} with type "{type}".').format(
             posid=data.get('positionid'),
             datetime=date_format(
-                dateutil.parser.parse(data["datetime"]), "SHORT_DATETIME_FORMAT"
+                dateutil.parser.parse(data["datetime"]).astimezone(sender.timezone),
+                "SHORT_DATETIME_FORMAT"
             ),
             type=dict(PrintLog.PRINT_TYPES)[data["type"]],
         )
