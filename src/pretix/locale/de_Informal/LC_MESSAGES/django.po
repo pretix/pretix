@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-28 11:31+0000\n"
-"PO-Revision-Date: 2024-10-15 12:00+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2024-10-28 11:51+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.1\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -6061,10 +6061,8 @@ msgid "Ticket"
 msgstr "Ticket"
 
 #: pretix/base/models/orders.py:3405
-#, fuzzy
-#| msgid "Verification"
 msgid "Certificate"
-msgstr "Verifikation"
+msgstr "Zertifkat"
 
 #: pretix/base/models/orders.py:3406 pretix/control/views/event.py:367
 #: pretix/control/views/event.py:372
@@ -6228,12 +6226,12 @@ msgstr "Die Datei ist kein gültiger Sitzplan. Fehlermeldung: {}"
 #: pretix/base/models/seating.py:63
 #, python-brace-format
 msgid "Seat with zone {zone}, row {row}, and number {number} has no seat ID."
-msgstr ""
+msgstr "Sitz mit Zone {zone}, Reihe {row} und Nummer {number} hat keine ID."
 
 #: pretix/base/models/seating.py:71
 #, python-brace-format
 msgid "Multiple seats have the same ID: {id}"
-msgstr ""
+msgstr "Mehrere Sitzplätze haben die selbe ID: {id}"
 
 #: pretix/base/models/seating.py:199
 #, python-brace-format
@@ -16661,11 +16659,9 @@ msgstr ""
 "Der Check-in von Position #{posid} auf Liste \"{list}\" wurde gelöscht."
 
 #: pretix/control/logdisplay.py:644
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Position #{posid} has been scanned at {datetime} for list \"{list}\"."
+#, python-brace-format
 msgid "Position #{posid} has been printed at {datetime} with type \"{type}\"."
-msgstr "Ticket #{posid} wurde am {datetime} für die Liste \"{list}\" gescannt."
+msgstr "Ticket #{posid} wurde am {datetime} als Typ \"{type}\" gedruckt."
 
 #: pretix/control/logdisplay.py:666
 #, python-brace-format
@@ -17353,6 +17349,9 @@ msgid ""
 "check that you have completed all installation steps and your cronjob is "
 "executed correctly."
 msgstr ""
+"Die Cronjob-Komponente von pretix wurde in den letzten Stunden nicht "
+"ausgeführt. Bitte prüfe, dass du alle Installationsschritte abgeschlossen "
+"hast und der Cronjob korrekt ausgeführt wird."
 
 #: pretix/control/templates/pretixcontrol/base.html:435
 msgid ""
@@ -20209,10 +20208,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/base.html:24
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:79
-#, fuzzy
-#| msgid "Manage questions"
 msgid "Manage quotas"
-msgstr "Fragen verwalten"
+msgstr "Kontingente verwalten"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:82
@@ -32000,6 +31997,8 @@ msgid ""
 "A product in your cart is only sold in combination with add-on products that "
 "are no longer available. Please contact the event organizer."
 msgstr ""
+"Ein Produkt in deinem Warenkorb wird nur in Kombination mit Zusatzprodukten "
+"verkauft, die nicht mehr verfügbar sind. Bitte kontaktiere den Veranstalter."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "We're now trying to book these add-ons for you!"
