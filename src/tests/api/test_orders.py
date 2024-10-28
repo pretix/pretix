@@ -522,6 +522,7 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     res = dict(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
+        res["positions"][0]["print_logs"][0]["id"] = order.positions.first().print_logs.first().pk
         res["fees"][0]["id"] = order.fees.first().pk
     res["positions"][0]["item"] = item.pk
     res["fees"][0]["tax_rule"] = taxrule.pk
@@ -1134,6 +1135,7 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
     res = dict(TEST_ORDERPOSITION_RES)
     with scopes_disabled():
         op = order.positions.first()
+        res["print_logs"][0]["id"] = op.print_logs.first().pk
     res["id"] = op.pk
     res["item"] = item.pk
     res["answers"][0]["question"] = question.pk
