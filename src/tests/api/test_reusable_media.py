@@ -192,6 +192,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "addon_to": None,
             "subevent": None,
             "checkins": [],
+            "print_logs": [],
             "downloads": [],
             "answers": [],
             "tax_rule": None,
