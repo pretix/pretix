@@ -299,7 +299,7 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
     def get_queryset(self):
         qs = self.request.event.checkin_lists.select_related('subevent').prefetch_related(
-            "limit_products", "auto_checkin_sales_channels"
+            "limit_products",
         )
 
         if self.filter_form.is_valid():

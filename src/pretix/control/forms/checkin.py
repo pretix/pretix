@@ -33,9 +33,7 @@ from django_scopes.forms import (
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import Gate
 from pretix.base.models.checkin import Checkin, CheckinList
-from pretix.control.forms import (
-    ItemMultipleChoiceField, SalesChannelCheckboxSelectMultiple,
-)
+from pretix.control.forms import ItemMultipleChoiceField
 from pretix.control.forms.widgets import Select2
 
 
@@ -67,10 +65,6 @@ class CheckinListForm(forms.ModelForm):
         kwargs.pop('locales', None)
         super().__init__(**kwargs)
         self.fields['limit_products'].queryset = self.event.items.all()
-        self.fields['auto_checkin_sales_channels'].queryset = self.event.organizer.sales_channels.all()
-        self.fields['auto_checkin_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(
-            self.event, choices=self.fields['auto_checkin_sales_channels'].widget.choices
-        )
 
         if not self.event.organizer.gates.exists():
             del self.fields['gates']
@@ -102,7 +96,6 @@ class CheckinListForm(forms.ModelForm):
             'limit_products',
             'subevent',
             'include_pending',
-            'auto_checkin_sales_channels',
             'allow_multiple_entries',
             'allow_entry_after_exit',
             'rules',
@@ -125,7 +118,6 @@ class CheckinListForm(forms.ModelForm):
             'limit_products': ItemMultipleChoiceField,
             'gates': SafeModelMultipleChoiceField,
             'subevent': SafeModelChoiceField,
-            'auto_checkin_sales_channels': SafeModelMultipleChoiceField,
             'exit_all_at': NextTimeField,
         }
 

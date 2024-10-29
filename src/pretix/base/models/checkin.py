@@ -99,14 +99,6 @@ class CheckinList(LoggedModel):
         verbose_name=_('Automatically check out everyone at'),
         null=True, blank=True
     )
-    auto_checkin_sales_channels = models.ManyToManyField(
-        "SalesChannel",
-        verbose_name=_('Sales channels to automatically check in'),
-        help_text=_('This option is deprecated and will be removed in the next months. As a replacement, our new plugin '
-                    '"Auto check-in" can be used. When we remove this option, we will automatically migrate your event '
-                    'to use the new plugin.'),
-        blank=True,
-    )
     rules = models.JSONField(default=dict, blank=True)
 
     objects = ScopedManager(organizer='event__organizer')

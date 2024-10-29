@@ -165,13 +165,6 @@ def order(event, item, taxrule, question):
         return o
 
 
-@pytest.fixture
-def clist_autocheckin(event):
-    c = event.checkin_lists.create(name="Default", all_products=True)
-    c.auto_checkin_sales_channels.add(event.organizer.sales_channels.get(identifier="web"))
-    return c
-
-
 ORDER_CREATE_PAYLOAD = {
     "email": "dummy@dummy.test",
     "phone": "+49622112345",
@@ -545,36 +538,6 @@ def test_order_create_positionids_addons_simulated(token_client, organizer, even
          'addon_to': 1, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': None,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None}
     ]
-
-
-@pytest.mark.django_db
-def test_order_create_autocheckin(token_client, organizer, event, item, quota, question, clist_autocheckin):
-    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
-    res['positions'][0]['item'] = item.pk
-    res['positions'][0]['answers'][0]['question'] = question.pk
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orders/'.format(
-            organizer.slug, event.slug
-        ), format='json', data=res
-    )
-    assert resp.status_code == 201
-    with scopes_disabled():
-        o = Order.objects.get(code=resp.data['code'])
-        assert clist_autocheckin.auto_checkin_sales_channels.contains(organizer.sales_channels.get(identifier="web"))
-        assert o.positions.first().checkins.first().auto_checked_in
-
-    clist_autocheckin.auto_checkin_sales_channels.clear()
-
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orders/'.format(
-            organizer.slug, event.slug
-        ), format='json', data=res
-    )
-    assert resp.status_code == 201
-    with scopes_disabled():
-        o = Order.objects.get(code=resp.data['code'])
-        assert clist_autocheckin.auto_checkin_sales_channels.count() == 0
-        assert o.positions.first().checkins.count() == 0
 
 
 @pytest.mark.django_db

@@ -126,7 +126,6 @@ def test_full_clone_same_organizer():
         ],
     })
     clist.limit_products.add(item1)
-    clist.auto_checkin_sales_channels.add(sc)
 
     copied_event = Event.objects.create(
         organizer=organizer, name='Dummy2', slug='dummy2',
@@ -212,7 +211,6 @@ def test_full_clone_same_organizer():
         ],
     }
     assert copied_clist.limit_products.get() == copied_item1
-    assert copied_clist.auto_checkin_sales_channels.get() == sc
 
     # todo: test that the plugin hook is called
     # todo: test custom style
@@ -248,9 +246,6 @@ def test_full_clone_cross_organizer_differences():
     item2 = event.items.create(name="T-shirt", default_price=15)
     item2.require_membership_types.add(membership_type)
 
-    clist = event.checkin_lists.create(name="Default")
-    clist.auto_checkin_sales_channels.add(sc)
-
     copied_event = Event.objects.create(
         organizer=organizer2, name='Dummy2', slug='dummy2',
         date_from=datetime.datetime(2022, 4, 15, 9, 0, 0, tzinfo=datetime.timezone.utc),
@@ -270,6 +265,3 @@ def test_full_clone_cross_organizer_differences():
     assert copied_item1.grant_membership_type is None
     assert copied_item2.require_membership_types.count() == 0
     assert copied_item1.limit_sales_channels.get() == sc2
-
-    copied_clist = copied_event.checkin_lists.get()
-    assert copied_clist.auto_checkin_sales_channels.get() == sc2
