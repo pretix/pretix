@@ -462,14 +462,28 @@ class BadgeExporter(BaseExporter):
                  )),
                 ('date_from',
                  forms.DateField(
-                     label=_('Start date'),
+                     label=_('Start event date'),
                      widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                      required=False,
                      help_text=_('Only include tickets for dates on or after this date.')
                  )),
                 ('date_to',
                  forms.DateField(
-                     label=_('End date'),
+                     label=_('End event date'),
+                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                     required=False,
+                     help_text=_('Only include tickets for dates on or before this date.')
+                 )),
+                ('order_date_from',
+                 forms.DateField(
+                     label=_('Start order date'),
+                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                     required=False,
+                     help_text=_('Only include tickets for dates on or after this date.')
+                 )),
+                ('order_date_to',
+                 forms.DateField(
+                     label=_('End order date'),
                      widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                      required=False,
                      help_text=_('Only include tickets for dates on or before this date.')
@@ -532,6 +546,24 @@ class BadgeExporter(BaseExporter):
                 time(hour=0, minute=0, second=0)
             ), self.event.timezone)
             qs = qs.filter(Q(subevent__date_from__lt=dt) | Q(subevent__isnull=True, order__event__date_from__lt=dt))
+
+        if form_data.get('order_date_from'):
+            if not isinstance(form_data.get('order_date_from'), date):
+                form_data['order_date_from'] = dateutil.parser.parse(form_data['order_date_from']).date()
+            df = make_aware(datetime.combine(
+                form_data['order_date_from'],
+                time(hour=0, minute=0, second=0)
+            ), self.event.timezone)
+            qs = qs.filter(order__datetime__gte=df)
+
+        if form_data.get('order_date_to'):
+            if not isinstance(form_data.get('order_date_to'), date):
+                form_data['order_date_to'] = dateutil.parser.parse(form_data['order_date_to']).date()
+            dt = make_aware(datetime.combine(
+                form_data['order_date_to'] + timedelta(days=1),
+                time(hour=0, minute=0, second=0)
+            ), self.event.timezone)
+            qs = qs.filter(order__datetime__lt=dt)
 
         if form_data.get('order_by') == 'name':
             qs = qs.annotate(
