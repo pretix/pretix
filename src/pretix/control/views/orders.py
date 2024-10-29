@@ -125,7 +125,7 @@ from pretix.control.forms.orders import (
     ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeChangeForm,
     OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
     OrderPositionAddFormset, OrderPositionChangeForm, OrderPositionMailForm,
-    OrderRefundForm, OtherOperationsForm, ReactivateOrderForm,
+    OrderRefundForm, OtherOperationsForm, ReactivateOrderForm, OrderFeeAddForm, OrderFeeAddFormset,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -1874,7 +1874,7 @@ class OrderChange(OrderView):
                                    data=self.request.POST if self.request.method == "POST" else None)
 
     @cached_property
-    def add_formset(self):
+    def add_position_formset(self):
         ff = formset_factory(
             OrderPositionAddForm, formset=OrderPositionAddFormset,
             can_order=False, can_delete=True, extra=0
@@ -1883,6 +1883,18 @@ class OrderChange(OrderView):
             prefix='add',
             order=self.order,
             items=self.items,
+            data=self.request.POST if self.request.method == "POST" else None
+        )
+
+    @cached_property
+    def add_fee_formset(self):
+        ff = formset_factory(
+            OrderFeeAddForm, formset=OrderFeeAddFormset,
+            can_order=False, can_delete=True, extra=0
+        )
+        return ff(
+            prefix='add_fee',
+            order=self.order,
             data=self.request.POST if self.request.method == "POST" else None
         )
 
@@ -1914,7 +1926,8 @@ class OrderChange(OrderView):
         ctx = super().get_context_data(**kwargs)
         ctx['positions'] = self.positions
         ctx['fees'] = self.fees
-        ctx['add_formset'] = self.add_formset
+        ctx['add_position_formset'] = self.add_position_formset
+        ctx['add_fee_formset'] = self.add_fee_formset
         ctx['other_form'] = self.other_form
         ctx['use_revocation_list'] = self.request.event.ticket_secret_generator.use_revocation_list
         return ctx
@@ -1929,12 +1942,12 @@ class OrderChange(OrderView):
                 )
             return True
 
-    def _process_add(self, ocm):
-        if not self.add_formset.is_valid():
+    def _process_add_positions(self, ocm):
+        if not self.add_position_formset.is_valid():
             return False
         else:
-            for f in self.add_formset.forms:
-                if f in self.add_formset.deleted_forms or not f.has_changed():
+            for f in self.add_position_formset.forms:
+                if f in self.add_position_formset.deleted_forms or not f.has_changed():
                     continue
 
                 if '-' in f.cleaned_data['itemvar']:
@@ -1954,6 +1967,29 @@ class OrderChange(OrderView):
                                      f.cleaned_data.get('subevent'),
                                      f.cleaned_data.get('seat'),
                                      f.cleaned_data.get('used_membership'))
+                except OrderError as e:
+                    f.custom_error = str(e)
+                    return False
+        return True
+
+    def _process_add_fees(self, ocm):
+        if not self.add_fee_formset.is_valid():
+            return False
+        else:
+            for f in self.add_fee_formset.forms:
+                if f in self.add_fee_formset.deleted_forms or not f.has_changed():
+                    continue
+
+                f = OrderFee(
+                    fee_type=f.cleaned_data['fee_type'],
+                    value=f.cleaned_data['value'],
+                    order=ocm.order,
+                    tax_rule=f.cleaned_data['tax_rule'],
+                    description=f.cleaned_data['description'],
+                )
+                f._calculate_tax()
+                try:
+                    ocm.add_fee(f)
                 except OrderError as e:
                     f.custom_error = str(e)
                     return False
@@ -2061,7 +2097,7 @@ class OrderChange(OrderView):
             notify=notify,
             reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True
         )
-        form_valid = self._process_add(ocm) and self._process_fees(ocm) and self._process_change(ocm) and self._process_other(ocm)
+        form_valid = self._process_add_positions(ocm) and self._process_add_fees(ocm) and self._process_fees(ocm) and self._process_change(ocm) and self._process_other(ocm)
 
         if not form_valid:
             messages.error(self.request, _('An error occurred. Please see the details below.'))
