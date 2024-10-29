@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import base64
+import copy
 import logging
 
 from cryptography.hazmat.backends.openssl.backend import Backend
@@ -146,6 +147,8 @@ class InitializeView(APIView):
     permission_classes = ()
 
     def post(self, request, format=None):
+        from pretix.base.signals import device_info_updated
+
         serializer = InitializationRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -159,6 +162,8 @@ class InitializeView(APIView):
 
         if device.revoked:
             raise ValidationError({'token': ['This initialization token has been revoked.']})
+
+        old_instance = copy.copy(device)
 
         device.initialized = now()
         device.hardware_brand = serializer.validated_data.get('hardware_brand')
@@ -174,6 +179,10 @@ class InitializeView(APIView):
 
         device.log_action('pretix.device.initialized', data=serializer.validated_data, auth=device)
 
+        device_info_updated.send(
+            sender=Device, old_device=old_instance, new_device=device
+        )
+
         serializer = DeviceSerializer(device)
         return Response(serializer.data)
 
@@ -182,9 +191,12 @@ class UpdateView(APIView):
     authentication_classes = (DeviceTokenAuthentication,)
 
     def post(self, request, format=None):
+        from pretix.base.signals import device_info_updated
+
         serializer = UpdateRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         device = request.auth
+        old_instance = copy.copy(device)
         device.hardware_brand = serializer.validated_data.get('hardware_brand')
         device.hardware_model = serializer.validated_data.get('hardware_model')
         device.os_name = serializer.validated_data.get('os_name')
@@ -200,9 +212,8 @@ class UpdateView(APIView):
         device.save()
         device.log_action('pretix.device.updated', data=serializer.validated_data, auth=device)
 
-        from ...base.signals import device_info_updated
         device_info_updated.send(
-            sender=Device, old_device=request.auth, new_device=device
+            sender=Device, old_device=old_instance, new_device=device
         )
 
         serializer = DeviceSerializer(device)
