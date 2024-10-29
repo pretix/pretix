@@ -122,10 +122,11 @@ from pretix.control.forms.filter import (
 )
 from pretix.control.forms.orders import (
     CancelForm, CommentForm, DenyForm, EventCancelForm, ExporterForm,
-    ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeChangeForm,
-    OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
-    OrderPositionAddFormset, OrderPositionChangeForm, OrderPositionMailForm,
-    OrderRefundForm, OtherOperationsForm, ReactivateOrderForm, OrderFeeAddForm, OrderFeeAddFormset,
+    ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeAddForm,
+    OrderFeeAddFormset, OrderFeeChangeForm, OrderLocaleForm, OrderMailForm,
+    OrderPositionAddForm, OrderPositionAddFormset, OrderPositionChangeForm,
+    OrderPositionMailForm, OrderRefundForm, OtherOperationsForm,
+    ReactivateOrderForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -2097,7 +2098,11 @@ class OrderChange(OrderView):
             notify=notify,
             reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True
         )
-        form_valid = self._process_add_positions(ocm) and self._process_add_fees(ocm) and self._process_fees(ocm) and self._process_change(ocm) and self._process_other(ocm)
+        form_valid = (self._process_add_positions(ocm) and
+                      self._process_add_fees(ocm) and
+                      self._process_fees(ocm) and
+                      self._process_change(ocm) and
+                      self._process_other(ocm))
 
         if not form_valid:
             messages.error(self.request, _('An error occurred. Please see the details below.'))
