@@ -117,7 +117,7 @@ dev = [
   "isort==5.13.*",
   "pep8-naming==0.14.*",
   "potypo",
-  "pytest-asyncio",
+  "pytest-asyncio==0.24.*",
   "pytest-cache",
   "pytest-cov",
   "pytest-django==4.*",
