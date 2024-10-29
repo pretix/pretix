@@ -40,7 +40,7 @@ def mocker_context():
 
 def get_redis_connection(alias="default", write=True):
     worker_id = os.environ.get("PYTEST_XDIST_WORKER")
-    if worker_id.startswith("gw"):
+    if worker_id and worker_id.startswith("gw"):
         redis_port = 1000 + int(worker_id.replace("gw", ""))
     else:
         redis_port = 1000
