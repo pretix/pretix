@@ -838,7 +838,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             data = json.loads(response.content.decode())
             assert data["meta_filter_fields"] == [
                 {
-                    "choices": [["", "-- all -- "], ["DE", "DE"], ["EN", "EN"]],
+                    "choices": [["", "-- all --"], ["DE", "DE"], ["EN", "EN"]],
                     "key": "attr[Language]",
                     "label": "Language"
                 }
