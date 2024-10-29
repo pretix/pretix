@@ -8,7 +8,7 @@
 {% for tup in items_by_category %}{% with category=tup.0 items=tup.1 form_prefix=tup.2 %}
     {% if category %}
         <section aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
-            <h3 id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}
+            <h{{ headline_level|default:3 }} class="h3" id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}
                 {% if category.subevent_name %}
                     <small class="text-muted"><i class="fa fa-calendar"></i> {{ category.subevent_name }}</small>
                 {% endif %}
@@ -19,13 +19,13 @@
                         {% trans "Your order qualifies for a discount" %}
                     </small>
                 {% endif %}
-            </h3>
+            </h{{ headline_level|default:3 }}>
             {% if category.description %}
                 <div id="{{ form_prefix }}category-info-{{ category.id }}">{{ category.description|localize|rich_text }}</div>
             {% endif %}
     {% else %}
         <section aria-labelledby="{{ form_prefix }}category-none">
-            <h3 id="{{ form_prefix }}category-none" class="sr-only">{% trans "Uncategorized items" %}</h3>
+            <h{{ headline_level|default:"3" }} id="{{ form_prefix }}category-none" class="h3 sr-only">{% trans "Uncategorized items" %}</h{{ headline_level|default:3 }}>
     {% endif %}
         {% for item in items %}
             {% if item.has_variations %}
@@ -43,7 +43,7 @@
                                 </a>
                             {% endif %}
                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                <h4 id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h4>
+                                <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h{{ headline_level|default:3|add:1 }}>
                                 {% if item.description %}
                                     <div id="{{ form_prefix }}item-{{ item.pk }}-description" class="product-description">
                                         {{ item.description|localize|rich_text }}
@@ -117,7 +117,7 @@
                                 data-price="{% if event.settings.display_net_prices %}{{ var.display_price.net|unlocalize }}{% else %}{{ var.display_price.gross|unlocalize }}{% endif %}"
                             {% endif %}>
                                 <div class="col-md-8 col-sm-6 col-xs-12">
-                                    <h5 id="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend">{{ var }}</h5>
+                                    <h{{ headline_level|default:3|add:2 }} class="h5" id="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend">{{ var }}</h{{ headline_level|default:3|add:2 }}>
                                     {% if var.description %}
                                         <div id="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description" class="variation-description">
                                             {{ var.description|localize|rich_text }}
@@ -261,7 +261,7 @@
                             </a>
                         {% endif %}
                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                            <h4 id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h4>
+                            <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h{{ headline_level|default:3 }}>
                             {% if item.description %}
                                 <div id="{{ form_prefix }}item-{{ item.pk }}-description" class="product-description">
                                     {{ item.description|localize|rich_text }}

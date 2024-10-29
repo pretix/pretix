@@ -57,16 +57,29 @@
         </div>
 
         {% if cross_selling_data %}
-            <details class="panel panel-default cross-selling" open>
-                <summary class="panel-heading">
-                    <h3 class="panel-title">
-                        {% trans "More recommendations" %}
-                    </h3>
-                </summary>
+            {% if forms %}
+                <details class="panel panel-default cross-selling" open>
+                    <summary class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "More recommendations" %}
+                        </h3>
+                    </summary>
+            {% else %}
+                <div class="panel panel-default cross-selling">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "Our recommendations" %}
+                        </h3>
+                    </div>
+            {% endif %}
                 <div class="panel-body">
-                    {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event %}
+                    {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event headline_level=4 %}
                 </div>
-            </details>
+            {% if forms %}
+                </details>
+            {% else %}
+                </div>
+            {% endif %}
         {% endif %}
 
         <div class="row checkout-button-row">
