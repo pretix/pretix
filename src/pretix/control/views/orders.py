@@ -1943,6 +1943,29 @@ class OrderChange(OrderView):
                 )
             return True
 
+    def _process_add_fees(self, ocm):
+        if not self.add_fee_formset.is_valid():
+            return False
+        else:
+            for f in self.add_fee_formset.forms:
+                if f in self.add_fee_formset.deleted_forms or not f.has_changed():
+                    continue
+
+                f = OrderFee(
+                    fee_type=f.cleaned_data['fee_type'],
+                    value=f.cleaned_data['value'],
+                    order=ocm.order,
+                    tax_rule=f.cleaned_data['tax_rule'],
+                    description=f.cleaned_data['description'],
+                )
+                f._calculate_tax()
+                try:
+                    ocm.add_fee(f)
+                except OrderError as e:
+                    f.custom_error = str(e)
+                    return False
+        return True
+
     def _process_add_positions(self, ocm):
         if not self.add_position_formset.is_valid():
             return False
@@ -1973,30 +1996,7 @@ class OrderChange(OrderView):
                     return False
         return True
 
-    def _process_add_fees(self, ocm):
-        if not self.add_fee_formset.is_valid():
-            return False
-        else:
-            for f in self.add_fee_formset.forms:
-                if f in self.add_fee_formset.deleted_forms or not f.has_changed():
-                    continue
-
-                f = OrderFee(
-                    fee_type=f.cleaned_data['fee_type'],
-                    value=f.cleaned_data['value'],
-                    order=ocm.order,
-                    tax_rule=f.cleaned_data['tax_rule'],
-                    description=f.cleaned_data['description'],
-                )
-                f._calculate_tax()
-                try:
-                    ocm.add_fee(f)
-                except OrderError as e:
-                    f.custom_error = str(e)
-                    return False
-        return True
-
-    def _process_fees(self, ocm):
+    def _process_change_fees(self, ocm):
         for f in self.fees:
             if not f.form.is_valid():
                 return False
@@ -2017,7 +2017,7 @@ class OrderChange(OrderView):
                 return False
         return True
 
-    def _process_change(self, ocm):
+    def _process_change_positions(self, ocm):
         for p in self.positions:
             if not p.form.is_valid():
                 return False
@@ -2098,10 +2098,10 @@ class OrderChange(OrderView):
             notify=notify,
             reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True
         )
-        form_valid = (self._process_add_positions(ocm) and
-                      self._process_add_fees(ocm) and
-                      self._process_fees(ocm) and
-                      self._process_change(ocm) and
+        form_valid = (self._process_add_fees(ocm) and
+                      self._process_add_positions(ocm) and
+                      self._process_change_fees(ocm) and
+                      self._process_change_positions(ocm) and
                       self._process_other(ocm))
 
         if not form_valid:
