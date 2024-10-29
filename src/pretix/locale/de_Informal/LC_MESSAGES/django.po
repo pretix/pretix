@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-10-28 11:53+0000\n"
+"PO-Revision-Date: 2024-10-29 09:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -32013,10 +32013,8 @@ msgid "More recommendations"
 msgstr "Empfehlungen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:71
-#, fuzzy
-#| msgid "More recommendations"
 msgid "Our recommendations"
-msgstr "Empfehlungen"
+msgstr "Unsere Empfehlungen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:89
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:201
