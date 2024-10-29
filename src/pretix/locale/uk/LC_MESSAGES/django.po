@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-28 11:31+0000\n"
+"POT-Creation-Date: 2024-10-29 08:53+0000\n"
 "PO-Revision-Date: 2024-05-23 14:03+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -15821,7 +15821,7 @@ msgstr "Це замовлення було створено шляхом под�
 
 #: pretix/control/logdisplay.py:219 pretix/control/logdisplay.py:221
 #: pretix/control/logdisplay.py:631 pretix/control/logdisplay.py:633
-#: pretix/control/logdisplay.py:661 pretix/control/logdisplay.py:663
+#: pretix/control/logdisplay.py:662 pretix/control/logdisplay.py:664
 msgid "(unknown)"
 msgstr "(невідомо)"
 
@@ -16992,7 +16992,7 @@ msgid "Position #{posid} has been printed at {datetime} with type \"{type}\"."
 msgstr ""
 "Позицію #{posid} було зареєстровано в {datetime} для списку \"{list}\"."
 
-#: pretix/control/logdisplay.py:666
+#: pretix/control/logdisplay.py:667
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
@@ -17000,90 +17000,90 @@ msgid ""
 msgstr ""
 "Позицію #{posid} було зареєстровано вручну о {datetime} у списку \"{list}\"."
 
-#: pretix/control/logdisplay.py:671
+#: pretix/control/logdisplay.py:672
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
 "Позицію #{posid} було знову зареєстровано о {datetime} у списку \"{list}\"."
 
-#: pretix/control/logdisplay.py:678
+#: pretix/control/logdisplay.py:679
 #, python-brace-format
 msgid "{user} has been added to the team."
 msgstr "{user} додано до команди."
 
-#: pretix/control/logdisplay.py:681
+#: pretix/control/logdisplay.py:682
 #, python-brace-format
 msgid "{user} has been removed from the team."
 msgstr "{user} вилучено з команди."
 
-#: pretix/control/logdisplay.py:684
+#: pretix/control/logdisplay.py:685
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
 msgstr ""
 "{user} приєднався до команди за запрошенням, надісланим на адресу {email}."
 
-#: pretix/control/logdisplay.py:689
+#: pretix/control/logdisplay.py:690
 #, python-brace-format
 msgid "{user} has been invited to the team."
 msgstr "{user} запрошено до команди."
 
-#: pretix/control/logdisplay.py:692
+#: pretix/control/logdisplay.py:693
 #, python-brace-format
 msgid "Invite for {user} has been resent."
 msgstr "Запрошення для користувача {user} надіслано повторно."
 
-#: pretix/control/logdisplay.py:695
+#: pretix/control/logdisplay.py:696
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
 msgstr "Запрошення для користувача {user} відкликане."
 
-#: pretix/control/logdisplay.py:698
+#: pretix/control/logdisplay.py:699
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
 msgstr "Токен \"{name}\" було створено."
 
-#: pretix/control/logdisplay.py:701
+#: pretix/control/logdisplay.py:702
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
 msgstr "Токен\"{name}\" був відкликаний."
 
-#: pretix/control/logdisplay.py:704
+#: pretix/control/logdisplay.py:705
 msgid "Your account settings have been changed."
 msgstr "Налаштування Вашого аккауту було змінено."
 
-#: pretix/control/logdisplay.py:706 pretix/control/views/user.py:252
+#: pretix/control/logdisplay.py:707 pretix/control/views/user.py:252
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "Ваша електронна адреса була змінена на {email}."
 
-#: pretix/control/logdisplay.py:708 pretix/control/views/user.py:249
+#: pretix/control/logdisplay.py:709 pretix/control/views/user.py:249
 msgid "Your password has been changed."
 msgstr "Ваш пароль було змінено."
 
-#: pretix/control/logdisplay.py:710
+#: pretix/control/logdisplay.py:711
 msgid "Your account has been enabled."
 msgstr "Ваш аккаунт активовано."
 
-#: pretix/control/logdisplay.py:712
+#: pretix/control/logdisplay.py:713
 msgid "Your account has been disabled."
 msgstr "Ваш аккаунт не працює."
 
-#: pretix/control/logdisplay.py:716
+#: pretix/control/logdisplay.py:717
 msgid "You impersonated {}."
 msgstr "Ви виказували себе за {}."
 
-#: pretix/control/logdisplay.py:719
+#: pretix/control/logdisplay.py:720
 msgid "You stopped impersonating {}."
 msgstr "Ви припинили видавати себе за {}."
 
-#: pretix/control/logdisplay.py:725
+#: pretix/control/logdisplay.py:726
 #, fuzzy
 #| msgid "Blocked Seats"
 msgid "Blocked manually"
 msgstr "Заблоковані місця"
 
-#: pretix/control/logdisplay.py:727
+#: pretix/control/logdisplay.py:728
 msgid "Blocked because of an API integration"
 msgstr ""
 
@@ -17419,7 +17419,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/reauth.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:11
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:45
-#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:81
+#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:94
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:150
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:89
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:135
@@ -31731,13 +31731,19 @@ msgstr "Зараз ми намагаємося забронювати ці до�
 msgid "Additional options for"
 msgstr "Додаткові налаштування"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:63
+#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:64
 #, fuzzy
 #| msgid "Top recommendation"
 msgid "More recommendations"
 msgstr "Найкраща рекомендація"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:76
+#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:71
+#, fuzzy
+#| msgid "Top recommendation"
+msgid "Our recommendations"
+msgstr "Найкраща рекомендація"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:89
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:201
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:145
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:84

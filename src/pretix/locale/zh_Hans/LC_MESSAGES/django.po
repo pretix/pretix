@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-28 11:31+0000\n"
+"POT-Creation-Date: 2024-10-29 08:53+0000\n"
 "PO-Revision-Date: 2024-04-10 23:00+0000\n"
 "Last-Translator: Shiiko <shiiko@xlclan.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -15834,7 +15834,7 @@ msgstr "此订单是通过拆分订单{order}创建的"
 
 #: pretix/control/logdisplay.py:219 pretix/control/logdisplay.py:221
 #: pretix/control/logdisplay.py:631 pretix/control/logdisplay.py:633
-#: pretix/control/logdisplay.py:661 pretix/control/logdisplay.py:663
+#: pretix/control/logdisplay.py:662 pretix/control/logdisplay.py:664
 msgid "(unknown)"
 msgstr "（未知）"
 
@@ -17078,94 +17078,94 @@ msgstr "列表\"{list}\"上的位置 #{posid}的签入已恢复。"
 msgid "Position #{posid} has been printed at {datetime} with type \"{type}\"."
 msgstr "位置 #{posid}已在{datetime}处签入列表“{list}”。"
 
-#: pretix/control/logdisplay.py:666
+#: pretix/control/logdisplay.py:667
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr "位置 #{posid}已在{datetime}列表\"{list}\"手动签入。"
 
-#: pretix/control/logdisplay.py:671
+#: pretix/control/logdisplay.py:672
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr "位置 #{posid}已在{datetime}列表\"{list}\"再次签入。"
 
-#: pretix/control/logdisplay.py:678
+#: pretix/control/logdisplay.py:679
 #, python-brace-format
 msgid "{user} has been added to the team."
 msgstr "{user}已添加到团队中。"
 
-#: pretix/control/logdisplay.py:681
+#: pretix/control/logdisplay.py:682
 #, python-brace-format
 msgid "{user} has been removed from the team."
 msgstr "{user}已从团队中删除。"
 
-#: pretix/control/logdisplay.py:684
+#: pretix/control/logdisplay.py:685
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
 msgstr "{user}已使用发送到{email}的邀请加入了团队。"
 
-#: pretix/control/logdisplay.py:689
+#: pretix/control/logdisplay.py:690
 #, python-brace-format
 msgid "{user} has been invited to the team."
 msgstr "{user}已被邀请加入团队。"
 
-#: pretix/control/logdisplay.py:692
+#: pretix/control/logdisplay.py:693
 #, fuzzy, python-brace-format
 #| msgid "The invite for {user} has been revoked."
 msgid "Invite for {user} has been resent."
 msgstr "{user}的邀请已撤销。"
 
-#: pretix/control/logdisplay.py:695
+#: pretix/control/logdisplay.py:696
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
 msgstr "{user}的邀请已撤销。"
 
-#: pretix/control/logdisplay.py:698
+#: pretix/control/logdisplay.py:699
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
 msgstr "已创建令牌\"{name}\"。"
 
-#: pretix/control/logdisplay.py:701
+#: pretix/control/logdisplay.py:702
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
 msgstr "已撤销令牌\"{name}\"。"
 
-#: pretix/control/logdisplay.py:704
+#: pretix/control/logdisplay.py:705
 msgid "Your account settings have been changed."
 msgstr "您的帐户设置已更改。"
 
-#: pretix/control/logdisplay.py:706 pretix/control/views/user.py:252
+#: pretix/control/logdisplay.py:707 pretix/control/views/user.py:252
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "您的电子邮件地址已更改为{email}。"
 
-#: pretix/control/logdisplay.py:708 pretix/control/views/user.py:249
+#: pretix/control/logdisplay.py:709 pretix/control/views/user.py:249
 msgid "Your password has been changed."
 msgstr "您的密码已更改。"
 
-#: pretix/control/logdisplay.py:710
+#: pretix/control/logdisplay.py:711
 msgid "Your account has been enabled."
 msgstr "您的帐户已启用。"
 
-#: pretix/control/logdisplay.py:712
+#: pretix/control/logdisplay.py:713
 msgid "Your account has been disabled."
 msgstr "您的帐户已被禁用。"
 
-#: pretix/control/logdisplay.py:716
+#: pretix/control/logdisplay.py:717
 msgid "You impersonated {}."
 msgstr "您冒充了{}。"
 
-#: pretix/control/logdisplay.py:719
+#: pretix/control/logdisplay.py:720
 msgid "You stopped impersonating {}."
 msgstr "您停止冒充{}。"
 
-#: pretix/control/logdisplay.py:725
+#: pretix/control/logdisplay.py:726
 msgid "Blocked manually"
 msgstr ""
 
-#: pretix/control/logdisplay.py:727
+#: pretix/control/logdisplay.py:728
 msgid "Blocked because of an API integration"
 msgstr ""
 
@@ -17524,7 +17524,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/reauth.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:11
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:45
-#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:81
+#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:94
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:150
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:89
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:135
@@ -32688,13 +32688,19 @@ msgstr "我们现在正在尝试为您预订这些附加组件！"
 msgid "Additional options for"
 msgstr "其他设置"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:63
+#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:64
 #, fuzzy
 #| msgid "Order code"
 msgid "More recommendations"
 msgstr "订单代码"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:76
+#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:71
+#, fuzzy
+#| msgid "Order code"
+msgid "Our recommendations"
+msgstr "订单代码"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_addons.html:89
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:201
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:145
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:84
