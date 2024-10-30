@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-09-18 14:02+0000\n"
+"PO-Revision-Date: 2024-10-30 19:00+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.1\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -22131,7 +22131,7 @@ msgid ""
 "After starting this operation, depending on the size of your event, it might "
 "take a few minutes or longer until all orders are processed."
 msgstr ""
-"Efter att du har startat denna operation kan det, beroende på storleken på "
+"Efter att du har startat denna process kan det, beroende på storleken på "
 "ditt evenemang, ta några minuter eller längre tid innan alla bokningar är "
 "behandlade."
 
@@ -31866,7 +31866,7 @@ msgstr "Ändra kontaktinformation"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:167
 msgid "Confirmations"
-msgstr "Bekräftelser"
+msgstr "Villkor"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:185
 msgid ""
