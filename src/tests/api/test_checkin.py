@@ -253,7 +253,7 @@ def test_list_list(token_client, organizer, event, clist, item, subevent, django
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
 
-    with django_assert_num_queries(12):
+    with django_assert_num_queries(11):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
