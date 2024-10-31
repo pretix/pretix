@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-10-31 17:00+0000\n"
+"PO-Revision-Date: 2024-11-01 02:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -4670,9 +4670,8 @@ msgid "{category} ({category_type})"
 msgstr "{category} {category_type}"
 
 #: pretix/base/models/items.py:155
-#, fuzzy
 msgid "Add-on category"
-msgstr "Categoría del producto"
+msgstr "Categoría de productos adicionales"
 
 #: pretix/base/models/items.py:222 pretix/base/models/items.py:278
 msgid "Disable product for this date"
@@ -6057,10 +6056,8 @@ msgid "Ticket"
 msgstr "Entrada"
 
 #: pretix/base/models/orders.py:3405
-#, fuzzy
-#| msgid "Verification"
 msgid "Certificate"
-msgstr "Comprobación"
+msgstr "Certificado"
 
 #: pretix/base/models/orders.py:3406 pretix/control/views/event.py:367
 #: pretix/control/views/event.py:372
@@ -14192,9 +14189,8 @@ msgstr ""
 "la página principal."
 
 #: pretix/control/forms/item.py:103
-#, fuzzy
 msgid "Add-on product category"
-msgstr "Categoría del producto"
+msgstr "Categoría de productos adicionales"
 
 #: pretix/control/forms/item.py:104
 msgid ""
@@ -14415,9 +14411,8 @@ msgid "Use value from product"
 msgstr "Crear un primer producto"
 
 #: pretix/control/forms/item.py:1081
-#, fuzzy
 msgid "Add-ons"
-msgstr "Add-ons"
+msgstr "Productos adicionales"
 
 #: pretix/control/forms/item.py:1105
 msgid "You added the same add-on category twice"
@@ -14527,9 +14522,8 @@ msgid "Create orders as test mode orders"
 msgstr "Crear los pedidos en modo de prueba"
 
 #: pretix/control/forms/orders.py:83
-#, fuzzy
 msgid "Confirm order regardless of payment"
-msgstr "Cancelar el pago"
+msgstr "Confirmar pedido aunque se haya realizado el pago"
 
 #: pretix/control/forms/orders.py:84
 msgid ""
@@ -15003,10 +14997,11 @@ msgstr ""
 "permiso para cambiar de equipo y permisos."
 
 #: pretix/control/forms/organizer.py:318 pretix/control/forms/organizer.py:351
-#, fuzzy
 msgid ""
 "Your device will not have access to anything, please select some events."
-msgstr "Actualmente no tiene acceso a ningún evento."
+msgstr ""
+"El dispositivo no tendrá acceso a los datos, por favor seleccione algunos "
+"eventos."
 
 #: pretix/control/forms/organizer.py:498 pretix/plugins/stripe/payment.py:311
 msgid "experimental"
@@ -15049,10 +15044,9 @@ msgid "Phone"
 msgstr "Teléfono"
 
 #: pretix/control/forms/organizer.py:955
-#, fuzzy
 msgctxt "sso_oidc"
 msgid "Base URL"
-msgstr "URL destino"
+msgstr "URL de base"
 
 #: pretix/control/forms/organizer.py:959
 msgctxt "sso_oidc"
@@ -15240,7 +15234,6 @@ msgstr ""
 "disponibilidad."
 
 #: pretix/control/forms/subevents.py:347
-#, fuzzy
 msgid "Available_until"
 msgstr "Disponible hasta"
 
