@@ -20,13 +20,40 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+from collections import OrderedDict
 
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
+from pretix.api.signals import register_device_security_profile
+
 logger = logging.getLogger(__name__)
+_ALL_PROFILES = None
 
 
-class FullAccessSecurityProfile:
+class BaseSecurityProfile:
+    @property
+    def identifier(self) -> str:
+        """
+        Unique identifier for this profile.
+        """
+        raise NotImplementedError()
+
+    @property
+    def verbose_name(self) -> str:
+        """
+        Human-readable name (can be a ``gettext_lazy`` object).
+        """
+        raise NotImplementedError()
+
+    def is_allowed(self, request) -> bool:
+        """
+        Return whether a given request should be allowed.
+        """
+        raise NotImplementedError()
+
+
+class FullAccessSecurityProfile(BaseSecurityProfile):
     identifier = 'full'
     verbose_name = _('Full device access (reading and changing orders and gift cards, reading of products and settings)')
 
@@ -34,7 +61,7 @@ class FullAccessSecurityProfile:
         return True
 
 
-class AllowListSecurityProfile:
+class AllowListSecurityProfile(BaseSecurityProfile):
     allowlist = ()
 
     def is_allowed(self, request):
@@ -233,12 +260,28 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
     )
 
 
-DEVICE_SECURITY_PROFILES = {
-    k.identifier: k() for k in (
-        FullAccessSecurityProfile,
-        PretixScanSecurityProfile,
-        PretixScanNoSyncSecurityProfile,
-        PretixScanNoSyncNoSearchSecurityProfile,
-        PretixPosSecurityProfile,
+def get_all_security_profiles():
+    global _ALL_PROFILES
+
+    if _ALL_PROFILES:
+        return _ALL_PROFILES
+
+    types = OrderedDict()
+    for recv, ret in register_device_security_profile.send(None):
+        if isinstance(ret, (list, tuple)):
+            for r in ret:
+                types[r.identifier] = r
+        else:
+            types[ret.identifier] = ret
+    _ALL_PROFILES = types
+    return types
+
+
+@receiver(register_device_security_profile, dispatch_uid="base_register_default_security_profiles")
+def register_default_webhook_events(sender, **kwargs):
+    return (
+        FullAccessSecurityProfile(),
+        PretixScanSecurityProfile(),
+        PretixScanNoSyncSecurityProfile(),
+        PretixScanNoSyncNoSearchSecurityProfile(),
     )
-}

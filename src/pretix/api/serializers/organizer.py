@@ -29,6 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from pretix.api.auth.devicesecurity import get_all_security_profiles
 from pretix.api.serializers import AsymmetricField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
@@ -297,6 +298,7 @@ class DeviceSerializer(serializers.ModelSerializer):
     revoked = serializers.BooleanField(read_only=True)
     initialized = serializers.DateTimeField(read_only=True)
     initialization_token = serializers.DateTimeField(read_only=True)
+    security_profile = serializers.ChoiceField(choices=[], required=False, default="full")
 
     class Meta:
         model = Device
@@ -305,6 +307,10 @@ class DeviceSerializer(serializers.ModelSerializer):
             'revoked', 'name', 'created', 'initialized', 'hardware_brand', 'hardware_model',
             'os_name', 'os_version', 'software_brand', 'software_version', 'security_profile'
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['security_profile'].choices = [(k, v.verbose_name) for k, v in get_all_security_profiles().items()]
 
 
 class TeamInviteSerializer(serializers.ModelSerializer):
