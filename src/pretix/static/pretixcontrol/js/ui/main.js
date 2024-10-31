@@ -377,7 +377,7 @@ var form_handlers = function (el) {
         var dependent = $(this),
             dependency = findDependency($(this).attr("data-display-dependency"), this),
             update = function (ev) {
-                var enabled = dependency.toArray().some(function(d) {
+                var enabled = dependency.attr('disabled') ? false : dependency.toArray().some(function(d) {
                     if (d.type === 'checkbox' || d.type === 'radio') {
                         return d.checked;
                     } else if (d.type === 'select-one') {
@@ -393,12 +393,12 @@ var form_handlers = function (el) {
                         return (!!d.value && !d.value.match(/^0\.?0*$/g));
                     }
                 });
-                if (dependent.is("[data-inverse]")) {
+                if (!dependency.attr('disabled') && dependent.is("[data-inverse]")) {
                     enabled = !enabled;
                 }
                 var $toggling = dependent;
                 if (dependent.attr("data-disable-dependent")) {
-                    $toggling.attr('disabled', !enabled);
+                    $toggling.attr('disabled', !enabled).trigger("change");
                 }
                 if (dependent.get(0).tagName.toLowerCase() !== "div") {
                     $toggling = dependent.closest('.form-group');
