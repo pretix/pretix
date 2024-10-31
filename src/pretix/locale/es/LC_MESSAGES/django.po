@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-10-22 17:00+0000\n"
+"PO-Revision-Date: 2024-10-31 17:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.1\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -6226,11 +6226,13 @@ msgstr ""
 #, python-brace-format
 msgid "Seat with zone {zone}, row {row}, and number {number} has no seat ID."
 msgstr ""
+"El asiento con zona {zone}, fila {row} y número {number} no tiene "
+"identificador de asiento."
 
 #: pretix/base/models/seating.py:71
 #, python-brace-format
 msgid "Multiple seats have the same ID: {id}"
-msgstr ""
+msgstr "Varios asientos tienen el mismo ID: {id}"
 
 #: pretix/base/models/seating.py:199
 #, python-brace-format
@@ -16675,12 +16677,10 @@ msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
 msgstr "El registro #{posid} en la lista \"{list}\" ha sido revertido."
 
 #: pretix/control/logdisplay.py:644
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Position #{posid} has been scanned at {datetime} for list \"{list}\"."
+#, python-brace-format
 msgid "Position #{posid} has been printed at {datetime} with type \"{type}\"."
 msgstr ""
-"La posición #{posid} se ha escaneado a {datetime} para la lista \"{list}\"."
+"La posición #{posid} se ha imprimido el {datetime} para la lista \"{type}\"."
 
 #: pretix/control/logdisplay.py:667
 #, python-brace-format
@@ -17372,6 +17372,9 @@ msgid ""
 "check that you have completed all installation steps and your cronjob is "
 "executed correctly."
 msgstr ""
+"El componente cronjob de pretix no se ha ejecutado en las últimas horas. Por "
+"favor, compruebe que ha completado todos los pasos de instalación y que su "
+"cronjob se ejecuta correctamente."
 
 #: pretix/control/templates/pretixcontrol/base.html:435
 msgid ""
@@ -27643,7 +27646,7 @@ msgstr "Las entradas de la lista de espera han sido transferidas."
 #: pretix/helpers/daterange.py:97
 #, python-brace-format
 msgid "{date_from} – {date_to}"
-msgstr ""
+msgstr "{date_from} – {date_to}"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
@@ -27661,9 +27664,8 @@ msgid "Login from new source detected"
 msgstr "No se ha detectado ningún código de pedido"
 
 #: pretix/helpers/security.py:170
-#, fuzzy
 msgid "Unknown country"
-msgstr "Código de país desconocido."
+msgstr "País desconocido"
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"
@@ -32158,6 +32160,9 @@ msgid ""
 "A product in your cart is only sold in combination with add-on products that "
 "are no longer available. Please contact the event organizer."
 msgstr ""
+"Un producto de su cesta sólo se vende combinado con productos "
+"complementarios que ya no están disponibles. Póngase en contacto con el "
+"organizador del evento."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "We're now trying to book these add-ons for you!"
