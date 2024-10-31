@@ -1603,6 +1603,34 @@ class OrderChangeTests(SoupTest):
         self.op2.refresh_from_db()
         assert self.order.total == self.op1.price + self.op2.price
 
+    def test_add_fee_success(self):
+        old_total = self.order.total
+        r = self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'add_fee-TOTAL_FORMS': '1',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
+            'add_fee-0-do': 'on',
+            'add_fee-0-fee_type': 'other',
+            'add_fee-0-description': 'Surprise Fee',
+            'add_fee-0-value': '5.00',
+        })
+        assert r.status_code == 302
+        self.order.refresh_from_db()
+        with scopes_disabled():
+            fee = self.order.fees.get()
+        assert fee.fee_type == OrderFee.FEE_TYPE_OTHER
+        assert fee.description == 'Surprise Fee'
+        assert fee.value == Decimal('5.00')
+        assert not fee.canceled
+        assert self.order.total == old_total + 5
+
 
 @pytest.mark.django_db
 def test_check_vatid(client, env):
