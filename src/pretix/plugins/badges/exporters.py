@@ -472,7 +472,7 @@ class BadgeExporter(BaseExporter):
                      label=_('End event date'),
                      widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                      required=False,
-                     help_text=_('Only include tickets for dates on or before this date.')
+                     help_text=_('Only include tickets ordered on or before this date.')
                  )),
                 ('order_date_from',
                  forms.DateField(
