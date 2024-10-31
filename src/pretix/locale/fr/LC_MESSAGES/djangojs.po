@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:06+0000\n"
-"PO-Revision-Date: 2024-10-31 17:00+0000\n"
+"PO-Revision-Date: 2024-11-01 02:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -452,7 +452,6 @@ msgid "Product variation"
 msgstr "Variation du produit"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-#, fuzzy
 msgid "Gate"
 msgstr "Pont"
 
