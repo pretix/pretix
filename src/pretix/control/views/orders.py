@@ -1881,7 +1881,7 @@ class OrderChange(OrderView):
             can_order=False, can_delete=True, extra=0
         )
         return ff(
-            prefix='add',
+            prefix='add_position',
             order=self.order,
             items=self.items,
             data=self.request.POST if self.request.method == "POST" else None
