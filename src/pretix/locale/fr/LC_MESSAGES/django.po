@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
 "PO-Revision-Date: 2024-10-31 17:00+0000\n"
-"Last-Translator: cpoisnel <chepoisnel@gmail.com>\n"
+"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -3067,7 +3067,7 @@ msgstr "Rue et numéro"
 #: pretix/base/forms/questions.py:717 pretix/base/forms/questions.py:1059
 msgctxt "address"
 msgid "Select state"
-msgstr "Sélectionner l'état"
+msgstr "Choisir un état"
 
 #: pretix/base/forms/questions.py:1046
 msgid ""
