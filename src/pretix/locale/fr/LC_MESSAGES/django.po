@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
 "PO-Revision-Date: 2024-10-31 17:00+0000\n"
-"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
+"Last-Translator: Mossroy <mossroy@mossroy.fr>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -3947,7 +3947,7 @@ msgstr "Interdit par une règle personnalisée"
 
 #: pretix/base/models/checkin.py:362
 msgid "Ticket code revoked/changed"
-msgstr "Code du billet révoqué/modifié"
+msgstr "Code ticket révoqué/modifié"
 
 #: pretix/base/models/checkin.py:363
 msgid "Information required"
