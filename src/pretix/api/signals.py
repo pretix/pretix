@@ -39,7 +39,7 @@ instances.
 register_device_security_profile = Signal()
 """
 This signal is sent out to get all known device security_profiles. Receivers should
-return an instance of a subclass of ``pretix.api.auth.devicesceuirty.BaseSecurityProfile``
+return an instance of a subclass of ``pretix.api.auth.devicesecurity.BaseSecurityProfile``
 or a list of such instances.
 """
 
