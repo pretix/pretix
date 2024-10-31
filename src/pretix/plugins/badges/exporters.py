@@ -495,6 +495,7 @@ class BadgeExporter(BaseExporter):
                          ('name', _('Attendee name')),
                          ('company', _('Attendee company')),
                          ('code', _('Order code')),
+                         ('order_date', _('Order date')),
                          ('date', _('Event date')),
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
@@ -585,6 +586,8 @@ class BadgeExporter(BaseExporter):
             ).order_by('resolved_company', 'order__code')
         elif form_data.get('order_by') == 'code':
             qs = qs.order_by('order__code')
+        elif form_data.get('order_by') == 'order_date':
+            qs = qs.order_by('order__datetime')
         elif form_data.get('order_by') == 'date':
             qs = qs.annotate(ed=Coalesce('subevent__date_from', 'order__event__date_from')).order_by('ed', 'order__code')
         elif form_data.get('order_by', '').startswith('name:'):
