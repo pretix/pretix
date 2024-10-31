@@ -27,8 +27,10 @@
                             </div>
                         </div>
                     </div>
-                    {% bootstrap_field form.cross_selling_condition layout="control" horizontal_field_class="col-md-9" %}
-                    {% bootstrap_field form.cross_selling_match_products layout="control" %}
+                    <div data-display-dependency="#id_category_type_2,#id_category_type_3">
+                        {% bootstrap_field form.cross_selling_condition layout="control" horizontal_field_class="col-md-9" %}
+                        {% bootstrap_field form.cross_selling_match_products layout="control" %}
+                    </div>
                 </fieldset>
             </div>
             {% if category %}
