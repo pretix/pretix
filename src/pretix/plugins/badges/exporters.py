@@ -479,7 +479,7 @@ class BadgeExporter(BaseExporter):
                      label=_('Start order date'),
                      widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                      required=False,
-                     help_text=_('Only include tickets for dates on or after this date.')
+                     help_text=_('Only include tickets ordered on or after this date.')
                  )),
                 ('order_date_to',
                  forms.DateField(
