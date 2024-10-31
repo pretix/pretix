@@ -143,7 +143,9 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic
     def perform_destroy(self, instance):
+        instance.checkins.all().delete()
         instance.log_action(
             'pretix.event.checkinlist.deleted',
             user=self.request.user,
