@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-15 11:06+0000\n"
-"PO-Revision-Date: 2024-10-22 17:00+0000\n"
+"PO-Revision-Date: 2024-11-01 19:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -326,13 +326,13 @@ msgstr "Tickets válidos"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
 msgid "Currently inside"
-msgstr "Actualmente adentro"
+msgstr "Actualmente en el interior"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
-msgstr "Sí"
+msgstr "Si"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:138
@@ -570,10 +570,8 @@ msgid "Group of objects"
 msgstr "Grupo de objetos"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:899
-#, fuzzy
-#| msgid "Text object"
 msgid "Text object (deprecated)"
-msgstr "Objeto de texto"
+msgstr "Objeto texto (obsoleto)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:901
 msgid "Text box"
@@ -704,12 +702,12 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"Los elementos en su carrito de compras ya no se encuentran reservados. "
-"Puedes seguir añadiendo más productos mientras estén disponibles."
+"Los elementos en su cesta de compras ya no se encuentran reservados. Puedes "
+"seguir añadiendo más productos mientras estén disponibles."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
-msgstr "El carrito de compras ha expirado"
+msgstr "La cesta de compra ha expirado"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
