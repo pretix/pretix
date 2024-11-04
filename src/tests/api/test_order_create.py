@@ -492,6 +492,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         'refunds': [],
         'require_approval': False,
         'sales_channel': 'web',
+        'cancellation_date': None
     }
 
 

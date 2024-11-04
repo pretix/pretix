@@ -215,7 +215,7 @@ class OrderViewSetMixin:
     queryset = Order.objects.none()
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('datetime',)
-    ordering_fields = ('datetime', 'code', 'status', 'last_modified')
+    ordering_fields = ('datetime', 'code', 'status', 'last_modified', 'cancellation_date')
     filterset_class = OrderFilter
     lookup_field = 'code'
 

@@ -104,6 +104,7 @@ url                                   string                     The full URL to
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
 last_modified                         datetime                   Last modification of this object
+cancellation_date                     datetime                   Time of order creation (or ``null``)
 ===================================== ========================== =======================================================
 
 
@@ -151,6 +152,9 @@ last_modified                         datetime                   Last modificati
 
    The ``expires`` attribute can now be passed during order creation.
 
+.. versionchanged:: 2024.11
+
+   The ``cancellation_date`` attribute has been added and can also be used as an ordering key.
 
 .. _order-position-resource:
 
@@ -464,14 +468,15 @@ List of all orders
                 "provider": "banktransfer"
               }
             ],
-            "refunds": []
+            "refunds": [],
+            "cancellation_date": null
           }
         ]
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``datetime``, ``code``,
-                           ``last_modified``, and ``status``. Default: ``datetime``
+                           ``last_modified``, ``status`` and ``cancellation_date``. Default: ``datetime``
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
    :query string search: Only return orders matching a given search query (matching for names, email addresses, and company names)
@@ -703,7 +708,8 @@ Fetching individual orders
             "provider": "banktransfer"
           }
         ],
-        "refunds": []
+        "refunds": [],
+        "cancellation_date": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
