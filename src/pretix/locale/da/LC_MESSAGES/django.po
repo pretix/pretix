@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-11-04 11:19+0000\n"
-"Last-Translator: Casper Schack <cas@dcbib.dk>\n"
+"PO-Revision-Date: 2024-11-04 13:44+0000\n"
+"Last-Translator: Katrine Tella <ktl@hjoerring.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -16642,8 +16642,9 @@ msgstr "Login"
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
+#, fuzzy
 msgid "Register"
-msgstr "Registrer"
+msgstr "Tilmeld"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -32118,10 +32119,9 @@ msgstr "Aktivér venteliste"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:217
 #: pretix/presale/templates/pretixpresale/event/voucher.html:437
-#, fuzzy
 msgctxt "free_tickets"
 msgid "Register"
-msgstr "Registrer"
+msgstr "Tilmeld"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:222
 #: pretix/presale/templates/pretixpresale/event/voucher.html:442
