@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-11-04 13:44+0000\n"
+"PO-Revision-Date: 2024-11-04 19:55+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -12252,7 +12252,7 @@ msgstr "Código del pedido:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
 msgid "created by"
-msgstr "creado por"
+msgstr "creado con"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:37
 #: pretix/base/templates/pretixbase/email/order_details.html:132
