@@ -104,7 +104,7 @@ url                                   string                     The full URL to
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
 last_modified                         datetime                   Last modification of this object
-cancellation_date                     datetime                   Time of order creation (or ``null``)
+cancellation_date                     datetime                   Time of order cancellation (or ``null``)
 ===================================== ========================== =======================================================
 
 
