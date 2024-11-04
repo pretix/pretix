@@ -104,7 +104,10 @@ url                                   string                     The full URL to
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
 last_modified                         datetime                   Last modification of this object
-cancellation_date                     datetime                   Time of order cancellation (or ``null``)
+cancellation_date                     datetime                   Time of order cancellation (or ``null``). **Note**:
+                                                                 Will not be set for partial cancellations and is not
+                                                                 reliable for orders that have been cancelled,
+                                                                 reactivated and cancelled again.
 ===================================== ========================== =======================================================
 
 
