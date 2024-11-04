@@ -753,12 +753,12 @@ class OrderSerializer(I18nAwareModelSerializer):
             'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
-            'url', 'customer', 'valid_if_pending', 'api_meta'
+            'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date'
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'positions', 'downloads', 'customer',
-            'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel'
+            'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel', 'cancellation_date'
         )
 
     def __init__(self, *args, **kwargs):

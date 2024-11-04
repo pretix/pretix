@@ -337,6 +337,7 @@ TEST_ORDER_RES = {
     "downloads": [],
     "payments": TEST_PAYMENTS_RES,
     "refunds": TEST_REFUNDS_RES,
+    "cancellation_date": None,
 }
 
 
