@@ -377,7 +377,8 @@ var form_handlers = function (el) {
         var dependent = $(this),
             dependency = findDependency($(this).attr("data-display-dependency"), this),
             update = function (ev) {
-                var enabled = dependency.attr('disabled') ? false : dependency.toArray().some(function(d) {
+                var enabled = dependency.toArray().some(function(d) {
+                    if (dependency.attr('disabled')) return false;
                     if (d.type === 'checkbox' || d.type === 'radio') {
                         return d.checked;
                     } else if (d.type === 'select-one') {
