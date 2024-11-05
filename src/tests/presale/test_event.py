@@ -405,11 +405,11 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
             SubEventItem.objects.create(subevent=se1, item=item, price=12)
 
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
-        self.assertIn("12.00", resp.rendered_content)
-        self.assertNotIn("15.00", resp.rendered_content)
+        self.assertIn("€12.00", resp.rendered_content)
+        self.assertNotIn("€15.00", resp.rendered_content)
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
-        self.assertIn("15.00", resp.rendered_content)
-        self.assertNotIn("12.00", resp.rendered_content)
+        self.assertIn("€15.00", resp.rendered_content)
+        self.assertNotIn("€12.00", resp.rendered_content)
 
     def test_subevent_net_prices(self):
         self.event.has_subevents = True
@@ -429,14 +429,14 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
 
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
         doc = BeautifulSoup(resp.rendered_content, "lxml")
-        self.assertIn("10.08", doc.text)
-        self.assertNotIn("12.00", doc.text)
-        self.assertNotIn("15.00", doc.text)
+        self.assertIn("€10.08", doc.text)
+        self.assertNotIn("€12.00", doc.text)
+        self.assertNotIn("€15.00", doc.text)
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
         doc = BeautifulSoup(resp.rendered_content, "lxml")
-        self.assertIn("12.61", doc.text)
-        self.assertNotIn("12.00", doc.text)
-        self.assertNotIn("15.00", doc.text)
+        self.assertIn("€12.61", doc.text)
+        self.assertNotIn("€12.00", doc.text)
+        self.assertNotIn("€15.00", doc.text)
 
     def test_variations_subevent_disabled(self):
         self.event.has_subevents = True
