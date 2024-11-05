@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-11-04 00:00+0000\n"
-"Last-Translator: Mika Andrianarijaona <mikaoelitiana@gmail.com>\n"
+"PO-Revision-Date: 2024-11-05 20:00+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -1925,7 +1925,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1585
 #: pretix/control/forms/organizer.py:115
 msgid "Event slug"
-msgstr "Nom court de l'évènement"
+msgstr "Étiquette de l'événement"
 
 #: pretix/base/exporters/orderlist.py:261 pretix/base/notifications.py:201
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:25
