@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-11-04 19:55+0000\n"
+"PO-Revision-Date: 2024-11-05 20:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -639,7 +639,7 @@ msgstr "{system} Usuario"
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
 msgid "E-mail"
-msgstr "Correo electrónico"
+msgstr "E-mail"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:672
@@ -7291,7 +7291,7 @@ msgstr "Ciudad Aleatoria"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
-msgstr "Dirección de facturación empresa"
+msgstr "Dirección de facturación de la empresa"
 
 #: pretix/base/pdf.py:341
 msgid "Sesame Street 42"
@@ -7911,7 +7911,7 @@ msgstr ""
 #: pretix/base/services/checkin.py:217
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:69
 msgid "Unknown reason"
-msgstr "Razón desconocida"
+msgstr "Motivo desconocido"
 
 #: pretix/base/services/checkin.py:273
 #, python-brace-format
@@ -14228,7 +14228,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:141 pretix/control/forms/item.py:211
 msgid "This field is required"
-msgstr "Este campo es obligatorio"
+msgstr "Campo obligatorio"
 
 #: pretix/control/forms/item.py:213
 msgid "Dependencies between questions are not supported during check-in."
@@ -29210,7 +29210,7 @@ msgstr "Última actualización"
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:71
 msgid "Total value"
-msgstr "Valor total"
+msgstr "Importe total"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
@@ -29589,7 +29589,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:5
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
 msgid "Pay order"
-msgstr "Pagar pedido"
+msgstr "Orden de pago"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:16
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:8
@@ -30696,7 +30696,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:337
 msgid "Credit card payments"
-msgstr "Pagos con tarjeta de crédito"
+msgstr "Pagos con tarjeta"
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1531
 msgid "iDEAL"
@@ -30848,7 +30848,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:724
 msgid "No payment information found."
-msgstr "No se ha encontrado información de pago."
+msgstr "No se han encontrado datos de pago."
 
 #: pretix/plugins/stripe/payment.py:762
 msgid ""
@@ -31201,7 +31201,7 @@ msgstr "Stripe Connect"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr "El monto total será retirado de su tarjeta de crédito."
+msgstr "El importe total se retirará de su tarjeta de crédito."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
@@ -31232,9 +31232,9 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
-"Después de que haya enviado su pedido, le redirigiremos al proveedor de "
-"servicios de pago para completar su pago. A continuación, se le redirigirá "
-"de nuevo aquí para obtener sus entradas."
+"Después de enviar su pedido, le redirigiremos al proveedor de servicios de "
+"pago para que complete el pago. A continuación, se le redirigirá de nuevo "
+"aquí para obtener sus entradas."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
@@ -31368,20 +31368,20 @@ msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
-"Estamos esperando una respuesta del proveedor de pagos con respecto a su "
-"pago. Póngase en contacto con nosotros si esto tarda más de unos días."
+"Se esta esperando una respuesta del proveedor de pagos en relación con su "
+"pago. Póngase en contacto con nosotros si tarda más de unos días."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:42
 msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
-"Necesitas confirmar tu pago. Haga clic en el enlace a continuación para "
-"hacerlo o iniciar un nuevo pago."
+"Debe confirmar su pago. Haga clic en el siguiente enlace para hacerlo o "
+"inicie un nuevo pago."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:48
 msgid "Confirm payment"
-msgstr "Confirmación de pago"
+msgstr "Confirmar pago"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:54
 msgid ""
@@ -31394,7 +31394,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:62
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr "La operación de pago no pudo completarse por el siguiente motivo:"
+msgstr "La operación de pago no ha podido completarse por el siguiente motivo:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
