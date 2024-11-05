@@ -550,7 +550,7 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'type': bool,
         'form_kwargs': dict(
-            label=_("Require a business addresses"),
+            label=_("Require a business address"),
             help_text=_('This will require users to enter a company name.'),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_required'}),
         )

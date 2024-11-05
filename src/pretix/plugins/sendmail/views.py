@@ -198,7 +198,7 @@ class BaseSenderView(EventPermissionRequiredMixin, FormView):
                             escape(v.render_sample(self.request.event))
                         )
 
-                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
+                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=set())
                     preview_subject = prefix_subject(self.request.event, format_map(subject, context_dict), highlight=True)
                     message = form.cleaned_data['message'].localize(l)
                     preview_text = markdown_compile_email(format_map(message, context_dict))
@@ -616,7 +616,7 @@ class CreateRule(EventPermissionRequiredMixin, CreateView):
                             escape(v.render_sample(self.request.event))
                         )
 
-                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
+                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=set())
                     preview_subject = prefix_subject(self.request.event, format_map(subject, context_dict), highlight=True)
                     template = form.cleaned_data['template'].localize(l)
                     preview_text = markdown_compile_email(format_map(template, context_dict))
@@ -692,7 +692,7 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
                         escape(v.render_sample(self.request.event))
                     )
 
-                subject = bleach.clean(self.object.subject.localize(lang), tags=[])
+                subject = bleach.clean(self.object.subject.localize(lang), tags=set())
                 preview_subject = prefix_subject(self.request.event, format_map(subject, placeholders), highlight=True)
                 template = self.object.template.localize(lang)
                 preview_text = markdown_compile_email(format_map(template, placeholders))

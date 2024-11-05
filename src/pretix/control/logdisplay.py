@@ -613,7 +613,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type == 'pretix.event.order.consent':
         return _('The user confirmed the following message: "{}"').format(
-            bleach.clean(logentry.parsed_data.get('msg'), tags=[], strip=True)
+            bleach.clean(logentry.parsed_data.get('msg'), tags=set(), strip=True)
         )
 
     if logentry.action_type == 'pretix.event.order.canceled':
