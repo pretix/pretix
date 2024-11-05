@@ -394,7 +394,7 @@ var form_handlers = function (el) {
                         return (!!d.value && !d.value.match(/^0\.?0*$/g));
                     }
                 });
-                if (!dependency.attr('disabled') && dependent.is("[data-inverse]")) {
+                if (dependent.is("[data-inverse]")) {
                     enabled = !enabled;
                 }
                 var $toggling = dependent;
