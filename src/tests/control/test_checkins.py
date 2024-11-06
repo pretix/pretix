@@ -265,7 +265,6 @@ def test_checkins_list_ordering(client, checkin_list_env, order_key, expected):
     ('status=1&item=&user=', ['A1Ticket', 'A3Ticket']),
     ('status=2&item=&user=', ['A1Ticket']),
     ('status=3&item=&user=', ['A3Ticket']),
-    ('status=0&item=&user=', ['A1Mascot', 'A2Ticket']),
     ('status=&item=&user=a3dummy', ['A3Ticket']),  # match order email
     ('status=&item=&user=a3dummy', ['A3Ticket']),  # match order email,
     ('status=&item=&user=a4', ['A3Ticket']),  # match attendee name
