@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-11-04 00:00+0000\n"
+"PO-Revision-Date: 2024-11-07 00:00+0000\n"
 "Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -3171,7 +3171,7 @@ msgstr "Voorbeeld: %s"
 #: pretix/base/forms/widgets.py:71
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Beschikbare plaatsaanduidingen: {list}"
+msgstr "Beschikbare tijdelijke aanduidingen: {list}"
 
 #: pretix/base/forms/widgets.py:214 pretix/base/models/items.py:1642
 #: pretix/base/reldate.py:201 pretix/plugins/checkinlists/exporters.py:751
@@ -3448,10 +3448,9 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr "Ongeldige instelling voor kolom \"{header}\"."
 
 #: pretix/base/modelimport.py:199
-#, fuzzy, python-brace-format
-#| msgid "Could not parse {value} as a date and time."
+#, python-brace-format
 msgid "Could not parse {value} as a yes/no value."
-msgstr "Kon {value} niet als datum en tijd herkennen."
+msgstr "Kon {value} niet als ja-/nee waarde herkennen."
 
 #: pretix/base/modelimport.py:222
 #, python-brace-format
@@ -3630,10 +3629,8 @@ msgid "Customer"
 msgstr "Klant"
 
 #: pretix/base/modelimport_orders.py:710
-#, fuzzy
-#| msgid "No matching seat was found."
 msgid "No matching customer was found."
-msgstr "Geen overeenkomende stoel gevonden."
+msgstr "Geen overeenkomende klant gevonden."
 
 #: pretix/base/modelimport_vouchers.py:50 pretix/base/models/vouchers.py:488
 msgid "A voucher with this code already exists."
@@ -3646,10 +3643,8 @@ msgid "Maximum usages"
 msgstr "Maximum aantal keren te gebruiken"
 
 #: pretix/base/modelimport_vouchers.py:79
-#, fuzzy
-#| msgid "Maximum number of items per order"
 msgid "The maximum number of usages must be set."
-msgstr "Maximale aantal producten per bestelling"
+msgstr "Het maximale aantal benutting moet ingesteld zijn."
 
 #: pretix/base/modelimport_vouchers.py:88 pretix/base/models/vouchers.py:205
 msgid "Minimum usages"
@@ -3798,12 +3793,12 @@ msgstr "Wachtwoord herstel"
 
 #: pretix/base/models/checkin.py:55
 msgid "All products (including newly created ones)"
-msgstr "Alle producten (inclusief nieuw gemaakte)"
+msgstr "Alle producten (inclusief nieuwe gemaakte)"
 
 #: pretix/base/models/checkin.py:56 pretix/plugins/badges/exporters.py:436
 #: pretix/plugins/checkinlists/exporters.py:842
 msgid "Limit to products"
-msgstr "Beperk tot producten"
+msgstr "Tot producten limiteren"
 
 #: pretix/base/models/checkin.py:60
 msgid ""
@@ -7349,7 +7344,7 @@ msgstr "Voorbeeldstad"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
-msgstr "Bedrijf factuuradres"
+msgstr "Factuuradres bedrijf"
 
 #: pretix/base/pdf.py:341
 msgid "Sesame Street 42"
@@ -26862,7 +26857,9 @@ msgstr "De nieuwe inchecklijst is aangemaakt."
 #: pretix/plugins/stripe/views.py:682
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
-msgstr "We konden uw wijzigingen niet opslaan. Zie hieronder voor details."
+msgstr ""
+"De wijzigingen konden niet worden opgeslagen, zie hieronder voor meer "
+"informatie."
 
 #: pretix/control/views/checkin.py:418 pretix/control/views/checkin.py:455
 msgid "The requested list does not exist."
@@ -27593,8 +27590,7 @@ msgstr[1] ""
 #: pretix/presale/views/order.py:1279 pretix/presale/views/order.py:1662
 #: pretix/presale/views/order.py:1693
 msgid "Unknown order code or not authorized to access this order."
-msgstr ""
-"Onbekende bestelcode of niet gemachtigd om deze bestelling te bekijken."
+msgstr "Ongeldig bestelnummer of geen toegang tot deze bestelling."
 
 #: pretix/control/views/orders.py:674 pretix/presale/views/order.py:1111
 msgid "Ticket download is not enabled for this product."
