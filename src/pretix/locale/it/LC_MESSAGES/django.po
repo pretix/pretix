@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-11-04 00:00+0000\n"
+"PO-Revision-Date: 2024-11-07 00:00+0000\n"
 "Last-Translator: Damiano <estux@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -4634,7 +4634,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:126
 msgid "Only show if the cart contains one of the following products"
-msgstr ""
+msgstr "Mostra solo se il carrello contiene uno dei seguenti prodotti"
 
 #: pretix/base/models/items.py:129
 msgid "Cross-selling condition"
@@ -4666,22 +4666,21 @@ msgstr "Categoria prodotto"
 
 #: pretix/base/models/items.py:222 pretix/base/models/items.py:278
 msgid "Disable product for this date"
-msgstr ""
+msgstr "Disattiva il prodotto per questa data"
 
 #: pretix/base/models/items.py:226 pretix/base/models/items.py:282
 #: pretix/base/models/items.py:560
 msgid "This product will not be sold before the given date."
-msgstr ""
+msgstr "Questo prodotto non sarà venduto prima della data indicata."
 
 #: pretix/base/models/items.py:231 pretix/base/models/items.py:287
 #: pretix/base/models/items.py:570
 msgid "This product will not be sold after the given date."
-msgstr ""
+msgstr "Questo prodotto non sarà venduto dopo la data indicata."
 
 #: pretix/base/models/items.py:436
-#, fuzzy
 msgid "Event validity (default)"
-msgstr "(Default per l'evento)"
+msgstr "Validità dell'evento (predefinita)"
 
 #: pretix/base/models/items.py:437
 #, fuzzy
@@ -4690,14 +4689,12 @@ msgstr "Cliente"
 
 #: pretix/base/models/items.py:438
 msgid "Dynamic validity"
-msgstr ""
+msgstr "Validità dinamica"
 
 #: pretix/base/models/items.py:444 pretix/control/forms/item.py:663
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
-#, fuzzy
-#| msgid "This product is currently not available."
 msgid "Hide product if unavailable"
-msgstr "Questo prodotto non è al momento disponibile."
+msgstr "Nascondi il prodotto se non è disponibile"
 
 #: pretix/base/models/items.py:445
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
@@ -5340,21 +5337,19 @@ msgstr ""
 #: pretix/base/models/items.py:1720 pretix/base/models/items.py:1726
 #: pretix/base/models/items.py:1732
 msgid "Minimum value"
-msgstr ""
+msgstr "Valore minimo"
 
 #: pretix/base/models/items.py:1721 pretix/base/models/items.py:1724
 #: pretix/base/models/items.py:1727 pretix/base/models/items.py:1730
 #: pretix/base/models/items.py:1733 pretix/base/models/items.py:1736
 #: pretix/base/models/items.py:1740
-#, fuzzy
 msgid "Currently not supported in our apps and during check-in"
-msgstr "La domanda non può dipendere da una domanda fatta durante il check-in."
+msgstr "Attualmente non è supportato nelle nostre app e durante il check-in"
 
 #: pretix/base/models/items.py:1723 pretix/base/models/items.py:1729
 #: pretix/base/models/items.py:1735
-#, fuzzy
 msgid "Maximum value"
-msgstr "Tasse"
+msgstr "Valore massimo"
 
 #: pretix/base/models/items.py:1738
 #, fuzzy
