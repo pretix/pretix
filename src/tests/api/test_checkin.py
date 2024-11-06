@@ -252,9 +252,8 @@ def test_list_list(token_client, organizer, event, clist, item, subevent, django
     res = dict(TEST_LIST_RES)
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
-    res["auto_checkin_sales_channels"] = []
 
-    with django_assert_num_queries(12):
+    with django_assert_num_queries(11):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
@@ -292,7 +291,6 @@ def test_list_detail(token_client, organizer, event, clist, item):
 
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
-    res["auto_checkin_sales_channels"] = []
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/'.format(organizer.slug, event.slug,
                                                                                       clist.pk))
     assert resp.status_code == 200
@@ -327,9 +325,6 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
             "limit_products": [item.pk],
             "all_products": False,
             "subevent": None,
-            "auto_checkin_sales_channels": [
-                "web"
-            ]
         },
         format='json'
     )
@@ -339,7 +334,6 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
         assert cl.name == "VIP"
         assert cl.limit_products.count() == 1
         assert not cl.all_products
-        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -368,24 +362,6 @@ def test_list_create_with_subevent(token_client, organizer, event, event3, item,
         format='json'
     )
     assert resp.status_code == 201
-
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
-        {
-            "name": "VIP",
-            "limit_products": [item.pk],
-            "all_products": True,
-            "subevent": subevent.pk,
-            "auto_checkin_sales_channels": [
-                "web"
-            ]
-        },
-        format='json'
-    )
-    assert resp.status_code == 201
-    with scopes_disabled():
-        cl = CheckinList.objects.get(pk=resp.data['id'])
-        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -439,20 +415,6 @@ def test_list_update(token_client, organizer, event, clist):
     with scopes_disabled():
         cl = CheckinList.objects.get(pk=resp.data['id'])
     assert cl.name == "VIP"
-
-    resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/checkinlists/{}/'.format(organizer.slug, event.slug, clist.pk),
-        {
-            "auto_checkin_sales_channels": [
-                "web"
-            ],
-        },
-        format='json'
-    )
-    assert resp.status_code == 200
-    with scopes_disabled():
-        cl = CheckinList.objects.get(pk=resp.data['id'])
-        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
 
 @pytest.mark.django_db

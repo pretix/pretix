@@ -71,13 +71,6 @@ def event():
         yield event
 
 
-@pytest.fixture
-def clist_autocheckin(event):
-    c = event.checkin_lists.create(name="Default", all_products=True)
-    c.auto_checkin_sales_channels.add(event.organizer.sales_channels.get(identifier="web"))
-    return c
-
-
 @pytest.mark.django_db
 def test_expiry_days(event):
     today = now()
@@ -3456,53 +3449,6 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.valid_from is None
         assert self.op1.valid_until is None
-
-
-@pytest.mark.django_db
-def test_autocheckin(clist_autocheckin, event):
-    today = now()
-    tr7 = event.tax_rules.create(rate=Decimal('17.00'))
-    ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rule=tr7,
-                                 default_price=Decimal('23.00'), admission=True)
-    cp1 = CartPosition.objects.create(
-        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
-    )
-    order = _create_order(event, email='dummy@example.org', positions=[cp1],
-                          now_dt=today,
-                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
-                          payment_requests=[{
-                              "id": "test0",
-                              "provider": "free",
-                              "max_value": None,
-                              "min_value": None,
-                              "multi_use_supported": False,
-                              "info_data": {},
-                              "pprov": FreeOrderProvider(event),
-                          }],
-                          locale='de')[0]
-    assert clist_autocheckin.auto_checkin_sales_channels.contains(event.organizer.sales_channels.get(identifier="web"))
-    assert order.positions.first().checkins.first().auto_checked_in
-
-    clist_autocheckin.auto_checkin_sales_channels.clear()
-
-    cp1 = CartPosition.objects.create(
-        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
-    )
-    order = _create_order(event, email='dummy@example.org', positions=[cp1],
-                          now_dt=today,
-                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
-                          payment_requests=[{
-                              "id": "test0",
-                              "provider": "free",
-                              "max_value": None,
-                              "min_value": None,
-                              "multi_use_supported": False,
-                              "info_data": {},
-                              "pprov": FreeOrderProvider(event),
-                          }],
-                          locale='de')[0]
-    assert clist_autocheckin.auto_checkin_sales_channels.count() == 0
-    assert order.positions.first().checkins.count() == 0
 
 
 @pytest.mark.django_db

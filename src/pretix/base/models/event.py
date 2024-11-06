@@ -1024,10 +1024,9 @@ class Event(EventMixin, LoggedModel):
 
         checkin_list_map = {}
         for cl in other.checkin_lists.filter(subevent__isnull=True).prefetch_related(
-            'limit_products', 'auto_checkin_sales_channels'
+            'limit_products'
         ):
             items = list(cl.limit_products.all())
-            auto_checkin_sales_channels = list(cl.auto_checkin_sales_channels.all())
             checkin_list_map[cl.pk] = cl
             cl.pk = None
             cl._prefetched_objects_cache = {}
@@ -1039,8 +1038,6 @@ class Event(EventMixin, LoggedModel):
             cl.log_action('pretix.object.cloned')
             for i in items:
                 cl.limit_products.add(item_map[i.pk])
-            if auto_checkin_sales_channels:
-                cl.auto_checkin_sales_channels.set(self.organizer.sales_channels.filter(identifier__in=[s.identifier for s in auto_checkin_sales_channels]))
 
         if other.seating_plan:
             if other.seating_plan.organizer_id == self.organizer_id:

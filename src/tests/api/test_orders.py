@@ -180,13 +180,6 @@ def order2(event2, item2):
         return o
 
 
-@pytest.fixture
-def clist_autocheckin(event):
-    c = event.checkin_lists.create(name="Default", all_products=True)
-    c.auto_checkin_sales_channels.add(event.organizer.sales_channels.get(identifier="web"))
-    return c
-
-
 TEST_ORDERPOSITION_RES = {
     "id": 1,
     "order": "FOO",

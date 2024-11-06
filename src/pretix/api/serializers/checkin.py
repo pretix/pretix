@@ -26,30 +26,21 @@ from rest_framework.exceptions import ValidationError
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.models import Checkin, CheckinList, SalesChannel
+from pretix.base.models import Checkin, CheckinList
 
 
 class CheckinListSerializer(I18nAwareModelSerializer):
     checkin_count = serializers.IntegerField(read_only=True)
     position_count = serializers.IntegerField(read_only=True)
-    auto_checkin_sales_channels = serializers.SlugRelatedField(
-        slug_field="identifier",
-        queryset=SalesChannel.objects.none(),
-        required=False,
-        allow_empty=True,
-        many=True,
-    )
 
     class Meta:
         model = CheckinList
         fields = ('id', 'name', 'all_products', 'limit_products', 'subevent', 'checkin_count', 'position_count',
-                  'include_pending', 'auto_checkin_sales_channels', 'allow_multiple_entries', 'allow_entry_after_exit',
+                  'include_pending', 'allow_multiple_entries', 'allow_entry_after_exit',
                   'rules', 'exit_all_at', 'addon_match', 'ignore_in_statistics', 'consider_tickets_used')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.fields['auto_checkin_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
         if 'subevent' in self.context['request'].query_params.getlist('expand'):
             self.fields['subevent'] = SubEventSerializer(read_only=True)
