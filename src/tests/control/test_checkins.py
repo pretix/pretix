@@ -228,6 +228,7 @@ def checkin_list_env():
     # checkin
     Checkin.objects.create(position=op_a1_ticket, datetime=now() + timedelta(minutes=1), list=cl)
     Checkin.objects.create(position=op_a3_ticket, list=cl)
+    Checkin.objects.create(position=op_a3_ticket, list=cl, type="exit")
 
     return event, user, orga, [item_ticket, item_mascot], [order_pending, order_a1, order_a2, order_a3], \
         [op_pending_ticket, op_a1_ticket, op_a1_mascot, op_a2_ticket, op_a3_ticket], cl
@@ -260,8 +261,10 @@ def test_checkins_list_ordering(client, checkin_list_env, order_key, expected):
 @pytest.mark.django_db
 @pytest.mark.parametrize("query, expected", [
     ('status=&item=&user=', ['A1Ticket', 'A1Mascot', 'A2Ticket', 'A3Ticket']),
-    ('status=1&item=&user=', ['A1Ticket', 'A3Ticket']),
     ('status=0&item=&user=', ['A1Mascot', 'A2Ticket']),
+    ('status=1&item=&user=', ['A1Ticket', 'A3Ticket']),
+    ('status=2&item=&user=', ['A1Ticket']),
+    ('status=3&item=&user=', ['A3Ticket']),
     ('status=&item=&user=a3dummy', ['A3Ticket']),  # match order email
     ('status=&item=&user=a3dummy', ['A3Ticket']),  # match order email,
     ('status=&item=&user=a4', ['A3Ticket']),  # match attendee name
