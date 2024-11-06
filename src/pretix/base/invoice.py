@@ -289,7 +289,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
     def _clean_text(self, text, tags=None):
         return self._normalize(bleach.clean(
             text,
-            tags=set(tags) or set()
+            tags=set(tags) if tags else set()
         ).strip().replace('<br>', '<br />').replace('\n', '<br />\n'))
 
 
