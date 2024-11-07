@@ -113,7 +113,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - giropay: (deprecated)
 # - iDEAL: ✓
 # - P24: ✓
-# - Sofort: ✓
+# - Sofort: (deprecated)
 # - FPX: ✗
 # - PayNow: ✗
 # - UPI: ✗
@@ -1599,6 +1599,17 @@ class StripeSofort(StripeRedirectMethod):
     public_name = _('SOFORT (instant bank transfer)')
     method = 'sofort'
     redirect_in_widget_allowed = False
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        # Stripe<>giropay is shut down November 29th
+        return super().is_allowed(request, total) and now() < datetime(
+            2024, 11, 29, 0, 0, 0, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")
+        )
+
+    def order_change_allowed(self, order: Order, request: HttpRequest=None) -> bool:
+        return super().order_change_allowed(order, request) and now() < datetime(
+            2024, 11, 29, 0, 0, 0, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")
+        )
 
     def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
