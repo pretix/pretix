@@ -206,7 +206,7 @@ msgstr "Todos los eventos (incluidos los de nueva creación)"
 #: pretix/api/models.py:119 pretix/base/models/devices.py:124
 #: pretix/base/models/organizer.py:287
 msgid "Limit to events"
-msgstr "Limitar a eventos"
+msgstr "Limitar a los eventos"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:1077
@@ -228,12 +228,14 @@ msgstr "El producto \"{}\" no tiene asignada una cuota."
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1664
 #: pretix/base/models/items.py:1903 pretix/base/models/items.py:2161
+#: pretix/api/serializers/checkin.py:74 pretix/base/models/event.py:1667
 msgid "One or more items do not belong to this event."
 msgstr "Uno o mas articulos no pertenecen a este evento."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:2172 pretix/base/models/items.py:2175
 #: pretix/base/models/waitinglist.py:305 pretix/base/models/waitinglist.py:308
+#: pretix/api/serializers/checkin.py:78 pretix/api/serializers/checkin.py:81
 msgid "The subevent does not belong to this event."
 msgstr "El sub-evento no pertenece a este evento."
 
@@ -394,6 +396,7 @@ msgstr ""
 "veces permitido."
 
 #: pretix/api/views/checkin.py:610 pretix/api/views/checkin.py:617
+#: pretix/api/views/checkin.py:608 pretix/api/views/checkin.py:615
 msgid "Medium connected to other event"
 msgstr "Medio conectado a otro evento"
 
@@ -408,16 +411,18 @@ msgstr ""
 
 #: pretix/api/views/order.py:606 pretix/control/views/orders.py:1588
 #: pretix/presale/views/order.py:742 pretix/presale/views/order.py:815
+#: pretix/control/views/orders.py:1587
 msgid "You cannot generate an invoice for this order."
 msgstr "No se puede generar una factura para este pedido."
 
 #: pretix/api/views/order.py:611 pretix/control/views/orders.py:1590
 #: pretix/presale/views/order.py:744 pretix/presale/views/order.py:817
+#: pretix/control/views/orders.py:1589
 msgid "An invoice for this order already exists."
 msgstr "Ya existe una factura para este pedido."
 
 #: pretix/api/views/order.py:637 pretix/control/views/orders.py:1716
-#: pretix/control/views/users.py:143
+#: pretix/control/views/users.py:143 pretix/control/views/orders.py:1715
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
 "Hubo un error al enviar el correo. Por favor, inténtelo de nuevo más tarde."
@@ -443,7 +448,8 @@ msgstr "Pedido marcado como pagado"
 #: pretix/api/webhooks.py:249 pretix/base/models/checkin.py:354
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
-#: pretix/control/views/orders.py:1549
+#: pretix/control/views/orders.py:1549 pretix/base/models/checkin.py:358
+#: pretix/control/views/orders.py:1548
 msgid "Order canceled"
 msgstr "Pedido cancelado"
 
@@ -474,27 +480,27 @@ msgstr "Perdido cambiado"
 
 #: pretix/api/webhooks.py:277
 msgid "Refund of payment created"
-msgstr "Reembolso del pago creado"
+msgstr "Devolución del pago creado"
 
 #: pretix/api/webhooks.py:281 pretix/base/notifications.py:293
 msgid "External refund of payment"
-msgstr "Reembolso externo del pago"
+msgstr "Devolución externa del pago"
 
 #: pretix/api/webhooks.py:285
 msgid "Refund of payment requested by customer"
-msgstr "Reembolso del pago solicitado por el cliente"
+msgstr "Devolución del pago solicitada por el cliente"
 
 #: pretix/api/webhooks.py:289
 msgid "Refund of payment completed"
-msgstr "Reembolso del pago completado"
+msgstr "Devolución del pago completada"
 
 #: pretix/api/webhooks.py:293
 msgid "Refund of payment canceled"
-msgstr "Reembolso del pago anulado"
+msgstr "Devolución del pago anulada"
 
 #: pretix/api/webhooks.py:297
 msgid "Refund of payment failed"
-msgstr "Reembolso del pago fallido"
+msgstr "Devolución del pago fallida"
 
 #: pretix/api/webhooks.py:301
 msgid "Payment confirmed"
@@ -861,6 +867,7 @@ msgstr "Preguntas"
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:51
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:129
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html:20
+#: pretix/control/forms/orders.py:777
 msgctxt "subevent"
 msgid "Date"
 msgstr "Fecha"
@@ -878,7 +885,8 @@ msgstr "Fecha"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:67
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:129
 #: pretix/plugins/sendmail/forms.py:99 pretix/plugins/sendmail/forms.py:173
-#: pretix/plugins/sendmail/forms.py:351
+#: pretix/plugins/sendmail/forms.py:351 pretix/control/forms/checkin.py:89
+#: pretix/control/forms/orders.py:779 pretix/control/forms/orders.py:941
 msgctxt "subevent"
 msgid "All dates"
 msgstr "Todas las fechas"
@@ -987,6 +995,7 @@ msgstr "Nombre completo"
 #: pretix/presale/templates/pretixpresale/event/order.html:311
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:29
 #: pretix/presale/templates/pretixpresale/organizers/index.html:41
+#: pretix/base/models/event.py:1469 pretix/base/models/event.py:1711
 msgid "Name"
 msgstr "Nombre"
 
@@ -1179,6 +1188,7 @@ msgstr "Zona horaria"
 #: pretix/base/models/event.py:1468 pretix/base/settings.py:3218
 #: pretix/base/settings.py:3228 pretix/control/forms/subevents.py:480
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
+#: pretix/base/models/event.py:1471
 msgid "Event start time"
 msgstr "Hora de inicio del evento"
 
@@ -1186,37 +1196,42 @@ msgstr "Hora de inicio del evento"
 #: pretix/base/models/event.py:1470 pretix/base/pdf.py:286
 #: pretix/control/forms/subevents.py:485
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
+#: pretix/base/models/event.py:1473
 msgid "Event end time"
 msgstr "Hora de finalización del evento"
 
 #: pretix/base/exporters/events.py:64 pretix/base/models/event.py:586
 #: pretix/base/models/event.py:1472 pretix/control/forms/subevents.py:490
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
+#: pretix/base/models/event.py:1475
 msgid "Admission time"
 msgstr "Hora de admisión"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:598
 #: pretix/base/models/event.py:1481 pretix/control/forms/subevents.py:93
+#: pretix/base/models/event.py:1484
 msgid "Start of presale"
 msgstr "Inicio de preventa"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:592
 #: pretix/base/models/event.py:1475 pretix/control/forms/subevents.py:99
+#: pretix/base/models/event.py:1478
 msgid "End of presale"
 msgstr "Finalización de preventa"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:351
 #: pretix/base/models/event.py:604 pretix/base/models/event.py:1487
+#: pretix/base/models/event.py:1490
 msgid "Location"
 msgstr "Localización"
 
 #: pretix/base/exporters/events.py:68 pretix/base/models/event.py:607
-#: pretix/base/models/event.py:1490
+#: pretix/base/models/event.py:1490 pretix/base/models/event.py:1493
 msgid "Latitude"
 msgstr "Lalitud"
 
 #: pretix/base/exporters/events.py:69 pretix/base/models/event.py:615
-#: pretix/base/models/event.py:1498
+#: pretix/base/models/event.py:1498 pretix/base/models/event.py:1501
 msgid "Longitude"
 msgstr "Longitud"
 
@@ -1224,6 +1239,7 @@ msgstr "Longitud"
 #: pretix/base/models/event.py:1513
 #: pretix/control/templates/pretixcontrol/event/index.html:128
 #: pretix/control/templates/pretixcontrol/order/index.html:997
+#: pretix/base/models/event.py:1516
 msgid "Internal comment"
 msgstr "Comentario interno"
 
@@ -1342,6 +1358,7 @@ msgstr "Fecha"
 #: pretix/plugins/ticketoutputpdf/exporters.py:96
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:70
+#: pretix/plugins/badges/exporters.py:483
 msgid "Order code"
 msgstr "Código del pedido"
 
@@ -1672,6 +1689,7 @@ msgstr "Variacion"
 #: pretix/control/forms/filter.py:1195 pretix/control/forms/filter.py:2012
 #: pretix/control/templates/pretixcontrol/event/plugins.html:55
 #: pretix/control/templates/pretixcontrol/users/index.html:51
+#: pretix/base/models/event.py:1460
 msgid "Active"
 msgstr "Activo"
 
@@ -1794,7 +1812,7 @@ msgstr "Cantidad máxima por pedido"
 #: pretix/base/models/items.py:1229 pretix/base/models/orders.py:281
 #: pretix/plugins/checkinlists/exporters.py:520
 msgid "Requires special attention"
-msgstr "Requiere atención especial"
+msgstr "Requiere una atención especial"
 
 #: pretix/base/exporters/items.py:90 pretix/base/exporters/orderlist.py:283
 #: pretix/base/modelimport_orders.py:617 pretix/base/models/items.py:654
@@ -1887,7 +1905,7 @@ msgstr "Impuestos del pedido"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Only paid orders"
-msgstr "Sólo pedidos pagados"
+msgstr "Sólo los pedidos pagados"
 
 #: pretix/base/exporters/orderlist.py:116
 msgid "Include payment amounts"
@@ -1907,6 +1925,7 @@ msgstr "Incluya solo los pedidos creados dentro de este intervalo de fechas."
 #: pretix/plugins/reports/exporters.py:305
 #: pretix/plugins/reports/exporters.py:454
 #: pretix/plugins/ticketoutputpdf/exporters.py:97
+#: pretix/plugins/badges/exporters.py:484
 msgid "Event date"
 msgstr "Fecha evento"
 
@@ -1927,7 +1946,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1585
 #: pretix/control/forms/organizer.py:115
 msgid "Event slug"
-msgstr "URL semántica del evento"
+msgstr "URL semántica"
 
 #: pretix/base/exporters/orderlist.py:261 pretix/base/notifications.py:201
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:25
@@ -1991,7 +2010,7 @@ msgstr "Estado"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:161
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:34
 msgid "Email"
-msgstr "Correo electrónico"
+msgstr "E-mail"
 
 #: pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:446
@@ -2164,6 +2183,7 @@ msgstr "ID de posición"
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:18
 #: pretix/plugins/checkinlists/exporters.py:510
 #: pretix/plugins/checkinlists/exporters.py:699
+#: pretix/plugins/badges/exporters.py:465
 msgid "Start date"
 msgstr "Fecha de inicio"
 
@@ -2177,6 +2197,7 @@ msgstr "Fecha de inicio"
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:20
 #: pretix/plugins/checkinlists/exporters.py:511
 #: pretix/plugins/checkinlists/exporters.py:700
+#: pretix/plugins/badges/exporters.py:472
 msgid "End date"
 msgstr "Fecha final"
 
@@ -2224,6 +2245,7 @@ msgstr "Producto"
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html:42
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:133
+#: pretix/plugins/badges/exporters.py:481
 msgid "Attendee name"
 msgstr "Nombre del asistente"
 
@@ -2452,7 +2474,7 @@ msgstr "Convertido de la versión heredada"
 
 #: pretix/base/exporters/orderlist.py:1001
 msgid "Payments and refunds"
-msgstr "Pagos y reembolsos"
+msgstr "Pagos y devoluciones"
 
 #: pretix/base/exporters/orderlist.py:1003
 msgid "Download a spreadsheet of all payments or refunds of every order."
@@ -2469,8 +2491,8 @@ msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
-"Tenga en cuenta que al usar esto se excluirán los pagos no confirmados o los "
-"reembolsos no completados."
+"Tenga en cuenta que al usar esto se excluirán los pagos no confirmados o las "
+"devoluciones no completados."
 
 #: pretix/base/exporters/orderlist.py:1019
 msgid "Date range (start of transaction)"
@@ -2482,7 +2504,7 @@ msgstr "Estado de pagos"
 
 #: pretix/base/exporters/orderlist.py:1033
 msgid "Refund states"
-msgstr "Estados del reembolso"
+msgstr "Estados de la devolución"
 
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1217
@@ -2748,6 +2770,8 @@ msgstr "De forma predeterminada es el momento del reporte."
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:76
 #: pretix/plugins/reports/accountingreport.py:104
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:136
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:153
 msgid "All"
 msgstr "Todos"
 
@@ -2791,6 +2815,7 @@ msgid "Expiry date"
 msgstr "Fecha de caducidad"
 
 #: pretix/base/exporters/orderlist.py:1359 pretix/control/forms/orders.py:873
+#: pretix/control/forms/orders.py:830
 msgid "Special terms and conditions"
 msgstr "Términos y condiciones especiales"
 
@@ -3472,6 +3497,9 @@ msgstr "No se puede analizar {value} como fecha y hora."
 #: pretix/base/modelimport.py:232 pretix/control/views/orders.py:1162
 #: pretix/control/views/orders.py:1191 pretix/control/views/orders.py:1235
 #: pretix/control/views/orders.py:1270 pretix/control/views/orders.py:1293
+#: pretix/control/views/orders.py:1161 pretix/control/views/orders.py:1190
+#: pretix/control/views/orders.py:1234 pretix/control/views/orders.py:1269
+#: pretix/control/views/orders.py:1292
 msgid "You entered an invalid number."
 msgstr "Ha introducido un número no válido."
 
@@ -3638,6 +3666,7 @@ msgstr "Opción ambigua seleccionada."
 
 #: pretix/base/modelimport_orders.py:697 pretix/base/models/orders.py:238
 #: pretix/control/forms/orders.py:686 pretix/control/forms/organizer.py:784
+#: pretix/control/forms/orders.py:643
 msgid "Customer"
 msgstr "Cliente"
 
@@ -3900,59 +3929,59 @@ msgstr ""
 msgid "Automatically check out everyone at"
 msgstr "Registrar salida automáticamente para todos a las"
 
-#: pretix/base/models/checkin.py:336
+#: pretix/base/models/checkin.py:336 pretix/base/models/checkin.py:340
 msgid "Entry"
 msgstr "Ingreso"
 
-#: pretix/base/models/checkin.py:337
+#: pretix/base/models/checkin.py:337 pretix/base/models/checkin.py:341
 msgid "Exit"
 msgstr "Salida"
 
-#: pretix/base/models/checkin.py:355
+#: pretix/base/models/checkin.py:355 pretix/base/models/checkin.py:359
 msgid "Unknown ticket"
 msgstr "Entrada desconocida"
 
-#: pretix/base/models/checkin.py:356
+#: pretix/base/models/checkin.py:356 pretix/base/models/checkin.py:360
 msgid "Ticket not paid"
 msgstr "Entrada no pagada"
 
-#: pretix/base/models/checkin.py:357
+#: pretix/base/models/checkin.py:357 pretix/base/models/checkin.py:361
 msgid "Forbidden by custom rule"
 msgstr "Prohibido por regla personalizada"
 
-#: pretix/base/models/checkin.py:358
+#: pretix/base/models/checkin.py:358 pretix/base/models/checkin.py:362
 msgid "Ticket code revoked/changed"
 msgstr "Código de entrada revocada/cambiada"
 
-#: pretix/base/models/checkin.py:359
+#: pretix/base/models/checkin.py:359 pretix/base/models/checkin.py:363
 msgid "Information required"
 msgstr "Información requerida"
 
-#: pretix/base/models/checkin.py:360
+#: pretix/base/models/checkin.py:360 pretix/base/models/checkin.py:364
 msgid "Ticket already used"
 msgstr "Esta entrada ya fue utilizada"
 
-#: pretix/base/models/checkin.py:361
+#: pretix/base/models/checkin.py:361 pretix/base/models/checkin.py:365
 msgid "Ticket type not allowed here"
 msgstr "Tipo de entrada no está permitido"
 
-#: pretix/base/models/checkin.py:362
+#: pretix/base/models/checkin.py:362 pretix/base/models/checkin.py:366
 msgid "Ticket code is ambiguous on list"
 msgstr "El código de la entrada es ambiguo en la lista"
 
-#: pretix/base/models/checkin.py:363
+#: pretix/base/models/checkin.py:363 pretix/base/models/checkin.py:367
 msgid "Server error"
 msgstr "Error del Servidor"
 
-#: pretix/base/models/checkin.py:364
+#: pretix/base/models/checkin.py:364 pretix/base/models/checkin.py:368
 msgid "Ticket blocked"
 msgstr "Entrada bloqueada"
 
-#: pretix/base/models/checkin.py:365
+#: pretix/base/models/checkin.py:365 pretix/base/models/checkin.py:369
 msgid "Order not approved"
 msgstr "Pedido no aprobado"
 
-#: pretix/base/models/checkin.py:366
+#: pretix/base/models/checkin.py:366 pretix/base/models/checkin.py:370
 msgid "Ticket not valid at this time"
 msgstr "Entrada no válida en este momento"
 
@@ -4054,6 +4083,7 @@ msgstr "Este identificador ya se utiliza para una pregunta diferente."
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:763
+#: pretix/control/forms/checkin.py:204 pretix/control/forms/checkin.py:225
 msgid "Gate"
 msgstr "Puerta"
 
@@ -4262,6 +4292,7 @@ msgstr ""
 "La URL semántica solo puede contener letras, números, puntos y guiones."
 
 #: pretix/base/models/event.py:588 pretix/base/models/event.py:1461
+#: pretix/base/models/event.py:1464
 msgid "Show in lists"
 msgstr "Mostrar en listas"
 
@@ -4274,7 +4305,7 @@ msgstr ""
 "eventos de tu cuenta de organizador."
 
 #: pretix/base/models/event.py:593 pretix/base/models/event.py:1476
-#: pretix/control/forms/subevents.py:100
+#: pretix/control/forms/subevents.py:100 pretix/base/models/event.py:1479
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
@@ -4284,7 +4315,7 @@ msgstr ""
 "de su evento."
 
 #: pretix/base/models/event.py:599 pretix/base/models/event.py:1482
-#: pretix/control/forms/subevents.py:94
+#: pretix/control/forms/subevents.py:94 pretix/base/models/event.py:1485
 msgid "Optional. No products will be sold before this date."
 msgstr "Opcional. Ningún producto será vendido antes de esta fecha."
 
@@ -4303,6 +4334,7 @@ msgid "Event series"
 msgstr "Serie de eventos"
 
 #: pretix/base/models/event.py:635 pretix/base/models/event.py:1510
+#: pretix/base/models/event.py:1513
 msgid "Seating plan"
 msgstr "Plan de butacas"
 
@@ -4328,7 +4360,7 @@ msgstr "Restringir a canales de venta específicos"
 msgid "Events"
 msgstr "Eventos"
 
-#: pretix/base/models/event.py:1289
+#: pretix/base/models/event.py:1289 pretix/base/models/event.py:1292
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
@@ -4336,7 +4368,7 @@ msgstr ""
 "Ha configurado al menos un producto de pago pero no ha habilitado ningún "
 "método de pago."
 
-#: pretix/base/models/event.py:1292
+#: pretix/base/models/event.py:1292 pretix/base/models/event.py:1295
 msgid ""
 "You have configured at least one paid product but have not configured a "
 "currency."
@@ -4344,38 +4376,38 @@ msgstr ""
 "Ha configurado al menos un producto de pago pero no ha configurado una "
 "divisa."
 
-#: pretix/base/models/event.py:1295
+#: pretix/base/models/event.py:1295 pretix/base/models/event.py:1298
 msgid "You need to configure at least one quota to sell anything."
 msgstr "Tienes que configurar al menos una cuota para vender algo."
 
-#: pretix/base/models/event.py:1300
+#: pretix/base/models/event.py:1300 pretix/base/models/event.py:1303
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
 msgstr "Debe completar el metaparámetro \"{property}\"."
 
-#: pretix/base/models/event.py:1407
+#: pretix/base/models/event.py:1407 pretix/base/models/event.py:1410
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
 "Una vez creado, un evento no puede cambiar entre una serie y un único evento."
 
-#: pretix/base/models/event.py:1413
+#: pretix/base/models/event.py:1413 pretix/base/models/event.py:1416
 msgid "The event slug cannot be changed."
 msgstr "La URL semántica del evento no se puede cambiar."
 
-#: pretix/base/models/event.py:1416
+#: pretix/base/models/event.py:1416 pretix/base/models/event.py:1419
 msgid "This slug has already been used for a different event."
 msgstr "Esta URL semántica ya ha sido usada para un evento diferente."
 
-#: pretix/base/models/event.py:1422
+#: pretix/base/models/event.py:1422 pretix/base/models/event.py:1425
 msgid "The event cannot end before it starts."
 msgstr "El evento no puede terminar antes de que empiece."
 
-#: pretix/base/models/event.py:1428
+#: pretix/base/models/event.py:1428 pretix/base/models/event.py:1431
 msgid "The event's presale cannot end before it starts."
 msgstr "La preventa del evento no puede finalizar antes de su inicio."
 
-#: pretix/base/models/event.py:1458
+#: pretix/base/models/event.py:1458 pretix/base/models/event.py:1461
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
@@ -4383,7 +4415,7 @@ msgstr ""
 "Sólo con esta casilla activada, esta fecha es visible en el frontend para "
 "los usuarios."
 
-#: pretix/base/models/event.py:1462
+#: pretix/base/models/event.py:1462 pretix/base/models/event.py:1465
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
@@ -4392,46 +4424,50 @@ msgstr ""
 "para tu evento."
 
 #: pretix/base/models/event.py:1507 pretix/base/settings.py:3019
+#: pretix/base/models/event.py:1510
 msgid "Frontpage text"
 msgstr "Texto de pagina principal"
 
-#: pretix/base/models/event.py:1524
+#: pretix/base/models/event.py:1524 pretix/base/models/event.py:1527
 msgid "Date in event series"
 msgstr "Fecha en una serie de eventos"
 
-#: pretix/base/models/event.py:1525
+#: pretix/base/models/event.py:1525 pretix/base/models/event.py:1528
 msgid "Dates in event series"
 msgstr "Fechas en una serie de eventos"
 
-#: pretix/base/models/event.py:1670
+#: pretix/base/models/event.py:1670 pretix/base/models/event.py:1673
 msgid "One or more variations do not belong to this event."
 msgstr "Uno o mas variaciones no pertenecen a este evento."
 
 #: pretix/base/models/event.py:1700 pretix/base/models/items.py:2194
+#: pretix/base/models/event.py:1703
 msgid "Can not contain spaces or special characters except underscores"
 msgstr ""
 "No puede tener caracteres espacios o caracteres especiales excepto guión bajo"
 
 #: pretix/base/models/event.py:1705 pretix/base/models/items.py:2199
+#: pretix/base/models/event.py:1708
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
 "El nombre de la propiedad sólo puede contener letras, números y guiones "
 "bajos."
 
-#: pretix/base/models/event.py:1710
+#: pretix/base/models/event.py:1710 pretix/base/models/event.py:1713
 msgid "Default value"
 msgstr "Valor predefinido"
 
 #: pretix/base/models/event.py:1712
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:50
+#: pretix/base/models/event.py:1715
 msgid "Can only be changed by organizer-level administrators"
 msgstr "Solo los adminsitradores de nivel organizador pueden cambiar esto"
 
-#: pretix/base/models/event.py:1714
+#: pretix/base/models/event.py:1714 pretix/base/models/event.py:1717
 msgid "Required for events"
 msgstr "Requerido para eventos"
 
-#: pretix/base/models/event.py:1715
+#: pretix/base/models/event.py:1715 pretix/base/models/event.py:1718
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
@@ -4441,15 +4477,17 @@ msgstr ""
 "valor para fechas individuales"
 
 #: pretix/base/models/event.py:1721 pretix/base/models/items.py:2211
+#: pretix/base/models/event.py:1724
 msgid "Valid values"
 msgstr "Valores válidos"
 
 #: pretix/base/models/event.py:1724
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
+#: pretix/base/models/event.py:1727
 msgid "Show filter option to customers"
 msgstr "Mostrar opción de filtro a los clientes"
 
-#: pretix/base/models/event.py:1725
+#: pretix/base/models/event.py:1725 pretix/base/models/event.py:1728
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
@@ -4458,16 +4496,17 @@ msgstr ""
 "y el calendario."
 
 #: pretix/base/models/event.py:1728 pretix/control/forms/organizer.py:223
-#: pretix/control/forms/organizer.py:227
+#: pretix/control/forms/organizer.py:227 pretix/base/models/event.py:1731
 msgid "Public name"
 msgstr "Nombre público"
 
 #: pretix/base/models/event.py:1732
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
+#: pretix/base/models/event.py:1735
 msgid "Can be used for filtering"
 msgstr "Se puede utilizar para filtrar"
 
-#: pretix/base/models/event.py:1733
+#: pretix/base/models/event.py:1733 pretix/base/models/event.py:1736
 msgid ""
 "This field will be shown to filter events or reports in the backend, and it "
 "can also be used for hidden filter parameters in the frontend (e.g. using "
@@ -4477,17 +4516,19 @@ msgstr ""
 "también se puede usar para parámetros de filtro ocultos en el frontend (por "
 "ejemplo, usando el widget)."
 
-#: pretix/base/models/event.py:1743
+#: pretix/base/models/event.py:1743 pretix/base/models/event.py:1746
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
 "Una propiedad puede ser obligatoria o tener un valor predeterminado, pero no "
 "ambas cosas."
 
 #: pretix/base/models/event.py:1823 pretix/base/models/organizer.py:516
+#: pretix/base/models/event.py:1826
 msgid "Link text"
 msgstr "Texto del enlace"
 
 #: pretix/base/models/event.py:1826 pretix/base/models/organizer.py:519
+#: pretix/base/models/event.py:1829
 msgid "Link URL"
 msgstr "URL del enlace"
 
@@ -4520,7 +4561,8 @@ msgstr "Destinatarios adicionales (CCO)"
 #: pretix/control/forms/organizer.py:544 pretix/control/forms/organizer.py:554
 #: pretix/control/forms/organizer.py:564 pretix/control/forms/vouchers.py:273
 #: pretix/plugins/sendmail/forms.py:57 pretix/plugins/sendmail/forms.py:73
-#: pretix/plugins/sendmail/models.py:232
+#: pretix/plugins/sendmail/models.py:232 pretix/control/forms/orders.py:667
+#: pretix/control/forms/orders.py:880 pretix/control/forms/orders.py:907
 msgid "Subject"
 msgstr "Asunto"
 
@@ -4528,7 +4570,9 @@ msgstr "Asunto"
 #: pretix/control/forms/orders.py:763 pretix/control/forms/orders.py:931
 #: pretix/control/forms/orders.py:958 pretix/control/forms/vouchers.py:279
 #: pretix/plugins/sendmail/forms.py:58 pretix/plugins/sendmail/forms.py:78
-#: pretix/plugins/sendmail/models.py:233
+#: pretix/plugins/sendmail/models.py:233 pretix/control/forms/orders.py:703
+#: pretix/control/forms/orders.py:720 pretix/control/forms/orders.py:888
+#: pretix/control/forms/orders.py:915
 msgid "Message"
 msgstr "Mensaje"
 
@@ -5115,6 +5159,7 @@ msgstr ""
 #: pretix/plugins/autocheckin/models.py:72
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:31
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:32
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:105
 msgid "Products"
 msgstr "Productos"
 
@@ -5758,7 +5803,7 @@ msgstr "expirado"
 #: pretix/base/models/orders.py:253 pretix/control/forms/filter.py:560
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:64
 msgid "Locale"
-msgstr "Localización"
+msgstr "Local"
 
 #: pretix/base/models/orders.py:268 pretix/control/forms/filter.py:571
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
@@ -5895,7 +5940,7 @@ msgstr "fallido"
 #: pretix/base/models/orders.py:1724
 msgctxt "payment_state"
 msgid "refunded"
-msgstr "reembolsado"
+msgstr "devuelto"
 
 #: pretix/base/models/orders.py:1752 pretix/base/models/orders.py:2166
 #: pretix/base/shredder.py:629
@@ -6695,16 +6740,16 @@ msgstr "El pedido {order.code} ha sido sobrepagado."
 #: pretix/base/notifications.py:294
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr "Se ha producido un reembolso externo por {order.code}."
+msgstr "Se ha producido una devolución externa por {order.code}."
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
-msgstr "Reembolso solicitado"
+msgstr "Devolución solicitada"
 
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr "Has sido requerido para emitir un reembolso para {order.code}."
+msgstr "Has sido requerido para emitir una devolución para {order.code}."
 
 #: pretix/base/payment.py:86
 msgctxt "payment"
@@ -6875,7 +6920,7 @@ msgstr "El pago de esta factura ya se ha recibido."
 #: pretix/base/payment.py:977
 msgid "Automatic refunds are not supported by this payment provider."
 msgstr ""
-"Los reembolsos automáticos no son soportados por este proveedor de pago."
+"Las devoluciones automáticas no son soportadas por este proveedor de pago."
 
 #: pretix/base/payment.py:1068
 msgid ""
@@ -6973,6 +7018,7 @@ msgid "Offsetting"
 msgstr "Compensación"
 
 #: pretix/base/payment.py:1273 pretix/control/views/orders.py:1244
+#: pretix/control/views/orders.py:1243
 msgid "You entered an order that could not be found."
 msgstr "Ha introducido un pedido que no se ha podido encontrar."
 
@@ -7113,7 +7159,7 @@ msgstr "123.45 EUR"
 
 #: pretix/base/pdf.py:163
 msgid "Price including add-ons"
-msgstr "Precio incluyendo complementos"
+msgstr "Precio con complementos incluidos"
 
 #: pretix/base/pdf.py:173 pretix/base/pdf.py:331
 #: pretix/base/services/invoices.py:473
@@ -7130,6 +7176,7 @@ msgstr "Juan Pérez"
 #: pretix/plugins/ticketoutputpdf/exporters.py:95
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:186
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:189
+#: pretix/plugins/badges/exporters.py:482
 msgid "Attendee company"
 msgstr "Empresa asistente"
 
@@ -7279,7 +7326,7 @@ msgstr "Dirección de facturación de la empresa"
 
 #: pretix/base/pdf.py:341
 msgid "Sesame Street 42"
-msgstr "Calle Sésamo 42"
+msgstr "Plaza Sésamo 42"
 
 #: pretix/base/pdf.py:346
 msgid "12345"
@@ -7431,6 +7478,7 @@ msgstr "Tarjeta regalo: Fecha de caducidad"
 #: pretix/base/pdf.py:562 pretix/base/pdf.py:600 pretix/base/pdf.py:606
 #: pretix/plugins/badges/exporters.py:504
 #: pretix/plugins/ticketoutputpdf/exporters.py:102
+#: pretix/plugins/badges/exporters.py:489
 #, python-brace-format
 msgid "Question: {question}"
 msgstr "Pregunta: {question}"
@@ -7455,6 +7503,7 @@ msgstr "Señor Doe"
 #: pretix/plugins/checkinlists/exporters.py:124
 #: pretix/plugins/checkinlists/exporters.py:495
 #: pretix/plugins/ticketoutputpdf/exporters.py:99
+#: pretix/plugins/badges/exporters.py:486
 #, python-brace-format
 msgid "Attendee name: {part}"
 msgstr "Nombre del asistente: {part}"
@@ -9222,12 +9271,12 @@ msgid ""
 "invoice, or %m and %d for the day of month."
 msgstr ""
 "Esto se antepondrá a los números de factura. Si deja este campo vacío, se "
-"utilizará el slug de su evento seguido de un guión. Atención: si varios "
-"eventos dentro de la misma organización usan el mismo valor en este campo, "
-"compartirán su rango de números, es decir, cada número completo se usará "
-"como máximo una vez en todos sus eventos. Este ajuste sólo afecta a facturas "
-"futuras. Puedes usar %Y (con siglo) %y (sin siglo) para insertar el año de "
-"la factura, o %m y %d para el día del mes."
+"utilizará la URL semántica de su evento seguido de un guión. Atención: si "
+"varios eventos dentro de la misma organización usan el mismo valor en este "
+"campo, compartirán su rango de números, es decir, cada número completo se "
+"usará como máximo una vez en todos sus eventos. Este ajuste sólo afecta a "
+"facturas futuras. Puedes usar %Y (con siglo) %y (sin siglo) para insertar el "
+"año de la factura, o %m y %d para el día del mes."
 
 #: pretix/base/settings.py:696 pretix/base/settings.py:718
 #, python-brace-format
@@ -10149,7 +10198,7 @@ msgstr ""
 msgid "Allow changes regardless of price, even if this results in a refund."
 msgstr ""
 "Permitir cambios independientemente del precio, incluso si esto resulta en "
-"un reembolso."
+"una devolución."
 
 #: pretix/base/settings.py:1753
 msgid "Requirement for changed prices"
@@ -10241,6 +10290,7 @@ msgstr ""
 "por usted."
 
 #: pretix/base/settings.py:1877 pretix/control/forms/orders.py:880
+#: pretix/control/forms/orders.py:837
 msgid "Keep a fixed cancellation fee"
 msgstr "Mantener una tarifa de cancelación fija"
 
@@ -10249,20 +10299,22 @@ msgid "Keep payment, shipping and service fees"
 msgstr "Conservar cuota de pago, envío y servicios"
 
 #: pretix/base/settings.py:1898 pretix/control/forms/orders.py:891
+#: pretix/control/forms/orders.py:848
 msgid "Keep a percentual cancellation fee"
 msgstr "Mantener una tarifa de cancelación porcentual"
 
 #: pretix/base/settings.py:1907
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr "Permitir que los clientes elijan voluntariamente un reembolso más bajo"
+msgstr ""
+"Permitir que los clientes elijan voluntariamente una devolución más bajo"
 
 #: pretix/base/settings.py:1908
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
 msgstr ""
-"Con esta opción habilitada, sus clientes pueden optar por obtener un "
-"reembolso menor para respaldarlo."
+"Con esta opción habilitada, sus clientes pueden optar por obtener una "
+"devolución menor para apoyarle."
 
 #: pretix/base/settings.py:1913
 msgid ""
@@ -10270,12 +10322,12 @@ msgid ""
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
 "Sin embargo, si desea que le ayudemos a mantener las luces encendidas aquí, "
-"considere utilizar el control deslizante a continuación para solicitar un "
-"reembolso menor. ¡Gracias!"
+"considere utilizar el control deslizante a continuación para solicitar una "
+"devolución menor. ¡Gracias!"
 
 #: pretix/base/settings.py:1920
 msgid "Voluntary lower refund explanation"
-msgstr "Explicación del reembolso inferior voluntario"
+msgstr "Explicación de la devolución inferior voluntaria"
 
 #: pretix/base/settings.py:1923
 msgid ""
@@ -10284,10 +10336,10 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organization."
 msgstr ""
-"Este texto se mostrará entre la explicación de cómo funcionan los reembolsos "
-"y el control deslizante que sus clientes pueden usar para elegir el monto "
-"que desean recibir. Puedes usarlo p.e. explicar que elegir un reembolso más "
-"bajo ayudará a su organización."
+"Este texto se mostrará entre la explicación de cómo funcionan las "
+"devoluciones y el control deslizante que sus clientes pueden usar para "
+"elegir el monto que desean recibir. Puedes usarlo p.e. explicar que elegir "
+"un reembolso más bajo ayudará a su organización."
 
 #: pretix/base/settings.py:1938
 msgid "Step size for reduction amount"
@@ -10309,7 +10361,8 @@ msgid ""
 "event organizer before the order is canceled and a refund is issued."
 msgstr ""
 "Los clientes solo pueden solicitar una cancelación que debe ser aprobada por "
-"el organizador del evento antes de cancelar el pedido y emitir un reembolso."
+"el organizador del evento antes de cancelar el pedido y emitir una "
+"devolución."
 
 #: pretix/base/settings.py:1959
 msgid ""
@@ -10320,27 +10373,27 @@ msgstr ""
 
 #: pretix/base/settings.py:1968 pretix/base/settings.py:1978
 msgid "All refunds are issued to the original payment method"
-msgstr "Todos los reembolsos se emiten al método de pago original"
+msgstr "Todas la devoluciones se emiten al método de pago original"
 
 #: pretix/base/settings.py:1969 pretix/base/settings.py:1979
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
 msgstr ""
-"Los clientes pueden elegir entre una tarjeta regalo y un reembolso en su "
+"Los clientes pueden elegir entre una tarjeta regalo y una devolución en su "
 "método de pago"
 
 #: pretix/base/settings.py:1970 pretix/base/settings.py:1980
 msgid "All refunds are issued as gift cards"
-msgstr "Todos los reembolsos se emiten como tarjetas de regalo"
+msgstr "Todos las devoluciones se emiten como tarjetas de regalo"
 
 #: pretix/base/settings.py:1971 pretix/base/settings.py:1981
 msgid "Do not handle refunds automatically at all"
-msgstr "No gestionar reembolsos automáticamente"
+msgstr "No gestionar devoluciones automáticamente"
 
 #: pretix/base/settings.py:1976
 #: pretix/control/templates/pretixcontrol/order/index.html:148
 msgid "Refund method"
-msgstr "Método de reembolso"
+msgstr "Método de devolución"
 
 #: pretix/base/settings.py:2002 pretix/base/settings.py:2015
 msgid "Terms of cancellation"
@@ -12769,7 +12822,7 @@ msgstr ""
 "pueden seleccionar en instalaciones de desarrollo de pretix, no en "
 "producción."
 
-#: pretix/control/forms/checkin.py:129
+#: pretix/control/forms/checkin.py:129 pretix/control/forms/checkin.py:137
 msgid ""
 "If you allow checking in add-on tickets by scanning the main ticket, you "
 "must select a specific set of products for this check-in list, only "
@@ -12779,30 +12832,31 @@ msgstr ""
 "debe seleccionar un conjunto específico de productos para esta lista de "
 "asistentes, incluyendo solo los posibles productos adicionales."
 
-#: pretix/control/forms/checkin.py:176
+#: pretix/control/forms/checkin.py:176 pretix/control/forms/checkin.py:184
 msgid "Barcode"
 msgstr "Código de barras"
 
-#: pretix/control/forms/checkin.py:179
+#: pretix/control/forms/checkin.py:179 pretix/control/forms/checkin.py:187
 msgid "Check-in time"
 msgstr "Hora de check-in"
 
-#: pretix/control/forms/checkin.py:183
+#: pretix/control/forms/checkin.py:183 pretix/control/forms/checkin.py:191
 msgid "Check-in type"
 msgstr "Tipo de check-in"
 
-#: pretix/control/forms/checkin.py:187
+#: pretix/control/forms/checkin.py:187 pretix/control/forms/checkin.py:195
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
 msgstr ""
 "Permitir el check-in de pedidos impagos (si la lista de check-in lo permite)"
 
-#: pretix/control/forms/checkin.py:191
+#: pretix/control/forms/checkin.py:191 pretix/control/forms/checkin.py:199
 msgid "Support for check-in questions"
 msgstr "Soporte para preguntas de check-in"
 
 #: pretix/control/forms/checkin.py:197 pretix/control/forms/checkin.py:213
 #: pretix/control/forms/filter.py:2399 pretix/control/forms/filter.py:2441
-#: pretix/control/forms/filter.py:2607
+#: pretix/control/forms/filter.py:2607 pretix/control/forms/checkin.py:205
+#: pretix/control/forms/checkin.py:221
 msgid "All gates"
 msgstr "Todas las puertas"
 
@@ -13538,11 +13592,13 @@ msgid "{product} – Any variation"
 msgstr "{product} - Cualquier variación"
 
 #: pretix/control/forms/filter.py:529 pretix/control/forms/orders.py:833
+#: pretix/control/forms/orders.py:790
 msgctxt "subevent"
 msgid "All dates starting at or after"
 msgstr "Todas las fechas a partir de o después"
 
 #: pretix/control/forms/filter.py:535 pretix/control/forms/orders.py:840
+#: pretix/control/forms/orders.py:797
 msgctxt "subevent"
 msgid "All dates starting before"
 msgstr "Todas las fechas empezando antes"
@@ -13557,11 +13613,11 @@ msgstr "Se hizo pedido antes"
 
 #: pretix/control/forms/filter.py:576
 msgid "Minimal sum of payments and refunds"
-msgstr "Suma mínima de pagos y reembolsos"
+msgstr "Suma mínima de pagos y devoluciones"
 
 #: pretix/control/forms/filter.py:581
 msgid "Maximal sum of payments and refunds"
-msgstr "Suma máxima de pagos y reembolsos"
+msgstr "Suma máxima de pagos y devoluciones"
 
 #: pretix/control/forms/filter.py:592
 msgid "At least one ticket with check-in"
@@ -13828,15 +13884,15 @@ msgstr "Cualquier producto del contingente \"{quota}\""
 
 #: pretix/control/forms/filter.py:2289
 msgid "Refund status"
-msgstr "Estado del reembolso"
+msgstr "Estado de la devolución"
 
 #: pretix/control/forms/filter.py:2291
 msgid "All open refunds"
-msgstr "Todos los reembolsos abiertos"
+msgstr "Todas las devoluciones abiertas"
 
 #: pretix/control/forms/filter.py:2292
 msgid "All refunds"
-msgstr "Todos los reembolsos"
+msgstr "Todas las devoluciones"
 
 #: pretix/control/forms/filter.py:2330 pretix/plugins/reports/exporters.py:688
 msgid "Date filter"
@@ -14609,7 +14665,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:234
 msgid "Payment amount"
-msgstr "Monto de pago"
+msgstr "Importe del pago"
 
 #: pretix/control/forms/orders.py:238
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:24
@@ -14754,11 +14810,11 @@ msgstr "Eliminar esta tasa"
 msgid "including all taxes"
 msgstr "impuestos incluidos"
 
-#: pretix/control/forms/orders.py:656
+#: pretix/control/forms/orders.py:656 pretix/control/forms/orders.py:613
 msgid "Invalidate secrets"
 msgstr "Invalidar secretos"
 
-#: pretix/control/forms/orders.py:657
+#: pretix/control/forms/orders.py:657 pretix/control/forms/orders.py:614
 msgid ""
 "Regenerates the order and ticket secrets. You will need to re-send the link "
 "to the order page to the user and the user will need to download his tickets "
@@ -14769,10 +14825,12 @@ msgstr ""
 "sus entradas de nuevo. Las versiones antiguas no serán válidas."
 
 #: pretix/control/forms/orders.py:714 pretix/plugins/sendmail/forms.py:196
+#: pretix/control/forms/orders.py:671
 msgid "Attach tickets"
 msgstr "Adjuntar entradas"
 
 #: pretix/control/forms/orders.py:715 pretix/plugins/sendmail/forms.py:197
+#: pretix/control/forms/orders.py:672
 msgid ""
 "Will be ignored if tickets exceed a given size limit to ensure email "
 "deliverability."
@@ -14780,24 +14838,25 @@ msgstr ""
 "Se ignorarán si las entradas exceden un límite de tamaño determinado para "
 "garantizar la capacidad de entrega del correo electrónico."
 
-#: pretix/control/forms/orders.py:719
+#: pretix/control/forms/orders.py:719 pretix/control/forms/orders.py:676
 msgid "Attach invoices"
 msgstr "Adjuntar facturas"
 
 #: pretix/control/forms/orders.py:740
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:20
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:30
+#: pretix/control/forms/orders.py:697
 msgid "Recipient"
 msgstr "Destinatario"
 
-#: pretix/control/forms/orders.py:777
+#: pretix/control/forms/orders.py:777 pretix/control/forms/orders.py:734
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
 "Cancelar el pedido. Todos las entradas ya no funcionarán. Esto no se puede "
 "revertir."
 
-#: pretix/control/forms/orders.py:778
+#: pretix/control/forms/orders.py:778 pretix/control/forms/orders.py:735
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
@@ -14805,41 +14864,42 @@ msgstr ""
 "Marque el pedido como pendiente y permita que el usuario pague el importe "
 "pendiente con otro método de pago."
 
-#: pretix/control/forms/orders.py:780
+#: pretix/control/forms/orders.py:780 pretix/control/forms/orders.py:737
 msgid "Do nothing and keep the order as it is."
 msgstr "No hagas nada y mantén el pedido como está."
 
-#: pretix/control/forms/orders.py:807
+#: pretix/control/forms/orders.py:807 pretix/control/forms/orders.py:764
 msgid "The refund amount needs to be positive and less than {}."
-msgstr "El importe del reembolso debe ser positivo e inferior a {}."
+msgstr "El importe de la devolución debe ser positivo e inferior a {}."
 
-#: pretix/control/forms/orders.py:813
+#: pretix/control/forms/orders.py:813 pretix/control/forms/orders.py:770
 msgid "You need to specify an amount for a partial refund."
-msgstr "Es necesario especificar un importe para un reembolso parcial."
+msgstr "Es necesario especificar un importe para un devolución parcial."
 
-#: pretix/control/forms/orders.py:825
+#: pretix/control/forms/orders.py:825 pretix/control/forms/orders.py:782
 msgid "Cancel all dates"
 msgstr "Cancelar todas fechas"
 
-#: pretix/control/forms/orders.py:844
+#: pretix/control/forms/orders.py:844 pretix/control/forms/orders.py:801
 msgid "Automatically refund money if possible"
 msgstr "Devolver automáticamente el dinero si es posible"
 
-#: pretix/control/forms/orders.py:847
+#: pretix/control/forms/orders.py:847 pretix/control/forms/orders.py:804
 msgid ""
 "Only available for payment method that support automatic refunds. Tickets "
 "that have been blocked (manually or by a plugin) are not auto-canceled and "
 "you will need to deal with them manually."
 msgstr ""
-"Solo disponible para métodos de pago que admitan reembolsos automáticos. Las "
-"entradas que han sido bloqueados (manualmente o mediante un complemento) no "
-"se cancelan automáticamente y deberás tratarlos manualmente."
+"Solo disponible para métodos de pago que admitan devoluciones automáticos. "
+"Las entradas que han sido bloqueados (manualmente o mediante un complemento) "
+"no se cancelan automáticamente y deberás tratarlos manualmente."
 
-#: pretix/control/forms/orders.py:851
+#: pretix/control/forms/orders.py:851 pretix/control/forms/orders.py:808
 msgid "Create refund in the manual refund to-do list"
-msgstr "Crear reembolso en la lista de tareas pendientes de reembolso manual"
+msgstr ""
+"Crear una devolución en la lista de tareas pendientes de devolución manual"
 
-#: pretix/control/forms/orders.py:854
+#: pretix/control/forms/orders.py:854 pretix/control/forms/orders.py:811
 msgid ""
 "Manual refunds will be created which will be listed in the manual refund to-"
 "do list. When combined with the automatic refund functionally, only payments "
@@ -14847,63 +14907,64 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
-"Se crearán reembolsos manuales que aparecerán en la lista de tareas "
-"pendientes de reembolsos manuales. Cuando se combina funcionalmente con el "
+"Se crearán devoluciones manuales que aparecerán en la lista de tareas "
+"pendientes de devoluciones manuales. Cuando se combina funcionalmente con el "
 "reembolso automático, solo los pagos con un método de pago que no admita "
-"reembolsos automáticos estarán en su lista de tareas pendientes de reembolso "
-"manual. No marques si deseas reembolsar algunos de los pedidos "
+"devoluciones automáticas estarán en su lista de tareas pendientes de "
+"reembolso manual. No marques si deseas reembolsar algunos de los pedidos "
 "compensándolos con pedidos diferentes o emitiendo tarjetas de regalo."
 
-#: pretix/control/forms/orders.py:860
+#: pretix/control/forms/orders.py:860 pretix/control/forms/orders.py:817
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
 msgstr ""
-"Reembolsar el valor del pedido a una tarjeta de regalo en lugar del método "
-"de pago original"
+"Devolver el valor del pedido a una tarjeta de regalo en lugar del método de "
+"pago original"
 
-#: pretix/control/forms/orders.py:866
+#: pretix/control/forms/orders.py:866 pretix/control/forms/orders.py:823
 msgid "Gift card validity"
 msgstr "Validez de la tarjeta regalo"
 
-#: pretix/control/forms/orders.py:885
+#: pretix/control/forms/orders.py:885 pretix/control/forms/orders.py:842
 msgid "Keep a fixed cancellation fee per ticket"
 msgstr "Mantener una tarifa de cancelación fija por entrada"
 
-#: pretix/control/forms/orders.py:886
+#: pretix/control/forms/orders.py:886 pretix/control/forms/orders.py:843
 msgid "Free tickets and add-on products are not counted"
 msgstr "Las entradas gratuitas en productos complementarios no contabilizan"
 
-#: pretix/control/forms/orders.py:896
+#: pretix/control/forms/orders.py:896 pretix/control/forms/orders.py:853
 msgid "Keep fees"
 msgstr "Guardar las tarifas"
 
-#: pretix/control/forms/orders.py:899
+#: pretix/control/forms/orders.py:899 pretix/control/forms/orders.py:856
 msgid ""
 "The selected types of fees will not be refunded but instead added to the "
 "cancellation fee. Fees are never refunded in when an order in an event "
 "series is only partially canceled since it consists of tickets for multiple "
 "dates."
 msgstr ""
-"Los tipos de tarifas seleccionados no se reembolsarán, sino que se agregarán "
-"a la tarifa de cancelación. Las tarifas nunca se reembolsan cuando un pedido "
+"Los tipos de tarifas seleccionados no se devolverán, sino que se agregarán a "
+"la tarifa de cancelación. Las tarifas nunca se reembolsan cuando un pedido "
 "de una serie de eventos se cancela solo parcialmente, ya que consta de "
 "entradas para varias fechas."
 
-#: pretix/control/forms/orders.py:905
+#: pretix/control/forms/orders.py:905 pretix/control/forms/orders.py:862
 msgid "Send information via email"
 msgstr "Enviar información por correo electrónico"
 
-#: pretix/control/forms/orders.py:911
+#: pretix/control/forms/orders.py:911 pretix/control/forms/orders.py:868
 msgid "Send information to waiting list"
 msgstr "Enviar información a la lista de espera"
 
 #: pretix/control/forms/orders.py:926 pretix/control/forms/orders.py:952
+#: pretix/control/forms/orders.py:883 pretix/control/forms/orders.py:909
 #, python-brace-format
 msgid "Canceled: {event}"
 msgstr "Cancelado: {event}"
 
-#: pretix/control/forms/orders.py:937
+#: pretix/control/forms/orders.py:937 pretix/control/forms/orders.py:894
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -14925,7 +14986,7 @@ msgstr ""
 "Con este correo electrónico, lamentamos informarle que {event} ha sido "
 "cancelado.\n"
 "\n"
-"Le reembolsaremos {refund_amount} a su método de pago original.\n"
+"Le devolveremos {refund_amount} a su método de pago original.\n"
 "\n"
 "Puede ver el estado actual de su pedido aquí:\n"
 "\n"
@@ -14935,7 +14996,7 @@ msgstr ""
 "\n"
 "Tu equipo de {event}"
 
-#: pretix/control/forms/orders.py:964
+#: pretix/control/forms/orders.py:964 pretix/control/forms/orders.py:921
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -14960,23 +15021,23 @@ msgstr ""
 "Tu equipo de {event}"
 
 #: pretix/control/forms/orders.py:996 pretix/plugins/sendmail/forms.py:115
-#: pretix/plugins/sendmail/forms.py:208
+#: pretix/plugins/sendmail/forms.py:208 pretix/control/forms/orders.py:953
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
 msgstr "Seleccione una fecha específica o un rango de fechas, no ambos."
 
-#: pretix/control/forms/orders.py:998
+#: pretix/control/forms/orders.py:998 pretix/control/forms/orders.py:955
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
 msgstr "Seleccione todas las fechas o un rango de fechas, no ambos."
 
 #: pretix/control/forms/orders.py:1000 pretix/plugins/sendmail/forms.py:117
-#: pretix/plugins/sendmail/forms.py:210
+#: pretix/plugins/sendmail/forms.py:210 pretix/control/forms/orders.py:957
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
 msgstr "Si establece un rango de fechas, establezca un inicio y un final."
 
-#: pretix/control/forms/orders.py:1002
+#: pretix/control/forms/orders.py:1002 pretix/control/forms/orders.py:959
 msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr "Confirme que desea cancelar TODAS las fechas de esta serie de eventos."
 
@@ -15882,10 +15943,12 @@ msgid "The order has been set to require payment before use."
 msgstr "El pedido se ha configurado para requerir el pago antes de su uso."
 
 #: pretix/control/logdisplay.py:389 pretix/control/views/orders.py:1557
+#: pretix/control/views/orders.py:1556
 msgid "The order has been marked as expired."
 msgstr "El pedido se ha marcado como caducado."
 
 #: pretix/control/logdisplay.py:390 pretix/control/views/orders.py:1455
+#: pretix/control/views/orders.py:1454
 msgid "The order has been marked as paid."
 msgstr "El pedido ha sido marcado como pagado."
 
@@ -15895,9 +15958,10 @@ msgstr "La solicitud de cancelación ha sido eliminada."
 
 #: pretix/control/logdisplay.py:392
 msgid "The order has been refunded."
-msgstr "El pedido ha sido reembolsado."
+msgstr "El pedido ha sido devuelto."
 
 #: pretix/control/logdisplay.py:393 pretix/control/views/orders.py:1840
+#: pretix/control/views/orders.py:1839
 msgid "The order has been reactivated."
 msgstr "El pedido ha sido reactivado."
 
@@ -15916,6 +15980,7 @@ msgstr ""
 "El pedido requiere aprobación antes que pueda continuar a ser procesada."
 
 #: pretix/control/logdisplay.py:397 pretix/control/views/orders.py:779
+#: pretix/control/views/orders.py:778
 msgid "The order has been approved."
 msgstr "El pedido ha sido aprobado."
 
@@ -15957,15 +16022,17 @@ msgstr "Se ha cambiado el escenario del pedido."
 
 #: pretix/control/logdisplay.py:407 pretix/control/views/orders.py:1596
 #: pretix/presale/views/order.py:750 pretix/presale/views/order.py:823
+#: pretix/control/views/orders.py:1595
 msgid "The invoice has been generated."
 msgstr "Se ha generado la factura."
 
 #: pretix/control/logdisplay.py:408 pretix/control/views/orders.py:1667
+#: pretix/control/views/orders.py:1666
 msgid "The invoice has been regenerated."
 msgstr "Se ha regenerado la factura."
 
 #: pretix/control/logdisplay.py:409 pretix/control/views/orders.py:1698
-#: pretix/presale/views/order.py:836
+#: pretix/presale/views/order.py:836 pretix/control/views/orders.py:1697
 msgid "The invoice has been reissued."
 msgstr "Se ha vuelto a emitir la factura."
 
@@ -16148,31 +16215,31 @@ msgstr "El pedido ha sido pagado de más."
 #: pretix/control/logdisplay.py:450
 #, python-brace-format
 msgid "Refund {local_id} has been created."
-msgstr "Se ha creado el reembolso {local_id}."
+msgstr "Se ha creado la devolución  {local_id}."
 
 #: pretix/control/logdisplay.py:451
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
-msgstr "El reembolso {local_id} ha sido creado por una entidad externa."
+msgstr "La devolución {local_id} ha sido creada por una entidad externa."
 
 #: pretix/control/logdisplay.py:452
 msgid "The customer requested you to issue a refund."
-msgstr "El cliente le ha solicitado emitir un reembolso."
+msgstr "El cliente le ha solicitado emitir una devolución."
 
 #: pretix/control/logdisplay.py:453
 #, python-brace-format
 msgid "Refund {local_id} has been completed."
-msgstr "El reembolso {local_id} se ha completado."
+msgstr "La devolución {local_id} se ha completado."
 
 #: pretix/control/logdisplay.py:454
 #, python-brace-format
 msgid "Refund {local_id} has been canceled."
-msgstr "Se ha cancelado el reembolso {local_id}."
+msgstr "Se ha cancelado la devolución {local_id}."
 
 #: pretix/control/logdisplay.py:455
 #, python-brace-format
 msgid "Refund {local_id} has failed."
-msgstr "El reembolso {local_id} ha fallado."
+msgstr "La devolución {local_id} ha fallada."
 
 #: pretix/control/logdisplay.py:461
 msgid "The user has been created."
@@ -16649,7 +16716,7 @@ msgid "The order has been canceled (comment: \"{comment}\")."
 msgstr "El pedido ha sido cancelado (comentario: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:624 pretix/control/views/orders.py:1552
-#: pretix/presale/views/order.py:1058
+#: pretix/presale/views/order.py:1058 pretix/control/views/orders.py:1551
 msgid "The order has been canceled."
 msgstr "El pedido ha sido cancelado."
 
@@ -16862,7 +16929,7 @@ msgstr "Panorama general"
 #: pretix/plugins/reports/accountingreport.py:684
 #: pretix/presale/templates/pretixpresale/event/order.html:136
 msgid "Refunds"
-msgstr "Reembolsos"
+msgstr "Devoluciones"
 
 #: pretix/control/navigation.py:245
 msgid "Import"
@@ -17222,6 +17289,8 @@ msgstr "Establecer nueva contraseña"
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:20
+#: pretix/control/templates/pretixcontrol/checkin/list_edit.html:125
+#: pretix/control/templates/pretixcontrol/items/category.html:39
 msgid "Save"
 msgstr "Guardar"
 
@@ -17614,6 +17683,7 @@ msgstr[1] ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 #: pretix/presale/templates/pretixpresale/event/position_change.html:24
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:44
+#: pretix/control/templates/pretixcontrol/order/change.html:467
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -17660,6 +17730,7 @@ msgstr "Cancelar"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:202
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:235
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:26
+#: pretix/control/views/orders.py:360
 msgid "Delete"
 msgstr "Borrar"
 
@@ -17792,6 +17863,7 @@ msgstr "Editar la configuración de la lista"
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:161
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:8
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:20
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:173
 msgid "Check-in simulator"
 msgstr "Simulador de check-in"
 
@@ -17919,6 +17991,7 @@ msgstr ""
 "aplicaciones de Android y de escritorio."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:76
+#: pretix/control/templates/pretixcontrol/checkin/list_edit.html:77
 msgid "Custom check-in rule"
 msgstr "Regla de check-in personalizada"
 
@@ -17943,14 +18016,17 @@ msgstr "Regla de check-in personalizada"
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:94
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:117
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:84
+#: pretix/control/templates/pretixcontrol/checkin/list_edit.html:84
 msgid "Edit"
 msgstr "Tratar"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:89
+#: pretix/control/templates/pretixcontrol/checkin/list_edit.html:90
 msgid "Visualize"
 msgstr "Visualizar"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:107
+#: pretix/control/templates/pretixcontrol/checkin/list_edit.html:108
 msgid ""
 "Your rule always filters by product or variation, but the following products "
 "or variations are not contained in any of your rule parts so people with "
@@ -17961,6 +18037,7 @@ msgstr ""
 "regla, por lo que las personas con estas entradas no podrán ingresar:"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:113
+#: pretix/control/templates/pretixcontrol/checkin/list_edit.html:114
 msgid "Please double-check if this was intentional."
 msgstr "Vuelva a verificar si esto fue intencional."
 
@@ -18035,6 +18112,7 @@ msgstr "Dispositivos conectados"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:89
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:72
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:69
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:169
 msgid "Clone"
 msgstr "Clonar"
 
@@ -18417,7 +18495,7 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
-"SI un usuario cancela un pedido pagado y el dinero no puede ser reembolsado "
+"SI un usuario cancela un pedido pagado y el dinero no puede ser devuelta "
 "automáticamente, p.e. dado el método de pago seleccionado, tendrás que tomar "
 "acciones manuales. De cualquier forma, tienes desactivadas las "
 "notificaciones para este evento."
@@ -18500,16 +18578,16 @@ msgid ""
 "for self-service cancellations, the system will try to refund the money "
 "automatically."
 msgstr ""
-"Si el cambio conlleva una reducción de precio y se habilitan los reembolsos "
-"automáticos para cancelaciones de autoservicio, el sistema intentará "
-"reembolsar el dinero automáticamente."
+"Si el cambio conlleva una reducción de precio y se habilitan las "
+"devoluciones automáticas para cancelaciones de autoservicio, el sistema "
+"intentará reembolsar el dinero automáticamente."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:80
 msgid ""
 "Refunds can be issued as a gift card if the respective option is set, but "
 "there is no customer choice between gift card and direct refund."
 msgstr ""
-"Los reembolsos se pueden emitir como una tarjeta de regalo si se establece "
+"Las devoluciones se pueden emitir como una tarjeta de regalo si se establece "
 "la opción respectiva, pero el cliente no puede elegir entre una tarjeta de "
 "regalo y un reembolso directo."
 
@@ -18546,7 +18624,7 @@ msgid ""
 "If you need to call off your event you want to cancel and refund all "
 "tickets, you can do so through this option."
 msgstr ""
-"Si necesita cancelar su evento y desea cancelar y reembolsar todas las "
+"Si necesita cancelar su evento y desea cancelar y devolver todas las "
 "entradas, puede hacerlo a través de esta opción."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:55
@@ -18600,7 +18678,7 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"Para confirmar que realmente lo desea, escriba aquí el nombre corto del "
+"Para confirmar que realmente lo desea, escriba aquí la URL semántica del "
 "evento (\"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
@@ -18716,9 +18794,9 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
-"Este evento contiene <strong> órdenes sobrepagadas</strong>, por ejemplo, "
+"Este evento contiene <strong> pedidos sobrepagadas</strong>, por ejemplo, "
 "debido a intentos de pago duplicados. Usted debe revisar los casos y "
-"considerar el reembolso de la cantidad pagada en exceso al usuario."
+"considerar la devolución de la cantidad pagada en exceso al usuario."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:41
 msgid "Show overpaid orders"
@@ -18729,12 +18807,12 @@ msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
 msgstr ""
-"Este evento contiene <strong>pendiente de reembolsos </strong> que usted "
-"debe cuidar."
+"Este evento contiene <strong>devoluciones pendientes </strong> que debe "
+"cuidar."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:50
 msgid "Show pending refunds"
-msgstr "Mostrar reembolsos pendientes"
+msgstr "Mostrar devoluciones pendientes"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:55
 msgid ""
@@ -18767,10 +18845,10 @@ msgid ""
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"Este evento contiene <strong> órdenes completamente pagadas</strong> que no "
+"Este evento contiene <strong> pedidos completamente pagadas</strong> que no "
 "están marcadas como pagadas, probablemente debido a que no fue dejado ningún "
 "cupo al momento que llegó el pago. Deberías revisar estos casos y considerar "
-"ya sea reembolsar al cliente o crear más espacio."
+"ya sea devolver al cliente o crear más espacio."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:79
 msgid "Show affected orders"
@@ -19456,7 +19534,7 @@ msgstr "Detalles del pedido"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:272
 msgid "Other settings"
-msgstr "Otros ajustes"
+msgstr "Otras opciones"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:279
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:55
@@ -20636,6 +20714,7 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/category.html:39
+#: pretix/control/templates/pretixcontrol/items/category.html:29
 msgid "Category history"
 msgstr "Historia de la categoría"
 
@@ -21336,7 +21415,7 @@ msgid ""
 "you will be offered options to refund the payment afterwards."
 msgstr ""
 "Esto <strong>no</strong> transferirá de regreso automáticamente el dinero, "
-"pero podrás ofrecer opciones para hacer el reembolso después."
+"pero podrás ofrecer opciones para hacer la devolución después."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:29
 #, python-format
@@ -21558,10 +21637,6 @@ msgstr "Agregar producto"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:434
 #, fuzzy
-#| msgid ""
-#| "Manually modifying payment fees is discouraged since they might "
-#| "automatically be on subsequent order changes or when choosing a different "
-#| "payment method."
 msgid ""
 "Manually modifying payment fees is discouraged since they might "
 "automatically be updated on subsequent order changes or when choosing a "
@@ -21575,18 +21650,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:481
 #: pretix/control/templates/pretixcontrol/order/change.html:501
 #, fuzzy
-#| msgid "Additional fee"
 msgid "Add fee"
 msgstr "Tarifa adicional"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:508
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:63
+#: pretix/control/templates/pretixcontrol/order/change.html:444
 msgid "Other operations"
 msgstr "Otras operaciones"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:534
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:30
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:30
+#: pretix/control/templates/pretixcontrol/order/change.html:470
 msgid "Perform changes"
 msgstr "Realizar modificaciones"
 
@@ -21665,13 +21741,13 @@ msgstr "Detalles del pedido: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:45
 #: pretix/control/templates/pretixcontrol/orders/index.html:298
-#: pretix/control/views/orders.py:289
+#: pretix/control/views/orders.py:289 pretix/control/views/orders.py:288
 msgid "Approve"
 msgstr "Aprobar"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:50
 #: pretix/control/templates/pretixcontrol/orders/index.html:305
-#: pretix/control/views/orders.py:303
+#: pretix/control/views/orders.py:303 pretix/control/views/orders.py:302
 msgid "Deny"
 msgstr "Denegar"
 
@@ -21713,9 +21789,9 @@ msgstr ""
 "como vencida manualmente."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:115
-#: pretix/control/views/orders.py:351
+#: pretix/control/views/orders.py:351 pretix/control/views/orders.py:350
 msgid "Refund for overpayment"
-msgstr "Reembolso por pago en exceso"
+msgstr "Devolución por pago en exceso"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:117
 #, python-format
@@ -21735,7 +21811,7 @@ msgid ""
 "payment deadline."
 msgstr ""
 "Este pedido ha caducado a pesar de haber recibido pagos de %(amount)s. Puede "
-"elegir entre reembolsar el dinero a continuación o reactivarlo ampliando el "
+"elegir entre devolver el dinero a continuación o reactivarlo ampliando el "
 "plazo de pago."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:142
@@ -21979,7 +22055,7 @@ msgstr "Confirmar como pagado"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:821
 msgid "Create a refund"
-msgstr "Crear un reembolso"
+msgstr "Crear un devolución"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:842
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:60
@@ -22004,7 +22080,7 @@ msgstr "Ignorar"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:58
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:123
 msgid "Process refund"
-msgstr "Procesar el reembolso"
+msgstr "Procesar la devolución"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:941
 #: pretix/presale/templates/pretixpresale/event/base.html:137
@@ -22103,13 +22179,14 @@ msgstr "Reactivar"
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
 msgid "Cancel refund"
-msgstr "Cancelar reembolso"
+msgstr "Cancelar devolución"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
 msgstr ""
-"¿Realmente quieres cancelar este reembolso? No se puede revertir esta acción."
+"¿Realmente quieres cancelar esta devolución? No se puede revertir esta "
+"acción."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
@@ -22119,22 +22196,22 @@ msgid ""
 msgstr ""
 "Si el dinero ya está en el camino de regreso, esto no detendrá el dinero, "
 "sólo marcará esta transferencia como abortada en el pretexto. Esto tampoco "
-"reactivará el pedido, sólo le permitirá elegir un nuevo método de reembolso."
+"reactivará el pedido, sólo le permitirá elegir un nuevo método de devolución."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
-msgstr "Sí, cancelar reembolso"
+msgstr "Sí, cancelar la devolución"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:9
 msgid "Refund order"
-msgstr "Pedido de reembolso"
+msgstr "Pedido de devolución"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:23
 msgid "How should the refund be sent?"
-msgstr "¿Cómo debe enviarse el reembolso?"
+msgstr "¿Cómo debe enviarse la devolución?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:25
 msgid ""
@@ -22143,24 +22220,24 @@ msgid ""
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
-"Cualquier pago que haya seleccionado para reembolsos automáticos será "
+"Cualquier pago que haya seleccionado para devoluciones automáticas será "
 "comunicado inmediatamente la solicitud de reembolso al proveedor de pago "
-"respectivo. Los reembolsos manuales se crearán como reembolsos pendientes, "
-"luego podrá marcarlos como hechos una vez que haya transferido el dinero de "
-"vuelta al cliente."
+"respectivo. Los devoluciones manuales se crearán como devoluciones "
+"pendientes, luego podrá marcarlos como hechos una vez que haya transferido "
+"el dinero de vuelta al cliente."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 msgid "Refund to original payment method"
-msgstr "Reembolso al método de pago original"
+msgstr "Devolución al método de pago original"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:39
 msgid "Amount not refunded"
-msgstr "Importe no reembolsado"
+msgstr "Importe no devuelto"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:40
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:87
 msgid "Refund amount"
-msgstr "Reembolso"
+msgstr "Importe de la devolución"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:68
 msgid "Full amount"
@@ -22168,11 +22245,11 @@ msgstr "Importe total"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:71
 msgid "This payment method does not support automatic refunds."
-msgstr "Este método de pago no admite reembolsos automáticos."
+msgstr "Este método de pago no admite devoluciones automáticas."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:80
 msgid "Refund to a different payment method"
-msgstr "Reembolso a un método de pago diferente"
+msgstr "Devolver a un método de pago diferente"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:86
 msgid "Recipient / options"
@@ -22196,7 +22273,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:159
 msgid "Manual refund"
-msgstr "Reembolso manual"
+msgstr "Devolución manual"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:163
 msgid "Keep transfer as to do"
@@ -22208,15 +22285,15 @@ msgstr "Mantenga la transferencia como para hacer"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr "Marcar reembolso como hecho"
+msgstr "Marcar la devolución como realizada"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:213
 msgid "Perform refund"
-msgstr "Realizar reembolso"
+msgstr "Realizar la devolución"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
 msgid "Do you really want to mark this refund as complete?"
-msgstr "¿Realmente desea marcar este reembolso como completo?"
+msgstr "¿Realmente desea marcar esta devolución como completa?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
@@ -22230,10 +22307,10 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is "
 "<strong>%(total)s</strong>."
 msgstr ""
-"Hemos recibido una notificación de que <strong>%(amount)s</strong> han sido "
-"reembolsados a través de <strong>%(method)s</strong>. Si este reembolso es "
-"procesado, el pedido será pagado por <strong>%(pending)s</strong>. El total "
-"del pedido es <strong>%(total)s</strong>."
+"Hemos recibido la notificación de que <strong>%(amount)s</strong> han sido "
+"devuelto a través de <strong>%(method)s</strong>. Si se procesa esta "
+"devolución, el pedido tendrá un importe inferior en<strong>%(pending)s</"
+"strong>. El total del pedido es <strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -22261,11 +22338,11 @@ msgstr "¿Cuánto quieres que te devuelva?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:25
 msgid "Refund full paid amount"
-msgstr "Reembolso del importe total pagado"
+msgstr "Devolución del importe total pagado"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
 msgid "Refund only"
-msgstr "Reembolso solamente"
+msgstr "Sólo devolución"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:40
 msgid "What should happen to the order?"
@@ -22354,7 +22431,7 @@ msgstr ""
 "Puede utilizar esta página para cancelar y reembolsar todos los pedidos a la "
 "vez en caso de que necesite llamar para su evento. Esto también desactivará "
 "todos los productos para que no se puedan crear nuevos pedidos. Asegúrese de "
-"verificar después si hay pedidos pagados en exceso o reembolsos pendientes "
+"verificar después si hay pedidos pagados en exceso o devoluciones pendientes "
 "que deba solucionar manualmente."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
@@ -22400,7 +22477,7 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
-"Dado que está reembolsando los pedidos de sus clientes con tarjetas de "
+"Dado que está devolviendo los pedidos de sus clientes con tarjetas de "
 "regalo, debe explicarles cómo acceder a sus tarjetas de regalo. La forma más "
 "sencilla de hacerlo es incluir una explicación y un enlace a su pedido "
 "utilizando la función de correo electrónico que se proporciona aquí."
@@ -22799,7 +22876,7 @@ msgstr "CANCELACIÓN SOLICITADA"
 #: pretix/control/templates/pretixcontrol/search/orders.html:98
 #: pretix/control/templates/pretixcontrol/search/orders.html:100
 msgid "REFUND PENDING"
-msgstr "REEMBOLSO PENDIENTE"
+msgstr "DEVOLUCIÓN PENDIENTE"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:224
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:254
@@ -22849,12 +22926,12 @@ msgid "Select action"
 msgstr "Seleccionar acción"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:312
-#: pretix/control/views/orders.py:335
+#: pretix/control/views/orders.py:335 pretix/control/views/orders.py:334
 msgid "Refund overpaid amount"
-msgstr "Reembolso del importe pagado en exceso"
+msgstr "Devolución del importe pagado en exceso"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:320
-#: pretix/control/views/orders.py:320
+#: pretix/control/views/orders.py:320 pretix/control/views/orders.py:319
 msgid "Mark as expired if overdue"
 msgstr "Marcar como vencido si está vencido"
 
@@ -22920,7 +22997,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:34
 msgid "No refunds are currently open."
-msgstr "Actualmente no hay reembolsos abiertos."
+msgstr "Actualmente no hay devoluciones abiertas."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 msgid "Actions"
@@ -23124,7 +23201,7 @@ msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"Para confirmar que realmente lo desea, escriba aquí el nombre corto del "
+"Para confirmar que realmente lo desea, escriba aquí la URL semántica del "
 "organizador (\"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
@@ -23342,9 +23419,9 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
-"Algunas jurisdicciones, incluida la Unión Europea, requieren el "
-"consentimiento del usuario antes de que se le permita utilizar cookies o "
-"tecnología similar para análisis, seguimiento, pago o fines similares."
+"Algunas jurisdicciones, incluida la Unión Europea, exigen el consentimiento "
+"del usuario antes de permitirle utilizar cookies o tecnologías similares con "
+"fines analíticos, de seguimiento, de pago o similares."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:172
 msgid ""
@@ -23377,12 +23454,12 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
-"En última instancia, es su responsabilidad asegurarse de cumplir con todas "
+"En última instancia, es su responsabilidad asegurarse de que cumple todas "
 "las leyes pertinentes. Intentamos ayudar proporcionando estas "
-"configuraciones, pero no podemos asumir responsabilidad ya que no conocemos "
-"la configuración exacta de su uso de pretix, los detalles legales en su "
-"jurisdicción específica o los acuerdos que tiene con terceros, como "
-"proveedores de pago o seguimiento."
+"configuraciones, pero no podemos asumir la responsabilidad, ya que no "
+"conocemos la configuración exacta de su uso de pretix, los detalles legales "
+"en su jurisdicción específica o los acuerdos que tiene con terceros, como "
+"proveedores de pago o de seguimiento."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:210
 msgid "Barcode media"
@@ -24485,8 +24562,8 @@ msgid ""
 msgstr ""
 "Vuelva a comprobar que está completamente seguro de que desea eliminar las "
 "categorías de datos seleccionadas del evento <strong>%(event)s</strong>. "
-"Para confirmar que realmente deseas esto, escribe el nombre corto del evento "
-"(\"%(slug)s\") aquí:"
+"Para confirmar que realmente deseas esto, escribe la URL semántica del "
+"evento (\"%(slug)s\") aquí:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Event short name"
@@ -26090,6 +26167,7 @@ msgstr "Desconocido renderizador de correo electrónico."
 
 #: pretix/control/views/event.py:826 pretix/control/views/orders.py:671
 #: pretix/presale/views/order.py:1097 pretix/presale/views/order.py:1104
+#: pretix/control/views/orders.py:670
 msgid "You requested an invalid ticket output type."
 msgstr "Ha solicitado un tipo de salida de entrada no válido."
 
@@ -26145,10 +26223,12 @@ msgstr ""
 "dependen de este evento: {plugin_names}"
 
 #: pretix/control/views/event.py:1154 pretix/control/views/orders.py:760
+#: pretix/control/views/orders.py:759
 msgid "The comment has been updated."
 msgstr "El comentario ha sido actualizado."
 
 #: pretix/control/views/event.py:1156 pretix/control/views/orders.py:762
+#: pretix/control/views/orders.py:761
 msgid "Could not update the comment."
 msgstr "No se pudo actualizar el comentario."
 
@@ -26547,20 +26627,20 @@ msgstr ""
 msgid "Access for the selected application has been revoked."
 msgstr "Se ha revocado el acceso a la aplicación seleccionada."
 
-#: pretix/control/views/orders.py:244
+#: pretix/control/views/orders.py:244 pretix/control/views/orders.py:243
 #, python-brace-format
 msgid ""
 "Successfully executed the action \"{label}\" on {success} of {total} orders."
 msgstr ""
 "Ejecutó con éxito la acción \"{label}\" en {success} de {total} pedidos."
 
-#: pretix/control/views/orders.py:535
+#: pretix/control/views/orders.py:535 pretix/control/views/orders.py:534
 msgid "Your invoice"
 msgid_plural "Your invoices"
 msgstr[0] "Su factura"
 msgstr[1] "Sus facturas"
 
-#: pretix/control/views/orders.py:537
+#: pretix/control/views/orders.py:537 pretix/control/views/orders.py:536
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -26596,20 +26676,21 @@ msgstr[1] ""
 #: pretix/presale/views/order.py:937 pretix/presale/views/order.py:986
 #: pretix/presale/views/order.py:991 pretix/presale/views/order.py:1106
 #: pretix/presale/views/order.py:1279 pretix/presale/views/order.py:1662
-#: pretix/presale/views/order.py:1693
+#: pretix/presale/views/order.py:1693 pretix/control/views/orders.py:672
 msgid "Unknown order code or not authorized to access this order."
 msgstr ""
 "Código de pedido desconocido o no autorizado para acceder a este pedido."
 
 #: pretix/control/views/orders.py:675 pretix/presale/views/order.py:1111
+#: pretix/control/views/orders.py:674
 msgid "Ticket download is not enabled for this product."
 msgstr "La descarga de entrada no está habilitada para este producto."
 
-#: pretix/control/views/orders.py:796
+#: pretix/control/views/orders.py:796 pretix/control/views/orders.py:795
 msgid "The order has been deleted."
 msgstr "El pedido ha sido eliminado."
 
-#: pretix/control/views/orders.py:803
+#: pretix/control/views/orders.py:803 pretix/control/views/orders.py:802
 msgid ""
 "The order could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
@@ -26617,52 +26698,53 @@ msgstr ""
 "El pedido no pudo ser eliminado ya que algunas restricciones (por ejemplo "
 "los datos creados por los plug-ins) no lo permiten."
 
-#: pretix/control/views/orders.py:811
+#: pretix/control/views/orders.py:811 pretix/control/views/orders.py:810
 msgid "Only orders created in test mode can be deleted."
 msgstr "Solamente los pedidos creados en modo de prueba pueden ser eliminados."
 
-#: pretix/control/views/orders.py:832
+#: pretix/control/views/orders.py:832 pretix/control/views/orders.py:831
 msgid "The order has been denied and is therefore now canceled."
 msgstr "El pedido ha sido denegado y, por lo tanto, se ha cancelado."
 
-#: pretix/control/views/orders.py:872
+#: pretix/control/views/orders.py:872 pretix/control/views/orders.py:871
 msgid "This payment has been canceled."
 msgstr "Este pago ha sido cancelado."
 
-#: pretix/control/views/orders.py:874
+#: pretix/control/views/orders.py:874 pretix/control/views/orders.py:873
 msgid "This payment can not be canceled at the moment."
 msgstr "Este pago no puede ser cancelado en este momento."
 
-#: pretix/control/views/orders.py:900
+#: pretix/control/views/orders.py:900 pretix/control/views/orders.py:899
 msgid "The refund has been canceled."
-msgstr "El reembolso ha sido cancelado."
+msgstr "La devolución ha sido cancelada."
 
-#: pretix/control/views/orders.py:902
+#: pretix/control/views/orders.py:902 pretix/control/views/orders.py:901
 msgid "This refund can not be canceled at the moment."
-msgstr "Este reembolso no puede ser cancelado en este momento."
+msgstr "Esta devolución no puede cancelarse en este momento."
 
-#: pretix/control/views/orders.py:936
+#: pretix/control/views/orders.py:936 pretix/control/views/orders.py:935
 msgid "The refund has been processed."
-msgstr "El reembolso ha sido procesado."
+msgstr "La devolución ha sido procesada."
 
 #: pretix/control/views/orders.py:938 pretix/control/views/orders.py:964
+#: pretix/control/views/orders.py:937 pretix/control/views/orders.py:963
 msgid "This refund can not be processed at the moment."
-msgstr "Este reembolso no puede ser procesado en este momento."
+msgstr "Esta devolución no puede ser procesada en este momento."
 
-#: pretix/control/views/orders.py:962
+#: pretix/control/views/orders.py:962 pretix/control/views/orders.py:961
 msgid "The refund has been marked as done."
-msgstr "El reembolso se ha marcado como efectuado."
+msgstr "La devolución se ha marcado como realizada."
 
-#: pretix/control/views/orders.py:988
+#: pretix/control/views/orders.py:988 pretix/control/views/orders.py:987
 msgid "The request has been removed. If you want, you can now inform the user."
 msgstr ""
 "La solicitud ha sido eliminada. Si lo desea, puede informar ahora al usuario."
 
-#: pretix/control/views/orders.py:995
+#: pretix/control/views/orders.py:995 pretix/control/views/orders.py:994
 msgid "Your cancellation request"
 msgstr "Su solicitud de cancelación"
 
-#: pretix/control/views/orders.py:996
+#: pretix/control/views/orders.py:996 pretix/control/views/orders.py:995
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -26678,7 +26760,7 @@ msgstr ""
 "\n"
 "Tu equipo de {event}"
 
-#: pretix/control/views/orders.py:1052
+#: pretix/control/views/orders.py:1052 pretix/control/views/orders.py:1051
 msgid ""
 "The payment has been marked as complete, but we were unable to send a "
 "confirmation mail."
@@ -26686,76 +26768,75 @@ msgstr ""
 "El pago se ha marcado como completo, pero no hemos podido enviar un correo "
 "de confirmación."
 
-#: pretix/control/views/orders.py:1055
+#: pretix/control/views/orders.py:1055 pretix/control/views/orders.py:1054
 msgid "The payment has been marked as complete."
 msgstr "El pago se ha marcado como completo."
 
-#: pretix/control/views/orders.py:1057
+#: pretix/control/views/orders.py:1057 pretix/control/views/orders.py:1056
 msgid "This payment can not be confirmed at the moment."
 msgstr "Este pago no puede ser confirmado por el momento."
 
-#: pretix/control/views/orders.py:1148
+#: pretix/control/views/orders.py:1148 pretix/control/views/orders.py:1147
 msgid ""
 "The refund was prevented due to a refund already being processed at the same "
 "time. Please have a look at the order details and check if your refund is "
 "still necessary."
 msgstr ""
-"El reembolso no se ha podido realizar debido a que ya se estaba tramitando "
+"La devolución no se ha podido realizar debido a que ya se estaba tramitando "
 "otro reembolso al mismo tiempo. Por favor, revisar los detalles del pedido y "
 "comprobar si el reembolso sigue siendo necesario."
 
-#: pretix/control/views/orders.py:1248
+#: pretix/control/views/orders.py:1248 pretix/control/views/orders.py:1247
 msgid "You entered an order in an event with a different currency."
 msgstr "Ha introducido un pedido en un evento con una moneda diferente."
 
-#: pretix/control/views/orders.py:1299
+#: pretix/control/views/orders.py:1299 pretix/control/views/orders.py:1298
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
 msgstr ""
-"Usted no puede reembolsar más de la cantidad de un pago que aún no ha sido "
-"reembolsado."
+"No se puede devolver más del importe de un pago que aún no se ha devuelto."
 
-#: pretix/control/views/orders.py:1304
+#: pretix/control/views/orders.py:1304 pretix/control/views/orders.py:1303
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
 msgstr ""
-"Ha seleccionado un reembolso parcial para una vía de pago que sólo soporta "
-"reembolsos completos."
+"Ha seleccionado una devolución parcial para un método de pago que sólo "
+"admite devoluciones completas."
 
-#: pretix/control/views/orders.py:1334
+#: pretix/control/views/orders.py:1334 pretix/control/views/orders.py:1333
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
 msgstr ""
-"Uno de los reembolsos no fue procesado. Usted debe volver a intentar el "
-"reembolso de una manera diferente. El mensaje de error era: {}"
+"No se ha podido procesar una de las devoluciones. Debería volver a intentar "
+"realizar la devolución de otra forma. El mensaje de error era: {}"
 
-#: pretix/control/views/orders.py:1340
+#: pretix/control/views/orders.py:1340 pretix/control/views/orders.py:1339
 msgid "A refund of {} has been processed."
-msgstr "Se ha procesado un reembolso de {}."
+msgstr "Se ha procesado una devolución de {}."
 
-#: pretix/control/views/orders.py:1344
+#: pretix/control/views/orders.py:1344 pretix/control/views/orders.py:1343
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
-"Se ha guardado un reembolso de {}, pero aún no se ha ejecutado "
-"completamente. Puede marcarlo como completo a continuación."
+"Se ha guardado una devolución de {}, pero aún no se ha ejecutado "
+"completamente. Puedes marcarlo como completo a continuación."
 
-#: pretix/control/views/orders.py:1373
+#: pretix/control/views/orders.py:1373 pretix/control/views/orders.py:1372
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
 "Se ha creado una nueva tarjeta regalo. Ahora puede enviar al usuario su "
 "código de tarjeta regalo."
 
-#: pretix/control/views/orders.py:1381
+#: pretix/control/views/orders.py:1381 pretix/control/views/orders.py:1380
 msgid "Your gift card code"
 msgstr "Código de la tarjeta de regalo"
 
-#: pretix/control/views/orders.py:1383
+#: pretix/control/views/orders.py:1383 pretix/control/views/orders.py:1382
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -26769,20 +26850,20 @@ msgid ""
 msgstr ""
 "Hola,\n"
 "\n"
-"Le hemos reembolsado {amount} por su pedido.\n"
+"Le hemos devuelto {amount} por su pedido.\n"
 "\n"
 "Puede utilizar el código de la tarjeta regalo {giftcard} para pagar futuras "
 "compras de entradas en nuestra tienda.\n"
 "\n"
-"Tu equipo de {event}"
+"El equipo de {event}"
 
-#: pretix/control/views/orders.py:1394
+#: pretix/control/views/orders.py:1394 pretix/control/views/orders.py:1393
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr ""
-"Los reembolsos seleccionados no coinciden con el importe total del reembolso "
-"seleccionado."
+"las devoluciones seleccionadas no coinciden con el importe total de "
+"devolución seleccionado."
 
-#: pretix/control/views/orders.py:1522
+#: pretix/control/views/orders.py:1522 pretix/control/views/orders.py:1521
 msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
@@ -26790,11 +26871,11 @@ msgstr ""
 "El pedido ha sido marcado como pagado, pero no hemos podido enviar un correo "
 "de confirmación."
 
-#: pretix/control/views/orders.py:1525
+#: pretix/control/views/orders.py:1525 pretix/control/views/orders.py:1524
 msgid "The payment has been created successfully."
 msgstr "El pago ha sido creado con éxito."
 
-#: pretix/control/views/orders.py:1539
+#: pretix/control/views/orders.py:1539 pretix/control/views/orders.py:1538
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
@@ -26803,19 +26884,20 @@ msgstr ""
 "dinero de vuelta al usuario."
 
 #: pretix/control/views/orders.py:1610 pretix/control/views/orders.py:1614
+#: pretix/control/views/orders.py:1609 pretix/control/views/orders.py:1613
 msgid "No VAT ID specified."
 msgstr "No se especifica el número de IVA."
 
-#: pretix/control/views/orders.py:1618
+#: pretix/control/views/orders.py:1618 pretix/control/views/orders.py:1617
 msgid "No country specified."
 msgstr "No se especifica ningún país."
 
-#: pretix/control/views/orders.py:1622
+#: pretix/control/views/orders.py:1622 pretix/control/views/orders.py:1621
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
 "No se ha podido comprobar el tipo de IVA ya que no se admite este país."
 
-#: pretix/control/views/orders.py:1633
+#: pretix/control/views/orders.py:1633 pretix/control/views/orders.py:1632
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
@@ -26824,47 +26906,53 @@ msgstr ""
 "que el servicio de comprobación del IVA del país no está disponible en la "
 "actualidad."
 
-#: pretix/control/views/orders.py:1636
+#: pretix/control/views/orders.py:1636 pretix/control/views/orders.py:1635
 msgid "This VAT ID is valid."
 msgstr "Este número de IVA es válido."
 
 #: pretix/control/views/orders.py:1650 pretix/control/views/orders.py:1683
+#: pretix/control/views/orders.py:1649 pretix/control/views/orders.py:1682
 msgid "Unknown invoice."
 msgstr "Factura desconocida."
 
-#: pretix/control/views/orders.py:1653
+#: pretix/control/views/orders.py:1653 pretix/control/views/orders.py:1652
 msgid "Invoices may not be changed after they are created."
 msgstr "Las facturas no se pueden modificar una vez creadas."
 
 #: pretix/control/views/orders.py:1655 pretix/control/views/orders.py:1686
+#: pretix/control/views/orders.py:1654 pretix/control/views/orders.py:1685
 msgid "The invoice has already been canceled."
 msgstr "La factura ya se ha anulado."
 
-#: pretix/control/views/orders.py:1657
+#: pretix/control/views/orders.py:1657 pretix/control/views/orders.py:1656
 msgid "The invoice file has already been exported."
 msgstr "El archivo de factura ya ha sido exportado."
 
-#: pretix/control/views/orders.py:1659
+#: pretix/control/views/orders.py:1659 pretix/control/views/orders.py:1658
 msgid "The invoice file is too old to be regenerated."
 msgstr "El archivo de factura es demasiado antiguo para regenerarlo."
 
 #: pretix/control/views/orders.py:1661 pretix/control/views/orders.py:1688
+#: pretix/control/views/orders.py:1660 pretix/control/views/orders.py:1687
 msgid "The invoice has been cleaned of personal data."
 msgstr "La factura ha sido limpiada de datos personales."
 
-#: pretix/control/views/orders.py:1719
+#: pretix/control/views/orders.py:1719 pretix/control/views/orders.py:1718
 msgid "The email has been queued to be sent."
 msgstr "El correo electrónico ha sido puesto en cola para ser enviado."
 
 #: pretix/control/views/orders.py:1743 pretix/presale/views/order.py:1288
+#: pretix/control/views/orders.py:1742
 msgid "This invoice has not been found"
 msgstr "No se ha encontrado esta factura"
 
 #: pretix/control/views/orders.py:1750 pretix/presale/views/order.py:1295
+#: pretix/control/views/orders.py:1749
 msgid "The invoice file is no longer stored on the server."
 msgstr "El archivo de factura ya no se almacena en el servidor."
 
 #: pretix/control/views/orders.py:1755 pretix/presale/views/order.py:1300
+#: pretix/control/views/orders.py:1754
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
@@ -26872,11 +26960,12 @@ msgstr ""
 "El archivo de la factura aún no ha sido generado, nosotros lo generaremos "
 "para usted ahora. Por favor, inténtelo de nuevo en unos segundos."
 
-#: pretix/control/views/orders.py:1783
+#: pretix/control/views/orders.py:1783 pretix/control/views/orders.py:1782
 msgid "The payment term has been changed."
 msgstr "Se ha modificado la condición de pago."
 
 #: pretix/control/views/orders.py:1788 pretix/control/views/orders.py:1845
+#: pretix/control/views/orders.py:1787 pretix/control/views/orders.py:1844
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
@@ -26884,59 +26973,68 @@ msgstr ""
 "No pudimos procesar la petición completamente porque el servidor estaba "
 "demasiado ocupado."
 
-#: pretix/control/views/orders.py:1796
+#: pretix/control/views/orders.py:1796 pretix/control/views/orders.py:1795
 msgid "This action is only allowed for pending orders."
 msgstr "Esta acción sólo se permite para órdenes pendientes."
 
-#: pretix/control/views/orders.py:1851
+#: pretix/control/views/orders.py:1851 pretix/control/views/orders.py:1850
 msgid "This action is only allowed for canceled orders."
 msgstr "Esta acción sólo está permitida para pedidos cancelados."
 
 #: pretix/control/views/orders.py:2108 pretix/presale/views/order.py:1572
+#: pretix/control/views/orders.py:2067
 msgid "An error occurred. Please see the details below."
 msgstr "Se ha producido un error. Por favor, vea los detalles a continuación."
 
-#: pretix/control/views/orders.py:2116
+#: pretix/control/views/orders.py:2116 pretix/control/views/orders.py:2075
 msgid "The order has been changed and the user has been notified."
 msgstr "El pedido ha sido cambiado y el usuario ha sido notificado."
 
 #: pretix/control/views/orders.py:2118 pretix/control/views/orders.py:2252
 #: pretix/control/views/orders.py:2289 pretix/presale/views/order.py:1607
+#: pretix/control/views/orders.py:2077 pretix/control/views/orders.py:2211
+#: pretix/control/views/orders.py:2248
 msgid "The order has been changed."
 msgstr "El pedido ha sido cambiado."
 
 #: pretix/control/views/orders.py:2145 pretix/presale/checkoutflow.py:939
 #: pretix/presale/views/order.py:792 pretix/presale/views/order.py:897
+#: pretix/control/views/orders.py:2104
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr ""
 "Tuvimos dificultades para procesar su información. Por favor revise los "
 "errores a continuación."
 
-#: pretix/control/views/orders.py:2254
+#: pretix/control/views/orders.py:2254 pretix/control/views/orders.py:2213
 msgid "Nothing about the order had to be changed."
 msgstr "No hubo que cambiar nada en el pedido."
 
 #: pretix/control/views/orders.py:2335 pretix/plugins/sendmail/views.py:177
+#: pretix/control/views/orders.py:2294
 msgid "We could not send the email. See below for details."
 msgstr "No pudimos enviar el correo electrónico. Ver abajo para más detalles."
 
 #: pretix/control/views/orders.py:2351 pretix/control/views/orders.py:2418
 #: pretix/plugins/sendmail/views.py:207 pretix/plugins/sendmail/views.py:625
-#: pretix/plugins/sendmail/views.py:701
+#: pretix/plugins/sendmail/views.py:701 pretix/control/views/orders.py:2310
+#: pretix/control/views/orders.py:2377
 #, python-brace-format
 msgid "Subject: {subject}"
 msgstr "Asunto: {subject}"
 
 #: pretix/control/views/orders.py:2367 pretix/control/views/orders.py:2435
+#: pretix/control/views/orders.py:2326 pretix/control/views/orders.py:2394
 msgid "Your message has been queued and will be sent to {}."
 msgstr "Su mensaje ha sido puesto en cola y será enviado a {}."
 
 #: pretix/control/views/orders.py:2371 pretix/control/views/orders.py:2438
+#: pretix/control/views/orders.py:2330 pretix/control/views/orders.py:2397
 msgid "Failed to send mail to the following user: {}"
 msgstr "No se pudo enviar correo al siguiente usuario: {}"
 
 #: pretix/control/views/orders.py:2474 pretix/presale/views/order.py:1071
+#: pretix/control/views/orders.py:2433
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -26944,21 +27042,24 @@ msgstr ""
 "Este enlace ya no es válido. Por favor, vuelva atrás, actualice la página e "
 "inténtelo de nuevo."
 
-#: pretix/control/views/orders.py:2550
+#: pretix/control/views/orders.py:2550 pretix/control/views/orders.py:2509
 msgid "There is no order with the given order code."
 msgstr "No hay ningún pedido con el código de pedido dado."
 
 #: pretix/control/views/orders.py:2656 pretix/control/views/organizer.py:1772
+#: pretix/control/views/orders.py:2615
 msgid "The selected exporter was not found."
 msgstr "No se encontró al exportador seleccionado."
 
 #: pretix/control/views/orders.py:2666 pretix/control/views/organizer.py:1782
+#: pretix/control/views/orders.py:2625
 msgid "There was a problem processing your input. See below for error details."
 msgstr ""
 "Hubo un problema procesando su entrada. Vea a continuación los detalles de "
 "los errores."
 
 #: pretix/control/views/orders.py:2701 pretix/control/views/organizer.py:1825
+#: pretix/control/views/orders.py:2660
 #, python-brace-format
 msgid ""
 "Your export schedule has been saved. The next export will start around "
@@ -26968,17 +27069,20 @@ msgstr ""
 "comenzará alrededor del {datetime}."
 
 #: pretix/control/views/orders.py:2706 pretix/control/views/organizer.py:1830
+#: pretix/control/views/orders.py:2665
 msgid "Your export schedule has been saved, but no next export is planned."
 msgstr ""
 "Su programa de exportación se ha guardado, pero no está prevista ninguna "
 "próxima exportación."
 
 #: pretix/control/views/orders.py:2745 pretix/control/views/organizer.py:1870
+#: pretix/control/views/orders.py:2704
 #, python-brace-format
 msgid "Export: {title}"
 msgstr "Exportar: {title}"
 
 #: pretix/control/views/orders.py:2746 pretix/control/views/organizer.py:1872
+#: pretix/control/views/orders.py:2705
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -26991,6 +27095,7 @@ msgstr ""
 "programado para {name}."
 
 #: pretix/control/views/orders.py:2814 pretix/control/views/organizer.py:1940
+#: pretix/control/views/orders.py:2773
 msgid ""
 "Your export is queued to start soon. The results will be send via email. "
 "Depending on system load and type and size of export, this may take a few "
@@ -27000,11 +27105,11 @@ msgstr ""
 "por correo electrónico. Dependiendo de la carga del sistema y del tipo y "
 "tamaño de la exportación, esto puede tardar unos minutos."
 
-#: pretix/control/views/orders.py:2893
+#: pretix/control/views/orders.py:2893 pretix/control/views/orders.py:2852
 msgid "All orders have been canceled."
 msgstr "Todos los pedidos han sido cancelados."
 
-#: pretix/control/views/orders.py:2895
+#: pretix/control/views/orders.py:2895 pretix/control/views/orders.py:2854
 #, python-brace-format
 msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
@@ -27013,7 +27118,7 @@ msgstr ""
 "Los pedidos han sido cancelados. Se produjo un error con {count} pedidos; "
 "verifique todos los pedidos no cancelados."
 
-#: pretix/control/views/orders.py:2916
+#: pretix/control/views/orders.py:2916 pretix/control/views/orders.py:2875
 msgid "Your input was not valid."
 msgstr "Tu entrada no fue válida."
 
@@ -27634,6 +27739,7 @@ msgid "Known domains"
 msgstr "Dominios conocidos"
 
 #: pretix/plugins/autocheckin/apps.py:30 pretix/plugins/autocheckin/apps.py:33
+#: pretix/control/templates/pretixcontrol/checkin/lists.html:104
 msgid "Automated check-in"
 msgstr "Check-in automático"
 
@@ -27870,29 +27976,26 @@ msgstr "Fecha del evento"
 
 #: pretix/plugins/badges/exporters.py:475
 #, fuzzy
-#| msgid "Only include tickets for dates on or before this date."
 msgid "Only include tickets ordered on or before this date."
 msgstr "Solo incluya entradas para fechas iguales o anteriores a esta fecha."
 
 #: pretix/plugins/badges/exporters.py:479
 #, fuzzy
-#| msgid "Start date"
 msgid "Start order date"
 msgstr "Fecha de inicio"
 
 #: pretix/plugins/badges/exporters.py:482
 #, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include tickets ordered on or after this date."
 msgstr "Solo incluya entradas para fechas iguales o posteriores a esta fecha."
 
 #: pretix/plugins/badges/exporters.py:486
 #, fuzzy
-#| msgid "Order date"
 msgid "End order date"
 msgstr "Fecha del pedido"
 
 #: pretix/plugins/badges/exporters.py:489
+#: pretix/plugins/badges/exporters.py:475
 msgid "Only include tickets for dates on or before this date."
 msgstr "Solo incluya entradas para fechas iguales o anteriores a esta fecha."
 
@@ -27901,11 +28004,13 @@ msgstr "Solo incluya entradas para fechas iguales o anteriores a esta fecha."
 #: pretix/plugins/reports/exporters.py:495
 #: pretix/plugins/reports/exporters.py:677
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
+#: pretix/plugins/badges/exporters.py:479
 msgid "Sort by"
 msgstr "Ordenar por"
 
 #: pretix/plugins/badges/exporters.py:661
 #: pretix/plugins/ticketoutputpdf/exporters.py:242
+#: pretix/plugins/badges/exporters.py:626
 msgid ""
 "Your data could not be converted as requested. This could be caused by "
 "invalid values in your databases, such as answers to number questions which "
@@ -27994,7 +28099,7 @@ msgstr "etiqueta {width} x {height} mm"
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
 msgid "Print badges"
-msgstr "Imprimir insignias"
+msgstr "Imprimir identificadores"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
@@ -28183,7 +28288,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:184
 msgid "IBAN blocklist for refunds"
-msgstr "Lista de bloqueo de IBAN para reembolsos"
+msgstr "Lista de bloqueo de IBAN para devoluciones"
 
 #: pretix/plugins/banktransfer/payment.py:187
 msgid ""
@@ -28196,11 +28301,11 @@ msgid ""
 "starting with 12345."
 msgstr ""
 "Introducir un prefijo IBAN o un IBAN por línea. El sistema no intentará "
-"enviar reembolsos a ninguno de estos IBAN. Es útil, por ejemplo, si recibes "
-"muchos \"pagos reenviados\" por proveedores de pago externos. También puede "
-"indicar códigos de país como \"GB\" si no desea enviar nunca reembolsos a "
-"IBAN de un país específico. Los dígitos de control se ignorarán para la "
-"comparación, por lo que puedes, por ejemplo, prohibir DE0012345 para "
+"enviar devoluciones a ninguno de estos IBAN. Es útil, por ejemplo, si "
+"recibes muchos \"pagos reenviados\" por proveedores de pago externos. "
+"También puede indicar códigos de país como \"GB\" si no desea enviar nunca "
+"devolverá a IBAN de un país específico. Los dígitos de control se ignorarán "
+"para la comparación, por lo que puedes, por ejemplo, prohibir DE0012345 para "
 "prohibir todos los IBAN alemanes cuyo identificador bancario empiece por "
 "12345."
 
@@ -28313,7 +28418,7 @@ msgstr "Cuenta bancaria {iban}"
 #: pretix/plugins/banktransfer/payment.py:640
 msgid "Can only create a bank transfer refund from an existing payment."
 msgstr ""
-"Solo se puede crear un reembolso por transferencia bancaria a partir de un "
+"Solo se puede crear una devolución por transferencia bancaria a partir de un "
 "pago existente."
 
 #: pretix/plugins/banktransfer/payment.py:660
@@ -28346,7 +28451,7 @@ msgstr "Importar datos bancarios"
 #: pretix/plugins/banktransfer/signals.py:63
 #: pretix/plugins/banktransfer/signals.py:99
 msgid "Export refunds"
-msgstr "Exportación de Reembolsos"
+msgstr "Exportación de devoluciones"
 
 #: pretix/plugins/banktransfer/signals.py:123
 msgid "The invoice was sent to the designated email address."
@@ -28669,7 +28774,7 @@ msgstr "Enviar factura por correo electrónico"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:7
 msgid "Export bank transfer refunds"
-msgstr "Exportación de reembolsos por transferencia bancaria"
+msgstr "Exportación de devoluciones por transferencia bancaria"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:9
 #, python-format
@@ -28677,13 +28782,13 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
-"<strong>%(num_new)s</strong> Se han realizado reembolsos por transferencia "
+"<strong>%(num_new)s</strong> Se han realizado devoluciones por transferencia "
 "bancaria y aún no forman parte de una exportación."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
 msgstr ""
-"En el modo de prueba, sus exportaciones solo contendrán pedidos en modo de "
+"En modo de prueba, sus exportaciones sólo contendrán pedidos en modo de "
 "prueba."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:19
@@ -28696,11 +28801,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
 msgid "Go to organizer-level exports"
-msgstr "Ir a exportaciones a nivel de organizadores"
+msgstr "Ir a las exportaciones a nivel de organizador"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:32
 msgid "Create new export file"
-msgstr "Crear archivo nuevo de exportación"
+msgstr "Crear un nuevo archivo de exportación"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:38
 msgid "Aggregate transactions to the same bank account"
@@ -28716,9 +28821,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"                    Tenga en cuenta que los reembolsos se marcarán como "
-"realizados una vez que se cree una exportación.\n"
-"Asegúrese de descargar la exportación y ejecutar los reembolsos.\n"
+"                    Tenga en cuenta que las devoluciones se marcarán como "
+"realizadas una vez que se cree una exportación.\n"
+"Asegúrese de descargar la exportación y ejecutar las devoluciones.\n"
 "                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
@@ -28749,7 +28854,7 @@ msgstr "XML SEPA"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:110
 msgid "No exports have been created yet."
-msgstr "Aún no se han creado exportaciones."
+msgstr "Todavía no se ha creado ninguna exportación."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
@@ -28764,16 +28869,17 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
-"Estás intentando descargar una exportación de reembolso de %(date)s con un "
-"pedido y un total de %(sum)s."
+"Estás intentando descargar una exportación de devoluciones de %(date)s con "
+"un pedido y un total de %(sum)s."
 msgstr[1] ""
-"Estás intentando descargar una exportación de reembolso de %(date)s con un "
-"pedido de %(cnt)s y un total de %(sum)s."
+"Estás intentando descargar una exportación de devoluciones de %(date)s con "
+"un pedido de %(cnt)s y un total de %(sum)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr "Indique desde qué cuenta bancaria se deben transferir los reembolsos."
+msgstr ""
+"Indique desde qué cuenta bancaria se deben transferir las devoluciones."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
@@ -28830,8 +28936,8 @@ msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
 msgstr ""
-"Importe negativo pero no se puede registrar el reembolso. Primero cree un "
-"reembolso manual."
+"Importe negativo pero no se puede registrar la devolución. Primero cree una "
+"devolución manual."
 
 #: pretix/plugins/banktransfer/views.py:172
 msgid "Problem sending email."
@@ -28912,8 +29018,8 @@ msgid ""
 "We could not find bank account information for the refund {refund_id}. It "
 "was marked as failed."
 msgstr ""
-"No pudimos encontrar la información de la cuenta bancaria para el reembolso "
-"{refund_id}. Fue marcado como fallido."
+"No pudimos encontrar la información de la cuenta bancaria para la devolución "
+"{refund_id}. Fue marcada como fallido."
 
 #: pretix/plugins/banktransfer/views.py:751
 msgid "No valid orders have been found."
@@ -29196,7 +29302,7 @@ msgstr "Se ha producido un error al enviar el mail de confirmación."
 #: pretix/plugins/paypal/payment.py:565 pretix/plugins/paypal/payment.py:572
 #: pretix/plugins/paypal2/payment.py:962 pretix/plugins/paypal2/payment.py:983
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr "Ha fallado el reintegro del importe a través de PayPal: {}"
+msgstr "Ha fallado la devolución del importe a través de PayPal: {}"
 
 #: pretix/plugins/paypal/payment.py:707 pretix/plugins/paypal/payment.py:715
 #: pretix/plugins/paypal2/payment.py:1060
@@ -29471,8 +29577,8 @@ msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
-"El reembolso del importe a través de PayPal ha fallado: El pago original no "
-"contiene la información necesaria para emitir un reembolso automático."
+"La devolución del importe a través de PayPal ha fallado: El pago original no "
+"contiene la información necesaria para emitir una devolución automática."
 
 #: pretix/plugins/paypal2/payment.py:1087
 msgid "PayPal APM"
@@ -29492,7 +29598,7 @@ msgstr "Pago denegado."
 
 #: pretix/plugins/paypal2/signals.py:61
 msgid "Payment refunded."
-msgstr "Reembolso del pago."
+msgstr "Pago devuelto."
 
 #: pretix/plugins/paypal2/signals.py:62
 msgid "Payment reversed."
@@ -30610,8 +30716,8 @@ msgid ""
 msgstr ""
 "Por favor, configure un <a href=\"https://dashboard.stripe.com/account/"
 "webhooks\">Stripe Webhook</a> en el siguiente punto final para cancelar "
-"automáticamente los pedidos cuando los cargos sean reembolsados externamente "
-"y para procesar métodos de pago asíncronos como SOFORT."
+"automáticamente los pedidos cuando los cargos sean devueltas externamente y "
+"para procesar métodos de pago asíncronos como SOFORT."
 
 #: pretix/plugins/stripe/payment.py:222
 msgid "Enable MOTO payments for resellers"
@@ -31169,7 +31275,7 @@ msgstr "La carga tuvo éxito."
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge refunded."
-msgstr "Cargo reembolsado."
+msgstr "Cargo devuelto."
 
 #: pretix/plugins/stripe/signals.py:94
 msgid "Charge updated."
@@ -31338,16 +31444,17 @@ msgid ""
 "statement that you can obtain from your bank. You agree to receive "
 "notifications for future debits up to 2 days before they occur."
 msgstr ""
-"Al proporcionar su información de pago y confirmar este pago, usted autoriza "
-"a (A) %(sepa_creditor_name)s y Stripe, nuestro proveedor de servicios de "
-"pago y/o PPRO, su proveedor de servicios local, a enviar instrucciones a su "
-"banco para debitar su cuenta y (B ) su banco para debitar su cuenta de "
-"acuerdo con dichas instrucciones. Como parte de sus derechos, tiene derecho "
-"a un reembolso de su banco según los términos y condiciones de su acuerdo "
-"con su banco. Se debe reclamar un reembolso dentro de las 8 semanas a partir "
-"de la fecha en que se debitó su cuenta. Sus derechos se explican en una "
-"declaración que puede obtener de su banco. Aceptas recibir notificaciones de "
-"futuros débitos hasta 2 días antes de que ocurran."
+"Al proporcionar su información de pago y confirmar este pago, autoriza a (A) "
+"%(sepa_creditor_name)s y Stripe, nuestro proveedor de servicios de pago y/o "
+"PPRO, su proveedor de servicios local, a enviar instrucciones a su banco "
+"para que cargue el importe en su cuenta y (B) a su banco a cargar el importe "
+"en su cuenta de acuerdo con dichas instrucciones. Como parte de sus "
+"derechos, tiene derecho a una devolución de su banco según los términos y "
+"condiciones de su acuerdo con su banco. La devolución debe reclamarse en un "
+"plazo de 8 semanas a partir de la fecha en que se efectuó el cargo en su "
+"cuenta. Sus derechos se explican en una declaración que puede obtener en su "
+"banco. Acepta recibir notificaciones de futuros cargos hasta 2 días antes de "
+"que se produzcan."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:7
 msgid "Charge ID"
@@ -31924,7 +32031,6 @@ msgstr "No existen más variantes de este producto."
 
 #: pretix/presale/forms/organizer.py:70
 #, fuzzy
-#| msgid "All"
 msgctxt "filter_empty"
 msgid "all"
 msgstr "Todos"
@@ -32415,7 +32521,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:17
 msgid "We apologize for the inconvenience!"
-msgstr "Pedimos disculpas por las molestias!"
+msgstr "¡Disculpe las molestias!"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:24
 msgid "Continue in new tab"
@@ -32423,7 +32529,7 @@ msgstr "Continuar en la nueva pestaña"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:31
 msgid "Cookies not supported"
-msgstr "Cookies no soportadas"
+msgstr "Cookies no admitidas"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:33
 msgid ""
@@ -32942,7 +33048,7 @@ msgstr "Tendrás que pagar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:146
 msgid "You will be refunded"
-msgstr "Se te reembolsará"
+msgstr "Se le devolverá el dinero"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:150
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:109
@@ -32950,8 +33056,8 @@ msgid ""
 "The organizer will get in touch with you to clarify the details of your "
 "refund."
 msgstr ""
-"El organizador se pondrá en contacto contigo para aclarar los detalles de tu "
-"reembolso."
+"El organizador se pondrá en contacto con usted para aclarar los detalles de "
+"su devolución."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:152
 #: pretix/presale/templates/pretixpresale/event/order.html:390
@@ -32962,8 +33068,8 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
-"El reembolso se emitirá en forma de una tarjeta de regalo que podrá utilizar "
-"para futuras compras."
+"La devolución se efectuará en forma de tarjeta regalo que podrá utilizar "
+"para otras compras."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:155
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:147
@@ -32973,9 +33079,9 @@ msgid ""
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
-"El total del reembolso se enviará automáticamente a su método de pago "
-"original. Dependiendo del método de pago, espere hasta dos semanas antes de "
-"que esto aparezca en su estado de cuenta."
+"El importe de la devolución se enviará automáticamente a su método de pago "
+"original. Dependiendo del método de pago, puede tardar hasta dos semanas en "
+"aparecer en su cuenta."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:161
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:165
@@ -32986,10 +33092,10 @@ msgid ""
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
-"Con el método de pago usado, el monto de %(amount)s del reembolso <strong> "
-"no puede ser reenviado a ti automáticamente</strong>. En su lugar, el "
-"organizador del evento necesitará iniciar la transferencia manualmente. Por "
-"favor se paciente ya que esto puede tomar un poco más de tiempo."
+"Con el método de pago que utilizó, el importe de la devolución <strong>no se "
+"le puede enviar automáticamente</strong>. En su lugar, el organizador del "
+"evento tendrá que iniciar la transferencia manualmente. Por favor, tenga "
+"paciencia ya que esto puede tardar un poco más."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:185
 msgid ""
@@ -33475,7 +33581,7 @@ msgstr ""
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
-"Un reembolso de %(amount)s te será enviado pronto, por favor se paciente."
+"En breve se le enviará una devolución de %(amount)s, por favor se paciente."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
@@ -33487,8 +33593,8 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
-"Emitimos su reembolso de %(amount)s como tarjeta de regalo. En su próxima "
-"compra con nosotros, puede utilizar el siguiente código de tarjeta de regalo "
+"Hemos emitido su devolución de %(amount)s como tarjeta regalo. En su próxima "
+"compra con nosotros, puede utilizar el siguiente código de tarjeta regalo "
 "durante el pago:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:162
@@ -33507,8 +33613,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
-"Un reembolso de %(amount)s te ha sido enviado. Dependiendo del método de "
-"pago, por favor permitir hasta 14 días para que se muestre en tu declaración."
+"Una devolución de %(amount)s ha sido enviada. Dependiendo del método de "
+"pago, por favor permitir hasta 14 días para que se muestre en su cuenta."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 #: pretix/presale/templates/pretixpresale/event/position.html:33
@@ -33584,9 +33690,9 @@ msgid ""
 "receive a full refund or if a cancellation fee is deducted according to "
 "their cancellation policy."
 msgstr ""
-"Si se aprueba su solicitud, el organizador determinará si recibirá un "
-"reembolso completo o si se deducirá una tarifa de cancelación de acuerdo con "
-"su política de cancelación."
+"Si se aprueba su solicitud, el organizador determinará si se le devolverá el "
+"importe íntegro o si se le deducirá una comisión de cancelación de acuerdo "
+"con la política de cancelación."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:392
 #: pretix/presale/templates/pretixpresale/event/order.html:428
@@ -33594,14 +33700,14 @@ msgstr ""
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
-"El reembolso puede emitirse mediante su método de pago original o como "
+"La devolución puede emitirse mediante su método de pago original o como "
 "tarjeta de regalo."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:394
 #: pretix/presale/templates/pretixpresale/event/order.html:430
 #: pretix/presale/templates/pretixpresale/event/order.html:451
 msgid "The refund will be issued to your original payment method."
-msgstr "El reembolso se emitirá a su método de pago original."
+msgstr "La devolución se emitirá a su método de pago original."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:396
 #: pretix/presale/templates/pretixpresale/event/order.html:409
@@ -33615,7 +33721,8 @@ msgstr "Esto invalidará todos las entradas de este pedido."
 #: pretix/presale/templates/pretixpresale/event/order.html:401
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
-msgstr "Puede solicitar cancelar este pedido, pero no recibirá un reembolso."
+msgstr ""
+"Puede solicitar la cancelación de este pedido, pero no recibirá un reembolso."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:405
 msgid "You can cancel this order, but you will not receive a refund."
@@ -34736,19 +34843,30 @@ msgstr "Acceso de escritura"
 msgid "Kosovo"
 msgstr "Kosovo"
 
-#~ msgid "Sales channels to automatically check in"
-#~ msgstr "Canales de venta para registrarse automáticamente"
+#: pretix/base/models/checkin.py:104
+msgid "Sales channels to automatically check in"
+msgstr "Canales de venta para registrarse automáticamente"
 
-#~ msgid ""
-#~ "This option is deprecated and will be removed in the next months. As a "
-#~ "replacement, our new plugin \"Auto check-in\" can be used. When we remove "
-#~ "this option, we will automatically migrate your event to use the new "
-#~ "plugin."
-#~ msgstr ""
-#~ "Esta opción está obsoleta y se eliminará en los próximos meses. Como "
-#~ "reemplazo, se puede utilizar nuestro nuevo plugin «Auto check-in». Cuando "
-#~ "eliminemos esta opción, migraremos automáticamente su evento para "
-#~ "utilizar el nuevo plugin."
+#: pretix/base/models/checkin.py:105
+msgid ""
+"This option is deprecated and will be removed in the next months. As a "
+"replacement, our new plugin \"Auto check-in\" can be used. When we remove "
+"this option, we will automatically migrate your event to use the new plugin."
+msgstr ""
+"Esta opción está obsoleta y se eliminará en los próximos meses. Como "
+"reemplazo, se puede utilizar nuestro nuevo plugin «Auto check-in». Cuando "
+"eliminemos esta opción, migraremos automáticamente su evento para utilizar "
+"el nuevo plugin."
+
+#: pretix/control/templates/pretixcontrol/order/change.html:434
+msgid ""
+"Manually modifying payment fees is discouraged since they might "
+"automatically be on subsequent order changes or when choosing a different "
+"payment method."
+msgstr ""
+"No se aconseja modificar manualmente las tasas de pago, ya que podrían "
+"aparecer automáticamente en cambios de órdenes futuras o cuando se "
+"selecciona un método de pago diferente."
 
 #, python-brace-format
 #~ msgid "{category} (Add-On products)"
