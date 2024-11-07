@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-29 08:53+0000\n"
-"PO-Revision-Date: 2024-11-07 00:00+0000\n"
+"PO-Revision-Date: 2024-11-07 08:26+0000\n"
 "Last-Translator: Damiano <estux@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -5352,9 +5352,8 @@ msgid "Maximum value"
 msgstr "Valore massimo"
 
 #: pretix/base/models/items.py:1738
-#, fuzzy
 msgid "Maximum length"
-msgstr "Tasse"
+msgstr "Lunghezza massima"
 
 #: pretix/base/models/items.py:1744
 msgid "Validate file to be a portrait"
@@ -5368,7 +5367,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1800
 msgid "An answer to this question is required to proceed."
-msgstr ""
+msgstr "Per procedere è necessario rispondere a questa domanda."
 
 #: pretix/base/models/items.py:1810
 #, fuzzy
@@ -5377,25 +5376,23 @@ msgstr "oggetto non valido"
 
 #: pretix/base/models/items.py:1844
 msgid "The number is to low."
-msgstr ""
+msgstr "Il numero è troppo basso."
 
 #: pretix/base/models/items.py:1846
 msgid "The number is to high."
-msgstr ""
+msgstr "Il numero è troppo alto."
 
 #: pretix/base/models/items.py:1849
 msgid "Invalid number input."
 msgstr ""
 
 #: pretix/base/models/items.py:1856 pretix/base/models/items.py:1880
-#, fuzzy
 msgid "Please choose a later date."
-msgstr "Data di Inizio"
+msgstr "Si prega di scegliere una data successiva."
 
 #: pretix/base/models/items.py:1858 pretix/base/models/items.py:1882
-#, fuzzy
 msgid "Please choose an earlier date."
-msgstr "Data di Inizio"
+msgstr "Si prega di scegliere una data precedente."
 
 #: pretix/base/models/items.py:1861
 msgid "Invalid date input."
@@ -5411,12 +5408,12 @@ msgstr ""
 
 #: pretix/base/models/items.py:1889
 msgid "Unknown country code."
-msgstr ""
+msgstr "Codice del paese sconosciuto."
 
 #: pretix/base/models/items.py:1919
 #: pretix/control/templates/pretixcontrol/items/question.html:90
 msgid "Answer"
-msgstr ""
+msgstr "Risposta"
 
 #: pretix/base/models/items.py:1943
 msgid "The identifier \"{}\" is already used for a different option."
@@ -19439,7 +19436,7 @@ msgstr "Conteggio"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:92
 msgid "Percentage"
-msgstr ""
+msgstr "Percentuale"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:110
 #: pretix/control/templates/pretixcontrol/order/transactions.html:65
