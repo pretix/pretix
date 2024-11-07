@@ -343,11 +343,13 @@ class CartManager:
                 err = error_messages['some_subevent_not_started']
                 cp.addons.all().delete()
                 cp.delete()
+                continue
 
             if cp.subevent and cp.subevent.presale_end and time_machine_now(self.real_now_dt) > cp.subevent.presale_end:
                 err = error_messages['some_subevent_ended']
                 cp.addons.all().delete()
                 cp.delete()
+                continue
 
             if cp.subevent:
                 tlv = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
@@ -360,6 +362,7 @@ class CartManager:
                         err = error_messages['some_subevent_ended']
                         cp.addons.all().delete()
                         cp.delete()
+                        continue
         return err
 
     def _update_subevents_cache(self, se_ids: List[int]):
