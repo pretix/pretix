@@ -25690,29 +25690,26 @@ msgid "Move to the end of the list"
 msgstr "Verplaats naar eind van de lijst"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:272
-#, fuzzy
 msgctxt "subevent"
 msgid "Transfer to other date"
-msgstr "Overdragen aan andere bestelling"
+msgstr "Overdragen aan andere datum"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:6
-#, fuzzy
 msgid "Transfer entry"
-msgstr "Overschrijvingsbedrag"
+msgstr "Overschrijvingsregel"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:9
-#, fuzzy, python-format
+#, python-format
 msgctxt "subevent"
 msgid ""
 "Please select the date to which the following waiting list entry should be "
 "transferred: <strong>%(entry)s</strong>?"
 msgstr ""
-"Weet u zeker dat u het volgende wachtlijstitem wilt verwijderen: "
+"Selecteerd de datum waarnaar u het volgende wachtlijstitem wilt verplaatsen: "
 "<strong>%(entry)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:19
-#, fuzzy
 msgid "Transfer"
 msgstr "Overdragen"
 
@@ -25847,9 +25844,8 @@ msgid "The selected check-ins have been reverted."
 msgstr "De gekozen check-ins zijn teruggedraaid."
 
 #: pretix/control/views/checkin.py:281
-#, fuzzy
 msgid "The selected tickets have been marked as checked out."
-msgstr "De geselecteerde tickets zijn aangemerkt als ingecheckt."
+msgstr "De geselecteerde tickets zijn aangemerkt als uitgecheckt."
 
 #: pretix/control/views/checkin.py:283
 msgid "The selected tickets have been marked as checked in."
@@ -26004,24 +26000,20 @@ msgstr[1] "{num} bestellingen"
 
 #: pretix/control/views/discounts.py:67 pretix/control/views/discounts.py:109
 #: pretix/control/views/discounts.py:214
-#, fuzzy
 msgid "The requested discount does not exist."
-msgstr "De gevraagde lijst bestaat niet."
+msgstr "De gevraagde korting bestaat niet."
 
 #: pretix/control/views/discounts.py:77
-#, fuzzy
 msgid "The selected discount has been deleted."
-msgstr "De gekozen lijst is verwijderd."
+msgstr "De geselecteerde korting is verwijderd."
 
 #: pretix/control/views/discounts.py:85
-#, fuzzy
 msgid "The selected discount has been deactivated."
-msgstr "Het gekozen product is uitgeschakeld."
+msgstr "De geselecteerde korting is uitgeschakeld."
 
 #: pretix/control/views/discounts.py:176
-#, fuzzy
 msgid "The new discount has been created."
-msgstr "De nieuwe datum is aangemaakt."
+msgstr "De nieuwe korting is aangemaakt."
 
 #: pretix/control/views/discounts.py:227
 msgid "The order of discounts has been updated."
@@ -26031,14 +26023,12 @@ msgstr "De volgorde van kortingen werd bijgewerkt."
 #: pretix/control/views/item.py:395 pretix/control/views/item.py:529
 #: pretix/control/views/organizer.py:2234
 #: pretix/control/views/organizer.py:3277
-#, fuzzy
 msgid "Some of the provided object ids are invalid."
-msgstr "Sommige van de opgegeven productkenmerken zijn ongeldig."
+msgstr "Sommige van de opgegeven object ID's zijn ongeldig."
 
 #: pretix/control/views/discounts.py:263
-#, fuzzy
 msgid "Not all discounts have been selected."
-msgstr "Niet alle producten zijn geselecteerd."
+msgstr "Niet alle kortingen zijn geselecteerd."
 
 #: pretix/control/views/event.py:357
 msgid "Integrations"
@@ -26331,9 +26321,8 @@ msgstr "De volgorde van categorieën is bijgewerkt."
 #: pretix/control/views/item.py:398 pretix/control/views/item.py:532
 #: pretix/control/views/organizer.py:2237
 #: pretix/control/views/organizer.py:3280
-#, fuzzy
 msgid "Not all objects have been selected."
-msgstr "Niet alle producten zijn geselecteerd."
+msgstr "Niet alle objecten zijn geselecteerd."
 
 #: pretix/control/views/item.py:471
 msgid "Street"
@@ -26468,14 +26457,12 @@ msgstr ""
 "systeem op te nemen in het SPF-record."
 
 #: pretix/control/views/mailsetup.py:216
-#, fuzzy
 msgid "The verification code was incorrect, please try again."
-msgstr "De registratie kon niet worden voltooid. Probeer het opnieuw."
+msgstr "De verificatiecode was niet correct, probeer het opnieuw."
 
 #: pretix/control/views/mailsetup.py:221
-#, fuzzy
 msgid "Sender address verification"
-msgstr "Afzenderadres"
+msgstr "Afzenderadresverificatie"
 
 #: pretix/control/views/mailsetup.py:277
 #, python-format
@@ -26715,10 +26702,10 @@ msgstr ""
 "terugbetaling in behandeling was. Controleer de bestelgegevens om te zien of "
 "de terugbetaling nog steeds nodig is."
 
-#: pretix/control/views/orders.py:1248 pretix/control/views/orders.py:1247
-#, fuzzy
+#: pretix/control/views/orders.py:1247
 msgid "You entered an order in an event with a different currency."
-msgstr "U voerde een bestelling in die niet kon worden gevonden."
+msgstr ""
+"U voerde een bestelling in in een evenement met een andere munteenheid."
 
 #: pretix/control/views/orders.py:1299 pretix/control/views/orders.py:1298
 msgid ""
@@ -27121,13 +27108,12 @@ msgstr ""
 "deel uitmaakt van de systeemlogboeken."
 
 #: pretix/control/views/organizer.py:703
-#, fuzzy
 msgid ""
 "The team could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
-"Het evenement kon niet worden verwijderd omdat sommige beperkingen (bijv. "
-"data aangemaakt door plug-ins) het niet toestaan."
+"Het team kon niet worden verwijderd omdat sommige beperkingen (bijv. data "
+"aangemaakt door plug-ins) het niet toestaan."
 
 #: pretix/control/views/organizer.py:709
 msgid "The selected team has been deleted."
@@ -27214,20 +27200,17 @@ msgid "All unprocessed webhooks have been stopped from retrying."
 msgstr "Alle onverwerkte webhooks worden niet meer uitgevoerd."
 
 #: pretix/control/views/organizer.py:1375
-#, fuzzy
 msgid "The selected organizer has been invited."
-msgstr "De gekozen organisator kon niet worden gevonden."
+msgstr "De geselecteerde organisator is uitgenodigd."
 
 #: pretix/control/views/organizer.py:1412
 #: pretix/control/views/organizer.py:1423
-#, fuzzy
 msgid "The selected connection has been removed."
-msgstr "De gekozen winkelwagenposities zijn verwijderd."
+msgstr "De geselecteerde verbinding is verwijderd."
 
 #: pretix/control/views/organizer.py:1434
-#, fuzzy
 msgid "The selected connection has been accepted."
-msgstr "De gekozen vraag is verwijderd."
+msgstr "De geselecteerde verbinding is geaccepteerd."
 
 #: pretix/control/views/organizer.py:1492
 #: pretix/control/views/organizer.py:1529
@@ -27277,9 +27260,8 @@ msgid "The selected property has been deleted."
 msgstr "De eigenschap is verwijderd."
 
 #: pretix/control/views/organizer.py:2203
-#, fuzzy
 msgid "The order of properties has been updated."
-msgstr "De volgorde van items is bijgewerkt."
+msgstr "De volgorde van eigenschappen is bijgewerkt."
 
 #: pretix/control/views/organizer.py:2380
 #: pretix/control/views/organizer.py:2494
@@ -27289,9 +27271,8 @@ msgid "The selected object has been deleted."
 msgstr "Het geselecteerde object is verwijderd."
 
 #: pretix/control/views/organizer.py:2414
-#, fuzzy
 msgid "The provider has been created."
-msgstr "De bestelling is aangemaakt."
+msgstr "De provider is aangemaakt."
 
 #: pretix/control/views/organizer.py:2532
 #, python-brace-format
@@ -27324,28 +27305,24 @@ msgid "The customer account has been anonymized."
 msgstr "Het klantenaccount is geanonimiseerd."
 
 #: pretix/control/views/organizer.py:3215
-#, fuzzy
 msgid "This channel can not be deleted."
-msgstr "Deze organisator kan niet worden verwijderd."
+msgstr "Dit kanaal kan niet worden verwijderd."
 
 #: pretix/control/views/organizer.py:3220
-#, fuzzy
 msgid "The selected sales channel has been deleted."
-msgstr "De gekozen lijst is verwijderd."
+msgstr "Het geselecteerde verkoopkanaal is verwijderd."
 
 #: pretix/control/views/organizer.py:3222
-#, fuzzy
 msgid ""
 "The channel could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it."
 msgstr ""
-"Het evenement kon niet worden verwijderd omdat sommige beperkingen (bijv. "
-"data aangemaakt door plug-ins) het niet toestaan."
+"Het kanaal kon niet worden verwijderd omdat sommige beperkingen (bijv. data "
+"aangemaakt door plug-ins) het niet toestaan."
 
 #: pretix/control/views/organizer.py:3246
-#, fuzzy
 msgid "The order of sales channels has been updated."
-msgstr "De volgorde van kortingen werd bijgewerkt."
+msgstr "De volgorde van verkoopkanalen is bijgewerkt."
 
 #: pretix/control/views/pdf.py:83
 msgid "The uploaded PDF file is too large."
@@ -27634,9 +27611,8 @@ msgid "This is not an event series."
 msgstr "Dit is geen evenementenreeks."
 
 #: pretix/control/views/waitinglist.py:403
-#, fuzzy
 msgid "The waitinglist entry has been transferred."
-msgstr "De wachtlijstinschrijving is verplaatst naar het begin van de lijst."
+msgstr "De wachtlijstinschrijving is overgedragen."
 
 #: pretix/helpers/daterange.py:97
 #, python-brace-format
@@ -27645,18 +27621,16 @@ msgstr "{date_from} – {date_to}"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
-#, fuzzy
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload a "
 "picture with smaller dimensions."
 msgstr ""
-"Het bestand dat u uploadde heeft een te hoge resolutie. De maximale "
-"toegestane resolutie is 10000 x 10000 pixels."
+"Het bestand dat u uploadde heeft een te hoge resolutie. Upload alstublieft "
+"een afbeelding met lagere resolutie."
 
 #: pretix/helpers/security.py:166
-#, fuzzy
 msgid "Login from new source detected"
-msgstr "Geen bestelcode gevonden"
+msgstr "Login vanaf nieuwe locatie gedetecteerd"
 
 #: pretix/helpers/security.py:170
 msgid "Unknown country"
@@ -27693,14 +27667,12 @@ msgstr "Bepaalde tickets automatisch inchecken nadat ze zijn verkocht."
 
 #: pretix/plugins/autocheckin/forms.py:60
 #: pretix/plugins/autocheckin/models.py:82
-#, fuzzy
 msgid "Only including usage of payment providers"
-msgstr "Alle betalingsproviders"
+msgstr "Alleen inclusief gebruik van betalingsproviders"
 
 #: pretix/plugins/autocheckin/forms.py:120
-#, fuzzy
 msgid "All variations"
-msgstr "Alle acties"
+msgstr "Alle variaties"
 
 #: pretix/plugins/autocheckin/forms.py:248
 msgid ""
@@ -27711,94 +27683,79 @@ msgstr ""
 "uitgevoerd nadat de betaling heeft plaatsgevonden."
 
 #: pretix/plugins/autocheckin/models.py:36
-#, fuzzy
 msgid "After order was placed"
-msgstr "Nieuwe bestelling geplaatst"
+msgstr "Nadat bestelling is geplaatst"
 
 #: pretix/plugins/autocheckin/models.py:37
-#, fuzzy
 msgid "After order was paid"
-msgstr "Markeer bestelling als betaald"
+msgstr "Nadat bestelling is betaald"
 
 #: pretix/plugins/autocheckin/models.py:48
-#, fuzzy
 msgid ""
 "If you keep this empty, all lists that match the purchased product will be "
 "used."
 msgstr ""
-"Als u dit leeg laat, wordt het ticket geldig vanaf het moment van aankoop."
+"Als u dit leeg laat, worden alle lijsten die overeenkomen met het gekochten "
+"product gebruikt."
 
 #: pretix/plugins/autocheckin/models.py:59
-#, fuzzy
 msgid "All sales channels"
-msgstr "Verkoopkanaal"
+msgstr "Alle verkoopkanalen"
 
 #: pretix/plugins/autocheckin/models.py:69
-#, fuzzy
 msgid "All products and variations"
-msgstr "Productvarianten"
+msgstr "Alle producten en varianten"
 
 #: pretix/plugins/autocheckin/models.py:78
-#, fuzzy
 msgid "All payment methods"
-msgstr "Betaalmethode inschakelen"
+msgstr "Alle betaalmethodes"
 
 #: pretix/plugins/autocheckin/signals.py:47
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:13
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:13
-#, fuzzy
 msgid "Auto check-in"
-msgstr "Automatisch inchecken"
+msgstr "Automatische check-in"
 
 #: pretix/plugins/autocheckin/signals.py:70
-#, fuzzy
 msgid "An auto check-in rule was created"
-msgstr "De e-mailregel is verwijderd"
+msgstr "Een automatische-check-in-regel is aangemaakt"
 
 #: pretix/plugins/autocheckin/signals.py:72
-#, fuzzy
 msgid "An auto check-in rule was updated"
-msgstr "De e-mailregel is verwijderd"
+msgstr "Een automatische-check-in-regel is aangepast"
 
 #: pretix/plugins/autocheckin/signals.py:75
-#, fuzzy
 msgid "An auto check-in rule was deleted"
-msgstr "De e-mailregel is verwijderd"
+msgstr "Een automatische-check-in-regel is verwijderd"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
-#, fuzzy
 msgid "Create auto check-in rule"
-msgstr "Aangepaste incheckregel"
+msgstr "Automatische-check-in-regel aanmaken"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
-#, fuzzy
 msgid "Conditions"
-msgstr "Bevestigingen"
+msgstr "Voorwaarden"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
-#, fuzzy
 msgid "Delete auto check-in rule"
-msgstr "Verwijder inchecklijst"
+msgstr "Verwijder automatische-check-in-regel"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
-#, fuzzy
 msgid "Are you sure you want to delete the auto check-in rule?"
-msgstr "Weet u zeker dat u de toegangslocatie wilt verwijderen?"
+msgstr "Weet u zeker dat u de automatische-check-in-regel wilt verwijderen?"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
-#, fuzzy
 msgid "Auto check-in rule"
-msgstr "Aangepaste incheckregel"
+msgstr "Automatische-check-in-regel"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
-#, fuzzy
 msgid "Auto check-in rules"
-msgstr "Aangepaste incheckregel"
+msgstr "Automatische-check-in-regels"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:11
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
@@ -27807,14 +27764,12 @@ msgstr "U heeft nog geen regels gemaakt."
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:17
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:22
-#, fuzzy
 msgid "Create a new check-in rule"
-msgstr "Maak een nieuwe inchecklijst"
+msgstr "Maak een nieuwe automatische-check-in-regel"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:32
-#, fuzzy
 msgid "Payment methods"
-msgstr "Betalingsmethode"
+msgstr "Betalingsmethodes"
 
 #: pretix/plugins/autocheckin/views.py:119 pretix/plugins/sendmail/views.py:631
 msgid "Your rule has been created."
@@ -27874,7 +27829,6 @@ msgstr "Badges van gasten"
 
 #: pretix/plugins/badges/exporters.py:422
 #: pretix/plugins/ticketoutputpdf/exporters.py:69
-#, fuzzy
 msgctxt "export_category"
 msgid "PDF collections"
 msgstr "PDF-verzamelingen"
@@ -28060,9 +28014,8 @@ msgid "Badge layout: %(name)s"
 msgstr "Badge-lay-out: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:26
-#, fuzzy
 msgid "Save & continue"
-msgstr "Datakeuze"
+msgstr "Opslaan & doorgaan"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
@@ -28235,7 +28188,6 @@ msgid "IBAN blocklist for refunds"
 msgstr "IBAN-blokkadelijst voor terugbetalingen"
 
 #: pretix/plugins/banktransfer/payment.py:187
-#, fuzzy
 msgid ""
 "Put one IBAN or IBAN prefix per line. The system will not attempt to send "
 "refunds to any of these IBANs. Useful e.g. if you receive a lot of "
@@ -28250,7 +28202,9 @@ msgstr ""
 "handig zijn als u bijvoorbeeld een groot aantal \"doorgestuurde betalingen\" "
 "ontvangt van een derde partij zoals een betalingsprovider. U kunt hier ook "
 "landcodes zoals \"GB\" invullen als u nooit automatisch terugbetalingen wilt "
-"overmaken naar IBANs uit een bepaald land."
+"overmaken naar IBANs uit een bepaald land. De controlecijfers zullen "
+"genegeerd worden bij de vergelijking, zodat u bijvoorbeeld DE0012345 kunt "
+"opgeven om alle Duitse IBANs te weigeren die met de bankcode 12345 beginnen."
 
 #: pretix/plugins/banktransfer/payment.py:218
 msgid ""
@@ -28274,19 +28228,16 @@ msgstr ""
 "bijkomende informatie."
 
 #: pretix/plugins/banktransfer/payment.py:229
-#, fuzzy
 msgid "Invoice email subject"
-msgstr "E-mail onderwerp"
+msgstr "Onderwerp factuur-e-mail"
 
 #: pretix/plugins/banktransfer/payment.py:241
-#, fuzzy
 msgid "Invoice email text"
-msgstr "Factuurdatum"
+msgstr "Tekst factuur-e-mail"
 
 #: pretix/plugins/banktransfer/payment.py:256
-#, fuzzy
 msgid "Restrict to business customers"
-msgstr "Zakelijke klanten"
+msgstr "Beperk tot zakelijke klanten"
 
 #: pretix/plugins/banktransfer/payment.py:257
 msgid ""
@@ -28310,9 +28261,8 @@ msgid ""
 msgstr "Gelieve de factuur ook direct naar onze boekhouding te versturen"
 
 #: pretix/plugins/banktransfer/payment.py:336
-#, fuzzy
 msgid "Invoice recipient e-mail"
-msgstr "Ontvanger van factuur:"
+msgstr "E-mailadres van ontvanger van factuur"
 
 #: pretix/plugins/banktransfer/payment.py:338
 msgid ""
@@ -28398,14 +28348,13 @@ msgid "Export refunds"
 msgstr "Terugbetalingen exporteren"
 
 #: pretix/plugins/banktransfer/signals.py:123
-#, fuzzy
 msgid "The invoice was sent to the designated email address."
-msgstr "Voer twee keer hetzelfde e-mailadres in."
+msgstr "De factuur is verstuurd naar het aangegeven e-mailadres."
 
 #: pretix/plugins/banktransfer/signals.py:132
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invoice {invoice_number}"
-msgstr "Factuurnummer"
+msgstr "Factuur {invoice_number}"
 
 #: pretix/plugins/banktransfer/signals.py:137
 #, fuzzy, python-brace-format
