@@ -198,7 +198,7 @@
                                 </a>
                             {% endif %}
                         </dd>
-                        {% if order.status == "n" %}
+                        {% if order.status == "n" and not order.require_approval %}
                             <dt>{% trans "Expiry date" %}</dt>
                             <dd>
                                 {{ order.expires|date:"SHORT_DATETIME_FORMAT" }}
