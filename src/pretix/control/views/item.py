@@ -257,7 +257,7 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed():
             self.object.log_action(
-                'pretix.event.category.reordered', user=self.request.user, data={
+                'pretix.event.category.changed', user=self.request.user, data={
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )
