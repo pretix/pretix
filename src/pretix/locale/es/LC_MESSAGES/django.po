@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-05 20:00+0000\n"
+"PO-Revision-Date: 2024-11-09 00:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -20709,6 +20709,9 @@ msgid ""
 "feature and are not suitable for strictly ensuring that products are only "
 "available in certain combinations."
 msgstr ""
+"Tenga en cuenta que las categorías de venta cruzadas están pensadas como una "
+"funcionalidad de marketing y no son adecuadas para garantizar estrictamente "
+"que los productos sólo estén disponibles en determinadas combinaciones."
 
 #: pretix/control/templates/pretixcontrol/items/category.html:39
 #: pretix/control/templates/pretixcontrol/items/category.html:29
@@ -21633,22 +21636,20 @@ msgid "Add product"
 msgstr "Agregar producto"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:434
-#, fuzzy
 msgid ""
 "Manually modifying payment fees is discouraged since they might "
 "automatically be updated on subsequent order changes or when choosing a "
 "different payment method."
 msgstr ""
-"No se aconseja modificar manualmente las tasas de pago, ya que podrían "
-"aparecer automáticamente en cambios de órdenes futuras o cuando se "
-"selecciona un método de pago diferente."
+"No se aconseja modificar manualmente las comisiones de pago, ya que podrían "
+"actualizarse automáticamente al modificar posteriormente el pedido o al "
+"elegir un método de pago diferente."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:454
 #: pretix/control/templates/pretixcontrol/order/change.html:481
 #: pretix/control/templates/pretixcontrol/order/change.html:501
-#, fuzzy
 msgid "Add fee"
-msgstr "Tarifa adicional"
+msgstr "Añadir comisión"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:508
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:63
@@ -27958,38 +27959,32 @@ msgstr ""
 "deben tener el tamaño correcto."
 
 #: pretix/plugins/badges/exporters.py:465
-#, fuzzy
 msgid "Start event date"
-msgstr "Fecha de inicio"
+msgstr "Fecha de inicio del evento"
 
 #: pretix/plugins/badges/exporters.py:468
 msgid "Only include tickets for dates on or after this date."
 msgstr "Solo incluya entradas para fechas iguales o posteriores a esta fecha."
 
 #: pretix/plugins/badges/exporters.py:472
-#, fuzzy
 msgid "End event date"
-msgstr "Fecha del evento"
+msgstr "Fecha final del evento"
 
 #: pretix/plugins/badges/exporters.py:475
-#, fuzzy
 msgid "Only include tickets ordered on or before this date."
-msgstr "Solo incluya entradas para fechas iguales o anteriores a esta fecha."
+msgstr "Sólo se incluirán las entradas pedidas en esta fecha o antes."
 
 #: pretix/plugins/badges/exporters.py:479
-#, fuzzy
 msgid "Start order date"
-msgstr "Fecha de inicio"
+msgstr "Fecha de inicio del pedido"
 
 #: pretix/plugins/badges/exporters.py:482
-#, fuzzy
 msgid "Only include tickets ordered on or after this date."
-msgstr "Solo incluya entradas para fechas iguales o posteriores a esta fecha."
+msgstr "Sólo se incluirán las entradas encargadas a partir de esta fecha."
 
 #: pretix/plugins/badges/exporters.py:486
-#, fuzzy
 msgid "End order date"
-msgstr "Fecha del pedido"
+msgstr "Fecha final del pedido"
 
 #: pretix/plugins/badges/exporters.py:489
 #: pretix/plugins/badges/exporters.py:475
@@ -32027,10 +32022,9 @@ msgid "No other variations of this product exist."
 msgstr "No existen más variantes de este producto."
 
 #: pretix/presale/forms/organizer.py:70
-#, fuzzy
 msgctxt "filter_empty"
 msgid "all"
-msgstr "Todos"
+msgstr "todos"
 
 #: pretix/presale/forms/renderers.py:50
 msgctxt "form"
