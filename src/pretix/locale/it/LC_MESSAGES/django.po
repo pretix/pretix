@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-07 08:26+0000\n"
+"PO-Revision-Date: 2024-11-09 09:00+0000\n"
 "Last-Translator: Damiano <estux@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -11316,9 +11316,8 @@ msgid "If your export fails five times in a row, it will no longer be sent."
 msgstr ""
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:10
-#, fuzzy
 msgid "Configuration link:"
-msgstr "Commento:"
+msgstr "Link di configurazione:"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
@@ -11327,25 +11326,26 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
-msgstr ""
+msgstr "Clicca qui per visualizzare e modificare le impostazioni di notifica"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
-msgstr ""
+msgstr "Clicca qui per disattivare immediatamente tutte le notifiche."
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
-msgstr ""
+msgstr "Clicca qui per visualizzare e modificare le impostazioni di notifica:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
-msgstr ""
+msgstr "Clicca qui per disattivare immediatamente tutte le notifiche:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
 msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
 msgstr ""
+"Hai ricevuto questa email perché qualcuno ti ha iscritto al seguente evento:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
@@ -11358,9 +11358,8 @@ msgid "Order code:"
 msgstr "Codice ordine:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
-#, fuzzy
 msgid "created by"
-msgstr "creato"
+msgstr "creato da"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:37
 #: pretix/base/templates/pretixbase/email/order_details.html:132
@@ -11375,11 +11374,13 @@ msgstr ""
 msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
-msgstr "Hai ricevuto questa email perchè hai effettuato un ordine per:"
+msgstr ""
+"Hai ricevuto questa email perchè hai effettuato un ordine per l'evento "
+"seguente:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:86
 msgid "Details:"
-msgstr ""
+msgstr "Dettagli:"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt:2
 #, python-format
@@ -11407,6 +11408,8 @@ msgid ""
 "This sales channel cannot be used properly since the respective plugin is "
 "not active for this event."
 msgstr ""
+"Questo canale di vendita non può essere utilizzato correttamente poichè il "
+"relativo plugin non è attivo per questo evento."
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
@@ -11443,10 +11446,12 @@ msgid ""
 "The link you clicked on wants to redirect you to a destination on the "
 "website %(host)s."
 msgstr ""
+"Il collegamento sul quale hai cliccato vuole reindirizzarti a una "
+"destinazione nel sito web %(host)s."
 
 #: pretix/base/templates/pretixbase/redirect.html:14
 msgid "Please only proceed if you trust this website to be safe."
-msgstr ""
+msgstr "Per favore procedi solo se ti fidi della sicurezza di questo sito web."
 
 #: pretix/base/templates/pretixbase/redirect.html:20
 #, fuzzy, python-format
@@ -11454,9 +11459,8 @@ msgid "Proceed to %(host)s"
 msgstr "Procedi al checkout"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
 msgid "Source code"
-msgstr "Codice voucher"
+msgstr "Codice sorgente"
 
 #: pretix/base/templates/source.html:10
 msgid ""
@@ -11477,46 +11481,45 @@ msgstr "Scarica biglietto"
 #: pretix/base/timeframes.py:49
 msgctxt "reporting_timeframe"
 msgid "Today"
-msgstr ""
+msgstr "Oggi"
 
 #: pretix/base/timeframes.py:53 pretix/base/timeframes.py:62
 #: pretix/base/timeframes.py:71 pretix/base/timeframes.py:80
 #: pretix/base/timeframes.py:89 pretix/base/timeframes.py:98
 #: pretix/base/timeframes.py:107
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "by day"
-msgstr "Ordini per giorno"
+msgstr "per giorno"
 
 #: pretix/base/timeframes.py:58
 msgctxt "reporting_timeframe"
 msgid "Yesterday"
-msgstr ""
+msgstr "Ieri"
 
 #: pretix/base/timeframes.py:67
 msgctxt "reporting_timeframe"
 msgid "Last 7 days"
-msgstr ""
+msgstr "Ultimi 7 giorni"
 
 #: pretix/base/timeframes.py:76
 msgctxt "reporting_timeframe"
 msgid "Last 14 days"
-msgstr ""
+msgstr "Ultimi 14 giorni"
 
 #: pretix/base/timeframes.py:85
 msgctxt "reporting_timeframe"
 msgid "Tomorrow"
-msgstr ""
+msgstr "Domani"
 
 #: pretix/base/timeframes.py:94
 msgctxt "reporting_timeframe"
 msgid "Next 7 days"
-msgstr ""
+msgstr "Prossimi 7 giorni"
 
 #: pretix/base/timeframes.py:103
 msgctxt "reporting_timeframe"
 msgid "Next 14 days"
-msgstr ""
+msgstr "Prossimi 14 giorni"
 
 #: pretix/base/timeframes.py:112
 #, fuzzy
@@ -11528,7 +11531,7 @@ msgstr "Valore attuale"
 #: pretix/base/timeframes.py:134 pretix/base/timeframes.py:143
 msgctxt "reporting_timeframe"
 msgid "by week"
-msgstr ""
+msgstr "per settimana"
 
 #: pretix/base/timeframes.py:121
 #, fuzzy
@@ -11539,12 +11542,12 @@ msgstr "Data di inizio evento"
 #: pretix/base/timeframes.py:130
 msgctxt "reporting_timeframe"
 msgid "Previous week"
-msgstr ""
+msgstr "Settimana precedente"
 
 #: pretix/base/timeframes.py:139
 msgctxt "reporting_timeframe"
 msgid "Next week"
-msgstr ""
+msgstr "Prossima settimana"
 
 #: pretix/base/timeframes.py:148
 msgctxt "reporting_timeframe"
@@ -11553,10 +11556,9 @@ msgstr "Mese corrente:"
 
 #: pretix/base/timeframes.py:152 pretix/base/timeframes.py:161
 #: pretix/base/timeframes.py:170 pretix/base/timeframes.py:179
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "by month"
-msgstr "mesi"
+msgstr "per mese"
 
 #: pretix/base/timeframes.py:157
 #, fuzzy
