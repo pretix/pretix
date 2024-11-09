@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-09 00:00+0000\n"
+"PO-Revision-Date: 2024-11-09 21:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -392,8 +392,8 @@ msgstr "Este usuario ya tiene permisos para este equipo."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
 msgstr ""
-"El vale de compra especificado ya ha sido utilizado el máximo número de "
-"veces permitido."
+"El vale de compra empleado ya ha sido utilizado el número máximo de veces "
+"permitido."
 
 #: pretix/api/views/checkin.py:610 pretix/api/views/checkin.py:617
 #: pretix/api/views/checkin.py:608 pretix/api/views/checkin.py:615
@@ -1699,7 +1699,7 @@ msgstr "Activo"
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
 msgid "Sales channels"
-msgstr "Canales de ventas"
+msgstr "Canales de venta"
 
 #: pretix/base/exporters/items.py:73 pretix/base/models/items.py:493
 #: pretix/base/models/items.py:1153
@@ -1777,15 +1777,15 @@ msgstr "Disponible hasta"
 
 #: pretix/base/exporters/items.py:82 pretix/base/models/items.py:600
 msgid "This product can only be bought using a voucher."
-msgstr "Este producto solo se puede comprar usando un vale de compra."
+msgstr "Este producto solo se puede comprar empleando un vale de compra."
 
 #: pretix/base/exporters/items.py:83 pretix/base/models/items.py:613
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Este producto sólo se mostrará si se canjea un vale de compra que coincida "
-"con el producto."
+"Este producto sólo se mostrará si se canjea por un vale de compra que "
+"coincida con el producto."
 
 #: pretix/base/exporters/items.py:84 pretix/base/models/items.py:606
 msgid "Buying this product requires approval"
@@ -2087,7 +2087,7 @@ msgstr "Números de factura"
 #: pretix/control/forms/filter.py:584
 #: pretix/control/templates/pretixcontrol/order/index.html:189
 msgid "Sales channel"
-msgstr "Canales de venta"
+msgstr "Canal de venta"
 
 #: pretix/base/exporters/orderlist.py:285
 #: pretix/base/exporters/orderlist.py:621 pretix/base/models/orders.py:276
@@ -18791,9 +18791,9 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
-"Este evento contiene <strong> pedidos sobrepagadas</strong>, por ejemplo, "
-"debido a intentos de pago duplicados. Usted debe revisar los casos y "
-"considerar la devolución de la cantidad pagada en exceso al usuario."
+"Este evento contiene <strong> pedidos pagados en exceso</strong>, por "
+"ejemplo, debido a que hay intentos de pago duplicados. Debe revisar los "
+"casos y considerar la devolución de la cantidad pagada en exceso al usuario."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:41
 msgid "Show overpaid orders"
@@ -18804,8 +18804,8 @@ msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
 msgstr ""
-"Este evento contiene <strong>devoluciones pendientes </strong> que debe "
-"cuidar."
+"Este evento contiene <strong>devoluciones pendientes </strong> sobre las que "
+"debe prestar atención."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:50
 msgid "Show pending refunds"
@@ -18842,10 +18842,10 @@ msgid ""
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"Este evento contiene <strong> pedidos completamente pagadas</strong> que no "
-"están marcadas como pagadas, probablemente debido a que no fue dejado ningún "
-"cupo al momento que llegó el pago. Deberías revisar estos casos y considerar "
-"ya sea devolver al cliente o crear más espacio."
+"Este evento contiene <strong> pedidos completamente pagados</strong> que no "
+"están marcadas como pagados, probablemente porque no se dejo ningún cupo al "
+"momento que llegó el pago. Debería revisar estos casos y considerar, "
+"devolver el dinero o crear más espacio."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:79
 msgid "Show affected orders"
@@ -21414,8 +21414,8 @@ msgid ""
 "This will <strong>not</strong> automatically transfer the money back, but "
 "you will be offered options to refund the payment afterwards."
 msgstr ""
-"Esto <strong>no</strong> transferirá de regreso automáticamente el dinero, "
-"pero podrás ofrecer opciones para hacer la devolución después."
+"Esto <strong>no</strong> transferirá de regreso el dinero automáticamente, "
+"pero le ofrecerá la opción de hacer un reembolso más tarde."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:29
 #, python-format
@@ -21789,7 +21789,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:115
 #: pretix/control/views/orders.py:351 pretix/control/views/orders.py:350
 msgid "Refund for overpayment"
-msgstr "Devolución por pago en exceso"
+msgstr "Reembolso del pago realizado en exceso"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:117
 #, python-format
@@ -21799,7 +21799,7 @@ msgstr "Este pedido está actualmente sobrepagado en %(amount)s."
 #: pretix/control/templates/pretixcontrol/order/index.html:121
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr "Iniciar una devolución de %(amount)s"
+msgstr "Iniciar un reembolso de %(amount)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:129
 #, python-format
@@ -21808,9 +21808,9 @@ msgid ""
 "can choose to refund the money below or reactivate it by extending the "
 "payment deadline."
 msgstr ""
-"Este pedido ha caducado a pesar de haber recibido pagos de %(amount)s. Puede "
-"elegir entre devolver el dinero a continuación o reactivarlo ampliando el "
-"plazo de pago."
+"Este pedido ha caducado a pesar de haber recibido un pago de %(amount)s. "
+"Puede elegir entre reembolsar el dinero o reactivarlo ampliando el plazo de "
+"pago."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:142
 msgid "Cancellation request"
@@ -22053,7 +22053,7 @@ msgstr "Confirmar como pagado"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:821
 msgid "Create a refund"
-msgstr "Crear un devolución"
+msgstr "Crear un reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:842
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:60
@@ -22078,7 +22078,7 @@ msgstr "Ignorar"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:58
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:123
 msgid "Process refund"
-msgstr "Procesar la devolución"
+msgstr "Procesar el reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:941
 #: pretix/presale/templates/pretixpresale/event/base.html:137
@@ -22177,14 +22177,14 @@ msgstr "Reactivar"
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
 msgid "Cancel refund"
-msgstr "Cancelar devolución"
+msgstr "Cancelar el reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
 msgstr ""
-"¿Realmente quieres cancelar esta devolución? No se puede revertir esta "
-"acción."
+"¿Realmente desea cancelar este reembolso? Una vez que lo haga, no puede "
+"revertir esta acción."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
@@ -22192,24 +22192,25 @@ msgid ""
 "will just mark this transfer as aborted in pretix. This will also not "
 "reactivate the order, it will just allow you to choose a new refund method."
 msgstr ""
-"Si el dinero ya está en el camino de regreso, esto no detendrá el dinero, "
-"sólo marcará esta transferencia como abortada en el pretexto. Esto tampoco "
-"reactivará el pedido, sólo le permitirá elegir un nuevo método de devolución."
+"Si el dinero ya está en proceso de ser reembolsado, esto no detendrá el "
+"mismo, sólo quedará marcada como transferencia abortada en pretix. Esto "
+"tampoco reactivará el pedido, sólo le permitirá elegir un nuevo método de "
+"devolución."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
-msgstr "Sí, cancelar la devolución"
+msgstr "Sí, cancelar el reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:9
 msgid "Refund order"
-msgstr "Pedido de devolución"
+msgstr "Pedido de reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:23
 msgid "How should the refund be sent?"
-msgstr "¿Cómo debe enviarse la devolución?"
+msgstr "¿Cómo se debe de realizar este reembolso?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:25
 msgid ""
@@ -22218,24 +22219,23 @@ msgid ""
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
-"Cualquier pago que haya seleccionado para devoluciones automáticas será "
-"comunicado inmediatamente la solicitud de reembolso al proveedor de pago "
-"respectivo. Los devoluciones manuales se crearán como devoluciones "
-"pendientes, luego podrá marcarlos como hechos una vez que haya transferido "
-"el dinero de vuelta al cliente."
+"Cualquier pago que haya seleccionado de manera automática para reembolso "
+"será comunicado inmediatamente a la entidad de pago correspondiente. Los "
+"devoluciones manuales se crearán como reembolsos pendientes, podrá marcarlos "
+"como hechos una vez que se haya transferido el dinero al cliente."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 msgid "Refund to original payment method"
-msgstr "Devolución al método de pago original"
+msgstr "Reembolso con el método de pago original"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:39
 msgid "Amount not refunded"
-msgstr "Importe no devuelto"
+msgstr "Importe no reembolsado"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:40
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:87
 msgid "Refund amount"
-msgstr "Importe de la devolución"
+msgstr "Importe del reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:68
 msgid "Full amount"
@@ -22243,11 +22243,11 @@ msgstr "Importe total"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:71
 msgid "This payment method does not support automatic refunds."
-msgstr "Este método de pago no admite devoluciones automáticas."
+msgstr "Este método de pago no admite reembolsos automáticos."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:80
 msgid "Refund to a different payment method"
-msgstr "Devolver a un método de pago diferente"
+msgstr "Reembolsar con un método de pago diferente"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:86
 msgid "Recipient / options"
@@ -22271,7 +22271,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:159
 msgid "Manual refund"
-msgstr "Devolución manual"
+msgstr "Reembolso manual"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:163
 msgid "Keep transfer as to do"
@@ -22283,15 +22283,15 @@ msgstr "Mantenga la transferencia como para hacer"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr "Marcar la devolución como realizada"
+msgstr "Marcar el reembolso como realizado"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:213
 msgid "Perform refund"
-msgstr "Realizar la devolución"
+msgstr "Realizar el reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
 msgid "Do you really want to mark this refund as complete?"
-msgstr "¿Realmente desea marcar esta devolución como completa?"
+msgstr "¿Desea marcar este reembolso como completo?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
@@ -22305,10 +22305,11 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is "
 "<strong>%(total)s</strong>."
 msgstr ""
-"Hemos recibido la notificación de que <strong>%(amount)s</strong> han sido "
-"devuelto a través de <strong>%(method)s</strong>. Si se procesa esta "
-"devolución, el pedido tendrá un importe inferior en<strong>%(pending)s</"
-"strong>. El total del pedido es <strong>%(total)s</strong>."
+"Hemos recibido la notificación de que <strong>%(amount)s</strong> ha sido "
+"devuelto a través de <strong>%(method)s</strong>. Si este reembolso está "
+"procesado, el pedido habrá sido pagado con un importe inferior "
+"en<strong>%(pending)s</strong>. El total del pedido es "
+"<strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -22332,15 +22333,15 @@ msgstr "Cancelar el pedido irrevocablemente."
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:20
 msgid "How much do you want to refund?"
-msgstr "¿Cuánto quieres que te devuelva?"
+msgstr "¿Cuánto quiere que se devuelva?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:25
 msgid "Refund full paid amount"
-msgstr "Devolución del importe total pagado"
+msgstr "Rembolsar el total del importe pagado"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
 msgid "Refund only"
-msgstr "Sólo devolución"
+msgstr "Sólo reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:40
 msgid "What should happen to the order?"
@@ -22426,11 +22427,11 @@ msgid ""
 "orders can be created. Make sure that you check afterwards for any overpaid "
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
-"Puede utilizar esta página para cancelar y reembolsar todos los pedidos a la "
-"vez en caso de que necesite llamar para su evento. Esto también desactivará "
-"todos los productos para que no se puedan crear nuevos pedidos. Asegúrese de "
-"verificar después si hay pedidos pagados en exceso o devoluciones pendientes "
-"que deba solucionar manualmente."
+"Puede utilizar esta página para cancelar y reembolsar todos los pedidos en "
+"caso de que necesite suspender su evento. Esto también desactivará todos los "
+"productos creándose nuevos pedidos. Asegúrese en verificar si hay pedidos "
+"pagos en exceso o reembolsos pendientes, en caso que hayan, los tendrá que "
+"revisar manualmente."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
 msgid ""
@@ -22455,7 +22456,7 @@ msgstr "Seleccionar fecha"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:37
 msgid "Refund options"
-msgstr "Opciones de devolución"
+msgstr "Opciones de reembolso"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:85
@@ -22475,10 +22476,10 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
-"Dado que está devolviendo los pedidos de sus clientes con tarjetas de "
-"regalo, debe explicarles cómo acceder a sus tarjetas de regalo. La forma más "
-"sencilla de hacerlo es incluir una explicación y un enlace a su pedido "
-"utilizando la función de correo electrónico que se proporciona aquí."
+"Dado que está reembolsando los pedidos de sus clientes con tarjetas regalo, "
+"debe explicarles cómo acceder a sus tarjetas regalo. La forma más sencilla "
+"de hacerlo es incluyendo una explicación y un enlace a su pedido empleando "
+"la función de correo electrónico."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:64
 msgid ""
@@ -22874,7 +22875,7 @@ msgstr "CANCELACIÓN SOLICITADA"
 #: pretix/control/templates/pretixcontrol/search/orders.html:98
 #: pretix/control/templates/pretixcontrol/search/orders.html:100
 msgid "REFUND PENDING"
-msgstr "DEVOLUCIÓN PENDIENTE"
+msgstr "REEMBOLSO PENDIENTE"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:224
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:254
@@ -22926,7 +22927,7 @@ msgstr "Seleccionar acción"
 #: pretix/control/templates/pretixcontrol/orders/index.html:312
 #: pretix/control/views/orders.py:335 pretix/control/views/orders.py:334
 msgid "Refund overpaid amount"
-msgstr "Devolución del importe pagado en exceso"
+msgstr "Reembolso del importe pagado en exceso"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:320
 #: pretix/control/views/orders.py:320 pretix/control/views/orders.py:319
@@ -22995,7 +22996,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:34
 msgid "No refunds are currently open."
-msgstr "Actualmente no hay devoluciones abiertas."
+msgstr "Actualmente no hay reembolsos abiertos."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 msgid "Actions"
@@ -26714,24 +26715,24 @@ msgstr "Este pago no puede ser cancelado en este momento."
 
 #: pretix/control/views/orders.py:900 pretix/control/views/orders.py:899
 msgid "The refund has been canceled."
-msgstr "La devolución ha sido cancelada."
+msgstr "El reembolso ha sido cancelado."
 
 #: pretix/control/views/orders.py:902 pretix/control/views/orders.py:901
 msgid "This refund can not be canceled at the moment."
-msgstr "Esta devolución no puede cancelarse en este momento."
+msgstr "Este reembolso no puede cancelarse en este momento."
 
 #: pretix/control/views/orders.py:936 pretix/control/views/orders.py:935
 msgid "The refund has been processed."
-msgstr "La devolución ha sido procesada."
+msgstr "El reembolso ha sido procesado."
 
 #: pretix/control/views/orders.py:938 pretix/control/views/orders.py:964
 #: pretix/control/views/orders.py:937 pretix/control/views/orders.py:963
 msgid "This refund can not be processed at the moment."
-msgstr "Esta devolución no puede ser procesada en este momento."
+msgstr "Este reembolso no puede ser procesado en este momento."
 
 #: pretix/control/views/orders.py:962 pretix/control/views/orders.py:961
 msgid "The refund has been marked as done."
-msgstr "La devolución se ha marcado como realizada."
+msgstr "El reembolso se ha marcado como realizado."
 
 #: pretix/control/views/orders.py:988 pretix/control/views/orders.py:987
 msgid "The request has been removed. If you want, you can now inform the user."
@@ -26780,9 +26781,9 @@ msgid ""
 "time. Please have a look at the order details and check if your refund is "
 "still necessary."
 msgstr ""
-"La devolución no se ha podido realizar debido a que ya se estaba tramitando "
-"otro reembolso al mismo tiempo. Por favor, revisar los detalles del pedido y "
-"comprobar si el reembolso sigue siendo necesario."
+"El reembolso no se ha podido realizar dado que hay otro reembolso en curso. "
+"Por favor, revise los detalles del pedido y compruebe si el reembolso sigue "
+"siendo necesario."
 
 #: pretix/control/views/orders.py:1248 pretix/control/views/orders.py:1247
 msgid "You entered an order in an event with a different currency."
@@ -26793,34 +26794,34 @@ msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
 msgstr ""
-"No se puede devolver más del importe de un pago que aún no se ha devuelto."
+"No se puede reembolsar más del importe pagado que aún no ha sido devuelto."
 
 #: pretix/control/views/orders.py:1304 pretix/control/views/orders.py:1303
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
 msgstr ""
-"Ha seleccionado una devolución parcial para un método de pago que sólo "
-"admite devoluciones completas."
+"Ha seleccionado un reembolso parcial para un método de pago que sólo admite "
+"reembolsos completos."
 
 #: pretix/control/views/orders.py:1334 pretix/control/views/orders.py:1333
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
 msgstr ""
-"No se ha podido procesar una de las devoluciones. Debería volver a intentar "
-"realizar la devolución de otra forma. El mensaje de error era: {}"
+"No se ha podido procesar uno de los reembolsos. Debería volver a intentar "
+"realizar el reembolso de otra forma. El mensaje de error era: {}"
 
 #: pretix/control/views/orders.py:1340 pretix/control/views/orders.py:1339
 msgid "A refund of {} has been processed."
-msgstr "Se ha procesado una devolución de {}."
+msgstr "Un reembolso de {} ha sido procesado."
 
 #: pretix/control/views/orders.py:1344 pretix/control/views/orders.py:1343
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
-"Se ha guardado una devolución de {}, pero aún no se ha ejecutado "
+"Se ha guardado un reembolso de {}, pero aún no se ha ejecutado "
 "completamente. Puedes marcarlo como completo a continuación."
 
 #: pretix/control/views/orders.py:1373 pretix/control/views/orders.py:1372
@@ -26848,18 +26849,18 @@ msgid ""
 msgstr ""
 "Hola,\n"
 "\n"
-"Le hemos devuelto {amount} por su pedido.\n"
+"Le hemos reembolsado {amount} por su pedido.\n"
 "\n"
 "Puede utilizar el código de la tarjeta regalo {giftcard} para pagar futuras "
-"compras de entradas en nuestra tienda.\n"
+"compras en nuestra tienda.\n"
 "\n"
 "El equipo de {event}"
 
 #: pretix/control/views/orders.py:1394 pretix/control/views/orders.py:1393
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr ""
-"las devoluciones seleccionadas no coinciden con el importe total de "
-"devolución seleccionado."
+"Los reembolsos seleccionados no coinciden con el importe total de devolución "
+"seleccionado."
 
 #: pretix/control/views/orders.py:1522 pretix/control/views/orders.py:1521
 msgid ""
@@ -28280,7 +28281,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:184
 msgid "IBAN blocklist for refunds"
-msgstr "Lista de bloqueo de IBAN para devoluciones"
+msgstr "Lista de bloqueo de IBAN para reembolsos"
 
 #: pretix/plugins/banktransfer/payment.py:187
 msgid ""
@@ -28292,14 +28293,14 @@ msgid ""
 "can e.g. ban DE0012345 to ban all German IBANs with the bank identifier "
 "starting with 12345."
 msgstr ""
-"Introducir un prefijo IBAN o un IBAN por línea. El sistema no intentará "
-"enviar devoluciones a ninguno de estos IBAN. Es útil, por ejemplo, si "
-"recibes muchos \"pagos reenviados\" por proveedores de pago externos. "
-"También puede indicar códigos de país como \"GB\" si no desea enviar nunca "
-"devolverá a IBAN de un país específico. Los dígitos de control se ignorarán "
-"para la comparación, por lo que puedes, por ejemplo, prohibir DE0012345 para "
-"prohibir todos los IBAN alemanes cuyo identificador bancario empiece por "
-"12345."
+"Coloque un prefijo de IBAN o un IBAN por línea. El sistema no intentará "
+"enviar reembolsos a ninguno de estos IBAN. Esta opción será útil, si por "
+"ejemplo recibe muchos \"pagos reenviados\" por proveedores de pago externos. "
+"También puede listar los códigos de países, como \"GB\" si no desea realizar "
+"reembolsos al IBAN de un país específico. Los dígitos de control serán "
+"ignorados al realizar las comparaciones, de modo que si desea prohibir, por "
+"ejemplo DE0012345 se prohibirán todos los IBAN alemanes cuyo identificador "
+"bancario empiece por 12345."
 
 #: pretix/plugins/banktransfer/payment.py:218
 msgid ""
@@ -28410,7 +28411,7 @@ msgstr "Cuenta bancaria {iban}"
 #: pretix/plugins/banktransfer/payment.py:640
 msgid "Can only create a bank transfer refund from an existing payment."
 msgstr ""
-"Solo se puede crear una devolución por transferencia bancaria a partir de un "
+"Solo se puede crear un reembolso por transferencia bancaria a partir de un "
 "pago existente."
 
 #: pretix/plugins/banktransfer/payment.py:660
@@ -28443,7 +28444,7 @@ msgstr "Importar datos bancarios"
 #: pretix/plugins/banktransfer/signals.py:63
 #: pretix/plugins/banktransfer/signals.py:99
 msgid "Export refunds"
-msgstr "Exportación de devoluciones"
+msgstr "Exportación de reembolsos"
 
 #: pretix/plugins/banktransfer/signals.py:123
 msgid "The invoice was sent to the designated email address."
@@ -28766,7 +28767,7 @@ msgstr "Enviar factura por correo electrónico"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:7
 msgid "Export bank transfer refunds"
-msgstr "Exportación de devoluciones por transferencia bancaria"
+msgstr "Exportación de reembolsos por transferencia bancaria"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:9
 #, python-format
@@ -28774,7 +28775,7 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
-"<strong>%(num_new)s</strong> Se han realizado devoluciones por transferencia "
+"<strong>%(num_new)s</strong> Se han realizado reembolsos por transferencia "
 "bancaria y aún no forman parte de una exportación."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
@@ -28813,9 +28814,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"                    Tenga en cuenta que las devoluciones se marcarán como "
-"realizadas una vez que se cree una exportación.\n"
-"Asegúrese de descargar la exportación y ejecutar las devoluciones.\n"
+"                    Tenga en cuenta que los reembolsos se marcarán como "
+"realizados una vez que se cree una exportación.\n"
+"Asegúrese de descargar la exportación y ejecutar los reembolsos.\n"
 "                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
@@ -28861,17 +28862,16 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
-"Estás intentando descargar una exportación de devoluciones de %(date)s con "
-"un pedido y un total de %(sum)s."
+"Está intentando descargar una exportación de reembolso con fecha de %(date)s "
+"por un pedido de un importe total de %(sum)s."
 msgstr[1] ""
-"Estás intentando descargar una exportación de devoluciones de %(date)s con "
-"un pedido de %(cnt)s y un total de %(sum)s."
+"Está intentando descargar una exportación de reembolso con fecha de %(date)s "
+"por los %(cnt)s pedidos por un importe total de %(sum)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr ""
-"Indique desde qué cuenta bancaria se deben transferir las devoluciones."
+msgstr "Indique desde qué cuenta bancaria se deben transferir los reembolsos."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
@@ -28928,8 +28928,8 @@ msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
 msgstr ""
-"Importe negativo pero no se puede registrar la devolución. Primero cree una "
-"devolución manual."
+"Importe negativo pero no se puede registrar el reembolso. Primero cree un "
+"reembolso manual."
 
 #: pretix/plugins/banktransfer/views.py:172
 msgid "Problem sending email."
@@ -29010,8 +29010,8 @@ msgid ""
 "We could not find bank account information for the refund {refund_id}. It "
 "was marked as failed."
 msgstr ""
-"No pudimos encontrar la información de la cuenta bancaria para la devolución "
-"{refund_id}. Fue marcada como fallido."
+"No pudimos encontrar la información de la cuenta bancaria para el reembolso "
+"{refund_id}. Fue marcado como fallido."
 
 #: pretix/plugins/banktransfer/views.py:751
 msgid "No valid orders have been found."
@@ -29294,7 +29294,7 @@ msgstr "Se ha producido un error al enviar el mail de confirmación."
 #: pretix/plugins/paypal/payment.py:565 pretix/plugins/paypal/payment.py:572
 #: pretix/plugins/paypal2/payment.py:962 pretix/plugins/paypal2/payment.py:983
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr "Ha fallado la devolución del importe a través de PayPal: {}"
+msgstr "Ha fallado el reembolso del importe a través de PayPal: {}"
 
 #: pretix/plugins/paypal/payment.py:707 pretix/plugins/paypal/payment.py:715
 #: pretix/plugins/paypal2/payment.py:1060
@@ -29506,8 +29506,8 @@ msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
-"Configure un Webhook de PayPal en el siguiente punto final para cancelar "
-"automáticamente los pedidos cuando los pagos se devuelvan externamente."
+"Configure un Webhook de PayPal en el siguiente terminal para cancelar "
+"automáticamente los pedidos cuyo reembolso se realiza externamente."
 
 #: pretix/plugins/paypal2/payment.py:276
 msgid "PayPal does not process payments in your event's currency."
@@ -29569,8 +29569,8 @@ msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
-"La devolución del importe a través de PayPal ha fallado: El pago original no "
-"contiene la información necesaria para emitir una devolución automática."
+"El reembolso del importe a través de PayPal ha fallado: El pago original no "
+"contiene la información necesaria para emitir un reembolso automático."
 
 #: pretix/plugins/paypal2/payment.py:1087
 msgid "PayPal APM"
@@ -29590,7 +29590,7 @@ msgstr "Pago denegado."
 
 #: pretix/plugins/paypal2/signals.py:61
 msgid "Payment refunded."
-msgstr "Pago devuelto."
+msgstr "Pago reembolsado."
 
 #: pretix/plugins/paypal2/signals.py:62
 msgid "Payment reversed."
@@ -30707,9 +30707,9 @@ msgid ""
 "process asynchronous payment methods like SOFORT."
 msgstr ""
 "Por favor, configure un <a href=\"https://dashboard.stripe.com/account/"
-"webhooks\">Stripe Webhook</a> en el siguiente punto final para cancelar "
-"automáticamente los pedidos cuando los cargos sean devueltas externamente y "
-"para procesar métodos de pago asíncronos como SOFORT."
+"webhooks\">Stripe Webhook</a> en el siguiente terminam para cancelar "
+"automáticamente los pedidos cuando los cargos sean reembolsados externamente "
+"y para procesar los métodos de pago asíncronos como SOFORT."
 
 #: pretix/plugins/stripe/payment.py:222
 msgid "Enable MOTO payments for resellers"
@@ -31267,7 +31267,7 @@ msgstr "La carga tuvo éxito."
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge refunded."
-msgstr "Cargo devuelto."
+msgstr "Cargo reembolsado."
 
 #: pretix/plugins/stripe/signals.py:94
 msgid "Charge updated."
@@ -31441,12 +31441,12 @@ msgstr ""
 "PPRO, su proveedor de servicios local, a enviar instrucciones a su banco "
 "para que cargue el importe en su cuenta y (B) a su banco a cargar el importe "
 "en su cuenta de acuerdo con dichas instrucciones. Como parte de sus "
-"derechos, tiene derecho a una devolución de su banco según los términos y "
-"condiciones de su acuerdo con su banco. La devolución debe reclamarse en un "
-"plazo de 8 semanas a partir de la fecha en que se efectuó el cargo en su "
-"cuenta. Sus derechos se explican en una declaración que puede obtener en su "
-"banco. Acepta recibir notificaciones de futuros cargos hasta 2 días antes de "
-"que se produzcan."
+"derechos, tiene la posibilidad de solicitar una devolución a su banco según "
+"los términos y condiciones de su acuerdo bancario. El reembolso debe "
+"reclamarse en un plazo máximo de 8 semanas a partir de la fecha en que se "
+"efectuó el cargo en su cuenta. Sus derechos se detallan en una declaración "
+"que puede solicitar a su banco. Usted acepta recibir notificaciones de "
+"futuros cargos hasta 2 días antes de que se produzcan."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:7
 msgid "Charge ID"
@@ -33039,7 +33039,7 @@ msgstr "Tendrás que pagar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:146
 msgid "You will be refunded"
-msgstr "Se le devolverá el dinero"
+msgstr "Usted será reembolsado"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:150
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:109
@@ -33048,7 +33048,7 @@ msgid ""
 "refund."
 msgstr ""
 "El organizador se pondrá en contacto con usted para aclarar los detalles de "
-"su devolución."
+"su reembolso."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:152
 #: pretix/presale/templates/pretixpresale/event/order.html:390
@@ -33059,8 +33059,8 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
-"La devolución se efectuará en forma de tarjeta regalo que podrá utilizar "
-"para otras compras."
+"El reembolso se efectuará en forma de tarjeta regalo que podrá utilizar para "
+"otras compras."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:155
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:147
@@ -33070,8 +33070,8 @@ msgid ""
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
-"El importe de la devolución se enviará automáticamente a su método de pago "
-"original. Dependiendo del método de pago, puede tardar hasta dos semanas en "
+"El importe del reembolso se enviará automáticamente al método de pago "
+"empleado. Dependiendo del método de pago, puede tardar hasta dos semanas en "
 "aparecer en su cuenta."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:161
@@ -33083,10 +33083,10 @@ msgid ""
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
-"Con el método de pago que utilizó, el importe de la devolución <strong>no se "
-"le puede enviar automáticamente</strong>. En su lugar, el organizador del "
-"evento tendrá que iniciar la transferencia manualmente. Por favor, tenga "
-"paciencia ya que esto puede tardar un poco más."
+"Con el método de pago empleado, el importe del reembolso <strong>no se puede "
+"enviarse automáticamente</strong>. Por lo que el organizador del evento "
+"tendrá que realizar la transferencia manualmente. Por favor, tenga "
+"paciencia, ya que esto puede tardar un poco más."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:185
 msgid ""
@@ -33572,7 +33572,7 @@ msgstr ""
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
-"En breve se le enviará una devolución de %(amount)s, por favor se paciente."
+"Un reembolso de %(amount)s le será enviado pronto, por favor sea paciente."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
@@ -33584,9 +33584,9 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
-"Hemos emitido su devolución de %(amount)s como tarjeta regalo. En su próxima "
-"compra con nosotros, puede utilizar el siguiente código de tarjeta regalo "
-"durante el pago:"
+"Hemos emitido un reembolso de %(amount)s como tarjeta regalo. En su próxima "
+"compra con nosotros, puede utilizar el siguiente código de tarjeta regalo al "
+"momento del pago:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:162
 #, python-format
@@ -33604,8 +33604,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
-"Una devolución de %(amount)s ha sido enviada. Dependiendo del método de "
-"pago, por favor permitir hasta 14 días para que se muestre en su cuenta."
+"Un reembolso de %(amount)s le ha sido enviado. Dependiendo del método de "
+"pago empleado este puede tardar hasta 14 días para mostrarse en su cuenta."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 #: pretix/presale/templates/pretixpresale/event/position.html:33
@@ -33681,8 +33681,8 @@ msgid ""
 "receive a full refund or if a cancellation fee is deducted according to "
 "their cancellation policy."
 msgstr ""
-"Si se aprueba su solicitud, el organizador determinará si se le devolverá el "
-"importe íntegro o si se le deducirá una comisión de cancelación de acuerdo "
+"Si su solicitud es aprobada por el organizador, este será quien determine si "
+"se le reembolsa el importe íntegro o si se le deduce una comisión de acuerdo "
 "con la política de cancelación."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:392
@@ -33691,14 +33691,14 @@ msgstr ""
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
-"La devolución puede emitirse mediante su método de pago original o como "
+"El reembolso puede emitirse mediante su método de pago original o como "
 "tarjeta de regalo."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:394
 #: pretix/presale/templates/pretixpresale/event/order.html:430
 #: pretix/presale/templates/pretixpresale/event/order.html:451
 msgid "The refund will be issued to your original payment method."
-msgstr "La devolución se emitirá a su método de pago original."
+msgstr "El reembolso se enviará al método de pago empleado."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:396
 #: pretix/presale/templates/pretixpresale/event/order.html:409
@@ -33726,9 +33726,9 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
-"Puede solicitar cancelar este pedido. Si se aprueba su solicitud, se "
-"retendrá una tarifa de cancelación del <strong>%(fee)s</strong> y recibirá "
-"un reembolso del resto."
+"Puede solicitar la cancelación de este pedido. Si se aprueba su solicitud, "
+"se le retendrá <strong>%(fee)s</strong> como comisión de cancelación y su "
+"reembolso será del importe restante."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:420
 #, python-format
@@ -33737,20 +33737,23 @@ msgid ""
 "<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
 "remainder."
 msgstr ""
-"Puedes cancelar este pedido. En este caso, se mantendrá una tarifa de "
-"cancelación del <strong>%(fee)s</strong> y se le reembolsará el resto."
+"Puede cancelar este pedido. En este caso, se le aplicará una comisión de "
+"cancelación de <strong>%(fee)s</strong> y se le reembolsará el importe "
+"restante."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:437
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
-"Puede solicitar cancelar este pedido. Si se aprueba su solicitud, obtendrá "
-"un reembolso completo."
+"Puede solicitar la cancelación de este pedido. Si se aprueba su solicitud, "
+"obtendrá el reembolso completo del importe pagado."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:442
 msgid "You can cancel this order and receive a full refund."
-msgstr "Puede cancelar este pedido y recibir un reembolso completo."
+msgstr ""
+"Puede cancelar este pedido y recibir un reembolso completo del importe "
+"pagado."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:461
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
@@ -33800,12 +33803,12 @@ msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
 msgstr ""
-"Si lo desea, puede solicitar un reembolso por el importe total menos una "
-"tarifa de cancelación de %(fee)s."
+"Si lo desea, puede solicitar un reembolso por el importe total al que se le "
+"aplicará una comisión de cancelación de %(fee)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:67
 msgid "If you want, you can request a full refund."
-msgstr "Si lo desea, puede solicitar el reembolso integral."
+msgstr "Si lo desea, puede solicitar el reembolso integro."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:96
 msgid "Enter custom amount"
@@ -33813,7 +33816,7 @@ msgstr "Introducir importe personalizado"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 msgid "Refund amount:"
-msgstr "Cantidad devuelta:"
+msgstr "Cantidad reembolsada:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:117
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:138
@@ -33823,11 +33826,11 @@ msgstr "Su tarjeta de regalo será válida hasta el %(expiry_date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:126
 msgid "I want the refund as a gift card for later purchases"
-msgstr "Quiero el reembolso como tarjeta regalo para compras posteriores"
+msgstr "Deseo un reembolso con tarjeta regalo para compras posteriores"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:132
 msgid "I want the refund to be sent to my original payment method"
-msgstr "Quiero que el reembolso se envíe a mi método de pago original"
+msgstr "Deseo que el reembolso se envíe al método de pago empleado"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:185
@@ -34836,7 +34839,7 @@ msgstr "Kosovo"
 
 #: pretix/base/models/checkin.py:104
 msgid "Sales channels to automatically check in"
-msgstr "Canales de venta para registrarse automáticamente"
+msgstr "Canales de venta con check-in automático"
 
 #: pretix/base/models/checkin.py:105
 msgid ""
