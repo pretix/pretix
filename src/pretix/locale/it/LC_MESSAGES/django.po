@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-09 09:00+0000\n"
+"PO-Revision-Date: 2024-11-11 05:00+0000\n"
 "Last-Translator: Damiano <estux@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -17269,6 +17269,8 @@ msgid ""
 "You can take your event offline. Nobody except your team will be able to see "
 "or access it any more."
 msgstr ""
+"Puoi mettere il tuo evento offline. Nessuno, tranne il tuo team, potrà più "
+"vederlo o accedervi."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:34
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
@@ -17288,7 +17290,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/delete.html:56
 #: pretix/control/templates/pretixcontrol/event/delete.html:70
 msgid "Delete personal data"
-msgstr ""
+msgstr "Elimina i dati personali"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 msgid ""
@@ -17296,6 +17298,9 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
+"Puoi rimuovere i dati personali, come nomi e indirizzi email, dal tuo evento "
+"e trattenere solamente le informazioni finanziarie, come il numero e il tipo "
+"di biglietti venduti."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
@@ -17314,12 +17319,16 @@ msgid ""
 "This operation will destroy your event including all configuration, "
 "products, quotas, questions, vouchers, lists, etc."
 msgstr ""
+"Questa operazione distruggerà il tuo evento, comprese tutte le "
+"configurazioni, i prodotti, le quote, le domande, i buoni, le liste, ecc."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:15
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:15
 msgid ""
 "This operation is irreversible and there is no way to bring your data back."
 msgstr ""
+"Questa operazione è irreversibile e non c'è modo di recuperare i tuoi dati "
+"in seguito."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:22
 #, python-format
@@ -17327,10 +17336,13 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"Per confermare che lo desideri veramente, inserisci qui il nome breve "
+"dell'evento (\"%(slug)s\") :"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
 msgid "Your event can not be deleted as it already contains orders."
 msgstr ""
+"Il tuo evento non può essere eliminato perché contiene già degli ordini."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:39
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:39
@@ -17404,7 +17416,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:29
 msgid "This plugin reports the following problems:"
-msgstr ""
+msgstr "Questo plugin segnala i seguenti problemi:"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:6
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:12
@@ -17412,7 +17424,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:24
 #, python-format
 msgid "Download QR code as %(filetype)s image"
-msgstr ""
+msgstr "Scarica il codice QR come immagine %(filetype)s"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
