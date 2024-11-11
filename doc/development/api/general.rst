@@ -100,3 +100,7 @@ API
 .. automodule:: pretix.base.signals
    :no-index:
    :members: validate_event_settings, api_event_settings_fields
+
+.. automodule:: pretix.api.signals
+   :no-index:
+   :members: register_device_security_profile

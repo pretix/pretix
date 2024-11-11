@@ -54,6 +54,7 @@ from i18nfield.strings import LazyI18nString
 from phonenumber_field.formfields import PhoneNumberField
 from pytz import common_timezones
 
+from pretix.api.auth.devicesecurity import get_all_security_profiles
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.customersso.oidc import oidc_validate_and_complete_config
@@ -311,6 +312,11 @@ class DeviceForm(forms.ModelForm):
             '-has_subevents', '-date_from'
         )
         self.fields['gate'].queryset = organizer.gates.all()
+        self.fields['security_profile'] = forms.ChoiceField(
+            label=self.fields['security_profile'].label,
+            help_text=self.fields['security_profile'].help_text,
+            choices=[(k, v.verbose_name) for k, v in get_all_security_profiles().items()],
+        )
 
     def clean(self):
         d = super().clean()
@@ -344,6 +350,11 @@ class DeviceBulkEditForm(forms.ModelForm):
             '-has_subevents', '-date_from'
         )
         self.fields['gate'].queryset = organizer.gates.all()
+        self.fields['security_profile'] = forms.ChoiceField(
+            label=self.fields['security_profile'].label,
+            help_text=self.fields['security_profile'].help_text,
+            choices=[(k, v.verbose_name) for k, v in get_all_security_profiles().items()],
+        )
 
     def clean(self):
         d = super().clean()

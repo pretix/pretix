@@ -28,7 +28,6 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 
-from pretix.api.auth.devicesecurity import DEVICE_SECURITY_PROFILES
 from pretix.base.models import LoggedModel
 
 
@@ -161,7 +160,6 @@ class Device(LoggedModel):
     )
     security_profile = models.CharField(
         max_length=190,
-        choices=[(k, v.verbose_name) for k, v in DEVICE_SECURITY_PROFILES.items()],
         default='full',
         null=True,
         blank=False
