@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-07 00:00+0000\n"
-"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2024-11-11 22:00+0000\n"
+"Last-Translator: arjan-s <github@anymore.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20632,6 +20632,9 @@ msgid ""
 "feature and are not suitable for strictly ensuring that products are only "
 "available in certain combinations."
 msgstr ""
+"Let op: cross-selling categoriën zijn bedoeld als marketinghulpmiddel en "
+"zijn niet geschikt om strikt af te dwingen dat producten alleen in bepaalde "
+"combinaties beschikbaar zijn."
 
 #: pretix/control/templates/pretixcontrol/items/category.html:39
 #: pretix/control/templates/pretixcontrol/items/category.html:29
@@ -21550,22 +21553,20 @@ msgid "Add product"
 msgstr "Product toevoegen"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:434
-#, fuzzy
 msgid ""
 "Manually modifying payment fees is discouraged since they might "
 "automatically be updated on subsequent order changes or when choosing a "
 "different payment method."
 msgstr ""
-"Het handmatig bewerken van betalingstoeslagen wordt afgeraden, omdat deze "
-"kosten anders kunnen zijn na later volgende wijzigingen in de bestelling of "
-"wanneer een andere betalingsmethode wordt gekozen."
+"Het handmatig aanpassen van betalingstoeslagen wordt afgeraden, omdat deze "
+"kosten automatisch bijgewerkt kunnen worden na latere aanpassingen in de "
+"bestelling of wanneer een andere betalingsmethode wordt gekozen."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:454
 #: pretix/control/templates/pretixcontrol/order/change.html:481
 #: pretix/control/templates/pretixcontrol/order/change.html:501
-#, fuzzy
 msgid "Add fee"
-msgstr "Extra kosten"
+msgstr "Toeslag toevoegen"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:508
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:63
@@ -27875,24 +27876,20 @@ msgid "End event date"
 msgstr "Laatste evenementsdatum"
 
 #: pretix/plugins/badges/exporters.py:475
-#, fuzzy
 msgid "Only include tickets ordered on or before this date."
-msgstr "Alleen tickets voor subevenementen op of voor deze datum."
+msgstr "Alleen tickets die besteld zijn op of voor deze datum."
 
 #: pretix/plugins/badges/exporters.py:479
-#, fuzzy
 msgid "Start order date"
-msgstr "Startdatum"
+msgstr "Startdatum bestelling"
 
 #: pretix/plugins/badges/exporters.py:482
-#, fuzzy
 msgid "Only include tickets ordered on or after this date."
-msgstr "Alleen tickets voor subevenementen op of na deze datum."
+msgstr "Alleen tickets die besteld zijn op of na deze datum."
 
 #: pretix/plugins/badges/exporters.py:486
-#, fuzzy
 msgid "End order date"
-msgstr "Besteldatum"
+msgstr "Einddatum bestelling"
 
 #: pretix/plugins/badges/exporters.py:489
 #: pretix/plugins/badges/exporters.py:475
@@ -28357,7 +28354,7 @@ msgid "Invoice {invoice_number}"
 msgstr "Factuur {invoice_number}"
 
 #: pretix/plugins/banktransfer/signals.py:137
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -28370,13 +28367,11 @@ msgid ""
 msgstr ""
 "Beste heer/mevrouw,\n"
 "\n"
-"U heeft ons verzocht om de link te sturen van uw bestelling voor \n"
-"het evenement {event}.\n"
+"U ontvangt dit bericht omdat er een bestelling is geplaatst voor {event} "
+"door {order_email}, en wij zijn gevraagd om de factuur naar u te sturen.\n"
 "\n"
-"U kunt uw bestelgegevens wijzigen en de status van uw bestelling \n"
-"bekijken op {url}\n"
+"Met vriendelijke groet,\n"
 "\n"
-"Met vriendelijke groeten,  \n"
 "Organisatie van {event}"
 
 #: pretix/plugins/banktransfer/tasks.py:171
@@ -28405,13 +28400,12 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
-#, fuzzy
 msgid ""
 "Please do not yet start a payment. We'll assign you a personal reference "
 "code after you completed the order."
 msgstr ""
-"We zullen u nadat u de bestelling hebt geplaatst een persoonlijke "
-"betalingscode geven die u in de omschrijving moet zetten."
+"Doe alstublieft nog geen betaling. We zullen na het afronden van de "
+"bestelling een persoonlijke betalingscode aan u toewijzen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
@@ -28444,9 +28438,8 @@ msgid "We will send a copy of your invoice directly to %(recipient)s."
 msgstr "We versturen een kopie van de factuur naar %(recipient)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:6
-#, fuzzy
 msgid "Send invoice to"
-msgstr "Factuur naar"
+msgstr "Stuur factuur naar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
 msgid "Account"
@@ -28617,12 +28610,8 @@ msgstr "Er is geen bijkomende actie meer vereist op deze website."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:43
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:31
-#, fuzzy
 msgid "We will send you an email as soon as we received your payment."
-msgstr ""
-"We zullen u een e-mail sturen zodra de organisator van het evenement uw "
-"bestelling heeft goedgekeurd of geweigerd. Als uw bestelling is goedgekeurd "
-"zullen we u een link sturen die u kunt gebruiken om te betalen."
+msgstr "We zullen u een e-mail sturen zodra we uw betaling ontvangen hebben."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:61
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:72
@@ -28633,13 +28622,12 @@ msgstr "Scan de qr-code met uw bankapplicatie"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:65
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:75
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:96
-#, fuzzy
 msgid ""
 "Scan this image with your banking app’s QR-Reader to start the payment "
 "process."
 msgstr ""
-"BezahlCode voor uw bestelling. Scan deze afbeelding met de QR-codelezer van "
-"uw bank-app om het betalingsproces te starten."
+"Scan deze afbeelding met de QR-codelezer van uw bank-app om het "
+"betalingsproces te starten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:95
 msgid "Open BezahlCode in your banking app to start the payment process."
@@ -28651,9 +28639,8 @@ msgid "At your request, we sent the invoice directly to %(recipient)s."
 msgstr "Op uw aanvraag hebben we de factuur verzonden naar %(recipient)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:117
-#, fuzzy
 msgid "Send again or somewhere else"
-msgstr "Log in als iemand anders"
+msgstr "Stuur opnieuw of naar een andere bestemming"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:126
 msgid ""
@@ -28664,14 +28651,12 @@ msgstr ""
 "te versturen:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:132
-#, fuzzy
 msgid "Invoice recipient email"
-msgstr "Ontvanger van factuur:"
+msgstr "E-mailadres van ontvanger van factuur"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:139
-#, fuzzy
 msgid "Send invoice via email"
-msgstr "Stuur vouchers via e-mail"
+msgstr "Stuur factuur via e-mail"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
@@ -28915,9 +28900,8 @@ msgid "You need to select the column containing the payment reference."
 msgstr "U moet de kolom selecteren die de betalingscode bevat."
 
 #: pretix/plugins/banktransfer/views.py:570
-#, fuzzy
 msgid "No currency has been selected."
-msgstr "Niet alle producten zijn geselecteerd."
+msgstr "Er is geen munteenheid geselecteerd."
 
 #: pretix/plugins/banktransfer/views.py:718
 #, python-brace-format
@@ -28946,11 +28930,10 @@ msgstr ""
 "bestelling reeds betaald is?"
 
 #: pretix/plugins/banktransfer/views.py:915
-#, fuzzy
 msgid "Sending invoices via email is disabled by the event organizer."
 msgstr ""
-"Deze bestelling is nog niet goedgekeurd door de organisator van het "
-"evenement."
+"Het sturen van facturen via e-mail is uitgeschakeld door de organisator van "
+"het evenement."
 
 #: pretix/plugins/banktransfer/views.py:920
 msgid "No invoice found, please request an invoice first."
@@ -28972,9 +28955,8 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:91
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
-#, fuzzy
 msgid "Only include tickets for dates within this range."
-msgstr "Alleen tickets voor subevenementen op of na deze datum."
+msgstr "Alleen tickets voor datums in deze reeks."
 
 #: pretix/plugins/checkinlists/exporters.py:95
 msgid "Include QR-code secret"
@@ -28996,7 +28978,6 @@ msgstr "Inchecklijst (PDF)"
 #: pretix/plugins/checkinlists/exporters.py:473
 #: pretix/plugins/checkinlists/exporters.py:670
 #: pretix/plugins/checkinlists/exporters.py:740
-#, fuzzy
 msgctxt "export_category"
 msgid "Check-in"
 msgstr "Check-in"
@@ -29038,9 +29019,8 @@ msgid "Secret"
 msgstr "Geheim"
 
 #: pretix/plugins/checkinlists/exporters.py:669
-#, fuzzy
 msgid "Valid check-in codes"
-msgstr "Alle check-ins"
+msgstr "Geldige incheckcodes"
 
 #: pretix/plugins/checkinlists/exporters.py:671
 msgid ""
@@ -29064,9 +29044,8 @@ msgstr ""
 "inchecken."
 
 #: pretix/plugins/checkinlists/exporters.py:760
-#, fuzzy
 msgid "Offline"
-msgstr "Ga offline"
+msgstr "Offline"
 
 #: pretix/plugins/checkinlists/exporters.py:761
 msgid "Offline override"
@@ -29098,11 +29077,8 @@ msgid "All check-in lists"
 msgstr "Alle inchecklijsten"
 
 #: pretix/plugins/manualpayment/apps.py:37
-#, fuzzy
 msgid "A fully customizable payment method for manual processing."
-msgstr ""
-"Deze plug-in voegt een aanpasbare betalingsmethode voor handmatige "
-"verwerking toe."
+msgstr "Een volledig aanpasbare betalingsmethode voor handmatige verwerking."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
 #: pretix/plugins/paypal/payment.py:75 pretix/plugins/paypal2/payment.py:82
@@ -29319,7 +29295,6 @@ msgid "Your PayPal account has been disconnected."
 msgstr "De verbinding met uw PayPal-account is verbroken."
 
 #: pretix/plugins/paypal2/apps.py:40
-#, fuzzy
 msgid ""
 "Accept payments with your PayPal account. In addition to regular PayPal "
 "payments, you can now also offer payments in a variety of local payment "
@@ -29329,14 +29304,12 @@ msgid ""
 msgstr ""
 "Accepteer betalingen met uw PayPal-account. Naast gewone betalingen met "
 "PayPal kunt u nu ook betalingen accepteren met verschillende lokale "
-"betaalmethoden zoals giropay, SOFORT, iDEAL en veel meer - ze hebben geen "
-"PayPal-account nodig. PayPal is een van de meest populaire betaalmethodes "
-"wereldwijd."
+"betaalmethoden zoals eps, iDEAL en veel meer - ze hebben geen PayPal-account "
+"nodig. PayPal is een van de meest populaire betaalmethodes wereldwijd."
 
 #: pretix/plugins/paypal2/payment.py:99
-#, fuzzy
 msgid "PayPal Merchant ID"
-msgstr "PayPal-betalingskenmerk"
+msgstr "PayPal-verkoper-ID"
 
 #: pretix/plugins/paypal2/payment.py:141
 msgid ""
@@ -29349,12 +29322,10 @@ msgstr ""
 "deze betaalmethode altijd actief."
 
 #: pretix/plugins/paypal2/payment.py:149
-#, fuzzy
 msgid "Alternative Payment Methods"
-msgstr "Betaalmethode inschakelen"
+msgstr "Alternatieve betalingsmethodes"
 
 #: pretix/plugins/paypal2/payment.py:151
-#, fuzzy
 msgid ""
 "In addition to payments through a PayPal account, you can also offer your "
 "customers the option to pay with credit cards and other, local payment "
@@ -29363,11 +29334,11 @@ msgid ""
 "shoppers location. For German merchants, this is the direct successor of "
 "PayPal Plus."
 msgstr ""
-"Naast gewone betalingen met PayPal kunt u nu ook betalingen accepteren met "
-"kredietkaart en andere lokale betaalmethoden zoals SOFORT, giropay, iDEAL en "
-"veel meer - zelfs zonder PayPal-account. In aanmerking komende "
-"betaalmethoden zullen bepaald worden op basis van de locatie van de klant. "
-"Voor Duitse handelaars is dit de directe opvolger van PayPal Plus."
+"Naast betalingen met PayPal kunt u nu ook betalingen accepteren met "
+"creditcard en andere, lokale betalingsmethodes zoals eps, iDEAL en veel meer "
+"- zelfs zonder PayPal-account. In aanmerking komende betalingsmethodes "
+"zullen bepaald worden op basis van de locatie van de klant. Voor Duitse "
+"winkeliers is dit de directe opvolger van PayPal Plus."
 
 #: pretix/plugins/paypal2/payment.py:166
 msgid "Disable SEPA Direct Debit"
@@ -29406,12 +29377,10 @@ msgid "-- Automatic --"
 msgstr "-- Automatisch --"
 
 #: pretix/plugins/paypal2/payment.py:222
-#, fuzzy
 msgid "Buyer country"
-msgstr "Ieder land"
+msgstr "Land van koper"
 
 #: pretix/plugins/paypal2/payment.py:246
-#, fuzzy
 msgid ""
 "To accept payments via PayPal, you will need an account at PayPal. By "
 "clicking on the following button, you can either create a new PayPal account "
@@ -29480,15 +29449,15 @@ msgstr ""
 "selecteren indien beschikbaar."
 
 #: pretix/plugins/paypal2/payment.py:476 pretix/plugins/paypal2/payment.py:1010
-#, fuzzy
 msgid ""
 "Something went wrong when requesting the payment status. Please try again."
-msgstr "Deze cadeaubon is in de tussentijd gebruikt. Probeer het opnieuw."
+msgstr ""
+"Er is iets misgegaan bij het opvragen van de betalingsstatus. Probeer het "
+"opnieuw."
 
 #: pretix/plugins/paypal2/payment.py:485 pretix/plugins/paypal2/payment.py:1019
-#, fuzzy
 msgid "You may need to enable JavaScript for PayPal payments."
-msgstr "U moet mogelijk JavaScript inschakelen voor Stripe-betalingen."
+msgstr "U moet mogelijk JavaScript inschakelen voor PayPal-betalingen."
 
 #: pretix/plugins/paypal2/payment.py:953
 msgid ""
@@ -29500,14 +29469,12 @@ msgstr ""
 "voeren."
 
 #: pretix/plugins/paypal2/payment.py:1087
-#, fuzzy
 msgid "PayPal APM"
-msgstr "PayPal"
+msgstr "PayPal APM"
 
 #: pretix/plugins/paypal2/payment.py:1088
-#, fuzzy
 msgid "PayPal Alternative Payment Methods"
-msgstr "Link om betalingsmethode in te schakelen"
+msgstr "PayPal Alternatieve Betalingsmethodes"
 
 #: pretix/plugins/paypal2/signals.py:59
 msgid "Payment completed."
@@ -29530,47 +29497,40 @@ msgid "Payment pending."
 msgstr "Betaling staat open."
 
 #: pretix/plugins/paypal2/signals.py:64
-#, fuzzy
 msgctxt "paypal"
 msgid "Order approved."
-msgstr "Bestelling goedgekeurd"
+msgstr "Bestelling goedgekeurd."
 
 #: pretix/plugins/paypal2/signals.py:65
-#, fuzzy
 msgctxt "paypal"
 msgid "Order completed."
-msgstr "Opmerking bestelling"
+msgstr "Bestelling afgerond."
 
 #: pretix/plugins/paypal2/signals.py:66
-#, fuzzy
 msgctxt "paypal"
 msgid "Capture completed."
-msgstr "Betaling voltooid."
+msgstr "Transactie voltooid."
 
 #: pretix/plugins/paypal2/signals.py:67
-#, fuzzy
 msgctxt "paypal"
 msgid "Capture pending."
-msgstr "Transactie staat open"
+msgstr "Transactie staat open."
 
 #: pretix/plugins/paypal2/signals.py:76
 msgid "PayPal reported an event: {}"
 msgstr "PayPal meldt: {}"
 
 #: pretix/plugins/paypal2/signals.py:83
-#, fuzzy
 msgid "PayPal ISU/Connect: Client ID"
-msgstr "PayPal Connect: Client-ID"
+msgstr "PayPal ISU/Connect: Client-ID"
 
 #: pretix/plugins/paypal2/signals.py:87
-#, fuzzy
 msgid "PayPal ISU/Connect: Secret key"
-msgstr "PayPal Connect: Geheime sleutel"
+msgstr "PayPal ISU/Connect: Geheime sleutel"
 
 #: pretix/plugins/paypal2/signals.py:91
-#, fuzzy
 msgid "PayPal ISU/Connect: Partner Merchant ID"
-msgstr "PayPal Connect: Client-ID"
+msgstr "PayPal ISU/Connect: Partner winkeliers-ID"
 
 #: pretix/plugins/paypal2/signals.py:92
 msgid ""
@@ -29581,18 +29541,16 @@ msgstr ""
 "merkinformatie bevat voor ISU."
 
 #: pretix/plugins/paypal2/signals.py:96
-#, fuzzy
 msgid "PayPal ISU/Connect Endpoint"
-msgstr "PayPal Connect-endpoint"
+msgstr "PayPal ISU/Connect-endpoint"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:9
 msgid "Almost done …"
 msgstr "Bijna klaar…"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:12
-#, fuzzy
 msgid "Please click on the \"Pay now\" button below to confirm your payment."
-msgstr "Controleer de onderstaande gegevens en bevestig uw bestelling."
+msgstr "Klik op de \"Betaal nu\" knop hieronder om uw betaling te bevestigen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:15
 msgid "We will then charge your PayPal account and finalize the order."
@@ -29622,15 +29580,14 @@ msgstr ""
 "starten."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:13
-#, fuzzy
 msgid ""
 "After you clicked continue, we will be able to select how you want to pay "
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
-"Als u verdergaat sturen we u door naar PayPal om de betalingsgegevens in te "
-"vullen. Daarna wordt u hier teruggeleid om de bestelling te controleren en "
-"te bevestigen."
+"Als u verdergaat sturen kunt u kiezen hoe u wilt betalen en kunt u uw "
+"betalingsgegevens invullen. Daarna wordt u hier teruggeleid om de bestelling "
+"te controleren en te bevestigen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:22
 msgid ""
@@ -29644,14 +29601,12 @@ msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
-#, fuzzy
 msgid "Error"
 msgstr "Fout"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:24
-#, fuzzy
 msgid "Capture status"
-msgstr "Bestelstatus"
+msgstr "Transactiestatus"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:27
 msgid ""
@@ -29678,9 +29633,8 @@ msgid "Pay order: %(code)s"
 msgstr "Betaal bestelling: %(code)s"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:26
-#, fuzzy
 msgid "Please turn on JavaScript."
-msgstr "Probeer het opnieuw."
+msgstr "Schakel JavaScript in."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:29
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:55
@@ -29696,28 +29650,28 @@ msgstr ""
 "opnieuw of neem contact met ons op."
 
 #: pretix/plugins/paypal2/views.py:221
-#, fuzzy
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+"Er trad een fout op tijdens het terugleiden van PayPal: aanvraagparameters "
+"ontbreken. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:257
-#, fuzzy
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+"Er trad een fout op tijdens het terugleiden van PayPal: resultaatparameters "
+"ontbreken. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:262
-#, fuzzy
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+"Er trad een fout op tijdens het terugleiden van PayPal: sessieparameters "
+"ontbreken. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:267
 msgid ""
@@ -29748,9 +29702,8 @@ msgstr ""
 "evenement te gebruiken."
 
 #: pretix/plugins/reports/accountingreport.py:58
-#, fuzzy
 msgid "Accounting report"
-msgstr "Accountinformatie"
+msgstr "Boekhoudingsrapport"
 
 #: pretix/plugins/reports/accountingreport.py:60
 msgid ""
@@ -29766,14 +29719,12 @@ msgid "Analysis"
 msgstr "Analyse"
 
 #: pretix/plugins/reports/accountingreport.py:82
-#, fuzzy
 msgid "Ignore test mode orders"
-msgstr "Toon alle testbestellingen"
+msgstr "Negeer testbestellingen"
 
 #: pretix/plugins/reports/accountingreport.py:90
-#, fuzzy
 msgid "Split event series by date"
-msgstr "Evenementenreeks: datum toegevoegd"
+msgstr "Splits evenementenreeks per datum"
 
 #: pretix/plugins/reports/accountingreport.py:128
 msgid "End"
@@ -29797,9 +29748,9 @@ msgstr ""
 
 #: pretix/plugins/reports/accountingreport.py:644
 #: pretix/plugins/reports/accountingreport.py:694
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Pending payments at {datetime}"
-msgstr "Betalingstermijn verlengen"
+msgstr "Openstaande betalingen op {datetime}"
 
 #: pretix/plugins/reports/accountingreport.py:751
 #: pretix/plugins/reports/accountingreport.py:789
@@ -29808,33 +29759,27 @@ msgid "Total gift card value at {datetime}"
 msgstr "Totale waarde van de cadeaubonnen op {datetime}"
 
 #: pretix/plugins/reports/accountingreport.py:770
-#, fuzzy
 msgid "Gift card transactions (credit)"
-msgstr "Cadeaubontransacties"
+msgstr "Cadeaubontransacties (krediet)"
 
 #: pretix/plugins/reports/accountingreport.py:780
-#, fuzzy
 msgid "Gift card transactions (debit)"
-msgstr "Cadeaubontransacties"
+msgstr "Cadeaubontransacties (debet)"
 
 #: pretix/plugins/reports/accountingreport.py:882
-#, fuzzy
 msgid "Open items"
-msgstr "Bestelde items"
+msgstr "Open items"
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
 msgstr "Rapport-exporteerder"
 
 #: pretix/plugins/reports/apps.py:51
-#, fuzzy
 msgid "Generate printable reports about your sales."
-msgstr ""
-"Deze plug-in staat u toe om printbare rapporten te genereren over uw "
-"verkoopcijfers."
+msgstr "Genereer printbare rapporten over uw verkoopcijfers."
 
 #: pretix/plugins/reports/exporters.py:97
-#, fuzzy, python-format
+#, python-format
 msgid "Page %d of %d"
 msgstr "Pagina %d van %d"
 
@@ -29886,9 +29831,8 @@ msgid "#"
 msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:477
-#, fuzzy
 msgid "Tax split list (PDF)"
-msgstr "Inchecklijst (PDF)"
+msgstr "Gesplitste belastingen (PDF)"
 
 #: pretix/plugins/reports/exporters.py:479
 msgid "Download a PDF list with the tax amounts included in each order."
@@ -29914,9 +29858,8 @@ msgid "Tax"
 msgstr "Belasting"
 
 #: pretix/plugins/reports/exporters.py:650
-#, fuzzy
 msgid "Tax split list"
-msgstr "Standaardlijst"
+msgstr "Gesplitste belastingen"
 
 #: pretix/plugins/reports/exporters.py:652
 msgid "Download a spreadsheet with the tax amounts included in each order."
@@ -29961,7 +29904,6 @@ msgstr ""
 "gebruikt, en uw eigen afrekeninterface gebruikt voor andere stappen."
 
 #: pretix/plugins/returnurl/views.py:37
-#, fuzzy
 msgid "Base redirection URLs"
 msgstr "Basis-URL voor doorverwijzing"
 
@@ -29995,29 +29937,25 @@ msgstr ""
 "voegen en een maximale grootte van 2 MB te gebruiken."
 
 #: pretix/plugins/sendmail/forms.py:91
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Waiting for"
-msgstr "Wachtend"
+msgstr "Wachtend op"
 
 #: pretix/plugins/sendmail/forms.py:97 pretix/plugins/sendmail/forms.py:171
 #: pretix/plugins/sendmail/forms.py:349
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to a specific event date"
-msgstr "Beperken tot specifieke verkoopkanalen"
+msgstr "Beperken tot een specifieke evenementdatum"
 
 #: pretix/plugins/sendmail/forms.py:103 pretix/plugins/sendmail/forms.py:177
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting at or after"
-msgstr "Alle subevenementen beginnend op of na"
+msgstr "Beperk tot evenementdatums beginnend op of na"
 
 #: pretix/plugins/sendmail/forms.py:108 pretix/plugins/sendmail/forms.py:182
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting before"
-msgstr "Alle subevenementen beginnend voor"
+msgstr "Beperk tot evenementdatums beginnend voor"
 
 #: pretix/plugins/sendmail/forms.py:149
 msgctxt "sendmail_form"
@@ -30034,10 +29972,9 @@ msgid "Filter check-in status"
 msgstr "Filteren op incheckstatus"
 
 #: pretix/plugins/sendmail/forms.py:168
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in on any list"
-msgstr "Beperken tot specifieke verkoopkanalen"
+msgstr "Beperk tot ontvangers die nog op geen enkele lijst ingecheckt zijn"
 
 #: pretix/plugins/sendmail/forms.py:187
 msgctxt "sendmail_form"
@@ -30074,15 +30011,13 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:234 pretix/plugins/sendmail/forms.py:388
 #: pretix/plugins/sendmail/views.py:270
-#, fuzzy
 msgid "payment pending but already confirmed"
-msgstr "wacht op betaling (excl. nog niet goedgekeurde bestellingen)"
+msgstr "betaling staat open maar is al bevestigd"
 
 #: pretix/plugins/sendmail/forms.py:235 pretix/plugins/sendmail/forms.py:390
 #: pretix/plugins/sendmail/views.py:271
-#, fuzzy
 msgid "payment pending (except unapproved or already confirmed)"
-msgstr "wacht op betaling (excl. nog niet goedgekeurde bestellingen)"
+msgstr "betaling staat open (excl. nog niet goedgekeurde of al bevestigde)"
 
 #: pretix/plugins/sendmail/forms.py:239 pretix/plugins/sendmail/forms.py:394
 #: pretix/plugins/sendmail/views.py:269
@@ -30095,10 +30030,9 @@ msgid "Restrict to orders with status"
 msgstr "Beperk tot bestellingen met status"
 
 #: pretix/plugins/sendmail/forms.py:267 pretix/plugins/sendmail/forms.py:271
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
-msgstr "Beperken tot specifieke verkoopkanalen"
+msgstr "Beperk tot ontvangers die al op een lijst ingecheckt zijn"
 
 #: pretix/plugins/sendmail/forms.py:373
 msgid "Type of schedule time"
@@ -30142,12 +30076,10 @@ msgid "Please specify a product"
 msgstr "Kies een product alstublieft"
 
 #: pretix/plugins/sendmail/models.py:51
-#, fuzzy
 msgid "scheduled"
-msgstr "Geplande tijd"
+msgstr "gepland"
 
 #: pretix/plugins/sendmail/models.py:52
-#, fuzzy
 msgid "failed"
 msgstr "mislukt"
 
@@ -30168,9 +30100,8 @@ msgid "Everyone"
 msgstr "Iedereen"
 
 #: pretix/plugins/sendmail/models.py:224
-#, fuzzy
 msgid "Anyone who is or was checked in"
-msgstr "Stuur naar niet-ingecheckte klanten"
+msgstr "Iedereen die ingecheckt is of was"
 
 #: pretix/plugins/sendmail/models.py:225
 msgid "Anyone who never checked in before"
@@ -30185,9 +30116,8 @@ msgid "Restrict to orders with status"
 msgstr "Beperk tot bestellingen met status"
 
 #: pretix/plugins/sendmail/models.py:244
-#, fuzzy
 msgid "Restrict to check-in status"
-msgstr "Lijst van bestellingen met belasting"
+msgstr "Beperk tot incheckstatus"
 
 #: pretix/plugins/sendmail/models.py:258
 msgid "Send date"
@@ -30244,14 +30174,12 @@ msgid "Scheduled emails"
 msgstr "Automatische e-mails"
 
 #: pretix/plugins/sendmail/signals.py:122
-#, fuzzy
 msgid "Mass email was sent to customers or attendees."
-msgstr "Een aangepaste email is verstuurd naar een gast."
+msgstr "Massa-e-mail verzonden naar klanten of aanwezigen."
 
 #: pretix/plugins/sendmail/signals.py:123
-#, fuzzy
 msgid "Mass email was sent to waiting list entries."
-msgstr "Een aangepaste email is verstuurd naar een gast."
+msgstr "Massa-e-mail verzonden naar wachtlijst-regels."
 
 #: pretix/plugins/sendmail/signals.py:124
 msgid "The order received a mass email."
@@ -30262,14 +30190,12 @@ msgid "A ticket holder of this order received a mass email."
 msgstr "Een tickethouder van deze bestelling ontving een massamail."
 
 #: pretix/plugins/sendmail/signals.py:126
-#, fuzzy
 msgid "An email rule was created"
-msgstr "De e-mailregel is verwijderd"
+msgstr "Een e-mailregel is gemaakt"
 
 #: pretix/plugins/sendmail/signals.py:127
-#, fuzzy
 msgid "An email rule was updated"
-msgstr "De e-mailregel is verwijderd"
+msgstr "Een e-mailregel is aangepast"
 
 #: pretix/plugins/sendmail/signals.py:128
 msgid "A scheduled email was sent to the order"
@@ -30352,14 +30278,13 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:6
-#, fuzzy
 msgid "Inspect Email Rule"
-msgstr "Maak e-mailregel"
+msgstr "Inspecteer e-mailregel"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:8
-#, fuzzy
 msgid "This page shows when your rule is planned to be sent."
-msgstr "De email is in de wachtrij gezet om te worden verstuurd."
+msgstr ""
+"Deze pagina toont wanneer uw regel gepland staat om te worden verstuurd."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:18
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:29
@@ -30412,14 +30337,12 @@ msgid "Last execution:"
 msgstr "Laatste uitvoering:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:82
-#, fuzzy
 msgid "Inspect scheduled times"
-msgstr "Type tijdsaangave"
+msgstr "Inspecteer planning"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:83
-#, fuzzy
 msgid "Use as a template for a new rule"
-msgstr "Gebruik als sjabloon voor een nieuwe datum"
+msgstr "Gebruik als sjabloon voor een nieuwe regel"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:7
@@ -30436,9 +30359,8 @@ msgstr ""
 "evenementenreeks."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:23
-#, fuzzy
 msgid "This email has already been sent. Changing it will have no effect."
-msgstr "Deze slug wordt al voor een ander evenement gebruikt."
+msgstr "Deze e-mail is al verzonden. Het veranderen zal geen effect hebben."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:28
 msgid ""
@@ -30461,18 +30383,17 @@ msgid "You supplied an invalid log entry ID"
 msgstr "U gaf een ongeldig log-ID op"
 
 #: pretix/plugins/sendmail/views.py:186
-#, fuzzy
 msgid "There are no matching recipients for your selection."
-msgstr "Er zijn geen bestellingen die overeenkomen met deze selectie."
+msgstr "Er zijn geen ontvangers die overeenkomen met uw selectie."
 
 #: pretix/plugins/sendmail/views.py:223
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your message has been queued and will be sent to the contact addresses of %s "
 "in the next few minutes."
 msgstr ""
-"Uw bericht is in de wachtrij gezet en zal binnenkort naar de e-mailadressen "
-"van %d bestellingen worden verstuurd."
+"Uw bericht is in de wachtrij gezet en zal in de komende minuten naar de "
+"contactadressen van %s verzonden worden."
 
 #: pretix/plugins/sendmail/views.py:253
 msgid "Orders or attendees"
@@ -30618,15 +30539,14 @@ msgid "Stripe"
 msgstr "Stripe"
 
 #: pretix/plugins/stripe/apps.py:40
-#, fuzzy
 msgid ""
 "Accept payments via Stripe, a globally popular payment service provider. "
 "Stripe supports payments via credit cards as well as many local payment "
 "methods such as iDEAL, Alipay,and many more."
 msgstr ""
 "Accepteer betalingen via Stripe, een populaire wereldwijde "
-"betalingsverwerker. Stripe ondersteunt betalingen via kredeitkaart maar ook "
-"veel lokale betaalmethoden zoals giropay, iDEAL, Alipay and veel meer."
+"betalingsverwerker. Stripe ondersteunt betalingen via creditcards maar ook "
+"veel lokale betaalmethoden zoals iDEAL, Alipay and veel meer."
 
 #: pretix/plugins/stripe/forms.py:40
 #, python-format
@@ -30738,9 +30658,8 @@ msgid "Publishable key"
 msgstr "Publiceerbare sleutel"
 
 #: pretix/plugins/stripe/payment.py:280
-#, fuzzy
 msgid "Generate API keys"
-msgstr "Genereer tickets"
+msgstr "Genereer API-sleutels"
 
 #: pretix/plugins/stripe/payment.py:282
 msgid ""
@@ -30843,17 +30762,16 @@ msgstr ""
 "Stripe-account vooraleer ze correct werken."
 
 #: pretix/plugins/stripe/payment.py:372
-#, fuzzy
 msgid ""
 "SEPA Direct Debit payments via Stripe are <strong>not</strong> processed "
 "instantly but might take up to <strong>14 days</strong> to be confirmed in "
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
-"In tegenstelling tot wat de naam doet vermoeden worden Sofort-betalingen via "
-"Stripe <strong>niet</strong> direct verwerkt, maar kunnen zein sommige "
-"gevallen tot <strong>14 dagen</strong> duren om verwerkt te worden. Activeer "
-"deze betalingsmethode alleen als uw betalingstermijn deze vertraging toelaat."
+"SEPA Direct Debit betalingen via Stripe worden <strong>niet</strong> direct "
+"verwerkt, maar kunnen in sommige gevallen tot <strong>14 dagen</strong> "
+"duren om verwerkt te worden. Activeer deze betalingsmethode alleen als uw "
+"betalingstermijn deze vertraging toelaat."
 
 #: pretix/plugins/stripe/payment.py:380
 msgid "SEPA Creditor Mandate Name"
@@ -31013,48 +30931,40 @@ msgid "Credit card"
 msgstr "Creditcard"
 
 #: pretix/plugins/stripe/payment.py:1195
-#, fuzzy
 msgid "SEPA Debit via Stripe"
-msgstr "EPS via Stripe"
+msgstr "SEPA Debit via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1196
 msgid "SEPA Debit"
 msgstr "SEPA Debit"
 
 #: pretix/plugins/stripe/payment.py:1236
-#, fuzzy
 msgid "Account Holder Name"
-msgstr "Rekeninghouder"
+msgstr "Naam van rekeninghouder"
 
 #: pretix/plugins/stripe/payment.py:1241
-#, fuzzy
 msgid "Account Holder Street"
-msgstr "Rekeninghouder"
+msgstr "Straat van rekeninghouder"
 
 #: pretix/plugins/stripe/payment.py:1253
-#, fuzzy
 msgid "Account Holder Postal Code"
-msgstr "Rekeninghouder"
+msgstr "Postcode van rekeninghouder"
 
 #: pretix/plugins/stripe/payment.py:1265
-#, fuzzy
 msgid "Account Holder City"
-msgstr "Rekeninghouder"
+msgstr "Woonplaats van rekeninghouder"
 
 #: pretix/plugins/stripe/payment.py:1277
-#, fuzzy
 msgid "Account Holder Country"
-msgstr "Rekeninghouder"
+msgstr "Land van rekeninghouder"
 
 #: pretix/plugins/stripe/payment.py:1321
-#, fuzzy
 msgid "Affirm via Stripe"
-msgstr "Alipay via Stripe"
+msgstr "Affirm via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1366
-#, fuzzy
 msgid "Klarna via Stripe"
-msgstr "Alipay via Stripe"
+msgstr "Klarna via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1483
 msgid "giropay via Stripe"
@@ -31119,9 +31029,8 @@ msgid "SOFORT via Stripe"
 msgstr "SOFORT via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1599
-#, fuzzy
 msgid "SOFORT (instant bank transfer)"
-msgstr "Betaling via bankoverschrijving"
+msgstr "SOFORT (directe bankoverschrijving)"
 
 #: pretix/plugins/stripe/payment.py:1617
 msgid "Country of your bank"
@@ -31193,55 +31102,48 @@ msgstr ""
 "applicatie WeChat. Houd uw logingegevens bij de hand."
 
 #: pretix/plugins/stripe/payment.py:1788
-#, fuzzy
 msgid "Revolut Pay via Stripe"
-msgstr "WeChat Pay via Stripe"
+msgstr "Revolut Pay via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1789
 msgid "Revolut Pay"
 msgstr "Revolut Pay"
 
 #: pretix/plugins/stripe/payment.py:1793
-#, fuzzy
 msgid ""
 "This payment method is available to users of the Revolut app. Please keep "
 "your login information available."
 msgstr ""
-"Deze betaalmethode is beschikbaar voor de gebruikers van de Chinese "
-"applicatie WeChat. Houd uw logingegevens bij de hand."
+"Deze betalingsmethode is beschikbaar voor de gebruikers van de Revolut-app. "
+"Houd uw logingegevens bij de hand."
 
 #: pretix/plugins/stripe/payment.py:1807
-#, fuzzy
 msgid "PayPal via Stripe"
-msgstr "Betaling via Stripe"
+msgstr "PayPal via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1814
-#, fuzzy
 msgid "Swish via Stripe"
-msgstr "EPS via Stripe"
+msgstr "Swish via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1819
-#, fuzzy
 msgid ""
 "This payment method is available to users of the Swedish apps Swish and "
 "BankID. Please have your app ready."
 msgstr ""
-"Deze betaalmethode is beschikbaar voor de gebruikers van de Chinese "
-"applicatie WeChat. Houd uw logingegevens bij de hand."
+"Deze betaalmethode is beschikbaar voor de gebruikers van de Zwitserse apps "
+"Swish en BankID. Houd uw app bij de hand."
 
 #: pretix/plugins/stripe/payment.py:1838
-#, fuzzy
 msgid "TWINT via Stripe"
-msgstr "EPS via Stripe"
+msgstr "TWINT via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1843
-#, fuzzy
 msgid ""
 "This payment method is available to users of the Swiss app TWINT. Please "
 "have your app ready."
 msgstr ""
-"Deze betaalmethode is beschikbaar voor de gebruikers van de Chinese "
-"applicatie WeChat. Houd uw logingegevens bij de hand."
+"Deze betaalmethode is beschikbaar voor de gebruikers van de Zwitserse app "
+"TWINT. Houd uw app bij de hand."
 
 #: pretix/plugins/stripe/signals.py:92
 msgid "Charge succeeded."
@@ -31330,9 +31232,8 @@ msgid "Card type"
 msgstr "Kaarttype"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
-#, fuzzy
 msgid "The total amount will be withdrawn from your bank account."
-msgstr "Het totaalbedrag zal worden afgeschreven van uw creditcard."
+msgstr "Het totaalbedrag zal worden afgeschreven van uw bankrekening."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:23
@@ -31341,9 +31242,8 @@ msgstr "Bank"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:25
-#, fuzzy
 msgid "Account number"
-msgstr "Rekeninghouder"
+msgstr "Rekeningnummer"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:7
@@ -31392,23 +31292,20 @@ msgstr ""
 "zullen direct naar Stripe worden verzonden, en nooit op onze servers komen."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
-#, fuzzy
 msgid "For a SEPA Debit payment, please turn on JavaScript."
-msgstr "Zet JavaScript aan om een creditcardbetaling uit te voeren."
+msgstr "Zet JavaScript aan om een SEPA Debit betaling uit te voeren."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:19
-#, fuzzy
 msgid ""
 "You already entered a bank account that we will use to charge the payment "
 "amount."
 msgstr ""
-"U heeft al een creditcardnummer opgegeven dat we zullen gebruiken om de "
-"betaling te voltooien."
+"U hebt al een bankrekening opgegeven die we zullen gebruiken om de betaling "
+"te voltooien."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:30
-#, fuzzy
 msgid "Use a different account"
-msgstr "Gebruik een andere kaart"
+msgstr "Gebruik een ander account"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:54
 #, python-format
@@ -31454,19 +31351,16 @@ msgid "Payer name"
 msgstr "Naam betaler"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
-#, fuzzy
 msgid "Do you really want to disconnect your Stripe account?"
-msgstr "Wilt u echt uw noodherstelcodes opnieuw genereren?"
+msgstr "Wilt u echt uw Stripe-account ontkoppelen?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
-#, fuzzy
 msgid "Disconnect"
-msgstr "Rekening"
+msgstr "Ontkoppelen"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:6
-#, fuzzy
 msgid "Payment instructions"
-msgstr "Betalingsinstellingen"
+msgstr "Betalingsinstructies"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
@@ -31485,14 +31379,12 @@ msgid "Enter the entity number, reference number, and amount."
 msgstr "Vul het entiteitsnummer, referentienummer en bedrag in."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
-#, fuzzy
 msgid "Entity number:"
-msgstr "Factuurnummer"
+msgstr "Entiteitsnummer:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
-#, fuzzy
 msgid "Reference number:"
-msgstr "Betalingscode"
+msgstr "Referentienummer:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:35
 msgid ""
@@ -31613,9 +31505,8 @@ msgid "PDF ticket layout for {channel}"
 msgstr "PDF-ticketlay-out voor {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:52
-#, fuzzy
 msgid "(Same as PDF ticket layout)"
-msgstr "PDF-ticketlay-out"
+msgstr "(Zelfde als PDF-ticketlay-out)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:54
 msgid "PDF ticket layout"
@@ -31639,9 +31530,8 @@ msgid "Ticket layout {val}"
 msgstr "Ticketlay-out {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/control_order_position_buttons.html:7
-#, fuzzy
 msgid "Alternative ticket"
-msgstr "Genereer tickets"
+msgstr "Alternatief tickets"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
@@ -31769,11 +31659,8 @@ msgid "Customer account"
 msgstr "Klantenaccount"
 
 #: pretix/presale/checkoutflow.py:338
-#, fuzzy
 msgid "We failed to process your authentication request, please try again."
-msgstr ""
-"We konden uw verzoek niet verwerken omdat de server overbelast was. Probeer "
-"het opnieuw."
+msgstr "We konden uw authenticatieverzoek niet verwerken, probeer het opnieuw."
 
 #: pretix/presale/checkoutflow.py:401
 msgctxt "checkoutflow"
@@ -31856,9 +31743,8 @@ msgstr "Selecteer een betaalmethode."
 
 #: pretix/presale/checkoutflow.py:1408 pretix/presale/checkoutflow.py:1422
 #: pretix/presale/checkoutflow.py:1433
-#, fuzzy
 msgid "Please select a payment method to proceed."
-msgstr "Selecteer een betaalmethode."
+msgstr "Selecteer een betalingsmethode om door te gaan."
 
 #: pretix/presale/checkoutflow.py:1438 pretix/presale/views/order.py:437
 #: pretix/presale/views/order.py:518
@@ -31966,9 +31852,8 @@ msgid "What is the result of {num1} + {num2}?"
 msgstr "Wat is het resultaat van {num1} + {num2}?"
 
 #: pretix/presale/forms/customer.py:236
-#, fuzzy
 msgid "Please enter the correct result."
-msgstr "Vul alstublieft een kortere naam in."
+msgstr "Vul alstublieft het correcte resultaat in."
 
 #: pretix/presale/forms/customer.py:328
 msgid "For security reasons, please wait 10 minutes before you try again."
@@ -32012,10 +31897,9 @@ msgid "No other variations of this product exist."
 msgstr "Er bestaan geen andere varianten van dit product."
 
 #: pretix/presale/forms/organizer.py:70
-#, fuzzy
 msgctxt "filter_empty"
 msgid "all"
-msgstr "Alle"
+msgstr "alle"
 
 #: pretix/presale/forms/renderers.py:50
 msgctxt "form"
@@ -32097,20 +31981,17 @@ msgstr "Waarschuwing"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:127
 #: pretix/presale/templates/pretixpresale/event/base.html:201
-#, fuzzy
 msgid "This ticket shop is currently in test mode."
-msgstr "Deze ticketwinkel is op dit moment uitgeschakeld."
+msgstr "Deze ticketwinkel staat op dit moment in testmodus."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:130
 #: pretix/presale/templates/pretixpresale/event/base.html:204
-#, fuzzy
 msgid ""
 "Please do not perform any real purchases as your order might be deleted "
 "without notice."
 msgstr ""
-"Deze ticketwinkel staat momenteel in de testmodus. Voer alstublieft geen "
-"echte aankopen uit, omdat uw bestelling op ieder moment verwijderd kan "
-"worden."
+"Voer alstublieft geen echte aankopen uit, omdat uw bestelling zonder overleg "
+"verwijderd kan worden."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:134
 #, python-format
@@ -32129,9 +32010,9 @@ msgid ""
 "href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
 "hidden=\"true\"></span>time machine</a>."
 msgstr ""
-"Om uw winkel op verschillende tijdstippen te testen, kunt u de<a "
-"href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
-"hidden=\"true\"></span>Tijdmachine< /a> inschakelen."
+"Om uw winkel op verschillende tijdstippen te testen, kunt u de <a href=\""
+"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-hidden=\"true\"></"
+"span>Tijdmachine< /a> inschakelen."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:163
 #: pretix/presale/templates/pretixpresale/event/base.html:210
@@ -32166,9 +32047,8 @@ msgstr "Privacybeleid"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:224
 #: pretix/presale/templates/pretixpresale/organizers/base.html:103
-#, fuzzy
 msgid "Cookie settings"
-msgstr "Factuurinstellingen"
+msgstr "Cookie-instellingen"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:227
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
@@ -32197,19 +32077,16 @@ msgid "We're now trying to book these add-ons for you!"
 msgstr "We proberen nu deze add-ons voor u te boeken!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
-#, fuzzy
 msgid "Additional options for"
-msgstr "Extra instellingen"
+msgstr "Extra instellingen voor"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:64
-#, fuzzy
 msgid "More recommendations"
-msgstr "Topaanbeveling"
+msgstr "Meer aanbevelingen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:71
-#, fuzzy
 msgid "Our recommendations"
-msgstr "Topaanbeveling"
+msgstr "Onze aanbevelingen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:89
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:201
@@ -32303,33 +32180,29 @@ msgid "Confirmations"
 msgstr "Bevestigingen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:185
-#, fuzzy
 msgid ""
 "After you submitted your order using the button below, it will require "
 "approval by the event organizer before it can be confirmed and forms a valid "
 "contract."
 msgstr ""
-"Uw bestelling vereist goedkeuring door de organisator van het evenement "
-"voordat de bestelling kan worden bevestigd en een geldig contract kan vormen."
+"Nadat u uw bestelling hebt ingediend met de onderstaande knop, zal de "
+"organisator van het evenement goedkeuring moeten geven voordat de bestelling "
+"kan worden bevestigd en een geldig contract oplevert."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:187
-#, fuzzy
 msgid ""
 "We will send you an email as soon as the event organizer approved or "
 "rejected your order."
 msgstr ""
 "We zullen u een e-mail sturen zodra de organisator van het evenement uw "
-"bestelling heeft goedgekeurd of geweigerd. Als uw bestelling is goedgekeurd "
-"zullen we u een link sturen die u kunt gebruiken om te betalen."
+"bestelling heeft goedgekeurd of geweigerd."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:191
-#, fuzzy
 msgid ""
 "If your order was approved, we will send you a link that you can use to pay."
 msgstr ""
-"We zullen u een e-mail sturen zodra de organisator van het evenement uw "
-"bestelling heeft goedgekeurd of geweigerd. Als uw bestelling is goedgekeurd "
-"zullen we u een link sturen die u kunt gebruiken om te betalen."
+"Als uw bestelling is goedgekeurd zullen we u een link sturen die u kunt "
+"gebruiken om te betalen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:207
 msgid "Place binding order"
@@ -32420,18 +32293,16 @@ msgid "You already selected the following payment methods:"
 msgstr "De volgende betaalmethodes heeft u reeds geselecteerd:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:26
-#, fuzzy
 msgid "Remove payment"
-msgstr "Ontvangen betalingen"
+msgstr "Verwijder betaling"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:38
 msgid "Remaining balance"
 msgstr "Openstaand bedrag"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:39
-#, fuzzy
 msgid "Please select a payment method below."
-msgstr "Selecteer een betaalmethode."
+msgstr "Selecteer hieronder een betalingsmethode."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:52
 msgid "Please select how you want to pay the remaining balance:"
@@ -32641,9 +32512,9 @@ msgstr "Nieuwe prijs:"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:176
 #: pretix/presale/templates/pretixpresale/event/voucher.html:328
 #: pretix/presale/templates/pretixpresale/event/voucher.html:330
-#, fuzzy, python-format
+#, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
-msgstr "Verander prijs voor %(item)s"
+msgstr "Verander prijs voor %(item)s, minimaal %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:152
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:291
@@ -32700,10 +32571,9 @@ msgstr "Voeg %(item)s, %(var)s toe aan winkelwagen"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:370
 #: pretix/presale/templates/pretixpresale/event/voucher.html:231
 #: pretix/presale/templates/pretixpresale/event/voucher.html:385
-#, fuzzy
 msgctxt "checkbox"
 msgid "Select"
-msgstr "Kies een datum"
+msgstr "Selecteer"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:205
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:350
@@ -32711,9 +32581,8 @@ msgstr "Kies een datum"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
 #: pretix/presale/templates/pretixpresale/event/voucher.html:235
 #: pretix/presale/templates/pretixpresale/event/voucher.html:389
-#, fuzzy
 msgid "Decrease quantity"
-msgstr "hoeveelheid"
+msgstr "Verminder hoeveelheid"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:214
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:233
@@ -32728,9 +32597,8 @@ msgstr "Aantal van %(item)s, %(var)s om te bestellen"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:387
 #: pretix/presale/templates/pretixpresale/event/voucher.html:242
 #: pretix/presale/templates/pretixpresale/event/voucher.html:398
-#, fuzzy
 msgid "Increase quantity"
-msgstr "hoeveelheid"
+msgstr "Verhoog hoeveelheid"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:343
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:367
@@ -32756,14 +32624,12 @@ msgid "Enter a voucher code below to buy this product."
 msgstr "Voer hieronder een vouchercode in om dit product te kopen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
-#, fuzzy
 msgid "Not available yet."
-msgstr "Niet beschikbaar"
+msgstr "Nog niet beschikbaar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
-#, fuzzy
 msgid "Not available any more."
-msgstr "Niet beschikbaar"
+msgstr "Niet meer beschikbaar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:19
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:85
@@ -32822,9 +32688,8 @@ msgid "Membership:"
 msgstr "Lidmaatschap:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:127
-#, fuzzy
 msgid "This ticket is blocked."
-msgstr "Dit ticket werd reeds eenmaal gebruikt."
+msgstr "Dit ticket is geblokkeerd."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:134
 msgctxt "ticket_checkins"
@@ -32914,9 +32779,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:20
-#, fuzzy
 msgid "Current value:"
-msgstr "Huidige waarde"
+msgstr "Huidige waarde:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:451
 #, python-format
