@@ -289,7 +289,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
     def _clean_text(self, text, tags=None):
         return self._normalize(bleach.clean(
             text,
-            tags=tags or []
+            tags=set(tags) if tags else set()
         ).strip().replace('<br>', '<br />').replace('\n', '<br />\n'))
 
 
@@ -461,7 +461,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     def _draw_event(self, canvas):
         def shorten(txt):
             txt = str(txt)
-            txt = bleach.clean(txt, tags=[]).strip()
+            txt = bleach.clean(txt, tags=set()).strip()
             p = Paragraph(self._normalize(txt.strip().replace('\n', '<br />\n')), style=self.stylesheet['Normal'])
             p_size = p.wrap(self.event_width, self.event_height)
 

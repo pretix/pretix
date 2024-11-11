@@ -137,7 +137,7 @@ def test_markdown_email_custom_allowlist():
     source = "![my image](https://example.org/my-image.jpg)"
     html = markdown_compile_email(
         source,
-        allowed_tags=ALLOWED_TAGS + ["img"],
+        allowed_tags=ALLOWED_TAGS | {"img"},
         allowed_attributes=dict(ALLOWED_ATTRIBUTES, img=["src", "alt", "title"]),
     )
     assert html == '<p><img alt="my image" src="https://example.org/my-image.jpg"></p>'

@@ -54,7 +54,7 @@ from tlds import tld_set
 
 register = template.Library()
 
-ALLOWED_TAGS_SNIPPET = [
+ALLOWED_TAGS_SNIPPET = {
     'a',
     'abbr',
     'acronym',
@@ -68,8 +68,8 @@ ALLOWED_TAGS_SNIPPET = [
     'strike',
     's',
     # Update doc/user/markdown.rst if you change this!
-]
-ALLOWED_TAGS = ALLOWED_TAGS_SNIPPET + [
+}
+ALLOWED_TAGS = ALLOWED_TAGS_SNIPPET | {
     'blockquote',
     'li',
     'ol',
@@ -91,7 +91,7 @@ ALLOWED_TAGS = ALLOWED_TAGS_SNIPPET + [
     'h6',
     'pre',
     # Update doc/user/markdown.rst if you change this!
-]
+}
 
 ALLOWED_ATTRIBUTES = {
     'a': ['href', 'title', 'class'],
@@ -106,7 +106,7 @@ ALLOWED_ATTRIBUTES = {
     # Update doc/user/markdown.rst if you change this!
 }
 
-ALLOWED_PROTOCOLS = ['http', 'https', 'mailto', 'tel']
+ALLOWED_PROTOCOLS = {'http', 'https', 'mailto', 'tel'}
 
 URL_RE = SimpleLazyObject(lambda: build_url_re(tlds=sorted(tld_set, key=len, reverse=True)))
 
@@ -211,9 +211,9 @@ class CleanPostprocessor(Postprocessor):
     def run(self, text):
         return bleach.clean(
             text,
-            tags=self.tags,
+            tags=set(self.tags),
             attributes=self.attributes,
-            protocols=self.protocols,
+            protocols=set(self.protocols),
             strip=self.strip
         )
 
@@ -308,7 +308,7 @@ def markdown_compile_email(source, allowed_tags=ALLOWED_TAGS, allowed_attributes
             EmailNl2BrExtension(),
             LinkifyAndCleanExtension(
                 linker,
-                tags=allowed_tags,
+                tags=set(allowed_tags),
                 attributes=allowed_attributes,
                 protocols=ALLOWED_PROTOCOLS,
                 strip=False,
