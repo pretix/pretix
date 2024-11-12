@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-10-29 09:00+0000\n"
+"PO-Revision-Date: 2024-11-12 08:38+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.1\n"
+"X-Generator: Weblate 5.8.3\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:79
@@ -20639,6 +20639,9 @@ msgid ""
 "feature and are not suitable for strictly ensuring that products are only "
 "available in certain combinations."
 msgstr ""
+"Bitte beachten Sie, dass die Cross-Selling-Kategorien als Funktion zur "
+"Bewerbung der Produkte gedacht sind keine strikte Limitierung darstellen, "
+"dass man Produkte nur in bestimmten Kombinationen kaufen kann."
 
 #: pretix/control/templates/pretixcontrol/items/category.html:39
 msgid "Category history"
@@ -21557,11 +21560,6 @@ msgid "Add product"
 msgstr "Produkt hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:434
-#, fuzzy
-#| msgid ""
-#| "Manually modifying payment fees is discouraged since they might "
-#| "automatically be on subsequent order changes or when choosing a different "
-#| "payment method."
 msgid ""
 "Manually modifying payment fees is discouraged since they might "
 "automatically be updated on subsequent order changes or when choosing a "
@@ -21574,10 +21572,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:454
 #: pretix/control/templates/pretixcontrol/order/change.html:481
 #: pretix/control/templates/pretixcontrol/order/change.html:501
-#, fuzzy
-#| msgid "Additional fee"
 msgid "Add fee"
-msgstr "Zusätzliche Gebühr"
+msgstr "Gebühr hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:508
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:63
@@ -27878,28 +27874,20 @@ msgid "End event date"
 msgstr "Letzter Termin"
 
 #: pretix/plugins/badges/exporters.py:475
-#, fuzzy
-#| msgid "Only include tickets for dates on or before this date."
 msgid "Only include tickets ordered on or before this date."
-msgstr "Nur Tickets an oder bevor diesem Datum."
+msgstr "Nur Tickets bestellt an oder bevor diesem Datum."
 
 #: pretix/plugins/badges/exporters.py:479
-#, fuzzy
-#| msgid "Start date"
 msgid "Start order date"
-msgstr "Beginn"
+msgstr "Bestelldatum Beginn"
 
 #: pretix/plugins/badges/exporters.py:482
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include tickets ordered on or after this date."
-msgstr "Nur Tickets für Termine an oder nach diesem Datum."
+msgstr "Nur Tickets bestellt an oder nach diesem Datum."
 
 #: pretix/plugins/badges/exporters.py:486
-#, fuzzy
-#| msgid "Order date"
 msgid "End order date"
-msgstr "Bestelldatum"
+msgstr "Bestelldatum Ende"
 
 #: pretix/plugins/badges/exporters.py:489
 msgid "Only include tickets for dates on or before this date."
@@ -31924,11 +31912,9 @@ msgid "No other variations of this product exist."
 msgstr "Keine anderen Varianten dieses Produktes existieren."
 
 #: pretix/presale/forms/organizer.py:70
-#, fuzzy
-#| msgid "All"
 msgctxt "filter_empty"
 msgid "all"
-msgstr "Alle"
+msgstr "alle"
 
 #: pretix/presale/forms/renderers.py:50
 msgctxt "form"
