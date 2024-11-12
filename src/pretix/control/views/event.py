@@ -239,7 +239,6 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         kwargs = super().get_form_kwargs()
         if self.request.user.has_active_staff_session(self.request.session.session_key):
             kwargs['change_slug'] = True
-            kwargs['domain'] = True
         return kwargs
 
     def post(self, request, *args, **kwargs):

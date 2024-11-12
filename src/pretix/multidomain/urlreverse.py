@@ -43,28 +43,33 @@ from pretix.base.models import Event, Organizer
 from .models import KnownDomain
 
 
-def get_event_domain(event, fallback=False, return_info=False):
+def get_event_domain(event, fallback=False, return_mode=False):
     assert isinstance(event, Event)
     if not event.pk:
         # Can happen on the "event deleted" response
-        return (None, None) if return_info else None
-    suffix = ('_fallback' if fallback else '') + ('_info' if return_info else '')
+        return (None, None) if return_mode else None
+    suffix = ('_fallback' if fallback else '') + ('_mode' if return_mode else '')
     domain = getattr(event, '_cached_domain' + suffix, None) or event.cache.get('domain' + suffix)
     if domain is None:
         domain = None, None
-        if fallback:
+        if hasattr(event, 'alternative_domain_assignment'):
+            domain = event.alternative_domain_assignment.domain_id, KnownDomain.MODE_ORG_ALT_DOMAIN
+        elif fallback:
             domains = KnownDomain.objects.filter(
-                Q(event=event) | Q(organizer_id=event.organizer_id, event__isnull=True)
+                Q(event=event, mode=KnownDomain.MODE_EVENT_DOMAIN) |
+                Q(organizer_id=event.organizer_id, event__isnull=True, mode=KnownDomain.MODE_ORG_DOMAIN)
             )
             domains_event = [d for d in domains if d.event_id == event.pk]
             domains_org = [d for d in domains if not d.event_id]
             if domains_event:
-                domain = domains_event[0].domainname, "event"
+                domain = domains_event[0].domainname, KnownDomain.MODE_EVENT_DOMAIN
             elif domains_org:
-                domain = domains_org[0].domainname, "organizer"
+                domain = domains_org[0].domainname, KnownDomain.MODE_ORG_DOMAIN
         else:
-            domains = event.domains.all()
-            domain = domains[0].domainname if domains else None, "event"
+            try:
+                domain = event.domain.domainname, KnownDomain.MODE_EVENT_DOMAIN
+            except KnownDomain.DoesNotExist:
+                domain = None, None
         event.cache.set('domain' + suffix, domain or 'none')
         setattr(event, '_cached_domain' + suffix, domain or 'none')
     elif domain == 'none':
@@ -72,7 +77,7 @@ def get_event_domain(event, fallback=False, return_info=False):
         domain = None, None
     else:
         setattr(event, '_cached_domain' + suffix, domain)
-    return domain if return_info or not isinstance(domain, tuple) else domain[0]
+    return domain if return_mode or not isinstance(domain, tuple) else domain[0]
 
 
 def get_organizer_domain(organizer):
@@ -81,7 +86,7 @@ def get_organizer_domain(organizer):
         return None
     domain = getattr(organizer, '_cached_domain', None) or organizer.cache.get('domain')
     if domain is None:
-        domains = organizer.domains.filter(event__isnull=True)
+        domains = organizer.domains.filter(event__isnull=True, mode=KnownDomain.MODE_ORG_DOMAIN)
         domain = domains[0].domainname if domains else None
         organizer.cache.set('domain', domain or 'none')
         organizer._cached_domain = domain or 'none'
@@ -131,7 +136,8 @@ def eventreverse(obj, name, kwargs=None):
     :returns: An absolute or relative URL as a string
     """
     from pretix.multidomain import (
-        event_domain_urlconf, maindomain_urlconf, organizer_domain_urlconf,
+        event_domain_urlconf, maindomain_urlconf,
+        organizer_alternative_domain_urlconf, organizer_domain_urlconf,
     )
 
     c = None
@@ -153,17 +159,24 @@ def eventreverse(obj, name, kwargs=None):
         raise TypeError('obj should be Event or Organizer')
 
     if event:
-        domain, domaintype = get_event_domain(obj, fallback=True, return_info=True)
+        domain, domaintype = get_event_domain(obj, fallback=True, return_mode=True)
     else:
-        domain, domaintype = get_organizer_domain(organizer), "organizer"
+        domain, domaintype = get_organizer_domain(organizer), KnownDomain.MODE_ORG_DOMAIN
 
     if domain:
-        if domaintype == "event" and 'event' in kwargs:
+        if domaintype == KnownDomain.MODE_EVENT_DOMAIN and 'event' in kwargs:
             del kwargs['event']
         if 'organizer' in kwargs:
             del kwargs['organizer']
 
-        path = reverse(name, kwargs=kwargs, urlconf=event_domain_urlconf if domaintype == "event" else organizer_domain_urlconf)
+        if domaintype == KnownDomain.MODE_EVENT_DOMAIN:
+            urlconf = event_domain_urlconf
+        elif domaintype == KnownDomain.MODE_ORG_ALT_DOMAIN:
+            urlconf = organizer_alternative_domain_urlconf
+        else:
+            urlconf = organizer_domain_urlconf
+
+        path = reverse(name, kwargs=kwargs, urlconf=urlconf)
         siteurlsplit = urlsplit(settings.SITE_URL)
         if siteurlsplit.port and siteurlsplit.port not in (80, 443):
             domain = '%s:%d' % (domain, siteurlsplit.port)

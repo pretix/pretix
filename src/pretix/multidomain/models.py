@@ -21,6 +21,7 @@
 #
 from django.core.cache import cache
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scopes_disabled
 
@@ -28,39 +29,114 @@ from pretix.base.models import Event, Organizer
 
 
 class KnownDomain(models.Model):
-    domainname = models.CharField(max_length=255, primary_key=True)
-    organizer = models.ForeignKey(Organizer, blank=True, null=True, related_name='domains', on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, blank=True, null=True, related_name='domains', on_delete=models.PROTECT)
+    MODE_ORG_DOMAIN = "organizer"
+    MODE_ORG_ALT_DOMAIN = "organizer_alternative"
+    MODE_EVENT_DOMAIN = "event"
+    MODES = (
+        (MODE_ORG_DOMAIN, _("Organizer domain")),
+        (MODE_ORG_ALT_DOMAIN, _("Alternative organizer domain for a set of events")),
+        (MODE_EVENT_DOMAIN, _("Event domain")),
+    )
+
+    domainname = models.CharField(
+        max_length=255,
+        primary_key=True,
+        verbose_name=_("Domain name"),
+    )
+    mode = models.CharField(
+        max_length=255,
+        choices=MODES,
+        default=MODE_ORG_DOMAIN,
+        verbose_name=_("Mode"),
+    )
+    organizer = models.ForeignKey(
+        Organizer,
+        blank=True,
+        null=True,
+        related_name='domains',
+        on_delete=models.CASCADE
+    )
+    event = models.OneToOneField(
+        Event,
+        blank=True,
+        null=True,
+        related_name='domain',
+        on_delete=models.PROTECT,
+        verbose_name=_("Event"),
+    )
 
     class Meta:
         verbose_name = _("Known domain")
         verbose_name_plural = _("Known domains")
+        constraints = [
+            models.UniqueConstraint(
+                fields=("organizer",),
+                name="unique_organizer_domain",
+                condition=Q(mode="organizer"),
+            ),
+        ]
+        ordering = ("-mode", "domainname")
 
     def __str__(self):
         return self.domainname
 
     @scopes_disabled()
     def save(self, *args, **kwargs):
+        if self.event:
+            self.mode = KnownDomain.MODE_EVENT_DOMAIN
+        elif self.mode == KnownDomain.MODE_EVENT_DOMAIN:
+            raise ValueError("Event domain needs event")
         super().save(*args, **kwargs)
         if self.event:
             self.event.get_cache().clear()
+            try:
+                self.event.alternative_domain_assignment.delete()
+            except AlternativeDomainAssignment.DoesNotExist:
+                pass
         elif self.organizer:
             self.organizer.get_cache().clear()
             for event in self.organizer.events.all():
                 event.get_cache().clear()
         cache.delete('pretix_multidomain_organizer_{}'.format(self.domainname))
-        cache.delete('pretix_multidomain_instance_{}'.format(self.domainname))
+        cache.delete('pretix_multidomain_instances_{}'.format(self.domainname))
         cache.delete('pretix_multidomain_event_{}'.format(self.domainname))
 
     @scopes_disabled()
     def delete(self, *args, **kwargs):
         if self.event:
-            self.event.get_cache().clear()
+            self.event.cache.clear()
         elif self.organizer:
-            self.organizer.get_cache().clear()
+            self.organizer.cache.clear()
             for event in self.organizer.events.all():
-                event.get_cache().clear()
+                event.cache.clear()
         cache.delete('pretix_multidomain_organizer_{}'.format(self.domainname))
-        cache.delete('pretix_multidomain_instance_{}'.format(self.domainname))
+        cache.delete('pretix_multidomain_instances_{}'.format(self.domainname))
         cache.delete('pretix_multidomain_event_{}'.format(self.domainname))
+        super().delete(*args, **kwargs)
+
+
+class AlternativeDomainAssignment(models.Model):
+    domain = models.ForeignKey(
+        KnownDomain,
+        on_delete=models.CASCADE,
+        related_name="event_assignments",
+    )
+    event = models.OneToOneField(
+        Event,
+        related_name="alternative_domain_assignment",
+        on_delete=models.CASCADE,
+    )
+
+    @scopes_disabled()
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.event.cache.clear()
+        cache.delete('pretix_multidomain_instances_{}'.format(self.domain_id))
+        cache.delete('pretix_multidomain_event_{}'.format(self.domain_id))
+
+    @scopes_disabled()
+    def delete(self, *args, **kwargs):
+        self.event.cache.clear()
+        cache.delete('pretix_multidomain_instances_{}'.format(self.domain_id))
+        cache.delete('pretix_multidomain_event_{}'.format(self.domain_id))
         super().delete(*args, **kwargs)
