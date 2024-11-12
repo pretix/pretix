@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-09 21:00+0000\n"
+"PO-Revision-Date: 2024-11-12 17:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.1\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -2280,12 +2280,12 @@ msgstr "Secreto del billete"
 #: pretix/base/modelimport_vouchers.py:272
 #: pretix/plugins/checkinlists/exporters.py:523
 msgid "Seat ID"
-msgstr "ID butaca"
+msgstr "ID asiento"
 
 #: pretix/base/exporters/orderlist.py:613
 #: pretix/plugins/checkinlists/exporters.py:524
 msgid "Seat name"
-msgstr "Nombre de la butaca"
+msgstr "Nombre del asiento"
 
 #: pretix/base/exporters/orderlist.py:614
 #: pretix/plugins/checkinlists/exporters.py:525
@@ -4336,7 +4336,7 @@ msgstr "Serie de eventos"
 #: pretix/base/models/event.py:635 pretix/base/models/event.py:1510
 #: pretix/base/models/event.py:1513
 msgid "Seating plan"
-msgstr "Plan de butacas"
+msgstr "Plan de asientos"
 
 #: pretix/base/models/event.py:642 pretix/base/models/items.py:666
 msgid "Sell on all sales channels"
@@ -14741,7 +14741,7 @@ msgstr "Agregado a"
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:23
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:100
 msgid "Seat"
-msgstr "Butaca"
+msgstr "Asiento"
 
 #: pretix/control/forms/orders.py:334
 #: pretix/control/templates/pretixcontrol/order/change.html:182
