@@ -215,7 +215,11 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleFunctionalTextPlaceholder(
             'event', ['event_or_subevent'], lambda event_or_subevent: event_or_subevent.name,
-            lambda event_or_subevent: event_or_subevent.name
+            lambda event: event.subevents.first().name if event.has_subevents else event.name,
+        ),
+        SimpleFunctionalTextPlaceholder(
+            'event_series_name', ['event', 'event_or_subevent'], lambda event, event_or_subevent: event.name,
+            lambda event: event.name
         ),
         SimpleFunctionalTextPlaceholder(
             'event_slug', ['event'], lambda event: event.slug, lambda event: event.slug
