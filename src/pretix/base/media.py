@@ -126,7 +126,7 @@ class NfcUidMediaType(BaseMediaType):
 class NfcMf0aesMediaType(BaseMediaType):
     identifier = 'nfc_mf0aes'
     verbose_name = 'NFC Mifare Ultralight AES'
-    icon = 'pretixbase/img/media/nfc_mf0aes.svg'
+    icon = 'pretixbase/img/media/nfc_secure.svg'
     medium_created_by_server = False
     supports_giftcard = True
     supports_orderposition = False
