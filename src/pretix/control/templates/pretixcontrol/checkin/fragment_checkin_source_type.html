@@ -1,7 +1,15 @@
 {% load i18n %}
+{% load static %}
+{% load getitem %}
 
-{% if checkin.raw_source_type == "barcode" %}
-    <span class="fa fa-qrcode fa-fw" data-toggle="tooltip_html" title="{% trans "User presented a QR code" %}"></span>
-{% elif checkin.raw_source_type == "nfc_uid" %}
-    <span class="fa fa-wifi fa-rotate-90 fa-fw" data-toggle="tooltip_html" title="{% trans "User presented NFC media" %}"></span>
+{% if checkin.raw_source_type %}
+    {% with media_types|getitem:checkin.raw_source_type as media_type %}
+        {% if "." in media_type.icon %}
+            <img src="{% static media_type.icon %}" class="fa-like-image"
+                 data-toggle="tooltip" title="{{ media_type.verbose_name }}">
+        {% else %}
+            <span class="fa fa-fw fa-{{ media_type.icon }} text-muted"
+                  data-toggle="tooltip" title="{{ media_type.verbose_name }}"></span>
+        {% endif %}
+    {% endwith %}
 {% endif %}

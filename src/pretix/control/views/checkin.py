@@ -49,6 +49,7 @@ from django.views.generic import FormView, ListView, TemplateView
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.services.checkin import (
@@ -157,6 +158,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx['media_types'] = MEDIA_TYPES
         ctx['checkinlist'] = self.list
         if self.request.event.has_subevents:
             ctx['seats'] = (
@@ -497,6 +499,7 @@ class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['filter_form'] = self.filter_form
+        ctx['media_types'] = MEDIA_TYPES
         return ctx
 
 
