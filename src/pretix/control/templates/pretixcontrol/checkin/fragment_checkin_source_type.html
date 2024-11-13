@@ -2,8 +2,8 @@
 {% load static %}
 {% load getitem %}
 
-{% if checkin.raw_source_type %}
-    {% with media_types|getitem:checkin.raw_source_type as media_type %}
+{% if source_type %}
+    {% with media_types|getitem:source_type as media_type %}
         {% if "." in media_type.icon %}
             <img src="{% static media_type.icon %}" class="fa-like-image"
                  data-toggle="tooltip" title="{{ media_type.verbose_name }}">
