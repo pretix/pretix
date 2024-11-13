@@ -1,0 +1,7 @@
+{% load i18n %}
+
+{% if checkin.raw_source_type == "barcode" %}
+    <span class="fa fa-qrcode fa-fw" data-toggle="tooltip_html" title="{% trans "User presented a QR-Code" %}"></span>
+{% elif checkin.raw_source_type == "nfc_uid" %}
+    <span class="fa fa-wifi fa-rotate-90 fa-fw" data-toggle="tooltip_html" title="{% trans "User presented NFC media" %}"></span>
+{% endif %}

@@ -185,6 +185,7 @@
                                             <span class="fa fa-magic text-muted"
                                                   data-toggle="tooltip" title="{% trans "Checked in automatically" %}"></span>
                                         {% endif %}
+                                        {% include "pretixcontrol/checkin/fragment_checkin_source_type.html" with checkin=e.checkins.last %}
                                     {% endif %}
                                 {% endif %}
                             </td>
