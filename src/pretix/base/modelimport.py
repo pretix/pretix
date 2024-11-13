@@ -256,6 +256,9 @@ class SubeventColumnMixin:
         ]
 
     def clean(self, value, previous_values):
+        if not value:
+            return None
+
         if value in self._subevent_cache:
             return self._subevent_cache[value]
 
