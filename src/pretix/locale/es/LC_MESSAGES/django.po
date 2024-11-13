@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-12 17:00+0000\n"
+"PO-Revision-Date: 2024-11-13 21:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -206,7 +206,7 @@ msgstr "Todos los eventos (incluidos los de nueva creación)"
 #: pretix/api/models.py:119 pretix/base/models/devices.py:124
 #: pretix/base/models/organizer.py:287
 msgid "Limit to events"
-msgstr "Limitar a los eventos"
+msgstr "Limitar a eventos"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:1077
@@ -230,7 +230,7 @@ msgstr "El producto \"{}\" no tiene asignada una cuota."
 #: pretix/base/models/items.py:1903 pretix/base/models/items.py:2161
 #: pretix/api/serializers/checkin.py:74 pretix/base/models/event.py:1667
 msgid "One or more items do not belong to this event."
-msgstr "Uno o mas articulos no pertenecen a este evento."
+msgstr "Uno o más artículos no pertenecen a este evento."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:2172 pretix/base/models/items.py:2175
@@ -279,7 +279,7 @@ msgstr "El artículo en el paquete no debe ser el paquete."
 
 #: pretix/api/serializers/item.py:210 pretix/control/forms/item.py:1271
 msgid "The bundled item must not have bundles on its own."
-msgstr "El articulo add-on no debe de tener add-ons en si mismo."
+msgstr "El artículo agrupado no puede tener grupos en sí mismo."
 
 #: pretix/api/serializers/item.py:298
 msgid ""
@@ -1909,7 +1909,7 @@ msgstr "Sólo los pedidos pagados"
 
 #: pretix/base/exporters/orderlist.py:116
 msgid "Include payment amounts"
-msgstr "Incluir los montos de pago"
+msgstr "Incluir los importes de pago"
 
 #: pretix/base/exporters/orderlist.py:122
 msgid "Show multiple choice answers grouped in one column"
@@ -2559,7 +2559,7 @@ msgstr "Código del estado"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr "Monto"
+msgstr "Importe"
 
 #: pretix/base/exporters/orderlist.py:1077
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:102
@@ -3363,7 +3363,7 @@ msgstr "Bruto"
 #: pretix/base/invoice.py:630
 msgctxt "invoice"
 msgid "Amount"
-msgstr "Monto"
+msgstr "Importe"
 
 #: pretix/base/invoice.py:642
 #, python-brace-format
@@ -3400,7 +3400,7 @@ msgstr "Pago con tarjeta de regalo"
 #: pretix/base/invoice.py:720
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr "Monto restante"
+msgstr "Importe restante"
 
 #: pretix/base/invoice.py:769
 msgctxt "invoice"
@@ -3885,7 +3885,8 @@ msgstr ""
 #: pretix/base/models/checkin.py:79
 msgid "Allow checking in add-on tickets by scanning the main ticket"
 msgstr ""
-"Permitir registrar tiquetes adicionales al escanear el tiquete principal"
+"Permitir el registro de entradas complementarias escaneando la entrada "
+"principal"
 
 #: pretix/base/models/checkin.py:81
 msgid ""
@@ -3894,7 +3895,7 @@ msgid ""
 "rejected.."
 msgstr ""
 "Solamente se puede escanear si la Lista de asistentes de forma tal que "
-"siempre hay un único tiquete complementario. Los escaneos ambiguos se "
+"siempre hay una única entrada complementaria. Los escaneos ambiguos se "
 "rechazarán..."
 
 #: pretix/base/models/checkin.py:85 pretix/control/navigation.py:638
@@ -3907,7 +3908,7 @@ msgid ""
 "Does not have any effect for the validation of tickets, only for the "
 "automatic configuration of check-in devices."
 msgstr ""
-"No tiene efecto alguno para la validación de tiquetes, solamente para la "
+"No tiene efecto alguno para la validación de entradas, solamente para la "
 "configuración automática de dispositivos de control de check-in."
 
 #: pretix/base/models/checkin.py:90
@@ -3916,13 +3917,13 @@ msgstr "Permitir volver a entrar después de un escaneo de salida"
 
 #: pretix/base/models/checkin.py:94
 msgid "Allow multiple entries per ticket"
-msgstr "Permitir varias entradas por tiquete"
+msgstr "Permitir varias entradas por billete"
 
 #: pretix/base/models/checkin.py:95
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
 msgstr ""
-"Use esta opción para inhabilitar advertencias si un tiquete se escanea por "
+"Use esta opción para inhabilitar advertencias si una entrada se escanea por "
 "segunda vez."
 
 #: pretix/base/models/checkin.py:99
@@ -4742,7 +4743,7 @@ msgstr "Muestra el texto informativo, si no es disponible"
 
 #: pretix/base/models/items.py:452 pretix/base/models/items.py:772
 msgid "Don't use re-usable media, use regular one-off tickets"
-msgstr "No usar medios reutilizables, usar tiquetes de un solo uso"
+msgstr "No usar medios reutilizables, usar entradas de un solo uso"
 
 #: pretix/base/models/items.py:453
 msgid "Require an existing medium to be re-used"
@@ -4831,7 +4832,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:539
 msgid "Show a waiting list for this ticket"
-msgstr "Mostrar una lista de espera para este tiquete"
+msgstr "Mostrar una lista de espera para esta entrada"
 
 #: pretix/base/models/items.py:540
 msgid "This will only work if waiting lists are enabled for this event."
@@ -4869,8 +4870,8 @@ msgstr ""
 "quota no está disponible. Si se combina con la opción de esconder productos "
 "vendidos, esto permite intercambiar productos por unos más costosos cuando "
 "se agoten. Puede haber un período corto en el cual ambos productos son "
-"visibles mientras todos los tiquetes en la quota referenciada están "
-"reservados, pero todavía no vendidos."
+"visibles mientras todas las entradas en la quota referenciada están "
+"reservadas, pero todavía no vendidas."
 
 #: pretix/base/models/items.py:592
 msgid "Only show after sellout of"
@@ -4909,7 +4910,7 @@ msgid ""
 msgstr ""
 "Si este producto es parte de un pedido, el pedido será puesto en un estado "
 "de \"aprobación\" y tendrá que ser confirmado por usted antes de que pueda "
-"ser pagado y completado. Puede utilizarlo, por ejemplo, para tiquetes con "
+"ser pagado y completado. Puede utilizarlo, por ejemplo, para entradas con "
 "descuento que sólo están disponibles para grupos específicos."
 
 #: pretix/base/models/items.py:615
@@ -4972,8 +4973,8 @@ msgid ""
 "needs to be checked."
 msgstr ""
 "Si lo selecciona, la aplicación de check-in mostrará una advertencia visible "
-"que indica que este tiquete requiere una atención especial. Puede utilizar "
-"esta opción, por ejemplo, para los tiquetes de estudiante, con el fin de "
+"que indica que esta entrada requiere una atención especial. Puede utilizar "
+"esta opción, por ejemplo, para las entradas de estudiante, con el fin de "
 "indicar a la persona en el momento de la entrada que su carné tendrá que ser "
 "validado."
 
@@ -5307,7 +5308,7 @@ msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
-"Si se selecciona esta opción, la adición de complementos a este tiquete es "
+"Si se selecciona esta opción, la adición de complementos a esta entrada es "
 "gratuita, incluso si los complementos normalmente cuestan dinero "
 "individualmente."
 
@@ -5808,7 +5809,7 @@ msgstr "Local"
 #: pretix/base/models/orders.py:268 pretix/control/forms/filter.py:571
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr "Cantidad total"
+msgstr "Importe total"
 
 #: pretix/base/models/orders.py:272 pretix/base/models/vouchers.py:293
 msgid ""
@@ -6423,7 +6424,7 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
-"Este es el monto máximo que se descontará usando este vale de compra en "
+"Este es el importe máximo que se descontará usando este vale de compra en "
 "todos los usos. Si se alcanza esta suma, el vale de compra ya no se podrá "
 "utilizar."
 
@@ -6667,7 +6668,7 @@ msgstr "Total neto"
 
 #: pretix/base/notifications.py:202
 msgid "Pending amount"
-msgstr "Monto pendiente"
+msgstr "Importe pendiente"
 
 #: pretix/base/notifications.py:204 pretix/control/forms/filter.py:211
 #: pretix/control/forms/modelimport.py:81
@@ -9199,15 +9200,15 @@ msgstr ""
 
 #: pretix/base/settings.py:628
 msgid "Show paid amount on partially paid invoices"
-msgstr "Mostrar monto pagado en facturas parcialmente pagadas"
+msgstr "Mostrar Importe pagado en facturas parcialmente pagadas"
 
 #: pretix/base/settings.py:629
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
-"Si una factura ya ha sido pagada parcialmente, esta opción agregará el monto "
-"pagado y pendiente a la factura."
+"Si una factura ya ha sido pagada parcialmente, esta opción agregará el "
+"importe pagado y pendiente a la factura."
 
 #: pretix/base/settings.py:639
 msgid "Show free products on invoices"
@@ -10961,7 +10962,7 @@ msgstr ""
 "\n"
 "recibimos un pago por su pedido de {event}.\n"
 "\n"
-"Desafortunadamente, el monto recibido es menor que el monto total.\n"
+"Desafortunadamente, el importe recibido es menor que el importe total.\n"
 "requerido. Por lo tanto, su pedido todavía se considera impago, ya que es\n"
 "Falta pago adicional de **{pending_sum}**.\n"
 "\n"
@@ -14585,7 +14586,7 @@ msgstr ""
 "configuración de su evento, y algunos complementos pueden tratar el pedido "
 "como pagado. Si marca esto, este pedido no se marcará como \"caducado\" "
 "automáticamente si llega la fecha límite de pago, ya que esperamos que desee "
-"cobrar el monto de alguna manera y no cancelar automáticamente el pedido."
+"cobrar el importe de alguna manera y no cancelar automáticamente el pedido."
 
 #: pretix/control/forms/orders.py:92
 msgid "Overbook quota"
@@ -31416,7 +31417,8 @@ msgid ""
 "You already entered a bank account that we will use to charge the payment "
 "amount."
 msgstr ""
-"Ya ingresaste una cuenta bancaria que usaremos para cargar el monto del pago."
+"Ya ingresaste una cuenta bancaria que usaremos para cargar el importe del "
+"pago."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:30
 msgid "Use a different account"
@@ -34692,8 +34694,8 @@ msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
-"El pedido ha sido cambiado. Ahora puede continuar pagando el monto pendiente "
-"de {amount}."
+"El pedido ha sido cambiado. Ahora puede continuar pagando el importe "
+"pendiente de {amount}."
 
 #: pretix/presale/views/order.py:1611
 msgid "You did not make any changes."
