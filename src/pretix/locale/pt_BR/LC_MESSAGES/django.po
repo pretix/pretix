@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-09-13 06:00+0000\n"
-"Last-Translator: Arthur Nunes <coletivosuburbano@gmail.com>\n"
+"PO-Revision-Date: 2024-11-14 20:00+0000\n"
+"Last-Translator: Gravity Fox <gravityraposa@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -37,7 +37,7 @@ msgstr "Árabe"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "Basco"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
@@ -642,7 +642,7 @@ msgstr "Senha"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "Sua senha deve conter caracteres numéricos e alfabéticos."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -650,8 +650,10 @@ msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "Sua senha não pode ser a mesma que sua senha passada."
 msgstr[1] ""
+"Sua senha não pode ser a mesma que uma das suas %(history_length)s senhas "
+"passadas."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -2397,64 +2399,51 @@ msgstr "Dados antigos"
 
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/items.py:1541
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
-#, fuzzy
-#| msgid "Current availability"
 msgid "Quantity"
-msgstr "Disponível"
+msgstr "Quantidade"
 
 #: pretix/base/exporters/orderlist.py:895
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
-msgstr "Referência interna"
+msgstr "Tipo de taxa interna"
 
 #: pretix/base/exporters/orderlist.py:897
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Data"
+msgstr "ID Data"
 
 #: pretix/base/exporters/orderlist.py:902
-#, fuzzy
-#| msgid "Tax rule"
 msgid "Tax rule ID"
-msgstr "Regra fiscal"
+msgstr "ID Regra fiscal"
 
 #: pretix/base/exporters/orderlist.py:905
 #: pretix/plugins/reports/accountingreport.py:319
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Gross value"
 msgid "Gross total"
-msgstr "Valor bruto"
+msgstr "Total bruto"
 
 #: pretix/base/exporters/orderlist.py:906
 #: pretix/plugins/reports/accountingreport.py:318
-#, fuzzy
-#| msgid "Total"
 msgid "Tax total"
-msgstr "Total"
+msgstr "Taxa total"
 
 #: pretix/base/exporters/orderlist.py:916
 msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Esse valor é fornecido para propósitos informativos, ele não faz parte dos "
+"dados da transação original e pode ter sido alterado desde a transação."
 
 #: pretix/base/exporters/orderlist.py:939
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Convertido da versão legado"
 
 #: pretix/base/exporters/orderlist.py:1001
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Payments and refunds"
-msgstr "Pagamentos e reembolsos do pedido"
+msgstr "Pagamentos e reembolsos"
 
 #: pretix/base/exporters/orderlist.py:1003
 msgid "Download a spreadsheet of all payments or refunds of every order."
-msgstr ""
+msgstr "Baixe uma planilha de todos os pagamentos e reembolsos de cada pedido."
 
 #: pretix/base/exporters/orderlist.py:1012
 #, fuzzy
@@ -2467,6 +2456,7 @@ msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Note que usar isto irá excluir qualquer pagamento ou reembolso não-conforme."
 
 #: pretix/base/exporters/orderlist.py:1019
 msgid "Date range (start of transaction)"
@@ -2515,10 +2505,8 @@ msgid "Completion date"
 msgstr "Data da conclusão"
 
 #: pretix/base/exporters/orderlist.py:1077
-#, fuzzy
-#| msgid "Status"
 msgid "Status code"
-msgstr "Status"
+msgstr "Código de Status"
 
 #: pretix/base/exporters/orderlist.py:1077
 #: pretix/base/exporters/orderlist.py:1215
@@ -2549,17 +2537,13 @@ msgid "Payment method"
 msgstr "Meio de pagamento"
 
 #: pretix/base/exporters/orderlist.py:1077
-#, fuzzy
-#| msgid "Payment matching IDs"
 msgid "Matching ID"
-msgstr "Identificadores de pagamento similares"
+msgstr "Identificadores similares"
 
 #: pretix/base/exporters/orderlist.py:1077
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment details"
-msgstr "Data de pagamento"
+msgstr "Detalhes de pagamento"
 
 #: pretix/base/exporters/orderlist.py:1127
 msgid "Quota availabilities"
@@ -2569,6 +2553,7 @@ msgstr "Disponibilidade"
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
 msgstr ""
+"Baixe uma planilha de todas as quotas incluindo sua disponibilidade atual."
 
 #: pretix/base/exporters/orderlist.py:1134
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -2799,24 +2784,19 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1359 pretix/control/forms/orders.py:873
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Termos e condições especiais"
 
 #: pretix/base/exporters/orderlist.py:1361
 #: pretix/control/templates/pretixcontrol/order/change.html:98
 #: pretix/control/templates/pretixcontrol/order/change.html:404
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:68
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Net value"
 msgid "Current value"
-msgstr "Valor líquido"
+msgstr "Valor atual"
 
 #: pretix/base/exporters/orderlist.py:1362
-#, fuzzy
-#| msgid "Creation date"
 msgid "Created in order"
-msgstr "Data de criação"
+msgstr "Criado em ordem"
 
 #: pretix/base/exporters/orderlist.py:1363
 #, fuzzy
@@ -2838,27 +2818,23 @@ msgstr "Apenas ordens pagas"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:9
 msgid "Reusable media"
-msgstr ""
+msgstr "Mídia reutilizável"
 
 #: pretix/base/exporters/reusablemedia.py:35
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgctxt "export_category"
 msgid "Reusable media"
-msgstr "Nenhuma data selecionada."
+msgstr "Mídia reutilizável."
 
 #: pretix/base/exporters/reusablemedia.py:36
 msgid ""
 "Download a spread sheet with the data of all reusable medias on your account."
 msgstr ""
+"Baixe uma planinha com todos os dados de mídias reutilizáveis na sua conta."
 
 #: pretix/base/exporters/reusablemedia.py:46 pretix/base/models/media.py:67
-#, fuzzy
-#| msgid "Fee type"
 msgctxt "reusable_medium"
 msgid "Media type"
-msgstr "Tipo de taxa"
+msgstr "Tipo de mídia"
 
 #: pretix/base/exporters/reusablemedia.py:47 pretix/base/models/media.py:73
 #, fuzzy
