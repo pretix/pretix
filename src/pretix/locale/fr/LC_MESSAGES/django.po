@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-05 20:00+0000\n"
+"PO-Revision-Date: 2024-11-14 20:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.1\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -217,7 +217,7 @@ msgstr "Limiter aux événements"
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:521
 msgid "Comment"
-msgstr "Commentaires"
+msgstr "Commentaire"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1382
 msgid "The product \"{}\" is not assigned to a quota."
@@ -639,7 +639,7 @@ msgstr "Utilisateur {system}"
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
 msgid "E-mail"
-msgstr "E-Mail"
+msgstr "E-mail"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:672
@@ -1342,7 +1342,7 @@ msgstr "Date"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:70
 msgid "Order code"
-msgstr "Code de commande"
+msgstr "Référence de commande"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/modelimport_orders.py:59 pretix/base/models/customers.py:395
@@ -1978,7 +1978,7 @@ msgstr "Total de la commande"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:75
 #: pretix/presale/templates/pretixpresale/organizers/index.html:47
 msgid "Status"
-msgstr "État"
+msgstr "Statut"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:444
@@ -2119,7 +2119,7 @@ msgstr "Type de frais"
 #: pretix/plugins/checkinlists/exporters.py:497
 #: pretix/plugins/reports/accountingreport.py:314
 msgid "Price"
-msgstr "Tarif"
+msgstr "Prix"
 
 #: pretix/base/exporters/orderlist.py:452
 #: pretix/base/exporters/orderlist.py:593
@@ -2135,7 +2135,7 @@ msgstr "Règle fiscale"
 #: pretix/base/exporters/orderlist.py:644
 #: pretix/base/exporters/orderlist.py:648 pretix/base/pdf.py:330
 msgid "Invoice address name"
-msgstr "Nom sur l'adresse de facturation"
+msgstr "Adresse de facturation"
 
 #: pretix/base/exporters/orderlist.py:480
 #: pretix/base/exporters/orderlist.py:683 pretix/base/models/orders.py:204
@@ -3724,7 +3724,7 @@ msgstr ""
 #: pretix/base/modelimport_vouchers.py:306 pretix/base/models/vouchers.py:519
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "Vous devez choisir le produit « {prod}» pour ce siège."
+msgstr "Vous devez choisir le produit « {prod} » pour ce siège."
 
 #: pretix/base/modelimport_vouchers.py:318 pretix/base/models/vouchers.py:285
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
@@ -7358,7 +7358,7 @@ msgstr "Ville quelconque"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
-msgstr "Adresse de facturation de la société"
+msgstr "Adresse de la facturation de l'entreprise"
 
 #: pretix/base/pdf.py:341
 msgid "Sesame Street 42"
@@ -7633,8 +7633,8 @@ msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
-"Nous n'avons pas pu traiter votre demande complètement car le serveur était "
-"trop occupé. Veuillez réessayer."
+"Nous n'avons pas pu traiter intégralement votre demande car le serveur était "
+"trop chargé. Veuillez réessayer."
 
 #: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:259
 msgid "You did not select any products."
@@ -13703,7 +13703,7 @@ msgstr "Approuvé, paiement en attente"
 #: pretix/plugins/reports/exporters.py:380
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:6
 msgid "Approval pending"
-msgstr "Approbation en attente"
+msgstr "En attente d'approbation"
 
 #: pretix/control/forms/filter.py:241
 msgid "Follow-up configured"
@@ -24642,10 +24642,8 @@ msgid "Add a new object"
 msgstr "Ajouter un nouvel objet"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:474
-#, fuzzy
-#| msgid "Text color"
 msgid "Text box"
-msgstr "Couleur du texte"
+msgstr "Zone de texte"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:478
 #, fuzzy
@@ -31984,7 +31982,7 @@ msgstr "Billet alternatif"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr "Mise en page des tickets"
+msgstr "Présentation du billet"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
