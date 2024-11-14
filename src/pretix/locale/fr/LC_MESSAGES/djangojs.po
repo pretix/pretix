@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:45+0000\n"
-"PO-Revision-Date: 2024-11-01 02:00+0000\n"
+"PO-Revision-Date: 2024-11-14 20:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.1\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -236,11 +236,11 @@ msgstr "Annulé"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Confirmed"
-msgstr ""
+msgstr "Confirmé"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Approval pending"
-msgstr ""
+msgstr "En attente d'approbation"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
@@ -476,14 +476,10 @@ msgid "Number of previous entries since midnight"
 msgstr "Nombre d'entrées depuis minuit"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries since"
 msgstr "Nombre d'entrées précédentes depuis"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries before"
 msgstr "Nombre d'entrées précédentes avant"
 
@@ -558,12 +554,12 @@ msgstr "Doublon"
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
 msgctxt "entry_status"
 msgid "present"
-msgstr ""
+msgstr "présent"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
 msgctxt "entry_status"
 msgid "absent"
-msgstr ""
+msgstr "absent"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -580,16 +576,12 @@ msgid "Group of objects"
 msgstr "Groupe d'objets"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:899
-#, fuzzy
-#| msgid "Text object"
 msgid "Text object (deprecated)"
-msgstr "Objet texte"
+msgstr "Objet textuel (obsolète)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:901
-#, fuzzy
-#| msgid "Text object"
 msgid "Text box"
-msgstr "Objet texte"
+msgstr "Zone de texte"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
@@ -674,10 +666,9 @@ msgstr "Seuls les sélectionnés"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:862
 msgid "Enter page number between 1 and %(max)s."
-msgstr ""
+msgstr "Saisir le numéro de page entre 1 et %(max)s."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:865
-#, fuzzy
 msgid "Invalid page number."
 msgstr "Numéro de page invalide."
 
@@ -784,12 +775,9 @@ msgid "Price"
 msgstr "Prix"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select %s"
 msgctxt "widget"
 msgid "Select"
-msgstr "Sélectionné %s"
+msgstr "Sélectionner"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
@@ -865,22 +853,16 @@ msgid "Only available with a voucher"
 msgstr "Disponible avec un bon de réduction"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
-#, fuzzy
-#| msgid "Payment method unavailable"
 msgctxt "widget"
 msgid "Not yet available"
-msgstr "Méthode de paiement non disponible"
+msgstr "Pas encore disponible"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
-#, fuzzy
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr "Méthode de paiement plus disponible"
+msgstr "Plus disponible"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Currently not available"
 msgstr "Actuellement non disponible"
@@ -976,20 +958,14 @@ msgid "Continue"
 msgstr "Continuer"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select variant %s"
 msgctxt "widget"
 msgid "Show variants"
-msgstr "Voir les variations"
+msgstr "Afficher les variantes"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select variant %s"
 msgctxt "widget"
 msgid "Hide variants"
-msgstr "Masquer les variations"
+msgstr "Masquer les variantes"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
