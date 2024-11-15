@@ -132,16 +132,6 @@ def get_event_navigation(request: HttpRequest):
             'icon': 'wrench',
             'children': event_settings
         })
-        if request.event.has_subevents:
-            nav.append({
-                'label': pgettext_lazy('subevent', 'Dates'),
-                'url': reverse('control:event.subevents', kwargs={
-                    'event': request.event.slug,
-                    'organizer': request.event.organizer.slug,
-                }),
-                'active': ('event.subevent' in url.url_name),
-                'icon': 'calendar',
-            })
 
     if 'can_change_items' in request.eventpermset:
         nav.append({
@@ -196,6 +186,18 @@ def get_event_navigation(request: HttpRequest):
                 },
             ]
         })
+
+    if 'can_change_event_settings' in request.eventpermset:
+        if request.event.has_subevents:
+            nav.append({
+                'label': pgettext_lazy('subevent', 'Dates'),
+                'url': reverse('control:event.subevents', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.event.organizer.slug,
+                }),
+                'active': ('event.subevent' in url.url_name),
+                'icon': 'calendar',
+            })
 
     if 'can_view_orders' in request.eventpermset:
         children = [
