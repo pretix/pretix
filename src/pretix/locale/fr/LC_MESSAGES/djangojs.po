@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:45+0000\n"
-"PO-Revision-Date: 2024-11-15 11:19+0000\n"
-"Last-Translator: Eva-Maria Obermann <obermann@rami.io>\n"
+"PO-Revision-Date: 2024-11-15 20:00+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -457,7 +457,7 @@ msgstr "Pont"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
-msgstr "Date actuelle"
+msgstr "Date et heure actuelle"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
@@ -465,7 +465,7 @@ msgstr "Jour courant de la semaine (1 = Lundi, 7 = Dimanche)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Current entry status"
-msgstr ""
+msgstr "Statut actuel de l'entrée"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
@@ -488,16 +488,12 @@ msgid "Number of days with a previous entry"
 msgstr "Nombre de jours avec entrée préalable"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry since"
-msgstr "Nombre de jours avec entrée préalable"
+msgstr "Nombre de jours avec entrée préalable depuis"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry before"
-msgstr "Nombre de jours avec entrée préalable"
+msgstr "Nombre de jours avec entrée préalable avant"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
