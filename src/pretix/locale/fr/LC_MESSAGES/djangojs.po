@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:45+0000\n"
-"PO-Revision-Date: 2024-11-14 20:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"PO-Revision-Date: 2024-11-15 11:19+0000\n"
+"Last-Translator: Eva-Maria Obermann <obermann@rami.io>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -175,7 +175,7 @@ msgstr "Communication avec votre banque …"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr "Sélectionner une liste d'enregistrement"
+msgstr "Choisis une liste d'enregistrement"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
@@ -191,7 +191,7 @@ msgstr "Résultats de recherche"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
 msgid "No tickets found"
-msgstr "Aucun billet trouvé"
+msgstr "Pas de billets trouvés"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
 msgid "Result"
@@ -293,7 +293,7 @@ msgstr "Entrée non autorisée"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code revoked/changed"
-msgstr "Code ticket révoqué/modifié"
+msgstr "Code de billet bloqué/modifié"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
@@ -457,7 +457,7 @@ msgstr "Pont"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
-msgstr "Date et heure courante"
+msgstr "Date actuelle"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
