@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-10-18 06:00+0000\n"
+"PO-Revision-Date: 2024-11-15 20:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -1327,7 +1327,7 @@ msgstr "Rendelésazonosító"
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:307
 msgid "E-mail address"
-msgstr ""
+msgstr "E-mail cím"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
@@ -2053,7 +2053,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:658 pretix/base/models/orders.py:320
 #: pretix/control/forms/filter.py:566
 msgid "E-mail address verified"
-msgstr ""
+msgstr "E-mail cím megerősítve"
 
 #: pretix/base/exporters/orderlist.py:288
 #: pretix/base/exporters/orderlist.py:465
@@ -29107,7 +29107,7 @@ msgstr ""
 
 #: pretix/presale/forms/checkout.py:70
 msgid "E-mail address (repeated)"
-msgstr ""
+msgstr "E-mail cím (megismételve)"
 
 #: pretix/presale/forms/checkout.py:71
 msgid ""
@@ -30515,7 +30515,7 @@ msgstr "Következő hét mutatása, %(week)s"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:94
 #: pretix/presale/views/widget.py:411
 msgid "Few tickets left"
-msgstr "Már csak kevés jegy van"
+msgstr "Már csak kevés jegy maradt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:29
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:72
@@ -31232,7 +31232,7 @@ msgstr "Válassz egy dátumot."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
-msgstr ""
+msgstr "Felvétel a várólistára"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:22
 #, python-format
@@ -31241,6 +31241,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"Ha újra lesznek elérhető jegyek, értesítjük a várólista elején levő "
+"embereket. Ha téged értesítünk, %(hours)s órád lesz jegyet rendelni mielőtt "
+"a következő embernek adjuk a lehetőséget."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
@@ -31248,6 +31251,9 @@ msgid ""
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
+"Csak egy jegyet fogsz kapni. Ha többre van szükséged, többször kell "
+"felvenned magad a várólistára. Nem garantáljuk, hogy több jegyet is tudsz "
+"szerezni."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
@@ -31266,7 +31272,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:44
 msgid "Add me to the list"
-msgstr ""
+msgstr "Felvétel a listára"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:5
 msgid "Remove me from the waiting list"
@@ -31595,11 +31601,11 @@ msgstr "Több időpont"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 #: pretix/presale/views/widget.py:437
 msgid "More info"
-msgstr ""
+msgstr "Információ"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:142
 msgid "No archived events found."
-msgstr ""
+msgstr "Nincsenek archívált események."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:142
 msgid "Show upcoming"
