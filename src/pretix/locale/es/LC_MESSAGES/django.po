@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-15 20:00+0000\n"
+"PO-Revision-Date: 2024-11-16 05:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -1223,7 +1223,7 @@ msgstr "Finalización de preventa"
 #: pretix/base/models/event.py:604 pretix/base/models/event.py:1487
 #: pretix/base/models/event.py:1490
 msgid "Location"
-msgstr "Localización"
+msgstr "Ubicación"
 
 #: pretix/base/exporters/events.py:68 pretix/base/models/event.py:607
 #: pretix/base/models/event.py:1490 pretix/base/models/event.py:1493
@@ -2061,7 +2061,7 @@ msgstr "Tasas"
 #: pretix/control/templates/pretixcontrol/order/index.html:192
 #: pretix/control/templates/pretixcontrol/pdf/index.html:232
 msgid "Order locale"
-msgstr "Configuración regional del pedido"
+msgstr "Idioma del pedido"
 
 #: pretix/base/exporters/orderlist.py:275
 #, python-brace-format
@@ -5804,7 +5804,7 @@ msgstr "expirado"
 #: pretix/base/models/orders.py:253 pretix/control/forms/filter.py:560
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:64
 msgid "Locale"
-msgstr "Local"
+msgstr "Localización"
 
 #: pretix/base/models/orders.py:268 pretix/control/forms/filter.py:571
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
