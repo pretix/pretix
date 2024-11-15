@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:45+0000\n"
-"PO-Revision-Date: 2024-11-13 21:00+0000\n"
+"PO-Revision-Date: 2024-11-15 20:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/es/>\n"
@@ -1058,7 +1058,7 @@ msgstr "febrero"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:80
 msgid "March"
-msgstr "marzo"
+msgstr "Marzo"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 msgid "April"
