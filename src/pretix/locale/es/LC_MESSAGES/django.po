@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-13 21:00+0000\n"
+"PO-Revision-Date: 2024-11-15 20:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -14437,8 +14437,8 @@ msgid ""
 "You have selected dynamic validity but have not entered a time period. This "
 "would render the tickets unusable."
 msgstr ""
-"Has seleccionado una validez dinámica, pero no has introducido ningún "
-"período de tiempo. Esto dejaría inutilizables a las entradas."
+"Ha seleccionado una validez dinámica, pero no has introducido ningún período "
+"de tiempo. Esto dejaría inutilizables a las entradas."
 
 #: pretix/control/forms/item.py:913
 #, python-format
@@ -20168,7 +20168,7 @@ msgstr "febrero"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:18
 msgid "March"
-msgstr "marzo"
+msgstr "Marzo"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:19
 msgid "April"
@@ -25054,7 +25054,7 @@ msgstr "Autenticación de dos factores"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:6
 msgid "Leave teams that require two-factor authentication"
-msgstr "Eliminar un dispositivo de autenticación de doble factor"
+msgstr "Retirarse de los equipos que requieren autenticación de dos factores"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:10
 msgid "Do you really want to leave the following teams?"
@@ -27392,7 +27392,7 @@ msgstr "La cuenta del cliente ha sido anonimizada."
 
 #: pretix/control/views/organizer.py:3215
 msgid "This channel can not be deleted."
-msgstr "Este canal no se puede borrar."
+msgstr "Este canal de venta no se puede borrar."
 
 #: pretix/control/views/organizer.py:3220
 msgid "The selected sales channel has been deleted."
@@ -27757,7 +27757,9 @@ msgstr "el equipo de pretix"
 
 #: pretix/plugins/autocheckin/apps.py:39
 msgid "Automatically check-in specific tickets after they have been sold."
-msgstr "Realizar automáticamente el check-in de las entradas una vez vendidas."
+msgstr ""
+"Realizar automáticamente el check-in de las entradas específicas una vez "
+"vendidas."
 
 #: pretix/plugins/autocheckin/forms.py:60
 #: pretix/plugins/autocheckin/models.py:82
