@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-01-31 04:00+0000\n"
+"PO-Revision-Date: 2024-11-17 00:00+0000\n"
 "Last-Translator: Pavle Ergović <pavleergovic@gmail.com>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -34,7 +34,7 @@ msgstr ""
 
 #: pretix/_base_settings.py:82
 msgid "Arabic"
-msgstr ""
+msgstr "Arapski"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
@@ -62,7 +62,7 @@ msgstr ""
 
 #: pretix/_base_settings.py:89
 msgid "Dutch"
-msgstr ""
+msgstr "Nizozemski"
 
 #: pretix/_base_settings.py:90
 msgid "Dutch (informal)"
@@ -70,11 +70,11 @@ msgstr ""
 
 #: pretix/_base_settings.py:91
 msgid "French"
-msgstr ""
+msgstr "Francuski"
 
 #: pretix/_base_settings.py:92
 msgid "Finnish"
-msgstr ""
+msgstr "Finski"
 
 #: pretix/_base_settings.py:93
 msgid "Galician"
@@ -82,7 +82,7 @@ msgstr ""
 
 #: pretix/_base_settings.py:94
 msgid "Greek"
-msgstr ""
+msgstr "Grčki"
 
 #: pretix/_base_settings.py:95
 msgid "Indonesian"
@@ -90,7 +90,7 @@ msgstr ""
 
 #: pretix/_base_settings.py:96
 msgid "Italian"
-msgstr ""
+msgstr "Talijanski"
 
 #: pretix/_base_settings.py:97
 msgid "Latvian"
@@ -416,30 +416,30 @@ msgstr ""
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Narudžba označena kao plaćena"
 
 #: pretix/api/webhooks.py:249 pretix/base/models/checkin.py:354
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1549
 msgid "Order canceled"
-msgstr ""
+msgstr "Narudžba otkazana"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr ""
+msgstr "Narudžba reaktivirana"
 
 #: pretix/api/webhooks.py:257 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr ""
+msgstr "Narudžba istekla"
 
 #: pretix/api/webhooks.py:261
 msgid "Order expiry date changed"
-msgstr ""
+msgstr "Promijenjen je datum isteka narudžbe"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr ""
+msgstr "Informacije o narudžbi su promijenjene"
 
 #: pretix/api/webhooks.py:269 pretix/base/notifications.py:275
 msgid "Order contact address changed"
@@ -476,19 +476,19 @@ msgstr ""
 
 #: pretix/api/webhooks.py:301
 msgid "Payment confirmed"
-msgstr ""
+msgstr "Plaćanje potvrđeno"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
-msgstr ""
+msgstr "Narudžba odobrena"
 
 #: pretix/api/webhooks.py:309
 msgid "Order denied"
-msgstr ""
+msgstr "Narudžba odbijena"
 
 #: pretix/api/webhooks.py:313
 msgid "Order deleted"
-msgstr ""
+msgstr "Narudžba obrisana"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -16789,7 +16789,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:248
 #: pretix/control/templates/pretixcontrol/order/index.html:538
 msgid "Resend link"
-msgstr ""
+msgstr "Ponovno pošalji link"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:105
 msgid "Payment reminder"
@@ -29498,7 +29498,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:243
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Ako ste već kupili kartu"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 msgid ""
@@ -29507,6 +29507,10 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Ako želite vidjeti ili promijeniti status i detalje svoje narudžbe, kliknite "
+"na poveznicu u jednoj od e-poruka koje smo vam poslali tijekom postupka "
+"narudžbe. Ako ne možete pronaći poveznicu, kliknite na sljedeći gumb kako "
+"biste zatražili da vam se poveznica vaše narudžbe ponovno pošalje."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:256
 msgid "Resend order link"
