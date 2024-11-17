@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:44+0000\n"
-"PO-Revision-Date: 2024-11-11 05:00+0000\n"
+"PO-Revision-Date: 2024-11-18 02:00+0000\n"
 "Last-Translator: Damiano <estux@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.1\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -17110,13 +17110,15 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup.html:84
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:18
 msgid "Use a custom SMTP server"
-msgstr ""
+msgstr "Utilizza un server SMTP personalizzato"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:92
 msgid ""
 "For full customization, you can configure your own SMTP server that will be "
 "used for email sending."
 msgstr ""
+"Per una personalizzazione completa, puoi configurare il tuo server SMTP che "
+"verrà utilizzato per l'invio delle e-mail."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:110
 #, fuzzy
@@ -17125,7 +17127,7 @@ msgstr "Impostazioni account"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr ""
+msgstr "Questo è il record SPF che abbiamo trovato sul tuo dominio:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
