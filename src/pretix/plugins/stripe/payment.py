@@ -496,7 +496,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                 #  )),
                 ('method_mobilepay',
                  forms.BooleanField(
-                     label=_('Mobilepay'),
+                     label=_('MobilePay'),
                      disabled=self.event.currency not in ['DKK', 'EUR', 'NOK', 'SEK'],
                  )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
