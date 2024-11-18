@@ -18,6 +18,7 @@
                     {% bootstrap_form form %}
                     <div class="form-group buttons">
                         <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            <span class="fa fa-sign-in" aria-hidden="true"></span>
                             {% trans "Log in" %}
                         </button>
                     </div>
@@ -35,6 +36,7 @@
                         <div class="col-md-6">
                             <a class="btn btn-link btn-block"
                                href="{% eventurl request.organizer "presale:organizer.customer.register" %}">
+                               <span class="fa fa-address-book-o" aria-hidden="true"></span>
                                 {% trans "Create account" %}
                             </a>
                         </div>
