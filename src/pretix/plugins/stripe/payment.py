@@ -1867,7 +1867,7 @@ class StripeMobilePay(StripeRedirectMethod):
     method = 'mobilepay'
     confirmation_method = 'automatic'
     explanation = _(
-        'This payment method is available to MobilePay app users in Denmark and Finnland. Please have your app ready.'
+        'This payment method is available to MobilePay app users in Denmark and Finland. Please have your app ready.'
     )
 
     def _payment_intent_kwargs(self, request, payment):
