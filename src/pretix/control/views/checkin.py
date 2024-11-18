@@ -49,6 +49,7 @@ from django.views.generic import FormView, ListView, TemplateView
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.services.checkin import (
@@ -81,9 +82,7 @@ class CheckInListQueryMixin:
             position_id=OuterRef('pk'),
             list_id=self.list.pk,
             type=Checkin.TYPE_ENTRY
-        ).order_by().values('position_id').annotate(
-            m=Max('datetime')
-        ).values('m')
+        ).order_by('-datetime').values('position_id')
         cqs_exit = Checkin.objects.filter(
             position_id=OuterRef('pk'),
             list_id=self.list.pk,
@@ -103,7 +102,7 @@ class CheckInListQueryMixin:
             status_q,
             order__event=self.request.event,
         ).annotate(
-            last_entry=Subquery(cqs),
+            last_entry=Subquery(cqs[:1].values('datetime')),
             last_exit=Subquery(cqs_exit),
             auto_checked_in=Exists(
                 Checkin.objects.filter(
@@ -112,7 +111,8 @@ class CheckInListQueryMixin:
                     list_id=self.list.pk,
                     auto_checked_in=True
                 )
-            )
+            ),
+            last_entry_source_type=Subquery(cqs[:1].values('raw_source_type'))
         ).select_related(
             'item', 'variation', 'order', 'addon_to'
         ).prefetch_related(
@@ -157,6 +157,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx['media_types'] = MEDIA_TYPES
         ctx['checkinlist'] = self.list
         if self.request.event.has_subevents:
             ctx['seats'] = (
@@ -497,6 +498,7 @@ class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['filter_form'] = self.filter_form
+        ctx['media_types'] = MEDIA_TYPES
         return ctx
 
 
