@@ -1601,7 +1601,7 @@ class StripeSofort(StripeRedirectMethod):
     redirect_in_widget_allowed = False
 
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
-        # Stripe<>giropay is shut down November 29th
+        # Stripe<>Sofort is shut down November 29th
         return super().is_allowed(request, total) and now() < datetime(
             2024, 11, 29, 0, 0, 0, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")
         )
