@@ -28217,9 +28217,6 @@ msgstr ""
 #, fuzzy
 msgid "Invoice recipient email"
 msgstr ""
-"#-#-#-#-#  django.po (1)  #-#-#-#-#\n"
-"E-Mail Rechnungsempfang:\n"
-"#-#-#-#-#  django.po (1)  #-#-#-#-#\n"
 "E-Mail Rechnungsempfänger"
 
 #: pretix/plugins/banktransfer/payment.py:338

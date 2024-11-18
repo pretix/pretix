@@ -642,10 +642,7 @@ msgstr "{system} Användare"
 #, fuzzy
 msgid "Email"
 msgstr ""
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Epost\n"
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"E-post"
+"Epost"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:672
@@ -1351,10 +1348,7 @@ msgstr "Bokningsnummer"
 #, fuzzy
 msgid "Email address"
 msgstr ""
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"E-postadress\n"
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Email adress"
+"E-postadress"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
@@ -28022,9 +28016,6 @@ msgstr "Vänligen skicka även min faktura direkt till vår ekonomiavdelning"
 #, fuzzy
 msgid "Invoice recipient email"
 msgstr ""
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Mottagarens e-postadress för fakturan\n"
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "E-postadress till fakturamottagare"
 
 #: pretix/plugins/banktransfer/payment.py:338
@@ -34487,14 +34478,6 @@ msgstr "Skrivrättigheter"
 #: pretix/settings.py:806
 msgid "Kosovo"
 msgstr "Kosovo"
-
-#, fuzzy
-#~ msgid "E-mail"
-#~ msgstr ""
-#~ "#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-#~ "Epost\n"
-#~ "#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-#~ "E-post"
 
 #~ msgid "pretixPOS"
 #~ msgstr "pretixPOS"

@@ -675,13 +675,9 @@ msgstr "{system} Користувач"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:34
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
-#, fuzzy
 msgid "Email"
 msgstr ""
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Ел.пошта\n"
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Електронна адреса"
+"Ел.пошта"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:672
@@ -34502,14 +34498,6 @@ msgstr "Доступ до запису"
 #: pretix/settings.py:806
 msgid "Kosovo"
 msgstr "Косово"
-
-#, fuzzy
-#~ msgid "E-mail"
-#~ msgstr ""
-#~ "#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-#~ "Ел.пошта\n"
-#~ "#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-#~ "Електронна адреса"
 
 #~ msgid "pretixPOS"
 #~ msgstr "pretixPOS"

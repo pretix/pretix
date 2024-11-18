@@ -1403,9 +1403,6 @@ msgstr "订单代码"
 #, fuzzy
 msgid "Email address"
 msgstr ""
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"E-mail 地址\n"
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "电子邮件地址"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330

@@ -643,12 +643,8 @@ msgstr "Utilisateur {system}"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:34
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
-#, fuzzy
 msgid "Email"
 msgstr ""
-"#-#-#-#-#  django.po (1)  #-#-#-#-#\n"
-"Email\n"
-"#-#-#-#-#  django.po (1)  #-#-#-#-#\n"
 "E-Mail"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164

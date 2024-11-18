@@ -198,6 +198,7 @@ Mitgliedschafts
 Mitgliedschaftsdauer
 min
 Mo
+MobilePay
 MOTO
 Multibanco
 MwSt

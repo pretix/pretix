@@ -1420,12 +1420,8 @@ msgstr "Código do pedido"
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:307
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:134
-#, fuzzy
 msgid "Email address"
 msgstr ""
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Enderezo de correo electrónico\n"
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Correo electrónico"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330

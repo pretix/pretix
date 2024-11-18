@@ -1402,12 +1402,8 @@ msgstr "ID comandă"
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:307
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:134
-#, fuzzy
 msgid "Email address"
 msgstr ""
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Adresa de email\n"
-"#-#-#-#-#  django.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Adresă email"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
