@@ -14,6 +14,7 @@ $(function () {
         var lastQuery = null;
         var runQueryTimeout = null;
         var loadIndicatorTimeout = null;
+        var focusOutTimeout = null;
         function showLoadIndicator() {
             $container.find("li:not(.query-holder)").remove();
             $container.append("<li class='loading'><span class='fa fa-4x fa-cog fa-spin'></span></li>");
@@ -108,8 +109,17 @@ $(function () {
                 event.stopPropagation();
             }
         });
-        $query.on("blur", function (event) {
-            $container.removeClass('focused');
+        $container.add($query).on("keydown", function (event) {
+            if (event.which === 27) {  // escape
+                $container.removeClass('focused');
+            }
+        }).on("focusin", function (event) {
+            window.clearTimeout(focusOutTimeout);
+            $(document.body).one("focusout", function (event) {
+                focusOutTimeout = window.setTimeout(function () {
+                    $container.removeClass('focused');
+                }, 100);
+            })
         });
         $query.on("keyup", function (event) {
             var $first = $container.find("li:not(.query-holder)").first();
