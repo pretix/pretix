@@ -374,6 +374,7 @@ class ProfileView(CustomerRequiredMixin, ListView):
             'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
         )
         ctx['invoice_addresses'] = InvoiceAddress.profiles.filter(customer=self.request.customer)
+        ctx['attendee_profiles'] = self.request.customer.attendee_profiles.all()
         ctx['is_paginated'] = True
 
         for m in ctx['memberships']:

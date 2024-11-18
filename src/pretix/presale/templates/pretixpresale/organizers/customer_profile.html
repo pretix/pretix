@@ -50,16 +50,16 @@
     <div>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#orders" aria-controls="orders" role="tab" data-toggle="tab">{% trans "Orders" %}</a>
+                <a href="#orders" aria-controls="orders" role="tab" data-toggle="tab">{% trans "Orders" %} ({{ page_obj.paginator.count }})</a>
             </li>
             <li role="presentation">
-                <a href="#memberships" aria-controls="memberships" role="tab" data-toggle="tab">{% trans "Memberships" %}</a>
+                <a href="#memberships" aria-controls="memberships" role="tab" data-toggle="tab">{% trans "Memberships" %} ({{ memberships|length }})</a>
             </li>
             <li role="presentation">
-                <a href="#addresses" aria-controls="addresses" role="tab" data-toggle="tab">{% trans "Addresses" %}</a>
+                <a href="#addresses" aria-controls="addresses" role="tab" data-toggle="tab">{% trans "Addresses" %} ({{ invoice_addresses|length }})</a>
             </li>
             <li role="presentation">
-                <a href="#profiles" aria-controls="profiles" role="tab" data-toggle="tab">{% trans "Attendee profiles" %}</a>
+                <a href="#profiles" aria-controls="profiles" role="tab" data-toggle="tab">{% trans "Attendee profiles" %} ({{ attendee_profiles|length }})</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -224,7 +224,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for ap in customer.attendee_profiles.all %}
+                    {% for ap in attendee_profiles %}
                         <tr>
                             <td>
                                 {{ ap.describe|linebreaksbr }}
