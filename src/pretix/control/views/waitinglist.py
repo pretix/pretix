@@ -304,7 +304,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 
         headers = [
-            _('Name'), _('E-mail address'), _('Phone number'), _('Product'), _('On list since'), _('Status'), _('Voucher code'),
+            _('Name'), _('Email address'), _('Phone number'), _('Product'), _('On list since'), _('Status'), _('Voucher code'),
             _('Language'), _('Priority')
         ]
         if self.request.event.has_subevents:

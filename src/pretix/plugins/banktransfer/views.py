@@ -929,5 +929,5 @@ class SendInvoiceMailView(EventViewMixin, OrderDetailMixin, View):
         }
         last_payment.save(update_fields=['info'])
 
-        messages.success(request, _('Sending the latest invoice via e-mail to {email}.').format(email=request.POST['email']))
+        messages.success(request, _('Sending the latest invoice via email to {email}.').format(email=request.POST['email']))
         return redirect(self.get_order_url())

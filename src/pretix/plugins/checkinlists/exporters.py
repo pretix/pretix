@@ -502,7 +502,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         if form_data['secrets']:
             headers.append(_('Secret'))
 
-        headers.append(_('E-mail'))
+        headers.append(_('Email'))
         headers.append(_('Phone number'))
 
         if self.event.has_subevents:

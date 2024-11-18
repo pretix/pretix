@@ -254,7 +254,7 @@ class PasswordRecoverForm(forms.Form):
 
 class PasswordForgotForm(forms.Form):
     email = forms.EmailField(
-        label=_('E-mail'),
+        label=_('Email'),
     )
 
     def __init__(self, *args, **kwargs):

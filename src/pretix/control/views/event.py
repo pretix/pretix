@@ -807,7 +807,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
                 r._csp_ignore = True
                 return r
         else:
-            raise Http404(_('Unknown e-mail renderer.'))
+            raise Http404(_('Unknown email renderer.'))
 
 
 class TicketSettingsPreview(EventPermissionRequiredMixin, View):

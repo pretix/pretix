@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('action_type', models.CharField(max_length=255)),
-                ('method', models.CharField(choices=[('mail', 'E-mail')], max_length=255)),
+                ('method', models.CharField(choices=[('mail', 'Email')], max_length=255)),
                 ('event', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='pretixbase.Event')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('enabled', models.BooleanField(default=True)),

@@ -43,7 +43,7 @@ class NotificationSetting(models.Model):
     :type enabled: bool
     """
     CHANNELS = (
-        ('mail', _('E-mail')),
+        ('mail', _('Email')),
     )
     user = models.ForeignKey('User', on_delete=models.CASCADE,
                              related_name='notification_settings')

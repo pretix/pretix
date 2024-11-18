@@ -54,7 +54,7 @@ from pretix.presale.signals import contact_form_fields
 
 class ContactForm(forms.Form):
     required_css_class = 'required'
-    email = forms.EmailField(label=_('E-mail'),
+    email = forms.EmailField(label=_('Email'),
                              validators=[EmailBanlistValidator()],
                              widget=forms.EmailInput(attrs={'autocomplete': 'section-contact email'})
                              )
@@ -67,7 +67,7 @@ class ContactForm(forms.Form):
 
         if self.event.settings.order_email_asked_twice:
             self.fields['email_repeat'] = forms.EmailField(
-                label=_('E-mail address (repeated)'),
+                label=_('Email address (repeated)'),
                 help_text=_('Please enter the same email address again to make sure you typed it correctly.'),
             )
 

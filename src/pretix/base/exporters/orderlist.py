@@ -284,7 +284,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Comment'))
         headers.append(_('Follow-up date'))
         headers.append(_('Positions'))
-        headers.append(_('E-mail address verified'))
+        headers.append(_('Email address verified'))
         headers.append(_('External customer ID'))
         headers.append(_('Payment providers'))
         if form_data.get('include_payment_amounts'):
@@ -655,7 +655,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers += [
             _('Sales channel'),
             _('Order locale'),
-            _('E-mail address verified'),
+            _('Email address verified'),
             _('External customer ID'),
             _('Check-in lists'),
             _('Payment providers'),

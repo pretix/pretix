@@ -152,7 +152,7 @@ class NativeAuthBackend(BaseAuthBackend):
         to log in.
         """
         d = OrderedDict([
-            ('email', forms.EmailField(label=_("E-mail"), max_length=254,
+            ('email', forms.EmailField(label=_("Email"), max_length=254,
                                        widget=forms.EmailInput(attrs={'autofocus': 'autofocus'}))),
             ('password', forms.CharField(label=_("Password"), widget=forms.PasswordInput,
                                          max_length=4096)),

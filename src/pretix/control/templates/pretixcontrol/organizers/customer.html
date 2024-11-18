@@ -46,7 +46,7 @@
                                         {% trans "active" %}
                                     {% endif %}
                                 </dd>
-                                <dt>{% trans "E-mail" %}</dt>
+                                <dt>{% trans "Email" %}</dt>
                                 <dd>
                                     {{ customer.email|default_if_none:"" }}
                                     {% if customer.email and not customer.provider %}
