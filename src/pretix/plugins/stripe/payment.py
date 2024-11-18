@@ -152,7 +152,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Link: ✓ (PaymentRequestButton)
 # - Cash App Pay: ✗
 # - PayPal: ✓ (No settings UI yet)
-# - MobilePay: ✗
+# - MobilePay: ✓
 # - Alipay: ✓
 # - WeChat Pay: ✓
 # - GrabPay: ✓
@@ -494,6 +494,11 @@ class StripeSettingsHolder(BasePaymentProvider):
                 #          'EUR', 'GBP', 'USD', 'CHF', 'CZK', 'DKK', 'NOK', 'PLN', 'SEK', 'AUD', 'CAD', 'HKD', 'NZD', 'SGD'
                 #      ]
                 #  )),
+                ('method_mobilepay',
+                 forms.BooleanField(
+                     label=_('MobilePay'),
+                     disabled=self.event.currency not in ['DKK', 'EUR', 'NOK', 'SEK'],
+                 )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
         if not self.settings.connect_client_id or self.settings.secret_key:
@@ -1851,5 +1856,23 @@ class StripeTwint(StripeRedirectMethod):
         return {
             "payment_method_data": {
                 "type": "twint",
+            },
+        }
+
+
+class StripeMobilePay(StripeRedirectMethod):
+    identifier = 'stripe_mobilepay'
+    verbose_name = 'MobilePay via Stripe'
+    public_name = 'MobilePay'
+    method = 'mobilepay'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to MobilePay app users in Denmark and Finland. Please have your app ready.'
+    )
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "mobilepay",
             },
         }

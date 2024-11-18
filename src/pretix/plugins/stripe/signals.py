@@ -46,8 +46,8 @@ from pretix.presale.signals import html_head, process_response
 def register_payment_provider(sender, **kwargs):
     from .payment import (
         StripeAffirm, StripeAlipay, StripeBancontact, StripeCC, StripeEPS,
-        StripeGiropay, StripeIdeal, StripeKlarna, StripeMultibanco,
-        StripePayPal, StripePrzelewy24, StripeRevolutPay,
+        StripeGiropay, StripeIdeal, StripeKlarna, StripeMobilePay,
+        StripeMultibanco, StripePayPal, StripePrzelewy24, StripeRevolutPay,
         StripeSEPADirectDebit, StripeSettingsHolder, StripeSofort, StripeSwish,
         StripeTwint, StripeWeChatPay,
     )
@@ -55,7 +55,7 @@ def register_payment_provider(sender, **kwargs):
     return [
         StripeSettingsHolder, StripeCC, StripeGiropay, StripeIdeal, StripeAlipay, StripeBancontact,
         StripeSofort, StripeEPS, StripeMultibanco, StripePrzelewy24, StripeRevolutPay, StripeWeChatPay,
-        StripeSEPADirectDebit, StripeAffirm, StripeKlarna, StripePayPal, StripeSwish, StripeTwint,
+        StripeSEPADirectDebit, StripeAffirm, StripeKlarna, StripePayPal, StripeSwish, StripeTwint, StripeMobilePay
     ]
 
 
