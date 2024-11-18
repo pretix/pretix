@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-18 15:30+0000\n"
-"PO-Revision-Date: 2024-11-12 08:38+0000\n"
+"PO-Revision-Date: 2024-11-18 16:34+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -3083,10 +3083,6 @@ msgstr ""
 "wählen Sie eine andere."
 
 #: pretix/base/forms/user.py:53
-#, fuzzy
-#| msgid ""
-#| "Please enter your current password if you want to change your email "
-#| "address or password."
 msgid ""
 "Please enter your current password if you want to change your email address "
 "or password."
@@ -9082,8 +9078,6 @@ msgid "Require invoice address"
 msgstr "Rechnungsadresse erforderlich"
 
 #: pretix/base/settings.py:553
-#, fuzzy
-#| msgid "Require a business addresses"
 msgid "Require a business address"
 msgstr "Nur Firmenadressen akzeptieren"
 
@@ -11966,8 +11960,6 @@ msgid "This will remove all phone numbers from orders."
 msgstr "Dies entfernt alle Telefonnummern von Bestellungen."
 
 #: pretix/base/shredder.py:290
-#, fuzzy
-#| msgid "Emails"
 msgid "Emails"
 msgstr "E-Mails"
 
@@ -25814,11 +25806,6 @@ msgid "Welcome to pretix! You are now part of the team \"{}\"."
 msgstr "Willkommen bei pretix! Sie haben jetzt Zugriff auf das Team \"{}\"."
 
 #: pretix/control/views/auth.py:357
-#, fuzzy
-#| msgid ""
-#| "If the address is registered to valid account, then we have sent you an e-"
-#| "mail containing further instructions. Please note that we will send at "
-#| "most one email every 24 hours."
 msgid ""
 "If the address is registered to valid account, then we have sent you an "
 "email containing further instructions. Please note that we will send at most "
@@ -25829,10 +25816,6 @@ msgstr ""
 "Sie, dass wir maximal eine E-Mail alle 24 Stunden schicken."
 
 #: pretix/control/views/auth.py:360
-#, fuzzy
-#| msgid ""
-#| "If the address is registered to valid account, then we have sent you an e-"
-#| "mail containing further instructions."
 msgid ""
 "If the address is registered to valid account, then we have sent you an "
 "email containing further instructions."
@@ -30868,7 +30851,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:499
 msgid "MobilePay"
-msgstr ""
+msgstr "MobilePay"
 
 #: pretix/plugins/stripe/payment.py:506
 msgid "Destination"
@@ -31162,16 +31145,12 @@ msgstr ""
 "Verfügung. Bitte halten Sie Ihre App bereit."
 
 #: pretix/plugins/stripe/payment.py:1870
-#, fuzzy
-#| msgid ""
-#| "This payment method is available to users of the Swiss app TWINT. Please "
-#| "have your app ready."
 msgid ""
 "This payment method is available to MobilePay app users in Denmark and "
 "Finland. Please have your app ready."
 msgstr ""
-"Diese Zahlungsmethode steht den Nutzern der Schweizer App TWINT zur "
-"Verfügung. Bitte halten Sie Ihre App bereit."
+"Diese Zahlungsmethode steht den Nutzern der App MobilePay in Dänemark und "
+"Finnland zur Verfügung. Bitte halten Sie Ihre App bereit."
 
 #: pretix/plugins/stripe/signals.py:92
 msgid "Charge succeeded."
