@@ -352,12 +352,12 @@ Fetching individual invoices
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
-   :param invoice_no: The ``invoice_no`` field of the invoice to fetch
+   :param number: The ``number`` field of the invoice to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/download/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/invoices/(number)/download/
 
    Download an invoice in PDF format.
 
@@ -384,7 +384,7 @@ Fetching individual invoices
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
-   :param invoice_no: The ``invoice_no`` field of the invoice to fetch
+   :param number: The ``number`` field of the invoice to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
@@ -397,7 +397,7 @@ Modifying invoices
 
 Invoices cannot be edited directly, but the following actions can be triggered:
 
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/reissue/
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(number)/reissue/
 
    Cancels the invoice and creates a new one.
 
@@ -419,13 +419,13 @@ Invoices cannot be edited directly, but the following actions can be triggered:
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
-   :param invoice_no: The ``invoice_no`` field of the invoice to reissue
+   :param number: The ``number`` field of the invoice to reissue
    :statuscode 200: no error
    :statuscode 400: The invoice has already been canceled
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
 
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/regenerate/
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(number)/regenerate/
 
    Re-generates the invoice from order data.
 
@@ -447,7 +447,7 @@ Invoices cannot be edited directly, but the following actions can be triggered:
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
-   :param invoice_no: The ``invoice_no`` field of the invoice to regenerate
+   :param number: The ``number`` field of the invoice to regenerate
    :statuscode 200: no error
    :statuscode 400: The invoice has already been canceled
    :statuscode 401: Authentication failure
