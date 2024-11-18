@@ -1227,7 +1227,7 @@ def test_order_sendmail_preview(client, order_url, env):
         follow=True)
 
     assert response.status_code == 200
-    assert 'E-mail preview' in response.content.decode()
+    assert 'Email preview' in response.content.decode()
     assert len(mail.outbox) == 0
 
 

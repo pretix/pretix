@@ -144,7 +144,7 @@ def test_sendmail_preview(logged_in_client, sendmail_url, event, order, pos):
                                       },
                                      follow=True)
     assert response.status_code == 200
-    assert 'E-mail preview' in response.rendered_content
+    assert 'Email preview' in response.rendered_content
 
     assert len(djmail.outbox) == 0
 

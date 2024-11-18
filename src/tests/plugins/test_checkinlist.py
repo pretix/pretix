@@ -90,7 +90,7 @@ def test_csv_simple(event):
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title","Attendee name:
  First name","Attendee name: Middle name","Attendee name: Family name","Product","Price","Checked in","Checked out","Automatically
- checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special attention",
+ checked in","Secret","Email","Phone number","Company","Voucher code","Order date","Order time","Requires special attention",
 "Comment","Check-in text","Seat ID","Seat name","Seat zone","Seat row","Seat number","Blocked","Valid from","Valid until","Address","ZIP code",
 "City","Country","State"
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
@@ -112,7 +112,7 @@ def test_csv_order_by_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Checked out","Automatically checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special
+"Checked in","Checked out","Automatically checked in","Secret","Email","Phone number","Company","Voucher code","Order date","Order time","Requires special
  attention","Comment","Check-in text","Seat ID","Seat name","Seat zone","Seat row","Seat number","Blocked","Valid from","Valid until",
 "Address","ZIP code","City","Country","State"
 "FOO","Mrs Andrea J Zulu","Mrs","Andrea","J","Zulu","Ticket","13.00","","","No","ggsngqtnmhx74jswjngw3fk8pfwz2a7k",
@@ -130,7 +130,7 @@ def test_csv_order_by_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Checked out","Automatically checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special
+"Checked in","Checked out","Automatically checked in","Secret","Email","Phone number","Company","Voucher code","Order date","Order time","Requires special
  attention","Comment","Check-in text","Seat ID","Seat name","Seat zone","Seat row","Seat number","Blocked","Valid from","Valid until",
 "Address","ZIP code","City","Country","State"
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
@@ -183,7 +183,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Checked out","Automatically checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special
+"Checked in","Checked out","Automatically checked in","Secret","Email","Phone number","Company","Voucher code","Order date","Order time","Requires special
  attention","Comment","Check-in text","Seat ID","Seat name","Seat zone","Seat row","Seat number","Blocked","Valid from","Valid until",
 "Address","ZIP code","City","Country","State"
 "BAR","Mr Albert J Zulu","Mr","Albert","J","Zulu","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytyy",
@@ -201,7 +201,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Checked out","Automatically checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special
+"Checked in","Checked out","Automatically checked in","Secret","Email","Phone number","Company","Voucher code","Order date","Order time","Requires special
  attention","Comment","Check-in text","Seat ID","Seat name","Seat zone","Seat row","Seat number","Blocked","Valid from","Valid until",
 "Address","ZIP code","City","Country","State"
 "BAR","Mr Albert J Zulu","Mr","Albert","J","Zulu","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytyy",
@@ -219,7 +219,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Checked out","Automatically checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special
+"Checked in","Checked out","Automatically checked in","Secret","Email","Phone number","Company","Voucher code","Order date","Order time","Requires special
  attention","Comment","Check-in text","Seat ID","Seat name","Seat zone","Seat row","Seat number","Blocked","Valid from","Valid until",
 "Address","ZIP code","City","Country","State"
 "FOO","Mr Paul A Jones","Mr","Paul","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
@@ -262,7 +262,7 @@ def test_csv_order_by_orderdatetime(event):
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title","Attendee name:
  First name","Attendee name: Middle name","Attendee name: Family name","Product","Price","Checked in","Checked out","Automatically
- checked in","Secret","E-mail","Phone number","Company","Voucher code","Order date","Order time","Requires special attention",
+ checked in","Secret","Email","Phone number","Company","Voucher code","Order date","Order time","Requires special attention",
 "Comment","Check-in text","Seat ID","Seat name","Seat zone","Seat row","Seat number","Blocked","Valid from","Valid until","Address","ZIP code",
 "City","Country","State"
 "FOO2","Mx Alex F Nord","Mx","Alex","F","Nord","Ticket2","23.00","","","No","asdfasdfasdfasdfasdfasdfasfdasdf",
