@@ -40,7 +40,7 @@ class StaffSessionForm(forms.ModelForm):
 
 class UserEditForm(forms.ModelForm):
     error_messages = {
-        'duplicate_identifier': _("There already is an account associated with this e-mail address. "
+        'duplicate_identifier': _("There already is an account associated with this email address. "
                                   "Please choose a different one."),
         'pw_mismatch': _("Please enter the same password twice"),
     }

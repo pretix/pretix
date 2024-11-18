@@ -48,10 +48,10 @@ from pretix.control.forms import SingleLanguageWidget
 
 class UserSettingsForm(forms.ModelForm):
     error_messages = {
-        'duplicate_identifier': _("There already is an account associated with this e-mail address. "
+        'duplicate_identifier': _("There already is an account associated with this email address. "
                                   "Please choose a different one."),
-        'pw_current': _("Please enter your current password if you want to change your e-mail "
-                        "address or password."),
+        'pw_current': _("Please enter your current password if you want to change your email address "
+                        "or password."),
         'pw_current_wrong': _("The current password you entered was not correct."),
         'pw_mismatch': _("Please enter the same password twice"),
         'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),

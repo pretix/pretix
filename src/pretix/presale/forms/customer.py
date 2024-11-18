@@ -53,7 +53,7 @@ class TokenGenerator(PasswordResetTokenGenerator):
 class AuthenticationForm(forms.Form):
     required_css_class = 'required'
     email = forms.EmailField(
-        label=_("E-mail"),
+        label=_("Email"),
         widget=forms.EmailInput(attrs={'autofocus': True})
     )
     password = forms.CharField(
@@ -128,7 +128,7 @@ class RegistrationForm(forms.Form):
     required_css_class = 'required'
     name_parts = forms.CharField()
     email = forms.EmailField(
-        label=_("E-mail"),
+        label=_("Email"),
     )
 
     error_messages = {
@@ -283,7 +283,7 @@ class SetPasswordForm(forms.Form):
         'pw_mismatch': _("Please enter the same password twice"),
     }
     email = forms.EmailField(
-        label=_('E-mail'),
+        label=_('Email'),
         disabled=True
     )
     password = forms.CharField(
@@ -329,7 +329,7 @@ class ResetPasswordForm(forms.Form):
         'unknown': _("A user with this email address is not known in our system."),
     }
     email = forms.EmailField(
-        label=_('E-mail'),
+        label=_('Email'),
     )
 
     def __init__(self, request=None, *args, **kwargs):
@@ -372,7 +372,7 @@ class ChangePasswordForm(forms.Form):
         'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
     }
     email = forms.EmailField(
-        label=_('E-mail'),
+        label=_('Email'),
         disabled=True
     )
     password_current = forms.CharField(

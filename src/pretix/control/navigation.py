@@ -78,7 +78,7 @@ def get_event_navigation(request: HttpRequest):
                 'active': url.url_name == 'event.settings.tickets',
             },
             {
-                'label': _('E-mail'),
+                'label': _('Email'),
                 'url': reverse('control:event.settings.mail', kwargs={
                     'event': request.event.slug,
                     'organizer': request.event.organizer.slug,
@@ -498,7 +498,7 @@ def get_organizer_navigation(request):
                     'active': url.url_name.startswith('organizer.propert'),
                 },
                 {
-                    'label': _('E-mail'),
+                    'label': _('Email'),
                     'url': reverse('control:organizer.settings.mail', kwargs={
                         'organizer': request.organizer.slug,
                     }),

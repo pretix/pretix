@@ -282,7 +282,7 @@ def test_import_email_invalid(user, event, item):
         import_orders.apply(
             args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
         ).get()
-    assert 'Error while importing value "Dieter" for column "E-mail address" in line "1": Enter a valid email address.' in str(excinfo.value)
+    assert 'Error while importing value "Dieter" for column "Email address" in line "1": Enter a valid email address.' in str(excinfo.value)
 
 
 @pytest.mark.django_db
@@ -356,7 +356,7 @@ def test_import_attendee_email_invalid(user, event, item):
         import_orders.apply(
             args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
         ).get()
-    assert 'Error while importing value "Dieter" for column "Attendee e-mail address" in line "1": Enter a valid email address.' in str(excinfo.value)
+    assert 'Error while importing value "Dieter" for column "Attendee email address" in line "1": Enter a valid email address.' in str(excinfo.value)
 
 
 @pytest.mark.django_db

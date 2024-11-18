@@ -242,7 +242,7 @@ class Order(LockModel, LoggedModel):
     )
     email = models.EmailField(
         null=True, blank=True,
-        verbose_name=_('E-mail')
+        verbose_name=_('Email')
     )
     phone = PhoneNumberField(
         null=True, blank=True,
@@ -317,7 +317,7 @@ class Order(LockModel, LoggedModel):
     )
     email_known_to_work = models.BooleanField(
         default=False,
-        verbose_name=_('E-mail address verified')
+        verbose_name=_('Email address verified')
     )
     invoice_dirty = models.BooleanField(
         # Invoice needs to be re-issued when the order is paid again

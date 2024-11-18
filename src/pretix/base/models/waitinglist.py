@@ -73,7 +73,7 @@ class WaitingListEntry(LoggedModel):
         blank=True, default=dict
     )
     email = models.EmailField(
-        verbose_name=_("E-mail address")
+        verbose_name=_("Email address")
     )
     phone = PhoneNumberField(
         null=True, blank=True,

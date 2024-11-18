@@ -68,7 +68,7 @@ def test_custom_smtp_backend(backend: T, from_addr: str) -> None:
 
 class BaseHTMLMailRenderer:
     """
-    This is the base class for all HTML e-mail renderers.
+    This is the base class for all HTML email renderers.
     """
 
     def __init__(self, event: Event, organizer=None):

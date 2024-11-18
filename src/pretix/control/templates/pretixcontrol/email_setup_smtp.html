@@ -5,7 +5,7 @@
 {% load static %}
 {% block title %}{% trans "Organizer" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "E-mail sending" %}</h1>
+    <h1>{% trans "Email sending" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% for k, v in request.POST.items %}

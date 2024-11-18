@@ -128,7 +128,7 @@ class UpdateSettingsForm(SettingsForm):
     )
     update_check_email = forms.EmailField(
         required=False,
-        label=_("E-mail notifications"),
+        label=_("Email notifications"),
         help_text=_("We will notify you at this address if we detect that a new update is available. This "
                     "address will not be transmitted to pretix.eu, the emails will be sent by this server "
                     "locally.")

@@ -91,7 +91,7 @@ class Customer(LoggedModel):
             ),
         ],
     )
-    email = models.EmailField(db_index=True, null=True, blank=False, verbose_name=_('E-mail'), max_length=190)
+    email = models.EmailField(db_index=True, null=True, blank=False, verbose_name=_('Email'), max_length=190)
     phone = PhoneNumberField(null=True, blank=True, verbose_name=_('Phone number'))
     password = models.CharField(verbose_name=_('Password'), max_length=128)
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
@@ -392,7 +392,7 @@ class CustomerSSOClient(LoggedModel):
     SCOPE_CHOICES = (
         ('openid', _('OpenID Connect access (required)')),
         ('profile', _('Profile data (name, addresses)')),
-        ('email', _('E-mail address')),
+        ('email', _('Email address')),
         ('phone', _('Phone number')),
     )
 

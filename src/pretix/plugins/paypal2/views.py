@@ -264,7 +264,7 @@ def isu_return(request, *args, **kwargs):
             elif request.GET.get("isEmailConfirmed") == "false":  # Yes - literal!
                 messages.error(
                     request,
-                    _('The e-mail address on your PayPal account has not yet been confirmed. You will need to do '
+                    _('The email address on your PayPal account has not yet been confirmed. You will need to do '
                       'this before you can start accepting payments.')
                 )
             else:

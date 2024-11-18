@@ -56,7 +56,7 @@ from pretix.base.signals import order_import_columns
 
 class EmailColumn(ImportColumn):
     identifier = 'email'
-    verbose_name = gettext_lazy('E-mail address')
+    verbose_name = gettext_lazy('Email address')
 
     def clean(self, value, previous_values):
         if value:
@@ -322,7 +322,7 @@ class AttendeeNamePart(ImportColumn):
 
 class AttendeeEmail(ImportColumn):
     identifier = 'attendee_email'
-    verbose_name = gettext_lazy('Attendee e-mail address')
+    verbose_name = gettext_lazy('Attendee email address')
 
     def clean(self, value, previous_values):
         if value:

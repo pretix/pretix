@@ -4,7 +4,7 @@
 {% load hierarkey_form %}
 {% load static %}
 {% block inside %}
-    <h1>{% trans "E-mail settings" %}</h1>
+    <h1>{% trans "Email settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data"
             mail-preview-url="{% url "control:event.settings.mail.preview" event=request.event.slug organizer=request.event.organizer.slug %}">
         {% csrf_token %}
@@ -63,7 +63,7 @@
                 {% bootstrap_field form.mail_attach_ical_description layout="control" %}
             </fieldset>
             <fieldset>
-                <legend>{% trans "E-mail design" %}</legend>
+                <legend>{% trans "Email design" %}</legend>
                 <div class="row">
                     {% for r in renderers.values %}
                         <div class="col-md-3">
@@ -84,7 +84,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend>{% trans "E-mail content" %}</legend>
+                <legend>{% trans "Email content" %}</legend>
                 <h4>{% trans "Text" %}</h4>
                 <div class="panel-group" id="questions_group">
                     {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}

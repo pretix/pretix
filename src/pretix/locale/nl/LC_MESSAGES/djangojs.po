@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-08 13:45+0000\n"
+"POT-Creation-Date: 2024-11-18 15:16+0000\n"
 "PO-Revision-Date: 2024-10-23 14:30+0000\n"
 "Last-Translator: arjan-s <github@anymore.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -645,48 +645,38 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:496
 #: pretix/static/pretixcontrol/js/ui/main.js:516
-#: pretix/static/pretixcontrol/js/ui/main.js:495
-#: pretix/static/pretixcontrol/js/ui/main.js:515
 msgid "Search query"
 msgstr "Zoekopdracht"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:514
-#: pretix/static/pretixcontrol/js/ui/main.js:513
 msgid "All"
 msgstr "Alle"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:515
-#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "None"
 msgstr "Geen"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:519
-#: pretix/static/pretixcontrol/js/ui/main.js:518
 msgid "Selected only"
 msgstr "Alleen geselecteerde"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:862
-#: pretix/static/pretixcontrol/js/ui/main.js:861
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:865
-#: pretix/static/pretixcontrol/js/ui/main.js:864
 msgid "Invalid page number."
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1023
-#: pretix/static/pretixcontrol/js/ui/main.js:1022
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1063
-#: pretix/static/pretixcontrol/js/ui/main.js:1062
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1138
-#: pretix/static/pretixcontrol/js/ui/main.js:1137
 msgid "You have unsaved changes!"
 msgstr "U heeft nog niet opgeslagen wijzigingen!"
 
