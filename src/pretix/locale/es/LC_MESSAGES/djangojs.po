@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:45+0000\n"
-"PO-Revision-Date: 2024-11-15 20:00+0000\n"
+"PO-Revision-Date: 2024-11-18 15:48+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/es/>\n"
@@ -448,7 +448,7 @@ msgstr "Producto"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
-msgstr "Ver variaciones del producto"
+msgstr "Variación del producto"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
@@ -645,7 +645,7 @@ msgstr ""
 #: pretix/static/pretixcontrol/js/ui/main.js:496
 #: pretix/static/pretixcontrol/js/ui/main.js:516
 msgid "Search query"
-msgstr "Consultar búsqueda"
+msgstr "Consulta de búsqueda"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "All"
