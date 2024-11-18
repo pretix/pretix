@@ -9,43 +9,30 @@
     <h2>
         {% trans "Your account" %}
     </h2>
-    <div class="panel panel-primary items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Account information" %}
-            </h3>
-        </div>
-        <div class="panel-body">
-            <dl class="dl-horizontal">
+    <div class="row">
+        <dl>
+            <div class="col-sm-6">
+                <dt>{{ customer.name }}</dt>
+                <dd>{{ customer.email }}</dd>
+                {% if customer.phone %}
+                    <dd><spani class="fa fa-phone" aria-hidden="true"></span> {{ customer.phone }}</dd>
+                {% endif %}
+                <dd>
+                    <ul class="list-inline">
+                        <li><a href="{% eventurl request.organizer "presale:organizer.customer.change" %}">
+                                                        <span class="fa fa-edit" aria-hidden=true></span> {% trans "Change account information" %}</a></li>
+                        <li><a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
+                                                        <span class="fa fa-key" aria-hidden=true></span> {% trans "Change password" %}</a></li>
+                    </ul>
+                </dd>
+                <dd>
+                </dd>
+            </div>
+            <div class="col-sm-6 text-right">
                 <dt>{% trans "Customer ID" %}</dt>
                 <dd>#{{ customer.identifier }}</dd>
-                {% if customer.provider %}
-                    <dt>{% trans "Login method" %}</dt>
-                    <dd>{{ customer.provider.name }}</dd>
-                {% endif %}
-                <dt>{% trans "Email" %}</dt>
-                <dd>{{ customer.email }}
-                </dd>
-                <dt>{% trans "Name" %}</dt>
-                <dd>{{ customer.name }}</dd>
-                {% if customer.phone %}
-                    <dt>{% trans "Phone" %}</dt>
-                    <dd>{{ customer.phone }}</dd>
-                {% endif %}
-            </dl>
-            <div class="text-right">
-                <a href="{% eventurl request.organizer "presale:organizer.customer.change" %}"
-                        class="btn btn-default">
-                    {% trans "Change account information" %}
-                </a>
-                {% if not customer.provider %}
-                    <a href="{% eventurl request.organizer "presale:organizer.customer.password" %}"
-                            class="btn btn-default">
-                        {% trans "Change password" %}
-                    </a>
-                {% endif %}
             </div>
-        </div>
+        </dl>
     </div>
     <div>
         <ul class="nav nav-tabs" role="tablist">
