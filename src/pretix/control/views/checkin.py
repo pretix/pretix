@@ -102,7 +102,7 @@ class CheckInListQueryMixin:
             status_q,
             order__event=self.request.event,
         ).annotate(
-            last_entry=Subquery(cqs.values('datetime')),
+            last_entry=Subquery(cqs[:1].values('datetime')),
             last_exit=Subquery(cqs_exit),
             auto_checked_in=Exists(
                 Checkin.objects.filter(
