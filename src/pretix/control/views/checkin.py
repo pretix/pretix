@@ -82,9 +82,7 @@ class CheckInListQueryMixin:
             position_id=OuterRef('pk'),
             list_id=self.list.pk,
             type=Checkin.TYPE_ENTRY
-        ).order_by('-datetime').values('position_id').annotate(
-            m=Max('datetime')
-        )[:1]
+        ).order_by('-datetime').values('position_id')
         cqs_exit = Checkin.objects.filter(
             position_id=OuterRef('pk'),
             list_id=self.list.pk,
@@ -104,7 +102,7 @@ class CheckInListQueryMixin:
             status_q,
             order__event=self.request.event,
         ).annotate(
-            last_entry=Subquery(cqs.values('m')),
+            last_entry=Subquery(cqs.values('datetime')),
             last_exit=Subquery(cqs_exit),
             auto_checked_in=Exists(
                 Checkin.objects.filter(
@@ -114,7 +112,7 @@ class CheckInListQueryMixin:
                     auto_checked_in=True
                 )
             ),
-            last_entry_source_type=Subquery(cqs.values('raw_source_type'))
+            last_entry_source_type=Subquery(cqs[:1].values('raw_source_type'))
         ).select_related(
             'item', 'variation', 'order', 'addon_to'
         ).prefetch_related(
