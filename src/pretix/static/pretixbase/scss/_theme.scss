@@ -252,3 +252,31 @@ svg.svg-icon {
 @include table-row-variant('info', var(--pretix-brand-info-success-lighten-30), var(--pretix-brand-info-success-lighten-25));
 @include table-row-variant('warning', var(--pretix-brand-warning-lighten-40), var(--pretix-brand-warning-lighten-35));
 @include table-row-variant('danger', var(--pretix-brand-danger-lighten-30), var(--pretix-brand-danger-lighten-25));
+
+.text-blob-success, .text-blob-info, .text-blob-warning, .text-blob-danger {
+  padding: .25em .8em;
+  border-radius: 1em;
+
+  &:has(.status-dot) {
+    padding-left: .45em;
+  }
+}
+.text-blob-success {
+  color: var(--pretix-brand-success-darken-10);
+  background: var(--pretix-brand-success-lighten-48);
+}
+.text-blob-info {
+  color: var(--pretix-brand-info-darken-20);
+  background: var(--pretix-brand-info-lighten-33);
+}
+.text-blob-warning {
+  color: var(--pretix-brand-warning-darken-25);
+  background: var(--pretix-brand-warning-lighten-41);
+  .status-dot {
+    color: var(--pretix-brand-warning);
+  }
+}
+.text-blob-danger {
+  color: var(--pretix-brand-danger-darken-5);
+  background: var(--pretix-brand-danger-lighten-43);
+}
