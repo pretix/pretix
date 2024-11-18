@@ -51,63 +51,67 @@
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="orders">
-                <table class="panel-body table table-hover">
-                    <thead>
-                    <tr>
-                        <th>{% trans "Order code" %}</th>
-                        <th>{% trans "Event" %}</th>
-                        <th>{% trans "Order date" %}</th>
-                        <th class="text-right">{% trans "Order total" %}</th>
-                        <th class="text-right">{% trans "Positions" %}</th>
-                        <th class="text-right">{% trans "Status" %}</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
+            {% if orders %}
+                <ol class="event-list list-unstyled">
                     {% for o in orders %}
-                        <tr>
-                            <td>
-                                <strong>
-                                    <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
-                                        {{ o.code }}
-                                    </a>
-                                </strong>
-                                {% if o.testmode %}
-                                    <span class="label label-warning">{% trans "TEST MODE" %}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {{ o.event }}
-                                {% if not o.event.has_subevents and o.event.settings.show_dates_on_frontpage %}
-                                    <br><small class="text-muted">{{ o.event.get_date_range_display }}</small>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
-                                {% if o.customer_id != customer.pk %}
-                                    <span class="fa fa-link text-muted"
-                                          data-toggle="tooltip"
-                                          title="{% trans "Matched to the account based on the email address." %}"
-                                    ></span>
-                                {% endif %}
-                            </td>
-                            <td class="text-right flip">
-                                {{ o.total|money:o.event.currency }}
-                            </td>
-                            <td class="text-right flip">{{ o.count_positions|default_if_none:"0" }}</td>
-                            <td class="text-right flip">{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</td>
-                            <td class="text-right flip">
-                                <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
-                                   target="_blank"
-                                   class="btn btn-default">
+                    <li class="row">
+                        <dl>
+                            <div class="col-md-3 col-sm-3 col-xs-8">
+                                <dt class="sr-only">{% trans "Order" %}</dt>
+                                <dd><strong>
+                                        <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
+                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                            {{ o.code }}</a>
+                                    </strong>
+                                    {% if o.customer_id != customer.pk %}
+                                        <span class="fa fa-compress text-muted"
+                                              data-toggle="tooltip"
+                                              title="{% trans "Matched to the account based on the email address." %}"
+                                        ></span>
+                                    {% endif %}
+                                    <small>{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</small>
+                                    {% if o.testmode and False %}
+                                        <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                    {% endif %}
+                                </dd>
+                                <dd><time datetime="{{ o.datetime|date:"Y-m-d H:i" }}" class="text-muted small">{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</time></dd>
+                                <dd class="small"></dd>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-4 text-right">
+                                <dt class="sr-only">{% trans "Order total" %}</dt>
+                                <dd>{{ o.total|money:o.event.currency }}</dd>
+                                <dt class="sr-only">{% trans "Positions" %}</dt>
+                                <dd class="text-muted"><small>{% blocktranslate count counter=o.count_positions|default_if_none:0 %}{{ counter }} item{% plural %}{{ counter }} items{% endblocktranslate %}</small>
+                                </dd>
+                            </div>
+                            <div class="col-md-5 col-sm-5 col-xs-8">
+                                <dt class="sr-only">{% trans "Event" %}</dt>
+                                <dd>
+                                    <br class="hidden-sm"/>
+                                    {{ o.event }}
+                                    {% if not o.event.has_subevents and o.event.settings.show_dates_on_frontpage %}
+                                        <br><small class="text-muted">{{ o.event.get_date_range_display }}</small>
+                                    {% endif %}
+                                </dd>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-4">
+                                <dt class="sr-only">{% trans "Actions" %}</dt>
+                                <dd class="text-right">
+                                    <br class="hidden-sm"/>
+                                    <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
+                                   target="_blank">
+                                    <span class="fa fa-list-ul" aria-hidden="true"></span>
                                     {% trans "Details" %}
-                                </a>
-                            </td>
-                        </tr>
+                                </a></dd>
+                            </div>
+                        </dl>
+                    </li>
                     {% endfor %}
-                    </tbody>
-                </table>
+                </ol>
                 {% include "pretixcontrol/pagination.html" %}
+            {% else %}
+                <p class="text-center">{% trans "You don’t have any orders in your account yet." %}</p>
+            {% endif %}
             </div>
             <div role="tabpanel" class="tab-pane" id="memberships">
                 <table class="panel-body table table-hover">

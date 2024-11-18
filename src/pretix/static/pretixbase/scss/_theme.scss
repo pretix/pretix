@@ -254,11 +254,13 @@ svg.svg-icon {
 @include table-row-variant('danger', var(--pretix-brand-danger-lighten-30), var(--pretix-brand-danger-lighten-25));
 
 .text-blob-success, .text-blob-info, .text-blob-warning, .text-blob-danger {
-  padding: .25em .8em;
+  padding: .125em .5em;
   border-radius: 1em;
+  font-weight: bold;
+  white-space: nowrap;
 
   &:has(.status-dot) {
-    padding-left: .45em;
+    padding-left: .3em;
   }
 }
 .text-blob-success {
