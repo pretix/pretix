@@ -76,17 +76,7 @@ $(function () {
                             $("<li>").append(
                                 $("<a>").attr("href", res.url).append(
                                     $linkContent
-                                ).on("mousedown", function () {
-                                    event.preventDefault();
-                                    event.stopPropagation();
-                                }).on("click", function (event) {
-                                    if ($(this).length) {
-                                        location.href = $(this).attr("href");
-                                    }
-                                    $(this).parent().addClass("active");
-                                    event.preventDefault();
-                                    event.stopPropagation();
-                                })
+                                )
                             )
                         );
                     });
