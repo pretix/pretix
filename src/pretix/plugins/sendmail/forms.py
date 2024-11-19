@@ -381,8 +381,8 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
             ]
         )
 
-        self._set_field_placeholders('subject', ['event', 'order'])
-        self._set_field_placeholders('template', ['event', 'order'])
+        self._set_field_placeholders('subject', ['event', 'order', 'event_or_subevent'])
+        self._set_field_placeholders('template', ['event', 'order', 'event_or_subevent'])
 
         choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
         choices.insert(0, ('n__valid_if_pending', _('payment pending but already confirmed')))
