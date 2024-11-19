@@ -527,6 +527,56 @@ h2 .label {
     font-size: 30px;
 }
 
+
+.text-blob-success, .text-blob-info, .text-blob-warning, .text-blob-danger {
+  padding: 0 .65em;
+  border-radius: 1em;
+  font-weight: bold;
+  white-space: nowrap;
+
+  &:has(.status-dot) {
+    padding-left: .4em;
+  }
+}
+.text-blob-success {
+  color: var(--pretix-brand-success-darken-10);
+  background: var(--pretix-brand-success-lighten-48);
+}
+.text-blob-info {
+  color: var(--pretix-brand-info-darken-20);
+  background: var(--pretix-brand-info-lighten-33);
+}
+.text-blob-warning {
+  color: var(--pretix-brand-warning-darken-25);
+  background: var(--pretix-brand-warning-lighten-41);
+  .status-dot {
+    color: var(--pretix-brand-warning);
+  }
+}
+.text-blob-danger {
+  color: var(--pretix-brand-danger-darken-5);
+  background: var(--pretix-brand-danger-lighten-43);
+}
+
+
+.full-width-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 15px 0;
+  }
+  li+li {
+    border-top: 1px solid $table-border-color;
+  }
+}
+
+.alternating-rows .row:nth-child(even) {
+  background-color: $table-bg-accent;
+}
+
+
 @import "_iframe.scss";
 @import "_a11y.scss";
 @import "_print.scss";
