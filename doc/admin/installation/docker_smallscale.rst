@@ -231,11 +231,10 @@ The following snippet is an example on how to configure a nginx proxy for pretix
         }
     }
     server {
-        listen 443 default_server;
-        listen [::]:443 ipv6only=on default_server;
+        listen 443 ssl default_server;
+        listen [::]:443 ipv6only=on ssl default_server;
         server_name pretix.mydomain.com;
 
-        ssl on;
         ssl_certificate /path/to/cert.chain.pem;
         ssl_certificate_key /path/to/key.pem;
 
