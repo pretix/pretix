@@ -77,7 +77,7 @@ def get_event_domain(event, fallback=False, return_mode=False):
         domain = None, None
     else:
         setattr(event, '_cached_domain' + suffix, domain)
-    return domain if return_mode or not isinstance(domain, tuple) else domain[0]
+    return domain if return_mode else domain[0]
 
 
 def get_organizer_domain(organizer):
