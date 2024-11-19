@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-19 15:16+0000\n"
+"POT-Creation-Date: 2024-11-19 15:34+0000\n"
 "PO-Revision-Date: 2024-11-19 15:15+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -12874,9 +12874,10 @@ msgid "Your default locale must be specified."
 msgstr "Su localización por defecto debe ser especificada."
 
 #: pretix/control/forms/event.py:233
+#, python-brace-format
 msgid ""
 "You have not specified a tax rate. If you do not want us to compute sales "
-"taxes, please check \"Do not use taxes\" above."
+"taxes, please check \"{field}\" above."
 msgstr ""
 
 #: pretix/control/forms/event.py:308

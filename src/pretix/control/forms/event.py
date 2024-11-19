@@ -231,7 +231,7 @@ class EventWizardBasicsForm(I18nModelForm):
         if not data.get("no_taxes") and not data.get("tax_rate"):
             raise ValidationError({
                 'tax_rate': _('You have not specified a tax rate. If you do not want us to compute sales taxes, please '
-                              'check "Do not use taxes" above.')
+                              'check "{field}" above.').format(field=self.fields["no_taxes"].label)
             })
 
         # change timezone
