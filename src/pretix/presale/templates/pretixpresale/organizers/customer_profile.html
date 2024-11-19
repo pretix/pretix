@@ -9,48 +9,63 @@
     <h2>
         {% trans "Your account" %}
     </h2>
-    <div class="row">
-        <dl>
-            <div class="col-sm-6">
-                <dt>{{ customer.name }}</dt>
-                <dd>{{ customer.email }}</dd>
-                {% if customer.phone %}
-                    <dd><spani class="fa fa-phone" aria-hidden="true"></span> {{ customer.phone }}</dd>
-                {% endif %}
-                <dd>
-                    <ul class="list-inline">
-                        <li><a href="{% eventurl request.organizer "presale:organizer.customer.change" %}">
-                                                        <span class="fa fa-edit" aria-hidden=true></span> {% trans "Change account information" %}</a></li>
-                        <li><a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
-                                                        <span class="fa fa-key" aria-hidden=true></span> {% trans "Change password" %}</a></li>
-                    </ul>
-                </dd>
-                <dd>
-                </dd>
-            </div>
-            <div class="col-sm-6 text-right">
-                <dt>{% trans "Customer ID" %}</dt>
-                <dd>#{{ customer.identifier }}</dd>
-            </div>
-        </dl>
-    </div>
+        <div class="row">
+            <dl>
+                <div class="col-sm-6">
+                    <dt>{{ customer.name }}</dt>
+                    <dd>{{ customer.email }}</dd>
+                    {% if customer.phone %}
+                        <dd><spani class="fa fa-phone" aria-hidden="true"></span> {{ customer.phone }}</dd>
+                    {% endif %}
+                    <dd>
+                        <ul class="list-inline">
+                            <li><a href="{% eventurl request.organizer "presale:organizer.customer.change" %}">
+                                                            <span class="fa fa-edit" aria-hidden=true></span> {% trans "Change account information" %}</a></li>
+                            <li><a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
+                                                            <span class="fa fa-key" aria-hidden=true></span> {% trans "Change password" %}</a></li>
+                        </ul>
+                    </dd>
+                    <dd>
+                    </dd>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <dt>{% trans "Customer ID" %}</dt>
+                    <dd>#{{ customer.identifier }}</dd>
+                </div>            </dl>
+            <nav class="row" aria-label="{% trans "customer account information" %}">
+                <ul class="list-inline blank-after col-xs-12">
+                    <li>
+                        <a href="{% eventurl request.organizer "presale:organizer.customer.index" %}">
+                            <span class="fa fa-shopping-cart" aria-hidden="true"></span>{% trans "Orders" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% eventurl request.organizer "presale:organizer.customer.memberships" %}">
+                            <span class="fa fa-unlock-alt" aria-hidden="true"></span>{% trans "Memberships" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% eventurl request.organizer "presale:organizer.customer.addresses" %}">
+                            <span class="fa fa-address-card-o" aria-hidden="true"></span>{% trans "Addresses" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% eventurl request.organizer "presale:organizer.customer.profiles" %}">
+                            <span class="fa fa-users" aria-hidden="true"></span>{% trans "Attendee profiles" %}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     <div>
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#orders" aria-controls="orders" role="tab" data-toggle="tab">{% trans "Orders" %} ({{ page_obj.paginator.count }})</a>
-            </li>
-            <li role="presentation">
-                <a href="#memberships" aria-controls="memberships" role="tab" data-toggle="tab">{% trans "Memberships" %} ({{ memberships|length }})</a>
-            </li>
-            <li role="presentation">
-                <a href="#addresses" aria-controls="addresses" role="tab" data-toggle="tab">{% trans "Addresses" %} ({{ invoice_addresses|length }})</a>
-            </li>
-            <li role="presentation">
-                <a href="#profiles" aria-controls="profiles" role="tab" data-toggle="tab">{% trans "Attendee profiles" %} ({{ attendee_profiles|length }})</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="orders">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <span class="fa fa-shopping-cart" aria-hidden="true"></span> <b>{% trans "Orders" %}</b> ({{ page_obj.paginator.count }})
+            </h3>
+        </div>
+        <div class="panel-body">
             {% if orders %}
                 <ol class="event-list list-unstyled">
                     {% for o in orders %}
@@ -112,7 +127,10 @@
             {% else %}
                 <p class="text-center">{% trans "You don’t have any orders in your account yet." %}</p>
             {% endif %}
-            </div>
+        </div>
+    </div>
+    {% include "pretixcontrol/pagination.html" %}
+
             <div role="tabpanel" class="tab-pane" id="memberships">
                 <table class="panel-body table table-hover">
                     <caption class="sr-only">{% trans "Memberships" %}</caption>
