@@ -9,6 +9,7 @@ from decimal import Decimal
 import django.core.validators
 import django.db.models.deletion
 import i18nfield.fields
+from argon2.exceptions import HashingError
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.db import migrations, models
@@ -25,7 +26,14 @@ def initial_user(apps, schema_editor):
     user = User(email='admin@localhost')
     user.is_staff = True
     user.is_superuser = True
-    user.password = make_password('admin')
+    try:
+        user.password = make_password('admin')
+    except HashingError:
+        raise Exception(
+            "Could not hash password of initial user with argon2id. If this is a system with less than 8 CPU cores, "
+            "you might need to disable argon2id by setting `passwords_argon2=off` in the `[django]` section of the "
+            "pretix.cfg configuration file."
+        )
     user.save()
 
 
