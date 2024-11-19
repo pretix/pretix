@@ -4,11 +4,11 @@
 {% if order.status == "n" %}
     {% if order.require_approval %}
         <span class="text-blob-warning">
-            <i class="status-dot fa fa-exclamation-circle" aria-hidden="true"></i> {% trans "Approval pending" %}
+            <i class="status-dot fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans "Approval pending" %}
         </span>
     {% elif order.total == 0 %}
         <span class="text-blob-warning">
-            <i class="status-dot fa fa-exclamation-circle" aria-hidden="true"></i> {% trans "Confirmation pending" context "order state" %}
+            <i class="status-dot fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans "Confirmation pending" context "order state" %}
         </span>
     {% elif event.settings.payment_pending_hidden %}
         {# intentionally left blank #}
@@ -18,7 +18,7 @@
         </span>
     {% else %}
         <span class="text-blob-warning">
-            <i class="status-dot fa fa-exclamation-circle" aria-hidden="true"></i> {% trans "Payment pending" %}
+            <i class="status-dot fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans "Payment pending" %}
         </span>
     {% endif %}
 {% elif order.status == "p" %}
@@ -28,19 +28,19 @@
         </span>
     {% elif order.total == 0 %}
         <span class="text-blob-success">
-            <i class="status-dot fa fa-check-circle" aria-hidden="true"></i> {% trans "Confirmed" context "order state" %}
+            <i class="status-dot fa fa-check" aria-hidden="true"></i> {% trans "Confirmed" context "order state" %}
         </span>
     {% else %}
         <span class="text-blob-success">
-            <i class="status-dot fa fa-check-circle" aria-hidden="true"></i> {% trans "Paid" %}
+            <i class="status-dot fa fa-check" aria-hidden="true"></i> {% trans "Paid" %}
         </span>
     {% endif %}
 {% elif order.status == "e" %}
     <span class="text-blob-danger">
-        <i class="status-dot fa fa-minus-circle" aria-hidden="true"></i> {% trans "Expired" %}
+        <i class="status-dot fa fa-minus" aria-hidden="true"></i> {% trans "Expired" %}
     </span>
 {% elif order.status == "c" %}
     <span class="text-blob-danger">
-        <i class="status-dot fa fa-times-circle" aria-hidden="true"></i> {% trans "Canceled" %}
+        <i class="status-dot fa fa-times" aria-hidden="true"></i> {% trans "Canceled" %}
     </span>
 {% endif %}
