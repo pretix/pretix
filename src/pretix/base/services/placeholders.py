@@ -209,13 +209,20 @@ def get_best_name(position_or_address, parts=False):
 def base_placeholders(sender, **kwargs):
     from pretix.multidomain.urlreverse import build_absolute_uri
 
+    def _event_sample(event):
+        if event.has_subevents:
+            se = event.subevents.first()
+            if se:
+                return se.name
+        return event.name
+
     ph = [
         SimpleFunctionalTextPlaceholder(
             'event', ['event'], lambda event: event.name, lambda event: event.name
         ),
         SimpleFunctionalTextPlaceholder(
             'event', ['event_or_subevent'], lambda event_or_subevent: event_or_subevent.name,
-            lambda event: event.subevents.first().name if event.has_subevents else event.name,
+            _event_sample,
         ),
         SimpleFunctionalTextPlaceholder(
             'event_series_name', ['event', 'event_or_subevent'], lambda event, event_or_subevent: event.name,
