@@ -136,6 +136,11 @@ class EventWizardBasicsForm(I18nModelForm):
         choices=settings.LANGUAGES,
         label=_("Default language"),
     )
+    no_taxes = forms.BooleanField(
+        label=_("I don't want to specify taxes now"),
+        help_text=_("You can always configure tax rates later."),
+        required=False,
+    )
     tax_rate = forms.DecimalField(
         label=_("Sales tax rate"),
         help_text=_("Do you need to pay sales tax on your tickets? In this case, please enter the applicable tax rate "
@@ -222,6 +227,11 @@ class EventWizardBasicsForm(I18nModelForm):
         if data.get('timezone') not in common_timezones:
             raise ValidationError({
                 'timezone': _('Your default locale must be specified.')
+            })
+        if not data.get("no_taxes") and not data.get("tax_rate"):
+            raise ValidationError({
+                'tax_rate': _('You have not specified a tax rate. If you do not want us to compute sales taxes, please '
+                              'check "Do not use taxes" above.')
             })
 
         # change timezone
