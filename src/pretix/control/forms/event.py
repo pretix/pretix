@@ -137,7 +137,8 @@ class EventWizardBasicsForm(I18nModelForm):
         label=_("Default language"),
     )
     no_taxes = forms.BooleanField(
-        label=_("Do not use taxes"),
+        label=_("I don't want to specify taxes now"),
+        help_text=_("You can always configure tax rates later."),
         required=False,
     )
     tax_rate = forms.DecimalField(
