@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-19 15:15+0000\n"
+"POT-Creation-Date: 2024-11-18 15:30+0000\n"
 "PO-Revision-Date: 2024-10-30 19:00+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -594,8 +594,8 @@ msgstr "Kundkonto anonymiserat"
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:953
 #: pretix/base/forms/questions.py:984 pretix/base/payment.py:97
-#: pretix/control/forms/event.py:792 pretix/control/forms/event.py:798
-#: pretix/control/forms/event.py:842 pretix/control/forms/event.py:1439
+#: pretix/control/forms/event.py:782 pretix/control/forms/event.py:788
+#: pretix/control/forms/event.py:832 pretix/control/forms/event.py:1429
 #: pretix/control/forms/mailsetup.py:76 pretix/control/forms/mailsetup.py:118
 #: pretix/plugins/banktransfer/payment.py:673
 #: pretix/plugins/banktransfer/payment.py:679
@@ -641,7 +641,8 @@ msgstr "{system} Användare"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
 #, fuzzy
 msgid "Email"
-msgstr "Epost"
+msgstr ""
+"Epost"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:672
@@ -832,7 +833,7 @@ msgstr "Frågor"
 #: pretix/base/exporters/orderlist.py:1138 pretix/base/models/checkin.py:58
 #: pretix/base/models/items.py:2025 pretix/base/models/orders.py:1481
 #: pretix/base/models/orders.py:2958 pretix/base/models/vouchers.py:187
-#: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1543
+#: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1533
 #: pretix/control/forms/filter.py:424 pretix/control/forms/filter.py:1903
 #: pretix/control/forms/filter.py:2127 pretix/control/forms/filter.py:2242
 #: pretix/control/forms/filter.py:2324 pretix/control/forms/filter.py:2541
@@ -862,7 +863,7 @@ msgid "Date"
 msgstr "Datum"
 
 #: pretix/base/exporters/answers.py:79 pretix/base/exporters/answers.py:88
-#: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1544
+#: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1534
 #: pretix/control/forms/filter.py:427 pretix/control/forms/filter.py:454
 #: pretix/control/forms/filter.py:1906 pretix/control/forms/filter.py:1939
 #: pretix/control/forms/filter.py:2130 pretix/control/forms/filter.py:2150
@@ -1005,7 +1006,7 @@ msgstr "Bokningsdatum"
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
 #: pretix/base/models/customers.py:106 pretix/base/models/exports.py:54
-#: pretix/control/forms/event.py:1549 pretix/control/forms/exports.py:49
+#: pretix/control/forms/event.py:1539 pretix/control/forms/exports.py:49
 #: pretix/control/forms/exports.py:88 pretix/control/views/waitinglist.py:308
 msgid "Language"
 msgstr "Språk"
@@ -1346,7 +1347,8 @@ msgstr "Bokningsnummer"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:134
 #, fuzzy
 msgid "Email address"
-msgstr "E-postadress"
+msgstr ""
+"E-postadress"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
@@ -1515,7 +1517,7 @@ msgstr "Förmånstagare"
 msgid "Internal reference"
 msgstr "Intern referens"
 
-#: pretix/base/exporters/invoices.py:223 pretix/control/forms/event.py:1498
+#: pretix/base/exporters/invoices.py:223 pretix/control/forms/event.py:1488
 msgid "Reverse charge"
 msgstr "Omvänd skattskyldighet"
 
@@ -1670,7 +1672,7 @@ msgid "Active"
 msgstr "Aktiv"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:75
-#: pretix/control/forms/event.py:980 pretix/control/navigation.py:508
+#: pretix/control/forms/event.py:970 pretix/control/navigation.py:508
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:6
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
@@ -1708,7 +1710,7 @@ msgstr "Skapa biljetter"
 
 #: pretix/base/exporters/items.py:79 pretix/base/exporters/orderlist.py:1135
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:367
-#: pretix/control/forms/event.py:1619 pretix/control/navigation.py:237
+#: pretix/control/forms/event.py:1609 pretix/control/navigation.py:237
 #: pretix/control/templates/pretixcontrol/event/settings.html:351
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:6
@@ -1917,7 +1919,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:876
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1259
-#: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1595
+#: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1585
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
 msgstr "Förkortning för evenemanget"
@@ -2892,7 +2894,7 @@ msgid "Voucher expired"
 msgstr "Kupong utgången"
 
 #: pretix/base/exporters/waitinglist.py:111 pretix/base/pdf.py:121
-#: pretix/control/forms/event.py:1701
+#: pretix/control/forms/event.py:1691
 #: pretix/control/templates/pretixcontrol/items/index.html:38
 msgid "Product name"
 msgstr "Produkt namn"
@@ -3410,11 +3412,11 @@ msgctxt "invoice"
 msgid "Event date: {date_range}"
 msgstr "Evenemangsdatum: {date_range}"
 
-#: pretix/base/media.py:71
+#: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
 msgstr "Streckkod / QR-kod"
 
-#: pretix/base/media.py:88
+#: pretix/base/media.py:77
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
 msgid "NFC UID-based"
 msgstr "NFC UID-baserad"
@@ -4260,7 +4262,7 @@ msgid "Plugins"
 msgstr "Plugins"
 
 #: pretix/base/models/event.py:631 pretix/base/pdf.py:229
-#: pretix/control/forms/event.py:270 pretix/control/forms/filter.py:1677
+#: pretix/control/forms/event.py:260 pretix/control/forms/filter.py:1677
 #: pretix/control/templates/pretixcontrol/event/index.html:13
 #: pretix/control/views/dashboards.py:540
 #: pretix/presale/templates/pretixpresale/event/index.html:31
@@ -4477,14 +4479,14 @@ msgstr "Ytterligare mottagare (Cc)"
 msgid "Additional recipients (Bcc)"
 msgstr "Ytterligare mottagare (Bcc)"
 
-#: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1095
-#: pretix/control/forms/event.py:1169 pretix/control/forms/event.py:1179
-#: pretix/control/forms/event.py:1189 pretix/control/forms/orders.py:710
+#: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1085
+#: pretix/control/forms/event.py:1159 pretix/control/forms/event.py:1169
+#: pretix/control/forms/event.py:1179 pretix/control/forms/orders.py:710
 #: pretix/control/forms/orders.py:923 pretix/control/forms/orders.py:950
 #: pretix/control/forms/organizer.py:555 pretix/control/forms/organizer.py:565
 #: pretix/control/forms/organizer.py:575 pretix/control/forms/vouchers.py:273
 #: pretix/plugins/sendmail/forms.py:57 pretix/plugins/sendmail/forms.py:73
-#: pretix/plugins/sendmail/models.py:248
+#: pretix/plugins/sendmail/models.py:232
 msgid "Subject"
 msgstr "Ämne"
 
@@ -4492,7 +4494,7 @@ msgstr "Ämne"
 #: pretix/control/forms/orders.py:763 pretix/control/forms/orders.py:931
 #: pretix/control/forms/orders.py:958 pretix/control/forms/vouchers.py:279
 #: pretix/plugins/sendmail/forms.py:58 pretix/plugins/sendmail/forms.py:78
-#: pretix/plugins/sendmail/models.py:249
+#: pretix/plugins/sendmail/models.py:233
 msgid "Message"
 msgstr "Meddelande"
 
@@ -4760,7 +4762,7 @@ msgid "This will only work if waiting lists are enabled for this event."
 msgstr "Detta fungerar bara om väntelistan är aktiverat för detta event."
 
 #: pretix/base/models/items.py:544 pretix/base/settings.py:1349
-#: pretix/control/forms/event.py:1614
+#: pretix/control/forms/event.py:1604
 msgid "Show number of tickets left"
 msgstr "Visa antalet kvarvarande biljetter"
 
@@ -5460,7 +5462,7 @@ msgstr "Svarsalternativ"
 msgid "Question options"
 msgstr "Svarsalternativ"
 
-#: pretix/base/models/items.py:2032 pretix/control/forms/event.py:1648
+#: pretix/base/models/items.py:2032 pretix/control/forms/event.py:1638
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
 msgstr "Totalkapacitet"
@@ -6106,7 +6108,7 @@ msgid "%(name)s on %(object)s"
 msgstr "%(name)s för %(object)s"
 
 #: pretix/base/models/organizer.py:385
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:64
+#: pretix/control/templates/pretixcontrol/events/create_basics.html:61
 msgid "Team"
 msgstr "Team"
 
@@ -7034,10 +7036,10 @@ msgstr "Pris inklusive tillägg"
 
 #: pretix/base/pdf.py:173 pretix/base/pdf.py:331
 #: pretix/base/services/invoices.py:473
-#: pretix/base/services/placeholders.py:442
-#: pretix/base/services/placeholders.py:524
-#: pretix/base/services/placeholders.py:540
-#: pretix/base/services/placeholders.py:549 pretix/control/views/event.py:797
+#: pretix/base/services/placeholders.py:431
+#: pretix/base/services/placeholders.py:513
+#: pretix/base/services/placeholders.py:529
+#: pretix/base/services/placeholders.py:538 pretix/control/views/event.py:797
 msgid "John Doe"
 msgstr "John Doe"
 
@@ -7362,7 +7364,7 @@ msgid "Attendee name for salutation"
 msgstr "Deltagarnamn för hälsning"
 
 #: pretix/base/pdf.py:649 pretix/base/pdf.py:672
-#: pretix/base/services/placeholders.py:567
+#: pretix/base/services/placeholders.py:556
 #: pretix/control/forms/organizer.py:612
 msgid "Mr Doe"
 msgstr "Mr Doe"
@@ -8548,23 +8550,23 @@ msgstr ""
 "Ett fel uppstod när vi försökte skicka tillbaka pengarna till dig. Vänligen "
 "kontakta evenemangsorganisatören för mer information."
 
-#: pretix/base/services/placeholders.py:446
+#: pretix/base/services/placeholders.py:435
 msgid "Sample Corporation"
 msgstr "Exempel Företaget"
 
-#: pretix/base/services/placeholders.py:486
+#: pretix/base/services/placeholders.py:475
 msgid "Sample Admission Ticket"
 msgstr "Exempel på Entrébiljett"
 
-#: pretix/base/services/placeholders.py:528
+#: pretix/base/services/placeholders.py:517
 msgid "An individual text with a reason can be inserted here."
 msgstr "En text med en anledning kan läggas in här."
 
-#: pretix/base/services/placeholders.py:532
+#: pretix/base/services/placeholders.py:521
 msgid "The amount has been charged to your card."
 msgstr "Beloppet har debiterats ditt kort."
 
-#: pretix/base/services/placeholders.py:536
+#: pretix/base/services/placeholders.py:525
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "Vänligen för över pengar till detta bankkonto: 9999-9999-9999-9999"
 
@@ -9609,7 +9611,7 @@ msgstr ""
 msgid "Hide all products that are sold out"
 msgstr "Dölj alla produkter som är slutsålda"
 
-#: pretix/base/settings.py:1350 pretix/control/forms/event.py:1615
+#: pretix/base/settings.py:1350 pretix/control/forms/event.py:1605
 msgid "Publicly show how many tickets of a certain type are still available."
 msgstr ""
 "Visa offentligt hur många biljetter av en viss typ som fortfarande är "
@@ -9627,7 +9629,7 @@ msgstr "Visa variationer av en produkt utvidgad som standard"
 msgid "Enable waiting list"
 msgstr "Aktivera väntelista"
 
-#: pretix/base/settings.py:1378 pretix/control/forms/event.py:1620
+#: pretix/base/settings.py:1378 pretix/control/forms/event.py:1610
 msgid ""
 "Once a ticket is sold out, people can add themselves to a waiting list. As "
 "soon as a ticket becomes available again, it will be reserved for the first "
@@ -10229,19 +10231,19 @@ msgstr ""
 "bokning. Lämna det tomt om du vill att pretix automatiskt ska generera "
 "avbokningsvillkoren baserat på dina inställningar."
 
-#: pretix/base/settings.py:2028 pretix/control/forms/event.py:1643
+#: pretix/base/settings.py:2028 pretix/control/forms/event.py:1633
 msgid "Contact address"
 msgstr "Kontaktadress"
 
-#: pretix/base/settings.py:2029 pretix/control/forms/event.py:1645
+#: pretix/base/settings.py:2029 pretix/control/forms/event.py:1635
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "Vi kommer att visa detta offentligt så att deltagare kan kontakta dig."
 
-#: pretix/base/settings.py:2037 pretix/control/forms/event.py:1637
+#: pretix/base/settings.py:2037 pretix/control/forms/event.py:1627
 msgid "Imprint URL"
 msgstr "Länk till sidan med upphovsrättsinformation"
 
-#: pretix/base/settings.py:2038 pretix/control/forms/event.py:1638
+#: pretix/base/settings.py:2038 pretix/control/forms/event.py:1628
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
@@ -10275,7 +10277,7 @@ msgstr ""
 "undvika problem med leverans av e-post."
 
 #: pretix/base/settings.py:2084 pretix/plugins/sendmail/forms.py:201
-#: pretix/plugins/sendmail/models.py:270
+#: pretix/plugins/sendmail/models.py:254
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:66
 msgid "Attach calendar files"
 msgstr "Bifoga kalenderfiler"
@@ -10665,12 +10667,12 @@ msgstr ""
 "Med vänliga hälsningar,  \n"
 "Ditt {event} team"
 
-#: pretix/base/settings.py:2381 pretix/control/forms/event.py:1130
-#: pretix/control/forms/event.py:1230 pretix/plugins/sendmail/models.py:275
+#: pretix/base/settings.py:2381 pretix/control/forms/event.py:1120
+#: pretix/control/forms/event.py:1220 pretix/plugins/sendmail/models.py:259
 msgid "Number of days"
 msgstr "Antal dagar"
 
-#: pretix/base/settings.py:2383 pretix/control/forms/event.py:1133
+#: pretix/base/settings.py:2383 pretix/control/forms/event.py:1123
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
@@ -11718,7 +11720,7 @@ msgctxt "person_name_sample"
 msgid "MA"
 msgstr "MA"
 
-#: pretix/base/settings.py:3793 pretix/control/forms/event.py:225
+#: pretix/base/settings.py:3793 pretix/control/forms/event.py:220
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
@@ -12667,23 +12669,15 @@ msgstr ""
 "Du har redan använt denna benämning för ett annat evenemang. Vänligen välj "
 "en ny."
 
-#: pretix/control/forms/event.py:133 pretix/control/forms/event.py:514
+#: pretix/control/forms/event.py:133 pretix/control/forms/event.py:504
 msgid "Event timezone"
 msgstr "Tidszon för evenemanget"
 
 #: pretix/control/forms/event.py:140
-msgid "I don't want to specify taxes now"
-msgstr ""
-
-#: pretix/control/forms/event.py:141
-msgid "You can always configure tax rates later."
-msgstr ""
-
-#: pretix/control/forms/event.py:145
 msgid "Sales tax rate"
 msgstr "Momsats"
 
-#: pretix/control/forms/event.py:146
+#: pretix/control/forms/event.py:141
 msgid ""
 "Do you need to pay sales tax on your tickets? In this case, please enter the "
 "applicable tax rate here in percent. If you have a more complicated tax "
@@ -12694,11 +12688,11 @@ msgstr ""
 "momssituation kan du lägga till fler momssatser och detaljerad konfiguration "
 "senare."
 
-#: pretix/control/forms/event.py:155
+#: pretix/control/forms/event.py:150
 msgid "Grant access to team"
 msgstr "Bevilja åtkomst till teamet"
 
-#: pretix/control/forms/event.py:156
+#: pretix/control/forms/event.py:151
 msgid ""
 "You are allowed to create events under this organizer, however you do not "
 "have permission to edit all events under this organizer. Please select one "
@@ -12709,11 +12703,11 @@ msgstr ""
 "Vänligen välj ett av dina befintliga team som kommer att ges åtkomst till "
 "detta evenemang."
 
-#: pretix/control/forms/event.py:161
+#: pretix/control/forms/event.py:156
 msgid "Create a new team for this event with me as the only member"
 msgstr "Skapa ett nytt team för detta evenemang med mig som enda medlem"
 
-#: pretix/control/forms/event.py:204 pretix/control/forms/event.py:380
+#: pretix/control/forms/event.py:199 pretix/control/forms/event.py:370
 msgid ""
 "Sample Conference Center\n"
 "Heidelberg, Germany"
@@ -12721,49 +12715,43 @@ msgstr ""
 "Exempel på konferenscenter\n"
 "Heidelberg, Tyskland"
 
-#: pretix/control/forms/event.py:229
+#: pretix/control/forms/event.py:224
 msgid "Your default locale must be specified."
 msgstr "Standardlokalisering måste anges."
 
-#: pretix/control/forms/event.py:233
-msgid ""
-"You have not specified a tax rate. If you do not want us to compute sales "
-"taxes, please check \"Do not use taxes\" above."
-msgstr ""
-
-#: pretix/control/forms/event.py:308
+#: pretix/control/forms/event.py:298
 msgid "Copy configuration from"
 msgstr "Kopiera konfiguration från"
 
-#: pretix/control/forms/event.py:314 pretix/control/forms/event.py:317
+#: pretix/control/forms/event.py:304 pretix/control/forms/event.py:307
 #: pretix/control/forms/item.py:407
 msgid "Do not copy"
 msgstr "Kopiera inte"
 
-#: pretix/control/forms/event.py:333 pretix/control/forms/item.py:1296
+#: pretix/control/forms/event.py:323 pretix/control/forms/item.py:1296
 #: pretix/control/forms/subevents.py:407
 #, python-brace-format
 msgid "Default ({value})"
 msgstr "Standard ({value})"
 
-#: pretix/control/forms/event.py:385 pretix/control/forms/organizer.py:151
+#: pretix/control/forms/event.py:375 pretix/control/forms/organizer.py:151
 msgid "Custom domain"
 msgstr "Anpassat domännamn"
 
-#: pretix/control/forms/event.py:387 pretix/control/forms/organizer.py:153
+#: pretix/control/forms/event.py:377 pretix/control/forms/organizer.py:153
 msgid "You need to configure the custom domain in the webserver beforehand."
 msgstr ""
 "Du behöver konfigurera det anpassade domännamnet i webbservern i förväg."
 
-#: pretix/control/forms/event.py:399 pretix/control/forms/organizer.py:161
+#: pretix/control/forms/event.py:389 pretix/control/forms/organizer.py:161
 msgid "You cannot choose the base domain of this installation."
 msgstr "Du kan inte välja basdomänen för denna installation."
 
-#: pretix/control/forms/event.py:403 pretix/control/forms/organizer.py:166
+#: pretix/control/forms/event.py:393 pretix/control/forms/organizer.py:166
 msgid "This domain is already in use for a different event or organizer."
 msgstr "Denna domän används redan för ett annat evenemang eller arrangör."
 
-#: pretix/control/forms/event.py:499
+#: pretix/control/forms/event.py:489
 #, python-brace-format
 msgid ""
 "A validation error has occurred on a setting that is not part of this form: "
@@ -12772,11 +12760,11 @@ msgstr ""
 "Det har uppstått ett valideringsfel på en inställning som inte är en del av "
 "detta formulär: {error}"
 
-#: pretix/control/forms/event.py:517 pretix/control/forms/organizer.py:416
+#: pretix/control/forms/event.py:507 pretix/control/forms/organizer.py:416
 msgid "Name format"
 msgstr "Namnformat"
 
-#: pretix/control/forms/event.py:518 pretix/control/forms/organizer.py:417
+#: pretix/control/forms/event.py:508 pretix/control/forms/organizer.py:417
 msgid ""
 "This defines how pretix will ask for human names. Changing this after you "
 "already received orders might lead to unexpected behavior when sorting or "
@@ -12786,11 +12774,11 @@ msgstr ""
 "efter att du redan har tagit emot bokningar kan leda till oväntat beteende "
 "vid sortering eller ändring av namn."
 
-#: pretix/control/forms/event.py:523 pretix/control/forms/organizer.py:422
+#: pretix/control/forms/event.py:513 pretix/control/forms/organizer.py:422
 msgid "Allowed titles"
 msgstr "Tillåtna titlar"
 
-#: pretix/control/forms/event.py:524 pretix/control/forms/organizer.py:423
+#: pretix/control/forms/event.py:514 pretix/control/forms/organizer.py:423
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
@@ -12798,29 +12786,29 @@ msgstr ""
 "Om den namngivningsschema du definierade ovan tillåter användare att ange en "
 "titel kan du använda detta för att begränsa urvalet av valbara titlar."
 
-#: pretix/control/forms/event.py:643 pretix/control/forms/organizer.py:493
+#: pretix/control/forms/event.py:633 pretix/control/forms/organizer.py:493
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
 msgstr "Fråga efter {fields}, visa som {example}"
 
-#: pretix/control/forms/event.py:649 pretix/control/forms/organizer.py:499
+#: pretix/control/forms/event.py:639 pretix/control/forms/organizer.py:499
 msgid "Free text input"
 msgstr "Fritextinmatning"
 
-#: pretix/control/forms/event.py:685
+#: pretix/control/forms/event.py:675
 msgid "Do not ask"
 msgstr "Fråga inte"
 
-#: pretix/control/forms/event.py:686
+#: pretix/control/forms/event.py:676
 msgid "Ask, but do not require input"
 msgstr "Fråga, men kräv inte inmatning"
 
-#: pretix/control/forms/event.py:687
+#: pretix/control/forms/event.py:677
 #: pretix/control/templates/pretixcontrol/event/settings.html:75
 msgid "Ask and require input"
 msgstr "Fråga och kräv inmatning"
 
-#: pretix/control/forms/event.py:764
+#: pretix/control/forms/event.py:754
 msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
@@ -12828,11 +12816,11 @@ msgstr ""
 "Du har konfigurerat presentkort så att de är giltiga {} år plus det år då "
 "presentkortet utfärdades."
 
-#: pretix/control/forms/event.py:783
+#: pretix/control/forms/event.py:773
 msgid "Tax rule for payment fees"
 msgstr "Momsregel för betalningsavgifter"
 
-#: pretix/control/forms/event.py:785
+#: pretix/control/forms/event.py:775
 msgid ""
 "The tax rule that applies for additional fees you configured for single "
 "payment methods. This will set the tax rate and reverse charge rules, other "
@@ -12842,11 +12830,11 @@ msgstr ""
 "enskilda betalningsmetoder. Detta inställer momssatsen och omvänd "
 "skattskyldighet, andra inställningar för momsen ignoreras."
 
-#: pretix/control/forms/event.py:891
+#: pretix/control/forms/event.py:881
 msgid "Generate invoices for Sales channels"
 msgstr "Generera fakturor för försäljningskanaler"
 
-#: pretix/control/forms/event.py:894
+#: pretix/control/forms/event.py:884
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
@@ -12854,19 +12842,19 @@ msgstr ""
 "Om du har aktiverat fakturagenerering i den föregående inställningen kan du "
 "här begränsa det till specifika försäljningskanaler."
 
-#: pretix/control/forms/event.py:898
+#: pretix/control/forms/event.py:888
 msgid "Invoice style"
 msgstr "Fakturastil"
 
-#: pretix/control/forms/event.py:904
+#: pretix/control/forms/event.py:894
 msgid "Invoice language"
 msgstr "Fakturaspråk"
 
-#: pretix/control/forms/event.py:905 pretix/control/forms/event.py:920
+#: pretix/control/forms/event.py:895 pretix/control/forms/event.py:910
 msgid "The user's language"
 msgstr "Användarens språk"
 
-#: pretix/control/forms/event.py:928
+#: pretix/control/forms/event.py:918
 #, python-brace-format
 msgid ""
 "An invoice will be issued before payment if the customer selects one of the "
@@ -12875,7 +12863,7 @@ msgstr ""
 "En faktura kommer att utfärdas före betalning om kunden väljer någon av "
 "följande betalningsmetoder: {list}"
 
-#: pretix/control/forms/event.py:932
+#: pretix/control/forms/event.py:922
 msgid ""
 "None of the currently configured payment methods will cause an invoice to be "
 "issued before payment."
@@ -12883,19 +12871,19 @@ msgstr ""
 "Ingen av de för närvarande konfigurerade betalningsmetoderna kommer att "
 "resultera i att en faktura utfärdas före betalning."
 
-#: pretix/control/forms/event.py:941
+#: pretix/control/forms/event.py:931
 msgid "Recommended"
 msgstr "Rekommenderat"
 
-#: pretix/control/forms/event.py:953
+#: pretix/control/forms/event.py:943
 msgid "The online shop must be selected to receive these emails."
 msgstr "Onlinebutiken måste väljas för att ta emot dessa e-postmeddelanden."
 
-#: pretix/control/forms/event.py:969
+#: pretix/control/forms/event.py:959
 msgid "Sales channels for checkout emails"
 msgstr "Försäljningskanaler för utchecknings-e-post"
 
-#: pretix/control/forms/event.py:970
+#: pretix/control/forms/event.py:960
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
@@ -12904,7 +12892,7 @@ msgstr ""
 "endast till bokningar från dessa försäljningskanaler. Onlinebutiken måste "
 "vara aktiverad."
 
-#: pretix/control/forms/event.py:981
+#: pretix/control/forms/event.py:971
 msgid ""
 "This email will only be send to orders from these sales channels. The online "
 "shop must be enabled."
@@ -12912,53 +12900,53 @@ msgstr ""
 "Det här e-postmeddelandet kommer endast att skickas till bokningar från "
 "dessa försäljningskanaler. Onlinebutiken måste vara aktiverad."
 
-#: pretix/control/forms/event.py:989 pretix/control/forms/organizer.py:534
+#: pretix/control/forms/event.py:979 pretix/control/forms/organizer.py:534
 msgid "Bcc address"
 msgstr "Bcc-adress"
 
-#: pretix/control/forms/event.py:990 pretix/control/forms/organizer.py:535
+#: pretix/control/forms/event.py:980 pretix/control/forms/organizer.py:535
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr ""
 "Alla e-postmeddelanden kommer att skickas till denna adress som en Bcc-kopia"
 
-#: pretix/control/forms/event.py:996 pretix/control/forms/organizer.py:541
+#: pretix/control/forms/event.py:986 pretix/control/forms/organizer.py:541
 msgid "Signature"
 msgstr "Signatur"
 
-#: pretix/control/forms/event.py:999
+#: pretix/control/forms/event.py:989
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr ""
 "Detta kommer att bifogas till varje e-postmeddelande. Tillgängliga "
 "platshållare: {event}"
 
-#: pretix/control/forms/event.py:1004 pretix/control/forms/organizer.py:549
+#: pretix/control/forms/event.py:994 pretix/control/forms/organizer.py:549
 msgid "e.g. your contact details"
 msgstr "t.ex. dina kontaktuppgifter"
 
-#: pretix/control/forms/event.py:1009
+#: pretix/control/forms/event.py:999
 msgid "HTML mail renderer"
 msgstr "HTML-e-postrenderare"
 
-#: pretix/control/forms/event.py:1014 pretix/control/forms/event.py:1041
-#: pretix/control/forms/event.py:1068 pretix/control/forms/event.py:1204
+#: pretix/control/forms/event.py:1004 pretix/control/forms/event.py:1031
+#: pretix/control/forms/event.py:1058 pretix/control/forms/event.py:1194
 msgid "Subject sent to order contact address"
 msgstr "Ämnesrad som skickas till beställarens kontaktadress"
 
-#: pretix/control/forms/event.py:1019 pretix/control/forms/event.py:1046
-#: pretix/control/forms/event.py:1073 pretix/control/forms/event.py:1209
+#: pretix/control/forms/event.py:1009 pretix/control/forms/event.py:1036
+#: pretix/control/forms/event.py:1063 pretix/control/forms/event.py:1199
 msgid "Text sent to order contact address"
 msgstr "Text skickad till beställarens kontaktadress"
 
-#: pretix/control/forms/event.py:1024 pretix/control/forms/event.py:1051
-#: pretix/control/forms/event.py:1078 pretix/control/forms/event.py:1214
-#: pretix/control/forms/event.py:1259 pretix/control/forms/event.py:1289
+#: pretix/control/forms/event.py:1014 pretix/control/forms/event.py:1041
+#: pretix/control/forms/event.py:1068 pretix/control/forms/event.py:1204
+#: pretix/control/forms/event.py:1249 pretix/control/forms/event.py:1279
 msgid "Send an email to attendees"
 msgstr "Skicka ett e-postmeddelande till deltagarna"
 
-#: pretix/control/forms/event.py:1025 pretix/control/forms/event.py:1052
-#: pretix/control/forms/event.py:1079 pretix/control/forms/event.py:1215
-#: pretix/control/forms/event.py:1260 pretix/control/forms/event.py:1290
+#: pretix/control/forms/event.py:1015 pretix/control/forms/event.py:1042
+#: pretix/control/forms/event.py:1069 pretix/control/forms/event.py:1205
+#: pretix/control/forms/event.py:1250 pretix/control/forms/event.py:1280
 msgid ""
 "If the order contains attendees with email addresses different from the "
 "person who orders the tickets, the following email will be sent out to the "
@@ -12968,76 +12956,76 @@ msgstr ""
 "personen som beställer biljetterna, kommer följande e-post att skickas till "
 "deltagarna."
 
-#: pretix/control/forms/event.py:1030 pretix/control/forms/event.py:1057
-#: pretix/control/forms/event.py:1084 pretix/control/forms/event.py:1220
-#: pretix/control/forms/event.py:1265 pretix/control/forms/event.py:1295
+#: pretix/control/forms/event.py:1020 pretix/control/forms/event.py:1047
+#: pretix/control/forms/event.py:1074 pretix/control/forms/event.py:1210
+#: pretix/control/forms/event.py:1255 pretix/control/forms/event.py:1285
 msgid "Subject sent to attendees"
 msgstr "Ämnesrad som skickas till deltagare"
 
-#: pretix/control/forms/event.py:1035 pretix/control/forms/event.py:1062
-#: pretix/control/forms/event.py:1089 pretix/control/forms/event.py:1225
-#: pretix/control/forms/event.py:1270 pretix/control/forms/event.py:1300
+#: pretix/control/forms/event.py:1025 pretix/control/forms/event.py:1052
+#: pretix/control/forms/event.py:1079 pretix/control/forms/event.py:1215
+#: pretix/control/forms/event.py:1260 pretix/control/forms/event.py:1290
 msgid "Text sent to attendees"
 msgstr "Text skickad till deltagare"
 
-#: pretix/control/forms/event.py:1100 pretix/control/forms/event.py:1174
-#: pretix/control/forms/event.py:1184 pretix/control/forms/event.py:1194
-#: pretix/control/forms/event.py:1199 pretix/control/forms/organizer.py:560
+#: pretix/control/forms/event.py:1090 pretix/control/forms/event.py:1164
+#: pretix/control/forms/event.py:1174 pretix/control/forms/event.py:1184
+#: pretix/control/forms/event.py:1189 pretix/control/forms/organizer.py:560
 #: pretix/control/forms/organizer.py:570 pretix/control/forms/organizer.py:580
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:111
 msgid "Text"
 msgstr "Text"
 
-#: pretix/control/forms/event.py:1105
+#: pretix/control/forms/event.py:1095
 msgid "Subject (sent by admin)"
 msgstr "Ämne (skickat av administratören)"
 
-#: pretix/control/forms/event.py:1110
+#: pretix/control/forms/event.py:1100
 msgid "Subject (sent by admin to attendee)"
 msgstr "Ämne (skickat av administratören till deltagaren)"
 
-#: pretix/control/forms/event.py:1115
+#: pretix/control/forms/event.py:1105
 msgid "Text (sent by admin)"
 msgstr "Text (skickat av administratören)"
 
-#: pretix/control/forms/event.py:1120
+#: pretix/control/forms/event.py:1110
 msgid "Subject (requested by user)"
 msgstr "Ämne (efterfrågat av användaren)"
 
-#: pretix/control/forms/event.py:1125
+#: pretix/control/forms/event.py:1115
 msgid "Text (requested by user)"
 msgstr "Text (efterfrågat av användaren)"
 
-#: pretix/control/forms/event.py:1137
+#: pretix/control/forms/event.py:1127
 msgid "Text (if order will expire automatically)"
 msgstr "Text (om bokningen kommer att löpa ut automatiskt)"
 
-#: pretix/control/forms/event.py:1142
+#: pretix/control/forms/event.py:1132
 msgid "Subject (if order will expire automatically)"
 msgstr "Ämne (om bokningen kommer att löpa ut automatiskt)"
 
-#: pretix/control/forms/event.py:1147
+#: pretix/control/forms/event.py:1137
 msgid "Text (if order will not expire automatically)"
 msgstr "Text (om bokningen inte löper ut automatiskt)"
 
-#: pretix/control/forms/event.py:1152
+#: pretix/control/forms/event.py:1142
 msgid "Subject (if order will not expire automatically)"
 msgstr "Ämne (om bokningen inte löper ut automatiskt)"
 
-#: pretix/control/forms/event.py:1157
+#: pretix/control/forms/event.py:1147
 #, fuzzy
 #| msgid "Incomplete payment received: {code}"
 msgid "Subject (if an incomplete payment was received)"
 msgstr "Ofullständig betalning mottagen: {code}"
 
-#: pretix/control/forms/event.py:1162
+#: pretix/control/forms/event.py:1152
 #, fuzzy
 #| msgid "Incomplete payment received: {code}"
 msgid "Text (if an incomplete payment was received)"
 msgstr "Ofullständig betalning mottagen: {code}"
 
-#: pretix/control/forms/event.py:1165
+#: pretix/control/forms/event.py:1155
 msgid ""
 "This email only applies to payment methods that can receive incomplete "
 "payments, such as bank transfer."
@@ -13045,7 +13033,7 @@ msgstr ""
 "Det här e-postmeddelandet gäller endast för betalningsmetoder som kan ta "
 "emot ofullständiga betalningar, såsom banköverföring."
 
-#: pretix/control/forms/event.py:1233
+#: pretix/control/forms/event.py:1223
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
@@ -13053,23 +13041,23 @@ msgstr ""
 "Det här e-postmeddelandet kommer att skickas så många dagar före evenemanget "
 "startar. Om fältet är tomt kommer mailet aldrig att skickas."
 
-#: pretix/control/forms/event.py:1237
+#: pretix/control/forms/event.py:1227
 msgid "Subject for received order"
 msgstr "Ämne för mottagen bokning"
 
-#: pretix/control/forms/event.py:1242
+#: pretix/control/forms/event.py:1232
 msgid "Text for received order"
 msgstr "Text för mottagen bokning"
 
-#: pretix/control/forms/event.py:1247
+#: pretix/control/forms/event.py:1237
 msgid "Subject for approved order"
 msgstr "Ämne för godkänd bokning"
 
-#: pretix/control/forms/event.py:1252
+#: pretix/control/forms/event.py:1242
 msgid "Text for approved order"
 msgstr "Text för godkänd bokning"
 
-#: pretix/control/forms/event.py:1255 pretix/control/forms/event.py:1273
+#: pretix/control/forms/event.py:1245 pretix/control/forms/event.py:1263
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
@@ -13078,15 +13066,15 @@ msgstr ""
 "Kostnadsfria bokningar kommer istället att få den kostnadsfria "
 "bokningsmallen nedan."
 
-#: pretix/control/forms/event.py:1277
+#: pretix/control/forms/event.py:1267
 msgid "Subject for approved free order"
 msgstr "Ämne för godkänd kostnadsfri bokning"
 
-#: pretix/control/forms/event.py:1282
+#: pretix/control/forms/event.py:1272
 msgid "Text for approved free order"
 msgstr "Text för godkänd kostnadsfri bokning"
 
-#: pretix/control/forms/event.py:1285 pretix/control/forms/event.py:1303
+#: pretix/control/forms/event.py:1275 pretix/control/forms/event.py:1293
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
@@ -13095,75 +13083,75 @@ msgstr ""
 "kostnadsfria bokningar kommer istället att få mallen för icke kostnadsfria "
 "bokningar ovan."
 
-#: pretix/control/forms/event.py:1307
+#: pretix/control/forms/event.py:1297
 msgid "Subject for denied order"
 msgstr "Ämne för nekad bokning"
 
-#: pretix/control/forms/event.py:1312
+#: pretix/control/forms/event.py:1302
 msgid "Text for denied order"
 msgstr "Text för nekad bokning"
 
-#: pretix/control/forms/event.py:1405
+#: pretix/control/forms/event.py:1395
 msgid "Ticket code generator"
 msgstr "Biljettkods-generator"
 
-#: pretix/control/forms/event.py:1406
+#: pretix/control/forms/event.py:1396
 msgid "For advanced users, usually does not need to be changed."
 msgstr "För avancerade användare, behöver vanligtvis inte ändras."
 
-#: pretix/control/forms/event.py:1463
+#: pretix/control/forms/event.py:1453
 msgid "Any country"
 msgstr "Vilket land som helst"
 
-#: pretix/control/forms/event.py:1464
+#: pretix/control/forms/event.py:1454
 msgid "European Union"
 msgstr "Europeiska unionen"
 
-#: pretix/control/forms/event.py:1488
+#: pretix/control/forms/event.py:1478
 msgid "Any customer"
 msgstr "Vilken kund som helst"
 
-#: pretix/control/forms/event.py:1489
+#: pretix/control/forms/event.py:1479
 msgid "Individual"
 msgstr "Individuell"
 
-#: pretix/control/forms/event.py:1490
+#: pretix/control/forms/event.py:1480
 msgid "Business"
 msgstr "Företag"
 
-#: pretix/control/forms/event.py:1491
+#: pretix/control/forms/event.py:1481
 msgid "Business with valid VAT ID"
 msgstr "Företag med giltigt organisationsnummer"
 
-#: pretix/control/forms/event.py:1497
+#: pretix/control/forms/event.py:1487
 msgid "Charge VAT"
 msgstr "Debitera moms"
 
-#: pretix/control/forms/event.py:1499
+#: pretix/control/forms/event.py:1489
 msgid "No VAT"
 msgstr "Ingen moms"
 
-#: pretix/control/forms/event.py:1500
+#: pretix/control/forms/event.py:1490
 msgid "Sale not allowed"
 msgstr "Försäljning ej tillåten"
 
-#: pretix/control/forms/event.py:1501
+#: pretix/control/forms/event.py:1491
 msgid "Order requires approval"
 msgstr "Bokningen kräver godkännande"
 
-#: pretix/control/forms/event.py:1505
+#: pretix/control/forms/event.py:1495
 msgid "Deviating tax rate"
 msgstr "Avvikande skattesats"
 
-#: pretix/control/forms/event.py:1510 pretix/control/forms/event.py:1514
+#: pretix/control/forms/event.py:1500 pretix/control/forms/event.py:1504
 msgid "Text on invoice"
 msgstr "Text på faktura"
 
-#: pretix/control/forms/event.py:1554
+#: pretix/control/forms/event.py:1544
 msgid "Pre-selected voucher"
 msgstr "Förvald presentkort"
 
-#: pretix/control/forms/event.py:1556
+#: pretix/control/forms/event.py:1546
 msgid ""
 "If set, the widget will show products as if this voucher has been entered "
 "and when a product is bought via the widget, this voucher will be used. This "
@@ -13175,11 +13163,11 @@ msgstr ""
 "användas. Detta kan till exempel användas för att erbjuda widgets som ger "
 "rabatter eller låser upp hemliga produkter."
 
-#: pretix/control/forms/event.py:1561
+#: pretix/control/forms/event.py:1551
 msgid "Compatibility mode"
 msgstr "Kompatibilitetsläge"
 
-#: pretix/control/forms/event.py:1563
+#: pretix/control/forms/event.py:1553
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
@@ -13187,28 +13175,28 @@ msgstr ""
 "Vår vanliga widget fungerar inte i alla webbplattformar. Om du stöter på "
 "problem, försök använda detta kompatibilitetsläge."
 
-#: pretix/control/forms/event.py:1584
+#: pretix/control/forms/event.py:1574
 msgid "The given voucher code does not exist."
 msgstr "Den angivna rabattkoden finns inte."
 
-#: pretix/control/forms/event.py:1591 pretix/control/forms/organizer.py:112
+#: pretix/control/forms/event.py:1581 pretix/control/forms/organizer.py:112
 #: pretix/control/views/shredder.py:179
 msgid "The slug you entered was not correct."
 msgstr "Den slug du angav var inte korrekt."
 
-#: pretix/control/forms/event.py:1626
+#: pretix/control/forms/event.py:1616
 msgid "Ticket downloads"
 msgstr "Nedladdning av biljetter"
 
-#: pretix/control/forms/event.py:1627
+#: pretix/control/forms/event.py:1617
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr "Dina kunder kommer att kunna ladda ner sina biljetter i PDF-format."
 
-#: pretix/control/forms/event.py:1631
+#: pretix/control/forms/event.py:1621
 msgid "Require all attendees to fill in their names"
 msgstr "Kräv att alla deltagare fyller i sina namn"
 
-#: pretix/control/forms/event.py:1632
+#: pretix/control/forms/event.py:1622
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
@@ -13216,11 +13204,11 @@ msgstr ""
 "Som standard kommer vi att fråga efter namn men inte kräva dem. Du kan "
 "stänga av detta helt i inställningarna."
 
-#: pretix/control/forms/event.py:1658
+#: pretix/control/forms/event.py:1648
 msgid "Payment via Stripe"
 msgstr "Betalning via Stripe"
 
-#: pretix/control/forms/event.py:1659
+#: pretix/control/forms/event.py:1649
 msgid ""
 "Stripe is an online payments processor supporting credit cards and lots of "
 "other payment options. To accept payments via Stripe, you will need to set "
@@ -13232,11 +13220,11 @@ msgstr ""
 "skapa ett konto hos dem, vilket tar mindre än fem minuter med deras enkla "
 "gränssnitt."
 
-#: pretix/control/forms/event.py:1665
+#: pretix/control/forms/event.py:1655
 msgid "Payment by bank transfer"
 msgstr "Betalning via banköverföring"
 
-#: pretix/control/forms/event.py:1666
+#: pretix/control/forms/event.py:1656
 msgid ""
 "Your customers will be instructed to wire the money to your account. You can "
 "then import your bank statements to process the payments within pretix, or "
@@ -13246,16 +13234,16 @@ msgstr ""
 "kan sedan importera dina bankutdrag för att behandla betalningarna inom "
 "pretix, eller markera dem som betalda manuellt."
 
-#: pretix/control/forms/event.py:1705
+#: pretix/control/forms/event.py:1695
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
 msgstr "Pris (valfritt)"
 
-#: pretix/control/forms/event.py:1710
+#: pretix/control/forms/event.py:1700
 msgid "Free"
 msgstr "Välj"
 
-#: pretix/control/forms/event.py:1715
+#: pretix/control/forms/event.py:1705
 msgid "Quantity available"
 msgstr "Tillgängligt antal"
 
@@ -13383,7 +13371,7 @@ msgstr "Uppföljning förfallen"
 #: pretix/control/forms/filter.py:2480 pretix/control/forms/vouchers.py:152
 #: pretix/control/templates/pretixcontrol/items/question.html:38
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:119
-#: pretix/plugins/sendmail/models.py:251
+#: pretix/plugins/sendmail/models.py:235
 msgid "All products"
 msgstr "Alla produkter"
 
@@ -17596,7 +17584,7 @@ msgctxt "checkin_result"
 msgid "Denied"
 msgstr "Nekad"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:152
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:151
 #: pretix/control/templates/pretixcontrol/event/index.html:24
 msgid "Copy to clipboard"
 msgstr "Kopiera till urklipp"
@@ -17671,20 +17659,20 @@ msgstr "Incheckad men lämnade"
 msgid "Checked in automatically"
 msgstr "Automatiskt incheckad"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:198
+#: pretix/control/templates/pretixcontrol/checkin/index.html:197
 #, python-format
 msgid "Exit: %(date)s"
 msgstr "Ut: %(date)s"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:213
+#: pretix/control/templates/pretixcontrol/checkin/index.html:212
 msgid "Check-In selected attendees"
 msgstr "Checka in valda deltagare"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:217
+#: pretix/control/templates/pretixcontrol/checkin/index.html:216
 msgid "Check-Out selected attendees"
 msgstr "Checka ut valda deltagare"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:226
+#: pretix/control/templates/pretixcontrol/checkin/index.html:225
 msgid "Delete all check-ins of selected attendees"
 msgstr "Radera alla incheckningar för valda deltagare"
 
@@ -18884,7 +18872,7 @@ msgstr "Betalningsinställningar"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:23
 #: pretix/control/templates/pretixcontrol/user/settings.html:48
-#: pretix/plugins/sendmail/models.py:286
+#: pretix/plugins/sendmail/models.py:270
 msgid "Enabled"
 msgstr "Aktiverad"
 
@@ -18966,7 +18954,7 @@ msgstr ""
 "av anpassningar."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:17
-#: pretix/control/views/checkin.py:423 pretix/control/views/discounts.py:113
+#: pretix/control/views/checkin.py:422 pretix/control/views/discounts.py:113
 #: pretix/control/views/event.py:229 pretix/control/views/event.py:417
 #: pretix/control/views/event.py:497 pretix/control/views/event.py:536
 #: pretix/control/views/event.py:683 pretix/control/views/event.py:910
@@ -19240,7 +19228,7 @@ msgid "Shop design"
 msgstr "Butikens design"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:231
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:56
+#: pretix/control/templates/pretixcontrol/events/create_basics.html:53
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:411
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:95
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:54
@@ -19644,7 +19632,7 @@ msgid ""
 msgstr ""
 "Vi rekommenderar starkt att inte använda förkortningar med fler än 16 tecken."
 
-#: pretix/control/templates/pretixcontrol/events/create_basics.html:50
+#: pretix/control/templates/pretixcontrol/events/create_basics.html:47
 msgid "Display settings"
 msgstr "Visningsinställningar"
 
@@ -25615,23 +25603,23 @@ msgstr "Var vänlig försök igen."
 msgid "Invalid code, please try again."
 msgstr "Ogiltig kod, var god försök igen."
 
-#: pretix/control/views/checkin.py:280
+#: pretix/control/views/checkin.py:279
 msgid "The selected check-ins have been reverted."
 msgstr "De valda incheckningarna har återställts."
 
-#: pretix/control/views/checkin.py:282
+#: pretix/control/views/checkin.py:281
 msgid "The selected tickets have been marked as checked out."
 msgstr "De valda biljetterna har markerats som utcheckade."
 
-#: pretix/control/views/checkin.py:284
+#: pretix/control/views/checkin.py:283
 msgid "The selected tickets have been marked as checked in."
 msgstr "De valda biljetterna har markerats som incheckade."
 
-#: pretix/control/views/checkin.py:373
+#: pretix/control/views/checkin.py:372
 msgid "The new check-in list has been created."
 msgstr "Den nya incheckningslistan har skapats."
 
-#: pretix/control/views/checkin.py:380 pretix/control/views/checkin.py:440
+#: pretix/control/views/checkin.py:379 pretix/control/views/checkin.py:439
 #: pretix/control/views/discounts.py:134 pretix/control/views/discounts.py:182
 #: pretix/control/views/event.py:259 pretix/control/views/event.py:500
 #: pretix/control/views/event.py:539 pretix/control/views/event.py:686
@@ -25655,11 +25643,11 @@ msgstr "Den nya incheckningslistan har skapats."
 msgid "We could not save your changes. See below for details."
 msgstr "Vi kunde inte spara dina ändringar. Se nedan för detaljer."
 
-#: pretix/control/views/checkin.py:419 pretix/control/views/checkin.py:456
+#: pretix/control/views/checkin.py:418 pretix/control/views/checkin.py:455
 msgid "The requested list does not exist."
 msgstr "Den begärda listan finns inte."
 
-#: pretix/control/views/checkin.py:465
+#: pretix/control/views/checkin.py:464
 msgid "The selected list has been deleted."
 msgstr "Den valda listan har raderats."
 
@@ -28027,7 +28015,8 @@ msgstr "Vänligen skicka även min faktura direkt till vår ekonomiavdelning"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:132
 #, fuzzy
 msgid "Invoice recipient email"
-msgstr "E-postadress till fakturamottagare"
+msgstr ""
+"E-postadress till fakturamottagare"
 
 #: pretix/plugins/banktransfer/payment.py:338
 msgid ""
@@ -28048,7 +28037,7 @@ msgstr "Vänligen överför hela beloppet till följande bankkonto:"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:23
 #: pretix/plugins/banktransfer/views.py:835
-#: pretix/plugins/stripe/payment.py:1473
+#: pretix/plugins/stripe/payment.py:1467
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:32
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:35
 msgid "Account holder"
@@ -28840,7 +28829,7 @@ msgstr "En helt anpassningsbar betalningsmetod för manuell hantering."
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
 #: pretix/plugins/paypal/payment.py:75 pretix/plugins/paypal2/payment.py:82
 #: pretix/plugins/paypal2/payment.py:138 pretix/plugins/paypal2/payment.py:1080
-#: pretix/plugins/paypal2/payment.py:1081 pretix/plugins/stripe/payment.py:1830
+#: pretix/plugins/paypal2/payment.py:1081 pretix/plugins/stripe/payment.py:1813
 msgid "PayPal"
 msgstr "PayPal"
 
@@ -28940,7 +28929,7 @@ msgstr ""
 "betalningen har genomförts."
 
 #: pretix/plugins/paypal/payment.py:472 pretix/plugins/paypal2/payment.py:811
-#: pretix/plugins/stripe/payment.py:1000
+#: pretix/plugins/stripe/payment.py:994
 msgid "There was an error sending the confirmation mail."
 msgstr "Det uppstod ett fel vid sändningen av bekräftelsemejlet."
 
@@ -29743,7 +29732,7 @@ msgstr "Begränsa till bokningar skapade före"
 msgid "Everyone who placed an order"
 msgstr "Alla som har lagt en bokning"
 
-#: pretix/plugins/sendmail/forms.py:222 pretix/plugins/sendmail/models.py:234
+#: pretix/plugins/sendmail/forms.py:222 pretix/plugins/sendmail/models.py:218
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
@@ -29751,7 +29740,7 @@ msgstr ""
 "Varje deltagare (fallback till kontaktpersonen för bokningen när ingen "
 "deltagarens e-postadress anges)"
 
-#: pretix/plugins/sendmail/forms.py:224 pretix/plugins/sendmail/models.py:235
+#: pretix/plugins/sendmail/forms.py:224 pretix/plugins/sendmail/models.py:219
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr ""
 "Båda (alla kontaktpersonadresser för bokningar och alla deltagares e-"
@@ -29844,78 +29833,78 @@ msgstr "avslutad"
 msgid "missed"
 msgstr "missad"
 
-#: pretix/plugins/sendmail/models.py:233
+#: pretix/plugins/sendmail/models.py:217
 msgid "Everyone who created a ticket order"
 msgstr "Alla som skapat en biljettbokning"
 
-#: pretix/plugins/sendmail/models.py:239
+#: pretix/plugins/sendmail/models.py:223
 msgid "Everyone"
 msgstr "Alla"
 
-#: pretix/plugins/sendmail/models.py:240
+#: pretix/plugins/sendmail/models.py:224
 msgid "Anyone who is or was checked in"
 msgstr "Alla som är eller har blivit incheckade"
 
-#: pretix/plugins/sendmail/models.py:241
+#: pretix/plugins/sendmail/models.py:225
 msgid "Anyone who never checked in before"
 msgstr "Den som aldrig har checkat in förut"
 
-#: pretix/plugins/sendmail/models.py:252
+#: pretix/plugins/sendmail/models.py:236
 msgid "Limit products"
 msgstr "Begränsa produkter"
 
-#: pretix/plugins/sendmail/models.py:255
+#: pretix/plugins/sendmail/models.py:239
 msgid "Restrict to orders with status"
 msgstr "Begränsa till bokningar med status"
 
-#: pretix/plugins/sendmail/models.py:260
+#: pretix/plugins/sendmail/models.py:244
 msgid "Restrict to check-in status"
 msgstr "Begränsa till incheckningsstatus"
 
-#: pretix/plugins/sendmail/models.py:274
+#: pretix/plugins/sendmail/models.py:258
 msgid "Send date"
 msgstr "Skickningsdatum"
 
-#: pretix/plugins/sendmail/models.py:276
+#: pretix/plugins/sendmail/models.py:260
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
 msgid "Time of day"
 msgstr "Tid på dagen"
 
-#: pretix/plugins/sendmail/models.py:282
+#: pretix/plugins/sendmail/models.py:266
 msgid "Send email to"
 msgstr "Skicka e-post till"
 
-#: pretix/plugins/sendmail/models.py:287
+#: pretix/plugins/sendmail/models.py:271
 msgid "Only enabled rules are actually sent"
 msgstr "Endast aktiverade regler skickas faktiskt"
 
-#: pretix/plugins/sendmail/models.py:334
+#: pretix/plugins/sendmail/models.py:318
 #, python-brace-format
 msgid "on {date} at {time}"
 msgstr "den {date} kl. {time}"
 
-#: pretix/plugins/sendmail/models.py:340
+#: pretix/plugins/sendmail/models.py:324
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
 msgstr[0] "%(count)d dagar efter evenemangsslutet kl %(time)s"
 msgstr[1] "%(count)d dagar efter evenemangets slut kl %(time)s"
 
-#: pretix/plugins/sendmail/models.py:349
+#: pretix/plugins/sendmail/models.py:333
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
 msgstr[0] "%(count)d dag före evenemangets slut kl %(time)s"
 msgstr[1] "%(count)d dagar före evenemangets slut kl %(time)s"
 
-#: pretix/plugins/sendmail/models.py:359
+#: pretix/plugins/sendmail/models.py:343
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
 msgstr[0] "%(count)d dagar efter evenemangets start kl %(time)s"
 msgstr[1] "%(count)d dagar efter evenemangets start kl %(time)s"
 
-#: pretix/plugins/sendmail/models.py:368
+#: pretix/plugins/sendmail/models.py:352
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
@@ -30474,7 +30463,7 @@ msgstr ""
 msgid "Credit card payments"
 msgstr "Kreditkortsbetalningar"
 
-#: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1542
+#: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1536
 #, fuzzy
 msgid "iDEAL"
 msgstr "iDEAL"
@@ -30485,7 +30474,6 @@ msgstr "iDEAL"
 #: pretix/plugins/stripe/payment.py:434 pretix/plugins/stripe/payment.py:442
 #: pretix/plugins/stripe/payment.py:450 pretix/plugins/stripe/payment.py:458
 #: pretix/plugins/stripe/payment.py:467 pretix/plugins/stripe/payment.py:480
-#: pretix/plugins/stripe/payment.py:504
 msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before they work properly."
@@ -30493,11 +30481,11 @@ msgstr ""
 "Vissa betalningsmetoder kan behöva aktiveras i inställningarna för ditt "
 "Stripe-konto innan de fungerar korrekt."
 
-#: pretix/plugins/stripe/payment.py:350 pretix/plugins/stripe/payment.py:1567
+#: pretix/plugins/stripe/payment.py:350 pretix/plugins/stripe/payment.py:1561
 msgid "Alipay"
 msgstr "Alipay"
 
-#: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1579
+#: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1573
 msgid "Bancontact"
 msgstr "Bancontact"
 
@@ -30561,27 +30549,27 @@ msgstr ""
 "vissa fall. Aktivera endast denna betalningsmetod om din betalningsterm "
 "tillåter denna fördröjning."
 
-#: pretix/plugins/stripe/payment.py:408 pretix/plugins/stripe/payment.py:1692
+#: pretix/plugins/stripe/payment.py:408 pretix/plugins/stripe/payment.py:1675
 msgid "EPS"
 msgstr "EPS"
 
-#: pretix/plugins/stripe/payment.py:416 pretix/plugins/stripe/payment.py:1723
+#: pretix/plugins/stripe/payment.py:416 pretix/plugins/stripe/payment.py:1706
 msgid "Multibanco"
 msgstr "Multibanco"
 
-#: pretix/plugins/stripe/payment.py:424 pretix/plugins/stripe/payment.py:1745
+#: pretix/plugins/stripe/payment.py:424 pretix/plugins/stripe/payment.py:1728
 msgid "Przelewy24"
 msgstr "Przelewy24"
 
-#: pretix/plugins/stripe/payment.py:432 pretix/plugins/stripe/payment.py:1784
+#: pretix/plugins/stripe/payment.py:432 pretix/plugins/stripe/payment.py:1767
 msgid "WeChat Pay"
 msgstr "WeChat Pay"
 
-#: pretix/plugins/stripe/payment.py:448 pretix/plugins/stripe/payment.py:1837
+#: pretix/plugins/stripe/payment.py:448 pretix/plugins/stripe/payment.py:1820
 msgid "Swish"
 msgstr "Swish"
 
-#: pretix/plugins/stripe/payment.py:464 pretix/plugins/stripe/payment.py:1333
+#: pretix/plugins/stripe/payment.py:464 pretix/plugins/stripe/payment.py:1327
 msgid "Affirm"
 msgstr "Bekräfta"
 
@@ -30589,7 +30577,7 @@ msgstr "Bekräfta"
 msgid "Only available for payments between $50 and $30,000."
 msgstr "Endast tillgänglig för betalningar mellan $50 och $30,000."
 
-#: pretix/plugins/stripe/payment.py:475 pretix/plugins/stripe/payment.py:1378
+#: pretix/plugins/stripe/payment.py:475 pretix/plugins/stripe/payment.py:1372
 msgid "Klarna"
 msgstr "Klarna"
 
@@ -30609,15 +30597,15 @@ msgstr ""
 "Klarnas användarvillkor tillåter inte att det används av "
 "välgörenhetsorganisationer eller politiska organisationer."
 
-#: pretix/plugins/stripe/payment.py:502
+#: pretix/plugins/stripe/payment.py:499
 msgid "MobilePay"
 msgstr ""
 
-#: pretix/plugins/stripe/payment.py:512
+#: pretix/plugins/stripe/payment.py:506
 msgid "Destination"
 msgstr "Destination"
 
-#: pretix/plugins/stripe/payment.py:542 pretix/plugins/stripe/payment.py:1448
+#: pretix/plugins/stripe/payment.py:536 pretix/plugins/stripe/payment.py:1442
 #, python-brace-format
 msgid ""
 "The Stripe plugin is operating in test mode. You can use one of <a {args}"
@@ -30627,11 +30615,11 @@ msgstr ""
 "Pluginet Stripe är i testläge. Du kan använda <a {args}>många testkort</a> "
 "för att genomföra en transaktion. Inget pengar kommer faktiskt att överföras."
 
-#: pretix/plugins/stripe/payment.py:735
+#: pretix/plugins/stripe/payment.py:729
 msgid "No payment information found."
 msgstr "Ingen betalningsinformation hittades."
 
-#: pretix/plugins/stripe/payment.py:773
+#: pretix/plugins/stripe/payment.py:767
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
@@ -30639,20 +30627,20 @@ msgstr ""
 "Vi hade problem med att kommunicera med Stripe. Försök igen och kontakta "
 "support om problemet kvarstår."
 
-#: pretix/plugins/stripe/payment.py:777
+#: pretix/plugins/stripe/payment.py:771
 msgid "Stripe returned an error"
 msgstr "Stripe returnerade ett fel"
 
-#: pretix/plugins/stripe/payment.py:849
+#: pretix/plugins/stripe/payment.py:843
 msgid "You may need to enable JavaScript for Stripe payments."
 msgstr "Du kanske behöver aktivera JavaScript för Stripe-betalningar."
 
-#: pretix/plugins/stripe/payment.py:944 pretix/plugins/stripe/payment.py:1066
+#: pretix/plugins/stripe/payment.py:938 pretix/plugins/stripe/payment.py:1060
 #, python-format
 msgid "Stripe reported an error with your card: %s"
 msgstr "Stripe rapporterade ett fel med ditt kort: %s"
 
-#: pretix/plugins/stripe/payment.py:962 pretix/plugins/stripe/payment.py:1078
+#: pretix/plugins/stripe/payment.py:956 pretix/plugins/stripe/payment.py:1072
 msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
@@ -30660,7 +30648,7 @@ msgstr ""
 "Vi hade problem med att kommunicera med Stripe. Försök igen och kontakta oss "
 "om problemet kvarstår."
 
-#: pretix/plugins/stripe/payment.py:1003
+#: pretix/plugins/stripe/payment.py:997
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
@@ -30668,68 +30656,68 @@ msgstr ""
 "Din betalning är avvaktande färdigställande. Vi kommer att informera dig så "
 "snart betalningen är genomförd."
 
-#: pretix/plugins/stripe/payment.py:1011
+#: pretix/plugins/stripe/payment.py:1005
 msgid "Your payment failed. Please try again."
 msgstr "Din betalning misslyckades. Vänligen försök igen."
 
-#: pretix/plugins/stripe/payment.py:1017
+#: pretix/plugins/stripe/payment.py:1011
 #, python-format
 msgid "Stripe reported an error: %s"
 msgstr "Stripe rapporterade ett fel: %s"
 
-#: pretix/plugins/stripe/payment.py:1118
+#: pretix/plugins/stripe/payment.py:1112
 msgid "Credit card via Stripe"
 msgstr "Kretidkort via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1119
+#: pretix/plugins/stripe/payment.py:1113
 msgid "Credit card"
 msgstr "Kreditkort"
 
-#: pretix/plugins/stripe/payment.py:1206
+#: pretix/plugins/stripe/payment.py:1200
 msgid "SEPA Debit via Stripe"
 msgstr "SEPA Debit via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1207
+#: pretix/plugins/stripe/payment.py:1201
 msgid "SEPA Debit"
 msgstr "SEPA Debit"
 
-#: pretix/plugins/stripe/payment.py:1247
+#: pretix/plugins/stripe/payment.py:1241
 msgid "Account Holder Name"
 msgstr "Kontoinnehavarens namn"
 
-#: pretix/plugins/stripe/payment.py:1252
+#: pretix/plugins/stripe/payment.py:1246
 msgid "Account Holder Street"
 msgstr "Kontoinnehavarens gata"
 
-#: pretix/plugins/stripe/payment.py:1264
+#: pretix/plugins/stripe/payment.py:1258
 msgid "Account Holder Postal Code"
 msgstr "Kontoinnehavarens postnummer"
 
-#: pretix/plugins/stripe/payment.py:1276
+#: pretix/plugins/stripe/payment.py:1270
 msgid "Account Holder City"
 msgstr "Kontoinnehavarens stad"
 
-#: pretix/plugins/stripe/payment.py:1288
+#: pretix/plugins/stripe/payment.py:1282
 msgid "Account Holder Country"
 msgstr "Land för kontoinnehavaren"
 
-#: pretix/plugins/stripe/payment.py:1332
+#: pretix/plugins/stripe/payment.py:1326
 msgid "Affirm via Stripe"
 msgstr "Bekräfta via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1377
+#: pretix/plugins/stripe/payment.py:1371
 msgid "Klarna via Stripe"
 msgstr "Klarna via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1494
+#: pretix/plugins/stripe/payment.py:1488
 msgid "giropay via Stripe"
 msgstr "giropay via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1495
+#: pretix/plugins/stripe/payment.py:1489
 msgid "giropay"
 msgstr "giropay"
 
-#: pretix/plugins/stripe/payment.py:1498
+#: pretix/plugins/stripe/payment.py:1492
 msgid ""
 "giropay is an online payment method available to all customers of most "
 "German banks, usually after one-time activation. Please keep your online "
@@ -30739,23 +30727,23 @@ msgstr ""
 "flesta tyska banker, vanligtvis efter en engångsaktivering. Se till att ha "
 "ditt onlinebankkonto och inloggningsinformation tillgänglig."
 
-#: pretix/plugins/stripe/payment.py:1520 pretix/plugins/stripe/payment.py:1588
-#: pretix/plugins/stripe/payment.py:1701
+#: pretix/plugins/stripe/payment.py:1514 pretix/plugins/stripe/payment.py:1582
+#: pretix/plugins/stripe/payment.py:1684
 msgid "unknown name"
 msgstr "okändt namn"
 
-#: pretix/plugins/stripe/payment.py:1528 pretix/plugins/stripe/payment.py:1553
-#: pretix/plugins/stripe/payment.py:1596 pretix/plugins/stripe/payment.py:1709
-#: pretix/plugins/stripe/payment.py:1770
+#: pretix/plugins/stripe/payment.py:1522 pretix/plugins/stripe/payment.py:1547
+#: pretix/plugins/stripe/payment.py:1590 pretix/plugins/stripe/payment.py:1692
+#: pretix/plugins/stripe/payment.py:1753
 #, python-brace-format
 msgid "Bank account at {bank}"
 msgstr "Bankkonto på {bank}"
 
-#: pretix/plugins/stripe/payment.py:1541
+#: pretix/plugins/stripe/payment.py:1535
 msgid "iDEAL via Stripe"
 msgstr "iDEAL via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1545
+#: pretix/plugins/stripe/payment.py:1539
 msgid ""
 "iDEAL is an online payment method available to customers of Dutch banks. "
 "Please keep your online banking account and login information available."
@@ -30764,11 +30752,11 @@ msgstr ""
 "banker. Se till att ha ditt onlinebankkonto och inloggningsinformation "
 "tillgänglig."
 
-#: pretix/plugins/stripe/payment.py:1566
+#: pretix/plugins/stripe/payment.py:1560
 msgid "Alipay via Stripe"
 msgstr "Alipay via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1571
+#: pretix/plugins/stripe/payment.py:1565
 msgid ""
 "This payment method is available to customers of the Chinese payment system "
 "Alipay. Please keep your login information available."
@@ -30777,67 +30765,67 @@ msgstr ""
 "betalningssystemet Alipay. Se till att ha dina inloggningsuppgifter "
 "tillgängliga."
 
-#: pretix/plugins/stripe/payment.py:1578
+#: pretix/plugins/stripe/payment.py:1572
 msgid "Bancontact via Stripe"
 msgstr "Bancontact via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1609
+#: pretix/plugins/stripe/payment.py:1603
 msgid "SOFORT via Stripe"
 msgstr "SOFORT via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1610
+#: pretix/plugins/stripe/payment.py:1604
 msgid "SOFORT (instant bank transfer)"
 msgstr "SOFORT (instant bank transfer)"
 
-#: pretix/plugins/stripe/payment.py:1639
+#: pretix/plugins/stripe/payment.py:1622
 msgid "Country of your bank"
 msgstr "Landet hos din bank"
 
-#: pretix/plugins/stripe/payment.py:1640
+#: pretix/plugins/stripe/payment.py:1623
 msgid "Germany"
 msgstr "Tyskland"
 
-#: pretix/plugins/stripe/payment.py:1641
+#: pretix/plugins/stripe/payment.py:1624
 msgid "Austria"
 msgstr "Österrike"
 
-#: pretix/plugins/stripe/payment.py:1642
+#: pretix/plugins/stripe/payment.py:1625
 msgid "Belgium"
 msgstr "Belgien"
 
-#: pretix/plugins/stripe/payment.py:1643
+#: pretix/plugins/stripe/payment.py:1626
 msgid "Netherlands"
 msgstr "Nederländerna"
 
-#: pretix/plugins/stripe/payment.py:1644
+#: pretix/plugins/stripe/payment.py:1627
 msgid "Spain"
 msgstr "Spanien"
 
-#: pretix/plugins/stripe/payment.py:1680
+#: pretix/plugins/stripe/payment.py:1663
 #, python-brace-format
 msgid "Bank account {iban} at {bank}"
 msgstr "Bankkonto {iban} på {bank}"
 
-#: pretix/plugins/stripe/payment.py:1691
+#: pretix/plugins/stripe/payment.py:1674
 msgid "EPS via Stripe"
 msgstr "EPS via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1722
+#: pretix/plugins/stripe/payment.py:1705
 msgid "Multibanco via Stripe"
 msgstr "Multibanco via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1726
+#: pretix/plugins/stripe/payment.py:1709
 msgid ""
 "Multibanco is a payment method available to Portuguese bank account holders."
 msgstr ""
 "Multibanco är en betalningsmetod tillgänglig för portugisiska "
 "bankkontoinnehavare."
 
-#: pretix/plugins/stripe/payment.py:1744
+#: pretix/plugins/stripe/payment.py:1727
 msgid "Przelewy24 via Stripe"
 msgstr "Przelewy24 via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1748
+#: pretix/plugins/stripe/payment.py:1731
 msgid ""
 "Przelewy24 is an online payment method available to customers of Polish "
 "banks. Please keep your online banking account and login information "
@@ -30847,11 +30835,11 @@ msgstr ""
 "polska banker. Vänligen ha dina onlinebankuppgifter och "
 "inloggningsinformation tillgängliga."
 
-#: pretix/plugins/stripe/payment.py:1783
+#: pretix/plugins/stripe/payment.py:1766
 msgid "WeChat Pay via Stripe"
 msgstr "WeChat Pay via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1788
+#: pretix/plugins/stripe/payment.py:1771
 msgid ""
 "This payment method is available to users of the Chinese app WeChat. Please "
 "keep your login information available."
@@ -30859,17 +30847,17 @@ msgstr ""
 "Denna betalningsmetod är tillgänglig för användare av den kinesiska appen "
 "WeChat. Vänligen håll din inloggningsinformation tillgänglig."
 
-#: pretix/plugins/stripe/payment.py:1810
+#: pretix/plugins/stripe/payment.py:1793
 #, fuzzy
 #| msgid "WeChat Pay via Stripe"
 msgid "Revolut Pay via Stripe"
 msgstr "WeChat Pay via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1811
+#: pretix/plugins/stripe/payment.py:1794
 msgid "Revolut Pay"
 msgstr ""
 
-#: pretix/plugins/stripe/payment.py:1815
+#: pretix/plugins/stripe/payment.py:1798
 #, fuzzy
 #| msgid ""
 #| "This payment method is available to users of the Chinese app WeChat. "
@@ -30881,15 +30869,15 @@ msgstr ""
 "Denna betalningsmetod är tillgänglig för användare av den kinesiska appen "
 "WeChat. Vänligen håll din inloggningsinformation tillgänglig."
 
-#: pretix/plugins/stripe/payment.py:1829
+#: pretix/plugins/stripe/payment.py:1812
 msgid "PayPal via Stripe"
 msgstr "PayPal via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1836
+#: pretix/plugins/stripe/payment.py:1819
 msgid "Swish via Stripe"
 msgstr "Swish via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1841
+#: pretix/plugins/stripe/payment.py:1824
 msgid ""
 "This payment method is available to users of the Swedish apps Swish and "
 "BankID. Please have your app ready."
@@ -30897,17 +30885,17 @@ msgstr ""
 "Denna betalningsmetod är tillgänglig för användare av de svenska apparna "
 "Swish och BankID. Vänligen ha din app redo."
 
-#: pretix/plugins/stripe/payment.py:1860
+#: pretix/plugins/stripe/payment.py:1843
 msgid "TWINT via Stripe"
 msgstr "TWINT via Stripe"
 
-#: pretix/plugins/stripe/payment.py:1865
+#: pretix/plugins/stripe/payment.py:1848
 msgid ""
 "This payment method is available to users of the Swiss app TWINT. Please "
 "have your app ready."
 msgstr "."
 
-#: pretix/plugins/stripe/payment.py:1887
+#: pretix/plugins/stripe/payment.py:1870
 #, fuzzy
 #| msgid ""
 #| "This payment method is available to users of the Swiss app TWINT. Please "
