@@ -492,12 +492,18 @@ class StripeSettingsHolder(BasePaymentProvider):
                 #      label=_('PayPal'),
                 #      disabled=self.event.currency not in [
                 #          'EUR', 'GBP', 'USD', 'CHF', 'CZK', 'DKK', 'NOK', 'PLN', 'SEK', 'AUD', 'CAD', 'HKD', 'NZD', 'SGD'
-                #      ]
+                #      ],
+                #      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                #                  'before they work properly.'),
+                #      required=False,
                 #  )),
                 ('method_mobilepay',
                  forms.BooleanField(
                      label=_('MobilePay'),
                      disabled=self.event.currency not in ['DKK', 'EUR', 'NOK', 'SEK'],
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
                  )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
