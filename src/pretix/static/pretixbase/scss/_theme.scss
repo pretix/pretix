@@ -254,7 +254,7 @@ svg.svg-icon {
 @include table-row-variant('danger', var(--pretix-brand-danger-lighten-30), var(--pretix-brand-danger-lighten-25));
 
 .text-blob-success, .text-blob-info, .text-blob-warning, .text-blob-danger {
-  padding: .125em .5em;
+  padding: .125em .65em 0;
   border-radius: 1em;
   font-weight: bold;
   white-space: nowrap;
@@ -281,4 +281,22 @@ svg.svg-icon {
 .text-blob-danger {
   color: var(--pretix-brand-danger-darken-5);
   background: var(--pretix-brand-danger-lighten-43);
+}
+
+
+.full-width-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 15px 0;
+  }
+  li+li {
+    border-top: 1px solid $table-border-color;
+  }
+}
+
+.alternating-rows .row:nth-child(even) {
+  background-color: $table-bg-accent;
 }
