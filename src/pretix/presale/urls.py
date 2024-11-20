@@ -217,7 +217,6 @@ organizer_patterns = [
     re_path(r'^account/profiles$', pretix.presale.views.customer.ProfileView.as_view(), name='organizer.customer.profiles'),
     re_path(r'^account/profiles/(?P<id>\d+)/delete$', pretix.presale.views.customer.ProfileDeleteView.as_view(), name='organizer.customer.profile.delete'),
     re_path(r'^account/$', pretix.presale.views.customer.OrderView.as_view(), name='organizer.customer.index'),
-    #re_path(r'^account/$', pretix.presale.views.customer.ProfileView.as_view(), name='organizer.customer.profile'),
 
     re_path(r'^oauth2/v1/authorize$', pretix.presale.views.oidc_op.AuthorizeView.as_view(),
             name='organizer.oauth2.v1.authorize'),
