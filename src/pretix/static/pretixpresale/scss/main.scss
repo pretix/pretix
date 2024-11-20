@@ -95,6 +95,9 @@ footer nav .btn-link {
         vertical-align: baseline;
     }
 }
+.subnav a.active {
+    font-weight: bold;
+}
 .locales ul {
     display: inline;
     list-style: none;

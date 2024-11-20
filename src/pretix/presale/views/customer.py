@@ -339,11 +339,6 @@ class ResetPasswordView(FormView):
 
 
 class CustomerRequiredMixin:
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['customer'] = self.request.customer
-        return ctx
-
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
             raise Http404('Feature not enabled')
@@ -355,7 +350,41 @@ class CustomerRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class OrderView(CustomerRequiredMixin, ListView):
+class CustomerAccountBaseMixin(CustomerRequiredMixin):
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['customer'] = self.request.customer
+        url_name = self.request.resolver_match.url_name
+        ctx['sub_nav'] = [
+            {
+                'label': _('Orders'),
+                'url': eventreverse(self.request.organizer, 'presale:organizer.customer.index', kwargs={}),
+                'active': url_name == 'organizer.customer.index',
+                'icon': 'shopping-cart',
+            },
+            {
+                'label': _('Memberships'),
+                'url': eventreverse(self.request.organizer, 'presale:organizer.customer.memberships', kwargs={}),
+                'active': url_name.startswith('organizer.customer.membership'),
+                'icon': 'id-badge',
+            },
+            {
+                'label': _('Addresses'),
+                'url': eventreverse(self.request.organizer, 'presale:organizer.customer.addresses', kwargs={}),
+                'active': url_name.startswith('organizer.customer.address'),
+                'icon': 'address-card-o',
+            },
+            {
+                'label': _('Attendee profiles'),
+                'url': eventreverse(self.request.organizer, 'presale:organizer.customer.profiles', kwargs={}),
+                'active': url_name.startswith('organizer.customer.profile'),
+                'icon': 'users',
+            },
+        ]
+        return ctx
+
+
+class OrderView(CustomerAccountBaseMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_orders.html'
     context_object_name = 'orders'
     paginate_by = 20
@@ -397,7 +426,7 @@ class OrderView(CustomerRequiredMixin, ListView):
         return ctx
 
 
-class MembershipView(CustomerRequiredMixin, ListView):
+class MembershipView(CustomerAccountBaseMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_memberships.html'
     context_object_name = 'memberships'
     paginate_by = 20
@@ -407,8 +436,16 @@ class MembershipView(CustomerRequiredMixin, ListView):
             'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
         )
 
+    #def get_context_data(self, **kwargs):
+    #    ctx = super().get_context_data(**kwargs)
+    #    for m in ctx['memberships']:
+    #        if m.membership_type.max_usages:
+    #            m.percent = int(m.usages / m.membership_type.max_usages * 100)
+    #        else:
+    #            m.percent = 0
 
-class MembershipUsageView(CustomerRequiredMixin, ListView):
+
+class MembershipUsageView(CustomerAccountBaseMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_membership.html'
     context_object_name = 'usages'
     paginate_by = 20
@@ -432,7 +469,7 @@ class MembershipUsageView(CustomerRequiredMixin, ListView):
         return ctx
 
 
-class AddressView(CustomerRequiredMixin, ListView):
+class AddressView(CustomerAccountBaseMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_addresses.html'
     context_object_name = 'invoice_addresses'
     paginate_by = 20
@@ -441,7 +478,7 @@ class AddressView(CustomerRequiredMixin, ListView):
         return InvoiceAddress.profiles.filter(customer=self.request.customer)
 
 
-class AddressDeleteView(CustomerRequiredMixin, CompatDeleteView):
+class AddressDeleteView(CustomerAccountBaseMixin, CompatDeleteView):
     template_name = 'pretixpresale/organizers/customer_address_delete.html'
     context_object_name = 'address'
 
@@ -452,7 +489,7 @@ class AddressDeleteView(CustomerRequiredMixin, CompatDeleteView):
         return eventreverse(self.request.organizer, 'presale:organizer.customer.addresses', kwargs={})
 
 
-class ProfileView(CustomerRequiredMixin, ListView):
+class ProfileView(CustomerAccountBaseMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_profiles.html'
     context_object_name = 'attendee_profiles'
     paginate_by = 20
@@ -461,7 +498,7 @@ class ProfileView(CustomerRequiredMixin, ListView):
         return self.request.customer.attendee_profiles.all()
 
 
-class ProfileDeleteView(CustomerRequiredMixin, CompatDeleteView):
+class ProfileDeleteView(CustomerAccountBaseMixin, CompatDeleteView):
     template_name = 'pretixpresale/organizers/customer_profile_delete.html'
     context_object_name = 'profile'
 
@@ -472,7 +509,7 @@ class ProfileDeleteView(CustomerRequiredMixin, CompatDeleteView):
         return eventreverse(self.request.organizer, 'presale:organizer.customer.profiles', kwargs={})
 
 
-class ChangePasswordView(CustomerRequiredMixin, FormView):
+class ChangePasswordView(CustomerAccountBaseMixin, FormView):
     template_name = 'pretixpresale/organizers/customer_password.html'
     form_class = ChangePasswordForm
 
@@ -505,7 +542,7 @@ class ChangePasswordView(CustomerRequiredMixin, FormView):
         return kwargs
 
 
-class ChangeInformationView(CustomerRequiredMixin, FormView):
+class ChangeInformationView(CustomerAccountBaseMixin, FormView):
     template_name = 'pretixpresale/organizers/customer_info.html'
     form_class = ChangeInfoForm
 

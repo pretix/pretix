@@ -30,28 +30,15 @@
                 <dd>#{{ customer.identifier }}</dd>
             </div>
         </dl>
-        <nav class="row" aria-label="{% trans "customer account information" %}">
+        <nav class="subnav row" aria-label="{% trans "customer account information" %}">
             <ul class="list-inline blank-after col-xs-12">
+            {% for nav in sub_nav %}
                 <li>
-                    <a href="{% eventurl request.organizer "presale:organizer.customer.index" %}">
-                        <span class="fa fa-shopping-cart" aria-hidden="true"></span>{% trans "Orders" %}
+                    <a href="{{ nav.url }}"{% if nav.active %} class="active"{% endif %}>
+                        <span class="fa fa-{{ nav.icon }}" aria-hidden="true"></span>{{ nav.label }}
                     </a>
                 </li>
-                <li>
-                    <a href="{% eventurl request.organizer "presale:organizer.customer.memberships" %}">
-                        <span class="fa fa-unlock-alt" aria-hidden="true"></span>{% trans "Memberships" %}
-                    </a>
-                </li>
-                <li>
-                    <a href="{% eventurl request.organizer "presale:organizer.customer.addresses" %}">
-                        <span class="fa fa-address-card-o" aria-hidden="true"></span>{% trans "Addresses" %}
-                    </a>
-                </li>
-                <li>
-                    <a href="{% eventurl request.organizer "presale:organizer.customer.profiles" %}">
-                        <span class="fa fa-users" aria-hidden="true"></span>{% trans "Attendee profiles" %}
-                    </a>
-                </li>
+            {% endfor %}
             </ul>
         </nav>
     </div>
