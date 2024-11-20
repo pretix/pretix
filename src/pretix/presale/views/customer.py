@@ -339,6 +339,11 @@ class ResetPasswordView(FormView):
 
 
 class CustomerRequiredMixin:
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['customer'] = self.request.customer
+        return ctx
+
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
             raise Http404('Feature not enabled')
