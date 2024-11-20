@@ -536,23 +536,23 @@ h2 .label {
   }
 }
 .text-blob-success {
-  color: var(--pretix-brand-success-darken-10);
-  background: var(--pretix-brand-success-lighten-48);
+  color: var(--pretix-brand-success-shade-42);
+  background: var(--pretix-brand-success-tint-85);
 }
 .text-blob-info {
-  color: var(--pretix-brand-info-darken-20);
-  background: var(--pretix-brand-info-lighten-33);
+  color: var(--pretix-brand-info-shade-42);
+  background: var(--pretix-brand-info-tint-85);
 }
 .text-blob-warning {
-  color: var(--pretix-brand-warning-darken-25);
-  background: var(--pretix-brand-warning-lighten-41);
+  color: var(--pretix-brand-warning-shade-42);
+  background: var(--pretix-brand-warning-tint-85);
   .status-dot {
     color: var(--pretix-brand-warning);
   }
 }
 .text-blob-danger {
-  color: var(--pretix-brand-danger-darken-5);
-  background: var(--pretix-brand-danger-lighten-43);
+  color: var(--pretix-brand-danger-shade-42);
+  background: var(--pretix-brand-danger-tint-85);
 }
 
 
