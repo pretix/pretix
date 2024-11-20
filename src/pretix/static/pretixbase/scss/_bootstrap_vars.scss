@@ -122,29 +122,29 @@ $label-warning-bg-hover: var(--pretix-brand-warning-darken-10);
 $label-danger-bg: var(--pretix-brand-danger);
 $label-danger-bg-hover: var(--pretix-brand-danger-darken-10);
 
-$alert-success-bg: var(--pretix-brand-success-lighten-48);
-$alert-success-text: var(--pretix-brand-success-darken-10);
+$alert-success-bg: var(--pretix-brand-success-tint-85);
+$alert-success-text: var(--pretix-brand-success-shade-42);
 $alert-success-border: var(--pretix-brand-success);
 $alert-success-hr: var(--pretix-brand-success-darken-5);
-$alert-success-link: var(--pretix-brand-success-darken-20);
+$alert-success-link: var(--pretix-brand-success-shade-42);
 
-$alert-info-bg: var(--pretix-brand-info-lighten-33);
-$alert-info-text: var(--pretix-brand-info-darken-20);
+$alert-info-bg: var(--pretix-brand-info-tint-85);
+$alert-info-text: var(--pretix-brand-info-shade-42);
 $alert-info-border: var(--pretix-brand-info);
 $alert-info-hr: var(--pretix-brand-info-darken-5);
-$alert-info-link: var(--pretix-brand-info-darken-30);
+$alert-info-link: var(--pretix-brand-info-shade-42);
 
-$alert-warning-bg: var(--pretix-brand-warning-lighten-41);
-$alert-warning-text: var(--pretix-brand-warning-darken-25);
+$alert-warning-bg: var(--pretix-brand-warning-tint-85);
+$alert-warning-text: var(--pretix-brand-warning-shade-42);
 $alert-warning-border: var(--pretix-brand-warning);
 $alert-warning-hr: var(--pretix-brand-warning-darken-5);
-$alert-warning-link: var(--pretix-brand-warning-darken-35);
+$alert-warning-link: var(--pretix-brand-warning-shade-42);
 
-$alert-danger-bg: var(--pretix-brand-danger-lighten-43);
-$alert-danger-text: var(--pretix-brand-danger-darken-5);
+$alert-danger-bg: var(--pretix-brand-danger-tint-85);
+$alert-danger-text: var(--pretix-brand-danger-shade-42);
 $alert-danger-border: var(--pretix-brand-danger);
 $alert-danger-hr: var(--pretix-brand-danger-darken-5);
-$alert-danger-link: var(--pretix-brand-danger-darken-15);
+$alert-danger-link: var(--pretix-brand-danger-shade-42);
 
 $main-box-bg: #FFFFFF;
 
