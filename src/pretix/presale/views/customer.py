@@ -350,8 +350,8 @@ class CustomerRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class IndexView(CustomerRequiredMixin, ListView):
-    template_name = 'pretixpresale/organizers/customer_profile.html'
+class OrderView(CustomerRequiredMixin, ListView):
+    template_name = 'pretixpresale/organizers/customer_orders.html'
     context_object_name = 'orders'
     paginate_by = 20
 
