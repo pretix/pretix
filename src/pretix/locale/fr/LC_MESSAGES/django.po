@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-19 15:15+0000\n"
+"PO-Revision-Date: 2024-11-20 17:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -12955,11 +12955,11 @@ msgstr "Fuseau horaire de l'événement"
 
 #: pretix/control/forms/event.py:140
 msgid "I don't want to specify taxes now"
-msgstr ""
+msgstr "Je ne veux pas spécifier les taxes maintenant"
 
 #: pretix/control/forms/event.py:141
 msgid "You can always configure tax rates later."
-msgstr ""
+msgstr "Vous pouvez toujours configurer les taux d'imposition ultérieurement."
 
 #: pretix/control/forms/event.py:145
 msgid "Sales tax rate"
@@ -13014,6 +13014,9 @@ msgid ""
 "You have not specified a tax rate. If you do not want us to compute sales "
 "taxes, please check \"{field}\" above."
 msgstr ""
+"Vous n'avez pas spécifié de taux d'imposition. Si vous ne souhaitez pas que "
+"nous calculions les impôts sur les ventes, veuillez cocher \"{field}\" ci-"
+"dessus."
 
 #: pretix/control/forms/event.py:308
 msgid "Copy configuration from"
