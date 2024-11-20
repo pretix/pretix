@@ -369,19 +369,6 @@ class OrderView(CustomerRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['customer'] = self.request.customer
-        ctx['memberships'] = self.request.customer.memberships.with_usages().select_related(
-            'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
-        )
-        ctx['invoice_addresses'] = InvoiceAddress.profiles.filter(customer=self.request.customer)
-        ctx['attendee_profiles'] = self.request.customer.attendee_profiles.all()
-        ctx['is_paginated'] = True
-
-        for m in ctx['memberships']:
-            if m.membership_type.max_usages:
-                m.percent = int(m.usages / m.membership_type.max_usages * 100)
-            else:
-                m.percent = 0
 
         s = OrderPosition.objects.filter(
             order=OuterRef('pk')
@@ -407,8 +394,13 @@ class OrderView(CustomerRequiredMixin, ListView):
 
 class MembershipView(CustomerRequiredMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_memberships.html'
-    context_object_name = 'membership'
+    context_object_name = 'memberships'
     paginate_by = 20
+
+    def get_queryset(self):
+        return self.request.customer.memberships.with_usages().select_related(
+            'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
+        )
 
 
 class MembershipUsageView(CustomerRequiredMixin, ListView):
@@ -437,8 +429,11 @@ class MembershipUsageView(CustomerRequiredMixin, ListView):
 
 class AddressView(CustomerRequiredMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_addresses.html'
-    context_object_name = 'address'
+    context_object_name = 'invoice_addresses'
     paginate_by = 20
+
+    def get_queryset(self):
+        return InvoiceAddress.profiles.filter(customer=self.request.customer)
 
 
 class AddressDeleteView(CustomerRequiredMixin, CompatDeleteView):
@@ -454,8 +449,11 @@ class AddressDeleteView(CustomerRequiredMixin, CompatDeleteView):
 
 class ProfileView(CustomerRequiredMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_profiles.html'
-    context_object_name = 'profile'
+    context_object_name = 'attendee_profiles'
     paginate_by = 20
+
+    def get_queryset(self):
+        return self.request.customer.attendee_profiles.all()
 
 
 class ProfileDeleteView(CustomerRequiredMixin, CompatDeleteView):

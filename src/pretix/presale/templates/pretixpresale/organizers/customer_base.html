@@ -1,0 +1,60 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+{% block content %}
+    <h2>
+        {% trans "Your account" %}
+    </h2>
+    <div class="blank-after">
+        <dl class="row">
+            <div class="col-sm-6">
+                <dt>{{ customer.name }}</dt>
+                <dd>{{ customer.email }}</dd>
+                {% if customer.phone %}
+                    <dd><spani class="fa fa-phone" aria-hidden="true"></span> {{ customer.phone }}</dd>
+                {% endif %}
+                <dd>
+                    <ul class="list-inline">
+                        <li><a href="{% eventurl request.organizer "presale:organizer.customer.change" %}">
+                                                        <span class="fa fa-edit" aria-hidden=true></span> {% trans "Change account information" %}</a></li>
+                        <li><a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
+                                                        <span class="fa fa-key" aria-hidden=true></span> {% trans "Change password" %}</a></li>
+                    </ul>
+                </dd>
+                <dd>
+                </dd>
+            </div>
+            <div class="col-sm-6 text-right">
+                <dt>{% trans "Customer ID" %}</dt>
+                <dd>#{{ customer.identifier }}</dd>
+            </div>
+        </dl>
+        <nav class="row" aria-label="{% trans "customer account information" %}">
+            <ul class="list-inline blank-after col-xs-12">
+                <li>
+                    <a href="{% eventurl request.organizer "presale:organizer.customer.index" %}">
+                        <span class="fa fa-shopping-cart" aria-hidden="true"></span>{% trans "Orders" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="{% eventurl request.organizer "presale:organizer.customer.memberships" %}">
+                        <span class="fa fa-unlock-alt" aria-hidden="true"></span>{% trans "Memberships" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="{% eventurl request.organizer "presale:organizer.customer.addresses" %}">
+                        <span class="fa fa-address-card-o" aria-hidden="true"></span>{% trans "Addresses" %}
+                    </a>
+                </li>
+                <li>
+                    <a href="{% eventurl request.organizer "presale:organizer.customer.profiles" %}">
+                        <span class="fa fa-users" aria-hidden="true"></span>{% trans "Attendee profiles" %}
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    {% block inner %}
+    {% endblock %}
+{% endblock %}
