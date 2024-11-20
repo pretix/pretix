@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-10-22 17:00+0000\n"
+"PO-Revision-Date: 2024-11-20 17:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -123,11 +123,11 @@ msgstr "ロシア語"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "スロバキア語"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
-msgstr ""
+msgstr "スウェーデン語"
 
 #: pretix/_base_settings.py:106
 msgid "Spanish"
