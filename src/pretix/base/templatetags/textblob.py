@@ -30,7 +30,7 @@ def textblob(type, *args, **kwargs):
     return format_html(
         '<span class="text-blob-{}">{}',
         type or "info",
-        "" if not kwargs["icon"] else format_html(
+        "" if "icon" not in kwargs else format_html(
             '<i class="fa fa-{}" aria-hidden="true"></i> ',
             kwargs["icon"]
         )

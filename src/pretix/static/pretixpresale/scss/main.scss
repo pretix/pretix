@@ -532,13 +532,13 @@ h2 .label {
 
 
 .text-blob-success, .text-blob-info, .text-blob-warning, .text-blob-danger {
-  padding: 0 .5em;
+  padding: 0 .4em;
   border-radius: $border-radius-base;
   font-weight: bold;
   white-space: nowrap;
 
   &:has(>.fa:first-child) {
-    padding-left: .3em;
+    padding-left: .25em;
   }
 }
 .text-blob-success {
