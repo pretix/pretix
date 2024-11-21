@@ -14,19 +14,26 @@
         </div>
         <div class="panel-body">
             {% if invoice_addresses %}
-                <ol class="full-width-list alternating-rows">
-                    {% for ia in invoice_addresses %}
+                <ul class="full-width-list alternating-rows account-addresses">
                     <li class="row">
-                        {{ ia.describe|linebreaksbr }}
-
+                    {% for ia in invoice_addresses %}
+                        {% if forloop.counter0 and forloop.counter0|divisibleby:4 %}
+                            </li>
+                            <li class="row">
+                        {% endif %}
+                        <div class="col-md-3 col-xs-12">
+                            <address>{{ ia.describe|linebreaksbr }}</address>
+                            <p class="blank-after">
                                 <a href="{% abseventurl request.organizer "presale:organizer.customer.address.delete" id=ia.id %}"
-                                   class="btn btn-danger">
+                                   class="btn btn-danger btn-sm">
                                     <span class="fa fa-trash" aria-hidden="true"></span>
                                     {% trans "Delete" %}
                                 </a>
-                    </li>
+                            </p>
+                        </div>
                     {% endfor %}
-                </ol>
+                    </li>
+                </ul>
             {% else %}
                 <p class="text-center">{% trans "You don’t have any addresses in your account yet." %}</p>
             {% endif %}

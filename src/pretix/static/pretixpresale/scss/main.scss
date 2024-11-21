@@ -586,6 +586,11 @@ h2 .label {
 }
 
 
+.account-addresses address::first-line {
+    font-weight: bold;
+}
+
+
 @import "_iframe.scss";
 @import "_a11y.scss";
 @import "_print.scss";
