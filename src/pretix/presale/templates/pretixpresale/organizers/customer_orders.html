@@ -14,7 +14,7 @@
         </div>
         <div class="panel-body">
             {% if orders %}
-                <ol class="full-width-list alternating-rows">
+                <ul class="full-width-list alternating-rows">
                     {% for o in orders %}
                     <li class="row">
                         <dl>
@@ -66,7 +66,7 @@
                         </dl>
                     </li>
                     {% endfor %}
-                </ol>
+                </ul>
             {% else %}
                 <p class="text-center">{% trans "You don’t have any orders in your account yet." %}</p>
             {% endif %}

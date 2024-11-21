@@ -14,7 +14,7 @@
         </div>
         <div class="panel-body">
             {% if memberships %}
-                <ol class="full-width-list alternating-rows">
+                <ul class="full-width-list alternating-rows">
                     {% for m in memberships %}
                     <li class="row">
                         <dl>
@@ -69,7 +69,7 @@
                         </dl>
                     </li>
                     {% endfor %}
-                </ol>
+                </ul>
             {% else %}
                 <p class="text-center">{% trans "You don’t have any memberships in your account yet." %}</p>
             {% endif %}
