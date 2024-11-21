@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-20 17:00+0000\n"
+"PO-Revision-Date: 2024-11-21 23:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -416,7 +416,9 @@ msgstr "Une facture existe déjà pour cet ordre."
 #: pretix/api/views/order.py:637 pretix/control/views/orders.py:1716
 #: pretix/control/views/users.py:143
 msgid "There was an error sending the mail. Please try again later."
-msgstr "Il y a eu une erreur d'envoi du mail. Veuillez réessayer plus tard."
+msgstr ""
+"Une erreur s'est produite lors de l'envoi de l'e-mail. Veuillez réessayer "
+"plus tard."
 
 #: pretix/api/views/order.py:715 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:799
@@ -1411,7 +1413,7 @@ msgstr "Adresse"
 #: pretix/plugins/checkinlists/exporters.py:533
 #: pretix/plugins/reports/exporters.py:841
 msgid "ZIP code"
-msgstr "Code Postal"
+msgstr "Code postal"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -1495,7 +1497,7 @@ msgstr "Destinataire de facture :"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
 #: pretix/presale/templates/pretixpresale/event/order.html:307
 msgid "Company"
-msgstr "Société"
+msgstr "Entreprise"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
 msgid "Street address"
@@ -2134,7 +2136,7 @@ msgstr "Règle fiscale"
 #: pretix/base/exporters/orderlist.py:644
 #: pretix/base/exporters/orderlist.py:648 pretix/base/pdf.py:330
 msgid "Invoice address name"
-msgstr "Adresse de facturation"
+msgstr "Nom de l'adresse de facturation"
 
 #: pretix/base/exporters/orderlist.py:480
 #: pretix/base/exporters/orderlist.py:683 pretix/base/models/orders.py:204
@@ -2233,7 +2235,7 @@ msgstr "Nom du participant"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:176
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:179
 msgid "Attendee email"
-msgstr "Adresse mail du participant"
+msgstr "E-mail du participant"
 
 #: pretix/base/exporters/orderlist.py:609 pretix/base/models/vouchers.py:312
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -2319,19 +2321,19 @@ msgstr "Add-on à la position ID"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:340
 msgid "Invoice address street"
-msgstr "Adresse de facturation : rue"
+msgstr "Adresse de facturation (rue)"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:345
 msgid "Invoice address ZIP code"
-msgstr "Adresse de facturation : code postal"
+msgstr "Adresse de facturation (Code postal)"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:350
 msgid "Invoice address city"
-msgstr "Adresse de facturation : ville"
+msgstr "Adresse de facturation (ville)"
 
 #: pretix/base/exporters/orderlist.py:651 pretix/base/pdf.py:360
 msgid "Invoice address country"
-msgstr "Adresse de facturation : pays"
+msgstr "Adresse de facturation (pays)"
 
 #: pretix/base/exporters/orderlist.py:652
 msgctxt "address"
@@ -3587,7 +3589,7 @@ msgstr "Vous ne pouvez pas attribuer un poste secret qui existe déjà."
 
 #: pretix/base/modelimport_orders.py:490
 msgid "Please enter a valid language code."
-msgstr "Veuillez saisir un code de langue valide."
+msgstr "Veuillez saisir un code linguistique valide."
 
 #: pretix/base/modelimport_orders.py:558 pretix/base/modelimport_orders.py:560
 msgid "Please enter a valid sales channel."
@@ -3610,8 +3612,8 @@ msgstr "Aucun siège correspondant n’a été trouvé."
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
 msgstr ""
-"Le siège que vous avez sélectionné a déjà été pris. Veuillez sélectionner un "
-"autre siège."
+"La place que vous avez choisie est déjà occupée. Veuillez choisir une autre "
+"place."
 
 #: pretix/base/modelimport_orders.py:592 pretix/base/services/cart.py:209
 msgid "You need to select a specific seat."
@@ -3729,7 +3731,7 @@ msgstr "Vous devez choisir le produit « {prod} » pour ce siège."
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:42
 #: pretix/control/views/vouchers.py:120
 msgid "Tag"
-msgstr "Tag"
+msgstr "Balise"
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:297
 msgid "Shows hidden products that match this voucher"
@@ -3996,7 +3998,7 @@ msgstr ""
 #: pretix/base/models/customers.py:310 pretix/base/models/orders.py:1534
 #: pretix/base/models/orders.py:3204 pretix/base/settings.py:1108
 msgid "Company name"
-msgstr "Nom de la société"
+msgstr "Nom de l'entreprise"
 
 #: pretix/base/models/customers.py:314 pretix/base/models/orders.py:1538
 #: pretix/base/models/orders.py:3211 pretix/base/settings.py:81
@@ -5780,7 +5782,7 @@ msgstr "expiré"
 #: pretix/base/models/orders.py:253 pretix/control/forms/filter.py:560
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:64
 msgid "Locale"
-msgstr "Régionalisation"
+msgstr "Langue"
 
 #: pretix/base/models/orders.py:268 pretix/control/forms/filter.py:571
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
@@ -6066,7 +6068,7 @@ msgstr "Badge"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
-msgstr "Ticket"
+msgstr "Billet"
 
 #: pretix/base/models/orders.py:3405
 msgid "Certificate"
@@ -6472,7 +6474,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:8
 msgid "Vouchers"
-msgstr "Bons de réduction"
+msgstr "Bons d'achat"
 
 #: pretix/base/models/vouchers.py:339
 msgid "You cannot select a quota that belongs to a different event."
@@ -7176,7 +7178,7 @@ msgstr "Jacques Martin"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:186
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:189
 msgid "Attendee company"
-msgstr "Entreprise participante"
+msgstr "Entreprise du participant"
 
 #: pretix/base/pdf.py:178 pretix/base/pdf.py:336
 #: pretix/base/services/tickets.py:118 pretix/control/views/pdf.py:111
@@ -7320,7 +7322,7 @@ msgstr "Ville quelconque"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
-msgstr "Adresse de la facturation de l'entreprise"
+msgstr "Adresse de facturation de l'entreprise"
 
 #: pretix/base/pdf.py:341
 msgid "Sesame Street 42"
@@ -7493,7 +7495,7 @@ msgstr "Nom du participant pour la formule de salutation"
 #: pretix/base/services/placeholders.py:567
 #: pretix/control/forms/organizer.py:612
 msgid "Mr Doe"
-msgstr "M. Dupont"
+msgstr "M. Doe"
 
 #: pretix/base/pdf.py:655 pretix/base/pdf.py:662
 #: pretix/plugins/badges/exporters.py:501
@@ -13773,7 +13775,7 @@ msgstr "Prévente terminée"
 #: pretix/control/forms/filter.py:2339
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:84
 msgid "Date from"
-msgstr "Date de début"
+msgstr "Date à partir de"
 
 #: pretix/control/forms/filter.py:1211 pretix/control/forms/filter.py:1214
 #: pretix/control/forms/filter.py:1710 pretix/control/forms/filter.py:1713
@@ -16984,7 +16986,7 @@ msgstr "Widget"
 #: pretix/control/templates/pretixcontrol/event/payment.html:47
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:12
 msgid "Settings"
-msgstr "Réglages"
+msgstr "Paramètres"
 
 #: pretix/control/navigation.py:164
 msgid "Categories"
@@ -17018,7 +17020,7 @@ msgstr "Tous les bons de réduction"
 
 #: pretix/control/navigation.py:284
 msgid "Tags"
-msgstr "Tags"
+msgstr "Balises"
 
 #: pretix/control/navigation.py:296
 msgctxt "navigation"
@@ -17854,7 +17856,7 @@ msgstr "Supprimer"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:91
 #: pretix/presale/templates/pretixpresale/fragment_event_list_filter.html:21
 msgid "Filter"
-msgstr "Filtre"
+msgstr "Filtrer"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 msgid "Your search did not match any check-ins."
@@ -17915,7 +17917,7 @@ msgstr "Refusé"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:152
 #: pretix/control/templates/pretixcontrol/event/index.html:24
 msgid "Copy to clipboard"
-msgstr "Copier dans le Presse-papiers"
+msgstr "Copier dans le presse-papier"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -21945,7 +21947,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:229
 msgid "Contact email"
-msgstr "Email de contact"
+msgstr "E-mail de contact"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:233
 msgid ""
@@ -22207,21 +22209,21 @@ msgstr "Historique des commandes"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:6
 msgid "Email history"
-msgstr "Historique des e-mails"
+msgstr "Historique de l'e-mail"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:33
 msgid ""
 "This email has been sent with an older version of pretix. We are therefore "
 "not able to display it here accurately."
 msgstr ""
-"Cet email a été envoyé avec une ancienne version de pretix. Nous ne sommes "
+"Cet e-mail a été envoyé avec une ancienne version de pretix. Nous ne sommes "
 "donc pas en mesure de l'afficher correctement ici."
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:39
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:50
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:30
 msgid "Subject:"
-msgstr "Sujet :"
+msgstr "Sujet :"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
@@ -22860,7 +22862,7 @@ msgstr "Aperçu des données"
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:43
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:43
 msgid "Import settings"
-msgstr "Paramétrages d’importation"
+msgstr "Importer les paramètres"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:49
@@ -22868,13 +22870,13 @@ msgid ""
 "The import will be performed regardless of your quotas, so it will be "
 "possible to overbook your event using this option."
 msgstr ""
-"L’importation sera effectuée quels que soient vos quotas, il sera donc "
-"possible de surréserver votre événement en utilisant cette option."
+"L'importation sera effectuée sans tenir compte de vos quotas, de sorte qu'il "
+"sera possible de surbooker votre événement à l'aide de cette option."
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:57
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:57
 msgid "Perform import"
-msgstr "Effectuer l’importation"
+msgstr "Réaliser l'importation"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:10
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:10
@@ -22888,15 +22890,15 @@ msgid ""
 "The uploaded file should be a CSV file with a header row. You will be able "
 "to assign the meanings of the different columns in the next step."
 msgstr ""
-"Le fichier téléchargé doit être un fichier CSV avec une ligne d’en-tête. "
-"Vous pourrez attribuer les significations des différentes colonnes à l’étape "
+"Le fichier téléchargé doit être un fichier CSV avec une ligne d'en-tête. "
+"Vous pourrez définir la signification des différentes colonnes à l'étape "
 "suivante."
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:22
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:46
 msgid "Import file"
-msgstr "Importer un fichier"
+msgstr "Importer le fichier"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:25
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:25
@@ -22911,7 +22913,7 @@ msgstr "Détecter automatiquement"
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:35
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:35
 msgid "Start import"
-msgstr "Démarrer l'exportation"
+msgstr "Lancer l'importation"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:14
 msgid "Nobody ordered a ticket yet."
@@ -25524,7 +25526,7 @@ msgstr "Créer plusieurs bons"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:12
 msgid "Voucher codes"
-msgstr "Codes de réduction"
+msgstr "Codes de bons d'achat"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
@@ -25703,7 +25705,7 @@ msgstr "Expiration"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:183
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr "Tout produit dans le quota \"%(quota)s\""
+msgstr "Tout produit dans le quota « %(quota)s »"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:200
 msgid "Use as a template for new vouchers"
@@ -29300,7 +29302,7 @@ msgstr "Date de téléchargement"
 
 #: pretix/plugins/checkinlists/exporters.py:767
 msgid "Upload time"
-msgstr "Temps de téléchargement"
+msgstr "Temps de chargement"
 
 #: pretix/plugins/checkinlists/exporters.py:818
 msgid "OK"
@@ -33147,7 +33149,7 @@ msgstr "Nous appliquons ce bon de réduction à votre panier..."
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
 msgid "Redeem voucher"
-msgstr "Utiliser bon d'achat"
+msgstr "Utiliser le bon d'achat"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:10
 msgid "Change summary"
