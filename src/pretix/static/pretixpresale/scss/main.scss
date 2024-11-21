@@ -499,6 +499,9 @@ h2 .label {
     &.availability .progress-bar-success {
         background: var(--pretix-brand-success-lighten-20);
     }
+    &.full-width {
+        width: 100%;
+    }
 }
 
 .nav-tabs {

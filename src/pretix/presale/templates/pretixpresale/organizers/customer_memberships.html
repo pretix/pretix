@@ -18,79 +18,46 @@
                     {% for m in memberships %}
                     <li class="row">
                         <dl>
-                            <dt>{% trans "Membership type" %}</dt>
-                            <dd>
-                                {% if m.canceled %}<del>{% endif %}
-                                {{ m.membership_type.name }}
-                                {% if m.canceled %}</del>{% endif %}
-                                {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
-                            </dd>
-                            <dt>{% trans "Valid from" %}</dt>
-                            <dd>{{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}</dd>
-                            <dt>{% trans "Valid until" %}</dt>
-                            <dd>{{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}</dd>
-                            <dt>{% trans "Attendee name" %}</dt>
-                            <dd>{{ m.attendee_name }}</dd>
-                            <dt>{% trans "Usages" %}</dt>
-                            <dd>
-                                <div class="quotabox">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-success progress-bar-{{ m.percent }}">
+                            <div class="col-xs-5">
+                                <dt>
+                                    {% if m.canceled %}<del>{% endif %}
+                                    {{ m.membership_type.name }}
+                                    {% if m.membership_type.transferable %}
+                                        <span class="text-muted fa fa-users" aria-hidden="true" title="{% trans "Membership is transferable" %}"></span>
+                                    {% endif %}
+                                    {% if m.canceled %}</del>
+                                        <small>
+                                            <span class="text-blob-danger">
+                                                <i class="status-dot fa fa-times" aria-hidden="true"></i> {% trans "Canceled" %}
+                                            </span>
+                                        </small>
+                                    {% endif %}
+                                    {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
+                                </dt>
+                                <dd class="text-muted">
+                                {% if not m.membership_type.transferable %}
+                                    <span class="fa fa-id-badge" aria-hidden="true"></span>
+                                {% endif %}
+                                {{ m.attendee_name|default_if_none:"" }}</dd>
+                            
+                                <dd class="text-muted"><small>{% trans "Valid from" %} {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}</small></dd>
+                                <dd class="text-muted"><small>{% trans "Valid until" %} {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}</small></dd>
+                            </div>
+                            <div class="col-xs-5">
+                                <dd>
+                                    <div class="quotabox full-width">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success progress-bar-{{ m.percentage_used }}">
+                                            </div>
+                                        </div>
+                                        <div class="numbers">
+                                            {{ m.usages }} /
+                                            {{ m.membership_type.max_usages|default_if_none:"∞" }}
                                         </div>
                                     </div>
-                                    <div class="numbers">
-                                        {{ m.usages }} /
-                                        {{ m.membership_type.max_usages|default_if_none:"∞" }}
-                                    </div>
-                                </div>
-                            </dd>
-                            <dt class="sr-only">{% trans "Actions" %}</dt>
-                            <dd class="text-right">
-                                <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
-                               target="_blank">
-                                <span class="fa fa-list-ul" aria-hidden="true"></span>
-                                {% trans "Details" %}
-                            </a></dd>
-                        </dl>
-
-                        <dl>
-                            <div class="col-md-4 col-sm-5 col-xs-8">
-                                <dt class="sr-only">{% trans "Order" %}</dt>
-                                <dd><strong>
-                                        <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
-                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                            {{ o.code }}</a>
-                                    </strong>
-                                    {% if o.customer_id != customer.pk %}
-                                        <span class="fa fa-compress text-muted"
-                                              data-toggle="tooltip"
-                                              title="{% trans "Matched to the account based on the email address." %}"
-                                        ></span>
-                                    {% endif %}
-                                    <small>{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</small>
-                                </dd>
-                                <dd><time datetime="{{ o.datetime|date:"Y-m-d H:i" }}" class="text-muted small">{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</time></dd>
-                                {% if o.testmode and False %}
-                                    <dd><span class="label label-warning">{% trans "TEST MODE" %}</span></dd>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-4 text-right">
-                                <dt class="sr-only">{% trans "Order total" %}</dt>
-                                <dd>{{ o.total|money:o.event.currency }}</dd>
-                                <dt class="sr-only">{% trans "Positions" %}</dt>
-                                <dd class="text-muted"><small>{% blocktranslate count counter=o.count_positions|default_if_none:0 %}{{ counter }} item{% plural %}{{ counter }} items{% endblocktranslate %}</small>
                                 </dd>
                             </div>
-                            <div class="col-md-4 col-sm-3 col-xs-8">
-                                <dt class="sr-only">{% trans "Event" %}</dt>
-                                <dd>
-                                    {{ o.event }}
-                                    {% if not o.event.has_subevents and o.event.settings.show_dates_on_frontpage %}
-                                        <br><small class="text-muted">{{ o.event.get_date_range_display }}</small>
-                                    {% endif %}
-                                </dd>
-                            </div>
-                            <div class="col-sm-2 col-xs-4">
+                            <div class="col-xs-2">
                                 <dt class="sr-only">{% trans "Actions" %}</dt>
                                 <dd class="text-right">
                                     <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}"

@@ -160,6 +160,12 @@ class Membership(models.Model):
         return f'{self.membership_type.name}: {self.attendee_name} ({ds} – {de})'
 
     @property
+    def percentage_used(self):
+        if self.membership_type.max_usages and self.usages:
+            return int(self.usages / self.membership_type.max_usages * 100)
+        return 0
+
+    @property
     def attendee_name(self):
         return build_name(self.attendee_name_parts, fallback_scheme=lambda: self.customer.organizer.settings.name_scheme)
 
