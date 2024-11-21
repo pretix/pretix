@@ -537,7 +537,7 @@ h2 .label {
   font-weight: bold;
   white-space: nowrap;
 
-  &:has(.status-dot) {
+  &:has(>.fa:first-child) {
     padding-left: .4em;
   }
 }
@@ -552,7 +552,7 @@ h2 .label {
 .text-blob-warning {
   color: var(--pretix-brand-warning-shade-42);
   background: var(--pretix-brand-warning-tint-85);
-  .status-dot {
+  .fa {
     color: var(--pretix-brand-warning);
   }
 }

@@ -1,46 +1,29 @@
 {% load i18n %}
 {% load bootstrap3 %}
+{% load textblob %}
 {# Changes should be replicated in pretixcontrol/orders/fragment_order_status.html and in pretix/base/models/orders.py #}
 {% if order.status == "n" %}
     {% if order.require_approval %}
-        <span class="text-blob-warning">
-            <i class="status-dot fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans "Approval pending" %}
-        </span>
+        {% textblob "warning" icon="exclamation-triangle" %}{% trans "Approval pending" %}{% endtextblob %}
     {% elif order.total == 0 %}
-        <span class="text-blob-warning">
-            <i class="status-dot fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans "Confirmation pending" context "order state" %}
-        </span>
+        {% textblob "warning" icon="exclamation-triangle" %}{% trans "Confirmation pending" context "order state" %}{% endtextblob %}
     {% elif event.settings.payment_pending_hidden %}
         {# intentionally left blank #}
     {% elif order.valid_if_pending %}
-        <span class="text-blob-info">
-            <i class="status-dot fa fa-info-circle" aria-hidden="true"></i> {% trans "Confirmed" context "order state" %}
-        </span>
+        {% textblob "info" icon="info-circle" %}{% trans "Confirmed" context "order state" %}{% endtextblob %}
     {% else %}
-        <span class="text-blob-warning">
-            <i class="status-dot fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans "Payment pending" %}
-        </span>
+        {% textblob "warning" icon="exclamation-triangle" %}{% trans "Payment pending" %}{% endtextblob %}
     {% endif %}
 {% elif order.status == "p" %}
     {% if order.count_positions == 0 %}
-        <span class="text-blob-info">
-            <i class="status-dot fa fa-info-circle" aria-hidden="true"></i> {% trans "Canceled (paid fee)" %}
-        </span>
+        {% textblob "info" icon="info-circle" %}{% trans "Canceled (paid fee)" %}{% endtextblob %}
     {% elif order.total == 0 %}
-        <span class="text-blob-success">
-            <i class="status-dot fa fa-check" aria-hidden="true"></i> {% trans "Confirmed" context "order state" %}
-        </span>
+        {% textblob "success" icon="check" %}{% trans "Confirmed" context "order state" %}{% endtextblob %}
     {% else %}
-        <span class="text-blob-success">
-            <i class="status-dot fa fa-check" aria-hidden="true"></i> {% trans "Paid" %}
-        </span>
+        {% textblob "success" icon="check" %}{% trans "Paid" %}{% endtextblob %}
     {% endif %}
 {% elif order.status == "e" %}
-    <span class="text-blob-danger">
-        <i class="status-dot fa fa-minus" aria-hidden="true"></i> {% trans "Expired" %}
-    </span>
+    {% textblob "danger" icon="minus" %}{% trans "Expired" %}{% endtextblob %}
 {% elif order.status == "c" %}
-    <span class="text-blob-danger">
-        <i class="status-dot fa fa-times" aria-hidden="true"></i> {% trans "Canceled" %}
-    </span>
+    {% textblob "danger" icon="times" %}{% trans "Canceled" %}{% endtextblob %}
 {% endif %}
