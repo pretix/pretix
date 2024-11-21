@@ -574,6 +574,12 @@ h2 .label {
     border-top: 1px solid $table-border-color;
   }
 }
+.panel-body:has(>.full-width-list:first-child) {
+    padding-top: 0;
+}
+.panel-body:has(>.full-width-list:last-child) {
+    padding-bottom: 0;
+}
 
 .alternating-rows .row:nth-child(even) {
   background-color: $table-bg-accent;
