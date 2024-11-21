@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-20 17:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2024-11-21 12:58+0000\n"
+"Last-Translator: kei ogane <imada.nigero@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -284,7 +284,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "現在、パーソナライズできるのは入場商品（チケット）のみです。"
 
 #: pretix/api/serializers/item.py:317
 msgid ""
@@ -378,11 +378,11 @@ msgstr "このユーザーは既にチームへの参加を承認されていま
 #: pretix/api/views/cart.py:209
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr ""
+msgstr "指定されたバウチャーは、すでに最大使用回数に達しています。"
 
 #: pretix/api/views/checkin.py:610 pretix/api/views/checkin.py:617
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "他のイベントに関連付けられているメディアです"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:476
 #, python-brace-format
@@ -469,7 +469,7 @@ msgstr "外部からの払い戻し"
 
 #: pretix/api/webhooks.py:285
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "お客様から支払いの返金が要求されました"
 
 #: pretix/api/webhooks.py:289
 #, fuzzy
@@ -543,7 +543,8 @@ msgstr "イベント情報のデータが削除されました"
 msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
-msgstr ""
+msgstr "製品が変更されました（製品の追加または削除、バリエーションやバンドルのような"
+"ネストされたオブジェクトの変更を含む）"
 
 #: pretix/api/webhooks.py:354
 #, fuzzy
@@ -567,7 +568,7 @@ msgstr "その金額がカードに請求されました。"
 
 #: pretix/api/webhooks.py:370
 msgid "Waiting list entry added"
-msgstr ""
+msgstr "ウェイティングリストにエントリーが追加されました"
 
 #: pretix/api/webhooks.py:374
 #, fuzzy
@@ -581,7 +582,7 @@ msgstr "その金額がカードに請求されました。"
 
 #: pretix/api/webhooks.py:382
 msgid "Waiting list entry received voucher"
-msgstr ""
+msgstr "ウェイティングリストのエントリーがバウチャーを受け取りました"
 
 #: pretix/api/webhooks.py:386
 #, fuzzy
@@ -608,15 +609,15 @@ msgstr "国"
 #: pretix/plugins/banktransfer/payment.py:679
 #: pretix/presale/forms/customer.py:140
 msgid "This field is required."
-msgstr ""
+msgstr "この項目は必須です。"
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "郵便番号をXXXの形式で入力してください。"
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "郵便番号をXXXXの形式で入力してください。"
 
 #: pretix/base/auth.py:146
 #, python-brace-format
@@ -658,7 +659,7 @@ msgstr "パスワード"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "パスワードには数字とアルファベットの両方を含める必要があります。"
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -666,7 +667,8 @@ msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "パスワードは、過去%(history_length)s件のいずれかのパスワードと同じにすること"
+"はできません。"
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -674,13 +676,14 @@ msgstr "オンラインショップ"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
-msgstr ""
+msgstr "API販売チャネルには組み込みの機能はありませんが、カスタムインテグレーションで"
+"使用することができます。"
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -699,25 +702,25 @@ msgstr "ソースコード"
 #: pretix/base/customersso/oidc.py:61
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "設定オプション\"{name}\"がありません。"
 
 #: pretix/base/customersso/oidc.py:69 pretix/base/customersso/oidc.py:74
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
-msgstr ""
+msgstr "\"{url}\"から設定を取得できませんでした。エラーメッセージ:\"{error}\"。"
 
 #: pretix/base/customersso/oidc.py:80 pretix/base/customersso/oidc.py:85
 #: pretix/base/customersso/oidc.py:90 pretix/base/customersso/oidc.py:95
 #: pretix/base/customersso/oidc.py:100 pretix/base/customersso/oidc.py:105
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "互換性のないSSOプロバイダー: \"{error}\"。"
 
 #: pretix/base/customersso/oidc.py:111
 #, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr ""
+msgstr "\"{scope}\" をリクエストしていません。"
 
 #: pretix/base/customersso/oidc.py:117
 #, python-brace-format
