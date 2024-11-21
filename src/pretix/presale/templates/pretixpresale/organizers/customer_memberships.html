@@ -4,6 +4,7 @@
 {% load urlreplace %}
 {% load money %}
 {% load bootstrap3 %}
+{% load textblob %}
 {% block title %}{% trans "Your account" %}{% endblock %}
 {% block inner %}
     <div class="panel panel-default">
@@ -27,9 +28,9 @@
                                     {% endif %}
                                     {% if m.canceled %}</del>
                                         <small>
-                                            <span class="text-blob-danger">
-                                                <i class="status-dot fa fa-times" aria-hidden="true"></i> {% trans "Canceled" %}
-                                            </span>
+                                            {% textblob "danger" icon="times" %}
+                                                {% trans "Canceled" %}
+                                            {% endtextblob %}
                                         </small>
                                     {% endif %}
                                     {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
