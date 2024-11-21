@@ -544,10 +544,16 @@ h2 .label {
 .text-blob-success {
   color: var(--pretix-brand-success-shade-42);
   background: var(--pretix-brand-success-tint-85);
+  .fa {
+    color: var(--pretix-brand-success);
+  }
 }
 .text-blob-info {
   color: var(--pretix-brand-info-shade-42);
   background: var(--pretix-brand-info-tint-85);
+  .fa {
+    color: var(--pretix-brand-info);
+  }
 }
 .text-blob-warning {
   color: var(--pretix-brand-warning-shade-42);
@@ -559,6 +565,9 @@ h2 .label {
 .text-blob-danger {
   color: var(--pretix-brand-danger-shade-42);
   background: var(--pretix-brand-danger-tint-85);
+  .fa {
+    color: var(--pretix-brand-danger);
+  }
 }
 
 
