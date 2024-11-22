@@ -100,7 +100,7 @@ dependencies = [
   "ua-parser==0.18.*",
   "vat_moss_forked==2020.3.20.0.11.0",
   "vobject==0.9.*",
-  "webauthn==2.2.*",
+  "webauthn==2.3.*",
   "zeep==4.3.*"
 ]
 
