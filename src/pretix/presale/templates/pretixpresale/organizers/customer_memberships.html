@@ -24,30 +24,53 @@
                                     <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}">
                                         {{ m.membership_type.name }}
                                     </a>
+                                    {% if m.canceled %}</del>{% endif %}
                                     {% if m.membership_type.transferable %}
                                         <span class="text-muted fa fa-users" aria-hidden="true" title="{% trans "Membership is transferable" %}"></span>
                                     {% endif %}
-                                    {% if m.canceled %}</del>
-                                        <small>
-                                            {% textblob "danger" icon="times" %}
-                                                {% trans "Canceled" %}
-                                            {% endtextblob %}
-                                        </small>
-                                    {% endif %}
-                                    {% if m.testmode %}
-                                        {% textblob "warning" %}
-                                            {% trans "TEST MODE" %}
-                                        {% endtextblob %}
-                                    {% endif %}
                                 </dt>
                                 <dd class="text-muted">
-                                {% if not m.membership_type.transferable %}
-                                    <span class="fa fa-id-badge" aria-hidden="true"></span>
+                                    {% if not m.membership_type.transferable %}
+                                        <span class="fa fa-id-badge" aria-hidden="true"></span>
+                                    {% endif %}
+                                    {{ m.attendee_name|default_if_none:"" }}
+                                </dd>
+                                <dd class="text-muted">
+                                    <small>
+                                    {% if m.canceled %}
+                                        {% textblob "danger" icon="times" %}
+                                            {% trans "Canceled" %}
+                                        {% endtextblob %}
+                                    {% elif m.expired %}
+                                        {% icon "minus-square-o" %}
+                                        {% trans "Expired since" %}
+                                        <time datetime="{{ m.date_end|date:"Y-m-d H:i" }}">
+                                            {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                        </time>
+                                    {% elif m.not_yet_valid %}
+                                        {% icon "clock-o" %}
+                                        {% trans "Valid from" %}
+                                        <time datetime="{{ m.date_start|date:"Y-m-d H:i" }}">
+                                            {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}
+                                        </time>
+                                    {% else %}
+                                        {% icon "check" %}
+                                        {% trans "Valid until" %}
+                                        <time datetime="{{ m.date_end|date:"Y-m-d H:i" }}">
+                                            {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                        </time>
+                                    {% endif %}
+                                    </small>
+                                </dd>
+                                {% if m.testmode %}
+                                <dd>
+                                    <small>
+                                    {% textblob "warning" %}
+                                        {% trans "TEST MODE" %}
+                                    {% endtextblob %}
+                                    </small>
+                                </dd>
                                 {% endif %}
-                                {{ m.attendee_name|default_if_none:"" }}</dd>
-                            
-                                <dd class="text-muted"><small>{% trans "Valid from" %} {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}</small></dd>
-                                <dd class="text-muted"><small>{% trans "Valid until" %} {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}</small></dd>
                             </div>
                             <div class="col-xs-5">
                                 <dd>
