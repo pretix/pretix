@@ -436,14 +436,6 @@ class MembershipView(CustomerAccountBaseMixin, ListView):
             'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
         )
 
-    #def get_context_data(self, **kwargs):
-    #    ctx = super().get_context_data(**kwargs)
-    #    for m in ctx['memberships']:
-    #        if m.membership_type.max_usages:
-    #            m.percent = int(m.usages / m.membership_type.max_usages * 100)
-    #        else:
-    #            m.percent = 0
-
 
 class MembershipUsageView(CustomerAccountBaseMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_membership.html'
