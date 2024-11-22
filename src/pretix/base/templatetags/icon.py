@@ -28,11 +28,7 @@ register = template.Library()
 @register.simple_tag
 def icon(key, *args, **kwargs):
     return format_html(
-        '<span class="fa fa-{} {}" aria-hidden="true"{}></span>',
+        '<span class="fa fa-{} {}" aria-hidden="true"></span>',
         key,
         kwargs["class"] if "class" in kwargs else "",
-        "" if "title" not in kwargs else format_html(
-            ' title="{}"',
-            kwargs["title"]
-        )
     )
