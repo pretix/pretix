@@ -378,7 +378,7 @@ class CustomerAccountBaseMixin(CustomerRequiredMixin):
                 'label': _('Attendee profiles'),
                 'url': eventreverse(self.request.organizer, 'presale:organizer.customer.profiles', kwargs={}),
                 'active': url_name.startswith('organizer.customer.profile'),
-                'icon': 'users',
+                'icon': 'user',
             },
         ]
         return ctx
