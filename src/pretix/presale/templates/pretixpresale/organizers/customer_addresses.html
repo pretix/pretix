@@ -1,15 +1,14 @@
 {% extends "pretixpresale/organizers/customer_base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
-{% load urlreplace %}
-{% load money %}
-{% load bootstrap3 %}
-{% block title %}{% trans "Your account" %}{% endblock %}
+{% block title %}{% trans "Addresses" %}{% endblock %}
 {% block inner %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                <span class="fa fa-address-card-o" aria-hidden="true"></span> <b>{% trans "Addresses" %}</b> ({{ page_obj.paginator.count }})
+                {% icon "address-card-o" %}
+                <b>{% trans "Addresses" %}</b> ({{ page_obj.paginator.count }})
             </h3>
         </div>
         <div class="panel-body">
@@ -26,7 +25,7 @@
                             <p class="blank-after">
                                 <a href="{% abseventurl request.organizer "presale:organizer.customer.address.delete" id=ia.id %}"
                                    class="btn btn-danger btn-sm">
-                                    <span class="fa fa-trash" aria-hidden="true"></span>
+                                    {% icon "trash" %}
                                     {% trans "Delete" %}
                                 </a>
                             </p>

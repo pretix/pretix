@@ -1,10 +1,8 @@
 {% extends "pretixpresale/organizers/customer_base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
-{% load urlreplace %}
-{% load money %}
-{% load bootstrap3 %}
-{% block title %}{% trans "Your account" %}{% endblock %}
+{% block title %}{% trans "Attendee profiles" %}{% endblock %}
 {% block inner %}
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -15,17 +13,24 @@
         <div class="panel-body">
             {% if attendee_profiles %}
                 <ol class="full-width-list alternating-rows">
-                    {% for ap in attendee_profiles %}
                     <li class="row">
-                        {{ ap.describe|linebreaksbr }}
-
-                        <a href="{% abseventurl request.organizer "presale:organizer.customer.profile.delete" id=ap.id %}"
-                           class="btn btn-danger">
-                            <span class="fa fa-trash" aria-hidden="true"></span>
-                            {% trans "Delete" %}
-                        </a>
-                    </li>
+                    {% for ap in attendee_profiles %}
+                        {% if forloop.counter0 and forloop.counter0|divisibleby:4 %}
+                            </li>
+                            <li class="row">
+                        {% endif %}
+                        <div class="col-md-3 col-xs-12">
+                            <p>{{ ap.describe|linebreaksbr }}</p>
+                            <p class="blank-after">
+                                <a href="{% abseventurl request.organizer "presale:organizer.customer.profile.delete" id=ap.id %}"
+                                   class="btn btn-danger btn-sm">
+                                   {% icon "trash" %}
+                                    {% trans "Delete" %}
+                                </a>
+                            </p>
+                        </div>
                     {% endfor %}
+                    </li>
                 </ol>
             {% else %}
                 <p class="text-center">{% trans "You don’t have any attendee profiles in your account yet." %}</p>

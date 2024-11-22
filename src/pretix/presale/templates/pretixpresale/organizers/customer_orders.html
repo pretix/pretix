@@ -1,9 +1,8 @@
 {% extends "pretixpresale/organizers/customer_base.html" %}
 {% load i18n %}
 {% load eventurl %}
-{% load urlreplace %}
 {% load money %}
-{% load bootstrap3 %}
+{% load textblob %}
 {% block title %}{% trans "Your account" %}{% endblock %}
 {% block inner %}
     <div class="panel panel-default">
@@ -34,8 +33,14 @@
                                     <small>{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</small>
                                 </dd>
                                 <dd><time datetime="{{ o.datetime|date:"Y-m-d H:i" }}" class="text-muted small">{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</time></dd>
-                                {% if o.testmode and False %}
-                                    <dd><span class="label label-warning">{% trans "TEST MODE" %}</span></dd>
+                                {% if o.testmode %}
+                                    <dd>
+                                        <small>
+                                        {% textblob "warning" %}
+                                            {% trans "TEST MODE" %}
+                                        {% endtextblob %}
+                                        </small>
+                                    </dd>
                                 {% endif %}
                             </div>
                             <div class="col-md-2 col-sm-2 col-xs-4 text-right">

@@ -1,16 +1,15 @@
 {% extends "pretixpresale/organizers/customer_base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
-{% load urlreplace %}
-{% load money %}
-{% load bootstrap3 %}
 {% load textblob %}
-{% block title %}{% trans "Your account" %}{% endblock %}
+{% block title %}{% trans "Memberships" %}{% endblock %}
 {% block inner %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                <span class="fa fa-id-badge" aria-hidden="true"></span> <b>{% trans "Memberships" %}</b> ({{ page_obj.paginator.count }})
+                {% icon "id-badge" %}
+                <b>{% trans "Memberships" %}</b> ({{ page_obj.paginator.count }})
             </h3>
         </div>
         <div class="panel-body">
@@ -22,7 +21,9 @@
                             <div class="col-xs-5">
                                 <dt>
                                     {% if m.canceled %}<del>{% endif %}
-                                    {{ m.membership_type.name }}
+                                    <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}">
+                                        {{ m.membership_type.name }}
+                                    </a>
                                     {% if m.membership_type.transferable %}
                                         <span class="text-muted fa fa-users" aria-hidden="true" title="{% trans "Membership is transferable" %}"></span>
                                     {% endif %}
@@ -33,7 +34,11 @@
                                             {% endtextblob %}
                                         </small>
                                     {% endif %}
-                                    {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
+                                    {% if m.testmode %}
+                                        {% textblob "warning" %}
+                                            {% trans "TEST MODE" %}
+                                        {% endtextblob %}
+                                    {% endif %}
                                 </dt>
                                 <dd class="text-muted">
                                 {% if not m.membership_type.transferable %}
@@ -61,11 +66,11 @@
                             <div class="col-xs-2">
                                 <dt class="sr-only">{% trans "Actions" %}</dt>
                                 <dd class="text-right">
-                                    <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}"
-                                   target="_blank">
-                                    <span class="fa fa-list-ul" aria-hidden="true"></span>
-                                    {% trans "Details" %}
-                                </a></dd>
+                                    <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}">
+                                        {% icon "list-ul" %}
+                                        {% trans "Details" %}
+                                    </a>
+                                </dd>
                             </div>
                         </dl>
                     </li>
