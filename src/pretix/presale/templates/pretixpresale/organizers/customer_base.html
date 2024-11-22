@@ -12,7 +12,7 @@
                 <dt>{{ customer.name }}</dt>
                 <dd>{{ customer.email }}</dd>
                 {% if customer.phone %}
-                    <dd><spani class="fa fa-phone" aria-hidden="true"></span> {{ customer.phone }}</dd>
+                    <dd>{% icon "phone" %} {{ customer.phone }}</dd>
                 {% endif %}
                 <dd>
                     <ul class="list-inline">

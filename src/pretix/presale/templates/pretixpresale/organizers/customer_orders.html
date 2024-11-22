@@ -23,7 +23,7 @@
                                 <dt class="sr-only">{% trans "Order" %}</dt>
                                 <dd><strong>
                                         <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
-                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                            {% icon "shopping-cart" %}
                                             {{ o.code }}</a>
                                     </strong>
                                     {% if o.customer_id != customer.pk %}
@@ -66,7 +66,7 @@
                                 <dd class="text-right">
                                     <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
                                    target="_blank">
-                                    <span class="fa fa-list-ul" aria-hidden="true"></span>
+                                    {% icon "list-ul" %}
                                     {% trans "Details" %}
                                 </a></dd>
                             </div>
