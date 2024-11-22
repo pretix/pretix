@@ -36,6 +36,7 @@ def textbubble(type, *args, **kwargs):
         )
     )
 
+
 @register.simple_tag
 def endtextbubble():
     return mark_safe('</span>')
