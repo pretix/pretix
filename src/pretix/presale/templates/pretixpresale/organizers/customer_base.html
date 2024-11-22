@@ -1,5 +1,6 @@
 {% extends "pretixpresale/organizers/base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
 {% block content %}
     <h2>
@@ -15,10 +16,18 @@
                 {% endif %}
                 <dd>
                     <ul class="list-inline">
-                        <li><a href="{% eventurl request.organizer "presale:organizer.customer.change" %}">
-                                                        <span class="fa fa-edit" aria-hidden=true></span> {% trans "Change account information" %}</a></li>
-                        <li><a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
-                                                        <span class="fa fa-key" aria-hidden=true></span> {% trans "Change password" %}</a></li>
+                        <li>
+                            <a href="{% eventurl request.organizer "presale:organizer.customer.change" %}">
+                                {% icon "edit" %}
+                                {% trans "Change account information" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
+                                {% icon "key" %}
+                                {% trans "Change password" %}
+                            </a>
+                        </li>
                     </ul>
                 </dd>
                 <dd>
@@ -34,7 +43,7 @@
             {% for nav in sub_nav %}
                 <li>
                     <a href="{{ nav.url }}"{% if nav.active %} class="active"{% endif %}>
-                        <span class="fa fa-{{ nav.icon }}" aria-hidden="true"></span>{{ nav.label }}
+                        {% icon nav.icon %}{{ nav.label }}
                     </a>
                 </li>
             {% endfor %}

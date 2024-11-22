@@ -26,12 +26,14 @@
                                     </a>
                                     {% if m.canceled %}</del>{% endif %}
                                     {% if m.membership_type.transferable %}
-                                        <span class="text-muted fa fa-users" aria-hidden="true" title="{% trans "Membership is transferable" %}"></span>
+                                        <span class="text-muted" data-toggle="tooltip" title="{% trans "Membership is transferable" %}">
+                                            {% icon "users" %}
+                                        </span>
                                     {% endif %}
                                 </dt>
                                 <dd class="text-muted">
                                     {% if not m.membership_type.transferable %}
-                                        <span class="fa fa-id-badge" aria-hidden="true"></span>
+                                        {% icon "id-badge" %}
                                     {% endif %}
                                     {{ m.attendee_name|default_if_none:"" }}
                                 </dd>

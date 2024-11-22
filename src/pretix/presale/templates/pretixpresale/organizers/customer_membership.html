@@ -70,7 +70,7 @@
                             <dt class="sr-only">{% trans "Order" %}</dt>
                             <dd><strong>
                                     <a href="{% abseventurl op.order.event "presale:event.order" order=op.order.code secret=op.order.secret %}" target="_blank">
-                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                        {% icon "shopping-cart" %}
                                         {{ op.order.code }}-{{ op.positionid }}
                                     </a>
                                 </strong>
@@ -110,7 +110,7 @@
                             <dd class="text-right">
                                 <a href="{% abseventurl op.order.event "presale:event.order" order=op.order.code secret=op.order.secret %}"
                                target="_blank">
-                                <span class="fa fa-list-ul" aria-hidden="true"></span>
+                                {% icon "list-ul" %}
                                 {% trans "Details" %}
                             </a></dd>
                         </div>
