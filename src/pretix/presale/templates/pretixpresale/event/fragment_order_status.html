@@ -1,29 +1,29 @@
 {% load i18n %}
 {% load bootstrap3 %}
-{% load textblob %}
+{% load textbubble %}
 {# Changes should be replicated in pretixcontrol/orders/fragment_order_status.html and in pretix/base/models/orders.py #}
 {% if order.status == "n" %}
     {% if order.require_approval %}
-        {% textblob "warning" icon="exclamation-triangle" %}{% trans "Approval pending" %}{% endtextblob %}
+        {% textbubble "warning" icon="exclamation-triangle" %}{% trans "Approval pending" %}{% endtextbubble %}
     {% elif order.total == 0 %}
-        {% textblob "warning" icon="exclamation-triangle" %}{% trans "Confirmation pending" context "order state" %}{% endtextblob %}
+        {% textbubble "warning" icon="exclamation-triangle" %}{% trans "Confirmation pending" context "order state" %}{% endtextbubble %}
     {% elif event.settings.payment_pending_hidden %}
         {# intentionally left blank #}
     {% elif order.valid_if_pending %}
-        {% textblob "info" icon="info-circle" %}{% trans "Confirmed" context "order state" %}{% endtextblob %}
+        {% textbubble "info" icon="info-circle" %}{% trans "Confirmed" context "order state" %}{% endtextbubble %}
     {% else %}
-        {% textblob "warning" icon="exclamation-triangle" %}{% trans "Payment pending" %}{% endtextblob %}
+        {% textbubble "warning" icon="exclamation-triangle" %}{% trans "Payment pending" %}{% endtextbubble %}
     {% endif %}
 {% elif order.status == "p" %}
     {% if order.count_positions == 0 %}
-        {% textblob "info" icon="info-circle" %}{% trans "Canceled (paid fee)" %}{% endtextblob %}
+        {% textbubble "info" icon="info-circle" %}{% trans "Canceled (paid fee)" %}{% endtextbubble %}
     {% elif order.total == 0 %}
-        {% textblob "success" icon="check" %}{% trans "Confirmed" context "order state" %}{% endtextblob %}
+        {% textbubble "success" icon="check" %}{% trans "Confirmed" context "order state" %}{% endtextbubble %}
     {% else %}
-        {% textblob "success" icon="check" %}{% trans "Paid" %}{% endtextblob %}
+        {% textbubble "success" icon="check" %}{% trans "Paid" %}{% endtextbubble %}
     {% endif %}
 {% elif order.status == "e" %}
-    {% textblob "danger" icon="minus" %}{% trans "Expired" %}{% endtextblob %}
+    {% textbubble "danger" icon="minus" %}{% trans "Expired" %}{% endtextbubble %}
 {% elif order.status == "c" %}
-    {% textblob "danger" icon="times" %}{% trans "Canceled" %}{% endtextblob %}
+    {% textbubble "danger" icon="times" %}{% trans "Canceled" %}{% endtextbubble %}
 {% endif %}

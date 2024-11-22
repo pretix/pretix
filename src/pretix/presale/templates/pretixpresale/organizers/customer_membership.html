@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load icon %}
 {% load eventurl %}
-{% load textblob %}
+{% load textbubble %}
 {% block title %}{% trans "Your membership" %}{% endblock %}
 {% block inner %}
     <div class="panel panel-default">
@@ -16,9 +16,9 @@
                 <b>{% trans "Your membership" %}</b>
                 {% if membership.testmode %}
                     <span class="h6">
-                    {% textblob "warning" %}
+                    {% textbubble "warning" %}
                         {% trans "TEST MODE" %}
-                    {% endtextblob %}
+                    {% endtextbubble %}
                     </span>
                 {% endif %}
             </h3>
@@ -30,9 +30,9 @@
                     {{ membership.membership_type.name }}
                     {% if membership.canceled %}</del>
                         <small>
-                            {% textblob "danger" icon="times" %}
+                            {% textbubble "danger" icon="times" %}
                                 {% trans "Canceled" %}
-                            {% endtextblob %}
+                            {% endtextbubble %}
                         </small>
                     {% endif %}
                     <br><small class="text-muted">
@@ -80,9 +80,9 @@
                             {% if op.order.testmode %}
                                 <dd>
                                     <small>
-                                    {% textblob "warning" %}
+                                    {% textbubble "warning" %}
                                         {% trans "TEST MODE" %}
-                                    {% endtextblob %}
+                                    {% endtextbubble %}
                                     </small>
                                 </dd>
                             {% endif %}

@@ -26,9 +26,9 @@ register = template.Library()
 
 
 @register.simple_tag
-def textblob(type, *args, **kwargs):
+def textbubble(type, *args, **kwargs):
     return format_html(
-        '<span class="text-blob-{}">{}',
+        '<span class="textbubble-{}">{}',
         type or "info",
         "" if "icon" not in kwargs else format_html(
             '<i class="fa fa-{}" aria-hidden="true"></i> ',
@@ -37,5 +37,5 @@ def textblob(type, *args, **kwargs):
     )
 
 @register.simple_tag
-def endtextblob():
+def endtextbubble():
     return mark_safe('</span>')

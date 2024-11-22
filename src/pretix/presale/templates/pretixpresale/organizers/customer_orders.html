@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load money %}
-{% load textblob %}
+{% load textbubble %}
 {% block title %}{% trans "Your account" %}{% endblock %}
 {% block inner %}
     <div class="panel panel-default">
@@ -36,9 +36,9 @@
                                 {% if o.testmode %}
                                     <dd>
                                         <small>
-                                        {% textblob "warning" %}
+                                        {% textbubble "warning" %}
                                             {% trans "TEST MODE" %}
-                                        {% endtextblob %}
+                                        {% endtextbubble %}
                                         </small>
                                     </dd>
                                 {% endif %}
