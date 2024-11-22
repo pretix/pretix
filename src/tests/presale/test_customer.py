@@ -433,7 +433,7 @@ def test_org_sso_login_new_customer_email_conflict(env, client, provider):
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", [
     "account/change",
-    "account/membership/1/",
+    "account/memberships/1/",
     "account/",
 ])
 def test_login_required(client, env, url):
