@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-18 02:00+0000\n"
-"Last-Translator: Damiano <estux@users.noreply.translate.pretix.eu>\n"
+"PO-Revision-Date: 2024-11-24 01:00+0000\n"
+"Last-Translator: gabriblas <github@unowen.simplelogin.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -4424,6 +4424,9 @@ msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
+"Se selezionato, un evento può essere pubblicato solamente se la proprietà è "
+"stata impostata. Per le serie di eventi, impostare un valore per le date di "
+"singoli eventi è sempre opzionale"
 
 #: pretix/base/models/event.py:1721 pretix/base/models/items.py:2211
 msgid "Valid values"
@@ -4587,6 +4590,10 @@ msgid ""
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
 msgstr ""
+"Se selezionato, i prodotti che appartengono a questa categoria non potranno "
+"essere venduti separatamente. Potranno invece essere acquistati in "
+"combinazione con un altro prodotto che indichi questa categoria come un add-"
+"on valido."
 
 #: pretix/base/models/items.py:114 pretix/base/models/items.py:159
 #: pretix/control/forms/item.py:99
@@ -4594,21 +4601,25 @@ msgid "Normal category"
 msgstr "Categoria normale"
 
 #: pretix/base/models/items.py:115 pretix/control/forms/item.py:112
+#, fuzzy
 msgid "Normal + cross-selling category"
-msgstr ""
+msgstr "Categoria normale + cross-selling"
 
 #: pretix/base/models/items.py:116 pretix/control/forms/item.py:107
+#, fuzzy
 msgid "Cross-selling category"
-msgstr ""
+msgstr "Categoria cross-selling"
 
 #: pretix/base/models/items.py:124
 msgid "Always show in cross-selling step"
-msgstr ""
+msgstr "Visualizza sempre nello step di cross-selling (vendita aggiuntiva)"
 
 #: pretix/base/models/items.py:125
 msgid ""
 "Only show products that qualify for a discount according to discount rules"
 msgstr ""
+"Visualizza solamente prodotti su cui è applicabile uno sconto, in base alle "
+"regole di sconto"
 
 #: pretix/base/models/items.py:126
 msgid "Only show if the cart contains one of the following products"
@@ -4616,7 +4627,7 @@ msgstr "Mostra solo se il carrello contiene uno dei seguenti prodotti"
 
 #: pretix/base/models/items.py:129
 msgid "Cross-selling condition"
-msgstr ""
+msgstr "Condizione per il cross-selling (vendita aggiuntiva)"
 
 #: pretix/base/models/items.py:137
 #, fuzzy
@@ -7156,7 +7167,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:500
 msgid "Seat: row"
-msgstr ""
+msgstr "Posto: fila"
 
 #: pretix/base/pdf.py:505
 msgid "Seat: seat number"
@@ -7568,7 +7579,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:210
 msgid "Please select a valid seat."
-msgstr ""
+msgstr "Si prega di selezionare un posto a sedere valido."
 
 #: pretix/base/services/cart.py:211
 msgid "You can not select a seat for this position."
@@ -8015,7 +8026,7 @@ msgstr ""
 #: pretix/base/services/modelimport.py:236
 #, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr ""
+msgstr "Dati invalidi alla linea {row}: {message}"
 
 #: pretix/base/services/modelimport.py:217
 msgid "A voucher cannot be created without a code."
