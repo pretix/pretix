@@ -24,6 +24,7 @@ $(function () {
                         return;  // Lost race
                     }
                     var selected_value = dependents.state.prop("data-selected-value");
+                    if (selected_value) dependents.state.prop("data-selected-value", "");
                     dependents.state.find("option").filter(function (t) {return !!$(this).attr("value")}).remove();
                     if (data.data.length > 0) {
                         $.each(data.data, function (k, s) {
@@ -35,7 +36,7 @@ $(function () {
                         });
                     }
                     for(var k in dependents) {
-                        const options = data[k], dependent = dependents[k]; console.log(options, dependent)
+                        const options = data[k], dependent = dependents[k];
                         if ('visible' in options) {
                             if (options.visible) {
                                 dependent.closest(".form-group").show().toggleClass('required', isRequired);
@@ -54,6 +55,7 @@ $(function () {
                     dependency.closest(".form-group").find("label .fa-spin").remove();
                 });
             };
+        dependents.state.prop("data-selected-value", dependents.state.val());
         update();
         dependency.on("change", update);
     });
