@@ -459,7 +459,7 @@ $(function () {
         .on("change mouseup keyup", update_cart_form);
 
     $(".table-calendar td.has-events").click(function () {
-        var $grid = $(this).closest("[aria-role='grid']");
+        var $grid = $(this).closest("[role='grid']");
         $grid.find("[aria-selected]").attr("aria-selected", false);
         $(this).attr("aria-selected", true);
         $("#selected-day")
