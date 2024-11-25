@@ -30,7 +30,7 @@ from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 def states(request):
     cc = request.GET.get("country", "DE")
     info = {
-        'street': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
+        'street': {'required': True},
         'zipcode': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
         'city': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
         'state': {'visible': cc in COUNTRIES_WITH_STATE_IN_ADDRESS, 'required': cc in COUNTRIES_WITH_STATE_IN_ADDRESS},
