@@ -78,7 +78,7 @@ from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
 from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
-from pretix.base.models.tax import VAT_ID_COUNTRIES, ask_for_vat_id
+from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
 )
