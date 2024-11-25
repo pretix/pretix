@@ -5,6 +5,7 @@ $(function () {
         var dependent = $(this),
             counter = 0,
             dependency = $(this).closest(".panel-body, form").find('select[name$=country]'),
+            depRequired = dependency.closest(".form-group").is(".required"),
             update = function (ev) {
                 counter++;
                 var curCounter = counter;
@@ -24,8 +25,8 @@ $(function () {
                             }
                             dependent.append(o);
                         });
-                        dependent.closest(".form-group").show();
-                        dependent.prop('required', dependency.prop("required"));
+                        dependent.closest(".form-group").show().toggleClass('required', depRequired);
+                        dependent.prop('required', depRequired);
                     } else {
                         dependent.closest(".form-group").hide();
                         dependent.prop("required", false);
@@ -37,7 +38,8 @@ $(function () {
         if (dependent.find("option").length === 1) {
             dependent.closest(".form-group").hide();
         } else {
-            dependent.prop('required', dependency.prop("required"));
+            dependent.closest(".form-group").toggleClass('required', depRequired);
+            dependent.prop('required', depRequired);
         }
         dependency.on("change", update);
     });
