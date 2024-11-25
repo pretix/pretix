@@ -22,16 +22,28 @@
 import pycountry
 from django.http import JsonResponse
 
+from pretix.base.addressvalidation import COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED
+from pretix.base.models.tax import VAT_ID_COUNTRIES
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 
 
 def states(request):
     cc = request.GET.get("country", "DE")
+    info = {
+        'street': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
+        'zipcode': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
+        'city': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
+        'state': {'visible': cc in COUNTRIES_WITH_STATE_IN_ADDRESS, 'required': cc in COUNTRIES_WITH_STATE_IN_ADDRESS},
+        'vat_id': {'visible': cc in VAT_ID_COUNTRIES, 'required': False},
+    }
     if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
-        return JsonResponse({'data': []})
+        return JsonResponse({'data': [], **info,})
     types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
     statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
-    return JsonResponse({'data': [
-        {'name': s.name, 'code': s.code[3:]}
-        for s in sorted(statelist, key=lambda s: s.name)
-    ]})
+    return JsonResponse({
+        'data': [
+            {'name': s.name, 'code': s.code[3:]}
+            for s in sorted(statelist, key=lambda s: s.name)
+        ],
+        **info,
+    })

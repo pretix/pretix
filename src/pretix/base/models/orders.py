@@ -3204,9 +3204,9 @@ class InvoiceAddress(models.Model):
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
     name_parts = models.JSONField(default=dict)
-    street = models.TextField(verbose_name=_('Address'), blank=False)
-    zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
-    city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
+    street = models.TextField(verbose_name=_('Address'), blank=True)
+    zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=True)
+    city = models.CharField(max_length=255, verbose_name=_('City'), blank=True)
     country_old = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
     country = FastCountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'),
                                countries=CachedCountries)

@@ -54,6 +54,7 @@ from django.core.validators import (
 from django.db.models import QuerySet
 from django.forms import Select, widgets
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
+from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -712,6 +713,7 @@ class BaseQuestionsForm(forms.Form):
                 initial=country,
                 widget=forms.Select(attrs={
                     'autocomplete': 'country',
+                    'data-country-information-url': reverse('js_helpers.states'),
                 }),
             )
             c = [('', pgettext_lazy('address', 'Select state'))]
@@ -1005,7 +1007,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             'street': forms.Textarea(attrs={
                 'rows': 2,
                 'placeholder': _('Street and Number'),
-                'autocomplete': 'street-address'
+                'autocomplete': 'street-address',
             }),
             'beneficiary': forms.Textarea(attrs={'rows': 3}),
             'country': forms.Select(attrs={
@@ -1021,7 +1023,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 'data-display-dependency': '#id_is_business_1',
                 'autocomplete': 'organization',
             }),
-            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1', 'data-countries-with-vat-id': ','.join(VAT_ID_COUNTRIES)}),
+            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
             'internal_reference': forms.TextInput,
         }
         labels = {
@@ -1055,6 +1057,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             ])
 
         self.fields['country'].choices = CachedCountries()
+        self.fields['country'].widget.attrs['data-country-information-url'] = reverse('js_helpers.states')
 
         c = [('', pgettext_lazy('address', 'Select state'))]
         fprefix = self.prefix + '-' if self.prefix else ''
@@ -1082,6 +1085,10 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             }),
         )
         self.fields['state'].widget.is_required = True
+
+        self.fields['street'].required = False
+        self.fields['zipcode'].required = False
+        self.fields['city'].required = False
 
         # Without JavaScript the VAT ID field is not hidden, so we empty the field if a country outside the EU is selected.
         if cc and not ask_for_vat_id(cc) and fprefix + 'vat_id' in self.data:
