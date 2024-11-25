@@ -603,6 +603,7 @@ class BaseQuestionsForm(forms.Form):
         questions = pos.item.questions_to_ask
         event = kwargs.pop('event')
         self.all_optional = kwargs.pop('all_optional', False)
+        self.attendee_addresses_required = event.settings.attendee_addresses_required and not self.all_optional
 
         super().__init__(*args, **kwargs)
 
@@ -677,7 +678,7 @@ class BaseQuestionsForm(forms.Form):
 
         if item.ask_attendee_data and event.settings.attendee_addresses_asked:
             add_fields['street'] = forms.CharField(
-                required=event.settings.attendee_addresses_required and not self.all_optional,
+                required=self.attendee_addresses_required,
                 label=_('Address'),
                 widget=forms.Textarea(attrs={
                     'rows': 2,
@@ -687,7 +688,7 @@ class BaseQuestionsForm(forms.Form):
                 initial=(cartpos.street if cartpos else orderpos.street),
             )
             add_fields['zipcode'] = forms.CharField(
-                required=event.settings.attendee_addresses_required and not self.all_optional,
+                required=False,
                 max_length=30,
                 label=_('ZIP code'),
                 initial=(cartpos.zipcode if cartpos else orderpos.zipcode),
@@ -696,7 +697,7 @@ class BaseQuestionsForm(forms.Form):
                 }),
             )
             add_fields['city'] = forms.CharField(
-                required=event.settings.attendee_addresses_required and not self.all_optional,
+                required=False,
                 label=_('City'),
                 max_length=255,
                 initial=(cartpos.city if cartpos else orderpos.city),
@@ -708,7 +709,7 @@ class BaseQuestionsForm(forms.Form):
             add_fields['country'] = CountryField(
                 countries=CachedCountries
             ).formfield(
-                required=event.settings.attendee_addresses_required and not self.all_optional,
+                required=self.attendee_addresses_required,
                 label=_('Country'),
                 initial=country,
                 widget=forms.Select(attrs={
@@ -948,7 +949,7 @@ class BaseQuestionsForm(forms.Form):
         d = super().clean()
 
         if self.address_validation:
-            self.cleaned_data = d = validate_address(d, True)
+            self.cleaned_data = d = validate_address(d, all_optional=not self.attendee_addresses_required)
 
         if d.get('city') and d.get('country') and str(d['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
             if not d.get('state'):
