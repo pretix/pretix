@@ -434,24 +434,6 @@ var form_handlers = function (el) {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-    $("input[name$=vat_id][data-countries-with-vat-id]").each(function () {
-        var dependent = $(this),
-            dependency_country = $(this).closest(".panel-body, form").find('select[name$=country]'),
-            dependency_id_is_business_1 = $(this).closest(".panel-body, form").find('input[id$=id_is_business_1]'),
-            update = function (ev) {
-                if (dependency_id_is_business_1.length && !dependency_id_is_business_1.prop("checked")) {
-                    dependent.closest(".form-group").hide();
-                } else if (dependent.attr('data-countries-with-vat-id').split(',').includes(dependency_country.val())) {
-                    dependent.closest(".form-group").show();
-                } else {
-                    dependent.closest(".form-group").hide();
-                }
-            };
-        update();
-        dependency_country.on("change", update);
-        dependency_id_is_business_1.on("change", update);
-    });
-
     el.find("div.scrolling-choice:not(.no-search)").each(function () {
         if ($(this).find("input[type=text]").length > 0) {
             return;
