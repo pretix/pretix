@@ -35,6 +35,7 @@ from django.utils.translation import get_language, gettext_lazy as _
 from pretix.base.models import Event
 from pretix.base.signals import register_html_mail_renderers
 from pretix.base.templatetags.rich_text import markdown_compile_email
+from pretix.helpers.format import SafeFormatter, format_map
 
 from pretix.base.services.placeholders import (  # noqa
     get_available_placeholders, PlaceholderContext
@@ -79,7 +80,7 @@ class BaseHTMLMailRenderer:
         return self.identifier
 
     def render(self, plain_body: str, plain_signature: str, subject: str, order=None,
-               position=None) -> str:
+               position=None, context=None) -> str:
         """
         This method should generate the HTML part of the email.
 
@@ -134,8 +135,10 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
     def compile_markdown(self, plaintext):
         return markdown_compile_email(plaintext)
 
-    def render(self, plain_body: str, plain_signature: str, subject: str, order, position) -> str:
+    def render(self, plain_body: str, plain_signature: str, subject: str, order, position, context) -> str:
         body_md = self.compile_markdown(plain_body)
+        if context:
+            body_md = format_map(body_md, context=context, mode=SafeFormatter.MODE_RICH_TO_HTML)
         htmlctx = {
             'site': settings.PRETIX_INSTANCE_NAME,
             'site_url': settings.SITE_URL,
