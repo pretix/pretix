@@ -5,7 +5,7 @@ $(function () {
         let counter = 0;
         const dependency = $(this),
             url = this.getAttribute('data-country-information-url'),
-            form = $(this).closest(".panel-body, form"),
+            form = $(this).closest(".panel-body, form, .profile-scope"),
             isRequired = dependency.closest(".form-group").is(".required"),
             dependents =  {
                 'city': form.find("input[name$=city]"),
