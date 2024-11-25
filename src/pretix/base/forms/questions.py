@@ -951,7 +951,7 @@ class BaseQuestionsForm(forms.Form):
         if self.address_validation:
             self.cleaned_data = d = validate_address(d, all_optional=not self.attendee_addresses_required)
 
-        if d.get('city') and d.get('country') and str(d['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+        if d.get('street') and d.get('country') and str(d['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
             if not d.get('state'):
                 self.add_error('state', _('This field is required.'))
 
