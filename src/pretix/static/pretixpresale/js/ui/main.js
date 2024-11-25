@@ -459,10 +459,12 @@ $(function () {
         .on("change mouseup keyup", update_cart_form);
 
     $(".table-calendar td.has-events").click(function () {
-        var $tr = $(this).closest(".table-calendar").find(".selected-day");
-        $tr.find("td").html($(this).find(".events").clone());
-        $tr.find("td").prepend($("<h3>").text($(this).attr("data-date")));
-        $tr.removeClass("hidden");
+        var $grid = $(this).closest("[aria-role='grid']");
+        $grid.find("[aria-selected]").attr("aria-selected", false);
+        $(this).attr("aria-selected", true);
+        $("#selected-day")
+            .html($(this).find(".events").clone())
+            .prepend($("<h3>").text($(this).attr("data-date")));
     });
 
     $(".print-this-page").on("click", function (e) {

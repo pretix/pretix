@@ -2,7 +2,7 @@
 {% load date_fast %}
 {% load calendarhead %}
 <div class="table-responsive">
-    <table class="table table-calendar">
+    <table class="table table-calendar" role="grid">
         <caption class="sr-only">{% trans "Calendar" %}</caption>
         <thead>
         <tr>
@@ -18,7 +18,18 @@
                     {% if day %}
                         <td class="day {% if day.events %}has-events{% else %}no-events{% endif %}"
                             data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}">
-                            <p><time datetime="{{ day.date|date_fast:"Y-m-d" }}">{{ day.day }}</time></p>
+                            <p>
+                                <time datetime="{{ day.date|date_fast:"Y-m-d" }}">
+                                    <span aria-hidden="true">{{ day.day }}</span>
+                                    <span class="sr-only">
+                                    {% blocktrans trimmed count count=day.events|length %}
+                                        {{ count }} event
+                                        {% plural %}
+                                        {{ count }} events
+                                    {% endblocktrans %}
+                                    </span>
+                                </time>
+                            </p>
                             <ul class="events">
                                 {% for event in day.events %}
                                     <li><a class="event {% if event.continued %}continued{% endif %} {% spaceless %}
@@ -111,9 +122,9 @@
                 {% endfor %}
             </tr>
         {% endfor %}
-        <tr class="selected-day hidden">
-            <td colspan="7"></td>
-        </tr>
         </tbody>
     </table>
+    <div class="table-calendar row">
+        <div id="selected-day" aria-live="polite" class="col-xs-12 sm-hidden"></div>
+    </div>
 </div>
