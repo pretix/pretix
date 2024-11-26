@@ -472,6 +472,13 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
   .table-calendar .day .events {
     display: none;
   }
+  .table-calendar .day-label {
+    display: block;
+    padding: 4px 6px 4px 18px;
+    font-size: 12px;
+    font-weight: bold;
+    color: $text-muted;
+  }
 }
 #monthselform .row {
   margin: 0 -15px;

@@ -26,7 +26,7 @@
                                     </a>
                                     <span aria-hidden="true" class="hidden-xs">{{ day.day }}</span>
                                 {% else %}
-                                    <span aria-hidden="true">{{ day.day }}</span>
+                                    <span aria-hidden="true" class="day-label">{{ day.day }}</span>
                                 {% endif %}
                                     <span class="sr-only">
                                         ({% blocktrans trimmed count count=day.events|length %}
