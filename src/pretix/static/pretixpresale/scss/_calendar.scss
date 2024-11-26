@@ -476,6 +476,35 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
   #selected-day:has(*) {
     padding: $table-cell-padding;
   }
+  .day[aria-selected="true"] .event {
+    &.continued, &.over {
+      background: lighten($text-muted, 54%);
+      border-color: lighten($text-muted, 40%);
+    }
+
+    &.soon {
+      background: var(--pretix-brand-primary-lighten-55);
+      border-color: var(--pretix-brand-primary-lighten-20);
+    }
+
+    &.available {
+      background: var(--pretix-brand-success-lighten-50);
+      border-color: $brand-success;
+      &.low {
+        border-left-color: $brand-warning;
+      }
+    }
+
+    &.waitinglist {
+      background: var(--pretix-brand-warning-lighten-43);
+      border-color: $brand-warning;
+    }
+
+    &.reserved, &.soldout, {
+      background: var(--pretix-brand-danger-lighten-45);
+      border-color: var(--pretix-brand-danger-lighten-25);
+    }
+  }
 }
 #monthselform .row {
   margin: 0 -15px;
