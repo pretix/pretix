@@ -76,4 +76,18 @@ div.mail-preview {
     text-decoration: none;
     color: var(--pretix-brand-primary);
   }
+
+  table {
+    width: 100%;
+  }
+
+  table td {
+    vertical-align: top;
+    text-align: left;
+    padding: 0;
+  }
+
+  .text-right {
+    text-align: right;
+  }
 }

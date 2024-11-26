@@ -178,6 +178,9 @@
         pre, pre code {
             white-space: pre-line;
         }
+        .align-right {
+            text-align: right;
+        }
 
         {% if rtl %}
             body {
@@ -185,6 +188,9 @@
             }
             .content {
                 text-align: right;
+            }
+            .align-right {
+                text-align: left;
             }
         {% endif %}
 
