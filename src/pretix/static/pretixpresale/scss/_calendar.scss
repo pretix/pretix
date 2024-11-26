@@ -37,13 +37,13 @@
     }
 
     &.continued, &.over {
-      background: lighten(#767676, 54%);
-      border-color: lighten(#767676, 44%);
-      border-left-color: lighten(#767676, 44%);
-      color: #767676;
+      background: lighten($text-muted, 54%);
+      border-color: lighten($text-muted, 44%);
+      border-left-color: lighten($text-muted, 44%);
+      color: $text-muted;
       &:hover {
-        background: lighten(#767676, 54%);
-        border-color: lighten(#767676, 40%);
+        background: lighten($text-muted, 54%);
+        border-color: lighten($text-muted, 40%);
       }
     }
 
