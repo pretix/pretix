@@ -20,10 +20,14 @@
                             data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}">
                             <p>
                                 <time datetime="{{ day.date|date_fast:"Y-m-d" }}">
+                                {% if day.events %}
                                     <a href="#selected-day" class="day-label event hidden-sm hidden-md hidden-lg" aria-hidden="true">
                                         <b>{{ day.day }}</b>
                                     </a>
                                     <span aria-hidden="true" class="hidden-xs">{{ day.day }}</span>
+                                {% else %}
+                                    <span aria-hidden="true">{{ day.day }}</span>
+                                {% endif %}
                                     <span class="sr-only">
                                         ({% blocktrans trimmed count count=day.events|length %}
                                             {{ count }} event
