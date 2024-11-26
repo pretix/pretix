@@ -433,12 +433,6 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
   margin-right: calc(var(--offset-end, 0) / var(--duration) * 100%);
 }
 
-#selected-day {
-  padding: $table-cell-padding;
-}
-
-
-
 
 @media (min-width: $screen-md-min) {
   .week-calendar {
@@ -478,6 +472,9 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
     font-size: 12px;
     font-weight: bold;
     color: $text-muted;
+  }
+  #selected-day:has(*) {
+    padding: $table-cell-padding;
   }
 }
 #monthselform .row {
