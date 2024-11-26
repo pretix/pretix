@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-20 17:00+0000\n"
+"PO-Revision-Date: 2024-11-27 03:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -3799,7 +3799,7 @@ msgstr "Todos los productos (incluso los recién creados)"
 #: pretix/base/models/checkin.py:56 pretix/plugins/badges/exporters.py:436
 #: pretix/plugins/checkinlists/exporters.py:842
 msgid "Limit to products"
-msgstr "Limita a los productos"
+msgstr "Límite a los productos"
 
 #: pretix/base/models/checkin.py:60
 msgid ""
@@ -9565,7 +9565,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1175
 msgid "Introductory text"
-msgstr "Texto introductorio"
+msgstr "Texto de introducción"
 
 #: pretix/base/settings.py:1176
 msgid "Will be printed on every invoice above the invoice rows."
