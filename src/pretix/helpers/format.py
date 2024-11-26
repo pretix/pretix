@@ -26,9 +26,10 @@ logger = logging.getLogger(__name__)
 
 
 class PlainHtmlAlternativeString:
-    def __init__(self, plain, html):
+    def __init__(self, plain, html, is_block=False):
         self.plain = plain
         self.html = html
+        self.is_block = is_block
 
     def __repr__(self):
         return f"PlainHtmlAlternativeString('{self.plain}', '{self.html}')"

@@ -127,10 +127,15 @@ class BaseRichTextPlaceholder(BaseTextPlaceholder):
     def required_context(self):
         return self._args
 
+    @property
+    def is_block(self):
+        return False
+
     def render(self, context):
         return PlainHtmlAlternativeString(
             self.render_plain(**{k: context[k] for k in self._args}),
-            self.render_html(**{k: context[k] for k in self._args})
+            self.render_html(**{k: context[k] for k in self._args}),
+            self.is_block,
         )
 
     def render_html(self, **kwargs):
@@ -150,6 +155,7 @@ class BaseRichTextPlaceholder(BaseTextPlaceholder):
         return PlainHtmlAlternativeString(
             self.render_sample_plain(event=event),
             self.render_sample_html(event=event),
+            self.is_block,
         )
 
     def render_sample_html(self, event):
@@ -762,9 +768,10 @@ def get_sample_context(event, context_parameters, rich=True):
         if isinstance(sample, PlainHtmlAlternativeString):
             context_dict[k] = PlainHtmlAlternativeString(
                 sample.plain,
-                '<span class="placeholder placeholder-html" title="{}">{}</span>'.format(
-                    lbl,
-                    sample.html
+                '<{el} class="placeholder placeholder-html" title="{title}">{html}</{el}>'.format(
+                    el='div' if sample.is_block else 'span',
+                    title=lbl,
+                    html=sample.html,
                 )
             )
         elif str(sample).strip().startswith('* ') or str(sample).startswith('  '):
