@@ -465,6 +465,16 @@ $(function () {
         $("#selected-day")
             .html($(this).find(".events").clone())
             .prepend($("<h3>").text($(this).attr("data-date")));
+    }).each(function() {
+        // check all events classes and set the "winning" class for the availability of the day-label on mobile
+        var $dayLabel = $('.day-label', this);
+        var classes = ['available', 'waitinglist', 'soon', 'reserved', 'soldout', 'continued', 'over'];
+        for (var c of classes) {
+            if ($('.'+c, this).length) {
+                $dayLabel.addClass(c);
+                break;
+            }
+        }
     });
 
     $(".print-this-page").on("click", function (e) {

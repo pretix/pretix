@@ -433,6 +433,10 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
   margin-right: calc(var(--offset-end, 0) / var(--duration) * 100%);
 }
 
+#selected-day {
+  padding: $table-cell-padding;
+}
+
 
 
 
@@ -464,24 +468,9 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
     }
   }
 }
-@media (min-width: $screen-sm-min) {
-  .table-calendar, .week-calendar {
-    .selected-day {
-      display: none !important;
-    }
-  }
-}
 @media (max-width: $screen-xs-max) {
   .table-calendar .day .events {
     display: none;
-  }
-  .table-calendar td.day.has-events {
-    background: $brand-primary;
-    cursor: pointer;
-    color: white;
-  }
-  .table-calendar td.day.has-events:hover {
-    background: var(--pretix-brand-primary-darken-15);
   }
 }
 #monthselform .row {

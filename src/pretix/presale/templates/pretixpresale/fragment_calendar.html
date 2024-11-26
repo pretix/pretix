@@ -20,13 +20,16 @@
                             data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}">
                             <p>
                                 <time datetime="{{ day.date|date_fast:"Y-m-d" }}">
-                                    <span aria-hidden="true">{{ day.day }}</span>
+                                    <a href="#selected-day" class="day-label event hidden-sm hidden-md hidden-lg" aria-hidden="true">
+                                        <b>{{ day.day }}</b>
+                                    </a>
+                                    <span aria-hidden="true" class="hidden-xs">{{ day.day }}</span>
                                     <span class="sr-only">
-                                    {% blocktrans trimmed count count=day.events|length %}
-                                        {{ count }} event
+                                        ({% blocktrans trimmed count count=day.events|length %}
+                                            {{ count }} event
                                         {% plural %}
-                                        {{ count }} events
-                                    {% endblocktrans %}
+                                            {{ count }} events
+                                        {% endblocktrans %})
                                     </span>
                                 </time>
                             </p>
@@ -124,7 +127,7 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="table-calendar row">
-        <div id="selected-day" aria-live="polite" class="col-xs-12 sm-hidden"></div>
+    <div class="table-calendar clearfix hidden-sm hidden-md hidden-lg">
+        <div id="selected-day" aria-live="polite" class="col-xs-12"></div>
     </div>
 </div>
