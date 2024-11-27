@@ -151,6 +151,35 @@ var form_handlers = function (el) {
         ).find("canvas").attr("role", "img").attr("aria-label", this.getAttribute("data-desc"));
     });
 
+    el.find("section[max-items-per-order]").each(function() {
+        var max = parseInt(this.getAttribute("max-items-per-order"));
+        if (this.hasAttribute("max-order-size")) {
+            max = min(max, parseInt(this.getAttribute("max-order-size")));
+        }
+        var $inputs = $(".availability-box input", this);
+        this.addEventListener("change", function (e) {
+            
+            if (max === 1) {
+                if (e.target.checked) {
+                    $inputs.filter(":checked").not(e.target).prop("checked", false).trigger("change");
+                }
+                return;
+            }
+            var total = $inputs.toArray().reduce(function(a, e) {
+                return a + (e.type == "checkbox" ? (e.checked ? parseInt(e.value) : 0) : parseInt(e.value) || 0);
+            }, 0);
+            if (total > max) {
+                if (e.target.type == "checkbox") {
+                    e.target.checked = false;
+                } else {
+                    e.target.value = e.target.value - (total - max);
+                }
+                e.preventDefault();
+            } else {
+                $(".availability-box", this).tooltip('destroy')
+            }
+        });
+    });
 
     el.find("fieldset[data-addon-max-count]").each(function() {
         // usually addons are only allowed once one per item
