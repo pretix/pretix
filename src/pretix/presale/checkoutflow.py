@@ -160,7 +160,7 @@ class BaseCheckoutFlowStep:
                 kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
             return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
         else:
-            return prev.get_step_url(request)
+            return prev.get_step_url(request) + '?dir=prev'
 
     def get_next_url(self, request):
         n = self.get_next_applicable(request)
@@ -662,7 +662,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         if 'async_id' in request.GET and settings.HAS_CELERY:
             return self.get_result(request)
         if len(self.forms) == 0 and len(self.cross_selling_data) == 0 and self.is_completed(request):
-            return redirect(self.get_next_url(request))
+            return redirect(self.get_prev_url(request) if request.GET.get('dir') == 'prev' else self.get_next_url(request))
         return TemplateFlowStep.get(self, request)
 
     def _clean_category(self, form, category):
