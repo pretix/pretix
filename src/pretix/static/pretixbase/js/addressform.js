@@ -2,10 +2,11 @@ $(function () {
     "use strict";
 
     $("select[data-country-information-url]").each(function () {
-        let counter = 0;
+        let xhr;
         const dependency = $(this),
+            loader = $("<span class='fa fa-cog fa-spin'></span>").hide().prependTo(dependency.closest(".form-group").find("label")),
             url = this.getAttribute('data-country-information-url'),
-            form = $(this).closest(".panel-body, form, .profile-scope"),
+            form = dependency.closest(".panel-body, form, .profile-scope"),
             isRequired = dependency.closest(".form-group").is(".required"),
             dependents =  {
                 'city': form.find("input[name$=city]"),
@@ -15,17 +16,15 @@ $(function () {
                 'vat_id': form.find("input[name$=vat_id]"),
             },
             update = function (ev) {
-                counter++;
-                const curCounter = counter;
+                if (xhr) {
+                    xhr.abort();
+                }
                 for (var k in dependents) dependents[k].prop("disabled", true);
-                dependency.closest(".form-group").find("label").prepend("<span class='fa fa-cog fa-spin'></span> ");
-                $.getJSON(url + '?country=' + dependency.val(), function (data) {
-                    if (counter > curCounter) {
-                        return;  // Lost race
-                    }
+                loader.fadeIn();
+                xhr = $.getJSON(url + '?country=' + dependency.val(), function (data) {
                     var selected_value = dependents.state.prop("data-selected-value");
                     if (selected_value) dependents.state.prop("data-selected-value", "");
-                    dependents.state.find("option").filter(function (t) {return !!$(this).attr("value")}).remove();
+                    dependents.state.find("option:not([value=''])").remove();
                     if (data.data.length > 0) {
                         $.each(data.data, function (k, s) {
                             var o = $("<option>").attr("value", s.code).text(s.name);
@@ -36,23 +35,19 @@ $(function () {
                         });
                     }
                     for(var k in dependents) {
-                        const options = data[k], dependent = dependents[k];
-                        if ('visible' in options) {
-                            if (options.visible) {
-                                dependent.closest(".form-group").show().toggleClass('required', isRequired);
-                                dependent.prop('required', isRequired);
-                            } else {
-                                dependent.closest(".form-group").hide();
-                                dependent.prop("required", false);
-                            }
-                        }
-                        if ('required' in options) {
-                            dependent.closest(".form-group").toggleClass('required', options.required && isRequired);
-                            dependent.prop('required', options.required && isRequired);
-                        }
+                        const options = data[k],
+                            dependent = dependents[k],
+                            visible = 'visible' in options ? options.visible : true,
+                            required = 'required' in options && options.required && isRequired && visible;
+
+                        dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
+                        dependent.prop("required", required);
                     }
                     for (var k in dependents) dependents[k].prop("disabled", false);
-                    dependency.closest(".form-group").find("label .fa-spin").remove();
+                }).always(function() {
+                    loader.fadeOut();
+                }).fail(function(){
+                    // TODO: handle failed request
                 });
             };
         dependents.state.prop("data-selected-value", dependents.state.val());
