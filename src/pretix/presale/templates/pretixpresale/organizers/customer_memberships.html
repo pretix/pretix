@@ -31,12 +31,13 @@
                                         </span>
                                     {% endif %}
                                 </dt>
+                                {% if m.attendee_name %}
                                 <dd class="text-muted">
-                                    {% if not m.membership_type.transferable %}
-                                        {% icon "id-badge" %}
-                                    {% endif %}
-                                    {{ m.attendee_name|default_if_none:"" }}
+                                    {% icon "id-badge" %}
+                                    <span class="sr-only">{% trans "Attendee name" %}:</span>
+                                    {{ m.attendee_name }}
                                 </dd>
+                                {% endif %}
                                 <dd class="text-muted">
                                     <small>
                                     {% if m.canceled %}
