@@ -151,15 +151,17 @@ var form_handlers = function (el) {
         ).find("canvas").attr("role", "img").attr("aria-label", this.getAttribute("data-desc"));
     });
 
+    var itemsInCart = $("div[item-count]").toArray().reduce(function(t, x) { return t + parseInt(x.getAttribute("item-count")); }, 0);
+    var maxItemsPerOrder = 0;
     el.find("section[max-items-per-order]").each(function() {
-        var max = parseInt(this.getAttribute("max-items-per-order"));
+        maxItemsPerOrder = parseInt(this.getAttribute("max-items-per-order"));
         if (this.hasAttribute("max-order-size")) {
-            max = min(max, parseInt(this.getAttribute("max-order-size")));
+            maxItemsPerOrder = min(maxItemsPerOrder, parseInt(this.getAttribute("max-order-size")));
         }
         var $inputs = $(".availability-box input", this);
+
         this.addEventListener("change", function (e) {
-            
-            if (max === 1) {
+            if (maxItemsPerOrder === 1) {
                 if (e.target.checked) {
                     $inputs.filter(":checked").not(e.target).prop("checked", false).trigger("change");
                 }
@@ -167,19 +169,23 @@ var form_handlers = function (el) {
             }
             var total = $inputs.toArray().reduce(function(a, e) {
                 return a + (e.type == "checkbox" ? (e.checked ? parseInt(e.value) : 0) : parseInt(e.value) || 0);
-            }, 0);
-            if (total > max) {
+            }, 0) + itemsInCart;
+            if (total > maxItemsPerOrder) {
                 if (e.target.type == "checkbox") {
                     e.target.checked = false;
                 } else {
-                    e.target.value = e.target.value - (total - max);
+                    e.target.value = e.target.value - (total - maxItemsPerOrder);
                 }
                 e.preventDefault();
-            } else {
-                $(".availability-box", this).tooltip('destroy')
             }
         });
     });
+
+    if (itemsInCart >= maxItemsPerOrder) {
+        $(".add-item-cart-interaction").each(function() {
+            this.setAttribute("disabled", true); //this.disable won't work with labels
+        });
+    }
 
     el.find("fieldset[data-addon-max-count]").each(function() {
         // usually addons are only allowed once one per item
