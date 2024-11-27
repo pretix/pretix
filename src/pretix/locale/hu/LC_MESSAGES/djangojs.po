@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-08 13:45+0000\n"
-"PO-Revision-Date: 2024-10-01 22:52+0000\n"
+"PO-Revision-Date: 2024-11-28 06:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
-"Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/hu/>\n"
+"Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -779,7 +779,7 @@ msgstr "A kosár lejárt"
 #: pretix/static/pretixpresale/js/ui/main.js:588
 #: pretix/static/pretixpresale/js/ui/main.js:607
 msgid "Time zone:"
-msgstr ""
+msgstr "Időzona:"
 
 #: pretix/static/pretixpresale/js/ui/main.js:598
 msgid "Your local time:"
