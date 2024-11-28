@@ -223,7 +223,7 @@ class BaseKnownDomainFormSet(forms.BaseInlineFormSet):
         super().clean()
         data = [f.cleaned_data for f in self.forms]
 
-        if len([d for d in data if d["mode"] == KnownDomain.MODE_ORG_DOMAIN and not d.get("DELETE")]) > 1:
+        if len([d for d in data if d.get("mode") == KnownDomain.MODE_ORG_DOMAIN and not d.get("DELETE")]) > 1:
             raise ValidationError(_("You may set only one organizer domain."))
 
         return data

@@ -385,7 +385,7 @@ class EventUpdateForm(I18nModelForm):
             self.fields['domain'] = forms.ChoiceField(
                 label=_('Domain'),
                 help_text=_('You can add more domains in your organizer account.'),
-                choices=[('', _('Same as organizer account ({domain})').format(domain=domain))] + [
+                choices=[('', _('Same as organizer account') + (f" ({domain})" if domain else ""))] + [
                     (d.domainname, d.domainname) for d in self.instance.organizer.domains.filter(mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
                 ],
                 initial=current_domain_assignment.domain_id if current_domain_assignment else "",

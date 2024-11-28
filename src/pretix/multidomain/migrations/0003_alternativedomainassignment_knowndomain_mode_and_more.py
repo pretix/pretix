@@ -38,6 +38,10 @@ class Migration(migrations.Migration):
                 to="pretixbase.event",
             ),
         ),
+        migrations.RunSQL(
+            sql="UPDATE pretixmultidomain_knowndomain SET mode = 'event' WHERE event_id IS NOT NULL",
+            reverse_sql=migrations.RunSQL.noop,
+        ),
         migrations.AddConstraint(
             model_name="knowndomain",
             constraint=models.UniqueConstraint(
@@ -64,8 +68,4 @@ class Migration(migrations.Migration):
                 to="pretixbase.event",
             ),
         ),
-        migrations.RunSQL(
-            sql="UPDATE pretixmultidomain_knowndomain SET mode = 'event' WHERE event_id IS NOT NULL",
-            reverse_sql=migrations.RunSQL.noop,
-        )
     ]
