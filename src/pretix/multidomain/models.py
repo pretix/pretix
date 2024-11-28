@@ -114,6 +114,26 @@ class KnownDomain(models.Model):
         cache.delete('pretix_multidomain_event_{}'.format(self.domainname))
         super().delete(*args, **kwargs)
 
+    def _log_domain_action(self, user, data):
+        if self.event:
+            self.event.log_action(
+                'pretix.event.settings',
+                user=user,
+                data=data
+            )
+        else:
+            self.organizer.log_action(
+                'pretix.organizer.settings',
+                user=user,
+                data=data
+            )
+
+    def log_create(self, user):
+        self._log_domain_action(user, {'add_alt_domain': self.domainname} if self.mode == KnownDomain.MODE_ORG_ALT_DOMAIN else {'domain': self.domainname})
+
+    def log_delete(self, user):
+        self._log_domain_action(user, {'remove_alt_domain': self.domainname} if self.mode == KnownDomain.MODE_ORG_ALT_DOMAIN else {'domain': None})
+
 
 class AlternativeDomainAssignment(models.Model):
     domain = models.ForeignKey(

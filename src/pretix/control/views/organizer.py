@@ -490,13 +490,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
                 'data': self.footer_links_formset.cleaned_data
             })
         if self.domain_config and self.domain_formset.has_changed():
-            self.request.organizer.log_action('pretix.organizer.domains.changed', user=self.request.user, data={
-                'data': self.domain_formset.cleaned_data
-            })
-            self.domain_formset.save()
-            self.request.organizer.cache.clear()
-            for ev in self.request.organizer.events.all():
-                ev.cache.clear()
+            self._save_domain_config()
         if form.has_changed():
             self.request.organizer.log_action(
                 'pretix.organizer.changed',
@@ -506,6 +500,19 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
 
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
+
+    def _save_domain_config(self):
+        for form in self.domain_formset.initial_forms:
+            if form.instance.pk and form.has_changed():
+                self.object.domains.get(pk=form.instance.pk).log_delete(self.request.user)
+        self.domain_formset.save()
+        for new_obj in self.domain_formset.new_objects:
+            new_obj.log_create(self.request.user)
+        for ch_obj, form in self.domain_formset.changed_objects:
+            ch_obj.log_create(self.request.user)
+        self.request.organizer.cache.clear()
+        for ev in self.request.organizer.events.all():
+            ev.cache.clear()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
