@@ -13,14 +13,15 @@
     padding: 0;
   }
   a.event {
+    --status-bg-color: var(--pretix-brand-primary-tint-90);
+    --status-text-color: var(--pretix-brand-primary-shade-42);
+    --status-border-color: #{$brand-primary};
     display: block;
-    background: var(--pretix-brand-primary-lighten-48);
-    color: $brand-primary;
+    background: var(--status-bg-color);
+    color: var(--status-text-color);
+    border: 1px solid var(--status-border-color);
+    border-left-width: 12px;
     border-radius: $border-radius-base;
-    border-style: solid;
-    border-color: var(--pretix-brand-primary-lighten-30);
-    border-width: 1px 1px 1px 12px;
-    border-left-color: inherit;
 
     padding: 3px 5px;
     margin-bottom: 3px;
@@ -29,77 +30,42 @@
     text-decoration: none;
 
     &:hover {
-      background: var(--pretix-brand-primary-lighten-50);
-      border-color: $brand-primary;
+      outline: 1px solid var(--status-border-color);
+      outline-offset: 0;
     }
     &:focus {
-      outline-color: inherit;
+      outline: 2px solid var(--status-border-color);
+      outline-offset: 2px;
     }
 
     &.continued, &.over {
-      background: lighten($text-muted, 54%);
-      border-color: lighten($text-muted, 44%);
-      border-left-color: lighten($text-muted, 44%);
-      color: $text-muted;
-      &:hover {
-        background: lighten($text-muted, 54%);
-        border-color: lighten($text-muted, 40%);
-      }
-    }
-
-    &.soon {
-      background: var(--pretix-brand-primary-lighten-53);
-      border-color: var(--pretix-brand-primary-lighten-40);
-      border-left-color: var(--pretix-brand-primary-lighten-20);
-      color: var(--pretix-brand-primary-lighten-5);
-      &:hover {
-        background: var(--pretix-brand-primary-lighten-55);
-        border-color: var(--pretix-brand-primary-lighten-20);
-      }
+      --status-bg-color: #{$table-bg-accent};
+      --status-text-color: #{$text-muted};
+      --status-border-color: #{tint($text-muted, 50%)};
     }
 
     &.available {
-      background: var(--pretix-brand-success-lighten-48);
-      border-color: var(--pretix-brand-success-lighten-30);
-      border-left-color: $brand-success;
-      color: var(--pretix-brand-success-darken-12);
+      --status-bg-color: #{$alert-success-bg};
+      --status-text-color: #{$alert-success-text};
+      --status-border-color: #{$alert-success-border};
 
       &.low {
-        border-left-color: var(--pretix-brand-warning-lighten-12);
-      }
-
-      &:hover {
-        background: var(--pretix-brand-success-lighten-50);
-        border-color: $brand-success;
-
-        &.low {
-          border-left-color: $brand-warning;
-        }
+        border-left-width: 8px;
+        padding-left: 9px;
+        background: linear-gradient(to right, $alert-warning-border 4px, $alert-warning-bg 4px, $alert-warning-bg 25%, $alert-success-bg 66%);
       }
     }
 
     &.waitinglist {
-      background: var(--pretix-brand-warning-lighten-41);
-      border-color: var(--pretix-brand-warning-lighten-31);
-      border-left-color: var(--pretix-brand-warning-lighten-12);
-      color: #963;
-
-      &:hover {
-        background: var(--pretix-brand-warning-lighten-43);
-        border-color: $brand-warning;
-      }
+      --status-bg-color: #{$alert-warning-bg};
+      --status-text-color: #{$alert-warning-text};
+      --status-border-color: #{$alert-warning-border};
     }
 
     &.reserved, &.soldout, {
-      background: var(--pretix-brand-danger-lighten-43);
-      border-color: var(--pretix-brand-danger-lighten-30);
-      border-left-color: var(--pretix-brand-danger-lighten-30);
-      color: var(--pretix-brand-danger-darken-5);
-
-      &:hover {
-        background: var(--pretix-brand-danger-lighten-45);
-        border-color: var(--pretix-brand-danger-lighten-25);
-      }
+      --status-bg-color: #{$alert-danger-bg};
+      --status-text-color: #{$alert-danger-text};
+      --status-border-color: #{$alert-danger-border};
     }
 
     &.available > *:first-child,
@@ -474,49 +440,26 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
       display: none;
     }
     a.day-label, .day-label {
+      --status-text-color: #{$text-muted};
       display: block;
       padding: 3px 3px 15px 4px;
       font-size: 12px;
       font-weight: bold;
-      color: $text-muted;
+      color: var(--status-text-color);
       margin-bottom: 0;
       border-left-width: 8px;
     }
     .no-events .day-label {
       padding-left: 12px;
     }
+    a.event.available.low {
+      border-left-width: 5px;
+      padding-left: 7px;
+      background: linear-gradient(to right, $alert-warning-border 3px, $alert-warning-bg 3px, $alert-warning-bg 25%, var(--status-bg-color) 66%);
+    }
   }
   #selected-day:has(*) {
     padding: $table-cell-padding;
-  }
-  .day[aria-selected="true"] .event {
-    &.continued, &.over {
-      background: lighten($text-muted, 54%);
-      border-color: lighten($text-muted, 40%);
-    }
-
-    &.soon {
-      background: var(--pretix-brand-primary-lighten-55);
-      border-color: var(--pretix-brand-primary-lighten-20);
-    }
-
-    &.available {
-      background: var(--pretix-brand-success-lighten-50);
-      border-color: $brand-success;
-      &.low {
-        border-left-color: $brand-warning;
-      }
-    }
-
-    &.waitinglist {
-      background: var(--pretix-brand-warning-lighten-43);
-      border-color: $brand-warning;
-    }
-
-    &.reserved, &.soldout, {
-      background: var(--pretix-brand-danger-lighten-45);
-      border-color: var(--pretix-brand-danger-lighten-25);
-    }
   }
 }
 #monthselform .row {
