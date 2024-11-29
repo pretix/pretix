@@ -19,15 +19,12 @@
                         <td class="day {% if day.events %}has-events{% else %}no-events{% endif %}"
                             data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}">
                             <p>
-                                <time datetime="{{ day.date|date_fast:"Y-m-d" }}">
-                                {% if day.events %}
-                                    <a href="#selected-day" class="day-label event hidden-sm hidden-md hidden-lg" aria-hidden="true">
-                                        <b>{{ day.day }}</b>
-                                    </a>
-                                    <span aria-hidden="true" class="hidden-xs">{{ day.day }}</span>
-                                {% else %}
-                                    <span aria-hidden="true" class="day-label">{{ day.day }}</span>
-                                {% endif %}
+                            {% if day.events %}
+                                <a href="#selected-day" class="day-label event hidden-sm hidden-md hidden-lg">
+                                    <b aria-hidden="true">{{ day.day }}</b>
+                                    <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="sr-only">
+                                        {{ day.date|date_fast:"SHORT_DATE_FORMAT" }}
+                                    </time>
                                     <span class="sr-only">
                                         ({% blocktrans trimmed count count=day.events|length %}
                                             {{ count }} event
@@ -35,7 +32,11 @@
                                             {{ count }} events
                                         {% endblocktrans %})
                                     </span>
-                                </time>
+                                </a>
+                                <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="hidden-xs">{{ day.day }}</time>
+                            {% else %}
+                                <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="day-label">{{ day.day }}</time>
+                            {% endif %}
                             </p>
                             <ul class="events">
                                 {% for event in day.events %}

@@ -473,7 +473,7 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
     .day .events {
       display: none;
     }
-    time>.day-label {
+    a.day-label, .day-label {
       display: block;
       padding: 3px 3px 15px 4px;
       font-size: 12px;
