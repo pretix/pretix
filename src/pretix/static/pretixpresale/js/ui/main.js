@@ -468,6 +468,9 @@ $(function () {
     }).each(function() {
         // check all events classes and set the "winning" class for the availability of the day-label on mobile
         var $dayLabel = $('.day-label', this);
+        if ($('.available.low', this).length == $('.available', this).length) {
+            $dayLabel.addClass('low');
+        }
         var classes = ['available', 'waitinglist', 'soon', 'reserved', 'soldout', 'continued', 'over'];
         for (var c of classes) {
             if ($('.'+c, this).length) {
