@@ -463,15 +463,27 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
   }
 }
 @media (max-width: $screen-xs-max) {
-  .table-calendar .day .events {
-    display: none;
-  }
-  .table-calendar .day-label {
-    display: block;
-    padding: 4px 6px 4px 18px;
-    font-size: 12px;
-    font-weight: bold;
-    color: $text-muted;
+  .table-calendar {
+    .day, .no-day {
+      padding: 3px 2px;
+    }
+    p {
+      margin-bottom: 0;
+    }
+    .day .events {
+      display: none;
+    }
+    time>.day-label {
+      display: block;
+      padding: 3px 3px 15px 4px;
+      font-size: 12px;
+      font-weight: bold;
+      color: $text-muted;
+      margin-bottom: 0;
+    }
+    .no-events .day-label {
+      padding-left: 16px;
+    }
   }
   #selected-day:has(*) {
     padding: $table-cell-padding;
