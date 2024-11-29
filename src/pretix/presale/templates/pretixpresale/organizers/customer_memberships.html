@@ -1,0 +1,111 @@
+{% extends "pretixpresale/organizers/customer_base.html" %}
+{% load i18n %}
+{% load icon %}
+{% load eventurl %}
+{% load textbubble %}
+{% block title %}{% trans "Memberships" %}{% endblock %}
+{% block inner %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% icon "id-badge" %}
+                <b>{% trans "Memberships" %}</b> ({{ page_obj.paginator.count }})
+            </h3>
+        </div>
+        <div class="panel-body">
+            {% if memberships %}
+                <ul class="full-width-list alternating-rows">
+                    {% for m in memberships %}
+                    <li class="row">
+                        <dl>
+                            <div class="col-xs-5">
+                                <dt>
+                                    {% if m.canceled %}<del>{% endif %}
+                                    <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}">
+                                        {{ m.membership_type.name }}
+                                    </a>
+                                    {% if m.canceled %}</del>{% endif %}
+                                    {% if m.membership_type.transferable %}
+                                        <span class="text-muted" data-toggle="tooltip" title="{% trans "Membership is transferable" %}">
+                                            {% icon "users" %}
+                                        </span>
+                                    {% endif %}
+                                </dt>
+                                {% if m.attendee_name %}
+                                <dd class="text-muted">
+                                    {% icon "id-badge" %}
+                                    <span class="sr-only">{% trans "Attendee name" %}:</span>
+                                    {{ m.attendee_name }}
+                                </dd>
+                                {% endif %}
+                                <dd class="text-muted">
+                                    <small>
+                                    {% if m.canceled %}
+                                        {% textbubble "danger" icon="times" %}
+                                            {% trans "Canceled" %}
+                                        {% endtextbubble %}
+                                    {% elif m.expired %}
+                                        {% icon "minus-square-o" %}
+                                        {% trans "Expired since" %}
+                                        <time datetime="{{ m.date_end|date:"Y-m-d H:i" }}">
+                                            {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                        </time>
+                                    {% elif m.not_yet_valid %}
+                                        {% icon "clock-o" %}
+                                        {% trans "Valid from" %}
+                                        <time datetime="{{ m.date_start|date:"Y-m-d H:i" }}">
+                                            {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}
+                                        </time>
+                                    {% else %}
+                                        {% icon "check" %}
+                                        {% trans "Valid until" %}
+                                        <time datetime="{{ m.date_end|date:"Y-m-d H:i" }}">
+                                            {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                        </time>
+                                    {% endif %}
+                                    </small>
+                                </dd>
+                                {% if m.testmode %}
+                                <dd>
+                                    <small>
+                                    {% textbubble "warning" %}
+                                        {% trans "TEST MODE" %}
+                                    {% endtextbubble %}
+                                    </small>
+                                </dd>
+                                {% endif %}
+                            </div>
+                            <div class="col-xs-5">
+                                <dd>
+                                    <div class="quotabox full-width">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success progress-bar-{{ m.percentage_used }}">
+                                            </div>
+                                        </div>
+                                        <div class="numbers">
+                                            {{ m.usages }} /
+                                            {{ m.membership_type.max_usages|default_if_none:"∞" }}
+                                        </div>
+                                    </div>
+                                </dd>
+                            </div>
+                            <div class="col-xs-2">
+                                <dt class="sr-only">{% trans "Actions" %}</dt>
+                                <dd class="text-right">
+                                    <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}">
+                                        {% icon "list-ul" %}
+                                        {% trans "Details" %}
+                                    </a>
+                                </dd>
+                            </div>
+                        </dl>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-center">{% trans "You don’t have any memberships in your account yet." %}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

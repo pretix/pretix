@@ -30,9 +30,6 @@ $body-bg: #f5f5f5 !default;
     float: left;
     margin-right: .25em;
 }
-.status-dot {
-    font-size: 1.2em;
-}
 .text-warning { color: $brand-warning; }
 .text-info { color: $brand-info; }
 .text-success { color: $brand-success; }
@@ -97,6 +94,9 @@ footer nav .btn-link {
     img {
         vertical-align: baseline;
     }
+}
+.subnav a.active {
+    font-weight: bold;
 }
 .locales ul {
     display: inline;
@@ -499,6 +499,9 @@ h2 .label {
     &.availability .progress-bar-success {
         background: var(--pretix-brand-success-lighten-20);
     }
+    &.full-width {
+        width: 100%;
+    }
 }
 
 .nav-tabs {
@@ -526,6 +529,76 @@ h2 .label {
     padding: 32px; /* 30px + 2px optical compensation */
     font-size: 30px;
 }
+
+
+.textbubble-success, .textbubble-info, .textbubble-warning, .textbubble-danger {
+  padding: 0 .4em;
+  border-radius: $border-radius-base;
+  font-weight: bold;
+  white-space: nowrap;
+
+  &:has(>.fa:first-child) {
+    padding-left: .25em;
+  }
+}
+.textbubble-success {
+  color: var(--pretix-brand-success-shade-42);
+  background: var(--pretix-brand-success-tint-85);
+  .fa {
+    color: var(--pretix-brand-success);
+  }
+}
+.textbubble-info {
+  color: var(--pretix-brand-info-shade-42);
+  background: var(--pretix-brand-info-tint-85);
+  .fa {
+    color: var(--pretix-brand-info);
+  }
+}
+.textbubble-warning {
+  color: var(--pretix-brand-warning-shade-42);
+  background: var(--pretix-brand-warning-tint-85);
+  .fa {
+    color: var(--pretix-brand-warning);
+  }
+}
+.textbubble-danger {
+  color: var(--pretix-brand-danger-shade-42);
+  background: var(--pretix-brand-danger-tint-85);
+  .fa {
+    color: var(--pretix-brand-danger);
+  }
+}
+
+
+.full-width-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 15px 0;
+  }
+  li+li {
+    border-top: 1px solid $table-border-color;
+  }
+}
+.panel-body:has(>.full-width-list:first-child) {
+    padding-top: 0;
+}
+.panel-body:has(>.full-width-list:last-child) {
+    padding-bottom: 0;
+}
+
+.alternating-rows .row:nth-child(even) {
+  background-color: $table-bg-accent;
+}
+
+
+.account-addresses address::first-line {
+    font-weight: bold;
+}
+
 
 @import "_iframe.scss";
 @import "_a11y.scss";
