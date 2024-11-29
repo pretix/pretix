@@ -1207,6 +1207,67 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         }
         assert ia.name_cached == 'Mr John Kennedy'
 
+    def test_invoice_address_required_no_zipcode_country(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_address_not_asked_free = True
+        self.event.settings.set('name_scheme', 'title_given_middle_family')
+
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="city"]')), 1)
+
+        # Not all required fields filled out, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
+            'street': '',
+            'zipcode': '',
+            'city': 'Bar',
+            'country': 'BI',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Correct request for a country where zip code is not required in address
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
+            'street': 'Baz',
+            'zipcode': '',
+            'city': 'Bar',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            ia = InvoiceAddress.objects.last()
+        assert ia.name_parts == {
+            'title': 'Mr',
+            'given_name': 'John',
+            'middle_name': '',
+            'family_name': 'Kennedy',
+            "_scheme": "title_given_middle_family"
+        }
+        assert ia.name_cached == 'Mr John Kennedy'
+
     def test_invoice_address_validated(self):
         self.event.settings.invoice_address_asked = True
         self.event.settings.invoice_address_required = True
