@@ -20,7 +20,7 @@ $(function () {
                     xhr.abort();
                 }
                 for (var k in dependents) dependents[k].prop("disabled", true);
-                loader.fadeIn();
+                loader.show();
                 xhr = $.getJSON(url + '?country=' + dependency.val(), function (data) {
                     var selected_value = dependents.state.prop("data-selected-value");
                     if (selected_value) dependents.state.prop("data-selected-value", "");
@@ -43,7 +43,7 @@ $(function () {
                     }
                     for (var k in dependents) dependents[k].prop("disabled", false);
                 }).always(function() {
-                    loader.fadeOut();
+                    loader.hide();
                 }).fail(function(){
                     // TODO: handle failed request
                 });
