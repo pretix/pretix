@@ -1232,9 +1232,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'name_parts_3': 'Kennedy',
             'street': '',
             'zipcode': '',
-            'city': 'Bar',
+            'city': '',
             'country': 'BI',
-            'vat_id': 'DE123456',
             'email': 'admin@localhost'
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1248,11 +1247,10 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'name_parts_1': 'John',
             'name_parts_2': '',
             'name_parts_3': 'Kennedy',
-            'street': 'Baz',
+            'street': 'BP 12345',
             'zipcode': '',
-            'city': 'Bar',
-            'country': 'DE',
-            'vat_id': 'DE123456',
+            'city': 'Bujumbura',
+            'country': 'BI',
             'email': 'admin@localhost'
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
