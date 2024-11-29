@@ -1076,8 +1076,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))
                     return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_attendees_required', as_type=bool) \
-                        and (cp.street is None or cp.city is None or cp.country is None):
+                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_addresses_required', as_type=bool) \
+                        and (cp.street is None and cp.city is None and cp.country is None):
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))
                     return False
