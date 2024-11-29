@@ -28,9 +28,7 @@ $(function () {
                     if (data.data.length > 0) {
                         $.each(data.data, function (k, s) {
                             var o = $("<option>").attr("value", s.code).text(s.name);
-                            if (s.code == selected_value || (selected_value && selected_value.indexOf && selected_value.indexOf(s.code) > -1)) {
-                                o.prop("selected", true);
-                            }
+                            if (selected_value == s.code) o.prop("selected", true);
                             dependents.state.append(o);
                         });
                     }
