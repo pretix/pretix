@@ -475,7 +475,8 @@ $(function () {
         for (var c of classes) {
             if ($('.'+c, this).length) {
                 $dayLabel.addClass(c);
-                break;
+                // CAREFUL: „return“ as „break“ is not supported before ES2015 and breaks e.g. on iOS 15
+                return;
             }
         }
     });
