@@ -480,9 +480,10 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
       font-weight: bold;
       color: $text-muted;
       margin-bottom: 0;
+      border-left-width: 8px;
     }
     .no-events .day-label {
-      padding-left: 16px;
+      padding-left: 12px;
     }
   }
   #selected-day:has(*) {
