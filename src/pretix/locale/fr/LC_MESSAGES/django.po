@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-27 03:00+0000\n"
+"PO-Revision-Date: 2024-11-29 23:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -9966,7 +9966,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1520
 msgid "Allow users to download tickets"
-msgstr "Autoriser les utilisateurs à télécharger des billets"
+msgstr "Autoriser les utilisateurs à télécharger les billets"
 
 #: pretix/base/settings.py:1521
 msgid "If this is off, nobody can download a ticket."
@@ -18254,7 +18254,7 @@ msgstr "Voir tous les événements récents"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:65
 msgid "Your event series"
-msgstr "Votre série d'événements"
+msgstr "Vos séries d'événements"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:81
 msgid "View all event series"
