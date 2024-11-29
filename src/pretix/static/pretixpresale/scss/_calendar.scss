@@ -16,14 +16,23 @@
     --status-bg-color: var(--pretix-brand-primary-tint-90);
     --status-text-color: var(--pretix-brand-primary-shade-42);
     --status-border-color: #{$brand-primary};
+    position: relative;
     display: block;
     background: var(--status-bg-color);
     color: var(--status-text-color);
     border: 1px solid var(--status-border-color);
-    border-left-width: 12px;
     border-radius: $border-radius-base;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 11px;
+      height: 100%;
+      background: var(--status-border-color);
+    }
 
-    padding: 3px 5px;
+    padding: 3px 5px 3px 17px;
     margin-bottom: 3px;
     font-size: 12px;
     overflow-wrap: anywhere;
@@ -49,10 +58,8 @@
       --status-text-color: #{$alert-success-text};
       --status-border-color: #{$alert-success-border};
 
-      &.low {
-        border-left-width: 8px;
-        padding-left: 9px;
-        background: linear-gradient(to right, $alert-warning-border 4px, $alert-warning-bg 4px, $alert-warning-bg 25%, $alert-success-bg 66%);
+      &.low:before {
+        background: linear-gradient(to bottom, var(--pretix-brand-warning) 1em, var(--status-border-color) 2.5em);
       }
     }
 
@@ -442,20 +449,17 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
     a.day-label, .day-label {
       --status-text-color: #{$text-muted};
       display: block;
-      padding: 3px 3px 15px 4px;
+      padding: 3px 3px 15px 12px;
       font-size: 12px;
       font-weight: bold;
       color: var(--status-text-color);
       margin-bottom: 0;
-      border-left-width: 8px;
     }
     .no-events .day-label {
       padding-left: 12px;
     }
-    a.event.available.low {
-      border-left-width: 5px;
-      padding-left: 7px;
-      background: linear-gradient(to right, $alert-warning-border 3px, $alert-warning-bg 3px, $alert-warning-bg 25%, var(--status-bg-color) 66%);
+    a.day-label:before {
+      width: 8px;
     }
   }
   #selected-day:has(*) {
