@@ -1143,6 +1143,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             validate_address  # local import to prevent impact on startup time
 
         data = self.cleaned_data
+
         if not data.get('is_business'):
             data['company'] = ''
             data['vat_id'] = ''
@@ -1153,7 +1154,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 raise ValidationError({"company": _('You need to provide a company name.')})
             if not data.get('is_business') and not data.get('name_parts'):
                 raise ValidationError(_('You need to provide your name.'))
-            if not data.get('street') and not data.get('zipcode') and not data.get('city'):
+            if 'street' in self.fields and not data.get('street') and not data.get('zipcode') and not data.get('city'):
                 raise ValidationError({"street": _('This field is required.')})
 
         if 'vat_id' in self.changed_data or not data.get('vat_id'):
