@@ -1150,7 +1150,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             data['vat_id'] = ''
         if self.event.settings.invoice_address_required:
             if data.get('is_business') and not data.get('company'):
-                raise ValidationError(_('You need to provide a company name.'))
+                raise ValidationError({"company": _('You need to provide a company name.')})
             if not data.get('is_business') and not data.get('name_parts'):
                 raise ValidationError(_('You need to provide your name.'))
 
