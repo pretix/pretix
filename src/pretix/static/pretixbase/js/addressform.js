@@ -8,7 +8,8 @@ $(function () {
             url = this.getAttribute('data-country-information-url'),
             form = dependency.closest(".panel-body, form, .profile-scope"),
             isRequired = dependency.closest(".form-group").is(".required"),
-            dependents =  {
+            htmlRequired = dependency.closest(".no-required-attributes").length == 0,
+            dependents = {
                 'city': form.find("input[name$=city]"),
                 'zipcode': form.find("input[name$=zipcode]"),
                 'street': form.find("textarea[name$=street]"),
@@ -39,7 +40,7 @@ $(function () {
                             required = 'required' in options && options.required && isRequired && visible;
 
                         dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
-                        dependent.prop("required", required);
+                        dependent.prop("required", required && htmlRequired);
                     }
                     for (var k in dependents) dependents[k].prop("disabled", false);
                 }).always(function() {
