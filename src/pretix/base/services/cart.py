@@ -1426,6 +1426,28 @@ class CartManager:
             raise CartError(err)
 
 
+def add_payment_to_cart_session(cart_session, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):
+    """
+    :param cart_session: The current cart session.
+    :param provider: The instance of your payment provider.
+    :param min_value: The minimum value this payment instrument supports, or ``None`` for unlimited.
+    :param max_value: The maximum value this payment instrument supports, or ``None`` for unlimited. Highly discouraged
+                      to use for payment providers which charge a payment fee, as this can be very user-unfriendly if
+                      users need a second payment method just for the payment fee of the first method.
+    :param info_data: A dictionary of information that will be passed through to the ``OrderPayment.info_data`` attribute.
+    :return:
+    """
+    cart_session.setdefault('payments', [])
+    cart_session['payments'].append({
+        'id': str(uuid.uuid4()),
+        'provider': provider.identifier,
+        'multi_use_supported': provider.multi_use_supported,
+        'min_value': str(min_value) if min_value is not None else None,
+        'max_value': str(max_value) if max_value is not None else None,
+        'info_data': info_data or {},
+    })
+
+
 def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):
     """
     :param request: The current HTTP request context.
@@ -1440,16 +1462,7 @@ def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: D
     from pretix.presale.views.cart import cart_session
 
     cs = cart_session(request)
-    cs.setdefault('payments', [])
-
-    cs['payments'].append({
-        'id': str(uuid.uuid4()),
-        'provider': provider.identifier,
-        'multi_use_supported': provider.multi_use_supported,
-        'min_value': str(min_value) if min_value is not None else None,
-        'max_value': str(max_value) if max_value is not None else None,
-        'info_data': info_data or {},
-    })
+    add_payment_to_cart_session(cs, provider, min_value, max_value, info_data)
 
 
 def get_fees(event, request, total, invoice_address, payments, positions):
