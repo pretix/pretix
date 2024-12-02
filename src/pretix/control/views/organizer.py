@@ -104,11 +104,11 @@ from pretix.control.forms.organizer import (
     CustomerCreateForm, CustomerUpdateForm, DeviceBulkEditForm, DeviceForm,
     EventMetaPropertyAllowedValueFormSet, EventMetaPropertyForm, GateForm,
     GiftCardAcceptanceInviteForm, GiftCardCreateForm, GiftCardUpdateForm,
-    MailSettingsForm, MembershipTypeForm, MembershipUpdateForm,
-    OrganizerDeleteForm, OrganizerFooterLinkFormset, OrganizerForm,
-    OrganizerSettingsForm, OrganizerUpdateForm, ReusableMediumCreateForm,
-    ReusableMediumUpdateForm, SalesChannelForm, SSOClientForm, SSOProviderForm,
-    TeamForm, WebHookForm,
+    KnownDomainFormset, MailSettingsForm, MembershipTypeForm,
+    MembershipUpdateForm, OrganizerDeleteForm, OrganizerFooterLinkFormset,
+    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm,
+    ReusableMediumCreateForm, ReusableMediumUpdateForm, SalesChannelForm,
+    SSOClientForm, SSOProviderForm, TeamForm, WebHookForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
@@ -448,6 +448,10 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         return self.object
 
     @cached_property
+    def domain_config(self):
+        return self.request.user.has_active_staff_session(self.request.session.session_key)
+
+    @cached_property
     def sform(self):
         return OrganizerSettingsForm(
             obj=self.object,
@@ -461,6 +465,8 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         context = super().get_context_data(*args, **kwargs)
         context['sform'] = self.sform
         context['footer_links_formset'] = self.footer_links_formset
+        if self.domain_config:
+            context['domain_formset'] = self.domain_formset
         return context
 
     @transaction.atomic
@@ -483,6 +489,8 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
             self.request.organizer.log_action('pretix.organizer.footerlinks.changed', user=self.request.user, data={
                 'data': self.footer_links_formset.cleaned_data
             })
+        if self.domain_config and self.domain_formset.has_changed():
+            self._save_domain_config()
         if form.has_changed():
             self.request.organizer.log_action(
                 'pretix.organizer.changed',
@@ -493,10 +501,22 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
+    def _save_domain_config(self):
+        for form in self.domain_formset.initial_forms:
+            if form.instance.pk and form.has_changed():
+                self.object.domains.get(pk=form.instance.pk).log_delete(self.request.user)
+        self.domain_formset.save()
+        for new_obj in self.domain_formset.new_objects:
+            new_obj.log_create(self.request.user)
+        for ch_obj, form in self.domain_formset.changed_objects:
+            ch_obj.log_create(self.request.user)
+        self.request.organizer.cache.clear()
+        for ev in self.request.organizer.events.all():
+            ev.cache.clear()
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         if self.request.user.has_active_staff_session(self.request.session.session_key):
-            kwargs['domain'] = True
             kwargs['change_slug'] = True
         return kwargs
 
@@ -508,7 +528,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        if form.is_valid() and self.sform.is_valid() and self.footer_links_formset.is_valid():
+        if form.is_valid() and self.sform.is_valid() and self.footer_links_formset.is_valid() and (not self.domain_config or self.domain_formset.is_valid()):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -518,6 +538,11 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         return OrganizerFooterLinkFormset(self.request.POST if self.request.method == "POST" else None,
                                           organizer=self.object,
                                           prefix="footer-links", instance=self.object)
+
+    @cached_property
+    def domain_formset(self):
+        return KnownDomainFormset(self.request.POST if self.request.method == "POST" else None, prefix="domains",
+                                  instance=self.object, organizer=self.object)
 
     def save_footer_links_formset(self, obj):
         self.footer_links_formset.save()

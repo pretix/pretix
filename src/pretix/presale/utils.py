@@ -57,8 +57,9 @@ from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Customer, Event, Organizer
 from pretix.base.timemachine import time_machine_now_assigned_from_request
 from pretix.helpers.http import redirect_to_url
+from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import (
-    get_event_domain, get_organizer_domain,
+    build_absolute_uri, get_event_domain, get_organizer_domain,
 )
 from pretix.presale.signals import process_request, process_response
 
@@ -134,7 +135,7 @@ def update_customer_session_auth_hash(request, customer):
 
 
 def add_customer_to_request(request):
-    if 'cross_domain_customer_auth' in request.GET and request.event_domain:
+    if 'cross_domain_customer_auth' in request.GET and request.domain_mode in (KnownDomain.MODE_EVENT_DOMAIN, KnownDomain.MODE_ORG_ALT_DOMAIN):
         # The user is logged in on the main domain and now wants to take their session
         # to a event-specific domain. We validate the one time token received via a
         # query parameter and make sure we invalidate it right away. Then, we look up
@@ -258,11 +259,13 @@ def _detect_event(request, require_live=True, require_plugin=None):
 
     url = resolve(request.path_info)
 
+    request_domain_mode = getattr(request, 'domain_mode', 'system')
+    print("Mode", request_domain_mode)
     try:
-        if hasattr(request, 'event_domain'):
+        if request_domain_mode == KnownDomain.MODE_EVENT_DOMAIN:
             # We are on an event's custom domain
             pass
-        elif hasattr(request, 'organizer_domain'):
+        elif request_domain_mode in (KnownDomain.MODE_ORG_DOMAIN, KnownDomain.MODE_ORG_ALT_DOMAIN):
             # We are on an organizer's custom domain
             if 'organizer' in url.kwargs and url.kwargs['organizer']:
                 if url.kwargs['organizer'] != request.organizer.slug:
@@ -277,12 +280,20 @@ def _detect_event(request, require_live=True, require_plugin=None):
                     organizer=request.organizer,
                 )
 
-                # If this event has a custom domain, send the user there
-                domain = get_event_domain(request.event)
-                if domain:
+                # If this event has a custom domain or is not available on this alt domain, send the user there
+                domain, domainmode = get_event_domain(request.event, fallback=False, return_mode=True)
+                if not domain and request_domain_mode == KnownDomain.MODE_ORG_ALT_DOMAIN:
+                    path = request.get_full_path().split("/", 2)[-1]
+                    r = redirect_to_url(build_absolute_uri(request.event, "presale:event.index") + path)
+                    r['Access-Control-Allow-Origin'] = '*'
+                    return r
+                elif domain and domain != request.host:
                     if request.port and request.port not in (80, 443):
                         domain = '%s:%d' % (domain, request.port)
-                    path = request.get_full_path().split("/", 2)[-1]
+                    if domainmode == KnownDomain.MODE_EVENT_DOMAIN:
+                        path = request.get_full_path().split("/", 2)[-1]
+                    else:
+                        path = request.get_full_path()
                     r = redirect_to_url(urljoin('%s://%s' % (request.scheme, domain), path))
                     r['Access-Control-Allow-Origin'] = '*'
                     return r
@@ -299,11 +310,14 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 request.organizer = request.event.organizer
 
                 # If this event has a custom domain, send the user there
-                domain = get_event_domain(request.event)
+                domain, domainmode = get_event_domain(request.event, fallback=False, return_mode=True)
                 if domain:
                     if request.port and request.port not in (80, 443):
                         domain = '%s:%d' % (domain, request.port)
-                    path = request.get_full_path().split("/", 3)[-1]
+                    if domainmode == KnownDomain.MODE_EVENT_DOMAIN:
+                        path = request.get_full_path().split("/", 3)[-1]
+                    else:
+                        path = request.get_full_path().split("/", 2)[-1]
                     r = redirect_to_url(urljoin('%s://%s' % (request.scheme, domain), path))
                     r['Access-Control-Allow-Origin'] = '*'
                     return r
@@ -377,6 +391,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
     except Event.DoesNotExist:
         try:
             if hasattr(request, 'organizer_domain'):
+                # Redirect for case-insensitive event slug
                 event = request.organizer.events.get(
                     slug__iexact=url.kwargs['event'],
                     organizer=request.organizer,
@@ -388,6 +403,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 return r
             else:
                 if 'event' in url.kwargs and 'organizer' in url.kwargs:
+                    # Redirect for case-insensitive event or organizer slug
                     event = Event.objects.select_related('organizer').get(
                         slug__iexact=url.kwargs['event'],
                         organizer__slug__iexact=url.kwargs['organizer']
@@ -403,6 +419,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
         raise Http404(_('The selected event was not found.'))
     except Organizer.DoesNotExist:
         if 'organizer' in url.kwargs:
+            # Redirect for case-insensitive organizer slug
             try:
                 organizer = Organizer.objects.get(
                     slug__iexact=url.kwargs['organizer']
