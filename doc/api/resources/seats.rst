@@ -270,7 +270,7 @@ Endpoints
    You can pass up to 10,000 seats in one request.
 
    The endpoint will return an error if you pass a seat ID that does not exist.
-   However, it will not return an error if one of the passed seat is already blocked or sold.
+   However, it will not return an error if one of the passed seats is already blocked or sold.
 
    **Example request**:
 
