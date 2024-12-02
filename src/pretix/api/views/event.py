@@ -747,30 +747,23 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
             data={"seats": [serializer.instance.pk]},
         )
 
-    @action(methods=["POST"], detail=False)
-    def bulk_block(self, request, *args, **kwargs):
+    def bulk_change_blocked(self, blocked):
         s = SeatBulkBlockInputSerializer(
-            data=request.data,
-            context={"event": request.event, "queryset": self.get_queryset()},
+            data=self.request.data,
+            context={"event": self.request.event, "queryset": self.get_queryset()},
         )
         s.is_valid(raise_exception=True)
 
         seats = s.validated_data["seats"]
         for seat in seats:
-            seat.blocked = True
+            seat.blocked = blocked
         Seat.objects.bulk_update(seats, ["blocked"], batch_size=1000)
         return Response({})
+
+    @action(methods=["POST"], detail=False)
+    def bulk_block(self, request, *args, **kwargs):
+        return self.bulk_change_blocked(True)
 
     @action(methods=["POST"], detail=False)
     def bulk_unblock(self, request, *args, **kwargs):
-        s = SeatBulkBlockInputSerializer(
-            data=request.data,
-            context={"event": request.event, "queryset": self.get_queryset()},
-        )
-        s.is_valid(raise_exception=True)
-
-        seats = s.validated_data["seats"]
-        for seat in seats:
-            seat.blocked = False
-        Seat.objects.bulk_update(seats, ["blocked"], batch_size=1000)
-        return Response({})
+        return self.bulk_change_blocked(False)
