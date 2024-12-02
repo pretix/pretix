@@ -350,7 +350,7 @@ Endpoints
         Content-Type: application/json
 
         {
-            "seat_ids": ["6c0e29e5-05d6-421f-99f3-afd01478ecad", "c2899340-e2e7-4d05-8100-000a4b6d7cf4"]
+            "seat_guids": ["6c0e29e5-05d6-421f-99f3-afd01478ecad", "c2899340-e2e7-4d05-8100-000a4b6d7cf4"]
         }
 
    **Example response**:
