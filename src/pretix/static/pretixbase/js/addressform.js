@@ -45,7 +45,15 @@ $(function () {
                 }).always(function() {
                     loader.hide();
                 }).fail(function(){
-                    // TODO: handle failed request
+                    // In case of errors, show everything and require nothing, we can still handle errors in backend
+                    for(var k in dependents) {
+                        const dependent = dependents[k],
+                            visible = true,
+                            required = false;
+
+                        dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
+                        dependent.prop("required", required);
+                    }
                 });
             };
         dependents.state.prop("data-selected-value", dependents.state.val());
