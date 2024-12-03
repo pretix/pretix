@@ -219,7 +219,8 @@
                                                 {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
-                                            <div class="input-item-count-group">
+                                            <fieldset class="input-item-count-group">
+                                                <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}</legend>
                                                 <button type="button" data-step="-1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -230,10 +231,10 @@
                                                        max="{{ var.order_max }}"
                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-label="{% blocktrans with item=item.name var=var.name %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
+                                                       aria-label="{% trans "Quantity" %}">
                                                 <button type="button" data-step="1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
-                                            </div>
+                                            </fieldset>
                                         {% endif %}
                                     </div>
                                 {% else %}
@@ -370,7 +371,8 @@
                                         {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
-                                <div class="input-item-count-group">
+                                <fieldset class="input-item-count-group">
+                                    <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}</legend>
                                     <button type="button" data-step="-1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
                                         {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -382,11 +384,10 @@
                                            max="{{ item.order_max }}"
                                            name="{{ form_prefix }}item_{{ item.id }}"
                                            id="{{ form_prefix }}item_{{ item.id }}"
-                                           aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
-                                           {% if item.description %} aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}>
+                                           aria-label="{% trans "Quantity" %}">
                                     <button type="button" data-step="1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
                                         {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
-                                </div>
+                                </fieldset>
                             {% endif %}
                         </div>
                     {% else %}
