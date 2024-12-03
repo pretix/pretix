@@ -10,12 +10,12 @@
         <section aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
             <h{{ headline_level|default:3 }} class="h3" id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}
                 {% if category.subevent_name %}
-                    <small class="text-muted"><i class="fa fa-calendar"></i> {{ category.subevent_name }}</small>
+                    <small class="text-muted"><i class="fa fa-calendar" aria-hidden="true"></i> {{ category.subevent_name }}</small>
                 {% endif %}
                 {% if category.category_has_discount %}
                     <small class="text-success">
                         <i class="fa fa-star" aria-hidden="true"></i>
-                        <span class="sr-only">Congratulations!</span>
+                        <span class="sr-only">{% trans "Congratulations!" %}</span>
                         {% trans "Your order qualifies for a discount" %}
                     </small>
                 {% endif %}
