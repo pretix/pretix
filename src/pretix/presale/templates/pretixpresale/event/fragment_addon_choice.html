@@ -13,7 +13,7 @@
             {{ c.category.description|rich_text }}
         {% endif %}
         {% if c.min_count == c.max_count %}
-            <p class="addon-count-desc" id="addon-count-desc-{{ category_idx }}">
+            <p class="addon-count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                 {% blocktrans trimmed count min_count=c.min_count %}
                     You need to choose exactly one option from this category.
                 {% plural %}
@@ -22,7 +22,7 @@
             </p>
         {% elif c.min_count == 0 and c.max_count >= c.items|length and not c.multi_allowed %}
         {% elif c.min_count == 0 %}
-            <p class="addon-count-desc" id="addon-count-desc-{{ category_idx }}">
+            <p class="addon-count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                 {% blocktrans trimmed count max_count=c.max_count %}
                     You can choose {{ max_count }} option from this category.
                 {% plural %}
@@ -30,7 +30,7 @@
                 {% endblocktrans %}
             </p>
         {% else %}
-            <p class="addon-count-desc" id="addon-count-desc-{{ category_idx }}">
+            <p class="addon-count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                 {% blocktrans trimmed with min_count=c.min_count max_count=c.max_count %}
                     You can choose between {{ min_count }} and {{ max_count }} options from
                     this category.
@@ -198,12 +198,12 @@
                                                         id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
-                                                        aria-describedby="addon-count-desc-{{ category_idx }}">
+                                                        aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
-                                            <fieldset class="input-item-count-group" aria-describedby="addon-count-desc-{{ category_idx }} cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
+                                            <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
                                                 <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}</legend>
                                                 <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -344,12 +344,12 @@
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
-                                            aria-describedby="addon-count-desc-{{ category_idx }}">
+                                            aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                             {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
-                                <fieldset class="input-item-count-group" aria-describedby="addon-count-desc-{{ category_idx }} cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
+                                <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
                                     <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}</legend>
                                     <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
