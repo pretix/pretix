@@ -260,7 +260,6 @@ def _detect_event(request, require_live=True, require_plugin=None):
     url = resolve(request.path_info)
 
     request_domain_mode = getattr(request, 'domain_mode', 'system')
-    print("Mode", request_domain_mode)
     try:
         if request_domain_mode == KnownDomain.MODE_EVENT_DOMAIN:
             # We are on an event's custom domain
