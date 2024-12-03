@@ -89,6 +89,7 @@ class BaseHTMLMailRenderer:
         :param subject: The email subject.
         :param order: The order if this email is connected to one, otherwise ``None``.
         :param position: The order position if this email is connected to one, otherwise ``None``.
+        :param context: Context to use to render placeholders in the plain body
         :return: An HTML string
         """
         raise NotImplementedError()
