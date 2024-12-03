@@ -122,7 +122,7 @@ from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.helpers import OF_SELF, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
-from pretix.helpers.format import format_map
+from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.customer import TokenGenerator
@@ -357,9 +357,10 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
                                 highlight=True,
                             )
                         else:
-                            msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                format_map(v, self.placeholders(preview_item))
-                            )
+                            placeholders = self.placeholders(preview_item)
+                            msgs[self.supported_locale[idx]] = format_map(markdown_compile_email(
+                                format_map(v, placeholders)
+                            ), placeholders, mode=SafeFormatter.MODE_RICH_TO_HTML)
 
         return JsonResponse({
             'item': preview_item,

@@ -62,7 +62,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.html import escape
+from django.utils.html import conditional_escape
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
@@ -100,9 +100,12 @@ from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
 from ...base.services.mail import prefix_subject
+from ...base.services.placeholders import get_sample_context
 from ...base.settings import LazyI18nStringList
 from ...helpers.compat import CompatDeleteView
-from ...helpers.format import format_map
+from ...helpers.format import (
+    PlainHtmlAlternativeString, SafeFormatter, format_map,
+)
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -716,20 +719,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
 
     # get all supported placeholders with dummy values
     def placeholders(self, item):
-        ctx = {}
-        for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item]).values():
-            s = str(p.render_sample(self.request.event))
-            if s.strip().startswith('* '):
-                ctx[p.identifier] = '<div class="placeholder" title="{}">{}</div>'.format(
-                    _('This value will be replaced based on dynamic parameters.'),
-                    markdown_compile_email(s)
-                )
-            else:
-                ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
-                    _('This value will be replaced based on dynamic parameters.'),
-                    escape(s)
-                )
-        return ctx
+        return get_sample_context(self.request.event, MailSettingsForm.base_context[item])
 
     def post(self, request, *args, **kwargs):
         preview_item = request.POST.get('item', '')
@@ -751,9 +741,15 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                                     bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
                                 ), highlight=True)
                             else:
-                                msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                    format_map(v, self.placeholders(preview_item), raise_on_missing=True)
+                                placeholders = self.placeholders(preview_item)
+                                msgs[self.supported_locale[idx]] = format_map(
+                                    markdown_compile_email(
+                                        format_map(v, placeholders, raise_on_missing=True)
+                                    ),
+                                    placeholders,
+                                    mode=SafeFormatter.MODE_RICH_TO_HTML,
                                 )
+
                         except ValueError:
                             msgs[self.supported_locale[idx]] = '<div class="alert alert-danger">{}</div>'.format(
                                 PlaceholderValidator.error_message)
@@ -776,13 +772,18 @@ class MailSettingsRendererPreview(MailSettingsPreview):
     # get all supported placeholders with dummy values
     def placeholders(self, item):
         ctx = {}
-        for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item]).values():
-            ctx[p.identifier] = escape(str(p.render_sample(self.request.event)))
+        for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item], rich=True).values():
+            sample = p.render_sample(self.request.event)
+            if isinstance(sample, PlainHtmlAlternativeString):
+                ctx[p.identifier] = sample
+            else:
+                ctx[p.identifier] = conditional_escape(sample)
         return ctx
 
     def get(self, request, *args, **kwargs):
         v = str(request.event.settings.mail_text_order_placed)
-        v = format_map(v, self.placeholders('mail_text_order_placed'))
+        context = self.placeholders('mail_text_order_placed')
+        v = format_map(v, context)
         renderers = request.event.get_html_mail_renderers()
         if request.GET.get('renderer') in renderers:
             with rolledback_transaction():
@@ -800,7 +801,8 @@ class MailSettingsRendererPreview(MailSettingsPreview):
                     str(request.event.settings.mail_text_signature),
                     gettext('Your order: %(code)s') % {'code': order.code},
                     order,
-                    position=None
+                    position=None,
+                    context=context,
                 )
                 r = HttpResponse(v, content_type='text/html')
                 r._csp_ignore = True

@@ -50,7 +50,7 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
-from django.utils.html import escape, format_html
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -59,12 +59,12 @@ from django.views.generic import (
 )
 from django_scopes import scopes_disabled
 
-from pretix.base.email import get_available_placeholders
 from pretix.base.models import (
     CartPosition, LogEntry, Voucher, WaitingListEntry,
 )
 from pretix.base.models.vouchers import generate_codes
 from pretix.base.services.mail import prefix_subject
+from pretix.base.services.placeholders import get_sample_context
 from pretix.base.services.vouchers import vouchers_send
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncFormView
@@ -74,7 +74,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
 from pretix.control.views import PaginationMixin
 from pretix.helpers.compat import CompatDeleteView
-from pretix.helpers.format import format_map
+from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.models import modelcopy
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -549,22 +549,10 @@ class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
 
     # get all supported placeholders with dummy values
     def placeholders(self, item):
-        ctx = {}
         base_ctx = ['event', 'name']
         if item == 'send_message':
             base_ctx += ['voucher_list']
-        for p in get_available_placeholders(self.request.event, base_ctx).values():
-            s = str(p.render_sample(self.request.event))
-            if s.strip().startswith('* ') or s.startswith('  '):
-                ctx[p.identifier] = '<div class="placeholder" title="{}">{}</div>'.format(
-                    _('This value will be replaced based on dynamic parameters.'),
-                    markdown_compile_email(s)
-                )
-            else:
-                ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
-                    _('This value will be replaced based on dynamic parameters.'),
-                    escape(s)
-                )
+        ctx = get_sample_context(self.request.event, base_ctx)
         return self.SafeDict(ctx)
 
     def post(self, request, *args, **kwargs):
@@ -579,9 +567,10 @@ class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
                 highlight=True
             )
         else:
-            msgs["all"] = markdown_compile_email(
-                format_map(request.POST.get(preview_item), self.placeholders(preview_item))
-            )
+            placeholders = self.placeholders(preview_item)
+            msgs["all"] = format_map(markdown_compile_email(
+                format_map(request.POST.get(preview_item), placeholders)
+            ), placeholders, mode=SafeFormatter.MODE_RICH_TO_HTML)
 
         return JsonResponse({
             'item': preview_item,

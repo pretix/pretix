@@ -76,7 +76,7 @@ from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
-from pretix.helpers.format import format_map
+from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.ical import get_private_icals
@@ -311,7 +311,13 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             try:
                 if plain_text_only:
                     body_html = None
+                elif 'context' in inspect.signature(renderer.render).parameters:
+                    body_html = renderer.render(content_plain, signature, raw_subject, order, position, context)
                 elif 'position' in inspect.signature(renderer.render).parameters:
+                    # Backwards compatibility
+                    warnings.warn('Email renderer called without context argument because context argument is not '
+                                  'supported.',
+                                  DeprecationWarning)
                     body_html = renderer.render(content_plain, signature, raw_subject, order, position)
                 else:
                     # Backwards compatibility
@@ -322,6 +328,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             except:
                 logger.exception('Could not render HTML body')
                 body_html = None
+
+        body_plain = format_map(body_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
 
         send_task = mail_send_task.si(
             to=[email] if isinstance(email, str) else list(email),
@@ -655,7 +663,7 @@ def render_mail(template, context):
     if isinstance(template, LazyI18nString):
         body = str(template)
         if context:
-            body = format_map(body, context)
+            body = format_map(body, context, mode=SafeFormatter.MODE_IGNORE_RICH)
     else:
         tpl = get_template(template)
         body = tpl.render(context)

@@ -305,6 +305,7 @@ def markdown_compile_email(source, allowed_tags=ALLOWED_TAGS, allowed_attributes
         source,
         extensions=[
             'markdown.extensions.sane_lists',
+            'markdown.extensions.tables',
             EmailNl2BrExtension(),
             LinkifyAndCleanExtension(
                 linker,
