@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-29 23:00+0000\n"
+"PO-Revision-Date: 2024-12-03 20:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -31498,7 +31498,7 @@ msgstr "Lo sentimos, se ha producido un error en el proceso de pago."
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
 msgid "PDF ticket output"
-msgstr "Salida de entradas de PDF"
+msgstr "Salida de entradas en PDF"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:52
 msgid ""
