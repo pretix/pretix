@@ -70,7 +70,7 @@ input[type="checkbox"] {
   // Note: Neither radios nor checkboxes can be readonly.
   &[disabled],
   &.disabled,
-  fieldset[disabled] & {
+  fieldset[disabled] &:not(fieldset[disabled] > legend &) {
     cursor: $cursor-disabled;
   }
 }
