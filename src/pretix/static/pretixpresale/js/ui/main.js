@@ -459,10 +459,26 @@ $(function () {
         .on("change mouseup keyup", update_cart_form);
 
     $(".table-calendar td.has-events").click(function () {
-        var $tr = $(this).closest(".table-calendar").find(".selected-day");
-        $tr.find("td").html($(this).find(".events").clone());
-        $tr.find("td").prepend($("<h3>").text($(this).attr("data-date")));
-        $tr.removeClass("hidden");
+        var $grid = $(this).closest("[role='grid']");
+        $grid.find("[aria-selected]").attr("aria-selected", false);
+        $(this).attr("aria-selected", true);
+        $("#selected-day")
+            .html($(this).find(".events").clone())
+            .prepend($("<h3>").text($(this).attr("data-date")));
+    }).each(function() {
+        // check all events classes and set the "winning" class for the availability of the day-label on mobile
+        var $dayLabel = $('.day-label', this);
+        if ($('.available.low', this).length == $('.available', this).length) {
+            $dayLabel.addClass('low');
+        }
+        var classes = ['available', 'waitinglist', 'soon', 'reserved', 'soldout', 'continued', 'over'];
+        for (var c of classes) {
+            if ($('.'+c, this).length) {
+                $dayLabel.addClass(c);
+                // CAREFUL: „return“ as „break“ is not supported before ES2015 and breaks e.g. on iOS 15
+                return;
+            }
+        }
     });
 
     $(".print-this-page").on("click", function (e) {
