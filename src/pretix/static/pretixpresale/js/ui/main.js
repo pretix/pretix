@@ -324,6 +324,19 @@ $(function () {
         var $input = $("input", this);
         if (!$input.prop("checked")) $input.prop('checked', true).trigger("change");
     });
+    $(".accordion-radio input").on("change", function() {
+        // change event on radio-boxes only happens on checked, not uncheck!
+        $(this).closest(".panel").find(":input").each(function() {
+            if (this.hasAttribute("data-required-if-active")) {
+                this.required = this.getAttribute("data-required-if-active");
+            }
+        });
+        // make all other inputs in panels from the same radio-group (input name) optional
+        $(".accordion-radio:has([name=" + this.name + "]:not(:checked)) + div :input").each(function() {
+           this.setAttribute("data-required-if-active", this.required);
+           this.required = false;
+        });
+    }).filter(":checked").trigger("change");
 
     setup_basics($("body"));
     $(".overlay-remove").on("click", function() {
