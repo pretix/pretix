@@ -150,10 +150,6 @@ a.btn, button.btn {
 fieldset.accordion-panel > legend {
   display: contents;
 }
-fieldset.accordion-panel[disabled] > .panel-body {
-  display: none;
-}
-
 .nav-tabs {
   border-bottom: 0px solid #ddd;
 }

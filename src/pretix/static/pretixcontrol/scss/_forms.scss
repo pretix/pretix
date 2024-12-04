@@ -558,9 +558,6 @@ table td > .checkbox input[type="checkbox"] {
 fieldset.accordion-panel > legend {
   display: contents;
 }
-fieldset.accordion-panel[disabled] > .panel-body {
-  display: none;
-}
 .maildesignpreview {
   label {
     display: block;

@@ -244,9 +244,9 @@ function setup_basics(el) {
         }
     });
     $("fieldset.accordion-panel > legend input[type=radio]").change(function() {
-        $(this).closest("fieldset").siblings("fieldset").prop('disabled', true);
-        $(this).closest("fieldset").prop('disabled', false);
-    }).each(function() { $(this).closest("fieldset").prop('disabled', true); }).filter(":checked").trigger('change');
+        $(this).closest("fieldset").siblings("fieldset").prop('disabled', true).children('.panel-body').slideUp();
+        $(this).closest("fieldset").prop('disabled', false).children('.panel-body').slideDown();
+    }).filter(':not(:checked)').each(function() { $(this).closest("fieldset").prop('disabled', true).children('.panel-body').hide(); });
 
     el.find(".js-only").removeClass("js-only");
     el.find(".js-hidden").hide();
