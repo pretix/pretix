@@ -39,7 +39,7 @@ $(function () {
                             required = 'required' in options && options.required && isRequired && visible;
 
                         dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
-                        dependent.prop("required", required);
+                        dependent.prop("required", required && !dependent.is("[data-no-required-attr]"));
                     }
                     for (var k in dependents) dependents[k].prop("disabled", false);
                 }).always(function() {
@@ -52,7 +52,7 @@ $(function () {
                             required = false;
 
                         dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
-                        dependent.prop("required", required);
+                        dependent.prop("required", required && !dependent.is("[data-no-required-attr]"));
                     }
                 });
             };
