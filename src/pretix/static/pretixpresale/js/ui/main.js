@@ -243,6 +243,11 @@ function setup_basics(el) {
             $($(this).attr("data-target")).collapse('show');
         }
     });
+    $("fieldset.accordion-panel > legend input[type=radio]").change(function() {
+        $(this).closest("fieldset").siblings("fieldset").prop('disabled', true);
+        $(this).closest("fieldset").prop('disabled', false);
+    }).each(function() { $(this).closest("fieldset").prop('disabled', true); }).filter(":checked").trigger('change');
+
     el.find(".js-only").removeClass("js-only");
     el.find(".js-hidden").hide();
 
