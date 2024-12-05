@@ -38,6 +38,7 @@ from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db.models import (
     Count, IntegerField, Max, Min, OuterRef, Prefetch, Q, Subquery, Sum,
 )
@@ -47,7 +48,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.timezone import now
@@ -67,6 +67,7 @@ from pretix.control.signals import (
 from pretix.helpers.daterange import daterange
 
 from ...base.models.orders import CancellationRequest
+from ...base.templatetags.money import money_filter
 from ..logdisplay import OVERVIEW_BANLIST
 
 NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="text">{text}</span></div>'
@@ -111,7 +112,7 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
 
     return [
         {
-            'content': None if lazy else NUM_WIDGET.format(num=tickc, text=_('Attendees (ordered)')),
+            'content': None if lazy else NUM_WIDGET.format(num=intcomma(tickc), text=_('Attendees (ordered)')),
             'lazy': 'attendees-ordered',
             'display_size': 'small',
             'priority': 100,
@@ -121,7 +122,7 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
-            'content': None if lazy else NUM_WIDGET.format(num=paidc, text=_('Attendees (paid)')),
+            'content': None if lazy else NUM_WIDGET.format(num=intcomma(paidc), text=_('Attendees (paid)')),
             'lazy': 'attendees-paid',
             'display_size': 'small',
             'priority': 100,
@@ -132,7 +133,9 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
         },
         {
             'content': None if lazy else NUM_WIDGET.format(
-                num=formats.localize(round_decimal(rev, sender.currency)), text=_('Total revenue ({currency})').format(currency=sender.currency)),
+                num=money_filter(round_decimal(rev, sender.currency), sender.currency, hide_currency=True),
+                text=_('Total revenue ({currency})').format(currency=sender.currency)
+            ),
             'lazy': 'total-revenue',
             'display_size': 'small',
             'priority': 100,
@@ -207,7 +210,7 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
 
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(
-                num=str(happy), text=_('available to give to people on waiting list')
+                num=intcomma(happy), text=_('available to give to people on waiting list')
             ),
             'lazy': 'waitinglist-avail',
             'priority': 50,
@@ -217,7 +220,7 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
             })
         })
         widgets.append({
-            'content': None if lazy else NUM_WIDGET.format(num=str(wles.count()), text=_('total waiting list length')),
+            'content': None if lazy else NUM_WIDGET.format(num=intcomma(wles.count()), text=_('total waiting list length')),
             'lazy': 'waitinglist-length',
             'display_size': 'small',
             'priority': 50,
@@ -245,7 +248,7 @@ def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
             status, left = qa.results[q] if q in qa.results else q.availability(allow_cache=True)
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(
-                num='{}/{}'.format(left, q.size) if q.size is not None else '\u221e',
+                num='{}/{}'.format(intcomma(left), intcomma(q.size)) if q.size is not None else '\u221e',
                 text=_('{quota} left').format(quota=escape(q.name))
             ),
             'lazy': 'quota-{}'.format(q.pk),
@@ -297,7 +300,7 @@ def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
     for cl in qs:
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(
-                num='{}/{}'.format(cl.inside_count, cl.position_count),
+                num='{}/{}'.format(intcomma(cl.inside_count), intcomma(cl.position_count)),
                 text=_('Present – {list}').format(list=escape(cl.name))
             ),
             'lazy': 'checkin-{}'.format(cl.pk),
