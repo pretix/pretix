@@ -62,8 +62,8 @@
             {% endif %}
             <div class="panel-group" id="payment_accordion">
                 {% for p in providers %}
-                    <div class="panel panel-default">
-                        <div class="accordion-radio">
+                    <fieldset class="panel panel-default accordion-panel">
+                        <legend class="accordion-radio">
                             <div class="panel-heading">
                                 <p class="panel-title">
                                     {% if show_fees %}
@@ -71,49 +71,44 @@
                                     {% endif %}
                                     <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                            title="{{ p.provider.public_name }}"
-                                           data-parent="#payment_accordion"
                                            {% if selected == p.provider.identifier %}checked="checked"{% endif %}
                                            id="input_payment_{{ p.provider.identifier }}"
-                                           aria-describedby="payment_{{ p.provider.identifier }}"
-                                           data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"
+                                           aria-controls="payment_{{ p.provider.identifier }}"
                                            data-wallets="{{ p.provider.walletqueries|join:"|" }}" />
                                     <label for="input_payment_{{ p.provider.identifier }}"><strong>{{ p.provider.public_name }}</strong></label>
                                 </p>
                             </div>
-                        </div>
-                        <div id="payment_{{ p.provider.identifier }}"
-                             class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
-                            <div class="panel-body form-horizontal">
-                                {% if request.event.testmode %}
-                                    {% if p.provider.test_mode_message %}
-                                        <div class="alert alert-info">
-                                            <p>{{ p.provider.test_mode_message }}</p>
-                                        </div>
-                                        {% if not request.sales_channel.type_instance.testmode_supported %}
-                                            <div class="alert alert-danger">
-                                                <p>
-                                                {% trans "This sales channel does not provide support for test mode." %}
-                                                <strong>
-                                                    {% trans "If you continue, you might pay an actual order with non-existing money!" %}
-                                                </strong>
-                                                </p>
-                                            </div>
-                                        {% endif %}
-                                    {% else %}
-                                        <div class="alert alert-warning">
+                        </legend>
+                        <div id="payment_{{ p.provider.identifier }}" class="panel-body form-horizontal">
+                            {% if request.event.testmode %}
+                                {% if p.provider.test_mode_message %}
+                                    <div class="alert alert-info">
+                                        <p>{{ p.provider.test_mode_message }}</p>
+                                    </div>
+                                    {% if not request.sales_channel.type_instance.testmode_supported %}
+                                        <div class="alert alert-danger">
                                             <p>
-                                            {% trans "This payment provider does not provide support for test mode." %}
+                                            {% trans "This sales channel does not provide support for test mode." %}
                                             <strong>
-                                                {% trans "If you continue, actual money might be transferred." %}
+                                                {% trans "If you continue, you might pay an actual order with non-existing money!" %}
                                             </strong>
                                             </p>
                                         </div>
                                     {% endif %}
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        <p>
+                                        {% trans "This payment provider does not provide support for test mode." %}
+                                        <strong>
+                                            {% trans "If you continue, actual money might be transferred." %}
+                                        </strong>
+                                        </p>
+                                    </div>
                                 {% endif %}
-                                {{ p.form }}
-                            </div>
+                            {% endif %}
+                            {{ p.form }}
                         </div>
-                    </div>
+                    </fieldset>
                 {% endfor %}
                 {% if not providers %}
                     <p><em>{% trans "There are no payment providers enabled." %}</em></p>
