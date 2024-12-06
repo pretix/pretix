@@ -277,6 +277,10 @@ class NamePartsFormField(forms.MultiValueField):
         return value
 
 
+def name_parts_is_empty(name_parts_dict):
+    return not any(k != "_scheme" and v for k, v in name_parts_dict.items())
+
+
 class WrappedPhonePrefixSelect(Select):
     initial = None
 
@@ -1149,12 +1153,12 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             data['vat_id'] = ''
         if data.get('is_business') and not ask_for_vat_id(data.get('country')):
             data['vat_id'] = ''
-        if self.event.settings.invoice_address_required:
+        if self.address_validation and self.event.settings.invoice_address_required and not self.all_optional:
             if data.get('is_business') and not data.get('company'):
                 raise ValidationError({"company": _('You need to provide a company name.')})
-            if not data.get('is_business') and not data.get('name_parts'):
+            if not data.get('is_business') and name_parts_is_empty(data.get('name_parts', {})):
                 raise ValidationError(_('You need to provide your name.'))
-            if not self.all_optional and 'street' in self.fields and not data.get('street') and not data.get('zipcode') and not data.get('city'):
+            if not data.get('street') and not data.get('zipcode') and not data.get('city'):
                 raise ValidationError({"street": _('This field is required.')})
 
         if 'vat_id' in self.changed_data or not data.get('vat_id'):
@@ -1167,7 +1171,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         if all(
                 not v for k, v in data.items() if k not in ('is_business', 'country', 'name_parts')
-        ) and len(data.get('name_parts', {})) == 1:
+        ) and name_parts_is_empty(data.get('name_parts', {})):
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
 
