@@ -1725,7 +1725,7 @@ class OrderChangeManager:
             except TaxRule.SaleNotAllowed:
                 raise OrderError(error_messages['tax_rule_country_blocked'])
             # We use override_tax_rate to make sure .tax() doesn't get clever and re-adjusts the pricing itself
-            if new_rate != pos.tax_rate:
+            if new_rate != pos.tax_rate or new_code != pos.tax_code:
                 if keep == 'net':
                     new_tax = tax_rule.tax(pos.price - pos.tax_value, base_price_is='net', currency=self.event.currency,
                                            override_tax_rate=new_rate, override_tax_code=new_code)

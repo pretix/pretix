@@ -31,8 +31,8 @@ from django.db import models
 from django.utils.deconstruct import deconstructible
 from django.utils.formats import localize
 from django.utils.functional import lazy
-from django.utils.html import format_html
 from django.utils.hashable import make_hashable
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, pgettext, pgettext_lazy
 from i18nfield.fields import I18nCharField
 from i18nfield.strings import LazyI18nString
@@ -496,7 +496,7 @@ class TaxRule(LoggedModel):
         if rate == Decimal('0.00'):
             gross = _limit_subtract(base_price, subtract_from_gross)
             return TaxedPrice(
-                net=base_price - subtract_from_gross, gross=base_price - subtract_from_gross, tax=Decimal('0.00'),
+                net=gross, gross=gross, tax=Decimal('0.00'),
                 rate=rate, name=self.name, code=code,
             )
 
