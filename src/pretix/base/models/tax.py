@@ -31,7 +31,6 @@ from django.utils.deconstruct import deconstructible
 from django.utils.formats import localize
 from django.utils.functional import lazy
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _, pgettext
 from django.utils.translation import gettext_lazy as _, pgettext, pgettext_lazy
 from i18nfield.fields import I18nCharField
 from i18nfield.strings import LazyI18nString
@@ -194,7 +193,10 @@ TAX_CODE_LISTS = (
                 (
                     f"E/VATEX-EU-132-1{letter.upper()}",
                     lazy(
-                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} ({letter}) of Council Directive 2006/112/EC").format(article="132", section="1", letter=letter),
+                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} "
+                                                           "({letter}) of Council Directive 2006/112/EC").format(
+                            article="132", section="1", letter=letter
+                        ),
                         str
                     )()
                 ) for letter in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q")
@@ -203,7 +205,10 @@ TAX_CODE_LISTS = (
                 (
                     f"E/VATEX-EU-143-1{letter.upper()}",
                     lazy(
-                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} ({letter}) of Council Directive 2006/112/EC").format(article="143", section="1", letter=letter),
+                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} "
+                                                           "({letter}) of Council Directive 2006/112/EC").format(
+                            article="143", section="1", letter=letter
+                        ),
                         str
                     )()
                 ) for letter in ("a", "b", "c", "d", "e", "f", "fa", "g", "h", "i", "j", "k", "l")
@@ -212,7 +217,10 @@ TAX_CODE_LISTS = (
                 (
                     f"E/VATEX-EU-148-{letter.upper()}",
                     lazy(
-                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section ({letter}) of Council Directive 2006/112/EC").format(article="143", letter=letter),
+                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section ({letter}) "
+                                                           "of Council Directive 2006/112/EC").format(
+                            article="143", letter=letter
+                        ),
                         str
                     )()
                 ) for letter in ("a", "b", "c", "d", "e", "f", "g")
@@ -221,7 +229,10 @@ TAX_CODE_LISTS = (
                 (
                     f"E/VATEX-EU-151-1{letter.upper()}",
                     lazy(
-                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} ({letter}) of Council Directive 2006/112/EC").format(article="151", section="1", letter=letter),
+                        lambda *args: pgettext("tax_code", "Exempt based on article {article}, section {section} "
+                                                           "({letter}) of Council Directive 2006/112/EC").format(
+                            article="151", section="1", letter=letter
+                        ),
                         str
                     )()
                 ) for letter in ("a", "aa", "b", "c", "d", "e")
@@ -379,10 +390,10 @@ class TaxRule(LoggedModel):
         if self.eu_reverse_charge and not self.home_country:
             raise ValidationError(_('You need to set your home country to use the reverse charge feature.'))
 
-        if self.rate != Decimal("0.00") and (self.code.split("/")[0] in ("O", "E", "Z", "G", "K", "AE")):
+        if self.rate != Decimal("0.00") and (self.code and self.code.split("/")[0] in ("O", "E", "Z", "G", "K", "AE")):
             raise ValidationError(_("A combination of this tax code with a non-zero tax rate does not make sense."))
 
-        if self.rate == Decimal("0.00") and (self.code.split("/")[0] in ("S", "L", "M", "B", "AE")):
+        if self.rate == Decimal("0.00") and (self.code and self.code.split("/")[0] in ("S", "L", "M", "B", "AE")):
             raise ValidationError(_("A combination of this tax code with a zero tax rate does not make sense."))
 
     def __str__(self):

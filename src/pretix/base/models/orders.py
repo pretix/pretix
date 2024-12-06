@@ -1256,7 +1256,7 @@ class Order(LockModel, LoggedModel):
         keys = set(target_transaction_count.keys()) | set(current_transaction_count.keys())
         create = []
         for k in keys:
-            positionid, itemid, variationid, subeventid, price, taxrate, taxruleid, taxvalue, feetype, internaltype = k
+            positionid, itemid, variationid, subeventid, price, taxrate, taxruleid, taxvalue, feetype, internaltype, tax_code = k
             d = target_transaction_count[k] - current_transaction_count[k]
             if d:
                 create.append(Transaction(
@@ -1272,6 +1272,7 @@ class Order(LockModel, LoggedModel):
                     tax_rate=taxrate,
                     tax_rule_id=taxruleid,
                     tax_value=taxvalue,
+                    tax_code=tax_code,
                     fee_type=feetype,
                     internal_type=internaltype,
                 ))

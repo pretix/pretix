@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         (
             "pretixbase",
-            "0270_historicpassword",
+            "0273_remove_checkinlist_auto_checkin_sales_channels",
         ),
     ]
 
