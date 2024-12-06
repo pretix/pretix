@@ -186,7 +186,7 @@ TAX_CODE_LISTS = (
         )
     ),
     (
-        _("Except with specific reason"),
+        _("Exempt with specific reason"),
         (
             ("E/VATEX-EU-79-C",
              pgettext_lazy("tax_code", "Exempt based on article 79, point c of Council Directive 2006/112/EC")),
