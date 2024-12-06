@@ -154,9 +154,6 @@ a.btn, button.btn {
 fieldset.accordion-panel > legend {
   display: contents;
 }
-fieldset.accordion-panel[disabled] > .panel-body {
-  display: none;
-}
 fieldset[disabled] legend input[type="radio"],
 fieldset[disabled] legend input[type="checkbox"] {
   cursor: default;
