@@ -157,6 +157,10 @@ fieldset.accordion-panel > legend {
 fieldset.accordion-panel[disabled] > .panel-body {
   display: none;
 }
+fieldset[disabled] legend input[type="radio"],
+fieldset[disabled] legend input[type="checkbox"] {
+  cursor: default;
+}
 
 .nav-tabs {
   border-bottom: 0px solid #ddd;
