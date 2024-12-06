@@ -14,8 +14,8 @@
                         <span class="panel-title">
                             <input type="radio" name="customer_mode" value="login"
                                     {% if selected == "login" or not signup_allowed %}checked="checked"{% endif %}
-                                    id="input_customer_login" aria-controls="customer_login" />
-                            <label for="input_customer_login"><strong>{% trans "Log in with a customer account" %}</strong></label>
+                                    aria-controls="customer_login" />
+                            {% trans "Log in with a customer account" %}
                         </span>
                     </label>
                 </legend>
@@ -81,8 +81,8 @@
                             <span class="panel-title">
                                 <input type="radio" name="customer_mode" value="register"
                                         {% if selected == "register" %}checked="checked"{% endif %}
-                                        id="input_customer_register" aria-controls="customer_register" />
-                                <label for="input_customer_register"><strong>{% trans "Create a new customer account" %}</strong></label>
+                                        aria-controls="customer_register" />
+                                {% trans "Create a new customer account" %}
                             </span>
                         </label>
                     </legend>
@@ -105,8 +105,8 @@
                             <span class="panel-title">
                                 <input type="radio" name="customer_mode" value="guest"
                                         {% if selected == "guest" %}checked="checked"{% endif %}
-                                        id="input_customer_guest" aria-controls="customer_guest" />
-                                <label for="input_customer_guest"><strong>{% trans "Continue as a guest" %}</strong></label>
+                                        aria-controls="customer_guest" />
+                                {% trans "Continue as a guest" %}
                             </span>
                         </label>
                     </legend>
