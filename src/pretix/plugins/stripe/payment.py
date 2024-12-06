@@ -388,21 +388,6 @@ class StripeSettingsHolder(BasePaymentProvider):
                          }
                      ),
                  )),
-                ('method_sofort',
-                 forms.BooleanField(
-                     label=_('SOFORT'),
-                     disabled=self.event.currency != 'EUR',
-                     help_text=(
-                         _('Stripe is in the process of removing this payment method. If you created your Stripe '
-                           'account after November 2023, you cannot use this payment method.') +
-                         '<div class="alert alert-warning">%s</div>' % _(
-                             'Despite the name, Sofort payments via Stripe are <strong>not</strong> processed '
-                             'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
-                             'Please only activate this payment method if your payment term allows for this lag.'
-                         )
-                     ),
-                     required=False,
-                 )),
                 ('method_eps',
                  forms.BooleanField(
                      label=_('EPS'),
