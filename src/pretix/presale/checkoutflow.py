@@ -598,6 +598,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                                     tax=a.tax_value,
                                     name=a.item.tax_rule.name if a.item.tax_rule else "",
                                     rate=a.tax_rate,
+                                    code=a.item.tax_rule.code if a.item.tax_rule else None,
                                 )
                             else:
                                 v.initial_price = v.suggested_price
@@ -612,6 +613,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                                 tax=a.tax_value,
                                 name=a.item.tax_rule.name if a.item.tax_rule else "",
                                 rate=a.tax_rate,
+                                code=a.item.tax_rule.code if a.item.tax_rule else None,
                             )
                         else:
                             i.initial_price = i.suggested_price

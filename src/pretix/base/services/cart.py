@@ -1513,6 +1513,7 @@ def get_fees(event, request, total, invoice_address, payments, positions):
                     value=payment_fee,
                     tax_rate=payment_fee_tax.rate,
                     tax_value=payment_fee_tax.tax,
+                    tax_code=payment_fee_tax.code,
                     tax_rule=payment_fee_tax_rule
                 ))
 
