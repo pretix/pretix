@@ -272,7 +272,7 @@ var pretixpaypal = {
         // The first selector is used on the regular payment-step of the checkout flow
         // The second selector is used for the payment method change view.
         // In the long run, the layout of both pages should be adjusted to be one.
-        let textselector = $("label[for=input_payment_paypal_apm]");
+        let textselector = inputselector.closest("label");
         let textselector2 = inputselector.next("strong");
         let eligibles = [];
 
