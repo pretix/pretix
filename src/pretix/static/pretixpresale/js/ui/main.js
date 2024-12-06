@@ -329,10 +329,6 @@ $(function () {
         var $input = $("input", this);
         if (!$input.prop("checked")) $input.prop('checked', true).trigger("change");
     });
-    $(".accordion-radio input").on("change", function() {
-        $(this).closest("fieldset").find(".panel-body").slideDown();
-        $(this).closest(".panel-group").find(".accordion-panel:has(.accordion-radio input:not(:checked)) .panel-body").slideUp();
-    });
 
     setup_basics($("body"));
     $(".overlay-remove").on("click", function() {
