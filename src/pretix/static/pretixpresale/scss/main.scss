@@ -536,7 +536,7 @@ h2 .label {
 }
 
 
-.textbubble-success, .textbubble-info, .textbubble-warning, .textbubble-danger {
+.textbubble-success, .textbubble-success-warning, .textbubble-info, .textbubble-warning, .textbubble-danger {
   padding: 0 .4em;
   border-radius: $border-radius-base;
   font-weight: bold;
@@ -551,6 +551,13 @@ h2 .label {
   background: var(--pretix-brand-success-tint-85);
   .fa {
     color: var(--pretix-brand-success);
+  }
+}
+.textbubble-success-warning {
+  color: var(--pretix-brand-success-shade-42);
+  background: linear-gradient(to right, var(--pretix-brand-warning-tint-85), var(--pretix-brand-success-tint-85) 50%);
+  .fa {
+    color: var(--pretix-brand-warning);
   }
 }
 .textbubble-info {
