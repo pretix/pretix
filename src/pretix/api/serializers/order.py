@@ -512,11 +512,12 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'print_logs', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
-                  'valid_from', 'valid_until', 'blocked', 'voucher_budget_use')
+                  'print_logs', 'downloads', 'answers', 'tax_rule', 'tax_code', 'pseudonymization_id', 'pdf_data', 'seat',
+                  'canceled', 'valid_from', 'valid_until', 'blocked', 'voucher_budget_use')
         read_only_fields = (
             'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
-            'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data',
-            'seat', 'canceled', 'discount', 'valid_from', 'valid_until', 'blocked', 'voucher_budget_use'
+            'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'tax_code', 'pseudonymization_id',
+            'pdf_data', 'seat', 'canceled', 'discount', 'valid_from', 'valid_until', 'blocked', 'voucher_budget_use'
         )
 
     def __init__(self, *args, **kwargs):
@@ -642,7 +643,8 @@ class OrderPaymentDateField(serializers.DateField):
 class OrderFeeSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderFee
-        fields = ('id', 'fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule', 'canceled')
+        fields = ('id', 'fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule',
+                  'tax_code', 'canceled')
 
 
 class PaymentURLField(serializers.URLField):
@@ -1676,7 +1678,7 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
     class Meta:
         model = InvoiceLine
         fields = ('position', 'description', 'item', 'variation', 'subevent', 'attendee_name', 'event_date_from',
-                  'event_date_to', 'gross_value', 'tax_value', 'tax_rate', 'tax_name', 'fee_type',
+                  'event_date_to', 'gross_value', 'tax_value', 'tax_rate', 'tax_code', 'tax_name', 'fee_type',
                   'fee_internal_type', 'event_location')
 
 

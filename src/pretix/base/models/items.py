@@ -837,7 +837,7 @@ class Item(LoggedModel):
 
         if not self.tax_rule:
             t = TaxedPrice(gross=price - bundled_sum, net=price - bundled_sum, tax=Decimal('0.00'),
-                           rate=Decimal('0.00'), name='')
+                           rate=Decimal('0.00'), name='', code=None)
         else:
             t = self.tax_rule.tax(price, base_price_is=base_price_is, invoice_address=invoice_address,
                                   override_tax_rate=override_tax_rate, currency=currency or self.event.currency,
@@ -845,6 +845,7 @@ class Item(LoggedModel):
 
         if bundled_sum:
             t.name = "MIXED!"
+            t.code = None
             t.gross += bundled_sum
             t.net += bundled_sum_net
             t.tax += bundled_sum_tax
@@ -1258,7 +1259,7 @@ class ItemVariation(models.Model):
 
         if not self.item.tax_rule:
             t = TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
-                           rate=Decimal('0.00'), name='')
+                           rate=Decimal('0.00'), name='', code=None)
         else:
             t = self.item.tax_rule.tax(price, base_price_is=base_price_is, currency=currency,
                                        override_tax_rate=override_tax_rate,
@@ -1280,6 +1281,7 @@ class ItemVariation(models.Model):
                     t.net += bprice.net - compare_price.net
                     t.tax += bprice.tax - compare_price.tax
                     t.name = "MIXED!"
+                    t.code = None
 
         return t
 

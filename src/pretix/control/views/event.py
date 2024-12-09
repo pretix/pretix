@@ -1197,17 +1197,22 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form = self.get_form()
+        form = self.form
         if form.is_valid() and self.formset.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     @cached_property
+    def form(self):
+        return self.get_form()
+
+    @cached_property
     def formset(self):
         return TaxRuleLineFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
             event=self.request.event,
+            parent_form=self.form,
         )
 
     def get_context_data(self, **kwargs):
@@ -1248,17 +1253,22 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object(self.get_queryset())
-        form = self.get_form()
+        form = self.form
         if form.is_valid() and self.formset.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     @cached_property
+    def form(self):
+        return self.get_form()
+
+    @cached_property
     def formset(self):
         return TaxRuleLineFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
             event=self.request.event,
+            parent_form=self.form,
             initial=json.loads(self.object.custom_rules) if self.object.custom_rules else []
         )
 
