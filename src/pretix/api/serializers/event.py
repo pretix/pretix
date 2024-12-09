@@ -35,7 +35,7 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -43,6 +43,7 @@ from django.utils.translation import gettext as _
 from django_countries.serializers import CountryFieldMixin
 from pytz import common_timezones
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
