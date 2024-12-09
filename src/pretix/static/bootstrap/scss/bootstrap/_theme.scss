@@ -275,12 +275,12 @@
 }
 
 // Apply the mixin to the panel headings only
-.panel-default > .panel-heading   { @include panel-heading-styles($panel-default-heading-bg); }
-.panel-primary > .panel-heading   { @include panel-heading-styles($panel-primary-heading-bg); }
-.panel-success > .panel-heading   { @include panel-heading-styles($panel-success-heading-bg); }
-.panel-info > .panel-heading      { @include panel-heading-styles($panel-info-heading-bg); }
-.panel-warning > .panel-heading   { @include panel-heading-styles($panel-warning-heading-bg); }
-.panel-danger > .panel-heading    { @include panel-heading-styles($panel-danger-heading-bg); }
+.panel-default > .panel-heading, .panel-default > legend > .panel-heading   { @include panel-heading-styles($panel-default-heading-bg); }
+.panel-primary > .panel-heading, .panel-primary > legend > .panel-heading   { @include panel-heading-styles($panel-primary-heading-bg); }
+.panel-success > .panel-heading, .panel-success > legend > .panel-heading   { @include panel-heading-styles($panel-success-heading-bg); }
+.panel-info > .panel-heading, .panel-info > legend > .panel-heading      { @include panel-heading-styles($panel-info-heading-bg); }
+.panel-warning > .panel-heading, .panel-warning > legend > .panel-heading   { @include panel-heading-styles($panel-warning-heading-bg); }
+.panel-danger > .panel-heading, .panel-danger > legend > .panel-heading    { @include panel-heading-styles($panel-danger-heading-bg); }
 
 
 //

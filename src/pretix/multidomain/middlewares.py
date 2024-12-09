@@ -80,28 +80,32 @@ class MultiDomainMiddleware(MiddlewareMixin):
         request.port = int(port) if port else None
         request.host = domain
         if domain == default_domain:
+            request.domain_mode = "system"
             request.urlconf = "pretix.multidomain.maindomain_urlconf"
         elif domain:
-            cached = cache.get('pretix_multidomain_instance_{}'.format(domain))
+            cached = cache.get('pretix_multidomain_instances_{}'.format(domain))
 
             if cached is None:
                 try:
                     kd = KnownDomain.objects.select_related('organizer', 'event').get(domainname=domain)  # noqa
                     orga = kd.organizer
                     event = kd.event
+                    mode = kd.mode
                 except KnownDomain.DoesNotExist:
                     orga = False
                     event = False
+                    mode = "system"
                 cache.set(
-                    'pretix_multidomain_instance_{}'.format(domain),
-                    (orga.pk if orga else None, event.pk if event else None),
+                    'pretix_multidomain_instances_{}'.format(domain),
+                    (orga.pk if orga else None, event.pk if event else None, mode),
                     3600
                 )
             else:
-                orga, event = cached
+                orga, event, mode = cached
 
-            if event:
+            if mode == KnownDomain.MODE_EVENT_DOMAIN:
                 request.event_domain = True
+                request.domain_mode = KnownDomain.MODE_EVENT_DOMAIN
                 if isinstance(event, Event):
                     request.organizer = orga
                     request.event = event
@@ -110,11 +114,18 @@ class MultiDomainMiddleware(MiddlewareMixin):
                         request.event = Event.objects.select_related('organizer').get(pk=event)
                         request.organizer = request.event.organizer
                 request.urlconf = "pretix.multidomain.event_domain_urlconf"
-            elif orga:
+            elif mode == KnownDomain.MODE_ORG_ALT_DOMAIN:
                 request.organizer_domain = True
+                request.domain_mode = KnownDomain.MODE_ORG_ALT_DOMAIN
+                request.organizer = orga if isinstance(orga, Organizer) else Organizer.objects.get(pk=orga)
+                request.urlconf = "pretix.multidomain.organizer_alternative_domain_urlconf"
+            elif mode == KnownDomain.MODE_ORG_DOMAIN:
+                request.organizer_domain = True
+                request.domain_mode = KnownDomain.MODE_ORG_DOMAIN
                 request.organizer = orga if isinstance(orga, Organizer) else Organizer.objects.get(pk=orga)
                 request.urlconf = "pretix.multidomain.organizer_domain_urlconf"
             elif settings.DEBUG or domain in LOCAL_HOST_NAMES:
+                request.domain_mode = "system"
                 request.urlconf = "pretix.multidomain.maindomain_urlconf"
             else:
                 with scopes_disabled():

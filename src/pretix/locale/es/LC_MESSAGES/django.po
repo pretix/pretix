@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-27 03:00+0000\n"
+"PO-Revision-Date: 2024-12-03 20:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -11397,7 +11397,7 @@ msgstr "Color de fondo de la página"
 
 #: pretix/base/settings.py:2845
 msgid "Use round edges"
-msgstr "Utilice bordes redondos"
+msgstr "Utilizar bordes redondos"
 
 #: pretix/base/settings.py:2854
 msgid ""
@@ -11433,7 +11433,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2899 pretix/base/settings.py:2941
 msgid "Use header image in its full size"
-msgstr "Utilice la imagen del encabezado en su tamaño completo"
+msgstr "Utilizar la imagen del encabezado en su tamaño completo"
 
 #: pretix/base/settings.py:2900 pretix/base/settings.py:2942
 msgid "We recommend to upload a picture at least 1170 pixels wide."
@@ -13067,13 +13067,12 @@ msgstr ""
 
 #: pretix/control/forms/event.py:989 pretix/control/forms/organizer.py:534
 msgid "Bcc address"
-msgstr "Direcciones CCO"
+msgstr "Direcciones en copia oculta"
 
 #: pretix/control/forms/event.py:990 pretix/control/forms/organizer.py:535
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr ""
-"Todos los correos electrónicos se enviarán a esta dirección como una copia "
-"de CCO"
+"Todos los correos electrónicos se enviarán a esta dirección en copia oculta"
 
 #: pretix/control/forms/event.py:996 pretix/control/forms/organizer.py:541
 msgid "Signature"
@@ -13650,7 +13649,7 @@ msgstr "Fecha de inicio"
 #: pretix/control/forms/filter.py:1710 pretix/control/forms/filter.py:1713
 #: pretix/control/forms/filter.py:2344
 msgid "Date until"
-msgstr "Fecha límite"
+msgstr "Fecha final"
 
 #: pretix/control/forms/filter.py:1218
 msgid "Start time from"
@@ -16020,11 +16019,11 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:422
 msgid "A custom email has been sent."
-msgstr "Un e-mail personalizado ha sido enviado."
+msgstr "Un email personalizado ha sido enviado."
 
 #: pretix/control/logdisplay.py:423
 msgid "A custom email has been sent to an attendee."
-msgstr "Un e-mail personalizado ha sido enviado al participante."
+msgstr "Un email personalizado ha sido enviado al participante."
 
 #: pretix/control/logdisplay.py:424
 msgid ""
@@ -16472,7 +16471,7 @@ msgstr "Un plugin ha sido desactivado."
 
 #: pretix/control/logdisplay.py:533
 msgid "The shop has been taken live."
-msgstr "La tienda ha sido tomada en vivo."
+msgstr "La tienda ha sido puesta en marcha."
 
 #: pretix/control/logdisplay.py:534
 msgid "The shop has been taken offline."
@@ -16951,11 +16950,11 @@ msgstr "Parametrizaciones globales"
 
 #: pretix/control/navigation.py:440
 msgid "Update check"
-msgstr "Verificación de actualización"
+msgstr "Comprobación de actualizaciones"
 
 #: pretix/control/navigation.py:445
 msgid "License check"
-msgstr "Revisa de licencia"
+msgstr "Verificación de la licencia"
 
 #: pretix/control/navigation.py:450
 msgid "System report"
@@ -17952,7 +17951,7 @@ msgstr "Regla de check-in personalizada"
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:117
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:84
 msgid "Edit"
-msgstr "Tratar"
+msgstr "Editar"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:89
 msgid "Visualize"
@@ -20028,8 +20027,8 @@ msgid ""
 "For more information or to obtain a paid pretix Enterprise license, contact "
 "support@pretix.eu."
 msgstr ""
-"Para obtener más información u obtener una licencia pretix Enterprise paga, "
-"comuníquese con support@pretix.eu."
+"Para obtener más información u obtener una licencia pretix Enterprise de "
+"pago, comuníquese con support@pretix.eu."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:26
 msgid "License settings and check"
@@ -20071,10 +20070,9 @@ msgid ""
 "pretix support when your license renews. It may also be requested by pretix "
 "support to aid debugging of problems."
 msgstr ""
-"Si tienes una licencia de pretix de Enterprise, este informe se debe "
-"entregar al equipo del servicio al cliente de pretix cuando tu licencia "
-"renueve. También el servicio al cliente de pretix podría pedirlo para ayudar "
-"durante depurar."
+"Si dispone de una licencia de pretix Enterprise, deberá enviar este informe "
+"al servicio de asistencia pretix cuando renueve su licencia. También puede "
+"ser solicitado por el soporte pretix para ayudar a la solución de problemas."
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:8
 msgid ""
@@ -21288,11 +21286,11 @@ msgstr "Revocar"
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:6
 #: pretix/control/templates/pretixcontrol/user/settings.html:61
 msgid "Authorized applications"
-msgstr "Solicitudes autorizadas"
+msgstr "Aplicaciones autorizadas"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:9
 msgid "Manage your own apps"
-msgstr "Gestiona tus propias aplicaciones"
+msgstr "Gestione sus propias aplicaciones"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:18
 msgid "Permissions"
@@ -31500,7 +31498,7 @@ msgstr "Lo sentimos, se ha producido un error en el proceso de pago."
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
 msgid "PDF ticket output"
-msgstr "Salida de entradas de PDF"
+msgstr "Salida de entradas en PDF"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:52
 msgid ""
@@ -31603,7 +31601,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
 msgid "Open Layout Designer"
-msgstr "Abrir diseñador de diseño"
+msgstr "Abrir herramienta de diseño"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Advanced mode (multiple layouts)"

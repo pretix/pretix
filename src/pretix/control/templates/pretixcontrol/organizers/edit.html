@@ -294,6 +294,71 @@
                         <legend>{% trans "Invoices" %}</legend>
                         {% bootstrap_field sform.invoice_regenerate_allowed layout="control" %}
                     </fieldset>
+                    {% if domain_formset %}
+                        <fieldset>
+                            <legend>{% trans "Domains" %}</legend>
+                            <div class="alert alert-warning">
+                                {% trans "This dialog is intended for advanced users." %}
+                                {% trans "The domain needs to be configured on your webserver before it can be used here." %}
+                            </div>
+                            <div class="formset" data-formset data-formset-prefix="{{ domain_formset.prefix }}">
+                                {{ domain_formset.management_form }}
+                                {% bootstrap_formset_errors domain_formset %}
+                                <div data-formset-body>
+                                    {% for form in domain_formset %}
+                                        <div class="row formset-row" data-formset-form>
+                                            <div class="sr-only">
+                                                {{ form.id }}
+                                                {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {% bootstrap_field form.domainname layout='' form_group_class="" %}
+                                                {% bootstrap_form_errors form %}
+                                            </div>
+                                            <div class="col-md-3">
+                                                {% bootstrap_field form.mode layout='' form_group_class="" %}
+                                            </div>
+                                            <div class="col-md-3">
+                                                {% bootstrap_field form.event layout='' form_group_class="" %}
+                                            </div>
+                                            <div class="col-md-2 text-right flip">
+                                                <label aria-hidden="true">&nbsp;</label><br>
+                                                <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                    <i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <script type="form-template" data-formset-empty-form>
+                                    {% escapescript %}
+                                        <div class="row formset-row" data-formset-form>
+                                            <div class="sr-only">
+                                                {{ domain_formset.empty_form.id }}
+                                                {% bootstrap_field domain_formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {% bootstrap_field domain_formset.empty_form.domainname layout='' form_group_class="" %}
+                                            </div>
+                                            <div class="col-md-3">
+                                                {% bootstrap_field domain_formset.empty_form.mode layout='' form_group_class="" %}
+                                            </div>
+                                            <div class="col-md-3">
+                                                {% bootstrap_field domain_formset.empty_form.event layout='' form_group_class="" %}
+                                            </div>
+                                            <div class="col-md-2 text-right flip">
+                                                <label aria-hidden="true">&nbsp;</label><br>
+                                                <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                    <i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                    {% endescapescript %}
+                                </script>
+                                <p>
+                                    <button type="button" class="btn btn-default" data-formset-add>
+                                        <i class="fa fa-plus"></i> {% trans "Add domain" %}</button>
+                                </p>
+                        </fieldset>
+                    {% endif %}
                 </div>
                 <div class="form-group submit-group">
                     <button type="submit" class="btn btn-primary btn-save">

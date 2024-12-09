@@ -249,12 +249,123 @@ Endpoints
             "orderposition": null,
             "cartposition": null,
             "voucher": null
-        },
+        }
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to modify
    :param subevent_id: The ``id`` field of the subevent to modify
    :param id: The ``id`` field of the seat to modify
+   :statuscode 200: no error
+   :statuscode 400: The seat could not be modified due to invalid submitted data
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or event does not exist **or** you have no permission to change this resource.
+   :statuscode 404: Seat does not exist; or the endpoint without subevent id was used for event with subevents, or vice versa.
+
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/seats/bulk_block/
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/seats/bulk_block/
+
+   Set the ``blocked`` attribute to ``true`` for a large number of seats at once.
+   You can pass either a list of ``id`` values or a list of ``seat_guid`` values.
+   You can pass up to 10,000 seats in one request.
+
+   The endpoint will return an error if you pass a seat ID that does not exist.
+   However, it will not return an error if one of the passed seats is already blocked or sold.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+        PATCH /api/v1/organizers/bigevents/events/sampleconf/seats/bulk_block/ HTTP/1.1
+        Host: pretix.eu
+        Accept: application/json, text/javascript
+        Content-Type: application/json
+
+        {
+            "ids": [12, 45, 56]
+        }
+
+   or
+
+   .. sourcecode:: http
+
+        PATCH /api/v1/organizers/bigevents/events/sampleconf/seats/bulk_block/ HTTP/1.1
+        Host: pretix.eu
+        Accept: application/json, text/javascript
+        Content-Type: application/json
+
+        {
+            "seat_guids": ["6c0e29e5-05d6-421f-99f3-afd01478ecad", "c2899340-e2e7-4d05-8100-000a4b6d7cf4"]
+        }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Vary: Accept
+        Content-Type: application/json
+
+        {}
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param subevent_id: The ``id`` field of the subevent to modify
+   :statuscode 200: no error
+   :statuscode 400: The seat could not be modified due to invalid submitted data
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or event does not exist **or** you have no permission to change this resource.
+   :statuscode 404: Seat does not exist; or the endpoint without subevent id was used for event with subevents, or vice versa.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/seats/bulk_unblock/
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/seats/bulk_unblock/
+
+   Set the ``blocked`` attribute to ``false`` for a large number of seats at once.
+   You can pass either a list of ``id`` values or a list of ``seat_guid`` values.
+   You can pass up to 10,000 seats in one request.
+
+   The endpoint will return an error if you pass a seat ID that does not exist.
+   However, it will not return an error if one of the passed seat is already unblocked or is sold.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+        PATCH /api/v1/organizers/bigevents/events/sampleconf/seats/bulk_unblock/ HTTP/1.1
+        Host: pretix.eu
+        Accept: application/json, text/javascript
+        Content-Type: application/json
+
+        {
+            "ids": [12, 45, 56]
+        }
+
+   or
+
+   .. sourcecode:: http
+
+        PATCH /api/v1/organizers/bigevents/events/sampleconf/seats/bulk_unblock/ HTTP/1.1
+        Host: pretix.eu
+        Accept: application/json, text/javascript
+        Content-Type: application/json
+
+        {
+            "seat_guids": ["6c0e29e5-05d6-421f-99f3-afd01478ecad", "c2899340-e2e7-4d05-8100-000a4b6d7cf4"]
+        }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Vary: Accept
+        Content-Type: application/json
+
+        {}
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param subevent_id: The ``id`` field of the subevent to modify
    :statuscode 200: no error
    :statuscode 400: The seat could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure

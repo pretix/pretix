@@ -79,8 +79,8 @@ class BaseMailForm(FormPlaceholderMixin, forms.Form):
             widget=I18nMarkdownTextarea, required=True,
             locales=event.settings.get('locales'),
         )
-        self._set_field_placeholders('subject', context_parameters)
-        self._set_field_placeholders('message', context_parameters)
+        self._set_field_placeholders('subject', context_parameters, rich=False)
+        self._set_field_placeholders('message', context_parameters, rich=True)
 
 
 class WaitinglistMailForm(BaseMailForm):
@@ -382,7 +382,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
         )
 
         self._set_field_placeholders('subject', ['event', 'order', 'event_or_subevent'])
-        self._set_field_placeholders('template', ['event', 'order', 'event_or_subevent'])
+        self._set_field_placeholders('template', ['event', 'order', 'event_or_subevent'], rich=True)
 
         choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
         choices.insert(0, ('n__valid_if_pending', _('payment pending but already confirmed')))

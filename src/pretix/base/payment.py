@@ -1419,50 +1419,51 @@ class GiftCardPayment(BasePaymentProvider):
     def payment_refund_supported(self, payment: OrderPayment) -> bool:
         return True
 
-    def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
-        from pretix.base.services.cart import add_payment_to_cart
+    def _add_giftcard_to_cart(self, cs, gc):
+        from pretix.base.services.cart import add_payment_to_cart_session
 
+        if gc.currency != self.event.currency:
+            raise ValidationError(_("This gift card does not support this currency."))
+        if gc.testmode and not self.event.testmode:
+            raise ValidationError(_("This gift card can only be used in test mode."))
+        if not gc.testmode and self.event.testmode:
+            raise ValidationError(_("Only test gift cards can be used in test mode."))
+        if gc.expires and gc.expires < time_machine_now():
+            raise ValidationError(_("This gift card is no longer valid."))
+        if gc.value <= Decimal("0.00"):
+            raise ValidationError(_("All credit on this gift card has been used."))
+
+        for p in cs.get('payments', []):
+            if p['provider'] == self.identifier and p['info_data']['gift_card'] == gc.pk:
+                raise ValidationError(_("This gift card is already used for your payment."))
+
+        add_payment_to_cart_session(
+            cs,
+            self,
+            max_value=gc.value,
+            info_data={
+                'gift_card': gc.pk,
+                'gift_card_secret': gc.secret,
+            }
+        )
+
+    def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
         for p in get_cart(request):
             if p.item.issue_giftcard:
                 messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
                 return
 
-        cs = cart_session(request)
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
                 secret=request.POST.get("giftcard").strip()
             )
-            if gc.currency != self.event.currency:
-                messages.error(request, _("This gift card does not support this currency."))
+            cs = cart_session(request)
+            try:
+                self._add_giftcard_to_cart(cs, gc)
+                return True
+            except ValidationError as e:
+                messages.error(request, str(e.message))
                 return
-            if gc.testmode and not self.event.testmode:
-                messages.error(request, _("This gift card can only be used in test mode."))
-                return
-            if not gc.testmode and self.event.testmode:
-                messages.error(request, _("Only test gift cards can be used in test mode."))
-                return
-            if gc.expires and gc.expires < time_machine_now():
-                messages.error(request, _("This gift card is no longer valid."))
-                return
-            if gc.value <= Decimal("0.00"):
-                messages.error(request, _("All credit on this gift card has been used."))
-                return
-
-            for p in cs.get('payments', []):
-                if p['provider'] == self.identifier and p['info_data']['gift_card'] == gc.pk:
-                    messages.error(request, _("This gift card is already used for your payment."))
-                    return
-
-            add_payment_to_cart(
-                request,
-                self,
-                max_value=gc.value,
-                info_data={
-                    'gift_card': gc.pk,
-                    'gift_card_secret': gc.secret,
-                }
-            )
-            return True
         except GiftCard.DoesNotExist:
             if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard")).exists():
                 messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "

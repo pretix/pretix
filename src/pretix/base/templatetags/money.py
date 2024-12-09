@@ -52,12 +52,12 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
         # would make the numbers incorrect. If this branch executes, it's likely a bug in
         # pretix, but we won't show wrong numbers!
         if hide_currency:
-            return floatformat(value, 2)
+            return floatformat(value, "2g")
         else:
-            return '{} {}'.format(arg, floatformat(value, 2))
+            return '{} {}'.format(arg, floatformat(value, "2g"))
 
     if hide_currency:
-        return floatformat(value, places)
+        return floatformat(value, f"{places}g")
 
     locale_parts = translation.get_language().split("-", 1)
     locale = locale_parts[0]
@@ -70,7 +70,7 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
     try:
         return format_currency(value, arg, locale=locale)
     except:
-        return '{} {}'.format(arg, floatformat(value, places))
+        return '{} {}'.format(arg, floatformat(value, f"{places}g"))
 
 
 @register.filter("money_numberfield")

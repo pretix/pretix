@@ -40,13 +40,18 @@ def env():
 
 @pytest.mark.django_db
 def test_control_only_on_main_domain(env, client):
-    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0], mode=KnownDomain.MODE_ORG_DOMAIN)
     r = client.get('/control/login', HTTP_HOST='foobar')
     assert r.status_code == 302
     assert r['Location'] == 'http://example.com/control/login'
 
-    KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
+    KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1], mode=KnownDomain.MODE_EVENT_DOMAIN)
     r = client.get('/control/login', HTTP_HOST='barfoo')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://example.com/control/login'
+
+    KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    r = client.get('/control/login', HTTP_HOST='altfoo')
     assert r.status_code == 302
     assert r['Location'] == 'http://example.com/control/login'
 
@@ -81,6 +86,15 @@ def test_event_on_custom_domain(env, client):
 
 
 @pytest.mark.django_db
+def test_event_on_org_alt_domain(env, client):
+    d = KnownDomain.objects.create(domainname='foobar', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    d.event_assignments.create(event=env[1])
+    r = client.get('/2015/', HTTP_HOST='foobar')
+    assert r.status_code == 200
+    assert b'<meta property="og:title" content="MRMCD2015" />' in r.content
+
+
+@pytest.mark.django_db
 def test_path_without_trailing_slash_on_org_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     r = client.get('/widget/product_list', HTTP_HOST='foobar')
@@ -90,6 +104,15 @@ def test_path_without_trailing_slash_on_org_domain(env, client):
 @pytest.mark.django_db
 def test_event_with_org_domain_on_main_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://foobar/2015/'
+
+
+@pytest.mark.django_db
+def test_event_with_org_alt_domain_on_main_domain(env, client):
+    d = KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    d.event_assignments.create(event=env[1])
     r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
     assert r.status_code == 302
     assert r['Location'] == 'http://foobar/2015/'
@@ -110,6 +133,40 @@ def test_event_with_custom_domain_on_org_domain(env, client):
     r = client.get('/2015/', HTTP_HOST='foobar')
     assert r.status_code == 302
     assert r['Location'] == 'http://barfoo'
+
+
+@pytest.mark.django_db
+def test_event_with_custom_domain_on_org_alt_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
+    r = client.get('/2015/', HTTP_HOST='altfoo')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://barfoo'
+
+
+@pytest.mark.django_db
+def test_event_with_org_alt_domain_on_org_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0], mode=KnownDomain.MODE_ORG_DOMAIN)
+    d = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    d.event_assignments.create(event=env[1])
+
+    r = client.get('/2015/', HTTP_HOST='foobar')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://altfoo/2015/'
+
+
+@pytest.mark.django_db
+def test_event_without_org_alt_domain_on_org_alt_domain(env, client):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    r = client.get('/', HTTP_HOST='foobar')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://example.com/mrmcd/'
+
+    KnownDomain.objects.create(domainname='foobaz', organizer=env[0], mode=KnownDomain.MODE_ORG_DOMAIN)
+    r = client.get('/', HTTP_HOST='foobar')
+    assert r.status_code == 302
+    assert r['Location'] == 'http://foobaz/'
 
 
 @pytest.mark.django_db
@@ -143,10 +200,24 @@ def test_unknown_event_on_org_domain(env, client):
     r = client.get('/1234/', HTTP_HOST='foobar')
     assert r.status_code == 404
 
+    KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    r = client.get('/1234/', HTTP_HOST='altfoo')
+    assert r.status_code == 404
+
 
 @pytest.mark.django_db
 def test_cookie_domain_on_org_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    client.post('/2015/cart/add', HTTP_HOST='foobar')
+    r = client.get('/2015/', HTTP_HOST='foobar')
+    assert r.client.cookies['pretix_csrftoken']['domain'] == ''
+    assert r.client.cookies['pretix_session']['domain'] == ''
+
+
+@pytest.mark.django_db
+def test_cookie_domain_on_org_alt_domain(env, client):
+    d = KnownDomain.objects.create(domainname='foobar', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    d.event_assignments.create(event=env[1])
     client.post('/2015/cart/add', HTTP_HOST='foobar')
     r = client.get('/2015/', HTTP_HOST='foobar')
     assert r.client.cookies['pretix_csrftoken']['domain'] == ''

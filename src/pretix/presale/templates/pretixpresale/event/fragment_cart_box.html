@@ -10,18 +10,41 @@
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 <strong>{% trans "Your cart" %}</strong>
             </span>
-            <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" aria-hidden="true">
-                {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
-                    {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
-                {% else %}
-                    {% trans "Cart expired" %}
-                {% endif %}
-            </strong>
+            {% if cart.positions %}
+                <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" aria-hidden="true">
+                    {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                        {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
+                    {% else %}
+                        {% trans "Cart expired" %}
+                    {% endif %}
+                </strong>
+            {% endif %}
         </h2>
     </summary>
     <div>
         <div class="panel-body">
-            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
+            {% if cart.positions %}
+                {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
+            {% endif %}
+            {% if cart.current_selected_payments %}
+                <p>{% trans "You already selected the following payment methods:" %}</p>
+                <div class="list-group">
+                    {% for p in cart.current_selected_payments %}
+                        <div class="list-group-item">
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    {{ p.provider_name }}
+                                </div>
+                                <div class="col-xs-3 text-right">
+                                    {% if p.payment_amount %}
+                                        {{ p.payment_amount|money:request.event.currency }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div class="checkout-button-row">
                 <form class="checkout-button-primary" method="get" action="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
                     <p><button class="btn btn-primary btn-lg" type="submit"{% if has_addon_choices or cart.total == 0 %} aria-label="{% trans "Continue with order process" %}"{% endif %}>

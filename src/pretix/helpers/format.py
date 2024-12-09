@@ -25,14 +25,29 @@ from string import Formatter
 logger = logging.getLogger(__name__)
 
 
+class PlainHtmlAlternativeString:
+    def __init__(self, plain, html, is_block=False):
+        self.plain = plain
+        self.html = html
+        self.is_block = is_block
+
+    def __repr__(self):
+        return f"PlainHtmlAlternativeString('{self.plain}', '{self.html}')"
+
+
 class SafeFormatter(Formatter):
     """
     Customized version of ``str.format`` that (a) behaves just like ``str.format_map`` and
     (b) does not allow any unwanted shenanigans like attribute access or format specifiers.
     """
-    def __init__(self, context, raise_on_missing=False):
+    MODE_IGNORE_RICH = 0
+    MODE_RICH_TO_PLAIN = 1
+    MODE_RICH_TO_HTML = 2
+
+    def __init__(self, context, raise_on_missing=False, mode=MODE_IGNORE_RICH):
         self.context = context
         self.raise_on_missing = raise_on_missing
+        self.mode = mode
 
     def get_field(self, field_name, args, kwargs):
         return self.get_value(field_name, args, kwargs), field_name
@@ -40,14 +55,22 @@ class SafeFormatter(Formatter):
     def get_value(self, key, args, kwargs):
         if not self.raise_on_missing and key not in self.context:
             return '{' + str(key) + '}'
-        return self.context[key]
+        r = self.context[key]
+        if isinstance(r, PlainHtmlAlternativeString):
+            if self.mode == self.MODE_IGNORE_RICH:
+                return '{' + str(key) + '}'
+            elif self.mode == self.MODE_RICH_TO_PLAIN:
+                return r.plain
+            elif self.mode == self.MODE_RICH_TO_HTML:
+                return r.html
+        return r
 
     def format_field(self, value, format_spec):
-        # Ignore format _spec
+        # Ignore format_spec
         return super().format_field(value, '')
 
 
-def format_map(template, context, raise_on_missing=False):
+def format_map(template, context, raise_on_missing=False, mode=SafeFormatter.MODE_IGNORE_RICH):
     if not isinstance(template, str):
         template = str(template)
-    return SafeFormatter(context, raise_on_missing).format(template)
+    return SafeFormatter(context, raise_on_missing, mode=mode).format(template)

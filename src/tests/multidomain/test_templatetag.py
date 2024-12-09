@@ -63,6 +63,36 @@ def test_event_custom_domain_front_page(env):
 
 
 @pytest.mark.django_db
+def test_event_custom_event_domain_front_page(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0], event=env[1], mode=KnownDomain.MODE_EVENT_DOMAIN)
+    rendered = TEMPLATE_FRONT_PAGE.render(Context({
+        'event': env[1]
+    })).strip()
+    assert rendered == 'http://foobar/'
+
+
+@pytest.mark.django_db
+def test_event_custom_org_alt_domain_front_page(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0], mode=KnownDomain.MODE_ORG_DOMAIN)
+    d = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    d.event_assignments.create(event=env[1])
+    rendered = TEMPLATE_FRONT_PAGE.render(Context({
+        'event': env[1]
+    })).strip()
+    assert rendered == 'http://altfoo/2015/'
+
+
+@pytest.mark.django_db
+def test_event_custom_org_alt_domain_unassigned_front_page(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0], mode=KnownDomain.MODE_ORG_DOMAIN)
+    KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    rendered = TEMPLATE_FRONT_PAGE.render(Context({
+        'event': env[1]
+    })).strip()
+    assert rendered == 'http://foobar/2015/'
+
+
+@pytest.mark.django_db
 def test_event_main_domain_kwargs(env):
     rendered = TEMPLATE_KWARGS.render(Context({
         'event': env[1]

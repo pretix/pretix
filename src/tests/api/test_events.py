@@ -1602,6 +1602,80 @@ def test_event_block_unblock_seat(token_client, organizer, event, seatingplan, i
 
 
 @pytest.mark.django_db
+def test_event_block_unblock_seat_bulk(token_client, organizer, event, seatingplan, item):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+
+    s1 = event.seats.first()
+    s2 = event.seats.last()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/seats/bulk_block/'.format(organizer.slug, event.slug),
+        {
+            "ids": [s1.pk, s2.pk],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    s1.refresh_from_db()
+    s2.refresh_from_db()
+    assert s1.blocked
+    assert s2.blocked
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/seats/bulk_unblock/'.format(organizer.slug, event.slug),
+        {
+            "ids": [s1.pk, s2.pk],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    s1.refresh_from_db()
+    s2.refresh_from_db()
+    assert not s1.blocked
+    assert not s2.blocked
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/seats/bulk_block/'.format(organizer.slug, event.slug),
+        {
+            "seat_guids": [s1.seat_guid, s2.seat_guid],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    s1.refresh_from_db()
+    s2.refresh_from_db()
+    assert s1.blocked
+    assert s2.blocked
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/seats/bulk_unblock/'.format(organizer.slug, event.slug),
+        {
+            "seat_guids": [s1.seat_guid, s2.seat_guid],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    s1.refresh_from_db()
+    s2.refresh_from_db()
+    assert not s1.blocked
+    assert not s2.blocked
+
+
+@pytest.mark.django_db
 def test_event_expand_seat_filter_and_querycount(token_client, organizer, event, seatingplan, item):
     event.settings.seating_minimal_distance = 2
 

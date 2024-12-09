@@ -19,26 +19,14 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.core.validators import URLValidator
-from i18nfield.rest_framework import I18nAwareModelSerializer, I18nField
+from pretix.base.forms.questions import name_parts_is_empty
 
 
-class I18nURLField(I18nField):
-    def to_internal_value(self, value):
-        value = super().to_internal_value(value)
-        if not value:
-            return value
-        if isinstance(value.data, dict):
-            for v in value.data.values():
-                if v:
-                    URLValidator()(v)
-        else:
-            URLValidator()(value.data)
-        return value
-
-
-__all__ = [
-    "I18nAwareModelSerializer",  # for backwards compatibility
-    "I18nField",  # for backwards compatibility
-    "I18nURLField",
-]
+def test_name_parts_is_empty():
+    assert name_parts_is_empty({}) is True
+    assert name_parts_is_empty({"_scheme": "foo"}) is True
+    assert name_parts_is_empty({"_scheme": "foo", "full_name": ""}) is True
+    assert name_parts_is_empty({"full_name": None}) is True
+    assert name_parts_is_empty({"full_name": "Flora Nord"}) is False
+    assert name_parts_is_empty({"_scheme": "foo", "given_name": "Alice"}) is False
+    assert name_parts_is_empty({"_legacy": "Alice"}) is False

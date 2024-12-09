@@ -77,7 +77,7 @@ def test_urlreplace_replace_parameter():
 
         # rounding errors
         ("de", Decimal("1.234"), "EUR", "1,23" + NBSP + "€"),
-        ("de", Decimal("1023.1"), "JPY", "JPY 1023,10"),
+        ("de", Decimal("1023.1"), "JPY", "JPY 1.023,10"),
     ]
 )
 def test_money_filter(locale, amount, currency, expected):
@@ -99,9 +99,9 @@ def test_money_filter(locale, amount, currency, expected):
 @pytest.mark.parametrize(
     "locale,amount,currency,expected",
     [
-        ("de", Decimal("1000.00"), "EUR", "1000,00"),
-        ("en", Decimal("1000.00"), "EUR", "1000.00"),
-        ("de", Decimal("1023.1"), "JPY", "1023,10"),
+        ("de", Decimal("1000.00"), "EUR", "1.000,00"),
+        ("en", Decimal("1000.00"), "EUR", "1,000.00"),
+        ("de", Decimal("1023.1"), "JPY", "1.023,10"),
     ]
 )
 def test_money_filter_hidecurrency(locale, amount, currency, expected):

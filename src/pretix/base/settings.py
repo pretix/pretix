@@ -56,6 +56,7 @@ from django.utils.translation import (
 from django_countries.fields import Country
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
+from i18nfield.rest_framework import I18nField
 from i18nfield.strings import LazyI18nString
 from phonenumbers import PhoneNumber, parse
 from rest_framework import serializers
@@ -63,7 +64,7 @@ from rest_framework import serializers
 from pretix.api.serializers.fields import (
     ListMultipleChoiceField, UploadedFileField,
 )
-from pretix.api.serializers.i18n import I18nField, I18nURLField
+from pretix.api.serializers.i18n import I18nURLField
 from pretix.base.forms import I18nMarkdownTextarea, I18nURLFormField
 from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
 from pretix.base.reldate import (

@@ -136,6 +136,10 @@ article.item-with-variations .product-row:last-child:after {
     display: none;
 }
 
+.panel-body:not(:has(*)) {
+  padding: 0;
+}
+
 .panel-body > *:last-child,
 .panel-body address:last-child {
     margin-bottom: 0;
