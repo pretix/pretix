@@ -177,6 +177,7 @@
                 </div>
                 <div class="panel-body">
                     <dl class="dl-horizontal">
+                        {% eventsignal event "pretix.control.signals.order_info_top" order=order request=request %}
                         <dt>{% trans "Order code" %}</dt>
                         <dd>{{ order.code }}</dd>
                         <dt>{% trans "Order date" %}</dt>
