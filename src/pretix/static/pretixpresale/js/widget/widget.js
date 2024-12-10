@@ -427,8 +427,6 @@ Vue.component('variation', {
         // Variation description
         + '<div class="pretix-widget-item-info-col">'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<strong class="pretix-widget-item-title">{{ variation.value }}</strong>'
-        + '<div class="pretix-widget-item-description" v-if="variation.description" v-html="variation.description"></div>'
         + '<strong :id="variation_label_id" class="pretix-widget-item-title">{{ variation.value }}</strong>'
         + '<div :id="variation_desc_id" class="pretix-widget-item-description" v-if="variation.description" v-html="variation.description"></div>'
         + '<p class="pretix-widget-item-meta" '
