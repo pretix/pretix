@@ -53,8 +53,8 @@ $(function () {
         });
 
     wallets.forEach(function(wallet) {
-        const labels = $('[data-wallets*='+wallet+'] + label strong, [data-wallets*='+wallet+'] + strong')
-            .append('<span class="wallet wallet-loading" data-wallet="'+wallet+'"> <i aria-hidden="true" class="fa fa-cog fa-spin"></i></span>')
+        const labels = $('[data-wallets*='+wallet+'] + .provider-name')
+            .append('<span class="wallet wallet-loading" data-wallet="'+wallet+'"> <span aria-hidden="true" class="fa fa-cog fa-spin"></span></span>')
         walletdetection[wallet]()
             .then(function(result) {
                 const spans = labels.find(".wallet-loading[data-wallet=" + wallet + "]");
