@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-13 21:00+0000\n"
-"Last-Translator: arjan-s <github@anymore.nl>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2024-12-10 06:00+0000\n"
+"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -3075,10 +3075,6 @@ msgstr ""
 "mailadres."
 
 #: pretix/base/forms/user.py:53
-#, fuzzy
-#| msgid ""
-#| "Please enter your current password if you want to change your email "
-#| "address or password."
 msgid ""
 "Please enter your current password if you want to change your email address "
 "or password."
@@ -9045,8 +9041,6 @@ msgid "Require invoice address"
 msgstr "Verplicht factuuradres"
 
 #: pretix/base/settings.py:553
-#, fuzzy
-#| msgid "Require a business addresses"
 msgid "Require a business address"
 msgstr "Verplicht een adres van een bedrijf"
 
@@ -11907,8 +11901,6 @@ msgid "This will remove all phone numbers from orders."
 msgstr "Dit zal alle telefoonnummers van bestellingen verwijderen."
 
 #: pretix/base/shredder.py:290
-#, fuzzy
-#| msgid "Emails"
 msgid "Emails"
 msgstr "Emails"
 
@@ -12794,11 +12786,11 @@ msgstr "Tijdzone evenement"
 
 #: pretix/control/forms/event.py:140
 msgid "I don't want to specify taxes now"
-msgstr ""
+msgstr "Ik wil nu geen belasting specifiëren"
 
 #: pretix/control/forms/event.py:141
 msgid "You can always configure tax rates later."
-msgstr ""
+msgstr "Je kan altijd later belastingregels configureren."
 
 #: pretix/control/forms/event.py:145
 msgid "Sales tax rate"
@@ -12851,6 +12843,8 @@ msgid ""
 "You have not specified a tax rate. If you do not want us to compute sales "
 "taxes, please check \"{field}\" above."
 msgstr ""
+"U hebt geen belastingtarief opgegeven. Als u niet wilt dat wij "
+"omzetbelasting berekenen, vink dan \"{field}\" hierboven aan."
 
 #: pretix/control/forms/event.py:308
 msgid "Copy configuration from"
@@ -14263,7 +14257,7 @@ msgstr "Kies een quotum."
 #: pretix/control/forms/item.py:603 pretix/plugins/badges/forms.py:85
 #: pretix/plugins/ticketoutputpdf/forms.py:55
 msgid "(Event default)"
-msgstr "(Standaard van evenement)"
+msgstr "(Evenement standaard)"
 
 #: pretix/control/forms/item.py:613
 msgid "Choose automatically depending on event settings"
@@ -17993,7 +17987,7 @@ msgstr "Verbonden apparaten"
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:72
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:69
 msgid "Clone"
-msgstr "Kopiëren"
+msgstr "Kloon"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:22
 msgid ""
@@ -24694,7 +24688,7 @@ msgstr "U kunt deze optie wijzigen in de variant-instellingen."
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "You can change this option in the product settings."
-msgstr "U kunt deze optie wijzigen in de productinstellingen"
+msgstr "U kunt deze optie wijzigen in de productinstellingen."
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:11
 msgid "You haven't created any dates for this event series yet."
@@ -25732,30 +25726,21 @@ msgid "Welcome to pretix! You are now part of the team \"{}\"."
 msgstr "Welkom bij pretix! U bent nu lid van het team \"{}\"."
 
 #: pretix/control/views/auth.py:357
-#, fuzzy
-#| msgid ""
-#| "If the address is registered to valid account, then we have sent you an e-"
-#| "mail containing further instructions. Please note that we will send at "
-#| "most one email every 24 hours."
 msgid ""
 "If the address is registered to valid account, then we have sent you an "
 "email containing further instructions. Please note that we will send at most "
 "one email every 24 hours."
 msgstr ""
-"Als het adres gekoppeld is aan een geldig account zullen we u een e-mail "
-"sturen met verdere instructies. Merk op dat we ten hoogste één e-mail per 24 "
+"Als het adres gekoppeld is aan een geldig account zullen we u een email "
+"sturen met verdere instructies. Merk op dat we ten hoogste één email per 24 "
 "uur zullen sturen."
 
 #: pretix/control/views/auth.py:360
-#, fuzzy
-#| msgid ""
-#| "If the address is registered to valid account, then we have sent you an e-"
-#| "mail containing further instructions."
 msgid ""
 "If the address is registered to valid account, then we have sent you an "
 "email containing further instructions."
 msgstr ""
-"Als het adres gekoppeld is aan een geldig account zullen we u een e-mail "
+"Als het adres gekoppeld is aan een geldig account zullen we u een email "
 "sturen met verdere instructies."
 
 #: pretix/control/views/auth.py:380
@@ -30771,7 +30756,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:502
 msgid "MobilePay"
-msgstr ""
+msgstr "MobilePay"
 
 #: pretix/plugins/stripe/payment.py:512
 msgid "Destination"
@@ -31062,16 +31047,12 @@ msgstr ""
 "TWINT. Houd uw app bij de hand."
 
 #: pretix/plugins/stripe/payment.py:1887
-#, fuzzy
-#| msgid ""
-#| "This payment method is available to users of the Swiss app TWINT. Please "
-#| "have your app ready."
 msgid ""
 "This payment method is available to MobilePay app users in Denmark and "
 "Finland. Please have your app ready."
 msgstr ""
-"Deze betaalmethode is beschikbaar voor de gebruikers van de Zwitserse app "
-"TWINT. Houd uw app bij de hand."
+"Deze betaalmethode is beschikbaar voor de gebruikers van de MobilePay app in "
+"Denemarken en Finland. Houd uw app bij de hand."
 
 #: pretix/plugins/stripe/signals.py:92
 msgid "Charge succeeded."
