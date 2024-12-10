@@ -8,98 +8,100 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-12-11 01:00+0000\n"
+"Last-Translator: Neriman Memmedli <nerim4n@pm.me>\n"
+"Language-Team: Azerbaijani <https://translate.pretix.eu/projects/pretix/"
+"pretix/az/>\n"
 "Language: az\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
-msgstr ""
+msgstr "İngiliscə"
 
 #: pretix/_base_settings.py:80
 msgid "German"
-msgstr ""
+msgstr "Almanca"
 
 #: pretix/_base_settings.py:81
 msgid "German (informal)"
-msgstr ""
+msgstr "Almanca (qeyri-rəsmi)"
 
 #: pretix/_base_settings.py:82
 msgid "Arabic"
-msgstr ""
+msgstr "Ərəbcə"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "Baskca"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
-msgstr ""
+msgstr "Katalanca"
 
 #: pretix/_base_settings.py:85
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Çincə (sadələşdirilmiş)"
 
 #: pretix/_base_settings.py:86
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Çincə (ənənəvi)"
 
 #: pretix/_base_settings.py:87
 msgid "Czech"
-msgstr ""
+msgstr "Çexcə"
 
 #: pretix/_base_settings.py:88
 msgid "Danish"
-msgstr ""
+msgstr "Danca"
 
 #: pretix/_base_settings.py:89
 msgid "Dutch"
-msgstr ""
+msgstr "Niderlandca"
 
 #: pretix/_base_settings.py:90
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Niderlandca (qeyri-rəsmi)"
 
 #: pretix/_base_settings.py:91
 msgid "French"
-msgstr ""
+msgstr "Fransızca"
 
 #: pretix/_base_settings.py:92
 msgid "Finnish"
-msgstr ""
+msgstr "Fincə"
 
 #: pretix/_base_settings.py:93
 msgid "Galician"
-msgstr ""
+msgstr "Qalisiyaca"
 
 #: pretix/_base_settings.py:94
 msgid "Greek"
-msgstr ""
+msgstr "Yunanca"
 
 #: pretix/_base_settings.py:95
 msgid "Indonesian"
-msgstr ""
+msgstr "İndoneziya dili"
 
 #: pretix/_base_settings.py:96
 msgid "Italian"
-msgstr ""
+msgstr "İtalyanca"
 
 #: pretix/_base_settings.py:97
 msgid "Latvian"
-msgstr ""
+msgstr "Latışca"
 
 #: pretix/_base_settings.py:98
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norveç Bokmal"
 
 #: pretix/_base_settings.py:99
 msgid "Polish"
-msgstr ""
+msgstr "Polyakca"
 
 #: pretix/_base_settings.py:100
 msgid "Portuguese (Portugal)"
