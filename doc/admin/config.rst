@@ -288,6 +288,7 @@ Example::
     [django]
     secret=j1kjps5a5&4ilpn912s7a1!e2h!duz^i3&idu@_907s$wrz@x-
     debug=off
+    passwords_argon2=on
 
 ``secret``
     The secret to be used by Django for signing and verification purposes. If this
@@ -302,6 +303,10 @@ Example::
     Whether or not to run in debug mode. Default is ``False``.
 
     .. WARNING:: Never set this to ``True`` in production!
+
+``passwords_argon``
+    Use the ``argon2`` algorithm for password hashing. Disable on systems with a small number of CPU cores (currently
+    less than 8).
 
 ``profile``
     Enable code profiling for a random subset of requests. Disabled by default, see

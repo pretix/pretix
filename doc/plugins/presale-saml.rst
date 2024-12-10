@@ -158,7 +158,7 @@ expects and - more importantly - supports.
     for a sample configuration in an academic context.
 
     Note, that you can have multiple attributes with the same ``friendlyName``
-    but different ``name``s. This is often used in systems, where the same
+    but different ``name`` value. This is often used in systems, where the same
     information (for example a persons name) is saved in different fields -
     for example because one institution is returning SAML 1.0 and other
     institutions are returning SAML 2.0 style attributes. Typically, this only

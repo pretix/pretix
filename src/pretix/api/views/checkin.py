@@ -62,6 +62,7 @@ from pretix.base.models import (
     CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
     Question, ReusableMedium, RevokedTicketSecret, TeamAPIToken,
 )
+from pretix.base.models.orders import PrintLog
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
 )
@@ -115,7 +116,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         if 'subevent' in self.request.query_params.getlist('expand'):
             qs = qs.prefetch_related(
                 'subevent', 'subevent__event', 'subevent__subeventitem_set', 'subevent__subeventitemvariation_set',
-                'subevent__seat_category_mappings', 'subevent__meta_values', 'auto_checkin_sales_channels'
+                'subevent__seat_category_mappings', 'subevent__meta_values',
             )
         return qs
 
@@ -142,7 +143,9 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic
     def perform_destroy(self, instance):
+        instance.checkins.all().delete()
         instance.log_action(
             'pretix.event.checkinlist.deleted',
             user=self.request.user,
@@ -365,8 +368,9 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
         qs = qs.prefetch_related(
             Prefetch(
                 lookup='checkins',
-                queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists])
+                queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists]).select_related('device')
             ),
+            Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
             'answers', 'answers__options', 'answers__question',
             Prefetch('addons', OrderPosition.objects.select_related('item', 'variation')),
             Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
@@ -378,6 +382,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
                     'positions',
                     OrderPosition.objects.prefetch_related(
                         Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
+                        Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                         'item', 'variation', 'answers', 'answers__options', 'answers__question',
                     )
                 )
@@ -389,8 +394,9 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
         qs = qs.prefetch_related(
             Prefetch(
                 lookup='checkins',
-                queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists])
+                queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists]).select_related('device')
             ),
+            Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
             'answers', 'answers__options', 'answers__question',
             Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
         ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat')

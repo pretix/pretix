@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name='On waiting list since')),
-                ('email', models.EmailField(max_length=254, verbose_name='E-mail address')),
+                ('email', models.EmailField(max_length=254, verbose_name='Email address')),
                 ('locale', models.CharField(default='en', max_length=190)),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='waitinglistentries', to='pretixbase.Event', verbose_name='Event')),
                 ('item', models.ForeignKey(help_text='The product the user waits for.', on_delete=django.db.models.deletion.CASCADE, related_name='waitinglistentries', to='pretixbase.Item', verbose_name='Product')),

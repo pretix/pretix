@@ -37,7 +37,7 @@ def env():
         organizer=o, name='MRMCD2015', slug='2015',
         date_from=now()
     )
-    event.get_cache().clear()
+    event.cache.clear()
     return o, event
 
 
@@ -61,6 +61,16 @@ def test_event_org_domain_kwargs(env):
 
 
 @pytest.mark.django_db
+def test_event_org_alt_domain_kwargs(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    d = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    assert eventreverse(env[1], 'presale:event.checkout', {'step': 'payment'}) == 'http://foobar/2015/checkout/payment/'
+    d.event_assignments.create(event=env[1])
+    with scopes_disabled():
+        assert eventreverse(Event.objects.get(pk=env[1].pk), 'presale:event.checkout', {'step': 'payment'}) == 'http://altfoo/2015/checkout/payment/'
+
+
+@pytest.mark.django_db
 def test_event_main_domain_kwargs(env):
     assert eventreverse(env[1], 'presale:event.checkout', {'step': 'payment'}) == '/mrmcd/2015/checkout/payment/'
 
@@ -69,6 +79,15 @@ def test_event_main_domain_kwargs(env):
 def test_event_org_domain_front_page(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     assert eventreverse(env[1], 'presale:event.index') == 'http://foobar/2015/'
+    assert eventreverse(env[0], 'presale:organizer.index') == 'http://foobar/'
+
+
+@pytest.mark.django_db
+def test_event_org_alt_domain_front_page(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    d = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    d.event_assignments.create(event=env[1])
+    assert eventreverse(env[1], 'presale:event.index') == 'http://altfoo/2015/'
     assert eventreverse(env[0], 'presale:organizer.index') == 'http://foobar/'
 
 
@@ -109,8 +128,8 @@ def test_event_org_domain_keep_scheme(env):
     }
 })
 def test_event_main_domain_cache(env):
-    env[0].get_cache().clear()
-    with assert_num_queries(1):
+    env[0].cache.clear()
+    with assert_num_queries(2):
         eventreverse(env[1], 'presale:event.index')
     with assert_num_queries(0):
         eventreverse(env[1], 'presale:event.index')
@@ -125,8 +144,8 @@ def test_event_main_domain_cache(env):
 })
 def test_event_org_domain_cache(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
-    env[0].get_cache().clear()
-    with assert_num_queries(1):
+    env[0].cache.clear()
+    with assert_num_queries(2):
         eventreverse(env[1], 'presale:event.index')
     with assert_num_queries(0):
         eventreverse(env[1], 'presale:event.index')
@@ -142,7 +161,7 @@ def test_event_org_domain_cache(env):
 def test_event_custom_domain_cache(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
-    env[0].get_cache().clear()
+    env[0].cache.clear()
     with assert_num_queries(1):
         eventreverse(env[1], 'presale:event.index')
     with assert_num_queries(0):
@@ -157,17 +176,40 @@ def test_event_custom_domain_cache(env):
     }
 })
 @scopes_disabled()
+def test_event_org_alt_domain_cache_clear(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    kd_alt = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    env[0].cache.clear()
+    with assert_num_queries(2):
+        eventreverse(env[1], 'presale:event.index')
+    kd_alt.event_assignments.create(event=env[1])
+    with assert_num_queries(2):
+        ev = Event.objects.get(pk=env[1].pk)
+        assert ev.pk == env[1].pk
+        assert ev.organizer == env[0]
+    with assert_num_queries(1):
+        eventreverse(ev, 'presale:event.index')
+
+
+@pytest.mark.django_db
+@override_settings(CACHES={
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+})
+@scopes_disabled()
 def test_event_org_domain_cache_clear(env):
     kd = KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     env[0].cache.clear()
-    with assert_num_queries(1):
+    with assert_num_queries(2):
         eventreverse(env[1], 'presale:event.index')
     kd.delete()
     with assert_num_queries(2):
         ev = Event.objects.get(pk=env[1].pk)
         assert ev.pk == env[1].pk
         assert ev.organizer == env[0]
-    with assert_num_queries(1):
+    with assert_num_queries(2):
         eventreverse(ev, 'presale:event.index')
 
 
@@ -190,7 +232,7 @@ def test_event_custom_domain_cache_clear(env):
         ev = Event.objects.get(pk=env[1].pk)
         assert ev.pk == env[1].pk
         assert ev.organizer == env[0]
-    with assert_num_queries(1):
+    with assert_num_queries(2):
         eventreverse(ev, 'presale:event.index')
 
 
@@ -210,3 +252,11 @@ def test_event_custom_domain_absolute(env):
 def test_event_org_domain_absolute(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     assert build_absolute_uri(env[1], 'presale:event.index') == 'http://foobar/2015/'
+
+
+@pytest.mark.django_db
+def test_event_org_alt_domain_absolute(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    d = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    d.event_assignments.create(event=env[1])
+    assert build_absolute_uri(env[1], 'presale:event.index') == 'http://altfoo/2015/'

@@ -257,7 +257,7 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed():
             self.object.log_action(
-                'pretix.event.category.reordered', user=self.request.user, data={
+                'pretix.event.category.changed', user=self.request.user, data={
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )
@@ -302,6 +302,8 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
             i = modelcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
+            kwargs.setdefault('initial', {})
+            kwargs['initial']['cross_selling_match_products'] = [str(i.pk) for i in self.copy_from.cross_selling_match_products.all()]
         else:
             kwargs['instance'] = ItemCategory(event=self.request.event)
         return kwargs
@@ -661,6 +663,10 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             question=self.object, orderposition__isnull=False,
             orderposition__order__event=self.request.event
         )
+
+        if self.request.GET.get("subevent", "") != "":
+            qs = qs.filter(orderposition__subevent=self.request.GET["subevent"])
+
         s = self.request.GET.get("status", "np")
         if s != "":
             if s == 'o':
@@ -914,16 +920,19 @@ class QuotaCreate(EventPermissionRequiredMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
 
+        kwargs.setdefault('initial', {})
         if self.copy_from:
             i = modelcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
-            kwargs.setdefault('initial', {})
             kwargs['initial']['itemvars'] = [str(i.pk) for i in self.copy_from.items.all()] + [
                 '{}-{}'.format(v.item_id, v.pk) for v in self.copy_from.variations.all()
             ]
         else:
             kwargs['instance'] = Quota(event=self.request.event)
+            if 'product' in self.request.GET:
+                kwargs['initial']['itemvars'] = self.request.GET.getlist('product')
+
         return kwargs
 
     def form_invalid(self, form):

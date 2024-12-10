@@ -102,6 +102,18 @@
     }
   }
 }
+.cross-selling .panel-body h3, .cross-selling .panel-body .h3 {
+  font-size: 21px;
+  line-height: inherit;
+  margin-top: 20px;
+}
+.cross-selling .panel-body > *:first-child > h3:first-child,
+.cross-selling .panel-body > *:first-child > .h3:first-child {
+  margin-top: 0;
+}
+.cross-selling .panel-body h3 small, .cross-selling .panel-body .h3 small {
+  padding-left: 20px;
+}
 
 
 .panel-confirm {

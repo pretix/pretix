@@ -8,7 +8,7 @@
 {% endblock %}
 {% block title %}{% trans "Organizer" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "E-mail settings" %}</h1>
+    <h1>{% trans "Email settings" %}</h1>
 
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data"
           mail-preview-url="{% url "control:organizer.settings.mail.preview" organizer=request.organizer.slug %}">
@@ -55,7 +55,7 @@
                 {% bootstrap_field form.mail_bcc layout="control" %}
             </fieldset>
             <fieldset>
-                <legend>{% trans "E-mail content" %}</legend>
+                <legend>{% trans "Email content" %}</legend>
                 <div class="panel-group" id="questions_group">
                     {% blocktrans asvar title_customer_registration %}Customer account registration{% endblocktrans %}
                     {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="customer_registration" title=title_customer_registration items="mail_subject_customer_registration,mail_text_customer_registration" %}

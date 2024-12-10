@@ -379,6 +379,13 @@ def test_org_sso_login_new_customer_popup(env, client, provider):
 
 
 @pytest.mark.django_db
+def test_org_sso_login_new_customer_popup_org_alt_domain(env, client, provider):
+    d = KnownDomain.objects.create(organizer=env[0], domainname="popuporigin", mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+    d.event_assignments.create(event=env[1])
+    _sso_login(client, provider, popup_origin="https://popuporigin")
+
+
+@pytest.mark.django_db
 def test_org_sso_login_new_customer_popup_invalid_origin(env, client, provider):
     KnownDomain.objects.create(organizer=env[0], event=env[1], domainname="popuporigin")
     with pytest.raises(AssertionError):
@@ -433,7 +440,7 @@ def test_org_sso_login_new_customer_email_conflict(env, client, provider):
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", [
     "account/change",
-    "account/membership/1/",
+    "account/memberships/1/",
     "account/",
 ])
 def test_login_required(client, env, url):
@@ -696,16 +703,21 @@ def client2():
     return Client()
 
 
-def _cross_domain_login(env, client, client2):
+def _cross_domain_login(env, client, client2, org_alt=False):
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=True)
         customer.set_password('foo')
         customer.save()
         KnownDomain.objects.create(domainname='org.test', organizer=env[0])
-        KnownDomain.objects.create(domainname='event.test', organizer=env[0], event=env[1])
+        if org_alt:
+            d = KnownDomain.objects.create(domainname='event.test', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+            d.event_assignments.create(event=env[1])
+        else:
+            KnownDomain.objects.create(domainname='event.test', organizer=env[0], event=env[1])
 
     # Log in on org domain
-    r = client.post('/account/login?next=https://event.test/redeem&request_cross_domain_customer_auth=true', {
+    path = '/conf/' if org_alt else '/'
+    r = client.post(f'/account/login?next=https://event.test{path}redeem&request_cross_domain_customer_auth=true', {
         'email': 'john@example.org',
         'password': 'foo',
     }, HTTP_HOST='org.test')
@@ -713,12 +725,12 @@ def _cross_domain_login(env, client, client2):
 
     u = urlparse(r.headers['Location'])
     assert u.netloc == 'event.test'
-    assert u.path == '/redeem'
+    assert u.path == path + 'redeem'
     q = parse_qs(u.query)
     assert 'cross_domain_customer_auth' in q
 
     # Take session over to event domain
-    r = client2.get(f'/?{u.query}', HTTP_HOST='event.test')
+    r = client2.get(f'{path}?{u.query}', HTTP_HOST='event.test')
     assert r.status_code == 200
     assert b'john@example.org' in r.content
 
@@ -727,12 +739,27 @@ def _cross_domain_login(env, client, client2):
 def test_cross_domain_login(env, client, client2):
     _cross_domain_login(env, client, client2)
 
-    # Logged in on org domain
+    # Logged in on evnet domain
     r = client.get('/', HTTP_HOST='event.test')
     assert r.status_code == 200
     assert b'john@example.org' in r.content
 
-    # Logged in on event domain
+    # Logged in on org domain
+    r = client2.get('/', HTTP_HOST='org.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content
+
+
+@pytest.mark.django_db
+def test_cross_domain_login_org_alt(env, client, client2):
+    _cross_domain_login(env, client, client2, org_alt=True)
+
+    # Logged in on org alt domain
+    r = client.get('/conf/', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content
+
+    # Logged in on org domain
     r = client2.get('/', HTTP_HOST='org.test')
     assert r.status_code == 200
     assert b'john@example.org' in r.content

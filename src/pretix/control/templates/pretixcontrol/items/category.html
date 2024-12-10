@@ -16,7 +16,19 @@
                         {% bootstrap_field form.internal_name layout="control" %}
                     </div>
                     {% bootstrap_field form.description layout="control" %}
-                    {% bootstrap_field form.is_addon layout="control" %}
+                    {% bootstrap_field form.category_type layout="control" horizontal_field_class="big-radio-wrapper col-md-9" %}
+                    <div class="row" data-display-dependency="#id_category_type_2">
+                        <div class="col-md-offset-3 col-md-9">
+                            <div class="alert alert-info">
+                                {% blocktrans trimmed %}
+                                Please note that cross-selling categories are intended as a marketing feature and are not
+                                suitable for strictly ensuring that products are only available in certain combinations.
+                                {% endblocktrans %}
+                            </div>
+                        </div>
+                    </div>
+                    {% bootstrap_field form.cross_selling_condition layout="control" horizontal_field_class="col-md-9" %}
+                    {% bootstrap_field form.cross_selling_match_products layout="control" %}
                 </fieldset>
             </div>
             {% if category %}

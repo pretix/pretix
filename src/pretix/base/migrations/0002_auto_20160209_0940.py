@@ -187,7 +187,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('code', models.CharField(max_length=16, verbose_name='Order code')),
                 ('status', models.CharField(choices=[('n', 'pending'), ('p', 'paid'), ('e', 'expired'), ('c', 'cancelled'), ('r', 'refunded')], max_length=3, verbose_name='Status')),
-                ('email', models.EmailField(blank=True, max_length=254, null=True, verbose_name='E-mail')),
+                ('email', models.EmailField(blank=True, max_length=254, null=True, verbose_name='Email')),
                 ('locale', models.CharField(blank=True, max_length=32, null=True, verbose_name='Locale')),
                 ('secret', models.CharField(default=pretix.base.models.orders.generate_secret, max_length=32)),
                 ('datetime', models.DateTimeField(verbose_name='Date')),

@@ -41,7 +41,10 @@
         {% endif %}
         {% include "pretixcontrol/event/fragment_geodata.html" %}
         {% bootstrap_field form.currency layout="control" %}
-        {% bootstrap_field form.tax_rate addon_after="%" layout="control" %}
+        {% bootstrap_field form.no_taxes layout="control" %}
+        <div data-display-dependency="#{{ form.no_taxes.id_for_label }}" data-inverse>
+            {% bootstrap_field form.tax_rate addon_after="%" layout="control" %}
+        </div>
     </fieldset>
     <fieldset>
         <legend>{% trans "Display settings" %}</legend>

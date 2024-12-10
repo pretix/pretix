@@ -20,8 +20,9 @@
 # <https://www.gnu.org/licenses/>.
 #
 import re
+from collections import defaultdict
 from decimal import Decimal
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 from django import forms
 from django.db.models import Q
@@ -31,6 +32,7 @@ from pretix.base.models import (
     AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation,
     SalesChannel, Voucher,
 )
+from pretix.base.models.discount import Discount, PositionInfo
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.timemachine import time_machine_now
@@ -155,14 +157,22 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
     return price
 
 
-def apply_discounts(event: Event, sales_channel: str,
-                    positions: List[Tuple[int, Optional[int], Decimal, bool, bool]]) -> List[Decimal]:
+def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
+                    positions: List[Tuple[int, Optional[int], Decimal, bool, bool, Decimal]],
+                    collect_potential_discounts: Optional[defaultdict]=None) -> List[Tuple[Decimal, Optional[Discount]]]:
     """
     Applies any dynamic discounts to a cart
 
     :param event: Event the cart belongs to
     :param sales_channel: Sales channel the cart was created with
     :param positions: Tuple of the form ``(item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount)``
+    :param collect_potential_discounts: If a `defaultdict(list)` is supplied, all discounts that could be applied to the cart
+    based on the "consumed" items, but lack matching "benefitting" items will be collected therein.
+    The dict will contain a mapping from index in the `positions` list of the item that could be consumed, to a list
+    of tuples describing the discounts that could be applied in the form `(discount, max_count, grouping_id)`.
+    `max_count` is either the maximum number of benefitting items that the discount would apply to, or `inf` if that number
+    is not limited. The `grouping_id` can be used to distinguish several occurrences of the same discount.
+
     :return: A list of ``(new_gross_price, discount)`` tuples in the same order as the input
     """
     if isinstance(sales_channel, SalesChannel):
@@ -177,10 +187,10 @@ def apply_discounts(event: Event, sales_channel: str,
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:
         result = discount.apply({
-            idx: (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)
+            idx: PositionInfo(item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)
             for idx, (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount) in enumerate(positions)
             if not is_bundled and idx not in new_prices
-        })
+        }, collect_potential_discounts)
         for k in result.keys():
             result[k] = (result[k], discount)
         new_prices.update(result)

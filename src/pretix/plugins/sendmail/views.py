@@ -46,12 +46,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.html import escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, ngettext
 from django.views.generic import DeleteView, FormView, ListView, TemplateView
 
-from pretix.base.email import get_available_placeholders
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import Checkin, LogEntry, Order, OrderPosition
 from pretix.base.models.event import SubEvent
@@ -63,7 +61,8 @@ from pretix.plugins.sendmail.tasks import (
 )
 
 from ...base.services.mail import prefix_subject
-from ...helpers.format import format_map
+from ...base.services.placeholders import get_sample_context
+from ...helpers.format import SafeFormatter, format_map
 from ...helpers.models import modelcopy
 from . import forms
 from .models import Rule, ScheduledMail
@@ -191,17 +190,15 @@ class BaseSenderView(EventPermissionRequiredMixin, FormView):
         if self.request.POST.get("action") != "send":
             for l in self.request.event.settings.locales:
                 with language(l, self.request.event.settings.region):
-                    context_dict = {}
-                    for k, v in get_available_placeholders(self.request.event, self.context_parameters).items():
-                        context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
-                            _('This value will be replaced based on dynamic parameters.'),
-                            escape(v.render_sample(self.request.event))
-                        )
-
-                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
+                    context_dict = get_sample_context(self.request.event, self.context_parameters)
+                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=set())
                     preview_subject = prefix_subject(self.request.event, format_map(subject, context_dict), highlight=True)
                     message = form.cleaned_data['message'].localize(l)
-                    preview_text = markdown_compile_email(format_map(message, context_dict))
+                    preview_text = format_map(
+                        markdown_compile_email(format_map(message, context_dict)),
+                        context_dict,
+                        mode=SafeFormatter.MODE_RICH_TO_HTML,
+                    )
 
                     self.output[l] = {
                         'subject': _('Subject: {subject}').format(subject=preview_subject),
@@ -603,31 +600,6 @@ class CreateRule(EventPermissionRequiredMixin, CreateView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        self.output = {}
-
-        if self.request.POST.get("action") == "preview":
-            for l in self.request.event.settings.locales:
-                with language(l, self.request.event.settings.region):
-                    context_dict = {}
-                    for k, v in get_available_placeholders(self.request.event, ['event', 'order',
-                                                                                'position_or_address']).items():
-                        context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
-                            _('This value will be replaced based on dynamic parameters.'),
-                            escape(v.render_sample(self.request.event))
-                        )
-
-                    subject = bleach.clean(form.cleaned_data['subject'].localize(l), tags=[])
-                    preview_subject = prefix_subject(self.request.event, format_map(subject, context_dict), highlight=True)
-                    template = form.cleaned_data['template'].localize(l)
-                    preview_text = markdown_compile_email(format_map(template, context_dict))
-
-                    self.output[l] = {
-                        'subject': _('Subject: {subject}').format(subject=preview_subject),
-                        'html': preview_text,
-                    }
-
-            return self.get(self.request, *self.args, **self.kwargs)
-
         messages.success(self.request, _('Your rule has been created.'))
 
         form.instance.event = self.request.event
@@ -685,17 +657,15 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
 
         for lang in self.request.event.settings.locales:
             with language(lang, self.request.event.settings.region):
-                placeholders = {}
-                for k, v in get_available_placeholders(self.request.event, ['event', 'order', 'position_or_address']).items():
-                    placeholders[k] = '<span class="placeholder" title="{}">{}</span>'.format(
-                        _('This value will be replaced based on dynamic parameters.'),
-                        escape(v.render_sample(self.request.event))
-                    )
-
-                subject = bleach.clean(self.object.subject.localize(lang), tags=[])
+                placeholders = get_sample_context(self.request.event, ['event', 'order', 'position_or_address'])
+                subject = bleach.clean(self.object.subject.localize(lang), tags=set())
                 preview_subject = prefix_subject(self.request.event, format_map(subject, placeholders), highlight=True)
                 template = self.object.template.localize(lang)
-                preview_text = markdown_compile_email(format_map(template, placeholders))
+                preview_text = format_map(
+                    markdown_compile_email(format_map(template, placeholders)),
+                    placeholders,
+                    mode=SafeFormatter.MODE_RICH_TO_HTML,
+                )
 
                 o[lang] = {
                     'subject': _('Subject: {subject}'.format(subject=preview_subject)),

@@ -85,6 +85,7 @@ MariaDB
 Mercado
 MerchantID
 Mifare
+MobilePay
 MOTO
 Multibanco
 Mx

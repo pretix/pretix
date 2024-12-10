@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2023-11-14 23:00+0000\n"
-"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
+"POT-Creation-Date: 2024-11-18 15:16+0000\n"
+"PO-Revision-Date: 2024-10-23 14:30+0000\n"
+"Last-Translator: arjan-s <github@anymore.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -63,7 +63,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA Direct Debit"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
 msgid "Bancontact"
@@ -78,10 +78,8 @@ msgid "SOFORT"
 msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
-#, fuzzy
-#| msgid "Yes"
 msgid "eps"
-msgstr "Ja"
+msgstr "eps"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
 msgid "MyBank"
@@ -299,13 +297,11 @@ msgstr "Ticketcode ingetrokken/veranderd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 #, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket blocked"
 msgstr "Ticket niet betaald"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 #, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket not valid at this time"
 msgstr "Ticket niet betaald"
 
@@ -315,11 +311,11 @@ msgstr "Bestelling geannuleerd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Ticket-code op de lijst is niet eenduidig"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
-msgstr ""
+msgstr "Bestelling niet goedgekeurd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Checked-in Tickets"
@@ -456,7 +452,7 @@ msgstr "Productvariant"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
-msgstr ""
+msgstr "Ingang"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
@@ -480,13 +476,11 @@ msgstr "Aantal eerdere binnenkomsten sinds middernacht"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
 #, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries since"
 msgstr "Aantal eerdere binnenkomsten"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
 #, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries before"
 msgstr "Aantal eerdere binnenkomsten"
 
@@ -496,13 +490,11 @@ msgstr "Aantal dagen met een eerdere binnenkomst"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
 #, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry since"
 msgstr "Aantal dagen met een eerdere binnenkomst"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
 #, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry before"
 msgstr "Aantal dagen met een eerdere binnenkomst"
 
@@ -582,15 +574,12 @@ msgstr "Groep van objecten"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:899
 #, fuzzy
-#| msgid "Text object"
 msgid "Text object (deprecated)"
 msgstr "Tekstobject"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:901
-#, fuzzy
-#| msgid "Text object"
 msgid "Text box"
-msgstr "Tekstobject"
+msgstr "Tekstkader"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
@@ -654,40 +643,40 @@ msgstr ""
 "Uw kleur heeft een slecht contrast voor tekst op een witte achtergrond, kies "
 "een donkerdere kleur."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
-#: pretix/static/pretixcontrol/js/ui/main.js:511
+#: pretix/static/pretixcontrol/js/ui/main.js:496
+#: pretix/static/pretixcontrol/js/ui/main.js:516
 msgid "Search query"
 msgstr "Zoekopdracht"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:509
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:510
+#: pretix/static/pretixcontrol/js/ui/main.js:515
 msgid "None"
 msgstr "Geen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:514
+#: pretix/static/pretixcontrol/js/ui/main.js:519
 msgid "Selected only"
 msgstr "Alleen geselecteerde"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:847
+#: pretix/static/pretixcontrol/js/ui/main.js:862
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:850
+#: pretix/static/pretixcontrol/js/ui/main.js:865
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1008
+#: pretix/static/pretixcontrol/js/ui/main.js:1023
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1048
+#: pretix/static/pretixcontrol/js/ui/main.js:1063
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1123
+#: pretix/static/pretixcontrol/js/ui/main.js:1138
 msgid "You have unsaved changes!"
 msgstr "U heeft nog niet opgeslagen wijzigingen!"
 
@@ -779,29 +768,25 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Prijs"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 #, fuzzy
-#| msgid "Selected only"
 msgctxt "widget"
 msgid "Select"
 msgstr "Alleen geselecteerde"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
-#, fuzzy, javascript-format
-#| msgid "Selected only"
+#, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr "Alleen geselecteerde"
+msgstr "Selecteer %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#, fuzzy, javascript-format
-#| msgctxt "widget"
-#| msgid "See variations"
+#, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr "Zie variaties"
+msgstr "Selecteer variant %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -866,8 +851,6 @@ msgstr "Alleen verkrijgbaar met een voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 #, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Not yet available"
 msgstr "momenteel beschikbaar: %s"
@@ -879,8 +862,6 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 #, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Currently not available"
 msgstr "momenteel beschikbaar: %s"
@@ -978,16 +959,12 @@ msgstr "Ga verder"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 #, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Show variants"
 msgstr "Zie variaties"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 #, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Hide variants"
 msgstr "Zie variaties"
@@ -1135,40 +1112,30 @@ msgstr "December"
 #~ msgstr "Ongeldig ticket"
 
 #, fuzzy
-#~| msgid "Check-in QR"
 #~ msgid "Check-in result"
 #~ msgstr "QR-code voor check-in"
 
 #, fuzzy
-#~| msgid "May"
 #~ msgid "day"
 #~ msgstr "Mei"
 
 #, fuzzy
-#~| msgctxt "widget"
-#~| msgid "Next week"
 #~ msgid "week"
 #~ msgstr "Volgende week"
 
 #, fuzzy
-#~| msgid "None"
 #~ msgid "on"
 #~ msgstr "Geen"
 
 #, fuzzy
-#~| msgctxt "widget"
-#~| msgid "Next month"
 #~ msgid "months"
 #~ msgstr "Volgende maand"
 
 #, fuzzy
-#~| msgctxt "widget"
-#~| msgid "Next month"
 #~ msgid "month"
 #~ msgstr "Volgende maand"
 
 #, fuzzy
-#~| msgid "Others"
 #~ msgid "the"
 #~ msgstr "Andere"
 

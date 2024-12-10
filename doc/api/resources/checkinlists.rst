@@ -31,8 +31,6 @@ subevent                              integer                    ID of the date 
 position_count                        integer                    Number of tickets that match this list (read-only).
 checkin_count                         integer                    Number of check-ins performed on this list (read-only).
 include_pending                       boolean                    If ``true``, the check-in list also contains tickets from orders in pending state.
-auto_checkin_sales_channels           list of strings            All items on the check-in list will be automatically marked as checked-in when purchased through any of the listed sales channels.
-                                                                 **Deprecated, will be removed in pretix 2024.10.** Use :ref:`rest-autocheckinrules`: instead.
 allow_multiple_entries                boolean                    If ``true``, subsequent scans of a ticket on this list should not show a warning but instead be stored as an additional check-in.
 allow_entry_after_exit                boolean                    If ``true``, subsequent scans of a ticket on this list are valid if the last scan of the ticket was an exit scan.
 rules                                 object                     Custom check-in logic. The contents of this field are currently not considered a stable API and modifications through the API are highly discouraged.
@@ -91,10 +89,7 @@ Endpoints
             "allow_entry_after_exit": true,
             "exit_all_at": null,
             "rules": {},
-            "addon_match": false,
-            "auto_checkin_sales_channels": [
-              "pretixpos"
-            ]
+            "addon_match": false
           }
         ]
       }
@@ -146,10 +141,7 @@ Endpoints
         "allow_entry_after_exit": true,
         "exit_all_at": null,
         "rules": {},
-        "addon_match": false,
-        "auto_checkin_sales_channels": [
-          "pretixpos"
-        ]
+        "addon_match": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -246,10 +238,7 @@ Endpoints
         "subevent": null,
         "allow_multiple_entries": false,
         "allow_entry_after_exit": true,
-        "addon_match": false,
-        "auto_checkin_sales_channels": [
-          "pretixpos"
-        ]
+        "addon_match": false
       }
 
    **Example response**:
@@ -271,10 +260,7 @@ Endpoints
         "subevent": null,
         "allow_multiple_entries": false,
         "allow_entry_after_exit": true,
-        "addon_match": false,
-        "auto_checkin_sales_channels": [
-          "pretixpos"
-        ]
+        "addon_match": false
       }
 
    :param organizer: The ``slug`` field of the organizer of the event/item to create a list for
@@ -326,10 +312,7 @@ Endpoints
         "subevent": null,
         "allow_multiple_entries": false,
         "allow_entry_after_exit": true,
-        "addon_match": false,
-        "auto_checkin_sales_channels": [
-          "pretixpos"
-        ]
+        "addon_match": false
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
@@ -342,7 +325,7 @@ Endpoints
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/checkinlist/(id)/
 
-   Delete a check-in list. Note that this also deletes the information on all check-ins performed via this list.
+   Delete a check-in list. **Note that this also deletes the information on all check-ins performed via this list.**
 
    **Example request**:
 

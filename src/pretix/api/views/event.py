@@ -40,6 +40,7 @@ from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import serializers, views, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import (
     NotFound, PermissionDenied, ValidationError,
 )
@@ -50,8 +51,9 @@ from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
-    EventSettingsSerializer, ItemMetaPropertiesSerializer, SeatSerializer,
-    SubEventSerializer, TaxRuleSerializer,
+    EventSettingsSerializer, ItemMetaPropertiesSerializer,
+    SeatBulkBlockInputSerializer, SeatSerializer, SubEventSerializer,
+    TaxRuleSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
@@ -237,9 +239,9 @@ class EventViewSet(viewsets.ModelViewSet):
             disabled = {m: 'disabled' for m in current_plugins_value if m not in updated_plugins_value}
             changed = merge_dicts(enabled, disabled)
 
-            for module, action in changed.items():
+            for module, operation in changed.items():
                 serializer.instance.log_action(
-                    'pretix.event.plugins.' + action,
+                    'pretix.event.plugins.' + operation,
                     user=self.request.user,
                     auth=self.request.auth,
                     data={'plugin': module}
@@ -297,7 +299,8 @@ class EventViewSet(viewsets.ModelViewSet):
 
             if 'all_sales_channels' in serializer.validated_data and 'sales_channels' in serializer.validated_data:
                 new_event.all_sales_channels = serializer.validated_data['all_sales_channels']
-                new_event.limit_sales_channels.set(serializer.validated_data['limit_sales_channels'])
+                if not new_event.all_sales_channels:
+                    new_event.limit_sales_channels.set(serializer.validated_data['limit_sales_channels'])
         else:
             serializer.instance.set_defaults()
 
@@ -370,7 +373,7 @@ with scopes_disabled():
 
         class Meta:
             model = SubEvent
-            fields = ['active', 'event__live']
+            fields = ['is_public', 'active', 'event__live']
 
         def ends_after_qs(self, queryset, name, value):
             expr = Q(
@@ -743,3 +746,24 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
             auth=self.request.auth,
             data={"seats": [serializer.instance.pk]},
         )
+
+    def bulk_change_blocked(self, blocked):
+        s = SeatBulkBlockInputSerializer(
+            data=self.request.data,
+            context={"event": self.request.event, "queryset": self.get_queryset()},
+        )
+        s.is_valid(raise_exception=True)
+
+        seats = s.validated_data["seats"]
+        for seat in seats:
+            seat.blocked = blocked
+        Seat.objects.bulk_update(seats, ["blocked"], batch_size=1000)
+        return Response({})
+
+    @action(methods=["POST"], detail=False)
+    def bulk_block(self, request, *args, **kwargs):
+        return self.bulk_change_blocked(True)
+
+    @action(methods=["POST"], detail=False)
+    def bulk_unblock(self, request, *args, **kwargs):
+        return self.bulk_change_blocked(False)

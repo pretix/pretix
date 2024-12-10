@@ -304,10 +304,21 @@ class TaxRule(LoggedModel):
                     subtract_from_gross = Decimal('0.00')
                 rate = adjust_rate
 
+        def _limit_subtract(base_price, subtract_from_gross):
+            if not subtract_from_gross:
+                return base_price
+            if base_price >= Decimal('0.00'):
+                # For positive prices, make sure they don't go negative because of bundles
+                return max(Decimal('0.00'), base_price - subtract_from_gross)
+            else:
+                # If the price is already negative, we don't really care any more
+                return base_price - subtract_from_gross
+
         if rate == Decimal('0.00'):
+            gross = _limit_subtract(base_price, subtract_from_gross)
             return TaxedPrice(
-                net=max(Decimal('0.00'), base_price - subtract_from_gross),
-                gross=max(Decimal('0.00'), base_price - subtract_from_gross),
+                net=gross,
+                gross=gross,
                 tax=Decimal('0.00'),
                 rate=rate,
                 name=self.name,
@@ -320,19 +331,14 @@ class TaxRule(LoggedModel):
                 base_price_is = 'net'
 
         if base_price_is == 'gross':
-            if base_price >= Decimal('0.00'):
-                # For positive prices, make sure they don't go negative because of bundles
-                gross = max(Decimal('0.00'), base_price - subtract_from_gross)
-            else:
-                # If the price is already negative, we don't really care any more
-                gross = base_price - subtract_from_gross
+            gross = _limit_subtract(base_price, subtract_from_gross)
             net = round_decimal(gross - (gross * (1 - 100 / (100 + rate))),
                                 currency)
         elif base_price_is == 'net':
             net = base_price
             gross = round_decimal((net * (1 + rate / 100)), currency)
             if subtract_from_gross:
-                gross -= subtract_from_gross
+                gross = _limit_subtract(gross, subtract_from_gross)
                 net = round_decimal(gross - (gross * (1 - 100 / (100 + rate))),
                                     currency)
         else:

@@ -35,9 +35,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system packages
-        run: sudo apt update && sudo apt install gettext
+        run: sudo apt update && sudo apt -y install gettext
       - name: Install Dependencies
-        run: pip3 install -e ".[dev]"
+        run: pip3 install uv && uv pip install --system -e ".[dev]"
       - name: Compile messages
         run: python manage.py compilemessages
         working-directory: ./src
@@ -62,7 +62,7 @@ jobs:
       - name: Install system packages
         run: sudo apt update && sudo apt install enchant-2 hunspell hunspell-de-de aspell-en aspell-de
       - name: Install Dependencies
-        run: pip3 install -e ".[dev]"
+        run: pip3 install uv && uv pip install --system -e ".[dev]"
       - name: Spellcheck translations
         run: potypo
         working-directory: ./src

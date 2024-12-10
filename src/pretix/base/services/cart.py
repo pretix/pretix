@@ -343,11 +343,13 @@ class CartManager:
                 err = error_messages['some_subevent_not_started']
                 cp.addons.all().delete()
                 cp.delete()
+                continue
 
             if cp.subevent and cp.subevent.presale_end and time_machine_now(self.real_now_dt) > cp.subevent.presale_end:
                 err = error_messages['some_subevent_ended']
                 cp.addons.all().delete()
                 cp.delete()
+                continue
 
             if cp.subevent:
                 tlv = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
@@ -360,6 +362,7 @@ class CartManager:
                         err = error_messages['some_subevent_ended']
                         cp.addons.all().delete()
                         cp.delete()
+                        continue
         return err
 
     def _update_subevents_cache(self, se_ids: List[int]):
@@ -1423,6 +1426,28 @@ class CartManager:
             raise CartError(err)
 
 
+def add_payment_to_cart_session(cart_session, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):
+    """
+    :param cart_session: The current cart session.
+    :param provider: The instance of your payment provider.
+    :param min_value: The minimum value this payment instrument supports, or ``None`` for unlimited.
+    :param max_value: The maximum value this payment instrument supports, or ``None`` for unlimited. Highly discouraged
+                      to use for payment providers which charge a payment fee, as this can be very user-unfriendly if
+                      users need a second payment method just for the payment fee of the first method.
+    :param info_data: A dictionary of information that will be passed through to the ``OrderPayment.info_data`` attribute.
+    :return:
+    """
+    cart_session.setdefault('payments', [])
+    cart_session['payments'].append({
+        'id': str(uuid.uuid4()),
+        'provider': provider.identifier,
+        'multi_use_supported': provider.multi_use_supported,
+        'min_value': str(min_value) if min_value is not None else None,
+        'max_value': str(max_value) if max_value is not None else None,
+        'info_data': info_data or {},
+    })
+
+
 def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):
     """
     :param request: The current HTTP request context.
@@ -1437,16 +1462,7 @@ def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: D
     from pretix.presale.views.cart import cart_session
 
     cs = cart_session(request)
-    cs.setdefault('payments', [])
-
-    cs['payments'].append({
-        'id': str(uuid.uuid4()),
-        'provider': provider.identifier,
-        'multi_use_supported': provider.multi_use_supported,
-        'min_value': str(min_value) if min_value is not None else None,
-        'max_value': str(max_value) if max_value is not None else None,
-        'info_data': info_data or {},
-    })
+    add_payment_to_cart_session(cs, provider, min_value, max_value, info_data)
 
 
 def get_fees(event, request, total, invoice_address, payments, positions):
@@ -1542,10 +1558,9 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
     """
-    Removes a list of items from a user's cart.
     :param event: The event ID in question
     :param voucher: A voucher code
-    :param session: Session ID of a guest
+    :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
@@ -1566,10 +1581,10 @@ def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='e
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def remove_cart_position(self, event: Event, position: int, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
     """
-    Removes a list of items from a user's cart.
+    Removes an item specified by its position ID from a user's cart.
     :param event: The event ID in question
     :param position: A cart position ID
-    :param session: Session ID of a guest
+    :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
@@ -1590,9 +1605,9 @@ def remove_cart_position(self, event: Event, position: int, cart_id: str=None, l
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
     """
-    Removes a list of items from a user's cart.
+    Removes all items from a user's cart.
     :param event: The event ID in question
-    :param session: Session ID of a guest
+    :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
@@ -1611,13 +1626,15 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, locale='en',
+def set_cart_addons(self, event: Event, addons: List[dict], add_to_cart_items: List[dict], cart_id: str=None, locale='en',
                     invoice_address: int=None, sales_channel='web', override_now_dt: datetime=None) -> None:
     """
-    Removes a list of items from a user's cart.
+    Assigns addons to eligible products in a user's cart, adding and removing the addon products as necessary to
+    ensure the requested addon state.
     :param event: The event ID in question
     :param addons: A list of dicts with the keys addon_to, item, variation
-    :param session: Session ID of a guest
+    :param add_to_cart_items: A list of dicts with the keys item, variation, count, custom_price, voucher, seat ID
+    :param cart_id: The cart ID of the cart to modify
     """
     with language(locale), time_machine_now_assigned(override_now_dt):
         ia = False
@@ -1635,6 +1652,7 @@ def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, l
             try:
                 cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, sales_channel=sales_channel)
                 cm.set_addons(addons)
+                cm.add_new_items(add_to_cart_items)
                 cm.commit()
             except LockTimeoutException:
                 self.retry()

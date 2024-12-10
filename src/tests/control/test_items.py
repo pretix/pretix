@@ -86,6 +86,23 @@ class CategoriesTest(ItemFormTest):
         with scopes_disabled():
             assert str(ItemCategory.objects.get(id=c.id).name) == 'T-Shirts'
 
+    def test_copy(self):
+        i2 = Item.objects.create(event=self.event1, name="Non-Standard", default_price=10, position=2)
+        c = ItemCategory.objects.create(event=self.event1, name="Cross-Selling", cross_selling_mode='only', cross_selling_condition='products')
+        c.cross_selling_match_products.add(self.item1)
+        c.cross_selling_match_products.add(i2)
+
+        doc = self.get_doc('/control/event/%s/%s/categories/add?copy_from=%d' % (self.orga1.slug, self.event1.slug, c.pk))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        assert form_data['name_0'] == 'Cross-Selling'
+        assert form_data['category_type'] == 'only'
+        assert form_data['cross_selling_condition'] == 'products'
+        assert form_data['cross_selling_match_products'] == [str(self.item1.pk), str(i2.pk)]
+        form_data['name_0'] = 'Recommendations'
+        doc = self.post_doc('/control/event/%s/%s/categories/add' % (self.orga1.slug, self.event1.slug), form_data)
+        assert doc.select(".alert-success")
+        self.assertIn("Recommendations", doc.select("#page-wrapper table")[0].text)
+
     def test_sort(self):
         with scopes_disabled():
             c1 = ItemCategory.objects.create(event=self.event1, name="Entry tickets", position=0)

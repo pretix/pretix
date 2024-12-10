@@ -333,7 +333,7 @@ class BankTransfer(BasePaymentProvider):
                     required=False,
                 ),
                 'send_invoice_to': forms.EmailField(
-                    label=_('Invoice recipient e-mail'),
+                    label=_('Invoice recipient email'),
                     required=False,
                     help_text=_('The invoice recipient will receive an email which includes the invoice and your email '
                                 'address so they know who placed this order.'),

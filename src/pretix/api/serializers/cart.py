@@ -235,7 +235,7 @@ class CartPositionCreateSerializer(BaseCartPositionCreateSerializer):
         return cid
 
     def create(self, validated_data):
-        validated_data.pop('sales_channel')
+        validated_data.pop('sales_channel', None)
         addons_data = validated_data.pop('addons', None)
         bundled_data = validated_data.pop('bundled', None)
 

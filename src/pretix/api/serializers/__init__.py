@@ -110,6 +110,10 @@ class SalesChannelMigrationMixin:
                 data["all_sales_channels"] = False
                 data["limit_sales_channels"] = data["sales_channels"]
             del data["sales_channels"]
+
+        if data.get("all_sales_channels"):
+            data["limit_sales_channels"] = []
+
         return super().to_internal_value(data)
 
     def to_representation(self, value):

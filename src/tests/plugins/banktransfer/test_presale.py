@@ -86,6 +86,5 @@ class BanktransferOrdersTest(BaseOrdersTest):
         from django.contrib.messages import get_messages
         messages = list(get_messages(response.wsgi_request))
         assert len(messages) == 1
-        assert str(messages[0]) == 'Sending the latest invoice via e-mail to test@example.org.'
-
+        assert str(messages[0]) == 'Sending the latest invoice via email to test@example.org.'
         assert len(djmail.outbox) == 1

@@ -89,7 +89,7 @@ class CheckoutView(View):
             else:
                 previous_step = step
                 step.c_is_before = True
-                step.c_resolved_url = step.get_step_url(request)
+                step.c_resolved_url = step.get_step_url(request) + '?dir=prev'
         raise Http404()
 
     def redirect(self, url):

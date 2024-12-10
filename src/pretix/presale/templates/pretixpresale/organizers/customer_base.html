@@ -1,0 +1,55 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load icon %}
+{% load eventurl %}
+{% block content %}
+    <h2>
+        {% trans "Your account" %}
+    </h2>
+    <div class="blank-after">
+        <dl class="row">
+            <div class="col-sm-6">
+                <dt>{{ customer.name }}</dt>
+                <dd>{{ customer.email }}</dd>
+                {% if customer.phone %}
+                    <dd>{% icon "phone" %} {{ customer.phone }}</dd>
+                {% endif %}
+                <dd>
+                    <ul class="list-inline">
+                        <li>
+                            <a href="{% eventurl request.organizer "presale:organizer.customer.change" %}">
+                                {% icon "edit" %}
+                                {% trans "Change account information" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
+                                {% icon "key" %}
+                                {% trans "Change password" %}
+                            </a>
+                        </li>
+                    </ul>
+                </dd>
+                <dd>
+                </dd>
+            </div>
+            <div class="col-sm-6 text-right">
+                <dt>{% trans "Customer ID" %}</dt>
+                <dd>#{{ customer.identifier }}</dd>
+            </div>
+        </dl>
+        <nav class="subnav row" aria-label="{% trans "customer account information" %}">
+            <ul class="list-inline blank-after col-xs-12">
+            {% for nav in sub_nav %}
+                <li>
+                    <a href="{{ nav.url }}"{% if nav.active %} class="active"{% endif %}>
+                        {% icon nav.icon %}{{ nav.label }}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        </nav>
+    </div>
+    {% block inner %}
+    {% endblock %}
+{% endblock %}

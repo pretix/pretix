@@ -82,6 +82,7 @@ Connect
 Consent
 Copyleft
 Cronjob
+Cross
 csv
 Customer
 CZK
@@ -197,6 +198,7 @@ Mitgliedschafts
 Mitgliedschaftsdauer
 min
 Mo
+MobilePay
 MOTO
 Multibanco
 MwSt
@@ -280,6 +282,7 @@ Scopes
 sechsstelligen
 Secret
 Security
+Selling
 SEPA
 Shirts
 Signaturverfahren

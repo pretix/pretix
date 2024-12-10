@@ -32,8 +32,15 @@ from pretix.helpers.periodic import minimum_interval
 register_webhook_events = Signal()
 """
 This signal is sent out to get all known webhook events. Receivers should return an
-instance of a subclass of pretix.api.webhooks.WebhookEvent or a list of such
+instance of a subclass of ``pretix.api.webhooks.WebhookEvent`` or a list of such
 instances.
+"""
+
+register_device_security_profile = Signal()
+"""
+This signal is sent out to get all known device security_profiles. Receivers should
+return an instance of a subclass of ``pretix.api.auth.devicesecurity.BaseSecurityProfile``
+or a list of such instances.
 """
 
 

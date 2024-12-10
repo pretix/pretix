@@ -549,7 +549,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
     )
     email = forms.CharField(
         required=False,
-        label=_('E-mail address')
+        label=_('Email address')
     )
     comment = forms.CharField(
         required=False,
@@ -563,7 +563,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
     email_known_to_work = forms.NullBooleanField(
         required=False,
         widget=FilterNullBooleanSelect,
-        label=_('E-mail address verified'),
+        label=_('Email address verified'),
     )
     total = forms.DecimalField(
         localize=True,
@@ -648,7 +648,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         )
         self.fields['attendee_email'] = forms.CharField(
             required=False,
-            label=_('Attendee e-mail address')
+            label=_('Attendee email address')
         )
         self.fields['attendee_address_company'] = forms.CharField(
             required=False,
@@ -1967,7 +1967,7 @@ class CheckinListAttendeeFilterForm(FilterForm):
             if s == '1':
                 qs = qs.filter(last_entry__isnull=False)
             elif s == '2':
-                qs = qs.filter(pk__in=self.list.positions_inside.values_list('pk'))
+                qs = self.list._filter_positions_inside(qs)
             elif s == '3':
                 qs = qs.filter(last_entry__isnull=False).filter(
                     Q(last_exit__isnull=False) & Q(last_exit__gte=F('last_entry'))

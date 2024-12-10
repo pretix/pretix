@@ -30,15 +30,21 @@ jobs:
             python-version: "3.9"
           - database: sqlite
             python-version: "3.10"
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pretix
+        options: >-
+          --health-cmd "pg_isready -U postgres -d pretix"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
-      - uses: harmon758/postgresql-action@v1
-        with:
-          postgresql version: '15'
-          postgresql db: 'pretix'
-          postgresql user: 'postgres'
-          postgresql password: 'postgres'
-        if: matrix.database == 'postgres'
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -50,9 +56,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system dependencies
-        run: sudo apt update && sudo apt install gettext
+        run: sudo apt update && sudo apt install -y gettext
       - name: Install Python dependencies
-        run: pip3 install --ignore-requires-python -e ".[dev]" psycopg2-binary  # We ignore that flake8 needs newer python as we don't run flake8 during tests
+        run: pip3 install uv && uv pip install --system -e ".[dev]" psycopg2-binary
       - name: Run checks
         run: python manage.py check
         working-directory: ./src
@@ -64,15 +70,15 @@ jobs:
         run: make all compress
       - name: Run tests
         working-directory: ./src
-        run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test -n 3 -p no:sugar --cov=./ --cov-report=xml --reruns 3 tests --maxfail=100
+        run: PRETIX_CONFIG_FILE=tests/ci_${{ matrix.database }}.cfg py.test -n 3 -p no:sugar --cov=./ --cov-report=xml tests --maxfail=100
       - name: Run concurrency tests
         working-directory: ./src
-        run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test tests/concurrency_tests/ --reruns 0 --reuse-db
+        run: PRETIX_CONFIG_FILE=tests/ci_${{ matrix.database }}.cfg py.test tests/concurrency_tests/ --reuse-db
         if: matrix.database == 'postgres'
       - name: Upload coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v4
         with:
           file: src/coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false
         if: matrix.database == 'postgres' && matrix.python-version == '3.11'

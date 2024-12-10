@@ -104,6 +104,10 @@ url                                   string                     The full URL to
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
 last_modified                         datetime                   Last modification of this object
+cancellation_date                     datetime                   Time of order cancellation (or ``null``). **Note**:
+                                                                 Will not be set for partial cancellations and is not
+                                                                 reliable for orders that have been cancelled,
+                                                                 reactivated and cancelled again.
 ===================================== ========================== =======================================================
 
 
@@ -151,6 +155,9 @@ last_modified                         datetime                   Last modificati
 
    The ``expires`` attribute can now be passed during order creation.
 
+.. versionchanged:: 2024.11
+
+   The ``cancellation_date`` attribute has been added and can also be used as an ordering key.
 
 .. _order-position-resource:
 
@@ -206,6 +213,17 @@ checkins                              list of objects            List of **succe
 ├ device                              integer                    Internal ID of the device. Can be ``null``. **Deprecated**, since this ID is not otherwise used in the API and is therefore not very useful.
 ├ device_id                           integer                    Attribute ``device_id`` of the device. Can be ``null``.
 └ auto_checked_in                     boolean                    Indicates if this check-in been performed automatically by the system
+print_logs                            list of objects            List of print jobs recorded e.g. by the pretix apps
+├ id                                  integer                    Internal ID of the print job
+├ successful                          boolean                    Whether the print job successfully resulted in a print.
+                                                                 This is not expected to be 100 % reliable information (since
+                                                                 printer feedback is never perfect) and there is no guarantee
+                                                                 that unsuccessful jobs will be logged.
+├ device_id                           integer                    Attribute ``device_id`` of the device that recorded the print. Can be ``null``.
+├ datetime                            datetime                   Time of printing
+├ source                              string                     Source of print job, e.g. name of the app used.
+├ type                                string                     Type of print (currently ``badge``, ``ticket``, ``certificate``, or ``other``)
+└ info                                object                     Additional data with client-dependent structure.
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
@@ -232,6 +250,10 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 4.16
 
    The attributes ``blocked``, ``valid_from`` and ``valid_until`` have been added.
+
+.. versionchanged:: 2024.9
+
+   The attribute ``print_logs`` has been added.
 
 .. _order-payment-resource:
 
@@ -399,8 +421,19 @@ List of all orders
                     "type": "entry",
                     "gate": null,
                     "device": 2,
+                    "device_id": 1,
                     "datetime": "2017-12-25T12:45:23Z",
                     "auto_checked_in": false
+                  }
+                ],
+                "print_logs": [
+                  {
+                    "id": 1,
+                    "type": "badge",
+                    "datetime": "2017-12-25T12:45:23Z",
+                    "device_id": 1,
+                    "source": "pretixSCAN",
+                    "info": {}
                   }
                 ],
                 "answers": [
@@ -438,14 +471,15 @@ List of all orders
                 "provider": "banktransfer"
               }
             ],
-            "refunds": []
+            "refunds": [],
+            "cancellation_date": null
           }
         ]
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``datetime``, ``code``,
-                           ``last_modified``, and ``status``. Default: ``datetime``
+                           ``last_modified``, ``status`` and ``cancellation_date``. Default: ``datetime``
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
    :query string search: Only return orders matching a given search query (matching for names, email addresses, and company names)
@@ -626,8 +660,20 @@ Fetching individual orders
                 "type": "entry",
                 "gate": null,
                 "device": 2,
+                "device_id": 1,
                 "datetime": "2017-12-25T12:45:23Z",
                 "auto_checked_in": false
+              }
+            ],
+            "print_logs": [
+              {
+                "id": 1,
+                "type": "badge",
+                "successful": true,
+                "datetime": "2017-12-25T12:45:23Z",
+                "device_id": 1,
+                "source": "pretixSCAN",
+                "info": {}
               }
             ],
             "answers": [
@@ -665,7 +711,8 @@ Fetching individual orders
             "provider": "banktransfer"
           }
         ],
-        "refunds": []
+        "refunds": [],
+        "cancellation_date": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -977,8 +1024,8 @@ Creating orders
       * ``internal_reference``
       * ``vat_id``
       * ``vat_id_validated`` (optional) – If you need support for reverse charge (rarely the case), you need to check
-       yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
-       trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
+         yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
+         trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
 
    * ``positions``
 
@@ -1581,8 +1628,20 @@ List of all order positions
                 "type": "entry",
                 "gate": null,
                 "device": 2,
+                "device_id": 1,
                 "datetime": "2017-12-25T12:45:23Z",
                 "auto_checked_in": false
+              }
+            ],
+            "print_logs": [
+              {
+                "id": 1,
+                "type": "badge",
+                "successful": true,
+                "datetime": "2017-12-25T12:45:23Z",
+                "device_id": 1,
+                "source": "pretixSCAN",
+                "info": {}
               }
             ],
             "answers": [
@@ -1695,8 +1754,20 @@ Fetching individual positions
             "type": "entry",
             "gate": null,
             "device": 2,
+            "device_id": 1,
             "datetime": "2017-12-25T12:45:23Z",
             "auto_checked_in": false
+          }
+        ],
+        "print_logs": [
+          {
+            "id": 1,
+            "type": "badge",
+            "successful": true,
+            "datetime": "2017-12-25T12:45:23Z",
+            "device_id": 1,
+            "source": "pretixSCAN",
+            "info": {}
           }
         ],
         "answers": [
@@ -1794,6 +1865,10 @@ Manipulating individual positions
 .. versionadded:: 4.16
 
    The endpoints to manage blocks have been added.
+
+.. versionchanged:: 2024.9
+
+   The API now supports logging ticket and badge prints.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 
@@ -2053,6 +2128,59 @@ Manipulating individual positions
    :statuscode 400: The order position could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/printlog/
+
+   Creates a print log, stating that this ticket has been printed.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/printlog/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+     {
+       "datetime": "2024-09-19T13:37:00+02:00",
+       "source": "pretixPOS",
+       "type": "badge",
+       "info": {
+         "cashier": 1234
+       }
+     }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/pdf
+
+     {
+       "id": 1234,
+       "device_id": null,
+       "datetime": "2024-09-19T13:37:00+02:00",
+       "source": "pretixPOS",
+       "type": "badge",
+       "info": {
+         "cashier": 1234
+       }
+     }
+
+   :param organizer: The ``slug`` field of the organizer to create a log for
+   :param event: The ``slug`` field of the event to create a log for
+   :param id: The ``id`` field of the order position to create a log for
+   :statuscode 201: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource
+                    **or** downloads are not available for this order position at this time. The response content will
+                    contain more details.
+   :statuscode 404: The requested order position or download provider does not exist.
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
+                    seconds.
 
 Changing order contents
 -----------------------

@@ -55,6 +55,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.testutils.sessions import get_cart_session_key
 
 
 class EventTestMixin:
@@ -405,11 +406,11 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
             SubEventItem.objects.create(subevent=se1, item=item, price=12)
 
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
-        self.assertIn("12.00", resp.rendered_content)
-        self.assertNotIn("15.00", resp.rendered_content)
+        self.assertIn("€12.00", resp.rendered_content)
+        self.assertNotIn("€15.00", resp.rendered_content)
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
-        self.assertIn("15.00", resp.rendered_content)
-        self.assertNotIn("12.00", resp.rendered_content)
+        self.assertIn("€15.00", resp.rendered_content)
+        self.assertNotIn("€12.00", resp.rendered_content)
 
     def test_subevent_net_prices(self):
         self.event.has_subevents = True
@@ -429,14 +430,14 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
 
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
         doc = BeautifulSoup(resp.rendered_content, "lxml")
-        self.assertIn("10.08", doc.text)
-        self.assertNotIn("12.00", doc.text)
-        self.assertNotIn("15.00", doc.text)
+        self.assertIn("€10.08", doc.text)
+        self.assertNotIn("€12.00", doc.text)
+        self.assertNotIn("€15.00", doc.text)
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
         doc = BeautifulSoup(resp.rendered_content, "lxml")
-        self.assertIn("12.61", doc.text)
-        self.assertNotIn("12.00", doc.text)
-        self.assertNotIn("15.00", doc.text)
+        self.assertIn("€12.61", doc.text)
+        self.assertNotIn("€12.00", doc.text)
+        self.assertNotIn("€15.00", doc.text)
 
     def test_variations_subevent_disabled(self):
         self.event.has_subevents = True
@@ -1002,6 +1003,25 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "SE1" in html.rendered_content
         assert 'name="variation_%d_%d' % (self.item.pk, var1.pk) not in html.rendered_content
         assert 'name="variation_%d_%d' % (self.item.pk, var2.pk) not in html.rendered_content
+
+    def test_voucher_is_a_gift_card(self):
+        gc = self.orga.issued_gift_cards.create(secret="GIFTCARD", currency=self.event.currency)
+        gc.transactions.create(value=Decimal("12.00"), acceptor=self.orga)
+
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'GIFTCARD'), follow=True)
+        assert "alert-success" in html.rendered_content
+        assert "€12.00" in html.rendered_content
+
+        payments = self.client.session['carts'][get_cart_session_key(self.client, self.event)]["payments"]
+        assert payments[0]["info_data"]["gift_card_secret"] == "GIFTCARD"
+
+    def test_voucher_is_a_gift_card_but_invalid(self):
+        gc = self.orga.issued_gift_cards.create(secret="GIFTCARD", currency=self.event.currency, expires=now() - datetime.timedelta(days=1))
+        gc.transactions.create(value=Decimal("12.00"), acceptor=self.orga)
+
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'GIFTCARD'), follow=True)
+        assert "alert-danger" in html.rendered_content
+        assert "This gift card is no longer valid" in html.rendered_content
 
 
 class WaitingListTest(EventTestMixin, SoupTest):

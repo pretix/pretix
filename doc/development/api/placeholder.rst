@@ -86,7 +86,10 @@ Signals
 -------
 
 .. automodule:: pretix.base.signals
+   :no-index:
    :members: register_text_placeholders
+
 .. automodule:: pretix.base.signals
+   :no-index:
    :members: register_mail_placeholders
 

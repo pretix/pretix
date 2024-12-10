@@ -1,0 +1,15 @@
+{% load i18n %}
+{% load static %}
+{% load getitem %}
+
+{% if source_type %}
+    {% with media_types|getitem:source_type as media_type %}
+        {% if "." in media_type.icon %}
+            <img src="{% static media_type.icon %}" class="fa-like-image"
+                 data-toggle="tooltip" title="{{ media_type.verbose_name }}">
+        {% else %}
+            <span class="fa fa-fw fa-{{ media_type.icon }} text-muted"
+                  data-toggle="tooltip" title="{{ media_type.verbose_name }}"></span>
+        {% endif %}
+    {% endwith %}
+{% endif %}

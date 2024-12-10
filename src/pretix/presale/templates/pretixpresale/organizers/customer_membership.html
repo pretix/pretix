@@ -1,96 +1,127 @@
-{% extends "pretixpresale/organizers/base.html" %}
+{% extends "pretixpresale/organizers/customer_base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
-{% load urlreplace %}
-{% load money %}
-{% load bootstrap3 %}
+{% load textbubble %}
 {% block title %}{% trans "Your membership" %}{% endblock %}
-{% block content %}
-    <h2>
-        {% trans "Your membership" %}
-    </h2>
-    <div class="panel panel-primary items">
+{% block inner %}
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                {% trans "Details" %}
+                {% if membership.membership_type.transferable %}
+                    {% icon "users" %}
+                {% else %}
+                    {% icon "id-badge" %}
+                {% endif %}
+                <b>{% trans "Your membership" %}</b>
+                {% if membership.testmode %}
+                    <span class="h6">
+                    {% textbubble "warning" %}
+                        {% trans "TEST MODE" %}
+                    {% endtextbubble %}
+                    </span>
+                {% endif %}
             </h3>
         </div>
         <div class="panel-body">
             <dl class="dl-horizontal">
                 <dt>{% trans "Membership type" %}</dt>
-                <dd>{{ membership.membership_type.name }}</dd>
+                <dd>{% if membership.canceled %}<del>{% endif %}
+                    {{ membership.membership_type.name }}
+                    {% if membership.canceled %}</del>
+                        <small>
+                            {% textbubble "danger" icon="times" %}
+                                {% trans "Canceled" %}
+                            {% endtextbubble %}
+                        </small>
+                    {% endif %}
+                    <br><small class="text-muted">
+                        {% if membership.membership_type.transferable %}
+                            ({% trans "transferable" %})
+                        {% else %}
+                            ({% trans "not transferable" %})
+                        {% endif %}
+                    </small>
+                </dd>
                 <dt>{% trans "Valid from" %}</dt>
                 <dd>{{ membership.date_start|date:"SHORT_DATETIME_FORMAT" }}
                 <dt>{% trans "Valid until" %}</dt>
                 <dd>{{ membership.date_end|date:"SHORT_DATETIME_FORMAT" }}
                 <dt>{% trans "Attendee name" %}</dt>
-                <dd>{{ membership.attendee_name }}
+                <dd>{{ membership.attendee_name|default_if_none:"–" }}
                 <dt>{% trans "Maximum usages" %}</dt>
                 <dd>{{ membership.membership_type.max_usages|default_if_none:"–" }}</dd>
             </dl>
         </div>
     </div>
-    <div class="panel panel-default items">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
                 {% trans "Usages" %}
             </h3>
         </div>
-        <table class="panel-body table table-hover">
-            <caption class="sr-only">{% trans "Usages" %}</caption>
-            <thead>
-            <tr>
-                <th>{% trans "Order code" %}</th>
-                <th>{% trans "Event" %}</th>
-                <th>{% trans "Product" %}</th>
-                <th>{% trans "Order date" %}</th>
-                <th class="text-right">{% trans "Status" %}</th>
-                <th class="text-right"></th>
-            </tr>
-            </thead>
-            <tbody>
+        <div class="panel-body">
+        {% if usages %}
+            <ul class="full-width-list alternating-rows">
             {% for op in usages %}
-                <tr>
-                    <td>
-                        <strong>
-                            {{ op.order.code }}-{{ op.positionid }}
-                        </strong>
-                        {% if op.order.testmode %}
-                            <span class="label label-warning">{% trans "TEST MODE" %}</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ op.order.event }}
-                        {% if op.subevent %}
-                            <br>
-                            {{ op.subevent|default:"" }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ op.item.name }}
-                        {% if op.variation %}– {{ op.variation }}{% endif %}
-                    </td>
-                    <td>
-                        {{ op.order.datetime|date:"SHORT_DATETIME_FORMAT" }}
-                    </td>
-                    <td class="text-right flip">
-                        {% if op.canceled %}
-                            {% trans "Canceled" %} <i class="{{ class }} fa fa-times-circle text-danger" aria-hidden="true"></i>
-                        {% else %}
-                            {% include "pretixcontrol/orders/fragment_order_status.html" with order=op.order %}
-                        {% endif %}
-                    </td>
-                    <td class="text-right flip">
-                        <a href="{% abseventurl op.order.event "presale:event.order" order=op.order.code secret=op.order.secret %}"
-                                target="_blank"
-                                class="btn btn-default">
-                            {% trans "Details" %}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% include "pretixcontrol/pagination.html" %}
+                <li class="row">
+                    <dl>
+                        <div class="col-md-4 col-sm-5 col-xs-12">
+                            <dt class="sr-only">{% trans "Order" %}</dt>
+                            <dd><strong>
+                                    <a href="{% abseventurl op.order.event "presale:event.order" order=op.order.code secret=op.order.secret %}" target="_blank">
+                                        {% icon "shopping-cart" %}
+                                        {{ op.order.code }}-{{ op.positionid }}
+                                    </a>
+                                </strong>
+                                <small>{% include "pretixpresale/event/fragment_order_status.html" with order=op.order event=op.order.event %}</small>
+                            </dd>
+                            <dd><time datetime="{{ op.order.datetime|date:"Y-m-d H:i" }}" class="text-muted small">{{ op.order.datetime|date:"SHORT_DATETIME_FORMAT" }}</time></dd>
+                            {% if op.order.testmode %}
+                                <dd>
+                                    <small>
+                                    {% textbubble "warning" %}
+                                        {% trans "TEST MODE" %}
+                                    {% endtextbubble %}
+                                    </small>
+                                </dd>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 col-sm-5 col-xs-8">
+                            <dt class="sr-only">{% trans "Product" %}</dt>
+                            <dd>{{ op.item.name }}
+                                {% if op.variation %} - {{ op.variation }}{% endif %}
+                            </dd>
+                            <dt class="sr-only">{% trans "Event" %}</dt>
+                            <dd>
+                                <small class="text-muted">
+                                {{ op.order.event }}
+                                {% if op.subevent %}
+                                    <br>{{ op.subevent }}
+                                {% endif %}
+                                {% if not op.order.event.has_subevents and op.order.event.settings.show_dates_on_frontpage %}
+                                    <br>{{ op.order.event.get_date_range_display }}
+                                {% endif %}
+                                </small>
+                            </dd>
+                        </div>
+                        <div class="col-sm-2 col-xs-4">
+                            <dt class="sr-only">{% trans "Actions" %}</dt>
+                            <dd class="text-right">
+                                <a href="{% abseventurl op.order.event "presale:event.order" order=op.order.code secret=op.order.secret %}"
+                               target="_blank">
+                                {% icon "list-ul" %}
+                                {% trans "Details" %}
+                            </a></dd>
+                        </div>
+                    </dl>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center">{% trans "You haven’t used this membership yet." %}</p>
+        {% endif %}
+        </div>
     </div>
+    {% include "pretixcontrol/pagination.html" %}
 {% endblock %}

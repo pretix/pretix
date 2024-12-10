@@ -57,6 +57,7 @@ from pretix.base.models import (
     Checkin, CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
     TaxRule,
 )
+from pretix.base.models.orders import PrintLog
 from pretix.base.signals import (
     app_cache, logentry_display, orderposition_blocked_display,
 )
@@ -348,7 +349,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type == 'pretix.event.order.consent':
         return _('The user confirmed the following message: "{}"').format(
-            bleach.clean(logentry.parsed_data.get('msg'), tags=[], strip=True)
+            bleach.clean(logentry.parsed_data.get('msg'), tags=set(), strip=True)
         )
 
     if logentry.action_type == 'pretix.event.order.canceled':
@@ -374,6 +375,16 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if sender and logentry.action_type.startswith('pretix.event.checkin'):
         return _display_checkin(sender, logentry)
+
+    if logentry.action_type == 'pretix.event.order.print':
+        return _('Position #{posid} has been printed at {datetime} with type "{type}".').format(
+            posid=data.get('positionid'),
+            datetime=date_format(
+                dateutil.parser.parse(data["datetime"]).astimezone(sender.timezone),
+                "SHORT_DATETIME_FORMAT"
+            ),
+            type=dict(PrintLog.PRINT_TYPES)[data["type"]],
+        )
 
 
 @receiver(signal=orderposition_blocked_display, dispatch_uid="pretixcontrol_orderposition_blocked_display")

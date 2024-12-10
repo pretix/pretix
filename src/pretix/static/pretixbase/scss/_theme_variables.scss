@@ -53,7 +53,9 @@ $in-border-radius-small: 2px !default;
   --pretix-brand-primary-darken-17: #{darken($in-brand-primary, 17%)};
   --pretix-brand-primary-darken-20: #{darken($in-brand-primary, 20%)};
   --pretix-brand-primary-darken-30: #{darken($in-brand-primary, 30%)};
+  --pretix-brand-primary-tint-90: #{tint($in-brand-primary, 90%)};
   --pretix-brand-primary-shade-25: #{shade($in-brand-primary, 25%)};
+  --pretix-brand-primary-shade-42: #{shade($in-brand-primary, 42%)};
   --pretix-brand-primary-lighten-28-saturate-20: #{saturate(lighten($in-brand-primary, 28%), 20%)};
   --pretix-brand-primary-lighten-23-saturate-2: #{saturate(lighten($in-brand-primary, 23%), 2%)};
 
@@ -73,7 +75,9 @@ $in-border-radius-small: 2px !default;
   --pretix-brand-success-darken-20: #{darken($in-brand-success, 20%)};
   --pretix-brand-success-darken-30: #{darken($in-brand-success, 30%)};
   --pretix-brand-success-tint-50: #{tint($in-brand-success, 50%)};
+  --pretix-brand-success-tint-85: #{tint($in-brand-success, 85%)};
   --pretix-brand-success-shade-25: #{shade($in-brand-success, 25%)};
+  --pretix-brand-success-shade-42: #{shade($in-brand-success, 42%)};
 
   --pretix-brand-info-lighten-23: #{lighten($in-brand-info, 23%)};
   --pretix-brand-info-lighten-25: #{lighten($in-brand-info, 25%)};
@@ -84,7 +88,9 @@ $in-border-radius-small: 2px !default;
   --pretix-brand-info-darken-17: #{darken($in-brand-info, 17%)};
   --pretix-brand-info-darken-20: #{darken($in-brand-info, 20%)};
   --pretix-brand-info-darken-30: #{darken($in-brand-info, 30%)};
+  --pretix-brand-info-tint-85: #{tint($in-brand-info, 85%)};
   --pretix-brand-info-shade-25: #{shade($in-brand-info, 25%)};
+  --pretix-brand-info-shade-42: #{shade($in-brand-info, 42%)};
 
   --pretix-brand-warning-lighten-12: #{lighten($in-brand-warning, 12%)};
   --pretix-brand-warning-lighten-31: #{lighten($in-brand-warning, 31%)};
@@ -101,7 +107,9 @@ $in-border-radius-small: 2px !default;
   --pretix-brand-warning-darken-30: #{darken($in-brand-warning, 30%)};
   --pretix-brand-warning-darken-35: #{darken($in-brand-warning, 35%)};
   --pretix-brand-warning-tint-50: #{tint($in-brand-warning, 50%)};
+  --pretix-brand-warning-tint-85: #{tint($in-brand-warning, 85%)};
   --pretix-brand-warning-shade-25: #{shade($in-brand-warning, 25%)};
+  --pretix-brand-warning-shade-42: #{shade($in-brand-warning, 42%)};
   --pretix-brand-warning-transparent-60: #{transparentize($in-brand-warning, 0.6)};
 
   --pretix-brand-danger-lighten-5: #{lighten($in-brand-danger, 5%)};
@@ -118,7 +126,9 @@ $in-border-radius-small: 2px !default;
   --pretix-brand-danger-darken-20: #{darken($in-brand-danger, 20%)};
   --pretix-brand-danger-darken-30: #{darken($in-brand-danger, 30%)};
   --pretix-brand-danger-tint-50: #{tint($in-brand-danger, 50%)};
+  --pretix-brand-danger-tint-85: #{tint($in-brand-danger, 85%)};
   --pretix-brand-danger-shade-25: #{shade($in-brand-danger, 25%)};
+  --pretix-brand-danger-shade-42: #{shade($in-brand-danger, 42%)};
 
   --pretix-border-radius-base: #{$in-border-radius-base};
   --pretix-border-radius-large: #{$in-border-radius-large};

@@ -343,7 +343,7 @@ class Forgot(TemplateView):
                 logger.warning('Backend password reset for unregistered e-mail \"' + email + '\" requested.')
 
             except SendMailException:
-                logger.exception('Sending password reset e-mail to \"' + email + '\" failed.')
+                logger.exception('Sending password reset email to \"' + email + '\" failed.')
 
             except RepeatedResetDenied:
                 pass
@@ -354,10 +354,10 @@ class Forgot(TemplateView):
 
             finally:
                 if has_redis:
-                    messages.info(request, _('If the address is registered to valid account, then we have sent you an e-mail containing further instructions. '
+                    messages.info(request, _('If the address is registered to valid account, then we have sent you an email containing further instructions. '
                                              'Please note that we will send at most one email every 24 hours.'))
                 else:
-                    messages.info(request, _('If the address is registered to valid account, then we have sent you an e-mail containing further instructions.'))
+                    messages.info(request, _('If the address is registered to valid account, then we have sent you an email containing further instructions.'))
 
                 return redirect('control:auth.forgot')
         else:

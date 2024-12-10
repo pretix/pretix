@@ -35,7 +35,7 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -43,6 +43,7 @@ from django.utils.translation import gettext as _
 from django_countries.serializers import CountryFieldMixin
 from pytz import common_timezones
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
@@ -772,6 +773,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_address_company_required',
         'invoice_address_beneficiary',
         'invoice_address_custom_field',
+        'invoice_address_custom_field_helptext',
         'invoice_name_required',
         'invoice_address_not_asked_free',
         'invoice_show_payments',
@@ -916,6 +918,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_company_required',
         'invoice_address_beneficiary',
         'invoice_address_custom_field',
+        'invoice_address_custom_field_helptext',
         'invoice_name_required',
         'invoice_address_not_asked_free',
         'invoice_address_from_name',
@@ -985,6 +988,40 @@ def prefetch_by_id(items, qs, id_attr, target_attr):
         result = qs.in_bulk(id_list=ids)
         for item in items:
             setattr(item, target_attr, result.get(getattr(item, id_attr)))
+
+
+class SeatBulkBlockInputSerializer(serializers.Serializer):
+    ids = serializers.ListField(child=serializers.IntegerField(), required=False, allow_empty=True)
+    seat_guids = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+
+        if data.get("seat_guids") and data.get("ids"):
+            raise ValidationError("Please pass either seat_guids or ids.")
+
+        if data.get("seat_guids"):
+            seat_ids = data["seat_guids"]
+            if len(seat_ids) > 10000:
+                raise ValidationError({"seat_guids": ["Please do not pass over 10000 seats."]})
+
+            seats = {s.seat_guid: s for s in self.context["queryset"].filter(seat_guid__in=seat_ids)}
+            for s in seat_ids:
+                if s not in seats:
+                    raise ValidationError({"seat_guids": [f"The seat '{s}' does not exist."]})
+        elif data.get("ids"):
+            seat_ids = data["ids"]
+            if len(seat_ids) > 10000:
+                raise ValidationError({"ids": ["Please do not pass over 10000 seats."]})
+
+            seats = self.context["queryset"].in_bulk(seat_ids)
+            for s in seat_ids:
+                if s not in seats:
+                    raise ValidationError({"ids": [f"The seat '{s}' does not exist."]})
+        else:
+            raise ValidationError("Please pass either seat_guids or ids.")
+
+        return {"seats": seats.values()}
 
 
 class SeatSerializer(I18nAwareModelSerializer):

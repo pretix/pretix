@@ -61,6 +61,7 @@
             <script type="text/javascript" src="{% static "fileupload/jquery.fileupload.js" %}"></script>
             <script type="text/javascript" src="{% static "lightbox/js/lightbox.js" %}"></script>
             <script type="text/javascript" src="{% static "are-you-sure/jquery.are-you-sure.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/addressform.js" %}"></script>
 		{% endcompress %}
         {{ html_head|safe }}
 
@@ -419,6 +420,14 @@
                                     line with pretix' license.
                                 {% endblocktrans %}
                             </a>
+                        </div>
+                    {% endif %}
+                    {% if warning_cronjob %}
+                        <div class="alert alert-warning">
+                            {% blocktrans trimmed %}
+                                The cronjob component of pretix was not executed in the last hours. Please check that
+                                you have completed all installation steps and your cronjob is executed correctly.
+                            {% endblocktrans %}
                         </div>
                     {% endif %}
 

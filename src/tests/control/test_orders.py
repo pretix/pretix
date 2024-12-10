@@ -1227,7 +1227,7 @@ def test_order_sendmail_preview(client, order_url, env):
         follow=True)
 
     assert response.status_code == 200
-    assert 'E-mail preview' in response.content.decode()
+    assert 'Email preview' in response.content.decode()
     assert len(mail.outbox) == 0
 
 
@@ -1309,10 +1309,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'op-{}-itemvar'.format(self.op1.pk): str(self.shirt.pk),
             'op-{}-price'.format(self.op1.pk): str('12.00'),
         })
@@ -1341,10 +1345,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'op-{}-subevent'.format(self.op1.pk): str(se2.pk),
         })
         self.op1.refresh_from_db()
@@ -1373,10 +1381,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'op-{}-used_membership'.format(self.op1.pk): str(m_correct1.pk),
             'op-{}-used_membership'.format(self.op2.pk): str(m_correct1.pk),
             'op-{}-used_membership'.format(self.op3.pk): str(m_correct1.pk),
@@ -1389,10 +1401,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'op-{}-operation'.format(self.op1.pk): 'price',
             'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
             'op-{}-price'.format(self.op1.pk): '24.00',
@@ -1409,10 +1425,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'op-{}-operation_cancel'.format(self.op1.pk): 'on',
         })
         self.order.refresh_from_db()
@@ -1424,13 +1444,17 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '1',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
-            'add-0-itemvar': str(self.shirt.pk),
-            'add-0-do': 'on',
-            'add-0-price': '14.00',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '1',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
+            'add_position-0-itemvar': str(self.shirt.pk),
+            'add_position-0-do': 'on',
+            'add_position-0-price': '14.00',
         })
         with scopes_disabled():
             assert self.order.positions.count() == 3
@@ -1453,10 +1477,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'other-recalculate_taxes': 'net',
             'op-{}-operation'.format(self.op1.pk): '',
             'op-{}-operation'.format(self.op2.pk): '',
@@ -1489,10 +1517,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'other-recalculate_taxes': 'gross',
             'op-{}-operation'.format(self.op1.pk): '',
             'op-{}-operation'.format(self.op2.pk): '',
@@ -1517,10 +1549,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'op-{}-price'.format(self.op1.pk): '24.00',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
@@ -1544,10 +1580,14 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'add-TOTAL_FORMS': '0',
-            'add-INITIAL_FORMS': '0',
-            'add-MIN_NUM_FORMS': '0',
-            'add-MAX_NUM_FORMS': '100',
+            'add_fee-TOTAL_FORMS': '0',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
             'op-{}-operation'.format(self.op1.pk): 'price',
             'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
             'op-{}-price'.format(self.op1.pk): '24.00',
@@ -1562,6 +1602,34 @@ class OrderChangeTests(SoupTest):
         self.op1.refresh_from_db()
         self.op2.refresh_from_db()
         assert self.order.total == self.op1.price + self.op2.price
+
+    def test_add_fee_success(self):
+        old_total = self.order.total
+        r = self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'add_fee-TOTAL_FORMS': '1',
+            'add_fee-INITIAL_FORMS': '0',
+            'add_fee-MIN_NUM_FORMS': '0',
+            'add_fee-MAX_NUM_FORMS': '100',
+            'add_position-TOTAL_FORMS': '0',
+            'add_position-INITIAL_FORMS': '0',
+            'add_position-MIN_NUM_FORMS': '0',
+            'add_position-MAX_NUM_FORMS': '100',
+            'add_fee-0-do': 'on',
+            'add_fee-0-fee_type': 'other',
+            'add_fee-0-description': 'Surprise Fee',
+            'add_fee-0-value': '5.00',
+        })
+        assert r.status_code == 302
+        self.order.refresh_from_db()
+        with scopes_disabled():
+            fee = self.order.fees.get()
+        assert fee.fee_type == OrderFee.FEE_TYPE_OTHER
+        assert fee.description == 'Surprise Fee'
+        assert fee.value == Decimal('5.00')
+        assert not fee.canceled
+        assert self.order.total == old_total + 5
 
 
 @pytest.mark.django_db

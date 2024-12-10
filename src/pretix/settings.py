@@ -718,7 +718,11 @@ PASSWORD_HASHERS = [
     # the HistoricPassword model will not be changed automatically. In case a serious issue with a hasher
     # comes to light, dropping the contents of the HistoricPassword table might be the more risk-adequate
     # decision.
-    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    *(
+        ["django.contrib.auth.hashers.Argon2PasswordHasher"]
+        if config.getboolean('django', 'passwords_argon2', fallback=True)
+        else []
+    ),
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",

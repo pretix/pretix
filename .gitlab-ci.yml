@@ -10,7 +10,7 @@ tests:
         - cd src
         - python manage.py check
         - make all compress
-        - PRETIX_CONFIG_FILE=tests/travis_sqlite.cfg py.test --reruns 3 -n 3 tests --maxfail=100
+        - PRETIX_CONFIG_FILE=tests/ci_sqlite.cfg py.test -n 3 tests --maxfail=100
     except:
         - pypi
 pypi:

@@ -13,31 +13,52 @@
             {% trans "Edit question" %}
         </a>
     </h1>
-    <form class="form-inline helper-display-inline" action="" method="get">
-        <p>
-            <select name="status" class="form-control">
-                <option value="" {% if request.GET.status == "" %}selected="selected"{% endif %}>{% trans "All orders" %}</option>
-                <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
-                <option value="pv" {% if request.GET.status == "pv" %}selected="selected"{% endif %}>{% trans "Paid or confirmed" %}</option>
-                <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
-                <option value="np" {% if request.GET.status == "np" or "status" not in request.GET %}selected="selected"{% endif %}>{% trans "Pending or paid" %}</option>
-                <option value="o" {% if request.GET.status == "o" %}selected="selected"{% endif %}>{% trans "Pending (overdue)" %}</option>
-                <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
-                <option value="ne" {% if request.GET.status == "ne" %}selected="selected"{% endif %}>{% trans "Pending or expired" %}</option>
-                <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Canceled" %}</option>
-            </select>
-            <select name="item" class="form-control">
-                <option value="">{% trans "All products" %}</option>
-                {% for item in items %}
-                    <option value="{{ item.id }}"
-                            {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
-                        {{ item.name }}
-                    </option>
-                {% endfor %}
-            </select>
-            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-        </p>
-    </form>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Filter" %}</h3>
+        </div>
+        <form class="panel-body filter-form" action="" method="get">
+            <div class="row">
+                <div class="col-lg-2 col-sm-6 col-xs-6">
+                    <select name="status" class="form-control">
+                        <option value="" {% if request.GET.status == "" %}selected="selected"{% endif %}>{% trans "All orders" %}</option>
+                        <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
+                        <option value="pv" {% if request.GET.status == "pv" %}selected="selected"{% endif %}>{% trans "Paid or confirmed" %}</option>
+                        <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
+                        <option value="np" {% if request.GET.status == "np" or "status" not in request.GET %}selected="selected"{% endif %}>{% trans "Pending or paid" %}</option>
+                        <option value="o" {% if request.GET.status == "o" %}selected="selected"{% endif %}>{% trans "Pending (overdue)" %}</option>
+                        <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
+                        <option value="ne" {% if request.GET.status == "ne" %}selected="selected"{% endif %}>{% trans "Pending or expired" %}</option>
+                        <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Canceled" %}</option>
+                    </select>
+                </div>
+                <div class="col-lg-5 col-sm-6 col-xs-6">
+                    <select name="item" class="form-control">
+                        <option value="">{% trans "All products" %}</option>
+                        {% for item in items %}
+                            <option value="{{ item.id }}"
+                                    {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
+                                {{ item.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% if request.event.has_subevents %}
+                    <div class="col-lg-5 col-sm-6 col-xs-6">
+                        {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="text-right">
+                <button class="btn btn-primary btn-lg" type="submit">
+                    <span class="fa fa-filter"></span>
+                    {% trans "Filter" %}
+                </button>
+            </div>
+        </form>
+    </div>
+
     <div class="row" id="question-stats">
         {% if not stats %}
             <div class="empty-collection col-md-10 col-xs-12">
@@ -75,7 +96,7 @@
                     {% for stat in stats %}
                         <tr>
                             <td>
-                                <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status={{ request.GET.status|default:"np" }}&item={{ request.GET.item }}&question={{ question.pk }}&answer={{ stat.alink|default:stat.answer|urlencode }}">
+                                <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status={{ request.GET.status|default:"np" }}&item={{ request.GET.item }}&subevent={{ request.GET.subevent }}&question={{ question.pk }}&answer={{ stat.alink|default:stat.answer|urlencode }}">
                                     {{ stat.answer }}
                                 </a>
                             </td>

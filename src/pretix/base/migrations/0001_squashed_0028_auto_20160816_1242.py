@@ -9,6 +9,7 @@ from decimal import Decimal
 import django.core.validators
 import django.db.models.deletion
 import i18nfield.fields
+from argon2.exceptions import HashingError
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.db import migrations, models
@@ -25,7 +26,14 @@ def initial_user(apps, schema_editor):
     user = User(email='admin@localhost')
     user.is_staff = True
     user.is_superuser = True
-    user.password = make_password('admin')
+    try:
+        user.password = make_password('admin')
+    except HashingError:
+        raise Exception(
+            "Could not hash password of initial user with argon2id. If this is a system with less than 8 CPU cores, "
+            "you might need to disable argon2id by setting `passwords_argon2=off` in the `[django]` section of the "
+            "pretix.cfg configuration file."
+        )
     user.save()
 
 
@@ -48,7 +56,7 @@ class Migration(migrations.Migration):
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
                 ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('email', models.EmailField(blank=True, db_index=True, max_length=254, null=True, unique=True, verbose_name='E-mail')),
+                ('email', models.EmailField(blank=True, db_index=True, max_length=254, null=True, unique=True, verbose_name='Email')),
                 ('givenname', models.CharField(blank=True, max_length=255, null=True, verbose_name='Given name')),
                 ('familyname', models.CharField(blank=True, max_length=255, null=True, verbose_name='Family name')),
                 ('is_active', models.BooleanField(default=True, verbose_name='Is active')),
@@ -232,7 +240,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('code', models.CharField(max_length=16, verbose_name='Order code')),
                 ('status', models.CharField(choices=[('n', 'pending'), ('p', 'paid'), ('e', 'expired'), ('c', 'cancelled'), ('r', 'refunded')], max_length=3, verbose_name='Status')),
-                ('email', models.EmailField(blank=True, max_length=254, null=True, verbose_name='E-mail')),
+                ('email', models.EmailField(blank=True, max_length=254, null=True, verbose_name='Email')),
                 ('locale', models.CharField(blank=True, max_length=32, null=True, verbose_name='Locale')),
                 ('secret', models.CharField(default=pretix.base.models.orders.generate_secret, max_length=32)),
                 ('datetime', models.DateTimeField(verbose_name='Date')),

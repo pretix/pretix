@@ -823,6 +823,9 @@ class Event(EventMixin, LoggedModel):
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
 
+        if hasattr(other, 'alternative_domain_assignment'):
+            other.alternative_domain_assignment.domain.event_assignments.create(event=self)
+
         if not self.all_sales_channels:
             self.limit_sales_channels.set(
                 self.organizer.sales_channels.filter(
@@ -870,10 +873,12 @@ class Event(EventMixin, LoggedModel):
         for i in Item.objects.filter(event=other).prefetch_related(
             'variations', 'limit_sales_channels', 'require_membership_types',
             'variations__limit_sales_channels', 'variations__require_membership_types',
+            'matched_by_cross_selling_categories',
         ):
             vars = list(i.variations.all())
             require_membership_types = list(i.require_membership_types.all())
             limit_sales_channels = list(i.limit_sales_channels.all())
+            matched_by_cross_selling_categories = list(i.matched_by_cross_selling_categories.all())
             item_map[i.pk] = i
             i.pk = None
             i.event = self
@@ -910,6 +915,9 @@ class Event(EventMixin, LoggedModel):
                     v.require_membership_types.set(require_membership_types)
                 if not v.all_sales_channels:
                     v.limit_sales_channels.set(self.organizer.sales_channels.filter(identifier__in=[s.identifier for s in limit_sales_channels]))
+
+            if matched_by_cross_selling_categories:
+                i.matched_by_cross_selling_categories.set([category_map[c.pk] for c in matched_by_cross_selling_categories])
 
         for i in self.items.filter(hidden_if_item_available__isnull=False):
             i.hidden_if_item_available = item_map[i.hidden_if_item_available_id]
@@ -1019,10 +1027,9 @@ class Event(EventMixin, LoggedModel):
 
         checkin_list_map = {}
         for cl in other.checkin_lists.filter(subevent__isnull=True).prefetch_related(
-            'limit_products', 'auto_checkin_sales_channels'
+            'limit_products'
         ):
             items = list(cl.limit_products.all())
-            auto_checkin_sales_channels = list(cl.auto_checkin_sales_channels.all())
             checkin_list_map[cl.pk] = cl
             cl.pk = None
             cl._prefetched_objects_cache = {}
@@ -1034,8 +1041,6 @@ class Event(EventMixin, LoggedModel):
             cl.log_action('pretix.object.cloned')
             for i in items:
                 cl.limit_products.add(item_map[i.pk])
-            if auto_checkin_sales_channels:
-                cl.auto_checkin_sales_channels.set(self.organizer.sales_channels.filter(identifier__in=[s.identifier for s in auto_checkin_sales_channels]))
 
         if other.seating_plan:
             if other.seating_plan.organizer_id == self.organizer_id:

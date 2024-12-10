@@ -99,14 +99,6 @@ class CheckinList(LoggedModel):
         verbose_name=_('Automatically check out everyone at'),
         null=True, blank=True
     )
-    auto_checkin_sales_channels = models.ManyToManyField(
-        "SalesChannel",
-        verbose_name=_('Sales channels to automatically check in'),
-        help_text=_('This option is deprecated and will be removed in the next months. As a replacement, our new plugin '
-                    '"Auto check-in" can be used. When we remove this option, we will automatically migrate your event '
-                    'to use the new plugin.'),
-        blank=True,
-    )
     rules = models.JSONField(default=dict, blank=True)
 
     objects = ScopedManager(organizer='event__organizer')
@@ -141,7 +133,7 @@ class CheckinList(LoggedModel):
         return self.positions_query(ignore_status=False)
 
     @scopes_disabled()
-    def positions_inside_query(self, ignore_status=False, at_time=None):
+    def _filter_positions_inside(self, qs, at_time=None):
         if at_time is None:
             c_q = []
         else:
@@ -149,7 +141,7 @@ class CheckinList(LoggedModel):
 
         if "postgresql" not in settings.DATABASES["default"]["ENGINE"]:
             # Use a simple approach that works on all databases
-            qs = self.positions_query(ignore_status=ignore_status).annotate(
+            qs = qs.annotate(
                 last_entry=Subquery(
                     Checkin.objects.filter(
                         *c_q,
@@ -202,7 +194,7 @@ class CheckinList(LoggedModel):
             .values("position_id", "type", "datetime", "cnt_exists_after")
             .query.sql_with_params()
         )
-        return self.positions_query(ignore_status=ignore_status).filter(
+        return qs.filter(
             pk__in=RawSQL(
                 f"""
                 SELECT "position_id"
@@ -213,6 +205,10 @@ class CheckinList(LoggedModel):
                 [*base_params, Checkin.TYPE_ENTRY]
             )
         )
+
+    @scopes_disabled()
+    def positions_inside_query(self, ignore_status=False, at_time=None):
+        return self._filter_positions_inside(self.positions_query(ignore_status=ignore_status), at_time=at_time)
 
     @property
     def positions_inside(self):

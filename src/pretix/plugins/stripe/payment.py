@@ -113,7 +113,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - giropay: (deprecated)
 # - iDEAL: ✓
 # - P24: ✓
-# - Sofort: ✓
+# - Sofort: (deprecated)
 # - FPX: ✗
 # - PayNow: ✗
 # - UPI: ✗
@@ -152,7 +152,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Link: ✓ (PaymentRequestButton)
 # - Cash App Pay: ✗
 # - PayPal: ✓ (No settings UI yet)
-# - MobilePay: ✗
+# - MobilePay: ✓
 # - Alipay: ✓
 # - WeChat Pay: ✓
 # - GrabPay: ✓
@@ -388,21 +388,6 @@ class StripeSettingsHolder(BasePaymentProvider):
                          }
                      ),
                  )),
-                ('method_sofort',
-                 forms.BooleanField(
-                     label=_('SOFORT'),
-                     disabled=self.event.currency != 'EUR',
-                     help_text=(
-                         _('Stripe is in the process of removing this payment method. If you created your Stripe '
-                           'account after November 2023, you cannot use this payment method.') +
-                         '<div class="alert alert-warning">%s</div>' % _(
-                             'Despite the name, Sofort payments via Stripe are <strong>not</strong> processed '
-                             'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
-                             'Please only activate this payment method if your payment term allows for this lag.'
-                         )
-                     ),
-                     required=False,
-                 )),
                 ('method_eps',
                  forms.BooleanField(
                      label=_('EPS'),
@@ -492,8 +477,19 @@ class StripeSettingsHolder(BasePaymentProvider):
                 #      label=_('PayPal'),
                 #      disabled=self.event.currency not in [
                 #          'EUR', 'GBP', 'USD', 'CHF', 'CZK', 'DKK', 'NOK', 'PLN', 'SEK', 'AUD', 'CAD', 'HKD', 'NZD', 'SGD'
-                #      ]
+                #      ],
+                #      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                #                  'before they work properly.'),
+                #      required=False,
                 #  )),
+                ('method_mobilepay',
+                 forms.BooleanField(
+                     label=_('MobilePay'),
+                     disabled=self.event.currency not in ['DKK', 'EUR', 'NOK', 'SEK'],
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
+                 )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
         if not self.settings.connect_client_id or self.settings.secret_key:
@@ -1600,6 +1596,17 @@ class StripeSofort(StripeRedirectMethod):
     method = 'sofort'
     redirect_in_widget_allowed = False
 
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        # Stripe<>Sofort is shut down November 29th
+        return super().is_allowed(request, total) and now() < datetime(
+            2024, 11, 29, 0, 0, 0, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")
+        )
+
+    def order_change_allowed(self, order: Order, request: HttpRequest=None) -> bool:
+        return super().order_change_allowed(order, request) and now() < datetime(
+            2024, 11, 29, 0, 0, 0, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")
+        )
+
     def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
         ctx = {
@@ -1851,5 +1858,23 @@ class StripeTwint(StripeRedirectMethod):
         return {
             "payment_method_data": {
                 "type": "twint",
+            },
+        }
+
+
+class StripeMobilePay(StripeRedirectMethod):
+    identifier = 'stripe_mobilepay'
+    verbose_name = 'MobilePay via Stripe'
+    public_name = 'MobilePay'
+    method = 'mobilepay'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to MobilePay app users in Denmark and Finland. Please have your app ready.'
+    )
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "mobilepay",
             },
         }

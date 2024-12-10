@@ -194,66 +194,6 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   line-height: 30px;
 }
 
-div.mail-preview {
-  border: 1px solid #ccc;
-  border-top-width: 1px;
-  border-radius: 3px;
-
-  .placeholder {
-    background: var(--pretix-brand-warning-transparent-60);
-  }
-}
-
-.mail-preview-group div[lang] {
-  @include border-top-radius(0px);
-  @include border-bottom-radius(0px);
-  border-top-width: 0;
-  margin-bottom: 0;
-  padding-right: 15px;
-  padding-bottom: 8px;
-
-  &:first-child {
-    @include border-top-radius($input-border-radius);
-    border-top-width: 1px;
-  }
-  &:last-child {
-    @include border-bottom-radius($input-border-radius);
-    margin-bottom: 20px;
-  }
-  h2, h3 {
-    margin-bottom: 20px;
-    margin-top: 10px;
-  }
-  p {
-    margin: 0 0 10px;
-
-    /* These are technically the same, but use both */
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-
-    -ms-word-break: break-all;
-    /* This is the dangerous one in WebKit, as it breaks things wherever */
-    word-break: break-all;
-    /* Instead use this non-standard one: */
-    word-break: break-word;
-
-    /* Adds a hyphen where the word breaks, if supported (No Blink) */
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-  }
-  p:last-child {
-    margin-bottom: 0;
-  }
-  /* Reset styling from bootstrap that we don't actually have in emails */
-  pre {
-    background: none;
-    border: none;
-    padding: 0;
-  }
-}
-
 .search-line {
   width: 100%;
   margin-bottom: 20px;
@@ -567,7 +507,7 @@ table td > .checkbox input[type="checkbox"] {
     }
   }
 }
-.form-horizontal .big-radio {
+.form-horizontal .big-radio, .form-horizontal .big-radio-wrapper .radio {
   border: 1px solid #ccc;
   border-bottom: 0;
   padding: 0;
@@ -588,11 +528,22 @@ table td > .checkbox input[type="checkbox"] {
     border-bottom: 1px solid #ccc;
   }
 }
+.form-horizontal .control-label:has(+.big-radio-wrapper),
+.form-horizontal .control-label:has(+div > .big-radio) {
+  padding-top: 16px;
+}
+.form-horizontal .big-radio-wrapper .radio label {
+  font-weight: bold;
+}
+.form-horizontal .big-radio-wrapper .radio label > span {
+  display: block;
+  font-weight: normal;
+}
 .accordion-radio {
   display: block;
   margin: 0;
 }
-.panel-default>.accordion-radio>.panel-heading {
+.panel-default>.accordion-radio>.panel-heading, fieldset.accordion-panel>legend>.panel-heading {
   color: #333;
   background-color: #f5f5f5;
   padding: 12px 15px;
@@ -603,6 +554,9 @@ table td > .checkbox input[type="checkbox"] {
     position: relative;
     top: 2px;
   }
+}
+fieldset.accordion-panel > legend {
+  display: contents;
 }
 .maildesignpreview {
   label {

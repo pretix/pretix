@@ -287,9 +287,9 @@ class PhoneNumberShredder(BaseDataShredder):
 
 
 class EmailAddressShredder(BaseDataShredder):
-    verbose_name = _('E-mails')
+    verbose_name = _('Emails')
     identifier = 'order_emails'
-    description = _('This will remove all e-mail addresses from orders and attendees, as well as logged email '
+    description = _('This will remove all email addresses from orders and attendees, as well as logged email '
                     'contents. This will also remove the association to customer accounts.')
 
     def generate_files(self) -> List[Tuple[str, str, str]]:

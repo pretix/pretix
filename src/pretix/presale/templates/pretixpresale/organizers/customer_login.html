@@ -1,7 +1,7 @@
 {% extends "pretixpresale/organizers/base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
-{% load urlreplace %}
 {% load bootstrap3 %}
 {% block title %}{% trans "Log in" %}{% endblock %}
 {% block content %}
@@ -18,6 +18,7 @@
                     {% bootstrap_form form %}
                     <div class="form-group buttons">
                         <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            {% icon "sign-in" %}
                             {% trans "Log in" %}
                         </button>
                     </div>
@@ -35,6 +36,7 @@
                         <div class="col-md-6">
                             <a class="btn btn-link btn-block"
                                href="{% eventurl request.organizer "presale:organizer.customer.register" %}">
+                               {% icon "address-book-o" %}
                                 {% trans "Create account" %}
                             </a>
                         </div>

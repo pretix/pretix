@@ -145,7 +145,7 @@ class UserResetView(AdministratorPermissionRequiredMixin, RecentAuthenticationRe
 
         self.object.log_action('pretix.control.auth.user.forgot_password.mail_sent',
                                user=request.user)
-        messages.success(request, _('We sent out an e-mail containing further instructions.'))
+        messages.success(request, _('We sent out an email containing further instructions.'))
         return redirect(self.get_success_url())
 
     def get_success_url(self):

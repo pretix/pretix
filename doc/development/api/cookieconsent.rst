@@ -17,6 +17,7 @@ First, you need to declare that you are using non-essential cookies by respondin
 signal:
 
 .. automodule:: pretix.presale.signals
+   :no-index:
    :members: register_cookie_providers
 
 You are expected to return a list of ``CookieProvider`` objects instantiated from the following class:

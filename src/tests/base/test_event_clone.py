@@ -65,6 +65,8 @@ def test_full_clone_same_organizer():
     item_meta = event.item_meta_properties.create(name="Bla")
     tax_rule = event.tax_rules.create(name="VAT", rate=19)
     category = event.categories.create(name="Tickets")
+    cross_sell_category = event.categories.create(name="Recommendations", cross_selling_mode="only",
+                                                  cross_selling_condition="products")
 
     q1 = event.quotas.create(name="Quota 1", size=5)
     q2 = event.quotas.create(name="Quota 2", size=0, closed=True)
@@ -88,6 +90,7 @@ def test_full_clone_same_organizer():
     q1.items.add(item1)
     q2.items.add(item2)
     q2.variations.add(item2v)
+    cross_sell_category.cross_selling_match_products.add(item1)
 
     event.discounts.create(internal_name="Fake discount")
     question1 = event.questions.create(question="Yes or no", type=Question.TYPE_BOOLEAN)
@@ -123,7 +126,6 @@ def test_full_clone_same_organizer():
         ],
     })
     clist.limit_products.add(item1)
-    clist.auto_checkin_sales_channels.add(sc)
 
     copied_event = Event.objects.create(
         organizer=organizer, name='Dummy2', slug='dummy2',
@@ -156,7 +158,7 @@ def test_full_clone_same_organizer():
     copied_item1 = copied_event.items.get(name=item1.name)
     copied_item2 = copied_event.items.get(name=item2.name)
     assert copied_item1.tax_rule == copied_event.tax_rules.get()
-    assert copied_item1.category == copied_event.categories.get()
+    assert copied_item1.category == copied_event.categories.get(name='Tickets')
     assert copied_item1.limit_sales_channels.get() == sc
     assert copied_item1.meta_data == item1.meta_data
     assert copied_item2.variations.get().meta_data == item2v.meta_data
@@ -166,13 +168,16 @@ def test_full_clone_same_organizer():
     assert copied_item2.variations.get().limit_sales_channels.get() == sc
     assert copied_item2.require_membership_types.count() == 1
     assert copied_item2.require_membership_types.get() == membership_type
-    assert copied_item1.addons.get().addon_category == copied_event.categories.get()
+    assert copied_item1.addons.get().addon_category == copied_event.categories.get(name='Tickets')
     assert copied_item1.bundles.get().bundled_item == copied_item2
     assert copied_item1.bundles.get().bundled_variation == copied_item2.variations.get()
     assert copied_item2.hidden_if_item_available == copied_item1
     assert copied_q1.items.get() == copied_item1
     assert copied_q2.items.get() == copied_item2
     assert copied_q2.variations.get() == copied_item2.variations.get()
+
+    copied_cross_sell_category = copied_event.categories.get(name=cross_sell_category.name)
+    assert copied_cross_sell_category.cross_selling_match_products.get() == copied_item1
 
     copied_question1 = copied_event.questions.get(type=question1.type)
     copied_question2 = copied_event.questions.get(type=question2.type)
@@ -206,7 +211,6 @@ def test_full_clone_same_organizer():
         ],
     }
     assert copied_clist.limit_products.get() == copied_item1
-    assert copied_clist.auto_checkin_sales_channels.get() == sc
 
     # todo: test that the plugin hook is called
     # todo: test custom style
@@ -242,9 +246,6 @@ def test_full_clone_cross_organizer_differences():
     item2 = event.items.create(name="T-shirt", default_price=15)
     item2.require_membership_types.add(membership_type)
 
-    clist = event.checkin_lists.create(name="Default")
-    clist.auto_checkin_sales_channels.add(sc)
-
     copied_event = Event.objects.create(
         organizer=organizer2, name='Dummy2', slug='dummy2',
         date_from=datetime.datetime(2022, 4, 15, 9, 0, 0, tzinfo=datetime.timezone.utc),
@@ -264,6 +265,3 @@ def test_full_clone_cross_organizer_differences():
     assert copied_item1.grant_membership_type is None
     assert copied_item2.require_membership_types.count() == 0
     assert copied_item1.limit_sales_channels.get() == sc2
-
-    copied_clist = copied_event.checkin_lists.get()
-    assert copied_clist.auto_checkin_sales_channels.get() == sc2

@@ -609,6 +609,49 @@ class OrderFeeChangeForm(forms.Form):
         change_decimal_field(self.fields['value'], instance.order.event.currency)
 
 
+class OrderFeeAddForm(forms.Form):
+    fee_type = forms.ChoiceField(choices=OrderFee.FEE_TYPES)
+    value = forms.DecimalField(
+        max_digits=13, decimal_places=2,
+        localize=True,
+        label=_('Price'),
+        help_text=_("including all taxes"),
+    )
+    tax_rule = forms.ModelChoiceField(
+        TaxRule.objects.none(),
+        required=False,
+    )
+    description = forms.CharField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        order = kwargs.pop('order')
+        super().__init__(*args, **kwargs)
+        self.fields['tax_rule'].queryset = order.event.tax_rules.all()
+        change_decimal_field(self.fields['value'], order.event.currency)
+
+
+class OrderFeeAddFormset(forms.BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        self.order = kwargs.pop('order', None)
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['order'] = self.order
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            order=self.order,
+        )
+        self.add_fields(form, None)
+        return form
+
+
 class OrderContactForm(forms.ModelForm):
     regenerate_secrets = forms.BooleanField(required=False, label=_('Invalidate secrets'),
                                             help_text=_('Regenerates the order and ticket secrets. You will '

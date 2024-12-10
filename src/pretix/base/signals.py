@@ -415,7 +415,7 @@ validate_cart_addons = EventPluginSignal()
 Arguments: ``addons``, ``base_position``, ``iao``
 
 This signal is sent when a user tries to select a combination of addons. In contrast to
- ``validate_cart``, this is executed before the cart is actually modified. You are passed
+``validate_cart``, this is executed before the cart is actually modified. You are passed
 an argument ``addons`` containing a dict of ``(item, variation or None) → count`` tuples as well
 as the ``ItemAddOn`` object as the argument ``iao`` and the base cart position as
 ``base_position``.

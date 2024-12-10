@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 13:34+0000\n"
-"PO-Revision-Date: 2024-07-19 08:56+0000\n"
-"Last-Translator: Reece Needham <nouveaureece@protonmail.com>\n"
-"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/es/>\n"
+"POT-Creation-Date: 2024-11-08 13:45+0000\n"
+"PO-Revision-Date: 2024-11-18 15:48+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.8.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -326,13 +326,13 @@ msgstr "Tickets válidos"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
 msgid "Currently inside"
-msgstr "Actualmente adentro"
+msgstr "Actualmente en el interior"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
-msgstr "Sí"
+msgstr "Si"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:138
@@ -448,7 +448,7 @@ msgstr "Producto"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
-msgstr "Ver variaciones del producto"
+msgstr "Variación del producto"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
@@ -570,16 +570,12 @@ msgid "Group of objects"
 msgstr "Grupo de objetos"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:899
-#, fuzzy
-#| msgid "Text object"
 msgid "Text object (deprecated)"
-msgstr "Objeto de texto"
+msgstr "Objeto texto (obsoleto)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:901
-#, fuzzy
-#| msgid "Text object"
 msgid "Text box"
-msgstr "Objeto de texto"
+msgstr "Campo de texto"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
@@ -646,40 +642,40 @@ msgstr ""
 "Tu color tiene mal contraste para un texto con fondo blanco, por favor, "
 "escoge un tono más oscuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
-#: pretix/static/pretixcontrol/js/ui/main.js:511
+#: pretix/static/pretixcontrol/js/ui/main.js:496
+#: pretix/static/pretixcontrol/js/ui/main.js:516
 msgid "Search query"
-msgstr "Consultar búsqueda"
+msgstr "Consulta de búsqueda"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:509
+#: pretix/static/pretixcontrol/js/ui/main.js:514
 msgid "All"
 msgstr "Todos"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:510
+#: pretix/static/pretixcontrol/js/ui/main.js:515
 msgid "None"
 msgstr "Ninguno"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:514
+#: pretix/static/pretixcontrol/js/ui/main.js:519
 msgid "Selected only"
 msgstr "Solamente seleccionados"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:847
+#: pretix/static/pretixcontrol/js/ui/main.js:862
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Introduce un número de página entre 1 y %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:850
+#: pretix/static/pretixcontrol/js/ui/main.js:865
 msgid "Invalid page number."
 msgstr "Número de página inválido."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1008
+#: pretix/static/pretixcontrol/js/ui/main.js:1023
 msgid "Use a different name internally"
 msgstr "Usar un nombre diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1048
+#: pretix/static/pretixcontrol/js/ui/main.js:1063
 msgid "Click to close"
 msgstr "Click para cerrar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1123
+#: pretix/static/pretixcontrol/js/ui/main.js:1138
 msgid "You have unsaved changes!"
 msgstr "¡Tienes cambios sin guardar!"
 
@@ -706,12 +702,12 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"Los elementos en su carrito de compras ya no se encuentran reservados. "
-"Puedes seguir añadiendo más productos mientras estén disponibles."
+"Los elementos en su cesta de compras ya no se encuentran reservados. Puedes "
+"seguir añadiendo más productos mientras estén disponibles."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
-msgstr "El carrito de compras ha expirado"
+msgstr "La cesta de compra ha expirado"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
@@ -732,7 +728,7 @@ msgstr "Obtienes %(currency)s %(price)s de vuelta"
 
 #: pretix/static/pretixpresale/js/ui/main.js:227
 msgid "Please enter the amount the organizer can keep."
-msgstr "Por favor, ingrese el monto que el organizador puede quedarse."
+msgstr "Por favor, ingrese el importe que el organizador puede quedarse."
 
 #: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Please enter a quantity for one of the ticket types."
@@ -1062,7 +1058,7 @@ msgstr "febrero"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:80
 msgid "March"
-msgstr "marzo"
+msgstr "Marzo"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 msgid "April"

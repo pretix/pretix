@@ -421,7 +421,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 )
             if op.seat:
                 item += '<br/>' + str(op.seat)
-            name = bleach.clean(str(name), tags=['br']).strip().replace('<br>', '<br/>')
+            name = bleach.clean(str(name), tags={'br'}).strip().replace('<br>', '<br/>')
             if op.blocked:
                 name = '<font face="OpenSansBd">[' + _('Blocked') + ']</font> ' + name
             row = [
@@ -430,7 +430,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
                 Paragraph(name, self.get_style()),
-                Paragraph(bleach.clean(str(item), tags=['br']).strip().replace('<br>', '<br/>'), self.get_style()),
+                Paragraph(bleach.clean(str(item), tags={'br'}).strip().replace('<br>', '<br/>'), self.get_style()),
             ]
             acache = {}
             if op.addon_to:
@@ -440,7 +440,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 acache[a.question_id] = format_answer_for_export(a)
             for q in questions:
                 txt = acache.get(q.pk, '')
-                txt = bleach.clean(txt, tags=['br']).strip().replace('<br>', '<br/>')
+                txt = bleach.clean(txt, tags={'br'}).strip().replace('<br>', '<br/>')
                 p = Paragraph(txt, self.get_style())
                 while p.wrap(colwidths[len(row)], 5000)[1] > 50 * mm:
                     txt = txt[:len(txt) - 50] + "..."
@@ -502,7 +502,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         if form_data['secrets']:
             headers.append(_('Secret'))
 
-        headers.append(_('E-mail'))
+        headers.append(_('Email'))
         headers.append(_('Phone number'))
 
         if self.event.has_subevents:

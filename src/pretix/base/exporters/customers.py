@@ -64,7 +64,7 @@ class CustomerListExporter(OrganizerLevelExportMixin, ListExporter):
             _('Customer ID'),
             _('SSO provider'),
             _('External identifier'),
-            _('E-mail'),
+            _('Email'),
             _('Phone number'),
             _('Full name'),
         ]

@@ -264,7 +264,7 @@ def isu_return(request, *args, **kwargs):
             elif request.GET.get("isEmailConfirmed") == "false":  # Yes - literal!
                 messages.error(
                     request,
-                    _('The e-mail address on your PayPal account has not yet been confirmed. You will need to do '
+                    _('The email address on your PayPal account has not yet been confirmed. You will need to do '
                       'this before you can start accepting payments.')
                 )
             else:
@@ -505,9 +505,15 @@ def webhook(request, *args, **kwargs):
                 except Quota.QuotaExceededException:
                     pass
         elif sale['status'] == 'APPROVED':
-            request.session['payment_paypal_oid'] = payment.info_data['id']
             try:
+                request.session['payment_paypal_oid'] = payment.info_data['id']
                 payment.payment_provider.execute_payment(request, payment)
+            except KeyError:
+                # We might receive the CHECKOUT.ORDER.APPROVED webhook early if the user approves the payment but
+                # the order has not been created yet. In these cases, we will skip the immediate capture until
+                # the Order and OrderPayment has been created, and we can capture the payment in the regular
+                # execute_payment run.
+                logger.info('PayPal2 - Did not capture/execute_payment from Webhook: payment was not yet populated.')
             except PaymentException as e:
                 logger.exception('PayPal2 - Could not capture/execute_payment from Webhook: {}'.format(str(e)))
 

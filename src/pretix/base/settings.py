@@ -56,6 +56,7 @@ from django.utils.translation import (
 from django_countries.fields import Country
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
+from i18nfield.rest_framework import I18nField
 from i18nfield.strings import LazyI18nString
 from phonenumbers import PhoneNumber, parse
 from rest_framework import serializers
@@ -63,7 +64,7 @@ from rest_framework import serializers
 from pretix.api.serializers.fields import (
     ListMultipleChoiceField, UploadedFileField,
 )
-from pretix.api.serializers.i18n import I18nField, I18nURLField
+from pretix.api.serializers.i18n import I18nURLField
 from pretix.base.forms import I18nMarkdownTextarea, I18nURLFormField
 from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
 from pretix.base.reldate import (
@@ -550,7 +551,7 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'type': bool,
         'form_kwargs': dict(
-            label=_("Require a business addresses"),
+            label=_("Require a business address"),
             help_text=_('This will require users to enter a company name.'),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_required'}),
         )
@@ -571,13 +572,25 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'serializer_class': I18nField,
         'form_kwargs': dict(
-            label=_("Custom recipient field"),
+            label=_("Custom recipient field label"),
             widget=I18nTextInput,
             help_text=_("If you want to add a custom text field, e.g. for a country-specific registration number, to "
                         "your invoice address form, please fill in the label here. This label will both be used for "
                         "asking the user to input their details as well as for displaying the value on the invoice. It will "
                         "be shown on the invoice below the headline. "
                         "The field will not be required.")
+        )
+    },
+    'invoice_address_custom_field_helptext': {
+        'default': '',
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            label=_("Custom recipient field help text"),
+            widget=I18nTextInput,
+            help_text=_("If you use the custom recipient field, you can specify a help text which will be displayed "
+                        "underneath the field. It will not be displayed on the invoice.")
         )
     },
     'invoice_address_vatid': {

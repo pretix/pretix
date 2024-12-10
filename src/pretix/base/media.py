@@ -37,6 +37,16 @@ class BaseMediaType:
     def verbose_name(self):
         raise NotImplementedError()
 
+    @property
+    def icon(self):
+        """
+        This can be:
+
+        - The name of a Font Awesome icon to represent this channel type.
+        - The name of a SVG icon file that is resolvable through the static file system. We recommend to design for a size of 18x14 pixels.
+        """
+        return "circle"
+
     def generate_identifier(self, organizer):
         if self.medium_created_by_server:
             raise NotImplementedError()
@@ -59,6 +69,7 @@ class BaseMediaType:
 class BarcodePlainMediaType(BaseMediaType):
     identifier = 'barcode'
     verbose_name = _('Barcode / QR-Code')
+    icon = 'qrcode'
     medium_created_by_server = True
     supports_giftcard = False
     supports_orderposition = True
@@ -75,6 +86,7 @@ class BarcodePlainMediaType(BaseMediaType):
 class NfcUidMediaType(BaseMediaType):
     identifier = 'nfc_uid'
     verbose_name = _('NFC UID-based')
+    icon = 'pretixbase/img/media/nfc_uid.svg'
     medium_created_by_server = False
     supports_giftcard = True
     supports_orderposition = False
@@ -114,6 +126,7 @@ class NfcUidMediaType(BaseMediaType):
 class NfcMf0aesMediaType(BaseMediaType):
     identifier = 'nfc_mf0aes'
     verbose_name = 'NFC Mifare Ultralight AES'
+    icon = 'pretixbase/img/media/nfc_secure.svg'
     medium_created_by_server = False
     supports_giftcard = True
     supports_orderposition = False

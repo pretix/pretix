@@ -57,7 +57,7 @@ from pretix.base.models import (
     Checkin, CheckinList, Device, Event, Gate, Item, ItemVariation, Order,
     OrderPosition, QuestionOption,
 )
-from pretix.base.signals import checkin_created, order_placed, periodic_task
+from pretix.base.signals import checkin_created, periodic_task
 from pretix.helpers import OF_SELF
 from pretix.helpers.jsonlogic import Logic
 from pretix.helpers.jsonlogic_boolalg import convert_to_dnf
@@ -1152,23 +1152,6 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 _('This ticket has already been redeemed.'),
                 'already_redeemed',
             )
-
-
-@receiver(order_placed, dispatch_uid="legacy_autocheckin_order_placed")
-def order_placed(sender, **kwargs):
-    order = kwargs['order']
-    event = sender
-
-    cls = list(event.checkin_lists.filter(auto_checkin_sales_channels=order.sales_channel).prefetch_related(
-        'limit_products'))
-    if not cls:
-        return
-    for op in order.positions.all():
-        for cl in cls:
-            if cl.all_products or op.item_id in {i.pk for i in cl.limit_products.all()}:
-                if not cl.subevent_id or cl.subevent_id == op.subevent_id:
-                    ci = Checkin.objects.create(position=op, list=cl, auto_checked_in=True, type=Checkin.TYPE_ENTRY)
-                    checkin_created.send(event, checkin=ci)
 
 
 @receiver(periodic_task, dispatch_uid="autocheckout_exit_all")

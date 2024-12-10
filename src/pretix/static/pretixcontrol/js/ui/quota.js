@@ -29,7 +29,7 @@ $(function () {
         autofill = false;
     })
 
-    $("input[name=itemvars]").change(function () {
+    function do_autofill() {
         if (autofill) {
             var names = [];
             $("input[name=itemvars]:checked").each(function () {
@@ -37,5 +37,7 @@ $(function () {
             });
             $("#id_name").val(names.join(', '));
         }
-    });
+    }
+    $("input[name=itemvars]").change(do_autofill);
+    do_autofill();
 });

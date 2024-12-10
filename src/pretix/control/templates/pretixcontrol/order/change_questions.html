@@ -46,11 +46,13 @@
                     <div id="cp{{ pos.id }}">
                         <div class="panel-body">
                             {% for form in forms %}
-                                {% if form.pos.item != pos.item %}
-                                    {# Add-Ons #}
-                                    <legend>+ {{ form.pos.item }}</legend>
-                                {% endif %}
-                                {% bootstrap_form form layout="control" %}
+                                <div class="profile-scope">
+                                    {% if form.pos.item != pos.item %}
+                                        {# Add-Ons #}
+                                        <legend>+ {{ form.pos.item }}</legend>
+                                    {% endif %}
+                                    {% bootstrap_form form layout="control" %}
+                                </div>
                             {% endfor %}
                         </div>
                     </div>

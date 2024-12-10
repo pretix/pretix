@@ -5,7 +5,7 @@
 {% load static %}
 {% block title %}{% trans "Organizer" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "E-mail sending" %}</h1>
+    <h1>{% trans "Email sending" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="panel-group" id="email">
@@ -27,7 +27,7 @@
                     <div class="panel-body form-horizontal">
                         <p>
                             {% blocktrans trimmed %}
-                                E-mails will be sent through the system's default server. They will show the following
+                                Emails will be sent through the system's default server. They will show the following
                                 sender information:
                             {% endblocktrans %}
                         </p>
@@ -62,7 +62,7 @@
                     <div class="panel-body form-horizontal">
                         <p>
                             {% blocktrans trimmed %}
-                                E-mails will be sent through the system's default server but with your own sender
+                                Emails will be sent through the system's default server but with your own sender
                                 address.
                                 This will make your emails look more personalized and coming directly from you, but it
                                 also might require some extra steps to ensure good deliverability.

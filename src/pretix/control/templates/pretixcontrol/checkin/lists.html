@@ -101,7 +101,6 @@
                             <a href="?{% url_replace request 'ordering' 'subevent' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                     {% endif %}
-                    <th class="iconcol">{% trans "Automated check-in" %}</th>
                     <th>{% trans "Products" %}</th>
                     <th class="action-col-2"></th>
                 </tr>
@@ -137,17 +136,6 @@
                                 </td>
                             {% endif %}
                         {% endif %}
-                        <td>
-                            {% for channel in cl.auto_checkin_sales_channels.all %}
-                                {% if "." in channel.icon %}
-                                    <img src="{% static channel.icon %}" class="fa-like-image"
-                                         data-toggle="tooltip" title="{{ channel.label }}">
-                                {% else %}
-                                    <span class="fa fa-{{ channel.icon }} text-muted"
-                                          data-toggle="tooltip" title="{{ channel.label }}"></span>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
                         <td>
                             {% if cl.all_products %}
                                 <em>{% trans "All" %}</em>

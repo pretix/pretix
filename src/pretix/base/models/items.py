@@ -63,14 +63,13 @@ from django_countries.fields import Country
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
+from pretix.base.media import MEDIA_TYPES
+from pretix.base.models import Event, SubEvent
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.timemachine import time_machine_now
-
-from ...helpers.images import ImageSizeValidator
-from ..media import MEDIA_TYPES
-from .event import Event, SubEvent
+from pretix.helpers.images import ImageSizeValidator
 
 
 class ItemCategory(LoggedModel):
@@ -111,6 +110,33 @@ class ItemCategory(LoggedModel):
                     'only be bought in combination with a product that has this category configured as a possible '
                     'source for add-ons.')
     )
+    CROSS_SELLING_MODES = (
+        (None, _('Normal category')),
+        ('both', _('Normal + cross-selling category')),
+        ('only', _('Cross-selling category')),
+    )
+    cross_selling_mode = models.CharField(
+        choices=CROSS_SELLING_MODES,
+        null=True,
+        max_length=5
+    )
+    CROSS_SELLING_CONDITION = (
+        ('always', _('Always show in cross-selling step')),
+        ('discounts', _('Only show products that qualify for a discount according to discount rules')),
+        ('products', _('Only show if the cart contains one of the following products')),
+    )
+    cross_selling_condition = models.CharField(
+        verbose_name=_("Cross-selling condition"),
+        choices=CROSS_SELLING_CONDITION,
+        null=True,
+        max_length=10,
+    )
+    cross_selling_match_products = models.ManyToManyField(
+        'pretixbase.Item',
+        blank=True,
+        verbose_name=_("Cross-selling condition products"),
+        related_name="matched_by_cross_selling_categories",
+    )
 
     class Meta:
         verbose_name = _("Product category")
@@ -119,19 +145,31 @@ class ItemCategory(LoggedModel):
 
     def __str__(self):
         name = self.internal_name or self.name
-        if self.is_addon:
-            return _('{category} (Add-On products)').format(category=str(name))
+        if self.category_type != 'normal':
+            return _('{category} ({category_type})').format(category=str(name),
+                                                            category_type=self.get_category_type_display())
         return str(name)
 
     def get_category_type_display(self):
         if self.is_addon:
-            return _('Add-On products')
+            return _('Add-on category')
+        elif self.cross_selling_mode:
+            return self.get_cross_selling_mode_display()
         else:
-            return None
+            return _('Normal category')
 
     @property
     def category_type(self):
-        return 'addon' if self.is_addon else 'normal'
+        return 'addon' if self.is_addon else self.cross_selling_mode or 'normal'
+
+    @category_type.setter
+    def category_type(self, new_value):
+        if new_value == 'addon':
+            self.is_addon = True
+            self.cross_selling_mode = None
+        else:
+            self.is_addon = False
+            self.cross_selling_mode = None if new_value == 'normal' else new_value
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -270,7 +308,7 @@ class SubEventItemVariation(models.Model):
         return True
 
 
-def filter_available(qs, channel='web', voucher=None, allow_addons=False):
+def filter_available(qs, channel='web', voucher=None, allow_addons=False, allow_cross_sell=False):
     # Channel can currently be a SalesChannel or a str, since we need that compatibility, but a SalesChannel
     # makes the query SIGNIFICANTLY faster
     from .organizer import SalesChannel
@@ -291,6 +329,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
 
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
+    if not allow_cross_sell:
+        q &= Q(Q(category__isnull=True) | ~Q(category__cross_selling_mode='only'))
 
     if voucher:
         if voucher.item_id:
@@ -304,8 +344,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
 
 
 class ItemQuerySet(models.QuerySet):
-    def filter_available(self, channel='web', voucher=None, allow_addons=False):
-        return filter_available(self, channel, voucher, allow_addons)
+    def filter_available(self, channel='web', voucher=None, allow_addons=False, allow_cross_sell=False):
+        return filter_available(self, channel, voucher, allow_addons, allow_cross_sell)
 
 
 class ItemQuerySetManager(ScopedManager(organizer='event__organizer').__class__):
@@ -313,8 +353,8 @@ class ItemQuerySetManager(ScopedManager(organizer='event__organizer').__class__)
         super().__init__()
         self._queryset_class = ItemQuerySet
 
-    def filter_available(self, channel='web', voucher=None, allow_addons=False):
-        return filter_available(self.get_queryset(), channel, voucher, allow_addons)
+    def filter_available(self, channel='web', voucher=None, allow_addons=False, allow_cross_sell=False):
+        return filter_available(self.get_queryset(), channel, voucher, allow_addons, allow_cross_sell)
 
 
 class Item(LoggedModel):
@@ -1078,13 +1118,12 @@ class ItemVariation(models.Model):
     :param original_price: The item's "original" price. Will not be used for any calculations, will just be shown.
     :type original_price: decimal.Decimal
     :param require_approval: If set to ``True``, orders containing this variation can only be processed and paid after
-    approval by an administrator
+                             approval by an administrator
     :type require_approval: bool
     :param all_sales_channels: A flag indicating that this variation is available on all channels and limit_sales_channels will be ignored.
     :type all_sales_channels: bool
     :param limit_sales_channels: A list of sales channel identifiers, that this variation is available for sale on.
     :type limit_sales_channels: list
-
     """
     item = models.ForeignKey(
         Item,

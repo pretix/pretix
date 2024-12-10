@@ -378,6 +378,7 @@ var form_handlers = function (el) {
             dependency = findDependency($(this).attr("data-display-dependency"), this),
             update = function (ev) {
                 var enabled = dependency.toArray().some(function(d) {
+                    if (d.disabled) return false;
                     if (d.type === 'checkbox' || d.type === 'radio') {
                         return d.checked;
                     } else if (d.type === 'select-one') {
@@ -397,6 +398,9 @@ var form_handlers = function (el) {
                     enabled = !enabled;
                 }
                 var $toggling = dependent;
+                if (dependent.attr("data-disable-dependent")) {
+                    $toggling.attr('disabled', !enabled).trigger("change");
+                }
                 if (dependent.get(0).tagName.toLowerCase() !== "div") {
                     $toggling = dependent.closest('.form-group');
                 }
@@ -411,8 +415,9 @@ var form_handlers = function (el) {
                 }
             };
         update();
-        dependency.closest('.form-group').find('[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependency.each(function() {
+            $(this).closest('.form-group').find('[name=' + $(this).attr("name") + ']').on("change dp.change", update);
+        })
     });
 
     el.find("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
@@ -427,60 +432,6 @@ var form_handlers = function (el) {
         update();
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
-    });
-
-    $("input[name$=vat_id][data-countries-with-vat-id]").each(function () {
-        var dependent = $(this),
-            dependency_country = $(this).closest(".panel-body, form").find('select[name$=country]'),
-            dependency_id_is_business_1 = $(this).closest(".panel-body, form").find('input[id$=id_is_business_1]'),
-            update = function (ev) {
-                if (dependency_id_is_business_1.length && !dependency_id_is_business_1.prop("checked")) {
-                    dependent.closest(".form-group").hide();
-                } else if (dependent.attr('data-countries-with-vat-id').split(',').includes(dependency_country.val())) {
-                    dependent.closest(".form-group").show();
-                } else {
-                    dependent.closest(".form-group").hide();
-                }
-            };
-        update();
-        dependency_country.on("change", update);
-        dependency_id_is_business_1.on("change", update);
-    });
-
-    $("select[name$=state]:not([data-static])").each(function () {
-        var dependent = $(this),
-            counter = 0,
-            dependency = $(this).closest(".panel-body, form").find('select[name$=country]'),
-            update = function (ev) {
-                counter++;
-                var curCounter = counter;
-                dependent.prop("disabled", true);
-                dependency.closest(".form-group").find("label").prepend("<span class='fa fa-cog fa-spin'></span> ");
-                $.getJSON('/js_helpers/states/?country=' + dependency.val(), function (data) {
-                    if (counter > curCounter) {
-                        return;  // Lost race
-                    }
-                    dependent.find("option").filter(function (t) {return !!$(this).attr("value")}).remove();
-                    if (data.data.length > 0) {
-                        $.each(data.data, function (k, s) {
-                            dependent.append($("<option>").attr("value", s.code).text(s.name));
-                        });
-                        dependent.closest(".form-group").show();
-                        dependent.prop('required', dependency.prop("required"));
-                    } else {
-                        dependent.closest(".form-group").hide();
-                        dependent.prop("required", false);
-                    }
-                    dependent.prop("disabled", false);
-                    dependency.closest(".form-group").find("label .fa-spin").remove();
-                });
-            };
-        if (dependent.find("option").length === 1) {
-            dependent.closest(".form-group").hide();
-        } else {
-            dependent.prop('required', dependency.prop("required"));
-        }
-        dependency.on("change", update);
     });
 
     el.find("div.scrolling-choice:not(.no-search)").each(function () {

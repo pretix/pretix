@@ -60,6 +60,7 @@ that we'll provide in this plugin:
 Similar signals exist for other objects:
 
 .. automodule:: pretix.base.signals
+   :no-index:
    :members: voucher_import_columns
 
 

@@ -21,6 +21,8 @@
 #
 import copy
 import json
+from datetime import timedelta
+from decimal import Decimal
 
 import pytest
 from django.core.files.base import ContentFile
@@ -28,7 +30,9 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from rest_framework.test import APIClient
 
-from pretix.base.models import Event, Item, Organizer, Team
+from pretix.base.models import (
+    Event, Item, Order, OrderPosition, Organizer, Team,
+)
 from pretix.plugins.ticketoutputpdf.models import TicketLayoutItem
 
 
@@ -39,12 +43,33 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(organizer=event.organizer)
+    t = Team.objects.create(organizer=event.organizer, can_view_orders=True)
     t.limit_events.add(event)
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23)
-    tl = event.ticket_layouts.create(name="Foo", default=True, layout='[{"a": 2}]')
+    tl = event.ticket_layouts.create(
+        name="Foo",
+        default=True,
+        layout='[{"type": "poweredby", "left": "0", "bottom": "0", "size": "1.00", "content": "dark"}]',
+    )
     TicketLayoutItem.objects.create(layout=tl, item=item1, sales_channel=o.sales_channels.get(identifier="web"))
     return event, tl, item1
+
+
+@pytest.fixture
+def position(env):
+    item = env[0].items.create(name="Ticket", default_price=3, admission=True)
+    order = Order.objects.create(
+        code='FOO', event=env[0], email='dummy@dummy.test',
+        status=Order.STATUS_PAID, locale='en',
+        datetime=now() - timedelta(days=4),
+        expires=now() - timedelta(hours=4) + timedelta(days=10),
+        total=Decimal('23.00'),
+        sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
+    )
+    return OrderPosition.objects.create(
+        order=order, item=item, variation=None,
+        price=Decimal("23.00"), attendee_name_parts={"full_name": "Peter"}, positionid=1
+    )
 
 
 @pytest.fixture
@@ -65,7 +90,7 @@ RES_LAYOUT = {
     'name': 'Foo',
     'default': True,
     'item_assignments': [{'item': 1, 'sales_channel': 'web'}],
-    'layout': [{'a': 2}],
+    'layout': [{"type": "poweredby", "left": "0", "bottom": "0", "size": "1.00", "content": "dark"}],
     'background': 'http://example.com/static/pretixpresale/pdf/ticket_default_a4.pdf'
 }
 
@@ -213,3 +238,92 @@ def test_api_delete(env, token_client):
     )
     assert resp.status_code == 204
     assert not env[0].ticket_layouts.exists()
+
+
+@pytest.mark.django_db
+def test_renderer_batch_valid(env, token_client, position):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/ticketpdfrenderer/render_batch/'.format(env[0].slug, env[0].slug),
+        {
+            "parts": [
+                {
+                    "orderposition": position.pk,
+                },
+                {
+                    "orderposition": position.pk,
+                    "override_channel": "web",
+                },
+                {
+                    "orderposition": position.pk,
+                    "override_layout": env[1].pk,
+                },
+            ]
+        },
+        format='json',
+    )
+    assert resp.status_code == 202
+    assert "download" in resp.data
+    resp = token_client.get("/" + resp.data["download"].split("/", 3)[3])
+    assert resp.status_code == 200
+    assert resp["Content-Type"] == "application/pdf"
+
+
+@pytest.mark.django_db
+def test_renderer_batch_invalid(env, token_client, position):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/ticketpdfrenderer/render_batch/'.format(env[0].slug, env[0].slug),
+        {
+            "parts": [
+                {
+                    "orderposition": -2,
+                },
+            ]
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"parts": [{"orderposition": ["Invalid pk \"-2\" - object does not exist."]}]}
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/ticketpdfrenderer/render_batch/'.format(env[0].slug, env[0].slug),
+        {
+            "parts": [
+                {
+                    "orderposition": position.pk,
+                    "override_layout": -2,
+                },
+            ]
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"parts": [{"override_layout": ["Invalid pk \"-2\" - object does not exist."]}]}
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/ticketpdfrenderer/render_batch/'.format(env[0].slug, env[0].slug),
+        {
+            "parts": [
+                {
+                    "orderposition": position.pk,
+                    "override_channel": "magic",
+                },
+            ]
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"parts": [{"override_channel": ["Object with identifier=magic does not exist."]}]}
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/ticketpdfrenderer/render_batch/'.format(env[0].slug, env[0].slug),
+        {
+            "parts": [
+                {
+                    "orderposition": position.pk,
+                }
+            ] * 1002
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"parts": ["Please do not submit more than 1000 parts."]}
