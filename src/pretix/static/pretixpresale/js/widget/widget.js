@@ -341,7 +341,7 @@ Vue.component('pricebox', {
         + '<span class="pretix-widget-pricebox-currency">{{ $root.currency }}</span> '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
         + '       :min="display_price_nonlocalized" :value="suggested_price_nonlocalized" :name="field_name"'
-        + '       step="any" aria-label="'+strings.price+'">'
+        + '       step="any" v-bind:aria-label="free_price_label">'
         + '</div>'
         + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
         + '{{ taxline }}'
@@ -394,6 +394,9 @@ Vue.component('pricebox', {
                 return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + this.display_price;
             }
         },
+        free_price_label () {
+            return [strings.price, this.$root.currency].join(", ")
+        },
         taxline: function () {
             if (this.$root.display_net_prices) {
                 if (this.price.includes_mixed_tax_rate) {
@@ -418,7 +421,7 @@ Vue.component('pricebox', {
     }
 });
 Vue.component('variation', {
-    template: ('<div class="pretix-widget-variation" :data-id="variation.id">'
+    template: ('<div class="pretix-widget-variation" :data-id="variation.id" role="group" v-bind:aria-labelledby="aria_labelledby" v-bind:aria-describedby="variation_desc_id">'
         + '<div class="pretix-widget-item-row">'
 
         // Variation description
@@ -426,6 +429,8 @@ Vue.component('variation', {
         + '<div class="pretix-widget-item-title-and-description">'
         + '<strong class="pretix-widget-item-title">{{ variation.value }}</strong>'
         + '<div class="pretix-widget-item-description" v-if="variation.description" v-html="variation.description"></div>'
+        + '<strong :id="variation_label_id" class="pretix-widget-item-title">{{ variation.value }}</strong>'
+        + '<div :id="variation_desc_id" class="pretix-widget-item-description" v-if="variation.description" v-html="variation.description"></div>'
         + '<p class="pretix-widget-item-meta" '
         + '   v-if="!variation.has_variations && variation.avail[1] !== null && variation.avail[0] === 100">'
         + '<small>{{ quota_left_str }}</small>'
@@ -434,7 +439,7 @@ Vue.component('variation', {
         + '</div>'
 
         // Price
-        + '<div class="pretix-widget-item-price-col">'
+        + '<div :id="variation_price_id" class="pretix-widget-item-price-col">'
         + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="orig_price" '
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="variation.suggested_price"'
         + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices">'
@@ -464,23 +469,35 @@ Vue.component('variation', {
         quota_left_str: function () {
             return django.interpolate(strings["quota_left"], [this.variation.avail[1]]);
         },
+        variation_label_id: function () {
+            return 'pretix-widget-variation-label-' + this.item.id + '-' + this.variation.id;
+        },
+        variation_desc_id: function () {
+            return 'pretix-widget-variation-desc-' + this.item.id + '-' + this.variation.id;
+        },
+        variation_price_id: function () {
+            return 'pretix-widget-variation-price-' + this.item.id + '-' + this.variation.id;
+        },
+        aria_labelledby: function () {
+            return [this.variation_label_id, this.variation_price_id].join(" ");
+        },
     }
 });
 Vue.component('item', {
-    template: ('<div v-bind:class="classObject" :data-id="item.id">'
+    template: ('<div v-bind:class="classObject" :data-id="item.id" role="group" v-bind:aria-labelledby="aria_labelledby" v-bind:aria-describedby="item_desc_id">'
         + '<div class="pretix-widget-item-row pretix-widget-main-item-row">'
 
         // Product description
         + '<div class="pretix-widget-item-info-col">'
         + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture"></a>'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
+        + '<a v-if="item.has_variations && show_toggle" :id="item_label_id" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
         + '   @click.prevent.stop="expand" role="button" tabindex="0"'
         + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'
         + '{{ item.name }}'
         + '</a>'
-        + '<strong v-else class="pretix-widget-item-title">{{ item.name }}</strong>'
-        + '<div class="pretix-widget-item-description" v-if="item.description" v-html="item.description"></div>'
+        + '<strong v-else class="pretix-widget-item-title" :id="item_label_id">{{ item.name }}</strong>'
+        + '<div class="pretix-widget-item-description" :id="item_desc_id" v-if="item.description" v-html="item.description"></div>'
         + '<p class="pretix-widget-item-meta" v-if="item.order_min && item.order_min > 1">'
         + '<small>{{ min_order_str }}</small>'
         + '</p>'
@@ -492,7 +509,7 @@ Vue.component('item', {
         + '</div>'
 
         // Price
-        + '<div class="pretix-widget-item-price-col">'
+        + '<div :id="item_price_id" class="pretix-widget-item-price-col">'
         + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations && $root.showPrices"'
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="item.suggested_price"'
         + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
@@ -573,6 +590,18 @@ Vue.component('item', {
                 'pretix-widget-item-variations': true,
                 'pretix-widget-item-variations-expanded': this.expanded,
             }
+        },
+        item_label_id: function () {
+            return 'pretix-widget-item-label-' + this.item.id;
+        },
+        item_desc_id: function () {
+            return 'pretix-widget-item-desc-' + this.item.id;
+        },
+        item_price_id: function () {
+            return 'pretix-widget-item-price-' + this.item.id;
+        },
+        aria_labelledby: function () {
+            return [this.item_label_id, this.item_price_id].join(" ");
         },
         min_order_str: function () {
             return django.interpolate(strings["order_min"], [this.item.order_min]);
