@@ -1792,6 +1792,7 @@ class StripeWeChatPay(StripeRedirectMethod):
 
 
 class StripeRevolutPay(StripeRedirectMethod):
+    identifier = 'stripe_revolut_pay'
     verbose_name = _('Revolut Pay via Stripe')
     public_name = _('Revolut Pay')
     method = 'revolut_pay'
