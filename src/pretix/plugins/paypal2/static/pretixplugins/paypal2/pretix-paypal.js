@@ -92,8 +92,8 @@ var pretixpaypal = {
         }
 
         // We are setting the cogwheel already here, as the renderAPM() method might take some time to get loaded.
-        let apmtextselector = $("input[name=payment][value=paypal_apm]").closest("label").find(".panel-title");
-        apmtextselector.prepend('<span class="fa fa-cog fa-spin"></span> ');
+        const apmtextselector = $("input[name=payment][value=paypal_apm]").closest("fieldset").find(".provider-name");
+        apmtextselector.append(' <span aria-hidden="true" class="fa fa-cog fa-spin"></span>');
 
         let sdk_url = 'https://www.paypal.com/sdk/js' +
             '?client-id=' + pretixpaypal.client_id +
@@ -269,11 +269,7 @@ var pretixpaypal = {
     renderAPMs: function () {
         pretixpaypal.restore();
         let inputselector = $("input[name=payment][value=paypal_apm]");
-        // The first selector is used on the regular payment-step of the checkout flow
-        // The second selector is used for the payment method change view.
-        // In the long run, the layout of both pages should be adjusted to be one.
-        let textselector = inputselector.closest("label").find('.panel-title');
-        let textselector2 = inputselector.next("strong");
+        let textselector = inputselector.closest("fieldset").find('.provider-name');
         let eligibles = [];
 
         pretixpaypal.paypal.getFundingSources().forEach(function (fundingSource) {
@@ -296,10 +292,6 @@ var pretixpaypal = {
         textselector.fadeOut(300, function () {
             textselector.text(eligibles.join(', '));
             textselector.fadeIn(300);
-        });
-        textselector2.fadeOut(300, function () {
-            textselector2[0].textContent = eligibles.join(', ');
-            textselector2.fadeIn(300);
         });
     },
 

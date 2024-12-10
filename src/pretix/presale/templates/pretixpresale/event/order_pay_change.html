@@ -29,29 +29,24 @@
         {% endif %}
         <div class="panel-group" id="payment_accordion">
             {% for p in providers %}
-                <div class="panel panel-default" data-total="{{ p.total|money_numberfield:request.event.currency }}">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <label class="radio">
+                <fieldset class="panel panel-default accordion-panel" data-total="{{ p.total|money_numberfield:request.event.currency }}">
+                    <legend class="accordion-radio">
+                        <label class="panel-heading">
+                            <span class="panel-title">
                                 {% if show_fees %}
                                     <strong class="pull-right flip">{% if p.fee_diff >= 0 %}+{% else %}-{% endif %} {{ p.fee_diff_abs|money:event.currency }}</strong>
                                 {% endif %}
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
-                                        data-parent="#payment_accordion"
                                         {% if selected == p.provider.identifier %}checked="checked"{% endif %}
-                                        data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"
                                         data-wallets="{{ p.provider.walletqueries|join:"|" }}"/>
-                                <strong>{{ p.provider.public_name }}</strong>
-                            </label>
-                        </h4>
+                                <strong class="provider-name">{{ p.provider.public_name }}</strong>
+                            </span>
+                        </label>
+                    </legend>
+                    <div id="payment_{{ p.provider.identifier }}" class="panel-body form-horizontal">
+                        {{ p.form }}
                     </div>
-                    <div id="payment_{{ p.provider.identifier }}"
-                         class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
-                        <div class="panel-body form-horizontal">
-                            {{ p.form }}
-                        </div>
-                    </div>
-                </div>
+                </fieldset>
             {% empty %}
                 <div class="alert alert-info">
                     {% trans "There are no alternative payment providers available for this order." %}
