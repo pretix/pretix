@@ -2027,7 +2027,7 @@ function get_ga_client_id(tracking_id) {
     return null;
 }
 
-var create_widget = function (element) {
+var create_widget = function (element, html_id=null) {
     var target_url = element.attributes.event.value;
     if (!target_url.match(/\/$/)) {
         target_url += "/";
@@ -2051,6 +2051,7 @@ var create_widget = function (element) {
             widget_data[attrib.name.replace(/^data-/, '')] = attrib.value;
         }
     }
+    html_id = html_id || element.id || makeid(16);
 
     var observer = new MutationObserver((mutationList) => {
         mutationList.forEach((mutation) => {
@@ -2110,6 +2111,7 @@ var create_widget = function (element) {
                 widget_data: widget_data,
                 loading: 1,
                 widget_id: 'pretix-widget-' + widget_id,
+                html_id: html_id,
                 vouchers_exist: false,
                 disable_vouchers: disable_vouchers,
                 disable_filters: disable_filters,
@@ -2147,7 +2149,7 @@ var create_widget = function (element) {
     return app;
 };
 
-var create_button = function (element) {
+var create_button = function (element, html_id=null) {
     var target_url = element.attributes.event.value;
     if (!target_url.match(/\/$/)) {
         target_url += "/";
@@ -2165,6 +2167,7 @@ var create_button = function (element) {
             widget_data[attrib.name.replace(/^data-/, '')] = attrib.value;
         }
     }
+    html_id = html_id || element.id || makeid(16);
 
     var observer = new MutationObserver((mutationList) => {
         mutationList.forEach((mutation) => {
@@ -2206,6 +2209,7 @@ var create_button = function (element) {
                 frame_dismissed: false,
                 widget_data: widget_data,
                 widget_id: 'pretix-widget-' + widget_id,
+                html_id: html_id,
                 button_text: button_text
             }
         },
@@ -2240,14 +2244,14 @@ window.PretixWidget.buildWidgets = function () {
         var wlength = widgets.length;
         for (var i = 0; i < wlength; i++) {
             var widget = widgets[i];
-            widgetlist.push(create_widget(widget));
+            widgetlist.push(create_widget(widget, widget.id || "pretix-widget-"+i));
         }
 
         var buttons = document.querySelectorAll("pretix-button, div.pretix-button-compat");
         var blength = buttons.length;
         for (var i = 0; i < blength; i++) {
             var button = buttons[i];
-            buttonlist.push(create_button(button));
+            buttonlist.push(create_button(button, button.id || "pretix-button-"+i));
         }
     });
 };
