@@ -4,6 +4,7 @@
 {% load eventurl %}
 {% load cache_large %}
 {% load money %}
+{% load panel %}
 {% load thumb %}
 {% load eventsignal %}
 {% load rich_text %}
@@ -83,31 +84,38 @@
                 </button>
             {% endif %}
             </p>
-        {% else %}
-            <h3>{% trans "Choose date to book a ticket" %}</h3>
         {% endif %}
-        <div class="panel panel-default subevent-list" id="subevent-list">
-            <div class="panel-heading">
-                {% if subevent %}
-                    {% trans "Other dates" context "subevent" %}
+
+        <div class="subevent-list">
+            {% panel "default" %}
+                <h3 class="panel-title"><b>
+                {% if subevent and "date" not in request.GET and "filtered" not in request.GET %}
+                    {% if show_cart %}
+                        {% trans "Add tickets for a different date" %}
+                    {% else %}
+                        {% trans "View other date" %}
+                    {% endif %}
                 {% else %}
-                    {% trans "Dates" context "subevent" %}
-                {% endif %}
-            </div>
-            <div class="panel-body">
-                <div>
-                    {% cache_large 15 subevent_list subevent_list_cache_key %}
-                        {% if subevent_list.list_type == "calendar" %}
-                            {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
-                        {% elif subevent_list.list_type == "week" %}
-                            {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
-                        {% else %}
-                            {% include "pretixpresale/event/fragment_subevent_list.html" %}
-                        {% endif %}
-                    {% endcache_large %}
-                </div>
-            </div>
+                    {% trans "Choose date to book a ticket" %}
+                {% endif %}</b>
+                </h3>
+            {% if filter_form.fields %}
+                {% panelsubhead %}
+                    {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
+            {% endif %}
+            {% panelbody %}
+                {% cache_large 15 subevent_list subevent_list_cache_key %}
+                    {% if subevent_list.list_type == "calendar" %}
+                        {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
+                    {% elif subevent_list.list_type == "week" %}
+                        {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
+                    {% else %}
+                        {% include "pretixpresale/event/fragment_subevent_list.html" %}
+                    {% endif %}
+                {% endcache_large %}
+            {% endpanel %}
         </div>
+
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
             {% if frontpage_text %}
