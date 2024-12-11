@@ -333,12 +333,12 @@ Vue.component('availbox', {
 });
 Vue.component('pricebox', {
     template: ('<div class="pretix-widget-pricebox">'
-        + '<span v-if="!free_price && !original_price">{{ priceline }}</span>'
+        + '<span v-if="!free_price && !original_price" v-html="priceline"></span>'
         + '<span v-if="!free_price && original_price">'
         + '<del class="pretix-widget-pricebox-original-price">{{ original_line }}</del> '
-        + '<ins class="pretix-widget-pricebox-new-price">{{ priceline }}</ins></span>'
+        + '<ins class="pretix-widget-pricebox-new-price" v-html="priceline"></ins></span>'
         + '<div v-if="free_price">'
-        + '{{ $root.currency }} '
+        + '<span class="pretix-widget-pricebox-currency">{{ $root.currency }}</span> '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
         + '       :min="display_price_nonlocalized" :value="suggested_price_nonlocalized" :name="field_name"'
         + '       step="any" aria-label="'+strings.price+'">'
@@ -391,7 +391,7 @@ Vue.component('pricebox', {
                 }
                 return strings.free;
             } else {
-                return this.$root.currency + " " + this.display_price;
+                return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + this.display_price;
             }
         },
         taxline: function () {
@@ -497,7 +497,7 @@ Vue.component('item', {
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="item.suggested_price"'
         + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
         + '</pricebox>'
-        + '<div class="pretix-widget-pricebox" v-if="item.has_variations && $root.showPrices">{{ pricerange }}</div>'
+        + '<div class="pretix-widget-pricebox" v-if="item.has_variations && $root.showPrices" v-html="pricerange"></div>'
         + '<span v-if="!$root.showPrices">&nbsp;</span>'
         + '</div>'
 
@@ -588,9 +588,10 @@ Vue.component('item', {
                 return django.interpolate(strings.price_from, {
                     'currency': this.$root.currency,
                     'price': floatformat(this.item.min_price, 2)
-                }, true);
+                }, true).replace(this.$root.currency, '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + '</span>');
             } else if (this.item.min_price !== this.item.max_price) {
-                return this.$root.currency + " " + floatformat(this.item.min_price, 2) + " – "
+                return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " 
+                    + floatformat(this.item.min_price, 2) + " – "
                     + floatformat(this.item.max_price, 2);
             } else if (this.item.min_price === "0.00" && this.item.max_price === "0.00") {
                 if (this.item.mandatory_priced_addons) {
@@ -598,7 +599,7 @@ Vue.component('item', {
                 }
                 return strings.free;
             } else {
-                return this.$root.currency + " " + floatformat(this.item.min_price, 2);
+                return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + floatformat(this.item.min_price, 2);
             }
         },
         variationsToggleLabel: function () {
