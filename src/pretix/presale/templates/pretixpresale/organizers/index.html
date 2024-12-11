@@ -53,7 +53,7 @@
         </div>
         {% for e in events %}{% eventurl e "presale:event.index" as url %}
             <div class="row">
-                <div class="col-md-5 col-xs-12">
+                <div class="col-md-4 col-xs-12">
                     <a href="{{ url }}">
                         <strong>
                             {{ e.name }}
@@ -87,7 +87,7 @@
                     {% endif %}
                     <td>
                 </div>
-                <div class="col-md-2 col-xs-6">
+                <div class="col-md-3 col-xs-6">
                     <small>
                     {% if e.has_subevents %}
                         {% textbubble "info" icon="bars" %}
@@ -133,18 +133,19 @@
                         {% textbubble "danger" icon="times" %}
                             {% trans "Sale over" %}
                         {% endtextbubble %}
-                    {% elif e.settings.presale_start_show_date %}
+                    {% else %}
                         {% textbubble "warning" icon="clock-o" %}
+                            {% trans "Not yet on sale" %}
+                        {% endtextbubble %}
+                        {% if e.settings.presale_start_show_date %}
+                            <br><span class="text-muted">
                             {% with date_iso=e.effective_presale_start.isoformat date_human=e.effective_presale_start|date:"SHORT_DATE_FORMAT" %}
                                 {% blocktrans trimmed with date='<time datetime="'|add:date_iso|add:'">'|add:date_human|add:"</time>"|safe %}
                                     Sale starts {{ date }}
                                 {% endblocktrans %}
                             {% endwith %}
-                        {% endtextbubble %}
-                    {% else %}
-                        {% textbubble "warning" icon="clock-o" %}
-                            {% trans "Not yet on sale" %}
-                        {% endtextbubble %}
+                            </span>
+                        {% endif %}
                     {% endif %}
                     </small>
                 </div>
