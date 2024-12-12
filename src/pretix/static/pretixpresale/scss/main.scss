@@ -412,6 +412,13 @@ details.details-open .panel-title::before {
     margin-right: .25em;
 }
 
+.panel-subhead {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: $table-bg-accent;
+    border-bottom: 1px solid $table-border-color;
+}
+
 details {
     list-style: none;
 }
@@ -588,10 +595,10 @@ h2 .label {
   margin: 0;
   padding: 0;
 
-  li {
+  & > li, & > .row {
     padding: 15px 0;
   }
-  li+li {
+  & > li+li, & > .row + .row {
     border-top: 1px solid $table-border-color;
   }
 }

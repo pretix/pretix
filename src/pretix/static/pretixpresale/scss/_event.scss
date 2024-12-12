@@ -235,33 +235,6 @@ div.front-page {
     }
 }
 
-.subevent-list {
-    background-color: white;
-
-    .row {
-        margin: 0;
-    }
-    .label {
-        text-decoration: none;
-    }
-    .subevent-row a {
-        display: block;
-        color: $text-color;
-        padding: 3px 0;
-    }
-    .subevent-row:nth-child(2n) a {
-        background-color: $gray-lighter;
-    }
-    .subevent-row:hover a {
-        background-color: darken($gray-lighter, 10%);
-    }
-    .subevent-row .row > div {
-        padding: 5px;
-        min-height: 35px; /* label height */
-        vertical-align: middle;
-    }
-}
-
 .calendar-nav, .calendar-nav li {
     list-style: none;
     margin: 0;

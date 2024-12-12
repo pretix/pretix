@@ -4,6 +4,7 @@
 {% load eventurl %}
 {% load cache_large %}
 {% load money %}
+{% load panel %}
 {% load thumb %}
 {% load eventsignal %}
 {% load rich_text %}
@@ -70,32 +71,27 @@
             {% endif %}
         {% endif %}
 
-        {% if subevent and "date" not in request.GET and "filtered" not in request.GET %}
-            <p>
-            {% if show_cart %}
-                <button class="subevent-toggle btn btn-primary btn-block btn-lg" aria-expanded="false">
-                    <span class="fa fa-reply" aria-hidden="true"></span>
-                    {% trans "Add tickets for a different date" %}
-                </button>
-            {% else %}
-                <button class="subevent-toggle btn btn-default btn-block" aria-expanded="false">
-                    {% trans "View other date" %}
-                </button>
-            {% endif %}
-            </p>
-        {% else %}
-            <h3>{% trans "Choose date to book a ticket" %}</h3>
-        {% endif %}
-        <div class="panel panel-default subevent-list" id="subevent-list">
-            <div class="panel-heading">
-                {% if subevent %}
-                    {% trans "Other dates" context "subevent" %}
+        <details class="panel panel-{% if subevent and "date" not in request.GET and "filtered" not in request.GET and show_cart %}primary{% else %}default{% endif %}">
+            <summary class="panel-heading">
+                <h3 class="panel-title"><b>
+                {% if subevent and "date" not in request.GET and "filtered" not in request.GET %}
+                    {% if show_cart %}
+                        {% trans "Add tickets for a different date" %}
+                    {% else %}
+                        {% trans "View other date" %}
+                    {% endif %}
                 {% else %}
-                    {% trans "Dates" context "subevent" %}
-                {% endif %}
-            </div>
-            <div class="panel-body">
-                <div>
+                    {% trans "Choose date to book a ticket" %}
+                {% endif %}</b>
+                </h3>
+            </summary>
+            <div>
+            {% if filter_form.fields %}
+                <div class="panel-subhead">
+                    {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
+                </div>
+            {% endif %}
+                <div class="panel-body">
                     {% cache_large 15 subevent_list subevent_list_cache_key %}
                         {% if subevent_list.list_type == "calendar" %}
                             {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
@@ -107,7 +103,8 @@
                     {% endcache_large %}
                 </div>
             </div>
-        </div>
+        </details>
+
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
             {% if frontpage_text %}
