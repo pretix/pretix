@@ -412,14 +412,6 @@ $(function () {
     });
     questions_init_profiles($("body"));
 
-    // Subevent choice
-    if ($(".subevent-toggle").length) {
-        $(".subevent-list").hide();
-        $(".subevent-toggle").show().click(function () {
-            $(".subevent-list").slideToggle(300);
-            $(this).slideToggle(300).attr("aria-expanded", true);
-        });
-    }
     if (sessionStorage) {
         $("[data-save-scrollpos]").on("click submit", function () {
             sessionStorage.setItem('scrollpos', window.scrollY);
