@@ -70,8 +70,14 @@
             {% endif %}
         {% endif %}
 
-        <details class="panel panel-{% if subevent and "date" not in request.GET and "filtered" not in request.GET and show_cart %}primary{% else %}default{% endif %}">
+
+    {% if subevent_list_foldable %}
+        <details class="panel panel-{% if show_cart %}primary{% else %}default{% endif %}">
             <summary class="panel-heading">
+    {% else %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+    {% endif %}
                 <h3 class="panel-title"><b>
                 {% if subevent and "date" not in request.GET and "filtered" not in request.GET %}
                     {% if show_cart %}
@@ -83,8 +89,12 @@
                     {% trans "Choose date to book a ticket" %}
                 {% endif %}</b>
                 </h3>
+    {% if subevent_list_foldable %}
             </summary>
             <div>
+    {% else %}
+            </div>
+    {% endif %}
             {% if filter_form.fields %}
                 <div class="panel-subhead">
                     {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
@@ -101,8 +111,12 @@
                         {% endif %}
                     {% endcache_large %}
                 </div>
+    {% if subevent_list_foldable %}
             </div>
         </details>
+    {% else %}
+        </div>
+    {% endif %}
 
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
