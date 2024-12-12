@@ -74,7 +74,7 @@
                                            {% if selected == p.provider.identifier %}checked="checked"{% endif %}
                                            aria-controls="payment_{{ p.provider.identifier }}"
                                            data-wallets="{{ p.provider.walletqueries|join:"|" }}" />
-                                    <strong class="provider-name">{{ p.provider.public_name }}</strong>
+                                    <strong class="accordion-label-text">{{ p.provider.public_name }}</strong>
                                 </span>
                             </label>
                         </legend>

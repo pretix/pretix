@@ -92,7 +92,7 @@ var pretixpaypal = {
         }
 
         // We are setting the cogwheel already here, as the renderAPM() method might take some time to get loaded.
-        const apmtextselector = $("input[name=payment][value=paypal_apm]").closest("fieldset").find(".provider-name");
+        const apmtextselector = $("input[name=payment][value=paypal_apm]").closest("label").find(".accordion-label-text");
         apmtextselector.append(' <span aria-hidden="true" class="fa fa-cog fa-spin"></span>');
 
         let sdk_url = 'https://www.paypal.com/sdk/js' +
@@ -269,7 +269,7 @@ var pretixpaypal = {
     renderAPMs: function () {
         pretixpaypal.restore();
         let inputselector = $("input[name=payment][value=paypal_apm]");
-        let textselector = inputselector.closest("fieldset").find('.provider-name');
+        let textselector = inputselector.closest("label").find('.accordion-label-text');
         let eligibles = [];
 
         pretixpaypal.paypal.getFundingSources().forEach(function (fundingSource) {

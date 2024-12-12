@@ -39,7 +39,7 @@
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                         {% if selected == p.provider.identifier %}checked="checked"{% endif %}
                                         data-wallets="{{ p.provider.walletqueries|join:"|" }}"/>
-                                <strong class="provider-name">{{ p.provider.public_name }}</strong>
+                                <strong class="accordion-label-text">{{ p.provider.public_name }}</strong>
                             </span>
                         </label>
                     </legend>
