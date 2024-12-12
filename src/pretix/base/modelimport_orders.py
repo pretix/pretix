@@ -441,6 +441,7 @@ class Price(DecimalColumnMixin, ImportColumn):
         position.price = p.gross
         position.tax_rule = position.item.tax_rule
         position.tax_rate = p.rate
+        position.tax_code = p.code
         position.tax_value = p.tax
 
 

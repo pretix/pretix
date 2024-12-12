@@ -1721,16 +1721,17 @@ class OrderChangeManager:
 
             try:
                 new_rate = tax_rule.tax_rate_for(ia)
+                new_code = tax_rule.tax_code_for(ia)
             except TaxRule.SaleNotAllowed:
                 raise OrderError(error_messages['tax_rule_country_blocked'])
             # We use override_tax_rate to make sure .tax() doesn't get clever and re-adjusts the pricing itself
-            if new_rate != pos.tax_rate:
+            if new_rate != pos.tax_rate or new_code != pos.tax_code:
                 if keep == 'net':
                     new_tax = tax_rule.tax(pos.price - pos.tax_value, base_price_is='net', currency=self.event.currency,
-                                           override_tax_rate=new_rate)
+                                           override_tax_rate=new_rate, override_tax_code=new_code)
                 else:
                     new_tax = tax_rule.tax(pos.price, base_price_is='gross', currency=self.event.currency,
-                                           override_tax_rate=new_rate)
+                                           override_tax_rate=new_rate, override_tax_code=new_code)
                 self._totaldiff += new_tax.gross - pos.price
                 self._operations.append(self.PriceOperation(pos, new_tax, new_tax.gross - pos.price))
                 self._invoice_dirty = True
@@ -2304,6 +2305,7 @@ class OrderChangeManager:
                 op.position.price = op.price.gross
                 op.position.tax_rate = op.price.rate
                 op.position.tax_value = op.price.tax
+                op.position.tax_code = op.price.code
                 op.position.save()
             elif isinstance(op, self.TaxRuleOperation):
                 if isinstance(op.position, OrderPosition):
@@ -2400,7 +2402,7 @@ class OrderChangeManager:
             elif isinstance(op, self.AddOperation):
                 pos = OrderPosition.objects.create(
                     item=op.item, variation=op.variation, addon_to=op.addon_to,
-                    price=op.price.gross, order=self.order, tax_rate=op.price.rate,
+                    price=op.price.gross, order=self.order, tax_rate=op.price.rate, tax_code=op.price.code,
                     tax_value=op.price.tax, tax_rule=op.item.tax_rule,
                     positionid=nextposid, subevent=op.subevent, seat=op.seat,
                     used_membership=op.membership, valid_from=op.valid_from, valid_until=op.valid_until,
