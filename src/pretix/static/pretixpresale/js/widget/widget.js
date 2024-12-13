@@ -2003,6 +2003,7 @@ var create_overlay = function (app) {
                 error_url_after_new_tab: true,
                 error_message: null,
                 lightbox: null,
+                prevActiveElement: null,
             }
         },
         methods: {
