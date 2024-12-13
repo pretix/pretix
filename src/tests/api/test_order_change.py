@@ -475,6 +475,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
                 'gross_value': '23.00',
                 'tax_value': '0.00',
                 'tax_rate': '0.00',
+                'tax_code': None,
                 'tax_name': ''
             },
             {
@@ -492,6 +493,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
                 'gross_value': '0.25',
                 'tax_value': '0.05',
                 'tax_rate': '19.00',
+                'tax_code': None,
                 'tax_name': ''
             }
         ],

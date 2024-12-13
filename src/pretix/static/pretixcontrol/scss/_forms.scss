@@ -765,8 +765,13 @@ fieldset.accordion-panel > legend {
   margin: 0;
   & > div {
     padding-top: 5px;
-    padding-bottom: 5px;
   }
+  & > div > div {
+    margin-bottom: 10px;
+  }
+}
+.tax-rule-lines .alert-danger {
+  margin: 10px 15px 5px;
 }
 .tax-rule-lines .tax-rule-line {
   border-bottom: 1px solid $input-border;
