@@ -1009,10 +1009,10 @@ Vue.component('pretix-widget-event-form', {
         // Resume cart
         + '<div class="pretix-widget-info-message pretix-widget-clickable"'
         + '     v-if="$root.cart_exists">'
-        + '<button @click.prevent.stop="$parent.resume" class="pretix-widget-resume-button" type="button">'
+        + '<button @click.prevent.stop="$parent.resume" class="pretix-widget-resume-button" type="button" v-bind:aria-describedby="id_cart_exists_msg">'
         + strings['resume_checkout']
         + '</button>'
-        + strings['cart_exists']
+        + '<span :id="id_cart_exists_msg">' + strings['cart_exists'] + '</span>'
         + '<div class="pretix-widget-clear"></div>'
         + '</div>'
 
@@ -1082,6 +1082,9 @@ Vue.component('pretix-widget-event-form', {
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
+        id_cart_exists_msg: function () {
+            return this.$root.html_id + '-cart-exists';
+        },
         buy_label: function () {
             var i, j, k, all_free = true;
             for (i = 0; i < this.$root.categories.length; i++) {
