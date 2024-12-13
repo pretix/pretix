@@ -2020,6 +2020,13 @@ var create_overlay = function (app) {
                     this.prevActiveElement?.focus();
                 }
             },
+            error_message: function (newValue) {
+                if (newValue) {
+                    this.prevActiveElement = document.activeElement;
+                } else {
+                    this.prevActiveElement?.focus();
+                }
+            },
         }
     });
     app.$root.overlay = framechild;
