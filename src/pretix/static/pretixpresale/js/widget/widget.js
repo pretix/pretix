@@ -468,13 +468,13 @@ Vue.component('variation', {
             return django.interpolate(strings["quota_left"], [this.variation.avail[1]]);
         },
         variation_label_id: function () {
-            return 'pretix-widget-variation-label-' + this.item.id + '-' + this.variation.id;
+            return this.$root.html_id + '-variation-label-' + this.item.id + '-' + this.variation.id;
         },
         variation_desc_id: function () {
-            return 'pretix-widget-variation-desc-' + this.item.id + '-' + this.variation.id;
+            return this.$root.html_id + '-variation-desc-' + this.item.id + '-' + this.variation.id;
         },
         variation_price_id: function () {
-            return 'pretix-widget-variation-price-' + this.item.id + '-' + this.variation.id;
+            return this.$root.html_id + '-variation-price-' + this.item.id + '-' + this.variation.id;
         },
         aria_labelledby: function () {
             return [this.variation_label_id, this.variation_price_id].join(" ");
@@ -590,13 +590,13 @@ Vue.component('item', {
             }
         },
         item_label_id: function () {
-            return 'pretix-widget-item-label-' + this.item.id;
+            return this.$root.html_id + '-item-label-' + this.item.id;
         },
         item_desc_id: function () {
-            return 'pretix-widget-item-desc-' + this.item.id;
+            return this.$root.html_id + '-item-desc-' + this.item.id;
         },
         item_price_id: function () {
-            return 'pretix-widget-item-price-' + this.item.id;
+            return this.$root.html_id + '-item-price-' + this.item.id;
         },
         aria_labelledby: function () {
             return [this.item_label_id, this.item_price_id].join(" ");
