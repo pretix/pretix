@@ -676,7 +676,7 @@ var shared_methods = {
     },
     buy_callback: function (data) {
         if (data.redirect) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             if (data.cart_id) {
                 this.$root.cart_id = data.cart_id;
                 setCookie(this.$root.cookieName, data.cart_id, 30);
@@ -740,7 +740,7 @@ var shared_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
-        var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+        var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
         this.$root.overlay.frame_loading = true;
         iframe.src = redirect_url;
     },
@@ -754,7 +754,7 @@ var shared_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             this.$root.overlay.frame_loading = true;
             iframe.src = redirect_url;
         } else {
@@ -779,7 +779,7 @@ var shared_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             this.$root.overlay.frame_loading = true;
             iframe.src = redirect_url;
         } else {
@@ -811,15 +811,15 @@ var shared_iframe_fragment = (
     + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
     + '</div>'
     + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
+    + '<div class="pretix-widget-frame-close"><button @click.prevent.stop="close" type="button" aria-label="'+strings.close+'">'
+    + '<svg height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+    + '</button></div>'
     + '<iframe frameborder="0" width="650" height="650" @load="iframeLoaded" '
     + '        :name="$root.parent.widget_id" src="about:blank" v-once'
     + '        allow="autoplay *; camera *; fullscreen *; payment *"'
     + '        referrerpolicy="origin">'
     + 'Please enable frames in your browser!'
     + '</iframe>'
-    + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent.stop="close" role="button" aria-label="'+strings.close+'">'
-    + '<svg height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
-    + '</a></div>'
     + '</div>'
     + '</div>'
 );
@@ -919,7 +919,7 @@ Vue.component('pretix-overlay', {
                 window.open(this.$root.error_url_after);
                 return;
             }
-            var iframe = this.$refs['frame-container'].children[0];
+            var iframe = this.$refs['frame-container'].querySelector("iframe");
             iframe.src = this.$root.error_url_after;
             this.$root.frame_loading = true;
             this.$root.error_message = null;
@@ -1674,7 +1674,7 @@ var shared_root_methods = {
             } else {
                 url += '?iframe=1';
             }
-            this.$root.overlay.$children[0].$refs['frame-container'].children[0].src = url;
+            this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe").src = url;
             this.$root.overlay.frame_loading = true;
         } else {
             event.target.href = url;
@@ -1838,7 +1838,7 @@ var shared_root_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             this.$root.overlay.frame_loading = true;
             iframe.src = redirect_url;
         } else {
@@ -1864,7 +1864,7 @@ var shared_root_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             this.$root.overlay.frame_loading = true;
             iframe.src = redirect_url;
         } else {
@@ -2006,6 +2006,19 @@ var create_overlay = function (app) {
             }
         },
         methods: {
+        },
+        watch: {
+            frame_shown: function (newValue) {
+                if (newValue) {
+                    this.prevActiveElement = document.activeElement;
+                    var btn = this.parent.$root.overlay.$children[0].$refs['frame-container'].querySelector(".pretix-widget-frame-close button");
+                    this.$nextTick(function () {
+                        btn.focus();
+                    });
+                } else {
+                    this.prevActiveElement?.focus();
+                }
+            },
         }
     });
     app.$root.overlay = framechild;
