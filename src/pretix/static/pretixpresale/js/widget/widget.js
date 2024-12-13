@@ -26,6 +26,7 @@ var strings = {
     'reserved': django.pgettext('widget', 'Reserved'),
     'free': django.pgettext('widget', 'FREE'),
     'price_from': django.pgettext('widget', 'from %(currency)s %(price)s'),
+    'image_of': django.pgettext('widget', 'Image of %s'),
     'tax_incl': django.pgettext('widget', 'incl. %(rate)s% %(taxname)s'),
     'tax_plus': django.pgettext('widget', 'plus %(rate)s% %(taxname)s'),
     'tax_incl_mixed': django.pgettext('widget', 'incl. taxes'),
@@ -487,7 +488,7 @@ Vue.component('item', {
 
         // Product description
         + '<div class="pretix-widget-item-info-col">'
-        + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture"></a>'
+        + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture" :alt="picture_alt_text"></a>'
         + '<div class="pretix-widget-item-title-and-description">'
         + '<a v-if="item.has_variations && show_toggle" :id="item_label_id" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
         + '   @click.prevent.stop="expand" role="button" tabindex="0"'
@@ -588,6 +589,9 @@ Vue.component('item', {
                 'pretix-widget-item-variations': true,
                 'pretix-widget-item-variations-expanded': this.expanded,
             }
+        },
+        picture_alt_text: function () {
+            return django.interpolate(strings["image_of"], [this.item.name]);
         },
         item_label_id: function () {
             return this.$root.html_id + '-item-label-' + this.item.id;
