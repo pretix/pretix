@@ -17,6 +17,8 @@ var strings = {
     'quantity_dec': django.pgettext('widget', 'Decrease quantity'),
     'quantity_inc': django.pgettext('widget', 'Increase quantity'),
     'price': django.pgettext('widget', 'Price'),
+    'original_price': django.pgettext('widget', 'Original price: %s'),
+    'new_price': django.pgettext('widget', 'New price: %s'),
     'select': django.pgettext('widget', 'Select'),
     'select_item': django.pgettext('widget', 'Select %s'),
     'select_variant': django.pgettext('widget', 'Select variant %s'),
@@ -336,8 +338,8 @@ Vue.component('pricebox', {
     template: ('<div class="pretix-widget-pricebox">'
         + '<span v-if="!free_price && !original_price" v-html="priceline"></span>'
         + '<span v-if="!free_price && original_price">'
-        + '<del class="pretix-widget-pricebox-original-price">{{ original_line }}</del> '
-        + '<ins class="pretix-widget-pricebox-new-price" v-html="priceline"></ins></span>'
+        + '<del class="pretix-widget-pricebox-original-price" v-bind:aria-label="original_price_aria_label" v-html="original_line"></del> '
+        + '<ins class="pretix-widget-pricebox-new-price" v-bind:aria-label="new_price_aria_label" v-html="priceline"></ins></span>'
         + '<div v-if="free_price">'
         + '<span class="pretix-widget-pricebox-currency">{{ $root.currency }}</span> '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
@@ -355,6 +357,13 @@ Vue.component('pricebox', {
         suggested_price: Object,
         original_price: String,
         mandatory_priced_addons: Boolean,
+    },
+    methods: {
+        stripHTML: function (s) {
+            var div = document.createElement('div');
+            div.innerHTML = s;
+            return div.textContent || div.innerText || '';
+        },
     },
     computed: {
         display_price: function () {
@@ -382,8 +391,14 @@ Vue.component('pricebox', {
                 return parseFloat(price.gross).toFixed(2);
             }
         },
+        original_price_aria_label: function () {
+            return django.interpolate(strings.original_price, [this.stripHTML(this.original_line)]);
+        },
+        new_price_aria_label: function () {
+            return django.interpolate(strings.new_price, [this.stripHTML(this.priceline)]);
+        },
         original_line: function () {
-            return this.$root.currency + " " + floatformat(parseFloat(this.original_price), 2);
+            return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + floatformat(parseFloat(this.original_price), 2);
         },
         priceline: function () {
             if (this.price.gross === "0.00") {
