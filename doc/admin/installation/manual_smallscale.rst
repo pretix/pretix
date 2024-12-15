@@ -248,6 +248,14 @@ The following snippet is an example on how to configure a nginx proxy for pretix
             return 404;
         }
 
+        location /static/staticfiles.json {
+            deny all;
+            return 404;
+        }
+        location /static/CACHE/manifest.json {
+            deny all;
+            return 404;
+        }
         location /static/ {
             alias /var/pretix/venv/lib/python3.11/site-packages/pretix/static.dist/;
             access_log off;
