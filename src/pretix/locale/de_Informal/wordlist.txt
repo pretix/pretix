@@ -182,6 +182,7 @@ Kombitickets
 Kompatibilitätsmodus
 Konfigurations
 Kosovo
+land
 landesspezifische
 Lead
 Leaflet
