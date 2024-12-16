@@ -1410,6 +1410,7 @@ class OrderChangeMixin:
                                         gross=a.price,
                                         tax=a.tax_value,
                                         name=a.item.tax_rule.name if a.item.tax_rule else "",
+                                        code=a.item.tax_rule.code if a.item.tax_rule else None,
                                         rate=a.tax_rate,
                                     )
                                 else:
@@ -1424,6 +1425,7 @@ class OrderChangeMixin:
                                     gross=a.price,
                                     tax=a.tax_value,
                                     name=a.item.tax_rule.name if a.item.tax_rule else "",
+                                    code=a.item.tax_rule.name if a.item.tax_rule else None,
                                     rate=a.tax_rate,
                                 )
                             else:

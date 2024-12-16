@@ -54,6 +54,7 @@ from django.core.validators import (
 from django.db.models import QuerySet
 from django.forms import Select, widgets
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
+from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -77,7 +78,7 @@ from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
 from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
-from pretix.base.models.tax import VAT_ID_COUNTRIES, ask_for_vat_id
+from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
 )
@@ -274,6 +275,10 @@ class NamePartsFormField(forms.MultiValueField):
             value["salutation"] = ""
 
         return value
+
+
+def name_parts_is_empty(name_parts_dict):
+    return not any(k != "_scheme" and v for k, v in name_parts_dict.items())
 
 
 class WrappedPhonePrefixSelect(Select):
@@ -602,6 +607,7 @@ class BaseQuestionsForm(forms.Form):
         questions = pos.item.questions_to_ask
         event = kwargs.pop('event')
         self.all_optional = kwargs.pop('all_optional', False)
+        self.attendee_addresses_required = event.settings.attendee_addresses_required and not self.all_optional
 
         super().__init__(*args, **kwargs)
 
@@ -676,7 +682,7 @@ class BaseQuestionsForm(forms.Form):
 
         if item.ask_attendee_data and event.settings.attendee_addresses_asked:
             add_fields['street'] = forms.CharField(
-                required=event.settings.attendee_addresses_required and not self.all_optional,
+                required=self.attendee_addresses_required,
                 label=_('Address'),
                 widget=forms.Textarea(attrs={
                     'rows': 2,
@@ -686,7 +692,7 @@ class BaseQuestionsForm(forms.Form):
                 initial=(cartpos.street if cartpos else orderpos.street),
             )
             add_fields['zipcode'] = forms.CharField(
-                required=event.settings.attendee_addresses_required and not self.all_optional,
+                required=False,
                 max_length=30,
                 label=_('ZIP code'),
                 initial=(cartpos.zipcode if cartpos else orderpos.zipcode),
@@ -695,7 +701,7 @@ class BaseQuestionsForm(forms.Form):
                 }),
             )
             add_fields['city'] = forms.CharField(
-                required=event.settings.attendee_addresses_required and not self.all_optional,
+                required=False,
                 label=_('City'),
                 max_length=255,
                 initial=(cartpos.city if cartpos else orderpos.city),
@@ -707,11 +713,12 @@ class BaseQuestionsForm(forms.Form):
             add_fields['country'] = CountryField(
                 countries=CachedCountries
             ).formfield(
-                required=event.settings.attendee_addresses_required and not self.all_optional,
+                required=self.attendee_addresses_required,
                 label=_('Country'),
                 initial=country,
                 widget=forms.Select(attrs={
                     'autocomplete': 'country',
+                    'data-country-information-url': reverse('js_helpers.states'),
                 }),
             )
             c = [('', pgettext_lazy('address', 'Select state'))]
@@ -946,9 +953,9 @@ class BaseQuestionsForm(forms.Form):
         d = super().clean()
 
         if self.address_validation:
-            self.cleaned_data = d = validate_address(d, True)
+            self.cleaned_data = d = validate_address(d, all_optional=not self.attendee_addresses_required)
 
-        if d.get('city') and d.get('country') and str(d['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+        if d.get('street') and d.get('country') and str(d['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
             if not d.get('state'):
                 self.add_error('state', _('This field is required.'))
 
@@ -1005,7 +1012,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             'street': forms.Textarea(attrs={
                 'rows': 2,
                 'placeholder': _('Street and Number'),
-                'autocomplete': 'street-address'
+                'autocomplete': 'street-address',
             }),
             'beneficiary': forms.Textarea(attrs={'rows': 3}),
             'country': forms.Select(attrs={
@@ -1021,12 +1028,24 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 'data-display-dependency': '#id_is_business_1',
                 'autocomplete': 'organization',
             }),
-            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1', 'data-countries-with-vat-id': ','.join(VAT_ID_COUNTRIES)}),
+            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
             'internal_reference': forms.TextInput,
         }
         labels = {
             'is_business': ''
         }
+
+    @property
+    def ask_vat_id(self):
+        return self.event.settings.invoice_address_vatid
+
+    @property
+    def address_required(self):
+        return self.event.settings.invoice_address_required
+
+    @property
+    def company_required(self):
+        return self.event.settings.invoice_address_company_required
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.pop('event')
@@ -1039,7 +1058,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             kwargs['initial']['country'] = guess_country_from_request(self.request, self.event)
 
         super().__init__(*args, **kwargs)
-        if not event.settings.invoice_address_vatid:
+
+        self.fields["company"].widget.attrs["data-display-dependency"] = f'#id_{self.add_prefix("is_business")}_1'
+        self.fields["vat_id"].widget.attrs["data-display-dependency"] = f'#id_{self.add_prefix("is_business")}_1'
+
+        if not self.ask_vat_id:
             del self.fields['vat_id']
         elif self.validate_vat_id:
             self.fields['vat_id'].help_text = '<br/>'.join([
@@ -1055,6 +1078,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             ])
 
         self.fields['country'].choices = CachedCountries()
+        self.fields['country'].widget.attrs['data-country-information-url'] = reverse('js_helpers.states')
 
         c = [('', pgettext_lazy('address', 'Select state'))]
         fprefix = self.prefix + '-' if self.prefix else ''
@@ -1083,18 +1107,22 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         )
         self.fields['state'].widget.is_required = True
 
+        self.fields['street'].required = False
+        self.fields['zipcode'].required = False
+        self.fields['city'].required = False
+
         # Without JavaScript the VAT ID field is not hidden, so we empty the field if a country outside the EU is selected.
         if cc and not ask_for_vat_id(cc) and fprefix + 'vat_id' in self.data:
             self.data = self.data.copy()
             del self.data[fprefix + 'vat_id']
 
-        if not event.settings.invoice_address_required or self.all_optional:
+        if not self.address_required or self.all_optional:
             for k, f in self.fields.items():
                 f.required = False
                 f.widget.is_required = False
                 if 'required' in f.widget.attrs:
                     del f.widget.attrs['required']
-        elif event.settings.invoice_address_company_required and not self.all_optional:
+        elif self.company_required and not self.all_optional:
             self.initial['is_business'] = True
 
             self.fields['is_business'].widget = BusinessBooleanRadio(require_business=True)
@@ -1111,11 +1139,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             label=_('Name'),
             initial=self.instance.name_parts,
         )
-        if event.settings.invoice_address_required and not event.settings.invoice_address_company_required and not self.all_optional:
+        if self.address_required and not self.company_required and not self.all_optional:
             if not event.settings.invoice_name_required:
-                self.fields['name_parts'].widget.attrs['data-required-if'] = '#id_is_business_0'
+                self.fields['name_parts'].widget.attrs['data-required-if'] = f'#id_{self.add_prefix("is_business")}_0'
             self.fields['name_parts'].widget.attrs['data-no-required-attr'] = '1'
-            self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
+            self.fields['company'].widget.attrs['data-required-if'] = f'#id_{self.add_prefix("is_business")}_1'
 
         if not event.settings.invoice_address_beneficiary:
             del self.fields['beneficiary']
@@ -1135,16 +1163,19 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             validate_address  # local import to prevent impact on startup time
 
         data = self.cleaned_data
+
         if not data.get('is_business'):
             data['company'] = ''
             data['vat_id'] = ''
         if data.get('is_business') and not ask_for_vat_id(data.get('country')):
             data['vat_id'] = ''
-        if self.event.settings.invoice_address_required:
+        if self.address_validation and self.address_required and not self.all_optional:
             if data.get('is_business') and not data.get('company'):
-                raise ValidationError(_('You need to provide a company name.'))
-            if not data.get('is_business') and not data.get('name_parts'):
+                raise ValidationError({"company": _('You need to provide a company name.')})
+            if not data.get('is_business') and name_parts_is_empty(data.get('name_parts', {})):
                 raise ValidationError(_('You need to provide your name.'))
+            if not data.get('street') and not data.get('zipcode') and not data.get('city'):
+                raise ValidationError({"street": _('This field is required.')})
 
         if 'vat_id' in self.changed_data or not data.get('vat_id'):
             self.instance.vat_id_validated = False
@@ -1156,7 +1187,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         if all(
                 not v for k, v in data.items() if k not in ('is_business', 'country', 'name_parts')
-        ) and len(data.get('name_parts', {})) == 1:
+        ) and name_parts_is_empty(data.get('name_parts', {})):
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
 

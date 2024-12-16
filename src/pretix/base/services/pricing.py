@@ -91,9 +91,11 @@ def get_price(item: Item, variation: ItemVariation = None,
 
         if custom_price_is_net:
             price = tax_rule.tax(max(custom_price, price.net), base_price_is='net', override_tax_rate=price.rate,
+                                 override_tax_code=price.code,
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
         else:
             price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross', override_tax_rate=price.rate,
+                                 override_tax_code=price.code,
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
     else:
         price = tax_rule.tax(price, invoice_address=invoice_address, subtract_from_gross=bundled_sum)
@@ -146,10 +148,12 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
 
         if custom_price_input_is_net:
             price = tax_rule.tax(max(custom_price_input, price.net), base_price_is='net', override_tax_rate=price.rate,
-                                 invoice_address=invoice_address, subtract_from_gross=bundled_sum)
+                                 override_tax_code=price.code, invoice_address=invoice_address,
+                                 subtract_from_gross=bundled_sum)
         else:
             price = tax_rule.tax(max(custom_price_input, price.gross), base_price_is='gross', override_tax_rate=price.rate,
-                                 invoice_address=invoice_address, subtract_from_gross=bundled_sum)
+                                 override_tax_code=price.code, invoice_address=invoice_address,
+                                 subtract_from_gross=bundled_sum)
     else:
         price = tax_rule.tax(price_after_voucher, invoice_address=invoice_address, subtract_from_gross=bundled_sum,
                              base_price_is='gross' if is_bundled else 'auto')

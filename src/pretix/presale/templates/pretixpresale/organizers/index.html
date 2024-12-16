@@ -1,9 +1,11 @@
 {% extends "pretixpresale/organizers/base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load rich_text %}
 {% load tz %}
 {% load eventurl %}
 {% load urlreplace %}
+{% load textbubble %}
 {% load thumb %}
 {% block title %}{% trans "Event list" %}{% endblock %}
 {% block custom_header %}
@@ -51,7 +53,7 @@
         </div>
         {% for e in events %}{% eventurl e "presale:event.index" as url %}
             <div class="row">
-                <div class="col-md-5 col-xs-12">
+                <div class="col-md-4 col-xs-12">
                     <a href="{{ url }}">
                         <strong>
                             {{ e.name }}
@@ -85,52 +87,75 @@
                     {% endif %}
                     <td>
                 </div>
-                <div class="col-md-2 col-xs-6">
+                <div class="col-md-3 col-xs-6">
+                    <small>
                     {% if e.has_subevents %}
-                        <span class="label label-default">{% trans "Event series" %}</span>
+                        {% textbubble "info" icon="bars" %}
+                            {% trans "Event series" %}
+                        {% endtextbubble %}
                     {% elif e.presale_is_running and request.organizer.settings.event_list_availability %}
                         {% if e.best_availability_state == 100 %}
                             {% if e.best_availability_is_low %}
-                                <span class="label label-success-warning">{% trans "Few tickets left" %}</span>
+                                {% textbubble "success-warning" icon="exclamation-triangle" %}
+                                    {% trans "Few tickets left" %}
+                                {% endtextbubble %}
                             {% else %}
-                                {% if e.has_paid_item %}
-                                    <span class="label label-success">{% trans "Buy now" context "available_event_in_list" %}</span>
-                                {% else %}
-                                    <span class="label label-success">{% trans "Book now" %}</span>
-                                {% endif %}
+                                {% textbubble "success" icon="check" %}
+                                    {% if e.has_paid_item %}
+                                        {% trans "Buy now" context "available_event_in_list" %}
+                                    {% else %}
+                                        {% trans "Book now" %}
+                                    {% endif %}
+                                {% endtextbubble %}
                             {% endif %}
                         {% elif e.waiting_list_active and e.best_availability_state >= 0 %}
-                            <span class="label label-warning">{% trans "Waiting list" %}</span>
+                            {% textbubble "warning" icon="ellipsis-h" %}
+                                {% trans "Waiting list" %}
+                            {% endtextbubble %}
                         {% elif e.best_availability_state == 20 %}
-                            <span class="label label-danger">{% trans "Reserved" %}</span>
+                            {% textbubble "danger" icon="minus" %}
+                                {% trans "Reserved" %}
+                            {% endtextbubble %}
                         {% elif e.best_availability_state < 20 %}
-                            {% if e.has_paid_item %}
-                                <span class="label label-danger">{% trans "Sold out" %}</span>
-                            {% else %}
-                                <span class="label label-danger">{% trans "Fully booked" %}</span>
-                            {% endif %}
+                            {% textbubble "danger" icon="times" %}
+                                {% if e.has_paid_item %}
+                                    {% trans "Sold out" %}
+                                {% else %}
+                                    {% trans "Fully booked" %}
+                                {% endif %}
+                            {% endtextbubble %}
                         {% endif %}
                     {% elif e.presale_is_running %}
-                        <span class="label label-success">{% trans "Book now" %}</span>
+                        {% textbubble "success" icon="check" %}
+                            {% trans "Book now" %}
+                        {% endtextbubble %}
                     {% elif e.presale_has_ended %}
-                        <span class="label label-danger">{% trans "Sale over" %}</span>
-                    {% elif e.settings.presale_start_show_date %}
-                        <span class="label label-warning">
-                                {% blocktrans trimmed with date=e.effective_presale_start|date:"SHORT_DATE_FORMAT" %}
+                        {% textbubble "danger" icon="times" %}
+                            {% trans "Sale over" %}
+                        {% endtextbubble %}
+                    {% else %}
+                        {% textbubble "warning" icon="clock-o" %}
+                            {% trans "Not yet on sale" %}
+                        {% endtextbubble %}
+                        {% if e.settings.presale_start_show_date %}
+                            <br><span class="text-muted">
+                            {% with date_iso=e.effective_presale_start.isoformat date_human=e.effective_presale_start|date:"SHORT_DATE_FORMAT" %}
+                                {% blocktrans trimmed with date='<time datetime="'|add:date_iso|add:'">'|add:date_human|add:"</time>"|safe %}
                                     Sale starts {{ date }}
                                 {% endblocktrans %}
+                            {% endwith %}
                             </span>
-                    {% else %}
-                        <span class="label label-warning">{% trans "Not yet on sale" %}</span>
+                        {% endif %}
                     {% endif %}
+                    </small>
                 </div>
                 <div class="col-md-2 col-xs-6 text-right flip">
                     <a class="btn btn-primary btn-block" href="{{ url }}{% if e.has_subevents and e.match_by_subevents %}{{ filterquery }}{% endif %}">
-                        {% if e.has_subevents %}<span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Tickets" %}
+                        {% if e.has_subevents %}{% icon "ticket" %} {% trans "Tickets" %}
                         {% elif e.presale_is_running and e.best_availability_state == 100 %}
-                            <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Tickets" %}
+                            {% icon "ticket" %} {% trans "Tickets" %}
                         {% else %}
-                            <span class="fa fa-info" aria-hidden="true"></span> {% trans "More info" %}
+                            {% icon "info" %} {% trans "More info" %}
                         {% endif %}
                     </a>
                 </div>

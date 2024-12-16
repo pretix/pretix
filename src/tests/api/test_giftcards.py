@@ -151,6 +151,7 @@ def test_giftcard_detail_expand(token_client, organizer, event, giftcard):
         "voucher_budget_use": None,
         "tax_rate": "0.00",
         "tax_value": "0.00",
+        "tax_code": None,
         "secret": op.secret,
         "addon_to": None,
         "subevent": None,

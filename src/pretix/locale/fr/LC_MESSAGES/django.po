@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-27 03:00+0000\n"
+"PO-Revision-Date: 2024-12-03 20:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -8954,7 +8954,7 @@ msgstr "Nombre maximum d'articles par commande"
 
 #: pretix/base/settings.py:316
 msgid "Add-on products will not be counted."
-msgstr "Les Add-Ons ne seront pas pris en compte."
+msgstr "Les Add-Ons e sont pas comptabilisés."
 
 #: pretix/base/settings.py:325
 msgid ""
@@ -9966,7 +9966,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1520
 msgid "Allow users to download tickets"
-msgstr "Autoriser les utilisateurs à télécharger des billets"
+msgstr "Autoriser les utilisateurs à télécharger les billets"
 
 #: pretix/base/settings.py:1521
 msgid "If this is off, nobody can download a ticket."
@@ -18254,7 +18254,7 @@ msgstr "Voir tous les événements récents"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:65
 msgid "Your event series"
-msgstr "Votre série d'événements"
+msgstr "Vos séries d'événements"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:81
 msgid "View all event series"
@@ -20630,17 +20630,16 @@ msgid ""
 "product. You can also specify the minimum and maximum number of add-ons of "
 "the given category that can or need to be chosen."
 msgstr ""
-"Avec les modules complémentaires, vous pouvez spécifier des produits qui "
-"peuvent être achetés en complément de ce produit. Par exemple, si vous "
-"organisez une conférence avec un ticket de conférence de base et un certain "
-"nombre d’ateliers, vous pouvez définir les ateliers comme des modules "
-"complémentaires au ticket de conférence. Avec cette configuration, les "
-"ateliers ne peuvent pas être achetés seuls, mais uniquement en combinaison "
-"avec un billet de conférence. Vous pouvez spécifier ici des catégories de "
-"produits qui peuvent être utilisés comme modules complémentaires à ce "
-"produit. Vous pouvez également spécifier le nombre minimal et maximal de "
-"modules complémentaires de la catégorie donnée qui peuvent ou doivent être "
-"choisis."
+"Avec les add-ons, vous pouvez spécifier des produits qui peuvent être "
+"achetés en complément de ce produit. Par exemple, si vous organisez une "
+"conférence avec un ticket de conférence de base et un certain nombre d’"
+"ateliers, vous pouvez définir les ateliers comme des modules complémentaires "
+"au ticket de conférence. Avec cette configuration, les ateliers ne peuvent "
+"pas être achetés seuls, mais uniquement en combinaison avec un billet de "
+"conférence. Vous pouvez spécifier ici des catégories de produits qui peuvent "
+"être utilisés comme modules complémentaires à ce produit. Vous pouvez "
+"également spécifier le nombre minimal et maximal de modules complémentaires "
+"de la catégorie donnée qui peuvent ou doivent être choisis."
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:28
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:62
@@ -31762,7 +31761,7 @@ msgstr "Désolé, une erreur s’est produite dans le processus de paiement."
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
 msgid "PDF ticket output"
-msgstr "Sortie du ticket PDF"
+msgstr "Génération de billets au format PDF"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:52
 msgid ""

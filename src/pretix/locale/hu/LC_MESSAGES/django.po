@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-19 15:34+0000\n"
-"PO-Revision-Date: 2024-11-27 03:00+0000\n"
+"PO-Revision-Date: 2024-12-10 06:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -2796,12 +2796,9 @@ msgid "Reusable media"
 msgstr ""
 
 #: pretix/base/exporters/reusablemedia.py:35
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgctxt "export_category"
 msgid "Reusable media"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/base/exporters/reusablemedia.py:36
 msgid ""
@@ -3572,11 +3569,8 @@ msgid "Invalid option selected."
 msgstr ""
 
 #: pretix/base/modelimport_orders.py:658 pretix/base/modelimport_orders.py:666
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Ambiguous option selected."
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/base/modelimport_orders.py:697 pretix/base/models/orders.py:238
 #: pretix/control/forms/orders.py:686 pretix/control/forms/organizer.py:795
@@ -8262,11 +8256,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:190
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Activate re-usable media"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/base/settings.py:191
 msgid ""
@@ -12857,11 +12848,8 @@ msgid "Device status"
 msgstr ""
 
 #: pretix/control/forms/filter.py:2621
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Active devices"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/control/forms/filter.py:2622
 msgid "Revoked devices"
@@ -13891,11 +13879,8 @@ msgid "Organizer short name"
 msgstr "Szervező rövidített név"
 
 #: pretix/control/forms/organizer.py:1092
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Allow access to reusable media"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/control/forms/organizer.py:1093
 msgid ""
@@ -20970,11 +20955,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:291
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Select action"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:312
 #: pretix/control/views/orders.py:335
@@ -21401,11 +21383,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:188
 #: pretix/control/templates/pretixcontrol/subevents/index.html:211
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Edit selected"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:12
 msgid "Organizer settings"
@@ -22746,18 +22725,12 @@ msgid "Delete selected"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:214
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Activate selected"
-msgstr "Nincs dátum kiválasztva."
+msgstr "Aktiválás"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:217
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Deactivate selected"
-msgstr "Nincs dátum kiválasztva."
+msgstr "Deaktiválás"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -25706,11 +25679,8 @@ msgid "Badge layout: %(name)s"
 msgstr ""
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:26
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Save & continue"
-msgstr "Nincs dátum kiválasztva."
+msgstr "Mentés és folytatás"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
@@ -28628,7 +28598,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "Az összeg a kártyádról kerül levonásra."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
@@ -29906,12 +29876,9 @@ msgstr "%(item)s, %(var)s hozzáadása a kosárhoz"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:370
 #: pretix/presale/templates/pretixpresale/event/voucher.html:231
 #: pretix/presale/templates/pretixpresale/event/voucher.html:385
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgctxt "checkbox"
 msgid "Select"
-msgstr "Nincs dátum kiválasztva."
+msgstr "Kiválaszt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:205
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:350
@@ -31427,11 +31394,8 @@ msgid "Social features"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:114
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Save selection"
-msgstr "Nincs dátum kiválasztva."
+msgstr "Kijelölés mentése"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -31629,7 +31593,7 @@ msgstr "Következő események megjelenítése"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:144
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "Nincs nyílvános következő esemény."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:144
 msgid "Show past events"
@@ -31758,7 +31722,7 @@ msgstr "Ismeretlen eseménykód vagy nincs jogod az eseményhez."
 #: pretix/presale/views/event.py:902
 msgctxt "subevent"
 msgid "No date selected."
-msgstr "Nincs dátum kiválasztva."
+msgstr "Nincs időpont kiválasztva."
 
 #: pretix/presale/views/event.py:905
 msgctxt "subevent"

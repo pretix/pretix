@@ -50,7 +50,7 @@ def item2(event2):
 
 @pytest.fixture
 def taxrule(event):
-    return event.tax_rules.create(rate=Decimal('19.00'))
+    return event.tax_rules.create(rate=Decimal('19.00'), code="S/standard")
 
 
 @pytest.fixture
@@ -111,9 +111,9 @@ def order(event, item, device, taxrule, question):
             amount=Decimal('23.00'),
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
-                      tax_value=Decimal('0.05'), tax_rule=taxrule)
+                      tax_value=Decimal('0.05'), tax_rule=taxrule, tax_code=taxrule.code)
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
-                      tax_value=Decimal('0.05'), tax_rule=taxrule, canceled=True)
+                      tax_value=Decimal('0.05'), tax_rule=taxrule, tax_code=taxrule.code, canceled=True)
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'),
                                       vat_id="DE123", vat_id_validated=True, custom_field="Custom info")
         op = OrderPosition.objects.create(
@@ -196,6 +196,7 @@ TEST_ORDERPOSITION_RES = {
     "tax_rate": "0.00",
     "tax_value": "0.00",
     "tax_rule": None,
+    "tax_code": None,
     "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
     "addon_to": None,
     "pseudonymization_id": "ABCDEFGHKL",
@@ -297,6 +298,7 @@ TEST_ORDER_RES = {
             "description": "",
             "internal_type": "",
             "tax_rate": "19.00",
+            "tax_code": "S/standard",
             "tax_value": "0.05"
         }
     ],
@@ -1967,7 +1969,7 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     assert not resp.data['positions'][0].get('pdf_data')
 
     # order list
-    with django_assert_max_num_queries(31):
+    with django_assert_max_num_queries(32):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
@@ -1982,7 +1984,7 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     assert not resp.data['results'][0]['positions'][0].get('pdf_data')
 
     # position list
-    with django_assert_max_num_queries(34):
+    with django_assert_max_num_queries(35):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))

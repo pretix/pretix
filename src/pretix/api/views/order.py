@@ -35,6 +35,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils import formats
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
@@ -67,6 +68,7 @@ from pretix.api.serializers.orderchange import (
     OrderPositionInfoPatchSerializer,
 )
 from pretix.api.views import RichOrderingFilter
+from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
@@ -97,7 +99,6 @@ from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     order_modified, order_paid, order_placed, register_ticket_outputs,
 )
-from pretix.base.templatetags.money import money_filter
 from pretix.control.signals import order_search_filter_q
 from pretix.helpers import OF_SELF
 
@@ -1228,9 +1229,10 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         price = get_price(**kwargs)
         tr = kwargs.get('tax_rule', kwargs.get('item').tax_rule)
         with language(data.get('locale') or self.request.event.settings.locale, self.request.event.settings.region):
+            gross_formatted = formats.localize_input(round_decimal(price.gross, self.request.event.currency))
             return Response({
                 'gross': price.gross,
-                'gross_formatted': money_filter(price.gross, self.request.event.currency, hide_currency=True),
+                'gross_formatted': gross_formatted,
                 'net': price.net,
                 'rate': price.rate,
                 'name': str(price.name),

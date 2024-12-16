@@ -243,6 +243,11 @@ function setup_basics(el) {
             $($(this).attr("data-target")).collapse('show');
         }
     });
+    $("fieldset.accordion-panel > legend input[type=radio]").change(function() {
+        $(this).closest("fieldset").siblings("fieldset").prop('disabled', true).children('.panel-body').slideUp();
+        $(this).closest("fieldset").prop('disabled', false).children('.panel-body').slideDown();
+    }).filter(':not(:checked)').each(function() { $(this).closest("fieldset").prop('disabled', true).children('.panel-body').hide(); });
+
     el.find(".js-only").removeClass("js-only");
     el.find(".js-hidden").hide();
 
@@ -459,10 +464,26 @@ $(function () {
         .on("change mouseup keyup", update_cart_form);
 
     $(".table-calendar td.has-events").click(function () {
-        var $tr = $(this).closest(".table-calendar").find(".selected-day");
-        $tr.find("td").html($(this).find(".events").clone());
-        $tr.find("td").prepend($("<h3>").text($(this).attr("data-date")));
-        $tr.removeClass("hidden");
+        var $grid = $(this).closest("[role='grid']");
+        $grid.find("[aria-selected]").attr("aria-selected", false);
+        $(this).attr("aria-selected", true);
+        $("#selected-day")
+            .html($(this).find(".events").clone())
+            .prepend($("<h3>").text($(this).attr("data-date")));
+    }).each(function() {
+        // check all events classes and set the "winning" class for the availability of the day-label on mobile
+        var $dayLabel = $('.day-label', this);
+        if ($('.available.low', this).length == $('.available', this).length) {
+            $dayLabel.addClass('low');
+        }
+        var classes = ['available', 'waitinglist', 'soon', 'reserved', 'soldout', 'continued', 'over'];
+        for (var c of classes) {
+            if ($('.'+c, this).length) {
+                $dayLabel.addClass(c);
+                // CAREFUL: „return“ as „break“ is not supported before ES2015 and breaks e.g. on iOS 15
+                return;
+            }
+        }
     });
 
     $(".print-this-page").on("click", function (e) {
@@ -515,65 +536,6 @@ $(function () {
         update();
         dependency.closest('.form-group, form').find('input[name=' + dependency.attr("name") + '], select[name=' + dependency.attr("name") + ']').on("change", update);
         dependency.closest('.form-group, form').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
-    });
-
-    $("input[name$=vat_id][data-countries-with-vat-id]").each(function () {
-        var dependent = $(this),
-            dependency_country = $(this).closest(".panel-body, form").find('select[name$=country]'),
-            dependency_id_is_business_1 = $(this).closest(".panel-body, form").find('input[id$=id_is_business_1]'),
-            update = function (ev) {
-                if (dependency_id_is_business_1.length && !dependency_id_is_business_1.prop("checked")) {
-                    dependent.closest(".form-group").hide();
-                } else if (dependent.attr('data-countries-with-vat-id').split(',').includes(dependency_country.val())) {
-                    dependent.closest(".form-group").show();
-                } else {
-                    dependent.closest(".form-group").hide();
-                }
-            };
-        update();
-        dependency_country.on("change", update);
-        dependency_id_is_business_1.on("change", update);
-    });
-
-    $("select[name$=state]").each(function () {
-        var dependent = $(this),
-            counter = 0,
-            dependency = $(this).closest(".panel-body, form").find('select[name$=country]'),
-            update = function (ev) {
-                counter++;
-                var curCounter = counter;
-                dependent.prop("disabled", true);
-                dependency.closest(".form-group").find("label").prepend("<span class='fa fa-cog fa-spin'></span> ");
-                $.getJSON('/js_helpers/states/?country=' + dependency.val(), function (data) {
-                    if (counter > curCounter) {
-                        return;  // Lost race
-                    }
-                    var selected_value = dependent.prop("data-selected-value");
-                    dependent.find("option").filter(function (t) {return !!$(this).attr("value")}).remove();
-                    if (data.data.length > 0) {
-                        $.each(data.data, function (k, s) {
-                            var o = $("<option>").attr("value", s.code).text(s.name);
-                            if (s.code == selected_value || (selected_value && selected_value.indexOf && selected_value.indexOf(s.code) > -1)) {
-                                o.prop("selected", true);
-                            }
-                            dependent.append(o);
-                        });
-                        dependent.closest(".form-group").show();
-                        dependent.prop('required', dependency.prop("required"));
-                    } else {
-                        dependent.closest(".form-group").hide();
-                        dependent.prop("required", false);
-                    }
-                    dependent.prop("disabled", false);
-                    dependency.closest(".form-group").find("label .fa-spin").remove();
-                });
-            };
-        if (dependent.find("option").length === 1) {
-            dependent.closest(".form-group").hide();
-        } else {
-            dependent.prop('required', dependency.prop("required"));
-        }
-        dependency.on("change", update);
     });
 
     form_handlers($("body"));

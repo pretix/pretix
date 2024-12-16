@@ -97,10 +97,10 @@ dependencies = [
   "text-unidecode==1.*",
   "tlds>=2020041600",
   "tqdm==4.*",
-  "ua-parser==0.18.*",
+  "ua-parser==1.0.*",
   "vat_moss_forked==2020.3.20.0.11.0",
   "vobject==0.9.*",
-  "webauthn==2.2.*",
+  "webauthn==2.4.*",
   "zeep==4.3.*"
 ]
 

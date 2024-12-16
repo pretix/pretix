@@ -1992,6 +1992,7 @@ class OrderChangeManagerTests(TestCase):
         assert nop.tax_value == Decimal('0.00')
         assert self.order.total == self.op1.price + self.op2.price + nop.price
         assert nop.positionid == 3
+        assert self.order.transactions.filter(item=self.shirt).last().tax_code == "AE"
 
     @classscope(attr='o')
     def test_add_item_custom_price(self):
@@ -2216,7 +2217,7 @@ class OrderChangeManagerTests(TestCase):
 
         self._enable_reverse_charge()
         self.tr7.custom_rules = json.dumps([
-            {'country': 'AT', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+            {'country': 'AT', 'address_type': '', 'action': 'vat', 'rate': '100.00', 'code': 'S/reduced'}
         ])
         self.tr7.save()
 
@@ -2230,6 +2231,7 @@ class OrderChangeManagerTests(TestCase):
 
         assert self.order.total == Decimal('86.00') + fee.value
         assert self.order.transactions.count() == 7
+        assert self.order.transactions.filter(item=op.item).last().tax_code == "S/reduced"
 
     @classscope(attr='o')
     def test_recalculate_country_rate_keep_gross(self):
@@ -3270,6 +3272,7 @@ class OrderChangeManagerTests(TestCase):
         nop = self.order.positions.first()
         nop.tax_value = Decimal('0.00')
         nop.tax_rate = Decimal('0.00')
+        nop.tax_code = None
         nop.save()
         InvoiceAddress.objects.create(
             order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,

@@ -133,6 +133,7 @@ class InvoiceAddressForm(BaseInvoiceAddressForm):
 
 
 class InvoiceNameForm(InvoiceAddressForm):
+    address_validation = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

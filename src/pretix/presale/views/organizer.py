@@ -71,7 +71,7 @@ from pretix.helpers.formats.en.formats import (
 )
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.thumb import get_thumbnail
-from pretix.multidomain.urlreverse import eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.organizer import EventListFilterForm
 from pretix.presale.ical import get_public_ical
 from pretix.presale.views import OrganizerViewMixin
@@ -1305,3 +1305,8 @@ class OrganizerFavicon(View):
             return redirect_to_url(get_thumbnail(icon_file, '32x32^', formats=settings.PILLOW_FORMATS_QUESTIONS_FAVICON).thumb.url)
         else:
             return redirect_to_url(static("pretixbase/img/favicon.ico"))
+
+
+class RedirectToOrganizerIndex(View):
+    def get(self, *args, **kwargs):
+        return redirect_to_url(build_absolute_uri(self.request.organizer, "presale:organizer.index"))

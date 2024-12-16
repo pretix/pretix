@@ -632,7 +632,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['subevent_list_cache_key'] = self._subevent_list_cachekey()
 
         context['show_cart'] = (
-            context['cart']['positions'] and (
+            (context['cart']['positions'] or context['cart'].get('current_selected_payments')) and (
                 self.request.event.has_subevents or self.request.event.presale_is_running
             )
         )

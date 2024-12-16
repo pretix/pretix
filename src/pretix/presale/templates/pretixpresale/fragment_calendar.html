@@ -2,7 +2,7 @@
 {% load date_fast %}
 {% load calendarhead %}
 <div class="table-responsive">
-    <table class="table table-calendar">
+    <table class="table table-calendar" role="grid">
         <caption class="sr-only">{% trans "Calendar" %}</caption>
         <thead>
         <tr>
@@ -18,7 +18,26 @@
                     {% if day %}
                         <td class="day {% if day.events %}has-events{% else %}no-events{% endif %}"
                             data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}">
-                            <p><time datetime="{{ day.date|date_fast:"Y-m-d" }}">{{ day.day }}</time></p>
+                            <p>
+                            {% if day.events %}
+                                <a href="#selected-day" class="day-label event hidden-sm hidden-md hidden-lg">
+                                    <b aria-hidden="true">{{ day.day }}</b>
+                                    <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="sr-only">
+                                        {{ day.date|date_fast:"SHORT_DATE_FORMAT" }}
+                                    </time>
+                                    <span class="sr-only">
+                                        ({% blocktrans trimmed count count=day.events|length %}
+                                            {{ count }} event
+                                        {% plural %}
+                                            {{ count }} events
+                                        {% endblocktrans %})
+                                    </span>
+                                </a>
+                                <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="hidden-xs">{{ day.day }}</time>
+                            {% else %}
+                                <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="day-label">{{ day.day }}</time>
+                            {% endif %}
+                            </p>
                             <ul class="events">
                                 {% for event in day.events %}
                                     <li><a class="event {% if event.continued %}continued{% endif %} {% spaceless %}
@@ -111,9 +130,7 @@
                 {% endfor %}
             </tr>
         {% endfor %}
-        <tr class="selected-day hidden">
-            <td colspan="7"></td>
-        </tr>
         </tbody>
     </table>
+    <div id="selected-day" aria-live="polite" class="table-calendar hidden-sm hidden-md hidden-lg"></div>
 </div>

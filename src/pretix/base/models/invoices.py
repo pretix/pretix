@@ -362,6 +362,7 @@ class InvoiceLine(models.Model):
     tax_value = models.DecimalField(max_digits=13, decimal_places=2, default=Decimal('0.00'))
     tax_rate = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal('0.00'))
     tax_name = models.CharField(max_length=190)
+    tax_code = models.CharField(max_length=190, null=True, blank=True)
     subevent = models.ForeignKey('SubEvent', null=True, blank=True, on_delete=models.PROTECT)
     event_date_from = models.DateTimeField(null=True)
     event_date_to = models.DateTimeField(null=True)

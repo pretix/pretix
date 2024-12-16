@@ -2306,6 +2306,25 @@ class CartTest(CartTestMixin, TestCase):
             assert cp1.voucher is None
             assert cp2.voucher is None
 
+    def test_voucher_apply_is_a_giftcard(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=8, expires=now() + timedelta(minutes=10),
+            )
+            gc = self.orga.issued_gift_cards.create(secret="GIFTCARD", currency=self.event.currency)
+            gc.transactions.create(value=Decimal("12.24"), acceptor=self.orga)
+
+        html = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': 'GIFTCARD',
+        }, follow=True)
+        assert "alert-success" in html.rendered_content
+        assert "€12.24" in html.rendered_content
+
     def test_discount(self):
         with scopes_disabled():
             Discount.objects.create(event=self.event, condition_min_count=2, benefit_discount_matching_percent=20,

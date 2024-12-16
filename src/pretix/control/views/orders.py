@@ -134,7 +134,7 @@ from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
 from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
-from pretix.helpers.format import format_map
+from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
 
@@ -2351,7 +2351,7 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                 'subject': mark_safe(_('Subject: {subject}').format(
                     subject=prefix_subject(order.event, escape(email_subject), highlight=True)
                 )),
-                'html': markdown_compile_email(email_content)
+                'html': format_map(markdown_compile_email(email_content), email_context, mode=SafeFormatter.MODE_RICH_TO_HTML)
             }
             return self.get(self.request, *self.args, **self.kwargs)
         else:

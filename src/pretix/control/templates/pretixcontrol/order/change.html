@@ -202,6 +202,12 @@
                                         + {{ position.tax_rate }}%)
                                     </small>
                                 {% endif %}
+                                {% if position.tax_code %}
+                                    <br>
+                                    <small>
+                                        {{ position.get_tax_code_display }}
+                                    </small>
+                                {% endif %}
                             </div>
                             <div class="col-sm-4 field-container">
                                 {% bootstrap_field position.form.price addon_after=request.event.currency layout='inline' %}
@@ -418,6 +424,12 @@
                                     <small>
                                         ({{ fee.net_value|money:request.event.currency }}
                                         + {{ fee.tax_rate }}%)
+                                    </small>
+                                {% endif %}
+                                {% if fee.tax_code %}
+                                    <br>
+                                    <small>
+                                        {{ fee.get_tax_code_display }}
                                     </small>
                                 {% endif %}
                             </div>

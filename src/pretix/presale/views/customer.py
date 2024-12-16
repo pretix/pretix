@@ -77,7 +77,7 @@ class RedirectBackMixin:
             self.redirect_field_name,
             self.request.GET.get(self.redirect_field_name, '')
         )
-        hosts = list(KnownDomain.objects.filter(event__organizer=self.request.organizer).values_list('domainname', flat=True))
+        hosts = list(KnownDomain.objects.filter(organizer=self.request.organizer).values_list('domainname', flat=True))
         siteurlsplit = urlsplit(settings.SITE_URL)
         if siteurlsplit.port and siteurlsplit.port not in (80, 443):
             hosts = ['%s:%d' % (h, siteurlsplit.port) for h in hosts]
@@ -168,7 +168,7 @@ class LogoutView(View):
         return HttpResponseRedirect(next_page)
 
     def get_next_page(self):
-        if getattr(self.request, 'event_domain', False):
+        if getattr(self.request, 'domain_mode', 'system') in (KnownDomain.MODE_ORG_ALT_DOMAIN, KnownDomain.MODE_EVENT_DOMAIN):
             # After we cleared the cookies on this domain, redirect to the parent domain to clear cookies as well
             next_page = eventreverse(self.request.organizer, 'presale:organizer.customer.logout', kwargs={})
             if self.redirect_field_name in self.request.POST or self.redirect_field_name in self.request.GET:
@@ -188,7 +188,7 @@ class LogoutView(View):
                     self.redirect_field_name,
                     self.request.GET.get(self.redirect_field_name)
                 )
-                hosts = list(KnownDomain.objects.filter(event__organizer=self.request.organizer).values_list('domainname', flat=True))
+                hosts = list(KnownDomain.objects.filter(organizer=self.request.organizer).values_list('domainname', flat=True))
                 siteurlsplit = urlsplit(settings.SITE_URL)
                 if siteurlsplit.port and siteurlsplit.port not in (80, 443):
                     hosts = ['%s:%d' % (h, siteurlsplit.port) for h in hosts]
