@@ -2012,9 +2012,9 @@ var create_overlay = function (app) {
             frame_shown: function (newValue) {
                 if (newValue) {
                     this.prevActiveElement = document.activeElement;
-                    var btn = this.parent.$root.overlay.$children[0].$refs['frame-container'].querySelector(".pretix-widget-frame-close button");
+                    var btn = this.$el?.querySelector(".pretix-widget-frame-close a");
                     this.$nextTick(function () {
-                        btn.focus();
+                        btn?.focus();
                     });
                 } else {
                     this.prevActiveElement?.focus();
