@@ -2006,8 +2006,12 @@ var create_overlay = function (app) {
         },
         watch: {
             frame_src: function (newValue) {
-                var iframe = this.$el?.querySelector("iframe");
-                if (iframe) iframe.src = newValue;
+                this.$el.querySelector("iframe").src = newValue;
+            },
+            frame_loading: function (newValue) {
+                if (newValue) {
+                    this.$el.querySelector("iframe").src = this.frame_src;
+                }
             },
             frame_shown: function (newValue) {
                 if (newValue) {
