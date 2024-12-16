@@ -821,7 +821,7 @@ var shared_iframe_fragment = (
 );
 
 var shared_alert_fragment = (
-    '<div :class="alertClasses" role="dialog" aria-modal="true">'
+    '<div :class="alertClasses" role="dialog" aria-modal="true" aria-live="polite">'
     + '<transition name="bounce">'
     + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
     + '<p>{{ $root.error_message }}</p>'
