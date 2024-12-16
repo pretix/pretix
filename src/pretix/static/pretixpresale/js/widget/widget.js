@@ -676,7 +676,6 @@ var shared_methods = {
     },
     buy_callback: function (data) {
         if (data.redirect) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             if (data.cart_id) {
                 this.$root.cart_id = data.cart_id;
                 setCookie(this.$root.cookieName, data.cart_id, 30);
@@ -701,7 +700,7 @@ var shared_methods = {
                 }
                 this.$root.overlay.frame_loading = false;
             } else {
-                iframe.src = url;
+                this.$root.overlay.frame_src = url;
             }
         } else {
             this.async_task_id = data.async_id;
@@ -740,9 +739,8 @@ var shared_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
-        var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
         this.$root.overlay.frame_loading = true;
-        iframe.src = redirect_url;
+        this.$root.overlay.frame_src = redirect_url;
     },
     voucher_open: function (voucher) {
         var redirect_url;
@@ -754,9 +752,8 @@ var shared_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
+            this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
         }
@@ -779,9 +776,8 @@ var shared_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
+            this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
         }
@@ -919,8 +915,7 @@ Vue.component('pretix-overlay', {
                 window.open(this.$root.error_url_after);
                 return;
             }
-            var iframe = this.$refs['frame-container'].querySelector("iframe");
-            iframe.src = this.$root.error_url_after;
+            this.$root.overlay.frame_src = this.$root.error_url_after;
             this.$root.frame_loading = true;
             this.$root.error_message = null;
             this.$root.error_url_after = null;
@@ -1674,8 +1669,8 @@ var shared_root_methods = {
             } else {
                 url += '?iframe=1';
             }
-            this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe").src = url;
             this.$root.overlay.frame_loading = true;
+            this.$root.overlay.frame_src = url;
         } else {
             event.target.href = url;
             return;
@@ -1838,9 +1833,8 @@ var shared_root_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
+            this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
         }
@@ -1864,9 +1858,8 @@ var shared_root_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].querySelector("iframe");
             this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
+            this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
         }
@@ -2006,9 +1999,16 @@ var create_overlay = function (app) {
                 prevActiveElement: null,
             }
         },
+        props: {
+            frame_src: String,
+        },
         methods: {
         },
         watch: {
+            frame_src: function (newValue) {
+                var iframe = this.$el?.querySelector("iframe");
+                if (iframe) iframe.src = newValue;
+            },
             frame_shown: function (newValue) {
                 if (newValue) {
                     this.prevActiveElement = document.activeElement;
