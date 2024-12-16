@@ -100,7 +100,7 @@ class MarkdownTextarea(forms.Textarea):
 
 
 class I18nMarkdownTextarea(i18nfield.forms.I18nTextarea):
-    def format_output(self, rendered_widgets) -> str:
+    def format_output(self, rendered_widgets, id_) -> str:
         rendered_widgets = rendered_widgets + [
             '<div class="i18n-field-markdown-note">%s</div>' % (
                 _("You can use {markup_name} in this field.").format(
@@ -108,11 +108,11 @@ class I18nMarkdownTextarea(i18nfield.forms.I18nTextarea):
                 )
             )
         ]
-        return super().format_output(rendered_widgets)
+        return super().format_output(rendered_widgets, id_)
 
 
 class I18nMarkdownTextInput(i18nfield.forms.I18nTextInput):
-    def format_output(self, rendered_widgets) -> str:
+    def format_output(self, rendered_widgets, id_) -> str:
         rendered_widgets = rendered_widgets + [
             '<div class="i18n-field-markdown-note">%s</div>' % (
                 _("You can use {markup_name} in this field.").format(
@@ -120,7 +120,7 @@ class I18nMarkdownTextInput(i18nfield.forms.I18nTextInput):
                 )
             )
         ]
-        return super().format_output(rendered_widgets)
+        return super().format_output(rendered_widgets, id_)
 
 
 SECRET_REDACTED = '*****'
