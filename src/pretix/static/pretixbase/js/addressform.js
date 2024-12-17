@@ -34,10 +34,17 @@ $(function () {
                     }
                     for(var k in dependents) {
                         const options = data[k],
-                            dependent = dependents[k],
-                            visible = 'visible' in options ? options.visible : true,
-                            required = 'required' in options && options.required && isRequired && visible;
+                            dependent = dependents[k];
+                        let visible = 'visible' in options ? options.visible : true;
 
+                        if (dependent.is("[data-display-dependency]")) {
+                            const dependency = $(dependent.attr("data-display-dependency"));
+                            visible = visible && (
+                                (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val()
+                            );
+                        }
+
+                        const required = 'required' in options && options.required && isRequired && visible;
                         dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
                         dependent.prop("required", required);
                     }
