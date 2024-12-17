@@ -55,6 +55,7 @@ class LogEntryTypeRegistry(EventPluginRegistry):
         def reg(clz):
             for action_type, plain in data.items():
                 self.register(clz(action_type=action_type, plain=plain))
+            return clz
         return reg
 
 
