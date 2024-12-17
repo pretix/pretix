@@ -220,32 +220,110 @@ class DeprecatedSignal(django.dispatch.Signal):
 
 
 class Registry:
+    """
+    A Registry is a collection of objects (entries), annotated with metadata. Entries can be searched and filtered by
+    metadata keys, and metadata is returned as part of the result.
+
+    Entry metadata is generated during registration using to the accessor functions given to the Registry
+    constructor.
+
+    Example:
+
+    .. code-block:: python
+
+        animal_sound_registry = Registry({"animal": lambda s: s.animal})
+
+        @animal_sound_registry.new("dog", "woof")
+        @animal_sound_registry.new("cricket", "chirp")
+        class AnimalSound:
+            def __init__(self, animal, sound):
+                self.animal = animal
+                self.sound = sound
+
+            def make_sound(self):
+                return self.sound
+
+        @animal_sound_registry.new()
+        class CatSound(AnimalSound):
+            def __init__(self):
+                super().__init__(animal="cat", sound=["meow", "meww", "miaou"])
+
+            def make_sound(self):
+                return random.choice(self.sound)
+    """
+
     def __init__(self, keys):
-        self.registered_items = list()
+        """
+        :param keys: dictionary {key: accessor_function}
+                     When a new entry is registered, all accessor functions are called with the new entry as parameter.
+                     Their return value is stored as the metadata value for that key.
+        """
+        self.registered_entries = list()
         self.keys = keys
         self.by_key = {key: {} for key in self.keys.keys()}
 
     def register(self, *objs):
+        """
+        Register one or more entries in this registry.
+
+        Usable as a regular method or as decorator on a class or function. If used on a class, the class type object
+        itself is registered, not an instance of the class. To register an instance, use the ``new`` method.
+
+        .. code-block:: python
+
+            @some_registry.register
+            def my_new_entry(foo):
+              # ...
+        """
         for obj in objs:
             meta = {k: accessor(obj) for k, accessor in self.keys.items()}
             tup = (obj, meta)
-            for key, accessor in self.keys.items():
-                self.by_key[key][accessor(obj)] = tup
-            self.registered_items.append(tup)
+            for key, value in meta.items():
+                self.by_key[key][value] = tup
+            self.registered_entries.append(tup)
 
     def new(self, *args, **kwargs):
+        """
+        Instantiate the decorated class with the given *args and **kwargs, and register the instance in this registry.
+        May be used multiple times.
+
+        .. code-block:: python
+
+            @animal_sound_registry.new("meow")
+            @animal_sound_registry.new("woof")
+            class AnimalSound:
+              def __init__(self, sound):
+                # ...
+        """
         def reg(clz):
             obj = clz(*args, **kwargs)
             self.register(obj)
             return clz
         return reg
 
-    def find(self, **kwargs):
+    def get(self, **kwargs):
         (key, value), = kwargs.items()
         return self.by_key.get(key).get(value, (None, None))
 
+    def filter(self, **kwargs):
+        return ((entry, meta)
+                for entry, meta in self.registered_entries
+                if all(value == meta[key] for key, value in kwargs.items())
+                )
+
 
 class EventPluginRegistry(Registry):
+    """
+    A Registry which automatically annotates entries with a "plugin" key, specifying which plugin
+    the entry is defined in. This allows the consumer of entries to determine whether an entry is
+    enabled for a given event, or filter only for entries defined by enabled plugins.
+
+    .. code-block:: python
+
+        logtype, meta = my_registry.find(action_type="foo.bar.baz")
+        # meta["plugin"] contains the django app name of the defining plugin
+    """
+
     def __init__(self, keys):
         super().__init__({"plugin": lambda o: get_defining_app(o), **keys})
 

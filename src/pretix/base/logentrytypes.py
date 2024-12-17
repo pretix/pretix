@@ -33,16 +33,45 @@ def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
 
 class LogEntryTypeRegistry(EventPluginRegistry):
     def new_from_dict(self, data):
+        """
+        Register multiple instance of a LogEntryType class with different action_type
+        and plain text strings, as given by the items of the specified data dictionary.
+
+        This method is designed to be used as a decorator as follows:
+
+        .. code-block:: python
+
+            @log_entry_types.new_from_dict({
+                'pretix.event.item.added': _('The product has been created.'),
+                'pretix.event.item.changed': _('The product has been changed.'),
+                # ...
+            })
+            class CoreItemLogEntryType(ItemLogEntryType):
+                # ...
+
+        :param data: action types and descriptions
+                     ``{"some_action_type": "Plain text description", ...}``
+        """
         def reg(clz):
             for action_type, plain in data.items():
                 self.register(clz(action_type=action_type, plain=plain))
         return reg
 
 
+"""
+Registry for LogEntry types.
+
+Each entry in this registry should be an instance of a subclass of ``LogEntryType``.
+They are annotated with their ``action_type`` and the defining ``plugin``.
+"""
 log_entry_types = LogEntryTypeRegistry({'action_type': lambda o: getattr(o, 'action_type')})
 
 
 class LogEntryType:
+    """
+    Base class for a type of LogEntry, identified by its action_type.
+    """
+
     def __init__(self, action_type=None, plain=None):
         assert self.__module__ != LogEntryType.__module__  # must not instantiate base classes, only derived ones
         if action_type:
@@ -51,6 +80,11 @@ class LogEntryType:
             self.plain = plain
 
     def display(self, logentry):
+        """
+        Returns the message to be displayed for a given logentry of this type.
+
+        :return: `str` or `LazyI18nString`
+        """
         if hasattr(self, 'plain'):
             plain = str(self.plain)
             if '{' in plain:
@@ -60,6 +94,14 @@ class LogEntryType:
                 return plain
 
     def get_object_link_info(self, logentry) -> dict:
+        """
+        Return information to generate a link to the content_object of a given logentry.
+
+        Not implemented in the base class, causing the object link to be omitted.
+
+        :return: `dict` with the keys `href` (containing a URL to view/edit the object) and `val` (containing the
+        escaped text for the anchor element)
+        """
         pass
 
     def get_object_link(self, logentry):
@@ -69,10 +111,18 @@ class LogEntryType:
     object_link_wrapper = '{val}'
 
     def shred_pii(self, logentry):
+        """
+        To be used for shredding personally identified information contained in the data field of a LogEntry of this
+        type.
+        """
         raise NotImplementedError
 
 
 class EventLogEntryType(LogEntryType):
+    """
+    Base class for any LogEntry type whose content_object is either an `Event` itself or belongs to a specific `Event`.
+    """
+
     def get_object_link_info(self, logentry) -> dict:
         if hasattr(self, 'object_link_viewname') and hasattr(self, 'object_link_argname') and logentry.content_object:
             return {
@@ -85,9 +135,11 @@ class EventLogEntryType(LogEntryType):
             }
 
     def object_link_argvalue(self, content_object):
+        """Return the identifier used in a link to content_object."""
         return content_object.id
 
     def object_link_display_name(self, content_object):
+        """Return the display name to refer to content_object in the user interface."""
         return str(content_object)
 
 
@@ -108,8 +160,8 @@ class VoucherLogEntryType(EventLogEntryType):
     object_link_viewname = 'control:event.voucher'
     object_link_argname = 'voucher'
 
-    def object_link_display_name(self, order):
-        return order.code[:6]
+    def object_link_display_name(self, voucher):
+        return voucher.code[:6]
 
 
 class ItemLogEntryType(EventLogEntryType):

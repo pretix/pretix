@@ -93,7 +93,7 @@ class LogEntry(models.Model):
         indexes = [models.Index(fields=["datetime", "id"])]
 
     def display(self):
-        log_entry_type, meta = log_entry_types.find(action_type=self.action_type)
+        log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
         if log_entry_type:
             return log_entry_type.display(self)
 
@@ -134,7 +134,7 @@ class LogEntry(models.Model):
             Discount, Event, Item, Order, Question, Quota, SubEvent, Voucher,
         )
 
-        log_entry_type, meta = log_entry_types.find(action_type=self.action_type)
+        log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
         if log_entry_type:
             link_info = log_entry_type.get_object_link_info(self)
             if is_app_active(self.event, meta['plugin']):
