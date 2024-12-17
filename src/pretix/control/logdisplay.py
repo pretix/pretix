@@ -378,12 +378,12 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type == 'pretix.event.order.print':
         return _('Position #{posid} has been printed at {datetime} with type "{type}".').format(
-            posid=data.get('positionid'),
+            posid=logentry.parsed_data.get('positionid'),
             datetime=date_format(
-                dateutil.parser.parse(data["datetime"]).astimezone(sender.timezone),
+                dateutil.parser.parse(logentry.parsed_data["datetime"]).astimezone(sender.timezone),
                 "SHORT_DATETIME_FORMAT"
             ),
-            type=dict(PrintLog.PRINT_TYPES)[data["type"]],
+            type=dict(PrintLog.PRINT_TYPES)[logentry.parsed_data["type"]],
         )
 
 
