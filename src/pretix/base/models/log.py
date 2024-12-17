@@ -38,9 +38,7 @@ import logging
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
 
 from pretix.base.logentrytypes import log_entry_types, make_link
 from pretix.base.signals import is_app_active, logentry_object_link
