@@ -72,7 +72,9 @@ def inputfile_factory(multiplier=1):
             'I': 'Foo',
             'J': '2021-06-28 11:00:00',
             'K': '06221/32177-50',
-            'L': 'True'
+            'L': 'True',
+            'M': 'baz',
+            'N': 'Seat-1',
         },
         {
             'A': 'Daniel',
@@ -87,6 +89,8 @@ def inputfile_factory(multiplier=1):
             'J': '2021-06-28 11:00:00',
             'K': '+4962213217750',
             'L': 'False',
+            'M': 'baz',
+            'N': 'Seat-2',
         },
         {},
         {
@@ -102,12 +106,14 @@ def inputfile_factory(multiplier=1):
             'J': '2021-06-28 11:00:00',
             'K': '',
             'L': '',
+            'M': 'baz',
+            'N': 'Seat-3',
         },
     ]
     if multiplier > 1:
         d = d * multiplier
     f = StringIO()
-    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'], dialect=csv.excel)
+    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'], dialect=csv.excel)
     w.writeheader()
     w.writerows(d)
     f.seek(0)
@@ -663,18 +669,39 @@ def test_import_seat_required(user, event, item):
 def test_import_seat_blocked(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
     settings['item'] = 'static:{}'.format(item.pk)
-    settings['seat'] = 'csv:D'
+    settings['seat'] = 'csv:N'
 
     event.seat_category_mappings.create(
         layout_category='Stalls', product=item
     )
-    event.seats.create(seat_number="Test", product=item, seat_guid="Test", blocked=True)
+    event.seats.create(seat_number="Seat-1", product=item, seat_guid="Seat-1", blocked=True)
+    event.seats.create(seat_number="Seat-2", product=item, seat_guid="Seat-2", blocked=True)
+    event.seats.create(seat_number="Seat-3", product=item, seat_guid="Seat-3", blocked=True)
     with pytest.raises(DataImportError) as excinfo:
         import_orders.apply(
             args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
         ).get()
-    assert 'Error while importing value "Test" for column "Seat ID" in line "1": The seat you selected has already ' \
+    assert 'Error while importing value "Seat-1" for column "Seat ID" in line "1": The seat you selected has already ' \
            'been taken. Please select a different seat.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_seat_blocked_sales_channel(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['seat'] = 'csv:N'
+    settings['sales_channel'] = 'csv:M'
+    event.settings.seating_allow_blocked_seats_for_channel = ["baz"]
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    event.seats.create(seat_number="Seat-1", product=item, seat_guid="Seat-1", blocked=True)
+    event.seats.create(seat_number="Seat-2", product=item, seat_guid="Seat-2", blocked=True)
+    event.seats.create(seat_number="Seat-3", product=item, seat_guid="Seat-3", blocked=True)
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    ).get()
 
 
 @pytest.mark.django_db
