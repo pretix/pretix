@@ -966,7 +966,7 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-event-location" v-if="($root.events || $root.weeks || $root.days) && $root.location" v-html="$root.location"></div>'
 
         // Form start
-        + '<div class="pretix-widget-event-description" v-if="($root.events || $root.weeks || $root.days) && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
+        + '<div class="pretix-widget-event-description" v-if="($root.show_frontpage_text || $root.events || $root.weeks || $root.days) && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<form method="post" :action="$root.formAction" ref="form" :target="$root.formTarget">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
@@ -1213,7 +1213,7 @@ Vue.component('pretix-widget-event-list', {
         + '<div class="pretix-widget-event-header" v-if="$root.parent_stack.length > 0">'
         + '<strong>{{ $root.name }}</strong>'
         + '</div>'
-        + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
+        + '<div class="pretix-widget-event-description" v-if="($root.show_frontpage_text || $root.parent_stack.length > 0) && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<pretix-widget-event-list-filter-form v-if="!$root.disable_filters && $root.meta_filter_fields.length > 0"></pretix-widget-event-list-filter-form>'
         + '<pretix-widget-event-list-entry v-for="event in $root.events" :event="event" :key="event.url"></pretix-widget-event-list-entry>'
         + '<p class="pretix-widget-event-list-load-more" v-if="$root.has_more_events"><button @click.prevent.stop="load_more">'+strings.load_more+'</button></p>'
@@ -1431,7 +1431,7 @@ Vue.component('pretix-widget-event-calendar', {
         + '<div class="pretix-widget-event-header" v-if="$root.parent_stack.length > 0">'
         + '<strong>{{ $root.name }}</strong>'
         + '</div>'
-        + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
+        + '<div class="pretix-widget-event-description" v-if="($root.show_frontpage_text || $root.parent_stack.length > 0) && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
 
         // Filter
         + '<pretix-widget-event-list-filter-form v-if="!$root.disable_filters && $root.meta_filter_fields.length > 0"></pretix-widget-event-list-filter-form>'
@@ -1522,7 +1522,7 @@ Vue.component('pretix-widget-event-week-calendar', {
         + '<pretix-widget-event-list-filter-form v-if="!$root.disable_filters && $root.meta_filter_fields.length > 0"></pretix-widget-event-list-filter-form>'
 
         // Calendar navigation
-        + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
+        + '<div class="pretix-widget-event-description" v-if="($root.show_frontpage_text || $root.parent_stack.length > 0) && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<div class="pretix-widget-event-calendar-head">'
         + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevweek" role="button">&laquo; '
         + strings['previous_week']
@@ -2040,6 +2040,7 @@ var create_widget = function (element, html_id=null) {
     var disable_iframe = element.attributes["disable-iframe"] ? true : false;
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
     var disable_filters = element.attributes["disable-filters"] ? true : false;
+    var show_frontpage_text = element.attributes["show-frontpage-text"] ? true : false;
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     var filter = element.attributes.filter ? element.attributes.filter.value : null;
     var items = element.attributes.items ? element.attributes.items.value : null;
@@ -2116,6 +2117,7 @@ var create_widget = function (element, html_id=null) {
                 vouchers_exist: false,
                 disable_vouchers: disable_vouchers,
                 disable_filters: disable_filters,
+                show_frontpage_text: show_frontpage_text,
                 cart_exists: false,
                 itemcount: 0,
                 overlay: null,

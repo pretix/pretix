@@ -96,6 +96,14 @@ attribute::
    <pretix-widget event="https://pretix.eu/demo/democon/" disable-iframe></pretix-widget>
 
 
+Always show frontpage-text
+--------------------------
+
+If you want the widget to show the event’s frontpage-text, you can pass the optional ``show-frontpage-text`` attribute::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" show-frontpage-text></pretix-widget>
+
+
 Pre-selecting a voucher
 -----------------------
 
