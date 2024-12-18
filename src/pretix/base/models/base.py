@@ -31,6 +31,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 
+from pretix.base.logentrytypes import log_entry_types
 from pretix.helpers.json import CustomJSONEncoder
 
 
@@ -124,7 +125,13 @@ class LoggingMixin:
                     if (sensitivekey in k) and v:
                         data[k] = "********"
 
+            type, meta = log_entry_types.get(action_type=action)
+            if not type:
+                raise TypeError("Undefined log entry type '%s'" % action)
+
             logentry.data = json.dumps(data, cls=CustomJSONEncoder, sort_keys=True)
+
+            type.validate_data(json.loads(logentry.data))
         elif data:
             raise TypeError("You should only supply dictionaries as log data.")
         if save:

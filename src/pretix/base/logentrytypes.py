@@ -1,3 +1,4 @@
+import json
 #
 # This file is part of pretix (Community Edition).
 #
@@ -20,7 +21,9 @@
 # <https://www.gnu.org/licenses/>.
 #
 from collections import defaultdict
+from functools import cached_property
 
+import jsonschema
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -89,13 +92,39 @@ They are annotated with their ``action_type`` and the defining ``plugin``.
 log_entry_types = LogEntryTypeRegistry({'action_type': lambda o: getattr(o, 'action_type')})
 
 
+def prepare_schema(schema):
+    def handle_properties(t):
+        return {"shred_properties": [k for k, v in t["properties"].items() if v["shred"]]}
+
+    def walk_tree(schema):
+        if type(schema) is dict:
+            new_keys = {}
+            for k, v in schema.items():
+                if k == "properties":
+                    new_keys = handle_properties(schema)
+                walk_tree(v)
+            if schema.get("type") == "object" and "additionalProperties" not in new_keys:
+                new_keys["additionalProperties"] = False
+            schema.update(new_keys)
+        elif type(schema) is list:
+            for v in schema:
+                walk_tree(v)
+
+    walk_tree(schema)
+    return schema
+
+
 class LogEntryType:
     """
     Base class for a type of LogEntry, identified by its action_type.
     """
 
+    data_schema = None  # {"type": "object", "properties": []}
+
     def __init__(self, action_type=None, plain=None):
         assert self.__module__ != LogEntryType.__module__  # must not instantiate base classes, only derived ones
+        if self.data_schema:
+            print(self.__class__.__name__, "has schema", self._prepared_schema)
         if action_type:
             self.action_type = action_type
         if plain:
@@ -132,12 +161,33 @@ class LogEntryType:
 
     object_link_wrapper = '{val}'
 
+    def validate_data(self, parsed_data):
+        if not self._prepared_schema:
+            return
+        jsonschema.validate(parsed_data, self._prepared_schema)
+
+    @cached_property
+    def _prepared_schema(self):
+        if self.data_schema:
+            return prepare_schema(self.data_schema)
+
     def shred_pii(self, logentry):
         """
         To be used for shredding personally identified information contained in the data field of a LogEntry of this
         type.
         """
-        raise NotImplementedError
+        if self._prepared_schema:
+            def shred_fun(validator, value, instance, schema):
+                for key in value:
+                    instance[key] = "##########"
+
+            v = jsonschema.validators.extend(jsonschema.validators.Draft202012Validator,
+                                             validators={"shred_properties": shred_fun})
+            data = logentry.parsed_data
+            jsonschema.validate(data, self._prepared_schema, v)
+            logentry.data = json.dumps(data)
+        else:
+            raise NotImplementedError
 
 
 class EventLogEntryType(LogEntryType):

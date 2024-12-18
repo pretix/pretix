@@ -403,7 +403,6 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.valid_if_pending.set': _('The order has been set to be usable before it is paid.'),
     'pretix.event.order.valid_if_pending.unset': _('The order has been set to require payment before use.'),
     'pretix.event.order.expired': _('The order has been marked as expired.'),
-    'pretix.event.order.paid': _('The order has been marked as paid.'),
     'pretix.event.order.cancellationrequest.deleted': _('The cancellation request has been deleted.'),
     'pretix.event.order.refunded': _('The order has been refunded.'),
     'pretix.event.order.reactivated': _('The order has been reactivated.'),
@@ -469,6 +468,21 @@ class CoreOrderLogEntryType(OrderLogEntryType):
     pass
 
 
+@log_entry_types.new()
+class OrderPaidLogEntryType(CoreOrderLogEntryType):
+    action_type = 'pretix.event.order.paid'
+    plain = _('The order has been marked as paid.')
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "provider": {"type": "string", "shred": False, },
+            "info": {"type": ["null", "string", "object"], "shred": True, },
+            "date": {"type": "string", "shred": False, },
+            "force": {"type": "boolean", "shred": False, },
+        },
+    }
+
+
 @log_entry_types.new_from_dict({
     'pretix.voucher.added': _('The voucher has been created.'),
     'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
@@ -486,6 +500,12 @@ class CoreVoucherLogEntryType(VoucherLogEntryType):
 class VoucherRedeemedLogEntryType(VoucherLogEntryType):
     action_type = 'pretix.voucher.redeemed'
     plain = _('The voucher has been redeemed in order {order_code}.')
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "order_code": {"type": "string", "shred": False, },
+        },
+    }
 
     def display(self, logentry):
         data = json.loads(logentry.data)
