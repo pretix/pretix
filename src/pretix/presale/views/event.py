@@ -555,6 +555,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context['ev'] = self.subevent or self.request.event
         context['subevent'] = self.subevent
+        context['subevent_list_foldable'] = self.subevent and "date" not in self.request.GET and "filtered" not in self.request.GET
 
         # Show voucher option if an event is selected and vouchers exist
         vouchers_exist = self.request.event.cache.get('vouchers_exist')

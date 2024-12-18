@@ -1,0 +1,62 @@
+{% load i18n %}
+{% load icon %}
+{% load textbubble %}
+
+{% if event.has_subevents %}
+    {% textbubble "info" icon="bars" %}
+        {% trans "Event series" %}
+    {% endtextbubble %}
+{% elif event.presale_is_running and request.organizer.settings.event_list_availability %}
+    {% if event.best_availability_state == 100 %}
+        {% if event.best_availability_is_low %}
+            {% textbubble "success-warning" icon="exclamation-triangle" %}
+                {% trans "Few tickets left" %}
+            {% endtextbubble %}
+        {% else %}
+            {% textbubble "success" icon="check" %}
+                {% if event.has_paid_item %}
+                    {% trans "Buy now" context "available_event_in_list" %}
+                {% else %}
+                    {% trans "Book now" %}
+                {% endif %}
+            {% endtextbubble %}
+        {% endif %}
+    {% elif event.waiting_list_active and event.best_availability_state >= 0 %}
+        {% textbubble "warning" icon="ellipsis-h" %}
+            {% trans "Waiting list" %}
+        {% endtextbubble %}
+    {% elif event.best_availability_state == 20 %}
+        {% textbubble "danger" icon="minus" %}
+            {% trans "Reserved" %}
+        {% endtextbubble %}
+    {% elif event.best_availability_state < 20 %}
+        {% textbubble "danger" icon="times" %}
+            {% if event.has_paid_item %}
+                {% trans "Sold out" %}
+            {% else %}
+                {% trans "Fully booked" %}
+            {% endif %}
+        {% endtextbubble %}
+    {% endif %}
+{% elif event.presale_is_running %}
+    {% textbubble "success" icon="check" %}
+        {% trans "Book now" %}
+    {% endtextbubble %}
+{% elif event.presale_has_ended %}
+    {% textbubble "danger" icon="times" %}
+        {% trans "Sale over" %}
+    {% endtextbubble %}
+{% else %}
+    {% textbubble "warning" icon="clock-o" %}
+        {% trans "Not yet on sale" %}
+    {% endtextbubble %}
+    {% if event.settings.presale_start_show_date %}
+        <br><span class="text-muted">
+        {% with date_iso=event.effective_presale_start.isoformat date_human=event.effective_presale_start|date:"SHORT_DATE_FORMAT" %}
+            {% blocktrans trimmed with date='<time datetime="'|add:date_iso|add:'">'|add:date_human|add:"</time>"|safe %}
+                Sale starts {{ date }}
+            {% endblocktrans %}
+        {% endwith %}
+        </span>
+    {% endif %}
+{% endif %}
