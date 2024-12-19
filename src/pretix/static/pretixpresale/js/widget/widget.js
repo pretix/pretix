@@ -2054,11 +2054,11 @@ var create_widget = function (element, html_id=null) {
     var disable_iframe = element.attributes["disable-iframe"] ? true : false;
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
     var disable_filters = element.attributes["disable-filters"] ? true : false;
-    var show_frontpage_text = element.getAttribute("show-frontpage-text"); // default null means "auto", everything other than "true" is false
-    if (!show_frontpage_text || show_frontpage_text === "auto") {
-        show_frontpage_text = null;
+    var show_frontpage_text = element.getAttribute("show-frontpage-text"); // null means "auto", everything other than "false" is true
+    if (show_frontpage_text !== null && show_frontpage_text !== "auto") {
+        show_frontpage_text = show_frontpage_text !== "false";
     } else {
-        show_frontpage_text = show_frontpage_text === "true";
+        show_frontpage_text = null;
     }
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     var filter = element.attributes.filter ? element.attributes.filter.value : null;
