@@ -225,8 +225,6 @@ class Order(LockModel, LoggedModel):
         "Organizer",
         related_name="orders",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     event = models.ForeignKey(
         Event,
@@ -2464,8 +2462,6 @@ class OrderPosition(AbstractPosition):
         "Organizer",
         related_name="order_positions",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     order = models.ForeignKey(
         Order,
