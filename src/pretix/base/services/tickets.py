@@ -21,6 +21,7 @@
 #
 import logging
 import os
+from decimal import Decimal
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -97,9 +98,9 @@ def preview(event: int, provider: str):
     event = Event.objects.get(id=event)
 
     with rolledback_transaction(), language(event.settings.locale, event.settings.region):
-        item = event.items.create(name=_("Sample product"), default_price=42.23,
+        item = event.items.create(name=_("Sample product"), default_price=Decimal('42.23'),
                                   description=_("Sample product description"))
-        item2 = event.items.create(name=_("Sample workshop"), default_price=23.40)
+        item2 = event.items.create(name=_("Sample workshop"), default_price=Decimal('23.40'))
 
         from pretix.base.models import Order
         order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
