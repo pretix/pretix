@@ -165,13 +165,10 @@ However, for some of them (types of :ref:`Log Entries <logging>`) we use a diffe
 In a ``Registry``, classes are collected at application startup, along with a unique key (in case
 of LogEntryType, the ``action_type``) as well as which plugin registered them.
 
-To register a class, you can use one of several decorator provided by the Registry object:
+To register a class, you can use one of several decorators provided by the Registry object:
 
-.. code-block:: python
-
-   @log_entry_types.new('my_pretix_plugin.some.action', _('Some action in My Pretix Plugin occured.'))
-   class MyPretixPluginLogEntryType(EventLogEntryType):
-       pass
+.. autoclass:: pretix.base.logentrytypes.LogEntryTypeRegistry
+   :members: register, new, new_from_dict
 
 All files in which classes are registered need to be imported in the ``AppConfig.ready`` as explained
 in `Signals <signals>`_ above.
