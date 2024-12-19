@@ -962,7 +962,7 @@ Vue.component('pretix-widget-event-form', {
         + '{{ $root.date_range }}'
         + '</div>'
 
-        // Date range
+        // Location
         + '<div class="pretix-widget-event-location" v-if="show_description && $root.location" v-html="$root.location"></div>'
 
         // Form start
