@@ -154,7 +154,7 @@ in the ``installed`` method:
 Note that ``installed`` will *not* be called if the plugin is indirectly activated for an event
 because the event is created with settings copied from another event.
 
-.. _`Registries`:
+.. _`registries`:
 Registries
 ----------
 

@@ -145,15 +145,14 @@ To show more sophisticated message strings, e.g. varying the message depending o
 
 .. automethod:: pretix.base.logentrytypes.LogEntryType.display
 
-If your new model object does not belong to an `Event`, you need to implement
+If your new model object does not belong to an `Event`, you need to inherit directly from ``LogEntryType`` instead
+of ``EventLogEntryType``, providing your own implementation of ``get_object_link_info`` if object links should be
+displayed.
 
-meow
+.. autoclass:: pretix.base.logentrytypes.LogEntryType
+   :members: get_object_link_info
 
-.. autoclass:: pretix.base.logentrytypes.Registry
-   :members: new
 
-.. autoclass:: pretix.base.logentrytypes.LogEntryTypeRegistry
-   :members: new, new_from_dict
 
 Sending notifications
 ---------------------
