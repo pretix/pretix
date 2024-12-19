@@ -1052,7 +1052,7 @@ Vue.component('pretix-widget-event-form', {
     },
     computed: {
         show_description: function () {
-            return $root.show_frontpage_text || ($root.show_frontpage_text === null && ($root.events || $root.weeks || $root.days));
+            return this.$root.show_frontpage_text || (this.$root.show_frontpage_text === null && (this.$root.events || this.$root.weeks || this.$root.days));
         },
         buy_label: function () {
             var i, j, k, all_free = true;
@@ -1223,7 +1223,7 @@ Vue.component('pretix-widget-event-list', {
         + '</div>'),
     computed: {
         show_description: function () {
-            return $root.show_frontpage_text || ($root.show_frontpage_text === null && $root.parent_stack.length > 0);
+            return this.$root.show_frontpage_text || (this.$root.show_frontpage_text === null && this.$root.parent_stack.length > 0);
         },
     },
     methods: {
@@ -1475,7 +1475,7 @@ Vue.component('pretix-widget-event-calendar', {
         + '</div>'),
     computed: {
         show_description: function () {
-            return $root.show_frontpage_text || ($root.show_frontpage_text === null && $root.parent_stack.length > 0);
+            return this.$root.show_frontpage_text || (this.$root.show_frontpage_text === null && this.$root.parent_stack.length > 0);
         },
         monthname: function () {
             return strings['months'][this.$root.date.substr(5, 2)] + ' ' + this.$root.date.substr(0, 4);
@@ -1556,7 +1556,7 @@ Vue.component('pretix-widget-event-week-calendar', {
         + '</div>'),
     computed: {
         show_description: function () {
-            return $root.show_frontpage_text || ($root.show_frontpage_text === null && $root.parent_stack.length > 0);
+            return this.$root.show_frontpage_text || (this.$root.show_frontpage_text === null && this.$root.parent_stack.length > 0);
         },
         weekname: function () {
             var curWeek = this.$root.week[1];
