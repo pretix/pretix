@@ -255,6 +255,15 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 Additionally, the argument ``order`` and ``request`` are available.
 """
 
+order_info_top = EventPluginSignal()
+"""
+Arguments: ``order``, ``request``
+
+This signal is sent out to display additional information on top of the order detail page ("Order details" section)
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 order_position_buttons = EventPluginSignal()
 """
 Arguments: ``order``, ``position``, ``request``
