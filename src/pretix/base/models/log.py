@@ -33,16 +33,15 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
+import logging
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.html import escape
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
-from pretix.base.signals import logentry_object_link
+from pretix.base.logentrytypes import log_entry_types, make_link
+from pretix.base.signals import is_app_active, logentry_object_link
 
 
 class VisibleOnlyManager(models.Manager):
@@ -92,6 +91,10 @@ class LogEntry(models.Model):
         indexes = [models.Index(fields=["datetime", "id"])]
 
     def display(self):
+        log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
+        if log_entry_type:
+            return log_entry_type.display(self)
+
         from ..signals import logentry_display
 
         for receiver, response in logentry_display.send(self.event, logentry=self):
@@ -126,9 +129,17 @@ class LogEntry(models.Model):
     @cached_property
     def display_object(self):
         from . import (
-            Discount, Event, Item, ItemCategory, Order, Question, Quota,
-            SubEvent, TaxRule, Voucher,
+            Discount, Event, Item, Order, Question, Quota, SubEvent, Voucher,
         )
+
+        log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
+        if log_entry_type:
+            link_info = log_entry_type.get_object_link_info(self)
+            if is_app_active(self.event, meta['plugin']):
+                return make_link(link_info, log_entry_type.object_link_wrapper)
+            else:
+                return make_link(link_info, log_entry_type.object_link_wrapper, is_active=False,
+                                 event=self.event, plugin_name=meta['plugin'] and getattr(meta['plugin'], 'name'))
 
         try:
             if self.content_type.model_class() is Event:
@@ -137,110 +148,15 @@ class LogEntry(models.Model):
             co = self.content_object
         except:
             return ''
-        a_map = None
-        a_text = None
 
-        if isinstance(co, Order):
-            a_text = _('Order {val}')
-            a_map = {
-                'href': reverse('control:event.order', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'code': co.code
-                }),
-                'val': escape(co.code),
-            }
-        elif isinstance(co, Voucher):
-            a_text = _('Voucher {val}…')
-            a_map = {
-                'href': reverse('control:event.voucher', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'voucher': co.id
-                }),
-                'val': escape(co.code[:6]),
-            }
-        elif isinstance(co, Item):
-            a_text = _('Product {val}')
-            a_map = {
-                'href': reverse('control:event.item', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'item': co.id
-                }),
-                'val': escape(co.name),
-            }
-        elif isinstance(co, SubEvent):
-            a_text = pgettext_lazy('subevent', 'Date {val}')
-            a_map = {
-                'href': reverse('control:event.subevent', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'subevent': co.id
-                }),
-                'val': escape(str(co))
-            }
-        elif isinstance(co, Quota):
-            a_text = _('Quota {val}')
-            a_map = {
-                'href': reverse('control:event.items.quotas.show', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'quota': co.id
-                }),
-                'val': escape(co.name),
-            }
-        elif isinstance(co, Discount):
-            a_text = _('Discount {val}')
-            a_map = {
-                'href': reverse('control:event.items.discounts.edit', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'discount': co.id
-                }),
-                'val': escape(co.internal_name),
-            }
-        elif isinstance(co, ItemCategory):
-            a_text = _('Category {val}')
-            a_map = {
-                'href': reverse('control:event.items.categories.edit', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'category': co.id
-                }),
-                'val': escape(co.name),
-            }
-        elif isinstance(co, Question):
-            a_text = _('Question {val}')
-            a_map = {
-                'href': reverse('control:event.items.questions.show', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'question': co.id
-                }),
-                'val': escape(co.question),
-            }
-        elif isinstance(co, TaxRule):
-            a_text = _('Tax rule {val}')
-            a_map = {
-                'href': reverse('control:event.settings.tax.edit', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'rule': co.id
-                }),
-                'val': escape(co.name),
-            }
+        for receiver, response in logentry_object_link.send(self.event, logentry=self):
+            if response:
+                return response
 
-        if a_text and a_map:
-            a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
-            return a_text.format_map(a_map)
-        elif a_text:
-            return a_text
-        else:
-            for receiver, response in logentry_object_link.send(self.event, logentry=self):
-                if response:
-                    return response
-            return ''
+        if isinstance(co, (Order, Voucher, Item, SubEvent, Quota, Discount, Question)):
+            logging.warning("LogEntryType missing or ill-defined: %s", self.action_type)
+
+        return ''
 
     @cached_property
     def parsed_data(self):
