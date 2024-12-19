@@ -55,7 +55,7 @@ def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
 class LogEntryTypeRegistry(EventPluginRegistry):
     def new_from_dict(self, data):
         """
-        Register multiple instance of a LogEntryType class with different action_type
+        Register multiple instance of a `LogEntryType` class with different `action_type`
         and plain text strings, as given by the items of the specified data dictionary.
 
         This method is designed to be used as a decorator as follows:
@@ -142,7 +142,7 @@ class LogEntryType:
 
 class EventLogEntryType(LogEntryType):
     """
-    Base class for any LogEntry type whose content_object is either an `Event` itself or belongs to a specific `Event`.
+    Base class for any `LogEntry` type whose `content_object` is either an `Event` itself or belongs to a specific `Event`.
     """
 
     def get_object_link_info(self, logentry) -> dict:
@@ -183,7 +183,9 @@ class VoucherLogEntryType(EventLogEntryType):
     object_link_argname = 'voucher'
 
     def object_link_display_name(self, voucher):
-        return voucher.code[:6]
+        if len(voucher.code) > 6:
+            return voucher.code[:6] + "…"
+        return voucher.code
 
 
 class ItemLogEntryType(EventLogEntryType):

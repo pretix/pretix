@@ -121,7 +121,7 @@ This will automatically make pretix discover this plugin as soon as it is instal
 through ``pip``. During development, you can just run ``python setup.py develop`` inside
 your plugin source directory to make it discoverable.
 
-.. _`Signals`:
+.. _`signals`:
 Signals
 -------
 
@@ -163,7 +163,7 @@ ticket renderer.
 
 However, for some of them (types of :ref:`Log Entries <logging>`) we use a different method to keep track of them:
 In a ``Registry``, classes are collected at application startup, along with a unique key (in case
-of LogEntryType, the action_type) as well as which plugin registered them.
+of LogEntryType, the ``action_type``) as well as which plugin registered them.
 
 To register a class, you can use one of several decorator provided by the Registry object:
 
@@ -174,7 +174,7 @@ To register a class, you can use one of several decorator provided by the Regist
        pass
 
 All files in which classes are registered need to be imported in the ``AppConfig.ready`` as explained
-in `Signals`_ above.
+in `Signals <signals>`_ above.
 
 Views
 -----

@@ -254,7 +254,7 @@ class Registry:
 
     def __init__(self, keys):
         """
-        :param keys: dictionary {key: accessor_function}
+        :param keys: Dictionary with `{key: accessor_function}`
                      When a new entry is registered, all accessor functions are called with the new entry as parameter.
                      Their return value is stored as the metadata value for that key.
         """
@@ -281,10 +281,12 @@ class Registry:
             for key, value in meta.items():
                 self.by_key[key][value] = tup
             self.registered_entries.append(tup)
+        if len(objs) == 1:
+            return objs[0]
 
     def new(self, *args, **kwargs):
         """
-        Instantiate the decorated class with the given *args and **kwargs, and register the instance in this registry.
+        Instantiate the decorated class with the given `*args` and `**kwargs`, and register the instance in this registry.
         May be used multiple times.
 
         .. code-block:: python
@@ -306,10 +308,11 @@ class Registry:
         return self.by_key.get(key).get(value, (None, None))
 
     def filter(self, **kwargs):
-        return ((entry, meta)
-                for entry, meta in self.registered_entries
-                if all(value == meta[key] for key, value in kwargs.items())
-                )
+        return (
+            (entry, meta)
+            for entry, meta in self.registered_entries
+            if all(value == meta[key] for key, value in kwargs.items())
+        )
 
 
 class EventPluginRegistry(Registry):

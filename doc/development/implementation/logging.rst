@@ -73,7 +73,7 @@ following ready-to-include template::
    {% include "pretixcontrol/includes/logs.html" with obj=order %}
 
 We now need a way to translate the action codes like ``pretix.event.changed`` into human-readable
-strings. The :py:attr:`pretix.base.logentrytypes.log_entry_types` :ref:`Registry <Registries>` allows you to do so. A simple
+strings. The :py:attr:`pretix.base.logentrytypes.log_entry_types` :ref:`registry <registries>` allows you to do so. A simple
 implementation could look like:
 
 .. code-block:: python
@@ -90,21 +90,21 @@ implementation could look like:
     class CoreOrderLogEntryType(OrderLogEntryType):
         pass
 
-Please note that you always need to define your own inherited LogEntryType class in your plugin. If you would just
-register an instance of a LogEntryType class defined in pretix core, it is not correctly registered as belonging to
-your plugin, leading to confusing user interface situations.
+Please note that you always need to define your own inherited ``LogEntryType`` class in your plugin. If you would just
+register an instance of a ``LogEntryType`` class defined in pretix core, it cannot be automatically detected as belonging
+to your plugin, leading to confusing user interface situations.
 
 
 Customizing log entry display
-""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""
 
-The base LogEntryType classes allows for varying degree of customization in their descendants.
+The base ``LogEntryType`` classes allow for varying degree of customization in their descendants.
 
-If you want to add another log message for an existing core object (e.g. an Order, Item or Voucher), you can inherit
-from its predefined LogEntryType, e.g. `OrderLogEntryType` and just specify a new plaintext string. You can use format
+If you want to add another log message for an existing core object (e.g. an ``Order``, ``Item``, or ``Voucher``), you can inherit
+from its predefined `LogEntryType`, e.g. `OrderLogEntryType`, and just specify a new plaintext string. You can use format
 strings to insert information from the LogEntry's `data` object as shown in the section above.
 
-If you defined a new model object in your plugin, you should make sure proper object links in the user interface are
+If you define a new model object in your plugin, you should make sure proper object links in the user interface are
 displayed for it. If your model object belongs logically to a pretix `Event`, you can inherit from `EventLogEntryType`,
 and set the `object_link_*` fields accordingly. `object_link_viewname` refers to a django url name, which needs to
 accept the arguments `organizer` and `event`, containing the respective slugs, and an argument named by `object_link_argname`.
@@ -126,7 +126,7 @@ overwrite `object_link_display_name`.
             return order.code
 
 To show more sophisticated message strings, e.g. varying the message depending on information from the LogEntry's
-`data` object, overwrite the `display` method:
+`data` object, override the `display` method:
 
 .. code-block:: python
 
