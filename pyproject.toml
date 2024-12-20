@@ -32,7 +32,7 @@ dependencies = [
   "bleach==6.2.*",
   "celery==5.4.*",
   "chardet==5.2.*",
-  "cryptography>=3.4.2",
+  "cryptography>=44.0.0",
   "css-inline==0.14.*",
   "defusedcsv>=1.1.0",
   "Django[argon2]==4.2.*,>=4.2.15",
