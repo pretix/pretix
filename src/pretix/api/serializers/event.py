@@ -437,21 +437,24 @@ class CloneEventSerializer(EventSerializer):
         testmode = validated_data.pop('testmode', None)
         has_subevents = validated_data.pop('has_subevents', None)
         tz = validated_data.pop('timezone', None)
-        sales_channels = validated_data.pop('sales_channels', None)
+        all_sales_channels = validated_data.pop('all_sales_channels', None)
+        limit_sales_channels = validated_data.pop('limit_sales_channels', None)
         date_admission = validated_data.pop('date_admission', None)
         new_event = super().create({**validated_data, 'plugins': None})
 
         event = Event.objects.filter(slug=self.context['event'], organizer=self.context['organizer'].pk).first()
         new_event.copy_data_from(event, skip_meta_data='meta_data' in validated_data)
 
+        print("s", all_sales_channels, limit_sales_channels)
         if plugins is not None:
             new_event.set_active_plugins(plugins)
         if is_public is not None:
             new_event.is_public = is_public
         if testmode is not None:
             new_event.testmode = testmode
-        if sales_channels is not None:
-            new_event.sales_channels = sales_channels
+        if all_sales_channels is not None or limit_sales_channels is not None:
+            new_event.all_sales_channels = all_sales_channels
+            new_event.limit_sales_channels.set(limit_sales_channels)
         if has_subevents is not None:
             new_event.has_subevents = has_subevents
         if has_subevents is not None:

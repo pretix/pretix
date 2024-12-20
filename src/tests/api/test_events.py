@@ -498,6 +498,51 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop, urls
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize("urlstyle", [
+    '/api/v1/organizers/{}/events/{}/clone/',
+    '/api/v1/organizers/{}/events/?clone_from={}',
+])
+def test_event_create_with_clone_migrate_sales_channels(token_client, organizer, event, meta_prop, urlstyle):
+    with scopes_disabled():
+        all_channels = list(organizer.sales_channels.values_list("identifier", flat=True))
+    resp = token_client.post(
+        urlstyle.format(organizer.slug, event.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "testmode": True,
+            "currency": "EUR",
+            "date_from": "2018-12-27T10:00:00Z",
+            "date_to": "2018-12-28T10:00:00Z",
+            "date_admission": "2018-12-27T08:00:00Z",
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2030",
+            "sales_channels": all_channels,
+            "meta_data": {
+                "type": "Workshop"
+            },
+            "plugins": [
+                "pretix.plugins.ticketoutputpdf"
+            ],
+            "timezone": "Europe/Vienna"
+        },
+        format='json'
+    )
+
+    assert resp.status_code == 201
+    with scopes_disabled():
+        cloned_event = Event.objects.get(organizer=organizer.pk, slug='2030')
+        assert cloned_event.all_sales_channels
+        assert not cloned_event.limit_sales_channels.exists()
+
+
+@pytest.mark.django_db
 def test_event_create_with_clone_unknown_source(user, user_client, organizer, event):
     with scopes_disabled():
         target_org = Organizer.objects.create(name='Dummy', slug='dummy2')
