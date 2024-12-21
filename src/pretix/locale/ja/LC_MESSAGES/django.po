@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-11-21 12:58+0000\n"
-"Last-Translator: Ryo <saremba@rami.io>\n"
+"PO-Revision-Date: 2024-12-21 02:00+0000\n"
+"Last-Translator: Hijiri <7m4gmh@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -254,7 +254,7 @@ msgid "Unknown plugin: '{name}'."
 msgstr "不明なプラグイン： '{name}'。"
 
 #: pretix/api/serializers/event.py:296
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
 msgstr "不明なプラグイン： '{name}'。"
 
@@ -457,9 +457,8 @@ msgid "Order changed"
 msgstr "注文が変更されました"
 
 #: pretix/api/webhooks.py:277
-#, fuzzy
 msgid "Refund of payment created"
-msgstr "外部からの払い戻し"
+msgstr "払戻しが生成されました"
 
 #: pretix/api/webhooks.py:281 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -470,24 +469,20 @@ msgid "Refund of payment requested by customer"
 msgstr "お客様から支払いの返金が要求されました"
 
 #: pretix/api/webhooks.py:289
-#, fuzzy
 msgid "Refund of payment completed"
-msgstr "外部からの払い戻し"
+msgstr "払戻し完了"
 
 #: pretix/api/webhooks.py:293
-#, fuzzy
 msgid "Refund of payment canceled"
-msgstr "外部からの払い戻し"
+msgstr "払戻しがキャンセルされました"
 
 #: pretix/api/webhooks.py:297
-#, fuzzy
 msgid "Refund of payment failed"
-msgstr "外部からの払い戻し"
+msgstr "払戻しに失敗しました"
 
 #: pretix/api/webhooks.py:301
-#, fuzzy
 msgid "Payment confirmed"
-msgstr "支払い済みの注文"
+msgstr "支払いが確認されました"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
@@ -498,9 +493,8 @@ msgid "Order denied"
 msgstr "注文が中断されました"
 
 #: pretix/api/webhooks.py:313
-#, fuzzy
 msgid "Order deleted"
-msgstr "注文が中断されました"
+msgstr "注文が削除されました"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -556,28 +550,24 @@ msgid "Shop taken offline"
 msgstr "ショップがオープン"
 
 #: pretix/api/webhooks.py:362
-#, fuzzy
 msgid "Test-Mode of shop has been activated"
-msgstr "その金額がカードに請求されました。"
+msgstr "ショップのテストモードがアクティベイトされました"
 
 #: pretix/api/webhooks.py:366
-#, fuzzy
 msgid "Test-Mode of shop has been deactivated"
-msgstr "その金額がカードに請求されました。"
+msgstr "ショップのテストモードが無効になりました"
 
 #: pretix/api/webhooks.py:370
 msgid "Waiting list entry added"
 msgstr "ウェイティングリストにエントリーが追加されました"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
 msgid "Waiting list entry changed"
-msgstr "その金額がカードに請求されました。"
+msgstr "ウェイティングリストのエントリーが変更されました"
 
 #: pretix/api/webhooks.py:378
-#, fuzzy
 msgid "Waiting list entry deleted"
-msgstr "その金額がカードに請求されました。"
+msgstr "ウェイティングリストのエントリーが削除されました"
 
 #: pretix/api/webhooks.py:382
 msgid "Waiting list entry received voucher"
@@ -729,7 +719,9 @@ msgstr "\"{scope}\" をリクエストしていません。"
 msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
-msgstr ""
+msgstr "あなたはスコープ \"{scope}\" "
+"をリクエストしましたが、プロバイダがサポートするのは次のものに限られます: "
+"{scopes}."
 
 #: pretix/base/customersso/oidc.py:127
 #, python-brace-format
@@ -758,7 +750,8 @@ msgstr "ログインできませんでした。エラーメッセージ: \"{erro
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
-msgstr ""
+msgstr "このアカウントの電子メールアドレスが未検証です。あなたの顧客アカウントの電子"
+"メールアドレスを先に検証してください。"
 
 #: pretix/base/email.py:203 pretix/base/exporters/items.py:157
 #: pretix/base/exporters/items.py:205 pretix/control/views/main.py:311
