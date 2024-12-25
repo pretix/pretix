@@ -445,7 +445,6 @@ class CloneEventSerializer(EventSerializer):
         event = Event.objects.filter(slug=self.context['event'], organizer=self.context['organizer'].pk).first()
         new_event.copy_data_from(event, skip_meta_data='meta_data' in validated_data)
 
-        print("s", all_sales_channels, limit_sales_channels)
         if plugins is not None:
             new_event.set_active_plugins(plugins)
         if is_public is not None:
