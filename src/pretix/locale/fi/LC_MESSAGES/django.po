@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2023-09-07 03:00+0000\n"
-"Last-Translator: Tuomas Savela <pupp3@icloud.com>\n"
+"PO-Revision-Date: 2024-12-25 17:58+0000\n"
+"Last-Translator: Aarni Heinonen <vamoosev@gmail.com>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -29,115 +29,115 @@ msgstr "Saksa"
 
 #: pretix/_base_settings.py:81
 msgid "German (informal)"
-msgstr ""
+msgstr "Saksa (Epävirallinen)"
 
 #: pretix/_base_settings.py:82
 msgid "Arabic"
-msgstr ""
+msgstr "Arabia"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "Baski"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
-msgstr ""
+msgstr "Katalaani"
 
 #: pretix/_base_settings.py:85
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Kiina (Yksinkertaistettu)"
 
 #: pretix/_base_settings.py:86
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Kiina (Perinteinen)"
 
 #: pretix/_base_settings.py:87
 msgid "Czech"
-msgstr ""
+msgstr "Tšekki"
 
 #: pretix/_base_settings.py:88
 msgid "Danish"
-msgstr ""
+msgstr "Tanska"
 
 #: pretix/_base_settings.py:89
 msgid "Dutch"
-msgstr ""
+msgstr "Hollanti"
 
 #: pretix/_base_settings.py:90
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Hollanti (Epävirallinen)"
 
 #: pretix/_base_settings.py:91
 msgid "French"
-msgstr ""
+msgstr "Ranska"
 
 #: pretix/_base_settings.py:92
 msgid "Finnish"
-msgstr ""
+msgstr "Suomi"
 
 #: pretix/_base_settings.py:93
 msgid "Galician"
-msgstr ""
+msgstr "Galego"
 
 #: pretix/_base_settings.py:94
 msgid "Greek"
-msgstr ""
+msgstr "Kreikka"
 
 #: pretix/_base_settings.py:95
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesia"
 
 #: pretix/_base_settings.py:96
 msgid "Italian"
-msgstr ""
+msgstr "Italia"
 
 #: pretix/_base_settings.py:97
 msgid "Latvian"
-msgstr ""
+msgstr "Latvia"
 
 #: pretix/_base_settings.py:98
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norja (Kirjakieli)"
 
 #: pretix/_base_settings.py:99
 msgid "Polish"
-msgstr ""
+msgstr "Puola"
 
 #: pretix/_base_settings.py:100
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portugali (Portugali)"
 
 #: pretix/_base_settings.py:101
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugali (Brazilia)"
 
 #: pretix/_base_settings.py:102
 msgid "Romanian"
-msgstr ""
+msgstr "Romania"
 
 #: pretix/_base_settings.py:103
 msgid "Russian"
-msgstr ""
+msgstr "Venäjä"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "Slovakki"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
-msgstr ""
+msgstr "Ruotsi"
 
 #: pretix/_base_settings.py:106
 msgid "Spanish"
-msgstr ""
+msgstr "Espania"
 
 #: pretix/_base_settings.py:107
 msgid "Turkish"
-msgstr ""
+msgstr "Turkki"
 
 #: pretix/_base_settings.py:108
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukraina"
 
 #: pretix/api/auth/devicesecurity.py:58
 msgid ""
@@ -172,10 +172,8 @@ msgid "Allowed URIs list, space separated"
 msgstr "Sallitut URI-osoitteet, välilyönnillä erotettuna"
 
 #: pretix/api/models.py:47
-#, fuzzy
-#| msgid "Allowed URIs list, space separated"
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Sallitut URI-osoitteet, välilyönnillä erotettuna"
+msgstr "Uloskirjautumisjälkeiset sallitut URI:t, eroteltuna välilyönneillä"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
@@ -258,10 +256,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Tuntematon lisäosa: '{name}'."
 
 #: pretix/api/serializers/event.py:296
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Tuntematon lisäosa: '{name}'."
+msgstr "Rajoitettu lisäosa: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
@@ -287,7 +284,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Vain sisäänpääsytuotteita voi tällä hetkellä personoida."
 
 #: pretix/api/serializers/item.py:317
 msgid ""
@@ -306,6 +303,8 @@ msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Vaihtoehtojen päivittäminen PATCH/PUT-metodeilla ei ole tuettu. Käytä sen "
+"sijaan omistettua sisennettyä päätepistettä."
 
 #: pretix/api/serializers/item.py:533 pretix/control/forms/item.py:177
 msgid "Question cannot depend on a question asked during check-in."
@@ -320,22 +319,16 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Tämän tyyppistä kysymystä ei voi kysyä ilmoittautuessa."
 
 #: pretix/api/serializers/item.py:546 pretix/control/forms/item.py:199
-#, fuzzy
-#| msgid "This type of question cannot be asked during check-in."
 msgid "This type of question cannot be shown during check-in."
-msgstr "Tämän tyyppistä kysymystä ei voi kysyä ilmoittautuessa."
+msgstr "Tämän tyyppistä kysymystä ei voi esittää ilmoittautuessa."
 
 #: pretix/api/serializers/media.py:108
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Lahjakortti, jolla on sama salaisuus, on jo olemassa sinun tai siihen "
-"liittyvän järjestäjän tilillä."
+"Väline, jolla on sama tunniste ja tyyppi, on jo olemassa "
+"organisaattoritilissäsi."
 
 #: pretix/api/serializers/order.py:78
 #, python-brace-format
@@ -360,7 +353,7 @@ msgstr "Kiintiössä \"{}\" ei ole tarpeaksi tilaa operaation suorittamiseksi."
 #: pretix/api/serializers/organizer.py:103
 #: pretix/control/forms/organizer.py:888 pretix/presale/forms/customer.py:445
 msgid "An account with this email address is already registered."
-msgstr ""
+msgstr "Antamasi sähköpostiosoiteella on jo rekisteröity tili."
 
 #: pretix/api/serializers/organizer.py:236
 #: pretix/control/forms/organizer.py:737
@@ -393,7 +386,7 @@ msgstr "Kyseistä kuponkia on jo käytetty enimmäismäärä kertoja."
 
 #: pretix/api/views/checkin.py:610 pretix/api/views/checkin.py:617
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Väline yhdistetty toiseen tapahtumaan"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:476
 #, python-brace-format
@@ -494,10 +487,8 @@ msgid "Refund of payment failed"
 msgstr "Maksun hyvitys on epäonnistunut"
 
 #: pretix/api/webhooks.py:301
-#, fuzzy
-#| msgid "Payment confirmation date"
 msgid "Payment confirmed"
-msgstr "Maksun vahvistuspäivämäärä"
+msgstr "Maksu vahvistettu"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
@@ -508,10 +499,8 @@ msgid "Order denied"
 msgstr "Tilaus hylätty"
 
 #: pretix/api/webhooks.py:313
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order deleted"
-msgstr "Tilaus hylätty"
+msgstr "Tilaus poistettu"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
@@ -573,44 +562,32 @@ msgid "Test-Mode of shop has been deactivated"
 msgstr "Kaupan testikäyttö on otettu pois päältä"
 
 #: pretix/api/webhooks.py:370
-#, fuzzy
-#| msgid "Join waiting list"
 msgid "Waiting list entry added"
-msgstr "Liity jonotuslistalle"
+msgstr "Jonotuslistalle on lisätty merkintä"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Waiting list entry changed"
-msgstr "Jonotuslistalla alkaen"
+msgstr "Jonotuslistan merkintä muokattu"
 
 #: pretix/api/webhooks.py:378
-#, fuzzy
-#| msgid "The new category has been created."
 msgid "Waiting list entry deleted"
-msgstr "Uusi kategoria luotu."
+msgstr "Jonotuslistamerkintä poistettu"
 
 #: pretix/api/webhooks.py:382
 msgid "Waiting list entry received voucher"
-msgstr ""
+msgstr "Jonotuslistalle lisätty merkintä sai kupongin"
 
 #: pretix/api/webhooks.py:386
-#, fuzzy
-#| msgid "Customer account"
 msgid "Customer account created"
-msgstr "Asiakastili"
+msgstr "Asiakastili luotu"
 
 #: pretix/api/webhooks.py:390
-#, fuzzy
-#| msgid "Customer account"
 msgid "Customer account changed"
-msgstr "Asiakastili"
+msgstr "Asiakastili muokatttu"
 
 #: pretix/api/webhooks.py:394
-#, fuzzy
-#| msgid "Customer account"
 msgid "Customer account anonymized"
-msgstr "Asiakastili"
+msgstr "Asiakastili anonymisoitu"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:960
@@ -672,7 +649,7 @@ msgstr "Salasana"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "Salasanasi täytyy sisältää numeroita että kirjaimia."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -680,8 +657,10 @@ msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "Salasanasi ei voi olla sama kuin aiempi salasanasi."
 msgstr[1] ""
+"Salasanasi ei voi olla sama kuin jokin edellisistä %(history_length)s "
+"salasanastasi."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -689,13 +668,16 @@ msgstr "Verkkokauppa"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "Ohjelmointirajapinta"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"Ohjelmointirajapintamyyntikanavat eivät sisällä sisäänrakennettua "
+"toiminnallisuutta, mutta niitä voidaan käyttää räätälöityihin "
+"integraatioihin."
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -760,6 +742,8 @@ msgid ""
 "No supported Token Endpoint Auth Methods supported: "
 "{token_endpoint_auth_methods_supported}"
 msgstr ""
+"Ei tuettuja tunnistepäätepisteen todennusmenetelmiä: "
+"{token_endpoint_auth_methods_supported}"
 
 #: pretix/base/customersso/oidc.py:203 pretix/base/customersso/oidc.py:210
 #: pretix/base/customersso/oidc.py:229 pretix/base/customersso/oidc.py:246
@@ -819,7 +803,7 @@ msgstr "Yhdistetty Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:54
 msgid "Question answer file uploads"
-msgstr ""
+msgstr "Kysymys-vastaustiedostojen lataukset"
 
 #: pretix/base/exporters/answers.py:55 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:87
@@ -828,8 +812,6 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:1241
 #: pretix/plugins/reports/exporters.py:478
 #: pretix/plugins/reports/exporters.py:651
-#, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Order data"
 msgstr "Tilauksen tiedot"
@@ -899,7 +881,7 @@ msgstr "Päivämäärä"
 #: pretix/plugins/sendmail/forms.py:351
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "Kaikki päivämäärät"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:606
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
@@ -907,8 +889,6 @@ msgid "Customer accounts"
 msgstr "Asiakastilit"
 
 #: pretix/base/exporters/customers.py:51
-#, fuzzy
-#| msgid "Customer accounts"
 msgctxt "export_category"
 msgid "Customer accounts"
 msgstr "Asiakastilit"
@@ -1019,7 +999,7 @@ msgstr "Vahvistettu sähköpostiosoite"
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:68
 msgid "Last login"
-msgstr ""
+msgstr "Viimeisin kirjautuminen"
 
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:102
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:66
@@ -1040,7 +1020,7 @@ msgstr "Kieli"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:72
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:68
 msgid "Notes"
-msgstr ""
+msgstr "Muistiinpanot"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -1106,8 +1086,6 @@ msgid "No"
 msgstr "Ei"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
-#, fuzzy
-#| msgid "Invoices"
 msgctxt "export_category"
 msgid "Invoices"
 msgstr "Laskut"
@@ -1116,7 +1094,7 @@ msgstr "Laskut"
 msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
-msgstr ""
+msgstr "Lataa laskut muodossa, joka on yhteensopiva dekodi NREI -ohjelmistolle."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -1134,27 +1112,21 @@ msgstr "Tapahtumalippu {event}-{code}"
 #: pretix/plugins/reports/exporters.py:698
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
 msgid "Date range"
-msgstr ""
+msgstr "Päivämääräväli"
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
-#, fuzzy
-#| msgid ""
-#| "Only include invoices issued on or after this date. Note that the invoice "
-#| "date does not always correspond to the order or payment date."
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"Sisällytä vain laskut, joiden päiväys on tämä päivämäärä tai sen jälkeen. "
-"Huomaa, että laskun päiväys ei aina vastaa tilaus- tai maksupäivämäärää."
+"Sisällytä vain tässä aikarajassa laskutetut laskut. Huomaa, että laskun "
+"päivämäärä ei aina vastaa tilauksen tai maksun päivämäärää."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
 msgstr "Tapahtumatieto"
 
 #: pretix/base/exporters/events.py:48
-#, fuzzy
-#| msgid "Event data"
 msgctxt "export_category"
 msgid "Event data"
 msgstr "Tapahtumatieto"
@@ -1164,6 +1136,8 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Lataa taulukkolaskentatiedosto, jossa on tietoja kaikista tapahtumista tässä "
+"organisaattoritilissä."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:441
@@ -1194,7 +1168,7 @@ msgstr "Tapahtuman valuutta"
 #: pretix/base/exporters/events.py:61 pretix/base/models/auth.py:261
 #: pretix/base/models/exports.py:133 pretix/control/forms/exports.py:93
 msgid "Timezone"
-msgstr ""
+msgstr "Aikavyöhyke"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:582
 #: pretix/base/models/event.py:1471 pretix/base/settings.py:3219
@@ -1214,7 +1188,7 @@ msgstr "Tapahtuman loppumisajankohta"
 #: pretix/base/models/event.py:1475 pretix/control/forms/subevents.py:490
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr ""
+msgstr "Pääsyaika"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:598
 #: pretix/base/models/event.py:1484 pretix/control/forms/subevents.py:93
@@ -1275,6 +1249,8 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
+"Huomaa, että tämä saattaa sisältää joitain laskuja tilauksista, jotka on "
+"lopulta maksettu kokonaan tai osittain eri palveluntarjoajalla."
 
 #: pretix/base/exporters/invoices.py:126
 msgid "All invoices"
@@ -1283,6 +1259,8 @@ msgstr "Kaikki laskut"
 #: pretix/base/exporters/invoices.py:127
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
+"Lataa kaikki laskut jotka järjestelmä on luonut ZIP tiedostona tai PDF "
+"tiedostona."
 
 #: pretix/base/exporters/invoices.py:178
 msgid "Invoice data"
@@ -1294,6 +1272,10 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Lataa taulukkolaskentatiedosto, joka sisältää kaikki järjestelmän luomat "
+"laskutiedot. Taulukkolaskentatiedostossa on kaksi välilehteä: toinen, jossa "
+"on rivi jokaiselle laskulle, ja toinen, jossa on rivi jokaiselle laskun "
+"erälle."
 
 #: pretix/base/exporters/invoices.py:191 pretix/base/shredder.py:576
 #: pretix/control/templates/pretixcontrol/order/index.html:267
@@ -1371,7 +1353,7 @@ msgstr "Laskun tyyppi"
 
 #: pretix/base/exporters/invoices.py:204 pretix/base/exporters/invoices.py:331
 msgid "Cancellation of"
-msgstr ""
+msgstr "Peruutus"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:207
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:209
@@ -1534,7 +1516,7 @@ msgstr "Sisäinen viite"
 #: pretix/base/exporters/invoices.py:223 pretix/base/models/tax.py:162
 #: pretix/control/forms/event.py:1502
 msgid "Reverse charge"
-msgstr ""
+msgstr "Käänteinen verovelvollisuus"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Shown foreign currency"
@@ -1554,7 +1536,7 @@ msgstr "Summa (ilman veroja)"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Payment matching IDs"
-msgstr ""
+msgstr "Maksujen vastaavuustunnisteet"
 
 #: pretix/base/exporters/invoices.py:229 pretix/base/exporters/invoices.py:349
 #: pretix/base/exporters/orderlist.py:289
@@ -1622,52 +1604,50 @@ msgstr "Tapahtuman alkupäivämäärä"
 
 #: pretix/base/exporters/invoices.py:350 pretix/base/pdf.py:278
 msgid "Event end date"
-msgstr ""
+msgstr "Tapahtuman päätöspäivä"
 
 #: pretix/base/exporters/items.py:49
-#, fuzzy
 msgid "Product data"
-msgstr "Tuotetyyppi"
+msgstr "Tuotetiedot"
 
 #: pretix/base/exporters/items.py:50 pretix/base/exporters/orderlist.py:1128
-#, fuzzy
 msgctxt "export_category"
 msgid "Product data"
-msgstr "Tuotetyyppi"
+msgstr "Tuotetiedot"
 
 #: pretix/base/exporters/items.py:51
 msgid "Download a spreadsheet with details about all products and variations."
 msgstr ""
+"Lataa taulukkolaskentatiedosto, joka sisältää tietoja kaikista tuotteista ja "
+"niiden variaatioista."
 
 #: pretix/base/exporters/items.py:57 pretix/base/exporters/orderlist.py:588
 #: pretix/base/exporters/orderlist.py:890
-#, fuzzy
 msgid "Product ID"
-msgstr "Tuote"
+msgstr "Tuotetunnus"
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:590
 #: pretix/base/exporters/orderlist.py:892
-#, fuzzy
 msgid "Variation ID"
-msgstr "Variaatiot"
+msgstr "Variaation tunniste"
 
 #: pretix/base/exporters/items.py:59 pretix/base/models/items.py:142
 #: pretix/base/pdf.py:151
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr ""
+msgstr "Tuotekategoria"
 
 #: pretix/base/exporters/items.py:60 pretix/base/models/discount.py:62
 #: pretix/base/models/items.py:96 pretix/base/models/items.py:479
 #: pretix/base/models/tax.py:320 pretix/control/forms/organizer.py:264
 #: pretix/control/templates/pretixcontrol/items/discounts.html:57
 msgid "Internal name"
-msgstr ""
+msgstr "Sisäinen nimi"
 
 #: pretix/base/exporters/items.py:64 pretix/base/models/items.py:476
 msgid "Item name"
-msgstr ""
+msgstr "Tuoteen nimi"
 
 #: pretix/base/exporters/items.py:68 pretix/base/exporters/orderlist.py:589
 #: pretix/base/exporters/orderlist.py:893
@@ -1675,7 +1655,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1493 pretix/base/models/orders.py:2988
 #: pretix/plugins/checkinlists/exporters.py:693
 msgid "Variation"
-msgstr ""
+msgstr "Variaatio"
 
 #: pretix/base/exporters/items.py:71 pretix/base/exporters/reusablemedia.py:48
 #: pretix/base/models/customers.py:57 pretix/base/models/customers.py:403
@@ -1695,37 +1675,36 @@ msgstr "Aktiivinen"
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
 msgid "Sales channels"
-msgstr ""
+msgstr "Myyntikanavat"
 
 #: pretix/base/exporters/items.py:73 pretix/base/models/items.py:493
 #: pretix/base/models/items.py:1154
 #: pretix/control/templates/pretixcontrol/items/index.html:43
 msgid "Default price"
-msgstr ""
+msgstr "Oletushinta"
 
 #: pretix/base/exporters/items.py:74 pretix/base/models/items.py:501
 #: pretix/control/templates/pretixcontrol/items/index.html:131
 msgid "Free price input"
-msgstr ""
+msgstr "Vapaa hintasyöttö"
 
 #: pretix/base/exporters/items.py:75 pretix/base/models/items.py:516
 msgid "Sales tax"
-msgstr ""
+msgstr "Arvolisävero"
 
 #: pretix/base/exporters/items.py:76 pretix/base/models/items.py:521
 msgid "Is an admission ticket"
-msgstr ""
+msgstr "On pääsylippu"
 
 #: pretix/base/exporters/items.py:77
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
-#, fuzzy
 msgid "Personalized ticket"
-msgstr "Maksutapa"
+msgstr "Personoitu lippu"
 
 #: pretix/base/exporters/items.py:78 pretix/base/models/items.py:535
 msgid "Generate tickets"
-msgstr ""
+msgstr "Generoi liput"
 
 #: pretix/base/exporters/items.py:79 pretix/base/exporters/orderlist.py:1135
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:367
@@ -1749,7 +1728,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:113
 #: pretix/presale/views/widget.py:422
 msgid "Waiting list"
-msgstr ""
+msgstr "Jonotuslista"
 
 #: pretix/base/exporters/items.py:80 pretix/base/models/discount.py:80
 #: pretix/base/models/items.py:224 pretix/base/models/items.py:280
@@ -1760,7 +1739,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:171
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:149
 msgid "Available from"
-msgstr ""
+msgstr "Saatavilla alkaen"
 
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:85
 #: pretix/base/models/items.py:229 pretix/base/models/items.py:285
@@ -1770,37 +1749,39 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:176
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:154
 msgid "Available until"
-msgstr ""
+msgstr "Saatavilla asti"
 
 #: pretix/base/exporters/items.py:82 pretix/base/models/items.py:600
 msgid "This product can only be bought using a voucher."
-msgstr ""
+msgstr "Tämän tuotteen voi ostaa vain kupongilla."
 
 #: pretix/base/exporters/items.py:83 pretix/base/models/items.py:613
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
+"Tämä tuote näytetään vain, jos tuotteen kanssa yhteensopiva kuponki "
+"lunastetaan."
 
 #: pretix/base/exporters/items.py:84 pretix/base/models/items.py:606
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "Tämän tuoteen ostamiseen tarvitaan suostumus"
 
 #: pretix/base/exporters/items.py:85 pretix/base/models/items.py:619
 msgid "Only sell this product as part of a bundle"
-msgstr ""
+msgstr "Myy tätä tuotetta vain osana pakettia"
 
 #: pretix/base/exporters/items.py:86 pretix/base/models/items.py:626
 msgid "Allow product to be canceled or changed"
-msgstr ""
+msgstr "Salli tuoteen peruminen tai sulkeminen"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:632
 msgid "Minimum amount per order"
-msgstr ""
+msgstr "Vähimmäismäärä per tilaus"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:639
 msgid "Maximum amount per order"
-msgstr ""
+msgstr "Enimmäismäärä per tilaus"
 
 #: pretix/base/exporters/items.py:89 pretix/base/exporters/orderlist.py:282
 #: pretix/base/modelimport_orders.py:610 pretix/base/models/items.py:647
@@ -1813,31 +1794,29 @@ msgstr "Vaatii erityishuomiota"
 #: pretix/base/modelimport_orders.py:618 pretix/base/models/items.py:654
 #: pretix/base/models/items.py:1237 pretix/base/models/orders.py:289
 #: pretix/plugins/checkinlists/exporters.py:522
-#, fuzzy
-#| msgid "Check-in"
 msgid "Check-in text"
-msgstr "Ilmoittautuminen"
+msgstr "Ilmoittautumis teksti"
 
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:659
 #: pretix/base/models/items.py:1157
 msgid "Original price"
-msgstr ""
+msgstr "Alkuperäinen hinta"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:676
 msgid "This product is a gift card"
-msgstr ""
+msgstr "Tämä tuote on lahjakortti"
 
 #: pretix/base/exporters/items.py:93 pretix/base/models/items.py:682
 #: pretix/base/models/items.py:1178
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:41
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:167
 msgid "Require a valid membership"
-msgstr ""
+msgstr "Vaadi voimassa oleva jäsenyys"
 
 #: pretix/base/exporters/items.py:94 pretix/base/models/items.py:691
 #: pretix/base/models/items.py:1187
 msgid "Hide without a valid membership"
-msgstr ""
+msgstr "Piiloita ilman voimassa olevaa jäsenyyttä"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:86
 msgid "Order data"
@@ -1848,6 +1827,8 @@ msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Lataa jäsennelty JSON-esitys kaikista tilauksista. Tämä voi olla hyödyllistä "
+"kolmannen osapuolen järjestelmiin tuomisessa."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1858,6 +1839,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Lataa tekstitiedosto, joka sisältää kaikki sähköpostiosoitteet, jotka on "
+"kerätty ostajilta tai lippujen haltijoilta."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:487
 #: pretix/plugins/reports/exporters.py:669
@@ -1870,6 +1853,10 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Lataa taulukkolaskentatiedosto kaikista tilauksista. "
+"Taulukkolaskentatiedostossa on kolme välilehteä: yksi, jossa on rivi "
+"jokaiselle tilaukselle, yksi, jossa on rivi jokaiselle tilauksen erälle, ja "
+"yksi, jossa on rivi kaikille tilaukseen lisättyille maksuilla."
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:332
 #: pretix/control/navigation.py:255 pretix/control/navigation.py:362
@@ -1891,7 +1878,7 @@ msgstr "Tilausrivit"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Order fees"
-msgstr ""
+msgstr "Tilausmaksut"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Only paid orders"
@@ -1903,14 +1890,12 @@ msgstr "Sisällytä maksujen summat"
 
 #: pretix/base/exporters/orderlist.py:122
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "Näytä monivalintavastaukset ryhmiteltyinä yhteen sarakkeeseen"
 
 #: pretix/base/exporters/orderlist.py:131
 #: pretix/plugins/reports/exporters.py:701
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include orders created within this date range."
-msgstr "Sisällytä vain tällä päivämäärällä ja sen jälkeen tehdyt tilaukset."
+msgstr "Sisällytä vain tilaukset, jotka on luotu tämän aikarajan sisällä."
 
 #: pretix/base/exporters/orderlist.py:135 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:234 pretix/plugins/badges/exporters.py:499
@@ -1925,6 +1910,8 @@ msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
+"Sisällytä vain tilaukset, jotka sisältävät vähintään yhden lipun tälle "
+"aikarajalle. Myös muut päivämäärät sisällytetään sekoitetuissa tilauksissa!"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:440
@@ -2019,7 +2006,7 @@ msgstr "Tilauksen aika"
 
 #: pretix/base/exporters/orderlist.py:270
 msgid "Custom address field"
-msgstr ""
+msgstr "Räätälöity osoitekenttä"
 
 #: pretix/base/exporters/orderlist.py:270
 msgid "Date of last payment"
@@ -2027,7 +2014,7 @@ msgstr "Viimeinen maksupäivämäärä"
 
 #: pretix/base/exporters/orderlist.py:270 pretix/base/services/stats.py:237
 msgid "Fees"
-msgstr ""
+msgstr "Kulu"
 
 #: pretix/base/exporters/orderlist.py:270
 #: pretix/base/exporters/orderlist.py:657 pretix/base/modelimport_orders.py:472
@@ -2039,17 +2026,17 @@ msgstr "Tilauksen kieli"
 #: pretix/base/exporters/orderlist.py:275
 #, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr ""
+msgstr "Brutto {rate}% arvonlisäveroja"
 
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr ""
+msgstr "Netto {rate} % arvonlisäverolla"
 
 #: pretix/base/exporters/orderlist.py:277
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr ""
+msgstr "Arvonlisäveron arvo {rate} % verokannalla"
 
 #: pretix/base/exporters/orderlist.py:280
 msgid "Invoice numbers"
@@ -2066,14 +2053,15 @@ msgstr "Myyntikanavat"
 #: pretix/base/exporters/orderlist.py:621 pretix/base/models/orders.py:277
 #: pretix/control/forms/filter.py:240
 msgid "Follow-up date"
-msgstr ""
+msgstr "Seurantapäivämäärä"
 
 #: pretix/base/exporters/orderlist.py:286
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:208
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:51
+#, fuzzy
 msgid "Positions"
-msgstr ""
+msgstr "Paikat"
 
 #: pretix/base/exporters/orderlist.py:287
 #: pretix/base/exporters/orderlist.py:658 pretix/base/models/orders.py:321
@@ -2084,7 +2072,6 @@ msgstr "Sähköpostiosoite vahvistettu"
 #: pretix/base/exporters/orderlist.py:288
 #: pretix/base/exporters/orderlist.py:465
 #: pretix/base/exporters/orderlist.py:659
-#, fuzzy
 msgid "External customer ID"
 msgstr "Asiakastunnus"
 
@@ -2096,7 +2083,7 @@ msgstr "Maksettu maksutavalla {method}"
 #: pretix/base/exporters/orderlist.py:448
 #: pretix/base/exporters/orderlist.py:894
 msgid "Fee type"
-msgstr ""
+msgstr "Kulutyyppi"
 
 #: pretix/base/exporters/orderlist.py:450
 #: pretix/base/exporters/orderlist.py:591
@@ -2122,14 +2109,14 @@ msgstr "Hinta"
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:16
 #: pretix/control/templates/pretixcontrol/order/change.html:165
 msgid "Tax rule"
-msgstr ""
+msgstr "Verosääntö"
 
 #: pretix/base/exporters/orderlist.py:455
 #: pretix/base/exporters/orderlist.py:460
 #: pretix/base/exporters/orderlist.py:644
 #: pretix/base/exporters/orderlist.py:648 pretix/base/pdf.py:330
 msgid "Invoice address name"
-msgstr ""
+msgstr "Laskutusosoiteen nimi"
 
 #: pretix/base/exporters/orderlist.py:480
 #: pretix/base/exporters/orderlist.py:683 pretix/base/models/orders.py:205
@@ -2140,7 +2127,7 @@ msgstr "peruutettu"
 #: pretix/base/exporters/orderlist.py:887
 #: pretix/plugins/checkinlists/exporters.py:755
 msgid "Position ID"
-msgstr ""
+msgstr "Paikkatunniste"
 
 #: pretix/base/exporters/orderlist.py:584
 #: pretix/base/exporters/orderlist.py:1139
@@ -2239,39 +2226,40 @@ msgid "Voucher"
 msgstr "Kuponki"
 
 #: pretix/base/exporters/orderlist.py:610
+#, fuzzy
 msgid "Pseudonymization ID"
-msgstr ""
+msgstr "Pseudonymisointitunniste"
 
 #: pretix/base/exporters/orderlist.py:611 pretix/control/forms/filter.py:677
 #: pretix/control/templates/pretixcontrol/order/change.html:280
 msgid "Ticket secret"
-msgstr ""
+msgstr "Lipun salaisuus"
 
 #: pretix/base/exporters/orderlist.py:612 pretix/base/modelimport_orders.py:570
 #: pretix/base/modelimport_vouchers.py:272
 #: pretix/plugins/checkinlists/exporters.py:523
 msgid "Seat ID"
-msgstr ""
+msgstr "Istuintunniste"
 
 #: pretix/base/exporters/orderlist.py:613
 #: pretix/plugins/checkinlists/exporters.py:524
 msgid "Seat name"
-msgstr ""
+msgstr "Istuimen nimi"
 
 #: pretix/base/exporters/orderlist.py:614
 #: pretix/plugins/checkinlists/exporters.py:525
 msgid "Seat zone"
-msgstr ""
+msgstr "Paikkavyöhyke"
 
 #: pretix/base/exporters/orderlist.py:615
 #: pretix/plugins/checkinlists/exporters.py:526
 msgid "Seat row"
-msgstr ""
+msgstr "Paikkarivi"
 
 #: pretix/base/exporters/orderlist.py:616
 #: pretix/plugins/checkinlists/exporters.py:527
 msgid "Seat number"
-msgstr ""
+msgstr "Paikkanumero"
 
 #: pretix/base/exporters/orderlist.py:617
 #: pretix/control/templates/pretixcontrol/order/change.html:224
@@ -2280,7 +2268,7 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Blokattu"
 
 #: pretix/base/exporters/orderlist.py:618 pretix/base/modelimport_orders.py:500
 #: pretix/base/models/orders.py:2512
@@ -2302,7 +2290,7 @@ msgstr "Voimassa alkaen"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:48
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:61
 msgid "Valid until"
-msgstr ""
+msgstr "Voimassa kunnes"
 
 #: pretix/base/exporters/orderlist.py:620
 msgid "Order comment"
@@ -2310,7 +2298,7 @@ msgstr "Tilauksen kommentti"
 
 #: pretix/base/exporters/orderlist.py:622
 msgid "Add-on to position ID"
-msgstr ""
+msgstr "lisäosa työtehtävään liittyvään tunnukseen"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:340
 msgid "Invoice address street"
@@ -2318,11 +2306,11 @@ msgstr "Laskutusosoiteen kadunnimi"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:345
 msgid "Invoice address ZIP code"
-msgstr ""
+msgstr "Laskutusosoitteen postinumero"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:350
 msgid "Invoice address city"
-msgstr ""
+msgstr "Laskutusosoitteen kaupunki"
 
 #: pretix/base/exporters/orderlist.py:651 pretix/base/pdf.py:360
 msgid "Invoice address country"
@@ -2342,13 +2330,11 @@ msgstr "Laskutusosoitteen maakunta"
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:162
 #: pretix/plugins/checkinlists/apps.py:44
 msgid "Check-in lists"
-msgstr ""
+msgstr "Ilmoittautumisluettelot"
 
 #: pretix/base/exporters/orderlist.py:822
-#, fuzzy
-#| msgid "Order reactivated"
 msgid "Order transaction data"
-msgstr "Tilaus uudelleenaktivoitu"
+msgstr "Tilaustapahtuman tiedot"
 
 #: pretix/base/exporters/orderlist.py:824
 msgid ""
@@ -2356,12 +2342,14 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Lataa laskentataulukko kaikista tilauksiin tehdyistä olennaisista "
+"muutoksista eli kaikista tuotteisiin, hintoihin tai verokantoihin tehdyistä "
+"muutoksista. Tiedot ovat tarkkoja vain niiden muutosten osalta, jotka on "
+"tehty lokakuun 2021 jälkeen julkaistujen pretix-versioiden kanssa."
 
 #: pretix/base/exporters/orderlist.py:840
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include transactions created within this date range."
-msgstr "Sisällytä vain tällä päivämäärällä ja sen jälkeen tehdyt tilaukset."
+msgstr "Sisällytä vain tämän päivämäärävälin sisällä luodut tapahtumat."
 
 #: pretix/base/exporters/orderlist.py:875 pretix/base/models/event.py:654
 #: pretix/base/models/items.py:464 pretix/base/models/items.py:2020
@@ -2391,25 +2379,19 @@ msgstr "Tapahtuma"
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:75
 msgid "Currency"
-msgstr ""
+msgstr "Valuuta"
 
 #: pretix/base/exporters/orderlist.py:883
-#, fuzzy
-#| msgid "Creation date"
 msgid "Transaction date"
-msgstr "Luontipäivämäärä"
+msgstr "Tapahtumapäivä"
 
 #: pretix/base/exporters/orderlist.py:884
-#, fuzzy
-#| msgid "Creation date"
 msgid "Transaction time"
-msgstr "Luontipäivämäärä"
+msgstr "Tapahtuma-aika"
 
 #: pretix/base/exporters/orderlist.py:885
-#, fuzzy
-#| msgid "Order data"
 msgid "Old data"
-msgstr "Tilauksen tiedot"
+msgstr "Vanha tieto"
 
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/items.py:1543
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
@@ -2423,81 +2405,73 @@ msgid "Quantity"
 msgstr "Määrä"
 
 #: pretix/base/exporters/orderlist.py:895
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
-msgstr "Sisäinen viite"
+msgstr "Sisäisen kulun tyyppi"
 
 #: pretix/base/exporters/orderlist.py:897
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Päivämäärä"
+msgstr "Päivämäärätunnus"
 
 #: pretix/base/exporters/orderlist.py:902
-#, fuzzy
-#| msgid "Tax ID"
 msgid "Tax rule ID"
 msgstr "Y-tunnus"
 
 #: pretix/base/exporters/orderlist.py:905
 #: pretix/plugins/reports/accountingreport.py:319
-#, fuzzy
-#| msgid "Order total"
 msgid "Gross total"
-msgstr "Tilauksen summa"
+msgstr "Brutto yhteensä"
 
 #: pretix/base/exporters/orderlist.py:906
 #: pretix/plugins/reports/accountingreport.py:318
-#, fuzzy
-#| msgid "Total"
 msgid "Tax total"
-msgstr "Summa"
+msgstr "Verosumma"
 
 #: pretix/base/exporters/orderlist.py:916
 msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Tämä arvo annetaan tiedoksi, se ei ole osa alkuperäisiä tapahtumatietoja, ja "
+"se on saattanut muuttua tapahtuman jälkeen."
 
 #: pretix/base/exporters/orderlist.py:939
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Muunnettu vanhasta versiosta"
 
 #: pretix/base/exporters/orderlist.py:1001
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Payments and refunds"
-msgstr "Tilauksen maksut ja palautukset"
+msgstr "Maksut ja palautukset"
 
 #: pretix/base/exporters/orderlist.py:1003
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Lataa laskentataulukko kaikista maksuista tai palautuksista jokaisen "
+"tilauksen osalta."
 
 #: pretix/base/exporters/orderlist.py:1012
-#, fuzzy
-#| msgid "Date of last payment"
 msgid "Date range (payment date)"
-msgstr "Viimeinen maksupäivämäärä"
+msgstr "Päivämääräalue (maksupäivä)"
 
 #: pretix/base/exporters/orderlist.py:1015
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Huomaa, että tätä käyttämällä ei oteta huomioon vahvistamattomia maksuja tai "
+"keskeneräisiä palautuksia."
 
 #: pretix/base/exporters/orderlist.py:1019
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Päivämääräalue (tapahtuman alku)"
 
 #: pretix/base/exporters/orderlist.py:1025
 msgid "Payment states"
-msgstr ""
+msgstr "Maksutilat"
 
 #: pretix/base/exporters/orderlist.py:1033
 msgid "Refund states"
-msgstr ""
+msgstr "Palautustilat"
 
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1217
@@ -2533,11 +2507,11 @@ msgstr "Luontipäivämäärä"
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/control/templates/pretixcontrol/order/index.html:841
 msgid "Completion date"
-msgstr ""
+msgstr "Valmistumispäivä"
 
 #: pretix/base/exporters/orderlist.py:1077
 msgid "Status code"
-msgstr ""
+msgstr "Tilakoodi"
 
 #: pretix/base/exporters/orderlist.py:1077
 #: pretix/base/exporters/orderlist.py:1215
@@ -2569,7 +2543,7 @@ msgstr "Maksutapa"
 
 #: pretix/base/exporters/orderlist.py:1077
 msgid "Matching ID"
-msgstr ""
+msgstr "Vastaava tunniste"
 
 #: pretix/base/exporters/orderlist.py:1077
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
@@ -2578,22 +2552,23 @@ msgstr "Maksun tiedot"
 
 #: pretix/base/exporters/orderlist.py:1127
 msgid "Quota availabilities"
-msgstr ""
+msgstr "Kiintiöiden käytettävyys"
 
 #: pretix/base/exporters/orderlist.py:1129
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
 msgstr ""
+"Lataa taulukko kaikista kiintiöistä ja niiden tämänhetkisestä saatavuudesta."
 
 #: pretix/base/exporters/orderlist.py:1134
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
 msgid "Quota name"
-msgstr ""
+msgstr "Kiintiön nimi"
 
 #: pretix/base/exporters/orderlist.py:1134
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
 msgid "Total quota"
-msgstr ""
+msgstr "Kokonaiskiintiö"
 
 #: pretix/base/exporters/orderlist.py:1134
 #: pretix/control/templates/pretixcontrol/event/cancel.html:20
@@ -2603,46 +2578,44 @@ msgstr "Maksetut tilaukset"
 
 #: pretix/base/exporters/orderlist.py:1134 pretix/control/views/item.py:963
 msgid "Pending orders"
-msgstr ""
+msgstr "Odottavat tilaukset"
 
 #: pretix/base/exporters/orderlist.py:1134
 msgid "Blocking vouchers"
-msgstr ""
+msgstr "Estävät kupongit"
 
 #: pretix/base/exporters/orderlist.py:1135 pretix/control/views/item.py:982
 msgid "Current user's carts"
-msgstr ""
+msgstr "Nykyisen käyttäjän ostoskorit"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Exited orders"
-msgstr ""
+msgstr "Poistuneet tilaukset"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Current availability"
-msgstr ""
+msgstr "Nykyinen saatavuus"
 
 #: pretix/base/exporters/orderlist.py:1152
 #: pretix/base/exporters/orderlist.py:1159
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
 #: pretix/control/views/item.py:989
 msgid "Infinite"
-msgstr ""
+msgstr "Loputon"
 
 #: pretix/base/exporters/orderlist.py:1181
 msgid "Gift card transactions"
-msgstr ""
+msgstr "Lahjakortti tapahtumat"
 
 #: pretix/base/exporters/orderlist.py:1183
 #: pretix/base/exporters/orderlist.py:1288
-#, fuzzy
-#| msgid "Gift card"
 msgctxt "export_category"
 msgid "Gift cards"
-msgstr "Lahjakortti"
+msgstr "Lahjakortit"
 
 #: pretix/base/exporters/orderlist.py:1184
 msgid "Download a spreadsheet of all gift card transactions."
-msgstr ""
+msgstr "Lataa laskentaohjelmataulukko kaikista lahjakorttitapahtumista."
 
 #: pretix/base/exporters/orderlist.py:1212
 #: pretix/base/exporters/orderlist.py:1259
@@ -2654,7 +2627,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:156
 msgid "Gift card code"
-msgstr ""
+msgstr "Lahjakortin koodi"
 
 #: pretix/base/exporters/orderlist.py:1213
 #: pretix/base/exporters/orderlist.py:1302
@@ -2707,40 +2680,42 @@ msgstr "Järjestäjä"
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:72
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:42
 msgid "TEST MODE"
-msgstr ""
+msgstr "TESTI TILA"
 
 #: pretix/base/exporters/orderlist.py:1240
 msgid "Gift card redemptions"
-msgstr ""
+msgstr "Lahjakorttien lunastamiset"
 
 #: pretix/base/exporters/orderlist.py:1242
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Lataa laskentataulukko kaikista lahjakortteihin liittyvistä maksuista tai "
+"palautuksista."
 
 #: pretix/base/exporters/orderlist.py:1259
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:16
 msgid "Issuer"
-msgstr ""
+msgstr "Liikkeellelaskija"
 
 #: pretix/base/exporters/orderlist.py:1286 pretix/control/navigation.py:538
 #: pretix/control/navigation.py:556
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
 #: pretix/plugins/reports/accountingreport.py:898
 msgid "Gift cards"
-msgstr ""
+msgstr "Lahjakortit"
 
 #: pretix/base/exporters/orderlist.py:1289
 msgid "Download a spreadsheet of all gift cards including their current value."
-msgstr ""
+msgstr "Lataa taulukko kaikista lahjakorteista ja niiden nykyisestä arvosta."
 
 #: pretix/base/exporters/orderlist.py:1296
 msgid "Show value at"
-msgstr ""
+msgstr "Näytä arvo kohdassa"
 
 #: pretix/base/exporters/orderlist.py:1299
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "Oletusarvona on raportin laatimisajankohta."
 
 #: pretix/base/exporters/orderlist.py:1304
 #: pretix/base/exporters/orderlist.py:1314 pretix/control/forms/filter.py:518
@@ -2766,7 +2741,7 @@ msgstr "Kaikki"
 
 #: pretix/base/exporters/orderlist.py:1306 pretix/control/forms/filter.py:1417
 msgid "Live"
-msgstr ""
+msgstr "Live"
 
 #: pretix/base/exporters/orderlist.py:1315 pretix/control/forms/filter.py:1425
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
@@ -2775,11 +2750,11 @@ msgstr "Tyhjä"
 
 #: pretix/base/exporters/orderlist.py:1316 pretix/control/forms/filter.py:1426
 msgid "Valid and with value"
-msgstr ""
+msgstr "Voimassa oleva ja arvolla varustettu"
 
 #: pretix/base/exporters/orderlist.py:1317 pretix/control/forms/filter.py:1427
 msgid "Expired and with value"
-msgstr ""
+msgstr "Vanhentunut ja arvolla varustettu"
 
 #: pretix/base/exporters/orderlist.py:1318 pretix/control/forms/filter.py:227
 #: pretix/control/forms/filter.py:1428 pretix/control/forms/filter.py:2097
@@ -2794,18 +2769,18 @@ msgstr "Vanhentunut"
 
 #: pretix/base/exporters/orderlist.py:1356 pretix/base/models/giftcards.py:98
 msgid "Test mode card"
-msgstr ""
+msgstr "Testitilakortti"
 
 #: pretix/base/exporters/orderlist.py:1358
 #: pretix/base/modelimport_orders.py:516 pretix/base/models/giftcards.py:102
 #: pretix/control/templates/pretixcontrol/order/index.html:202
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:62
 msgid "Expiry date"
-msgstr ""
+msgstr "Vanhentumispäivämäärä"
 
 #: pretix/base/exporters/orderlist.py:1359 pretix/control/forms/orders.py:873
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Erityiset ehdot ja säännöt"
 
 #: pretix/base/exporters/orderlist.py:1361
 #: pretix/control/templates/pretixcontrol/order/change.html:98
@@ -2813,11 +2788,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:68
 msgid "Current value"
-msgstr ""
+msgstr "Nykyinen arvo"
 
 #: pretix/base/exporters/orderlist.py:1362
 msgid "Created in order"
-msgstr ""
+msgstr "Luotu tilauksessa"
 
 #: pretix/base/exporters/orderlist.py:1363
 msgid "Last invoice number of order"
@@ -2825,7 +2800,7 @@ msgstr "Tilauksen viimeisin laskunumero"
 
 #: pretix/base/exporters/orderlist.py:1364
 msgid "Last invoice date of order"
-msgstr ""
+msgstr "Tilauksen viimeisin laskun päivämäärä"
 
 #: pretix/base/exporters/reusablemedia.py:34 pretix/control/navigation.py:616
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:204
@@ -2834,44 +2809,36 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:9
 msgid "Reusable media"
-msgstr ""
+msgstr "Uudelleenkäytettävä media"
 
 #: pretix/base/exporters/reusablemedia.py:35
-#, fuzzy
-#| msgid "Deactivate selected"
 msgctxt "export_category"
 msgid "Reusable media"
-msgstr "Poista valitut käytöstä"
+msgstr "Uudelleenkäytettävä media"
 
 #: pretix/base/exporters/reusablemedia.py:36
-#, fuzzy
-#| msgid ""
-#| "Download a spreadsheet of all currently registered customer accounts."
 msgid ""
 "Download a spread sheet with the data of all reusable medias on your account."
 msgstr ""
-"Lataa taulukko kaikista tällä hetkellä rekisteröidyistä asiakastileistä."
+"Lataa taulukkolaskentatiedosto, joka sisältää kaikkien tilisi "
+"uudelleenkäytettävien medioiden tiedot."
 
 #: pretix/base/exporters/reusablemedia.py:46 pretix/base/models/media.py:67
-#, fuzzy
-#| msgid "Device type"
 msgctxt "reusable_medium"
 msgid "Media type"
-msgstr "Laitteen tyyppi"
+msgstr "Median tyyppi"
 
 #: pretix/base/exporters/reusablemedia.py:47 pretix/base/models/media.py:73
-#, fuzzy
-#| msgid "External identifier"
 msgctxt "reusable_medium"
 msgid "Identifier"
-msgstr "Ulkoinen tunniste"
+msgstr "Tunniste"
 
 #: pretix/base/exporters/reusablemedia.py:49 pretix/base/models/media.py:81
 #: pretix/base/models/orders.py:265 pretix/base/models/orders.py:3094
 #: pretix/control/forms/orders.py:76
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:138
 msgid "Expiration date"
-msgstr ""
+msgstr "Vanhentumispäivämäärä"
 
 #: pretix/base/exporters/reusablemedia.py:50 pretix/base/models/media.py:90
 #: pretix/control/templates/pretixcontrol/order/index.html:215
@@ -2880,67 +2847,63 @@ msgid "Customer account"
 msgstr "Asiakastili"
 
 #: pretix/base/exporters/reusablemedia.py:51 pretix/base/models/media.py:97
-#, fuzzy
-#| msgid "Change history"
 msgid "Linked ticket"
-msgstr "Muutoshistoria"
+msgstr "Linkitetty lippu"
 
 #: pretix/base/exporters/reusablemedia.py:52 pretix/base/models/media.py:104
-#, fuzzy
 msgid "Linked gift card"
-msgstr "Voi hallita lahjakortteja"
+msgstr "Linkitetty lahjakortti"
 
 #: pretix/base/exporters/waitinglist.py:42
-#, fuzzy
-#| msgid "Join waiting list"
 msgctxt "export_category"
 msgid "Waiting list"
-msgstr "Liity jonotuslistalle"
+msgstr "Jonotuslista"
 
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
 msgstr ""
+"Lataa taulukkolaskentatiedosto, joka sisältää kaikki jonotuslistasi tiedot."
 
 #: pretix/base/exporters/waitinglist.py:49
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:102
 msgid "All entries"
-msgstr ""
+msgstr "Kaikki merkinnät"
 
 #: pretix/base/exporters/waitinglist.py:54
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:105
 msgid "Waiting for a voucher"
-msgstr ""
+msgstr "Odottaa kuponkia"
 
 #: pretix/base/exporters/waitinglist.py:59
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:107
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:227
 #: pretix/control/views/waitinglist.py:326
 msgid "Voucher assigned"
-msgstr ""
+msgstr "Kuponki myönnetty"
 
 #: pretix/base/exporters/waitinglist.py:64
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:110
 msgid "Waiting for redemption"
-msgstr ""
+msgstr "Odottaa lunastusta"
 
 #: pretix/base/exporters/waitinglist.py:72
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:223
 #: pretix/control/views/waitinglist.py:322
 msgid "Voucher redeemed"
-msgstr ""
+msgstr "Kuponi lunastettu"
 
 #: pretix/base/exporters/waitinglist.py:80
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:116
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:225
 #: pretix/control/views/waitinglist.py:324
 msgid "Voucher expired"
-msgstr ""
+msgstr "Kuponki on vanhentunut"
 
 #: pretix/base/exporters/waitinglist.py:111 pretix/base/pdf.py:121
 #: pretix/control/forms/event.py:1764
 #: pretix/control/templates/pretixcontrol/items/index.html:38
 msgid "Product name"
-msgstr ""
+msgstr "Tuotteen nimi"
 
 #: pretix/base/exporters/waitinglist.py:115
 #: pretix/base/modelimport_orders.py:95 pretix/base/modelimport_vouchers.py:60
@@ -2952,7 +2915,7 @@ msgstr "Päivämäärä"
 #: pretix/base/exporters/waitinglist.py:119
 #: pretix/control/views/waitinglist.py:308
 msgid "Priority"
-msgstr ""
+msgstr "Etusija"
 
 #: pretix/base/exporters/waitinglist.py:121
 #: pretix/base/modelimport_vouchers.py:39 pretix/base/models/vouchers.py:190
@@ -2971,7 +2934,7 @@ msgstr "Kuponkikoodi"
 #: pretix/base/forms/__init__.py:118
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "Voit käyttää {markup_name} tässä kentässä."
 
 #: pretix/base/forms/__init__.py:178
 #, python-format
@@ -2979,47 +2942,51 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"Teknisista syistä et voi asettaa kenttiä, jotka on peitettävä (esim. "
+"salasanat), arvoon %(value)s."
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/auth.py:179
 msgid "Keep me logged in"
-msgstr ""
+msgstr "Pysy kirjautuneena"
 
 #: pretix/base/forms/auth.py:65 pretix/base/forms/auth.py:272
 msgid "This combination of credentials is not known to our system."
-msgstr ""
+msgstr "Tämä käyttäjätunnuksen ja salasanan yhdistelmä ei ole tiedossamme."
 
 #: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:372 pretix/presale/forms/customer.py:444
 msgid "For security reasons, please wait 5 minutes before you try again."
-msgstr ""
+msgstr "Tietoturvasyistä, odota 5 minuuttia ennen kuin yrität uudelleen."
 
 #: pretix/base/forms/auth.py:67 pretix/base/forms/auth.py:273
 msgid "This account is inactive."
-msgstr ""
+msgstr "Tämä tili on inaktiivinen."
 
 #: pretix/base/forms/auth.py:156
 msgid ""
 "You already registered with that email address, please use the login form."
 msgstr ""
+"Olet jo rekisteröitynyt tuolla sähköpostiosoitteella, käytä "
+"kirjautumislomaketta."
 
 #: pretix/base/forms/auth.py:157 pretix/base/forms/auth.py:215
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:283 pretix/presale/forms/customer.py:371
 msgid "Please enter the same password twice"
-msgstr ""
+msgstr "Syötä sama salasana kahdesti."
 
 #: pretix/base/forms/auth.py:172 pretix/base/forms/auth.py:224
 #: pretix/presale/forms/customer.py:296 pretix/presale/forms/customer.py:390
 msgid "Repeat password"
-msgstr ""
+msgstr "Toista salasana"
 
 #: pretix/base/forms/questions.py:213
 msgid "Please do not use special characters in names."
-msgstr ""
+msgstr "Älä käytä erikoismerkkejä nimissä."
 
 #: pretix/base/forms/questions.py:272
 msgid "Please enter a shorter name."
-msgstr ""
+msgstr "Syötä lyhyempi nimi."
 
 #: pretix/base/forms/questions.py:296
 msgctxt "phonenumber"
@@ -3029,118 +2996,131 @@ msgstr "Kansainvälinen maatunnus"
 #: pretix/base/forms/questions.py:320
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Puhelinnumero (ilman kansainvälistä suuntanumeroa)"
 
 #: pretix/base/forms/questions.py:481
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
-msgstr ""
+msgstr "Latasit kuvan vaakasuuntaisena. Lataa kuva pystysuuntaisena."
 
 #: pretix/base/forms/questions.py:484
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Lataa kuva, jonka leveys on 3/4 korkeudesta."
 
 #: pretix/base/forms/questions.py:487
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"Latasit tiedoston, jossa on erittäin suuri määrä pikseleitä. Lataa kuva, "
+"joka on enintään 10000 x 10000 pikseliä."
 
 #: pretix/base/forms/questions.py:490 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Lataa kelvollinen kuva. Lataamasi tiedosto ei ole kuva tai se on vioittunut."
 
 #: pretix/base/forms/questions.py:633 pretix/base/forms/questions.py:642
 msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
-msgstr ""
+msgstr "Jos jätät tämän tyhjäksi, lippu on voimassa ostopaikasta alkaen."
 
 #: pretix/base/forms/questions.py:689 pretix/base/forms/questions.py:1014
 msgid "Street and Number"
-msgstr ""
+msgstr "Tie ja numero"
 
 #: pretix/base/forms/questions.py:724 pretix/base/forms/questions.py:1083
 msgctxt "address"
 msgid "Select state"
-msgstr ""
+msgstr "Valitse osavaltio/maakunta"
 
 #: pretix/base/forms/questions.py:1069
 msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Vapaaehtoinen, mutta asuinmaasi mukaan saatamme joutua perimään lisäveroja, "
+"jos et syötä sitä."
 
 #: pretix/base/forms/questions.py:1071 pretix/base/forms/questions.py:1077
 msgid "If you are registered in Switzerland, you can enter your UID instead."
 msgstr ""
+"Jos olet rekisteröitynyt Sveitsissä, voit syöttää sen sijaan UID-tunnuksesi."
 
 #: pretix/base/forms/questions.py:1075
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Vapaaehtoinen, mutta sen syöttäminen saattaa olla tarpeen, jotta voit "
+"hyödyntää verohyötyjä laskussasi asuinmaasi ja myyjän asuinmaan mukaan."
 
 #: pretix/base/forms/questions.py:1174
 msgid "You need to provide a company name."
-msgstr ""
+msgstr "Sinun täytyy antaa yrityksen nimi."
 
 #: pretix/base/forms/questions.py:1176
 msgid "You need to provide your name."
-msgstr ""
+msgstr "Sinun täytyy antaa nimesi."
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
 "There already is an account associated with this email address. Please "
 "choose a different one."
 msgstr ""
+"Tällä sähköpostiosoitteella on jo tili. Valitse toinen sähköpostiosoite."
 
 #: pretix/base/forms/user.py:53
 msgid ""
 "Please enter your current password if you want to change your email address "
 "or password."
 msgstr ""
+"Syötä nykyinen salasanasi, jos haluat muuttaa sähköpostiosoitteesi tai "
+"salasanaasi."
 
 #: pretix/base/forms/user.py:55 pretix/presale/forms/customer.py:370
 #: pretix/presale/forms/customer.py:443
 msgid "The current password you entered was not correct."
-msgstr ""
+msgstr "Syöttämäsi nykyinen salasana ei ollut oikein."
 
 #: pretix/base/forms/user.py:58
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Valitse salasana, joka on eri kuin nykyinen salasanasi."
 
 #: pretix/base/forms/user.py:63 pretix/presale/forms/customer.py:379
 #: pretix/presale/forms/customer.py:448
 msgid "Your current password"
-msgstr ""
+msgstr "Nykyinen salasanasi"
 
 #: pretix/base/forms/user.py:67 pretix/control/forms/users.py:50
 #: pretix/presale/forms/customer.py:384
 msgid "New password"
-msgstr ""
+msgstr "Uusi salasana"
 
 #: pretix/base/forms/user.py:71 pretix/control/forms/users.py:54
 msgid "Repeat new password"
-msgstr ""
+msgstr "Toista uusi salasanasi"
 
 #: pretix/base/forms/user.py:75 pretix/control/forms/organizer.py:458
 #: pretix/control/forms/users.py:58
 msgid "Default timezone"
-msgstr ""
+msgstr "Oletus aikavyöhyke"
 
 #: pretix/base/forms/user.py:76 pretix/control/forms/users.py:59
 msgid ""
 "Only used for views that are not bound to an event. For all event views, the "
 "event timezone is used instead."
 msgstr ""
+"Käytetään vain näkymiin, jotka eivät ole sidottuja tapahtumaan. Kaikissa "
+"tapahtumanäkymissä käytetään sen sijaan tapahtuman aikavyöhykettä."
 
 #: pretix/base/forms/user.py:175
 msgid "Device name"
-msgstr ""
+msgstr "Laiteen nimi"
 
 #: pretix/base/forms/user.py:176
 msgid "Device type"
@@ -3152,7 +3132,7 @@ msgstr "Älypuhelin, jossa on tunnistautumissovellus"
 
 #: pretix/base/forms/user.py:178
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr ""
+msgstr "WebAuthn-yhteensopiva laitteistotunniste (esim. Yubikey)"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -3161,29 +3141,31 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
+"Paikkamerkkisyntaksissasi on virhe. Tarkista, että avaus '{' ja sulkeva '}' "
+"aaltosulut paikkamerkeissäsi vastaavat toisiaan. Huomaa: jos haluat käyttää "
+"kirjaimellisia '{' tai '}', sinun täytyy tuplata ne muodossa '{{' ja '}}'."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:758
 #, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr ""
+msgstr "Virheellinen paikkamerkki: {%(value)s}"
 
 #: pretix/base/forms/widgets.py:68
-#, fuzzy, python-format
-#| msgid "Sample State"
+#, python-format
 msgid "Sample: %s"
-msgstr "Esimerkkimaakunta"
+msgstr "Esimerkki: %s"
 
 #: pretix/base/forms/widgets.py:71
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr ""
+msgstr "Saatavilla olevat paikkamerkit: {list}"
 
 #: pretix/base/forms/widgets.py:214 pretix/base/models/items.py:1644
 #: pretix/base/reldate.py:201 pretix/plugins/checkinlists/exporters.py:751
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:54
 msgid "Time"
-msgstr ""
+msgstr "Aika"
 
 #: pretix/base/forms/widgets.py:234 pretix/base/forms/widgets.py:239
 msgid "Business or institutional customer"
@@ -3197,57 +3179,57 @@ msgstr "Henkilöasiakas"
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr ""
+msgstr "Sivu %d / %d"
 
 #: pretix/base/invoice.py:323
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr ""
+msgstr "Perinteinen renderöijä (pretix 1.0)"
 
 #: pretix/base/invoice.py:367
 msgctxt "invoice"
 msgid "Invoice from"
-msgstr ""
+msgstr "Lasku lähettäjältä"
 
 #: pretix/base/invoice.py:373
 msgctxt "invoice"
 msgid "Invoice to"
-msgstr ""
+msgstr "Lasku vastaanottajalle"
 
 #: pretix/base/invoice.py:401 pretix/base/invoice.py:951
 msgctxt "invoice"
 msgid "Order code"
-msgstr ""
+msgstr "Tilauskoodi"
 
 #: pretix/base/invoice.py:410 pretix/base/invoice.py:964
 msgctxt "invoice"
 msgid "Cancellation number"
-msgstr ""
+msgstr "Peruutusnumero"
 
 #: pretix/base/invoice.py:416 pretix/base/invoice.py:966
 msgctxt "invoice"
 msgid "Original invoice"
-msgstr ""
+msgstr "Alkuperäinen lasku"
 
 #: pretix/base/invoice.py:421 pretix/base/invoice.py:971
 msgctxt "invoice"
 msgid "Invoice number"
-msgstr ""
+msgstr "Laskun numero"
 
 #: pretix/base/invoice.py:429 pretix/base/invoice.py:986
 msgctxt "invoice"
 msgid "Cancellation date"
-msgstr ""
+msgstr "Peruutuspäivä"
 
 #: pretix/base/invoice.py:435
 msgctxt "invoice"
 msgid "Original invoice date"
-msgstr ""
+msgstr "Alkuperinen laskutus päivä"
 
 #: pretix/base/invoice.py:442 pretix/base/invoice.py:988
 msgctxt "invoice"
 msgid "Invoice date"
-msgstr ""
+msgstr "Lasutus päivämäärä"
 
 #: pretix/base/invoice.py:458
 msgctxt "invoice"
@@ -3261,23 +3243,25 @@ msgid ""
 "{from_date}\n"
 "until {to_date}"
 msgstr ""
+"{from_date} \n"
+"asti {to_date} saakka"
 
 #: pretix/base/invoice.py:517 pretix/base/services/mail.py:495
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
-msgstr ""
+msgstr "Lasku {num}"
 
 #: pretix/base/invoice.py:560
 #, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr ""
+msgstr "Asiakasviite: {reference}"
 
 #: pretix/base/invoice.py:568
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr ""
+msgstr "Asiakkaan y-tunnus"
 
 #: pretix/base/invoice.py:575
 msgctxt "invoice"
@@ -3287,19 +3271,19 @@ msgstr "Edunsaaja"
 #: pretix/base/invoice.py:596
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr ""
+msgstr "Verolasku"
 
 #: pretix/base/invoice.py:597
 msgctxt "invoice"
 msgid "Invoice"
-msgstr ""
+msgstr "Lasku"
 
 #: pretix/base/invoice.py:598
 #: pretix/control/templates/pretixcontrol/order/index.html:271
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr ""
+msgstr "Peruutus"
 
 #: pretix/base/invoice.py:620 pretix/base/invoice.py:628
 msgctxt "invoice"
@@ -3309,22 +3293,22 @@ msgstr "Kuvaus"
 #: pretix/base/invoice.py:621 pretix/base/invoice.py:629
 msgctxt "invoice"
 msgid "Qty"
-msgstr ""
+msgstr "Määrä"
 
 #: pretix/base/invoice.py:622 pretix/base/invoice.py:768
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr ""
+msgstr "Verokanta"
 
 #: pretix/base/invoice.py:623
 msgctxt "invoice"
 msgid "Net"
-msgstr ""
+msgstr "Netto"
 
 #: pretix/base/invoice.py:624
 msgctxt "invoice"
 msgid "Gross"
-msgstr ""
+msgstr "Brutto"
 
 #: pretix/base/invoice.py:630
 msgctxt "invoice"
@@ -3335,60 +3319,58 @@ msgstr "Määrä"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Yksikköhinta: {net_price} neto / {gross_price} bruttona"
 
 #: pretix/base/invoice.py:659
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Nettohinta"
+msgstr "Yksittäishinta: {price}"
 
 #: pretix/base/invoice.py:677 pretix/base/invoice.py:683
 msgctxt "invoice"
 msgid "Invoice total"
-msgstr ""
+msgstr "Laskun kokonaismäärä"
 
 #: pretix/base/invoice.py:693
 msgctxt "invoice"
 msgid "Received payments"
-msgstr ""
+msgstr "Vastaanotetut maksut"
 
 #: pretix/base/invoice.py:698
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr ""
+msgstr "Maksettavat maksut"
 
 #: pretix/base/invoice.py:715
-#, fuzzy
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Voi hallita lahjakortteja"
+msgstr "Maksettu lahjakortilla"
 
 #: pretix/base/invoice.py:720
-#, fuzzy
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr "Hyvitettävä summa"
+msgstr "Jäljellä oleva summa"
 
 #: pretix/base/invoice.py:769
 msgctxt "invoice"
 msgid "Net value"
-msgstr ""
+msgstr "Nettoarvo"
 
 #: pretix/base/invoice.py:770
 msgctxt "invoice"
 msgid "Gross value"
-msgstr ""
+msgstr "Bruttoarvo"
 
 #: pretix/base/invoice.py:771
 msgctxt "invoice"
 msgid "Tax"
-msgstr ""
+msgstr "Vero"
 
 #: pretix/base/invoice.py:801
 msgctxt "invoice"
 msgid "Included taxes"
-msgstr ""
+msgstr "Sisätää verot"
 
 #: pretix/base/invoice.py:829
 #, python-brace-format
@@ -3397,6 +3379,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
+"Käyttäen muuntohintaista 1:{rate}, joka on julkaistu {authority} toimesta "
+"{date}, tämä vastaa:"
 
 #: pretix/base/invoice.py:844
 #, python-brace-format
@@ -3405,43 +3389,41 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
+"Käyttäen muuntohintaista 1:{rate}, joka on julkaistu {authority} toimesta "
+"{date}, laskun kokonaissumma vastaa {total}."
 
 #: pretix/base/invoice.py:858
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Oletuslaskun renderöijä (eurooppalainen kirjeen tyyli)"
 
 #: pretix/base/invoice.py:947
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr "Ole hyvä ja anna kelvollinen sähköpostiosoite."
+msgstr "(Ilmoitathan aina.)"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Yksinkertaistettu laskun renderöijä"
 
 #: pretix/base/invoice.py:1013
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "Event series date changed"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "Tapahtumapäivä muutettu"
+msgstr "Tapahtuman päivämäärä: {date_range}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Viivakoodi / QR-koodi"
 
 #: pretix/base/media.py:88
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
 msgid "NFC UID-based"
-msgstr ""
+msgstr "NFC UID-pohjainen"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
 msgid "Default list"
-msgstr ""
+msgstr "Oletuslista"
 
 #: pretix/base/modelimport.py:112
 msgid "Keep empty"
@@ -3450,12 +3432,12 @@ msgstr "Jätä tyhjäksi"
 #: pretix/base/modelimport.py:139
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr ""
+msgstr "Sarakkeen ”{header}” virheellinen asetus."
 
 #: pretix/base/modelimport.py:199
 #, python-brace-format
 msgid "Could not parse {value} as a yes/no value."
-msgstr ""
+msgstr "{value}-arvoa ei voitu jäsentää kyllä/ei-arvona."
 
 #: pretix/base/modelimport.py:222
 #, python-brace-format
