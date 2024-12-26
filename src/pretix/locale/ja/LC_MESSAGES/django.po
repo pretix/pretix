@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-12-25 23:27+0000\n"
+"PO-Revision-Date: 2024-12-26 01:54+0000\n"
 "Last-Translator: Hijiri <7m4gmh@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2840,7 +2840,7 @@ msgstr "[日本語訳] Linked gift card"
 #: pretix/base/exporters/waitinglist.py:42
 msgctxt "export_category"
 msgid "Waiting list"
-msgstr ""
+msgstr "空席待ちリスト"
 
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
@@ -2892,7 +2892,7 @@ msgstr "[日本語訳] Product name"
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
 msgctxt "subevents"
 msgid "Date"
-msgstr ""
+msgstr "日付"
 
 #: pretix/base/exporters/waitinglist.py:119
 #: pretix/control/views/waitinglist.py:308
@@ -3168,7 +3168,7 @@ msgstr "[日本語訳] Individual customer"
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr ""
+msgstr "%dページのうち %dページ"
 
 #: pretix/base/invoice.py:323
 msgctxt "invoice"
@@ -3188,7 +3188,7 @@ msgstr "[日本語訳] Invoice to"
 #: pretix/base/invoice.py:401 pretix/base/invoice.py:951
 msgctxt "invoice"
 msgid "Order code"
-msgstr ""
+msgstr "注文コード"
 
 #: pretix/base/invoice.py:410 pretix/base/invoice.py:964
 msgctxt "invoice"
@@ -3203,12 +3203,12 @@ msgstr "[日本語訳] Original invoice"
 #: pretix/base/invoice.py:421 pretix/base/invoice.py:971
 msgctxt "invoice"
 msgid "Invoice number"
-msgstr ""
+msgstr "請求書番号"
 
 #: pretix/base/invoice.py:429 pretix/base/invoice.py:986
 msgctxt "invoice"
 msgid "Cancellation date"
-msgstr ""
+msgstr "キャンセルした日"
 
 #: pretix/base/invoice.py:435
 msgctxt "invoice"
@@ -21329,11 +21329,11 @@ msgstr "[日本語訳] Do you really want to approve this order?"
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:27
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:212
 msgid "No, take me back"
-msgstr "[日本語訳] No, take me back"
+msgstr "いいえ、戻らないでください"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:25
 msgid "Yes, approve order"
-msgstr "[日本語訳] Yes, approve order"
+msgstr "はい、注文を承認します"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:6
 #: pretix/control/templates/pretixcontrol/order/cancel.html:10
@@ -21342,7 +21342,7 @@ msgstr "[日本語訳] Yes, approve order"
 #: pretix/presale/templates/pretixpresale/event/order.html:478
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
-msgstr "[日本語訳] Cancel order"
+msgstr "注文をキャンセルする"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:12
 #: pretix/control/templates/pretixcontrol/order/deny.html:11
@@ -21373,12 +21373,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:220
 msgid "Yes, cancel order"
-msgstr "[日本語訳] Yes, cancel order"
+msgstr "はい、注文をキャンセルします"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:4
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:8
 msgid "Ignore cancellation request"
-msgstr "[日本語訳] Ignore cancellation request"
+msgstr "キャンセルのリクエストが拒否されました"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:10
 msgid ""
@@ -21392,7 +21392,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:26
 msgid "Yes, delete request"
-msgstr "[日本語訳] Yes, delete request"
+msgstr "はい、リクエストを削除します"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:7
 #: pretix/control/templates/pretixcontrol/order/change.html:13
@@ -21402,7 +21402,7 @@ msgstr "[日本語訳] Yes, delete request"
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:11
 #, python-format
 msgid "Change order: %(code)s"
-msgstr "[日本語訳] Change order: %(code)s"
+msgstr "注文を変更する: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:18
 #: pretix/control/templates/pretixcontrol/order/change_contact.html:12
@@ -21421,7 +21421,7 @@ msgstr "[日本語訳] Change order: %(code)s"
 #: pretix/control/templates/pretixcontrol/order/transactions.html:11
 #, python-format
 msgid "Back to order %(order)s"
-msgstr "[日本語訳] Back to order %(order)s"
+msgstr "注文に戻る %(order)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:24
 msgid ""
@@ -21430,11 +21430,10 @@ msgid ""
 "implications, e.g. the payment method fee might change or additional "
 "questions can be added to the order that need to be answered by the user."
 msgstr ""
-"[日本語訳] You can use this tool to change the ordered products or to "
-"partially cancel the order. Please keep in mind that changing an order can "
-"have several implications, e.g. the payment method fee might change or "
-"additional questions can be added to the order that need to be answered by "
-"the user."
+"このツールを使用して、注文した商品を変更したり、注文を部分的にキャンセルした"
+"りできます。注文を変更すると、支払い方法の手数料が変更されたり、ユーザーが回"
+"答する必要がある追加の質問が注文に追加されたりする可能性があるなど、いくつか"
+"の影響があることに注意してください。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:31
 msgid ""
@@ -21550,7 +21549,7 @@ msgstr "[日本語訳] Unconstrained"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:266
 msgid "–"
-msgstr "[日本語訳] –"
+msgstr "–"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:272
 msgid ""
@@ -21574,7 +21573,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:358
 #: pretix/control/templates/pretixcontrol/order/change.html:386
 msgid "Add product"
-msgstr "[日本語訳] Add product"
+msgstr "すべての商品"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:446
 msgid ""
@@ -21607,21 +21606,20 @@ msgstr "[日本語訳] Perform changes"
 #: pretix/control/templates/pretixcontrol/order/change_contact.html:9
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:5
 msgid "Change contact information"
-msgstr "[日本語訳] Change contact information"
+msgstr "連絡先の情報を変更する"
 
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:5
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:9
 msgid "Change locale information"
-msgstr "[日本語訳] Change locale information"
+msgstr "言語設定を変更する"
 
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:18
 msgid "This language will be used whenever emails are sent to the users."
-msgstr ""
-"[日本語訳] This language will be used whenever emails are sent to the users."
+msgstr "この言語は、ユーザーに電子メールを送る時に常に使用されます。"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:9
 msgid "Change order information"
-msgstr "[日本語訳] Change order information"
+msgstr "注文情報を変更する"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:25
 #: pretix/control/templates/pretixcontrol/order/index.html:946
@@ -21629,90 +21627,89 @@ msgstr "[日本語訳] Change order information"
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:39
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:29
 msgid "Invoice information"
-msgstr "[日本語訳] Invoice information"
+msgstr "請求書の情報"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:26
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:40
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
-msgstr "[日本語訳] (optional)"
+msgstr "(任意)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
 msgid "Delete order"
-msgstr "[日本語訳] Delete order"
+msgstr "注文を削除"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:10
 msgid ""
 "Do you really want to delete this order? <strong>You really cannot revert "
 "this action and we can't either.</strong>"
-msgstr ""
-"[日本語訳] Do you really want to delete this order? <strong>You really "
-"cannot revert this action and we can't either.</strong>"
+msgstr "この注文を本当に削除してよいですか? "
+"<strong>この行為は、誰も元に戻すことができません。</strong>"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:25
 msgid "Yes, delete order"
-msgstr "[日本語訳] Yes, delete order"
+msgstr "はい、注文を削除します"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:5
 #: pretix/control/templates/pretixcontrol/order/deny.html:9
 msgid "Deny order"
-msgstr "[日本語訳] Deny order"
+msgstr "注文を拒絶"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:27
 msgid "Yes, deny order"
-msgstr "[日本語訳] Yes, deny order"
+msgstr "はい、注文を断ります"
 
 #: pretix/control/templates/pretixcontrol/order/extend.html:5
 #: pretix/control/templates/pretixcontrol/order/extend.html:9
 #: pretix/control/templates/pretixcontrol/order/index.html:61
 msgid "Extend payment term"
-msgstr "[日本語訳] Extend payment term"
+msgstr "支払期日を延長する"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:13
 #: pretix/control/templates/pretixcontrol/order/index.html:20
 #, python-format
 msgid "Order details: %(code)s"
-msgstr "[日本語訳] Order details: %(code)s"
+msgstr "注文の詳細: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:45
 #: pretix/control/templates/pretixcontrol/orders/index.html:298
 #: pretix/control/views/orders.py:289
 msgid "Approve"
-msgstr "[日本語訳] Approve"
+msgstr "承認"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:50
 #: pretix/control/templates/pretixcontrol/orders/index.html:305
 #: pretix/control/views/orders.py:303
 msgid "Deny"
-msgstr "[日本語訳] Deny"
+msgstr "拒絶"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:57
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:37
 msgid "Mark as paid"
-msgstr "[日本語訳] Mark as paid"
+msgstr "支払済みを記録する"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:72
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:5
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:9
 msgid "Reactivate order"
-msgstr "[日本語訳] Reactivate order"
+msgstr "注文を再度有効にする"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:80
 msgid "View order as user"
-msgstr "[日本語訳] View order as user"
+msgstr "ユーザーとして注文を見る"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:84
 msgid "View email history"
-msgstr "[日本語訳] View email history"
+msgstr "電子メールの履歴を見る"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:88
 msgid "View transaction history"
-msgstr "[日本語訳] View transaction history"
+msgstr "決済の履歴を見る"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:99
 msgid "Expire order"
-msgstr "[日本語訳] Expire order"
+msgstr "注文を無効（期限切れ）にする"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:100
 msgid ""
@@ -21727,17 +21724,17 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:115
 #: pretix/control/views/orders.py:351
 msgid "Refund for overpayment"
-msgstr "[日本語訳] Refund for overpayment"
+msgstr "支払超過の払い戻し"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:117
 #, python-format
 msgid "This order is currently overpaid by %(amount)s."
-msgstr "[日本語訳] This order is currently overpaid by %(amount)s."
+msgstr "この注文は、現在 %(amount)s の過払い状態です。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:121
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr "[日本語訳] Initiate a refund of %(amount)s"
+msgstr "%(amount)s の返金を始める"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:129
 #, python-format
@@ -21752,7 +21749,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:142
 msgid "Cancellation request"
-msgstr "[日本語訳] Cancellation request"
+msgstr "キャンセルのリクエスト"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:146
 msgid "The customer asked you to cancel the order with the following settings:"
@@ -21766,11 +21763,11 @@ msgstr "[日本語訳] Original payment method"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:162
 msgid "Delete request"
-msgstr "[日本語訳] Delete request"
+msgstr "リクエストの削除"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:185
 msgid "Cancellation date"
-msgstr "[日本語訳] Cancellation date"
+msgstr "キャンセルした日"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:207
 msgid ""
@@ -34200,11 +34197,11 @@ msgstr "国"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 msgid "Account information"
-msgstr "[日本語訳] Account information"
+msgstr "アカウント情報"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
 msgid "Update your account information"
-msgstr "[日本語訳] Update your account information"
+msgstr "アカウント情報の更新"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:11
 #, python-format
@@ -34307,73 +34304,71 @@ msgstr "[日本語訳] Event list"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Past events"
-msgstr "[日本語訳] Past events"
+msgstr "過去のイベント"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:29
 msgid "Upcoming events"
-msgstr "[日本語訳] Upcoming events"
+msgstr "これからのイベント"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:67
 msgctxt "subevent"
 msgid "Multiple dates"
-msgstr "[日本語訳] Multiple dates"
+msgstr "複数の日付"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:158
 #: pretix/presale/views/widget.py:437
 msgid "More info"
-msgstr "[日本語訳] More info"
+msgstr "さらなる情報"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:167
 msgid "No archived events found."
-msgstr "[日本語訳] No archived events found."
+msgstr "アーカイブされたイベントが見つかりません。"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:167
 msgid "Show upcoming"
-msgstr "[日本語訳] Show upcoming"
+msgstr "これからのイベントを見る"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:169
 msgid "No public upcoming events found."
-msgstr "[日本語訳] No public upcoming events found."
+msgstr "公開される今後のイベントが見つかりません。"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:169
 msgid "Show past events"
-msgstr "[日本語訳] Show past events"
+msgstr "過去のイベントを見る"
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr "[日本語訳] Page %(page)s of %(of)s"
+msgstr "%(of)sページのうち %(page)s ページ"
 
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "[日本語訳] We are processing your request …"
+msgstr "リクエストを処理中です …"
 
 #: pretix/presale/utils.py:271 pretix/presale/utils.py:417
 #: pretix/presale/utils.py:418
 msgid "The selected event was not found."
-msgstr "[日本語訳] The selected event was not found."
+msgstr "選択されたイベントが見つかりません。"
 
 #: pretix/presale/utils.py:381
 msgid "This feature is not enabled."
-msgstr "[日本語訳] This feature is not enabled."
+msgstr "この機能は無効です。"
 
 #: pretix/presale/utils.py:427 pretix/presale/utils.py:433
 msgid "The selected organizer was not found."
-msgstr "[日本語訳] The selected organizer was not found."
+msgstr "選択された主催者が見つかりません。"
 
 #: pretix/presale/views/__init__.py:272
 #, python-brace-format
 msgid ""
 "Your selected payment method can only be used for a payment of at least "
 "{amount}."
-msgstr ""
-"[日本語訳] Your selected payment method can only be used for a payment of at "
-"least {amount}."
+msgstr "選択された支払い方法は、少なくとも {amount}以上の支払いに使用可能です。"
 
 #: pretix/presale/views/cart.py:200
 msgid "Please enter positive numbers only."
-msgstr "[日本語訳] Please enter positive numbers only."
+msgstr "正の数のみ入力してください。"
 
 #: pretix/presale/views/cart.py:439
 msgid "We applied the voucher to as many products in your cart as we could."
@@ -34390,43 +34385,39 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:502
 msgid "Your cart has been updated."
-msgstr "[日本語訳] Your cart has been updated."
+msgstr "カートが更新されました。"
 
 #: pretix/presale/views/cart.py:505 pretix/presale/views/cart.py:531
 msgid "Your cart is now empty."
-msgstr "[日本語訳] Your cart is now empty."
+msgstr "カートが空です。"
 
 #: pretix/presale/views/cart.py:546
 msgid "The products have been successfully added to your cart."
-msgstr "[日本語訳] The products have been successfully added to your cart."
+msgstr "商品が正常にカートに追加されました。"
 
 #: pretix/presale/views/cart.py:570 pretix/presale/views/event.py:537
 #: pretix/presale/views/widget.py:377
 msgid "Tickets for this event cannot be purchased on this sales channel."
-msgstr ""
-"[日本語訳] Tickets for this event cannot be purchased on this sales channel."
+msgstr "このイベントのチケットは、この販売チャンネルでは購入できません。"
 
 #: pretix/presale/views/cart.py:709
 msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
-msgstr ""
-"[日本語訳] The gift card has been saved to your cart. Please now select the "
-"products you want to purchase."
+msgstr "ギフトカードがカートに追加されました。購入したい商品を選択してください。"
 
 #: pretix/presale/views/cart.py:737
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
-msgstr "[日本語訳] We were unable to find the specified date."
+msgstr "指定された日付を見つけることができません。"
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
-msgstr "[日本語訳] Your cart is empty"
+msgstr "カートは空です"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The booking period for this event is over or has not yet started."
-msgstr ""
-"[日本語訳] The booking period for this event is over or has not yet started."
+msgstr "このイベントの予約期間が経過したか、または開始前です。"
 
 #: pretix/presale/views/customer.py:247
 msgid ""
@@ -34718,11 +34709,11 @@ msgstr "[日本語訳] Read access"
 
 #: pretix/settings.py:799
 msgid "Write access"
-msgstr "[日本語訳] Write access"
+msgstr "書き込みアクセス"
 
 #: pretix/settings.py:810
 msgid "Kosovo"
-msgstr "[日本語訳] Kosovo"
+msgstr "コソボ"
 
 #, fuzzy
 #~| msgid "Email"
