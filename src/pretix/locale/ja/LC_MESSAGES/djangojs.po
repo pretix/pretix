@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2022-03-15 00:00+0000\n"
-"Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/ja/>\n"
+"PO-Revision-Date: 2024-12-26 01:54+0000\n"
+"Last-Translator: Hijiri <7m4gmh@gmail.com>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -929,7 +929,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Waiting list"
-msgstr "待機リスト"
+msgstr "空席待ちリスト"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
