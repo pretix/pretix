@@ -268,8 +268,15 @@
                         {% if line.discount and line.line_price_gross != line.price %}
                             <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
                                 <br>
-                                <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
-                                {% trans "Discounted" %}
+                                <span class="fa fa-star fa-fw" aria-hidden="true"></span>
+                                {% if line.price < line.line_price_gross %}
+                                    {% widthratio line.price line.line_price_gross 100 as percent %}
+                                    {% blocktranslate trimmed with percent=percent %}
+                                        {{ percent }} % Discount
+                                    {% endblocktranslate %}
+                                {% else %}
+                                    {% trans "Discounted" %}
+                                {% endif %}
                             </span>
                         {% endif %}
                     </div>
@@ -335,8 +342,15 @@
                         {% if line.discount and line.line_price_gross != line.price %}
                             <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
                                 <br>
-                                <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
-                                {% trans "Discounted" %}
+                                <span class="fa fa-star fa-fw" aria-hidden="true"></span>
+                                {% if line.price < line.line_price_gross %}
+                                    {% widthratio line.price line.line_price_gross 100 as percent %}
+                                    {% blocktranslate trimmed with percent=percent %}
+                                        {{ percent }} % Discount
+                                    {% endblocktranslate %}
+                                {% else %}
+                                    {% trans "Discounted" %}
+                                {% endif %}
                             </span>
                         {% endif %}
                     </div>
