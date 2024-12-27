@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-12-26 22:00+0000\n"
+"PO-Revision-Date: 2024-12-27 11:45+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1983,7 +1983,7 @@ msgstr "注文日"
 #: pretix/base/exporters/orderlist.py:881
 #: pretix/plugins/checkinlists/exporters.py:519
 msgid "Order time"
-msgstr "注文時間"
+msgstr "注文時刻"
 
 #: pretix/base/exporters/orderlist.py:270
 msgid "Custom address field"
@@ -3253,7 +3253,7 @@ msgstr "取消し"
 #: pretix/base/invoice.py:620 pretix/base/invoice.py:628
 msgctxt "invoice"
 msgid "Description"
-msgstr "概要"
+msgstr "説明"
 
 #: pretix/base/invoice.py:621 pretix/base/invoice.py:629
 msgctxt "invoice"
@@ -3875,7 +3875,7 @@ msgstr "チケットのチェックインが完了しました"
 
 #: pretix/base/models/checkin.py:365
 msgid "Order not approved"
-msgstr "注文初が発行されました"
+msgstr "注文が承認されませんでした"
 
 #: pretix/base/models/checkin.py:366
 msgid "Ticket not valid at this time"
@@ -5788,7 +5788,7 @@ msgstr "送料"
 
 #: pretix/base/models/orders.py:2286
 msgid "Service fee"
-msgstr "サービス料金"
+msgstr "手数料"
 
 #: pretix/base/models/orders.py:2287
 #: pretix/control/templates/pretixcontrol/order/index.html:156
@@ -27021,7 +27021,7 @@ msgstr "バッジのレイアウト: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:26
 msgid "Save & continue"
-msgstr "保存して続行します"
+msgstr "保存して続ける"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
@@ -28512,8 +28512,8 @@ msgid ""
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
-"「続行」をクリックすると、支払い方法を選択し、支払い情報を入力することができ"
-"ます。その後、こちらに戻り、注文内容を確認して確定することができます。"
+"続けるをクリックすると、支払い方法を選択し、支払い情報を入力することができま"
+"す。その後、こちらに戻り、注文内容を確認して確定することができます。"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:22
 msgid ""
@@ -30308,9 +30308,9 @@ msgid ""
 "Issue tickets as PDF files, usable on any device. Our drag-and-drop editor "
 "allows you to customize the layout of the PDF files to your brand."
 msgstr ""
-"PDFファイルとしてチケットを発行し、どのデバイスでも利用できるようにします。当"
-"社のドラッグアンドドロップエディターを使用して、PDFファイルのレイアウトをブラ"
-"ンドにカスタマイズすることができます。"
+"PDFファイルとしてチケットを発行し、どのデバイスでも利用できるようにします。ド"
+"ラッグアンドドロップエディターを使用して、PDFファイルのレイアウトをブランドに"
+"カスタマイズすることができます。"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:71
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
@@ -31052,7 +31052,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:109
 msgid "Continue as a guest"
-msgstr "ゲストとして続行"
+msgstr "ゲストとして続ける"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:115
 msgid ""
@@ -31132,13 +31132,13 @@ msgstr "支払い設定に移動し、1つ以上の支払いプロバイダー�
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid "Before we continue, we need you to answer some questions."
-msgstr "続行する前に、いくつかの質問に答えていただく必要があります。"
+msgstr "続ける前に、いくつかの質問に答えていただく必要があります。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:10
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
-msgstr "続行するには、すべての<span>*</span>マークが付いたフィールドを入力する必要が"
-"あります。"
+msgstr "続けるには、すべての<span>*</span>マークが付いたフィールドを入力する必要があ"
+"ります。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:51
 msgid "Auto-fill with address"
@@ -31163,7 +31163,7 @@ msgstr "プロファイルを自動入力"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
-msgstr "新規タブで継続してください"
+msgstr "新規タブで続けてください"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:10
 msgid ""
@@ -31183,7 +31183,7 @@ msgstr "ご迷惑をおかけして申し訳ありません！"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:24
 msgid "Continue in new tab"
-msgstr "新規タブで継続"
+msgstr "新規タブで続ける"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:31
 msgid "Cookies not supported"
@@ -32779,7 +32779,7 @@ msgstr "単発イベント"
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:78
 msgctxt "timerange"
 msgid "to"
-msgstr "至"
+msgstr "まで"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:119
 #, python-format
