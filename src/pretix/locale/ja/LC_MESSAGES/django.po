@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-12-28 23:35+0000\n"
+"PO-Revision-Date: 2024-12-29 09:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -4902,7 +4902,7 @@ msgstr "時間"
 
 #: pretix/base/models/items.py:741
 msgid "Days"
-msgstr "日々"
+msgstr "日"
 
 #: pretix/base/models/items.py:745
 msgid "Months"
@@ -7399,7 +7399,7 @@ msgstr "レイアウトファイルが有効なレイアウトではありませ
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
-msgstr "イベントが開始します"
+msgstr "イベント開始"
 
 #: pretix/base/reldate.py:36
 msgid "Event end"
@@ -9819,9 +9819,9 @@ msgid ""
 "order contains tickets for multiple event dates, the earliest date will be "
 "used."
 msgstr ""
-"ユーザーが注文の詳細を変更できる最終日は、参加者の名前や質問への回答などです"
-"。イベントシリーズ機能を使用し、1つの注文に複数のイベント日のチケットが含まれ"
-"る場合、最も早い日付が使用されます。"
+"出席者の名前や質問への回答など、ユーザーが注文の詳細を変更できる最終日。イベ"
+"ントシリーズ機能を使用し、注文に複数のイベント日付のチケットが含まれている場"
+"合、最も早い日付が使用されます。"
 
 #: pretix/base/settings.py:1726
 msgid "Customers can change the variation of the products they purchased"
@@ -11929,7 +11929,7 @@ msgstr "写真をアップロード"
 #: pretix/control/templates/pretixcontrol/item/index.html:236
 #: pretix/control/templates/pretixcontrol/item/index.html:249
 msgid "days"
-msgstr "日々"
+msgstr "日"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
 #: pretix/control/templates/pretixcontrol/item/index.html:216
@@ -11940,7 +11940,7 @@ msgstr "分"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:23
 msgid "at"
-msgstr "於"
+msgstr "の"
 
 #: pretix/base/templates/pretixbase/redirect.html:5
 #: pretix/base/templates/pretixbase/redirect.html:9
