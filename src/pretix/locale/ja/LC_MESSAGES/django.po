@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-12-29 09:00+0000\n"
+"PO-Revision-Date: 2024-12-29 22:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -6376,7 +6376,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:265
 msgid "This variation of the product select above is being used."
-msgstr "上記の製品の変種が使用されています。"
+msgstr "上記の製品のバリエーションが使用されています。"
 
 #: pretix/base/models/vouchers.py:274
 msgid ""
@@ -13965,9 +13965,9 @@ msgid ""
 "by a user or currently is in a user's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
-"変種「%s」はすでにユーザーによって注文されたり、現在ユーザーのカートに入って"
-"いるため、削除することはできません。代わりに変種を「非アクティブ」に設定して"
-"ください。"
+"バリエーション「%s」はすでにユーザーによって注文されたり、現在ユーザーのカー"
+"トに入っているため、削除することはできません。代わりにバリエーションを「非ア"
+"クティブ」に設定してください。"
 
 #: pretix/control/forms/item.py:996
 msgid "Use value from product"
@@ -29365,7 +29365,7 @@ msgstr "売り切れの席"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:80
 msgid "Blocked Seats"
-msgstr "空席をブロックする"
+msgstr "ブロックされた座席"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:86
 msgid "Free Seats"
@@ -31256,7 +31256,7 @@ msgstr "%(from_price)s から %(to_price)s まで"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:98
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:103
 msgid "Hide variants"
-msgstr "隠す変種"
+msgstr "バリエーションを隠す"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:100
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:105
@@ -31267,7 +31267,7 @@ msgstr "%(count)s種類の%(item)sを表示します"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:102
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:107
 msgid "Show variants"
-msgstr "表示される変種"
+msgstr "バリエーションを表示する"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:129
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:271
@@ -32080,7 +32080,7 @@ msgstr "カートに追加"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:243
 msgid "If you already ordered a ticket"
-msgstr "ずでにチケットを注文済みの場合"
+msgstr "すでにチケットを注文済みの場合"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 msgid ""
