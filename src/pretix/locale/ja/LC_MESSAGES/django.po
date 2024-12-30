@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-12-29 22:00+0000\n"
+"PO-Revision-Date: 2024-12-30 06:59+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1396,7 +1396,7 @@ msgstr "郵便番号"
 #: pretix/plugins/checkinlists/exporters.py:534
 #: pretix/plugins/reports/exporters.py:842
 msgid "City"
-msgstr "市区町村"
+msgstr "都道府県・市区町村"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -1536,7 +1536,7 @@ msgstr "決済プロバイダー"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 msgid "Cancellation"
-msgstr "取消し"
+msgstr "キャンセル"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 #: pretix/control/templates/pretixcontrol/order/index.html:271
@@ -1762,11 +1762,11 @@ msgstr "商品のキャンセルや変更を認める"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:632
 msgid "Minimum amount per order"
-msgstr "注文あたりの下限金額"
+msgstr "注文あたりの下限数量"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:639
 msgid "Maximum amount per order"
-msgstr "注文あたりの上限金額"
+msgstr "注文あたりの上限数量"
 
 #: pretix/base/exporters/items.py:89 pretix/base/exporters/orderlist.py:282
 #: pretix/base/modelimport_orders.py:610 pretix/base/models/items.py:647
@@ -2195,7 +2195,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:176
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:179
 msgid "Attendee email"
-msgstr "出席者のメールアドレス"
+msgstr "参加者のメールアドレス"
 
 #: pretix/base/exporters/orderlist.py:609 pretix/base/models/vouchers.py:312
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -2289,7 +2289,7 @@ msgstr "請求先の郵便番号"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:350
 msgid "Invoice address city"
-msgstr "請求先の住所の都市"
+msgstr "請求先の住所の市区町村"
 
 #: pretix/base/exporters/orderlist.py:651 pretix/base/pdf.py:360
 msgid "Invoice address country"
@@ -3248,7 +3248,7 @@ msgstr "請求書"
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr "取消し"
+msgstr "キャンセル"
 
 #: pretix/base/invoice.py:620 pretix/base/invoice.py:628
 msgctxt "invoice"
@@ -5010,7 +5010,8 @@ msgstr ""
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
-msgstr "1注文あたりの最大数は、1注文あたりの最小数よりも低くすることはできません。"
+msgstr "1つの注文あたりの最大数は、1つの注文あたりの最小数よりも低くすることはできま"
+"せん。"
 
 #: pretix/base/models/items.py:1001
 msgid "The item's category must belong to the same event as the item."
@@ -6278,17 +6279,17 @@ msgstr "この税法とゼロ税率の組み合わせは意味がありません
 #: pretix/base/models/tax.py:426
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr "{rate}% {name}を含む"
+msgstr "{name}{rate}% を含む"
 
 #: pretix/base/models/tax.py:428
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr "プラス{rate}% {name}"
+msgstr "プラス{name}{rate}%"
 
 #: pretix/base/models/tax.py:430
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:46
 msgid "reverse charge enabled"
-msgstr "逆転送金が有効になっています"
+msgstr "リバースチャージが有効です"
 
 #: pretix/base/models/tax.py:568
 msgctxt "invoice"
@@ -8696,7 +8697,7 @@ msgstr "NFCチップのUID保護機能を使用します"
 
 #: pretix/base/settings.py:316
 msgid "Maximum number of items per order"
-msgstr "1 注文あたりの最大アイテム数"
+msgstr "1 つの注文あたりの最大アイテム数"
 
 #: pretix/base/settings.py:317
 msgid "Add-on products will not be counted."
@@ -9906,7 +9907,7 @@ msgstr "お客様は未払いの注文をキャンセル可能"
 
 #: pretix/base/settings.py:1819
 msgid "Charge a fixed cancellation fee"
-msgstr "のキャンセル"
+msgstr "固定キャンセル料を請求する"
 
 #: pretix/base/settings.py:1820 pretix/base/settings.py:1831
 #: pretix/base/settings.py:1845
@@ -14025,7 +14026,7 @@ msgstr "STARTTLSを使用"
 
 #: pretix/control/forms/mailsetup.py:60
 msgid "Commonly enabled on port 587."
-msgstr "ポート587で一般的に有効になっています。"
+msgstr "一般的にポート587で有効です。"
 
 #: pretix/control/forms/mailsetup.py:64
 msgid "Use SSL"
@@ -14033,7 +14034,7 @@ msgstr "SSLを使用"
 
 #: pretix/control/forms/mailsetup.py:65
 msgid "Commonly enabled on port 465."
-msgstr "ポート465で一般的に有効になっています。"
+msgstr "一般的にポート465で有効です。"
 
 #: pretix/control/forms/mailsetup.py:72
 msgid ""
@@ -16300,7 +16301,7 @@ msgstr "請求書を作成します"
 #: pretix/control/navigation.py:105
 msgctxt "action"
 msgid "Cancellation"
-msgstr "取消し"
+msgstr "キャンセル"
 
 #: pretix/control/navigation.py:113
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
@@ -16423,7 +16424,7 @@ msgstr "ライセンスのチェック"
 
 #: pretix/control/navigation.py:450
 msgid "System report"
-msgstr "{system} ユーザー"
+msgstr "システムレポート"
 
 #: pretix/control/navigation.py:494
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -18464,13 +18465,13 @@ msgstr "支払い設定"
 #: pretix/control/templates/pretixcontrol/user/settings.html:48
 #: pretix/plugins/sendmail/models.py:286
 msgid "Enabled"
-msgstr "有効になっています"
+msgstr "有効です"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:28
 #: pretix/control/templates/pretixcontrol/subevents/index.html:166
 #: pretix/control/templates/pretixcontrol/user/settings.html:53
 msgid "Disabled"
-msgstr "障害を持っています"
+msgstr "無効です"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:55
 #, python-format
@@ -23097,7 +23098,7 @@ msgstr "メンバー"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:36
 msgid "Two-factor authentication enabled"
-msgstr "二段階認証が有効になっています"
+msgstr "二段階認証が有効です"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:40
 msgid "Two-factor authentication disabled"
@@ -24195,7 +24196,7 @@ msgstr "二要素認証の状態"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:87
 msgid "Two-factor authentication is currently enabled."
-msgstr "二要素認証が現在有効になっています。"
+msgstr "二要素認証が現在有効です。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:103
 msgid "Two-factor authentication is currently disabled."
@@ -24294,7 +24295,7 @@ msgstr "グローバル"
 #: pretix/control/templates/pretixcontrol/user/notifications.html:72
 #: pretix/control/templates/pretixcontrol/user/settings.html:20
 msgid "On"
-msgstr "On"
+msgstr "オン"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:71
@@ -26470,7 +26471,7 @@ msgstr "二段階認証を有効にする前に、少なくとも1つのデバ�
 
 #: pretix/control/views/user.py:606
 msgid "Two-factor authentication is now enabled for your account."
-msgstr "あなたのアカウントには、現在、二要素認証が有効になっています。"
+msgstr "あなたのアカウントは、現在、二要素認証が有効です。"
 
 #: pretix/control/views/user.py:622
 msgid "Two-factor authentication is now disabled for your account."
@@ -30807,7 +30808,7 @@ msgid ""
 "You are currently using the time machine. The ticket shop is rendered as if "
 "it were %(datetime)s."
 msgstr "現在、タイムマシンを使用しています。チケットショップは、%(datetime)sのように"
-"描写されています。"
+"表現されています。"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:142
 #: pretix/presale/templates/pretixpresale/event/base.html:152
