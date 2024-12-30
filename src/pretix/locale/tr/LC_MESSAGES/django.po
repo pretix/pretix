@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-08-02 23:00+0000\n"
-"Last-Translator: baris gormez <vbgormez@gmail.com>\n"
+"PO-Revision-Date: 2024-12-30 22:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -465,7 +465,7 @@ msgstr "Siparişin süresi doldu"
 
 #: pretix/api/webhooks.py:261
 msgid "Order expiry date changed"
-msgstr "Siparişin son tarihi değiştirildi."
+msgstr "Siparişin son kullanma tarihi değiştirildi"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -494,11 +494,11 @@ msgstr "Müşteri tarafından iade talep edildi"
 
 #: pretix/api/webhooks.py:289
 msgid "Refund of payment completed"
-msgstr "Ödeme iadesi tamamlandı."
+msgstr "Ödemenin iadesi tamamlandı"
 
 #: pretix/api/webhooks.py:293
 msgid "Refund of payment canceled"
-msgstr "İade iptal edildi."
+msgstr "Ödemenin iadesi iptal edildi"
 
 #: pretix/api/webhooks.py:297
 msgid "Refund of payment failed"
@@ -1192,17 +1192,13 @@ msgstr ""
 "tarihinin her zaman sipariş veya ödeme tarihine uygun olmadığını unutmayın."
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
-#| msgid "Event date"
 msgid "Event data"
-msgstr "Etkinlik tarihi"
+msgstr "Etkinlik verileri"
 
 #: pretix/base/exporters/events.py:48
-#, fuzzy
-#| msgid "Event date"
 msgctxt "export_category"
 msgid "Event data"
-msgstr "Etkinlik tarihi"
+msgstr "Etkinlik verileri"
 
 #: pretix/base/exporters/events.py:49
 msgid ""
@@ -1857,7 +1853,7 @@ msgstr "Bekleme listesi"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:171
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:149
 msgid "Available from"
-msgstr "Mevcut"
+msgstr "Şuradan temin edilebilir"
 
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:85
 #: pretix/base/models/items.py:229 pretix/base/models/items.py:285
@@ -4379,10 +4375,8 @@ msgid "Profile data (name, addresses)"
 msgstr "Yeni bir tarih oluştur"
 
 #: pretix/base/models/customers.py:414
-#, fuzzy
-#| msgid "Event date"
 msgid "Client type"
-msgstr "Etkinlik tarihi"
+msgstr "Müşteri türü"
 
 #: pretix/base/models/customers.py:417
 #, fuzzy
@@ -8227,10 +8221,8 @@ msgstr ""
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
-#, fuzzy
-#| msgid "Event date"
 msgid "Event canceled"
-msgstr "Etkinlik tarihi"
+msgstr "Etkinlik iptal edildi"
 
 #: pretix/base/services/cart.py:101 pretix/base/services/modelimport.py:194
 #: pretix/base/services/orders.py:150
@@ -9079,6 +9071,9 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"{date}'de gerçekleşen bir etkinlik için \"{type}\" türünde bir üyelik "
+"kullanmaya çalışıyorsunuz, ancak aynı üyeliği aynı anda farklı bir bilet "
+"için zaten kullandınız."
 
 #: pretix/base/services/modelimport.py:53
 #, python-brace-format
@@ -10835,7 +10830,7 @@ msgstr "Seçilen ürün aktif değil veya fiyat ayarlı değil."
 
 #: pretix/base/settings.py:1659
 msgid "Hide all unavailable dates from calendar or list views"
-msgstr ""
+msgstr "Takvim veya liste görünümlerinden tüm uygun olmayan tarihleri gizle"
 
 #: pretix/base/settings.py:1660 pretix/base/settings.py:1671
 msgid ""
@@ -11292,8 +11287,8 @@ msgid ""
 msgstr ""
 "Merhaba,\n"
 "\n"
-"Bu mesajı size {event} etkinliğine ait siparişiniz ile ilgili bağlantıyı "
-"göndermemizi istediğiniz için aldınız\n"
+"Bu mesajı size bağlantıyı göndermemizi istediğiniz için alıyorsunuz\n"
+"to your order for {event}.\n"
 "\n"
 "Bu adresten sipariş ayrıntılarınızı değiştirebilir ve siparişinizin durumunu "
 "görebilirsiniz\n"
@@ -14143,12 +14138,12 @@ msgid "Text (if an incomplete payment was received)"
 msgstr "Siparişiniz için ödeme alındı: {code}"
 
 #: pretix/control/forms/event.py:1169
-#, fuzzy
-#| msgid "This plugin allows you to receive payments via bank transfer "
 msgid ""
 "This email only applies to payment methods that can receive incomplete "
 "payments, such as bank transfer."
-msgstr "Bu eklenti banka havalesi yoluyla ödeme almanızı sağlar "
+msgstr ""
+"Bu e-posta yalnızca banka havalesi gibi eksik ödemeler alabilen ödeme "
+"yöntemleri için geçerlidir."
 
 #: pretix/control/forms/event.py:1237
 msgid ""
@@ -14942,10 +14937,8 @@ msgid "Date filter"
 msgstr "Tarih geçmişi"
 
 #: pretix/control/forms/filter.py:2332 pretix/plugins/reports/exporters.py:690
-#, fuzzy
-#| msgid "Filter by tag"
 msgid "Filter by…"
-msgstr "Etikete göre filtrele"
+msgstr "Filtrele…"
 
 #: pretix/control/forms/filter.py:2334 pretix/plugins/reports/exporters.py:692
 #, fuzzy
@@ -16001,6 +15994,10 @@ msgid ""
 "series is only partially canceled since it consists of tickets for multiple "
 "dates."
 msgstr ""
+"Seçilen ücret türleri iade edilmeyecek, bunun yerine iptal ücretine "
+"eklenecektir. Bir etkinlik serisindeki bir sipariş, birden fazla tarih için "
+"biletlerden oluştuğu için yalnızca kısmen iptal edildiğinde ücretler asla "
+"iade edilmez."
 
 #: pretix/control/forms/orders.py:905
 #, fuzzy
@@ -16191,11 +16188,9 @@ msgid "This will be attached to every email."
 msgstr "Bu her e-postaya eklenecektir. Mevcut yer tutucuları: {event}"
 
 #: pretix/control/forms/organizer.py:681
-#, fuzzy
-#| msgid "Event date"
 msgctxt "webhooks"
 msgid "Event types"
-msgstr "Etkinlik tarihi"
+msgstr "Etkinlik türleri"
 
 #: pretix/control/forms/organizer.py:713
 #, fuzzy
@@ -16718,9 +16713,9 @@ msgid "Position #{posid} created: {item} ({price})."
 msgstr "Poziyon #{posid} oluşturuldu: {item} ({price})."
 
 #: pretix/control/logdisplay.py:162
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr "Pozisyon #{posid} için yeni bir sır oluşturuldu"
+msgstr "#{Posid} pozisyonu için yeni bir sır oluşturuldu."
 
 #: pretix/control/logdisplay.py:166
 #, fuzzy, python-brace-format
@@ -18369,10 +18364,8 @@ msgstr "Soruyu sil"
 
 #: pretix/control/navigation.py:494
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
-#, fuzzy
-#| msgid "Event date"
 msgid "Event metadata"
-msgstr "Etkinlik tarihi"
+msgstr "Olay meta verileri"
 
 #: pretix/control/navigation.py:515
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
@@ -19540,10 +19533,8 @@ msgid "Valid check-in"
 msgstr "Check-in listeleri"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:68
-#, fuzzy
-#| msgid "Meta information"
 msgid "Additional information required"
-msgstr "Meta bilgisi"
+msgstr "Ek bilgi gerekli"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
@@ -19720,8 +19711,8 @@ msgid ""
 msgstr ""
 "Merhaba,\n"
 "\n"
-"pretix hesabınızdaki bilgiler değiştiği için bu e-postayı aldınız. Aşağıdaki "
-"değişiklikler gerçekleşti:\n"
+"Bu, pretix hesabınızın hesap bilgilerinin\n"
+"Değişti. Özellikle, aşağıdaki değişiklikler yapılmıştır:\n"
 "\n"
 "%(messages)s\n"
 "\n"
@@ -19981,6 +19972,9 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
+"İsimler ve e-posta adresleri gibi kişisel verileri etkinliğinizden "
+"kaldırabilir ve yalnızca satılan bilet sayısı ve türü gibi finansal "
+"bilgileri saklayabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
@@ -20080,11 +20074,8 @@ msgid "Failed to retrieve geo coordinates"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No dates"
 msgid "Retrieving geo coordinates …"
-msgstr "Tarih yok"
+msgstr "Coğrafi koordinatlar alınıyor …"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:6
 #, fuzzy
@@ -20991,6 +20982,10 @@ msgid ""
 "quota, you might run into situations where people are sent an email from the "
 "waiting list but still are unable to book a seat."
 msgstr ""
+"Bekleme listesi, kullanılabilirliği esas olarak kotalara göre belirler. Bir "
+"oturma planı kullanıyorsanız ve mevcut koltuk sayınız mevcut kotadan azsa, "
+"insanlara bekleme listesinden bir e-posta gönderildiği ancak yine de bir "
+"koltuk ayırtamadıkları durumlarla karşılaşabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:366
 msgid ""
@@ -21011,10 +21006,8 @@ msgid "Manage waiting list"
 msgstr "Bekleme listesini etkinleştir"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:396
-#, fuzzy
-#| msgid "Event date"
 msgid "Item metadata"
-msgstr "Etkinlik tarihi"
+msgstr "Öğe meta verileri"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:398
 #, fuzzy
@@ -21390,10 +21383,8 @@ msgstr ""
 "tarih ve saat ayarları ve etkinlik adını içeren metinler."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:7
-#, fuzzy
-#| msgid "Event date"
 msgid "Event type"
-msgstr "Etkinlik tarihi"
+msgstr "Etkinlik türü"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
@@ -24890,6 +24881,10 @@ msgid ""
 "data such as event metadata and POS transactions will persist until you "
 "uninstall or reset the software manually."
 msgstr ""
+"Cihaz yazılımı destekliyorsa, siparişler gibi kişisel veriler bir sonraki "
+"senkronizasyon denemesinde cihazdan silinecektir. Olay meta verileri ve POS "
+"işlemleri gibi kişisel olmayan veriler, yazılımı manuel olarak kaldırana "
+"veya sıfırlayana kadar devam edecektir."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:10
 msgid ""
@@ -25344,10 +25339,10 @@ msgid ""
 "can later set for your events and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of events."
 msgstr ""
-"Burada daha sonra etkinlikleriniz için ayarlayabileceğiniz ve bilet "
+"Burada, daha sonra etkinlikleriniz için ayarlayabileceğiniz ve bilet "
 "düzenleri gibi yerlerde yeniden kullanabileceğiniz bir dizi meta veri "
-"özelliği (yani değişkenler) tanımlayabilirsiniz. Çok sayıda etkinlik "
-"oluşturursanız, bu yararlı bir zaman çizelgesidir."
+"özelliği (yani değişkenler) tanımlayabilirsiniz. Bu, çok sayıda etkinlik "
+"oluşturursanız yararlı bir zaman tasarrufudur."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:9
@@ -25955,10 +25950,8 @@ msgstr "E-posta içeriği"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:20
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:34
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:29
-#, fuzzy
-#| msgid "Bancontact"
 msgid "Content"
-msgstr "Bancontact"
+msgstr "Içerik"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:270
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:50
@@ -27445,11 +27438,7 @@ msgid "Quota unlimited"
 msgstr "Kota adı"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:240
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                    Waiting, product %(num)sx available\n"
-#| "                                "
+#, python-format
 msgid ""
 "\n"
 "                                            Waiting, product %(num)sx "
@@ -27457,8 +27446,8 @@ msgid ""
 "                                        "
 msgstr ""
 "\n"
-"                                    Bekliyor, ürün %(num)sx mevcut\n"
-"                                "
+"                                            Bekliyor, ürün %(num)sx mevcut\n"
+"                                        "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:246
 msgid "Waiting, product unavailable"
@@ -27821,7 +27810,7 @@ msgstr "Yakında"
 msgid "{num} order"
 msgid_plural "{num} orders"
 msgstr[0] "{num} sipariş"
-msgstr[1] "{num} sipariş"
+msgstr[1] "{num} siparişler"
 
 #: pretix/control/views/discounts.py:67 pretix/control/views/discounts.py:109
 #: pretix/control/views/discounts.py:214
@@ -27904,10 +27893,9 @@ msgid "invalid item"
 msgstr "geçersiz öğe"
 
 #: pretix/control/views/event.py:802
-#, fuzzy, python-format
-#| msgid "Your order: {code}"
+#, python-format
 msgid "Your order: %(code)s"
-msgstr "Siparişiniz: {code}"
+msgstr "Siparişiniz: %(code)s"
 
 #: pretix/control/views/event.py:811
 msgid "Unknown email renderer."
@@ -29821,10 +29809,8 @@ msgid "Only include tickets for dates on or after this date."
 msgstr ""
 
 #: pretix/plugins/badges/exporters.py:472
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "Etkinlik tarihi"
+msgstr "Etkinlik bitiş tarihi"
 
 #: pretix/plugins/badges/exporters.py:475
 #, fuzzy
@@ -35584,8 +35570,8 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                                    Bekliyor, ürün %(num)sx mevcut\n"
-"                                "
+"                %(Datetime)s için takvim\n"
+"            "
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "Your cart, general information, add products to your cart"
@@ -36403,9 +36389,7 @@ msgid ""
 "                                                    "
 msgstr ""
 "\n"
-"                                                        ……………………………………………"
-"itibaren %(start_date)s\n"
-"………………………………………\n"
+"                                                        %(start_date)s'den\n"
 "                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
@@ -36441,22 +36425,15 @@ msgid "to"
 msgstr "için"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:119
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                                        from "
-#| "%(start_date)s\n"
-#| "                                                    "
+#, python-format
 msgid ""
 "\n"
 "                                    from %(start_date)s\n"
 "                                "
 msgstr ""
 "\n"
-"                                                        ……………………………………………"
-"itibaren %(start_date)s\n"
-"………………………………………\n"
-"                                                    "
+"                                    %(start_date)s'den\n"
+"                                "
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
 #, fuzzy
@@ -36539,22 +36516,15 @@ msgid "Save selection"
 msgstr "Veri seçimi"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                                        from "
-#| "%(start_date)s\n"
-#| "                                                    "
+#, python-format
 msgid ""
 "\n"
 "                                        from %(start_date)s\n"
 "                                    "
 msgstr ""
 "\n"
-"                                                        ……………………………………………"
-"itibaren %(start_date)s\n"
-"………………………………………\n"
-"                                                    "
+"                                        %(start_date)s'den\n"
+"                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
@@ -37009,10 +36979,8 @@ msgid "This feature is only available in test mode."
 msgstr "Bu geri ödeme şu anda işleme alınamaz."
 
 #: pretix/presale/views/event.py:985
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Time machine disabled!"
-msgstr "Bu hesap aktif değildir."
+msgstr "Zaman makinesi devre dışı!"
 
 #: pretix/presale/views/order.py:368 pretix/presale/views/order.py:433
 #: pretix/presale/views/order.py:514
