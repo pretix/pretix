@@ -3557,8 +3557,8 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str(p) for p in [d.get('family_name', ''), d.get('given_name', '')] if p
         ),
         'sample': {
-            'given_name': '泽东',
-            'family_name': '毛',
+            'family_name': '孫',
+            'given_name': '文',
             '_scheme': 'family_nospace_given',
         },
     }),
@@ -3609,8 +3609,8 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'concatenation': lambda d: str(d.get('full_name', '')),
         'concatenation_all_components': lambda d: str(d.get('full_name', '')) + " (" + d.get('latin_transcription', '') + ")",
         'sample': {
-            'full_name': '庄司',
-            'latin_transcription': 'Shōji',
+            'full_name': '明仁',
+            'latin_transcription': 'Akihito',
             '_scheme': 'full_transcription',
         },
     }),
