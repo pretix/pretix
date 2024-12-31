@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-12-31 18:00+0000\n"
+"PO-Revision-Date: 2025-01-01 05:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1396,7 +1396,7 @@ msgstr "郵便番号"
 #: pretix/plugins/checkinlists/exporters.py:534
 #: pretix/plugins/reports/exporters.py:842
 msgid "City"
-msgstr "都道府県・市区町村"
+msgstr "市区町村"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -32535,8 +32535,8 @@ msgstr "追加情報"
 msgid ""
 "This order is managed for you by %(email)s. Please contact them for any "
 "questions regarding payment, cancellation or changes to this order."
-msgstr "この注文は%(email)sによって管理されています。支払い、キャンセル、または注文の"
-"変更に関する質問は彼らに連絡してください。"
+msgstr "この注文は%(email)sが管理しています。支払い、キャンセル、または注文の変更に関"
+"する質問は彼らに連絡してください。"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:63
 msgctxt "action"
