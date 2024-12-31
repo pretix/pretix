@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-12-30 06:59+0000\n"
+"PO-Revision-Date: 2024-12-31 18:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -431,7 +431,7 @@ msgstr "注文がキャンセルされました"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr "注文が再開されました"
+msgstr "再開された注文"
 
 #: pretix/api/webhooks.py:257 pretix/base/notifications.py:263
 msgid "Order expired"
@@ -808,8 +808,8 @@ msgstr "注文日"
 msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
-msgstr "ZIPファイルをダウンロードしてください。ZIPファイルには、注文の作成時に顧客か"
-"らアップロードされたファイルが全て含まれています。"
+msgstr "ZIPファイルをダウンロードします。ZIPファイルには、注文の作成時に顧客からアッ"
+"プロードされたファイルが全て含まれています。"
 
 #: pretix/base/exporters/answers.py:66 pretix/base/models/items.py:1755
 #: pretix/control/navigation.py:172
@@ -883,7 +883,7 @@ msgstr "顧客アカウント"
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
 msgstr "現在登録されている全ての顧客アカウントについて、スプレッドシートをダウンロー"
-"ドしてください。"
+"ドします。"
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:82
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:29
@@ -1083,7 +1083,7 @@ msgid ""
 "software."
 msgstr "nedoki "
 "NREIコンバージョンソフトウエアで使用できるフォーマットの請求書をダウンロード"
-"してください。"
+"します。"
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -1124,7 +1124,7 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr "この主催者アカウントのすべてのイベントの日程の情報が含まれるスプレッドシート"
-"をダウンロードしてください。"
+"をダウンロードします。"
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:441
@@ -1247,7 +1247,7 @@ msgstr "全ての請求書"
 #: pretix/base/exporters/invoices.py:127
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr "システムが作成した全てのインボイスのPDFファイルのZIPファイルをダウンロードし"
-"てください。"
+"ます。"
 
 #: pretix/base/exporters/invoices.py:178
 msgid "Invoice data"
@@ -1816,7 +1816,7 @@ msgstr "全ての注文について構造化されたJSONをダウンロード�
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
-msgstr "Eメールアドレス（テクストファイル）"
+msgstr "Eメールアドレス（テキストファイル）"
 
 #: pretix/base/exporters/mail.py:54
 msgid ""
@@ -2713,7 +2713,7 @@ msgstr "全て"
 
 #: pretix/base/exporters/orderlist.py:1306 pretix/control/forms/filter.py:1417
 msgid "Live"
-msgstr "ライブ"
+msgstr "営業中"
 
 #: pretix/base/exporters/orderlist.py:1315 pretix/control/forms/filter.py:1425
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
@@ -2842,7 +2842,7 @@ msgstr "すべてのエントリー"
 #: pretix/base/exporters/waitinglist.py:54
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:105
 msgid "Waiting for a voucher"
-msgstr "バウチャーをお待ちしています"
+msgstr "バウチャーを待っています"
 
 #: pretix/base/exporters/waitinglist.py:59
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:107
@@ -2854,7 +2854,7 @@ msgstr "割引券が割り当てられました"
 #: pretix/base/exporters/waitinglist.py:64
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:110
 msgid "Waiting for redemption"
-msgstr "贖いを待っています"
+msgstr "バウチャー引き換え待ち"
 
 #: pretix/base/exporters/waitinglist.py:72
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:223
@@ -4336,9 +4336,9 @@ msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
-"チェックされているとき、プロパティが設定されている場合にのみ、イベントをライ"
-"ブ（開店状態）にすることができます。イベントシリーズでは、個々の日付に値を設"
-"定することは常にオプションです"
+"チェックされているとき、プロパティが設定されている場合にのみ、イベントを営業"
+"中にすることができます。イベントシリーズでは、個々の日付に値を設定することは"
+"常にオプションです"
 
 #: pretix/base/models/event.py:1724 pretix/base/models/items.py:2213
 msgid "Valid values"
@@ -6496,7 +6496,7 @@ msgstr "その座席「{id}」は現在利用できません（ブロックさ�
 
 #: pretix/base/models/waitinglist.py:64
 msgid "On waiting list since"
-msgstr "待機リストに載ってから"
+msgstr "このときから現在まで空席待ちリストに搭載"
 
 #: pretix/base/models/waitinglist.py:84
 msgid "Assigned voucher"
@@ -8713,8 +8713,8 @@ msgstr "製品リストには、総額ではなく純額を表示してくださ
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
-msgstr "ご選択に関係なく、カートには純価格が表示されます。支払う必要がある価格ですの"
-"で。"
+msgstr "あなたの選択に関わらず、カートには支払う必要がある価格である総価格を表示しま"
+"す。"
 
 #: pretix/base/settings.py:338
 msgid "Hide prices on attendee ticket page"
@@ -9521,8 +9521,8 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
-"チケットバウチャーが待機リストの人に送信された場合、有効期限が切れるまでこの"
-"数時間以内に引き換えられ、リストの次の人に再割り当てする必要があります。"
+"チケットバウチャーが空席待ちリストの人に送信された場合、有効期限が切れるまで"
+"この数時間以内に引き換えられ、リストの次の人に再割り当てする必要があります。"
 
 #: pretix/base/settings.py:1421
 msgid "Disable waiting list"
@@ -9571,7 +9571,7 @@ msgstr "電話番号を要求"
 
 #: pretix/base/settings.py:1466
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr "待機リストに登録する際には、電話番号が必要です。"
+msgstr "空席待ちリストに登録する際には、電話番号が必要です。"
 
 #: pretix/base/settings.py:1476
 msgid "Phone number explanation"
@@ -9600,8 +9600,8 @@ msgid ""
 msgstr ""
 "増加した制限により、顧客は同じ固有のメールアドレスを使用して特定の製品の複数"
 "のチケットをリクエストすることができます。ただし、この設定に関係なく、1回のエ"
-"ントリーで1つのチケットしか付与されないため、複数のチケットを希望する場合は待"
-"機リストフォームを複数回記入する必要があります。"
+"ントリーで1つのチケットしか付与されません。したがって、複数のチケットを希望す"
+"る場合は、空席待ちリストのフォームを複数回記入する必要があります。"
 
 #: pretix/base/settings.py:1507
 msgid "Show number of check-ins to customer"
@@ -10636,7 +10636,7 @@ msgstr ""
 #: pretix/base/settings.py:2465
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr "あなたは{event}の待機リストから選ばれました"
+msgstr "あなたは{event}の空席待ちリストから選ばれました"
 
 #: pretix/base/settings.py:2469
 #, python-brace-format
@@ -11092,7 +11092,7 @@ msgstr "数量などの数値入力には、カスタムのスピナーではな
 
 #: pretix/base/settings.py:2866
 msgid "Only respected by modern browsers."
-msgstr "現代のブラウザにのみリスペクトされています。"
+msgstr "最新のブラウザのみに反映されます。"
 
 #: pretix/base/settings.py:2877 pretix/base/settings.py:2920
 #: pretix/control/forms/organizer.py:520
@@ -13214,7 +13214,7 @@ msgstr "支払い期限"
 
 #: pretix/control/forms/filter.py:1196 pretix/control/forms/filter.py:1671
 msgid "Shop live and presale running"
-msgstr "ショップライブとプレセールが開催中です"
+msgstr "営業中かつプレセールが開催中です"
 
 #: pretix/control/forms/filter.py:1197 pretix/control/forms/filter.py:2013
 msgid "Inactive"
@@ -13314,7 +13314,7 @@ msgstr "有効なメンバーシップがあります"
 
 #: pretix/control/forms/filter.py:1670
 msgid "Shop live"
-msgstr "ショップライブ"
+msgstr "お店が営業中"
 
 #: pretix/control/forms/filter.py:1672
 msgid "Shop not live"
@@ -14442,7 +14442,7 @@ msgstr "電子メールで情報を送信"
 
 #: pretix/control/forms/orders.py:911
 msgid "Send information to waiting list"
-msgstr "待機リストに情報を送信します"
+msgstr "空席待ちリストに情報を送信する"
 
 #: pretix/control/forms/orders.py:926 pretix/control/forms/orders.py:952
 #, python-brace-format
@@ -15753,14 +15753,14 @@ msgstr "そのバウチャーは作成されました。"
 
 #: pretix/control/logdisplay.py:485
 msgid "The voucher has been created and sent to a person on the waiting list."
-msgstr "そのバウチャーは作成され、待機リストの人に送信されました。"
+msgstr "そのバウチャーは作成され、空席待ちリストの人に送信されました。"
 
 #: pretix/control/logdisplay.py:486
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
-msgstr "そのクーポンは、受取人が待機リストから自分自身を削除したため、期限が切れるよ"
-"うに設定されました。"
+msgstr "そのクーポンは、受取人が空席待ちリストから自分自身を削除したため、期限切に設"
+"定されました。"
 
 #: pretix/control/logdisplay.py:487
 msgid "The voucher has been changed."
@@ -16000,11 +16000,11 @@ msgstr "ユーザーがイベントチームから削除されました。"
 
 #: pretix/control/logdisplay.py:547 pretix/control/logdisplay.py:548
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr "待機リストの人にバウチャーが送られました。"
+msgstr "空席待ちリストの人にバウチャーが送られました。"
 
 #: pretix/control/logdisplay.py:549
 msgid "An entry has been removed from the waiting list."
-msgstr "待機リストからエントリーが削除されました。"
+msgstr "空席待ちリストからエントリーが削除されました。"
 
 #: pretix/control/logdisplay.py:550
 msgid "An entry has been transferred to another waiting list."
@@ -18253,7 +18253,7 @@ msgstr "チケットショップを公開するためには、まず以下の問
 #: pretix/control/templates/pretixcontrol/event/live.html:51
 #: pretix/control/templates/pretixcontrol/event/live.html:65
 msgid "Go live"
-msgstr "ライブ配信を開始します"
+msgstr "営業を開始します"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:59
 msgid "If you want to, you can publish your ticket shop now."
@@ -18888,8 +18888,8 @@ msgstr ""
 msgid ""
 "Specifically, this means the waiting list is not safe to use together with "
 "the minimum distance feature of our seating plan module."
-msgstr "具体的には、このことは待ちリストが座席配置モジュールの最小距離機能と一緒に使"
-"用することが安全ではないことを意味します。"
+msgstr "具体的には、これは空席待ちリストが座席計画モジュールの最短距離機能と一緒に使"
+"用するのは安全ではないことを意味します。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:377
 msgid "Waiting customers"
@@ -21659,8 +21659,8 @@ msgstr ""
 msgid ""
 "You should not execute this function multiple times for the same event, or "
 "everyone on the waiting list will get multiple emails."
-msgstr "同じイベントに対してこの関数を複数回実行しないでください。そうすると、待機リ"
-"ストの全員が複数のメールを受け取ってしまいます。"
+msgstr "同じイベントに対してこの関数を複数回実行しないでください。そうすると、空席待"
+"ちリストの全員が複数のメールを受け取ってしまいます。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:83
 msgid "Cancel all orders"
@@ -23722,7 +23722,7 @@ msgstr ""
 "あなたが影響を受けるデータを削除してもよいかどうかを確認するのはあなた自身の"
 "責任です。たとえば、課税の理由である場合など、あなたの立法で削除が許可されて"
 "いるかどうかを確認する必要があります。多くの国では、監査が発生した場合に備え"
-"て、ライブシステムに一部のデータを保持する必要があります。"
+"て、稼働中のシステムに一部のデータを保持する必要があります。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:32
 msgid ""
@@ -24759,8 +24759,8 @@ msgid ""
 "waiting list in, you could sell tickets worth an additional "
 "<strong>%(amount)s</strong>."
 msgstr ""
-"もしイベントで待機リストの全員を収容できるだけのスペースを確保できれば、追加"
-"で<strong>%(amount)s</strong>の価値のチケットを販売できます。"
+"もしイベントで空席待ちリストの全員を収容できるだけのスペースを確保できれば、"
+"追加で<strong>%(amount)s</strong>の価値のチケットを販売できます。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:113
 msgid "Successfully redeemed"
@@ -25026,7 +25026,7 @@ msgstr "アクティブな製品"
 
 #: pretix/control/views/dashboards.py:213
 msgid "available to give to people on waiting list"
-msgstr "待機リストの人々に提供可能"
+msgstr "空席待ちリストの人々に提供可能"
 
 #: pretix/control/views/dashboards.py:223
 msgid "total waiting list length"
@@ -25047,11 +25047,11 @@ msgstr "ここをクリックして変更してください"
 
 #: pretix/control/views/dashboards.py:273
 msgid "live"
-msgstr "ライブ"
+msgstr "営業中"
 
 #: pretix/control/views/dashboards.py:274
 msgid "live and in test mode"
-msgstr "ライブで、テストモードで"
+msgstr "営業中かつテストモード"
 
 #: pretix/control/views/dashboards.py:275
 msgid "not yet public"
@@ -25188,7 +25188,7 @@ msgstr "無効なチケット出力タイプをリクエストしました。"
 
 #: pretix/control/views/event.py:972
 msgid "Your shop is live now!"
-msgstr "あなたのショップは今ライブです！"
+msgstr "あなたのショップは営業中です！"
 
 #: pretix/control/views/event.py:980
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
@@ -26612,7 +26612,7 @@ msgstr "これはイベントシリーズではありません。"
 
 #: pretix/control/views/waitinglist.py:403
 msgid "The waitinglist entry has been transferred."
-msgstr "待機リストのエントリは転送されました。"
+msgstr "空席待ちリストのエントリは転送されました。"
 
 #: pretix/helpers/daterange.py:97
 #, python-brace-format
@@ -29083,7 +29083,7 @@ msgstr "顧客や参加者に対して大量のメールが送信されました
 
 #: pretix/plugins/sendmail/signals.py:122
 msgid "Mass email was sent to waiting list entries."
-msgstr "待機リストのエントリーに対して大量のメールが送信されました。"
+msgstr "空席待ちリストのエントリーに対して大量のメールが送信されました。"
 
 #: pretix/plugins/sendmail/signals.py:123
 msgid "The order received a mass email."
@@ -29514,7 +29514,7 @@ msgstr "ストライプアカウント"
 #: pretix/plugins/stripe/payment.py:261
 msgctxt "stripe"
 msgid "Live"
-msgstr "ライブ"
+msgstr "営業中"
 
 #: pretix/plugins/stripe/payment.py:262
 msgctxt "stripe"
@@ -30753,7 +30753,7 @@ msgstr "このショップは現在あなたとあなたのチームだけが見
 
 #: pretix/presale/templates/pretixpresale/event/base.html:34
 msgid "Take it live now"
-msgstr "今すぐライブで行ってください"
+msgstr "今すぐ営業を始める"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:44
 #: pretix/presale/templates/pretixpresale/event/base.html:105
@@ -32669,9 +32669,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
-"もしチケットが再び利用可能になった場合、待機リストの最初の人にお知らせします"
-"。通知があった場合、次の人に割り当てるまでに%(hours)s時間以内にチケットを購入"
-"することができます。"
+"もしチケットが再び利用可能になった場合、空席待ちリストの最初の人にお知らせし"
+"ます。通知があった場合、次の人に割り当てるまでに%(hours)s時間以内にチケットを"
+"購入することができます。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
@@ -32716,9 +32716,9 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
-"あなたは待機リストからチケットを購入するために選ばれました。もしもうチケット"
-"が必要ない場合は、できるだけ早くリストからチケットを削除していただけると次の"
-"待っている人にすぐに回すことができます!"
+"あなたは空席待ちリストからチケットを購入するために選ばれました。もしもうチケ"
+"ットが必要ない場合は、できるだけ早くリストからチケットを削除していただけると"
+"次の待っている人にすぐに回すことができます!"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
@@ -33369,8 +33369,8 @@ msgstr "このユーザーが注文をしている場合、注文コードが記
 msgid ""
 "No ticket types are available for the waiting list, have a look at the "
 "ticket shop instead."
-msgstr "待機リスト用のチケットタイプは利用できません。代わりにチケットショップをご覧"
-"ください。"
+msgstr "空席待ちリストのチケットタイプは利用できません。代わりにチケットショップをご"
+"覧ください。"
 
 #: pretix/presale/views/waiting.py:137 pretix/presale/views/waiting.py:161
 msgid "Waiting lists are disabled for this event."
@@ -33406,7 +33406,7 @@ msgstr "あなたの待ちリストのスポットはもはや有効ではない
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
-msgstr "ありがとうございました！私たちはあなたの待機リストのスポットを他の誰かに割り"
+msgstr "ありがとうございました！私たちはあなたの空席待ちリストの順番を他の誰かに割り"
 "当てます。"
 
 #: pretix/presale/views/widget.py:372
