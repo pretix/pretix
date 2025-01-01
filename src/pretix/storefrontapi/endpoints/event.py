@@ -21,7 +21,7 @@ def opt_str(o):
     return str(o)
 
 
-class RichtTextField(serializers.Field):
+class RichTextField(serializers.Field):
     def to_representation(self, value):
         return rich_text(value)
 
@@ -69,7 +69,7 @@ class EventSettingsField(serializers.Field):
 
 
 class CategorySerializer(I18nFlattenedModelSerializer):
-    description = RichtTextField()
+    description = RichTextField()
 
     class Meta:
         model = ItemCategory
@@ -222,7 +222,7 @@ class AvailabilityField(serializers.Field):
 
 
 class VariationSerializer(I18nFlattenedModelSerializer):
-    description = RichtTextField()
+    description = RichTextField()
     pricing = PricingField(source="*")
     availability = AvailabilityField(source="*")
 
@@ -238,7 +238,7 @@ class VariationSerializer(I18nFlattenedModelSerializer):
 
 
 class ItemSerializer(I18nFlattenedModelSerializer):
-    description = RichtTextField()
+    description = RichTextField()
     available_variations = VariationSerializer(many=True, read_only=True)
     pricing = PricingField(source="*")
     availability = AvailabilityField(source="*")
@@ -253,7 +253,6 @@ class ItemSerializer(I18nFlattenedModelSerializer):
             "description",
             "picture",
             "min_per_order",
-            "free_price",
             "available_variations",
             "pricing",
             "availability",
@@ -269,6 +268,7 @@ class ProductGroupField(serializers.Field):
             subevent=ev if isinstance(ev, SubEvent) else None,
             require_seat=False,
             channel=self.context["sales_channel"],
+            voucher=None,  # TODO
             memberships=(
                 self.context["customer"].usable_memberships(
                     for_event=ev, testmode=event.testmode
@@ -321,8 +321,7 @@ class SubEventDetailSerializer(BaseEventDetailSerializer):
 
     # todo: vouchers_exist
     # todo: date range
-    # todo: waiting list info
-    # todo: has seating
+    # todo: seating, seating waiting list
 
     class Meta:
         model = SubEvent
@@ -346,8 +345,7 @@ class SubEventDetailSerializer(BaseEventDetailSerializer):
 class EventDetailSerializer(BaseEventDetailSerializer):
     # todo: vouchers_exist
     # todo: date range
-    # todo: waiting list info
-    # todo: has seating
+    # todo: seating, seating waiting list
     product_list = ProductGroupField(source="*")
 
     class Meta:
@@ -379,6 +377,7 @@ class EventViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         event = request.event  # Lookup is already done
+        # todo: prefetch related items
 
         ctx = {
             "sales_channel": request.sales_channel,

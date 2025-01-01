@@ -25,12 +25,13 @@ from django.apps import apps
 from django.urls import include, re_path
 from rest_framework import routers
 
-from .endpoints import event
+from .endpoints import checkout, event
 
 storefront_orga_router = routers.DefaultRouter()
 storefront_orga_router.register(r"events", event.EventViewSet)
 
 storefront_event_router = routers.DefaultRouter()
+storefront_event_router.register(r"checkouts", checkout.CheckoutViewSet)
 
 # Force import of all plugins to give them a chance to register URLs with the router
 for app in apps.get_app_configs():

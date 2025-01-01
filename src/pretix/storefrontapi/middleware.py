@@ -129,6 +129,14 @@ class ApiMiddleware:
                 LocaleMiddleware(NotImplementedError).process_request(request)
                 r = self.get_response(request)
                 r["Access-Control-Allow-Origin"] = "*"  # todo: allow whitelist?
+                r["Access-Control-Allow-Headers"] = ",".join(
+                    [
+                        "Content-Type",
+                        "X-Storefront-Time-Machine-Date",
+                        "Accept",
+                        "Accept-Language",
+                    ]
+                )
                 return r
             finally:
                 timemachine_now_var.set(None)
