@@ -24,7 +24,6 @@ from pathlib import Path
 
 import setuptools
 
-
 sys.path.append(str(Path.cwd() / 'src'))
 
 

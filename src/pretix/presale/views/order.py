@@ -82,6 +82,7 @@ from pretix.base.services.orders import (
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
 from pretix.base.signals import order_modified, register_ticket_outputs
+from pretix.base.storelogic.products import get_items_for_product_list
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
@@ -95,7 +96,6 @@ from pretix.presale.signals import question_form_fields_overrides
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
-from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
@@ -1372,7 +1372,7 @@ class OrderChangeMixin:
 
                     if ckey not in item_cache:
                         # Get all items to possibly show
-                        items, _btn = get_grouped_items(
+                        items, _btn = get_items_for_product_list(
                             self.request.event,
                             subevent=p.subevent,
                             voucher=None,

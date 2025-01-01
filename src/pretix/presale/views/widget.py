@@ -61,6 +61,9 @@ from pretix.base.models import (
 from pretix.base.services.cart import error_messages
 from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.settings import GlobalSettingsObject
+from pretix.base.storelogic.products import (
+    get_items_for_product_list, item_group_by_category,
+)
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.daterange import daterange
 from pretix.helpers.thumb import get_thumbnail
@@ -68,9 +71,6 @@ from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.organizer import meta_filtersets
 from pretix.presale.style import get_theme_vars_css
 from pretix.presale.views.cart import get_or_create_cart_id
-from pretix.presale.views.event import (
-    get_grouped_items, item_group_by_category,
-)
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
     days_for_template, filter_qs_by_attr, weeks_for_template,
@@ -270,7 +270,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 ).values_list('item_id', flat=True)
             )
 
-        items, display_add_to_cart = get_grouped_items(
+        items, display_add_to_cart = get_items_for_product_list(
             self.request.event,
             subevent=self.subevent,
             voucher=self.voucher,

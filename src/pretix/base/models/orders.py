@@ -3063,6 +3063,38 @@ class Transaction(models.Model):
         return self.tax_value * self.count
 
 
+class CheckoutSession(models.Model):
+    """
+    A checkout session optionally bundles cart positions with additional information. This is historically
+    not required in pretix and currently only used in the Storefront API.
+    """
+    event = models.ForeignKey(
+        Event,
+        verbose_name=_("Event"),
+        on_delete=models.CASCADE
+    )
+    cart_id = models.CharField(
+        max_length=255, unique=True,
+        verbose_name=_("Cart ID (e.g. session key)")
+    )
+    created = models.DateTimeField(
+        verbose_name=_("Date"),
+        auto_now_add=True
+    )
+    customer = models.ForeignKey(
+        Customer,
+        related_name='checkout_sessions',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+    )
+    sales_channel = models.ForeignKey(
+        "SalesChannel",
+        on_delete=models.CASCADE,
+    )
+    testmode = models.BooleanField(default=False)
+    session_data = models.JSONField(default=dict)
+
+
 class CartPosition(AbstractPosition):
     """
     A cart position is similar to an order line, except that it is not
@@ -3245,6 +3277,13 @@ class CartPosition(AbstractPosition):
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
+    checkout_session = models.OneToOneField(
+        CheckoutSession,
+        null=True,
+        blank=True,
+        related_name='invoice_address',
+        on_delete=models.CASCADE
+    )
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
     customer = models.ForeignKey(
         Customer,

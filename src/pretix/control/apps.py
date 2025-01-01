@@ -40,5 +40,5 @@ class PretixControlConfig(AppConfig):
     label = 'pretixcontrol'
 
     def ready(self):
-        from .views import dashboards  # noqa
         from . import logdisplay  # noqa
+        from .views import dashboards  # noqa

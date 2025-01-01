@@ -39,9 +39,9 @@ from pretix.presale.views import EventViewMixin, iframe_entry_view_wrapper
 
 from ...base.i18n import get_language_without_region
 from ...base.models import Voucher, WaitingListEntry
+from ...base.storelogic.products import get_items_for_product_list
 from ..forms.waitinglist import WaitingListForm
 from . import allow_frame_if_namespaced
-from .event import get_grouped_items
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
@@ -53,7 +53,7 @@ class WaitingView(EventViewMixin, FormView):
     @cached_property
     def itemvars(self):
         customer = getattr(self.request, 'customer', None)
-        items, display_add_to_cart = get_grouped_items(
+        items, display_add_to_cart = get_items_for_product_list(
             self.request.event,
             subevent=self.subevent,
             require_seat=None,

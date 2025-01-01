@@ -72,6 +72,7 @@ from pretix.base.services.orders import perform_order
 from pretix.base.services.tasks import EventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
+from pretix.base.storelogic.products import get_items_for_product_list
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
@@ -98,7 +99,6 @@ from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
     get_or_create_cart_id,
 )
-from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.questions import QuestionsViewMixin
 
 
@@ -560,7 +560,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
                 if ckey not in item_cache:
                     # Get all items to possibly show
-                    items, _btn = get_grouped_items(
+                    items, _btn = get_items_for_product_list(
                         self.request.event,
                         subevent=cartpos.subevent,
                         voucher=None,

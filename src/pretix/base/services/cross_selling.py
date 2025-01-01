@@ -29,7 +29,7 @@ from typing import List
 from django.utils.functional import cached_property
 
 from pretix.base.models import CartPosition, ItemCategory, SalesChannel
-from pretix.presale.views.event import get_grouped_items
+from pretix.base.storelogic.products import get_items_for_product_list
 
 
 class DummyCategory:
@@ -161,7 +161,7 @@ class CrossSellingService:
         ]
 
     def _prepare_items(self, subevent, items_qs, discount_info):
-        items, _btn = get_grouped_items(
+        items, _btn = get_items_for_product_list(
             self.event,
             subevent=subevent,
             voucher=None,
