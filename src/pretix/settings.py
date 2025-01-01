@@ -439,6 +439,7 @@ CORE_MODULES = {
     "pretix.base",
     "pretix.presale",
     "pretix.control",
+    "pretix.storefrontapi",
     "pretix.plugins.checkinlists",
     "pretix.plugins.reports",
 }
@@ -460,6 +461,7 @@ MIDDLEWARE = [
     'pretix.base.middleware.SecurityMiddleware',
     'pretix.presale.middleware.EventMiddleware',
     'pretix.api.middleware.ApiScopeMiddleware',
+    'pretix.storefrontapi.middleware.ApiMiddleware',
 ]
 
 try:
