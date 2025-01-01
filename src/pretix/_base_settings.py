@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'pretix.presale',
     'pretix.multidomain',
     'pretix.api',
+    'pretix.storefrontapi',
     'pretix.helpers',
     'rest_framework',
     'djangoformsetjs',

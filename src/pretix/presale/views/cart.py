@@ -64,6 +64,9 @@ from pretix.base.services.cart import (
     CartError, add_items_to_cart, apply_voucher, clear_cart, error_messages,
     remove_cart_position,
 )
+from pretix.base.storelogic.products import (
+    get_items_for_product_list, item_group_by_category,
+)
 from pretix.base.timemachine import time_machine_now
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
@@ -71,9 +74,6 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import (
     CartMixin, EventViewMixin, allow_cors_if_namespaced,
     allow_frame_if_namespaced, iframe_entry_view_wrapper,
-)
-from pretix.presale.views.event import (
-    get_grouped_items, item_group_by_category,
 )
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
@@ -613,7 +613,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         context['max_times'] = self.voucher.max_usages - self.voucher.redeemed
 
         # Fetch all items
-        items, display_add_to_cart = get_grouped_items(
+        items, display_add_to_cart = get_items_for_product_list(
             self.request.event,
             subevent=self.subevent,
             voucher=self.voucher,

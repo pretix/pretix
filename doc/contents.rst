@@ -7,6 +7,7 @@ Table of contents
    user/index
    admin/index
    api/index
+   storefrontapi/index
    development/index
    plugins/index
    license/faq

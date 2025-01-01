@@ -156,6 +156,8 @@ Field specific input errors include the name of the offending fields as keys in 
 
 If you see errors of type ``429 Too Many Requests``, you should read our documentation on :ref:`rest-ratelimit`.
 
+.. _`rest-types`:
+
 Data types
 ----------
 
