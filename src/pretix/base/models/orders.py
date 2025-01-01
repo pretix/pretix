@@ -3071,15 +3071,16 @@ class CheckoutSession(models.Model):
     event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),
-        on_delete=models.CASCADE
+        related_name="checkout_sessions",
+        on_delete=models.CASCADE,
     )
     cart_id = models.CharField(
         max_length=255, unique=True,
-        verbose_name=_("Cart ID (e.g. session key)")
+        verbose_name=_("Cart ID (e.g. session key)"),
     )
     created = models.DateTimeField(
         verbose_name=_("Date"),
-        auto_now_add=True
+        auto_now_add=True,
     )
     customer = models.ForeignKey(
         Customer,
@@ -3093,6 +3094,9 @@ class CheckoutSession(models.Model):
     )
     testmode = models.BooleanField(default=False)
     session_data = models.JSONField(default=dict)
+
+    def cart_positions(self):
+        return CartPosition.objects.filter(event_id=self.event_id, cart_id=self.cart_id)
 
 
 class CartPosition(AbstractPosition):
