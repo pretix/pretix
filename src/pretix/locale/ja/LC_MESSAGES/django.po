@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-01 05:00+0000\n"
+"PO-Revision-Date: 2025-01-02 07:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -802,7 +802,7 @@ msgstr "質問と回答のファイルのアップロード"
 #: pretix/plugins/reports/exporters.py:651
 msgctxt "export_category"
 msgid "Order data"
-msgstr "注文日"
+msgstr "注文データ"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
@@ -1469,7 +1469,7 @@ msgstr "企業"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
 msgid "Street address"
-msgstr "町域・番地"
+msgstr "町丁・番地"
 
 #: pretix/base/exporters/invoices.py:219 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/orderlist.py:269
@@ -1805,7 +1805,7 @@ msgstr "有効な会員資格がない場合は隠す"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:86
 msgid "Order data"
-msgstr "ご注文日"
+msgstr "注文データ"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
@@ -2002,7 +2002,7 @@ msgstr "手数料"
 #: pretix/control/templates/pretixcontrol/order/index.html:192
 #: pretix/control/templates/pretixcontrol/pdf/index.html:232
 msgid "Order locale"
-msgstr "注文の場所"
+msgstr "注文のロケール"
 
 #: pretix/base/exporters/orderlist.py:275
 #, python-brace-format
@@ -2368,7 +2368,7 @@ msgstr "入場時間"
 
 #: pretix/base/exporters/orderlist.py:885
 msgid "Old data"
-msgstr "ご注文日"
+msgstr "古いデータ"
 
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/items.py:1543
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
@@ -2661,8 +2661,8 @@ msgstr "ギフトカードの利用"
 #: pretix/base/exporters/orderlist.py:1242
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
-msgstr "ギフトカードを利用した支払いや払い戻しに関するすべての支払い明細書をダウンロ"
-"ードしてください。"
+msgstr "ギフトカードを含むすべての支払いまたは払い戻しのスプレッドシートをダウンロー"
+"ドします。"
 
 #: pretix/base/exporters/orderlist.py:1259
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:16
@@ -4864,7 +4864,7 @@ msgstr "会員期間（月単位）"
 
 #: pretix/base/models/items.py:719
 msgid "Validity"
-msgstr "有効性 (Yūkōsei)"
+msgstr "有効性"
 
 #: pretix/base/models/items.py:721
 msgid ""
@@ -9970,12 +9970,12 @@ msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
-"ただし、ここで電気をつけたままにしておいてほしい場合は、返金額を減額するため"
-"にスライダーを使用してリクエストしてください。ありがとうございます！"
+"ただし、ここでライトを点灯させ続けるのをご希望の場合は、以下のスライダーを使"
+"用して少額の払い戻しをリクエストすることを検討してください。ありがとう！"
 
 #: pretix/base/settings.py:1921
 msgid "Voluntary lower refund explanation"
-msgstr "自主的な低返金の説明"
+msgstr "自発的な低額払い戻しの説明"
 
 #: pretix/base/settings.py:1924
 msgid ""
@@ -10061,7 +10061,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2029 pretix/control/forms/event.py:1706
 msgid "Contact address"
-msgstr "連絡先の住所"
+msgstr "連絡先のアドレス"
 
 #: pretix/base/settings.py:2030 pretix/control/forms/event.py:1708
 msgid "We'll show this publicly to allow attendees to contact you."
@@ -17857,7 +17857,7 @@ msgstr "通知設定を変更"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:51
 msgid "Order changes"
-msgstr "注文が変更された"
+msgstr "注文の変更"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:54
 msgid ""
@@ -18486,7 +18486,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:66
 msgid "Deadlines"
-msgstr "締め切り"
+msgstr "支払い期限"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:74
 msgctxt "unit"
@@ -18822,7 +18822,7 @@ msgstr "表示"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:243
 msgid "Product list"
-msgstr "ご注文日"
+msgstr "商品リスト"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:249
 msgctxt "subevents"
@@ -20750,7 +20750,7 @@ msgstr "このポジションは限られた予算のバウチャーで作成さ
 #: pretix/control/templates/pretixcontrol/order/change.html:101
 #: pretix/control/templates/pretixcontrol/order/change.html:413
 msgid "Change to"
-msgstr "（を）変更"
+msgstr "変更の対象"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:111
 #: pretix/control/templates/pretixcontrol/order/change.html:142
@@ -25414,7 +25414,7 @@ msgstr "すべてのオブジェクトが選択されていません。"
 
 #: pretix/control/views/item.py:471
 msgid "Street"
-msgstr "通り"
+msgstr "町丁・番地"
 
 #: pretix/control/views/item.py:573 pretix/control/views/item.py:747
 #: pretix/control/views/item.py:769
@@ -26645,7 +26645,7 @@ msgstr "一連のイベントのための代替の組織者のドメイン"
 
 #: pretix/multidomain/models.py:38
 msgid "Event domain"
-msgstr "イベント情報"
+msgstr "イベントのドメイン"
 
 #: pretix/multidomain/models.py:44
 msgid "Domain name"
@@ -29675,7 +29675,7 @@ msgstr "Swish"
 
 #: pretix/plugins/stripe/payment.py:449 pretix/plugins/stripe/payment.py:1318
 msgid "Affirm"
-msgstr "確認します"
+msgstr "Affirm"
 
 #: pretix/plugins/stripe/payment.py:454
 msgid "Only available for payments between $50 and $30,000."
@@ -29704,7 +29704,7 @@ msgstr "MobilePayペイ"
 
 #: pretix/plugins/stripe/payment.py:497
 msgid "Destination"
-msgstr "目的地（最終的な宛先）"
+msgstr "デスティネーション"
 
 #: pretix/plugins/stripe/payment.py:527 pretix/plugins/stripe/payment.py:1433
 #, python-brace-format
@@ -29802,7 +29802,7 @@ msgstr "口座名義人の国"
 
 #: pretix/plugins/stripe/payment.py:1317
 msgid "Affirm via Stripe"
-msgstr "Stripeを通じて確認します"
+msgstr "Stripe経由でAffirm"
 
 #: pretix/plugins/stripe/payment.py:1362
 msgid "Klarna via Stripe"
@@ -30236,7 +30236,7 @@ msgstr "お支払いを確認する必要があります。以下のリンクを
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:48
 msgid "Confirm payment"
-msgstr "支払いを確認します"
+msgstr "支払いを確認する"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:54
 msgid ""
@@ -30253,7 +30253,7 @@ msgstr "支払いの処理は、次の理由で完了しません:"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
 msgid "Confirm payment: %(code)s"
-msgstr "支払いを確認します: %(code)s"
+msgstr "支払いを確認: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:20
 msgid "Confirming your payment…"
