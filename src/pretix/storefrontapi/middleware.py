@@ -129,7 +129,17 @@ class ApiMiddleware:
                 LocaleMiddleware(NotImplementedError).process_request(request)
                 r = self.get_response(request)
                 r["Access-Control-Allow-Origin"] = "*"  # todo: allow whitelist?
-                r["Access-Control-Allow-Headers"] = ",".join(
+                r["Access-Control-Allow-Methods"] = ", ".join(
+                    [
+                        "GET",
+                        "POST",
+                        "HEAD",
+                        "OPTIONS",
+                        "PUT",
+                        "DELETE",
+                    ]
+                )
+                r["Access-Control-Allow-Headers"] = ", ".join(
                     [
                         "Content-Type",
                         "X-Storefront-Time-Machine-Date",

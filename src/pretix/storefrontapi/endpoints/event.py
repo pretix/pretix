@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, viewsets
 from rest_framework.generics import get_object_or_404
@@ -6,6 +8,7 @@ from rest_framework.response import Response
 from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Quota, SubEvent,
 )
+from pretix.base.models.tax import TaxedPrice
 from pretix.base.storelogic.products import (
     get_items_for_product_list, item_group_by_category,
 )
@@ -86,20 +89,32 @@ class PricingField(serializers.Field):
             return None
 
         item = item_or_var if isinstance(item_or_var, Item) else item_or_var.item
+        suggested_price = item.suggested_price
+        display_price = item.display_price
+
+        if self.context.get("price_included"):
+            display_price = TaxedPrice(
+                gross=Decimal("0.00"),
+                net=Decimal("0.00"),
+                tax=Decimal("0.00"),
+                rate=Decimal("0.00"),
+                name="",
+                code=None,
+            )
+
+        if hasattr(item, "initial_price"):
+            # Pre-select current price for add-ons
+            suggested_price = item.initial_price
 
         return {
             "display_price": {
-                "net": opt_str(item_or_var.display_price.net),
-                "gross": opt_str(item_or_var.display_price.gross),
+                "net": opt_str(display_price.net),
+                "gross": opt_str(display_price.gross),
                 "tax_rate": opt_str(
-                    item_or_var.display_price.rate
-                    if not item.includes_mixed_tax_rate
-                    else None
+                    display_price.rate if not item.includes_mixed_tax_rate else None
                 ),
                 "tax_name": opt_str(
-                    item_or_var.display_price.name
-                    if not item.includes_mixed_tax_rate
-                    else None
+                    display_price.name if not item.includes_mixed_tax_rate else None
                 ),
             },
             "original_price": (
@@ -122,20 +137,16 @@ class PricingField(serializers.Field):
             ),
             "free_price": item.free_price,
             "suggested_price": {
-                "net": opt_str(item_or_var.suggested_price.net),
-                "gross": opt_str(item_or_var.suggested_price.gross),
+                "net": opt_str(suggested_price.net),
+                "gross": opt_str(suggested_price.gross),
                 "tax_rate": opt_str(
-                    item_or_var.suggested_price.rate
-                    if not item.includes_mixed_tax_rate
-                    else None
+                    suggested_price.rate if not item.includes_mixed_tax_rate else None
                 ),
                 "tax_name": opt_str(
-                    item_or_var.suggested_price.name
-                    if not item.includes_mixed_tax_rate
-                    else None
+                    suggested_price.name if not item.includes_mixed_tax_rate else None
                 ),
             },
-            "mandatory_priced_addons": item.mandatory_priced_addons,
+            "mandatory_priced_addons": getattr(item, "mandatory_priced_addons", False),
             "includes_mixed_tax_rate": item.includes_mixed_tax_rate,
         }
 
@@ -211,7 +222,7 @@ class AvailabilityField(serializers.Field):
                 "code": "ok",
                 "message": None,
                 "waiting_list": False,
-                "max_selection": item_or_var.order_max,
+                "max_selection": self.context.get("max_count", item_or_var.order_max),
                 "quota_left": (
                     item_or_var.cached_availability[1]
                     if item.show_quota_left
@@ -236,6 +247,13 @@ class VariationSerializer(I18nFlattenedModelSerializer):
             "availability",
         ]
 
+    def to_representation(self, instance):
+        r = super().to_representation(instance)
+        if hasattr(instance, "initial"):
+            # Used for addons
+            r["initial_count"] = instance.initial
+        return r
+
 
 class ItemSerializer(I18nFlattenedModelSerializer):
     description = RichTextField()
@@ -257,6 +275,13 @@ class ItemSerializer(I18nFlattenedModelSerializer):
             "pricing",
             "availability",
         ]
+
+    def to_representation(self, instance):
+        r = super().to_representation(instance)
+        if hasattr(instance, "initial"):
+            # Used for addons
+            r["initial_count"] = instance.initial
+        return r
 
 
 class ProductGroupField(serializers.Field):

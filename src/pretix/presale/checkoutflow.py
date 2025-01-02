@@ -34,7 +34,6 @@
 import copy
 import inspect
 import uuid
-from collections import defaultdict
 from decimal import Decimal
 
 from django.conf import settings
@@ -61,7 +60,7 @@ from pretix.base.models.items import Question
 from pretix.base.models.orders import (
     InvoiceAddress, OrderPayment, QuestionAnswer,
 )
-from pretix.base.models.tax import TaxedPrice, TaxRule
+from pretix.base.models.tax import TaxRule
 from pretix.base.services.cart import (
     CartError, CartManager, add_payment_to_cart, error_messages, get_fees,
     set_cart_addons,
@@ -72,7 +71,9 @@ from pretix.base.services.orders import perform_order
 from pretix.base.services.tasks import EventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
-from pretix.base.storelogic.products import get_items_for_product_list
+from pretix.base.storelogic.addons import (
+    addons_is_applicable, addons_is_completed, get_addon_groups,
+)
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
@@ -493,7 +494,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         self.request = request
 
         # check whether addons are applicable
-        if get_cart(request).filter(item__addons__isnull=False).exists():
+        if addons_is_applicable(get_cart(request)):
             return True
 
         # don't re-check whether cross-selling is applicable if we're already past the AddOnsStep
@@ -517,19 +518,9 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         return request._checkoutflow_addons_applicable
 
     def is_completed(self, request, warn=False):
-        if getattr(self, '_completed', None) is not None:
-            return self._completed
-        for cartpos in get_cart(request).filter(addon_to__isnull=True).prefetch_related(
-            'item__addons', 'item__addons__addon_category', 'addons', 'addons__item'
-        ):
-            a = cartpos.addons.all()
-            for iao in cartpos.item.addons.all():
-                found = len([1 for p in a if p.item.category_id == iao.addon_category_id and not p.is_bundled])
-                if found < iao.min_count or found > iao.max_count:
-                    self._completed = False
-                    return False
-        self._completed = True
-        return True
+        if getattr(self, '_completed', None) is None:
+            self._completed = addons_is_completed(get_cart(request))
+        return self._completed
 
     @cached_property
     def forms(self):
@@ -537,100 +528,12 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         A list of forms with one form for each cart position that can have add-ons.
         All forms have a custom prefix, so that they can all be submitted at once.
         """
-        formset = []
-        quota_cache = {}
-        item_cache = {}
-        for cartpos in sorted(get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
-            'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
-        ), key=lambda c: c.sort_key):
-            formsetentry = {
-                'pos': cartpos,
-                'item': cartpos.item,
-                'variation': cartpos.variation,
-                'categories': []
-            }
-
-            current_addon_products = defaultdict(list)
-            for a in cartpos.addons.all():
-                if not a.is_bundled:
-                    current_addon_products[a.item_id, a.variation_id].append(a)
-
-            for iao in cartpos.item.addons.all():
-                ckey = '{}-{}'.format(cartpos.subevent.pk if cartpos.subevent else 0, iao.addon_category.pk)
-
-                if ckey not in item_cache:
-                    # Get all items to possibly show
-                    items, _btn = get_items_for_product_list(
-                        self.request.event,
-                        subevent=cartpos.subevent,
-                        voucher=None,
-                        channel=self.request.sales_channel,
-                        base_qs=iao.addon_category.items,
-                        allow_addons=True,
-                        quota_cache=quota_cache,
-                        memberships=(
-                            self.request.customer.usable_memberships(
-                                for_event=cartpos.subevent or self.request.event,
-                                testmode=self.request.event.testmode
-                            )
-                            if getattr(self.request, 'customer', None) else None
-                        ),
-                    )
-                    item_cache[ckey] = items
-                else:
-                    # We can use the cache to prevent a database fetch, but we need separate Python objects
-                    # or our things below like setting `i.initial` will do the wrong thing.
-                    items = [copy.copy(i) for i in item_cache[ckey]]
-                    for i in items:
-                        i.available_variations = [copy.copy(v) for v in i.available_variations]
-
-                for i in items:
-                    i.allow_waitinglist = False
-
-                    if i.has_variations:
-                        for v in i.available_variations:
-                            v.initial = len(current_addon_products[i.pk, v.pk])
-                            if v.initial and i.free_price:
-                                a = current_addon_products[i.pk, v.pk][0]
-                                v.initial_price = TaxedPrice(
-                                    net=a.price - a.tax_value,
-                                    gross=a.price,
-                                    tax=a.tax_value,
-                                    name=a.item.tax_rule.name if a.item.tax_rule else "",
-                                    rate=a.tax_rate,
-                                    code=a.item.tax_rule.code if a.item.tax_rule else None,
-                                )
-                            else:
-                                v.initial_price = v.suggested_price
-                        i.expand = any(v.initial for v in i.available_variations)
-                    else:
-                        i.initial = len(current_addon_products[i.pk, None])
-                        if i.initial and i.free_price:
-                            a = current_addon_products[i.pk, None][0]
-                            i.initial_price = TaxedPrice(
-                                net=a.price - a.tax_value,
-                                gross=a.price,
-                                tax=a.tax_value,
-                                name=a.item.tax_rule.name if a.item.tax_rule else "",
-                                rate=a.tax_rate,
-                                code=a.item.tax_rule.code if a.item.tax_rule else None,
-                            )
-                        else:
-                            i.initial_price = i.suggested_price
-
-                if items:
-                    formsetentry['categories'].append({
-                        'category': iao.addon_category,
-                        'price_included': iao.price_included or (cartpos.voucher_id and cartpos.voucher.all_addons_included),
-                        'multi_allowed': iao.multi_allowed,
-                        'min_count': iao.min_count,
-                        'max_count': iao.max_count,
-                        'iao': iao,
-                        'items': items
-                    })
-            if formsetentry['categories']:
-                formset.append(formsetentry)
-        return formset
+        return get_addon_groups(
+            self.request.event,
+            self.request.sales_channel,
+            getattr(self.request, 'customer', None),
+            get_cart(self.request),
+        )
 
     @cached_property
     def cross_selling_is_applicable(self):

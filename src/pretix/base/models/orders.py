@@ -3095,9 +3095,6 @@ class CheckoutSession(models.Model):
     testmode = models.BooleanField(default=False)
     session_data = models.JSONField(default=dict)
 
-    def cart_positions(self):
-        return CartPosition.objects.filter(event_id=self.event_id, cart_id=self.cart_id)
-
 
 class CartPosition(AbstractPosition):
     """
