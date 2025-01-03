@@ -490,7 +490,9 @@ class OrderPositionChangeForm(forms.Form):
     )
     operation_secret = forms.BooleanField(
         required=False,
-        label=_('Generate a new secret')
+        label=_('Generate a new secret'),
+        help_text=_('This affects both the ticket secret (often used as a QR code) as well as the link used to '
+                    'individually access the ticket.')
     )
     operation_cancel = forms.BooleanField(
         required=False,

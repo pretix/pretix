@@ -2425,6 +2425,8 @@ class OrderChangeManager:
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
             elif isinstance(op, self.RegenerateSecretOperation):
+                op.web_secret = generate_secret()
+                op.save(update_fields=["web_secret"])
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate=True, save=True
                 )
@@ -2531,6 +2533,7 @@ class OrderChangeManager:
                 'new_order': split_order.code,
             })
             op.order = split_order
+            op.web_secret = generate_secret()
             assign_ticket_secret(
                 self.event, position=op, force_invalidate=True,
             )
