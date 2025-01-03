@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-12-30 22:00+0000\n"
+"PO-Revision-Date: 2025-01-04 01:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -1041,10 +1041,8 @@ msgid "Name"
 msgstr "Ad"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:99
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Account active"
-msgstr "Bu hesap aktif değildir."
+msgstr "Hesap aktif"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:100
 #, fuzzy
