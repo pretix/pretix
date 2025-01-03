@@ -313,6 +313,7 @@ var editor = {
                     content: o.content,
                 });
             } else  if (o.type === "barcodearea") {
+                col = (new fabric.Color(o.fill))._source;
                 d.push({
                     type: "barcodearea",
                     page: editor.pdf_page_number,
@@ -323,6 +324,7 @@ var editor = {
                     text: o.text,
                     text_i18n: o.text_i18n || {},
                     nowhitespace: o.nowhitespace || false,
+                    color: col,
                 });
             } else  if (o.type === "poweredby") {
                 d.push({
@@ -349,6 +351,10 @@ var editor = {
             o.content = d.content;
             o.scaleToHeight(editor._mm2px(d.size));
             o.nowhitespace = d.nowhitespace || false;
+            if (!d.color) {
+              d.color = [0, 0, 0, 1];
+            }
+            o.set('fill', 'rgb(' + d.color[0] + ',' + d.color[1] + ',' + d.color[2] + ')');
             if (d.content === "other") {
                 o.text = d.text
             } else if (d.content === "other_i18n") {
@@ -640,6 +646,8 @@ var editor = {
                 }));
             });
         } else if (o.type === "barcodearea") {
+            var col = (new fabric.Color(o.fill))._source;
+            $("#toolbox-qrcolor").val("#" + ((1 << 24) + (col[0] << 16) + (col[1] << 8) + col[2]).toString(16).slice(1));
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-qrwhitespace").prop("checked", o.nowhitespace || false);
         } else if (o.type === "imagearea") {
@@ -742,6 +750,7 @@ var editor = {
             o.set('scaleX', 1);
             o.set('scaleY', 1);
             o.set('top', new_top)
+            o.set('fill', $("#toolbox-qrcolor").val());
             o.nowhitespace = $("#toolbox-qrwhitespace").prop("checked") || false;
 
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
@@ -1028,7 +1037,7 @@ var editor = {
             width: 100,
             height: 100,
             lockRotation: true,
-            fill: '#666',
+            fill: '#000',
             content: $(this).attr("data-content"),
             text: '',
             nowhitespace: true,
