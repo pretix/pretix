@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2024-01-22 17:08+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
-"pretix/pretix/zh_Hant/>\n"
+"PO-Revision-Date: 2025-01-04 01:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
+"projects/pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -582,10 +582,8 @@ msgid "Customer account changed"
 msgstr "客戶帳戶電子郵件更改"
 
 #: pretix/api/webhooks.py:394
-#, fuzzy
-#| msgid "The customer account has been anonymized."
 msgid "Customer account anonymized"
-msgstr "客戶帳戶已匿名化。"
+msgstr "客戶帳戶已匿名化"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:960
@@ -3097,10 +3095,9 @@ msgid "Invalid placeholder: {%(value)s}"
 msgstr "無效的佔位元： %(value)s）s"
 
 #: pretix/base/forms/widgets.py:68
-#, fuzzy, python-format
-#| msgid "Sample city"
+#, python-format
 msgid "Sample: %s"
-msgstr "範例城市"
+msgstr "範例: %s"
 
 #: pretix/base/forms/widgets.py:71
 #, python-brace-format
@@ -3351,11 +3348,10 @@ msgid "Simplified invoice renderer"
 msgstr ""
 
 #: pretix/base/invoice.py:1013
-#, fuzzy, python-brace-format
-#| msgid "Event date range"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "活動日期區間"
+msgstr "活動日期: {date_range}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
@@ -3576,10 +3572,8 @@ msgid "Maximum usages"
 msgstr "最大使用量"
 
 #: pretix/base/modelimport_vouchers.py:79
-#, fuzzy
-#| msgid "Maximum number of items per order"
 msgid "The maximum number of usages must be set."
-msgstr "每項訂單的最大商品數量"
+msgstr "必須設定最大使用次數。"
 
 #: pretix/base/modelimport_vouchers.py:88 pretix/base/models/vouchers.py:205
 msgid "Minimum usages"
@@ -5899,10 +5893,8 @@ msgid "Team members"
 msgstr "團隊成員"
 
 #: pretix/base/models/organizer.py:289
-#, fuzzy
-#| msgid "Do you really want to disable two-factor authentication?"
 msgid "Require all members of this team to use two-factor authentication"
-msgstr "你真的要禁用兩步驟驗證嗎？"
+msgstr "要求該團隊的所有成員使用雙因素身份驗證"
 
 #: pretix/base/models/organizer.py:290
 msgid ""
@@ -7822,10 +7814,9 @@ msgid "number of entries before {datetime}"
 msgstr "今日條目數數量"
 
 #: pretix/base/services/checkin.py:320
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of days with an entry since {datetime}"
-msgstr "今日條目數數量"
+msgstr "自 {datetime}以來條目的天數"
 
 #: pretix/base/services/checkin.py:321
 #, fuzzy, python-brace-format
@@ -13807,10 +13798,8 @@ msgstr ""
 "的所有部分，VIP區除外。"
 
 #: pretix/control/forms/item.py:664
-#, fuzzy
-#| msgid "The ordered product \"{item}\" is no longer available."
 msgid "Show product with info on why it’s unavailable"
-msgstr "訂購的產品“{item}”不再可用。"
+msgstr "顯示產品，並瞭解為什麼它不可用"
 
 #: pretix/control/forms/item.py:677
 msgid ""
@@ -18881,10 +18870,8 @@ msgid "Calculation"
 msgstr "取消"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:64
-#, fuzzy
-#| msgid "Reason:"
 msgid "Reason"
-msgstr "理由："
+msgstr "理由"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:137
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:251
@@ -19956,11 +19943,8 @@ msgid ""
 msgstr "目前不可用，因為已設定此產品的有限時間範圍"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:111
-#, fuzzy
-#| msgctxt "discount"
-#| msgid "Condition"
 msgid "Condition:"
-msgstr "條件"
+msgstr "條件:"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:126
 msgid "Applies to:"
@@ -22022,10 +22006,8 @@ msgid "Channel type"
 msgstr "掃描"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:5
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Delete sales channel:"
-msgstr "銷售管道"
+msgstr "銷售管道:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:10
 #, fuzzy
@@ -22044,10 +22026,8 @@ msgid ""
 msgstr "無法刪除此成員資格，因為它已在訂單中使用。將其結束日期更改為過去。"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:6
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Sales channel:"
-msgstr "銷售管道"
+msgstr "銷售管道:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:8
 msgid ""
@@ -26454,10 +26434,8 @@ msgid "Login from new source detected"
 msgstr "未檢測到訂購號"
 
 #: pretix/helpers/security.py:170
-#, fuzzy
-#| msgid "Unknown country code."
 msgid "Unknown country"
-msgstr "未知國家代碼."
+msgstr "未知國家"
 
 #: pretix/multidomain/models.py:36
 #, fuzzy
@@ -29485,7 +29463,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:350 pretix/plugins/stripe/payment.py:1552
 msgid "Alipay"
-msgstr "Alipay"
+msgstr "支付寶"
 
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1564
 msgid "Bancontact"
@@ -30070,16 +30048,12 @@ msgid "Enter the entity number, reference number, and amount."
 msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Entity number:"
-msgstr "發票編號"
+msgstr "公司編號："
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
-#, fuzzy
-#| msgid "Reference code"
 msgid "Reference number:"
-msgstr "參考代碼"
+msgstr "參考代碼:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:35
 msgid ""
@@ -31156,10 +31130,9 @@ msgstr "新價格："
 #: pretix/presale/templates/pretixpresale/event/voucher.html:176
 #: pretix/presale/templates/pretixpresale/event/voucher.html:329
 #: pretix/presale/templates/pretixpresale/event/voucher.html:331
-#, fuzzy, python-format
-#| msgid "Modify price for %(item)s"
+#, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
-msgstr "修改%(item)s 的價格"
+msgstr "修改%(item)s的價格，至少 %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:153
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:294
@@ -31263,16 +31236,12 @@ msgid "Enter a voucher code below to buy this product."
 msgstr "在下面輸入優惠券代碼以購買此票。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
-#, fuzzy
-#| msgid "Not available"
 msgid "Not available yet."
-msgstr "無法使用"
+msgstr "尚不可用。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
-#, fuzzy
-#| msgid "Not available"
 msgid "Not available any more."
-msgstr "無法使用"
+msgstr "不再可用。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:19
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:85
@@ -32615,7 +32584,7 @@ msgid ""
 "                                                    "
 msgstr ""
 "\n"
-"                                                        from %(start_date)s\n"
+"                                                        從 %(start_date)s\n"
 "                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
@@ -33132,10 +33101,8 @@ msgid "This feature is only available in test mode."
 msgstr "此禮品卡只能在測試模式下使用。"
 
 #: pretix/presale/views/event.py:985
-#, fuzzy
-#| msgid "This account is disabled."
 msgid "Time machine disabled!"
-msgstr "此帳戶已禁用。"
+msgstr "時間機器被禁用！"
 
 #: pretix/presale/views/order.py:368 pretix/presale/views/order.py:433
 #: pretix/presale/views/order.py:514
@@ -33266,14 +33233,12 @@ msgid ""
 msgstr "你不能將自己添加到候補名單中，因為該商品目前有貨。"
 
 #: pretix/presale/views/waiting.py:180
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "We've added you to the waiting list. You will receive an email as soon as "
-#| "this product gets available again."
+#, python-brace-format
 msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
-msgstr "我們已將你添加到候補名單中。 一旦該產品再次，您將收到一封電子郵件。"
+msgstr "我們已將您列入候補名單。 "
+"一旦該產品再次上市，我們將立即向{email}傳送電子郵件。"
 
 #: pretix/presale/views/waiting.py:208
 msgid "We could not find you on our waiting list."
