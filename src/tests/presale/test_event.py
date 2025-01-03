@@ -1604,6 +1604,8 @@ class EventLocaleTest(EventTestMixin, SoupTest):
         self.event.settings.locales = ['de', 'en']
         self.event.settings.locale = 'de'
         self.event.settings.timezone = 'UTC'
+        self.event.date_from = datetime.datetime(2024, 12, 26, 14, 0, tzinfo=datetime.timezone.utc)
+        self.event.save()
 
     def test_german_by_default(self):
         response = self.client.get(
@@ -1619,7 +1621,7 @@ class EventLocaleTest(EventTestMixin, SoupTest):
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Fri, Dec. 26th,', response.rendered_content)
+        self.assertIn('Thu, Dec. 26th,', response.rendered_content)
         self.assertIn('14:00', response.rendered_content)
 
     def test_english_region_US(self):
@@ -1629,7 +1631,7 @@ class EventLocaleTest(EventTestMixin, SoupTest):
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Fri, Dec. 26th,', response.rendered_content)
+        self.assertIn('Thu, Dec. 26th,', response.rendered_content)
         self.assertIn('2 p.m.', response.rendered_content)
 
     def test_german_region_US(self):
@@ -1639,5 +1641,5 @@ class EventLocaleTest(EventTestMixin, SoupTest):
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Fr, 26. Dezember', response.rendered_content)
+        self.assertIn('Do, 26. Dezember', response.rendered_content)
         self.assertIn('14:00', response.rendered_content)
