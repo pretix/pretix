@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-03 01:00+0000\n"
+"PO-Revision-Date: 2025-01-03 14:22+0000\n"
 "Last-Translator: Hector <hector@demandaeventos.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -121,11 +121,11 @@ msgstr "Ruso"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr "eslovaco"
+msgstr "Eslovaco"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
-msgstr "sueco"
+msgstr "Sueco"
 
 #: pretix/_base_settings.py:106
 msgid "Spanish"
@@ -162,37 +162,38 @@ msgstr "pretixSCAN (solo en línea, sin sincronización de pedidos)"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:402
 msgid "Application name"
-msgstr "Nombre de Aplicación"
+msgstr "Nombre de aplicación"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:421
 msgid "Redirection URIs"
-msgstr "URI de Redirección"
+msgstr "URI de redirección"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:422
 msgid "Allowed URIs list, space separated"
-msgstr "Lista de URI permitida, separada por espacio"
+msgstr "Lista de URIs permitidas, separadas por espacio"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Lista de URI permitidas, separadas por espacios"
+msgstr ""
+"Lista de URIs después del cierre de sesión permitidas, separadas por espacios"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
 msgid "Client ID"
-msgstr "ID Cliente"
+msgstr "ID de cliente"
 
 #: pretix/api/models.py:55
 msgid "Client secret"
-msgstr "Clave Secreta"
+msgstr "Secreto de cliente"
 
 #: pretix/api/models.py:116
 msgid "Enable webhook"
-msgstr "Habilitar webhook"
+msgstr "Habilitar webhooks"
 
 #: pretix/api/models.py:117
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr "URL destino"
+msgstr "URL de destino"
 
 #: pretix/api/models.py:118 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:286
@@ -220,7 +221,7 @@ msgstr "Comentario"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1384
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "El producto \"{}\" no tiene asignada una cuota."
+msgstr "El producto \"{}\" no está asignado a una cuota."
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1667
 #: pretix/base/models/items.py:1905 pretix/base/models/items.py:2163
@@ -265,11 +266,11 @@ msgstr "Plugin restringido: '{name}'."
 #: pretix/api/serializers/item.py:359
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "Los metadatos de propiedad '{name}' no existe."
+msgstr "La propiedad '{name}' de metadatos del elemento no existe."
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:1269
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "El artículo en el paquete no debe ser el paquete."
+msgstr "El artículo agrupado no debe ser el mismo que el del paquete."
 
 #: pretix/api/serializers/item.py:210 pretix/control/forms/item.py:1271
 msgid "The bundled item must not have bundles on its own."
@@ -280,8 +281,8 @@ msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"Actualizando los add-ons, paquetes o variaciones por medio de PATCH/PUT no "
-"es soportado. Use un punto dedicado para esta finalidad."
+"Actualizar los add-ons, paquetes o variaciones por medio de PATCH/PUT no "
+"está soportado. Por favor, use el endpoint dedicado para esta finalidad."
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
@@ -304,12 +305,13 @@ msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"Actualizando las opciones por medio de PATCH/PUT no es soportado. Use un "
-"punto dedicado para esta finalidad."
+"Actualizando las opciones por medio de PATCH/PUT no está soportado. Por "
+"favor, use el endpoint dedicado para esta finalidad."
 
 #: pretix/api/serializers/item.py:533 pretix/control/forms/item.py:177
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "La pregunta no debe depender de otra realizada durante el check-in."
+msgstr ""
+"La pregunta no puede depender de otra pregunta realizada durante el check-in."
 
 #: pretix/api/serializers/item.py:538 pretix/control/forms/item.py:182
 msgid "Circular dependency between questions detected."
@@ -317,7 +319,7 @@ msgstr "Se ha detectado una dependencia circular entre las preguntas."
 
 #: pretix/api/serializers/item.py:543 pretix/control/forms/item.py:191
 msgid "This type of question cannot be asked during check-in."
-msgstr "Este tipo de pregunta no se puede hacer durante el check-in."
+msgstr "Este tipo de pregunta no se puede preguntar durante el check-in."
 
 #: pretix/api/serializers/item.py:546 pretix/control/forms/item.py:199
 msgid "This type of question cannot be shown during check-in."
@@ -328,19 +330,19 @@ msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Ya existe un medio con el mismo identificador en tu cuenta de organizador o "
-"en otra afiliada."
+"Un medio con el mismo identificador y tipo ya existe en tu cuenta de "
+"organizador."
 
 #: pretix/api/serializers/order.py:78
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "\"{input}\" no es una entrada valida."
+msgstr "\"{input}\" no es una opción valida."
 
 #: pretix/api/serializers/order.py:1345 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1530
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "La butaca seleccionada {seat} no está disponible."
+msgstr "El asiento seleccionado {seat} no está disponible."
 
 #: pretix/api/serializers/order.py:1371 pretix/api/serializers/order.py:1378
 msgid "The product \"{}\" is not available on this date."
@@ -351,12 +353,12 @@ msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
 "No hay suficiente cuota disponible en la cuota \"{}\" para realizar esta "
-"operacion."
+"operación."
 
 #: pretix/api/serializers/organizer.py:103
 #: pretix/control/forms/organizer.py:888 pretix/presale/forms/customer.py:445
 msgid "An account with this email address is already registered."
-msgstr "Una cuenta con esta dirección de correo ya está registrada."
+msgstr "Una cuenta con esta dirección de correo electrónico ya está registrada."
 
 #: pretix/api/serializers/organizer.py:236
 #: pretix/control/forms/organizer.py:737
@@ -364,13 +366,13 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
-"Ya existe una tarjeta regalo con el mismo secreto en tu cuenta de "
+"Una tarjeta regalo con el mismo secreto ya existe en tu cuenta de "
 "organizador o en otra afiliada."
 
 #: pretix/api/serializers/organizer.py:327
 #: pretix/control/views/organizer.py:769
 msgid "pretix account invitation"
-msgstr "invitación a la cuenta pretix"
+msgstr "Invitación a la cuenta pretix"
 
 #: pretix/api/serializers/organizer.py:349
 #: pretix/control/views/organizer.py:868
@@ -386,7 +388,7 @@ msgstr "Este usuario ya tiene permisos para este equipo."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
 msgstr ""
-"El vale de compra empleado ya ha sido utilizado el número máximo de veces "
+"El vale de compra utilizado ya ha sido utilizado el máximo número de veces "
 "permitido."
 
 #: pretix/api/views/checkin.py:610 pretix/api/views/checkin.py:617
@@ -405,7 +407,7 @@ msgstr ""
 #: pretix/api/views/order.py:607 pretix/control/views/orders.py:1588
 #: pretix/presale/views/order.py:742 pretix/presale/views/order.py:815
 msgid "You cannot generate an invoice for this order."
-msgstr "No se puede generar una factura para este pedido."
+msgstr "No puedes generar una factura para este pedido."
 
 #: pretix/api/views/order.py:612 pretix/control/views/orders.py:1590
 #: pretix/presale/views/order.py:744 pretix/presale/views/order.py:817
@@ -426,7 +428,7 @@ msgstr ""
 
 #: pretix/api/webhooks.py:237 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr "Se hizo nuevo pedido"
+msgstr "Se hizo un nuevo pedido"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:239
 msgid "New order requires approval"
@@ -453,7 +455,7 @@ msgstr "Pedido caducado"
 
 #: pretix/api/webhooks.py:261
 msgid "Order expiry date changed"
-msgstr "Se ha modificado la fecha de caducidad del pedido"
+msgstr "Fecha de caducidad del pedido modificada"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -461,16 +463,16 @@ msgstr "Información de pedido modificada"
 
 #: pretix/api/webhooks.py:269 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr "Cambiar la dirección de contacto del pedido"
+msgstr "Dirección de contacto del pedido modificada"
 
 #: pretix/api/webhooks.py:273 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr "Perdido cambiado"
+msgstr "Pedido cambiado"
 
 #: pretix/api/webhooks.py:277
 msgid "Refund of payment created"
-msgstr "Devolución del pago creado"
+msgstr "Orden de devolución de pago creada"
 
 #: pretix/api/webhooks.py:281 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -494,7 +496,7 @@ msgstr "Devolución fallida del pago"
 
 #: pretix/api/webhooks.py:301
 msgid "Payment confirmed"
-msgstr "Pago confimado"
+msgstr "Pago confirmado"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
