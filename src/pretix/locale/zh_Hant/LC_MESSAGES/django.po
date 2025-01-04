@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-04 01:00+0000\n"
+"PO-Revision-Date: 2025-01-04 19:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
@@ -37,11 +37,11 @@ msgstr "阿拉伯語"
 
 #: pretix/_base_settings.py:83
 msgid "Basque"
-msgstr ""
+msgstr "巴斯克語"
 
 #: pretix/_base_settings.py:84
 msgid "Catalan"
-msgstr ""
+msgstr "嘉泰羅尼亞語"
 
 #: pretix/_base_settings.py:85
 msgid "Chinese (simplified)"
@@ -85,7 +85,7 @@ msgstr "希臘語"
 
 #: pretix/_base_settings.py:95
 msgid "Indonesian"
-msgstr ""
+msgstr "印尼語"
 
 #: pretix/_base_settings.py:96
 msgid "Italian"
@@ -97,7 +97,7 @@ msgstr "拉脫維亞語"
 
 #: pretix/_base_settings.py:98
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "挪威博克馬爾語"
 
 #: pretix/_base_settings.py:99
 msgid "Polish"
@@ -121,11 +121,11 @@ msgstr "俄語"
 
 #: pretix/_base_settings.py:104
 msgid "Slovak"
-msgstr ""
+msgstr "斯洛伐克語"
 
 #: pretix/_base_settings.py:105
 msgid "Swedish"
-msgstr ""
+msgstr "瑞典語"
 
 #: pretix/_base_settings.py:106
 msgid "Spanish"
@@ -645,7 +645,7 @@ msgstr "密碼"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "您的密碼必須包含數字和字母字元。"
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -653,7 +653,7 @@ msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "您的密碼可能與您之前的 %(history_length)s密碼之一不同。"
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -661,13 +661,13 @@ msgstr "網上商店"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
-msgstr ""
+msgstr "API銷售渠道沒有內建功能，但可用於自定義整合。"
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -2887,7 +2887,7 @@ msgstr "優惠券代碼"
 #: pretix/base/forms/__init__.py:118
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "您可以在此欄位中使用{markup_name}。"
 
 #: pretix/base/forms/__init__.py:178
 #, python-format
@@ -3087,6 +3087,8 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
+"您的佔位符語法有誤。 請檢查佔位符上的開頭“{”和結尾“}”花括號是否匹配。 "
+"請注意：要使用字面“{”或“}”，您需要將它們加倍為“{{”和“}}”。"
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:758
 #, fuzzy, python-format
@@ -3336,7 +3338,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:858
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "預設發票渲染器（歐式信件）"
 
 #: pretix/base/invoice.py:947
 msgctxt "invoice"
@@ -3345,7 +3347,7 @@ msgstr "（請隨時報價）"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "簡化的發票渲染器"
 
 #: pretix/base/invoice.py:1013
 #, python-brace-format
@@ -3608,7 +3610,7 @@ msgstr "優惠券價值"
 
 #: pretix/base/modelimport_vouchers.py:165
 msgid "It is pointless to set a value without a price mode."
-msgstr ""
+msgstr "在沒有價格模式的情況下設定值是沒有意義的。"
 
 #: pretix/base/modelimport_vouchers.py:237 pretix/base/models/items.py:2081
 #: pretix/base/models/vouchers.py:272
@@ -3737,18 +3739,18 @@ msgstr ""
 #: pretix/base/models/checkin.py:65
 msgctxt "checkin"
 msgid "Ignore check-ins on this list in statistics"
-msgstr ""
+msgstr "忽略統計中此列表中的簽到"
 
 #: pretix/base/models/checkin.py:69
 msgctxt "checkin"
 msgid "Tickets with a check-in on this list should be considered \"used\""
-msgstr ""
+msgstr "此列表中有簽到的門票應被視為「已使用」"
 
 #: pretix/base/models/checkin.py:70
 msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
-msgstr ""
+msgstr "這與各種情況有關，例如用於決定客戶是否仍然可以取消門票。"
 
 #: pretix/base/models/checkin.py:74
 msgctxt "checkin"
@@ -4059,7 +4061,8 @@ msgid ""
 "By default, the discount is applied across the same selection of products "
 "than the condition for the discount given above. If you want, you can "
 "however also select a different selection of products."
-msgstr ""
+msgstr "預設情況下，折扣適用於與上述折扣條件相同的產品選擇。 "
+"然而，如果您願意，您也可以選擇不同的產品。"
 
 #: pretix/base/models/discount.py:138
 #, fuzzy
@@ -4350,7 +4353,7 @@ msgstr "對客戶顯示簽到次數"
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
-msgstr ""
+msgstr "將顯示此欄位，以過濾公共活動列表和日曆中的活動。"
 
 #: pretix/base/models/event.py:1731 pretix/control/forms/organizer.py:269
 #: pretix/control/forms/organizer.py:273
