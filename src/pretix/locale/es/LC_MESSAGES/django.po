@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-03 14:22+0000\n"
+"PO-Revision-Date: 2025-01-04 01:00+0000\n"
 "Last-Translator: Hector <hector@demandaeventos.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -500,19 +500,19 @@ msgstr "Pago confirmado"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
-msgstr "Perdido aprobado"
+msgstr "Pedido aprobado"
 
 #: pretix/api/webhooks.py:309
 msgid "Order denied"
-msgstr "Perdido denegado"
+msgstr "Pedido denegado"
 
 #: pretix/api/webhooks.py:313
 msgid "Order deleted"
-msgstr "Perdido borrado"
+msgstr "Pedido eliminado"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
-msgstr "Entrada comprobada"
+msgstr "Entrada escaneada"
 
 #: pretix/api/webhooks.py:321
 msgid "Ticket check-in reverted"
@@ -533,7 +533,7 @@ msgstr "Evento eliminado"
 #: pretix/api/webhooks.py:337
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Fecha de inicio de la serie de eventos creada"
+msgstr "Fechas de la serie de eventos añadidas"
 
 #: pretix/api/webhooks.py:341
 msgctxt "subevent"
@@ -571,15 +571,15 @@ msgstr "Modo de pruebas de la tienda ha sido desactivado"
 
 #: pretix/api/webhooks.py:370
 msgid "Waiting list entry added"
-msgstr "Agregado a la lista de espera"
+msgstr "Elemento agregado a la lista de espera"
 
 #: pretix/api/webhooks.py:374
 msgid "Waiting list entry changed"
-msgstr "Entrada a la lista de espera"
+msgstr "Elemento de la lista de espera cambiado"
 
 #: pretix/api/webhooks.py:378
 msgid "Waiting list entry deleted"
-msgstr "Entrada a la lista de espera eliminada"
+msgstr "Elemento de la lista de espera eliminado"
 
 #: pretix/api/webhooks.py:382
 msgid "Waiting list entry received voucher"
@@ -612,11 +612,11 @@ msgstr "Este campo es obligatorio."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr "Ingresa el código postal en el formato XXX."
+msgstr "Ingresa el código postal en el formato XXXXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr "Ingresa un código postal en el formato XXX."
+msgstr "Ingresa un código postal en el formato XXXXX."
 
 #: pretix/base/auth.py:146
 #, python-brace-format
@@ -657,7 +657,7 @@ msgstr "Contraseña"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr "Su contraseña debe contener caracteres numéricos y alfabéticos."
+msgstr "Su contraseña debe contener caracteres alfanuméricos."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -689,7 +689,7 @@ msgstr ""
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "hecho posible por {name} basado en <a {a_attr}>pretix</a>"
+msgstr "desarrollado por {name} basado en <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
@@ -703,7 +703,7 @@ msgstr "Código fuente"
 #: pretix/base/customersso/oidc.py:61
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr "La opción de configuración \"{name}\" no existe."
+msgstr "La opción de configuración \"{name}\" falta."
 
 #: pretix/base/customersso/oidc.py:69 pretix/base/customersso/oidc.py:74
 #, python-brace-format
@@ -723,7 +723,7 @@ msgstr "Proveedor SSO incompatible: \"{error}\"."
 #: pretix/base/customersso/oidc.py:111
 #, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "No esta solicitando \"{scope}\"."
+msgstr "No estas solicitando \"{scope}\"."
 
 #: pretix/base/customersso/oidc.py:117
 #, python-brace-format
@@ -731,8 +731,8 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
-"Está solicitando el scope \"{scope}\", pero el proveedor solo admite estos: "
-"{scopes}."
+"Estás solicitando la funcionalidad \"{scope}\", pero el proveedor solo "
+"admite estos: {scopes}."
 
 #: pretix/base/customersso/oidc.py:127
 #, python-brace-format
@@ -740,7 +740,7 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
-"Está solicitando el campo \"{field}\", pero el proveedor solo admite estos: "
+"Estás solicitando el campo \"{field}\", pero el proveedor solo admite estos: "
 "{fields}."
 
 #: pretix/base/customersso/oidc.py:137
@@ -759,7 +759,7 @@ msgstr ""
 #: pretix/presale/views/customer.py:862
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr "El inicio de sesión no fue exitoso. Mensaje de error: \"{error}\"."
+msgstr "El inicio de sesión no tuvo éxito. Mensaje de error: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:236
 msgid ""
@@ -810,7 +810,7 @@ msgstr "Excel combinado (.xlsx)"
 
 #: pretix/base/exporters/answers.py:54
 msgid "Question answer file uploads"
-msgstr "Cargas de archivos de respuestas a preguntas"
+msgstr "Subida de archivo de preguntas y respuestas"
 
 #: pretix/base/exporters/answers.py:55 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:87
@@ -893,12 +893,12 @@ msgstr "Todas las fechas"
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:606
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
 msgid "Customer accounts"
-msgstr "Cuenta de cliente"
+msgstr "Cuentas de clientes"
 
 #: pretix/base/exporters/customers.py:51
 msgctxt "export_category"
 msgid "Customer accounts"
-msgstr "Cuenta de cliente"
+msgstr "Cuentas de clientes"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
@@ -912,7 +912,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:36
 #: pretix/presale/templates/pretixpresale/organizers/customer_base.html:37
 msgid "Customer ID"
-msgstr "ID Cliente"
+msgstr "ID de cliente"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:32
@@ -1109,7 +1109,7 @@ msgstr ""
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr "Entrada para evento {event}-{code}"
+msgstr "Entrada para el evento {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:74
 #: pretix/base/exporters/orderlist.py:128
@@ -1204,12 +1204,12 @@ msgstr "Hora de admisión"
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:598
 #: pretix/base/models/event.py:1484 pretix/control/forms/subevents.py:93
 msgid "Start of presale"
-msgstr "Inicio de preventa"
+msgstr "Inicio de la preventa"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:592
 #: pretix/base/models/event.py:1478 pretix/control/forms/subevents.py:99
 msgid "End of presale"
-msgstr "Finalización de preventa"
+msgstr "Finalización de la preventa"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:351
 #: pretix/base/models/event.py:604 pretix/base/models/event.py:1490
@@ -1219,7 +1219,7 @@ msgstr "Ubicación"
 #: pretix/base/exporters/events.py:68 pretix/base/models/event.py:607
 #: pretix/base/models/event.py:1493
 msgid "Latitude"
-msgstr "Lalitud"
+msgstr "Latitud"
 
 #: pretix/base/exporters/events.py:69 pretix/base/models/event.py:615
 #: pretix/base/models/event.py:1501
@@ -1246,7 +1246,7 @@ msgstr "Comentario interno"
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
-msgstr "Proveedor de pagos"
+msgstr "Proveedor de pago"
 
 #: pretix/base/exporters/invoices.py:84 pretix/base/exporters/invoices.py:86
 #: pretix/control/forms/filter.py:206 pretix/control/forms/filter.py:1020
