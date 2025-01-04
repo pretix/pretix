@@ -137,6 +137,7 @@ class ApiMiddleware:
                         "OPTIONS",
                         "PUT",
                         "DELETE",
+                        "PATCH",
                     ]
                 )
                 r["Access-Control-Allow-Headers"] = ", ".join(

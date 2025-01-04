@@ -41,7 +41,6 @@ from django.contrib import messages
 from django.core.cache import caches
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.signing import BadSignature, loads
-from django.core.validators import EmailValidator
 from django.db import models
 from django.db.models import Count, F, Q, Sum
 from django.db.models.functions import Cast
@@ -71,9 +70,11 @@ from pretix.base.services.orders import perform_order
 from pretix.base.services.tasks import EventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
+from pretix.base.storelogic import IncompleteError
 from pretix.base.storelogic.addons import (
     addons_is_applicable, addons_is_completed, get_addon_groups,
 )
+from pretix.base.storelogic.fields import ensure_fields_are_completed
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
@@ -89,7 +90,7 @@ from pretix.presale.forms.customer import AuthenticationForm, RegistrationForm
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
     contact_form_fields, contact_form_fields_overrides,
-    order_api_meta_from_request, order_meta_from_request, question_form_fields,
+    order_api_meta_from_request, order_meta_from_request,
     question_form_fields_overrides,
 )
 from pretix.presale.utils import customer_login
@@ -907,93 +908,21 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return redirect_to_url(self.get_next_url(request))
 
     def is_completed(self, request, warn=False):
-        self.request = request
         try:
-            emailval = EmailValidator()
-            if not self.cart_session.get('email') and not self.all_optional:
-                if warn:
-                    messages.warning(request, _('Please enter a valid email address.'))
-                return False
-            if self.cart_session.get('email'):
-                emailval(self.cart_session.get('email'))
-        except ValidationError:
+            ensure_fields_are_completed(
+                self.request.event,
+                self._positions_for_questions,
+                self.cart_session,
+                self.invoice_address,
+                self.all_optional,
+                get_cart_is_free(self.request),
+            )
+        except IncompleteError as e:
             if warn:
-                messages.warning(request, _('Please enter a valid email address.'))
+                messages.warning(request, e)
             return False
-
-        if not self.all_optional:
-
-            if self.address_asked:
-                if request.event.settings.invoice_address_required and (not self.invoice_address or not self.invoice_address.street):
-                    messages.warning(request, _('Please enter your invoicing address.'))
-                    return False
-
-            if request.event.settings.invoice_name_required and (not self.invoice_address or not self.invoice_address.name):
-                messages.warning(request, _('Please enter your name.'))
-                return False
-
-        for cp in self._positions_for_questions:
-            answ = {
-                aw.question_id: aw for aw in cp.answerlist
-            }
-            question_cache = {
-                q.pk: q for q in cp.item.questions_to_ask
-            }
-
-            def question_is_visible(parentid, qvals):
-                if parentid not in question_cache:
-                    return False
-                parentq = question_cache[parentid]
-                if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
-                    return False
-                if parentid not in answ:
-                    return False
-                return (
-                    ('True' in qvals and answ[parentid].answer == 'True')
-                    or ('False' in qvals and answ[parentid].answer == 'False')
-                    or (any(qval in [o.identifier for o in answ[parentid].options.all()] for qval in qvals))
-                )
-
-            def question_is_required(q):
-                return (
-                    q.required and
-                    (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values))
-                )
-
-            if not self.all_optional:
-                for q in cp.item.questions_to_ask:
-                    if question_is_required(q) and q.id not in answ:
-                        if warn:
-                            messages.warning(request, _('Please fill in answers to all required questions.'))
-                        return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_names_required', as_type=bool) \
-                        and not cp.attendee_name_parts:
-                    if warn:
-                        messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_emails_required', as_type=bool) \
-                        and cp.attendee_email is None:
-                    if warn:
-                        messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_company_required', as_type=bool) \
-                        and cp.company is None:
-                    if warn:
-                        messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_addresses_required', as_type=bool) \
-                        and (cp.street is None and cp.city is None and cp.country is None):
-                    if warn:
-                        messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return False
-
-            responses = question_form_fields.send(sender=self.request.event, position=cp)
-            form_data = cp.meta_info_data.get('question_form_data', {})
-            for r, response in sorted(responses, key=lambda r: str(r[0])):
-                for key, value in response.items():
-                    if value.required and not form_data.get(key):
-                        return False
-        return True
+        else:
+            return True
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

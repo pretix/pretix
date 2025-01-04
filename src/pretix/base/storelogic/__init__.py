@@ -1,0 +1,2 @@
+class IncompleteError(Exception):
+    pass

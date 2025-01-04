@@ -339,8 +339,7 @@ def get_cart(request):
                 'item__category__position', 'item__category_id', 'item__position', 'item__name', 'variation__value'
             ).select_related(
                 'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
-                'item__tax_rule', 'item__category', 'used_membership', 'used_membership__membership_type'
-            ).select_related(
+                'item__tax_rule', 'item__category', 'used_membership', 'used_membership__membership_type',
                 'addon_to'
             ).prefetch_related(
                 'addons', 'addons__item', 'addons__variation',

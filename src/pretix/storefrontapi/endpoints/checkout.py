@@ -16,6 +16,9 @@ from pretix.base.services.cart import (
     add_items_to_cart, error_messages, get_fees, set_cart_addons,
 )
 from pretix.base.storelogic.addons import get_addon_groups
+from pretix.base.storelogic.fields import (
+    get_checkout_fields, get_position_fields,
+)
 from pretix.base.timemachine import time_machine_now
 from pretix.presale.views.cart import generate_cart_id
 from pretix.storefrontapi.endpoints.event import (
@@ -103,7 +106,15 @@ class CartFeeSerializer(serializers.ModelSerializer):
         ]
 
 
-class CartPositionSerializer(serializers.ModelSerializer):
+class FieldSerializer(serializers.Serializer):
+    identifier = serializers.CharField()
+    label = serializers.CharField(allow_null=True)
+    required = serializers.BooleanField()
+    type = serializers.CharField()
+    validation_hints = serializers.DictField()
+
+
+class MinimalCartPositionSerializer(serializers.ModelSerializer):
     # todo: prefetch related items
     item = InlineItemSerializer(read_only=True)
     variation = InlineItemVariationSerializer(read_only=True)
@@ -124,6 +135,21 @@ class CartPositionSerializer(serializers.ModelSerializer):
         ]
 
 
+class CartPositionSerializer(MinimalCartPositionSerializer):
+    def to_representation(self, instance):
+        d = super().to_representation(instance)
+        fields = get_position_fields(self.context["event"], instance)
+        d["fields"] = FieldSerializer(
+            fields,
+            many=True,
+            context={**self.context, "position": instance}
+        ).data
+        d["fields_data"] = {
+            f.identifier: f.current_value(instance) for f in fields
+        }
+        return d
+
+
 class CheckoutSessionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -137,9 +163,7 @@ class CheckoutSessionSerializer(serializers.ModelSerializer):
     def to_representation(self, checkout):
         d = super().to_representation(checkout)
 
-        cartpos = CartPosition.objects.filter(
-            event_id=self.context["event"], cart_id=checkout.cart_id
-        )
+        cartpos = checkout.get_cart_positions(prefetch_questions=True)
         total = sum(p.price for p in cartpos)
 
         try:
@@ -161,12 +185,28 @@ class CheckoutSessionSerializer(serializers.ModelSerializer):
 
         total += sum([f.value for f in fees])
         d["cart_positions"] = CartPositionSerializer(
-            sorted(cartpos, key=lambda c: c.sort_key), many=True
+            sorted(cartpos, key=lambda c: c.sort_key), many=True, context=self.context
         ).data
-        d["cart_fees"] = CartFeeSerializer(fees, many=True).data
+        d["cart_fees"] = CartFeeSerializer(fees, many=True, context=self.context).data
         d["total"] = str(total)
 
-        steps = get_steps(self.context["event"], cartpos)
+        fields = get_checkout_fields(self.context["event"])
+        d["fields"] = FieldSerializer(
+            fields,
+            many=True,
+            context={**self.context, "checkout": checkout}
+        ).data
+        d["fields_data"] = {
+            f.identifier: f.current_value(checkout.session_data) for f in fields
+        }
+
+        steps = get_steps(
+            self.context["event"],
+            cartpos,
+            getattr(checkout, "invoice_address", None),
+            checkout.session_data,
+            total,
+        )
         d["steps"] = {}
         for step in steps:
             applicable = step.is_applicable()
@@ -267,7 +307,7 @@ class CheckoutViewSet(viewsets.ViewSet):
         elif request.method == "GET":
             data = [
                 {
-                    "parent": CartPositionSerializer(grp["pos"], context=ctx).data,
+                    "parent": MinimalCartPositionSerializer(grp["pos"], context=ctx).data,
                     "categories": [
                         {
                             "category": CategorySerializer(
@@ -299,6 +339,38 @@ class CheckoutViewSet(viewsets.ViewSet):
                 },
                 status=200,
             )
+
+    @action(detail=True, methods=["PATCH"])
+    def fields(self, request, *args, **kwargs):
+        cs = get_object_or_404(
+            self.request.event.checkout_sessions, cart_id=kwargs["cart_id"]
+        )
+        server_pos = {
+            p.pk: p for p in cs.get_cart_positions(prefetch_questions=True)
+        }
+        for req_pos in request.data.get("cart_positions", []):
+            pos = server_pos[req_pos["id"]]
+            fields = get_position_fields(self.request.event, pos)
+            fields_data = req_pos["fields_data"]
+            for f in fields:
+                if f.identifier in fields_data:
+                    # todo: validation error handing
+                    value = f.validate_input(fields_data[f.identifier])
+                    f.save_input(pos, value)
+
+        fields = get_checkout_fields(self.request.event)
+        fields_data = request.data.get("fields_data", {})
+        session_data = cs.session_data
+        for f in fields:
+            if f.identifier in fields_data:
+                # todo: validation error handing
+                value = f.validate_input(fields_data[f.identifier])
+                f.save_input(session_data, value)
+
+        cs.session_data = session_data
+        cs.save(update_fields=["session_data"])
+        cs.refresh_from_db()
+        return self._return_checkout_status(cs, 200)
 
     @action(detail=True, methods=["POST"])
     def add_to_cart(self, request, *args, **kwargs):

@@ -55,7 +55,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import (
-    Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
+    Case, Exists, F, Max, OuterRef, Prefetch, Q, Subquery, Sum, Value, When,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.db.models.signals import post_delete
@@ -3094,6 +3094,31 @@ class CheckoutSession(models.Model):
     )
     testmode = models.BooleanField(default=False)
     session_data = models.JSONField(default=dict)
+
+    def get_cart_positions(self, prefetch_questions=False):
+        qs = CartPosition.objects.filter(event=self.event, cart_id=self.cart_id).select_related(
+            "item", "variation", "subevent",
+        )
+        if prefetch_questions:
+            qqs = self.event.questions.filter(ask_during_checkin=False, hidden=False)
+            qs = qs.prefetch_related(
+                Prefetch("answers",
+                         QuestionAnswer.objects.prefetch_related("options"),
+                         to_attr="answerlist"),
+                Prefetch("item__questions",
+                         qqs.prefetch_related(
+                             Prefetch("options", QuestionOption.objects.prefetch_related(Prefetch(
+                                 # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                                 # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                                 # a prefetch lookup on this query...
+                                 "question",
+                                 Question.objects.none(),
+                                 to_attr="dummy"
+                             )))
+                         ).select_related("dependency_question"),
+                         to_attr="questions_to_ask")
+            )
+        return qs
 
 
 class CartPosition(AbstractPosition):
