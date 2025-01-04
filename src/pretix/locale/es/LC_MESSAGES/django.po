@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-04 01:00+0000\n"
+"PO-Revision-Date: 2025-01-04 19:00+0000\n"
 "Last-Translator: Hector <hector@demandaeventos.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -1272,7 +1272,7 @@ msgstr "Todas las facturas"
 #: pretix/base/exporters/invoices.py:127
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
-"Descargue todas las facturas creadas por el sistema como un archivo ZIP de "
+"Descargue todas las facturas creadas por el sistema en un archivo ZIP de "
 "archivos PDF."
 
 #: pretix/base/exporters/invoices.py:178
@@ -1446,7 +1446,7 @@ msgstr "País"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
 msgid "Tax ID"
-msgstr "IVA-ID"
+msgstr "CIF"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
@@ -1490,7 +1490,7 @@ msgstr "Destinatario de la factura:"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
 #: pretix/presale/templates/pretixpresale/event/order.html:307
 msgid "Company"
-msgstr "Compañía"
+msgstr "Empresa"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
 msgid "Street address"
@@ -4567,13 +4567,13 @@ msgstr "Transacción manual"
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr "IVA-ID: %s"
+msgstr "CIF: %s"
 
 #: pretix/base/models/invoices.py:191 pretix/base/services/invoices.py:139
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr "IVA-ID: %s"
+msgstr "CIF: %s"
 
 #: pretix/base/models/items.py:93
 msgid "Category name"
