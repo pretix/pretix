@@ -89,8 +89,8 @@ class PricingField(serializers.Field):
             return None
 
         item = item_or_var if isinstance(item_or_var, Item) else item_or_var.item
-        suggested_price = item.suggested_price
-        display_price = item.display_price
+        suggested_price = item_or_var.suggested_price
+        display_price = item_or_var.display_price
 
         if self.context.get("price_included"):
             display_price = TaxedPrice(
@@ -104,7 +104,7 @@ class PricingField(serializers.Field):
 
         if hasattr(item, "initial_price"):
             # Pre-select current price for add-ons
-            suggested_price = item.initial_price
+            suggested_price = item_or_var.initial_price
 
         return {
             "display_price": {

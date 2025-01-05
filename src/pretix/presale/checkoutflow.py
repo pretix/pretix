@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 import copy
 import inspect
-import uuid
 from decimal import Decimal
 
 from django.conf import settings
@@ -75,6 +74,9 @@ from pretix.base.storelogic.addons import (
     addons_is_applicable, addons_is_completed, get_addon_groups,
 )
 from pretix.base.storelogic.fields import ensure_fields_are_completed
+from pretix.base.storelogic.payment import (
+    current_payments_valid, ensure_payment_is_completed, payment_is_applicable,
+)
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
@@ -908,14 +910,15 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return redirect_to_url(self.get_next_url(request))
 
     def is_completed(self, request, warn=False):
+        self.request = request
         try:
             ensure_fields_are_completed(
-                self.request.event,
+                self.event,
                 self._positions_for_questions,
                 self.cart_session,
                 self.invoice_address,
                 self.all_optional,
-                get_cart_is_free(self.request),
+                get_cart_is_free(request),
             )
         except IncompleteError as e:
             if warn:
@@ -1121,20 +1124,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         return singleton_payments[0]
 
     def current_payments_valid(self, amount):
-        singleton_payments = [p for p in self.cart_session.get('payments', []) if not p.get('multi_use_supported')]
-        if len(singleton_payments) > 1:
-            return False
-
-        matched = Decimal('0.00')
-        for p in self.cart_session.get('payments', []):
-            if p.get('min_value') and (amount - matched) < Decimal(p['min_value']):
-                continue
-            if p.get('max_value') and (amount - matched) > Decimal(p['max_value']):
-                matched += Decimal(p['max_value'])
-            else:
-                matched = Decimal('0.00')
-
-        return matched == Decimal('0.00'), amount - matched
+        return current_payments_valid(self.cart_session, amount)
 
     def post(self, request):
         self.request = request
@@ -1238,6 +1228,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
     def is_completed(self, request, warn=False):
         if not self.cart_session.get('payments'):
+            # Is also in ensure_payment_is_completed, but saves us performance of cart evaluation
             if warn:
                 messages.error(request, _('Please select a payment method to proceed.'))
             return False
@@ -1250,58 +1241,30 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         except TaxRule.SaleNotAllowed:
             # ignore for now, will fail on order creation
             pass
-        selected = self.current_selected_payments(total, warn=warn, total_includes_payment_fees=True)
-        if sum(p['payment_amount'] for p in selected) != total:
+
+        try:
+            ensure_payment_is_completed(
+                self.event,
+                total,
+                self.cart_session,
+                self.request,
+            )
+        except IncompleteError as e:
             if warn:
-                messages.error(request, _('Please select a payment method to proceed.'))
+                messages.warning(self.request, str(e))
             return False
-
-        if len([p for p in selected if not p['multi_use_supported']]) > 1:
-            raise ImproperlyConfigured('Multiple non-multi-use providers in session, should never happen')
-
-        for p in selected:
-            if not p['pprov'] or not p['pprov'].is_enabled or not self._is_allowed(p['pprov'], request):
-                self._remove_payment(p['id'])
-                if p['payment_amount']:
-                    if warn:
-                        messages.error(request, _('Please select a payment method to proceed.'))
-                    return False
-
-            if not p['multi_use_supported'] and not p['pprov'].payment_is_valid_session(request):
-                if warn:
-                    messages.error(request, _('The payment information you entered was incomplete.'))
-                return False
         return True
 
     def is_applicable(self, request):
         self.request = request
-
-        for cartpos in get_cart(self.request):
-            if cartpos.requires_approval(invoice_address=self.invoice_address):
-                if 'payments' in self.cart_session:
-                    del self.cart_session['payments']
-                return False
-
-        used_providers = {p['provider'] for p in self.cart_session.get('payments', [])}
-        for provider in self.request.event.get_payment_providers().values():
-            if provider.is_implicit(request) if callable(provider.is_implicit) else provider.is_implicit:
-                if self._is_allowed(provider, request):
-                    self.cart_session['payments'] = [
-                        {
-                            'id': str(uuid.uuid4()),
-                            'provider': provider.identifier,
-                            'multi_use_supported': False,
-                            'min_value': None,
-                            'max_value': None,
-                            'info_data': {},
-                        }
-                    ]
-                    return False
-                elif provider.identifier in used_providers:
-                    # is_allowed might have changed, e.g. after add-on selection
-                    self.cart_session['payments'] = [p for p in self.cart_session['payments'] if p['provider'] != provider.identifier]
-
-        return True
+        return payment_is_applicable(
+            self.event,
+            self._total_order_value,
+            get_cart(request),
+            self.invoice_address,
+            self.cart_session,
+            request,
+        )
 
     def get(self, request):
         self.request.pci_dss_payment_page = True

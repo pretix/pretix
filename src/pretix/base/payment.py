@@ -722,6 +722,10 @@ class BasePaymentProvider:
         """
         return ""
 
+    def storefrontapi_prepare(self, session_data, total, info):
+        # TODO: docstring
+        return True
+
     def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str]:
         """
         Will be called after the user selects this provider as their payment method.
@@ -1446,6 +1450,28 @@ class GiftCardPayment(BasePaymentProvider):
                 'gift_card_secret': gc.secret,
             }
         )
+
+    def storefrontapi_prepare(self, session_data, total, info):
+        # todo: validate gift card not paid with gift card
+        try:
+            gc = self.event.organizer.accepted_gift_cards.get(
+                secret=info.get("giftcard").strip()
+            )
+            try:
+                self._add_giftcard_to_cart(session_data, gc)
+                return True
+            except ValidationError as e:
+                raise PaymentException(str(e.message))
+        except GiftCard.DoesNotExist:
+            if self.event.vouchers.filter(code__iexact=info.get("giftcard")).exists():
+                raise PaymentException(
+                    _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
+                      "the product selection.")
+                )
+            else:
+                raise PaymentException(_("This gift card is not known."))
+        except GiftCard.MultipleObjectsReturned:
+            raise PaymentException(_("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
     def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
         for p in get_cart(request):

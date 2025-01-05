@@ -1,7 +1,7 @@
 import logging
 
 from celery.result import AsyncResult
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.utils import translation
 from django.utils.translation import gettext as _
 from rest_framework import serializers, status, viewsets
@@ -13,13 +13,19 @@ from rest_framework.reverse import reverse
 from pretix.base.models import Item, ItemVariation, SubEvent, TaxRule
 from pretix.base.models.orders import CartPosition, CheckoutSession, OrderFee
 from pretix.base.services.cart import (
-    add_items_to_cart, error_messages, get_fees, set_cart_addons,
+    add_items_to_cart, add_payment_to_cart_session, error_messages, get_fees,
+    set_cart_addons,
 )
+from pretix.base.services.orders import perform_order
 from pretix.base.storelogic.addons import get_addon_groups
 from pretix.base.storelogic.fields import (
     get_checkout_fields, get_position_fields,
 )
+from pretix.base.storelogic.payment import current_selected_payments
 from pretix.base.timemachine import time_machine_now
+from pretix.presale.signals import (
+    order_api_meta_from_request, order_meta_from_request,
+)
 from pretix.presale.views.cart import generate_cart_id
 from pretix.storefrontapi.endpoints.event import (
     CategorySerializer, ItemSerializer,
@@ -140,13 +146,9 @@ class CartPositionSerializer(MinimalCartPositionSerializer):
         d = super().to_representation(instance)
         fields = get_position_fields(self.context["event"], instance)
         d["fields"] = FieldSerializer(
-            fields,
-            many=True,
-            context={**self.context, "position": instance}
+            fields, many=True, context={**self.context, "position": instance}
         ).data
-        d["fields_data"] = {
-            f.identifier: f.current_value(instance) for f in fields
-        }
+        d["fields_data"] = {f.identifier: f.current_value(instance) for f in fields}
         return d
 
 
@@ -192,13 +194,27 @@ class CheckoutSessionSerializer(serializers.ModelSerializer):
 
         fields = get_checkout_fields(self.context["event"])
         d["fields"] = FieldSerializer(
-            fields,
-            many=True,
-            context={**self.context, "checkout": checkout}
+            fields, many=True, context={**self.context, "checkout": checkout}
         ).data
         d["fields_data"] = {
             f.identifier: f.current_value(checkout.session_data) for f in fields
         }
+
+        payments = current_selected_payments(
+            self.context["event"],
+            total,
+            checkout.session_data,
+            total_includes_payment_fees=False,
+            fail=False,
+        )
+        d["payments"] = [
+            {
+                "identifier": p["pprov"].identifier,
+                "label": str(p["pprov"].public_name),
+                "payment_amount": str(p["payment_amount"]),
+            }
+            for p in payments
+        ]
 
         steps = get_steps(
             self.context["event"],
@@ -307,7 +323,9 @@ class CheckoutViewSet(viewsets.ViewSet):
         elif request.method == "GET":
             data = [
                 {
-                    "parent": MinimalCartPositionSerializer(grp["pos"], context=ctx).data,
+                    "parent": MinimalCartPositionSerializer(
+                        grp["pos"], context=ctx
+                    ).data,
                     "categories": [
                         {
                             "category": CategorySerializer(
@@ -340,14 +358,151 @@ class CheckoutViewSet(viewsets.ViewSet):
                 status=200,
             )
 
+    def _get_total(self, cs, payments):
+        cartpos = cs.get_cart_positions(prefetch_questions=True)
+        total = sum(p.price for p in cartpos)
+
+        try:
+            # TODO: do we need a different get_fees for storefrontapi?
+            fees = get_fees(
+                self.request.event,
+                self.request,
+                total,
+                (cs.invoice_address if hasattr(cs, "invoice_address") else None),
+                payments=payments,
+                positions=cartpos,
+            )
+        except TaxRule.SaleNotAllowed:
+            # ignore for now, will fail on order creation
+            fees = []
+
+        total += sum([f.value for f in fees])
+        return total
+
+    @action(detail=True, methods=["GET", "POST"])
+    def payment(self, request, *args, **kwargs):
+        cs = get_object_or_404(
+            self.request.event.checkout_sessions, cart_id=kwargs["cart_id"]
+        )
+        if request.method == "POST":
+            # TODO: allow explicit removal
+
+            for provider in self.request.event.get_payment_providers().values():
+                if provider.identifier == request.data.get("identifier", ""):
+                    if not provider.multi_use_supported:
+                        # Providers with multi_use_supported will call this themselves
+                        simulated_payments = cs.session_data.get("payments", {})
+                        simulated_payments = [
+                            p
+                            for p in simulated_payments
+                            if p.get("multi_use_supported")
+                        ]
+                        simulated_payments.append(
+                            {
+                                "provider": provider.identifier,
+                                "multi_use_supported": False,
+                                "min_value": None,
+                                "max_value": None,
+                                "info_data": {},
+                            }
+                        )
+                        total = self._get_total(
+                            cs,
+                            simulated_payments,
+                        )
+                    else:
+                        total = self._get_total(
+                            cs,
+                            [
+                                p
+                                for p in cs.session_data.get("payments", [])
+                                if p.get("multi_use_supported")
+                            ],
+                        )
+
+                    resp = provider.storefrontapi_prepare(
+                        cs.session_data,
+                        total,
+                        request.data.get("info"),
+                    )
+                    if provider.multi_use_supported:
+                        if resp is True:
+                            # Provider needs to call add_payment_to_cart itself, but we need to remove all previously
+                            # selected ones that don't have multi_use supported. Otherwise, if you first select a credit
+                            # card, then go back and switch to a gift card, you'll have both in the session and the credit
+                            # card has preference, which is unexpected.
+                            cs.session_data["payments"] = [
+                                p
+                                for p in cs.session_data.get("payments", [])
+                                if p.get("multi_use_supported")
+                            ]
+
+                            if provider.identifier not in [
+                                p["provider"]
+                                for p in cs.session_data.get("payments", [])
+                            ]:
+                                raise ImproperlyConfigured(
+                                    f"Payment provider {provider.identifier} set multi_use_supported "
+                                    f"and returned True from payment_prepare, but did not call "
+                                    f"add_payment_to_cart"
+                                )
+                    else:
+                        if resp is True or isinstance(resp, str):
+                            # There can only be one payment method that does not have multi_use_supported, remove all
+                            # previous ones.
+                            cs.session_data["payments"] = [
+                                p
+                                for p in cs.session_data.get("payments", [])
+                                if p.get("multi_use_supported")
+                            ]
+                            add_payment_to_cart_session(
+                                cs.session_data, provider, None, None, None
+                            )
+                    cs.save(update_fields=["session_data"])
+            return self._return_checkout_status(cs, 200)
+        elif request.method == "GET":
+            available_providers = []
+            total = self._get_total(
+                cs,
+                [
+                    p
+                    for p in cs.session_data.get("payments", [])
+                    if p.get("multi_use_supported")
+                ],
+            )
+
+            for provider in sorted(
+                self.request.event.get_payment_providers().values(),
+                key=lambda p: (-p.priority, str(p.public_name).title()),
+            ):
+                # TODO: do we need a different is_allowed for storefrontapi?
+                if not provider.is_enabled or not provider.is_allowed(
+                    self.request, total
+                ):
+                    continue
+                fee = provider.calculate_fee(total)
+                available_providers.append(
+                    {
+                        "identifier": provider.identifier,
+                        "label": provider.public_name,
+                        "fee": str(fee),
+                        "total": str(total + fee),
+                    }
+                )
+
+            return Response(
+                data={
+                    "available_providers": available_providers,
+                },
+                status=200,
+            )
+
     @action(detail=True, methods=["PATCH"])
     def fields(self, request, *args, **kwargs):
         cs = get_object_or_404(
             self.request.event.checkout_sessions, cart_id=kwargs["cart_id"]
         )
-        server_pos = {
-            p.pk: p for p in cs.get_cart_positions(prefetch_questions=True)
-        }
+        server_pos = {p.pk: p for p in cs.get_cart_positions(prefetch_questions=True)}
         for req_pos in request.data.get("cart_positions", []):
             pos = server_pos[req_pos["id"]]
             fields = get_position_fields(self.request.event, pos)
@@ -396,6 +551,73 @@ class CheckoutViewSet(viewsets.ViewSet):
             {},
             cs.sales_channel.identifier,
             time_machine_now(default=None),
+        )
+
+    @action(detail=True, methods=["POST"])
+    def confirm(self, request, *args, **kwargs):
+        cs = get_object_or_404(
+            self.request.event.checkout_sessions, cart_id=kwargs["cart_id"]
+        )
+        cartpos = cs.get_cart_positions(prefetch_questions=True)
+        total = sum(p.price for p in cartpos)
+
+        try:
+            fees = get_fees(
+                self.request.event,
+                self.request,
+                total,
+                (cs.invoice_address if hasattr(cs, "invoice_address") else None),
+                payments=[],  # todo
+                positions=cartpos,
+            )
+        except TaxRule.SaleNotAllowed as e:
+            raise ValidationError(str(e))  # todo: need better message?
+
+        total += sum([f.value for f in fees])
+        steps = get_steps(
+            request.event,
+            cartpos,
+            getattr(cs, "invoice_address", None),
+            cs.session_data,
+            total,
+        )
+        for step in steps:
+            applicable = step.is_applicable()
+            valid = not applicable or step.is_valid()
+            if not valid:
+                raise ValidationError(f"Step {step.identifier} is not valid")
+
+        # todo: confirm messages, or integrate them as fields?
+        meta_info = {
+            "contact_form_data": cs.session_data.get("contact_form_data", {}),
+        }
+        api_meta = {}
+        for receiver, response in order_meta_from_request.send(
+            sender=request.event, request=request
+        ):
+            meta_info.update(response)
+        for receiver, response in order_api_meta_from_request.send(
+            sender=request.event, request=request
+        ):
+            api_meta.update(response)
+
+        # todo: delete checkout session
+        # todo: give info about order
+        return self._do_async(
+            cs,
+            perform_order,
+            self.request.event.id,
+            payments=cs.session_data.get("payments", []),
+            positions=[p.id for p in cartpos],
+            email=cs.session_data.get("email"),
+            locale=translation.get_language(),
+            address=cs.invoice_address.pk if hasattr(cs, "invoice_address") else None,
+            meta_info=meta_info,
+            sales_channel=request.sales_channel.identifier,
+            shown_total=None,
+            customer=cs.customer,
+            override_now_dt=time_machine_now(default=None),
+            api_meta=api_meta,
         )
 
     @action(

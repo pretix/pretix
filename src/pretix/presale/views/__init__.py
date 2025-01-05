@@ -31,7 +31,6 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-import copy
 from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -44,7 +43,6 @@ from django.db.models import Exists, OuterRef, Prefetch, Sum
 from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
 from django_scopes import scopes_disabled
 
 from pretix.base.i18n import get_language_without_region
@@ -54,7 +52,8 @@ from pretix.base.models import (
     QuestionAnswer, QuestionOption, TaxRule,
 )
 from pretix.base.services.cart import get_fees
-from pretix.base.templatetags.money import money_filter
+from pretix.base.storelogic import IncompleteError
+from pretix.base.storelogic.payment import current_selected_payments
 from pretix.helpers.cookies import set_cookie_without_samesite
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import question_form_fields
@@ -256,52 +255,16 @@ class CartMixin:
         }
 
     def current_selected_payments(self, total, warn=False, total_includes_payment_fees=False):
-        raw_payments = copy.deepcopy(self.cart_session.get('payments', []))
-        payments = []
-        total_remaining = total
-        for p in raw_payments:
-            # This algorithm of treating min/max values and fees needs to stay in sync between the following
-            # places in the code base:
-            # - pretix.base.services.cart.get_fees
-            # - pretix.base.services.orders._get_fees
-            # - pretix.presale.views.CartMixin.current_selected_payments
-            if p.get('min_value') and total_remaining < Decimal(p['min_value']):
-                if warn:
-                    messages.warning(
-                        self.request,
-                        _('Your selected payment method can only be used for a payment of at least {amount}.').format(
-                            amount=money_filter(Decimal(p['min_value']), self.request.event.currency)
-                        )
-                    )
-                self._remove_payment(p['id'])
-                continue
-
-            to_pay = total_remaining
-            if p.get('max_value') and to_pay > Decimal(p['max_value']):
-                to_pay = min(to_pay, Decimal(p['max_value']))
-
-            pprov = self.request.event.get_payment_providers(cached=True).get(p['provider'])
-            if not pprov:
-                self._remove_payment(p['id'])
-                continue
-
-            if not total_includes_payment_fees:
-                fee = pprov.calculate_fee(to_pay)
-                total_remaining += fee
-                to_pay += fee
-            else:
-                fee = Decimal('0.00')
-
-            if p.get('max_value') and to_pay > Decimal(p['max_value']):
-                to_pay = min(to_pay, Decimal(p['max_value']))
-
-            p['payment_amount'] = to_pay
-            p['provider_name'] = pprov.public_name
-            p['pprov'] = pprov
-            p['fee'] = fee
-            total_remaining -= to_pay
-            payments.append(p)
-        return payments
+        try:
+            return current_selected_payments(
+                self.request.event,
+                total,
+                self.cart_session,
+                total_includes_payment_fees=total_includes_payment_fees,
+                fail=warn
+            )
+        except IncompleteError as e:
+            messages.warning(self.request, str(e))
 
     def _remove_payment(self, payment_id):
         self.cart_session['payments'] = [p for p in self.cart_session['payments'] if p.get('id') != payment_id]

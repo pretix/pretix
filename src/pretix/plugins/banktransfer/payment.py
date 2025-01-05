@@ -360,6 +360,9 @@ class BankTransfer(BasePaymentProvider):
         }
         return template.render(ctx)
 
+    def storefrontapi_prepare(self, session_data, total, info):
+        return True
+
     def checkout_prepare(self, request, total):
         form = self.payment_form(request)
         if form.is_valid():
