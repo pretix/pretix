@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-02 07:00+0000\n"
+"PO-Revision-Date: 2025-01-05 14:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -20196,7 +20196,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:409
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr "%(rate)s%% %(taxname)sを含む"
+msgstr "%(taxname)s%(rate)s を含む"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:6
 #: pretix/control/templates/pretixcontrol/items/question.html:9
@@ -31343,7 +31343,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:366
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
-msgstr "%(rate)s%% %(name)s を含む"
+msgstr "%(name)s %(rate)sを含む"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:200
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:207
@@ -31564,7 +31564,7 @@ msgstr[0] "%(num)s 個の製品"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
 #, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr "incl. %(tax_sum)s 税金"
+msgstr "税%(tax_sum)sを含む"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:482
 #, python-format
@@ -31594,7 +31594,7 @@ msgstr "チェックアウトを続行します"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:63
 msgid "Empty cart"
-msgstr "空のカート"
+msgstr "カートを空にする"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:68
 #: pretix/presale/templates/pretixpresale/event/index.html:236
@@ -31876,7 +31876,7 @@ msgstr "%(item)sのフルサイズの画像を表示"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:359
 #, python-format
 msgid "%(value)s incl. taxes"
-msgstr "%(value)s 税込"
+msgstr "税込%(value)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:197
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:350
