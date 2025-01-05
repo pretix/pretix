@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-05 14:00+0000\n"
+"PO-Revision-Date: 2025-01-06 00:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -4552,7 +4552,7 @@ msgstr "アドオンカテゴリ"
 
 #: pretix/base/models/items.py:222 pretix/base/models/items.py:278
 msgid "Disable product for this date"
-msgstr "この日付の製品を無効にしてください"
+msgstr "この日付の製品を無効にする"
 
 #: pretix/base/models/items.py:226 pretix/base/models/items.py:282
 #: pretix/base/models/items.py:560
@@ -5638,7 +5638,7 @@ msgstr "支払い済みの注文"
 
 #: pretix/base/models/orders.py:418
 msgid "canceled (paid fee)"
-msgstr "キャンセル（料金支払い済み）"
+msgstr "キャンセル済み（支払い済み手数料）"
 
 #: pretix/base/models/orders.py:1031
 msgid ""
@@ -6587,7 +6587,7 @@ msgstr "購入した製品"
 #: pretix/base/services/placeholders.py:393
 #: pretix/base/templates/pretixbase/email/order_details.html:147
 msgid "View order details"
-msgstr "注文の詳細を表示します"
+msgstr "注文の詳細を表示する"
 
 #: pretix/base/notifications.py:234
 #, python-brace-format
@@ -6655,7 +6655,7 @@ msgstr "払い戻しをリクエストしました"
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr "{order.code}の返金手続きを依頼されました。"
+msgstr "{order.code}の返金手続きがリクエストされました。"
 
 #: pretix/base/payment.py:86
 msgctxt "payment"
@@ -11831,7 +11831,7 @@ msgstr "ここをクリックして、通知設定を表示および変更"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
-msgstr "ここをクリックしてすぐにすべての通知を無効にしてください。"
+msgstr "ここをクリックして、すべての通知を直ちに無効にする。"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
@@ -32242,7 +32242,7 @@ msgstr "注文された商品を変更します"
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 #: pretix/presale/templates/pretixpresale/event/position.html:34
 msgid "Change details"
-msgstr "変更の詳細"
+msgstr "詳細を変更"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:262
 msgid ""
