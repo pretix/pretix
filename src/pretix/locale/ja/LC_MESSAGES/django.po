@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-06 00:00+0000\n"
+"PO-Revision-Date: 2025-01-08 01:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -539,7 +539,7 @@ msgstr ""
 
 #: pretix/api/webhooks.py:354
 msgid "Shop taken live"
-msgstr "ショップが営業中になりました"
+msgstr "ショップが公開中になりました"
 
 #: pretix/api/webhooks.py:358
 msgid "Shop taken offline"
@@ -2713,7 +2713,7 @@ msgstr "全て"
 
 #: pretix/base/exporters/orderlist.py:1306 pretix/control/forms/filter.py:1417
 msgid "Live"
-msgstr "営業中"
+msgstr "公開中"
 
 #: pretix/base/exporters/orderlist.py:1315 pretix/control/forms/filter.py:1425
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
@@ -3667,7 +3667,7 @@ msgstr "タグ"
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:297
 msgid "Shows hidden products that match this voucher"
-msgstr "このクーポンに適合する非表示の商品を表示します\\"
+msgstr "このクーポンに適合する隠された商品を表示する"
 
 #: pretix/base/modelimport_vouchers.py:343 pretix/base/models/vouchers.py:301
 msgid "Offer all add-on products for free when redeeming this voucher"
@@ -4336,7 +4336,7 @@ msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
-"チェックされているとき、プロパティが設定されている場合にのみ、イベントを営業"
+"チェックされているとき、プロパティが設定されている場合にのみ、イベントを公開"
 "中にすることができます。イベントシリーズでは、個々の日付に値を設定することは"
 "常にオプションです"
 
@@ -7048,7 +7048,7 @@ msgstr "アドオンを含む価格"
 #: pretix/base/services/placeholders.py:669
 #: pretix/base/services/placeholders.py:678 pretix/control/views/event.py:797
 msgid "John Doe"
-msgstr "John Doe"
+msgstr "山田 太郎"
 
 #: pretix/base/pdf.py:177
 #: pretix/control/templates/pretixcontrol/order/index.html:549
@@ -7408,7 +7408,7 @@ msgstr "イベント終了"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
-msgstr "イベントの入場料"
+msgstr "イベントの入場"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
@@ -9238,7 +9238,7 @@ msgstr "開始日を表示します"
 
 #: pretix/base/settings.py:1025
 msgid "Show the presale start date before presale has started."
-msgstr "プレセールの開始日を表示する前に、プレセールが開始される前です。"
+msgstr "プレセールが始まる前に、プレセールの開始日を表示します。"
 
 #: pretix/base/settings.py:1040 pretix/base/settings.py:1051
 msgid "Do not generate invoices"
@@ -9696,8 +9696,8 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
-"電源が入っている場合、チケットは購入直後に直接ダウンロードできません。ファイ"
-"ルサイズが大きくない場合、支払い確認のメールに添付され、顧客はメール内のリン"
+"オンになっている場合、チケットは購入直後に直接ダウンロードできません。ファイ"
+"ルサイズが大きくなければ、支払い確認のメールに添付され、顧客はメール内のリン"
 "クをクリックするとすぐにページからダウンロードできます。他の販売チャネルを通"
 "じて行われた注文には影響しません。"
 
@@ -10162,7 +10162,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/mail.html:39
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:40
 msgid "Sender address"
-msgstr "送り主の住所"
+msgstr "送信元のアドレス"
 
 #: pretix/base/settings.py:2137 pretix/control/forms/mailsetup.py:36
 #: pretix/control/forms/mailsetup.py:109
@@ -11460,7 +11460,7 @@ msgstr "氏（Surname/Family Name）"
 #: pretix/base/settings.py:3685
 msgctxt "person_name_sample"
 msgid "John"
-msgstr "ジョン"
+msgstr "太郎"
 
 #: pretix/base/settings.py:3467 pretix/base/settings.py:3483
 #: pretix/base/settings.py:3499 pretix/base/settings.py:3515
@@ -11469,7 +11469,7 @@ msgstr "ジョン"
 #: pretix/base/settings.py:3655 pretix/base/settings.py:3686
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr "Doe"
+msgstr "山田"
 
 #: pretix/base/settings.py:3473 pretix/base/settings.py:3489
 #: pretix/base/settings.py:3521 pretix/base/settings.py:3640
@@ -11497,7 +11497,7 @@ msgstr "ミドルネーム"
 #: pretix/control/forms/organizer.py:651
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr "John Doe"
+msgstr "山田 太郎"
 
 #: pretix/base/settings.py:3593
 msgid "Calling name"
@@ -12183,7 +12183,7 @@ msgstr "あなたのイベントは終了します"
 #: pretix/base/timeline.py:76
 msgctxt "timeline"
 msgid "Admissions for your event start"
-msgstr "イベントの入場は始まります"
+msgstr "イベントの入場が始まります"
 
 #: pretix/base/timeline.py:84
 msgctxt "timeline"
@@ -13214,7 +13214,7 @@ msgstr "支払い期限"
 
 #: pretix/control/forms/filter.py:1196 pretix/control/forms/filter.py:1671
 msgid "Shop live and presale running"
-msgstr "営業中かつプレセールが開催中です"
+msgstr "公開中かつ予約販売が開催中です"
 
 #: pretix/control/forms/filter.py:1197 pretix/control/forms/filter.py:2013
 msgid "Inactive"
@@ -13314,7 +13314,7 @@ msgstr "有効なメンバーシップがあります"
 
 #: pretix/control/forms/filter.py:1670
 msgid "Shop live"
-msgstr "お店が営業中"
+msgstr "ショップが公開中"
 
 #: pretix/control/forms/filter.py:1672
 msgid "Shop not live"
@@ -16835,7 +16835,7 @@ msgstr "セキュリティ上の理由から、続行する前にパスワード
 #: pretix/control/templates/pretixcontrol/base.html:454
 #, python-format
 msgid "Times displayed in %(tz)s"
-msgstr "%(tz)sで表示される時間"
+msgstr "表示される時間帯 %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html:460
 msgid "running in development mode"
@@ -18253,7 +18253,7 @@ msgstr "チケットショップを公開するためには、まず以下の問
 #: pretix/control/templates/pretixcontrol/event/live.html:51
 #: pretix/control/templates/pretixcontrol/event/live.html:65
 msgid "Go live"
-msgstr "営業を開始します"
+msgstr "オンラインにする"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:59
 msgid "If you want to, you can publish your ticket shop now."
@@ -18420,7 +18420,7 @@ msgstr "支払い済みの注文"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:96
 msgid "Free order"
-msgstr "自由な順序"
+msgstr "無料の注文"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:99
 #: pretix/control/templates/pretixcontrol/order/index.html:248
@@ -20044,8 +20044,9 @@ msgid ""
 "tickets\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
 "自動割引を使用すると、特定の条件に基づいて顧客の購入に自動的に割引を適用する"
-"ことができます。たとえば、「3枚以上のチケットを購入すると20％割引」や「2枚の"
-"チケットを購入すると1枚無料」などのグループ割引を作成することができます。"
+"ことができます。たとえば、「3枚以上のチケットを購入すると20パーセント割引」や"
+"「2枚のチケットを購入すると1枚無料」などのグループ割引を作成することができま"
+"す。"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:15
 msgid ""
@@ -20196,7 +20197,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:409
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr "%(taxname)s%(rate)s を含む"
+msgstr "%(taxname)s%(rate)s パーセントを含む"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:6
 #: pretix/control/templates/pretixcontrol/items/question.html:9
@@ -25047,11 +25048,11 @@ msgstr "ここをクリックして変更してください"
 
 #: pretix/control/views/dashboards.py:273
 msgid "live"
-msgstr "営業中"
+msgstr "公開中"
 
 #: pretix/control/views/dashboards.py:274
 msgid "live and in test mode"
-msgstr "営業中かつテストモード"
+msgstr "公開中かつテストモード"
 
 #: pretix/control/views/dashboards.py:275
 msgid "not yet public"
@@ -25188,7 +25189,7 @@ msgstr "無効なチケット出力タイプをリクエストしました。"
 
 #: pretix/control/views/event.py:972
 msgid "Your shop is live now!"
-msgstr "あなたのショップは営業中です！"
+msgstr "あなたのショップは公開中です！"
 
 #: pretix/control/views/event.py:980
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
@@ -25549,7 +25550,7 @@ msgstr "検証コードが間違っています。もう一度お試しくださ
 
 #: pretix/control/views/mailsetup.py:221
 msgid "Sender address verification"
-msgstr "送り主の住所確認"
+msgstr "送信元のアドレス確認"
 
 #: pretix/control/views/mailsetup.py:277
 #, python-format
@@ -29514,7 +29515,7 @@ msgstr "ストライプアカウント"
 #: pretix/plugins/stripe/payment.py:261
 msgctxt "stripe"
 msgid "Live"
-msgstr "営業中"
+msgstr "公開中"
 
 #: pretix/plugins/stripe/payment.py:262
 msgctxt "stripe"
@@ -30753,7 +30754,7 @@ msgstr "このショップは現在あなたとあなたのチームだけが見
 
 #: pretix/presale/templates/pretixpresale/event/base.html:34
 msgid "Take it live now"
-msgstr "今すぐ営業を始める"
+msgstr "今すぐ公開する"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:44
 #: pretix/presale/templates/pretixpresale/event/base.html:105
@@ -30818,9 +30819,10 @@ msgid ""
 "href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
 "hidden=\"true\"></span>time machine</a>."
 msgstr ""
-"異なる時点であなたのショップを表示するには、<a href=\"%(time_machine_link)s\""
-"><span class=\"fa fa-clock-o\" aria-hidden=\"true\""
-"></span>タイムマシン</a>を有効にすることができます。"
+"<a href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-hidden="
+"\"true\""
+"></span>タイムマシン</a>を有効にすることで、異なる時刻におけるあなたのショッ"
+"プを表示することができます。"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:163
 #: pretix/presale/templates/pretixpresale/event/base.html:210
@@ -31343,7 +31345,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:366
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
-msgstr "%(name)s %(rate)sを含む"
+msgstr "%(name)s %(rate)sパーセントを含む"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:200
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:207
@@ -32091,12 +32093,12 @@ msgid ""
 "your order to be sent to you again."
 msgstr ""
 "注文の状況や詳細を確認または変更したい場合は、注文手続き中に当社から送られた"
-"メールのリンクをクリックしてください。リンクが見つからない場合は、以下のボタ"
+"メールのリンクをクリックしてください。リンクが見つからない場合は、つぎのボタ"
 "ンをクリックして、注文のリンクを再度送付してもらうこともできます。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:256
 msgid "Resend order link"
-msgstr "注文リンクを再送してください"
+msgstr "注文リンクを再送する"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:4
 #: pretix/presale/templates/pretixpresale/event/offline.html:8
@@ -32382,7 +32384,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:467
 msgid "You can cancel this order using the following button."
-msgstr "次のボタンを使用して、この注文をキャンセルすることができます。"
+msgstr "つぎのボタンを使用して、この注文をキャンセルすることができます。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
@@ -32547,7 +32549,7 @@ msgstr "チケットを変更"
 msgid ""
 "If you want to make changes to the components of your ticket, you can click "
 "on the following button."
-msgstr "チケットのコンポーネントを変更したい場合は、以下のボタンをクリックしてくださ"
+msgstr "チケットのコンポーネントを変更したい場合は、つぎのボタンをクリックしてくださ"
 "い。"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:73
@@ -32587,7 +32589,7 @@ msgstr "支払い済みの注文"
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
-msgstr "注文リンクを再送してください"
+msgstr "注文リンクを再送する"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
 msgid ""
@@ -33081,7 +33083,7 @@ msgstr "これからのイベントを見る"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:169
 msgid "No public upcoming events found."
-msgstr "公開される今後のイベントが見つかりません。"
+msgstr "今後一般に公表されるイベントが見つかりません。"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:169
 msgid "Show past events"
