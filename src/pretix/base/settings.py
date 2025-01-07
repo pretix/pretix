@@ -3609,8 +3609,8 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'concatenation': lambda d: str(d.get('full_name', '')),
         'concatenation_all_components': lambda d: str(d.get('full_name', '')) + " (" + d.get('latin_transcription', '') + ")",
         'sample': {
-            'full_name': '明仁',
-            'latin_transcription': 'Akihito',
+            'full_name': 'Aye',
+            'latin_transcription': 'Aye',
             '_scheme': 'full_transcription',
         },
     }),
