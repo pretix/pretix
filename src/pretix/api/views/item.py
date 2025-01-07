@@ -619,7 +619,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     def availability(self, request, *args, **kwargs):
         quota = self.get_object()
 
-        qa = QuotaAvailability()
+        qa = QuotaAvailability(full_results=True)
         qa.queue(quota)
         qa.compute()
         avail = qa.results[quota]
