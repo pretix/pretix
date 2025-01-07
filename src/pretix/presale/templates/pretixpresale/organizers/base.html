@@ -1,4 +1,5 @@
 {% extends "pretixpresale/base.html" %}
+{% load urlreplace %}
 {% load i18n %}
 {% load static %}
 {% load thumb %}
@@ -26,7 +27,7 @@
                     {% if organizer.settings.locales|length > 1 %}
                         <nav class="locales" aria-label="{% trans "select language" %}">
                             {% for l in languages %}
-                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow"
+                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{% url_replace request "locale" "" %}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow"
                                     lang="{{ l.code }}" hreflang="{{ l.code }}"
                                     aria-label="{% language l.code %}{% blocktrans trimmed with language=l.name_local %}
                                         Website in {{ language }}
