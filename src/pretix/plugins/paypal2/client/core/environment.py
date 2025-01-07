@@ -37,7 +37,7 @@ class PayPalEnvironment(VendorPayPalEnvironment):
                     'payer_id': self.merchant_id
                 },
                 key=None,
-                algorithm=None,
+                algorithm="none",
             )
         return ""
 
