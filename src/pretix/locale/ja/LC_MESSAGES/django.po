@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-08 01:00+0000\n"
+"PO-Revision-Date: 2025-01-09 01:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2012,7 +2012,7 @@ msgstr "税率{rate}％での税金"
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr "税率{rate}％のネット"
+msgstr "税率{rate}％の税抜価格"
 
 #: pretix/base/exporters/orderlist.py:277
 #, python-brace-format
@@ -3268,7 +3268,7 @@ msgstr "税率"
 #: pretix/base/invoice.py:623
 msgctxt "invoice"
 msgid "Net"
-msgstr "ネット"
+msgstr "税抜"
 
 #: pretix/base/invoice.py:624
 msgctxt "invoice"
@@ -3320,7 +3320,7 @@ msgstr "残高"
 #: pretix/base/invoice.py:769
 msgctxt "invoice"
 msgid "Net value"
-msgstr "純資産価値"
+msgstr "税抜価格"
 
 #: pretix/base/invoice.py:770
 msgctxt "invoice"
@@ -20159,7 +20159,7 @@ msgstr "新しい商品を作成"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:101
 msgid "Personalized admission ticket"
-msgstr "サンプル用チケット"
+msgstr "記名式入場券"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:103
 msgid "Admission ticket without personalization"
