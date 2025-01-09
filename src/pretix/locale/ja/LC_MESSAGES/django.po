@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-09 13:00+0000\n"
+"PO-Revision-Date: 2025-01-09 23:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -7635,7 +7635,7 @@ msgstr ""
 #: pretix/base/services/cart.py:175
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "このバウチャーコードは、もう%d回しか引き換えることができません。"
+msgstr "このバウチャーコードは、あと%d回しか引き換えることができません。"
 
 #: pretix/base/services/cart.py:176
 msgid ""
@@ -8621,7 +8621,7 @@ msgstr "プラグイン: %s"
 #: pretix/base/services/vouchers.py:56 pretix/control/logdisplay.py:484
 #, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr "そのバウチャーは{recipient}に送信されました。"
+msgstr "バウチャーは、{recipient}あてに送信されました。"
 
 #: pretix/base/settings.py:125
 msgid "Allow usage of restricted plugins"
@@ -15525,8 +15525,8 @@ msgstr "未確認のタイプの電子メールが送信されました。"
 msgid ""
 "The email has been sent without attached tickets since they would have been "
 "too large to be likely to arrive."
-msgstr "チケットを添付すると、サイズが大きすぎて届く可能性が低いため、メールはチケッ"
-"トを添付せずに送信されました。"
+msgstr "チケットのサイズが大きすぎて届かない可能性があるため、チケットを添付せずにメ"
+"ールが送信されました。"
 
 #: pretix/control/logdisplay.py:422
 msgid "A custom email has been sent."
@@ -15753,7 +15753,7 @@ msgstr "そのバウチャーは作成されました。"
 
 #: pretix/control/logdisplay.py:485
 msgid "The voucher has been created and sent to a person on the waiting list."
-msgstr "そのバウチャーは作成され、空席待ちリストの人に送信されました。"
+msgstr "バウチャーが作成され、空席待ちリストの人に送信されました。"
 
 #: pretix/control/logdisplay.py:486
 msgid ""
@@ -27349,7 +27349,7 @@ msgstr "払い戻しをエクスポート"
 
 #: pretix/plugins/banktransfer/signals.py:123
 msgid "The invoice was sent to the designated email address."
-msgstr "請求書は指定されたメールアドレスに送信されました。"
+msgstr "請求書は、指定されたメールアドレスあてに送信されました。"
 
 #: pretix/plugins/banktransfer/signals.py:132
 #, python-brace-format
