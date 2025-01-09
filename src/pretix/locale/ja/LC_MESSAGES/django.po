@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-09 01:00+0000\n"
+"PO-Revision-Date: 2025-01-09 13:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -3362,7 +3362,7 @@ msgstr "デフォルトの請求書レンダラー（ヨーロッパスタイル
 #: pretix/base/invoice.py:947
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr "（すべてのアイテムについて見積もりをしてください。）"
+msgstr "（問い合わせ時には、この番号をお知らせください。）"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
@@ -6245,11 +6245,11 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
-"非推奨です。ほとんどのイベントは逆転納税の対象とならないため、課税の場所はイ"
-"ベントの場所となります。このオプションを有効にすると、EU外のすべての顧客およ"
-"び有効なEUのVAT番号を入力した異なるEU諸国の事業顧客に対してVATを請求しません"
-"。税務顧問と相談した後にのみこのオプションを有効にしてください。正しい税金の"
-"計算については保証されません。自己責任でご利用ください。"
+"非推奨です。ほとんどのイベントはリバースチャージ制度の対象とならず、イベント"
+"の場所が課税の場所となります。このオプションを有効にすると、EU外のすべての顧"
+"客および有効なEUのVAT番号を入力した異なるEU諸国の事業顧客に対してVATを請求し"
+"ません。税務顧問と相談した後にのみこのオプションを有効にしてください。正しい"
+"税金の計算については保証されません。自己責任でご利用ください。"
 
 #: pretix/base/models/tax.py:374 pretix/plugins/stripe/payment.py:299
 msgid "Merchant country"
@@ -10312,8 +10312,8 @@ msgstr ""
 "こんにちは、\n"
 "\n"
 "{event}の注文を承りました。\n"
-"イベント主催者の承認が必要な商品をご注文いただいたため、次のメールをお待ちい"
-"ただくようお願い申し上げます。\n"
+"イベント主催者の承認が必要な商品をご注文いただいたため、\n"
+"次のメールをお待ちいただくようお願い申し上げます。\n"
 "\n"
 "注文の詳細の変更と確認は、以下のURLから可能です。\n"
 "{url}\n"
@@ -16528,8 +16528,8 @@ msgstr "お帰りなさい！"
 msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
-msgstr "アカウントの設定で、第二の認証手段（例：携帯電話）が必要になるように構成しま"
-"した。こちらに確認コードを入力してください:"
+msgstr "アカウントの設定で、第二の認証手段（例：携帯電話）が必要になるように構成され"
+"ています。こちらに確認コードを入力してください:"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:14
 msgid "Token"
@@ -21887,7 +21887,7 @@ msgstr "保留中（確認済み）"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:19
 msgid "Canceled (paid fee)"
-msgstr "キャンセル（料金支払い済み）"
+msgstr "キャンセル済み（支払い済み手数料）"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:6
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:8
