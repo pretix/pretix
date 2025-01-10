@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-10 20:00+0000\n"
+"PO-Revision-Date: 2025-01-11 07:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -21126,7 +21126,7 @@ msgstr "エントリーのスキャン: %(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:422
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:54
 msgid "Voucher code used:"
-msgstr "割引コード使用済:"
+msgstr "使用するバウチャーコード:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:424
 #, python-format
@@ -22487,7 +22487,7 @@ msgstr "デバイスを接続"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:81
 msgid "Hardware model"
-msgstr "ハードウェアモデル"
+msgstr "ハードウェアの機種"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:139
 msgid "Not yet initialized"
