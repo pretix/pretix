@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-10 10:00+0000\n"
+"PO-Revision-Date: 2025-01-10 20:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -31011,7 +31011,7 @@ msgstr "注文を確定"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:209
 msgid "Submit registration"
-msgstr "登録を送信してください"
+msgstr "予約を送信する"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:18
 msgid "Log in with a customer account"
