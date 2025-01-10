@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-09 23:00+0000\n"
+"PO-Revision-Date: 2025-01-10 10:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -4588,7 +4588,7 @@ msgstr "申し訳ございません。情報が利用できません"
 
 #: pretix/base/models/items.py:452 pretix/base/models/items.py:772
 msgid "Don't use re-usable media, use regular one-off tickets"
-msgstr "再利用可能なメディアを使用せず、通常の一回切りのチケットを使用してください"
+msgstr "再利用可能なメディアを使用せず、通常の一回限りのチケットを使用してください"
 
 #: pretix/base/models/items.py:453
 msgid "Require an existing medium to be re-used"
@@ -4678,11 +4678,11 @@ msgstr "このイベントで待ちリストが有効になっている場合の
 #: pretix/base/models/items.py:544 pretix/base/settings.py:1350
 #: pretix/control/forms/event.py:1677
 msgid "Show number of tickets left"
-msgstr "チケットの残り枚数を表示します"
+msgstr "チケットの残り枚数を表示する"
 
 #: pretix/base/models/items.py:545
 msgid "Publicly show how many tickets are still available."
-msgstr "公に利用可能なチケットの数を表示してください。"
+msgstr "利用可能なチケットの残数を公表します。"
 
 #: pretix/base/models/items.py:552 pretix/control/forms/item.py:622
 msgid "Product picture"
@@ -4822,7 +4822,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:672
 msgid "Only sell tickets for this product on the selected sales channels."
-msgstr "この製品のチケットは選択した販売チャネルでのみ販売してください。"
+msgstr "この製品のチケットは選択した販売チャネルでのみ販売します。"
 
 #: pretix/base/models/items.py:677
 msgid ""
@@ -5362,7 +5362,7 @@ msgstr "総容量"
 
 #: pretix/base/models/items.py:2036 pretix/control/forms/item.py:448
 msgid "Leave empty for an unlimited number of tickets."
-msgstr "チケットの数に制限はありません。"
+msgstr "空欄にすると、チケットの数が無制限になります。"
 
 #: pretix/base/models/items.py:2040 pretix/base/models/orders.py:1487
 #: pretix/base/models/orders.py:2982
@@ -6362,8 +6362,8 @@ msgstr "このバウチャーが有効になると、影響を受ける製品の
 msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
-msgstr "このバウチャーコードを持っている人は、有効になった場合でも、チケットを購入す"
-"ることができます。"
+msgstr "このバウチャーコードを持っている人は、売り切れた場合でも、チケットを購入する"
+"ことができます。"
 
 #: pretix/base/models/vouchers.py:254 pretix/control/forms/vouchers.py:69
 msgid ""
@@ -9467,7 +9467,7 @@ msgstr "全ての売り切れ商品を非表示にしてください"
 
 #: pretix/base/settings.py:1351 pretix/control/forms/event.py:1678
 msgid "Publicly show how many tickets of a certain type are still available."
-msgstr "特定の種類のチケットの残り枚数を公開してください。"
+msgstr "特定の種類のチケットの残り枚数を公開する。"
 
 #: pretix/base/settings.py:1360
 msgid "Ask search engines not to index the ticket shop"
@@ -13657,8 +13657,8 @@ msgid ""
 "as-a-Service company)."
 msgstr ""
 "私は他のイベント主催者のチケットを販売するためにPretixを使用しています（例："
-"チケット販売会社）、または他の人にPretixの機能を提供しています（例：Software-"
-"as-a-Service会社）。"
+"チケット販売会社）、または他の人にoretixの機能を提供しています（例：SaaS会社"
+"）。"
 
 #: pretix/control/forms/global_settings.py:162
 msgid "I'm not sure which option applies."
@@ -14325,7 +14325,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:714 pretix/plugins/sendmail/forms.py:196
 msgid "Attach tickets"
-msgstr "チケットを添付します"
+msgstr "チケットを添付する"
 
 #: pretix/control/forms/orders.py:715 pretix/plugins/sendmail/forms.py:197
 msgid ""
@@ -14347,8 +14347,8 @@ msgstr "受取人"
 #: pretix/control/forms/orders.py:777
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
-msgstr "注文をキャンセルします。すべてのチケットはもはや有効ではありません。これは元"
-"に戻すことができません。"
+msgstr "注文をキャンセルする。すべてのチケットはもはや有効ではありません。これは元に"
+"戻すことができません。"
 
 #: pretix/control/forms/orders.py:778
 msgid ""
@@ -18446,7 +18446,7 @@ msgstr "注文のカスタム電子メール"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:120
 msgid "Reminder to download tickets"
-msgstr "チケットをダウンロードすることをお知らせします"
+msgstr "チケットのダウンロードをリマインドする"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:123
 msgid "Order approval process"
@@ -20405,7 +20405,7 @@ msgstr "このクォータの実際の結果を変更する可能性があるプ
 #: pretix/control/templates/pretixcontrol/items/quota.html:86
 #, python-format
 msgid "This quota is currently overbooked by %(num)s tickets."
-msgstr "このクォータは現在%(num)s枚のチケットで過剰予約されています。"
+msgstr "このクォータは、現在%(num)s枚のチケットが過剰に予約されています。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:93
 msgid ""
@@ -31763,7 +31763,7 @@ msgstr "注文が確定しました"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:14
 msgid "Please check your email account, we've sent you your tickets."
-msgstr "メールアカウントを確認してください。チケットを送信しました。"
+msgstr "メールが届いているかご確認ください。チケットを送信しました。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:16
 msgid "Please check your email account, we've sent you an email."
@@ -33299,7 +33299,7 @@ msgstr "この注文については、チケットのダウンロードはまだ
 
 #: pretix/presale/views/order.py:1118
 msgid "Please click the link we sent you via email to download your tickets."
-msgstr "メールで送られたリンクをクリックしてチケットをダウンロードしてください。"
+msgstr "メールで送られたリンクをクリックして、チケットをダウンロードしてください。"
 
 #: pretix/presale/views/order.py:1601
 #, python-brace-format
