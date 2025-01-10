@@ -222,6 +222,12 @@ class RelativeDateTimeWidget(forms.MultiWidget):
     def get_context(self, name, value, attrs):
         ctx = super().get_context(name, value, attrs)
         ctx['required'] = self.status_choices[0][0] == 'unset'
+
+        ctx['rendered_subwidgets'] = [
+            self._render(w['template_name'], {**ctx, 'widget': w})
+            for w in ctx['widget']['subwidgets']
+        ]
+
         return ctx
 
 
