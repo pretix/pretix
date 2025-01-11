@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2025-01-11 07:00+0000\n"
+"PO-Revision-Date: 2025-01-11 21:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -25010,7 +25010,7 @@ msgstr "選択したリストは削除されました。"
 
 #: pretix/control/views/dashboards.py:115
 msgid "Attendees (ordered)"
-msgstr "出席者（順番に）"
+msgstr "参加者（注文済み）"
 
 #: pretix/control/views/dashboards.py:125
 msgid "Attendees (paid)"
