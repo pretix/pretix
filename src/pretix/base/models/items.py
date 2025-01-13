@@ -1718,10 +1718,10 @@ class Question(LoggedModel):
         'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
     dependency_values = MultiStringField(default=[])
-    valid_number_min = models.DecimalField(decimal_places=6, max_digits=16, null=True, blank=True,
+    valid_number_min = models.DecimalField(decimal_places=6, max_digits=30, null=True, blank=True,
                                            verbose_name=_('Minimum value'),
                                            help_text=_('Currently not supported in our apps and during check-in'))
-    valid_number_max = models.DecimalField(decimal_places=6, max_digits=16, null=True, blank=True,
+    valid_number_max = models.DecimalField(decimal_places=6, max_digits=30, null=True, blank=True,
                                            verbose_name=_('Maximum value'),
                                            help_text=_('Currently not supported in our apps and during check-in'))
     valid_date_min = models.DateField(null=True, blank=True,
