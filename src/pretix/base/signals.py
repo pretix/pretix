@@ -258,7 +258,7 @@ class Registry:
                      When a new entry is registered, all accessor functions are called with the new entry as parameter.
                      Their return value is stored as the metadata value for that key.
         """
-        self.registered_entries = list()
+        self.registered_entries = dict()
         self.keys = keys
         self.by_key = {key: {} for key in self.keys.keys()}
 
@@ -276,11 +276,15 @@ class Registry:
               # ...
         """
         for obj in objs:
+            if obj in self.registered_entries:
+                raise RuntimeError('Object already registered: {}'.format(obj))
+
             meta = {k: accessor(obj) for k, accessor in self.keys.items()}
             tup = (obj, meta)
             for key, value in meta.items():
                 self.by_key[key][value] = tup
-            self.registered_entries.append(tup)
+            self.registered_entries[obj] = meta
+
         if len(objs) == 1:
             return objs[0]
 
@@ -310,7 +314,7 @@ class Registry:
     def filter(self, **kwargs):
         return (
             (entry, meta)
-            for entry, meta in self.registered_entries
+            for entry, meta in self.registered_entries.items()
             if all(value == meta[key] for key, value in kwargs.items())
         )
 
