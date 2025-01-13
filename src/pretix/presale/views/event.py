@@ -73,9 +73,7 @@ from pretix.base.models.items import (
 )
 from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.quotas import QuotaAvailability
-from pretix.base.timemachine import (
-    has_time_machine_permission, time_machine_now,
-)
+from pretix.base.timemachine import time_machine_now
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
@@ -89,6 +87,7 @@ from pretix.presale.views.organizer import (
     filter_qs_by_attr, has_before_after, weeks_for_template,
 )
 
+from pretix.base.auth import has_event_access_permission
 from . import (
     CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
     iframe_entry_view_wrapper,
@@ -963,7 +962,7 @@ class EventTimeMachine(EventViewMixin, TemplateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        if not has_time_machine_permission(request, request.event):
+        if not has_event_access_permission(request):
             raise PermissionDenied(_('You are not allowed to access time machine mode.'))
         if not request.event.testmode:
             raise PermissionDenied(_('This feature is only available in test mode.'))

@@ -70,6 +70,7 @@ from pretix.base.models.orders import (
 )
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import PaymentException
+from pretix.base.auth import has_event_access_permission
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
     invoice_qualified,
@@ -205,10 +206,8 @@ class TicketPageMixin:
 
         ctx['download_buttons'] = self.download_buttons
 
-        ctx['backend_user'] = (
-            self.request.user.is_authenticated
-            and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
-        )
+        ctx['backend_user'] = has_event_access_permission(self.request, 'can_view_orders')
+
         return ctx
 
     @cached_property

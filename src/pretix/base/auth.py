@@ -222,3 +222,14 @@ class HistoryPasswordValidator:
         user.historic_passwords.filter(
             pk__in=user.historic_passwords.order_by("-created")[self.history_length:].values_list("pk", flat=True),
         ).delete()
+
+def has_event_access_permission(request, permission = 'can_change_event_settings'):
+    return (
+        request.user.is_authenticated and
+        request.user.has_event_permission(request.organizer, request.event, permission, request=request)
+    ) or (
+        getattr(request, 'event_access_user', None) and
+        request.event_access_user.is_authenticated and
+        request.event_access_user.has_event_permission(request.organizer, request.event, permission,
+                                                       session_key=request.event_access_parent_session_key)
+    )
