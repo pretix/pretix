@@ -53,6 +53,19 @@ def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
 
 
 class LogEntryTypeRegistry(EventPluginRegistry):
+    def __init__(self):
+        super().__init__({'action_type': lambda o: getattr(o, 'action_type')})
+
+    def register(self, *objs):
+        for obj in objs:
+            if not isinstance(obj, LogEntryType):
+                raise TypeError('Entries must be derived from LogEntryType')
+
+            if obj.__module__ == LogEntryType.__module__:
+                raise TypeError('Must not register base classes, only derived ones')
+
+        return super().register(*objs)
+
     def new_from_dict(self, data):
         """
         Register multiple instance of a `LogEntryType` class with different `action_type`
@@ -86,7 +99,7 @@ Registry for LogEntry types.
 Each entry in this registry should be an instance of a subclass of ``LogEntryType``.
 They are annotated with their ``action_type`` and the defining ``plugin``.
 """
-log_entry_types = LogEntryTypeRegistry({'action_type': lambda o: getattr(o, 'action_type')})
+log_entry_types = LogEntryTypeRegistry()
 
 
 class LogEntryType:
@@ -95,7 +108,6 @@ class LogEntryType:
     """
 
     def __init__(self, action_type=None, plain=None):
-        assert self.__module__ != LogEntryType.__module__  # must not instantiate base classes, only derived ones
         if action_type:
             self.action_type = action_type
         if plain:
