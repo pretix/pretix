@@ -1087,7 +1087,7 @@ class Order(LockModel, LoggedModel):
 
             for i, op in enumerate(positions):
                 if op.seat:
-                    if not op.seat.is_available(ignore_orderpos=op):
+                    if not op.seat.is_available(ignore_orderpos=op, sales_channel=self.sales_channel.identifier):
                         raise Quota.QuotaExceededException(error_messages['seat_unavailable'].format(seat=op.seat))
                 if force:
                     continue
