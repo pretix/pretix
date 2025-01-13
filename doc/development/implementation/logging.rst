@@ -100,17 +100,19 @@ Customizing log entry display
 
 The base ``LogEntryType`` classes allow for varying degree of customization in their descendants.
 
-If you want to add another log message for an existing core object (e.g. an ``Order``, ``Item``, or ``Voucher``), you can inherit
-from its predefined `LogEntryType`, e.g. `OrderLogEntryType`, and just specify a new plaintext string. You can use format
-strings to insert information from the LogEntry's `data` object as shown in the section above.
+If you want to add another log message for an existing core object (e.g. an :class:`Order <pretix.base.models.Order>`,
+:class:`Item <pretix.base.models.Item>`, or :class:`Voucher <pretix.base.models.Voucher>`), you can inherit
+from its predefined :class:`LogEntryType <pretix.base.logentrytypes.LogEntryType>`, e.g.
+:class:`OrderLogEntryType <pretix.base.logentrytypes.OrderLogEntryType>`, and just specify a new plaintext string.
+You can use format strings to insert information from the LogEntry's `data` object as shown in the section above.
 
 If you define a new model object in your plugin, you should make sure proper object links in the user interface are
-displayed for it. If your model object belongs logically to a pretix `Event`, you can inherit from `EventLogEntryType`,
-and set the `object_link_*` fields accordingly. `object_link_viewname` refers to a django url name, which needs to
-accept the arguments `organizer` and `event`, containing the respective slugs, and an argument named by `object_link_argname`.
-The latter will contain the ID of the model object, if not customized by overriding `object_link_argvalue`.
-If you want to customize the name displayed for the object (instead of the result of calling `str()` on it),
-overwrite `object_link_display_name`.
+displayed for it. If your model object belongs logically to a pretix :class:`Event <pretix.base.models.Event>`, you can inherit from :class:`EventLogEntryType <pretix.base.logentrytypes.EventLogEntryType>`,
+and set the ``object_link_*`` fields accordingly. ``object_link_viewname`` refers to a django url name, which needs to
+accept the arguments `organizer` and `event`, containing the respective slugs, and an argument named by ``object_link_argname``.
+The latter will contain the ID of the model object, if not customized by overriding ``object_link_argvalue``.
+If you want to customize the name displayed for the object (instead of the result of calling ``str()`` on it),
+overwrite ``object_link_display_name``.
 
 .. code-block:: python
 
@@ -125,7 +127,7 @@ overwrite `object_link_display_name`.
         def object_link_display_name(self, order):
             return order.code
 
-To show more sophisticated message strings, e.g. varying the message depending on information from the LogEntry's
+To show more sophisticated message strings, e.g. varying the message depending on information from the :class:`LogEntry <pretix.base.models.log.LogEntry>`'s
 `data` object, override the `display` method:
 
 .. code-block:: python
@@ -145,7 +147,7 @@ To show more sophisticated message strings, e.g. varying the message depending o
 
 .. automethod:: pretix.base.logentrytypes.LogEntryType.display
 
-If your new model object does not belong to an `Event`, you need to inherit directly from ``LogEntryType`` instead
+If your new model object does not belong to an :class:`Event <pretix.base.models.Event>`, you need to inherit directly from ``LogEntryType`` instead
 of ``EventLogEntryType``, providing your own implementation of ``get_object_link_info`` if object links should be
 displayed.
 

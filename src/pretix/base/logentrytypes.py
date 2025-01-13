@@ -117,12 +117,12 @@ class LogEntryType:
 
     def get_object_link_info(self, logentry) -> dict:
         """
-        Return information to generate a link to the content_object of a given logentry.
+        Return information to generate a link to the `content_object` of a given log entry.
 
         Not implemented in the base class, causing the object link to be omitted.
 
-        :return: `dict` with the keys `href` (containing a URL to view/edit the object) and `val` (containing the
-        escaped text for the anchor element)
+        :return: Dictionary with the keys ``href`` (containing a URL to view/edit the object) and ``val`` (containing the
+                 escaped text for the anchor element)
         """
         pass
 
