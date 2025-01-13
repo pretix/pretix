@@ -2,7 +2,9 @@ from unittest import mock
 
 import pytest
 
-from pretix.base.logentrytypes import LogEntryTypeRegistry, LogEntryType, ItemLogEntryType
+from pretix.base.logentrytypes import (
+    ItemLogEntryType, LogEntryType, LogEntryTypeRegistry,
+)
 from pretix.base.signals import Registry
 
 
@@ -12,18 +14,21 @@ def test_registry_classes():
     @animal_type_registry.register
     class Cat:
         classis = 'mammalia'
+
         def make_sound(self):
             return "meow"
 
     @animal_type_registry.register
     class Dog:
         classis = 'mammalia'
+
         def make_sound(self):
             return "woof"
 
     @animal_type_registry.register
     class Cricket:
         classis = 'insecta'
+
         def make_sound(self):
             return "chirp"
 
