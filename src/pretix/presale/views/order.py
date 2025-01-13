@@ -710,7 +710,7 @@ def can_generate_invoice(event, order, ignore_payments=False):
         and (
             event.settings.get('invoice_generate') in ('user', 'True')
             or (
-                event.settings.get('invoice_generate') == 'paid'
+                event.settings.get('invoice_generate') in ('paid', 'user_paid')
                 and order.status == Order.STATUS_PAID
             )
         ) and (

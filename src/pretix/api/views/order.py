@@ -602,7 +602,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
             and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
         )
-        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(order):
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'user_paid', 'True') or not invoice_qualified(order):
             return Response(
                 {'detail': _('You cannot generate an invoice for this order.')},
                 status=status.HTTP_400_BAD_REQUEST
