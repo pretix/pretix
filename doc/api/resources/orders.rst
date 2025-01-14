@@ -855,7 +855,7 @@ Generating new secrets
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/regenerate_secrets/
 
-   Triggers generation of new ``secret`` and ``ẁeb_secret`` attributes for both the order and all order positions.
+   Triggers generation of new ``secret`` and ``web_secret`` attributes for both the order and all order positions.
 
    **Example request**:
 
