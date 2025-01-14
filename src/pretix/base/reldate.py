@@ -324,7 +324,7 @@ class RelativeDateTimeField(forms.MultiValueField):
     def clean(self, value):
         if value[0] == 'absolute' and not value[1]:
             raise ValidationError(self.error_messages['incomplete'])
-        elif value[0] == 'relative' and (value[2] is None or not value[3]):
+        elif value[0] == 'relative' and (value[2] is None or not value[6]):
             raise ValidationError(self.error_messages['incomplete'])
         elif value[0] == 'relative_minutes' and (value[5] is None or not value[3]):
             raise ValidationError(self.error_messages['incomplete'])
@@ -414,7 +414,7 @@ class RelativeDateField(RelativeDateTimeField):
         elif value[0] == 'relative' and (value[2] is None or not value[3]):
             raise ValidationError(self.error_messages['incomplete'])
 
-        return super().clean(value)
+        return forms.MultiValueField.clean(self, value)
 
 
 class ModelRelativeDateTimeField(models.CharField):
