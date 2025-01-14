@@ -775,8 +775,6 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         for idx, gross in grossvalue_map.items():
             rate, name = idx
-            if rate == 0:
-                continue
             tax = taxvalue_map[idx]
             tdata.append([
                 Paragraph(self._normalize(localize(rate) + " % " + name), self.stylesheet['Fineprint']),
@@ -792,7 +790,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             except ValueError:
                 return localize(val) + ' ' + self.invoice.foreign_currency_display
 
-        if len(tdata) > 1 and has_taxes:
+        if any(rate != 0 and gross != 0 for (rate, name), gross in grossvalue_map.items()) and has_taxes:
             colwidths = [a * doc.width for a in (.25, .15, .15, .15, .3)]
             table = Table(tdata, colWidths=colwidths, repeatRows=2, hAlign=TA_LEFT)
             table.setStyle(TableStyle(tstyledata))
