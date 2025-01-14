@@ -2241,6 +2241,8 @@ class OrderContactChange(OrderView):
                 changed = True
                 self.order.secret = generate_secret()
                 for op in self.order.all_positions.all():
+                    op.web_secret = generate_secret()
+                    op.save(update_fields=["web_secret"])
                     assign_ticket_secret(
                         self.request.event, position=op, force_invalidate=True, save=True
                     )

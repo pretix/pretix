@@ -103,7 +103,7 @@ class SalesChannelMigrationMixin:
                     ]
                 })
 
-            if data["sales_channels"] == all_channels:
+            if set(data["sales_channels"]) == all_channels:
                 data["all_sales_channels"] = True
                 data["limit_sales_channels"] = []
             else:

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-16 14:20+0000\n"
-"PO-Revision-Date: 2023-04-06 02:00+0000\n"
-"Last-Translator: 전윤수 <jeonyunsoo123@gmail.com>\n"
+"PO-Revision-Date: 2025-01-11 21:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/_base_settings.py:79
 msgid "English"
@@ -163,17 +163,15 @@ msgstr "어플리케이션 이름"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:421
 msgid "Redirection URIs"
-msgstr "리다이렉션URI"
+msgstr "리다이렉션 URI"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:422
 msgid "Allowed URIs list, space separated"
 msgstr "허용된 URI 리스트,  스페이스로 구분"
 
 #: pretix/api/models.py:47
-#, fuzzy
-#| msgid "Allowed URIs list, space separated"
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "허용된 URI 리스트,  스페이스로 구분"
+msgstr "공백으로 구분된 허용된 로그아웃 후 URI 목록"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
@@ -201,7 +199,7 @@ msgstr "모든 이벤트 (향후 생성될 이벤트들도 포함)"
 #: pretix/api/models.py:119 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:287
 msgid "Limit to events"
-msgstr "다음 이벤트로 제한하기"
+msgstr "이러한 이벤트로 제한하다"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:1077
@@ -17954,10 +17952,8 @@ msgid "December"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:32
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Generate report"
-msgstr "티켓 생성"
+msgstr "보고서를 생성"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:7
 msgid "Update check results"
@@ -19895,11 +19891,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
-#, fuzzy
-#| msgid "1 order"
-#| msgid_plural "%(s)s orders"
 msgid "Modify orders"
-msgstr "%(s)s개 주문"
+msgstr "주문을 수정"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:12
 #, python-format
@@ -22091,11 +22084,8 @@ msgid "Begin"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:176
-#, fuzzy
-#| msgid "1 order"
-#| msgid_plural "%(s)s orders"
 msgid "Show orders"
-msgstr "%(s)s개 주문"
+msgstr "주문을 표시"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:187
 msgctxt "subevent"
@@ -26628,10 +26618,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/returnurl/views.py:37
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Base redirection URLs"
-msgstr "리다이렉션URI"
+msgstr "기본 리다이렉션 URL"
 
 #: pretix/plugins/returnurl/views.py:38
 msgid ""
@@ -27315,10 +27303,8 @@ msgid "Publishable key"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:280
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Generate API keys"
-msgstr "티켓 생성"
+msgstr "API 키 생성"
 
 #: pretix/plugins/stripe/payment.py:282
 msgid ""
@@ -28495,11 +28481,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:127
 #: pretix/presale/templates/pretixpresale/event/base.html:201
-#, fuzzy
-#| msgid "This ticket has been used once."
-#| msgid_plural "This ticket has been used %(count)s times."
 msgid "This ticket shop is currently in test mode."
-msgstr "티켓이 %(count)s회 사용되었습니다."
+msgstr "이 티켓 상점은 현재 테스트 모드입니다."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:130
 #: pretix/presale/templates/pretixpresale/event/base.html:204
@@ -29761,11 +29744,8 @@ msgid "Shop offline"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
-#, fuzzy
-#| msgid "This ticket has been used once."
-#| msgid_plural "This ticket has been used %(count)s times."
 msgid "This ticket shop is currently turned off."
-msgstr "티켓이 %(count)s회 사용되었습니다."
+msgstr "이 티켓 상점은 현재 비활성화되어 있습니다."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
@@ -30208,11 +30188,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:5
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:8
-#, fuzzy
-#| msgid "1 order"
-#| msgid_plural "%(s)s orders"
 msgid "Modify ticket"
-msgstr "%(s)s개 주문"
+msgstr "티켓 수정"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
@@ -30738,7 +30715,7 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:546
 msgid "The products have been successfully added to your cart."
-msgstr "성공적으로 추가되었습니다."
+msgstr "제품이 장바구니에 성공적으로 추가되었습니다."
 
 #: pretix/presale/views/cart.py:570 pretix/presale/views/event.py:537
 #: pretix/presale/views/widget.py:377

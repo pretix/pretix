@@ -1134,6 +1134,49 @@ def test_order_mark_paid_expired_seat_taken(client, env):
 
 
 @pytest.mark.django_db
+def test_order_mark_paid_expired_blocked(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.expires = now() - timedelta(days=5)
+        o.status = Order.STATUS_EXPIRED
+        o.sales_channel = env[0].organizer.sales_channels.get(identifier="bar")
+        olddate = o.expires
+        o.save()
+        seat_a1 = env[0].seats.create(seat_number="A1", product=env[3], seat_guid="A1", blocked=True)
+        p = o.positions.first()
+        p.seat = seat_a1
+        p.save()
+
+        q = Quota.objects.create(event=env[0], size=100)
+        q.items.add(env[3])
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'p',
+        'payment_date': now().date().isoformat(),
+        'amount': str(o.pending_sum),
+        'force': 'on'
+    }, follow=True)
+    assert b'alert-danger' in response.content
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
+    assert o.status == Order.STATUS_EXPIRED
+
+    env[0].settings.seating_allow_blocked_seats_for_channel = ["bar"]
+
+    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'p',
+        'payment_date': now().date().isoformat(),
+        'amount': str(o.pending_sum),
+        'force': 'on'
+    }, follow=True)
+    assert b'alert-success' in response.content
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+    assert o.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_order_go_lowercase(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/go?code=DuMmyfoO')

@@ -118,7 +118,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                     c.assign(record.get(c.identifier), order, position, order._address)
 
                 if position.seat is not None:
-                    lock_seats.append(position.seat)
+                    lock_seats.append((order.sales_channel, position.seat))
             except (ValidationError, ImportError) as e:
                 raise DataImportError(
                     _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
@@ -128,9 +128,9 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
             with transaction.atomic():
                 # We don't support vouchers, quotas, or memberships here, so we only need to lock if seats are in use
                 if lock_seats:
-                    lock_objects(lock_seats, shared_lock_objects=[event])
-                    for s in lock_seats:
-                        if not s.is_available():
+                    lock_objects([s for c, s in lock_seats], shared_lock_objects=[event])
+                    for c, s in lock_seats:
+                        if not s.is_available(sales_channel=c):
                             raise DataImportError(_('The seat you selected has already been taken. Please select a different seat.'))
 
                 save_transactions = []

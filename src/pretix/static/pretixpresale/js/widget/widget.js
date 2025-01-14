@@ -17,6 +17,8 @@ var strings = {
     'quantity_dec': django.pgettext('widget', 'Decrease quantity'),
     'quantity_inc': django.pgettext('widget', 'Increase quantity'),
     'price': django.pgettext('widget', 'Price'),
+    'original_price': django.pgettext('widget', 'Original price: %s'),
+    'new_price': django.pgettext('widget', 'New price: %s'),
     'select': django.pgettext('widget', 'Select'),
     'select_item': django.pgettext('widget', 'Select %s'),
     'select_variant': django.pgettext('widget', 'Select variant %s'),
@@ -26,6 +28,7 @@ var strings = {
     'reserved': django.pgettext('widget', 'Reserved'),
     'free': django.pgettext('widget', 'FREE'),
     'price_from': django.pgettext('widget', 'from %(currency)s %(price)s'),
+    'image_of': django.pgettext('widget', 'Image of %s'),
     'tax_incl': django.pgettext('widget', 'incl. %(rate)s% %(taxname)s'),
     'tax_plus': django.pgettext('widget', 'plus %(rate)s% %(taxname)s'),
     'tax_incl_mixed': django.pgettext('widget', 'incl. taxes'),
@@ -335,13 +338,13 @@ Vue.component('pricebox', {
     template: ('<div class="pretix-widget-pricebox">'
         + '<span v-if="!free_price && !original_price" v-html="priceline"></span>'
         + '<span v-if="!free_price && original_price">'
-        + '<del class="pretix-widget-pricebox-original-price">{{ original_line }}</del> '
-        + '<ins class="pretix-widget-pricebox-new-price" v-html="priceline"></ins></span>'
+        + '<del class="pretix-widget-pricebox-original-price" v-bind:aria-label="original_price_aria_label" v-html="original_line"></del> '
+        + '<ins class="pretix-widget-pricebox-new-price" v-bind:aria-label="new_price_aria_label" v-html="priceline"></ins></span>'
         + '<div v-if="free_price">'
         + '<span class="pretix-widget-pricebox-currency">{{ $root.currency }}</span> '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
         + '       :min="display_price_nonlocalized" :value="suggested_price_nonlocalized" :name="field_name"'
-        + '       step="any" aria-label="'+strings.price+'">'
+        + '       step="any" v-bind:aria-label="free_price_label">'
         + '</div>'
         + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
         + '{{ taxline }}'
@@ -354,6 +357,13 @@ Vue.component('pricebox', {
         suggested_price: Object,
         original_price: String,
         mandatory_priced_addons: Boolean,
+    },
+    methods: {
+        stripHTML: function (s) {
+            var div = document.createElement('div');
+            div.innerHTML = s;
+            return div.textContent || div.innerText || '';
+        },
     },
     computed: {
         display_price: function () {
@@ -381,8 +391,14 @@ Vue.component('pricebox', {
                 return parseFloat(price.gross).toFixed(2);
             }
         },
+        original_price_aria_label: function () {
+            return django.interpolate(strings.original_price, [this.stripHTML(this.original_line)]);
+        },
+        new_price_aria_label: function () {
+            return django.interpolate(strings.new_price, [this.stripHTML(this.priceline)]);
+        },
         original_line: function () {
-            return this.$root.currency + " " + floatformat(parseFloat(this.original_price), 2);
+            return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + floatformat(parseFloat(this.original_price), 2);
         },
         priceline: function () {
             if (this.price.gross === "0.00") {
@@ -393,6 +409,9 @@ Vue.component('pricebox', {
             } else {
                 return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + this.display_price;
             }
+        },
+        free_price_label () {
+            return [strings.price, this.$root.currency].join(", ")
         },
         taxline: function () {
             if (this.$root.display_net_prices) {
@@ -418,14 +437,14 @@ Vue.component('pricebox', {
     }
 });
 Vue.component('variation', {
-    template: ('<div class="pretix-widget-variation" :data-id="variation.id">'
+    template: ('<div class="pretix-widget-variation" :data-id="variation.id" role="group" v-bind:aria-labelledby="aria_labelledby" v-bind:aria-describedby="variation_desc_id">'
         + '<div class="pretix-widget-item-row">'
 
         // Variation description
         + '<div class="pretix-widget-item-info-col">'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<strong class="pretix-widget-item-title">{{ variation.value }}</strong>'
-        + '<div class="pretix-widget-item-description" v-if="variation.description" v-html="variation.description"></div>'
+        + '<strong :id="variation_label_id" class="pretix-widget-item-title">{{ variation.value }}</strong>'
+        + '<div :id="variation_desc_id" class="pretix-widget-item-description" v-if="variation.description" v-html="variation.description"></div>'
         + '<p class="pretix-widget-item-meta" '
         + '   v-if="!variation.has_variations && variation.avail[1] !== null && variation.avail[0] === 100">'
         + '<small>{{ quota_left_str }}</small>'
@@ -434,7 +453,7 @@ Vue.component('variation', {
         + '</div>'
 
         // Price
-        + '<div class="pretix-widget-item-price-col">'
+        + '<div :id="variation_price_id" class="pretix-widget-item-price-col">'
         + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="orig_price" '
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="variation.suggested_price"'
         + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices">'
@@ -464,23 +483,35 @@ Vue.component('variation', {
         quota_left_str: function () {
             return django.interpolate(strings["quota_left"], [this.variation.avail[1]]);
         },
+        variation_label_id: function () {
+            return this.$root.html_id + '-variation-label-' + this.item.id + '-' + this.variation.id;
+        },
+        variation_desc_id: function () {
+            return this.$root.html_id + '-variation-desc-' + this.item.id + '-' + this.variation.id;
+        },
+        variation_price_id: function () {
+            return this.$root.html_id + '-variation-price-' + this.item.id + '-' + this.variation.id;
+        },
+        aria_labelledby: function () {
+            return [this.variation_label_id, this.variation_price_id].join(" ");
+        },
     }
 });
 Vue.component('item', {
-    template: ('<div v-bind:class="classObject" :data-id="item.id">'
+    template: ('<div v-bind:class="classObject" :data-id="item.id" role="group" v-bind:aria-labelledby="aria_labelledby" v-bind:aria-describedby="item_desc_id">'
         + '<div class="pretix-widget-item-row pretix-widget-main-item-row">'
 
         // Product description
         + '<div class="pretix-widget-item-info-col">'
-        + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture"></a>'
+        + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture" :alt="picture_alt_text"></a>'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
-        + '   @click.prevent.stop="expand" role="button" tabindex="0"'
-        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'
+        + '<a v-if="item.has_variations && show_toggle" :id="item_label_id" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
+        + '   @click.prevent.stop="expand" tabindex="-1"'
+        + '>'
         + '{{ item.name }}'
         + '</a>'
-        + '<strong v-else class="pretix-widget-item-title">{{ item.name }}</strong>'
-        + '<div class="pretix-widget-item-description" v-if="item.description" v-html="item.description"></div>'
+        + '<strong v-else class="pretix-widget-item-title" :id="item_label_id">{{ item.name }}</strong>'
+        + '<div class="pretix-widget-item-description" :id="item_desc_id" v-if="item.description" v-html="item.description"></div>'
         + '<p class="pretix-widget-item-meta" v-if="item.order_min && item.order_min > 1">'
         + '<small>{{ min_order_str }}</small>'
         + '</p>'
@@ -492,7 +523,7 @@ Vue.component('item', {
         + '</div>'
 
         // Price
-        + '<div class="pretix-widget-item-price-col">'
+        + '<div :id="item_price_id" class="pretix-widget-item-price-col">'
         + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations && $root.showPrices"'
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="item.suggested_price"'
         + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
@@ -573,6 +604,21 @@ Vue.component('item', {
                 'pretix-widget-item-variations': true,
                 'pretix-widget-item-variations-expanded': this.expanded,
             }
+        },
+        picture_alt_text: function () {
+            return django.interpolate(strings["image_of"], [this.item.name]);
+        },
+        item_label_id: function () {
+            return this.$root.html_id + '-item-label-' + this.item.id;
+        },
+        item_desc_id: function () {
+            return this.$root.html_id + '-item-desc-' + this.item.id;
+        },
+        item_price_id: function () {
+            return this.$root.html_id + '-item-price-' + this.item.id;
+        },
+        aria_labelledby: function () {
+            return [this.item_label_id, this.item_price_id].join(" ");
         },
         min_order_str: function () {
             return django.interpolate(strings["order_min"], [this.item.order_min]);
@@ -978,10 +1024,10 @@ Vue.component('pretix-widget-event-form', {
         // Resume cart
         + '<div class="pretix-widget-info-message pretix-widget-clickable"'
         + '     v-if="$root.cart_exists">'
-        + '<button @click.prevent.stop="$parent.resume" class="pretix-widget-resume-button" type="button">'
+        + '<button @click.prevent.stop="$parent.resume" class="pretix-widget-resume-button" type="button" v-bind:aria-describedby="id_cart_exists_msg">'
         + strings['resume_checkout']
         + '</button>'
-        + strings['cart_exists']
+        + '<span :id="id_cart_exists_msg">' + strings['cart_exists'] + '</span>'
         + '<div class="pretix-widget-clear"></div>'
         + '</div>'
 
@@ -1053,6 +1099,9 @@ Vue.component('pretix-widget-event-form', {
     computed: {
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && (this.$root.events || this.$root.weeks || this.$root.days));
+        },
+        id_cart_exists_msg: function () {
+            return this.$root.html_id + '-cart-exists';
         },
         buy_label: function () {
             var i, j, k, all_free = true;

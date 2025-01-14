@@ -647,6 +647,8 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         order = self.get_object()
         order.secret = generate_secret()
         for op in order.all_positions.all():
+            op.web_secret = generate_secret()
+            op.save(update_fields=["web_secret"])
             assign_ticket_secret(
                 request.event, op, force_invalidate=True, save=True
             )

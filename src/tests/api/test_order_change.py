@@ -526,6 +526,7 @@ def test_order_regenerate_secrets(token_client, organizer, event, order):
     s = order.secret
     with scopes_disabled():
         ps = order.positions.first().secret
+        psw = order.positions.first().web_secret
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/regenerate_secrets/'.format(
             organizer.slug, event.slug, order.code
@@ -536,6 +537,7 @@ def test_order_regenerate_secrets(token_client, organizer, event, order):
     assert s != order.secret
     with scopes_disabled():
         assert ps != order.positions.first().secret
+        assert psw != order.positions.first().web_secret
 
 
 @pytest.mark.django_db
@@ -543,6 +545,7 @@ def test_position_regenerate_secrets(token_client, organizer, event, order):
     with scopes_disabled():
         p = order.positions.first()
         ps = p.secret
+        psw = p.web_secret
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/regenerate_secrets/'.format(
             organizer.slug, event.slug, p.pk,
@@ -552,6 +555,7 @@ def test_position_regenerate_secrets(token_client, organizer, event, order):
     p.refresh_from_db()
     with scopes_disabled():
         assert ps != p.secret
+        assert psw != p.web_secret
 
 
 @pytest.mark.django_db

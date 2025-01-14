@@ -94,6 +94,7 @@ ALL_LANGUAGES = [
     ('el', _('Greek')),
     ('id', _('Indonesian')),
     ('it', _('Italian')),
+    ('ja', _('Japanese')),
     ('lv', _('Latvian')),
     ('nb-no', _('Norwegian Bokmål')),
     ('pl', _('Polish')),
