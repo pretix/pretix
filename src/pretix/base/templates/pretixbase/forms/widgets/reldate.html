@@ -11,10 +11,9 @@
                 {% if selopt.value == "absolute" %}
                     {% include widget.subwidgets.1.template_name with widget=widget.subwidgets.1 %}
                 {% elif selopt.value == "relative" %}
-                    {% include widget.subwidgets.2.template_name with widget=widget.subwidgets.2 %}
-                    {% trans "days" %}
-                    {% include widget.subwidgets.4.template_name with widget=widget.subwidgets.4 %}
-                    {% include widget.subwidgets.3.template_name with widget=widget.subwidgets.3 %}
+                    {% blocktrans trimmed with number=rendered_subwidgets.2 relation=rendered_subwidgets.4 relation_to=rendered_subwidgets.3 %}
+                        {{ number }} days {{ relation }} {{ relation_to }}
+                    {% endblocktrans %}
                 {% endif %}
             </div>
         {% endfor %}
