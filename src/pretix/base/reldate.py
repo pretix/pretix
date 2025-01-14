@@ -312,6 +312,9 @@ class RelativeDateTimeField(forms.MultiValueField):
         )
 
     def set_event(self, event):
+        self.widget.widgets[reldatetimeparts.indizes.rel_days_relationto].choices = [
+            (k, v) for k, v in BASE_CHOICES if getattr(event, k, None)
+        ]
         self.widget.widgets[reldatetimeparts.indizes.rel_mins_relationto].choices = [
             (k, v) for k, v in BASE_CHOICES if getattr(event, k, None)
         ]
@@ -431,6 +434,11 @@ class RelativeDateField(RelativeDateTimeField):
         forms.MultiValueField.__init__(
             self, fields=fields, require_all_fields=False, *args, **kwargs
         )
+
+    def set_event(self, event):
+        self.widget.widgets[reldateparts.indizes.rel_days_relationto].choices = [
+            (k, v) for k, v in BASE_CHOICES if getattr(event, k, None)
+        ]
 
     def compress(self, data_list):
         if not data_list:
