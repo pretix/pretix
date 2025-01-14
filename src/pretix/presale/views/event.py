@@ -63,6 +63,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
+from pretix.base.auth import has_event_access_permission
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
     ItemVariation, Quota, SalesChannel, SeatCategoryMapping, Voucher,
@@ -87,7 +88,6 @@ from pretix.presale.views.organizer import (
     filter_qs_by_attr, has_before_after, weeks_for_template,
 )
 
-from pretix.base.auth import has_event_access_permission
 from . import (
     CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
     iframe_entry_view_wrapper,

@@ -223,7 +223,8 @@ class HistoryPasswordValidator:
             pk__in=user.historic_passwords.order_by("-created")[self.history_length:].values_list("pk", flat=True),
         ).delete()
 
-def has_event_access_permission(request, permission = 'can_change_event_settings'):
+
+def has_event_access_permission(request, permission='can_change_event_settings'):
     return (
         request.user.is_authenticated and
         request.user.has_event_permission(request.organizer, request.event, permission, request=request)

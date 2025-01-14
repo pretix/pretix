@@ -60,6 +60,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import ListView, TemplateView, View
 
+from pretix.base.auth import has_event_access_permission
 from pretix.base.models import (
     CachedTicket, Checkin, GiftCard, Invoice, Order, OrderPosition, Quota,
     TaxRule,
@@ -70,7 +71,6 @@ from pretix.base.models.orders import (
 )
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import PaymentException
-from pretix.base.auth import has_event_access_permission
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
     invoice_qualified,
