@@ -479,7 +479,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
-            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'True')
+            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'user_paid', 'True')
         ) and self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING) and (
             not self.order.invoices.exists()
             or self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
@@ -1584,7 +1584,7 @@ class OrderInvoiceCreate(OrderView):
                 order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
                 and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
             )
-            if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(order):
+            if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'user_paid', 'True') or not invoice_qualified(order):
                 messages.error(self.request, _('You cannot generate an invoice for this order.'))
             elif has_inv:
                 messages.error(self.request, _('An invoice for this order already exists.'))
