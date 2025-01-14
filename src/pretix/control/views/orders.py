@@ -1584,7 +1584,7 @@ class OrderInvoiceCreate(OrderView):
                 order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
                 and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
             )
-            if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(order):
+            if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'user_paid', 'True') or not invoice_qualified(order):
                 messages.error(self.request, _('You cannot generate an invoice for this order.'))
             elif has_inv:
                 messages.error(self.request, _('An invoice for this order already exists.'))
