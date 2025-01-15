@@ -626,6 +626,7 @@ class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             'team': self.object.pk
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('The team has been created. You can now add members to the team.'))
         form.instance.organizer = self.request.organizer
@@ -663,6 +664,7 @@ class TeamUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             'team': self.object.pk
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.team.changed', user=self.request.user, data={
@@ -983,6 +985,7 @@ class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
             'device': self.object.pk
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
@@ -1044,6 +1047,7 @@ class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
             'organizer': self.request.organizer.slug,
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.device.changed', user=self.request.user, data={
@@ -1236,6 +1240,7 @@ class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
             }))
         return super().get(request, *args, **kwargs)
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.revoked = True
@@ -1273,6 +1278,7 @@ class WebHookCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
             'organizer': self.request.organizer.slug,
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
@@ -1310,6 +1316,7 @@ class WebHookUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
             'organizer': self.request.organizer.slug,
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.request.organizer.log_action('pretix.webhook.changed', user=self.request.user, data=merge_dicts({
@@ -1386,6 +1393,7 @@ class GiftCardAcceptanceInviteView(OrganizerDetailViewMixin, OrganizerPermission
             'organizer': self.request.organizer,
         }
 
+    @transaction.atomic
     def form_valid(self, form):
         self.request.organizer.gift_card_acceptor_acceptance.get_or_create(
             acceptor=form.cleaned_data['acceptor'],
@@ -2000,6 +2008,7 @@ class GateCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             'organizer': self.request.organizer.slug,
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('The gate has been created.'))
         form.instance.organizer = self.request.organizer
@@ -2034,6 +2043,7 @@ class GateUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             'organizer': self.request.organizer.slug,
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.gate.changed', user=self.request.user, data={
@@ -2136,6 +2146,7 @@ class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionR
             'organizer': self.request.organizer.slug,
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('The property has been created.'))
         form.instance.organizer = self.request.organizer
@@ -2166,6 +2177,7 @@ class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionR
             'organizer': self.request.organizer.slug,
         })
 
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.choices = [
             f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
@@ -2207,6 +2219,7 @@ class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionR
         return redirect(success_url)
 
 
+@transaction.atomic
 def meta_property_move(request, property, up=True):
     property = get_object_or_404(request.organizer.meta_properties, id=property)
     properties = list(request.organizer.meta_properties.order_by("position"))
@@ -2329,6 +2342,7 @@ class MembershipTypeCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
         kwargs['event'] = self.request.organizer
         return kwargs
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('The membership type has been created.'))
         form.instance.organizer = self.request.organizer
@@ -2363,6 +2377,7 @@ class MembershipTypeUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
         kwargs['event'] = self.request.organizer
         return kwargs
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.membershiptype.changed', user=self.request.user, data={
@@ -2436,6 +2451,7 @@ class SSOProviderCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
         kwargs['event'] = self.request.organizer
         return kwargs
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('The provider has been created.'))
         form.instance.organizer = self.request.organizer
@@ -2478,6 +2494,7 @@ class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
         kwargs['event'] = self.request.organizer
         return kwargs
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.ssoprovider.changed', user=self.request.user, data={
@@ -2551,6 +2568,7 @@ class SSOClientCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
         kwargs['event'] = self.request.organizer
         return kwargs
 
+    @transaction.atomic
     def form_valid(self, form):
         secret = form.instance.set_client_secret()
         messages.success(
@@ -2595,6 +2613,7 @@ class SSOClientUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
         kwargs['event'] = self.request.organizer
         return kwargs
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.ssoclient.changed', user=self.request.user, data={
@@ -2797,6 +2816,7 @@ class CustomerCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         ctx['instance'] = c
         return ctx
 
+    @transaction.atomic
     def form_valid(self, form):
         r = super().form_valid(form)
         form.instance.log_action('pretix.customer.created', user=self.request.user, data={
@@ -2825,6 +2845,7 @@ class CustomerUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             identifier=self.kwargs.get('customer')
         )
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.customer.changed', user=self.request.user, data={
@@ -2862,6 +2883,7 @@ class MembershipUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequired
         )
         return ctx
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             d = {
@@ -2938,6 +2960,7 @@ class MembershipCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequired
         )
         return kwargs
 
+    @transaction.atomic
     def form_valid(self, form):
         r = super().form_valid(form)
         d = {
@@ -3036,6 +3059,7 @@ class ReusableMediumCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
         ctx['instance'] = c
         return ctx
 
+    @transaction.atomic
     def form_valid(self, form):
         r = super().form_valid(form)
         form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data={
@@ -3064,6 +3088,7 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
             pk=self.kwargs.get('pk')
         )
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data={
@@ -3155,6 +3180,7 @@ class ChannelCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
             "type": self.selected_type,
         }
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('The sales channel has been created.'))
         form.instance.organizer = self.request.organizer
@@ -3200,6 +3226,7 @@ class ChannelUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
             "type": self.type,
         }
 
+    @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.saleschannel.changed', user=self.request.user, data={
@@ -3250,6 +3277,7 @@ class ChannelDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
         return redirect(success_url)
 
 
+@transaction.atomic
 def channel_move(request, channel, up=True):
     channel = get_object_or_404(request.organizer.sales_channels, identifier=channel)
     channels = list(request.organizer.sales_channels.order_by("position"))

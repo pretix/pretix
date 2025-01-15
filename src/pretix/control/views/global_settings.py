@@ -34,6 +34,7 @@
 import importlib_metadata as metadata
 from django.conf import settings
 from django.contrib import messages
+from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, reverse
 from django.utils.timezone import now
@@ -58,6 +59,7 @@ class GlobalSettingsView(AdministratorPermissionRequiredMixin, FormView):
     template_name = 'pretixcontrol/global_settings.html'
     form_class = GlobalSettingsForm
 
+    @transaction.atomic
     def form_valid(self, form):
         form.save()
         messages.success(self.request, _('Your changes have been saved.'))
