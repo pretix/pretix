@@ -539,6 +539,8 @@ class ItemCreateForm(I18nModelForm):
                     v.pk = None
                     v.item = instance
                     v.save()
+                    if not variation.all_sales_channels:
+                        v.limit_sales_channels.set(variation.limit_sales_channels.all())
                     for mv in variation.meta_values.all():
                         mv.pk = None
                         mv.variation = v
