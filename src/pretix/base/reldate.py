@@ -202,6 +202,7 @@ reldatetimeparts.indizes = reldatetimeparts(*range(9))
 class RelativeDateTimeWidget(forms.MultiWidget):
     template_name = 'pretixbase/forms/widgets/reldatetime.html'
     parts = reldatetimeparts
+
     def __init__(self, *args, **kwargs):
         self.status_choices = kwargs.pop('status_choices')
         base_choices = kwargs.pop('base_choices')
@@ -226,22 +227,52 @@ class RelativeDateTimeWidget(forms.MultiWidget):
         if isinstance(value, reldatetimeparts):
             return value
         if not value:
-            return reldatetimeparts(status='unset', absolute=None, rel_days_number=1, rel_mins_relationto='date_from',
-                                 rel_days_timeofday=None, rel_mins_number=0, rel_days_relationto="date_from",
-                                 rel_mins_relation="before", rel_days_relation="before")
+            return reldatetimeparts(
+                status="unset",
+                absolute=None,
+                rel_days_number=1,
+                rel_mins_relationto="date_from",
+                rel_days_timeofday=None,
+                rel_mins_number=0,
+                rel_days_relationto="date_from",
+                rel_mins_relation="before",
+                rel_days_relation="before"
+            )
         elif isinstance(value.data, (datetime.datetime, datetime.date)):
-            return reldatetimeparts(status='absolute', absolute=value.data, rel_days_number=1, rel_mins_relationto='date_from',
-                                 rel_days_timeofday=None, rel_mins_number=0, rel_days_relationto="date_from",
-                                 rel_mins_relation="before", rel_days_relation="before")
+            return reldatetimeparts(
+                status="absolute",
+                absolute=value.data,
+                rel_days_number=1,
+                rel_mins_relationto="date_from",
+                rel_days_timeofday=None,
+                rel_mins_number=0,
+                rel_days_relationto="date_from",
+                rel_mins_relation="before",
+                rel_days_relation="before"
+            )
         elif value.data.minutes is not None:
-            return reldatetimeparts(status='relative_minutes', absolute=None, rel_days_number=None, rel_mins_relationto=value.data.base_date_name,
-                                 rel_days_timeofday=None, rel_mins_number=value.data.minutes, rel_days_relationto=value.data.base_date_name,
-                                 rel_mins_relation="after" if value.data.is_after else "before",
-                                 rel_days_relation="after" if value.data.is_after else "before")
-        return reldatetimeparts(status='relative', absolute=None, rel_days_number=value.data.days, rel_mins_relationto=value.data.base_date_name,
-                             rel_days_timeofday=value.data.time, rel_mins_number=0, rel_days_relationto=value.data.base_date_name,
-                             rel_mins_relation="after" if value.data.is_after else "before",
-                             rel_days_relation="after" if value.data.is_after else "before")
+            return reldatetimeparts(
+                status="relative_minutes",
+                absolute=None,
+                rel_days_number=None,
+                rel_mins_relationto=value.data.base_date_name,
+                rel_days_timeofday=None,
+                rel_mins_number=value.data.minutes,
+                rel_days_relationto=value.data.base_date_name,
+                rel_mins_relation="after" if value.data.is_after else "before",
+                rel_days_relation="after" if value.data.is_after else "before"
+            )
+        return reldatetimeparts(
+            status="relative",
+            absolute=None,
+            rel_days_number=value.data.days,
+            rel_mins_relationto=value.data.base_date_name,
+            rel_days_timeofday=value.data.time,
+            rel_mins_number=0,
+            rel_days_relationto=value.data.base_date_name,
+            rel_mins_relation="after" if value.data.is_after else "before",
+            rel_days_relation="after" if value.data.is_after else "before"
+        )
 
     def get_context(self, name, value, attrs):
         ctx = super().get_context(name, value, attrs)
@@ -392,12 +423,30 @@ class RelativeDateWidget(RelativeDateTimeWidget):
         if isinstance(value, str):
             value = RelativeDateWrapper.from_string(value)
         if not value:
-            return reldateparts(status='unset', absolute=None, rel_days_number=1, rel_days_relationto='date_from', rel_days_relation='before')
+            return reldateparts(
+                status="unset",
+                absolute=None,
+                rel_days_number=1,
+                rel_days_relationto="date_from",
+                rel_days_relation="before"
+            )
         if isinstance(value, reldateparts):
             return value
         elif isinstance(value.data, (datetime.datetime, datetime.date)):
-            return reldateparts(status='absolute', absolute=value.data, rel_days_number=1, rel_days_relationto='date_from', rel_days_relation='before')
-        return reldateparts(status='relative', absolute=None, rel_days_number=value.data.days, rel_days_relationto=value.data.base_date_name, rel_days_relation="after" if value.data.is_after else "before")
+            return reldateparts(
+                status="absolute",
+                absolute=value.data,
+                rel_days_number=1,
+                rel_days_relationto="date_from",
+                rel_days_relation="before"
+            )
+        return reldateparts(
+            status="relative",
+            absolute=None,
+            rel_days_number=value.data.days,
+            rel_days_relationto=value.data.base_date_name,
+            rel_days_relation="after" if value.data.is_after else "before"
+        )
 
 
 class RelativeDateField(RelativeDateTimeField):
