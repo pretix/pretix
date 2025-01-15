@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-10 10:00+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"PO-Revision-Date: 2025-01-16 01:00+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -93,7 +93,7 @@ msgstr "Italienisch"
 
 #: pretix/_base_settings.py:97
 msgid "Japanese"
-msgstr ""
+msgstr "Japanisch"
 
 #: pretix/_base_settings.py:98
 msgid "Latvian"
@@ -9675,10 +9675,8 @@ msgid "Automatically on user request"
 msgstr "Automatisch auf Anfrage des Kunden"
 
 #: pretix/base/settings.py:1043 pretix/base/settings.py:1056
-#, fuzzy
-#| msgid "Automatically on user request"
 msgid "Automatically on user request for paid orders"
-msgstr "Automatisch auf Anfrage des Kunden"
+msgstr "Automatisch auf Anfrage des Kunden für bezahlte Bestellungen"
 
 #: pretix/base/settings.py:1044
 msgid "Automatically for all created orders"
@@ -12506,17 +12504,17 @@ msgstr "Foto hochladen"
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:14
 #, python-format
 msgid "%(number)s days %(relation)s %(relation_to)s"
-msgstr ""
+msgstr "%(number)s Tage %(relation)s %(relation_to)s"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:14
 #, python-format
 msgid "%(number)s minutes %(relation)s %(relation_to)s"
-msgstr ""
+msgstr "%(number)s Minuten %(relation)s %(relation_to)s"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:18
 #, python-format
 msgid "%(number)s days %(relation)s %(relation_to)s at %(time_of_day)s"
-msgstr ""
+msgstr "%(number)s Tage %(relation)s %(relation_to)s um %(time_of_day)s"
 
 #: pretix/base/templates/pretixbase/redirect.html:5
 #: pretix/base/templates/pretixbase/redirect.html:9
@@ -14951,6 +14949,8 @@ msgid ""
 "This affects both the ticket secret (often used as a QR code) as well as the "
 "link used to individually access the ticket."
 msgstr ""
+"Dies betrifft sowohl den Ticketcode (oft als QR-Code verwendet) als auch den "
+"Link zum individuellen Zugriff auf das Ticket."
 
 #: pretix/control/forms/orders.py:499
 msgid "Cancel this position"
@@ -31163,7 +31163,7 @@ msgstr "Kreditkarte"
 #: pretix/plugins/stripe/payment.py:1186
 #, python-brace-format
 msgid "expires {month}/{year}"
-msgstr ""
+msgstr "läuft ab {month}/{year}"
 
 #: pretix/plugins/stripe/payment.py:1191
 msgid "SEPA Debit via Stripe"
