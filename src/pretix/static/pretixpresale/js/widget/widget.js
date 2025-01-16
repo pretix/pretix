@@ -2024,6 +2024,10 @@ var create_overlay = function (app) {
             error_message: function (newValue) {
                 if (newValue) {
                     this.prevActiveElement = document.activeElement;
+                    var btn = this.$el?.querySelector(".pretix-widget-alert-box button");
+                    this.$nextTick(function () {
+                        btn?.focus();
+                    });
                 } else {
                     this.prevActiveElement?.focus();
                 }
