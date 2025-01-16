@@ -9,13 +9,13 @@
                     {{ selopt.label }}
                 </label>
                 {% if selopt.value == "absolute" %}
-                    {% include widget.subwidgets.1.template_name with widget=widget.subwidgets.1 %}
+                    {{ rendered_subwidgets.absolute }}
                 {% elif selopt.value == "relative_minutes" %}
-                    {% blocktrans trimmed with number=rendered_subwidgets.5 relation=rendered_subwidgets.7 relation_to=rendered_subwidgets.3 %}
+                    {% blocktrans trimmed with number=rendered_subwidgets.rel_mins_number relation=rendered_subwidgets.rel_mins_relation relation_to=rendered_subwidgets.rel_mins_relationto %}
                         {{ number }} minutes {{ relation }} {{ relation_to }}
                     {% endblocktrans %}
                 {% elif selopt.value == "relative" %}
-                    {% blocktrans trimmed with number=rendered_subwidgets.2 relation=rendered_subwidgets.8 relation_to=rendered_subwidgets.6 time_of_day=rendered_subwidgets.4 %}
+                    {% blocktrans trimmed with number=rendered_subwidgets.rel_days_number relation=rendered_subwidgets.rel_days_relation relation_to=rendered_subwidgets.rel_days_relationto time_of_day=rendered_subwidgets.rel_days_timeofday %}
                         {{ number }} days {{ relation }} {{ relation_to }} at {{ time_of_day }}
                     {% endblocktrans %}
                 {% endif %}
