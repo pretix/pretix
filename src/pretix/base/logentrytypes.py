@@ -158,12 +158,12 @@ class EventLogEntryType(LogEntryType):
     """
 
     def get_object_link_info(self, logentry) -> dict:
-        if hasattr(self, 'object_link_viewname') and hasattr(self, 'object_link_argname') and logentry.content_object:
+        if hasattr(self, 'object_link_viewname') and logentry.content_object:
             return {
                 'href': reverse(self.object_link_viewname, kwargs={
                     'event': logentry.event.slug,
                     'organizer': logentry.event.organizer.slug,
-                    self.object_link_argname: self.object_link_argvalue(logentry.content_object),
+                    **self.object_link_args(logentry.content_object),
                 }),
                 'val': escape(self.object_link_display_name(logentry.content_object)),
             }
@@ -180,10 +180,9 @@ class EventLogEntryType(LogEntryType):
 class OrderLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Order {val}')
     object_link_viewname = 'control:event.order'
-    object_link_argname = 'code'
 
-    def object_link_argvalue(self, order):
-        return order.code
+    def object_link_args(self, order):
+        return {'code': order.code}
 
     def object_link_display_name(self, order):
         return order.code
