@@ -739,7 +739,6 @@ var shared_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
-        this.$root.overlay.frame_loading = true;
         this.$root.overlay.frame_src = redirect_url;
     },
     voucher_open: function (voucher) {
@@ -752,7 +751,6 @@ var shared_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            this.$root.overlay.frame_loading = true;
             this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
@@ -776,7 +774,6 @@ var shared_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            this.$root.overlay.frame_loading = true;
             this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
@@ -923,13 +920,16 @@ Vue.component('pretix-overlay', {
         close: function () {
             this.$root.frame_shown = false;
             this.$root.parent.frame_dismissed = true;
+            this.$root.frame_src = "";
             this.$root.parent.reload();
             this.$root.parent.trigger_close_callback();
         },
         iframeLoaded: function () {
             if (this.$root.frame_loading) {
                 this.$root.frame_loading = false;
-                this.$root.frame_shown = true;
+                if (this.$root.frame_src) {
+                    this.$root.frame_shown = true;
+                }
             }
         }
     }
@@ -1669,7 +1669,6 @@ var shared_root_methods = {
             } else {
                 url += '?iframe=1';
             }
-            this.$root.overlay.frame_loading = true;
             this.$root.overlay.frame_src = url;
         } else {
             event.target.href = url;
@@ -1833,7 +1832,6 @@ var shared_root_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            this.$root.overlay.frame_loading = true;
             this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
@@ -1858,7 +1856,6 @@ var shared_root_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            this.$root.overlay.frame_loading = true;
             this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
@@ -2005,13 +2002,13 @@ var create_overlay = function (app) {
         methods: {
         },
         watch: {
-            frame_src: function (newValue) {
-                this.$el.querySelector("iframe").src = newValue;
-            },
-            frame_loading: function (newValue) {
-                if (newValue) {
-                    this.$el.querySelector("iframe").src = this.frame_src;
+            frame_src: function (newValue, oldValue) {
+                // show loading spinner only when previously no frame_src was set
+                if (newValue && !oldValue) {
+                    this.frame_loading = true;
                 }
+                // to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
+                this.$el.querySelector("iframe").src = newValue || "about:blank";
             },
             frame_shown: function (newValue) {
                 if (newValue) {
