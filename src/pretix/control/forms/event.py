@@ -231,7 +231,7 @@ class EventWizardBasicsForm(I18nModelForm):
             raise ValidationError({
                 'timezone': _('Your default locale must be specified.')
             })
-        if not data.get("no_taxes") and not data.get("tax_rate"):
+        if not data.get("no_taxes") and data.get("tax_rate") is None:
             raise ValidationError({
                 'tax_rate': _('You have not specified a tax rate. If you do not want us to compute sales taxes, please '
                               'check "{field}" above.').format(field=self.fields["no_taxes"].label)
