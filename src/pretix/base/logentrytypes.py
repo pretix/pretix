@@ -168,9 +168,11 @@ class EventLogEntryType(LogEntryType):
                 'val': escape(self.object_link_display_name(logentry.content_object)),
             }
 
-    def object_link_argvalue(self, content_object):
-        """Return the identifier used in a link to content_object."""
-        return content_object.id
+    def object_link_args(self, content_object):
+        """Return the kwargs for the url used in a link to content_object."""
+        if hasattr(self, 'object_link_argname'):
+            return {self.object_link_argname: content_object.pk}
+        return {}
 
     def object_link_display_name(self, content_object):
         """Return the display name to refer to content_object in the user interface."""
