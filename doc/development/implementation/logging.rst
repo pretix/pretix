@@ -109,20 +109,33 @@ You can use format strings to insert information from the LogEntry's `data` obje
 If you define a new model object in your plugin, you should make sure proper object links in the user interface are
 displayed for it. If your model object belongs logically to a pretix :class:`Event <pretix.base.models.Event>`, you can inherit from :class:`EventLogEntryType <pretix.base.logentrytypes.EventLogEntryType>`,
 and set the ``object_link_*`` fields accordingly. ``object_link_viewname`` refers to a django url name, which needs to
-accept the arguments `organizer` and `event`, containing the respective slugs, and an argument named by ``object_link_argname``.
-The latter will contain the ID of the model object, if not customized by overriding ``object_link_argvalue``.
+accept the arguments `organizer` and `event`, containing the respective slugs, and additional arguments provided by
+``object_link_args``. The default implementation of ``object_link_args`` will return an argument named by
+````object_link_argname``, with a value of ``content_object.pk`` (the primary key of the model object).
 If you want to customize the name displayed for the object (instead of the result of calling ``str()`` on it),
 overwrite ``object_link_display_name``.
+
+
+.. code-block:: python
+
+    class ItemLogEntryType(EventLogEntryType):
+        object_link_wrapper = _('Product {val}')
+
+        # link will be generated as reverse('control:event.item', {'organizer': ..., 'event': ..., 'item': item.pk})
+        object_link_viewname = 'control:event.item'
+        object_link_argname = 'item'
+
 
 .. code-block:: python
 
     class OrderLogEntryType(EventLogEntryType):
         object_link_wrapper = _('Order {val}')
-        object_link_viewname = 'control:event.order'
-        object_link_argname = 'code'
 
-        def object_link_argvalue(self, order):
-            return order.code
+        # link will be generated as reverse('control:event.order', {'organizer': ..., 'event': ..., 'code': order.code})
+        object_link_viewname = 'control:event.order'
+
+        def object_link_args(self, order):
+            return {'code': order.code}
 
         def object_link_display_name(self, order):
             return order.code
