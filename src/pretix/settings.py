@@ -435,14 +435,6 @@ REST_FRAMEWORK = {
 }
 
 
-CORE_MODULES = {
-    "pretix.base",
-    "pretix.presale",
-    "pretix.control",
-    "pretix.plugins.checkinlists",
-    "pretix.plugins.reports",
-}
-
 MIDDLEWARE = [
     'pretix.helpers.logs.RequestIdMiddleware',
     'pretix.api.middleware.IdempotencyMiddleware',

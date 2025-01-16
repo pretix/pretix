@@ -75,6 +75,14 @@ FORMAT_MODULE_PATH = [
     'pretix.helpers.formats',
 ]
 
+CORE_MODULES = {
+    "pretix.base",
+    "pretix.presale",
+    "pretix.control",
+    "pretix.plugins.checkinlists",
+    "pretix.plugins.reports",
+}
+
 ALL_LANGUAGES = [
     ('en', _('English')),
     ('de', _('German')),

@@ -52,39 +52,56 @@ def _populate_app_cache():
         app_cache[ac.name] = ac
 
 
+def get_defining_app(o):
+    # If sentry packed this in a wrapper, unpack that
+    if "sentry" in o.__module__:
+        o = o.__wrapped__
+
+    # Find the Django application this belongs to
+    searchpath = o.__module__
+
+    # Core modules are always active
+    if any(searchpath.startswith(cm) for cm in settings.CORE_MODULES):
+        return 'CORE'
+
+    if not app_cache:
+        _populate_app_cache()
+
+    while True:
+        app = app_cache.get(searchpath)
+        if "." not in searchpath or app:
+            break
+        searchpath, _ = searchpath.rsplit(".", 1)
+    return app
+
+
+def is_app_active(sender, app):
+    if app == 'CORE':
+        return True
+
+    excluded = settings.PRETIX_PLUGINS_EXCLUDE
+    if sender and app and app.name in sender.get_plugins() and app.name not in excluded:
+        if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
+            return True
+    return False
+
+
+def is_receiver_active(sender, receiver):
+    if sender is None:
+        # Send to all events!
+        return True
+
+    app = get_defining_app(receiver)
+
+    return is_app_active(sender, app)
+
+
 class EventPluginSignal(django.dispatch.Signal):
     """
     This is an extension to Django's built-in signals which differs in a way that it sends
     out it's events only to receivers which belong to plugins that are enabled for the given
     Event.
     """
-
-    def _is_active(self, sender, receiver):
-        if sender is None:
-            # Send to all events!
-            return True
-
-        # If sentry packed this in a wrapper, unpack that
-        if "sentry" in receiver.__module__:
-            receiver = receiver.__wrapped__
-
-        # Find the Django application this belongs to
-        searchpath = receiver.__module__
-        core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])
-        app = None
-        if not core_module:
-            while True:
-                app = app_cache.get(searchpath)
-                if "." not in searchpath or app:
-                    break
-                searchpath, _ = searchpath.rsplit(".", 1)
-
-        # Only fire receivers from active plugins and core modules
-        excluded = settings.PRETIX_PLUGINS_EXCLUDE
-        if core_module or (sender and app and app.name in sender.get_plugins() and app.name not in excluded):
-            if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
-                return True
-        return False
 
     def send(self, sender: Event, **named) -> List[Tuple[Callable, Any]]:
         """
@@ -104,7 +121,7 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if self._is_active(sender, receiver):
+            if is_receiver_active(sender, receiver):
                 response = receiver(signal=self, sender=sender, **named)
                 responses.append((receiver, response))
         return responses
@@ -128,7 +145,7 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if self._is_active(sender, receiver):
+            if is_receiver_active(sender, receiver):
                 named[chain_kwarg_name] = response
                 response = receiver(signal=self, sender=sender, **named)
         return response
@@ -155,7 +172,7 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if self._is_active(sender, receiver):
+            if is_receiver_active(sender, receiver):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
                 except Exception as err:
@@ -200,6 +217,122 @@ class DeprecatedSignal(django.dispatch.Signal):
     def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
         warnings.warn('This signal is deprecated and will soon be removed', stacklevel=3)
         super().connect(receiver, sender=None, weak=True, dispatch_uid=None)
+
+
+class Registry:
+    """
+    A Registry is a collection of objects (entries), annotated with metadata. Entries can be searched and filtered by
+    metadata keys, and metadata is returned as part of the result.
+
+    Entry metadata is generated during registration using to the accessor functions given to the Registry
+    constructor.
+
+    Example:
+
+    .. code-block:: python
+
+        animal_sound_registry = Registry({"animal": lambda s: s.animal})
+
+        @animal_sound_registry.new("dog", "woof")
+        @animal_sound_registry.new("cricket", "chirp")
+        class AnimalSound:
+            def __init__(self, animal, sound):
+                self.animal = animal
+                self.sound = sound
+
+            def make_sound(self):
+                return self.sound
+
+        @animal_sound_registry.new()
+        class CatSound(AnimalSound):
+            def __init__(self):
+                super().__init__(animal="cat", sound=["meow", "meww", "miaou"])
+
+            def make_sound(self):
+                return random.choice(self.sound)
+    """
+
+    def __init__(self, keys):
+        """
+        :param keys: Dictionary with `{key: accessor_function}`
+                     When a new entry is registered, all accessor functions are called with the new entry as parameter.
+                     Their return value is stored as the metadata value for that key.
+        """
+        self.registered_entries = dict()
+        self.keys = keys
+        self.by_key = {key: {} for key in self.keys.keys()}
+
+    def register(self, *objs):
+        """
+        Register one or more entries in this registry.
+
+        Usable as a regular method or as decorator on a class or function. If used on a class, the class type object
+        itself is registered, not an instance of the class. To register an instance, use the ``new`` method.
+
+        .. code-block:: python
+
+            @some_registry.register
+            def my_new_entry(foo):
+              # ...
+        """
+        for obj in objs:
+            if obj in self.registered_entries:
+                raise RuntimeError('Object already registered: {}'.format(obj))
+
+            meta = {k: accessor(obj) for k, accessor in self.keys.items()}
+            tup = (obj, meta)
+            for key, value in meta.items():
+                self.by_key[key][value] = tup
+            self.registered_entries[obj] = meta
+
+        if len(objs) == 1:
+            return objs[0]
+
+    def new(self, *args, **kwargs):
+        """
+        Instantiate the decorated class with the given `*args` and `**kwargs`, and register the instance in this registry.
+        May be used multiple times.
+
+        .. code-block:: python
+
+            @animal_sound_registry.new("meow")
+            @animal_sound_registry.new("woof")
+            class AnimalSound:
+              def __init__(self, sound):
+                # ...
+        """
+        def reg(clz):
+            obj = clz(*args, **kwargs)
+            self.register(obj)
+            return clz
+        return reg
+
+    def get(self, **kwargs):
+        (key, value), = kwargs.items()
+        return self.by_key.get(key).get(value, (None, None))
+
+    def filter(self, **kwargs):
+        return (
+            (entry, meta)
+            for entry, meta in self.registered_entries.items()
+            if all(value == meta[key] for key, value in kwargs.items())
+        )
+
+
+class EventPluginRegistry(Registry):
+    """
+    A Registry which automatically annotates entries with a "plugin" key, specifying which plugin
+    the entry is defined in. This allows the consumer of entries to determine whether an entry is
+    enabled for a given event, or filter only for entries defined by enabled plugins.
+
+    .. code-block:: python
+
+        logtype, meta = my_registry.find(action_type="foo.bar.baz")
+        # meta["plugin"] contains the django app name of the defining plugin
+    """
+
+    def __init__(self, keys):
+        super().__init__({"plugin": lambda o: get_defining_app(o), **keys})
 
 
 event_live_issues = EventPluginSignal()
@@ -507,41 +640,16 @@ logentry_display = EventPluginSignal()
 """
 Arguments: ``logentry``
 
-To display an instance of the ``LogEntry`` model to a human user,
-``pretix.base.signals.logentry_display`` will be sent out with a ``logentry`` argument.
-
-The first received response that is not ``None`` will be used to display the log entry
-to the user. The receivers are expected to return plain text.
-
-As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+**DEPRECTATION:** Please do not use this signal for new LogEntry types. Use the log_entry_types
+registry instead, as described in https://docs.pretix.eu/en/latest/development/implementation/logging.html
 """
 
 logentry_object_link = EventPluginSignal()
 """
 Arguments: ``logentry``
 
-To display the relationship of an instance of the ``LogEntry`` model to another model
-to a human user, ``pretix.base.signals.logentry_object_link`` will be sent out with a
-``logentry`` argument.
-
-The first received response that is not ``None`` will be used to display the related object
-to the user. The receivers are expected to return a HTML link. The internal implementation
-builds the links like this::
-
-    a_text = _('Tax rule {val}')
-    a_map = {
-        'href': reverse('control:event.settings.tax.edit', kwargs={
-            'event': sender.slug,
-            'organizer': sender.organizer.slug,
-            'rule': logentry.content_object.id
-        }),
-        'val': escape(logentry.content_object.name),
-    }
-    a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
-    return a_text.format_map(a_map)
-
-Make sure that any user content in the HTML code you return is properly escaped!
-As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+**DEPRECTATION:** Please do not use this signal for new LogEntry types. Use the log_entry_types
+registry instead, as described in https://docs.pretix.eu/en/latest/development/implementation/logging.html
 """
 
 requiredaction_display = EventPluginSignal()

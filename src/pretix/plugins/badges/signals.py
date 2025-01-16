@@ -26,13 +26,12 @@ from collections import defaultdict
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import resolve, reverse
-from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
+from pretix.base.logentrytypes import EventLogEntryType, log_entry_types
 from pretix.base.models import Event, Order
 from pretix.base.signals import (
-    event_copy_data, item_copy_data, logentry_display, logentry_object_link,
-    register_data_exporters,
+    event_copy_data, item_copy_data, register_data_exporters,
 )
 from pretix.control.signals import (
     item_forms, nav_event, order_info, order_position_buttons,
@@ -173,35 +172,13 @@ def control_order_info(sender: Event, request, order: Order, **kwargs):
     return template.render(ctx, request=request)
 
 
-@receiver(signal=logentry_display, dispatch_uid="badges_logentry_display")
-def badges_logentry_display(sender, logentry, **kwargs):
-    if not logentry.action_type.startswith('pretix.plugins.badges'):
-        return
-
-    plains = {
-        'pretix.plugins.badges.layout.added': _('Badge layout created.'),
-        'pretix.plugins.badges.layout.deleted': _('Badge layout deleted.'),
-        'pretix.plugins.badges.layout.changed': _('Badge layout changed.'),
-    }
-
-    if logentry.action_type in plains:
-        return plains[logentry.action_type]
-
-
-@receiver(signal=logentry_object_link, dispatch_uid="badges_logentry_object_link")
-def badges_logentry_object_link(sender, logentry, **kwargs):
-    if not logentry.action_type.startswith('pretix.plugins.badges.layout') or not isinstance(logentry.content_object,
-                                                                                             BadgeLayout):
-        return
-
-    a_text = _('Badge layout {val}')
-    a_map = {
-        'href': reverse('plugins:badges:edit', kwargs={
-            'event': sender.slug,
-            'organizer': sender.organizer.slug,
-            'layout': logentry.content_object.id
-        }),
-        'val': escape(logentry.content_object.name),
-    }
-    a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
-    return a_text.format_map(a_map)
+@log_entry_types.new_from_dict({
+    'pretix.plugins.badges.layout.added': _('Badge layout created.'),
+    'pretix.plugins.badges.layout.deleted': _('Badge layout deleted.'),
+    'pretix.plugins.badges.layout.changed': _('Badge layout changed.'),
+})
+class BadgeLogEntryType(EventLogEntryType):
+    object_type = BadgeLayout
+    object_link_wrapper = _('Badge layout {val}')
+    object_link_viewname = 'plugins:badges:edit'
+    object_link_argname = 'layout'

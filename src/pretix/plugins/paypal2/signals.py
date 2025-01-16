@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import json
 from collections import OrderedDict
 
 from django import forms
@@ -32,10 +31,11 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.forms import SecretKeySettingsField
+from pretix.base.logentrytypes import EventLogEntryType, log_entry_types
 from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
-    logentry_display, register_global_settings, register_payment_providers,
+    register_global_settings, register_payment_providers,
 )
 from pretix.plugins.paypal2.payment import PaypalMethod
 from pretix.presale.signals import html_head, process_response
@@ -47,33 +47,32 @@ def register_payment_provider(sender, **kwargs):
     return [PaypalSettingsHolder, PaypalWallet, PaypalAPM]
 
 
-@receiver(signal=logentry_display, dispatch_uid="paypal2_logentry_display")
-def pretixcontrol_logentry_display(sender, logentry, **kwargs):
-    if logentry.action_type != 'pretix.plugins.paypal.event':
-        return
+@log_entry_types.new()
+class PaypalEventLogEntryType(EventLogEntryType):
+    action_type = 'pretix.plugins.paypal.event'
 
-    data = json.loads(logentry.data)
-    event_type = data.get('event_type')
-    text = None
-    plains = {
-        'PAYMENT.SALE.COMPLETED': _('Payment completed.'),
-        'PAYMENT.SALE.DENIED': _('Payment denied.'),
-        'PAYMENT.SALE.REFUNDED': _('Payment refunded.'),
-        'PAYMENT.SALE.REVERSED': _('Payment reversed.'),
-        'PAYMENT.SALE.PENDING': _('Payment pending.'),
-        'CHECKOUT.ORDER.APPROVED': pgettext_lazy('paypal', 'Order approved.'),
-        'CHECKOUT.ORDER.COMPLETED': pgettext_lazy('paypal', 'Order completed.'),
-        'PAYMENT.CAPTURE.COMPLETED': pgettext_lazy('paypal', 'Capture completed.'),
-        'PAYMENT.CAPTURE.PENDING': pgettext_lazy('paypal', 'Capture pending.'),
-    }
+    def display(self, logentry):
+        event_type = logentry.parsed_data.get('event_type')
+        text = None
+        plains = {
+            'PAYMENT.SALE.COMPLETED': _('Payment completed.'),
+            'PAYMENT.SALE.DENIED': _('Payment denied.'),
+            'PAYMENT.SALE.REFUNDED': _('Payment refunded.'),
+            'PAYMENT.SALE.REVERSED': _('Payment reversed.'),
+            'PAYMENT.SALE.PENDING': _('Payment pending.'),
+            'CHECKOUT.ORDER.APPROVED': pgettext_lazy('paypal', 'Order approved.'),
+            'CHECKOUT.ORDER.COMPLETED': pgettext_lazy('paypal', 'Order completed.'),
+            'PAYMENT.CAPTURE.COMPLETED': pgettext_lazy('paypal', 'Capture completed.'),
+            'PAYMENT.CAPTURE.PENDING': pgettext_lazy('paypal', 'Capture pending.'),
+        }
 
-    if event_type in plains:
-        text = plains[event_type]
-    else:
-        text = event_type
+        if event_type in plains:
+            text = plains[event_type]
+        else:
+            text = event_type
 
-    if text:
-        return _('PayPal reported an event: {}').format(text)
+        if text:
+            return _('PayPal reported an event: {}').format(text)
 
 
 @receiver(register_global_settings, dispatch_uid='paypal2_global_settings')

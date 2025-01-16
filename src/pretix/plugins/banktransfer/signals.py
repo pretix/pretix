@@ -25,9 +25,12 @@ from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _, gettext_noop
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.signals import logentry_display, register_payment_providers
+from pretix.base.signals import register_payment_providers
 from pretix.control.signals import html_head, nav_event, nav_organizer
 
+from ...base.logentrytypes import (
+    ClearDataShredderMixin, OrderLogEntryType, log_entry_types,
+)
 from ...base.settings import settings_hierarkey
 from .payment import BankTransfer
 
@@ -117,13 +120,10 @@ def html_head_presale(sender, request=None, **kwargs):
         return ""
 
 
-@receiver(signal=logentry_display)
-def pretixcontrol_logentry_display(sender, logentry, **kwargs):
-    plains = {
-        'pretix.plugins.banktransfer.order.email.invoice': _('The invoice was sent to the designated email address.'),
-    }
-    if logentry.action_type in plains:
-        return plains[logentry.action_type]
+@log_entry_types.new()
+class BanktransferOrderEmailInvoiceLogEntryType(OrderLogEntryType, ClearDataShredderMixin):
+    action_type = 'pretix.plugins.banktransfer.order.email.invoice'
+    plain = _('The invoice was sent to the designated email address.')
 
 
 settings_hierarkey.add_default(
