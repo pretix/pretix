@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-11 21:00+0000\n"
+"PO-Revision-Date: 2025-01-17 00:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -22412,7 +22412,7 @@ msgstr "フィルターを除去"
 #: pretix/control/templates/pretixcontrol/orders/index.html:146
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:207
 msgid "Order paid / total"
-msgstr "注文は支払い済みです / 合計です"
+msgstr "支払済の注文 / 合計"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:177
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:109
