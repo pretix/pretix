@@ -819,7 +819,7 @@ var shared_iframe_fragment = (
 
 var shared_alert_fragment = (
     '<div :class="alertClasses" role="dialog" aria-modal="true" aria-live="polite">'
-    + '<transition name="bounce">'
+    + '<transition name="bounce" @after-enter="focusButton">'
     + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
     + '<p>{{ $root.error_message }}</p>'
     + '<p><button v-if="$root.error_url_after" @click.prevent.stop="errorContinue">' + strings.continue + '</button>'
@@ -931,7 +931,11 @@ Vue.component('pretix-overlay', {
                     this.$root.frame_shown = true;
                 }
             }
-        }
+        },
+        focusButton: function () {
+            this.$el.querySelector(".pretix-widget-alert-box button").focus();
+        },
+
     }
 });
 
@@ -2024,10 +2028,6 @@ var create_overlay = function (app) {
             error_message: function (newValue) {
                 if (newValue) {
                     this.prevActiveElement = document.activeElement;
-                    var btn = this.$el?.querySelector(".pretix-widget-alert-box button");
-                    this.$nextTick(function () {
-                        btn?.focus();
-                    });
                 } else {
                     this.prevActiveElement?.focus();
                 }
