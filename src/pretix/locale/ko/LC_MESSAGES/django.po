@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-11 21:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2025-01-16 12:06+0000\n"
+"Last-Translator: deborahfoell <deborah.foell@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -21,11 +21,11 @@ msgstr ""
 
 #: pretix/_base_settings.py:79
 msgid "English"
-msgstr ""
+msgstr "영어"
 
 #: pretix/_base_settings.py:80
 msgid "German"
-msgstr ""
+msgstr "독일어"
 
 #: pretix/_base_settings.py:81
 msgid "German (informal)"
@@ -44,8 +44,9 @@ msgid "Catalan"
 msgstr ""
 
 #: pretix/_base_settings.py:85
+#, fuzzy
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "중국어"
 
 #: pretix/_base_settings.py:86
 msgid "Chinese (traditional)"
@@ -93,7 +94,7 @@ msgstr ""
 
 #: pretix/_base_settings.py:97
 msgid "Japanese"
-msgstr ""
+msgstr "일본어"
 
 #: pretix/_base_settings.py:98
 msgid "Latvian"
