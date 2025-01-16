@@ -407,7 +407,6 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.cancellationrequest.deleted': _('The cancellation request has been deleted.'),
     'pretix.event.order.refunded': _('The order has been refunded.'),
     'pretix.event.order.reactivated': _('The order has been reactivated.'),
-    'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
     'pretix.event.order.placed': _('The order has been created.'),
     'pretix.event.order.placed.require_approval': _(
         'The order requires approval before it can continue to be processed.'),
@@ -689,6 +688,7 @@ class CoreLogEntryType(LogEntryType):
 
 
 @log_entry_types.new_from_dict({
+    'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
     'pretix.event.item_meta_property.added': _('A meta property has been added to this event.'),
     'pretix.event.item_meta_property.deleted': _('A meta property has been removed from this event.'),
     'pretix.event.item_meta_property.changed': _('A meta property has been changed on this event.'),
