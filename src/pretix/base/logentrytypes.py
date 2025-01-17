@@ -38,13 +38,25 @@ class EventLogEntryType(LogEntryType):
     Base class for any `LogEntry` type whose `content_object` is either an `Event` itself or belongs to a specific `Event`.
     """
 
-    def get_object_link_info(self, logentry) -> dict:
-        if hasattr(self, 'object_link_viewname') and logentry.content_object:
+    def get_object_link_info(self, logentry) -> dict | None:
+        if hasattr(self, 'object_link_viewname'):
+            content = logentry.content_object
+            if not content:
+                if logentry.content_type_id:
+                    return {
+                        'val': _('(deleted)'),
+                    }
+                else:
+                    return
+
+            if hasattr(self, 'content_type') and not isinstance(content, self.content_type):
+                return
+
             return {
                 'href': reverse(self.object_link_viewname, kwargs={
                     'event': logentry.event.slug,
                     'organizer': logentry.event.organizer.slug,
-                    **self.object_link_args(logentry.content_object),
+                    **self.object_link_args(content),
                 }),
                 'val': self.object_link_display_name(logentry.content_object),
             }
@@ -63,7 +75,7 @@ class EventLogEntryType(LogEntryType):
 class OrderLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Order {val}')
     object_link_viewname = 'control:event.order'
-    expects_content_type = Order
+    content_type = Order
 
     def object_link_args(self, order):
         return {'code': order.code}
@@ -76,7 +88,7 @@ class VoucherLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Voucher {val}…')
     object_link_viewname = 'control:event.voucher'
     object_link_argname = 'voucher'
-    expects_content_type = Voucher
+    content_type = Voucher
 
     def object_link_display_name(self, voucher):
         if len(voucher.code) > 6:
@@ -88,46 +100,46 @@ class ItemLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Product {val}')
     object_link_viewname = 'control:event.item'
     object_link_argname = 'item'
-    expects_content_type = Item
+    content_type = Item
 
 
 class SubEventLogEntryType(EventLogEntryType):
     object_link_wrapper = pgettext_lazy('subevent', 'Date {val}')
     object_link_viewname = 'control:event.subevent'
     object_link_argname = 'subevent'
-    expects_content_type = SubEvent
+    content_type = SubEvent
 
 
 class QuotaLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Quota {val}')
     object_link_viewname = 'control:event.items.quotas.show'
     object_link_argname = 'quota'
-    expects_content_type = Quota
+    content_type = Quota
 
 
 class DiscountLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Discount {val}')
     object_link_viewname = 'control:event.items.discounts.edit'
     object_link_argname = 'discount'
-    expects_content_type = Discount
+    content_type = Discount
 
 
 class ItemCategoryLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Category {val}')
     object_link_viewname = 'control:event.items.categories.edit'
     object_link_argname = 'category'
-    expects_content_type = ItemCategory
+    content_type = ItemCategory
 
 
 class QuestionLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Question {val}')
     object_link_viewname = 'control:event.items.questions.show'
     object_link_argname = 'question'
-    expects_content_type = Question
+    content_type = Question
 
 
 class TaxRuleLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Tax rule {val}')
     object_link_viewname = 'control:event.settings.tax.edit'
     object_link_argname = 'rule'
-    expects_content_type = TaxRule
+    content_type = TaxRule
