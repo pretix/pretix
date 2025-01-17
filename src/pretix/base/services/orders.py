@@ -3114,14 +3114,34 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
             }
         )
 
+    new_invoice = False
     if recreate_invoices:
+        # Lock to prevent duplicate invoice creation
+        order = Order.objects.select_for_update(of=OF_SELF).get(pk=order.pk)
+
         i = order.invoices.filter(is_cancellation=False).last()
-        if i and order.total != oldtotal and not i.canceled:
+        has_active_invoice = i and not i.canceled
+
+        if has_active_invoice and order.total != oldtotal:
             generate_cancellation(i)
             generate_invoice(order)
+            new_invoice = True
+
+        elif (not has_active_invoice or order.invoice_dirty) and invoice_qualified(order):
+            if order.event.settings.get('invoice_generate') == 'True' or (
+                order.event.settings.get('invoice_generate') == 'paid' and
+                new_payment.payment_provider.requires_invoice_immediately
+            ):
+                if has_active_invoice:
+                    generate_cancellation(i)
+                i = generate_invoice(order)
+                new_invoice = True
+                order.log_action('pretix.event.order.invoice.generated', data={
+                    'invoice': i.pk
+                })
 
     order.create_transactions()
-    return old_fee, new_fee, fee, new_payment
+    return old_fee, new_fee, fee, new_payment, new_invoice
 
 
 @receiver(order_paid, dispatch_uid="pretixbase_order_paid_giftcards")
