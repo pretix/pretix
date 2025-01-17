@@ -388,6 +388,11 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             except:
                 logger.exception("Can not resize image")
                 pass
+            try:
+                ir.remove_transparency()
+            except:
+                logger.exception("Can not remove transparency from logo")
+                pass
             canvas.drawImage(ir,
                              self.logo_left,
                              self.pagesize[1] - self.logo_height - self.logo_top,
