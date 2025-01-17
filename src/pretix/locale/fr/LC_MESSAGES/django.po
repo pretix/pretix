@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-16 10:32+0000\n"
+"PO-Revision-Date: 2025-01-17 15:39+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -28848,9 +28848,8 @@ msgid "Payer"
 msgstr "Payeur"
 
 #: pretix/plugins/banktransfer/refund_export.py:93
-#, fuzzy
 msgid "Refund"
-msgstr "Remboursé"
+msgstr "Rembourser"
 
 #: pretix/plugins/banktransfer/signals.py:55
 #: pretix/plugins/banktransfer/signals.py:91
