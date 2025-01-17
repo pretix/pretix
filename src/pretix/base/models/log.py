@@ -40,7 +40,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.functional import cached_property
 
-from pretix.base.logentrytypes import log_entry_types, make_link
+from pretix.base.logentrytype_registry import log_entry_types, make_link
 from pretix.base.signals import is_app_active, logentry_object_link
 
 
