@@ -957,12 +957,19 @@ class BasePaymentProvider:
 
     def cancel_payment(self, payment: OrderPayment):
         """
-        Will be called to cancel a payment. The default implementation just sets the payment state to canceled,
-        but in some cases you might want to notify an external provider.
+        Will be called to cancel a payment. The default implementation fails if the payment is
+        ``OrderPayment.PAYMENT_STATE_PENDING`` and ``abort_pending_allowed`` is false. Otherwise, it just sets the
+        payment state to canceled. In some cases you might want to modify this behaviour to notify the external provider
+        of the cancellation.
 
         On success, you should set ``payment.state = OrderPayment.PAYMENT_STATE_CANCELED`` (or call the super method).
         On failure, you should raise a PaymentException.
         """
+        if payment.state == OrderPayment.PAYMENT_STATE_PENDING and not self.abort_pending_allowed:
+            raise PaymentException(_(
+                "This payment is already being processed and can not be canceled any more."
+            ))
+
         payment.state = OrderPayment.PAYMENT_STATE_CANCELED
         payment.save(update_fields=['state'])
 
