@@ -29,7 +29,9 @@ from pretix.base.signals import EventPluginRegistry
 
 def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
     if a_map:
-        if is_active:
+        if 'href' not in a_map:
+            a_map['val'] = '<i>{val}</i>'.format_map(a_map)
+        elif is_active:
             a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
         elif event and plugin_name:
             a_map['val'] = (
