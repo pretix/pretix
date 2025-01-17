@@ -115,7 +115,7 @@ class LogEntryType:
         if plain:
             self.plain = plain
 
-    def display(self, logentry):
+    def display(self, logentry, data):
         """
         Returns the message to be displayed for a given logentry of this type.
 
@@ -124,7 +124,7 @@ class LogEntryType:
         if hasattr(self, 'plain'):
             plain = str(self.plain)
             if '{' in plain:
-                data = defaultdict(lambda: '?', logentry.parsed_data)
+                data = defaultdict(lambda: '?', data)
                 return plain.format_map(data)
             else:
                 return plain

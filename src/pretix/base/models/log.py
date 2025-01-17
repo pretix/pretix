@@ -93,7 +93,7 @@ class LogEntry(models.Model):
     def display(self):
         log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
         if log_entry_type:
-            return log_entry_type.display(self)
+            return log_entry_type.display(self, self.parsed_data)
 
         from ..signals import logentry_display
 

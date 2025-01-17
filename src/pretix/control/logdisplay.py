@@ -759,17 +759,17 @@ class CoreItemLogEntryType(ItemLogEntryType):
     'pretix.event.item.variation.changed': _('The variation "{value}" has been changed.'),
 })
 class VariationLogEntryType(ItemLogEntryType):
-    def display(self, logentry):
-        if 'value' not in logentry.parsed_data:
+    def display(self, logentry, data):
+        if 'value' not in data:
             # Backwards compatibility
-            var = ItemVariation.objects.filter(id=logentry.parsed_data['id']).first()
+            var = ItemVariation.objects.filter(id=data['id']).first()
             if var:
-                logentry.parsed_data['value'] = str(var.value)
+                data['value'] = str(var.value)
             else:
-                logentry.parsed_data['value'] = '?'
+                data['value'] = '?'
         else:
-            logentry.parsed_data['value'] = LazyI18nString(logentry.parsed_data['value'])
-        return super().display(logentry)
+            data['value'] = LazyI18nString(data['value'])
+        return super().display(logentry, data)
 
 
 @log_entry_types.new_from_dict({
