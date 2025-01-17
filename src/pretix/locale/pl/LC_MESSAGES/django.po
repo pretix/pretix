@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2024-12-29 22:00+0000\n"
+"PO-Revision-Date: 2025-01-18 07:00+0000\n"
 "Last-Translator: Wiktor Przybylski <wikprzybylski@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -4234,10 +4234,10 @@ msgid ""
 "you can also choose to use a random value. This will be used in URLs, order "
 "codes, invoice numbers, and bank transfer references."
 msgstr ""
-"Powinna być krótkie, zawierać tylko małe litery, cyfry, kropki i myśliniki "
+"Powinna być krótkie, zawierać tylko małe litery, cyfry, kropki i myślniki "
 "oraz powinna być unikalne pośród wszystkich wydarzeń. Polecane jest użycie "
-"skrótu lub daty krótsze niż 10 znaków który jest łatwy do zapamiętania, ale "
-"możliwe jest też użycie losowej wartośći. Użyta będzie w URLach, kodach "
+"skrótu lub daty krótszej niż 10 znaków który jest łatwy do zapamiętania, ale "
+"możliwe jest też użycie losowej wartości. Użyta będzie w URLach, kodach "
 "zamówień, identyfikatorach faktur i tytułach płatności."
 
 #: pretix/base/models/event.py:571 pretix/base/models/organizer.py:87
@@ -17591,7 +17591,7 @@ msgstr "Kod transakcji serwera"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:75
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 msgid "Payment reference"
-msgstr "Numer referencyjny płatności"
+msgstr "Tytuł płatności"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
 msgid "Payment Application"
@@ -17611,7 +17611,7 @@ msgstr "Identyfikator transakcji"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
 msgid "Reference"
-msgstr "Odnośnik"
+msgstr "Tytułem"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:100
 msgid "Terminal ID"
@@ -19931,8 +19931,8 @@ msgid ""
 "bank transfer references as an abbreviation to reference this event."
 msgstr ""
 "Będziemy również używać tego skrótu w niektórych miejscach, takich jak kody "
-"zamówień, numery faktur lub odniesienia do przelewów bankowych, aby odnieść "
-"się do tego wydarzenia."
+"zamówień, numery faktur lub tytuły przelewów bankowych, aby odnieść się do "
+"tego wydarzenia."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:32
 msgid ""
@@ -28269,7 +28269,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:161
 msgid "Do not include hyphens in the payment reference."
-msgstr "W numerze referencyjnym płatności nie należy umieszczać myślników."
+msgstr "W tytule płatności nie należy umieszczać myślników."
 
 #: pretix/plugins/banktransfer/payment.py:162
 msgid "This is required in some countries."
@@ -28277,11 +28277,11 @@ msgstr "Jest to wymagane w niektórych krajach."
 
 #: pretix/plugins/banktransfer/payment.py:166
 msgid "Include invoice number in the payment reference."
-msgstr "W numerze płatności należy podać numer faktury."
+msgstr "W tytule płatności należy podać numer faktury."
 
 #: pretix/plugins/banktransfer/payment.py:170
 msgid "Prefix for the payment reference"
-msgstr "Prefiks dla numeru referencyjnego płatności"
+msgstr "Prefiks dla numeru referencyjnego (tytułu) płatności"
 
 #: pretix/plugins/banktransfer/payment.py:174
 msgid "Additional text to show on pending orders"
@@ -29011,7 +29011,7 @@ msgstr "Nieprawidłowe dane wejściowe."
 
 #: pretix/plugins/banktransfer/views.py:489
 msgid "You need to select the column containing the payment reference."
-msgstr "Należy wybrać kolumnę zawierającą numer referencyjny płatności."
+msgstr "Należy wybrać kolumnę zawierającą numer referencyjny (tytuł) płatności."
 
 #: pretix/plugins/banktransfer/views.py:570
 msgid "No currency has been selected."
