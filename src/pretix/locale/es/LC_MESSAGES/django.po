@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-16 10:32+0000\n"
+"PO-Revision-Date: 2025-01-17 15:39+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -9730,9 +9730,8 @@ msgid "Automatically on user request"
 msgstr "Automáticamente a petición del usuario"
 
 #: pretix/base/settings.py:1043 pretix/base/settings.py:1056
-#, fuzzy
 msgid "Automatically on user request for paid orders"
-msgstr "Automáticamente a petición del usuario"
+msgstr "Automáticamente a petición del usuario para los pedidos pagados"
 
 #: pretix/base/settings.py:1044 pretix/base/settings.py:1043
 msgid "Automatically for all created orders"
