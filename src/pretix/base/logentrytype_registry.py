@@ -22,6 +22,7 @@
 from collections import defaultdict
 
 from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.signals import EventPluginRegistry
@@ -30,27 +31,27 @@ from pretix.base.signals import EventPluginRegistry
 def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
     if a_map:
         if 'href' not in a_map:
-            a_map['val'] = '<i>{val}</i>'.format_map(a_map)
+            a_map['val'] = format_html('<i>{val}</i>', **a_map)
         elif is_active:
-            a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
+            a_map['val'] = format_html('<a href="{href}">{val}</a>', **a_map)
         elif event and plugin_name:
-            a_map['val'] = (
+            a_map['val'] = format_html(
                 '<i>{val}</i> <a href="{plugin_href}">'
-                '<span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span></a>'
-            ).format_map({
+                '<span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span></a>',
                 **a_map,
-                "errmes": _("The relevant plugin is currently not active. To activate it, click here to go to the plugin settings."),
-                "plugin_href": reverse('control:event.settings.plugins', kwargs={
+                errmes=_("The relevant plugin is currently not active. To activate it, click here to go to the plugin settings."),
+                plugin_href=reverse('control:event.settings.plugins', kwargs={
                     'organizer': event.organizer.slug,
                     'event': event.slug,
                 }) + '#plugin_' + plugin_name,
-            })
+            )
         else:
-            a_map['val'] = '<i>{val}</i> <span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span>'.format_map({
+            a_map['val'] = format_html(
+                '<i>{val}</i> <span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span>',
                 **a_map,
-                "errmes": _("The relevant plugin is currently not active."),
-            })
-        return wrapper.format_map(a_map)
+                errmes=_("The relevant plugin is currently not active."),
+            )
+        return format_html(wrapper, **a_map)
 
 
 class LogEntryTypeRegistry(EventPluginRegistry):
@@ -134,8 +135,8 @@ class LogEntryType:
 
         Not implemented in the base class, causing the object link to be omitted.
 
-        :return: Dictionary with the keys ``href`` (containing a URL to view/edit the object) and ``val`` (containing the
-                 escaped text for the anchor element)
+        :return: Dictionary with the keys ``href`` (URL to view/edit the object) and
+                 ``val`` (text for the anchor element)
         """
         pass
 

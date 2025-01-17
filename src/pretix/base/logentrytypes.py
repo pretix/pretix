@@ -19,10 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from collections import defaultdict
-
 from django.urls import reverse
-from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from .logentrytype_registry import (  # noqa
@@ -44,7 +41,7 @@ class EventLogEntryType(LogEntryType):
                     'organizer': logentry.event.organizer.slug,
                     **self.object_link_args(logentry.content_object),
                 }),
-                'val': escape(self.object_link_display_name(logentry.content_object)),
+                'val': self.object_link_display_name(logentry.content_object),
             }
 
     def object_link_args(self, content_object):
