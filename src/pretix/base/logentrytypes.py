@@ -22,6 +22,11 @@
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
+from pretix.base.models import (
+    Discount, Item, ItemCategory, Order, Question, Quota, SubEvent, TaxRule,
+    Voucher,
+)
+
 from .logentrytype_registry import (  # noqa
     ClearDataShredderMixin, LogEntryType, NoOpShredderMixin, log_entry_types,
     make_link, LogEntryTypeRegistry,
@@ -58,6 +63,7 @@ class EventLogEntryType(LogEntryType):
 class OrderLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Order {val}')
     object_link_viewname = 'control:event.order'
+    expects_content_type = Order
 
     def object_link_args(self, order):
         return {'code': order.code}
@@ -70,6 +76,7 @@ class VoucherLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Voucher {val}…')
     object_link_viewname = 'control:event.voucher'
     object_link_argname = 'voucher'
+    expects_content_type = Voucher
 
     def object_link_display_name(self, voucher):
         if len(voucher.code) > 6:
@@ -81,39 +88,46 @@ class ItemLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Product {val}')
     object_link_viewname = 'control:event.item'
     object_link_argname = 'item'
+    expects_content_type = Item
 
 
 class SubEventLogEntryType(EventLogEntryType):
     object_link_wrapper = pgettext_lazy('subevent', 'Date {val}')
     object_link_viewname = 'control:event.subevent'
     object_link_argname = 'subevent'
+    expects_content_type = SubEvent
 
 
 class QuotaLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Quota {val}')
     object_link_viewname = 'control:event.items.quotas.show'
     object_link_argname = 'quota'
+    expects_content_type = Quota
 
 
 class DiscountLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Discount {val}')
     object_link_viewname = 'control:event.items.discounts.edit'
     object_link_argname = 'discount'
+    expects_content_type = Discount
 
 
 class ItemCategoryLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Category {val}')
     object_link_viewname = 'control:event.items.categories.edit'
     object_link_argname = 'category'
+    expects_content_type = ItemCategory
 
 
 class QuestionLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Question {val}')
     object_link_viewname = 'control:event.items.questions.show'
     object_link_argname = 'question'
+    expects_content_type = Question
 
 
 class TaxRuleLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Tax rule {val}')
     object_link_viewname = 'control:event.settings.tax.edit'
     object_link_argname = 'rule'
+    expects_content_type = TaxRule
