@@ -396,6 +396,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
 
 
 @log_entry_types.new_from_dict({
+    'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
     'pretix.event.order.modified': _('The order details have been changed.'),
     'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
     'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),
@@ -688,7 +689,6 @@ class CoreLogEntryType(LogEntryType):
 
 
 @log_entry_types.new_from_dict({
-    'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
     'pretix.event.item_meta_property.added': _('A meta property has been added to this event.'),
     'pretix.event.item_meta_property.deleted': _('A meta property has been removed from this event.'),
     'pretix.event.item_meta_property.changed': _('A meta property has been changed on this event.'),
