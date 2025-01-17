@@ -226,7 +226,7 @@ Vue.component('availbox', {
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '</label>'
-        + '<div :class="count_group_classes" v-else>'
+        + '<div :class="count_group_classes" v-else role="group" v-bind:aria-label="item.name">'
         + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
         + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
