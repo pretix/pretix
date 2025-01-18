@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-18 07:00+0000\n"
+"PO-Revision-Date: 2025-01-18 18:00+0000\n"
 "Last-Translator: Wiktor Przybylski <wikprzybylski@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -94,7 +94,7 @@ msgstr "Włoski"
 
 #: pretix/_base_settings.py:97
 msgid "Japanese"
-msgstr ""
+msgstr "Japoński"
 
 #: pretix/_base_settings.py:98
 msgid "Latvian"
@@ -5179,7 +5179,7 @@ msgstr "Ten wariant nie będzie sprzedawany po podanej dacie."
 msgid "Sell on all sales channels the product is sold on"
 msgstr ""
 "Sprzedaj we wszystkich kanałach sprzedaży, w których sprzedawany jest ten "
-"produkt."
+"produkt"
 
 #: pretix/base/models/items.py:1219
 msgid ""
@@ -6205,11 +6205,9 @@ msgid "Standard rate"
 msgstr ""
 
 #: pretix/base/models/tax.py:152
-#, fuzzy
-#| msgid "Reduced ticket"
 msgctxt "tax_code"
 msgid "Reduced rate"
-msgstr "Bilet ulgowy"
+msgstr "Stawka ulgowa"
 
 #: pretix/base/models/tax.py:156
 msgctxt "tax_code"
@@ -6218,8 +6216,6 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/tax.py:164
-#, fuzzy
-#| msgid "Reverse charge"
 msgctxt "tax_code"
 msgid "Reverse charge"
 msgstr "Odwrotne obciążenie"
@@ -6265,7 +6261,7 @@ msgstr "Funkcje społecznościowe"
 #: pretix/base/models/tax.py:189
 msgctxt "tax_code"
 msgid "Canary Islands general indirect tax"
-msgstr ""
+msgstr "Kanaryjski podatek pośredni"
 
 #: pretix/base/models/tax.py:190
 msgctxt "tax_code"
@@ -34073,13 +34069,12 @@ msgid "Calendar"
 msgstr "Kalendarz"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:29
-#, fuzzy, python-format
-#| msgid "%(count)s elements"
+#, python-format
 msgid "%(count)s event"
 msgid_plural "%(count)s events"
-msgstr[0] "%(count)s elementów"
-msgstr[1] "%(count)s elementów"
-msgstr[2] "%(count)s elementów"
+msgstr[0] "%(count)s wydarzenie"
+msgstr[1] "%(count)s wydarzenia"
+msgstr[2] "%(count)s wydarzeń"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:68
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
