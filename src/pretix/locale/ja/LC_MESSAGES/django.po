@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-17 00:00+0000\n"
+"PO-Revision-Date: 2025-01-18 18:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -93,7 +93,7 @@ msgstr "イタリア語"
 
 #: pretix/_base_settings.py:97
 msgid "Japanese"
-msgstr ""
+msgstr "日本語"
 
 #: pretix/_base_settings.py:98
 msgid "Latvian"
@@ -2033,7 +2033,7 @@ msgstr "請求書番号"
 #: pretix/control/forms/filter.py:584
 #: pretix/control/templates/pretixcontrol/order/index.html:189
 msgid "Sales channel"
-msgstr ""
+msgstr "販売チャネル"
 
 #: pretix/base/exporters/orderlist.py:285
 #: pretix/base/exporters/orderlist.py:621 pretix/base/models/orders.py:277
@@ -2085,7 +2085,7 @@ msgstr "手数料の種別"
 #: pretix/plugins/checkinlists/exporters.py:497
 #: pretix/plugins/reports/accountingreport.py:314
 msgid "Price"
-msgstr ""
+msgstr "価格"
 
 #: pretix/base/exporters/orderlist.py:452
 #: pretix/base/exporters/orderlist.py:593
@@ -2190,7 +2190,7 @@ msgstr "商品"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:50
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:37
 msgid "Attendee name"
-msgstr ""
+msgstr "参加者の名前"
 
 #: pretix/base/exporters/orderlist.py:602 pretix/base/forms/questions.py:667
 #: pretix/base/models/customers.py:307 pretix/base/models/orders.py:1510
@@ -2217,7 +2217,7 @@ msgstr "疑似匿名化ID"
 #: pretix/base/exporters/orderlist.py:611 pretix/control/forms/filter.py:677
 #: pretix/control/templates/pretixcontrol/order/change.html:280
 msgid "Ticket secret"
-msgstr ""
+msgstr "チケットのパスワード"
 
 #: pretix/base/exporters/orderlist.py:612 pretix/base/modelimport_orders.py:570
 #: pretix/base/modelimport_vouchers.py:272
@@ -2482,7 +2482,7 @@ msgstr "支払いID"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:59
 msgid "Creation date"
-msgstr ""
+msgstr "生成した日付"
 
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/control/templates/pretixcontrol/order/index.html:841
@@ -3680,7 +3680,7 @@ msgstr "座席指定のバウチャーは一度しか使用できません。"
 #: pretix/base/modelimport_vouchers.py:306 pretix/base/models/vouchers.py:519
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr ""
+msgstr "このシートでは、商品 \"{prod}\" を選択しなければなりません。"
 
 #: pretix/base/modelimport_vouchers.py:318 pretix/base/models/vouchers.py:285
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
@@ -3767,7 +3767,7 @@ msgstr "全ての商品（新規に作成されたものを含む）"
 #: pretix/base/models/checkin.py:56 pretix/plugins/badges/exporters.py:436
 #: pretix/plugins/checkinlists/exporters.py:842
 msgid "Limit to products"
-msgstr ""
+msgstr "商品の限度"
 
 #: pretix/base/models/checkin.py:60
 msgid ""
@@ -5641,7 +5641,7 @@ msgstr "購入時にこのメンバーシップを利用できる回数。"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:34
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:45
 msgid "Canceled"
-msgstr ""
+msgstr "キャンセル済み"
 
 #: pretix/base/models/memberships.py:134
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:116
@@ -7440,7 +7440,7 @@ msgstr "1階、3列、席番号4"
 #: pretix/base/pdf.py:491 pretix/base/pdf.py:497
 #: pretix/control/forms/orders.py:330
 msgid "General admission"
-msgstr ""
+msgstr "一般入場"
 
 #: pretix/base/pdf.py:494
 msgid "Seat: zone"
@@ -7499,7 +7499,7 @@ msgstr "山田様"
 #: pretix/plugins/ticketoutputpdf/exporters.py:99
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr ""
+msgstr "参加者の名前: {part}"
 
 #: pretix/base/pdf.py:671
 msgid "Invoice address name for salutation"
@@ -7582,7 +7582,8 @@ msgstr "イベントがキャンセルされました"
 msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
-msgstr ""
+msgstr "サーバが混雑しているため、リクエストを完了することができませんでした。再度お"
+"試しください。"
 
 #: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:260
 msgid "You did not select any products."
@@ -9434,10 +9435,8 @@ msgid "Automatically on user request"
 msgstr "ユーザーのリクエストに応じて自動的に"
 
 #: pretix/base/settings.py:1043 pretix/base/settings.py:1056
-#, fuzzy
-#| msgid "Automatically on user request"
 msgid "Automatically on user request for paid orders"
-msgstr "ユーザーのリクエストに応じて自動的に"
+msgstr "支払い済み注文をユーザのリクエストに応じて自動的に"
 
 #: pretix/base/settings.py:1044
 msgid "Automatically for all created orders"
@@ -12155,17 +12154,17 @@ msgstr "写真をアップロード"
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:14
 #, python-format
 msgid "%(number)s days %(relation)s %(relation_to)s"
-msgstr ""
+msgstr "%(relation_to)sの%(number)s日%(relation)s"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:14
 #, python-format
 msgid "%(number)s minutes %(relation)s %(relation_to)s"
-msgstr ""
+msgstr "%(relation_to)sの%(number)s分%(relation)s"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:18
 #, python-format
 msgid "%(number)s days %(relation)s %(relation_to)s at %(time_of_day)s"
-msgstr ""
+msgstr "%(relation_to)sの%(number)s日%(relation)sの%(time_of_day)s"
 
 #: pretix/base/templates/pretixbase/redirect.html:5
 #: pretix/base/templates/pretixbase/redirect.html:9
@@ -14255,7 +14254,7 @@ msgstr "バンドル製品"
 #: pretix/control/forms/item.py:1238 pretix/control/forms/orders.py:365
 #: pretix/control/forms/orders.py:555
 msgid "inactive"
-msgstr ""
+msgstr "無効"
 
 #: pretix/control/forms/mailsetup.py:40
 msgid "Hostname"
@@ -14547,6 +14546,8 @@ msgid ""
 "This affects both the ticket secret (often used as a QR code) as well as the "
 "link used to individually access the ticket."
 msgstr ""
+"これは、チケットのパスワード（多くの場合、QRコードとして使用されます）と、チ"
+"ケットに個別にアクセスするために使用されるリンクの両方に影響します。"
 
 #: pretix/control/forms/orders.py:499
 msgid "Cancel this position"
@@ -15168,7 +15169,7 @@ msgstr "これらのクーポンはそれぞれ何回利用できますか。"
 
 #: pretix/control/forms/vouchers.py:347
 msgid "Specific seat IDs"
-msgstr ""
+msgstr "特定の座席番号"
 
 #: pretix/control/forms/vouchers.py:364
 msgid "CSV input needs to contain a header row in the first line."
@@ -16584,7 +16585,7 @@ msgstr "支払い"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:90
 #: pretix/presale/templates/pretixpresale/organizers/index.html:92
 msgid "Tickets"
-msgstr ""
+msgstr "チケット"
 
 #: pretix/control/navigation.py:89
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
@@ -18510,7 +18511,7 @@ msgstr "影響を受ける注文を表示"
 #: pretix/control/templates/pretixcontrol/event/index.html:142
 #: pretix/control/templates/pretixcontrol/order/index.html:1010
 msgid "Update comment"
-msgstr "更新されたコメント"
+msgstr "コメントを更新"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:152
 #: pretix/control/templates/pretixcontrol/event/logs.html:4
@@ -27367,7 +27368,7 @@ msgstr "参加者のバッジ"
 #: pretix/plugins/ticketoutputpdf/exporters.py:69
 msgctxt "export_category"
 msgid "PDF collections"
-msgstr ""
+msgstr "PDFコレクション"
 
 #: pretix/plugins/badges/exporters.py:423
 msgid "Download all attendee badges as one large PDF for printing."
@@ -27438,7 +27439,7 @@ msgstr "この日付以前の日付のチケットのみを含めてください
 #: pretix/plugins/reports/exporters.py:677
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Sort by"
-msgstr ""
+msgstr "並べ替えのキー"
 
 #: pretix/plugins/badges/exporters.py:661
 #: pretix/plugins/ticketoutputpdf/exporters.py:242
@@ -27866,8 +27867,6 @@ msgid "Payer"
 msgstr "支払い者"
 
 #: pretix/plugins/banktransfer/refund_export.py:93
-#, fuzzy
-#| msgid "Refunds"
 msgid "Refund"
 msgstr "返金"
 
@@ -30384,7 +30383,7 @@ msgstr "クレジットカード"
 #: pretix/plugins/stripe/payment.py:1186
 #, python-brace-format
 msgid "expires {month}/{year}"
-msgstr ""
+msgstr "有効期限{year}年 {month}月"
 
 #: pretix/plugins/stripe/payment.py:1191
 msgid "SEPA Debit via Stripe"
@@ -32819,7 +32818,7 @@ msgstr "%(amount)sの返金が近々送られますので、お待ちくださ�
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
-msgstr ""
+msgstr "印刷"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
