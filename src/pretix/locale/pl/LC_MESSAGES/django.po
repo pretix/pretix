@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-18 18:00+0000\n"
+"PO-Revision-Date: 2025-01-19 06:00+0000\n"
 "Last-Translator: Wiktor Przybylski <wikprzybylski@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -180,7 +180,7 @@ msgstr "Lista dozwolonych URI, przedzielona spacjami"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Lista dozwolonych URI Post Logout, przedzielona spacjami"
+msgstr "Lista dozwolonych URI po wylogowaniu, przedzielona spacjami"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
@@ -3079,10 +3079,6 @@ msgstr ""
 "Istnieje już konto z podanym adresem email. Proszę wprowadzić inny adres."
 
 #: pretix/base/forms/user.py:53
-#, fuzzy
-#| msgid ""
-#| "Please enter your current password if you want to change your email "
-#| "address or password."
 msgid ""
 "Please enter your current password if you want to change your email address "
 "or password."
@@ -6221,42 +6217,39 @@ msgid "Reverse charge"
 msgstr "Odwrotne obciążenie"
 
 #: pretix/base/models/tax.py:168
-#, fuzzy
-#| msgid "Tax rate"
 msgid "Tax free"
-msgstr "Stopa podatkowa"
+msgstr "Wolne od podatku"
 
 #: pretix/base/models/tax.py:171
 msgctxt "tax_code"
 msgid "Services outside of scope of tax"
-msgstr ""
+msgstr "Usługi nieopodatkowane"
 
 #: pretix/base/models/tax.py:174
 msgctxt "tax_code"
 msgid "Exempt from tax (no reason given)"
-msgstr ""
+msgstr "Zwolniony z podatku (bez podania przyczyny)"
 
 #: pretix/base/models/tax.py:177
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr ""
+msgstr "Towary objęte stawką zerową"
 
 #: pretix/base/models/tax.py:180
 msgctxt "tax_code"
 msgid "Free export item, VAT not charged"
-msgstr ""
+msgstr "Bezpłatny przedmiot eksportowy, bez podatku VAT"
 
 #: pretix/base/models/tax.py:183
 msgctxt "tax_code"
 msgid "VAT exempt for EEA intra-community supply of goods and services"
 msgstr ""
+"Zwolnienie z podatku VAT dla wewnątrzwspólnotowej dostawy towarów i usług w "
+"obrębie EOG"
 
 #: pretix/base/models/tax.py:187
-#, fuzzy
-#| msgctxt "cookie_usage"
-#| msgid "Social features"
 msgid "Special cases"
-msgstr "Funkcje społecznościowe"
+msgstr "Specjalne przypadki"
 
 #: pretix/base/models/tax.py:189
 msgctxt "tax_code"
@@ -6266,7 +6259,7 @@ msgstr "Kanaryjski podatek pośredni"
 #: pretix/base/models/tax.py:190
 msgctxt "tax_code"
 msgid "Tax for production, services and importation in Ceuta and Melilla"
-msgstr ""
+msgstr "Podatek od produkcji, usług i importu w Ceucie i Melilli"
 
 #: pretix/base/models/tax.py:191
 msgctxt "tax_code"
@@ -6280,7 +6273,7 @@ msgstr ""
 #: pretix/base/models/tax.py:198
 msgctxt "tax_code"
 msgid "Exempt based on article 79, point c of Council Directive 2006/112/EC"
-msgstr ""
+msgstr "Zwolniony na podstawie artykułu 79, punktu c Dyrektywy Rady 2006/112/WE"
 
 #: pretix/base/models/tax.py:205 pretix/base/models/tax.py:218
 #: pretix/base/models/tax.py:244
@@ -6290,6 +6283,8 @@ msgid ""
 "Exempt based on article {article}, section {section} ({letter}) of Council "
 "Directive 2006/112/EC"
 msgstr ""
+"Zwolniony na podstawie artykułu {article}, sekcji {section} ({letter}) "
+"Dyrektywy Rady 2006/112/EC"
 
 #: pretix/base/models/tax.py:231
 #, python-brace-format
@@ -6298,31 +6293,33 @@ msgid ""
 "Exempt based on article {article}, section ({letter}) of Council Directive "
 "2006/112/EC"
 msgstr ""
+"Zwolniony na podstawie artykułu {article}, sekcji {letter} Dyrektywy Rady "
+"2006/112/EC"
 
 #: pretix/base/models/tax.py:252
 msgctxt "tax_code"
 msgid "Exempt based on article 309 of Council Directive 2006/112/EC"
-msgstr ""
+msgstr "Zwolniony na podstawie artykułu 309 dyrektywy Rady 2006/112/WE"
 
 #: pretix/base/models/tax.py:254
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr ""
+msgstr "Nabycie wewnątrzwspólnotowe z używanych środków transportu"
 
 #: pretix/base/models/tax.py:256
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of second hand goods"
-msgstr ""
+msgstr "Wewnątrzwspólnotowe nabycie towarów używanych"
 
 #: pretix/base/models/tax.py:258
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of works of art"
-msgstr ""
+msgstr "Wewnątrzwspólnotowe nabycie dzieł sztuki"
 
 #: pretix/base/models/tax.py:260
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of collectors items and antiques"
-msgstr ""
+msgstr "Wewnątrzwspólnotowe nabycie przedmiotów kolekcjonerskich i antyków"
 
 #: pretix/base/models/tax.py:262
 msgctxt "tax_code"
@@ -34396,13 +34393,12 @@ msgid "You don’t have any memberships in your account yet."
 msgstr "Na koncie użytkownika nie są przechowywane żadne członkostwa."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:52
-#, fuzzy, python-format
-#| msgid "+ %(count)s invited"
+#, python-format
 msgid "%(counter)s item"
 msgid_plural "%(counter)s items"
-msgstr[0] "+ %(count)s zaproszonych"
-msgstr[1] "+ %(count)s zaproszonych"
-msgstr[2] "+ %(count)s zaproszonych"
+msgstr[0] "+ %(counter)s przedmiot"
+msgstr[1] "+ %(counter)s przedmioty"
+msgstr[2] "+ %(counter)s przedmiotów"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:78
 #, fuzzy
