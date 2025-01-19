@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-19 16:16+0000\n"
+"PO-Revision-Date: 2025-01-20 01:00+0000\n"
 "Last-Translator: Serge Bazanski <sergiusz@q3k.org>\n"
 "Language-Team: Polish (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pl_Informal/>\n"
@@ -4115,18 +4115,20 @@ msgid ""
 "than the condition for the discount given above. If you want, you can "
 "however also select a different selection of products."
 msgstr ""
+"Domyślnie zniżka jest stosowana do tego samego wyboru produktów, co warunek "
+"zniżki podany powyżej. Jeśli chcesz, możesz jednak wybrać inne produkty."
 
 #: pretix/base/models/discount.py:138
 msgid "Apply discount to specific products"
-msgstr ""
+msgstr "Zastosuj zniżkę na wybrane produkty"
 
 #: pretix/base/models/discount.py:143
 msgid "Percentual discount on matching products"
-msgstr ""
+msgstr "Zniżka w procentach na pasujące produkty"
 
 #: pretix/base/models/discount.py:150
 msgid "Apply discount only to this number of matching products"
-msgstr ""
+msgstr "Stosuj zniżkę tylko do tej liczby pasujących produktów"
 
 #: pretix/base/models/discount.py:152
 msgid ""
@@ -4137,10 +4139,16 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
+"Ta opcja pozwala na tworzenie zniżek typu "
+"\"kup X dostań Y ze zniżką / za darmo\". Na przykład jeśli ustawisz "
+"\"Minimalna liczba pasujących produtków\" na cztery i tę wartość na dwa to "
+"koszyk klienta zostanie podzielony na grupy czterech biletów i najtańsze dwa "
+"bilety z każdej grupy dostanę zniżkę. Jeśli chcesz prydzielić zniżkę "
+"wszystkim pasującym produktom zostaw to pole puste."
 
 #: pretix/base/models/discount.py:163
 msgid "Apply to add-on products"
-msgstr ""
+msgstr "Stosuj do produktów dodatkowych"
 
 #: pretix/base/models/discount.py:169
 msgid ""
@@ -4149,44 +4157,57 @@ msgid ""
 "to e.g. unlock a hidden product or gain access to sold-out quota will still "
 "receive the discount."
 msgstr ""
+"Gdy ta opcja jest wybrana produkty które już dostały zniżkę przez voucher "
+"nie będą podpadać pod tę zniżkę. Produkty które użyły vouchera tylko żeby "
+"np. odblokować ukrytość lub zdobyć dostęp do wyprzedanego limitu będą dalej "
+"pod nią podpadać."
 
 #: pretix/base/models/discount.py:201
 msgid ""
 "You can either set a minimum number of matching products or a minimum value, "
 "not both."
 msgstr ""
+"Możesz ustawić minimalną liczbę pasujących produktów lub minimalną wartość, "
+"ale nie obydwa."
 
 #: pretix/base/models/discount.py:206
 msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
+"Musisz ustawić minimalną liczbę pasujących produktów lub minimalną wartość."
 
 #: pretix/base/models/discount.py:211
 msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"Nie można zastosować zniżki tylko do podzbioru pasujących produktów jeśli "
+"dopasowanie jest ustawione po minimalnej wartości."
 
 #: pretix/base/models/discount.py:217
 msgid ""
 "You cannot apply the discount only to bookings of different dates if you are "
 "matching on a minimum value."
 msgstr ""
+"Nie można zastosować zniżki tylko do zamówien różnych dat jeśli dopasowanie "
+"jest ustawione po minimalnej wartości."
 
 #: pretix/base/models/discount.py:224
 msgid ""
 "You cannot apply the discount to a different set of products if the discount "
 "is only valid for bookings of different dates."
 msgstr ""
+"Nie można zastosować zniżki tylko do podzbioru pasujących produktów jeśli "
+"dopasowanie jest ustawione dla zamówień różnych dat."
 
 #: pretix/base/models/event.py:87
 msgid "The end of the presale period has to be later than its start."
-msgstr ""
+msgstr "Koniec przedsprzedaży musi być po jej rozpoczęciu."
 
 #: pretix/base/models/event.py:89
 msgid "The end of the event has to be later than its start."
-msgstr ""
+msgstr "Zakończenie wydarzenia musi być po jego rozpoczęciu."
 
 #: pretix/base/models/event.py:564
 msgid ""
@@ -4196,20 +4217,27 @@ msgid ""
 "you can also choose to use a random value. This will be used in URLs, order "
 "codes, invoice numbers, and bank transfer references."
 msgstr ""
+"Powinno być krótkie, zawierać tylko małe litery, cyfry, kropki i myślniki "
+"oraz powinno być unikatowe między wydarzeniami. Polecamy jakiś rodzaj skrótu "
+"lub daty z mniej niż 10 znakami który jest łatwy do zapamiętania, ale "
+"możliwe jest też użycie losowej wartości. Będzie użyte w URLach, kodach "
+"zamówień, numerach faktur i tytułach przelewów."
 
 #: pretix/base/models/event.py:571 pretix/base/models/organizer.py:87
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr ""
+msgstr "Skrót może zawierać tylko litery, cyfry, kropki i myślniki."
 
 #: pretix/base/models/event.py:588 pretix/base/models/event.py:1464
 msgid "Show in lists"
-msgstr ""
+msgstr "Wyświetlaj w listach"
 
 #: pretix/base/models/event.py:589
 msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr ""
+"Gdy wybrane wydarzenie będzie widoczne publicznie w listach wydarzeń konta "
+"organizatora."
 
 #: pretix/base/models/event.py:593 pretix/base/models/event.py:1479
 #: pretix/control/forms/subevents.py:100
@@ -4217,15 +4245,17 @@ msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
 msgstr ""
+"Opcjonalne. Żadne produkty nie mogą być sprzedane po tej dacie. Jeśli tego "
+"nie ustawisz przedsprzedaż skończy się wraz z zakończeniem wydarzenia."
 
 #: pretix/base/models/event.py:599 pretix/base/models/event.py:1485
 #: pretix/control/forms/subevents.py:94
 msgid "Optional. No products will be sold before this date."
-msgstr ""
+msgstr "Opcjonalne. Żadne produkty nie będą sprzedane przed tą datą."
 
 #: pretix/base/models/event.py:624 pretix/control/navigation.py:65
 msgid "Plugins"
-msgstr ""
+msgstr "Wtyczki"
 
 #: pretix/base/models/event.py:631 pretix/base/pdf.py:229
 #: pretix/control/forms/event.py:273 pretix/control/forms/filter.py:1677
@@ -4235,20 +4265,20 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:7
 #: pretix/presale/views/widget.py:682
 msgid "Event series"
-msgstr ""
+msgstr "Seria wydarzeń"
 
 #: pretix/base/models/event.py:635 pretix/base/models/event.py:1513
 msgid "Seating plan"
-msgstr ""
+msgstr "Plan miejsc"
 
 #: pretix/base/models/event.py:642 pretix/base/models/items.py:666
 msgid "Sell on all sales channels"
-msgstr ""
+msgstr "Sprzedaż przez wszystkie kanały sprzedaży"
 
 #: pretix/base/models/event.py:647 pretix/base/models/items.py:671
 #: pretix/base/models/items.py:1218 pretix/base/payment.py:417
 msgid "Restrict to specific sales channels"
-msgstr ""
+msgstr "Ograniczenie do konkretnych kanałów sprzedaży"
 
 #: pretix/base/models/event.py:655 pretix/control/navigation.py:344
 #: pretix/control/navigation.py:470
@@ -4261,129 +4291,143 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:104
 #: pretix/plugins/reports/accountingreport.py:107
 msgid "Events"
-msgstr ""
+msgstr "Wydarzenia"
 
 #: pretix/base/models/event.py:1292
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
+"Skonfigurowano przynajmniej jeden płatny produkt lecz nie wybrano żadnej "
+"metody płatności."
 
 #: pretix/base/models/event.py:1295
 msgid ""
 "You have configured at least one paid product but have not configured a "
 "currency."
 msgstr ""
+"Skonfigurowano przynajmniej jeden płatny produkt lecz nie wybrano waluty."
 
 #: pretix/base/models/event.py:1298
 msgid "You need to configure at least one quota to sell anything."
 msgstr ""
+"Musisz skonfigurować przynajmniej jeden limit sprzedaży żeby sprzedać "
+"cokolwiek."
 
 #: pretix/base/models/event.py:1303
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
-msgstr ""
+msgstr "Musisz wypełnić wartość metadanych \"{property}\"."
 
 #: pretix/base/models/event.py:1410
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
+"Po utworzeniu wydarzenie nie może zostać zmienione między cyklicznym a "
+"jednokrotnym."
 
 #: pretix/base/models/event.py:1416
 msgid "The event slug cannot be changed."
-msgstr ""
+msgstr "Skrót wydarzenie nie może zostać zmieniony."
 
 #: pretix/base/models/event.py:1419
 msgid "This slug has already been used for a different event."
-msgstr ""
+msgstr "Skrót został już użyty w innym wydarzeniu."
 
 #: pretix/base/models/event.py:1425
 msgid "The event cannot end before it starts."
-msgstr ""
+msgstr "Wydarzenie nie może skończyć się zanim się zacznie."
 
 #: pretix/base/models/event.py:1431
 msgid "The event's presale cannot end before it starts."
-msgstr ""
+msgstr "Przedsprzedaż wydarzenia nie może skończyć się zanim się zacznie."
 
 #: pretix/base/models/event.py:1461
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
-msgstr ""
+msgstr "Tylko z tą opcją data będzie widoczne w frontendzie dla użytkowników."
 
 #: pretix/base/models/event.py:1465
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr ""
+"Gdy wybrane wydarzenie będzie widoczne publicznie na liście dat wydarzenia."
 
 #: pretix/base/models/event.py:1510 pretix/base/settings.py:3022
 msgid "Frontpage text"
-msgstr ""
+msgstr "Tekst strony głównej"
 
 #: pretix/base/models/event.py:1527
 msgid "Date in event series"
-msgstr ""
+msgstr "Data w serii wydarzeń"
 
 #: pretix/base/models/event.py:1528
 msgid "Dates in event series"
-msgstr ""
+msgstr "Daty w serii wydarzeń"
 
 #: pretix/base/models/event.py:1673
 msgid "One or more variations do not belong to this event."
-msgstr ""
+msgstr "Jeden lub więcej wariantów nie należy do tego wydarzenia."
 
 #: pretix/base/models/event.py:1703 pretix/base/models/items.py:2196
 msgid "Can not contain spaces or special characters except underscores"
-msgstr ""
+msgstr "Nie może zawierać spacji lub znaków specjalnych poza podkreśleniami"
 
 #: pretix/base/models/event.py:1708 pretix/base/models/items.py:2201
 msgid "The property name may only contain letters, numbers and underscores."
-msgstr ""
+msgstr "Nazwa wartości może zawierać tylko litery, cyfry i podreślenia."
 
 #: pretix/base/models/event.py:1713
 msgid "Default value"
-msgstr ""
+msgstr "Wartość domyślna"
 
 #: pretix/base/models/event.py:1715
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:50
 msgid "Can only be changed by organizer-level administrators"
 msgstr ""
+"Może być zmienione tylko przez administratorów na poziomie organizatorów"
 
 #: pretix/base/models/event.py:1717
 msgid "Required for events"
-msgstr ""
+msgstr "Wymagane dla wydarzeń"
 
 #: pretix/base/models/event.py:1718
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
+"Gdy wybrane wydarzenie może zostać aktywowane tylko jeśli ta wartość jest "
+"ustawiona. W serii wydarzeń zawsze opcjonalne jest ustawienie wartości dla "
+"pojedyńczych dat"
 
 #: pretix/base/models/event.py:1724 pretix/base/models/items.py:2213
 msgid "Valid values"
-msgstr ""
+msgstr "Prawidłowe wartości"
 
 #: pretix/base/models/event.py:1727
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
 msgid "Show filter option to customers"
-msgstr ""
+msgstr "Pokaż opcje filtrów klientom"
 
 #: pretix/base/models/event.py:1728
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
 msgstr ""
+"To pole zostanie pokazane celem filtrowania wydarzeń w publicznej liście "
+"wydarzeń i kalendarzu."
 
 #: pretix/base/models/event.py:1731 pretix/control/forms/organizer.py:269
 #: pretix/control/forms/organizer.py:273
 msgid "Public name"
-msgstr ""
+msgstr "Nazwa publiczna"
 
 #: pretix/base/models/event.py:1735
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
 msgid "Can be used for filtering"
-msgstr ""
+msgstr "Może zostać użyte do filtrowania"
 
 #: pretix/base/models/event.py:1736
 msgid ""
@@ -4391,40 +4435,43 @@ msgid ""
 "can also be used for hidden filter parameters in the frontend (e.g. using "
 "the widget)."
 msgstr ""
+"To pole będzie pokazane do filtrowania wydarzeń lub raportów w backendzie i "
+"może też zostać użyte do ukrytych parametrów filtrów we frontendzie (np. "
+"używają widżetu)."
 
 #: pretix/base/models/event.py:1746
 msgid "A property can either be required or have a default value, not both."
-msgstr ""
+msgstr "Wartość może być albo wymagana, albo mieć wartość domyślną."
 
 #: pretix/base/models/event.py:1826 pretix/base/models/organizer.py:516
 msgid "Link text"
-msgstr ""
+msgstr "Tekst linku"
 
 #: pretix/base/models/event.py:1829 pretix/base/models/organizer.py:519
 msgid "Link URL"
-msgstr ""
+msgstr "URL linku"
 
 #: pretix/base/models/exports.py:42 pretix/control/navigation.py:229
 #: pretix/control/navigation.py:650
 msgid "Export"
-msgstr ""
+msgstr "Eksport"
 
 #: pretix/base/models/exports.py:59
 msgid "Additional recipients"
-msgstr ""
+msgstr "Dodatkowi odbiorcy"
 
 #: pretix/base/models/exports.py:61 pretix/base/models/exports.py:66
 #: pretix/base/models/exports.py:71
 msgid "You can specify multiple recipients separated by commas."
-msgstr ""
+msgstr "Możesz określić wielu odbiorców przedzielonych przecinkami."
 
 #: pretix/base/models/exports.py:64
 msgid "Additional recipients (Cc)"
-msgstr ""
+msgstr "Dodatkowi odbiorcy (Cc)"
 
 #: pretix/base/models/exports.py:69
 msgid "Additional recipients (Bcc)"
-msgstr ""
+msgstr "Dodatkowi odbiorcy (Bcc)"
 
 #: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1099
 #: pretix/control/forms/event.py:1173 pretix/control/forms/event.py:1183
@@ -4435,7 +4482,7 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:57 pretix/plugins/sendmail/forms.py:73
 #: pretix/plugins/sendmail/models.py:248
 msgid "Subject"
-msgstr ""
+msgstr "Temat"
 
 #: pretix/base/models/exports.py:78 pretix/control/forms/orders.py:748
 #: pretix/control/forms/orders.py:765 pretix/control/forms/orders.py:933
@@ -4443,67 +4490,70 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:58 pretix/plugins/sendmail/forms.py:78
 #: pretix/plugins/sendmail/models.py:249
 msgid "Message"
-msgstr ""
+msgstr "Wiadomość"
 
 #: pretix/base/models/exports.py:85
 msgid "Requested start time"
-msgstr ""
+msgstr "Żądany czas rozpoczęcia"
 
 #: pretix/base/models/exports.py:86
 msgid "The actual start time might be delayed depending on system load."
 msgstr ""
+"Faktyczny czas rozpoczęcia może zostać opóźniony w zależności od obciążenia "
+"systemu."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Żadna wartość nie może zawierać znaku rozdzielającego."
 
 #: pretix/base/models/giftcards.py:81
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
 msgid "Owned by ticket holder"
-msgstr ""
+msgstr "Należy do właściciela biletu"
 
 #: pretix/base/models/giftcards.py:93
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
 msgstr ""
+"Kod karty podarunkowej może zawierać tylko litery, cyfry, kropki i myślniki."
 
 #: pretix/base/models/giftcards.py:105
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Specjalne warunki"
 
 #: pretix/base/models/giftcards.py:219 pretix/base/models/giftcards.py:223
 msgid "Manual transaction"
-msgstr ""
+msgstr "Transakcja ręczna"
 
 #: pretix/base/models/invoices.py:185
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr ""
+msgstr "Identyfikator podatkowy: %s"
 
 #: pretix/base/models/invoices.py:191 pretix/base/services/invoices.py:139
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr ""
+msgstr "ID VAT: %s"
 
 #: pretix/base/models/items.py:93
 msgid "Category name"
-msgstr ""
+msgstr "Nazwa kategorii"
 
 #: pretix/base/models/items.py:97 pretix/base/models/items.py:480
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
-msgstr ""
+msgstr "Gdy wybrane, zostanie użyte zamiast publicznej nazwy w backendzie."
 
 #: pretix/base/models/items.py:101
 msgid "Category description"
-msgstr ""
+msgstr "Opis kategorii"
 
 #: pretix/base/models/items.py:108
 msgid "Products in this category are add-on products"
-msgstr ""
+msgstr "Produkty w tej kategorii są dodatkami"
 
 #: pretix/base/models/items.py:109
 msgid ""
@@ -4511,23 +4561,26 @@ msgid ""
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
 msgstr ""
+"Gdy wybrane, produkty w tej kategorii nie będą same na sprzedaż. Mogą zostać "
+"kupione tylko w połączeniu z produktem który ma ustawioną tę kategorię jako "
+"źródło dodatków."
 
 #: pretix/base/models/items.py:114 pretix/base/models/items.py:159
 #: pretix/control/forms/item.py:99
 msgid "Normal category"
-msgstr ""
+msgstr "Normalna kategoria"
 
 #: pretix/base/models/items.py:115 pretix/control/forms/item.py:112
 msgid "Normal + cross-selling category"
-msgstr ""
+msgstr "Normalna + sprzedaż krzyżowa"
 
 #: pretix/base/models/items.py:116 pretix/control/forms/item.py:107
 msgid "Cross-selling category"
-msgstr ""
+msgstr "Sprzedaż krzyżowa"
 
 #: pretix/base/models/items.py:124
 msgid "Always show in cross-selling step"
-msgstr ""
+msgstr "Zawsze pokazuj na etapie sprzedaży krzyżowej"
 
 #: pretix/base/models/items.py:125
 msgid ""
