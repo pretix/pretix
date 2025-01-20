@@ -64,7 +64,7 @@ class LogEntryTypeRegistry(EventPluginRegistry):
             if not isinstance(obj, LogEntryType):
                 raise TypeError('Entries must be derived from LogEntryType')
 
-            if obj.__module__ == LogEntryType.__module__:
+            if obj.__module__.startswith('pretix.base.'):
                 raise TypeError('Must not register base classes, only derived ones')
 
         return super().register(*objs)
