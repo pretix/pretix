@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:46+0000\n"
-"PO-Revision-Date: 2025-01-16 10:32+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"PO-Revision-Date: 2025-01-21 00:00+0000\n"
+"Last-Translator: Hector <hector@demandaeventos.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/es/>\n"
 "Language: es\n"
@@ -775,7 +775,7 @@ msgstr "Precio"
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
-msgstr "Prix initial : %s"
+msgstr "Precio original: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
