@@ -775,6 +775,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         for idx, gross in grossvalue_map.items():
             rate, name = idx
+            if rate == 0 and gross == 0:
+                continue
             tax = taxvalue_map[idx]
             tdata.append([
                 Paragraph(self._normalize(localize(rate) + " % " + name), self.stylesheet['Fineprint']),
