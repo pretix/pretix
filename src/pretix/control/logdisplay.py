@@ -36,6 +36,7 @@
 import json
 from collections import defaultdict
 from decimal import Decimal
+from typing import Optional
 
 import bleach
 import dateutil.parser
@@ -769,7 +770,7 @@ class CheckinlistLogEntryType(EventLogEntryType):
 class EventPluginStateLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Plugin {val}')
 
-    def get_object_link_info(self, logentry) -> dict:
+    def get_object_link_info(self, logentry) -> Optional[dict]:
         if 'plugin' in logentry.parsed_data:
             app = app_cache.get(logentry.parsed_data['plugin'])
             if app and hasattr(app, 'PretixPluginMeta'):

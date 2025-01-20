@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from collections import defaultdict
+from typing import Optional
 
 from django.urls import reverse
 from django.utils.html import format_html
@@ -129,7 +130,7 @@ class LogEntryType:
             else:
                 return plain
 
-    def get_object_link_info(self, logentry) -> dict:
+    def get_object_link_info(self, logentry) -> Optional[dict]:
         """
         Return information to generate a link to the `content_object` of a given log entry.
 

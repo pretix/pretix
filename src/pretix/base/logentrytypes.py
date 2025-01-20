@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from typing import Optional
+
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
@@ -38,7 +40,7 @@ class EventLogEntryType(LogEntryType):
     Base class for any `LogEntry` type whose `content_object` is either an `Event` itself or belongs to a specific `Event`.
     """
 
-    def get_object_link_info(self, logentry) -> dict | None:
+    def get_object_link_info(self, logentry) -> Optional[dict]:
         if hasattr(self, 'object_link_viewname'):
             content = logentry.content_object
             if not content:
