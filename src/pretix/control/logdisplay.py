@@ -33,7 +33,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import json
 from collections import defaultdict
 from decimal import Decimal
 from typing import Optional
@@ -43,7 +42,7 @@ import dateutil.parser
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.formats import date_format
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
@@ -522,17 +521,16 @@ class VoucherRedeemedLogEntryType(VoucherLogEntryType):
     action_type = 'pretix.voucher.redeemed'
     plain = _('The voucher has been redeemed in order {order_code}.')
 
-    def display(self, logentry):
-        data = json.loads(logentry.data)
-        data = defaultdict(lambda: '?', data)
+    def display(self, logentry, data):
         url = reverse('control:event.order', kwargs={
             'event': logentry.event.slug,
             'organizer': logentry.event.organizer.slug,
-            'code': data['order_code']
+            'code': data('order_code', '?')
         })
-        return mark_safe(self.plain.format(
-            order_code='<a href="{}">{}</a>'.format(url, data['order_code']),
-        ))
+        return format_html(
+            self.plain,
+            order_code=format_html('<a href="{}">{}</a>', url, data('order_code', '?')),
+        )
 
 
 @log_entry_types.new_from_dict({
