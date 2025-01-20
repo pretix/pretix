@@ -96,8 +96,7 @@ class OrderItemChanged(OrderChangeLogEntryType):
         new_item = str(event.items.get(pk=data['new_item']))
         if data['new_variation']:
             new_item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['new_variation']))
-        return _('Position #{posid}: {old_item} ({old_price}) changed '
-                              'to {new_item} ({new_price}).').format(
+        return _('Position #{posid}: {old_item} ({old_price}) changed to {new_item} ({new_price}).').format(
             posid=data.get('positionid', '?'),
             old_item=old_item, new_item=new_item,
             old_price=money_filter(Decimal(data['old_price']), event.currency),
@@ -125,7 +124,7 @@ class OrderSubeventChanged(OrderChangeLogEntryType):
         old_se = str(event.subevents.get(pk=data['old_subevent']))
         new_se = str(event.subevents.get(pk=data['new_subevent']))
         return _('Position #{posid}: Event date "{old_event}" ({old_price}) changed '
-                              'to "{new_event}" ({new_price}).').format(
+                 'to "{new_event}" ({new_price}).').format(
             posid=data.get('positionid', '?'),
             old_event=old_se, new_event=new_se,
             old_price=money_filter(Decimal(data['old_price']), event.currency),
@@ -138,8 +137,7 @@ class OrderPriceChanged(OrderChangeLogEntryType):
     action_type = 'pretix.event.order.changed.price'
 
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
-        return _('Price of position #{posid} changed from {old_price} '
-                              'to {new_price}.').format(
+        return _('Price of position #{posid} changed from {old_price} to {new_price}.').format(
             posid=data.get('positionid', '?'),
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
@@ -152,15 +150,13 @@ class OrderTaxRuleChanged(OrderChangeLogEntryType):
 
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         if 'positionid' in data:
-            return _('Tax rule of position #{posid} changed from {old_rule} '
-                                  'to {new_rule}.').format(
+            return _('Tax rule of position #{posid} changed from {old_rule} to {new_rule}.').format(
                 posid=data.get('positionid', '?'),
                 old_rule=TaxRule.objects.get(pk=data['old_taxrule']) if data['old_taxrule'] else '–',
                 new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
             )
         elif 'fee' in data:
-            return _('Tax rule of fee #{fee} changed from {old_rule} '
-                                  'to {new_rule}.').format(
+            return _('Tax rule of fee #{fee} changed from {old_rule} to {new_rule}.').format(
                 fee=data.get('fee', '?'),
                 old_rule=TaxRule.objects.get(pk=data['old_taxrule']) if data['old_taxrule'] else '–',
                 new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
@@ -219,8 +215,7 @@ class OrderPositionAdded(OrderChangeLogEntryType):
             item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['variation']))
         if data['addon_to']:
             addon_to = OrderPosition.objects.get(order__event=event, pk=data['addon_to'])
-            return _('Position #{posid} created: {item} ({price}) as an add-on to '
-                                  'position #{addon_to}.').format(
+            return _('Position #{posid} created: {item} ({price}) as an add-on to position #{addon_to}.').format(
                 posid=data.get('positionid', '?'),
                 item=item, addon_to=addon_to.positionid,
                 price=money_filter(Decimal(data['price']), event.currency),
@@ -371,13 +366,13 @@ class CheckinLogEntryType(CheckinErrorLogEntryType):
         elif data.get('forced'):
             return self.display_plain(
                 _('A scan for position #{posid} at {datetime} for list "{list}" has been uploaded even though it has '
-                'been scanned already.'),
+                  'been scanned already.'),
                 logentry, data
             )
         else:
             return self.display_plain(
                 _('Position #{posid} has been scanned and rejected because it has already been scanned before '
-                'on list "{list}".'),
+                  'on list "{list}".'),
                 logentry, data
             )
 
@@ -785,8 +780,6 @@ class EventPluginStateLogEntryType(EventLogEntryType):
                     }) + '#plugin_' + logentry.parsed_data['plugin'],
                     'val': app.PretixPluginMeta.name
                 }
-
-
 
 
 @log_entry_types.new_from_dict({
