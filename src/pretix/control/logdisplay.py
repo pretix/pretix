@@ -733,6 +733,8 @@ class CoreLogEntryType(LogEntryType):
     'pretix.event.item_meta_property.changed': _('A meta property has been changed on this event.'),
     'pretix.event.settings': _('The event settings have been changed.'),
     'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
+    'pretix.event.tickets.provider': _('The settings of a ticket output provider have been changed.'),
+    'pretix.event.payment.provider': _('The settings of a payment provider have been changed.'),
     'pretix.event.live.activated': _('The shop has been taken live.'),
     'pretix.event.live.deactivated': _('The shop has been taken offline.'),
     'pretix.event.testmode.activated': _('The shop has been taken into test mode.'),
@@ -783,6 +785,8 @@ class EventPluginStateLogEntryType(EventLogEntryType):
                     }) + '#plugin_' + logentry.parsed_data['plugin'],
                     'val': app.PretixPluginMeta.name
                 }
+
+
 
 
 @log_entry_types.new_from_dict({
