@@ -553,8 +553,8 @@ class CoreTaxRuleLogEntryType(TaxRuleLogEntryType):
 
 
 class TeamMembershipLogEntryType(LogEntryType):
-    def display(self, logentry):
-        return self.plain.format(user=logentry.parsed_data.get('email'))
+    def display(self, logentry, data):
+        return self.plain.format(user=data.get('email'))
 
 
 @log_entry_types.new_from_dict({
@@ -571,9 +571,9 @@ class CoreTeamMembershipLogEntryType(TeamMembershipLogEntryType):
 class TeamMemberJoinedLogEntryType(LogEntryType):
     action_type = 'pretix.team.member.joined'
 
-    def display(self, logentry):
+    def display(self, logentry, data):
         return _('{user} has joined the team using the invite sent to {email}.').format(
-            user=logentry.parsed_data.get('email'), email=logentry.parsed_data.get('invite_email')
+            user=data.get('email'), email=data.get('invite_email')
         )
 
 
@@ -581,23 +581,23 @@ class TeamMemberJoinedLogEntryType(LogEntryType):
 class UserSettingsChangedLogEntryType(LogEntryType):
     action_type = 'pretix.user.settings.changed'
 
-    def display(self, logentry):
+    def display(self, logentry, data):
         text = str(_('Your account settings have been changed.'))
-        if 'email' in logentry.parsed_data:
+        if 'email' in data:
             text = text + ' ' + str(
-                _('Your email address has been changed to {email}.').format(email=logentry.parsed_data['email']))
-        if 'new_pw' in logentry.parsed_data:
+                _('Your email address has been changed to {email}.').format(email=data['email']))
+        if 'new_pw' in data:
             text = text + ' ' + str(_('Your password has been changed.'))
-        if logentry.parsed_data.get('is_active') is True:
+        if data.get('is_active') is True:
             text = text + ' ' + str(_('Your account has been enabled.'))
-        elif logentry.parsed_data.get('is_active') is False:
+        elif data.get('is_active') is False:
             text = text + ' ' + str(_('Your account has been disabled.'))
         return text
 
 
 class UserImpersonatedLogEntryType(LogEntryType):
-    def display(self, logentry):
-        return self.plain.format(logentry.parsed_data['other_email'])
+    def display(self, logentry, data):
+        return self.plain.format(data['other_email'])
 
 
 @log_entry_types.new_from_dict({
@@ -869,27 +869,27 @@ class CoreDiscountLogEntryType(DiscountLogEntryType):
 class LegacyCheckinLogEntryType(OrderLogEntryType):
     action_type = 'pretix.control.views.checkin'
 
-    def display(self, logentry):
+    def display(self, logentry, data):
         # deprecated
-        dt = dateutil.parser.parse(logentry.parsed_data.get('datetime'))
+        dt = dateutil.parser.parse(data.get('datetime'))
         tz = logentry.event.timezone
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
-        if 'list' in logentry.parsed_data:
+        if 'list' in data:
             try:
-                checkin_list = logentry.event.checkin_lists.get(pk=logentry.parsed_data.get('list')).name
+                checkin_list = logentry.event.checkin_lists.get(pk=data.get('list')).name
             except CheckinList.DoesNotExist:
                 checkin_list = _("(unknown)")
         else:
             checkin_list = _("(unknown)")
 
-        if logentry.parsed_data.get('first'):
+        if data.get('first'):
             return _('Position #{posid} has been checked in manually at {datetime} on list "{list}".').format(
-                posid=logentry.parsed_data.get('positionid'),
+                posid=data.get('positionid'),
                 datetime=dt_formatted,
                 list=checkin_list,
             )
         return _('Position #{posid} has been checked in again at {datetime} on list "{list}".').format(
-            posid=logentry.parsed_data.get('positionid'),
+            posid=data.get('positionid'),
             datetime=dt_formatted,
             list=checkin_list
         )
