@@ -313,7 +313,7 @@ class EventWizard(SafeSessionWizardView):
                     )
                 event.set_defaults()
 
-            if basics_data['tax_rate']:
+            if basics_data['tax_rate'] is not None:
                 if not event.settings.tax_rate_default or event.settings.tax_rate_default.rate != basics_data['tax_rate']:
                     event.settings.tax_rate_default = event.tax_rules.create(
                         name=LazyI18nString.from_gettext(gettext('VAT')),
