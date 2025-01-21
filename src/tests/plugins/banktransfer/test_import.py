@@ -574,7 +574,7 @@ def test_pending_paypal_drop_fee(env, job):
         env[2].save()
         p = env[2].payments.create(
             provider='paypal',
-            state=OrderPayment.PAYMENT_STATE_PENDING,
+            state=OrderPayment.PAYMENT_STATE_CREATED,
             fee=fee,
             amount=env[2].total
         )
