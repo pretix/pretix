@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 16:42+0000\n"
-"PO-Revision-Date: 2025-01-16 01:00+0000\n"
+"PO-Revision-Date: 2025-01-21 17:11+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3421,12 +3421,12 @@ msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"Die notwendige Erweiterung ist nicht aktiv. Klicke hier, um zu den "
+"Erweiterungen zu gelangen und sie zu aktivieren."
 
 #: pretix/base/logentrytypes.py:50
-#, fuzzy
-#| msgid "The selected ticket shop is currently not available."
 msgid "The relevant plugin is currently not active."
-msgstr "Der ausgewählte Ticketshop ist im Moment nicht verfügbar."
+msgstr "Die notwendige Erweiterung ist nicht aktiv."
 
 #: pretix/base/logentrytypes.py:183
 #, python-brace-format
@@ -16805,22 +16805,17 @@ msgid "A user has been removed from the event team."
 msgstr "Ein Benutzer wurde aus dem Team entfernt."
 
 #: pretix/control/logdisplay.py:721
-#, fuzzy
-#| msgid "A plugin has been enabled."
 msgid "The plugin has been enabled."
-msgstr "Eine Erweiterung wurde aktiviert."
+msgstr "Die Erweiterung wurde aktiviert."
 
 #: pretix/control/logdisplay.py:722
-#, fuzzy
-#| msgid "A plugin has been disabled."
 msgid "The plugin has been disabled."
-msgstr "Eine Erweiterung wurde deaktiviert."
+msgstr "Die Erweiterung wurde deaktiviert."
 
 #: pretix/control/logdisplay.py:725
-#, fuzzy, python-brace-format
-#| msgid "Question {val}"
+#, python-brace-format
 msgid "Plugin {val}"
-msgstr "Frage {val}"
+msgstr "Erweiterung {val}"
 
 #: pretix/control/logdisplay.py:741
 msgid "The product has been created."
@@ -30479,10 +30474,9 @@ msgid "An email rule was deleted"
 msgstr "Eine E-Mail-Automatisierung wurde gelöscht"
 
 #: pretix/plugins/sendmail/signals.py:140
-#, fuzzy, python-brace-format
-#| msgid "Tax rule {val}"
+#, python-brace-format
 msgid "Mail rule {val}"
-msgstr "Steuer-Regel {val}"
+msgstr "E-Mail-Regel {val}"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:8
 msgid ""
@@ -32989,7 +32983,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:346
 #, python-format
 msgid "%(percent)s %% Discount"
-msgstr ""
+msgstr "%(percent)s %% Rabatt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:277
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:350
