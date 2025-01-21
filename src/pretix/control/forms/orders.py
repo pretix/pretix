@@ -612,7 +612,13 @@ class OrderFeeChangeForm(forms.Form):
 
 
 class OrderFeeAddForm(forms.Form):
-    fee_type = forms.ChoiceField(choices=OrderFee.FEE_TYPES)
+    fee_type = forms.ChoiceField(
+        choices=[("", ""), *OrderFee.FEE_TYPES],
+        help_text=_(
+            "Note that payment fees have a special semantic and might automatically be changed if the "
+            "payment method of the order is changed."
+        )
+    )
     value = forms.DecimalField(
         max_digits=13, decimal_places=2,
         localize=True,

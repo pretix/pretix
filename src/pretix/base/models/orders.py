@@ -2281,9 +2281,9 @@ class OrderFee(models.Model):
     FEE_TYPE_OTHER = "other"
     FEE_TYPE_GIFTCARD = "giftcard"
     FEE_TYPES = (
+        (FEE_TYPE_SERVICE, _("Service fee")),
         (FEE_TYPE_PAYMENT, _("Payment fee")),
         (FEE_TYPE_SHIPPING, _("Shipping fee")),
-        (FEE_TYPE_SERVICE, _("Service fee")),
         (FEE_TYPE_CANCELLATION, _("Cancellation fee")),
         (FEE_TYPE_INSURANCE, _("Insurance fee")),
         (FEE_TYPE_LATE, _("Late fee")),
