@@ -388,6 +388,15 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             except:
                 logger.exception("Can not resize image")
                 pass
+            try:
+                # Valid ZUGFeRD invoices must be compliant with PDF/A-3. pretix-zugferd ensures this by passing them
+                # through ghost script. Unfortunately, if the logo contains transparency, this will still fail.
+                # I was unable to figure out a way to fix this in GhostScript, so the easy fix is to remove the
+                # transparency, as our invoices always have a white background anyways.
+                ir.remove_transparency()
+            except:
+                logger.exception("Can not remove transparency from logo")
+                pass
             canvas.drawImage(ir,
                              self.logo_left,
                              self.pagesize[1] - self.logo_height - self.logo_top,
