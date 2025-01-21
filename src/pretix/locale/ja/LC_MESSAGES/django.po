@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-15 16:45+0000\n"
-"PO-Revision-Date: 2025-01-18 18:00+0000\n"
+"PO-Revision-Date: 2025-01-21 12:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2567,7 +2567,7 @@ msgstr "ブロッキングバウチャー"
 
 #: pretix/base/exporters/orderlist.py:1135 pretix/control/views/item.py:982
 msgid "Current user's carts"
-msgstr "現在のユーザーのカート"
+msgstr "ユーザーのカートにある商品"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Exited orders"
@@ -18057,7 +18057,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup.html:35
 msgctxt "mail_header"
 msgid "From"
-msgstr "から"
+msgstr "From"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:40
 msgctxt "mail_header"
@@ -20740,7 +20740,7 @@ msgstr "クォータ：%(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:14
 msgid "Edit quota"
-msgstr "編集の割り当て"
+msgstr "クォータの編集"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:30
 msgid "Open quota and disable closing"
@@ -25925,7 +25925,7 @@ msgstr "終了スキャン"
 
 #: pretix/control/views/item.py:977
 msgid "Vouchers and waiting list reservations"
-msgstr "バウチャーと待ちリストの予約"
+msgstr "バウチャーと空席待ちの予約"
 
 #: pretix/control/views/item.py:992
 msgid "Available quota"
@@ -32954,7 +32954,7 @@ msgstr "この注文をキャンセルすることはできますが、返金は
 
 #: pretix/presale/templates/pretixpresale/event/order.html:405
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr "この注文をキャンセルすることはできますが、返金は受け取れません。"
+msgstr "この注文をキャンセルすることはできますが、返金はありません。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:414
 #, python-format
@@ -33307,9 +33307,9 @@ msgid ""
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
-"1枚のチケットしか受け取れないことに注意してください。複数のチケットが必要な場"
-"合は、複数回待ちリストに自分自身を追加する必要があります。特定の枚数のチケッ"
-"トを受け取れることは保証されていません。"
+"確保できるチケットは1枚だけですので、ご注意ください。複数のチケットが必要な場"
+"合は、空席待ちリストに自分自身を複数回追加する必要があります。必要な枚数が確"
+"保できるかどうかは、お約束できません。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
@@ -33327,9 +33327,8 @@ msgid ""
 "You will <strong>not</strong> receive a confirmation email after you have "
 "been added to the waiting list. We will only contact you once a spot opens "
 "up."
-msgstr ""
-"追加された後、確認メールは<strong>受け取れません</strong>。空きが出た際にのみ"
-"ご連絡いたします。"
+msgstr "リストに追加後、確認のメールは<strong>お送りしません</strong>。空席が出た場合"
+"のみ、こちらからお知らせいたします。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:44
 msgid "Add me to the list"
