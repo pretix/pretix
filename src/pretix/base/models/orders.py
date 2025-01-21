@@ -3219,6 +3219,12 @@ class CartPosition(AbstractPosition):
             self.save(update_fields=['line_price_gross', 'tax_rate'])
 
     @property
+    def discount_percentage(self):
+        if not self.line_price_gross:
+            return 0
+        return (self.line_price_gross - self.price) / self.line_price_gross * 100
+
+    @property
     def addons_without_bundled(self):
         addons = [op for op in self.addons.all() if not op.is_bundled]
         return sorted(addons, key=lambda cp: cp.sort_key)

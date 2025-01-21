@@ -270,8 +270,7 @@
                                 <br>
                                 <span class="fa fa-star fa-fw" aria-hidden="true"></span>
                                 {% if line.price < line.line_price_gross %}
-                                    {% widthratio line.price line.line_price_gross 100 as percent %}
-                                    {% blocktranslate trimmed with percent=percent %}
+                                    {% blocktranslate trimmed with percent=line.discount_percentage|floatformat:0 %}
                                         {{ percent }} % Discount
                                     {% endblocktranslate %}
                                 {% else %}
@@ -344,8 +343,7 @@
                                 <br>
                                 <span class="fa fa-star fa-fw" aria-hidden="true"></span>
                                 {% if line.price < line.line_price_gross %}
-                                    {% widthratio line.price line.line_price_gross 100 as percent %}
-                                    {% blocktranslate trimmed with percent=percent %}
+                                    {% blocktranslate trimmed with percent=line.discount_percentage|floatformat:0 %}
                                         {{ percent }} % Discount
                                     {% endblocktranslate %}
                                 {% else %}
