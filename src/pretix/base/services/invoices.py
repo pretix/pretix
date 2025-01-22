@@ -495,12 +495,18 @@ def build_preview_invoice_pdf(event):
                         invoice=invoice, description=_("Sample product {}").format(i + 1),
                         gross_value=tax.gross, tax_value=tax.tax,
                         tax_rate=tax.rate, tax_name=tax.name, tax_code=tax.code,
+                        event_date_from=event.date_from,
+                        event_date_to=event.date_to,
+                        event_location=event.settings.invoice_event_location,
                     )
         else:
             for i in range(5):
                 InvoiceLine.objects.create(
                     invoice=invoice, description=_("Sample product A"),
                     gross_value=100, tax_value=0, tax_rate=0, tax_code=None,
+                    event_date_from=event.date_from,
+                    event_date_to=event.date_to,
+                    event_location=event.settings.invoice_event_location,
                 )
 
         return event.invoice_renderer.generate(invoice)
