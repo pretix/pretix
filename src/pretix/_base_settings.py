@@ -163,6 +163,12 @@ EXTRA_LANG_INFO = {
         'name': 'Portuguese',
         'name_local': 'Português',
     },
+    'nb-no': {
+        'bidi': False,
+        'code': 'nb-no',
+        'name': 'Norwegian Bokmal',
+        'name_local': 'norsk (bokmål)',
+    },
 }
 
 django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
