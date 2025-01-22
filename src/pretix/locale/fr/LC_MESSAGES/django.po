@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 16:42+0000\n"
-"PO-Revision-Date: 2025-01-17 15:39+0000\n"
+"PO-Revision-Date: 2025-01-22 16:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -3437,12 +3437,12 @@ msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"Le plugin concerné n'est actuellement pas actif. Pour l'activer, cliquez ici "
+"pour accéder aux paramètres du plugin."
 
 #: pretix/base/logentrytypes.py:50
-#, fuzzy
-#| msgid "The selected ticket shop is currently not available."
 msgid "The relevant plugin is currently not active."
-msgstr "La billetterie sélectionnée n'est actuellement pas disponible."
+msgstr "Le plugin correspondant n'est pas activé."
 
 #: pretix/base/logentrytypes.py:183
 #, python-brace-format
@@ -16952,22 +16952,17 @@ msgid "A user has been removed from the event team."
 msgstr "Un utilisateur a été retiré de l'équipe d'événement."
 
 #: pretix/control/logdisplay.py:721
-#, fuzzy
-#| msgid "A plugin has been enabled."
 msgid "The plugin has been enabled."
-msgstr "Un plugin a été activé."
+msgstr "Le plugin a été activé."
 
 #: pretix/control/logdisplay.py:722
-#, fuzzy
-#| msgid "A plugin has been disabled."
 msgid "The plugin has been disabled."
-msgstr "Un plugin a été désactivé."
+msgstr "Le plugin a été désactivé."
 
 #: pretix/control/logdisplay.py:725
-#, fuzzy, python-brace-format
-#| msgid "Question {val}"
+#, python-brace-format
 msgid "Plugin {val}"
-msgstr "Question {val}"
+msgstr "Plugin {val}"
 
 #: pretix/control/logdisplay.py:741
 msgid "The product has been created."
@@ -30778,10 +30773,9 @@ msgid "An email rule was deleted"
 msgstr "Une règle d’e-mail a été supprimée"
 
 #: pretix/plugins/sendmail/signals.py:140
-#, fuzzy, python-brace-format
-#| msgid "Tax rule {val}"
+#, python-brace-format
 msgid "Mail rule {val}"
-msgstr "Règle fiscale {val}"
+msgstr "Règle de messagerie {val}"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:8
 msgid ""
@@ -33314,7 +33308,7 @@ msgstr "Le prix de ce produit a été réduit en raison d’une remise automatiq
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:346
 #, python-format
 msgid "%(percent)s %% Discount"
-msgstr ""
+msgstr "%(percent)s %% Remise"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:277
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:350
