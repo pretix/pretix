@@ -646,18 +646,12 @@ class ItemUpdateForm(I18nModelForm):
 
         self.fields['available_from_mode'].widget = ButtonGroupRadioSelect(
             choices=self.fields['available_from_mode'].choices,
-            option_icons={
-                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
-                Item.UNAVAIL_MODE_INFO: 'info'
-            }
+            option_icons=Item.UNAVAIL_MODE_ICONS
         )
 
         self.fields['available_until_mode'].widget = ButtonGroupRadioSelect(
             choices=self.fields['available_until_mode'].choices,
-            option_icons={
-                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
-                Item.UNAVAIL_MODE_INFO: 'info'
-            }
+            option_icons=Item.UNAVAIL_MODE_ICONS
         )
 
         self.fields['hide_without_voucher'].widget = ButtonGroupRadioSelect(
@@ -970,18 +964,12 @@ class ItemVariationForm(I18nModelForm):
 
         self.fields['available_from_mode'].widget = ButtonGroupRadioSelect(
             choices=self.fields['available_from_mode'].choices,
-            option_icons={
-                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
-                Item.UNAVAIL_MODE_INFO: 'info'
-            }
+            option_icons=Item.UNAVAIL_MODE_ICONS
         )
 
         self.fields['available_until_mode'].widget = ButtonGroupRadioSelect(
             choices=self.fields['available_until_mode'].choices,
-            option_icons={
-                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
-                Item.UNAVAIL_MODE_INFO: 'info'
-            }
+            option_icons=Item.UNAVAIL_MODE_ICONS
         )
 
         self.meta_fields = []

@@ -442,8 +442,12 @@ class Item(LoggedModel):
     UNAVAIL_MODE_INFO = "info"
     UNAVAIL_MODES = (
         (UNAVAIL_MODE_HIDDEN, _("Hide product if unavailable")),
-        (UNAVAIL_MODE_INFO, _("Show info text if unavailable")),
+        (UNAVAIL_MODE_INFO, _("Show product with info on why it’s unavailable")),
     )
+    UNAVAIL_MODE_ICONS = {
+        UNAVAIL_MODE_HIDDEN: 'eye-slash',
+        UNAVAIL_MODE_INFO: 'info'
+    }
 
     MEDIA_POLICY_REUSE = 'reuse'
     MEDIA_POLICY_NEW = 'new'
