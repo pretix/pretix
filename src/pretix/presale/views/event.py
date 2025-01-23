@@ -302,14 +302,14 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
 
         if item.hidden_if_item_available:
             if item.hidden_if_item_available.has_variations:
-                dependency_available = any(
+                item._dependency_available = any(
                     var.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)[0] == Quota.AVAILABILITY_OK
                     for var in item.hidden_if_item_available.available_variations
                 )
             else:
                 q = item.hidden_if_item_available.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)
-                dependency_available = q[0] == Quota.AVAILABILITY_OK
-            if dependency_available:
+                item._dependency_available = q[0] == Quota.AVAILABILITY_OK
+            if item._dependency_available and item.hidden_if_item_available_mode == Item.UNAVAIL_MODE_HIDDEN:
                 item._remove = True
                 continue
 

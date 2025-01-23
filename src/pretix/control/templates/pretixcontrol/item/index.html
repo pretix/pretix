@@ -172,7 +172,7 @@
                         {% if form.hidden_if_available %}
                             {% bootstrap_field form.hidden_if_available layout="control" horizontal_field_class="col-md-7" %}
                         {% endif %}
-                        {% bootstrap_field form.hidden_if_item_available layout="control" horizontal_field_class="col-md-7" %}
+                        {% bootstrap_field form.hidden_if_item_available visibility_field=form.hidden_if_item_available_mode layout="control_with_visibility" %}
                     </fieldset>
                     {% for v in formsets.values %}
                         <fieldset>

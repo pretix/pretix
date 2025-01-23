@@ -476,6 +476,7 @@ class ItemCreateForm(I18nModelForm):
                 'show_quota_left',
                 'hidden_if_available',
                 'hidden_if_item_available',
+                'hidden_if_item_available_mode',
                 'require_bundling',
                 'require_membership',
                 'grant_membership_type',
@@ -666,6 +667,11 @@ class ItemUpdateForm(I18nModelForm):
             attrs={'data-checkbox-dependency': '#id_require_voucher'}
         )
 
+        self.fields['hidden_if_item_available_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['hidden_if_item_available_mode'].choices,
+            option_icons=Item.UNAVAIL_MODE_ICONS
+        )
+
         if self.instance.hidden_if_available_id:
             self.fields['hidden_if_available'].queryset = self.event.quotas.all()
             self.fields['hidden_if_available'].help_text = format_html(
@@ -847,6 +853,7 @@ class ItemUpdateForm(I18nModelForm):
             'show_quota_left',
             'hidden_if_available',
             'hidden_if_item_available',
+            'hidden_if_item_available_mode',
             'issue_giftcard',
             'require_membership',
             'require_membership_types',
