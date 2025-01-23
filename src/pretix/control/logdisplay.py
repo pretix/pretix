@@ -191,7 +191,7 @@ class OrderFeeRemoved(OrderChangeLogEntryType):
 
 
 @log_entry_types.new()
-class OrderCancelled(OrderChangeLogEntryType):
+class OrderCanceled(OrderChangeLogEntryType):
     action_type = 'pretix.event.order.changed.cancel'
 
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
@@ -386,7 +386,7 @@ class OrderConsentLogEntryType(OrderLogEntryType):
         )
 
 
-class OrderCancelledLogEntryType(OrderLogEntryType):
+class OrderCanceledLogEntryType(OrderLogEntryType):
     action_type = 'pretix.event.order.canceled'
 
     def display(self, logentry: LogEntry, data):
@@ -525,7 +525,7 @@ class VoucherRedeemedLogEntryType(VoucherLogEntryType):
         url = reverse('control:event.order', kwargs={
             'event': logentry.event.slug,
             'organizer': logentry.event.organizer.slug,
-            'code': data('order_code', '?')
+            'code': data.get('order_code', '?')
         })
         return format_html(
             self.plain,
