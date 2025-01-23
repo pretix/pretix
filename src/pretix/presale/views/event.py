@@ -70,7 +70,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
-    ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
+    Item, ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.quotas import QuotaAvailability
