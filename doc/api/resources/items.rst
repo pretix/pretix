@@ -69,6 +69,10 @@ hidden_if_available                     integer                    **DEPRECATED*
 hidden_if_item_available                integer                    The internal ID of a different item, or ``null``. If
                                                                    set, this item won't be shown publicly as long as this
                                                                    other item is available.
+hidden_if_item_available_mode           string                     If ``hide`` (the default), this item is hidden in the shop
+                                                                   if unavailable due to the ``hidden_if_item_available`` setting.
+                                                                   If ``info``, the item is visible, but can't be purchased,
+                                                                   and a note explaining the unavailability is displayed.
 require_voucher                         boolean                    If ``true``, this item can only be bought using a
                                                                    voucher that is specifically assigned to this item.
 hide_without_voucher                    boolean                    If ``true``, this item is only shown during the voucher
@@ -239,6 +243,10 @@ meta_data                               object                     Values set fo
    The ``hidden_if_item_available`` attributes has been added, the ``hidden_if_available`` attribute has been
    deprecated.
 
+.. versionchanged:: 2025.01
+
+   The ``hidden_if_item_available_mode`` attributes has been added.
+
 Notes
 -----
 
@@ -308,6 +316,7 @@ Endpoints
             "available_until_mode": "hide",
             "hidden_if_available": null,
             "hidden_if_item_available": null,
+            "hidden_if_item_available_mode": "hide",
             "require_voucher": false,
             "hide_without_voucher": false,
             "allow_cancel": true,
@@ -459,6 +468,7 @@ Endpoints
         "available_until_mode": "hide",
         "hidden_if_available": null,
         "hidden_if_item_available": null,
+        "hidden_if_item_available_mode": "hide",
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -589,6 +599,7 @@ Endpoints
         "available_until_mode": "hide",
         "hidden_if_available": null,
         "hidden_if_item_available": null,
+        "hidden_if_item_available_mode": "hide",
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -705,6 +716,7 @@ Endpoints
         "available_until_mode": "hide",
         "hidden_if_available": null,
         "hidden_if_item_available": null,
+        "hidden_if_item_available_mode": "hide",
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -855,6 +867,7 @@ Endpoints
         "available_until_mode": "hide",
         "hidden_if_available": null,
         "hidden_if_item_available": null,
+        "hidden_if_item_available_mode": "hide",
         "require_voucher": false,
         "hide_without_voucher": false,
         "generate_tickets": null,

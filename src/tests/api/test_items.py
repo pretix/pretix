@@ -323,6 +323,7 @@ TEST_ITEM_RES = {
     "max_per_order": None,
     "hidden_if_available": None,
     "hidden_if_item_available": None,
+    "hidden_if_item_available_mode": "hide",
     "checkin_attention": False,
     "checkin_text": None,
     "has_variations": False,
