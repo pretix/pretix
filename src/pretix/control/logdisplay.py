@@ -529,7 +529,7 @@ class VoucherRedeemedLogEntryType(VoucherLogEntryType):
         })
         return format_html(
             self.plain,
-            order_code=format_html('<a href="{}">{}</a>', url, data('order_code', '?')),
+            order_code=format_html('<a href="{}">{}</a>', url, data.get('order_code', '?')),
         )
 
 
