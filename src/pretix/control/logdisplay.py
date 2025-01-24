@@ -351,6 +351,7 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
                 return str(plain_without_dt).format_map(data)
 
 
+@log_entry_types.new('pretix.event.checkin')
 class CheckinLogEntryType(CheckinErrorLogEntryType):
     def display(self, logentry: LogEntry, data):
         if data.get('type') == Checkin.TYPE_EXIT:
@@ -377,6 +378,7 @@ class CheckinLogEntryType(CheckinErrorLogEntryType):
             )
 
 
+@log_entry_types.new()
 class OrderConsentLogEntryType(OrderLogEntryType):
     action_type = 'pretix.event.order.consent'
 
@@ -386,6 +388,7 @@ class OrderConsentLogEntryType(OrderLogEntryType):
         )
 
 
+@log_entry_types.new()
 class OrderCanceledLogEntryType(OrderLogEntryType):
     action_type = 'pretix.event.order.canceled'
 
@@ -397,6 +400,7 @@ class OrderCanceledLogEntryType(OrderLogEntryType):
             return _('The order has been canceled.')
 
 
+@log_entry_types.new()
 class OrderPrintLogEntryType(OrderLogEntryType):
     action_type = 'pretix.event.order.print'
 
