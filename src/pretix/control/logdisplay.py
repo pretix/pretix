@@ -33,16 +33,16 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import json
 from collections import defaultdict
 from decimal import Decimal
+from typing import Optional
 
 import bleach
 import dateutil.parser
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.formats import date_format
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
@@ -68,128 +68,212 @@ OVERVIEW_BANLIST = [
 ]
 
 
-def _display_order_changed(event: Event, logentry: LogEntry):
-    data = json.loads(logentry.data)
+class OrderChangeLogEntryType(OrderLogEntryType):
+    prefix = _('The order has been changed:')
 
-    text = _('The order has been changed:')
-    if logentry.action_type == 'pretix.event.order.changed.item':
+    def display(self, logentry, data):
+        return self.prefix + ' ' + self.display_prefixed(logentry.event, logentry, data)
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
+        return super().display(logentry, data)
+
+
+class OrderPositionChangeLogEntryType(OrderChangeLogEntryType):
+    prefix = _('The order has been changed:')
+
+    def display(self, logentry, data):
+        return super().display(logentry, {**data, 'posid': data.get('positionid', '?')})
+
+
+@log_entry_types.new()
+class OrderItemChanged(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.item'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
             old_item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['old_variation']))
         new_item = str(event.items.get(pk=data['new_item']))
         if data['new_variation']:
             new_item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['new_variation']))
-        return text + ' ' + _('Position #{posid}: {old_item} ({old_price}) changed '
-                              'to {new_item} ({new_price}).').format(
+        return _('Position #{posid}: {old_item} ({old_price}) changed to {new_item} ({new_price}).').format(
             posid=data.get('positionid', '?'),
             old_item=old_item, new_item=new_item,
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
-    elif logentry.action_type == 'pretix.event.order.changed.membership':
-        return text + ' ' + _('Position #{posid}: Used membership changed.').format(
-            posid=data.get('positionid', '?'),
-        )
-    elif logentry.action_type == 'pretix.event.order.changed.seat':
-        return text + ' ' + _('Position #{posid}: Seat "{old_seat}" changed '
-                              'to "{new_seat}".').format(
-            posid=data.get('positionid', '?'),
-            old_seat=data.get('old_seat'), new_seat=data.get('new_seat'),
-        )
-    elif logentry.action_type == 'pretix.event.order.changed.subevent':
+
+
+@log_entry_types.new()
+class OrderMembershipChanged(OrderPositionChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.membership'
+    plain = _('Position #{posid}: Used membership changed.')
+
+
+@log_entry_types.new()
+class OrderSeatChanged(OrderPositionChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.seat'
+    plain = _('Position #{posid}: Seat "{old_seat}" changed to "{new_seat}".')
+
+
+@log_entry_types.new()
+class OrderSubeventChanged(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.subevent'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
         old_se = str(event.subevents.get(pk=data['old_subevent']))
         new_se = str(event.subevents.get(pk=data['new_subevent']))
-        return text + ' ' + _('Position #{posid}: Event date "{old_event}" ({old_price}) changed '
-                              'to "{new_event}" ({new_price}).').format(
+        return _('Position #{posid}: Event date "{old_event}" ({old_price}) changed '
+                 'to "{new_event}" ({new_price}).').format(
             posid=data.get('positionid', '?'),
             old_event=old_se, new_event=new_se,
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
-    elif logentry.action_type == 'pretix.event.order.changed.price':
-        return text + ' ' + _('Price of position #{posid} changed from {old_price} '
-                              'to {new_price}.').format(
+
+
+@log_entry_types.new()
+class OrderPriceChanged(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.price'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
+        return _('Price of position #{posid} changed from {old_price} to {new_price}.').format(
             posid=data.get('positionid', '?'),
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
-    elif logentry.action_type == 'pretix.event.order.changed.tax_rule':
+
+
+@log_entry_types.new()
+class OrderTaxRuleChanged(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.tax_rule'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
         if 'positionid' in data:
-            return text + ' ' + _('Tax rule of position #{posid} changed from {old_rule} '
-                                  'to {new_rule}.').format(
+            return _('Tax rule of position #{posid} changed from {old_rule} to {new_rule}.').format(
                 posid=data.get('positionid', '?'),
                 old_rule=TaxRule.objects.get(pk=data['old_taxrule']) if data['old_taxrule'] else '–',
                 new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
             )
         elif 'fee' in data:
-            return text + ' ' + _('Tax rule of fee #{fee} changed from {old_rule} '
-                                  'to {new_rule}.').format(
+            return _('Tax rule of fee #{fee} changed from {old_rule} to {new_rule}.').format(
                 fee=data.get('fee', '?'),
                 old_rule=TaxRule.objects.get(pk=data['old_taxrule']) if data['old_taxrule'] else '–',
                 new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
             )
-    elif logentry.action_type == 'pretix.event.order.changed.addfee':
-        return text + ' ' + str(_('A fee has been added'))
-    elif logentry.action_type == 'pretix.event.order.changed.feevalue':
-        return text + ' ' + _('A fee was changed from {old_price} to {new_price}.').format(
+
+
+@log_entry_types.new()
+class OrderFeeAdded(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.addfee'
+    plain = _('A fee has been added')
+
+
+@log_entry_types.new()
+class OrderFeeChanged(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.feevalue'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
+        return _('A fee was changed from {old_price} to {new_price}.').format(
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
-    elif logentry.action_type == 'pretix.event.order.changed.cancelfee':
-        return text + ' ' + _('A fee of {old_price} was removed.').format(
+
+
+@log_entry_types.new()
+class OrderFeeRemoved(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.cancelfee'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
+        return _('A fee of {old_price} was removed.').format(
             old_price=money_filter(Decimal(data['old_price']), event.currency),
         )
-    elif logentry.action_type == 'pretix.event.order.changed.cancel':
+
+
+@log_entry_types.new()
+class OrderCanceled(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.cancel'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
             old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
-        return text + ' ' + _('Position #{posid} ({old_item}, {old_price}) canceled.').format(
+        return _('Position #{posid} ({old_item}, {old_price}) canceled.').format(
             posid=data.get('positionid', '?'),
             old_item=old_item,
             old_price=money_filter(Decimal(data['old_price']), event.currency),
         )
-    elif logentry.action_type == 'pretix.event.order.changed.add':
+
+
+@log_entry_types.new()
+class OrderPositionAdded(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.add'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
         item = str(event.items.get(pk=data['item']))
         if data['variation']:
             item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['variation']))
         if data['addon_to']:
             addon_to = OrderPosition.objects.get(order__event=event, pk=data['addon_to'])
-            return text + ' ' + _('Position #{posid} created: {item} ({price}) as an add-on to '
-                                  'position #{addon_to}.').format(
+            return _('Position #{posid} created: {item} ({price}) as an add-on to position #{addon_to}.').format(
                 posid=data.get('positionid', '?'),
                 item=item, addon_to=addon_to.positionid,
                 price=money_filter(Decimal(data['price']), event.currency),
             )
         else:
-            return text + ' ' + _('Position #{posid} created: {item} ({price}).').format(
+            return _('Position #{posid} created: {item} ({price}).').format(
                 posid=data.get('positionid', '?'),
                 item=item,
                 price=money_filter(Decimal(data['price']), event.currency),
             )
-    elif logentry.action_type == 'pretix.event.order.changed.secret':
-        return text + ' ' + _('A new secret has been generated for position #{posid}.').format(
-            posid=data.get('positionid', '?'),
-        )
-    elif logentry.action_type == 'pretix.event.order.changed.valid_from':
-        return text + ' ' + _('The validity start date for position #{posid} has been changed to {value}.').format(
+
+
+@log_entry_types.new()
+class OrderSecretChanged(OrderPositionChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.secret'
+    plain = _('A new secret has been generated for position #{posid}.')
+
+
+@log_entry_types.new()
+class OrderValidFromChanged(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.valid_from'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
+        return _('The validity start date for position #{posid} has been changed to {value}.').format(
             posid=data.get('positionid', '?'),
             value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get(
                 'new_value') else '–'
         )
-    elif logentry.action_type == 'pretix.event.order.changed.valid_until':
-        return text + ' ' + _('The validity end date for position #{posid} has been changed to {value}.').format(
+
+
+@log_entry_types.new()
+class OrderValidUntilChanged(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.valid_until'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
+        return _('The validity end date for position #{posid} has been changed to {value}.').format(
             posid=data.get('positionid', '?'),
             value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get('new_value') else '–'
         )
-    elif logentry.action_type == 'pretix.event.order.changed.add_block':
-        return text + ' ' + _('A block has been added for position #{posid}.').format(
-            posid=data.get('positionid', '?'),
-        )
-    elif logentry.action_type == 'pretix.event.order.changed.remove_block':
-        return text + ' ' + _('A block has been removed for position #{posid}.').format(
-            posid=data.get('positionid', '?'),
-        )
-    elif logentry.action_type == 'pretix.event.order.changed.split':
+
+
+@log_entry_types.new()
+class OrderChangedBlockAdded(OrderPositionChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.add_block'
+    plain = _('A block has been added for position #{posid}.')
+
+
+@log_entry_types.new()
+class OrderChangedBlockRemoved(OrderPositionChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.remove_block'
+    plain = _('A block has been removed for position #{posid}.')
+
+
+@log_entry_types.new()
+class OrderChangedSplit(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.split'
+
+    def display_prefixed(self, event: Event, logentry: LogEntry, data):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
             old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
@@ -198,193 +282,143 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             'organizer': event.organizer.slug,
             'code': data['new_order']
         })
-        return mark_safe(escape(text) + ' ' + _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}').format(
+        return mark_safe(self.prefix + ' ' + _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}').format(
             old_item=escape(old_item),
             posid=data.get('positionid', '?'),
             order='<a href="{}">{}</a>'.format(url, data['new_order']),
             old_price=money_filter(Decimal(data['old_price']), event.currency),
         ))
-    elif logentry.action_type == 'pretix.event.order.changed.split_from':
+
+
+@log_entry_types.new()
+class OrderChangedSplitFrom(OrderLogEntryType):
+    action_type = 'pretix.event.order.changed.split_from'
+
+    def display(self, logentry: LogEntry, data):
         return _('This order has been created by splitting the order {order}').format(
             order=data['original_order'],
         )
 
 
-def _display_checkin(event, logentry):
-    data = logentry.parsed_data
+@log_entry_types.new_from_dict({
+    'pretix.event.checkin.unknown': (
+        _('Unknown scan of code "{barcode}…" at {datetime} for list "{list}", type "{type}".'),
+        _('Unknown scan of code "{barcode}…" for list "{list}", type "{type}".'),
+    ),
+    'pretix.event.checkin.revoked': (
+        _('Scan of revoked code "{barcode}…" at {datetime} for list "{list}", type "{type}", was uploaded.'),
+        _('Scan of revoked code "{barcode}" for list "{list}", type "{type}", was uploaded.'),
+    ),
+    'pretix.event.checkin.denied': (
+        _('Denied scan of position #{posid} at {datetime} for list "{list}", type "{type}", error code "{errorcode}".'),
+        _('Denied scan of position #{posid} for list "{list}", type "{type}", error code "{errorcode}".'),
+    ),
+    'pretix.control.views.checkin.reverted': _('The check-in of position #{posid} on list "{list}" has been reverted.'),
+    'pretix.event.checkin.reverted': _('The check-in of position #{posid} on list "{list}" has been reverted.'),
+})
+class CheckinErrorLogEntryType(OrderLogEntryType):
+    def display(self, logentry: LogEntry, data):
+        self.display_plain(self.plain, logentry, data)
 
-    show_dt = False
-    if 'datetime' in data:
-        dt = dateutil.parser.parse(data.get('datetime'))
-        show_dt = abs((logentry.datetime - dt).total_seconds()) > 5 or 'forced' in data
-        tz = event.timezone
-        dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
+    def display_plain(self, plain, logentry: LogEntry, data):
+        if isinstance(plain, tuple):
+            plain_with_dt, plain_without_dt = plain
+        else:
+            plain_with_dt, plain_without_dt = plain, plain
 
-    if 'list' in data:
-        try:
-            checkin_list = event.checkin_lists.get(pk=data.get('list')).name
-        except CheckinList.DoesNotExist:
-            checkin_list = _("(unknown)")
-    else:
-        checkin_list = _("(unknown)")
+        data = defaultdict(lambda: '?', data)
 
-    if logentry.action_type == 'pretix.event.checkin.unknown':
-        if show_dt:
-            return _(
-                'Unknown scan of code "{barcode}…" at {datetime} for list "{list}", type "{type}".'
-            ).format(
-                posid=data.get('positionid'),
-                type=data.get('type'),
-                barcode=data.get('barcode')[:16],
-                datetime=dt_formatted,
-                list=checkin_list
+        event = logentry.event
+
+        if 'list' in data:
+            try:
+                data['list'] = event.checkin_lists.get(pk=data.get('list')).name
+            except CheckinList.DoesNotExist:
+                data['list'] = _("(unknown)")
+        else:
+            data['list'] = _("(unknown)")
+
+        data['barcode'] = data.get('barcode')[:16]
+        data['posid'] = logentry.parsed_data.get('positionid', '?')
+
+        if 'datetime' in data:
+            dt = dateutil.parser.parse(data.get('datetime'))
+            if abs((logentry.datetime - dt).total_seconds()) > 5 or 'forced' in data:
+                tz = event.timezone
+                data['datetime'] = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
+                return str(plain_with_dt).format_map(data)
+            else:
+                return str(plain_without_dt).format_map(data)
+
+
+class CheckinLogEntryType(CheckinErrorLogEntryType):
+    def display(self, logentry: LogEntry, data):
+        if data.get('type') == Checkin.TYPE_EXIT:
+            return self.display_plain((
+                _('Position #{posid} has been checked out at {datetime} for list "{list}".'),
+                _('Position #{posid} has been checked out for list "{list}".'),
+            ), logentry, data)
+        elif data.get('first'):
+            return self.display_plain((
+                _('Position #{posid} has been checked in at {datetime} for list "{list}".'),
+                _('Position #{posid} has been checked in for list "{list}".'),
+            ), logentry, data)
+        elif data.get('forced'):
+            return self.display_plain(
+                _('A scan for position #{posid} at {datetime} for list "{list}" has been uploaded even though it has '
+                  'been scanned already.'),
+                logentry, data
             )
         else:
-            return _(
-                'Unknown scan of code "{barcode}…" for list "{list}", type "{type}".'
-            ).format(
-                posid=data.get('positionid'),
-                type=data.get('type'),
-                barcode=data.get('barcode')[:16],
-                list=checkin_list
+            return self.display_plain(
+                _('Position #{posid} has been scanned and rejected because it has already been scanned before '
+                  'on list "{list}".'),
+                logentry, data
             )
 
-    if logentry.action_type == 'pretix.event.checkin.revoked':
-        if show_dt:
-            return _(
-                'Scan scan of revoked code "{barcode}…" at {datetime} for list "{list}", type "{type}", was uploaded.'
-            ).format(
-                posid=data.get('positionid'),
-                type=data.get('type'),
-                barcode=data.get('barcode')[:16],
-                datetime=dt_formatted,
-                list=checkin_list
-            )
-        else:
-            return _(
-                'Scan of revoked code "{barcode}" for list "{list}", type "{type}", was uploaded.'
-            ).format(
-                posid=data.get('positionid'),
-                type=data.get('type'),
-                barcode=data.get('barcode')[:16],
-                list=checkin_list
-            )
 
-    if logentry.action_type == 'pretix.event.checkin.denied':
-        if show_dt:
-            return _(
-                'Denied scan of position #{posid} at {datetime} for list "{list}", type "{type}", '
-                'error code "{errorcode}".'
-            ).format(
-                posid=data.get('positionid'),
-                type=data.get('type'),
-                errorcode=data.get('errorcode'),
-                datetime=dt_formatted,
-                list=checkin_list
-            )
-        else:
-            return _(
-                'Denied scan of position #{posid} for list "{list}", type "{type}", error code "{errorcode}".'
-            ).format(
-                posid=data.get('positionid'),
-                type=data.get('type'),
-                errorcode=data.get('errorcode'),
-                list=checkin_list
-            )
+class OrderConsentLogEntryType(OrderLogEntryType):
+    action_type = 'pretix.event.order.consent'
 
-    if data.get('type') == Checkin.TYPE_EXIT:
-        if show_dt:
-            return _('Position #{posid} has been checked out at {datetime} for list "{list}".').format(
-                posid=data.get('positionid'),
-                datetime=dt_formatted,
-                list=checkin_list
-            )
+    def display(self, logentry: LogEntry, data):
+        return _('The user confirmed the following message: "{}"').format(
+            bleach.clean(data.get('msg'), tags=set(), strip=True)
+        )
+
+
+class OrderCanceledLogEntryType(OrderLogEntryType):
+    action_type = 'pretix.event.order.canceled'
+
+    def display(self, logentry: LogEntry, data):
+        comment = data.get('comment')
+        if comment:
+            return _('The order has been canceled (comment: "{comment}").').format(comment=comment)
         else:
-            return _('Position #{posid} has been checked out for list "{list}".').format(
-                posid=data.get('positionid'),
-                list=checkin_list
-            )
-    if data.get('first'):
-        if show_dt:
-            return _('Position #{posid} has been checked in at {datetime} for list "{list}".').format(
-                posid=data.get('positionid'),
-                datetime=dt_formatted,
-                list=checkin_list
-            )
-        else:
-            return _('Position #{posid} has been checked in for list "{list}".').format(
-                posid=data.get('positionid'),
-                list=checkin_list
-            )
-    else:
-        if data.get('forced'):
-            return _(
-                'A scan for position #{posid} at {datetime} for list "{list}" has been uploaded even though it has '
-                'been scanned already.'.format(
-                    posid=data.get('positionid'),
-                    datetime=dt_formatted,
-                    list=checkin_list
-                )
-            )
-        return _(
-            'Position #{posid} has been scanned and rejected because it has already been scanned before '
-            'on list "{list}".'.format(
-                posid=data.get('positionid'),
-                list=checkin_list
-            )
+            return _('The order has been canceled.')
+
+
+class OrderPrintLogEntryType(OrderLogEntryType):
+    action_type = 'pretix.event.order.print'
+
+    def display(self, logentry: LogEntry, data):
+        return _('Position #{posid} has been printed at {datetime} with type "{type}".').format(
+            posid=data.get('positionid'),
+            datetime=date_format(
+                dateutil.parser.parse(data["datetime"]).astimezone(logentry.event.timezone),
+                "SHORT_DATETIME_FORMAT"
+            ),
+            type=dict(PrintLog.PRINT_TYPES)[data["type"]],
         )
 
 
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")
 def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
-    if logentry.action_type.startswith('pretix.event.order.changed'):
-        return _display_order_changed(sender, logentry)
-
     if logentry.action_type.startswith('pretix.event.payment.provider.'):
         return _('The settings of a payment provider have been changed.')
 
     if logentry.action_type.startswith('pretix.event.tickets.provider.'):
         return _('The settings of a ticket output provider have been changed.')
-
-    if logentry.action_type == 'pretix.event.order.consent':
-        return _('The user confirmed the following message: "{}"').format(
-            bleach.clean(logentry.parsed_data.get('msg'), tags=set(), strip=True)
-        )
-
-    if logentry.action_type == 'pretix.event.order.canceled':
-        comment = logentry.parsed_data.get('comment')
-        if comment:
-            return _('The order has been canceled (comment: "{comment}").').format(comment=comment)
-        else:
-            return _('The order has been canceled.')
-
-    if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
-        if 'list' in logentry.parsed_data:
-            try:
-                checkin_list = sender.checkin_lists.get(pk=logentry.parsed_data.get('list')).name
-            except CheckinList.DoesNotExist:
-                checkin_list = _("(unknown)")
-        else:
-            checkin_list = _("(unknown)")
-
-        return _('The check-in of position #{posid} on list "{list}" has been reverted.').format(
-            posid=logentry.parsed_data.get('positionid'),
-            list=checkin_list,
-        )
-
-    if sender and logentry.action_type.startswith('pretix.event.checkin'):
-        return _display_checkin(sender, logentry)
-
-    if logentry.action_type == 'pretix.event.order.print':
-        return _('Position #{posid} has been printed at {datetime} with type "{type}".').format(
-            posid=logentry.parsed_data.get('positionid'),
-            datetime=date_format(
-                dateutil.parser.parse(logentry.parsed_data["datetime"]).astimezone(sender.timezone),
-                "SHORT_DATETIME_FORMAT"
-            ),
-            type=dict(PrintLog.PRINT_TYPES)[logentry.parsed_data["type"]],
-        )
 
 
 @receiver(signal=orderposition_blocked_display, dispatch_uid="pretixcontrol_orderposition_blocked_display")
@@ -396,6 +430,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
 
 
 @log_entry_types.new_from_dict({
+    'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
     'pretix.event.order.modified': _('The order details have been changed.'),
     'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
     'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),
@@ -486,17 +521,16 @@ class VoucherRedeemedLogEntryType(VoucherLogEntryType):
     action_type = 'pretix.voucher.redeemed'
     plain = _('The voucher has been redeemed in order {order_code}.')
 
-    def display(self, logentry):
-        data = json.loads(logentry.data)
-        data = defaultdict(lambda: '?', data)
+    def display(self, logentry, data):
         url = reverse('control:event.order', kwargs={
             'event': logentry.event.slug,
             'organizer': logentry.event.organizer.slug,
-            'code': data['order_code']
+            'code': data.get('order_code', '?')
         })
-        return mark_safe(self.plain.format(
-            order_code='<a href="{}">{}</a>'.format(url, data['order_code']),
-        ))
+        return format_html(
+            self.plain,
+            order_code=format_html('<a href="{}">{}</a>', url, data('order_code', '?')),
+        )
 
 
 @log_entry_types.new_from_dict({
@@ -519,8 +553,8 @@ class CoreTaxRuleLogEntryType(TaxRuleLogEntryType):
 
 
 class TeamMembershipLogEntryType(LogEntryType):
-    def display(self, logentry):
-        return self.plain.format(user=logentry.parsed_data.get('email'))
+    def display(self, logentry, data):
+        return self.plain.format(user=data.get('email'))
 
 
 @log_entry_types.new_from_dict({
@@ -537,9 +571,9 @@ class CoreTeamMembershipLogEntryType(TeamMembershipLogEntryType):
 class TeamMemberJoinedLogEntryType(LogEntryType):
     action_type = 'pretix.team.member.joined'
 
-    def display(self, logentry):
+    def display(self, logentry, data):
         return _('{user} has joined the team using the invite sent to {email}.').format(
-            user=logentry.parsed_data.get('email'), email=logentry.parsed_data.get('invite_email')
+            user=data.get('email'), email=data.get('invite_email')
         )
 
 
@@ -547,23 +581,23 @@ class TeamMemberJoinedLogEntryType(LogEntryType):
 class UserSettingsChangedLogEntryType(LogEntryType):
     action_type = 'pretix.user.settings.changed'
 
-    def display(self, logentry):
+    def display(self, logentry, data):
         text = str(_('Your account settings have been changed.'))
-        if 'email' in logentry.parsed_data:
+        if 'email' in data:
             text = text + ' ' + str(
-                _('Your email address has been changed to {email}.').format(email=logentry.parsed_data['email']))
-        if 'new_pw' in logentry.parsed_data:
+                _('Your email address has been changed to {email}.').format(email=data['email']))
+        if 'new_pw' in data:
             text = text + ' ' + str(_('Your password has been changed.'))
-        if logentry.parsed_data.get('is_active') is True:
+        if data.get('is_active') is True:
             text = text + ' ' + str(_('Your account has been enabled.'))
-        elif logentry.parsed_data.get('is_active') is False:
+        elif data.get('is_active') is False:
             text = text + ' ' + str(_('Your account has been disabled.'))
         return text
 
 
 class UserImpersonatedLogEntryType(LogEntryType):
-    def display(self, logentry):
-        return self.plain.format(logentry.parsed_data['other_email'])
+    def display(self, logentry, data):
+        return self.plain.format(data['other_email'])
 
 
 @log_entry_types.new_from_dict({
@@ -688,16 +722,13 @@ class CoreLogEntryType(LogEntryType):
 
 
 @log_entry_types.new_from_dict({
-    'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
     'pretix.event.item_meta_property.added': _('A meta property has been added to this event.'),
     'pretix.event.item_meta_property.deleted': _('A meta property has been removed from this event.'),
     'pretix.event.item_meta_property.changed': _('A meta property has been changed on this event.'),
-    'pretix.event.checkinlist.added': _('The check-in list has been added.'),
-    'pretix.event.checkinlist.deleted': _('The check-in list has been deleted.'),
-    'pretix.event.checkinlists.deleted': _('The check-in list has been deleted.'),  # backwards compatibility
-    'pretix.event.checkinlist.changed': _('The check-in list has been changed.'),
     'pretix.event.settings': _('The event settings have been changed.'),
     'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
+    'pretix.event.tickets.provider': _('The settings of a ticket output provider have been changed.'),
+    'pretix.event.payment.provider': _('The settings of a payment provider have been changed.'),
     'pretix.event.live.activated': _('The shop has been taken live.'),
     'pretix.event.live.deactivated': _('The shop has been taken offline.'),
     'pretix.event.testmode.activated': _('The shop has been taken into test mode.'),
@@ -718,13 +749,26 @@ class CoreEventLogEntryType(EventLogEntryType):
 
 
 @log_entry_types.new_from_dict({
+    'pretix.event.checkinlist.added': _('The check-in list has been added.'),
+    'pretix.event.checkinlist.deleted': _('The check-in list has been deleted.'),
+    'pretix.event.checkinlists.deleted': _('The check-in list has been deleted.'),  # backwards compatibility
+    'pretix.event.checkinlist.changed': _('The check-in list has been changed.'),
+})
+class CheckinlistLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Check-in list {val}')
+    object_link_viewname = 'control:event.orders.checkinlists.edit'
+    object_link_argname = 'list'
+    content_type = CheckinList
+
+
+@log_entry_types.new_from_dict({
     'pretix.event.plugins.enabled': _('The plugin has been enabled.'),
     'pretix.event.plugins.disabled': _('The plugin has been disabled.'),
 })
 class EventPluginStateLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Plugin {val}')
 
-    def get_object_link_info(self, logentry) -> dict:
+    def get_object_link_info(self, logentry) -> Optional[dict]:
         if 'plugin' in logentry.parsed_data:
             app = app_cache.get(logentry.parsed_data['plugin'])
             if app and hasattr(app, 'PretixPluginMeta'):
@@ -759,17 +803,17 @@ class CoreItemLogEntryType(ItemLogEntryType):
     'pretix.event.item.variation.changed': _('The variation "{value}" has been changed.'),
 })
 class VariationLogEntryType(ItemLogEntryType):
-    def display(self, logentry):
-        if 'value' not in logentry.parsed_data:
+    def display(self, logentry, data):
+        if 'value' not in data:
             # Backwards compatibility
-            var = ItemVariation.objects.filter(id=logentry.parsed_data['id']).first()
+            var = ItemVariation.objects.filter(id=data['id']).first()
             if var:
-                logentry.parsed_data['value'] = str(var.value)
+                data['value'] = str(var.value)
             else:
-                logentry.parsed_data['value'] = '?'
+                data['value'] = '?'
         else:
-            logentry.parsed_data['value'] = LazyI18nString(logentry.parsed_data['value'])
-        return super().display(logentry)
+            data['value'] = LazyI18nString(data['value'])
+        return super().display(logentry, data)
 
 
 @log_entry_types.new_from_dict({
@@ -825,27 +869,27 @@ class CoreDiscountLogEntryType(DiscountLogEntryType):
 class LegacyCheckinLogEntryType(OrderLogEntryType):
     action_type = 'pretix.control.views.checkin'
 
-    def display(self, logentry):
+    def display(self, logentry, data):
         # deprecated
-        dt = dateutil.parser.parse(logentry.parsed_data.get('datetime'))
+        dt = dateutil.parser.parse(data.get('datetime'))
         tz = logentry.event.timezone
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
-        if 'list' in logentry.parsed_data:
+        if 'list' in data:
             try:
-                checkin_list = logentry.event.checkin_lists.get(pk=logentry.parsed_data.get('list')).name
+                checkin_list = logentry.event.checkin_lists.get(pk=data.get('list')).name
             except CheckinList.DoesNotExist:
                 checkin_list = _("(unknown)")
         else:
             checkin_list = _("(unknown)")
 
-        if logentry.parsed_data.get('first'):
+        if data.get('first'):
             return _('Position #{posid} has been checked in manually at {datetime} on list "{list}".').format(
-                posid=logentry.parsed_data.get('positionid'),
+                posid=data.get('positionid'),
                 datetime=dt_formatted,
                 list=checkin_list,
             )
         return _('Position #{posid} has been checked in again at {datetime} on list "{list}".').format(
-            posid=logentry.parsed_data.get('positionid'),
+            posid=data.get('positionid'),
             datetime=dt_formatted,
             list=checkin_list
         )

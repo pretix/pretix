@@ -491,8 +491,11 @@ class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMix
         if self.form.is_valid():
             if self.form.has_changed():
                 self.request.event.log_action(
-                    'pretix.event.payment.provider.' + self.provider.identifier, user=self.request.user, data={
-                        k: self.form.cleaned_data.get(k) for k in self.form.changed_data
+                    'pretix.event.payment.provider', user=self.request.user, data={
+                        'provider': self.provider.identifier,
+                        'new_values': {
+                            k: self.form.cleaned_data.get(k) for k in self.form.changed_data
+                        }
                     }
                 )
                 self.form.save()
@@ -888,11 +891,14 @@ class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
                 provider.form.save()
                 if provider.form.has_changed():
                     self.request.event.log_action(
-                        'pretix.event.tickets.provider.' + provider.identifier, user=self.request.user, data={
-                            k: (provider.form.cleaned_data.get(k).name
-                                if isinstance(provider.form.cleaned_data.get(k), File)
-                                else provider.form.cleaned_data.get(k))
-                            for k in provider.form.changed_data
+                        'pretix.event.tickets.provider', user=self.request.user, data={
+                            'provider': provider.identifier,
+                            'new_values': {
+                                k: (provider.form.cleaned_data.get(k).name
+                                    if isinstance(provider.form.cleaned_data.get(k), File)
+                                    else provider.form.cleaned_data.get(k))
+                                for k in provider.form.changed_data
+                            }
                         }
                     )
                     tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': provider.identifier})

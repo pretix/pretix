@@ -355,7 +355,7 @@ class Order(LockModel, LoggedModel):
 
         if not self.testmode:
             raise TypeError("Only test mode orders can be deleted.")
-        self.event.log_action(
+        self.log_action(
             'pretix.event.order.deleted', user=user, auth=auth,
             data={
                 'code': self.code,
