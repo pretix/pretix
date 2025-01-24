@@ -338,7 +338,7 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
         else:
             data['list'] = _("(unknown)")
 
-        data['barcode'] = data.get('barcode')[:16]
+        data['barcode'] = data.get('barcode', '')[:16]
         data['posid'] = logentry.parsed_data.get('positionid', '?')
 
         if 'datetime' in data:
