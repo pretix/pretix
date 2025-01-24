@@ -51,8 +51,8 @@ def register_payment_provider(sender, **kwargs):
 class PaypalEventLogEntryType(EventLogEntryType):
     action_type = 'pretix.plugins.paypal.event'
 
-    def display(self, logentry):
-        event_type = logentry.parsed_data.get('event_type')
+    def display(self, logentry, data):
+        event_type = data.get('event_type')
         text = None
         plains = {
             'PAYMENT.SALE.COMPLETED': _('Payment completed.'),

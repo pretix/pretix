@@ -338,7 +338,7 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
         else:
             data['list'] = _("(unknown)")
 
-        data['barcode'] = data.get('barcode')[:16]
+        data['barcode'] = data.get('barcode', '')[:16]
         data['posid'] = logentry.parsed_data.get('positionid', '?')
 
         if 'datetime' in data:
@@ -529,7 +529,7 @@ class VoucherRedeemedLogEntryType(VoucherLogEntryType):
         })
         return format_html(
             self.plain,
-            order_code=format_html('<a href="{}">{}</a>', url, data('order_code', '?')),
+            order_code=format_html('<a href="{}">{}</a>', url, data.get('order_code', '?')),
         )
 
 
