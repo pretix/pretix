@@ -1140,9 +1140,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         )
         if self.address_required and not self.company_required and not self.all_optional:
             if not event.settings.invoice_name_required:
-                self.fields['name_parts'].widget.attrs['data-required-if'] = f'#id_{self.add_prefix("is_business")}_0'
+                self.fields['name_parts'].widget.attrs['data-required-if'] = f'input[name="{self.add_prefix("is_business")}"][value="individual"]'
             self.fields['name_parts'].widget.attrs['data-no-required-attr'] = '1'
-            self.fields['company'].widget.attrs['data-required-if'] = f'#id_{self.add_prefix("is_business")}_1'
+            self.fields['company'].widget.attrs['data-required-if'] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
 
         if not event.settings.invoice_address_beneficiary:
             del self.fields['beneficiary']
