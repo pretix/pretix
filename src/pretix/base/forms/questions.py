@@ -1025,10 +1025,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 'autocomplete': 'address-level2',
             }),
             'company': forms.TextInput(attrs={
-                'data-display-dependency': '#id_is_business_1',
                 'autocomplete': 'organization',
             }),
-            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
+            'vat_id': forms.TextInput(),
             'internal_reference': forms.TextInput,
         }
         labels = {
