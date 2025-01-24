@@ -1059,10 +1059,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
 
-        # If an individual or company address is acceptable, #id_is_business_0 == individual, _1 == company.
-        # However, if only company addresses are acceptable, #id_is_business_0 == company and is the only choice
-        self.fields["company"].widget.attrs["data-display-dependency"] = f'#id_{self.add_prefix("is_business")}_{int(not self.company_required)}'
-        self.fields["vat_id"].widget.attrs["data-display-dependency"] = f'#id_{self.add_prefix("is_business")}_{int(not self.company_required)}'
+        self.fields["company"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
+        self.fields["vat_id"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
 
         if not self.ask_vat_id:
             del self.fields['vat_id']
