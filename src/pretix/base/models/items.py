@@ -442,12 +442,8 @@ class Item(LoggedModel):
     UNAVAIL_MODE_INFO = "info"
     UNAVAIL_MODES = (
         (UNAVAIL_MODE_HIDDEN, _("Hide product if unavailable")),
-        (UNAVAIL_MODE_INFO, _("Show product with info on why it’s unavailable")),
+        (UNAVAIL_MODE_INFO, _("Show info text if unavailable")),
     )
-    UNAVAIL_MODE_ICONS = {
-        UNAVAIL_MODE_HIDDEN: 'eye-slash',
-        UNAVAIL_MODE_INFO: 'info'
-    }
 
     MEDIA_POLICY_REUSE = 'reuse'
     MEDIA_POLICY_NEW = 'new'
@@ -599,11 +595,6 @@ class Item(LoggedModel):
                     "swap out products for more expensive ones once the cheaper option is sold out. There might "
                     "be a short period in which both products are visible while all tickets of the referenced "
                     "product are reserved, but not yet sold.")
-    )
-    hidden_if_item_available_mode = models.CharField(
-        choices=UNAVAIL_MODES,
-        default=UNAVAIL_MODE_HIDDEN,
-        max_length=16,
     )
     require_voucher = models.BooleanField(
         verbose_name=_('This product can only be bought using a voucher.'),
@@ -894,8 +885,6 @@ class Item(LoggedModel):
             return 'available_from'
         elif subevent_item and subevent_item.available_until and subevent_item.available_until < now_dt:
             return 'available_until'
-        elif self.hidden_if_item_available and self._dependency_available:
-            return 'hidden_if_item_available'
         else:
             return None
 

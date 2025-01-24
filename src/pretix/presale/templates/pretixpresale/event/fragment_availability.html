@@ -5,10 +5,6 @@
     <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
         <p><small><a href="#voucher">{% trans "Enter a voucher code below to buy this product." %}</a></small></p>
     </div>
-{% elif item.current_unavailability_reason == 'hidden_if_item_available' %}
-    <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
-        <p><small>{% trans "Not available yet." %}</small></p>
-    </div>
 {% elif item.current_unavailability_reason == 'available_from' or var.current_unavailability_reason == 'available_from' %}
     <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
         <p><small>{% trans "Not available yet." %}</small></p>

@@ -38,7 +38,6 @@ var strings = {
     'unavailable_available_from': django.pgettext('widget', 'Not yet available'),
     'unavailable_available_until': django.pgettext('widget', 'Not available anymore'),
     'unavailable_active': django.pgettext('widget', 'Currently not available'),
-    'unavailable_hidden_if_item_available': django.pgettext('widget', 'Not yet available'),
     'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
     'exit': django.pgettext('widget', 'Close ticket shop'),
     'loading_error': django.pgettext('widget', 'The ticket shop could not be loaded.'),

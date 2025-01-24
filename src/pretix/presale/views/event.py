@@ -70,7 +70,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
-    Item, ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
+    ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.quotas import QuotaAvailability
@@ -302,14 +302,14 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
 
         if item.hidden_if_item_available:
             if item.hidden_if_item_available.has_variations:
-                item._dependency_available = any(
+                dependency_available = any(
                     var.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)[0] == Quota.AVAILABILITY_OK
                     for var in item.hidden_if_item_available.available_variations
                 )
             else:
                 q = item.hidden_if_item_available.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)
-                item._dependency_available = q[0] == Quota.AVAILABILITY_OK
-            if item._dependency_available and item.hidden_if_item_available_mode == Item.UNAVAIL_MODE_HIDDEN:
+                dependency_available = q[0] == Quota.AVAILABILITY_OK
+            if dependency_available:
                 item._remove = True
                 continue
 
