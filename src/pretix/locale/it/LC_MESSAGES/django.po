@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 16:42+0000\n"
-"PO-Revision-Date: 2024-11-24 01:00+0000\n"
-"Last-Translator: gabriblas <github@unowen.simplelogin.com>\n"
+"PO-Revision-Date: 2025-01-25 22:00+0000\n"
+"Last-Translator: Rosariocastellana <rosariocastellana@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -93,7 +93,7 @@ msgstr "Italiano"
 
 #: pretix/_base_settings.py:105
 msgid "Japanese"
-msgstr ""
+msgstr "Giapponese"
 
 #: pretix/_base_settings.py:106
 msgid "Latvian"
@@ -3415,6 +3415,8 @@ msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"Il plugin in questione non è al momento attivo. Per attivarlo, clicca qui "
+"per andare alle impostazioni del plugin."
 
 #: pretix/base/logentrytypes.py:50
 #, fuzzy
@@ -3425,48 +3427,48 @@ msgstr "Questo prodotto non è al momento disponibile."
 #: pretix/base/logentrytypes.py:183
 #, python-brace-format
 msgid "Order {val}"
-msgstr ""
+msgstr "Ordine {val}"
 
 #: pretix/base/logentrytypes.py:194
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr ""
+msgstr "Voucher {val}…"
 
 #: pretix/base/logentrytypes.py:205
 #, python-brace-format
 msgid "Product {val}"
-msgstr ""
+msgstr "Prodotto {val}"
 
 #: pretix/base/logentrytypes.py:211
 #, python-brace-format
 msgctxt "subevent"
 msgid "Date {val}"
-msgstr ""
+msgstr "Data {val}"
 
 #: pretix/base/logentrytypes.py:217
 #, python-brace-format
 msgid "Quota {val}"
-msgstr ""
+msgstr "Quota {val}"
 
 #: pretix/base/logentrytypes.py:223
 #, python-brace-format
 msgid "Discount {val}"
-msgstr ""
+msgstr "Sconto {val}"
 
 #: pretix/base/logentrytypes.py:229
 #, python-brace-format
 msgid "Category {val}"
-msgstr ""
+msgstr "Categoria {val}"
 
 #: pretix/base/logentrytypes.py:235
 #, python-brace-format
 msgid "Question {val}"
-msgstr ""
+msgstr "Domanda {val}"
 
 #: pretix/base/logentrytypes.py:241
 #, python-brace-format
 msgid "Tax rule {val}"
-msgstr ""
+msgstr "Regola fiscale {val}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
@@ -4771,7 +4773,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:455
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Richiede l'utilizzo di un mezzo esistente o di uno nuovo"
 
 #: pretix/base/models/items.py:471 pretix/base/models/items.py:1446
 msgid "Category"
