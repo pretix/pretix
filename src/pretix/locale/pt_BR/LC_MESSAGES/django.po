@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 16:42+0000\n"
-"PO-Revision-Date: 2025-01-27 14:35+0000\n"
+"PO-Revision-Date: 2025-01-28 01:00+0000\n"
 "Last-Translator: Cornelius Kibelka <ckibelka-ctr@wikimedia.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -2436,10 +2436,8 @@ msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr "Baixe uma planilha de todos os pagamentos e reembolsos de cada pedido."
 
 #: pretix/base/exporters/orderlist.py:1012
-#, fuzzy
-#| msgid "Date of last payment"
 msgid "Date range (payment date)"
-msgstr "Data do último pagamento"
+msgstr "Intervalo de datas (data de pagamento)"
 
 #: pretix/base/exporters/orderlist.py:1015
 msgid ""
@@ -2576,10 +2574,8 @@ msgid "Current user's carts"
 msgstr "Carrinhos de usuários atuais"
 
 #: pretix/base/exporters/orderlist.py:1135
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Exited orders"
-msgstr "Ordens pagas"
+msgstr "Pedidos encerrados"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Current availability"
@@ -2593,18 +2589,14 @@ msgid "Infinite"
 msgstr "Infinito"
 
 #: pretix/base/exporters/orderlist.py:1181
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card transactions"
-msgstr "Cartão Presente"
+msgstr "Transações com cartões-presente"
 
 #: pretix/base/exporters/orderlist.py:1183
 #: pretix/base/exporters/orderlist.py:1288
-#, fuzzy
-#| msgid "Gift card"
 msgctxt "export_category"
 msgid "Gift cards"
-msgstr "Cartão Presente"
+msgstr "Cartões-presente"
 
 #: pretix/base/exporters/orderlist.py:1184
 msgid "Download a spreadsheet of all gift card transactions."
@@ -2620,10 +2612,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:28
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:156
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card code"
-msgstr "Cartão Presente"
+msgstr "Código do cartão-presente"
 
 #: pretix/base/exporters/orderlist.py:1213
 #: pretix/base/exporters/orderlist.py:1302
@@ -2679,10 +2669,8 @@ msgid "TEST MODE"
 msgstr "MODO DE TESTE"
 
 #: pretix/base/exporters/orderlist.py:1240
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card redemptions"
-msgstr "Cartão Presente"
+msgstr "Resgates de cartões-presente"
 
 #: pretix/base/exporters/orderlist.py:1242
 msgid ""
@@ -2700,10 +2688,8 @@ msgstr "Emissor"
 #: pretix/control/navigation.py:556
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
 #: pretix/plugins/reports/accountingreport.py:898
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift cards"
-msgstr "Cartão Presente"
+msgstr "Cartões-presente"
 
 #: pretix/base/exporters/orderlist.py:1289
 msgid "Download a spreadsheet of all gift cards including their current value."
@@ -2797,17 +2783,12 @@ msgid "Created in order"
 msgstr "Criado em ordem"
 
 #: pretix/base/exporters/orderlist.py:1363
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice number"
 msgid "Last invoice number of order"
-msgstr "Número da fatura"
+msgstr "Último número de fatura do pedido"
 
 #: pretix/base/exporters/orderlist.py:1364
-#, fuzzy
-#| msgid "Only paid orders"
 msgid "Last invoice date of order"
-msgstr "Apenas ordens pagas"
+msgstr "Data da última fatura do pedido"
 
 #: pretix/base/exporters/reusablemedia.py:34 pretix/control/navigation.py:616
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:204
@@ -2835,11 +2816,9 @@ msgid "Media type"
 msgstr "Tipo de mídia"
 
 #: pretix/base/exporters/reusablemedia.py:47 pretix/base/models/media.py:73
-#, fuzzy
-#| msgid "Internal identifier"
 msgctxt "reusable_medium"
 msgid "Identifier"
-msgstr "Identificador interno"
+msgstr "Identificador"
 
 #: pretix/base/exporters/reusablemedia.py:49 pretix/base/models/media.py:81
 #: pretix/base/models/orders.py:265 pretix/base/models/orders.py:3094
@@ -2851,27 +2830,18 @@ msgstr "Data de validade"
 #: pretix/base/exporters/reusablemedia.py:50 pretix/base/models/media.py:90
 #: pretix/control/templates/pretixcontrol/order/index.html:215
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:132
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customer account"
-msgstr "Cliente"
+msgstr "Conta do cliente"
 
 #: pretix/base/exporters/reusablemedia.py:51 pretix/base/models/media.py:97
-#, fuzzy
-#| msgid "Multiline text"
 msgid "Linked ticket"
-msgstr "Texto multilinha"
+msgstr "Bilhete vinculado"
 
 #: pretix/base/exporters/reusablemedia.py:52 pretix/base/models/media.py:104
-#, fuzzy
-#| msgid "Gift card"
 msgid "Linked gift card"
-msgstr "Cartão Presente"
+msgstr "Cartão-presente vinculado"
 
 #: pretix/base/exporters/waitinglist.py:42
-#, fuzzy
-#| msgid "Waiting list"
 msgctxt "export_category"
 msgid "Waiting list"
 msgstr "Lista de espera"
@@ -3566,23 +3536,23 @@ msgstr "Manter vazio"
 #: pretix/base/modelimport.py:139
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr ""
+msgstr "Configuração inválida para a coluna “{header}”."
 
 #: pretix/base/modelimport.py:199
 #, python-brace-format
 msgid "Could not parse {value} as a yes/no value."
-msgstr ""
+msgstr "Não foi possível analisar {value} como um valor sim/não."
 
 #: pretix/base/modelimport.py:222
 #, python-brace-format
 msgid "Could not parse {value} as a date and time."
-msgstr ""
+msgstr "Não foi possível analisar {value} como uma data e hora."
 
 #: pretix/base/modelimport.py:232 pretix/control/views/orders.py:1162
 #: pretix/control/views/orders.py:1191 pretix/control/views/orders.py:1235
 #: pretix/control/views/orders.py:1270 pretix/control/views/orders.py:1293
 msgid "You entered an invalid number."
-msgstr ""
+msgstr "Você inseriu um número inválido."
 
 #: pretix/base/modelimport.py:279 pretix/base/modelimport.py:291
 #, fuzzy
@@ -3594,7 +3564,7 @@ msgstr "Nenhum evento arquivado encontrado."
 #: pretix/base/modelimport.py:281 pretix/base/modelimport.py:293
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr ""
+msgstr "Foram encontradas várias datas correspondentes."
 
 #: pretix/base/modelimport_orders.py:85
 #, fuzzy
@@ -3617,7 +3587,7 @@ msgstr "Nenhum evento arquivado encontrado."
 #: pretix/base/modelimport_orders.py:130
 #: pretix/base/modelimport_vouchers.py:196
 msgid "Multiple matching products were found."
-msgstr ""
+msgstr "Foram encontrados vários produtos correspondentes."
 
 #: pretix/base/modelimport_orders.py:139
 #: pretix/base/modelimport_vouchers.py:205 pretix/base/models/items.py:1245
@@ -3637,7 +3607,7 @@ msgstr "Informações da conta alteradas"
 #: pretix/base/modelimport_vouchers.py:227
 #: pretix/base/modelimport_vouchers.py:261
 msgid "Multiple matching variations were found."
-msgstr ""
+msgstr "Foram encontradas diversas variações correspondentes."
 
 #: pretix/base/modelimport_orders.py:164
 #, fuzzy
@@ -3726,7 +3696,7 @@ msgstr "Tipo de dispositivo"
 
 #: pretix/base/modelimport_orders.py:460
 msgid "You cannot assign a position secret that already exists."
-msgstr ""
+msgstr "Não é possível atribuir um segredo de posição que já exista."
 
 #: pretix/base/modelimport_orders.py:491
 #, fuzzy
@@ -3814,7 +3784,7 @@ msgstr "Um voucher com esse código já existe."
 #: pretix/base/models/vouchers.py:196 pretix/control/views/vouchers.py:120
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:52
 msgid "Maximum usages"
-msgstr ""
+msgstr "Usos máximos"
 
 #: pretix/base/modelimport_vouchers.py:79
 #, fuzzy
@@ -3840,20 +3810,22 @@ msgstr "Quantidade máxima por pedido"
 #: pretix/base/modelimport_vouchers.py:119 pretix/base/models/vouchers.py:225
 #: pretix/control/forms/filter.py:2106
 msgid "Reserve ticket from quota"
-msgstr ""
+msgstr "Reservar bilhete da cota"
 
 #: pretix/base/modelimport_vouchers.py:127 pretix/base/models/vouchers.py:233
 msgid "Allow to bypass quota"
-msgstr ""
+msgstr "Permitir ignorar a cota"
 
 #: pretix/base/modelimport_vouchers.py:135 pretix/base/models/vouchers.py:239
 msgid "Price mode"
-msgstr ""
+msgstr "Modo de preço"
 
 #: pretix/base/modelimport_vouchers.py:150
 #, python-brace-format
 msgid "Could not parse {value} as a price mode, use one of {options}."
 msgstr ""
+"Não foi possível analisar {value} como um modo de preço, use uma das "
+"{options}."
 
 #: pretix/base/modelimport_vouchers.py:160 pretix/base/models/vouchers.py:245
 msgid "Voucher value"
@@ -3861,18 +3833,18 @@ msgstr "Valor do voucher"
 
 #: pretix/base/modelimport_vouchers.py:165
 msgid "It is pointless to set a value without a price mode."
-msgstr ""
+msgstr "Não faz sentido definir um valor sem um modo de preço."
 
 #: pretix/base/modelimport_vouchers.py:237 pretix/base/models/items.py:2081
 #: pretix/base/models/vouchers.py:272
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
-msgstr ""
+msgstr "Cota"
 
 #: pretix/base/modelimport_vouchers.py:253
 msgid "You cannot specify a quota if you specified a product."
-msgstr ""
+msgstr "Não é possível especificar uma cota se você especificou um produto."
 
 #: pretix/base/modelimport_vouchers.py:282 pretix/base/models/vouchers.py:495
 #, fuzzy
@@ -3895,11 +3867,9 @@ msgid "Seat-specific vouchers can only be used once."
 msgstr "Este produto não será vendido após a data indicada."
 
 #: pretix/base/modelimport_vouchers.py:306 pretix/base/models/vouchers.py:519
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
+#, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "Você precisa selecionar uma data."
+msgstr "Você precisa escolher o produto “{prod}” para esse assento."
 
 #: pretix/base/modelimport_vouchers.py:318 pretix/base/models/vouchers.py:285
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
@@ -3910,17 +3880,20 @@ msgstr "Tag"
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:297
 msgid "Shows hidden products that match this voucher"
-msgstr ""
+msgstr "Mostra produtos ocultos que correspondem a esse voucher"
 
 #: pretix/base/modelimport_vouchers.py:343 pretix/base/models/vouchers.py:301
 msgid "Offer all add-on products for free when redeeming this voucher"
 msgstr ""
+"Ofereça todos os produtos adicionais gratuitamente ao resgatar este voucher"
 
 #: pretix/base/modelimport_vouchers.py:351 pretix/base/models/vouchers.py:305
 msgid ""
 "Include all bundled products without a designated price when redeeming this "
 "voucher"
 msgstr ""
+"Inclua todos os produtos incluídos em um pacote sem um preço designado ao "
+"resgatar esse voucher"
 
 #: pretix/base/models/auth.py:248
 msgid "Is active"
@@ -3994,22 +3967,28 @@ msgid ""
 "and valid for check-in regardless of which date they are purchased for. You "
 "can limit their validity through the advanced check-in rules, though."
 msgstr ""
+"Se você escolher “todas as datas”, os bilhetes serão considerados parte "
+"dessa lista e válidos para o check-in, independentemente da data para a qual "
+"foram comprados. No entanto, você pode limitar a validade deles por meio das "
+"regras avançadas de check-in."
 
 #: pretix/base/models/checkin.py:65
 msgctxt "checkin"
 msgid "Ignore check-ins on this list in statistics"
-msgstr ""
+msgstr "Ignorar os check-ins dessa lista nas estatísticas"
 
 #: pretix/base/models/checkin.py:69
 msgctxt "checkin"
 msgid "Tickets with a check-in on this list should be considered \"used\""
-msgstr ""
+msgstr "Os bilhetes com um check-in nessa lista devem ser considerados “usados”"
 
 #: pretix/base/models/checkin.py:70
 msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
 msgstr ""
+"Isso é relevante em várias situações, por exemplo, para decidir se um "
+"bilhete ainda pode ser cancelado pelo cliente."
 
 #: pretix/base/models/checkin.py:74
 msgctxt "checkin"
@@ -4033,6 +4012,8 @@ msgstr ""
 #: pretix/base/models/checkin.py:79
 msgid "Allow checking in add-on tickets by scanning the main ticket"
 msgstr ""
+"Permitir o check-in de bilhetes adicionais por meio da leitura do bilhete "
+"principal"
 
 #: pretix/base/models/checkin.py:81
 msgid ""
@@ -4040,6 +4021,9 @@ msgid ""
 "there is always exactly one matching add-on ticket. Ambiguous scans will be "
 "rejected.."
 msgstr ""
+"Um escaneamento só será possível se a lista de check-in estiver configurada "
+"de forma que sempre haja exatamente um bilhete complementar correspondente. "
+"Os escaneamentos ambíguos serão rejeitados..."
 
 #: pretix/base/models/checkin.py:85 pretix/control/navigation.py:640
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
@@ -4054,19 +4038,23 @@ msgid ""
 "Does not have any effect for the validation of tickets, only for the "
 "automatic configuration of check-in devices."
 msgstr ""
+"Não tem efeito na validação de bilhetes, apenas na configuração automática "
+"dos dispositivos de check-in."
 
 #: pretix/base/models/checkin.py:90
 msgid "Allow re-entering after an exit scan"
-msgstr ""
+msgstr "Permitir o reingresso após um escaneamento de saída"
 
 #: pretix/base/models/checkin.py:94
 msgid "Allow multiple entries per ticket"
-msgstr ""
+msgstr "Permitir várias entradas por bilhete"
 
 #: pretix/base/models/checkin.py:95
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
 msgstr ""
+"Use essa opção para desativar os avisos se um bilhete for escaneado uma "
+"segunda vez."
 
 #: pretix/base/models/checkin.py:99
 #, fuzzy
@@ -4082,7 +4070,7 @@ msgstr "País"
 
 #: pretix/base/models/checkin.py:337
 msgid "Exit"
-msgstr ""
+msgstr "Saída"
 
 #: pretix/base/models/checkin.py:355
 #, fuzzy
