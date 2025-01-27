@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 16:42+0000\n"
-"PO-Revision-Date: 2024-11-14 20:00+0000\n"
-"Last-Translator: Gravity Fox <gravityraposa@gmail.com>\n"
+"PO-Revision-Date: 2025-01-27 14:35+0000\n"
+"Last-Translator: Cornelius Kibelka <ckibelka-ctr@wikimedia.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -93,7 +93,7 @@ msgstr "Italiano"
 
 #: pretix/_base_settings.py:105
 msgid "Japanese"
-msgstr ""
+msgstr "Japonês"
 
 #: pretix/_base_settings.py:106
 msgid "Latvian"
@@ -2450,7 +2450,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1019
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Intervalo de datas (início da transação)"
 
 #: pretix/base/exporters/orderlist.py:1025
 msgid "Payment states"
@@ -2609,6 +2609,7 @@ msgstr "Cartão Presente"
 #: pretix/base/exporters/orderlist.py:1184
 msgid "Download a spreadsheet of all gift card transactions."
 msgstr ""
+"Faça o download de uma planilha de todas as transações com cartões-presente."
 
 #: pretix/base/exporters/orderlist.py:1212
 #: pretix/base/exporters/orderlist.py:1259
@@ -2631,7 +2632,7 @@ msgstr "Cartão Presente"
 #: pretix/control/forms/filter.py:1413 pretix/control/forms/filter.py:1416
 #: pretix/control/templates/pretixcontrol/event/live.html:75
 msgid "Test mode"
-msgstr ""
+msgstr "Modo de teste"
 
 #: pretix/base/exporters/orderlist.py:1218 pretix/base/models/organizer.py:96
 #: pretix/control/forms/event.py:110 pretix/control/forms/event.py:116
@@ -2687,11 +2688,13 @@ msgstr "Cartão Presente"
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Faça o download de uma planilha de todos os pagamentos ou reembolsos que "
+"envolvam cartões-presente."
 
 #: pretix/base/exporters/orderlist.py:1259
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:16
 msgid "Issuer"
-msgstr ""
+msgstr "Emissor"
 
 #: pretix/base/exporters/orderlist.py:1286 pretix/control/navigation.py:538
 #: pretix/control/navigation.py:556
@@ -2705,14 +2708,16 @@ msgstr "Cartão Presente"
 #: pretix/base/exporters/orderlist.py:1289
 msgid "Download a spreadsheet of all gift cards including their current value."
 msgstr ""
+"Faça o download de uma planilha de todos os cartões-presente, incluindo seu "
+"valor atual."
 
 #: pretix/base/exporters/orderlist.py:1296
 msgid "Show value at"
-msgstr ""
+msgstr "Mostrar o valor em"
 
 #: pretix/base/exporters/orderlist.py:1299
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "Por padrão, a hora do relatório."
 
 #: pretix/base/exporters/orderlist.py:1304
 #: pretix/base/exporters/orderlist.py:1314 pretix/control/forms/filter.py:518
@@ -2738,20 +2743,20 @@ msgstr "Todos"
 
 #: pretix/base/exporters/orderlist.py:1306 pretix/control/forms/filter.py:1417
 msgid "Live"
-msgstr ""
+msgstr "Em tempo real"
 
 #: pretix/base/exporters/orderlist.py:1315 pretix/control/forms/filter.py:1425
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
 msgid "Empty"
-msgstr ""
+msgstr "Vazio"
 
 #: pretix/base/exporters/orderlist.py:1316 pretix/control/forms/filter.py:1426
 msgid "Valid and with value"
-msgstr ""
+msgstr "Válido e com valor"
 
 #: pretix/base/exporters/orderlist.py:1317 pretix/control/forms/filter.py:1427
 msgid "Expired and with value"
-msgstr ""
+msgstr "Expirado e com valor"
 
 #: pretix/base/exporters/orderlist.py:1318 pretix/control/forms/filter.py:227
 #: pretix/control/forms/filter.py:1428 pretix/control/forms/filter.py:2097
@@ -2766,14 +2771,14 @@ msgstr "Expirado"
 
 #: pretix/base/exporters/orderlist.py:1356 pretix/base/models/giftcards.py:98
 msgid "Test mode card"
-msgstr ""
+msgstr "Cartão de modo de teste"
 
 #: pretix/base/exporters/orderlist.py:1358
 #: pretix/base/modelimport_orders.py:516 pretix/base/models/giftcards.py:102
 #: pretix/control/templates/pretixcontrol/order/index.html:202
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:62
 msgid "Expiry date"
-msgstr ""
+msgstr "Data de expiração"
 
 #: pretix/base/exporters/orderlist.py:1359 pretix/control/forms/orders.py:875
 msgid "Special terms and conditions"
@@ -2874,23 +2879,24 @@ msgstr "Lista de espera"
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
 msgstr ""
+"Faça o download de uma planilha com todos os dados de sua lista de espera."
 
 #: pretix/base/exporters/waitinglist.py:49
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:102
 msgid "All entries"
-msgstr ""
+msgstr "Todos os registros"
 
 #: pretix/base/exporters/waitinglist.py:54
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:105
 msgid "Waiting for a voucher"
-msgstr ""
+msgstr "Aguardando um voucher"
 
 #: pretix/base/exporters/waitinglist.py:59
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:107
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:227
 #: pretix/control/views/waitinglist.py:326
 msgid "Voucher assigned"
-msgstr ""
+msgstr "Voucher atribuído"
 
 #: pretix/base/exporters/waitinglist.py:64
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:110
@@ -2903,7 +2909,7 @@ msgstr "Descrição da categoria"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:223
 #: pretix/control/views/waitinglist.py:322
 msgid "Voucher redeemed"
-msgstr ""
+msgstr "Voucher resgatado"
 
 #: pretix/base/exporters/waitinglist.py:80
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:116
@@ -2918,7 +2924,7 @@ msgstr "O carrinho expirou"
 #: pretix/control/forms/event.py:1764
 #: pretix/control/templates/pretixcontrol/items/index.html:38
 msgid "Product name"
-msgstr ""
+msgstr "Nome do produto"
 
 #: pretix/base/exporters/waitinglist.py:115
 #: pretix/base/modelimport_orders.py:95 pretix/base/modelimport_vouchers.py:60
@@ -2932,7 +2938,7 @@ msgstr "Data"
 #: pretix/base/exporters/waitinglist.py:119
 #: pretix/control/views/waitinglist.py:308
 msgid "Priority"
-msgstr ""
+msgstr "Prioridade"
 
 #: pretix/base/exporters/waitinglist.py:121
 #: pretix/base/modelimport_vouchers.py:39 pretix/base/models/vouchers.py:190
@@ -2951,7 +2957,7 @@ msgstr "Código do voucher"
 #: pretix/base/forms/__init__.py:118
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "Você pode usar {markup_name} nesse campo."
 
 #: pretix/base/forms/__init__.py:178
 #, python-format
@@ -2959,6 +2965,8 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"Por motivos técnicos, não é possível definir entradas que precisam ser "
+"mascaradas (por exemplo, senhas), como %(value)s."
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/auth.py:179
 msgid "Keep me logged in"
@@ -2966,12 +2974,12 @@ msgstr "Mantenha-me conectado"
 
 #: pretix/base/forms/auth.py:65 pretix/base/forms/auth.py:272
 msgid "This combination of credentials is not known to our system."
-msgstr ""
+msgstr "Essa combinação de credenciais não é conhecida pelo nosso sistema."
 
 #: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:372 pretix/presale/forms/customer.py:444
 msgid "For security reasons, please wait 5 minutes before you try again."
-msgstr ""
+msgstr "Por motivos de segurança, aguarde 5 minutos antes de tentar novamente."
 
 #: pretix/base/forms/auth.py:67 pretix/base/forms/auth.py:273
 msgid "This account is inactive."
@@ -3018,35 +3026,43 @@ msgstr "Referência interna"
 #: pretix/base/forms/questions.py:320
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Número de telefone (sem código de área internacional)"
 
 #: pretix/base/forms/questions.py:481
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"Você fez o upload de uma imagem na orientação paisagem. Carregue uma imagem "
+"na orientação retrato."
 
 #: pretix/base/forms/questions.py:484
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Carregue uma imagem em que a largura seja 3/4 da altura."
 
 #: pretix/base/forms/questions.py:487
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"O arquivo que você carregou tem um número muito grande de pixels. Carregue "
+"uma imagem que não seja maior que 10.000 x 10.000 pixels."
 
 #: pretix/base/forms/questions.py:490 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Faça upload de uma imagem válida. O arquivo que você carregou não era uma "
+"imagem ou era uma imagem corrompida."
 
 #: pretix/base/forms/questions.py:633 pretix/base/forms/questions.py:642
 msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
+"Se você mantiver esse campo vazio, o bilhete será válido a partir do momento "
+"da compra."
 
 #: pretix/base/forms/questions.py:689 pretix/base/forms/questions.py:1014
 msgid "Street and Number"
@@ -3064,16 +3080,20 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Opcional, mas, dependendo do país em que você reside, talvez seja necessário "
+"cobrar impostos adicionais se você não os inserir."
 
 #: pretix/base/forms/questions.py:1071 pretix/base/forms/questions.py:1077
 msgid "If you are registered in Switzerland, you can enter your UID instead."
-msgstr ""
+msgstr "Se você estiver registrado na Suíça, poderá inserir seu UID."
 
 #: pretix/base/forms/questions.py:1075
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Opcional, mas pode ser necessário para que você solicite benefícios fiscais "
+"em sua fatura, dependendo do seu país de residência e do país do vendedor."
 
 #: pretix/base/forms/questions.py:1174
 msgid "You need to provide a company name."
@@ -3109,7 +3129,7 @@ msgstr "Senha incorreta."
 
 #: pretix/base/forms/user.py:58
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Escolha uma senha diferente da atual."
 
 #: pretix/base/forms/user.py:63 pretix/presale/forms/customer.py:379
 #: pretix/presale/forms/customer.py:448
@@ -3164,6 +3184,10 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
+"Há um erro na sintaxe de seu placeholder. Verifique se os colchetes “{” de "
+"abertura e “}” de fechamento em seus placeholders estão corretos. Observação:"
+" para usar literalmente “{” ou “}”, você precisa duplicá-los como “{{” e "
+"“}}”."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:758
 #, fuzzy, python-format
@@ -3348,7 +3372,7 @@ msgstr "Montante"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Preço único: {net_price} líquido / {gross_price} bruto"
 
 #: pretix/base/invoice.py:668
 #, fuzzy, python-brace-format
@@ -3372,7 +3396,7 @@ msgstr "Ordens pagas"
 #: pretix/base/invoice.py:707
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr ""
+msgstr "Pagamentos pendentes"
 
 #: pretix/base/invoice.py:724
 #, fuzzy
@@ -3438,7 +3462,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:867
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Renderizador de faturas padrão (letra no estilo europeu)"
 
 #: pretix/base/invoice.py:956
 #, fuzzy
@@ -3450,7 +3474,7 @@ msgstr "Você precisa selecionar uma data."
 
 #: pretix/base/invoice.py:1003
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Renderizador de faturas simplificado"
 
 #: pretix/base/invoice.py:1022
 #, fuzzy, python-brace-format
@@ -3465,6 +3489,8 @@ msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"O plug-in relevante não está ativo no momento. Para ativá-lo, clique aqui "
+"para acessar as configurações do plug-in."
 
 #: pretix/base/logentrytypes.py:50
 #, fuzzy
@@ -3496,7 +3522,7 @@ msgstr "Data {val}"
 #: pretix/base/logentrytypes.py:217
 #, python-brace-format
 msgid "Quota {val}"
-msgstr ""
+msgstr "Contingente {val}"
 
 #: pretix/base/logentrytypes.py:223
 #, fuzzy, python-brace-format
@@ -3521,12 +3547,12 @@ msgstr "Norma fiscal {val}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Código de barras / código QR"
 
 #: pretix/base/media.py:88
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
 msgid "NFC UID-based"
-msgstr ""
+msgstr "Baseado em NFC UID"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -3535,7 +3561,7 @@ msgstr "Lista padrão"
 
 #: pretix/base/modelimport.py:112
 msgid "Keep empty"
-msgstr ""
+msgstr "Manter vazio"
 
 #: pretix/base/modelimport.py:139
 #, python-brace-format
