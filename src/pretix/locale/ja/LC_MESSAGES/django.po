@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 16:42+0000\n"
-"PO-Revision-Date: 2025-01-22 16:00+0000\n"
+"PO-Revision-Date: 2025-01-27 10:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2956,7 +2956,7 @@ msgstr ""
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:283 pretix/presale/forms/customer.py:371
 msgid "Please enter the same password twice"
-msgstr "同じパスワードを2回入力してください"
+msgstr "同じパスワードを２回入力してください"
 
 #: pretix/base/forms/auth.py:172 pretix/base/forms/auth.py:224
 #: pretix/presale/forms/customer.py:296 pretix/presale/forms/customer.py:390
@@ -3401,13 +3401,12 @@ msgstr "イベントの日程: {date_range}"
 msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
-msgstr ""
+msgstr "関連するプラグインは、現在アクティブではありません。アクティブにするには、こ"
+"こをクリックしてプラグイン設定に進んでください。"
 
 #: pretix/base/logentrytypes.py:50
-#, fuzzy
-#| msgid "This product is currently not available."
 msgid "The relevant plugin is currently not active."
-msgstr "この製品は現在利用できません。"
+msgstr "関連するプラグインは、現在無効です。"
 
 #: pretix/base/logentrytypes.py:183
 #, python-brace-format
@@ -16353,22 +16352,17 @@ msgid "A user has been removed from the event team."
 msgstr "ユーザーがイベントチームから削除されました。"
 
 #: pretix/control/logdisplay.py:721
-#, fuzzy
-#| msgid "A plugin has been enabled."
 msgid "The plugin has been enabled."
 msgstr "プラグインが有効になりました。"
 
 #: pretix/control/logdisplay.py:722
-#, fuzzy
-#| msgid "A plugin has been disabled."
 msgid "The plugin has been disabled."
 msgstr "プラグインが無効になっています。"
 
 #: pretix/control/logdisplay.py:725
-#, fuzzy, python-brace-format
-#| msgid "Question {val}"
+#, python-brace-format
 msgid "Plugin {val}"
-msgstr "質問{val}"
+msgstr "プラグイン{val}"
 
 #: pretix/control/logdisplay.py:741
 msgid "The product has been created."
@@ -29723,10 +29717,9 @@ msgid "An email rule was deleted"
 msgstr "電子メールのルールが削除されました"
 
 #: pretix/plugins/sendmail/signals.py:140
-#, fuzzy, python-brace-format
-#| msgid "Tax rule {val}"
+#, python-brace-format
 msgid "Mail rule {val}"
-msgstr "税金のルール {val}"
+msgstr "メールのルール {val}"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:8
 msgid ""
@@ -32173,7 +32166,7 @@ msgstr "この製品の価格が自動割引によって削減されました。
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:346
 #, python-format
 msgid "%(percent)s %% Discount"
-msgstr ""
+msgstr "%(percent)s %% 割引"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:277
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:350
