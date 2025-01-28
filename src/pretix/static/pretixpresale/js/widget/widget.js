@@ -230,7 +230,7 @@ Vue.component('availbox', {
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '</label>'
-        + '<div :class="count_group_classes" v-else>'
+        + '<div :class="count_group_classes" v-else role="group" v-bind:aria-label="item.name">'
         + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
         + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
@@ -723,7 +723,6 @@ var shared_methods = {
     },
     buy_callback: function (data) {
         if (data.redirect) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
             if (data.cart_id) {
                 this.$root.cart_id = data.cart_id;
                 setCookie(this.$root.cookieName, data.cart_id, 30);
@@ -748,7 +747,7 @@ var shared_methods = {
                 }
                 this.$root.overlay.frame_loading = false;
             } else {
-                iframe.src = url;
+                this.$root.overlay.frame_src = url;
             }
         } else {
             this.async_task_id = data.async_id;
@@ -787,9 +786,7 @@ var shared_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
-        var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
-        this.$root.overlay.frame_loading = true;
-        iframe.src = redirect_url;
+        this.$root.overlay.frame_src = redirect_url;
     },
     voucher_open: function (voucher) {
         var redirect_url;
@@ -801,9 +798,7 @@ var shared_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
-            this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
+            this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
         }
@@ -826,9 +821,7 @@ var shared_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
-            this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
+            this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
         }
@@ -853,27 +846,27 @@ var shared_loading_fragment = (
 );
 
 var shared_iframe_fragment = (
-    '<div :class="frameClasses">'
+    '<div :class="frameClasses" role="dialog" aria-modal="true" >'
     + '<div class="pretix-widget-frame-loading" v-show="$root.frame_loading">'
     + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
     + '</div>'
     + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
+    + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent.stop="close" role="button" aria-label="'+strings.close+'">'
+    + '<svg height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+    + '</a></div>'
     + '<iframe frameborder="0" width="650" height="650" @load="iframeLoaded" '
     + '        :name="$root.parent.widget_id" src="about:blank" v-once'
     + '        allow="autoplay *; camera *; fullscreen *; payment *"'
     + '        referrerpolicy="origin">'
     + 'Please enable frames in your browser!'
     + '</iframe>'
-    + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent.stop="close" role="button" aria-label="'+strings.close+'">'
-    + '<svg height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
-    + '</a></div>'
     + '</div>'
     + '</div>'
 );
 
 var shared_alert_fragment = (
-    '<div :class="alertClasses">'
-    + '<transition name="bounce">'
+    '<div :class="alertClasses" role="dialog" aria-modal="true" aria-live="polite">'
+    + '<transition name="bounce" @after-enter="focusButton">'
     + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
     + '<p>{{ $root.error_message }}</p>'
     + '<p><button v-if="$root.error_url_after" @click.prevent.stop="errorContinue">' + strings.continue + '</button>'
@@ -966,8 +959,7 @@ Vue.component('pretix-overlay', {
                 window.open(this.$root.error_url_after);
                 return;
             }
-            var iframe = this.$refs['frame-container'].children[0];
-            iframe.src = this.$root.error_url_after;
+            this.$root.overlay.frame_src = this.$root.error_url_after;
             this.$root.frame_loading = true;
             this.$root.error_message = null;
             this.$root.error_url_after = null;
@@ -975,15 +967,22 @@ Vue.component('pretix-overlay', {
         close: function () {
             this.$root.frame_shown = false;
             this.$root.parent.frame_dismissed = true;
+            this.$root.frame_src = "";
             this.$root.parent.reload();
             this.$root.parent.trigger_close_callback();
         },
         iframeLoaded: function () {
             if (this.$root.frame_loading) {
                 this.$root.frame_loading = false;
-                this.$root.frame_shown = true;
+                if (this.$root.frame_src) {
+                    this.$root.frame_shown = true;
+                }
             }
-        }
+        },
+        focusButton: function () {
+            this.$el.querySelector(".pretix-widget-alert-box button").focus();
+        },
+
     }
 });
 
@@ -1738,8 +1737,7 @@ var shared_root_methods = {
             } else {
                 url += '?iframe=1';
             }
-            this.$root.overlay.$children[0].$refs['frame-container'].children[0].src = url;
-            this.$root.overlay.frame_loading = true;
+            this.$root.overlay.frame_src = url;
         } else {
             event.target.href = url;
             return;
@@ -1902,9 +1900,7 @@ var shared_root_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
-            this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
+            this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
         }
@@ -1928,9 +1924,7 @@ var shared_root_methods = {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
-            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
-            this.$root.overlay.frame_loading = true;
-            iframe.src = redirect_url;
+            this.$root.overlay.frame_src = redirect_url;
         } else {
             window.open(redirect_url);
         }
@@ -2067,9 +2061,41 @@ var create_overlay = function (app) {
                 error_url_after_new_tab: true,
                 error_message: null,
                 lightbox: null,
+                prevActiveElement: null,
             }
         },
+        props: {
+            frame_src: String,
+        },
         methods: {
+        },
+        watch: {
+            frame_src: function (newValue, oldValue) {
+                // show loading spinner only when previously no frame_src was set
+                if (newValue && !oldValue) {
+                    this.frame_loading = true;
+                }
+                // to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
+                this.$el.querySelector("iframe").src = newValue || "about:blank";
+            },
+            frame_shown: function (newValue) {
+                if (newValue) {
+                    this.prevActiveElement = document.activeElement;
+                    var btn = this.$el?.querySelector(".pretix-widget-frame-close a");
+                    this.$nextTick(function () {
+                        btn?.focus();
+                    });
+                } else {
+                    this.prevActiveElement?.focus();
+                }
+            },
+            error_message: function (newValue) {
+                if (newValue) {
+                    this.prevActiveElement = document.activeElement;
+                } else {
+                    this.prevActiveElement?.focus();
+                }
+            },
         }
     });
     app.$root.overlay = framechild;
