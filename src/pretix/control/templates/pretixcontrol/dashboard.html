@@ -7,7 +7,7 @@
     <div class="dropdown-container">
         <input type="text" class="form-control" id="dashboard_query"
                 placeholder="{% trans "Go to event" %}"
-                data-typeahead-query autofocus>
+                data-typeahead-query tabindex="1" autofocus>
         <ul data-event-typeahead data-source="{% url "control:nav.typeahead" %}" data-typeahead-field="#dashboard_query"
                 class="event-dropdown dropdown-menu">
         </ul>
