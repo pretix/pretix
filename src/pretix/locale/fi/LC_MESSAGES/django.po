@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 16:42+0000\n"
-"PO-Revision-Date: 2025-01-22 16:00+0000\n"
+"PO-Revision-Date: 2025-01-28 22:00+0000\n"
 "Last-Translator: Johanna Ketola <johanna.ketola@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -7323,9 +7323,8 @@ msgid "Gift card: Issuance date"
 msgstr ""
 
 #: pretix/base/pdf.py:521
-#, fuzzy
 msgid "Gift card: Expiration date"
-msgstr "Rekisteröintipäivämäärä"
+msgstr "Lahjakortti: Vanhenemispäivämäärä"
 
 #: pretix/base/pdf.py:562 pretix/base/pdf.py:600 pretix/base/pdf.py:606
 #: pretix/plugins/badges/exporters.py:504
@@ -7340,9 +7339,8 @@ msgid "<Answer: {question}>"
 msgstr ""
 
 #: pretix/base/pdf.py:648
-#, fuzzy
 msgid "Attendee name for salutation"
-msgstr "Osallistujan nimi"
+msgstr "Osallistujan nimi tervehdyksessä"
 
 #: pretix/base/pdf.py:649 pretix/base/pdf.py:672
 #: pretix/base/services/placeholders.py:696
@@ -7360,9 +7358,8 @@ msgid "Attendee name: {part}"
 msgstr ""
 
 #: pretix/base/pdf.py:671
-#, fuzzy
 msgid "Invoice address name for salutation"
-msgstr "Laskutusosoitteen maakunta"
+msgstr "Laskutusosoitteen nimi tervehdyksessä"
 
 #: pretix/base/pdf.py:678
 #, python-brace-format
@@ -7484,12 +7481,11 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/cart.py:126
-#, fuzzy, python-format
-#| msgid "You cannot generate an invoice for this order."
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "Et voi luoda laskua tälle tilaukselle."
-msgstr[1] "Et voi luoda laskua tälle tilaukselle."
+msgstr[0] "Et voi valita enempää kuin %s tuotteen per tilaus."
+msgstr[1] "Et voi valita enempää kuin %s tuotetta per tilaus."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1539
 #, python-format
@@ -7521,16 +7517,12 @@ msgstr[1] ""
 #: pretix/base/services/cart.py:144 pretix/base/services/orders.py:153
 #: pretix/presale/templates/pretixpresale/event/index.html:167
 #: pretix/presale/views/waiting.py:145 pretix/presale/views/widget.py:763
-#, fuzzy
-#| msgid "The presale for this event has not yet started."
 msgid "The booking period for this event has not yet started."
-msgstr "Tapahtuman myynti ei ole vielä alkanut."
+msgstr "Tapahtuman varausaika ei ole vielä alkanut."
 
 #: pretix/base/services/cart.py:145
-#, fuzzy
-#| msgid "The presale period for this event is over."
 msgid "The booking period for this event has ended."
-msgstr "Tämän tapahtuman ennakkomyynti on päättynyt."
+msgstr "Tämän tapahtuman varausaika on päättynyt."
 
 #: pretix/base/services/cart.py:146
 msgid ""
@@ -7741,10 +7733,8 @@ msgid "Only allowed after {datetime}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:279
-#, fuzzy
-#| msgid "Attendee street"
 msgid "Attendee is checked out"
-msgstr "Osallistujan kadunnimi"
+msgstr "Osallistuja on kirjautunut ulos"
 
 #: pretix/base/services/checkin.py:281
 msgid "Attendee is already checked in"
@@ -7755,10 +7745,8 @@ msgid "Ticket type not allowed"
 msgstr "Lipputyyppi ei sallittu"
 
 #: pretix/base/services/checkin.py:289
-#, fuzzy
-#| msgid "Create a new gate"
 msgid "Wrong entrance gate"
-msgstr "Luo uusi portti"
+msgstr "Väärä sisäänkäyntiportti"
 
 #: pretix/base/services/checkin.py:313
 msgid "time since last entry"
@@ -7853,17 +7841,12 @@ msgid "This order position has been canceled."
 msgstr ""
 
 #: pretix/base/services/checkin.py:981
-#, fuzzy
-#| msgid "This ticket has been used once."
-#| msgid_plural "This ticket has been used %(count)s times."
 msgid "This ticket has been blocked."
-msgstr "Tämä lippu on käytetty."
+msgstr "Tämä lippu on estetty."
 
 #: pretix/base/services/checkin.py:990
-#, fuzzy
-#| msgid "This order is not yet approved by the event organizer."
 msgid "This order is not yet approved."
-msgstr "Tapahtuman järjestäjä ei ole vielä hyväksynyt tätä tilausta."
+msgstr "Tätä tilausta ei ole vielä hyväksytty."
 
 #: pretix/base/services/checkin.py:999 pretix/base/services/checkin.py:1003
 #, python-brace-format
@@ -7905,10 +7888,8 @@ msgid "This ticket has already been redeemed."
 msgstr ""
 
 #: pretix/base/services/currencies.py:38 pretix/base/services/currencies.py:39
-#, fuzzy
-#| msgid "European Union"
 msgid "European Central Bank"
-msgstr "Euroopan unioni"
+msgstr "Euroopan keskuspankki"
 
 #: pretix/base/services/currencies.py:40
 msgid "Czech National Bank"
@@ -7920,22 +7901,17 @@ msgid "Your export did not contain any data."
 msgstr ""
 
 #: pretix/base/services/export.py:151
-#, fuzzy
-#| msgid "You do not have permission to clone this event."
 msgid "You do not have sufficient permission to perform this export."
-msgstr "Sinulla ei ole oikeuksia kloonata tätä tapahtumaa."
+msgstr ""
+"Sinulla ei ole riittäviä oikeuksia tämän vientitoiminnon suorittamiseen."
 
 #: pretix/base/services/export.py:189
-#, fuzzy
-#| msgid "Export date"
 msgid "Export failed"
-msgstr "Vie päivämäärä"
+msgstr "Vienti epäonnistui"
 
 #: pretix/base/services/export.py:206
-#, fuzzy
-#| msgid "Order denied"
 msgid "Permission denied."
-msgstr "Tilaus hylätty"
+msgstr "Pääsy evätty."
 
 #: pretix/base/services/export.py:221
 msgid "Your exported data exceeded the size limit for scheduled exports."
@@ -8035,10 +8011,9 @@ msgid "You are receiving this email because you placed an order for {event}."
 msgstr ""
 
 #: pretix/base/services/mail.py:478
-#, fuzzy
 msgctxt "attachment_filename"
 msgid "Calendar invite"
-msgstr "Lisää kalenteriin"
+msgstr "Kalenterikutsu"
 
 #: pretix/base/services/memberships.py:108
 #, python-brace-format
@@ -8113,17 +8088,13 @@ msgstr ""
 
 #: pretix/base/services/memberships.py:231
 #: pretix/base/services/memberships.py:233
-#, fuzzy
-#| msgid "Start date"
 msgid "start"
-msgstr "Alkupäivämäärä"
+msgstr "alku"
 
 #: pretix/base/services/memberships.py:232
 #: pretix/base/services/memberships.py:234
-#, fuzzy
-#| msgid "Event end"
 msgid "open end"
-msgstr "Tapahtuma päättyy"
+msgstr "avoin loppu"
 
 #: pretix/base/services/memberships.py:244
 #, python-brace-format
@@ -8204,10 +8175,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: pretix/base/services/orders.py:154
-#, fuzzy
-#| msgid "The order has been deleted."
 msgid "The booking period has ended."
-msgstr "Tilaus poistettu."
+msgstr "Varausaika on päättynyt."
 
 #: pretix/base/services/orders.py:160
 msgid ""
@@ -8263,22 +8232,19 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/orders.py:201
-#, fuzzy, python-format
-#| msgid "Your event can not be deleted as it already contains orders."
+#, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr "Tapahtumaa ei voida poistaa, sillä siihen on jo tehty tilauksia."
+msgstr "Et voi poistaa sijaintia %(addon)s, koska se on jo kirjautunut sisään."
 
 #: pretix/base/services/orders.py:202
 msgid "Paid products not supported without a valid currency."
 msgstr ""
 
 #: pretix/base/services/orders.py:218
-#, fuzzy
-#| msgid "The refund has been canceled."
 msgid "The order was not canceled."
-msgstr "Hyvistys on peruttu."
+msgstr "Tilausta ei peruutettu."
 
 #: pretix/base/services/orders.py:272 pretix/control/forms/orders.py:124
 msgid "The new expiry date needs to be in the future."
@@ -8306,10 +8272,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/orders.py:955
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid "The selected payment methods do not cover the total balance."
-msgstr "Tätä maksutapa ei tue automaattisia hyvityksiä."
+msgstr "Valitut maksutavat eivät kata kokonaissaldoa."
 
 #: pretix/base/services/orders.py:1023
 msgid ""
@@ -8571,10 +8535,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:191
-#, fuzzy
-#| msgid "Deactivate selected"
 msgid "Activate re-usable media"
-msgstr "Poista valitut käytöstä"
+msgstr "Ota käyttöön uudelleenkäytettävä media"
 
 #: pretix/base/settings.py:192
 msgid ""
@@ -8593,10 +8555,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:260 pretix/base/settings.py:291
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card currency"
-msgstr "Lahjakortti"
+msgstr "Lahjakortin valuutta"
 
 #: pretix/base/settings.py:278
 msgid "Automatically create a new gift card if a new chip is encoded"
@@ -8742,10 +8702,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:520
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show exchange rates"
-msgstr "Näytä variaatiot"
+msgstr "Näytä valuuttakurssit"
 
 #: pretix/base/settings.py:523 pretix/base/settings.py:531
 #: pretix/control/forms/item.py:617
@@ -8781,9 +8739,8 @@ msgid "Ask for beneficiary"
 msgstr ""
 
 #: pretix/base/settings.py:575
-#, fuzzy
 msgid "Custom recipient field label"
-msgstr "Mukautetut kentät"
+msgstr "Mukautettu vastaanottajakentän tunniste"
 
 #: pretix/base/settings.py:577
 msgid ""
@@ -8795,9 +8752,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:590
-#, fuzzy
 msgid "Custom recipient field help text"
-msgstr "Mukautetut kentät"
+msgstr "Mukautettu vastaanottajakentän ohjeteksti"
 
 #: pretix/base/settings.py:592
 msgid ""
@@ -8910,10 +8866,8 @@ msgid "Highlight order code to make it stand out visibly"
 msgstr ""
 
 #: pretix/base/settings.py:733 pretix/base/settings.py:744
-#, fuzzy
-#| msgid "Only respected by modern browsers."
 msgid "Only respected by some invoice renderers."
-msgstr "Toimii vain moderneissa selaimissa."
+msgstr "Toimii vain joissakin laskugeneraattoreissa."
 
 #: pretix/base/settings.py:743 pretix/base/settings.py:2867
 #: pretix/control/templates/pretixcontrol/pdf/index.html:352
@@ -9036,10 +8990,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:957
-#, fuzzy
-#| msgid "Creation date"
 msgid "Expiration delay"
-msgstr "Luontipäivämäärä"
+msgstr "Vanhenemisen viive"
 
 #: pretix/base/settings.py:958
 msgid ""
@@ -9101,10 +9053,8 @@ msgid "Automatically on user request"
 msgstr ""
 
 #: pretix/base/settings.py:1043 pretix/base/settings.py:1056
-#, fuzzy
-#| msgid "Automatically refund full amount"
 msgid "Automatically on user request for paid orders"
-msgstr "Hyvitä täysi summa automaattisesti"
+msgstr "Automaattisesti käyttäjän pyynnöstä maksetuissa tilauksissa"
 
 #: pretix/base/settings.py:1044
 msgid "Automatically for all created orders"
@@ -9119,10 +9069,8 @@ msgid "Generate invoices"
 msgstr ""
 
 #: pretix/base/settings.py:1053
-#, fuzzy
-#| msgid "Re-try payment or choose another payment method"
 msgid "Automatically after payment or when required by payment method"
-msgstr "Yritä maksua uudelleen tai valitse toinen maksutapa"
+msgstr "Automaattisesti maksun jälkeen tai kun maksutapa vaatii sitä"
 
 #: pretix/base/settings.py:1054
 msgid "Automatically before payment for all created orders"
@@ -9350,10 +9298,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1423
-#, fuzzy
-#| msgid "Join waiting list"
 msgid "Disable waiting list"
-msgstr "Liity jonotuslistalle"
+msgstr "Poista odotuslista käytöstä"
 
 #: pretix/base/settings.py:1424
 msgid ""
@@ -9420,9 +9366,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1509
-#, fuzzy
 msgid "Show number of check-ins to customer"
-msgstr "Näytä jäljellä olevien lippujen määrä"
+msgstr "Näytä asiakkaalle kirjautumisten määrä"
 
 #: pretix/base/settings.py:1510
 msgid ""
@@ -9679,10 +9624,8 @@ msgid "Customers can cancel their unpaid orders"
 msgstr ""
 
 #: pretix/base/settings.py:1821
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Charge a fixed cancellation fee"
-msgstr "Peruutusmaksu"
+msgstr "Peri kiinteä peruutusmaksu"
 
 #: pretix/base/settings.py:1822 pretix/base/settings.py:1833
 #: pretix/base/settings.py:1847
@@ -9697,10 +9640,8 @@ msgid "Charge payment, shipping and service fees"
 msgstr ""
 
 #: pretix/base/settings.py:1846
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Charge a percentual cancellation fee"
-msgstr "Peruutusmaksu"
+msgstr "Peri prosentuaalinen peruutusmaksu"
 
 #: pretix/base/settings.py:1857 pretix/base/settings.py:1996
 msgid "Do not allow cancellations after"
@@ -9801,10 +9742,8 @@ msgid "Refund method"
 msgstr ""
 
 #: pretix/base/settings.py:2005 pretix/base/settings.py:2018
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Terms of cancellation"
-msgstr "Peruutus"
+msgstr "Peruutuksen ehdot"
 
 #: pretix/base/settings.py:2008
 msgid ""
@@ -9882,9 +9821,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2107
-#, fuzzy
 msgid "Event description"
-msgstr "Kuvaus"
+msgstr "Tapahtuman kuvaus"
 
 #: pretix/base/settings.py:2110
 msgid ""
@@ -10052,9 +9990,8 @@ msgstr ""
 "{event} -tiimi"
 
 #: pretix/base/settings.py:2281
-#, fuzzy
 msgid "Attachment for new orders"
-msgstr "Voi tarkastella tilauksia"
+msgstr "Liite uusille tilauksille"
 
 #: pretix/base/settings.py:2286
 #, python-brace-format
@@ -10083,10 +10020,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2325
-#, fuzzy, python-brace-format
-#| msgid "A new order has been placed: {order.code}"
+#, python-brace-format
 msgid "Your order has been changed: {code}"
-msgstr "Uusi tilaus tehty: {order.code}"
+msgstr "Tilaustasi {code} on muutettu"
 
 #: pretix/base/settings.py:2329
 #, python-brace-format
@@ -10135,9 +10071,9 @@ msgstr ""
 "{event} -tiimi"
 
 #: pretix/base/settings.py:2363
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr "Lippusi on valmis ladattavaksi: %(code)s"
+msgstr "Tapahtumailmoittautuminen vahvistettu: {code}"
 
 #: pretix/base/settings.py:2367
 #, python-brace-format
@@ -10165,10 +10101,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2394
-#, fuzzy, python-brace-format
-#| msgid "Your order: {code}"
+#, python-brace-format
 msgid "Your order is about to expire: {code}"
-msgstr "Tilauksesi: {code}"
+msgstr "Tilauksesi {code} on vanhentumassa"
 
 #: pretix/base/settings.py:2398
 #, python-brace-format
@@ -10187,27 +10122,12 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2412
-#, fuzzy, python-brace-format
-#| msgid "Your order: {code}"
+#, python-brace-format
 msgid "Your order is pending payment: {code}"
-msgstr "Tilauksesi: {code}"
+msgstr "Tilauksesi {code} odottaa maksua"
 
 #: pretix/base/settings.py:2416
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event} with a total value\n"
-#| "of {total_with_currency}. Please complete your payment before "
-#| "{expire_date}.\n"
-#| "\n"
-#| "{payment_info}\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10220,42 +10140,25 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hei!\n"
+"Hei,\n"
 "\n"
-"Olemme vastaanottaneet tilauksesi tapahtumaan {event} onnistuneesti.\n"
-"Ole hyvä ja maksa tilauksesi (summa {total_with_currency}) {expire_date} "
-"mennessä.\n"
+"emme ole vielä vastaanottaneet täyttä maksua tilauksestasi tapahtumaan "
+"{event}.\n"
+"Muistathan, että maksun tulee olla suoritettu ennen {expire_date}.\n"
 "\n"
-"{payment_info}\n"
-"\n"
-"Näet tilauksesi tiedot ja voit muuttaa sitä osoitteessa\n"
+"Voit tarkistaa maksutiedot ja tilauksesi tilan osoitteessa\n"
 "{url}\n"
 "\n"
-"Ystävällisin terveisin,\n"
-"{event} -tiimi"
+"Ystävällisin terveisin  \n"
+"{event}-tiimisi"
 
 #: pretix/base/settings.py:2429
-#, fuzzy, python-brace-format
-#| msgid "Payment received for your order: {code}"
+#, python-brace-format
 msgid "Incomplete payment received: {code}"
-msgstr "Tilauksesi {code} maksu vastaanotettu"
+msgstr "Osittainen maksu vastaanotettu: {code}"
 
 #: pretix/base/settings.py:2433
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event} with a total value\n"
-#| "of {total_with_currency}. Please complete your payment before "
-#| "{expire_date}.\n"
-#| "\n"
-#| "{payment_info}\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10271,42 +10174,27 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hei!\n"
+"Hei,\n"
 "\n"
-"Olemme vastaanottaneet tilauksesi tapahtumaan {event} onnistuneesti.\n"
-"Ole hyvä ja maksa tilauksesi (summa {total_with_currency}) {expire_date} "
-"mennessä.\n"
+"olemme vastaanottaneet maksun tilauksestasi tapahtumaan {event}.\n"
 "\n"
-"{payment_info}\n"
+"Valitettavasti vastaanotettu summa on pienempi kuin vaadittu kokonaissumma. "
+"Tilauksesi on edelleen maksamatta, sillä siitä puuttuu vielä "
+"**{pending_sum}**.\n"
 "\n"
-"Näet tilauksesi tiedot ja voit muuttaa sitä osoitteessa\n"
+"Voit tarkistaa maksutiedot ja tilauksesi tilan osoitteessa\n"
 "{url}\n"
 "\n"
-"Ystävällisin terveisin,\n"
-"{event} -tiimi"
+"Ystävällisin terveisin  \n"
+"{event}-tiimisi"
 
 #: pretix/base/settings.py:2449
-#, fuzzy, python-brace-format
-#| msgid "Payment received for your order: {code}"
+#, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "Tilauksesi {code} maksu vastaanotettu"
+msgstr "Tilauksesi {code} maksu epäonnistui"
 
 #: pretix/base/settings.py:2453
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event} with a total value\n"
-#| "of {total_with_currency}. Please complete your payment before "
-#| "{expire_date}.\n"
-#| "\n"
-#| "{payment_info}\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10322,19 +10210,19 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hei!\n"
+"Hei,\n"
 "\n"
-"Olemme vastaanottaneet tilauksesi tapahtumaan {event} onnistuneesti.\n"
-"Ole hyvä ja maksa tilauksesi (summa {total_with_currency}) {expire_date} "
-"mennessä.\n"
+"maksuyrityksesi tilauksestasi tapahtumaan {event} epäonnistui.\n"
 "\n"
-"{payment_info}\n"
+"Tilauksesi on edelleen voimassa, ja voit yrittää maksaa uudelleen käyttäen "
+"samaa tai toista maksutapaa. Muistathan suorittaa maksun ennen {expire_date}."
 "\n"
-"Näet tilauksesi tiedot ja voit muuttaa sitä osoitteessa\n"
+"\n"
+"Voit yrittää maksua uudelleen ja tarkistaa tilauksesi tilan osoitteessa\n"
 "{url}\n"
 "\n"
-"Ystävällisin terveisin,\n"
-"{event} -tiimi"
+"Ystävällisin terveisin  \n"
+"{event}-tiimisi"
 
 #: pretix/base/settings.py:2467
 #, python-brace-format
@@ -10373,10 +10261,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2500
-#, fuzzy, python-brace-format
-#| msgid "Order canceled"
+#, python-brace-format
 msgid "Order canceled: {code}"
-msgstr "Tilaus peruttu"
+msgstr "Tilaus {code} peruttu"
 
 #: pretix/base/settings.py:2504
 #, python-brace-format
@@ -10418,17 +10305,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2546 pretix/base/settings.py:2583
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you bought a ticket for {event}.\n"
-#| "\n"
-#| "If you did not do so already, you can download your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10442,13 +10319,13 @@ msgid ""
 msgstr ""
 "Hei,\n"
 "\n"
-"ostit lipun tapahtumaan {event}.\n"
+"hyväksyimme tilauksesi lipun tapahtumaan {event}.\n"
 "\n"
-"Jos et vielä ladannut lippuasi, voit tehdä sen täällä:\n"
+"Voit tarkistaa lipun tiedot ja tilan täältä:\n"
 "{url}\n"
 "\n"
-"Ystävällisin terveisin,\n"
-"{event} -tiimi"
+"Ystävällisin terveisin  \n"
+"{event}-tiimisi"
 
 #: pretix/base/settings.py:2558
 #, python-brace-format
@@ -10471,10 +10348,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2595
-#, fuzzy, python-brace-format
-#| msgid "Order denied"
+#, python-brace-format
 msgid "Order denied: {code}"
-msgstr "Tilaus hylätty"
+msgstr "Tilaus {code} estetty"
 
 #: pretix/base/settings.py:2599
 #, python-brace-format
@@ -10511,17 +10387,7 @@ msgid "Your ticket is ready for download: {code}"
 msgstr "Lippusi on valmis ladattavaksi: {code}"
 
 #: pretix/base/settings.py:2636
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "    you are registered for {event}.\n"
-#| "\n"
-#| "    If you did not do so already, you can download your ticket here:\n"
-#| "    {url}\n"
-#| "\n"
-#| "    Best regards,  \n"
-#| "    Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -10535,13 +10401,13 @@ msgid ""
 msgstr ""
 "Hei {attendee_name},\n"
 "\n"
-"olet rekisteröitynyt tapahtumaan {event}.\n"
+"olet ilmoittautunut tapahtumaan {event}.\n"
 "\n"
-"Jos et vielä ladannut lippuasi, voit tehdä sen täällä:\n"
+"Jos et ole vielä ladannut lippuasi, voit ladata sen täältä:\n"
 "{url}\n"
 "\n"
-"Ystävällisin terveisin,\n"
-"{event} -tiimi"
+"Ystävällisin terveisin  \n"
+"{event}-tiimisi"
 
 #: pretix/base/settings.py:2652
 #, python-brace-format
