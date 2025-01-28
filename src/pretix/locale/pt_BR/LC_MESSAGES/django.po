@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 16:42+0000\n"
-"PO-Revision-Date: 2025-01-28 22:00+0000\n"
+"PO-Revision-Date: 2025-01-29 07:00+0000\n"
 "Last-Translator: Cornelius Kibelka <ckibelka-ctr@wikimedia.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -2802,7 +2802,7 @@ msgstr "Mídia reutilizável"
 #: pretix/base/exporters/reusablemedia.py:35
 msgctxt "export_category"
 msgid "Reusable media"
-msgstr "Mídia reutilizável."
+msgstr "Mídia reutilizável"
 
 #: pretix/base/exporters/reusablemedia.py:36
 msgid ""
@@ -2870,10 +2870,8 @@ msgstr "Voucher atribuído"
 
 #: pretix/base/exporters/waitinglist.py:64
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:110
-#, fuzzy
-#| msgid "Category description"
 msgid "Waiting for redemption"
-msgstr "Descrição da categoria"
+msgstr "Aguardando a redenção"
 
 #: pretix/base/exporters/waitinglist.py:72
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:223
@@ -2885,10 +2883,8 @@ msgstr "Voucher resgatado"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:116
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:225
 #: pretix/control/views/waitinglist.py:324
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Voucher expired"
-msgstr "O carrinho expirou"
+msgstr "Voucher expirado"
 
 #: pretix/base/exporters/waitinglist.py:111 pretix/base/pdf.py:121
 #: pretix/control/forms/event.py:1764
@@ -2899,8 +2895,6 @@ msgstr "Nome do produto"
 #: pretix/base/exporters/waitinglist.py:115
 #: pretix/base/modelimport_orders.py:95 pretix/base/modelimport_vouchers.py:60
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevents"
 msgid "Date"
 msgstr "Data"
@@ -2973,25 +2967,17 @@ msgid "Repeat password"
 msgstr "Repita a senha"
 
 #: pretix/base/forms/questions.py:213
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "Please do not use special characters in names."
-msgstr "Você precisa selecionar uma data."
+msgstr "Não use caracteres especiais nos nomes."
 
 #: pretix/base/forms/questions.py:272
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "Please enter a shorter name."
-msgstr "Você precisa selecionar uma data."
+msgstr "Insira um nome mais curto."
 
 #: pretix/base/forms/questions.py:296
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Referência interna"
+msgstr "Código de área internacional"
 
 #: pretix/base/forms/questions.py:320
 msgctxt "phonenumber"
@@ -3039,11 +3025,9 @@ msgid "Street and Number"
 msgstr "Nome da rua e número do imóvel"
 
 #: pretix/base/forms/questions.py:724 pretix/base/forms/questions.py:1083
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "address"
 msgid "Select state"
-msgstr "Pré-venda não iniciada"
+msgstr "Selecionar estado"
 
 #: pretix/base/forms/questions.py:1069
 msgid ""
@@ -3082,15 +3066,11 @@ msgstr ""
 "diferente."
 
 #: pretix/base/forms/user.py:53
-#, fuzzy
-#| msgid ""
-#| "Please enter your current password if you want to change your email "
-#| "address or password."
 msgid ""
 "Please enter your current password if you want to change your email address "
 "or password."
 msgstr ""
-"Digite sua senha atual se desejar alterar seu endereço de e-mail ou senha."
+"Digite sua senha atual se quiser alterar seu endereço de e-mail ou senha."
 
 #: pretix/base/forms/user.py:55 pretix/presale/forms/customer.py:370
 #: pretix/presale/forms/customer.py:443
@@ -3142,10 +3122,8 @@ msgid "Smartphone with the Authenticator application"
 msgstr "Smartphone com o aplicativo de check-in"
 
 #: pretix/base/forms/user.py:178
-#, fuzzy
-#| msgid "U2F-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "Token de hardware compatível com U2F"
+msgstr "Token de hardware compatível com o WebAuthn (por exemplo, Yubikey)"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -3160,16 +3138,14 @@ msgstr ""
 "“}}”."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:758
-#, fuzzy, python-format
-#| msgid "Invalid placeholder(s): %(value)s"
+#, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr "Valores padrão inválido(s): %(value)s"
+msgstr "Espaço reservado inválido: %(value)s"
 
 #: pretix/base/forms/widgets.py:68
-#, fuzzy, python-format
-#| msgid "Presale not started"
+#, python-format
 msgid "Sample: %s"
-msgstr "Pré-venda não iniciada"
+msgstr "Amostra: %s"
 
 #: pretix/base/forms/widgets.py:71
 #, fuzzy, python-brace-format
@@ -3555,11 +3531,9 @@ msgid "You entered an invalid number."
 msgstr "Você inseriu um número inválido."
 
 #: pretix/base/modelimport.py:279 pretix/base/modelimport.py:291
-#, fuzzy
-#| msgid "No archived events found."
 msgctxt "subevent"
 msgid "No matching date was found."
-msgstr "Nenhum evento arquivado encontrado."
+msgstr "Nenhuma data correspondente foi encontrada."
 
 #: pretix/base/modelimport.py:281 pretix/base/modelimport.py:293
 msgctxt "subevent"
@@ -3567,10 +3541,8 @@ msgid "Multiple matching dates were found."
 msgstr "Foram encontradas várias datas correspondentes."
 
 #: pretix/base/modelimport_orders.py:85
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Enter a valid phone number."
-msgstr "Número mínimo"
+msgstr "Digite um número de telefone válido."
 
 #: pretix/base/modelimport_orders.py:100 pretix/presale/views/waiting.py:157
 msgctxt "subevent"
@@ -3579,10 +3551,8 @@ msgstr "Você precisa selecionar uma data."
 
 #: pretix/base/modelimport_orders.py:128
 #: pretix/base/modelimport_vouchers.py:194
-#, fuzzy
-#| msgid "No archived events found."
 msgid "No matching product was found."
-msgstr "Nenhum evento arquivado encontrado."
+msgstr "Nenhum produto correspondente foi encontrado."
 
 #: pretix/base/modelimport_orders.py:130
 #: pretix/base/modelimport_vouchers.py:196
@@ -3598,10 +3568,8 @@ msgstr "Variação do produto"
 #: pretix/base/modelimport_orders.py:159
 #: pretix/base/modelimport_vouchers.py:225
 #: pretix/base/modelimport_vouchers.py:259
-#, fuzzy
-#| msgid "Account information changed"
 msgid "No matching variation was found."
-msgstr "Informações da conta alteradas"
+msgstr "Não foi encontrada nenhuma variação correspondente."
 
 #: pretix/base/modelimport_orders.py:161
 #: pretix/base/modelimport_vouchers.py:227
@@ -3610,10 +3578,8 @@ msgid "Multiple matching variations were found."
 msgstr "Foram encontradas diversas variações correspondentes."
 
 #: pretix/base/modelimport_orders.py:164
-#, fuzzy
-#| msgid "This variation does not belong to this product."
 msgid "You need to select a variation for this product."
-msgstr "Essa variação não pertence a este produto."
+msgstr "Você precisa selecionar uma variação para esse produto."
 
 #: pretix/base/modelimport_orders.py:176 pretix/base/modelimport_orders.py:191
 #: pretix/base/modelimport_orders.py:206 pretix/base/modelimport_orders.py:217
@@ -3623,34 +3589,22 @@ msgstr "Essa variação não pertence a este produto."
 #: pretix/control/forms/filter.py:624 pretix/control/forms/filter.py:628
 #: pretix/control/forms/filter.py:632 pretix/control/forms/filter.py:637
 #: pretix/control/forms/filter.py:642
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice address"
-msgstr "Data da fatura"
+msgstr "Endereço da fatura"
 
 #: pretix/base/modelimport_orders.py:251 pretix/base/modelimport_orders.py:397
-#, fuzzy
-#| msgid "Please enter numbers only."
 msgid "Please enter a valid country code."
-msgstr "Por favor insira apenas números."
+msgstr "Digite um código de país válido."
 
 #: pretix/base/modelimport_orders.py:268 pretix/base/modelimport_orders.py:414
-#, fuzzy
-#| msgid "The payment method for this order cannot be changed."
 msgid "States are not supported for this country."
-msgstr "O método de pagamento para este pedido não pode ser alterado."
+msgstr "Não há suporte para estados nesse país."
 
 #: pretix/base/modelimport_orders.py:276 pretix/base/modelimport_orders.py:422
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "Please enter a valid state."
-msgstr "Você precisa selecionar uma data."
+msgstr "Insira um estado válido."
 
 #: pretix/base/modelimport_orders.py:325 pretix/control/forms/filter.py:651
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee email address"
 msgstr "E-mail do participante"
 
@@ -3663,85 +3617,62 @@ msgstr "E-mail do participante"
 #: pretix/control/templates/pretixcontrol/order/index.html:557
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:197
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:200
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee address"
-msgstr "Nome do participante"
+msgstr "Endereço do participante"
 
 #: pretix/base/modelimport_orders.py:409
-#, fuzzy
-#| msgid "Status"
 msgid "State"
-msgstr "Status"
+msgstr "Estado"
 
 #: pretix/base/modelimport_orders.py:432
-#, fuzzy
-#| msgid "Subtract from product price"
 msgid "Calculate from product"
-msgstr "Subtrair do preço do produto"
+msgstr "Calcular a partir do produto"
 
 #: pretix/base/modelimport_orders.py:450
 #: pretix/control/templates/pretixcontrol/checkin/index.html:111
 #: pretix/control/templates/pretixcontrol/order/index.html:497
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket code"
-msgstr "Design de bilhetes"
+msgstr "Código do bilhete"
 
 #: pretix/base/modelimport_orders.py:451
-#, fuzzy
-#| msgid "Device type"
 msgid "Generate automatically"
-msgstr "Tipo de dispositivo"
+msgstr "Gerar automaticamente"
 
 #: pretix/base/modelimport_orders.py:460
 msgid "You cannot assign a position secret that already exists."
 msgstr "Não é possível atribuir um segredo de posição que já exista."
 
 #: pretix/base/modelimport_orders.py:491
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "Please enter a valid language code."
-msgstr "Você precisa selecionar uma data."
+msgstr "Digite um código de idioma válido."
 
 #: pretix/base/modelimport_orders.py:559 pretix/base/modelimport_orders.py:561
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "Please enter a valid sales channel."
-msgstr "Você precisa selecionar uma data."
+msgstr "Insira um canal de vendas válido."
 
 #: pretix/base/modelimport_orders.py:585
 #: pretix/base/modelimport_vouchers.py:291
-#, fuzzy
-#| msgid "No archived events found."
 msgid "Multiple matching seats were found."
-msgstr "Nenhum evento arquivado encontrado."
+msgstr "Foram encontrados vários assentos correspondentes."
 
 #: pretix/base/modelimport_orders.py:587
 #: pretix/base/modelimport_vouchers.py:293
-#, fuzzy
-#| msgid "No archived events found."
 msgid "No matching seat was found."
-msgstr "Nenhum evento arquivado encontrado."
+msgstr "Não foi encontrado nenhum assento correspondente."
 
 #: pretix/base/modelimport_orders.py:590
 #: pretix/base/modelimport_vouchers.py:296 pretix/base/services/cart.py:212
 #: pretix/base/services/modelimport.py:134
 #: pretix/base/services/modelimport.py:246
-#, fuzzy
-#| msgid "This slug has already been used for a different event."
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
-msgstr "O metodo de pagamento já está sendo usado por um evento diferente."
+msgstr ""
+"O assento que você selecionou já foi ocupado. Por favor, selecione um "
+"assento diferente."
 
 #: pretix/base/modelimport_orders.py:593 pretix/base/services/cart.py:209
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to select a specific seat."
-msgstr "Você precisa selecionar uma data."
+msgstr "Você precisa selecionar um assento específico."
 
 #: pretix/base/modelimport_orders.py:647 pretix/base/models/items.py:1659
 #: pretix/base/models/items.py:1754 pretix/control/forms/item.py:148
@@ -3757,24 +3688,17 @@ msgid "Invalid option selected."
 msgstr "Opção inválida selecionada."
 
 #: pretix/base/modelimport_orders.py:659 pretix/base/modelimport_orders.py:667
-#, fuzzy
-#| msgid "Invalid option selected."
 msgid "Ambiguous option selected."
-msgstr "Opção inválida selecionada."
+msgstr "Opção ambígua selecionada."
 
 #: pretix/base/modelimport_orders.py:698 pretix/base/models/orders.py:239
 #: pretix/control/forms/orders.py:688 pretix/control/forms/organizer.py:840
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customer"
 msgstr "Cliente"
 
 #: pretix/base/modelimport_orders.py:711
-#, fuzzy
-#| msgid "No archived events found."
 msgid "No matching customer was found."
-msgstr "Nenhum evento arquivado encontrado."
+msgstr "Nenhum cliente correspondente foi encontrado."
 
 #: pretix/base/modelimport_vouchers.py:50 pretix/base/models/vouchers.py:488
 msgid "A voucher with this code already exists."
@@ -3787,19 +3711,12 @@ msgid "Maximum usages"
 msgstr "Usos máximos"
 
 #: pretix/base/modelimport_vouchers.py:79
-#, fuzzy
-#| msgid ""
-#| "The maximum number per order can not be lower than the minimum number per "
-#| "order."
 msgid "The maximum number of usages must be set."
-msgstr ""
-"O número máximo por pedido não pode ser menor que o número mínimo por pedido."
+msgstr "O número máximo de usos deve ser definido."
 
 #: pretix/base/modelimport_vouchers.py:88 pretix/base/models/vouchers.py:205
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Minimum usages"
-msgstr "Número mínimo"
+msgstr "Usos mínimos"
 
 #: pretix/base/modelimport_vouchers.py:103 pretix/base/models/vouchers.py:213
 #, fuzzy
@@ -4027,11 +3944,8 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:85 pretix/control/navigation.py:640
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Gates"
-msgstr "Nenhuma data selecionada."
+msgstr "Portas"
 
 #: pretix/base/models/checkin.py:86
 msgid ""
@@ -4073,11 +3987,8 @@ msgid "Exit"
 msgstr "Saída"
 
 #: pretix/base/models/checkin.py:355
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Unknown date selected."
 msgid "Unknown ticket"
-msgstr "Data desconhecida selecionada."
+msgstr "Bilhete desconhecido"
 
 #: pretix/base/models/checkin.py:356
 #, fuzzy
@@ -4090,10 +4001,8 @@ msgid "Forbidden by custom rule"
 msgstr "Proibido por regra personalizada"
 
 #: pretix/base/models/checkin.py:358
-#, fuzzy
-#| msgid "The event slug cannot be changed."
 msgid "Ticket code revoked/changed"
-msgstr "O slug do evento não pode ser alterado."
+msgstr "Código do bilhete revogado/alterado"
 
 #: pretix/base/models/checkin.py:359
 #, fuzzy
@@ -4136,10 +4045,8 @@ msgid "Order not approved"
 msgstr "Pedido aprovado"
 
 #: pretix/base/models/checkin.py:366
-#, fuzzy
-#| msgid "This product will not be sold before the given date."
 msgid "Ticket not valid at this time"
-msgstr "Este produto não será vendido antes da data indicada."
+msgstr "Bilhete não válido no momento"
 
 #: pretix/base/models/customers.py:55
 #, fuzzy
@@ -4283,18 +4190,14 @@ msgid "Dates can be mixed without limitation"
 msgstr "As datas podem ser misturadas sem limitações"
 
 #: pretix/base/models/discount.py:48
-#, fuzzy
-#| msgid "This product will not be sold before the given date."
 msgctxt "subevent"
 msgid "All matching products must be for the same date"
-msgstr "Este produto não será vendido antes da data indicada."
+msgstr "Todos os produtos correspondentes devem ser para a mesma data"
 
 #: pretix/base/models/discount.py:49
-#, fuzzy
-#| msgid "No archived events found."
 msgctxt "subevent"
 msgid "Each matching product must be for a different date"
-msgstr "Nenhum evento arquivado encontrado."
+msgstr "Cada produto correspondente deve ser para uma data diferente"
 
 #: pretix/base/models/discount.py:67 pretix/base/models/items.py:1149
 #: pretix/base/models/items.py:1469 pretix/base/models/items.py:1696
@@ -4807,7 +4710,7 @@ msgstr ""
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
-msgstr "Valores não podem conter um digito delimitador"
+msgstr "Valores não podem conter um digito delimitador."
 
 #: pretix/base/models/giftcards.py:81
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
@@ -4910,7 +4813,7 @@ msgstr "Mostrar somente se o carrinho contiver um dos seguintes produtos"
 
 #: pretix/base/models/items.py:129
 msgid "Cross-selling condition"
-msgstr ""
+msgstr "Condição de venda cruzada"
 
 #: pretix/base/models/items.py:137
 #, fuzzy
@@ -4928,7 +4831,7 @@ msgstr "Categorias de produtos"
 #: pretix/base/models/items.py:149
 #, python-brace-format
 msgid "{category} ({category_type})"
-msgstr ""
+msgstr "{category} {category_type}"
 
 #: pretix/base/models/items.py:155
 #, fuzzy
@@ -4985,19 +4888,20 @@ msgstr ""
 #: pretix/base/models/items.py:445
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "Show info text if unavailable"
-msgstr ""
+msgstr "Mostrar texto informativo se não estiver disponível"
 
 #: pretix/base/models/items.py:452 pretix/base/models/items.py:772
 msgid "Don't use re-usable media, use regular one-off tickets"
-msgstr ""
+msgstr "Não use mídia reutilizável, use bilhetes únicos regulares"
 
 #: pretix/base/models/items.py:453
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Exigir a reutilização de uma mídia existente"
 
 #: pretix/base/models/items.py:454
 msgid "Require a previously unknown medium to be newly added"
 msgstr ""
+"Exigir que um meio anteriormente desconhecido seja adicionado recentemente"
 
 #: pretix/base/models/items.py:455
 msgid "Require either an existing or a new medium to be used"
