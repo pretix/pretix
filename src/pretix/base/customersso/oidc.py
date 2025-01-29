@@ -139,6 +139,17 @@ def oidc_validate_and_complete_config(config):
                 )
             )
 
+    if "query_parameters" in config and config["query_parameters"]:
+        for qp in config["query_parameters"].split("&"):
+            # Very rudimentary check to avoid the most common footguns:
+            # - No ? in the query parameters
+            # - Max of one = (to split key and value)
+            # - One key, one value. Not just keys with no value.
+            if not (qp.count('=') == 1 and qp.count('?') == 0 and len(list(filter(None, qp.split('=')))) == 2):
+                raise ValidationError(
+                    _(f'Query parameter {qp} is invalid.')
+                )
+
     config['provider_config'] = provider_config
     return config
 
@@ -154,6 +165,11 @@ def oidc_authorize_url(provider, state, redirect_uri):
         'state': state,
         'redirect_uri': redirect_uri,
     }
+
+    if "query_parameters" in provider.configuration and provider.configuration["query_parameters"]:
+        for qp in provider.configuration["query_parameters"].split("&"):
+            params[qp.split("=")[0]] = qp.split("=")[1]
+
     return endpoint + '?' + urlencode(params)
 
 

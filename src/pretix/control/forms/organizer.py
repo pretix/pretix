@@ -1043,6 +1043,15 @@ class SSOProviderForm(I18nModelForm):
         label=pgettext_lazy('sso_oidc', 'Phone field'),
         required=False,
     )
+    config_oidc_query_parameters = forms.CharField(
+        label=pgettext_lazy('sso_oidc', 'Query parameters'),
+        help_text=pgettext_lazy('sso_oidc', 'Optional query parameters, that will be added to calls to '
+                                            'the authorization endpoint. Enter as: {example}'.format(
+                                                example='<code>param1=value1&amp;param2=value2</code>'
+                                            ),
+                                ),
+        required=False,
+    )
 
     class Meta:
         model = CustomerSSOProvider
