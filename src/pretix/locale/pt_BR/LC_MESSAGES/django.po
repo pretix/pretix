@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-29 07:00+0000\n"
+"PO-Revision-Date: 2025-01-29 22:00+0000\n"
 "Last-Translator: Cornelius Kibelka <ckibelka-ctr@wikimedia.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -3978,16 +3978,12 @@ msgstr ""
 "segunda vez."
 
 #: pretix/base/models/checkin.py:99
-#, fuzzy
-#| msgid "Ticket checked in"
 msgid "Automatically check out everyone at"
-msgstr "Este ingresso já foi validado"
+msgstr "Fazer check-out automático de todos em"
 
 #: pretix/base/models/checkin.py:336
-#, fuzzy
-#| msgid "Country"
 msgid "Entry"
-msgstr "País"
+msgstr "Entrada"
 
 #: pretix/base/models/checkin.py:337
 msgid "Exit"
@@ -3998,10 +3994,8 @@ msgid "Unknown ticket"
 msgstr "Bilhete desconhecido"
 
 #: pretix/base/models/checkin.py:356
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket not paid"
-msgstr "Design de bilhetes"
+msgstr "Bilhete não pago"
 
 #: pretix/base/models/checkin.py:357
 msgid "Forbidden by custom rule"
@@ -4012,64 +4006,48 @@ msgid "Ticket code revoked/changed"
 msgstr "Código do bilhete revogado/alterado"
 
 #: pretix/base/models/checkin.py:359
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Information required"
-msgstr "Taxa de cancelamento"
+msgstr "Informações necessárias"
 
 #: pretix/base/models/checkin.py:360
-#, fuzzy
-#| msgid "Default timezone"
 msgid "Ticket already used"
-msgstr "Fuso-horário padrão"
+msgstr "Bilhete já utilizado"
 
 #: pretix/base/models/checkin.py:361
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket type not allowed here"
-msgstr "Pré-venda não iniciada"
+msgstr "Tipo de bilhete não permitido aqui"
 
 #: pretix/base/models/checkin.py:362
 msgid "Ticket code is ambiguous on list"
 msgstr "O código do bilhete é ambíguo na lista"
 
 #: pretix/base/models/checkin.py:363
-#, fuzzy
-#| msgid "Service fee"
 msgid "Server error"
-msgstr "Taxa de serviço"
+msgstr "Erro do servidor"
 
 #: pretix/base/models/checkin.py:364
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket blocked"
-msgstr "Design de bilhetes"
+msgstr "Bilhete bloqueado"
 
 #: pretix/base/models/checkin.py:365
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order not approved"
-msgstr "Pedido aprovado"
+msgstr "Pedido não aprovado"
 
 #: pretix/base/models/checkin.py:366
 msgid "Ticket not valid at this time"
 msgstr "Bilhete não válido no momento"
 
 #: pretix/base/models/customers.py:55
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Provider name"
-msgstr "Nome do participante"
+msgstr "Nome do provedor"
 
 #: pretix/base/models/customers.py:60
 msgid "Login button label"
 msgstr "Rótulo do botão de login"
 
 #: pretix/base/models/customers.py:64
-#, fuzzy
-#| msgid "Required question"
 msgid "Single-sign-on method"
-msgstr "Pergunta obrigatória"
+msgstr "Método de login único"
 
 #: pretix/base/models/customers.py:85 pretix/base/models/devices.py:71
 #: pretix/base/models/items.py:1675 pretix/base/models/items.py:1923
@@ -4095,10 +4073,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:56
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:135
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:35
-#, fuzzy
-#| msgid "Shop disabled"
 msgid "disabled"
-msgstr "Loja desativada"
+msgstr "desativado"
 
 #: pretix/base/models/customers.py:310 pretix/base/models/orders.py:1536
 #: pretix/base/models/orders.py:3262 pretix/base/settings.py:1111
@@ -4122,11 +4098,9 @@ msgid "Public"
 msgstr "Público"
 
 #: pretix/base/models/customers.py:388
-#, fuzzy
-#| msgid "Creation date"
 msgctxt "openidconnect"
 msgid "Authorization code"
-msgstr "Data de criação"
+msgstr "Código de autorização"
 
 #: pretix/base/models/customers.py:389
 msgctxt "openidconnect"
@@ -4138,32 +4112,24 @@ msgid "OpenID Connect access (required)"
 msgstr "Acesso ao OpenID Connect (obrigatório)"
 
 #: pretix/base/models/customers.py:394
-#, fuzzy
-#| msgid "Device type"
 msgid "Profile data (name, addresses)"
-msgstr "Tipo de dispositivo"
+msgstr "Dados de perfil (nome, endereços)"
 
 #: pretix/base/models/customers.py:414
-#, fuzzy
-#| msgid "Events"
 msgid "Client type"
-msgstr "Eventos"
+msgstr "Tipo de cliente"
 
 #: pretix/base/models/customers.py:417
-#, fuzzy
-#| msgid "Payment type"
 msgid "Grant type"
-msgstr "Tipo de pagamento"
+msgstr "Tipo de subsídio"
 
 #: pretix/base/models/customers.py:428
 msgid "Allowed access scopes"
 msgstr "Escopos de acesso permitidos"
 
 #: pretix/base/models/customers.py:429
-#, fuzzy
-#| msgid "Device type"
 msgid "Separate multiple values with spaces"
-msgstr "Tipo de dispositivo"
+msgstr "Separe vários valores com espaços"
 
 #: pretix/base/models/devices.py:70 pretix/base/models/items.py:1674
 msgid "Internal identifier"
@@ -4213,10 +4179,8 @@ msgid "Position"
 msgstr "Posição"
 
 #: pretix/base/models/discount.py:70
-#, fuzzy
-#| msgid "Sales channels"
 msgid "All supported sales channels"
-msgstr "Canal de vendas"
+msgstr "Todos os canais de vendas suportados"
 
 #: pretix/base/models/discount.py:91
 #, fuzzy
