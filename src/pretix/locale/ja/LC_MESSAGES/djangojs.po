@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-15 16:46+0000\n"
+"POT-Creation-Date: 2025-01-29 13:18+0000\n"
 "PO-Revision-Date: 2025-01-18 18:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/ja/>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -857,6 +857,7 @@ msgid "Only available with a voucher"
 msgstr "クーポンをお持ちの方のみ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Not yet available"
 msgstr "提供開始前"
@@ -871,23 +872,23 @@ msgctxt "widget"
 msgid "Currently not available"
 msgstr "現時点で提供不可"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/js/widget/widget.js:42
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "最小注文数量：%s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "チケットショップ閉店"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "チケットショップの読み込みに失敗しました。"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
@@ -896,17 +897,17 @@ msgstr ""
 "現在チケットショップが混み合っています。新しいタブでチケットショップを開き続"
 "行してください。"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Open ticket shop"
 msgstr "チケットショップを開く"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "カートが作成できません。後ほど再度お試しください"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:48
+#: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
@@ -915,12 +916,12 @@ msgstr ""
 "現在チケットショップが混雑しているため、お客様のカートを作ることができません"
 "でした。新しいタブを開き「次へ」をクリックしてください。"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "空席待ちリスト"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -929,87 +930,87 @@ msgstr ""
 "お客様のカートはイベントの申し込みに有効です。商品を選択し、カートへ追加して"
 "ください。"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:53
+#: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "購入を続行する"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js:55
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "クーポンを使用する"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Redeem"
 msgstr "使用する"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:56
+#: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "クーポンコード"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:57
+#: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
 msgid "Close"
 msgstr "閉じる"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/js/widget/widget.js:59
 msgctxt "widget"
 msgid "Continue"
 msgstr "続ける"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:60
 msgctxt "widget"
 msgid "Show variants"
 msgstr "バリエーションを表示"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgctxt "widget"
 msgid "Hide variants"
 msgstr "バリエーションを隠す"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "他のイベントを選択する"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "他の日付を選択する"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
 msgid "Back"
 msgstr "戻る"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgctxt "widget"
 msgid "Next month"
 msgstr "翌月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgctxt "widget"
 msgid "Previous month"
 msgstr "前月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
 msgid "Next week"
 msgstr "翌週"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgctxt "widget"
 msgid "Previous week"
 msgstr "前週"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:69
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "座席一覧を開く"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:70
 msgctxt "widget"
 msgid ""
 "Some or all ticket categories are currently sold out. If you want, you can "
@@ -1020,84 +1021,84 @@ msgstr ""
 "て、ご自身で空席待ちリストに追加することができます。その後、空席が出来次第お"
 "知らせします。"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:71
 msgctxt "widget"
 msgid "Load more"
 msgstr "さらに読み込む"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:72
+#: pretix/static/pretixpresale/js/widget/widget.js:73
 msgid "Mo"
 msgstr "月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:73
+#: pretix/static/pretixpresale/js/widget/widget.js:74
 msgid "Tu"
 msgstr "火"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:74
+#: pretix/static/pretixpresale/js/widget/widget.js:75
 msgid "We"
 msgstr "水"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:75
+#: pretix/static/pretixpresale/js/widget/widget.js:76
 msgid "Th"
 msgstr "木"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:76
+#: pretix/static/pretixpresale/js/widget/widget.js:77
 msgid "Fr"
 msgstr "金"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:77
+#: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "Sa"
 msgstr "土"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:78
+#: pretix/static/pretixpresale/js/widget/widget.js:79
 msgid "Su"
 msgstr "日"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:81
+#: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "January"
 msgstr "１月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:82
+#: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "February"
 msgstr "２月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:83
+#: pretix/static/pretixpresale/js/widget/widget.js:84
 msgid "March"
 msgstr "３月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:84
+#: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "April"
 msgstr "４月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:85
+#: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "May"
 msgstr "５月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:86
+#: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "June"
 msgstr "６月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:87
+#: pretix/static/pretixpresale/js/widget/widget.js:88
 msgid "July"
 msgstr "７月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:88
+#: pretix/static/pretixpresale/js/widget/widget.js:89
 msgid "August"
 msgstr "８月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:89
+#: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "September"
 msgstr "９月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:90
+#: pretix/static/pretixpresale/js/widget/widget.js:91
 msgid "October"
 msgstr "１０月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:91
+#: pretix/static/pretixpresale/js/widget/widget.js:92
 msgid "November"
 msgstr "１１月"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:92
+#: pretix/static/pretixpresale/js/widget/widget.js:93
 msgid "December"
 msgstr "１２月"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-15 16:46+0000\n"
+"POT-Creation-Date: 2025-01-29 13:18+0000\n"
 "PO-Revision-Date: 2024-03-10 03:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -866,6 +866,7 @@ msgid "Only available with a voucher"
 msgstr "Kun tilgjengelig med kupong"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/js/widget/widget.js:41
 #, fuzzy
 #| msgid "Payment method unavailable"
 msgctxt "widget"
@@ -885,23 +886,23 @@ msgctxt "widget"
 msgid "Currently not available"
 msgstr "tilgjengelig for øyeblikket: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/js/widget/widget.js:42
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "minimumsbeløp for bestilling: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Steng billettbutikken"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "Billettbutikken kunne ikke lastes."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
@@ -910,17 +911,17 @@ msgstr ""
 "Det er for tiden mange brukere i denne billettbutikken. Åpne butikken i en "
 "ny fane for å fortsette."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Open ticket shop"
 msgstr "Åpne billettbutikk"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "Handlekurven kunne ikke opprettes. Vennligst prøv igjen senere"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:48
+#: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
@@ -929,12 +930,12 @@ msgstr ""
 "Vi kunne ikke opprette din handlekurv, på grunn av for mange brukere i "
 "billettshopen. Vennligst klikk «Fortsett» for å prøve på nytt i en ny fane."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Venteliste"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -943,37 +944,37 @@ msgstr ""
 "Du har allerede en aktiv handlekurv for dette arrangementet. Hvis du velger "
 "flere produkter, vil disse bli lagt til i den eksisterende handlekurven."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:53
+#: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Gjenoppta kassen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js:55
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Løs inn en kupong"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Løs inn"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:56
+#: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Kupongkode"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:57
+#: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
 msgid "Close"
 msgstr "Lukk"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/js/widget/widget.js:59
 msgctxt "widget"
 msgid "Continue"
 msgstr "Fortsett"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:60
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "See variations"
@@ -981,7 +982,7 @@ msgctxt "widget"
 msgid "Show variants"
 msgstr "Se variasjoner"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "See variations"
@@ -989,47 +990,47 @@ msgctxt "widget"
 msgid "Hide variants"
 msgstr "Se variasjoner"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "Velg et annet arrangement"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "Velg en annen dato"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
 msgid "Back"
 msgstr "Tilbake"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgctxt "widget"
 msgid "Next month"
 msgstr "Neste måned"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgctxt "widget"
 msgid "Previous month"
 msgstr "Forrige måned"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
 msgid "Next week"
 msgstr "Neste uke"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgctxt "widget"
 msgid "Previous week"
 msgstr "Forrige uke"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:69
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "Åpne setevalg"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:70
 msgctxt "widget"
 msgid ""
 "Some or all ticket categories are currently sold out. If you want, you can "
@@ -1040,84 +1041,84 @@ msgstr ""
 "kan du legge deg til på ventelisten. Vi vil da gi deg beskjed hvis det blir "
 "ledige seter igjen."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:71
 msgctxt "widget"
 msgid "Load more"
 msgstr "Last mer"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:72
+#: pretix/static/pretixpresale/js/widget/widget.js:73
 msgid "Mo"
 msgstr "Ma"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:73
+#: pretix/static/pretixpresale/js/widget/widget.js:74
 msgid "Tu"
 msgstr "Ti"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:74
+#: pretix/static/pretixpresale/js/widget/widget.js:75
 msgid "We"
 msgstr "On"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:75
+#: pretix/static/pretixpresale/js/widget/widget.js:76
 msgid "Th"
 msgstr "To"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:76
+#: pretix/static/pretixpresale/js/widget/widget.js:77
 msgid "Fr"
 msgstr "Fr"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:77
+#: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "Sa"
 msgstr "Lø"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:78
+#: pretix/static/pretixpresale/js/widget/widget.js:79
 msgid "Su"
 msgstr "Sø"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:81
+#: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "January"
 msgstr "Januar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:82
+#: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "February"
 msgstr "Februar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:83
+#: pretix/static/pretixpresale/js/widget/widget.js:84
 msgid "March"
 msgstr "Mars"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:84
+#: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "April"
 msgstr "April"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:85
+#: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "May"
 msgstr "Mai"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:86
+#: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "June"
 msgstr "Juni"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:87
+#: pretix/static/pretixpresale/js/widget/widget.js:88
 msgid "July"
 msgstr "Juli"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:88
+#: pretix/static/pretixpresale/js/widget/widget.js:89
 msgid "August"
 msgstr "August"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:89
+#: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "September"
 msgstr "September"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:90
+#: pretix/static/pretixpresale/js/widget/widget.js:91
 msgid "October"
 msgstr "Oktober"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:91
+#: pretix/static/pretixpresale/js/widget/widget.js:92
 msgid "November"
 msgstr "November"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:92
+#: pretix/static/pretixpresale/js/widget/widget.js:93
 msgid "December"
 msgstr "Desember"
 
