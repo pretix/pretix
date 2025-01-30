@@ -1218,7 +1218,7 @@ Vue.component('pretix-widget-event-list-filter-form', {
 });
 
 Vue.component('pretix-widget-event-list-entry', {
-    template: ('<a :class="classObject" @click.prevent.stop="select">'
+    template: ('<a :href="href" :class="classObject" @click.prevent.stop="select">'
         + '<div class="pretix-widget-event-list-entry-name">{{ event.name }}</div>'
         + '<div class="pretix-widget-event-list-entry-date">{{ event.date_range }}</div>'
         + '<div class="pretix-widget-event-list-entry-location">{{ location }}</div>'  // hidden by css for now, but
@@ -1241,7 +1241,10 @@ Vue.component('pretix-widget-event-list-entry', {
         },
         location: function () {
             return this.event.location.replace(/\s*\n\s*/g, ', ');
-        }
+        },
+        href: function () {
+            return this.event.event_url + (this.event.subevent ? this.event.subevent + '/' : '');
+        },
     },
     methods: {
         select: function () {
