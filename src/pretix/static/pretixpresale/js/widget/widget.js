@@ -1143,6 +1143,11 @@ Vue.component('pretix-widget-event-form', {
         back_to_list: function() {
             this.$root.target_url = this.$root.parent_stack.pop();
             this.$root.error = null;
+            if (!this.$root.subevent) {
+                // reset if we are not in a series
+                this.$root.name = null;
+                this.$root.frontpage_text = null;
+            }
             this.$root.subevent = null;
             this.$root.offset = 0;
             this.$root.append_events = false;
