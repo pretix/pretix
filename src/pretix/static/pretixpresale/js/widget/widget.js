@@ -1672,7 +1672,7 @@ Vue.component('pretix-widget-event-week-calendar', {
 });
 
 Vue.component('pretix-widget', {
-    template: ('<div class="pretix-widget-wrapper" ref="wrapper" tabindex="0">'
+    template: ('<div class="pretix-widget-wrapper" ref="wrapper" tabindex="0" role="article" v-bind:aria-label="$root.name">'
         + '<div :class="classObject">'
         + shared_loading_fragment
         + '<div class="pretix-widget-error-message" v-if="$root.error && $root.view !== \'event\'">{{ $root.error }}</div>'
