@@ -1154,6 +1154,12 @@ Vue.component('pretix-widget-event-form', {
             } else {
                 this.$root.view = "weeks";
             }
+
+            var $el = this.$root.$el;
+            this.$root.$nextTick(function() {
+                // wait for redraw, then focus content element for better a11y
+                $el.focus();
+            });
         },
         calculate_buy_disabled: function() {
             var i, j, k;
@@ -1286,6 +1292,10 @@ Vue.component('pretix-widget-event-list', {
     },
     methods: {
         back_to_calendar: function () {
+            // make sure to always focus content element
+            this.$nextTick(function () {
+                this.$root.$el.focus();
+            });
             this.$root.offset = 0;
             this.$root.append_events = false;
             if (this.$root.weeks) {
@@ -1657,7 +1667,7 @@ Vue.component('pretix-widget-event-week-calendar', {
 });
 
 Vue.component('pretix-widget', {
-    template: ('<div class="pretix-widget-wrapper" ref="wrapper">'
+    template: ('<div class="pretix-widget-wrapper" ref="wrapper" tabindex="0">'
         + '<div :class="classObject">'
         + shared_loading_fragment
         + '<div class="pretix-widget-error-message" v-if="$root.error && $root.view !== \'event\'">{{ $root.error }}</div>'
@@ -1883,6 +1893,15 @@ var shared_root_methods = {
                 // If we're on desktop and someone selects a seating-only event in a calendar, let's open it right away,
                 // but only if the person didn't close it before.
                 root.startseating()
+            } else {
+                // make sure to only move focus to content element when it had focus before the reload/click
+                // this is needed because reload is also called on initial load and we do not want to move focus on initial load
+                if (root.$el.contains(document.activeElement)) {
+                    root.$nextTick(function() {
+                        // wait for redraw, then focus content element for better a11y
+                        root.$el.focus();
+                    });
+                }
             }
         }, function (error) {
             root.categories = [];
