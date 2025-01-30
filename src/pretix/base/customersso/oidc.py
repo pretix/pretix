@@ -24,7 +24,7 @@ import hashlib
 import logging
 import time
 from datetime import datetime
-from urllib.parse import urlencode, urljoin, parse_qsl
+from urllib.parse import parse_qsl, urlencode, urljoin
 
 import jwt
 import requests
