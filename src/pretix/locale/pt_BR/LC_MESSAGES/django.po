@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
 "PO-Revision-Date: 2025-01-31 01:00+0000\n"
-"Last-Translator: Cornelius Kibelka <ckibelka-ctr@wikimedia.org>\n"
+"Last-Translator: Lorhan Sohaky <lorhansohaky@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -5839,7 +5839,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:184
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:59
 msgid "Quotas"
-msgstr ""
+msgstr "Cotas"
 
 #: pretix/base/models/items.py:2166
 msgid "All variations must belong to an item contained in the items list."
