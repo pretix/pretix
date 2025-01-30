@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-29 22:00+0000\n"
+"PO-Revision-Date: 2025-01-31 01:00+0000\n"
 "Last-Translator: Cornelius Kibelka <ckibelka-ctr@wikimedia.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -4878,7 +4878,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:459
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Exigir o uso de um meio existente ou de um novo meio"
 
 #: pretix/base/models/items.py:475 pretix/base/models/items.py:1457
 msgid "Category"
@@ -4933,6 +4933,10 @@ msgid ""
 "have without the free price option. This will be ignored if a voucher is "
 "used that lowers the price."
 msgstr ""
+"Esse preço será usado como o valor padrão do campo de entrada. O usuário "
+"pode escolher um valor mais baixo, mas não inferior ao preço que o produto "
+"teria sem a opção de preço gratuito. Isso será ignorado se for usado um "
+"voucher que reduza o preço."
 
 #: pretix/base/models/items.py:527
 msgid "Whether or not buying this product allows a person to enter your event"
@@ -4955,7 +4959,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:543
 msgid "Show a waiting list for this ticket"
-msgstr ""
+msgstr "Mostrar uma lista de espera para esse bilhete"
 
 #: pretix/base/models/items.py:544
 #, fuzzy
@@ -4966,11 +4970,11 @@ msgstr "As listas de espera estão desabilitadas para este evento."
 #: pretix/base/models/items.py:548 pretix/base/settings.py:1352
 #: pretix/control/forms/event.py:1677
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "Mostrar o número de bilhetes restantes"
 
 #: pretix/base/models/items.py:549
 msgid "Publicly show how many tickets are still available."
-msgstr ""
+msgstr "Mostrar publicamente quantos bilhetes ainda estão disponíveis."
 
 #: pretix/base/models/items.py:556 pretix/control/forms/item.py:625
 msgid "Product picture"
@@ -4979,7 +4983,7 @@ msgstr "Imagem do produto"
 #: pretix/base/models/items.py:585
 msgctxt "hidden_if_available_legacy"
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "Só mostrar após o esgotamento de"
 
 #: pretix/base/models/items.py:586
 msgid ""
@@ -4989,10 +4993,16 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"Se você selecionar uma cota aqui, esse produto só será exibido quando essa "
+"cota não estiver disponível. Se combinado com a opção de ocultar produtos "
+"esgotados, isso permite que você troque produtos por outros mais caros "
+"quando eles estiverem esgotados. Pode haver um curto período em que ambos os "
+"produtos estejam visíveis enquanto todos os ingressos da cota mencionada "
+"estiverem reservados, mas ainda não vendidos."
 
 #: pretix/base/models/items.py:596
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "Só mostrar após o esgotamento de"
 
 #: pretix/base/models/items.py:597
 msgid ""
@@ -5003,6 +5013,12 @@ msgid ""
 "products are visible while all tickets of the referenced product are "
 "reserved, but not yet sold."
 msgstr ""
+"Se você selecionar um produto aqui, esse produto só será mostrado quando "
+"estiver esgotado. Se combinado com a opção de ocultar produtos esgotados, "
+"isso permite que você troque produtos por outros mais caros quando a opção "
+"mais barata estiver esgotada. Pode haver um curto período em que ambos os "
+"produtos estejam visíveis enquanto todos os ingressos do produto em questão "
+"estiverem reservados, mas ainda não vendidos."
 
 #: pretix/base/models/items.py:611
 msgid ""
@@ -5612,7 +5628,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1715
 msgid "Show answer during check-in"
-msgstr ""
+msgstr "Mostrar resposta durante o check-in"
 
 #: pretix/base/models/items.py:1720
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
@@ -5629,7 +5645,7 @@ msgstr "Esta pergunta será feita aos compradores dos produtos selecionados"
 
 #: pretix/base/models/items.py:1725
 msgid "Print answer on invoices"
-msgstr ""
+msgstr "Imprimir resposta nas faturas"
 
 #: pretix/base/models/items.py:1733 pretix/base/models/items.py:1739
 #: pretix/base/models/items.py:1745
@@ -5643,7 +5659,7 @@ msgstr "Número mínimo"
 #: pretix/base/models/items.py:1746 pretix/base/models/items.py:1749
 #: pretix/base/models/items.py:1753
 msgid "Currently not supported in our apps and during check-in"
-msgstr ""
+msgstr "Atualmente, não há suporte em nossos aplicativos e durante o check-in"
 
 #: pretix/base/models/items.py:1736 pretix/base/models/items.py:1742
 #: pretix/base/models/items.py:1748
@@ -5660,13 +5676,15 @@ msgstr "Número máximo"
 
 #: pretix/base/models/items.py:1757
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Validar o arquivo como sendo um retrato"
 
 #: pretix/base/models/items.py:1758
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Se marcado, os arquivos devem ser imagens com uma proporção de 3:4. Isso é a "
+"proporção comum usada para fotos impressas em crachás."
 
 #: pretix/base/models/items.py:1813
 msgid "An answer to this question is required to proceed."
@@ -5680,11 +5698,11 @@ msgstr "Entrada de data inválida."
 
 #: pretix/base/models/items.py:1857
 msgid "The number is to low."
-msgstr ""
+msgstr "O número é baixo demais."
 
 #: pretix/base/models/items.py:1859
 msgid "The number is to high."
-msgstr ""
+msgstr "O número é alto demais."
 
 #: pretix/base/models/items.py:1862
 msgid "Invalid number input."
@@ -5763,7 +5781,7 @@ msgstr "Variações"
 #: pretix/base/models/items.py:2063
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Ignorar essa cota ao determinar a disponibilidade do evento"
 
 #: pretix/base/models/items.py:2064
 msgid ""
@@ -5772,10 +5790,14 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Se você ativar essa opção, essa cota será ignorada ao determinar a "
+"disponibilidade do evento em seu calendário de eventos. Isso é útil, por "
+"exemplo, para mercadorias que são adicionadas a cada evento, mas não deve "
+"impedir que o evento seja mostrado como esgotado."
 
 #: pretix/base/models/items.py:2071
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "Feche essa cota permanentemente quando ela estiver esgotada"
 
 #: pretix/base/models/items.py:2072
 msgid ""
@@ -5783,10 +5805,16 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
+"Se você ativar essa opção, quando a cota for esgotada uma vez, nenhum outro "
+"bilhete será vendido, mesmo que os bilhetes fiquem disponíveis novamente por "
+"meio de cancelamentos ou pedidos expirados. Obviamente, você sempre poderá "
+"reabri-la manualmente."
 
 #: pretix/base/models/items.py:2080
 msgid "Allow to sell more tickets once people have checked out"
 msgstr ""
+"Permitir a venda de mais bilhetes depois que as pessoas tiverem feito o "
+"check-out"
 
 #: pretix/base/models/items.py:2081
 msgid ""
@@ -5797,6 +5825,12 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
+"Com essa opção, a cota será liberada assim que as pessoas forem escaneadas "
+"na saída do seu evento. Isso só ocorrerá se elas tiverem sido escaneadas em "
+"uma entrada e em uma saída e a saída for o escaneamento mais recente. Não "
+"importa em qual lista de check-in uma das verificações estava, mas as listas "
+"de check-in serão ignoradas se estiverem definidas como “Permitir reentrada "
+"após uma verificação de saída” para evitar overbooking acidental."
 
 #: pretix/base/models/items.py:2093 pretix/control/navigation.py:156
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -5834,27 +5868,34 @@ msgid ""
 "If checked, this property must be set in each product. Does not apply if a "
 "default value is set."
 msgstr ""
+"Se marcada, essa propriedade deverá ser definida em cada produto. Não se "
+"aplica se um valor padrão for definido."
 
 #: pretix/base/models/items.py:2225
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Se você mantiver esse campo vazio, qualquer valor será permitido. Caso "
+"contrário, insira um valor possível por linha."
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:29
 msgid "Membership is transferable"
-msgstr ""
+msgstr "A assinatura é transferível"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"Se essa opção for selecionada, a assinatura poderá ser usada para comprar "
+"bilhetes para várias pessoas. Caso contrário, o nome do participante precisa "
+"ser sempre o mesmo."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "O uso paralelo é permitido"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -5864,10 +5905,15 @@ msgid ""
 "overlap check will be performed if there is a product-level validity of the "
 "ticket."
 msgstr ""
+"Se essa opção for selecionada, a assinatura poderá ser usada para comprar "
+"ingressos para eventos que ocorrerão ao mesmo tempo. Observe que isso só "
+"verificará se o horário de início dos eventos é idêntico, e não se há "
+"sobreposição entre os eventos. Uma verificação de sobreposição será "
+"realizada se houver uma validade do bilhete no nível do produto."
 
 #: pretix/base/models/memberships.py:58
 msgid "Number of times this membership can be used in a purchase."
-msgstr ""
+msgstr "Número de vezes que essa assinatura pode ser usada em uma compra."
 
 #: pretix/base/models/memberships.py:124
 #: pretix/control/templates/pretixcontrol/items/question.html:33
@@ -5923,7 +5969,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:278
 msgid "We'll show you this order to be due for a follow-up on this day."
-msgstr ""
+msgstr "Mostraremos a você que essa ordem deve ser acompanhada nesse dia."
 
 #: pretix/base/models/orders.py:284
 msgid ""
@@ -5942,6 +5988,8 @@ msgid ""
 "This text will be shown by the check-in app if a ticket of this order is "
 "scanned."
 msgstr ""
+"Esse texto será exibido pelo aplicativo de check-in se um bilhete desse "
+"pedido for escaneado."
 
 #: pretix/base/models/orders.py:301 pretix/base/models/orders.py:1524
 msgid "Meta information"
@@ -6009,7 +6057,7 @@ msgstr "O produto encomendado \"{item}\" já não está disponível."
 #: pretix/base/models/orders.py:1062
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "O voucher “{voucher}” não tem mais saldo suficiente."
 
 #: pretix/base/models/orders.py:1063
 #, fuzzy, python-brace-format
@@ -6120,6 +6168,8 @@ msgstr "Data de pagamento"
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
+"Pode ser mostrado ao usuário final ou usado, por exemplo, como parte de uma "
+"referência de pagamento."
 
 #: pretix/base/models/orders.py:2284
 msgid "Service fee"
@@ -6140,7 +6190,7 @@ msgstr "Taxa de cancelamento"
 
 #: pretix/base/models/orders.py:2288
 msgid "Insurance fee"
-msgstr ""
+msgstr "Taxa de seguro"
 
 #: pretix/base/models/orders.py:2289
 #, fuzzy
@@ -6198,14 +6248,14 @@ msgstr "Esta referência será impressa na sua fatura para sua conveniência."
 #: pretix/base/models/orders.py:3461
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
 msgid "Badge"
-msgstr ""
+msgstr "Crachá"
 
 #: pretix/base/models/orders.py:3462 pretix/base/pdf.py:1109
 #: pretix/control/forms/organizer.py:777 pretix/control/forms/organizer.py:813
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
-msgstr ""
+msgstr "Bilhete"
 
 #: pretix/base/models/orders.py:3463
 #, fuzzy
@@ -6250,6 +6300,7 @@ msgstr "Membros do time"
 #: pretix/base/models/organizer.py:289
 msgid "Require all members of this team to use two-factor authentication"
 msgstr ""
+"Exigir que todos os membros dessa equipe usem a autenticação de dois fatores"
 
 #: pretix/base/models/organizer.py:290
 msgid ""
@@ -6257,6 +6308,9 @@ msgid ""
 "up two-factor authentication or leave the team. The setting may take a few "
 "minutes to become effective for all users."
 msgstr ""
+"Se você ativar essa opção, todos os membros da equipe deverão configurar a "
+"autenticação de dois fatores ou sair da equipe. A configuração pode levar "
+"alguns minutos para entrar em vigor para todos os usuários."
 
 #: pretix/base/models/organizer.py:297
 msgid "Can create events"
@@ -6451,45 +6505,47 @@ msgstr "Isento de impostos (sem justificativa)"
 #: pretix/base/models/tax.py:177
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr ""
+msgstr "Mercadorias com taxa zero"
 
 #: pretix/base/models/tax.py:180
 msgctxt "tax_code"
 msgid "Free export item, VAT not charged"
-msgstr ""
+msgstr "Item de exportação gratuita, IVA não cobrado"
 
 #: pretix/base/models/tax.py:183
 msgctxt "tax_code"
 msgid "VAT exempt for EEA intra-community supply of goods and services"
 msgstr ""
+"Isenção de IVA para fornecimento intracomunitário de bens e serviços no EEE"
 
 #: pretix/base/models/tax.py:187
 msgid "Special cases"
-msgstr ""
+msgstr "Casos especiais"
 
 #: pretix/base/models/tax.py:189
 msgctxt "tax_code"
 msgid "Canary Islands general indirect tax"
-msgstr ""
+msgstr "Imposto indireto geral das Ilhas Canárias"
 
 #: pretix/base/models/tax.py:190
 msgctxt "tax_code"
 msgid "Tax for production, services and importation in Ceuta and Melilla"
-msgstr ""
+msgstr "Imposto para produção, serviços e importação em Ceuta e Melilla"
 
 #: pretix/base/models/tax.py:191
 msgctxt "tax_code"
 msgid "Transferred (VAT), only in Italy"
-msgstr ""
+msgstr "Transferido (IVA), apenas na Itália"
 
 #: pretix/base/models/tax.py:195
 msgid "Exempt with specific reason"
-msgstr ""
+msgstr "Isento por motivo específico"
 
 #: pretix/base/models/tax.py:198
 msgctxt "tax_code"
 msgid "Exempt based on article 79, point c of Council Directive 2006/112/EC"
 msgstr ""
+"Isento com base no artigo 79, alínea c, da Diretiva 2006/112/CE do Conselho"
 
 #: pretix/base/models/tax.py:205 pretix/base/models/tax.py:218
 #: pretix/base/models/tax.py:244
