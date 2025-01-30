@@ -143,6 +143,7 @@ def oidc_validate_and_complete_config(config):
         config["query_parameters"] = urlencode(
             parse_qsl(config["query_parameters"])
         )
+
     config['provider_config'] = provider_config
     return config
 
