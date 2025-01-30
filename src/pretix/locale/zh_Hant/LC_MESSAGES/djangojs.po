@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2024-01-22 17:08+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
-"pretix/pretix-js/zh_Hant/>\n"
+"PO-Revision-Date: 2025-01-31 01:00+0000\n"
+"Last-Translator: Chislon <chislon@gmail.com>\n"
+"Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
+"projects/pretix/pretix-js/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -237,11 +237,11 @@ msgstr "已取消"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Confirmed"
-msgstr ""
+msgstr "已確認"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Approval pending"
-msgstr ""
+msgstr "等待批准"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
@@ -432,7 +432,7 @@ msgstr "是之後"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
 msgid "="
-msgstr ""
+msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
@@ -444,7 +444,7 @@ msgstr "產品變體"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
-msgstr ""
+msgstr "閘口"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
@@ -456,7 +456,7 @@ msgstr "目前一週當中的星期幾(1=星期一，7=星期天)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Current entry status"
-msgstr ""
+msgstr "當前入場狀態"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
@@ -471,26 +471,20 @@ msgid "Number of previous entries since"
 msgstr "之前入場的數量"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries before"
-msgstr "先前入場的數量"
+msgstr "先前的入場的數量"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
 msgstr "先前入場的天數數量"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry since"
-msgstr "先前入場的天數數量"
+msgstr "自上次入場以來的天數"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry before"
-msgstr "先前入場的天數數量"
+msgstr "先前自上次入場以來的天數"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
@@ -547,12 +541,12 @@ msgstr "重覆"
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
 msgctxt "entry_status"
 msgid "present"
-msgstr ""
+msgstr "出席"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
 msgctxt "entry_status"
 msgid "absent"
-msgstr ""
+msgstr "缺席"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -567,16 +561,12 @@ msgid "Group of objects"
 msgstr "物件群組"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:899
-#, fuzzy
-#| msgid "Text object"
 msgid "Text object (deprecated)"
-msgstr "文字物件"
+msgstr "文字物件（已棄用）"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:901
-#, fuzzy
-#| msgid "Text object"
 msgid "Text box"
-msgstr "文字物件"
+msgstr "文字框"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Barcode area"
@@ -656,11 +646,11 @@ msgstr "只選定"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:808
 msgid "Enter page number between 1 and %(max)s."
-msgstr ""
+msgstr "輸入於 1 和 %(max)s 之間的頁號。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:811
 msgid "Invalid page number."
-msgstr ""
+msgstr "頁號無效。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:969
 msgid "Use a different name internally"
@@ -765,21 +755,18 @@ msgstr "價格"
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
-msgstr ""
+msgstr "原價: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
-msgstr ""
+msgstr "新價: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select %s"
 msgctxt "widget"
 msgid "Select"
-msgstr "選擇%s"
+msgstr "選擇"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
@@ -821,13 +808,13 @@ msgstr "免費或自由"
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr "從%（currency）s %（price）s"
+msgstr "從 %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
-msgstr ""
+msgstr "%s的圖像"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
@@ -862,24 +849,19 @@ msgstr "僅限優惠券可用"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #: pretix/static/pretixpresale/js/widget/widget.js:41
-#, fuzzy
-#| msgid "Payment method unavailable"
 msgctxt "widget"
 msgid "Not yet available"
-msgstr "目前無法使用的付款方式"
+msgstr "目前無法使用"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "不再可用"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Currently not available"
-msgstr "當前可用： %s"
+msgstr "目前不可用"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 #, javascript-format
@@ -968,20 +950,14 @@ msgid "Continue"
 msgstr "繼續"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select variant %s"
 msgctxt "widget"
 msgid "Show variants"
-msgstr "選擇類型 %s"
+msgstr "顯示不同的類型"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select variant %s"
 msgctxt "widget"
 msgid "Hide variants"
-msgstr "選擇類型 %s"
+msgstr "隱藏不同的類型"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
