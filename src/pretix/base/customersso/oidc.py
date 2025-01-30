@@ -24,7 +24,7 @@ import hashlib
 import logging
 import time
 from datetime import datetime
-from urllib.parse import urlencode, urljoin
+from urllib.parse import parse_qsl, urlencode, urljoin
 
 import jwt
 import requests
@@ -139,6 +139,11 @@ def oidc_validate_and_complete_config(config):
                 )
             )
 
+    if "query_parameters" in config and config["query_parameters"]:
+        config["query_parameters"] = urlencode(
+            parse_qsl(config["query_parameters"])
+        )
+
     config['provider_config'] = provider_config
     return config
 
@@ -154,6 +159,10 @@ def oidc_authorize_url(provider, state, redirect_uri):
         'state': state,
         'redirect_uri': redirect_uri,
     }
+
+    if "query_parameters" in provider.configuration and provider.configuration["query_parameters"]:
+        params.update(parse_qsl(provider.configuration["query_parameters"]))
+
     return endpoint + '?' + urlencode(params)
 
 
