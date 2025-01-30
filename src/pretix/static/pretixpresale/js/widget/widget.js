@@ -990,10 +990,10 @@ Vue.component('pretix-widget-event-form', {
     template: ('<div class="pretix-widget-event-form">'
         // Back navigation
         + '<div class="pretix-widget-event-list-back" v-if="$root.events || $root.weeks || $root.days">'
-        + '<a href="#" @click.prevent.stop="back_to_list" v-if="!$root.subevent">&lsaquo; '
+        + '<a :href="href" rel="back" @click.prevent.stop="back_to_list" v-if="!$root.subevent">&lsaquo; '
         + strings['back_to_list']
         + '</a>'
-        + '<a href="#" @click.prevent.stop="back_to_list" v-if="$root.subevent">&lsaquo; '
+        + '<a :href="href" rel="back" @click.prevent.stop="back_to_list" v-if="$root.subevent">&lsaquo; '
         + strings['back_to_dates']
         + '</a>'
         + '</div>'
@@ -1097,6 +1097,9 @@ Vue.component('pretix-widget-event-form', {
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
+        href: function () {
+            return this.$root.$weeks ? this.$root.event.event_url : this.$root.parent_stack[this.$root.parent_stack.length-1];
+        },
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && (this.$root.events || this.$root.weeks || this.$root.days));
         },
@@ -1261,7 +1264,7 @@ Vue.component('pretix-widget-event-list-entry', {
 Vue.component('pretix-widget-event-list', {
     template: ('<div class="pretix-widget-event-list">'
         + '<div class="pretix-widget-back" v-if="$root.weeks || $root.parent_stack.length > 0">'
-        + '<a href="#" @click.prevent.stop="back_to_calendar" role="button">&lsaquo; '
+        + '<a :href="href" rel="prev" @click.prevent.stop="back_to_calendar">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1276,6 +1279,9 @@ Vue.component('pretix-widget-event-list', {
     computed: {
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && this.$root.parent_stack.length > 0);
+        },
+        href: function () {
+            return this.$root.$weeks ? this.$root.event.event_url : this.$root.parent_stack[this.$root.parent_stack.length-1];
         },
     },
     methods: {
