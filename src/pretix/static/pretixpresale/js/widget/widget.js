@@ -1781,7 +1781,7 @@ var shared_root_methods = {
             }
         });
     },
-    reload: function () {
+    reload: function (opt) {
         var url;
         if (this.$root.is_button) {
             return;
@@ -1904,7 +1904,7 @@ var shared_root_methods = {
                 if (root.$el.contains(document.activeElement)) {
                     root.$nextTick(function() {
                         // wait for redraw, then focus content element for better a11y
-                        root.$el.focus();
+                        (opt.focus ? document.querySelector(opt.focus) : root.$el).focus();
                     });
                 }
             }
