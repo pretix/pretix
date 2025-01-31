@@ -1325,7 +1325,7 @@ Vue.component('pretix-widget-event-list', {
 });
 
 Vue.component('pretix-widget-event-calendar-event', {
-    template: ('<a :class="classObject" @click.prevent.stop="select">'
+    template: ('<a :href="href" :class="classObject" @click.prevent.stop="select">'
         + '<strong class="pretix-widget-event-calendar-event-name">'
         + '{{ event.name }}'
         + '</strong>'
@@ -1336,6 +1336,9 @@ Vue.component('pretix-widget-event-calendar-event', {
         event: Object
     },
     computed: {
+        href: function () {
+            return this.event.event_url + (this.event.subevent ? this.event.subevent + '/' : '');
+        },
         classObject: function () {
             var o = {
                 'pretix-widget-event-calendar-event': true
