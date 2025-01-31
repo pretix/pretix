@@ -1519,17 +1519,17 @@ Vue.component('pretix-widget-event-calendar', {
 
         // Calendar navigation
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth" role="button">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" :href="prev_href" @click.prevent.stop="prevmonth">&laquo; '
         + strings['previous_month']
         + '</a> '
         + '<strong>{{ monthname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth" role="button">'
+        + '<a class="pretix-widget-event-calendar-next-month" :href="next_href" @click.prevent.stop="nextmonth">'
         + strings['next_month']
         + ' &raquo;</a>'
         + '</div>'
 
         // Calendar
-        + '<table class="pretix-widget-event-calendar-table">'
+        + '<table class="pretix-widget-event-calendar-table" :id="id" tabindex="0">'
         + '<thead>'
         + '<tr>'
         + '<th>' + strings['days']['MO'] + '</th>'
@@ -1552,7 +1552,41 @@ Vue.component('pretix-widget-event-calendar', {
         },
         monthname: function () {
             return strings['months'][this.$root.date.substr(5, 2)] + ' ' + this.$root.date.substr(0, 4);
-        }
+        },
+        month: function () {
+            return parseInt(this.$root.date.substr(5, 2));
+        },
+        year: function () {
+            return parseInt(this.$root.date.substr(0, 4));
+        },
+        prev_month_date: function () {
+            var pm = this.month - 1;
+            return String(this.year - (pm ? 0 : 1)) + "-" + padNumber((pm || 12), 2);
+        },
+        next_month_date: function () {
+            var pm = this.month + 1;
+            return String(this.year + (pm > 12 ? 1 : 0)) + "-" + padNumber(pm % 12, 2);
+        },
+        id: function () {
+            return this.$root.html_id + "-event-calendar-table";
+        },
+        base_href: function () {
+            return this.$root.event?.event_url || this.$root.target_url;
+        },
+        prev_href: function () {
+            return [
+                this.base_href,
+                '?style=calendar&date=',
+                this.prev_month_date
+            ].join('');
+        },
+        next_href: function () {
+            return [
+                this.base_href,
+                '?style=calendar&date=',
+                this.next_month_date
+            ].join('');
+        },
     },
     methods: {
         back_to_list: function () {
@@ -1562,28 +1596,14 @@ Vue.component('pretix-widget-event-calendar', {
             this.$root.frontpage_text = null;
         },
         prevmonth: function () {
-            var curMonth = parseInt(this.$root.date.substr(5, 2));
-            var curYear = parseInt(this.$root.date.substr(0, 4));
-            curMonth--;
-            if (curMonth < 1) {
-                curMonth = 12;
-                curYear--;
-            }
-            this.$root.date = String(curYear) + "-" + padNumber(curMonth, 2) + "-01";
+            this.$root.date = this.prev_month_date + "-01";
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         },
         nextmonth: function () {
-            var curMonth = parseInt(this.$root.date.substr(5, 2));
-            var curYear = parseInt(this.$root.date.substr(0, 4));
-            curMonth++;
-            if (curMonth > 12) {
-                curMonth = 1;
-                curYear++;
-            }
-            this.$root.date = String(curYear) + "-" + padNumber(curMonth, 2) + "-01";
+            this.$root.date = this.next_month_date + "-01";
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         }
     },
 });
