@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-16 12:06+0000\n"
-"Last-Translator: deborahfoell <deborah.foell@om.org>\n"
+"PO-Revision-Date: 2025-01-31 05:00+0000\n"
+"Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -29,68 +29,67 @@ msgstr "독일어"
 
 #: pretix/_base_settings.py:89
 msgid "German (informal)"
-msgstr ""
+msgstr "독일어"
 
 #: pretix/_base_settings.py:90
 msgid "Arabic"
-msgstr ""
+msgstr "아랍어"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr ""
+msgstr "바스크어"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
-msgstr ""
+msgstr "카탈루냐어"
 
 #: pretix/_base_settings.py:93
-#, fuzzy
 msgid "Chinese (simplified)"
-msgstr "중국어"
+msgstr "중국어(간체)"
 
 #: pretix/_base_settings.py:94
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "중국어(번체)"
 
 #: pretix/_base_settings.py:95
 msgid "Czech"
-msgstr ""
+msgstr "체코어"
 
 #: pretix/_base_settings.py:96
 msgid "Danish"
-msgstr ""
+msgstr "덴마크어"
 
 #: pretix/_base_settings.py:97
 msgid "Dutch"
-msgstr ""
+msgstr "네덜란드어"
 
 #: pretix/_base_settings.py:98
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "네덜란드어(비공식)"
 
 #: pretix/_base_settings.py:99
 msgid "French"
-msgstr ""
+msgstr "프랑스어"
 
 #: pretix/_base_settings.py:100
 msgid "Finnish"
-msgstr ""
+msgstr "핀란드어"
 
 #: pretix/_base_settings.py:101
 msgid "Galician"
-msgstr ""
+msgstr "갈라시아어"
 
 #: pretix/_base_settings.py:102
 msgid "Greek"
-msgstr ""
+msgstr "그리스어"
 
 #: pretix/_base_settings.py:103
 msgid "Indonesian"
-msgstr ""
+msgstr "인도네시아어"
 
 #: pretix/_base_settings.py:104
 msgid "Italian"
-msgstr ""
+msgstr "이탈리아어"
 
 #: pretix/_base_settings.py:105
 msgid "Japanese"
@@ -98,69 +97,69 @@ msgstr "일본어"
 
 #: pretix/_base_settings.py:106
 msgid "Latvian"
-msgstr ""
+msgstr "라트비아어"
 
 #: pretix/_base_settings.py:107
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "노르웨이어"
 
 #: pretix/_base_settings.py:108
 msgid "Polish"
-msgstr ""
+msgstr "폴란드어"
 
 #: pretix/_base_settings.py:109
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "포르투갈어"
 
 #: pretix/_base_settings.py:110
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "포르투갈어(브라질)"
 
 #: pretix/_base_settings.py:111
 msgid "Romanian"
-msgstr ""
+msgstr "루마니아어"
 
 #: pretix/_base_settings.py:112
 msgid "Russian"
-msgstr ""
+msgstr "러시아어"
 
 #: pretix/_base_settings.py:113
 msgid "Slovak"
-msgstr ""
+msgstr "슬로바키아어"
 
 #: pretix/_base_settings.py:114
 msgid "Swedish"
-msgstr ""
+msgstr "스웨덴어"
 
 #: pretix/_base_settings.py:115
 msgid "Spanish"
-msgstr ""
+msgstr "스페인어"
 
 #: pretix/_base_settings.py:116
 msgid "Turkish"
-msgstr ""
+msgstr "터키어"
 
 #: pretix/_base_settings.py:117
 msgid "Ukrainian"
-msgstr ""
+msgstr "우크라이나어"
 
 #: pretix/api/auth/devicesecurity.py:58
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
-msgstr ""
+msgstr "전체 장치 엑세스(주문 및 기프트 카드 읽기 및 변경, 제품 및 설정읽기)"
 
 #: pretix/api/auth/devicesecurity.py:80
 msgid "pretixSCAN"
-msgstr ""
+msgstr "프레틴스스캔"
 
 #: pretix/api/auth/devicesecurity.py:118
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "프레틱스스캔(키오스크모드, 주문 동기화 없음, 검색없음)"
 
 #: pretix/api/auth/devicesecurity.py:153
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "프레틱스스캔(온라인 전용, 주문 동기화 없음)"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:402
 msgid "Application name"
@@ -222,92 +221,101 @@ msgstr "코멘트"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1384
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "제품\"{}\" 은 할당량에 할당되지 않습니다."
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1667
 #: pretix/base/models/items.py:1916 pretix/base/models/items.py:2174
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "하나 이상의 항목이 이 이벤트에 속하지 않습니다."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:2185 pretix/base/models/items.py:2188
 #: pretix/base/models/waitinglist.py:305 pretix/base/models/waitinglist.py:308
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "하위 이벤트는 이 이벤트에 속하지 않습니다."
 
 #: pretix/api/serializers/event.py:231
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
-msgstr ""
+msgstr "이벤트는 '라이브'로 생성할 수 없습니다;  이벤트가 시작되기 전에 사용 가능한 "
+"숫자와 결제 란을  추가 해야 합니다."
 
 #: pretix/api/serializers/event.py:246 pretix/api/serializers/event.py:551
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "메타 데이타 속성  '{name}' 이 존재하지 않습니다."
 
 #: pretix/api/serializers/event.py:249 pretix/api/serializers/event.py:554
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr ""
+msgstr "메타 데이터 속성 '{name}'은  '{value}' 값을 허용하지 않습니다."
 
 #: pretix/api/serializers/event.py:293
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "알수 없는 플러그인: '{name}'."
 
 #: pretix/api/serializers/event.py:296
 #, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr ""
+msgstr "제한된 플러그인: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "항목 메타 데이터 속성 {name}이 존재지 않습니다."
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:1266
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "묶음  상품은  묶은 상품과 동일한 상품이어서는 안 됩니다."
 
 #: pretix/api/serializers/item.py:210 pretix/control/forms/item.py:1268
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "묶음 상품은 그 자체로 또 다른 묶음을 포함 할 수 없습니다."
 
 #: pretix/api/serializers/item.py:298
+#, fuzzy
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"추가 기능, 묶음 상품들, 또는 변형은  PATCH/PUT를 통해 업데이트 할 수 "
+"없습니다. 전용 중첩은 마지막 지점에서 사용해주세요."
 
 #: pretix/api/serializers/item.py:306
+#, fuzzy
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "현재 입장권 상품만 개인화할 수 있습니다."
 
 #: pretix/api/serializers/item.py:317
+#, fuzzy
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
-msgstr ""
+msgstr "기프트 카드 상품은 0이 아닌 세율과 연결되어서는 안됩니다. 왜냐하면 판매세는 "
+"기프트 카드가 사용될 때 부과되기 때문입니다."
 
 #: pretix/api/serializers/item.py:322 pretix/control/forms/item.py:773
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "기프트 카드 상품은 동시에 입장권 상품이 될 수 없습니다."
 
 #: pretix/api/serializers/item.py:519
+#, fuzzy
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
-msgstr ""
+msgstr "옵션을 PATCH/PUT을 통해 업데이트 하는 것은 지원되지 않습니다. 전용 중첩 "
+"마지막 지점을 사용하세요."
 
 #: pretix/api/serializers/item.py:533 pretix/control/forms/item.py:177
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "질문은 체크인 중에 질문된 질문에 의존할 수 없습니다."
 
 #: pretix/api/serializers/item.py:538 pretix/control/forms/item.py:182
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "질문 간의 순환 의존성이 감지되었습니다."
 
 #: pretix/api/serializers/item.py:543 pretix/control/forms/item.py:191
 msgid "This type of question cannot be asked during check-in."
