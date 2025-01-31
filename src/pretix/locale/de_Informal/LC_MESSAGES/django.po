@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-21 17:11+0000\n"
+"PO-Revision-Date: 2025-01-31 14:13+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3429,10 +3429,8 @@ msgid "The relevant plugin is currently not active."
 msgstr "Die notwendige Erweiterung ist nicht aktiv."
 
 #: pretix/base/logentrytypes.py:49
-#, fuzzy
-#| msgid "Delete"
 msgid "(deleted)"
-msgstr "Löschen"
+msgstr "(gelöscht)"
 
 #: pretix/base/logentrytypes.py:78
 #, python-brace-format
@@ -14987,6 +14985,9 @@ msgid ""
 "Note that payment fees have a special semantic and might automatically be "
 "changed if the payment method of the order is changed."
 msgstr ""
+"Bitte beachte, dass Zahlungsgebühren eine spezielle Bedeutung haben und "
+"automatisch geändert werden können, wenn die Zahlungsmethode der Bestellung "
+"sich ändert."
 
 #: pretix/control/forms/orders.py:626
 #: pretix/control/templates/pretixcontrol/order/change.html:214
@@ -15830,16 +15831,13 @@ msgstr ""
 "\"{type}\")."
 
 #: pretix/control/logdisplay.py:309
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}"
-#| "\", type \"{type}\", was uploaded."
+#, python-brace-format
 msgid ""
 "Scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\", was uploaded."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste \"{list}"
-"\" (Typ \"{type}\")."
+"Scan von gesperrtem Code \"{barcode}…\" um {datetime} für die Liste "
+"\"{list}\" (Typ \"{type}\") wurde hochgeladen."
 
 #: pretix/control/logdisplay.py:310
 #, python-brace-format
@@ -16815,10 +16813,9 @@ msgid "The check-in list has been changed."
 msgstr "Die Check-in-Liste wurde verändert."
 
 #: pretix/control/logdisplay.py:762
-#, fuzzy, python-brace-format
-#| msgid "Check-in list"
+#, python-brace-format
 msgid "Check-in list {val}"
-msgstr "Check-in-Liste"
+msgstr "Check-in-Liste {val}"
 
 #: pretix/control/logdisplay.py:769
 msgid "The plugin has been enabled."
