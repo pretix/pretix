@@ -267,8 +267,9 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
 
         if created:
             # We're perform a payment method switching on-demand here
-            old_fee, new_fee, fee, p, new_invoice = change_payment_provider(order, p.payment_provider, p.amount,
-                                                                            new_payment=p, create_log=False)  # noqa
+            old_fee, new_fee, fee, p, new_invoice_created = change_payment_provider(
+                order, p.payment_provider, p.amount, new_payment=p, create_log=False
+            )  # noqa
             if fee:
                 p.fee = fee
                 p.save(update_fields=['fee'])

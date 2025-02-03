@@ -659,11 +659,11 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 request.session['payment_change_{}'.format(self.order.pk)] = '1'
 
                 with transaction.atomic():
-                    old_fee, new_fee, fee, newpayment, new_invoice = change_payment_provider(
+                    old_fee, new_fee, fee, newpayment, new_invoice_created = change_payment_provider(
                         self.order, p['provider'], None
                     )
 
-                if new_invoice:
+                if new_invoice_created:
                     messages.success(self.request, _('An invoice has been generated.'))
 
                 resp = p['provider'].payment_prepare(request, newpayment)
