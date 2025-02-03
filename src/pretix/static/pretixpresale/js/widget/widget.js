@@ -1532,7 +1532,7 @@ Vue.component('pretix-widget-event-calendar', {
         + '</div>'
 
         // Calendar
-        + '<table class="pretix-widget-event-calendar-table" :id="id" tabindex="0">'
+        + '<table class="pretix-widget-event-calendar-table" :id="id" tabindex="0" v-bind:aria-label="monthname">'
         + '<thead>'
         + '<tr>'
         + '<th>' + strings['days']['MO'] + '</th>'
@@ -1641,7 +1641,7 @@ Vue.component('pretix-widget-event-week-calendar', {
         + '</div>'
 
         // Actual calendar
-        + '<div class="pretix-widget-event-week-table" :id="id" tabindex="0">'
+        + '<div class="pretix-widget-event-week-table" :id="id" tabindex="0" v-bind:aria-label="weekname">'
         + '<div class="pretix-widget-event-week-col" v-for="d in $root.days">'
         + '<pretix-widget-event-week-cell :day="d">'
         + '</pretix-widget-event-week-cell>'
