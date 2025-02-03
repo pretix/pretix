@@ -1650,6 +1650,13 @@ class OrderChangeMixin:
                 raise OrderError(_('You may not change your order in a way that increases the total price since '
                                    'payments are no longer being accepted for this event.'))
 
+        if ocm._totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PENDING:
+            for p in self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_PENDING):
+                if not p.payment_provider.abort_pending_allowed:
+                    raise OrderError(_('You may not change your order in a way that requires additional payment while '
+                                       'we are processing your current payment. Please check back after your current '
+                                       'payment has been accepted.'))
+
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderChange(OrderChangeMixin, EventViewMixin, OrderDetailMixin, TemplateView):
