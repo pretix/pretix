@@ -1332,7 +1332,7 @@ Vue.component('pretix-widget-event-list', {
 });
 
 Vue.component('pretix-widget-event-calendar-event', {
-    template: ('<a :href="href" :class="classObject" @click.prevent.stop="select">'
+    template: ('<a :href="href" :class="classObject" @click.prevent.stop="select" v-bind:aria-describedby="describedby">'
         + '<strong class="pretix-widget-event-calendar-event-name">'
         + '{{ event.name }}'
         + '</strong>'
@@ -1340,7 +1340,8 @@ Vue.component('pretix-widget-event-calendar-event', {
         + '<div class="pretix-widget-event-calendar-event-availability" v-if="!event.continued && event.availability.text">{{ event.availability.text }}</div>'
         + '</a>'),
     props: {
-        event: Object
+        event: Object,
+        describedby: String,
     },
     computed: {
         href: function () {
@@ -1371,11 +1372,11 @@ Vue.component('pretix-widget-event-calendar-event', {
 
 Vue.component('pretix-widget-event-week-cell', {
     template: ('<div :class="classObject" @click.prevent.stop="selectDay">'
-        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day" :id="id">'
         + '{{ dayhead }}'
         + '</div>'
         + '<div class="pretix-widget-event-calendar-events" v-if="day">'
-        + '<pretix-widget-event-calendar-event v-for="e in day.events" :event="e"></pretix-widget-event-calendar-event>'
+        + '<pretix-widget-event-calendar-event v-for="e in day.events" :event="e" :describedby="id"></pretix-widget-event-calendar-event>'
         + '</div>'
         + '</div>'),
     props: {
@@ -1401,6 +1402,9 @@ Vue.component('pretix-widget-event-week-cell', {
         }
     },
     computed: {
+        id: function () {
+            return this.day ? this.$root.html_id + '-' + this.day.date : '';
+        },
         dayhead: function () {
             if (!this.day) {
                 return;
