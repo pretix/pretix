@@ -1804,7 +1804,7 @@ var shared_root_methods = {
             }
         });
     },
-    reload: function (opt) {
+    reload: function (opt = {}) {
         var url;
         if (this.$root.is_button) {
             return;
