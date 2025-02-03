@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-31 05:00+0000\n"
+"PO-Revision-Date: 2025-02-03 16:07+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -319,7 +319,7 @@ msgstr "질문 간의 순환 의존성이 감지되었습니다."
 
 #: pretix/api/serializers/item.py:543 pretix/control/forms/item.py:191
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "체크인 하는 동안에는 그러한 질문을 할 수 없습니다."
 
 #: pretix/api/serializers/item.py:546 pretix/control/forms/item.py:199
 msgid "This type of question cannot be shown during check-in."
