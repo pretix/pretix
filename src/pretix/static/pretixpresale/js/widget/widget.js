@@ -1098,7 +1098,7 @@ Vue.component('pretix-widget-event-form', {
     },
     computed: {
         href: function () {
-            return this.$root.$weeks ? this.$root.event.event_url : this.$root.parent_stack[this.$root.parent_stack.length-1];
+            return this.$root.event?.event_url || this.$root.parent_stack[this.$root.parent_stack.length-1];
         },
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && (this.$root.events || this.$root.weeks || this.$root.days));
