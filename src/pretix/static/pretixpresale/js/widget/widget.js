@@ -1631,17 +1631,17 @@ Vue.component('pretix-widget-event-week-calendar', {
         // Calendar navigation
         + '<div class="pretix-widget-event-description" v-if="$root.frontpage_text && display_event_info" v-html="$root.frontpage_text"></div>'
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevweek" role="button">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" :href="prev_href" @click.prevent.stop="prevweek" role="button">&laquo; '
         + strings['previous_week']
         + '</a> '
         + '<strong>{{ weekname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextweek" role="button">'
+        + '<a class="pretix-widget-event-calendar-next-month" :href="next_href" @click.prevent.stop="nextweek" role="button">'
         + strings['next_week']
         + ' &raquo;</a>'
         + '</div>'
 
         // Actual calendar
-        + '<div class="pretix-widget-event-week-table">'
+        + '<div class="pretix-widget-event-week-table" :id="id" tabindex="0">'
         + '<div class="pretix-widget-event-week-col" v-for="d in $root.days">'
         + '<pretix-widget-event-week-cell :day="d">'
         + '</pretix-widget-event-week-cell>'
@@ -1654,10 +1654,48 @@ Vue.component('pretix-widget-event-week-calendar', {
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && this.$root.parent_stack.length > 0);
         },
+        week: function () {
+            return this.$root.week[1];
+        },
+        year: function () {
+            return this.$root.week[0];
+        },
         weekname: function () {
-            var curWeek = this.$root.week[1];
-            var curYear = this.$root.week[0];
-            return curWeek + ' / ' + curYear;
+            return this.week + ' / ' + this.year;
+        },
+        prev_week_date: function () {
+            var w = this.week - 1;
+            if (!w) {
+                return (this.year - 1) + "-W" + getISOWeeks(this.year - 1);
+            }
+            return this.year + "-W" + w;
+        },
+        next_week_date: function () {
+            var w = this.week + 1;
+            if (w > getISOWeeks(this.year)) {
+                return String(this.year + 1) + "-W1";
+            }
+            return String(this.year) + "-W" + w;
+        },
+        id: function () {
+            return this.$root.html_id + "-event-week-table";
+        },
+        base_href: function () {
+            return this.$root.event?.event_url || this.$root.target_url;
+        },
+        prev_href: function () {
+            return [
+                this.base_href,
+                '?style=week&date=',
+                this.prev_week_date
+            ].join('');
+        },
+        next_href: function () {
+            return [
+                this.base_href,
+                '?style=week&date=',
+                this.next_week_date
+            ].join('');
         },
     },
     methods: {
@@ -1668,28 +1706,14 @@ Vue.component('pretix-widget-event-week-calendar', {
             this.$root.view = "events";
         },
         prevweek: function () {
-            var curWeek = this.$root.week[1];
-            var curYear = this.$root.week[0];
-            curWeek--;
-            if (curWeek < 1) {
-                curYear--;
-                curWeek = getISOWeeks(curYear);
-            }
-            this.$root.week = [curYear, curWeek];
+            this.$root.week = this.prev_week_date.split("-W");
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         },
         nextweek: function () {
-            var curWeek = this.$root.week[1];
-            var curYear = this.$root.week[0];
-            curWeek++;
-            if (curWeek > getISOWeeks(curYear)) {
-                curWeek = 1;
-                curYear++;
-            }
-            this.$root.week = [curYear, curWeek];
+            this.$root.week = this.next_week_date.split("-W");
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         }
     },
 });
