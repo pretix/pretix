@@ -77,6 +77,13 @@ var strings = {
         'FR': django.gettext('Fr'),
         'SA': django.gettext('Sa'),
         'SU': django.gettext('Su'),
+        'MONDAY': django.gettext('Monday'),
+        'TUESDAY': django.gettext('Tuesday'),
+        'WEDNESDAY': django.gettext('Wednesday'),
+        'THURSDAY': django.gettext('Thursday'),
+        'FRIDAY': django.gettext('Friday'),
+        'SATURDAY': django.gettext('Saturday'),
+        'SUNDAY': django.gettext('Sunday'),
     },
     'months': {
         '01': django.gettext('January'),
@@ -1429,7 +1436,7 @@ Vue.component('pretix-widget-event-week-cell', {
 
 Vue.component('pretix-widget-event-calendar-cell', {
     template: ('<td :class="classObject" @click.prevent.stop="selectDay">'
-        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day" v-bind:aria-label="date">'
         + '{{ daynum }}'
         + '</div>'
         + '<div class="pretix-widget-event-calendar-events" v-if="day">'
@@ -1464,6 +1471,9 @@ Vue.component('pretix-widget-event-calendar-cell', {
                 return;
             }
             return this.day.date.substr(8);
+        },
+        date: function () {
+            return this.day ? (new Date(this.day.date)).toLocaleDateString() : '';
         },
         classObject: function () {
             var o = {};
@@ -1535,13 +1545,13 @@ Vue.component('pretix-widget-event-calendar', {
         + '<table class="pretix-widget-event-calendar-table" :id="id" tabindex="0" v-bind:aria-label="monthname">'
         + '<thead>'
         + '<tr>'
-        + '<th>' + strings['days']['MO'] + '</th>'
-        + '<th>' + strings['days']['TU'] + '</th>'
-        + '<th>' + strings['days']['WE'] + '</th>'
-        + '<th>' + strings['days']['TH'] + '</th>'
-        + '<th>' + strings['days']['FR'] + '</th>'
-        + '<th>' + strings['days']['SA'] + '</th>'
-        + '<th>' + strings['days']['SU'] + '</th>'
+        + '<th aria-label="' + strings['days']['MONDAY'] + '">' + strings['days']['MO'] + '</th>'
+        + '<th aria-label="' + strings['days']['TUESDAY'] + '">' + strings['days']['TU'] + '</th>'
+        + '<th aria-label="' + strings['days']['WEDNESDAY'] + '">' + strings['days']['WE'] + '</th>'
+        + '<th aria-label="' + strings['days']['THURSDAY'] + '">' + strings['days']['TH'] + '</th>'
+        + '<th aria-label="' + strings['days']['FRIDAY'] + '">' + strings['days']['FR'] + '</th>'
+        + '<th aria-label="' + strings['days']['SATURDAY'] + '">' + strings['days']['SA'] + '</th>'
+        + '<th aria-label="' + strings['days']['SUNDAY'] + '">' + strings['days']['SU'] + '</th>'
         + '</tr>'
         + '</thead>'
         + '<tbody>'
