@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-27 10:00+0000\n"
+"PO-Revision-Date: 2025-02-04 20:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -3410,10 +3410,8 @@ msgid "The relevant plugin is currently not active."
 msgstr "関連するプラグインは、現在無効です。"
 
 #: pretix/base/logentrytypes.py:49
-#, fuzzy
-#| msgid "Delete"
 msgid "(deleted)"
-msgstr "削除"
+msgstr "(削除済み)"
 
 #: pretix/base/logentrytypes.py:78
 #, python-brace-format
@@ -14584,7 +14582,8 @@ msgstr "この料金を削除してください"
 msgid ""
 "Note that payment fees have a special semantic and might automatically be "
 "changed if the payment method of the order is changed."
-msgstr ""
+msgstr "支払い手数料には特別な意味があり、注文の支払い方法が変更されると自動的に変更"
+"される可能性があることに注意してください。"
 
 #: pretix/control/forms/orders.py:626
 #: pretix/control/templates/pretixcontrol/order/change.html:214
@@ -15407,16 +15406,13 @@ msgstr ""
 "リスト「{list}」のタイプ「{type}」のコード「{barcode}」のスキャンが不明です。"
 
 #: pretix/control/logdisplay.py:309
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}"
-#| "\", type \"{type}\", was uploaded."
+#, python-brace-format
 msgid ""
 "Scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\", was uploaded."
 msgstr ""
-"リスト「{list}」のコード「{barcode}」が{datetime}にアップロードされました。タ"
-"イプは「{type}」です。"
+"{datetime} にスキャンされた、リスト\"{list}\"、種別 \"{type}"
+"\"の取り消し済みのコード \"{barcode}…\"がアップロードされました。"
 
 #: pretix/control/logdisplay.py:310
 #, python-brace-format
@@ -16363,10 +16359,9 @@ msgid "The check-in list has been changed."
 msgstr "チェックインリストが変更されました。"
 
 #: pretix/control/logdisplay.py:762
-#, fuzzy, python-brace-format
-#| msgid "Check-in list"
+#, python-brace-format
 msgid "Check-in list {val}"
-msgstr "チェックイン・リスト"
+msgstr "チェックイン・リスト{val}"
 
 #: pretix/control/logdisplay.py:769
 msgid "The plugin has been enabled."
