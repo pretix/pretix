@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-19 06:00+0000\n"
+"PO-Revision-Date: 2025-02-05 08:00+0000\n"
 "Last-Translator: Wiktor Przybylski <wikprzybylski@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -31951,7 +31951,8 @@ msgstr "Zapisz adres na moim koncie klienta, by użyć go do przyszłych zakupó
 #: pretix/presale/forms/checkout.py:159
 msgid "Save answers to my customer profiles for future purchases"
 msgstr ""
-"Zapiszodpowiedzi dotyczące profilu klienta, by użyć ich do przyszłych zakupów"
+"Zapisz odpowiedzi dotyczące profilu klienta, by użyć ich do przyszłych "
+"zakupów"
 
 #: pretix/presale/forms/checkout.py:166
 msgid "Save to profile"
