@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-03 16:07+0000\n"
+"PO-Revision-Date: 2025-02-05 11:50+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -323,38 +323,40 @@ msgstr "체크인 하는 동안에는 그러한 질문을 할 수 없습니다."
 
 #: pretix/api/serializers/item.py:546 pretix/control/forms/item.py:199
 msgid "This type of question cannot be shown during check-in."
-msgstr ""
+msgstr "체크인 중에는 이러한 유형의 질문을 표시할 수 없습니다."
 
 #: pretix/api/serializers/media.py:108
+#, fuzzy
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
-msgstr ""
+msgstr "동일한 식별자와 유형의 매체가 이미 주최자 계정에 존재합니다."
 
 #: pretix/api/serializers/order.py:78
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "\"{input}\"은 유효한 선택이 아닙니다."
 
 #: pretix/api/serializers/order.py:1345 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1530
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "선택한 좌석 \"{seat}\"을 사용할 수 없습니다."
 
 #: pretix/api/serializers/order.py:1371 pretix/api/serializers/order.py:1378
 msgid "The product \"{}\" is not available on this date."
-msgstr ""
+msgstr "\"{}\" 제품은 이 날짜에 구매할 수 없습니다."
 
 #: pretix/api/serializers/order.py:1393 pretix/api/views/cart.py:200
+#, fuzzy
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "할당량 \"{}\"에 작업을 수행할 수 있는 할당량이 충분하지 않습니다."
 
 #: pretix/api/serializers/organizer.py:103
 #: pretix/control/forms/organizer.py:888 pretix/presale/forms/customer.py:445
 msgid "An account with this email address is already registered."
-msgstr ""
+msgstr "이 이메일 주소를 가진 계정이 이미 등록되어 있습니다."
 
 #: pretix/api/serializers/organizer.py:236
 #: pretix/control/forms/organizer.py:737
