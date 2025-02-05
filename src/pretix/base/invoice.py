@@ -99,22 +99,17 @@ def addon_aware_groupby(iterable, key, is_addon):
 
     for i in iterable:
         if is_addon(i):
-            packed_groups[-1][1].append(i)
+            packed_groups[-1].append(i)
         else:
-            packed_groups.append((i, []))
-    # Each packed_groups element contains (parent product, list of addon products)
+            packed_groups.append([i])
+    # Each packed_groups element contains a list with the parent product as first element, and any addon products following
 
     def _reorder(packed_groups):
         # Emit the products as individual products again, reordered by "all parent products, then all addon products"
         # within each group.
-        for group_grouper, grouped in groupby(packed_groups, key=lambda g: key(g[0]) + tuple(key(a) for a in g[1])):
-            grouped = list(grouped)
-            for grp in grouped:
-                yield grp[0]
-            for i in range(max(len(grp[1]) for grp in grouped)):
-                for grp in grouped:
-                    if len(grp[1]) > i:
-                        yield grp[1][i]
+        for _, repeated_groups in groupby(packed_groups, key=lambda g: tuple(key(a) for a in g)):
+            for repeated_items in zip(*repeated_groups):
+                yield from repeated_items
 
     return groupby(_reorder(packed_groups), key)
 
