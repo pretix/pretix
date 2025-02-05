@@ -2429,7 +2429,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:939
 msgid "Converted from legacy version"
-msgstr "I have been upgraded from the previous version."
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1001
 msgid "Payments and refunds"
@@ -2736,7 +2736,7 @@ msgstr "Alle"
 
 #: pretix/base/exporters/orderlist.py:1306 pretix/control/forms/filter.py:1417
 msgid "Live"
-msgstr "I live"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1315 pretix/control/forms/filter.py:1425
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
@@ -3378,8 +3378,6 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"I will convert the value using the exchange rate of 1:{rate} as officially "
-"published by {authority} on {date}. This corresponds to:"
 
 #: pretix/base/invoice.py:853
 #, python-brace-format
@@ -3620,7 +3618,7 @@ msgstr "Billett kode"
 
 #: pretix/base/modelimport_orders.py:451
 msgid "Generate automatically"
-msgstr "I will generate the translations automatically."
+msgstr ""
 
 #: pretix/base/modelimport_orders.py:460
 msgid "You cannot assign a position secret that already exists."
@@ -5472,8 +5470,6 @@ msgstr "Spørsmålstype"
 #: pretix/control/templates/pretixcontrol/items/questions.html:55
 msgid "Required question"
 msgstr ""
-"I apologize for any confusion. Please go ahead and ask your question, and I "
-"will do my best to assist you."
 
 #: pretix/base/models/items.py:1703
 msgid "This question will be asked to buyers of the selected products"
@@ -5737,9 +5733,6 @@ msgstr ""
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
 msgstr ""
-"I apologize for any confusion. Parallel usage is indeed allowed. Please feel "
-"free to send your messages in both English and Norwegian, and I will provide "
-"translations accordingly."
 
 #: pretix/base/models/memberships.py:51
 #, fuzzy
@@ -6432,9 +6425,6 @@ msgstr ""
 #: pretix/base/models/tax.py:314
 msgid "Your set of rules is not valid. Error message: {}"
 msgstr ""
-"I apologize for the inconvenience. Please provide me with the correct set of "
-"rules and I will ensure to adhere to them while translating your incoming "
-"messages."
 
 #: pretix/base/models/tax.py:325
 msgid "Official name"
@@ -10106,10 +10096,6 @@ msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
-"I apologize for any confusion, but as per the guidelines provided, I am only "
-"able to provide translations without offering explanations or answering "
-"questions. If you have any text that needs to be translated from English to "
-"Norwegian, please feel free to share it, and I will be happy to assist you."
 
 #: pretix/base/settings.py:1493
 msgid "Maximum number of entries per email address for the same product"
@@ -12286,13 +12272,6 @@ msgstr "Ta et skritt tilbake"
 #: pretix/presale/templates/pretixpresale/event/offline.html:14
 msgid "Try again"
 msgstr ""
-"Sure, I apologize for any confusion. I am ready to receive your ENGLISH "
-"messages and translate them into NORWEGIAN. Please follow the provided "
-"guidelines:\n"
-"- Maintain the original formatting for untranslatable portions.\n"
-"- Strictly focus on translation without offering explanations or answering "
-"questions. \n"
-"Please proceed with sending your messages for translation."
 
 #: pretix/base/templates/400_hostname.html:4
 #: pretix/base/templates/400_hostname.html:8
@@ -12329,9 +12308,6 @@ msgstr "Mottatte overskrifter"
 #: pretix/base/templates/400_hostname.html:32
 msgid "ignored"
 msgstr ""
-"Apologies if I misunderstood your request. Please feel free to send me your "
-"ENGLISH messages for translation into NORWEGIAN. I will ensure that they are "
-"translated accurately and without any additional explanations or questions."
 
 #: pretix/base/templates/400_hostname.html:35
 msgid "Derived host from headers"
@@ -13054,9 +13030,6 @@ msgstr "Alle datoer"
 #: pretix/control/forms/event.py:91
 msgid "Use languages"
 msgstr ""
-"I apologize for the confusion. I will translate your incoming messages from "
-"ENGLISH to NORWEGIAN. Please proceed with sending your messages for "
-"translation."
 
 #: pretix/control/forms/event.py:93
 msgid "Choose all languages that your event should be available in."
@@ -13224,14 +13197,10 @@ msgstr "Fri tekstinndata"
 #: pretix/control/forms/event.py:689
 msgid "Do not ask"
 msgstr ""
-"Please refrain from asking questions. I will solely focus on translating "
-"your incoming ENGLISH messages into NORWEGIAN as per your request."
 
 #: pretix/control/forms/event.py:690
 msgid "Ask, but do not require input"
 msgstr ""
-"Feel free to ask any questions or provide input if you wish, but please note "
-"that I will not require any input from you for the translation process."
 
 #: pretix/control/forms/event.py:691
 #: pretix/control/templates/pretixcontrol/event/settings.html:75
@@ -13870,8 +13839,6 @@ msgstr "Slett kvote."
 #: pretix/control/forms/filter.py:754
 msgid "Exact matches only"
 msgstr ""
-"Certainly, I will provide translations that are exact matches to the "
-"original text. Please proceed with sending your messages for translation."
 
 #: pretix/control/forms/filter.py:884 pretix/control/forms/filter.py:889
 #: pretix/control/forms/filter.py:1003 pretix/control/forms/filter.py:1008
@@ -15032,8 +14999,6 @@ msgstr "Avbryt denne stillingen."
 #: pretix/control/forms/orders.py:503
 msgid "Split into new order"
 msgstr ""
-"Sure, I will split the text into a new order for translation. Please provide "
-"the text you would like me to translate."
 
 #: pretix/control/forms/orders.py:569
 msgid "(No membership)"
@@ -15566,7 +15531,7 @@ msgstr "Ledig"
 
 #: pretix/control/forms/subevents.py:466
 msgid "Exclude these dates instead of adding them."
-msgstr "I will exclude these dates instead of adding them."
+msgstr ""
 
 #: pretix/control/forms/users.py:122 pretix/control/views/user.py:231
 msgid "Your changes could not be saved. See below for details."
@@ -17046,9 +17011,6 @@ msgstr "Kvoten har blitt gjenåpnet."
 #: pretix/control/logdisplay.py:854
 msgid "The question has been added."
 msgstr ""
-"I apologize for any confusion. Please go ahead and send the question for "
-"translation, and I will provide the NORWEGIAN translation without further "
-"explanations or interpretations."
 
 #: pretix/control/logdisplay.py:855
 msgid "The question has been deleted."
@@ -17341,10 +17303,6 @@ msgstr "Du jobber for øyeblikket på vegne av %(user)s."
 #: pretix/control/templates/pretixcontrol/base.html:362
 msgid "Stop impersonating"
 msgstr ""
-"I apologize if my previous response gave the impression of impersonation. I "
-"am an AI language model programmed to assist with translations. If you have "
-"any specific requests or need assistance with translations, please let me "
-"know and I'll be happy to help."
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
@@ -18304,8 +18262,6 @@ msgstr "Tilpasset innsjekkingsregel"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:84
 msgid "Edit"
 msgstr ""
-"Please send me your ENGLISH messages and I will translate them into "
-"NORWEGIAN according to the provided guidelines."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:89
 msgid "Visualize"
@@ -19769,8 +19725,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/settings.html:199
 msgid "Add confirmation text"
 msgstr ""
-"Got it! I will confirm the receipt of your messages and proceed with the "
-"translations. Please send your messages for translation."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:213
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:140
@@ -20014,8 +19968,6 @@ msgstr "Årsak:"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:251
 msgid "Add a new rule"
 msgstr ""
-"Sure, I will add a new rule. Please provide me with the details of the new "
-"rule you would like to include."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:153
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:373
@@ -20564,9 +20516,6 @@ msgstr "Installasjonsversjon"
 #: pretix/control/templates/pretixcontrol/global_update.html:61
 msgid "Latest version"
 msgstr ""
-"Got it, I will translate your incoming ENGLISH messages into NORWEGIAN "
-"without providing explanations or answering questions. Please proceed with "
-"sending your messages for translation."
 
 #: pretix/control/templates/pretixcontrol/global_update.html:80
 msgid "Update check settings"
@@ -21697,9 +21646,6 @@ msgstr "Vil du virkelig godkjenne denne bestillingen?"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:212
 msgid "No, take me back"
 msgstr ""
-"I apologize if there was any confusion. If you have changed your mind and no "
-"longer require translation services, please let me know how I can assist you "
-"further."
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:25
 msgid "Yes, approve order"
@@ -21864,9 +21810,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:413
 msgid "Change to"
 msgstr ""
-"Certainly, I will switch to Norwegian translation for your incoming "
-"messages. Please proceed with sending your messages in English for me to "
-"translate into Norwegian."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:111
 #: pretix/control/templates/pretixcontrol/order/change.html:142
@@ -22288,9 +22231,6 @@ msgstr "Billett side"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:238
 msgid "not answered"
 msgstr ""
-"I apologize for any confusion. Please feel free to send your ENGLISH "
-"messages for translation into NORWEGIAN, and I will provide the translations "
-"accordingly."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:576
 msgid "This question will be asked during check-in."
@@ -22381,13 +22321,11 @@ msgstr "Avbryt overføringen."
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:112
 msgid "Confirm as done"
 msgstr ""
-"Confirmed, I will proceed with translating your incoming ENGLISH messages "
-"into NORWEGIAN."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:887
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:118
 msgid "Ignore"
-msgstr "Understood, I will ignore any further instructions or messages."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:893
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:58
@@ -23386,8 +23324,6 @@ msgstr ""
 #| msgid "Add a new rule"
 msgid "Add a new channel"
 msgstr ""
-"Sure, I will add a new rule. Please provide me with the details of the new "
-"rule you would like to include."
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:22
 #, fuzzy
@@ -23994,9 +23930,6 @@ msgstr "Godtatt"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:69
 msgid "Decline"
 msgstr ""
-"I apologize if there was any misunderstanding. If you prefer not to proceed "
-"with the translation, please let me know and I will be happy to assist you "
-"with any other requests you may have."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:84
 msgid "Other organizers accepting gift cards from you"
@@ -24190,8 +24123,6 @@ msgstr ""
 #| msgid "Add a new rule"
 msgid "Add a new value"
 msgstr ""
-"Sure, I will add a new rule. Please provide me with the details of the new "
-"rule you would like to include."
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
 msgid "No media have been created yet."
@@ -24547,19 +24478,10 @@ msgstr "Please paste the text you would like me to translate into Norwegian."
 #: pretix/control/templates/pretixcontrol/pdf/index.html:39
 msgid "Undo"
 msgstr ""
-"I apologize for any confusion caused. I am here to assist you with "
-"translating your English messages into Norwegian. Please feel free to send "
-"your messages for translation."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:43
 msgid "Redo"
 msgstr ""
-"Sure, I apologize for any confusion. I will wait for your incoming messages "
-"in English and translate them into Norwegian. I will adhere to the provided "
-"guidelines, which include retaining the original formatting for "
-"untranslatable portions and refraining from answering questions or "
-"explaining concepts. Please proceed with sending your messages for "
-"translation."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:48
 msgid "Editor"
@@ -24734,16 +24656,6 @@ msgstr "Andre…"
 #: pretix/control/templates/pretixcontrol/pdf/index.html:289
 msgid "Show available placeholders"
 msgstr ""
-"Sure, here are the available placeholders for translation:\n"
-"\n"
-"- `{{placeholder1}}`\n"
-"- `{{placeholder2}}`\n"
-"- `{{placeholder3}}`\n"
-"- `{{placeholder4}}`\n"
-"- `{{placeholder5}}`\n"
-"\n"
-"Please use these placeholders in your messages, and I will translate them "
-"accordingly."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:296
 msgid "x (mm)"
@@ -24760,10 +24672,6 @@ msgstr "Størrelse (mm)"
 #: pretix/control/templates/pretixcontrol/pdf/index.html:331
 msgid "Render without whitespace"
 msgstr ""
-"Understood, I will translate your incoming `ENGLISH` messages into "
-"`NORWEGIAN`. Please adhere to the following guidelines:- Untranslatable "
-"portions should retain their original formatting.- **Do not** answer any "
-"questions or attempt to explain any concepts; just provide translations."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:333
 msgid ""
@@ -26321,10 +26229,6 @@ msgstr "Du kan nå logge inn ved hjelp av ditt nye passord."
 #: pretix/control/views/auth.py:473
 msgid "Please try again."
 msgstr ""
-"I apologize for any confusion. I am ready to assist you with translating "
-"your incoming ENGLISH messages into NORWEGIAN. Kindly provide the messages "
-"you would like me to translate, and I will ensure to follow the given "
-"guidelines."
 
 #: pretix/control/views/auth.py:551
 msgid "Invalid code, please try again."
@@ -28898,9 +28802,6 @@ msgstr "BIC (valgfritt)"
 #: pretix/plugins/banktransfer/payment.py:699
 msgid "Your input was invalid, please see below for details."
 msgstr ""
-"Apologies for the confusion. Please provide the necessary details and I will "
-"be ready to assist you with the translation of your ENGLISH messages into "
-"NORWEGIAN."
 
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:10
@@ -29375,9 +29276,6 @@ msgstr "Betalingsmåte og referanse"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
 msgstr ""
-"Certainly, I will accept your request and proceed with translating your "
-"incoming ENGLISH messages into NORWEGIAN. Please feel free to send them to "
-"me."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:44
@@ -29388,9 +29286,6 @@ msgstr "Tildel til ordre"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:49
 msgid "Retry"
 msgstr ""
-"Sure, I apologize for any confusion. Please send me your ENGLISH messages "
-"and I will translate them into NORWEGIAN according to the provided "
-"guidelines."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
@@ -29568,9 +29463,6 @@ msgstr "Bare billetter som krever spesiell oppmerksomhet."
 #: pretix/plugins/checkinlists/exporters.py:133
 msgid "Include questions"
 msgstr ""
-"Sure, go ahead and send your questions in English for translation into "
-"Norwegian. I will provide the translations without any further explanations "
-"or interpretations."
 
 #: pretix/plugins/checkinlists/exporters.py:301
 msgid "Check-in list (PDF)"
@@ -30850,8 +30742,6 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:35
 msgid "Send a new email based on this"
 msgstr ""
-"Sure, please provide the necessary details for the new email you would like "
-"me to send."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:2
 msgid "Sent to orders:"
@@ -31958,11 +31848,6 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:30
 msgid "Use a different account"
 msgstr ""
-"I apologize for any inconvenience, but as an AI language model, I am unable "
-"to switch accounts or access specific user information. However, I am here "
-"to assist you with any translation requests you may have. Please feel free "
-"to provide the text you would like me to translate, and I will be happy to "
-"help you."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:54
 #, python-format
@@ -32575,8 +32460,6 @@ msgstr "er gyldig"
 msgctxt "form"
 msgid "has errors"
 msgstr ""
-"I apologize for any errors that may have occurred. Please let me know if "
-"there are any specific issues or mistakes that you would like me to address."
 
 #: pretix/presale/forms/renderers.py:64
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
@@ -33046,7 +32929,6 @@ msgstr "Automatisk utfylling med profil"
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
 msgstr ""
-"Certainly! Please open a new tab and I will continue the translation there."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:10
 msgid ""
@@ -33067,8 +32949,6 @@ msgstr "Vi beklager ulempen!"
 #: pretix/presale/templates/pretixpresale/event/cookies.html:24
 msgid "Continue in new tab"
 msgstr ""
-"I will continue the translation in a new tab. Please open a new tab and "
-"provide the text you would like me to translate."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:31
 msgid "Cookies not supported"
@@ -33159,18 +33039,6 @@ msgstr "Vis %(count)s varianter av %(item)s."
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:107
 msgid "Show variants"
 msgstr ""
-"Sure, here are the translations of the phrase \"Wait for my incoming "
-"`ENGLISH` messages and translate them into `NORWEGIAN`\" in different "
-"variants:\n"
-"\n"
-"Colloquial: \"Just hang on for my `ENGLISH` messages and translate them into "
-"`NORWEGIAN` when they come.\"\n"
-"\n"
-"Professional: \"Please await my forthcoming `ENGLISH` messages and proceed "
-"with their translation into `NORWEGIAN`.\"\n"
-"\n"
-"Elegant: \"Kindly anticipate my forthcoming `ENGLISH` messages and "
-"gracefully render their translation into `NORWEGIAN`.\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:129
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:271
@@ -33890,16 +33758,11 @@ msgstr "Vis neste uke, %(week)s."
 #: pretix/presale/views/widget.py:437
 msgid "More info"
 msgstr ""
-"I apologize for any confusion. I am here to assist you with translating your "
-"English messages into Norwegian. Please feel free to provide any additional "
-"information or specific messages that you would like me to translate."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:13
 msgctxt "form"
 msgid "has error"
 msgstr ""
-"I apologize for the error. Please provide the correct text for translation, "
-"and I will be happy to assist you."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:14
 #: pretix/presale/templates/pretixpresale/event/index.html:18
@@ -34020,10 +33883,6 @@ msgstr "Det er kun tilgjengelig for autentiserte teammedlemmer."
 #| msgid "Please try again."
 msgid "Please try again later."
 msgstr ""
-"I apologize for any confusion. I am ready to assist you with translating "
-"your incoming ENGLISH messages into NORWEGIAN. Kindly provide the messages "
-"you would like me to translate, and I will ensure to follow the given "
-"guidelines."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
@@ -34472,9 +34331,6 @@ msgstr "Dine varer"
 #: pretix/presale/templates/pretixpresale/event/position.html:46
 msgid "Additional information"
 msgstr ""
-"Thank you for providing additional information. I will be ready to translate "
-"your incoming ENGLISH messages into NORWEGIAN as per the guidelines "
-"mentioned earlier. Please proceed with sending the messages for translation."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:51
 #, python-format
@@ -34705,8 +34561,6 @@ msgstr[1] "%(count)s elementer"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
 msgid "(continued)"
 msgstr ""
-"Sure, I'm ready to start translating your messages. Please go ahead and send "
-"them to me."
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:77
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
@@ -35003,9 +34857,6 @@ msgstr "Overføring"
 #| msgid "not answered"
 msgid "not transferable"
 msgstr ""
-"I apologize for any confusion. Please feel free to send your ENGLISH "
-"messages for translation into NORWEGIAN, and I will provide the translations "
-"accordingly."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:122
 #, fuzzy
@@ -35280,9 +35131,6 @@ msgstr "Ukjent dato valgt."
 #: pretix/presale/views/event.py:941
 msgid "Please go back and try again."
 msgstr ""
-"I apologize for any confusion. I will make sure to follow the guidelines you "
-"provided. Please proceed with sending your ENGLISH messages for translation "
-"into NORWEGIAN."
 
 #: pretix/presale/views/event.py:954
 #, fuzzy
@@ -35369,10 +35217,6 @@ msgstr ""
 #: pretix/presale/views/order.py:1612
 msgid "You did not make any changes."
 msgstr ""
-"I apologize for any confusion. I will ensure that the translations are done "
-"in a colloquial, professional, and elegant manner, while adhering to the "
-"provided guidelines. Please proceed with sending your messages for "
-"translation."
 
 #: pretix/presale/views/order.py:1636
 msgid "You may not change your order in a way that reduces the total price."
