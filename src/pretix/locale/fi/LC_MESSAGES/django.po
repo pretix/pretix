@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-05 11:29+0000\n"
-"Last-Translator: Antti Nironen <aanirone@gmail.com>\n"
+"PO-Revision-Date: 2025-02-05 20:00+0000\n"
+"Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -5301,7 +5301,7 @@ msgstr "Enimmäismäärän on oltava suurempi kuin vähimmäismäärä."
 
 #: pretix/base/models/items.py:1542
 msgid "Bundled item"
-msgstr ""
+msgstr "Niputettu erä"
 
 #: pretix/base/models/items.py:1548
 msgid "Bundled variation"
@@ -5318,59 +5318,63 @@ msgid ""
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
 msgstr ""
+"Jos tämä asetus on asetettu, näytetään, että tämä niputettu tuote vastaa "
+"bruttokokonaishinnan kyseisestä arvosta. Tämä voi olla tärkeää, jos kyseessä "
+"on sekaverotus, mutta voidaan pitää tyhjänä muussa tapauksessa. Tätä arvoa "
+"EI lisätä peruskohteen hintaan."
 
 #: pretix/base/models/items.py:1583
 msgid "The bundled item must belong to the same event as the item."
-msgstr ""
+msgstr "iputetun kohteen on kuuluttava samaan tapahtumaan kuin kohde."
 
 #: pretix/base/models/items.py:1585
 msgid "A variation needs to be set for this item."
-msgstr ""
+msgstr "Tälle kohteelle on asetettava variaatio."
 
 #: pretix/base/models/items.py:1587
 msgid "The chosen variation does not belong to this item."
-msgstr ""
+msgstr "Valittu variaatio ei kuulu tähän tuotteeseen."
 
 #: pretix/base/models/items.py:1592
 msgid "The count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Luvun on oltava nolla tai suurempi kuin nolla."
 
 #: pretix/base/models/items.py:1647
 msgid "Number"
-msgstr ""
+msgstr "Numero"
 
 #: pretix/base/models/items.py:1648
 msgid "Text (one line)"
-msgstr ""
+msgstr "Teksti (yksi rivi)"
 
 #: pretix/base/models/items.py:1649
 msgid "Multiline text"
-msgstr ""
+msgstr "Monirivinen teksti"
 
 #: pretix/base/models/items.py:1650
 msgid "Yes/No"
-msgstr ""
+msgstr "Kyllä/Ei"
 
 #: pretix/base/models/items.py:1651
 msgid "Choose one from a list"
-msgstr ""
+msgstr "Valitse yksi listalta"
 
 #: pretix/base/models/items.py:1652
 msgid "Choose multiple from a list"
-msgstr ""
+msgstr "Valitse useita luettelosta"
 
 #: pretix/base/models/items.py:1653
 msgid "File upload"
-msgstr ""
+msgstr "Tiedoston lataus"
 
 #: pretix/base/models/items.py:1656
 #: pretix/control/templates/pretixcontrol/event/settings.html:239
 msgid "Date and time"
-msgstr ""
+msgstr "Päiväys ja aika"
 
 #: pretix/base/models/items.py:1657
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "Maakohtainen koodi (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py:1680 pretix/base/models/items.py:1928
 #: pretix/base/models/organizer.py:543
@@ -5378,57 +5382,59 @@ msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores."
 msgstr ""
+"Tunnus saa sisältää vain kirjaimia, numeroita, pisteitä, viivoja ja "
+"alleviivauksia."
 
 #: pretix/base/models/items.py:1685
 msgid "Help text"
-msgstr ""
+msgstr "Aputeksti"
 
 #: pretix/base/models/items.py:1686
 msgid "If the question needs to be explained or clarified, do it here!"
-msgstr ""
+msgstr "Jos kysymystä pitää selittää tai selventää, tee se täällä!"
 
 #: pretix/base/models/items.py:1692
 msgid "Question type"
-msgstr ""
+msgstr "Kysymystyyppi"
 
 #: pretix/base/models/items.py:1696
 #: pretix/control/templates/pretixcontrol/items/questions.html:55
 msgid "Required question"
-msgstr ""
+msgstr "Vaadittu kysymys"
 
 #: pretix/base/models/items.py:1703
 msgid "This question will be asked to buyers of the selected products"
-msgstr ""
+msgstr "Tämä kysymys esitetään valittujen tuotteiden ostajille"
 
 #: pretix/base/models/items.py:1710
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr ""
+msgstr "Kysy ilmoittautumisen yhteydessä lipunostoprosessin sijasta"
 
 #: pretix/base/models/items.py:1711 pretix/base/models/items.py:1716
 msgid "Not supported by all check-in apps for all question types."
-msgstr ""
+msgstr "Kaikki kirjautumissovellukset eivät tue kaikkia kysymystyyppejä."
 
 #: pretix/base/models/items.py:1715
 msgid "Show answer during check-in"
-msgstr ""
+msgstr "Näytä vastaus kirjautumisen yhteydessä"
 
 #: pretix/base/models/items.py:1720
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
 msgid "Hidden question"
-msgstr ""
+msgstr "Piiloitettu kysymys"
 
 #: pretix/base/models/items.py:1721
 msgid "This question will only show up in the backend."
-msgstr ""
+msgstr "Tämä kysymys näkyy vain backendissä."
 
 #: pretix/base/models/items.py:1725
 msgid "Print answer on invoices"
-msgstr ""
+msgstr "Tulosta vastaus laskuille"
 
 #: pretix/base/models/items.py:1733 pretix/base/models/items.py:1739
 #: pretix/base/models/items.py:1745
 msgid "Minimum value"
-msgstr ""
+msgstr "Minimiarvo"
 
 #: pretix/base/models/items.py:1734 pretix/base/models/items.py:1737
 #: pretix/base/models/items.py:1740 pretix/base/models/items.py:1743
@@ -5436,6 +5442,7 @@ msgstr ""
 #: pretix/base/models/items.py:1753
 msgid "Currently not supported in our apps and during check-in"
 msgstr ""
+"Tällä hetkellä ei tueta sovelluksissamme eikä sisäänkirjautumisen aikana"
 
 #: pretix/base/models/items.py:1736 pretix/base/models/items.py:1742
 #: pretix/base/models/items.py:1748
@@ -5448,17 +5455,19 @@ msgstr "Enimmäispituus"
 
 #: pretix/base/models/items.py:1757
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Validoi tiedosto muotokuvaksi"
 
 #: pretix/base/models/items.py:1758
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Jos valitaan, tiedostojen on oltava kuvia, joiden kuvasuhde on 3:4. Tätä "
+"käytetään yleisesti kulkukortteihin painettaviin valokuviin."
 
 #: pretix/base/models/items.py:1813
 msgid "An answer to this question is required to proceed."
-msgstr ""
+msgstr "Jatkaminen edellyttää vastausta tähän kysymykseen."
 
 #: pretix/base/models/items.py:1823
 msgid "Invalid input type."
@@ -5466,35 +5475,35 @@ msgstr "Virheellinen syötetyyppi."
 
 #: pretix/base/models/items.py:1857
 msgid "The number is to low."
-msgstr ""
+msgstr "Numero on liian pieni."
 
 #: pretix/base/models/items.py:1859
 msgid "The number is to high."
-msgstr ""
+msgstr "Numero on liian suuri."
 
 #: pretix/base/models/items.py:1862
 msgid "Invalid number input."
-msgstr ""
+msgstr "Virheellinen numeron syöttö."
 
 #: pretix/base/models/items.py:1869 pretix/base/models/items.py:1893
 msgid "Please choose a later date."
-msgstr ""
+msgstr "Valitse myöhempi päivämäärä."
 
 #: pretix/base/models/items.py:1871 pretix/base/models/items.py:1895
 msgid "Please choose an earlier date."
-msgstr ""
+msgstr "Valitse aiempi päivämäärä."
 
 #: pretix/base/models/items.py:1874
 msgid "Invalid date input."
-msgstr ""
+msgstr "Virheellinen päivämäärän syöttö."
 
 #: pretix/base/models/items.py:1881
 msgid "Invalid time input."
-msgstr ""
+msgstr "Virheellisen ajan syöttö."
 
 #: pretix/base/models/items.py:1890
 msgid "Invalid datetime input."
-msgstr ""
+msgstr "Virheellinen datetime syöttö."
 
 #: pretix/base/models/items.py:1902
 msgid "Unknown country code."
@@ -5507,7 +5516,7 @@ msgstr "Vastaus"
 
 #: pretix/base/models/items.py:1956
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr ""
+msgstr "Tunnus ”{}” on jo käytössä toisessa vaihtoehdossa."
 
 #: pretix/base/models/items.py:1959
 msgid "Question option"
@@ -5520,7 +5529,7 @@ msgstr "Kysymysvaihtoehdot"
 #: pretix/base/models/items.py:2045 pretix/control/forms/event.py:1711
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
-msgstr ""
+msgstr "Kokonaiskapasiteetti"
 
 #: pretix/base/models/items.py:2047 pretix/control/forms/item.py:448
 msgid "Leave empty for an unlimited number of tickets."
@@ -5530,7 +5539,7 @@ msgstr "Jätä tyhjäksi, jos loputon."
 #: pretix/base/models/orders.py:2982
 #: pretix/control/templates/pretixcontrol/checkin/index.html:97
 msgid "Item"
-msgstr ""
+msgstr "Tuote"
 
 #: pretix/base/models/items.py:2059 pretix/control/forms/item.py:907
 #: pretix/plugins/autocheckin/models.py:74
@@ -5540,7 +5549,7 @@ msgstr "Variaatiot"
 #: pretix/base/models/items.py:2063
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Jätä tämä kiintiö huomiotta määritettäessä tapahtuman saatavuutta"
 
 #: pretix/base/models/items.py:2064
 msgid ""
@@ -5549,6 +5558,10 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Jos otat tämän käyttöön, kiintiö jätetään huomiotta määritettäessä "
+"tapahtuman saatavuutta tapahtumakalenterissa. Tämä on hyödyllistä esim. kun "
+"kuhunkin tapahtumaan lisätään kauppatavaraa, mutta sen ei pitäisi estää "
+"tapahtumaa näkymästä loppuunmyytynä."
 
 #: pretix/base/models/items.py:2071
 msgid "Close this quota permanently once it is sold out"
@@ -5560,10 +5573,14 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
+"Jos otat tämän käyttöön, kun kiintiö on kerran myyty loppuun, uusia lippuja "
+"ei enää myydä, vaikka lippuja tulisi uudelleen saataville peruutusten tai "
+"päättyvien tilausten kautta. Voit tietenkin aina avata sen uudelleen "
+"manuaalisesti."
 
 #: pretix/base/models/items.py:2080
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "Voit myydä lisää lippuja, kun ihmiset ovat kirjautuneet ulos"
 
 #: pretix/base/models/items.py:2081
 msgid ""
@@ -5574,6 +5591,13 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
+"Tämän vaihtoehdon avulla kiintiö vapautetaan heti, kun ihmiset skannataan "
+"tapahtuman ulostulossa. Näin tapahtuu vain, jos heidät on skannattu sekä "
+"sisään- että uloskäynnillä ja jos uloskäynti on viimeisin skannaus. Sillä ei "
+"ole merkitystä, kummalla sisäänkirjautumislistalla kumpikin skannaus "
+"tehtiin, mutta sisäänkirjautumislistat jätetään huomiotta, jos niiden "
+"asetuksena on ”Salli uudelleen sisäänpääsy uloskirjautumisen skannauksen "
+"jälkeen”, jotta vältytään vahingossa tapahtuvalta ylivaraukselta."
 
 #: pretix/base/models/items.py:2093 pretix/control/navigation.py:156
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -5587,6 +5611,8 @@ msgstr "Kiintiöt"
 #: pretix/base/models/items.py:2166
 msgid "All variations must belong to an item contained in the items list."
 msgstr ""
+"Kaikkien muunnelmien on kuuluttava johonkin kohdeluettelossa olevaan "
+"kohteeseen."
 
 #: pretix/base/models/items.py:2177
 msgid ""
@@ -5596,7 +5622,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:2183 pretix/base/models/waitinglist.py:303
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "Alatapahtuma ei voi olla nolla tapahtumien sarjassa."
 
 #: pretix/base/models/items.py:2219
 msgid "Required for products"
@@ -5607,27 +5633,33 @@ msgid ""
 "If checked, this property must be set in each product. Does not apply if a "
 "default value is set."
 msgstr ""
+"Jos tämä ominaisuus on valittuna, se on määritettävä jokaisessa tuotteessa. "
+"Ei sovelleta, jos oletusarvo on asetettu."
 
 #: pretix/base/models/items.py:2225
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Jos jätät tämän tyhjäksi, mikä tahansa arvo on sallittu. Muussa tapauksessa "
+"anna yksi mahdollinen arvo riviä kohti."
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:29
 msgid "Membership is transferable"
-msgstr ""
+msgstr "Jäsenyys on siirrettävissä"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"Jos tämä on valittu, jäsenyyttä voidaan käyttää useamman henkilön lippujen "
+"ostamiseen. Jos ei, osallistujan nimen on aina pysyttävä samana."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "Vierekkäinen käyttö sallittu"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -5637,10 +5669,14 @@ msgid ""
 "overlap check will be performed if there is a product-level validity of the "
 "ticket."
 msgstr ""
+"Jos tämä on valittu, jäsenyyttä voidaan käyttää lippujen ostamiseen samaan "
+"aikaan järjestettäviin tapahtumiin. Huomaa, että tämä tarkistaa vain "
+"tapahtumien identtisen alkamisajankohdan, ei tapahtumien päällekkäisyyttä. "
+"Päällekkäisyystarkistus tehdään, jos lipulla on tuotetason voimassaolo."
 
 #: pretix/base/models/memberships.py:58
 msgid "Number of times this membership can be used in a purchase."
-msgstr ""
+msgstr "Montako kertaa tätä jäsenyyttä voidaan käyttää oston yhteydessä."
 
 #: pretix/base/models/memberships.py:124
 #: pretix/control/templates/pretixcontrol/items/question.html:33
@@ -5658,11 +5694,11 @@ msgstr "Peruttu"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:116
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:28
 msgid "Membership type"
-msgstr ""
+msgstr "Jäsenyystyyppi"
 
 #: pretix/base/models/orders.py:202
 msgid "pending"
-msgstr ""
+msgstr "odottaa"
 
 #: pretix/base/models/orders.py:203 pretix/base/payment.py:511
 #: pretix/base/services/invoices.py:475
@@ -5677,22 +5713,24 @@ msgstr "vanhentunut"
 #: pretix/base/models/orders.py:254 pretix/control/forms/filter.py:560
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:64
 msgid "Locale"
-msgstr ""
+msgstr "Tapahtumapaikka"
 
 #: pretix/base/models/orders.py:269 pretix/control/forms/filter.py:571
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr ""
+msgstr "Kokonaissumma"
 
 #: pretix/base/models/orders.py:273 pretix/base/models/vouchers.py:293
 msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
 msgstr ""
+"Tähän kenttään syötetty teksti ei näy käyttäjälle, ja se on käytettävissäsi "
+"vain avuksesi."
 
 #: pretix/base/models/orders.py:278
 msgid "We'll show you this order to be due for a follow-up on this day."
-msgstr ""
+msgstr "Näytämme tämän tilauksen tulevan seurannan kohteeksi tänä päivänä."
 
 #: pretix/base/models/orders.py:284
 msgid ""
@@ -5701,16 +5739,22 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
+"Jos asetat tämän, kirjautumissovellus näyttää näkyvän varoituksen siitä, "
+"että tämän tilauksen liput vaativat erityistä huomiota. Tämä ei näytä mitään "
+"yksityiskohtia tai mukautettua viestiä, joten sinun on kerrottava "
+"kirjautumishenkilökunnalle, miten näitä tapauksia käsitellään."
 
 #: pretix/base/models/orders.py:291
 msgid ""
 "This text will be shown by the check-in app if a ticket of this order is "
 "scanned."
 msgstr ""
+"Tämä teksti näkyy kirjautumissovelluksessa, jos tämän tilauksen lippu "
+"skannataan."
 
 #: pretix/base/models/orders.py:301 pretix/base/models/orders.py:1524
 msgid "Meta information"
-msgstr ""
+msgstr "Meta informaatio"
 
 #: pretix/base/models/orders.py:305
 msgid "API meta information"
@@ -5735,12 +5779,16 @@ msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
 msgstr ""
+"Maksua ei voida hyväksyä, koska maksuasetuksissa määritetty viimeinen "
+"maksupäivä on päättynyt."
 
 #: pretix/base/models/orders.py:1033
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
+"Maksua ei voida hyväksyä, koska tilaus on vanhentunut ja olet määrittänyt "
+"maksuasetuksissa, että myöhästyneitä maksuja ei hyväksytä."
 
 #: pretix/base/models/orders.py:1035
 msgid "This order is not yet approved by the event organizer."
@@ -5754,21 +5802,21 @@ msgstr "Tilattu tuote \"{item}\" ei ole enää saatavilla."
 #: pretix/base/models/orders.py:1061
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr ""
+msgstr "Paikka ”{seat}” ei ole enää saatavilla."
 
 #: pretix/base/models/orders.py:1062
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "Kupongilla ”{voucher}” ei ole enää riittävää arvoa."
 
 #: pretix/base/models/orders.py:1063
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr ""
+msgstr "Tällä välin on käytetty kuponkia ”{voucher}”."
 
 #: pretix/base/models/orders.py:1403
 msgid "<file>"
-msgstr ""
+msgstr "<file>"
 
 #: pretix/base/models/orders.py:1504 pretix/base/models/orders.py:1512
 msgid "Empty, if this product is not an admission ticket"
@@ -5782,7 +5830,7 @@ msgstr "luotu"
 #: pretix/base/models/orders.py:1722
 msgctxt "payment_state"
 msgid "pending"
-msgstr ""
+msgstr "odottaa"
 
 #: pretix/base/models/orders.py:1723
 msgctxt "payment_state"
@@ -5812,7 +5860,7 @@ msgstr "Maksutiedot"
 #: pretix/base/models/orders.py:2109
 msgctxt "refund_state"
 msgid "started externally"
-msgstr ""
+msgstr "aloitettu ulkoisesti"
 
 #: pretix/base/models/orders.py:2110
 msgctxt "refund_state"
@@ -5864,7 +5912,7 @@ msgstr "Hyvityksen syy"
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:201
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
-msgstr ""
+msgstr "Voidaan näyttää loppukäyttäjälle tai käyttää esim. osana maksuviitettä."
 
 #: pretix/base/models/orders.py:2284
 msgid "Service fee"
@@ -5872,11 +5920,11 @@ msgstr "Palvelumaksu"
 
 #: pretix/base/models/orders.py:2285
 msgid "Payment fee"
-msgstr ""
+msgstr "Maksu"
 
 #: pretix/base/models/orders.py:2286
 msgid "Shipping fee"
-msgstr ""
+msgstr "Laivauskulut"
 
 #: pretix/base/models/orders.py:2287
 #: pretix/control/templates/pretixcontrol/order/index.html:156
@@ -5885,7 +5933,7 @@ msgstr "Peruutusmaksu"
 
 #: pretix/base/models/orders.py:2288
 msgid "Insurance fee"
-msgstr ""
+msgstr "Vakuutusmaksu"
 
 #: pretix/base/models/orders.py:2289
 msgid "Late fee"
@@ -5916,7 +5964,7 @@ msgstr "Arvo"
 
 #: pretix/base/models/orders.py:2544
 msgid "Order position"
-msgstr ""
+msgstr "Tilausjärjestys"
 
 #: pretix/base/models/orders.py:3087
 msgid "Cart ID (e.g. session key)"
@@ -5924,11 +5972,11 @@ msgstr "Korin ID (esim. istuntoavain)"
 
 #: pretix/base/models/orders.py:3124
 msgid "Cart position"
-msgstr ""
+msgstr "Ostoskärryn sijainti"
 
 #: pretix/base/models/orders.py:3125
 msgid "Cart positions"
-msgstr ""
+msgstr "Ostoskärryn sijainnit"
 
 #: pretix/base/models/orders.py:3261
 msgid "Business customer"
@@ -5936,19 +5984,19 @@ msgstr "Yritysasiakas"
 
 #: pretix/base/models/orders.py:3277
 msgid "This reference will be printed on your invoice for your convenience."
-msgstr ""
+msgstr "Tämä viite tulostetaan laskuusi."
 
 #: pretix/base/models/orders.py:3461
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
 msgid "Badge"
-msgstr ""
+msgstr "Nimilappu"
 
 #: pretix/base/models/orders.py:3462 pretix/base/pdf.py:1109
 #: pretix/control/forms/organizer.py:777 pretix/control/forms/organizer.py:813
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
-msgstr ""
+msgstr "Lippu"
 
 #: pretix/base/models/orders.py:3463
 msgid "Certificate"
@@ -5957,7 +6005,7 @@ msgstr "Todistus"
 #: pretix/base/models/orders.py:3464 pretix/control/views/event.py:369
 #: pretix/control/views/event.py:374
 msgid "Other"
-msgstr ""
+msgstr "Muu"
 
 #: pretix/base/models/organizer.py:79
 msgid ""
@@ -5965,6 +6013,9 @@ msgid ""
 "Every slug can only be used once. This is being used in URLs to refer to "
 "your organizer accounts and your events."
 msgstr ""
+"Niiden tulisi olla lyhyitä ja sisältää vain pieniä kirjaimia, numeroita, "
+"pisteitä ja viivoja. Jokaista slugia voi käyttää vain kerran. Tätä käytetään "
+"URL-osoitteissa viittaamaan järjestäjätileihin ja tapahtumiin."
 
 #: pretix/base/models/organizer.py:97 pretix/control/navigation.py:350
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:19
@@ -5986,6 +6037,7 @@ msgstr "Ryhmän jäsenet"
 #: pretix/base/models/organizer.py:289
 msgid "Require all members of this team to use two-factor authentication"
 msgstr ""
+"Vaadi kaikkia tämän ryhmän jäseniä käyttämään kaksivaiheista tunnistusta"
 
 #: pretix/base/models/organizer.py:290
 msgid ""
@@ -5993,6 +6045,9 @@ msgid ""
 "up two-factor authentication or leave the team. The setting may take a few "
 "minutes to become effective for all users."
 msgstr ""
+"Jos otat tämän käyttöön, kaikkien tiimin jäsenten on joko otettava käyttöön "
+"kaksitekijätodennus tai poistuttava tiimistä. Asetuksella voi kestää "
+"muutaman minuutin ennen kuin se tulee voimaan kaikkien käyttäjien osalta."
 
 #: pretix/base/models/organizer.py:297
 msgid "Can create events"
@@ -6011,6 +6066,9 @@ msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
+"Joku, jolla on tämä asetus, pääsee käsiksi suurimpaan osaan kaikkien "
+"tapahtumiesi tiedoista, esim. yksityisyysraporttien kautta, joten ole "
+"varovainen, kenet lisäät tähän ryhmään!"
 
 #: pretix/base/models/organizer.py:311
 msgid "Can manage customer accounts"
@@ -6042,7 +6100,7 @@ msgstr "Voi muokata tilauksia"
 
 #: pretix/base/models/organizer.py:339
 msgid "Can perform check-ins"
-msgstr ""
+msgstr "Voi suorittaa kirjautumisia"
 
 #: pretix/base/models/organizer.py:340
 msgid ""
@@ -6050,6 +6108,9 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"Tähän sisältyy osallistujien haku, jonka avulla voidaan saada osallistujien "
+"henkilötietoja. Käyttäjät, joilla on ”voi muuttaa tilauksia”, voivat myös "
+"tehdä sisäänkirjautumisia."
 
 #: pretix/base/models/organizer.py:345
 msgid "Can view vouchers"
@@ -6062,7 +6123,7 @@ msgstr "Voi muokata kuponkeja"
 #: pretix/base/models/organizer.py:353
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr ""
+msgstr "%(name)s on %(object)s"
 
 #: pretix/base/models/organizer.py:385
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:64
@@ -6077,7 +6138,7 @@ msgstr "Ryhmät"
 #: pretix/base/models/organizer.py:406
 #, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr ""
+msgstr "kutsu ryhmään '{team}' osoitteeseen '{email}'"
 
 #: pretix/base/models/organizer.py:538
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
@@ -6088,36 +6149,38 @@ msgstr "Tunnus"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:54
 #: pretix/control/templates/pretixcontrol/items/questions.html:22
 msgid "Type"
-msgstr ""
+msgstr "Tyyppi"
 
 #: pretix/base/models/seating.py:45 pretix/base/models/tax.py:305
 #: pretix/base/pdf.py:1265
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "Layout-tiedostosi ei ole kelvollinen JSON-tiedosto."
 
 #: pretix/base/models/seating.py:54 pretix/base/models/seating.py:78
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr ""
+msgstr "Layout-tiedostosi ei ole kelvollinen istumajärjestys. Virheilmoitus: {}"
 
 #: pretix/base/models/seating.py:63
 #, python-brace-format
 msgid "Seat with zone {zone}, row {row}, and number {number} has no seat ID."
 msgstr ""
+"Istuimella, jolla on vyöhyke {zone}, rivi {row} ja numero {number}, ei ole "
+"istuintunnusta."
 
 #: pretix/base/models/seating.py:71
 #, python-brace-format
 msgid "Multiple seats have the same ID: {id}"
-msgstr ""
+msgstr "Useilla paikoilla on sama tunnus: {id}"
 
 #: pretix/base/models/seating.py:199
 #, python-brace-format
 msgid "Row {number}"
-msgstr ""
+msgstr "Rivi {number}"
 
 #: pretix/base/models/seating.py:204
 #, python-brace-format
 msgid "Seat {number}"
-msgstr ""
+msgstr "Istuin {number}"
 
 #: pretix/base/models/tax.py:144
 msgid "Standard rates"
@@ -6126,7 +6189,7 @@ msgstr "Vakiohinnat"
 #: pretix/base/models/tax.py:148
 msgctxt "tax_code"
 msgid "Standard rate"
-msgstr ""
+msgstr "Normaali hinta"
 
 #: pretix/base/models/tax.py:152
 msgctxt "tax_code"
@@ -6137,12 +6200,12 @@ msgstr "Alennettu hinta"
 msgctxt "tax_code"
 msgid ""
 "Averaged rate (other revenue in a agricultural and silvicultural business)"
-msgstr ""
+msgstr "Keskimääräinen hinta (muut tulot maatalous- ja metsätalousyrityksestä)"
 
 #: pretix/base/models/tax.py:164
 msgctxt "tax_code"
 msgid "Reverse charge"
-msgstr ""
+msgstr "Käänteinen lataus"
 
 #: pretix/base/models/tax.py:168
 msgid "Tax free"
@@ -6151,55 +6214,60 @@ msgstr "Veroton"
 #: pretix/base/models/tax.py:171
 msgctxt "tax_code"
 msgid "Services outside of scope of tax"
-msgstr ""
+msgstr "Veron piiriin kuulumattomat palvelut"
 
 #: pretix/base/models/tax.py:174
 msgctxt "tax_code"
 msgid "Exempt from tax (no reason given)"
-msgstr ""
+msgstr "Verovapaa (perustetta ei ole ilmoitettu)"
 
 #: pretix/base/models/tax.py:177
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr ""
+msgstr "Nollaluokitellut tavarat"
 
 #: pretix/base/models/tax.py:180
 msgctxt "tax_code"
 msgid "Free export item, VAT not charged"
-msgstr ""
+msgstr "Vapaa vientituote, arvonlisäveroa ei peritä"
 
 #: pretix/base/models/tax.py:183
 msgctxt "tax_code"
 msgid "VAT exempt for EEA intra-community supply of goods and services"
 msgstr ""
+"ETA:n sisäisten tavaroiden luovutusten ja palvelujen suoritusten vapautus "
+"arvonlisäverosta"
 
 #: pretix/base/models/tax.py:187
 msgid "Special cases"
-msgstr ""
+msgstr "Erityistapaukset"
 
 #: pretix/base/models/tax.py:189
 msgctxt "tax_code"
 msgid "Canary Islands general indirect tax"
-msgstr ""
+msgstr "Kanariansaarten yleinen välillinen vero"
 
 #: pretix/base/models/tax.py:190
 msgctxt "tax_code"
 msgid "Tax for production, services and importation in Ceuta and Melilla"
 msgstr ""
+"Ceutassa ja Melillassa tuotannosta, palveluista ja tuonnista kannettava vero"
 
 #: pretix/base/models/tax.py:191
 msgctxt "tax_code"
 msgid "Transferred (VAT), only in Italy"
-msgstr ""
+msgstr "Siirretty (alv), vain Italiassa"
 
 #: pretix/base/models/tax.py:195
 msgid "Exempt with specific reason"
-msgstr ""
+msgstr "Vapautettu erityisestä syystä"
 
 #: pretix/base/models/tax.py:198
 msgctxt "tax_code"
 msgid "Exempt based on article 79, point c of Council Directive 2006/112/EC"
 msgstr ""
+"Vapautettu neuvoston direktiivin 2006/112/EY 79 artiklan c alakohdan "
+"perusteella"
 
 #: pretix/base/models/tax.py:205 pretix/base/models/tax.py:218
 #: pretix/base/models/tax.py:244
@@ -6209,6 +6277,8 @@ msgid ""
 "Exempt based on article {article}, section {section} ({letter}) of Council "
 "Directive 2006/112/EC"
 msgstr ""
+"Vapautettu neuvoston direktiivin 2006/112/EY {section} artiklan {article}, "
+"({letter}) perusteella"
 
 #: pretix/base/models/tax.py:231
 #, python-brace-format
@@ -6217,36 +6287,38 @@ msgid ""
 "Exempt based on article {article}, section ({letter}) of Council Directive "
 "2006/112/EC"
 msgstr ""
+"Vapautettu neuvoston direktiivin 2006/112/EY {article} artiklan kirjaimen "
+"kohdan ({letter}) perusteella"
 
 #: pretix/base/models/tax.py:252
 msgctxt "tax_code"
 msgid "Exempt based on article 309 of Council Directive 2006/112/EC"
-msgstr ""
+msgstr "Vapautettu neuvoston direktiivin 2006/112/EY 309 artiklan perusteella"
 
 #: pretix/base/models/tax.py:254
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr ""
+msgstr "Yhteisön sisäiset hankinnat käytetyistä kulkuneuvoista"
 
 #: pretix/base/models/tax.py:256
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of second hand goods"
-msgstr ""
+msgstr "Yhteisön sisäinen käytettyjen tavaroiden hankinta"
 
 #: pretix/base/models/tax.py:258
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of works of art"
-msgstr ""
+msgstr "Yhteisön sisäinen taideteosten hankinta"
 
 #: pretix/base/models/tax.py:260
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of collectors items and antiques"
-msgstr ""
+msgstr "Yhteisön sisäinen keräilyesineiden ja antiikkiesineiden hankinta"
 
 #: pretix/base/models/tax.py:262
 msgctxt "tax_code"
 msgid "France domestic VAT franchise in base"
-msgstr ""
+msgstr "Ranska kotimainen arvonlisävero franchising-peruste"
 
 #: pretix/base/models/tax.py:264
 msgctxt "tax_code"
@@ -6254,6 +6326,8 @@ msgid ""
 "France domestic Credit Notes without VAT, due to supplier forfeit of VAT for "
 "discount"
 msgstr ""
+"Ranskan kotimaiset hyvityslaskut ilman arvonlisäveroa, koska toimittaja ei "
+"ole maksanut arvonlisäveroa alennusta vastaan"
 
 #: pretix/base/models/tax.py:314
 msgid "Your set of rules is not valid. Error message: {}"
@@ -6261,11 +6335,11 @@ msgstr "Sääntöjoukkosi ei ole kelvollinen. Virheilmoitus: {}"
 
 #: pretix/base/models/tax.py:325
 msgid "Official name"
-msgstr ""
+msgstr "Virallinen nimi"
 
 #: pretix/base/models/tax.py:326
 msgid "Should be short, e.g. \"VAT\""
-msgstr ""
+msgstr "Pitäisi olla lyhyt, esim. ”ALV”"
 
 #: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1509
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
@@ -6277,20 +6351,23 @@ msgid ""
 "If you help us understand what this tax rules legally is, we can use this "
 "information for eInvoices, exporting to accounting system, etc."
 msgstr ""
+"Jos autat meitä ymmärtämään, mitä nämä verosäännöt ovat laillisesti, voimme "
+"käyttää tätä tietoa verkkolaskuissa, kirjanpitojärjestelmään viemisessä jne."
 
 #: pretix/base/models/tax.py:351
 msgid "The configured product prices include the tax amount"
-msgstr ""
+msgstr "Määritetyt tuotteiden hinnat sisältävät veron määrän"
 
 #: pretix/base/models/tax.py:355
 msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
+"Pidä bruttomäärä vakiona, jos verokanta muuttuu laskun osoitteen perusteella"
 
 #: pretix/base/models/tax.py:359
 msgid "Use EU reverse charge taxation rules"
-msgstr ""
+msgstr "Käytä EU:n käänteistä verovelvollisuutta koskevia sääntöjä"
 
 #: pretix/base/models/tax.py:363
 msgid ""
@@ -6298,10 +6375,13 @@ msgid ""
 "business customers in other EU countries in a way that works for all "
 "organizers. Use custom rules instead."
 msgstr ""
+"Tämä ominaisuus poistetaan tulevaisuudessa, koska se ei käsittele muiden EU-"
+"maiden muiden kuin yritysasiakkaiden arvonlisäveroa tavalla, joka toimisi "
+"kaikille järjestäjille. Käytä sen sijaan mukautettuja sääntöjä."
 
 #: pretix/base/models/tax.py:365
 msgid "DEPRECATED"
-msgstr ""
+msgstr "VÄHENNETTY"
 
 #: pretix/base/models/tax.py:366
 msgid ""
@@ -6312,6 +6392,13 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"Ei suositella. Useimmat tapahtumat EIVÄT ole oikeutettuja käänteiseen "
+"verovelvollisuuteen, koska verotuspaikka on tapahtumapaikka. Tämä vaihtoehto "
+"poistaa arvonlisäveron perimisen käytöstä kaikilta EU:n ulkopuolisilta "
+"asiakkailta ja eri EU-maissa olevilta yritysasiakkailta, jotka ovat antaneet "
+"voimassa olevan EU:n alv-tunnuksen. Ota tämä vaihtoehto käyttöön vasta "
+"veroneuvojan kanssa neuvoteltuasi. Oikeasta verolaskennasta ei anneta "
+"takuuta. KÄYTTÖ OMALLA VASTUULLA."
 
 #: pretix/base/models/tax.py:374 pretix/plugins/stripe/payment.py:299
 msgid "Merchant country"
@@ -6322,35 +6409,41 @@ msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
+"Asuinmaasi. Tämä on maa, jossa EU:n käännettyä verovelvollisuutta koskevaa "
+"sääntöä ei sovelleta, jos se on määritetty edellä."
 
 #: pretix/base/models/tax.py:412
 msgid "You need to set your home country to use the reverse charge feature."
 msgstr ""
+"Sinun on asetettava kotimaasi, jotta voit käyttää käänteinen veloitus "
+"-ominaisuutta."
 
 #: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1556
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
 msgstr ""
+"Tämän verokoodin ja nollasta poikkeavan verokannan yhdistelmässä ei ole "
+"järkeä."
 
 #: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1560
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
-msgstr ""
+msgstr "Tämän verokoodin ja nollaverokannan yhdistelmässä ei ole järkeä."
 
 #: pretix/base/models/tax.py:426
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr ""
+msgstr "sis. {rate}% {name}"
 
 #: pretix/base/models/tax.py:428
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr ""
+msgstr "plus {rate}% {name}"
 
 #: pretix/base/models/tax.py:430
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:46
 msgid "reverse charge enabled"
-msgstr ""
+msgstr "käänteinen veloitus aktivoitu"
 
 #: pretix/base/models/tax.py:568
 msgctxt "invoice"
@@ -6358,11 +6451,13 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
+"Käänteinen veloitus: Neuvoston direktiivin 2006/112/ETY 194 ja 196 artiklan "
+"mukaan arvonlisäverovelvollisuus kuuluu palvelun vastaanottajalle."
 
 #: pretix/base/models/tax.py:574
 msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
-msgstr ""
+msgstr "Arvonlisäverovelvollisuus on palvelun vastaanottajalla."
 
 #: pretix/base/models/vouchers.py:171
 msgid "No effect"
@@ -6396,6 +6491,12 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
+"Jos arvoksi on asetettu useampi kuin yksi, arvoseteli on lunastettava näin "
+"monesta tuotteesta, kun sitä käytetään ensimmäistä kertaa. Myöhemmillä "
+"käyttökerroilla se voidaan käyttää myös pienempään määrään tuotteita. "
+"Huomaa, että tämä tarkoittaa sitä, että käyttökertojen kokonaismäärä voi "
+"joissakin tapauksissa olla tätä rajaa pienempi, esimerkiksi "
+"peruutustapauksissa."
 
 #: pretix/base/models/vouchers.py:214
 msgid ""
@@ -6403,6 +6504,8 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
+"Tämä on suurin rahamäärä, joka alennetaan tällä kupongilla kaikissa "
+"käyttökerroissa. Jos tämä summa saavutetaan, arvoseteliä ei voi enää käyttää."
 
 #: pretix/base/models/vouchers.py:227
 msgid ""
@@ -6410,12 +6513,16 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
+"Jos kuponki aktivoidaan, se vähennetään kyseisen tuotteen kiintiöistä, "
+"jolloin on taattu, että jokainen, jolla on tämä kuponkikoodi, saa lipun."
 
 #: pretix/base/models/vouchers.py:235
 msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
+"Jos tämä kuponkikoodi on aktivoitu, sen haltija voi ostaa lippuja, vaikka "
+"niitä ei olisi enää yhtään jäljellä."
 
 #: pretix/base/models/vouchers.py:254 pretix/control/forms/vouchers.py:69
 msgid ""
@@ -6423,19 +6530,24 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
+"Tämä tuote lisätään käyttäjän ostoskoriin, jos kuponki on lunastettu. Tietyn "
+"tuotteen sijasta voit valita myös kiintiön. Tällöin voidaan valita kaikki "
+"tähän kiintiöön määritetyt tuotteet."
 
 #: pretix/base/models/vouchers.py:265
 msgid "This variation of the product select above is being used."
-msgstr ""
+msgstr "Tätä edellä valitun tuotteen muunnelmaa käytetään."
 
 #: pretix/base/models/vouchers.py:274
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
+"Jos se on käytössä, kuponki on voimassa kaikissa tuotteissa, joihin tämä "
+"kiintiö vaikuttaa."
 
 #: pretix/base/models/vouchers.py:281
 msgid "Specific seat"
-msgstr ""
+msgstr "Erityinen istuin"
 
 #: pretix/base/models/vouchers.py:288
 msgid ""
@@ -6443,6 +6555,9 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
+"Tämän kentän avulla voit ryhmitellä useita tositteita yhteen. Jos syötät "
+"saman arvon useammalle arvosetelille, saat tilastoja siitä, kuinka monta "
+"arvoseteliä on lunastettu jne."
 
 #: pretix/base/models/vouchers.py:313 pretix/control/navigation.py:267
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
@@ -6456,7 +6571,7 @@ msgstr "Et voi valita kiintiötä, joka kuuluu eri tapahtumaan."
 
 #: pretix/base/models/vouchers.py:341
 msgid "You cannot select a quota and a specific product at the same time."
-msgstr ""
+msgstr "Et voi valita kiintiötä ja tiettyä tuotetta samanaikaisesti."
 
 #: pretix/base/models/vouchers.py:344
 msgid ""
@@ -6464,6 +6579,9 @@ msgid ""
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
 msgstr ""
+"Et voi valita tuotetta, joka on saatavana vain lisätuotteena tai osana "
+"pakettia, sillä kuponkia ei voi soveltaa lisätuotteisiin tai "
+"pakettituotteisiin."
 
 #: pretix/base/models/vouchers.py:348
 msgid "You cannot select a product that belongs to a different event."
@@ -6474,53 +6592,65 @@ msgid ""
 "You cannot select a variation without having selected a product that "
 "provides variations."
 msgstr ""
+"Et voi valita variaatiota ilman, että olet valinnut tuotteen, joka tarjoaa "
+"variaatioita."
 
 #: pretix/base/models/vouchers.py:353
 msgid "This variation does not belong to this product."
-msgstr ""
+msgstr "Tämä variaatio ei kuulu tähän tuotteeseen."
 
 #: pretix/base/models/vouchers.py:355
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr ""
+msgstr "Tällä hetkellä ei ole mahdollista luoda arvoseteleitä lisätuotteille."
 
 #: pretix/base/models/vouchers.py:357 pretix/base/models/vouchers.py:469
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
 msgstr ""
+"Sinun on valittava tietty tuote tai kiintiö, jos tällä arvosetelillä on "
+"tarkoitus varata lippuja."
 
 #: pretix/base/models/vouchers.py:367
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
+"Tämä kuponki on jo lunastettu %(redeemed) kertaa. Et voi vähentää "
+"käyttökertojen enimmäismäärää alle tämän määrän."
 
 #: pretix/base/models/vouchers.py:376
 msgid ""
 "The maximum number of usages may not be lower than the minimum number of "
 "usages."
 msgstr ""
+"Käyttökertojen enimmäismäärä ei saa olla pienempi kuin käyttökertojen "
+"vähimmäismäärä."
 
 #: pretix/base/models/vouchers.py:382 pretix/base/models/vouchers.py:451
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
+"Jos haluat, että tämä kuponki varaa kiintiön, sinun on valittava tietty "
+"päivämäärä."
 
 #: pretix/base/models/vouchers.py:384
 msgid "You can not select a subevent if your event is not an event series."
-msgstr ""
+msgstr "Et voi valita alatapahtumaa, jos tapahtumasi ei ole tapahtumasarja."
 
 #: pretix/base/models/vouchers.py:482
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
+"Et voi luoda kuponkia, joka varaa kiintiön, koska valittu tuote tai kiintiö "
+"on tällä hetkellä loppuunmyyty tai kokonaan varattu."
 
 #: pretix/base/models/vouchers.py:504
 #, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr ""
+msgstr "Määritettyä paikan ID:tä ”{id}” ei ole olemassa tälle tapahtumalle."
 
 #: pretix/base/models/vouchers.py:508
 #, python-brace-format
@@ -6528,6 +6658,8 @@ msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
 msgstr ""
+"Paikka ”{id}” ei ole tällä hetkellä saatavilla (estetty, jo myyty tai toinen "
+"kuponki)."
 
 #: pretix/base/models/waitinglist.py:64
 msgid "On waiting list since"
@@ -6535,7 +6667,7 @@ msgstr "Jonotuslistalla alkaen"
 
 #: pretix/base/models/waitinglist.py:84
 msgid "Assigned voucher"
-msgstr ""
+msgstr "Myönnetty kuponki"
 
 #: pretix/base/models/waitinglist.py:93
 msgid "The product the user waits for."
@@ -6543,15 +6675,15 @@ msgstr "Tuote, jota käyttäjä odottaa."
 
 #: pretix/base/models/waitinglist.py:101
 msgid "The variation of the product selected above."
-msgstr ""
+msgstr "Edellä valitun tuotteen muunnelma."
 
 #: pretix/base/models/waitinglist.py:113
 msgid "Waiting list entry"
-msgstr ""
+msgstr "Odotuslistalle merkitseminen"
 
 #: pretix/base/models/waitinglist.py:114
 msgid "Waiting list entries"
-msgstr ""
+msgstr "Odotuslistan merkinnät"
 
 #: pretix/base/models/waitinglist.py:159
 msgid "This product is currently not available."
@@ -6559,7 +6691,7 @@ msgstr "Tämä tuote ei ole juuri nyt saatavilla."
 
 #: pretix/base/models/waitinglist.py:186
 msgid "No seat with this product is currently available."
-msgstr ""
+msgstr "Tällä hetkellä ei ole saatavilla istuinta tämän tuotteen kanssa."
 
 #: pretix/base/models/waitinglist.py:189
 msgid "A voucher has already been sent to this person."
@@ -6567,26 +6699,28 @@ msgstr "Tälle henkilölle on jo lähetetty kuponki."
 
 #: pretix/base/models/waitinglist.py:191
 msgid "This entry is anonymized and can no longer be used."
-msgstr ""
+msgstr "Tämä merkintä on anonymisoitu, eikä sitä voida enää käyttää."
 
 #: pretix/base/models/waitinglist.py:204
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
-msgstr ""
+msgstr "Luodaan automaattisesti odotusluettelomerkinnästä {email} lle"
 
 #: pretix/base/models/waitinglist.py:295
 msgid "The selected item does not belong to this event."
-msgstr ""
+msgstr "Valittu kohde ei kuulu tähän tapahtumaan."
 
 #: pretix/base/models/waitinglist.py:297
 msgid "Please select a specific variation of this product."
-msgstr ""
+msgstr "Valitse tämän tuotteen tietty variaatio."
 
 #: pretix/base/models/waitinglist.py:315
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
 msgstr ""
+"Olet jo tällä odotuslistalla! Ilmoitamme sinulle heti, kun lippu on "
+"saatavilla."
 
 #: pretix/base/notifications.py:192 pretix/control/navigation.py:193
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:20
@@ -6601,11 +6735,11 @@ msgstr "Päivämäärät"
 #: pretix/plugins/reports/accountingreport.py:317
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:438
 msgid "Net total"
-msgstr ""
+msgstr "Netto summa"
 
 #: pretix/base/notifications.py:202
 msgid "Pending amount"
-msgstr ""
+msgstr "Puuttuva summa"
 
 #: pretix/base/notifications.py:204 pretix/control/forms/filter.py:211
 #: pretix/control/forms/modelimport.py:81
@@ -6655,12 +6789,12 @@ msgstr "Tilaus {order.code} merkitty vanhentuneeksi."
 #: pretix/base/notifications.py:270
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr ""
+msgstr "Tilauksen {order.code} lipputiedot on muutettu."
 
 #: pretix/base/notifications.py:276
 #, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr ""
+msgstr "Tilauksen {order.code} yhteysosoite on muuttunut."
 
 #: pretix/base/notifications.py:282
 #, python-brace-format
@@ -6669,36 +6803,36 @@ msgstr "Tilaus {order.code} muutettu."
 
 #: pretix/base/notifications.py:287
 msgid "Order has been overpaid"
-msgstr ""
+msgstr "Tilauksesta on maksettu liikaa"
 
 #: pretix/base/notifications.py:288
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr ""
+msgstr "Tilauksesta {order.code} on maksettu liikaa."
 
 #: pretix/base/notifications.py:294
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr ""
+msgstr "Ulkoinen palautus {order.code}:lle on tapahtunut."
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
-msgstr ""
+msgstr "Palautus pyydetty"
 
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr ""
+msgstr "Sinua on pyydetty antamaan hyvitys {order.code} lle."
 
 #: pretix/base/payment.py:86
 msgctxt "payment"
 msgid "Apple Pay"
-msgstr ""
+msgstr "Apple Pay"
 
 #: pretix/base/payment.py:87
 msgctxt "payment"
 msgid "Google Pay"
-msgstr ""
+msgstr "Google Pay"
 
 #: pretix/base/payment.py:256
 #: pretix/presale/templates/pretixpresale/event/order.html:115
@@ -6707,12 +6841,14 @@ msgstr "Maksa nyt"
 
 #: pretix/base/payment.py:330
 msgid "Enable payment method"
-msgstr ""
+msgstr "Ota maksutapa käyttöön"
 
 #: pretix/base/payment.py:336
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
+"Käyttäjät eivät voi valita tätä maksupalveluntarjoajaa tietyn päivämäärän "
+"jälkeen."
 
 #: pretix/base/payment.py:342
 msgid ""
@@ -6723,7 +6859,7 @@ msgstr ""
 
 #: pretix/base/payment.py:347
 msgid "Minimum order total"
-msgstr ""
+msgstr "Tilauksen vähimmäissumma"
 
 #: pretix/base/payment.py:348
 msgid ""
@@ -6731,10 +6867,13 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Tämä maksu on käytettävissä vain, jos tilauksen loppusumma on yhtä suuri tai "
+"suurempi kuin annettu arvo. Tilauksen loppusumma voidaan laskea ottamatta "
+"huomioon tämän maksutavan maksuja."
 
 #: pretix/base/payment.py:358
 msgid "Maximum order total"
-msgstr ""
+msgstr "Tilauksen enimmäismäärä"
 
 #: pretix/base/payment.py:359
 msgid ""
@@ -6742,22 +6881,25 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Tämä maksu on käytettävissä vain, jos tilauksen loppusumma on yhtä suuri tai "
+"pienempi kuin annettu arvo. Tilauksen loppusumma voidaan laskea ottamatta "
+"huomioon tämän maksutavan maksuja."
 
 #: pretix/base/payment.py:369 pretix/base/payment.py:378
 msgid "Additional fee"
-msgstr ""
+msgstr "Lisämaksu"
 
 #: pretix/base/payment.py:370
 msgid "Absolute value"
-msgstr ""
+msgstr "Absoluuttinen arvo"
 
 #: pretix/base/payment.py:379
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Prosenttiosuus tilauksen kokonaismäärästä."
 
 #: pretix/base/payment.py:385
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Laske maksu kokonaisarvosta maksu mukaan lukien."
 
 #: pretix/base/payment.py:386
 #, python-brace-format
@@ -6767,10 +6909,14 @@ msgid ""
 "rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"Suosittelemme ottamaan tämän käyttöön, jos haluat, että käyttäjät maksavat "
+"maksupalveluntarjoajasi maksut. <a href=\"{docs_url}\" target=\"_blank\" rel="
+"\"noopener\">Klikkaa tästä saadaksesi yksityiskohtaista tietoa siitä, mitä "
+"tämä tekee.</a> Älä unohda asettaa oikeita maksuja yllä!"
 
 #: pretix/base/payment.py:394
 msgid "Text on invoices"
-msgstr ""
+msgstr "Teksti laskuissa"
 
 #: pretix/base/payment.py:395
 msgid ""
@@ -6779,10 +6925,14 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Tulostetaan laskuihin heti maksun lukujen alapuolelle ja lopputekstin "
+"yläpuolelle. Tätä käytetään vain, jos lasku laaditaan ennen tilauksen "
+"maksamista. Jos lasku luodaan myöhemmin, siinä näkyy teksti, jossa "
+"ilmoitetaan, että lasku on jo maksettu."
 
 #: pretix/base/payment.py:404
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Rajoitettu maihin"
 
 #: pretix/base/payment.py:406
 msgid ""
@@ -6790,93 +6940,106 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
+"Salli tämän palveluntarjoajan valitseminen vain valittujen maiden "
+"laskutusosoitteille. Jos et valitse mitään maata, kaikki maat sallitaan. "
+"Tämä on käytössä vain, jos laskutusosoite vaaditaan."
 
 #: pretix/base/payment.py:425
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
 msgstr ""
+"Salli tämän maksupalveluntarjoajan käyttö vain valituissa myyntikanavissa."
 
 #: pretix/base/payment.py:429
 msgid "Hide payment method"
-msgstr ""
+msgstr "Piilota maksutapa"
 
 #: pretix/base/payment.py:432
 msgid ""
 "The payment method will not be shown by default but only to people who enter "
 "the shop through a special link."
 msgstr ""
+"Maksutapaa ei näytetä oletusarvoisesti, vaan ainoastaan niille, jotka "
+"tulevat kauppaan erityisen linkin kautta."
 
 #: pretix/base/payment.py:438
 msgid "Link to enable payment method"
-msgstr ""
+msgstr "Linkki maksutavan käyttöönottoon"
 
 #: pretix/base/payment.py:447
 msgid "Share this link with customers who should use this payment method."
-msgstr ""
+msgstr "Jaa tämä linkki asiakkaille, joiden tulisi käyttää tätä maksutapaa."
 
 #: pretix/base/payment.py:452
 msgid "Do not send a payment reminder mail"
-msgstr ""
+msgstr "Älä lähetä maksumuistutusviestiä"
 
 #: pretix/base/payment.py:453
 msgid ""
 "Users will not receive a reminder mail to pay for their order before it "
 "expires if they have chosen this payment method."
 msgstr ""
+"Käyttäjät eivät saa muistutusviestiä tilauksen maksamisesta ennen sen "
+"voimassaolon päättymistä, jos he ovat valinneet tämän maksutavan."
 
 #: pretix/base/payment.py:500
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Tämän laskun maksu on jo vastaanotettu."
 
 #: pretix/base/payment.py:977
 msgid "Automatic refunds are not supported by this payment provider."
-msgstr ""
+msgstr "Tämä maksupalveluntarjoaja ei tue automaattisia palautuksia."
 
 #: pretix/base/payment.py:1068
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
 msgstr ""
+"Maksua ei vaadita, koska tämä tilaus sisältää vain maksuttomia tuotteita."
 
 #: pretix/base/payment.py:1075
 msgid "Free of charge"
-msgstr ""
+msgstr "Maksuton"
 
 #: pretix/base/payment.py:1107
 msgid "Box office"
-msgstr ""
+msgstr "Lipputulot"
 
 #: pretix/base/payment.py:1155 pretix/base/payment.py:1174
 #: pretix/plugins/manualpayment/apps.py:30
 #: pretix/plugins/manualpayment/apps.py:33
 msgid "Manual payment"
-msgstr ""
+msgstr "Manuaalinen maksu"
 
 #: pretix/base/payment.py:1160 pretix/plugins/banktransfer/payment.py:202
 msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
+"Testitilassa voit vain merkitä tilauksen maksetuksi manuaalisesti "
+"backendissä sen luomisen jälkeen."
 
 #: pretix/base/payment.py:1181 pretix/base/payment.py:1322
 #: pretix/plugins/banktransfer/payment.py:156
 msgid "Payment method name"
-msgstr ""
+msgstr "Maksutavan nimi"
 
 #: pretix/base/payment.py:1185
 msgid "Payment process description during checkout"
-msgstr ""
+msgstr "Maksuprosessin kuvaus kassalla"
 
 #: pretix/base/payment.py:1186
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
+"Tämä teksti näytetään kassalla, kun käyttäjä valitsee tämän maksutavan. Sen "
+"tulisi antaa lyhyt selitys tästä maksutavasta."
 
 #: pretix/base/payment.py:1191
 msgid "Payment process description in order confirmation emails"
-msgstr ""
+msgstr "Maksuprosessin kuvaus tilausvahvistussähköpostissa"
 
 #: pretix/base/payment.py:1192
 #, python-brace-format
@@ -6886,10 +7049,14 @@ msgid ""
 "payment. You can use the placeholders {order}, {amount}, {currency} and "
 "{amount_with_currency}."
 msgstr ""
+"Tämä teksti sisällytetään {payment_info}-paikannukseen tilauksen "
+"vahvistusviesteissä. Sen pitäisi neuvoa käyttäjää, miten maksun "
+"suorittamisessa tulee edetä. Voit käyttää tunnuksia {order}, {amount}, "
+"{currency} ja {amount_with_currency}."
 
 #: pretix/base/payment.py:1199
 msgid "Payment process description for pending orders"
-msgstr ""
+msgstr "Vireillä olevien tilausten maksuprosessin kuvaus"
 
 #: pretix/base/payment.py:1200
 #, python-brace-format
@@ -6898,25 +7065,30 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
+"Tämä teksti näkyy tilausvahvistussivulla vireillä olevien tilausten osalta. "
+"Sen pitäisi neuvoa käyttäjää, miten maksun suorittamisessa tulee edetä. Voit "
+"käyttää tunnuksia {order}, {amount}, {currency} ja {amount_with_currency}."
 
 #: pretix/base/payment.py:1208 pretix/plugins/banktransfer/payment.py:151
 msgid ""
 "Create an invoice for orders using bank transfer immediately if the event is "
 "otherwise configured to create invoices after payment is completed."
 msgstr ""
+"Luo lasku tilisiirtoa käyttävistä tilauksista heti, jos tapahtuma on muuten "
+"määritetty luomaan laskut maksun suorittamisen jälkeen."
 
 #: pretix/base/payment.py:1259
 msgid "Offsetting"
-msgstr ""
+msgstr "Kuittaus"
 
 #: pretix/base/payment.py:1273 pretix/control/views/orders.py:1244
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Kirjoitit tilauksen, jota ei löydy."
 
 #: pretix/base/payment.py:1302
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr ""
+msgstr "Tasattu tilauksia vastaan: %s"
 
 #: pretix/base/payment.py:1328
 msgid "Payment method description"
@@ -6924,106 +7096,110 @@ msgstr "Maksutavan kuvaus"
 
 #: pretix/base/payment.py:1345
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "Testitilassa vain testikortit toimivat."
 
 #: pretix/base/payment.py:1426 pretix/base/payment.py:1487
 #: pretix/base/payment.py:1532 pretix/base/payment.py:1534
 msgid "This gift card does not support this currency."
-msgstr ""
+msgstr "Tämä lahjakortti ei tue tätä valuuttaa."
 
 #: pretix/base/payment.py:1428 pretix/base/payment.py:1490
 #: pretix/base/payment.py:1540
 msgid "This gift card can only be used in test mode."
-msgstr ""
+msgstr "Tätä lahjakorttia voi käyttää vain testitilassa."
 
 #: pretix/base/payment.py:1430 pretix/base/payment.py:1493
 #: pretix/base/payment.py:1542
 msgid "Only test gift cards can be used in test mode."
-msgstr ""
+msgstr "Testitilassa voidaan käyttää vain testilahjakortteja."
 
 #: pretix/base/payment.py:1432 pretix/base/payment.py:1496
 #: pretix/base/payment.py:1544
 msgid "This gift card is no longer valid."
-msgstr ""
+msgstr "Tämä lahjakortti ei ole enää voimassa."
 
 #: pretix/base/payment.py:1434 pretix/base/payment.py:1499
 msgid "All credit on this gift card has been used."
-msgstr ""
+msgstr "Kaikki tämän lahjakortin luotto on käytetty."
 
 #: pretix/base/payment.py:1438
 msgid "This gift card is already used for your payment."
-msgstr ""
+msgstr "Tämä lahjakortti on jo käytetty maksamiseen."
 
 #: pretix/base/payment.py:1453 pretix/base/payment.py:1479
 #: pretix/base/payment.py:1522
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr ""
+msgstr "Et voi maksaa lahjakorteilla, kun ostat lahjakortin."
 
 #: pretix/base/payment.py:1469 pretix/base/payment.py:1512
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
+"Syötit lahjakortin sijasta arvosetelin. Arvoseteleitä voi syöttää vain "
+"kaupan ensimmäisellä sivulla tuotevalinnan alapuolella."
 
 #: pretix/base/payment.py:1472 pretix/base/payment.py:1515
 msgid "This gift card is not known."
-msgstr ""
+msgstr "Tätä lahjakorttia ei tunnisteta."
 
 #: pretix/base/payment.py:1474 pretix/base/payment.py:1517
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
+"Tätä lahjakorttia ei voi lunastaa, koska sen koodi ei ole yksilöllinen. Ota "
+"yhteyttä tämän tapahtuman järjestäjään."
 
 #: pretix/base/payment.py:1536
 msgid "This gift card is not accepted by this event organizer."
-msgstr ""
+msgstr "Tapahtuman järjestäjä ei hyväksy tätä lahjakorttia."
 
 #: pretix/base/payment.py:1538
 msgid "This gift card was used in the meantime. Please try again."
-msgstr ""
+msgstr "Tämä lahjakortti käytettiin sillä välin. Yritä uudelleen."
 
 #: pretix/base/pdf.py:96
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Lipun koodi (viivakoodin sisältö)"
 
 #: pretix/base/pdf.py:108
 msgid "Order position number"
-msgstr ""
+msgstr "Järjestysnumero"
 
 #: pretix/base/pdf.py:116
 msgid "Order code and position number"
-msgstr ""
+msgstr "Tilauskoodi ja järjestysnumero"
 
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:798 pretix/control/views/pdf.py:94
 msgid "Sample product"
-msgstr ""
+msgstr "Esimerkkituote"
 
 #: pretix/base/pdf.py:126
 msgid "Variation name"
-msgstr ""
+msgstr "Vaihtoehdon nimi"
 
 #: pretix/base/pdf.py:127
 msgid "Sample variation"
-msgstr ""
+msgstr "Esimerkkivaihtoehto"
 
 #: pretix/base/pdf.py:131
 msgid "Product description"
-msgstr ""
+msgstr "Tuotekuvaus"
 
 #: pretix/base/pdf.py:132 pretix/base/services/tickets.py:102
 #: pretix/control/views/event.py:799 pretix/control/views/pdf.py:95
 msgid "Sample product description"
-msgstr ""
+msgstr "Esimerkkituotteen kuvaus"
 
 #: pretix/base/pdf.py:136
 msgid "Product name and variation"
-msgstr ""
+msgstr "Tuotteen nimi ja laji"
 
 #: pretix/base/pdf.py:137
 msgid "Sample product – sample variation"
-msgstr ""
+msgstr "Esimerkkituote - esimerkkilaji"
 
 #: pretix/base/pdf.py:144
 msgid "Product variation description"
@@ -7035,15 +7211,15 @@ msgstr "Tuotevariaation esimerkkikuvaus"
 
 #: pretix/base/pdf.py:152
 msgid "Ticket category"
-msgstr ""
+msgstr "Lippuluokka"
 
 #: pretix/base/pdf.py:159 pretix/base/pdf.py:164
 msgid "123.45 EUR"
-msgstr ""
+msgstr "123,45 EUR"
 
 #: pretix/base/pdf.py:163
 msgid "Price including add-ons"
-msgstr ""
+msgstr "Hinta sisältäen lisäosat"
 
 #: pretix/base/pdf.py:173 pretix/base/pdf.py:331
 #: pretix/base/services/invoices.py:476
@@ -7066,11 +7242,11 @@ msgstr ""
 #: pretix/base/pdf.py:178 pretix/base/pdf.py:336
 #: pretix/base/services/tickets.py:119 pretix/control/views/pdf.py:111
 msgid "Sample company"
-msgstr ""
+msgstr "Esimerkkifirma"
 
 #: pretix/base/pdf.py:182
 msgid "Full attendee address"
-msgstr ""
+msgstr "Osallistujan täydellinen osoite"
 
 #: pretix/base/pdf.py:183
 msgid ""
@@ -7080,6 +7256,11 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"Matti Meikäläinen\n"
+"Esimerkkiyritys\n"
+"Seesaminkatu 42\n"
+"12345 Mikä tahansa kaupunki\n"
+"Atlantis"
 
 #: pretix/base/pdf.py:187
 msgid "Attendee street"
@@ -7099,7 +7280,7 @@ msgstr "Osallistujan maakunta"
 
 #: pretix/base/pdf.py:207
 msgid "Attendee country"
-msgstr ""
+msgstr "Osallistujan maa"
 
 #: pretix/base/pdf.py:219
 msgid "Pseudonymization ID (lead scanning)"
@@ -7107,7 +7288,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:225 pretix/base/pdf.py:230
 msgid "Sample event name"
-msgstr ""
+msgstr "Esimerkkitapahtuman nimi"
 
 #: pretix/base/pdf.py:235
 msgid "May 31st, 2017"
