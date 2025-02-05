@@ -231,6 +231,7 @@ class UserSettings(UpdateView):
         messages.error(self.request, _('Your changes could not be saved. See below for details.'))
         return super().form_invalid(form)
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
 
