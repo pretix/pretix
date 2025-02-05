@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-05 11:50+0000\n"
+"PO-Revision-Date: 2025-02-05 20:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -363,154 +363,156 @@ msgstr "이 이메일 주소를 가진 계정이 이미 등록되어 있습니�
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
-msgstr ""
+msgstr "동일한 비밀을 가진 기프트 카드가 이미 회원님 또는 제휴 주최자 계정에 "
+"존재합니다."
 
 #: pretix/api/serializers/organizer.py:327
 #: pretix/control/views/organizer.py:769
 msgid "pretix account invitation"
-msgstr ""
+msgstr "프레틱스 계정 초대"
 
 #: pretix/api/serializers/organizer.py:349
 #: pretix/control/views/organizer.py:868
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "이 사용자는 이미 이 팀에 초대되었습니다."
 
 #: pretix/api/serializers/organizer.py:365
 #: pretix/control/views/organizer.py:885
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "이 사용자는 이미 이 팀에 대한 권한을 가지고 있습니다."
 
 #: pretix/api/views/cart.py:209
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr ""
+msgstr "지정된 바우처는 이미 최대 횟수만큼 사용되었습니다."
 
 #: pretix/api/views/checkin.py:610 pretix/api/views/checkin.py:617
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "다른 이벤트와 연결된 매체"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:686
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr ""
+msgstr "\"{applicationion_name}\" 애플리케이션이 계정에 액세스할 수 있는 권한을 "
+"부여받았습니다."
 
 #: pretix/api/views/order.py:607 pretix/control/views/orders.py:1588
 #: pretix/presale/views/order.py:741 pretix/presale/views/order.py:814
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "이 주문에 대한 영수증을 생성할 수 없습니다."
 
 #: pretix/api/views/order.py:612 pretix/control/views/orders.py:1590
 #: pretix/presale/views/order.py:743 pretix/presale/views/order.py:816
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "이 주문에 대한 영수증이 이미 존재합니다."
 
 #: pretix/api/views/order.py:638 pretix/control/views/orders.py:1716
 #: pretix/control/views/users.py:143
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "메일을 보내는 동안 오류가 발생했습니다. 나중에 다시 시도해 주세요."
 
 #: pretix/api/views/order.py:718 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:798
 msgid "One of the selected products is not available in the selected country."
-msgstr ""
+msgstr "선택된 제품 중 하나는 선택된 국가에서 사용할 수 없습니다."
 
 #: pretix/api/webhooks.py:237 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr ""
+msgstr "신규주문"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr ""
+msgstr "새로운 주문은 승인이 필요합니다"
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr ""
+msgstr "결제된 것으로 표시된 주문"
 
 #: pretix/api/webhooks.py:249 pretix/base/models/checkin.py:354
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1549
 msgid "Order canceled"
-msgstr ""
+msgstr "주문취소"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr ""
+msgstr "주문이 재활성화됨"
 
 #: pretix/api/webhooks.py:257 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr ""
+msgstr "주문만료"
 
 #: pretix/api/webhooks.py:261
 msgid "Order expiry date changed"
-msgstr ""
+msgstr "주문 만료일 변경"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr ""
+msgstr "주문 정보가 변경되었습니다."
 
 #: pretix/api/webhooks.py:269 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr ""
+msgstr "주문 연락처 주소가 변경되었습니다"
 
 #: pretix/api/webhooks.py:273 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr ""
+msgstr "주문변경"
 
 #: pretix/api/webhooks.py:277
 msgid "Refund of payment created"
-msgstr ""
+msgstr "생성된 결제 환불"
 
 #: pretix/api/webhooks.py:281 pretix/base/notifications.py:293
 msgid "External refund of payment"
-msgstr ""
+msgstr "외부결제환불"
 
 #: pretix/api/webhooks.py:285
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "고객이 요청한 결제 환불"
 
 #: pretix/api/webhooks.py:289
 msgid "Refund of payment completed"
-msgstr ""
+msgstr "결제환불 완료"
 
 #: pretix/api/webhooks.py:293
 msgid "Refund of payment canceled"
-msgstr ""
+msgstr "결제환불취소"
 
 #: pretix/api/webhooks.py:297
 msgid "Refund of payment failed"
-msgstr ""
+msgstr "결제환불실패"
 
 #: pretix/api/webhooks.py:301
 msgid "Payment confirmed"
-msgstr ""
+msgstr "결제 확인"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
-msgstr ""
+msgstr "주문 승인"
 
 #: pretix/api/webhooks.py:309
 msgid "Order denied"
-msgstr ""
+msgstr "주문 거부"
 
 #: pretix/api/webhooks.py:313
 msgid "Order deleted"
-msgstr ""
+msgstr "주문 삭제"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
-msgstr ""
+msgstr "티켓 체크인"
 
 #: pretix/api/webhooks.py:321
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "티켓 체크인이 반환되었습니다."
 
 #: pretix/api/webhooks.py:325
 msgid "Event created"
-msgstr ""
+msgstr "이벤트 생성"
 
 #: pretix/api/webhooks.py:329
 msgid "Event details changed"
