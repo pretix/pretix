@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-04 20:00+0000\n"
-"Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
+"PO-Revision-Date: 2025-02-05 11:29+0000\n"
+"Last-Translator: Antti Nironen <aanirone@gmail.com>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -5117,6 +5117,10 @@ msgid ""
 "Note that not all media types support all types of products, and not all "
 "media types are supported across all sales channels or check-in processes."
 msgstr ""
+"Valitse tässä tuotteessa käytettävä fyysisen välineen tyyppi. Huomaa, että "
+"kaikki mediatyypit eivät tue kaikentyyppisiä tuotteita, ja kaikkia "
+"mediatyyppejä ei tueta kaikissa myyntikanavissa tai "
+"sisäänkirjautumisprosesseissa."
 
 #: pretix/base/models/items.py:795 pretix/base/models/items.py:1701
 #: pretix/control/forms/filter.py:420 pretix/control/forms/filter.py:1897
@@ -5141,6 +5145,8 @@ msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
 msgstr ""
+"Jos valitset uudelleenkäytettävän median käytännön, sinun on valittava myös "
+"uudelleenkäytettävä median tyyppi."
 
 #: pretix/base/models/items.py:992
 msgid "The selected media type is not enabled in your organizer settings."
@@ -5153,7 +5159,7 @@ msgstr "Valittu mediatyyppi ei tällä hetkellä tue lippujen käyttöä."
 #: pretix/base/models/items.py:996
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr ""
+msgstr "Valittu mediatyyppi ei tue lahjakortin käyttöä tällä hetkellä."
 
 #: pretix/base/models/items.py:998
 msgid ""
@@ -5161,28 +5167,32 @@ msgid ""
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
 msgstr ""
+"Et voi tällä hetkellä luoda lahjakortteja uudelleenkäytettävän median "
+"käytännöllä. Sen sijaan lahjakortteja joillekin uudelleenkäytettäville "
+"mediatyypeille voidaan luoda tai ladata uudelleen suoraan myyntipisteessä."
 
 #: pretix/base/models/items.py:1006
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
 msgstr ""
+"Tilauksen enimmäismäärä ei voi olla pienempi kuin tilauksen vähimmäismäärä."
 
 #: pretix/base/models/items.py:1012
 msgid "The item's category must belong to the same event as the item."
-msgstr ""
+msgstr "Tuotteen luokan on kuuluttava samaan tapahtumaan kuin nimike."
 
 #: pretix/base/models/items.py:1017
 msgid "The item's tax rule must belong to the same event as the item."
-msgstr ""
+msgstr "Tuotteen verosäännön on kuuluttava samaan tapahtumaan kuin nimike."
 
 #: pretix/base/models/items.py:1023
 msgid "The item's availability cannot end before it starts."
-msgstr ""
+msgstr "Tuotteen saatavuus ei voi päättyä ennen sen alkamista."
 
 #: pretix/base/models/items.py:1155
 msgid "This is shown below the variation name in lists."
-msgstr ""
+msgstr "Tämä näkyy muunnelman nimen alla luetteloissa."
 
 #: pretix/base/models/items.py:1182
 msgid "Require approval"
@@ -5195,12 +5205,16 @@ msgid ""
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
+"Jos tämä muunnelma on osa tilausta, tilaus asetetaan \"hyväksyntä\"-tilaan "
+"ja sinun on vahvistettava se ennen kuin se voidaan maksaa ja viedä loppuun. "
+"Voit käyttää tätä mm. alennetuille lipuille, jotka ovat saatavilla vain "
+"tietyille ryhmille."
 
 #: pretix/base/models/items.py:1194 pretix/control/navigation.py:579
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
 msgid "Membership types"
-msgstr ""
+msgstr "Jäsenyysluokat"
 
 #: pretix/base/models/items.py:1206
 msgid "This variation will not be sold before the given date."
@@ -5212,7 +5226,7 @@ msgstr "Tätä variaatiota ei myydä annetun ajankohdan jälkeen."
 
 #: pretix/base/models/items.py:1224
 msgid "Sell on all sales channels the product is sold on"
-msgstr ""
+msgstr "Myy kaikilla myyntikanavilla, joissa tuotetta myydään"
 
 #: pretix/base/models/items.py:1230
 msgid ""
@@ -5220,6 +5234,9 @@ msgid ""
 "if a sales channel is selected here but not on product level, the variation "
 "will not be available."
 msgstr ""
+"Tuotteen myyntikanavan valinta kokonaisuutena on ensisijainen, joten jos "
+"myyntikanava valitaan tässä, mutta ei tuotetasolla, muunnelma ei ole "
+"käytettävissä."
 
 #: pretix/base/models/items.py:1235
 msgid "Show only if a matching voucher is redeemed."
@@ -5230,53 +5247,57 @@ msgid ""
 "This variation will be hidden from the event page until the user enters a "
 "voucher that unlocks this variation."
 msgstr ""
+"Tämä muunnelma piilotetaan tapahtumasivulta, kunnes käyttäjä syöttää "
+"kupongin, joka avaa tämän muunnelman lukituksen."
 
 #: pretix/base/models/items.py:1257
 #: pretix/control/templates/pretixcontrol/item/create.html:111
 msgid "Product variations"
-msgstr ""
+msgstr "Tuotevariaatiot"
 
 #: pretix/base/models/items.py:1462
 msgid "Minimum number"
-msgstr ""
+msgstr "Vähimmäismäärä"
 
 #: pretix/base/models/items.py:1466
 msgid "Maximum number"
-msgstr ""
+msgstr "Enimmäismäärä"
 
 #: pretix/base/models/items.py:1470
 msgid "Add-Ons are included in the price"
-msgstr ""
+msgstr "Lisäosat sisältyvät hintaan"
 
 #: pretix/base/models/items.py:1471
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
+"Jos tämä valitaan, lisäosien lisääminen tähän lippuun on ilmaista, vaikka "
+"yksittäiset lisäosat yleensä nostavat hintaa."
 
 #: pretix/base/models/items.py:1476
 msgid "Allow the same product to be selected multiple times"
-msgstr ""
+msgstr "Salli valita sama tuote useita kertoja"
 
 #: pretix/base/models/items.py:1495
 msgid "The add-on's category must belong to the same event as the item."
-msgstr ""
+msgstr "Lisäosan luokan on kuuluttava samaan tapahtumaan kuin kohteen."
 
 #: pretix/base/models/items.py:1500
 msgid "The item already has an add-on of this category."
-msgstr ""
+msgstr "Tuotteella on jo lisäosa tästä luokasta."
 
 #: pretix/base/models/items.py:1505
 msgid "The minimum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Vähimmäismäärän on oltava yhtä suuri tai suurempi kuin nolla."
 
 #: pretix/base/models/items.py:1510
 msgid "The maximum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Enimmäismäärän on oltava yhtä suuri tai suurempi kuin nolla."
 
 #: pretix/base/models/items.py:1515
 msgid "The maximum count needs to be greater than the minimum count."
-msgstr ""
+msgstr "Enimmäismäärän on oltava suurempi kuin vähimmäismäärä."
 
 #: pretix/base/models/items.py:1542
 msgid "Bundled item"
@@ -5284,11 +5305,11 @@ msgstr ""
 
 #: pretix/base/models/items.py:1548
 msgid "Bundled variation"
-msgstr ""
+msgstr "Niputettu muunnelma"
 
 #: pretix/base/models/items.py:1559
 msgid "Designated price part"
-msgstr ""
+msgstr "Määrätty hinta-osa"
 
 #: pretix/base/models/items.py:1560
 msgid ""
