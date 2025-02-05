@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-05 20:00+0000\n"
+"PO-Revision-Date: 2025-02-06 05:00+0000\n"
 "Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -7292,41 +7292,41 @@ msgstr "Esimerkkitapahtuman nimi"
 
 #: pretix/base/pdf.py:235
 msgid "May 31st, 2017"
-msgstr ""
+msgstr "31.5.2017"
 
 #: pretix/base/pdf.py:239
 msgid "Event date range"
-msgstr ""
+msgstr "Tapahtuman päivämääräväli"
 
 #: pretix/base/pdf.py:240
 msgid "May 31st – June 4th, 2017"
-msgstr ""
+msgstr "31.5. – 4.6.2017"
 
 #: pretix/base/pdf.py:244
 msgid "Event begin date and time"
-msgstr ""
+msgstr "Tapahtuman alku- ja loppupäivämäärät ja ajat"
 
 #: pretix/base/pdf.py:245
 msgid "2017-05-31 20:00"
-msgstr ""
+msgstr "31.5.2017, klo 20:00"
 
 #: pretix/base/pdf.py:252
 msgid "Event begin date"
-msgstr ""
+msgstr "Tapahtuman alkupäivä"
 
 #: pretix/base/pdf.py:253 pretix/base/pdf.py:279 pretix/base/pdf.py:388
 #: pretix/base/pdf.py:412 pretix/base/pdf.py:436 pretix/base/pdf.py:460
 #: pretix/base/pdf.py:517 pretix/base/pdf.py:522
 msgid "2017-05-31"
-msgstr ""
+msgstr "31.5.2017"
 
 #: pretix/base/pdf.py:260
 msgid "Event begin time"
-msgstr ""
+msgstr "Tapahtuman aloitusaika"
 
 #: pretix/base/pdf.py:261
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:265
 msgid "Event begin weekday"
@@ -7339,15 +7339,15 @@ msgstr "perjantai"
 
 #: pretix/base/pdf.py:270
 msgid "Event end date and time"
-msgstr ""
+msgstr "Tapahtuman päätöspäivä ja -aika"
 
 #: pretix/base/pdf.py:271
 msgid "2017-05-31 22:00"
-msgstr ""
+msgstr "31.5.2017, klo 22:00"
 
 #: pretix/base/pdf.py:287
 msgid "22:00"
-msgstr ""
+msgstr "22:00"
 
 #: pretix/base/pdf.py:294
 msgid "Event end weekday"
@@ -7355,45 +7355,45 @@ msgstr "Tapahtuman loppumisviikonpäivä"
 
 #: pretix/base/pdf.py:299
 msgid "Event admission date and time"
-msgstr ""
+msgstr "Tapahtuman sisäänpääsyn päivämäärä ja kellonaika"
 
 #: pretix/base/pdf.py:300 pretix/base/pdf.py:396 pretix/base/pdf.py:420
 #: pretix/base/pdf.py:444 pretix/base/pdf.py:468 pretix/base/pdf.py:511
 msgid "2017-05-31 19:00"
-msgstr ""
+msgstr "31.5.2017, klo 19:00"
 
 #: pretix/base/pdf.py:307
 msgid "Event admission time"
-msgstr ""
+msgstr "Tapahtuman sisäänpääsyaika"
 
 #: pretix/base/pdf.py:308 pretix/base/pdf.py:404 pretix/base/pdf.py:428
 #: pretix/base/pdf.py:452 pretix/base/pdf.py:476
 msgid "19:00"
-msgstr ""
+msgstr "19:00"
 
 #: pretix/base/pdf.py:315
 msgid "Event location"
-msgstr ""
+msgstr "Tapahtuman sijainti"
 
 #: pretix/base/pdf.py:316 pretix/base/settings.py:1133
 msgid "Random City"
-msgstr ""
+msgstr "Satunnainen kaupunki"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
-msgstr ""
+msgstr "Laskun osoite yritys"
 
 #: pretix/base/pdf.py:341
 msgid "Sesame Street 42"
-msgstr ""
+msgstr "Seesamikatu 42"
 
 #: pretix/base/pdf.py:346
 msgid "12345"
-msgstr ""
+msgstr "12345"
 
 #: pretix/base/pdf.py:351 pretix/base/services/invoices.py:479
 msgid "Sample city"
-msgstr ""
+msgstr "Esimerkkikaupunki"
 
 #: pretix/base/pdf.py:355
 msgid "Invoice address state"
@@ -7405,23 +7405,25 @@ msgstr "Esimerkkimaakunta"
 
 #: pretix/base/pdf.py:361
 msgid "Atlantis"
-msgstr ""
+msgstr "Atlantis"
 
 #: pretix/base/pdf.py:365
 msgid "List of Add-Ons"
-msgstr ""
+msgstr "Lista lisäyksistä"
 
 #: pretix/base/pdf.py:366
 msgid ""
 "Add-on 1\n"
 "2x Add-on 2"
 msgstr ""
+"Lisäys1\n"
+"2xLisäys 2"
 
 #: pretix/base/pdf.py:372 pretix/control/forms/filter.py:1375
 #: pretix/control/forms/filter.py:1377
 #: pretix/control/templates/pretixcontrol/organizers/index.html:42
 msgid "Organizer name"
-msgstr ""
+msgstr "Järjestäjän nimi"
 
 #: pretix/base/pdf.py:373
 msgid "Event organizer company"
@@ -7429,11 +7431,11 @@ msgstr ""
 
 #: pretix/base/pdf.py:377
 msgid "Organizer info text"
-msgstr ""
+msgstr "Järjestäjän infoteksti"
 
 #: pretix/base/pdf.py:378
 msgid "Event organizer info text"
-msgstr ""
+msgstr "Tapahtumanjärjestäjän infoteksti"
 
 #: pretix/base/pdf.py:382 pretix/base/pdf.py:383
 msgid "Event info text"
@@ -7441,15 +7443,15 @@ msgstr "Tapahtuman ohjeteksti"
 
 #: pretix/base/pdf.py:387
 msgid "Printing date"
-msgstr ""
+msgstr "Tulostuspäivä"
 
 #: pretix/base/pdf.py:395
 msgid "Printing date and time"
-msgstr ""
+msgstr "Tulostuspäivä ja aika"
 
 #: pretix/base/pdf.py:403
 msgid "Printing time"
-msgstr ""
+msgstr "Tulostusaika"
 
 #: pretix/base/pdf.py:411 pretix/control/forms/item.py:730
 msgid "Purchase date"
@@ -7493,11 +7495,11 @@ msgstr ""
 
 #: pretix/base/pdf.py:488
 msgid "Seat: Full name"
-msgstr ""
+msgstr "Istuin: Koko nimi"
 
 #: pretix/base/pdf.py:489
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "Ensimmäinen kerros, rivi 3, istuin 4"
 
 #: pretix/base/pdf.py:491 pretix/base/pdf.py:497
 #: pretix/control/forms/orders.py:330
@@ -7506,19 +7508,19 @@ msgstr ""
 
 #: pretix/base/pdf.py:494
 msgid "Seat: zone"
-msgstr ""
+msgstr "Istuin: vyöhyke"
 
 #: pretix/base/pdf.py:495
 msgid "Ground floor"
-msgstr ""
+msgstr "Ensimmäinen kerros"
 
 #: pretix/base/pdf.py:500
 msgid "Seat: row"
-msgstr ""
+msgstr "Istuin: rivi"
 
 #: pretix/base/pdf.py:505
 msgid "Seat: seat number"
-msgstr ""
+msgstr "Istuin: istuin numero"
 
 #: pretix/base/pdf.py:510
 msgid "Date and time of first scan"
@@ -7537,12 +7539,12 @@ msgstr "Lahjakortti: Vanhenemispäivämäärä"
 #: pretix/plugins/ticketoutputpdf/exporters.py:102
 #, python-brace-format
 msgid "Question: {question}"
-msgstr ""
+msgstr "Kysymys: {question}"
 
 #: pretix/base/pdf.py:601 pretix/base/pdf.py:607
 #, python-brace-format
 msgid "<Answer: {question}>"
-msgstr ""
+msgstr "<Vastaus: {question}>"
 
 #: pretix/base/pdf.py:648
 msgid "Attendee name for salutation"
