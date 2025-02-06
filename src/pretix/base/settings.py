@@ -1308,10 +1308,13 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Show event times and dates on the ticket shop"),
-            help_text=_("If disabled, no date or time will be shown on the ticket shop's front page. This settings "
-                        "also affects a few other locations, however it should not be expected that the date of the "
-                        "event is shown nowhere to users."),
+            label=_("This shop represents an event"),
+            help_text=_(
+                "Uncheck this box if you are only selling something that has no specific date, such as gift cards or a "
+                "ticket that can be used any time. The system will then stop showing the event date in some places like "
+                "the event start page. Note that pretix still is a system built around events and the date may still "
+                "show up in other places."
+            ),
         )
     },
     'show_date_to': {
