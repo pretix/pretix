@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-05 20:00+0000\n"
+"PO-Revision-Date: 2025-02-06 18:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -516,52 +516,53 @@ msgstr "이벤트 생성"
 
 #: pretix/api/webhooks.py:329
 msgid "Event details changed"
-msgstr ""
+msgstr "이벤트 세부 정보가 변경되었습니다"
 
 #: pretix/api/webhooks.py:333
 msgid "Event deleted"
-msgstr ""
+msgstr "이벤트 삭제"
 
 #: pretix/api/webhooks.py:337
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr ""
+msgstr "이벤트 시리즈 날짜 추가"
 
 #: pretix/api/webhooks.py:341
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr ""
+msgstr "이벤트 시리즈 날짜 변경"
 
 #: pretix/api/webhooks.py:345
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr ""
+msgstr "이벤트 시리즈 날짜 삭제"
 
 #: pretix/api/webhooks.py:349
 msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
-msgstr ""
+msgstr "제품 변경(제품 추가 또는 삭제, 변형 또는 번들과 같은 중첩된 객체에 대한 변경 "
+"포함)"
 
 #: pretix/api/webhooks.py:354
 msgid "Shop taken live"
-msgstr ""
+msgstr "라이브 촬영 상점"
 
 #: pretix/api/webhooks.py:358
 msgid "Shop taken offline"
-msgstr ""
+msgstr "오프라인 쇼핑"
 
 #: pretix/api/webhooks.py:362
 msgid "Test-Mode of shop has been activated"
-msgstr ""
+msgstr "상점의 테스트 모드가 활성화되었습니다"
 
 #: pretix/api/webhooks.py:366
 msgid "Test-Mode of shop has been deactivated"
-msgstr ""
+msgstr "상점의 테스트 모드가 비활성화되었습니다"
 
 #: pretix/api/webhooks.py:370
 msgid "Waiting list entry added"
-msgstr ""
+msgstr "대기자 명단 항목 추가"
 
 #: pretix/api/webhooks.py:374
 msgid "Waiting list entry changed"
