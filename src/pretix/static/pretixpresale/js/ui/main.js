@@ -539,26 +539,27 @@ $(function () {
         var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
 
         $(this).tooltip({
-            "title": gettext("Time zone:") + " " + tz.abbr(t),
+            "title": gettext("Event time zone:") + " " + tz.abbr(t),
             "template": tpl
         });
         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
             var $add = $("<span>")
             $add.append($("<span>").addClass("fa fa-globe"))
             if ($(this).is("[data-time-short]")) {
-                $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat"))))
+                $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
             } else {
                 $add.addClass("text-muted")
                 $add.append(" " + gettext("Your local time:") + " ")
                 if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")))
+                    $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
                 } else {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")))
+                    $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
                 }
             }
-            $add.insertAfter($(this));
+            // $add.insertAfter($(this));
+            $add.insertBefore($(this));
             $add.tooltip({
-                "title": gettext("Time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
+                "title": gettext("Your time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
                 "template": tpl
             });
         }
@@ -641,7 +642,7 @@ $(function () {
         var currentTimeDisplayParts = [];
         timeFormatParts.forEach(function(format) {
             currentTimeDisplayParts.push([format, $("<span></span>").appendTo(currentTimeDisplay)])
-        }); 
+        });
         var duration = this.getAttribute("data-duration").split(":").reduce(function(previousValue, currentValue, currentIndex) {
             return previousValue + (currentIndex ? parseInt(currentValue, 10) * 60 : parseInt(currentValue, 10) * 60 * 60);
         }, 0);
@@ -654,7 +655,7 @@ $(function () {
                 currentTimeBar.remove();
                 return;
             }
-            
+
             var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
             var dx = Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
             currentTimeDisplayParts.forEach(function(part) {

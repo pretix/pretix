@@ -73,7 +73,7 @@
                                 {% if not show_names|default_if_none:True %}
                                     <strong>
                                 {% endif %}
-                                <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }}</time>
+                                <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }} {{ event.timezone }}</time>
                                 {% if event.time_end %}
                                     <span role="img" aria-label="{% trans "to" context "timerange" %}">–</span>
                                     <time datetime="{{ event.time_end|date:"H:i" }}">{{ event.time_end|date:"TIME_FORMAT" }}</time>
