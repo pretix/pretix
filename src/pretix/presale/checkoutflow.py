@@ -787,6 +787,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 self.cart_session.get('email', '') or
                 wd.get('email', '')
             ),
+            'email_repeat': (
+                self.cart_session.get('email_repeat', '') or
+                wd.get('email', '')
+            ),
             'phone': self.cart_session.get('phone', '') or wd.get('phone', None)
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
