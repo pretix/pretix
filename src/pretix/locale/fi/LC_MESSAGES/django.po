@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
 "PO-Revision-Date: 2025-02-06 18:00+0000\n"
-"Last-Translator: Karoliina Grohn <karoliina.grohn@om.org>\n"
+"Last-Translator: Johanna Ketola <johanna.ketola@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -6612,12 +6612,12 @@ msgstr ""
 "tarkoitus varata lippuja."
 
 #: pretix/base/models/vouchers.py:367
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"Tämä kuponki on jo lunastettu %(redeemed) kertaa. Et voi vähentää "
+"Tämä kuponki on jo lunastettu %(redeemed)s kertaa. Et voi vähentää "
 "käyttökertojen enimmäismäärää alle tämän määrän."
 
 #: pretix/base/models/vouchers.py:376
@@ -7237,7 +7237,7 @@ msgstr "Matti Meikäläinen"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:186
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:189
 msgid "Attendee company"
-msgstr ""
+msgstr "Osallistujan yritys"
 
 #: pretix/base/pdf.py:178 pretix/base/pdf.py:336
 #: pretix/base/services/tickets.py:119 pretix/control/views/pdf.py:111
@@ -7284,7 +7284,7 @@ msgstr "Osallistujan maa"
 
 #: pretix/base/pdf.py:219
 msgid "Pseudonymization ID (lead scanning)"
-msgstr ""
+msgstr "Pseudonymisointitunnus (liidien skannaus)"
 
 #: pretix/base/pdf.py:225 pretix/base/pdf.py:230
 msgid "Sample event name"
@@ -7427,7 +7427,7 @@ msgstr "Järjestäjän nimi"
 
 #: pretix/base/pdf.py:373
 msgid "Event organizer company"
-msgstr ""
+msgstr "Tapahtuman järjestäjäyritys"
 
 #: pretix/base/pdf.py:377
 msgid "Organizer info text"
@@ -7491,7 +7491,7 @@ msgstr "Voimassaolon päättyminen"
 
 #: pretix/base/pdf.py:483
 msgid "Reusable Medium ID"
-msgstr ""
+msgstr "Uudelleenkäytettävä mediatunnus"
 
 #: pretix/base/pdf.py:488
 msgid "Seat: Full name"
@@ -7504,7 +7504,7 @@ msgstr "Ensimmäinen kerros, rivi 3, istuin 4"
 #: pretix/base/pdf.py:491 pretix/base/pdf.py:497
 #: pretix/control/forms/orders.py:330
 msgid "General admission"
-msgstr ""
+msgstr "Yleinen sisäänpääsy"
 
 #: pretix/base/pdf.py:494
 msgid "Seat: zone"
@@ -7524,11 +7524,11 @@ msgstr "Istuin: istuin numero"
 
 #: pretix/base/pdf.py:510
 msgid "Date and time of first scan"
-msgstr ""
+msgstr "Ensimmäisen skannauksen päivämäärä ja aika"
 
 #: pretix/base/pdf.py:516
 msgid "Gift card: Issuance date"
-msgstr ""
+msgstr "Lahjakortti: Myöntämispäivämäärä"
 
 #: pretix/base/pdf.py:521
 msgid "Gift card: Expiration date"
@@ -7563,7 +7563,7 @@ msgstr "hra Meikäläinen"
 #: pretix/plugins/ticketoutputpdf/exporters.py:99
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr ""
+msgstr "Osallistujan nimi: {part}"
 
 #: pretix/base/pdf.py:671
 msgid "Invoice address name for salutation"
@@ -7572,11 +7572,11 @@ msgstr "Laskutusosoitteen nimi tervehdyksessä"
 #: pretix/base/pdf.py:678
 #, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr ""
+msgstr "Nimi laskutusosoitteessa: {part}"
 
 #: pretix/base/pdf.py:1274
 msgid "Your layout file is not a valid layout. Error message: {}"
-msgstr ""
+msgstr "Asettelutiedostosi asettelu ei ole kelvollinen. Virheilmoitus: {}"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
@@ -7588,49 +7588,52 @@ msgstr "Tapahtuma päättyy"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
-msgstr ""
+msgstr "Tapahtuman sisäänpääsy"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
-msgstr ""
+msgstr "Ennakkomyynnin alku"
 
 #: pretix/base/reldate.py:39
 msgid "Presale end"
-msgstr ""
+msgstr "Ennakkomyynnin loppu"
 
 #: pretix/base/reldate.py:183
 msgid "before"
-msgstr ""
+msgstr "ennen"
 
 #: pretix/base/reldate.py:184
 msgid "after"
-msgstr ""
+msgstr "jälkeen"
 
 #: pretix/base/reldate.py:292 pretix/base/reldate.py:456
 msgid "Fixed date:"
-msgstr ""
+msgstr "Kiinteä päivämäärä:"
 
 #: pretix/base/reldate.py:293 pretix/base/reldate.py:457
 msgid "Relative date:"
-msgstr ""
+msgstr "Suhteellinen päivämäärä:"
 
 #: pretix/base/reldate.py:294
 msgid "Relative time:"
-msgstr ""
+msgstr "Suhteellinen aika:"
 
 #: pretix/base/reldate.py:302 pretix/base/reldate.py:460
 msgid "Not set"
-msgstr ""
+msgstr "Ei asetettu"
 
 #: pretix/base/secrets.py:119
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "Satunnainen (oletusarvo, toimii kaikkien pretix-sovellusten kanssa)"
 
 #: pretix/base/secrets.py:150
 msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
+"pretix-allekirjoitusjärjestelmä 1 (hyvin suurille tapahtumille, muuttaa "
+"offline-skannauksen semantiikkaa – katso lisätietoja dokumentaatiosta tai "
+"tuesta)"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
@@ -7643,35 +7646,41 @@ msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
+"Emme pystyneet käsittelemään pyyntöäsi kokonaan, koska palvelimella oli "
+"ruuhkaa. Yritä uudelleen."
 
 #: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:260
 msgid "You did not select any products."
-msgstr ""
+msgstr "Et ole valinnut yhtään tuotetta."
 
 #: pretix/base/services/cart.py:105
 msgid "Unknown cart position."
-msgstr ""
+msgstr "Tuntematon ostoskorin sijainti."
 
 #: pretix/base/services/cart.py:106
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr ""
+msgstr "Päivämäärää ei ilmoitettu."
 
 #: pretix/base/services/cart.py:107 pretix/base/services/orders.py:187
 msgid "You selected a product which is not available for sale."
-msgstr ""
+msgstr "Valitsit tuotteen, joka ei ole myynnissä."
 
 #: pretix/base/services/cart.py:109
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
 msgstr ""
+"Osa valitsemistasi tuotteista ei ole enää saatavilla. Katso alla olevat "
+"tiedot."
 
 #: pretix/base/services/cart.py:113
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Joitakin valitsemiasi tuotteita ei ole enää saatavilla valitsemaasi määrää. "
+"Katso alla olevat tiedot."
 
 #: pretix/base/services/cart.py:117
 #, python-format
@@ -7679,6 +7688,8 @@ msgid ""
 "Some of the products you selected are no longer available. The following "
 "products are affected and have not been added to your cart: %s"
 msgstr ""
+"Osa valitsemistasi tuotteista ei ole enää saatavilla. Koskee seuraavia "
+"tuotteita, joita ei ole lisätty ostoskoriin: %s"
 
 #: pretix/base/services/cart.py:121
 #, python-format
@@ -7687,6 +7698,8 @@ msgid ""
 "you selected. The following products are affected and have not been added to "
 "your cart: %s"
 msgstr ""
+"Joitakin valitsemiasi tuotteita ei ole enää saatavilla valitsemaasi määrää. "
+"Koskee seuraavia tuotteita, joita ei ole lisätty ostoskoriin: %s"
 
 #: pretix/base/services/cart.py:126
 #, python-format
@@ -7700,16 +7713,16 @@ msgstr[1] "Et voi valita enempää kuin %s tuotetta per tilaus."
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tuotetta %(product)s ei voi valita useampaa kuin %(max)s."
+msgstr[1] "Tuotteita %(product)s ei voi valita useampia kuin %(max)s."
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1544
 #, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tuotetta %(product)s on valittava vähintään %(min)s"
+msgstr[1] "Tuotteita %(product)s on valittava vähintään %(min)s"
 
 #: pretix/base/services/cart.py:140
 #, python-format
@@ -7720,7 +7733,11 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
+"Poistimme ostoskoristasi tuotteen %(product)s, koska et voi ostaa niitä "
+"vähempää kuin %(min)s."
 msgstr[1] ""
+"Poistimme ostoskoristasi tuotteet %(product)s, koska et voi ostaa niitä "
+"vähempää kuin %(min)s."
 
 #: pretix/base/services/cart.py:144 pretix/base/services/orders.py:153
 #: pretix/presale/templates/pretixpresale/event/index.html:167
@@ -7737,30 +7754,36 @@ msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
 msgstr ""
+"Kaikki maksut tähän tapahtumaan on jo vahvistettava, joten uusia tilauksia "
+"ei voida tehdä."
 
 #: pretix/base/services/cart.py:148
 msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"Tämän tapahtuman varausaika ei ole vielä alkanut. Paikat, joihin tämä "
+"vaikuttaa, on poistettu ostoskorista."
 
 #: pretix/base/services/cart.py:151 pretix/base/services/orders.py:181
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
+"Jonkin ostoskorissasi olevan tapahtuman varausaika on päättynyt. Paikat, "
+"joihin tämä vaikuttaa, on poistettu ostoskoristasi."
 
 #: pretix/base/services/cart.py:153
 msgid "The entered price is not a number."
-msgstr ""
+msgstr "Syötetty hinta ei ole numero."
 
 #: pretix/base/services/cart.py:154
 msgid "The entered price is to high."
-msgstr ""
+msgstr "Syötetty hinta on liian korkea."
 
 #: pretix/base/services/cart.py:155
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "Tätä kuponkikoodia ei tunneta tietokannassamme."
 
 #: pretix/base/services/cart.py:157 pretix/base/services/orders.py:156
 #, python-format
@@ -7771,7 +7794,11 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
+"Kuponkikoodia ”%(voucher)s” voi käyttää vain, jos valitset vähintään "
+"%(number)s vastaavan tuotteen."
 msgstr[1] ""
+"Kuponkikoodia ”%(voucher)s” voi käyttää vain, jos valitset vähintään "
+"%(number)s vastaavaa tuotetta."
 
 #: pretix/base/services/cart.py:162
 #, python-format
@@ -7784,12 +7811,18 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"Kuponkikoodia ”%(voucher)s” voi käyttää vain, jos valitset vähintään "
+"%(number)s vastaavan tuotteen. Olemme siksi poistaneet ostoskoristasi "
+"joitakin paikkoja, joita ei voi enää ostaa tällä tavalla."
 msgstr[1] ""
+"Kuponkikoodia ”%(voucher)s” voi käyttää vain, jos valitset vähintään "
+"%(number)s vastaavaa tuotetta. Olemme siksi poistaneet ostoskoristasi "
+"joitakin paikkoja, joita ei voi enää ostaa tällä tavalla."
 
 #: pretix/base/services/cart.py:168
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
+msgstr "Tämän kuponkikoodin käyttökertojen enimmäismäärä on tullut täyteen."
 
 #: pretix/base/services/cart.py:170
 #, python-format
@@ -7799,35 +7832,43 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Tämä kuponkikoodi on tällä hetkellä lukittu, koska se on jo ostoskorissa. "
+"Tämä saattaa tarkoittaa, että joku muu on lunastamassa tätä kuponkia juuri "
+"nyt tai että olet yrittänyt lunastaa sen jo aiemmin, mutta et saanut "
+"maksuprosessia päätökseen. Voit yrittää käyttää sitä uudelleen %d minuutin "
+"kuluttua."
 
 #: pretix/base/services/cart.py:175
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "Tämä kuponkikoodi voidaan lunastaa enää %d kertaa."
 
 #: pretix/base/services/cart.py:176
 msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
+"Koko ostoskoriin kohdistuvaa kuponkia ei saa yhdistää muihin toimenpiteisiin."
 
 #: pretix/base/services/cart.py:178
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
+"Olet jo käyttänyt tämän kuponkikoodin. Poista siihen liittyvä rivi "
+"ostoskoristasi, jos haluat käyttää sitä toiseen tuotteeseen."
 
 #: pretix/base/services/cart.py:181
 msgid "This voucher is expired."
-msgstr ""
+msgstr "Tämä kuponki on vanhentunut."
 
 #: pretix/base/services/cart.py:182
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "Tätä kuponkia ei voi käyttää tähän tuotteeseen."
 
 #: pretix/base/services/cart.py:183
 msgid "This voucher is not valid for this seat."
-msgstr ""
+msgstr "Tämä kuponki ei ole voimassa tälle istumapaikalle."
 
 #: pretix/base/services/cart.py:185
 msgid ""
@@ -7835,32 +7876,37 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"Emme löytäneet ostoskoristasi mitään paikkaa, johon voisimme käyttää tämän "
+"kupongin. Jos haluat lisätä jotain uutta ostoskoriin käyttäen kyseistä "
+"kuponkia, voit tehdä sen sivun alareunassa olevan kupongin "
+"lunastusvaihtoehdon avulla."
 
 #: pretix/base/services/cart.py:190
 msgid "Your voucher is valid for a product that is currently not for sale."
 msgstr ""
+"Kuponkisi voidaan käyttää tuotteeseen, joka ei ole tällä hetkellä myynnissä."
 
 #: pretix/base/services/cart.py:191
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "Tätä kuponkia ei käy tähän tapahtumapäivään."
 
 #: pretix/base/services/cart.py:192
 msgid "You need a valid voucher code to order this product."
-msgstr ""
+msgstr "Tarvitset voimassa olevan kuponkikoodin tilataksesi tämän tuotteen."
 
 #: pretix/base/services/cart.py:193
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "Valittu tapahtumapäivä ei ole aktiivinen."
 
 #: pretix/base/services/cart.py:194 pretix/base/services/orders.py:188
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "Et voi valita lisäosaa valitulle tuotteelle."
 
 #: pretix/base/services/cart.py:195 pretix/base/services/orders.py:189
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "Et voi valita kahta muunnelmaa samasta lisätuotteesta."
 
 #: pretix/base/services/cart.py:197 pretix/base/services/orders.py:191
 #, python-format
@@ -7871,7 +7917,11 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
+"Voit valita enintään %(max)s lisäosan kategoriasta %(cat)s tuotteelle "
+"%(base)s."
 msgstr[1] ""
+"Voit valita enintään %(max)s lisäosaa kategoriasta %(cat)s tuotteelle "
+"%(base)s."
 
 #: pretix/base/services/cart.py:202 pretix/base/services/orders.py:196
 #, python-format
@@ -7882,7 +7932,11 @@ msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr[0] ""
+"Sinun on valittava vähintään %(min)s lisäosa kategoriasta %(cat)s tuotteelle "
+"%(base)s."
 msgstr[1] ""
+"Sinun on valittava vähintään %(min)s lisäosaa kategoriasta %(cat)s "
+"tuotteelle %(base)s."
 
 #: pretix/base/services/cart.py:206 pretix/base/services/orders.py:200
 #, python-format
