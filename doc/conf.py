@@ -69,7 +69,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pretix'
-copyright = '2014-{}, Raphael Michel'.format(date.today().year)
+copyright = '2014-{}, rami.io GmbH'.format(date.today().year)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -233,8 +233,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    ('index', 'pretix.tex', 'pretix Documentation',
-     'Raphael Michel', 'manual'),
+    ('index', 'pretix.tex', 'pretix Developer Documentation',
+     'rami.io GmbH', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -263,8 +263,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'pretix', 'pretix Documentation',
-     ['Raphael Michel'], 1)
+    ('index', 'pretix', 'pretix Developer Documentation',
+     ['rami.io GmbH'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -277,8 +277,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'pretix', 'pretix Documentation',
-     'Raphael Michel', 'pretix', 'One line description of project.',
+    ('index', 'pretix', 'pretix Developer Documentation',
+     'rami.io GmbH', 'pretix', 'One line description of project.',
      'Miscellaneous'),
 ]
 
