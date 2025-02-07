@@ -296,8 +296,14 @@ class OrderChangedSplitFrom(OrderLogEntryType):
     action_type = 'pretix.event.order.changed.split_from'
 
     def display(self, logentry: LogEntry, data):
-        return _('This order has been created by splitting the order {order}').format(
-            order=data['original_order'],
+        url = reverse('control:event.order', kwargs={
+            'event': logentry.event.slug,
+            'organizer': logentry.event.organizer.slug,
+            'code': data['original_order']
+        })
+        return format_html(
+            _('This order has been created by splitting the order {order}'),
+            order=format_html(mark_safe('<a href="{}">{}</a>'), url, data['original_order']),
         )
 
 
