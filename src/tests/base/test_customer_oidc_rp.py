@@ -250,8 +250,10 @@ def test_authorize_url(provider):
         "client_id=abc123&"
         "scope=openid+email+profile&"
         "state=state_val&"
-        "redirect_uri=https%3A%2F%2Fredirect%3Ffoo%3Dbar"
-    ) == oidc_authorize_url(provider, "state_val", "https://redirect?foo=bar")
+        "redirect_uri=https%3A%2F%2Fredirect%3Ffoo%3Dbar&"
+        "code_challenge=S1ZnvzwMZHrWOO62nENdJ6jhODhf7VfyZFBIXQyrTKo&"
+        "code_challenge_method=S256"
+    ) == oidc_authorize_url(provider, "state_val", "https://redirect?foo=bar", "pkce_value")
 
 
 @pytest.mark.django_db
@@ -264,7 +266,7 @@ def test_validate_authorization_invalid(provider):
         status=400,
     )
     with pytest.raises(ValidationError):
-        oidc_validate_authorization(provider, "code_received", "https://redirect?foo=bar")
+        oidc_validate_authorization(provider, "code_received", "https://redirect?foo=bar", "pkce_value")
 
 
 @pytest.mark.django_db
@@ -281,6 +283,7 @@ def test_validate_authorization_userinfo_invalid(provider):
                 "grant_type": "authorization_code",
                 "code": "code_received",
                 "redirect_uri": "https://redirect?foo=bar",
+                "code_verifier": "pkce_value",
             })
         ],
     )
@@ -296,7 +299,7 @@ def test_validate_authorization_userinfo_invalid(provider):
         ],
     )
     with pytest.raises(ValidationError) as e:
-        oidc_validate_authorization(provider, "code_received", "https://redirect?foo=bar")
+        oidc_validate_authorization(provider, "code_received", "https://redirect?foo=bar", "pkce_value")
     assert 'could not fetch' in str(e.value)
 
 
@@ -314,6 +317,7 @@ def test_validate_authorization_valid(provider):
                 "grant_type": "authorization_code",
                 "code": "code_received",
                 "redirect_uri": "https://redirect?foo=bar",
+                "code_verifier": "pkce_value",
             })
         ],
     )
@@ -328,4 +332,4 @@ def test_validate_authorization_valid(provider):
             matchers.header_matcher({"Authorization": "Bearer test_access_token"})
         ],
     )
-    oidc_validate_authorization(provider, "code_received", "https://redirect?foo=bar")
+    oidc_validate_authorization(provider, "code_received", "https://redirect?foo=bar", "pkce_value")

@@ -148,7 +148,7 @@ def oidc_validate_and_complete_config(config):
     return config
 
 
-def oidc_authorize_url(provider, state, redirect_uri):
+def oidc_authorize_url(provider, state, redirect_uri, pkce_code_verifier):
     endpoint = provider.configuration['provider_config']['authorization_endpoint']
     params = {
         # https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
@@ -163,10 +163,14 @@ def oidc_authorize_url(provider, state, redirect_uri):
     if "query_parameters" in provider.configuration and provider.configuration["query_parameters"]:
         params.update(parse_qsl(provider.configuration["query_parameters"]))
 
+    if pkce_code_verifier:
+        params["code_challenge"] = base64.urlsafe_b64encode(hashlib.sha256(pkce_code_verifier.encode()).digest()).decode().rstrip("=")
+        params["code_challenge_method"] = "S256"
+
     return endpoint + '?' + urlencode(params)
 
 
-def oidc_validate_authorization(provider, code, redirect_uri):
+def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier):
     endpoint = provider.configuration['provider_config']['token_endpoint']
 
     # Wall of shame and RFC ignorant IDPs
@@ -187,6 +191,9 @@ def oidc_validate_authorization(provider, code, redirect_uri):
         'code': code,
         'redirect_uri': redirect_uri,
     }
+
+    if pkce_code_verifier:
+        params["code_verifier"] = pkce_code_verifier
 
     if token_endpoint_auth_method == 'client_secret_post':
         params['client_id'] = provider.configuration['client_id']
