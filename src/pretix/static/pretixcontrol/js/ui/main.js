@@ -1065,11 +1065,17 @@ function add_log_expand_handlers(el) {
         } else if ($a.is("[data-expandpayment]")) {
             url += 'payment/'
         }
+        function format_data(data) {
+            return Object.entries(data).map(([key, value]) =>
+                $("<div>").append(
+                    $("<b>").text(key + ': '),
+                    $("<span>").text(JSON.stringify(value, null, 2))));
+        }
         $.getJSON(url + '?pk=' + id, function (data) {
             if ($a.parent().tagName === "p") {
-                $("<pre>").text(JSON.stringify(data.data, null, 2)).insertAfter($a.parent());
+                $("<pre>").append(format_data(data)).insertAfter($a.parent());
             } else {
-                $("<pre>").text(JSON.stringify(data.data, null, 2)).appendTo($a.parent());
+                $("<pre>").append(format_data(data)).appendTo($a.parent());
             }
             $a.remove();
         });

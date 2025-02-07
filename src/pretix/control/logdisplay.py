@@ -72,7 +72,7 @@ class OrderChangeLogEntryType(OrderLogEntryType):
     prefix = _('The order has been changed:')
 
     def display(self, logentry, data):
-        return self.prefix + ' ' + self.display_prefixed(logentry.event, logentry, data)
+        return format_html('{} {}', self.prefix, self.display_prefixed(logentry.event, logentry, data))
 
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         return super().display(logentry, data)
@@ -282,12 +282,13 @@ class OrderChangedSplit(OrderChangeLogEntryType):
             'organizer': event.organizer.slug,
             'code': data['new_order']
         })
-        return mark_safe(self.prefix + ' ' + _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}').format(
+        return format_html(
+            _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}'),
             old_item=escape(old_item),
             posid=data.get('positionid', '?'),
-            order='<a href="{}">{}</a>'.format(url, data['new_order']),
+            order=format_html(mark_safe('<a href="{}">{}</a>'), url, data['new_order']),
             old_price=money_filter(Decimal(data['old_price']), event.currency),
-        ))
+        )
 
 
 @log_entry_types.new()
@@ -295,8 +296,14 @@ class OrderChangedSplitFrom(OrderLogEntryType):
     action_type = 'pretix.event.order.changed.split_from'
 
     def display(self, logentry: LogEntry, data):
-        return _('This order has been created by splitting the order {order}').format(
-            order=data['original_order'],
+        url = reverse('control:event.order', kwargs={
+            'event': logentry.event.slug,
+            'organizer': logentry.event.organizer.slug,
+            'code': data['original_order']
+        })
+        return format_html(
+            _('This order has been created by splitting the order {order}'),
+            order=format_html(mark_safe('<a href="{}">{}</a>'), url, data['original_order']),
         )
 
 
@@ -343,12 +350,12 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
 
         if 'datetime' in data:
             dt = dateutil.parser.parse(data.get('datetime'))
-            if abs((logentry.datetime - dt).total_seconds()) > 5 or 'forced' in data:
+            if abs((logentry.datetime - dt).total_seconds()) > 5 or data.get('forced'):
                 tz = event.timezone
                 data['datetime'] = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
                 return str(plain_with_dt).format_map(data)
-            else:
-                return str(plain_without_dt).format_map(data)
+
+        return str(plain_without_dt).format_map(data)
 
 
 @log_entry_types.new('pretix.event.checkin')

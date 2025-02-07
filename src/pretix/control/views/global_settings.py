@@ -110,7 +110,7 @@ class MessageView(TemplateView):
 class LogDetailView(AdministratorPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         le = get_object_or_404(LogEntry, pk=request.GET.get('pk'))
-        return JsonResponse({'data': le.parsed_data})
+        return JsonResponse({'action_type': le.action_type, 'content_type': str(le.content_type), 'object_id': le.object_id, 'data': le.parsed_data})
 
 
 class PaymentDetailView(AdministratorPermissionRequiredMixin, View):
