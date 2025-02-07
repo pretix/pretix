@@ -244,15 +244,16 @@ class AuthorizeView(View):
                                         response_mode, state)
 
         if "id_token_hint" in request_data:
-            self._redirect_error("invalid_request", "id_token_hint currently not supported by this server",
-                                 redirect_uri, response_mode, state)
+            return self._redirect_error("invalid_request", "id_token_hint currently not supported by this server",
+                                        redirect_uri, response_mode, state)
 
         has_valid_session = bool(request.customer)
         if has_valid_session and max_age:
             try:
                 has_valid_session = int(time.time() - get_customer_auth_time(request)) < int(max_age)
             except ValueError:
-                self._redirect_error("invalid_request", "invalid max_age value", redirect_uri, response_mode, state)
+                return self._redirect_error("invalid_request", "invalid max_age value", redirect_uri,
+                                            response_mode, state)
 
         if not has_valid_session and prompt and prompt == "none":
             return self._redirect_error("interaction_required", "user is not logged in but no prompt is allowed",
