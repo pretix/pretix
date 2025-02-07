@@ -778,6 +778,50 @@ def test_store_failed(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_store_failed_other_event(token_client, organizer, clist, event, clist_event2, event2, order):
+    with scopes_disabled():
+        p = order.positions.first()
+        p.secret = 'xyzabc'
+        p.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event.slug, clist.pk,
+    ), {
+        'raw_barcode': 'xyzabc',
+        'error_reason': 'invalid',
+        'nonce': '111',
+    }, format='json')
+    assert resp.status_code == 201
+    with scopes_disabled():
+        c = Checkin.all.get(nonce='111')
+        assert c.position == p
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event2.slug, clist_event2.pk,
+    ), {
+        'raw_barcode': 'xyzabc',
+        'error_reason': 'invalid',
+        'nonce': '222',
+    }, format='json')
+    assert resp.status_code == 201
+    with scopes_disabled():
+        c = Checkin.all.get(nonce='222')
+        assert c.position is None
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event2.slug, clist_event2.pk,
+    ), {
+        'raw_barcode': 'xyzabc',
+        'error_reason': 'invalid',
+        'events_and_checkin_lists': [(event.slug, clist.pk), (event2.slug, clist_event2.pk)],
+        'nonce': '333',
+    }, format='json')
+    assert resp.status_code == 201
+    with scopes_disabled():
+        c = Checkin.all.get(nonce='333')
+        assert c.position == p
+
+
+@pytest.mark.django_db
 def test_redeem_unknown(token_client, organizer, clist, event, order):
     resp = _redeem(token_client, organizer, clist, 'unknown_secret', {'force': True})
     assert resp.status_code == 404
