@@ -416,6 +416,10 @@ class CustomerSSOClient(LoggedModel):
     authorization_grant_type = models.CharField(
         max_length=32, choices=GRANT_TYPES, verbose_name=_("Grant type"), default=GRANT_AUTHORIZATION_CODE,
     )
+    require_pkce = models.BooleanField(
+        verbose_name=_("Require PKCE extension"),
+        default=False,
+    )
     redirect_uris = models.TextField(
         blank=False,
         verbose_name=_("Redirection URIs"),
@@ -481,6 +485,8 @@ class CustomerSSOGrant(models.Model):
     expires = models.DateTimeField()
     redirect_uri = models.TextField()
     scope = models.TextField(blank=True)
+    code_challenge = models.TextField(blank=True, null=True)
+    code_challenge_method = models.CharField(max_length=255, blank=True, null=True)
 
 
 class CustomerSSOAccessToken(models.Model):
