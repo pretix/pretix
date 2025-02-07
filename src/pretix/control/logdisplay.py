@@ -72,7 +72,7 @@ class OrderChangeLogEntryType(OrderLogEntryType):
     prefix = _('The order has been changed:')
 
     def display(self, logentry, data):
-        return self.prefix + ' ' + self.display_prefixed(logentry.event, logentry, data)
+        return format_html('{} {}', self.prefix, self.display_prefixed(logentry.event, logentry, data))
 
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         return super().display(logentry, data)
@@ -282,12 +282,13 @@ class OrderChangedSplit(OrderChangeLogEntryType):
             'organizer': event.organizer.slug,
             'code': data['new_order']
         })
-        return mark_safe(self.prefix + ' ' + _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}').format(
+        return format_html(
+            _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}'),
             old_item=escape(old_item),
             posid=data.get('positionid', '?'),
-            order='<a href="{}">{}</a>'.format(url, data['new_order']),
+            order=format_html(mark_safe('<a href="{}">{}</a>'),url, data['new_order']),
             old_price=money_filter(Decimal(data['old_price']), event.currency),
-        ))
+        )
 
 
 @log_entry_types.new()
