@@ -337,7 +337,7 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
 
         event = logentry.event
 
-        if 'list' in data:
+        if 'list' in data and event:
             try:
                 data['list'] = event.checkin_lists.get(pk=data.get('list')).name
             except CheckinList.DoesNotExist:
@@ -351,8 +351,8 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
         if 'datetime' in data:
             dt = dateutil.parser.parse(data.get('datetime'))
             if abs((logentry.datetime - dt).total_seconds()) > 5 or data.get('forced'):
-                tz = event.timezone
-                data['datetime'] = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
+                if event:
+                    data['datetime'] = date_format(dt.astimezone(event.timezone), "SHORT_DATETIME_FORMAT")
                 return str(plain_with_dt).format_map(data)
 
         return str(plain_without_dt).format_map(data)
@@ -417,7 +417,7 @@ class OrderPrintLogEntryType(OrderLogEntryType):
             datetime=date_format(
                 dateutil.parser.parse(data["datetime"]).astimezone(logentry.event.timezone),
                 "SHORT_DATETIME_FORMAT"
-            ),
+            ) if logentry.event else data["datetime"],
             type=dict(PrintLog.PRINT_TYPES)[data["type"]],
         )
 
