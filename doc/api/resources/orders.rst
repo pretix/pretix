@@ -109,6 +109,7 @@ cancellation_date                     datetime                   Time of order c
                                                                  Will not be set for partial cancellations and is not
                                                                  reliable for orders that have been cancelled,
                                                                  reactivated and cancelled again.
+plugin_data                           object                     Additional data added by plugins.
 ===================================== ========================== =======================================================
 
 
@@ -163,6 +164,10 @@ cancellation_date                     datetime                   Time of order c
 .. versionchanged:: 2025.1
 
    The ``tax_code`` attribute has been added.
+
+.. versionchanged:: 2025.2
+
+   The ``plugin_data`` attribute has been added.
 
 .. _order-position-resource:
 
@@ -251,6 +256,7 @@ seat                                  objects                    The assigned se
 pdf_data                              object                     Data object required for ticket PDF generation. By default,
                                                                  this field is missing. It will be added only if you add the
                                                                  ``pdf_data=true`` query parameter to your request.
+plugin_data                           object                     Additional data added by plugins.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 4.16
@@ -264,6 +270,10 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 2025.1
 
    The ``tax_code`` attribute has been added.
+
+.. versionchanged:: 2025.2
+
+   The ``plugin_data`` attribute has been added.
 
 .. _order-payment-resource:
 
@@ -461,7 +471,8 @@ List of all orders
                     "output": "pdf",
                     "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
                   }
-                ]
+                ],
+                "plugin_data": {}
               }
             ],
             "downloads": [
@@ -483,7 +494,8 @@ List of all orders
               }
             ],
             "refunds": [],
-            "cancellation_date": null
+            "cancellation_date": null,
+            "plugin_data": {}
           }
         ]
       }
@@ -702,7 +714,8 @@ Fetching individual orders
                 "output": "pdf",
                 "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
               }
-            ]
+            ],
+            "plugin_data": {}
           }
         ],
         "downloads": [
@@ -724,7 +737,8 @@ Fetching individual orders
           }
         ],
         "refunds": [],
-        "cancellation_date": null
+        "cancellation_date": null,
+        "plugin_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -1671,7 +1685,8 @@ List of all order positions
                 "output": "pdf",
                 "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
               }
-            ]
+            ],
+            "plugin_data": {}
           }
         ]
       }
@@ -1798,7 +1813,8 @@ Fetching individual positions
             "output": "pdf",
             "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
           }
-        ]
+        ],
+        "plugin_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
