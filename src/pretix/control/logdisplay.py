@@ -350,12 +350,12 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
 
         if 'datetime' in data:
             dt = dateutil.parser.parse(data.get('datetime'))
-            if abs((logentry.datetime - dt).total_seconds()) > 5 or 'forced' in data:
+            if abs((logentry.datetime - dt).total_seconds()) > 5:
                 tz = event.timezone
                 data['datetime'] = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
                 return str(plain_with_dt).format_map(data)
-            else:
-                return str(plain_without_dt).format_map(data)
+
+        return str(plain_without_dt).format_map(data)
 
 
 @log_entry_types.new('pretix.event.checkin')
@@ -373,8 +373,12 @@ class CheckinLogEntryType(CheckinErrorLogEntryType):
             ), logentry, data)
         elif data.get('forced'):
             return self.display_plain(
-                _('A scan for position #{posid} at {datetime} for list "{list}" has been uploaded even though it has '
-                  'been scanned already.'),
+                (
+                    _('A scan for position #{posid} at {datetime} for list "{list}" has been uploaded even though it has '
+                      'been scanned already.'),
+                    _('A scan for position #{posid} for list "{list}" has been uploaded even though it has '
+                      'been scanned already.'),
+                ),
                 logentry, data
             )
         else:
