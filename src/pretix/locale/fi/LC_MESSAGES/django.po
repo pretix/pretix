@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-08 22:16+0000\n"
-"Last-Translator: Karoliina Grohn <karoliina.grohn@om.org>\n"
+"PO-Revision-Date: 2025-02-09 07:00+0000\n"
+"Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -26895,17 +26895,19 @@ msgstr ""
 msgid ""
 "More data was uploaded but is not shown here. It will still be processed"
 msgstr ""
+"Lisää tietoja ladattiin, mutta niitä ei näytetä tässä. Sitä käsitellään "
+"edelleen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:9
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:9
 msgid "Import currently running…"
-msgstr ""
+msgstr "Tuonti on parhaillaan käynnissä…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:11
 #, python-format
 msgid "Last import: %(date)s"
-msgstr ""
+msgstr "Viimeisin tuonti: %(date)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:8
 #, python-format
@@ -26913,42 +26915,51 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
+"Tapahtuman maksuasetuksissa määrität %(date)s-arvon maksujen viimeiseksi "
+"päivämääräksi. Siksi et voi merkitä mitään tilausta maksetuksi täällä."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
 msgstr ""
+"Tällä sivulla voit ladata pankin tiliotetiedostoja saapuvien maksujen "
+"käsittelyä varten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
 msgstr ""
+"Tällä hetkellä tämä ominaisuus tukee <code>.csv</code> tiedostoja ja "
+"tiedostoja MT940-muodossa."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:29
 #: pretix/plugins/banktransfer/views.py:561
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
 msgstr ""
+"Tuontia käsitellään parhaillaan, yritä uudelleen muutaman minuutin kuluttua."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:51
 msgid "Start upload"
-msgstr ""
+msgstr "Alota tiedoston lähetys"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:61
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "Ratkaisemattomat tapahtumat"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:66
 msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
 msgstr ""
+"Tällä sivulla voit tuoda pankkitietoja tapahtumakohtaisesti. Näet myös vain "
+"suoraan tähän tapahtumaan tuodut täsmäyttämättömät tapahtumat."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:71
 msgid "Go to organizer-level import"
-msgstr ""
+msgstr "Siirry järjestäjätason tuontiin"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:78
 msgid "Amount from"
@@ -26957,79 +26968,81 @@ msgstr "Summa alkaen"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:86
 msgid "up to"
-msgstr ""
+msgstr "tähän asti"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:92
 msgid "Clear"
-msgstr ""
+msgstr "Tyhjennä"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:101
 msgid "Discard all"
-msgstr ""
+msgstr "Hylkää kaikki"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:113
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "Hakusi ei löytänyt yhtään tapahtumaa."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "Tuonnin tulos"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
 msgstr ""
+"Tuontisi tulos on käynnissä. Ole kärsivällinen, kun käsittelemme tietoja …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
+msgstr "Tietojesi käsittelyssä tapahtui sisäinen virhe."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try to re-import the file."
-msgstr ""
+msgstr "Jotkin tapahtumat saattavat puuttua, yritä tuoda tiedosto uudelleen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr ""
+msgstr "Tuonti ei sisältänyt tapahtumia, joita et ole tuonut aiemmin."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr ""
+msgstr "Maksetuiksi merkityt tilaukset"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
-msgstr ""
+msgstr "Kelpaamattomat maksut"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:38
 msgid "Ignored payments"
-msgstr ""
+msgstr "Ohitetut maksut"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:44
 msgid "Review invalid and ignored payments"
-msgstr ""
+msgstr "Virheellisten ja ohitettujen maksujen tarkistaminen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:38
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:27
 msgid "Amount:"
-msgstr ""
+msgstr "Summa:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:42
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:30
 msgid "There is no further action required on this website."
-msgstr ""
+msgstr "Tällä verkkosivustolla ei vaadita lisätoimia."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:43
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:31
 msgid "We will send you an email as soon as we received your payment."
 msgstr ""
+"Lähetämme sinulle sähköpostiviestin heti, kun olemme vastaanottaneet maksusi."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:61
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:72
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:92
 msgid "Scan the qr-code with your banking app"
-msgstr ""
+msgstr "Skannaa qr-koodi pankkisovelluksellasi"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:65
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:75
@@ -27038,15 +27051,17 @@ msgid ""
 "Scan this image with your banking app’s QR-Reader to start the payment "
 "process."
 msgstr ""
+"Skannaa tämä kuva pankkisovelluksesi QR-Readerilla aloittaaksesi "
+"maksuprosessin."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:95
 msgid "Open BezahlCode in your banking app to start the payment process."
-msgstr ""
+msgstr "Avaa BezahlCode pankkisovelluksessasi aloittaaksesi maksuprosessin."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:112
 #, python-format
 msgid "At your request, we sent the invoice directly to %(recipient)s."
-msgstr ""
+msgstr "Pyynnöstäsi lähetimme laskun suoraan vastaanottajalle: %(recipient)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:117
 msgid "Send again or somewhere else"
@@ -27057,6 +27072,8 @@ msgid ""
 "To send the invoice directly to your accounting department, please enter "
 "their email address:"
 msgstr ""
+"Jos haluat lähettää laskun suoraan kirjanpito-osastollesi, kirjoita heidän "
+"sähköpostiosoitteensa:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:139
 msgid "Send invoice via email"
@@ -27066,7 +27083,7 @@ msgstr "Lähetä lasku sähköpostitse"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:7
 msgid "Export bank transfer refunds"
-msgstr ""
+msgstr "Vientipankkisiirtojen palautukset"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:9
 #, python-format
@@ -27074,28 +27091,31 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
+"<strong>%(num_new)s</strong>  Pankkisiirtopalautukset on asetettu, eivätkä "
+"ne ole vielä osa vientiä."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
-msgstr ""
+msgstr "Testitilassa vientisi sisältävät vain testitilan tilauksia."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:19
 msgid ""
 "If you want, you can now also create these exports for multiple events "
 "combined."
 msgstr ""
+"Halutessasi voit nyt myös luoda nämä viennit useille tapahtumille yhteensä."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
 msgid "Go to organizer-level exports"
-msgstr ""
+msgstr "Siirry järjestäjätason vienteihin"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:32
 msgid "Create new export file"
-msgstr ""
+msgstr "Luo uusi vientitiedosto"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:38
 msgid "Aggregate transactions to the same bank account"
-msgstr ""
+msgstr "Tapahtumien yhdistäminen samalle pankkitilille"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:43
 msgid ""
@@ -27106,10 +27126,15 @@ msgid ""
 "refunds.\n"
 "                "
 msgstr ""
+"\n"
+"                    Huomaa, että palautukset merkitään tehdyiksi, kun vienti "
+"on luotu.\n"
+"                    Varmista, että lataat viennin ja suoritat palautukset.\n"
+"                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
 msgid "Exported files"
-msgstr ""
+msgstr "Viedyt tiedostot"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:55
 msgid "Export date"
@@ -27117,7 +27142,7 @@ msgstr "Vie päivämäärä"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:56
 msgid "Number of orders"
-msgstr ""
+msgstr "Tilausten määrä"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:80
 msgid "not downloaded"
@@ -27126,12 +27151,12 @@ msgstr "ei ladattu"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:85
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:96
 msgid "Download CSV"
-msgstr ""
+msgstr "Lataa CSV"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:90
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:101
 msgid "SEPA XML"
-msgstr ""
+msgstr "SEPA XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:110
 msgid "No exports have been created yet."
@@ -27139,7 +27164,7 @@ msgstr "Vientejä ei ole vielä tehty."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
-msgstr ""
+msgstr "Vie SEPA xml"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:13
 #, python-format
@@ -27150,34 +27175,38 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
+"Yrität ladata hyvitysvientiä %(date)s:stä yhdellä tilauksella ja yhteensä  "
+"%(sum)s:lla."
 msgstr[1] ""
+"Yrität ladata hyvitysvientiä %(date)s:stä %(cnt)s-tilauksella ja yhteensä "
+"%(sum)s.:llä."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr ""
+msgstr "Ilmoita, miltä pankkitililtä hyvitykset siirretään."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
-msgstr ""
+msgstr "Lataa"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
-msgstr ""
+msgstr "Maksaja ja viite"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr ""
+msgstr "Hyväksy kuitenkin"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:44
 msgid "Assign to order"
-msgstr ""
+msgstr "Määritä tilaukseen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:49
 msgid "Retry"
-msgstr ""
+msgstr "Yritä uudelleen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
@@ -27185,96 +27214,104 @@ msgstr "Kommentti:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
-msgstr ""
+msgstr "Tilauskoodia ei havaittu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:100
 msgid "Invalid for this order"
-msgstr ""
+msgstr "Ei kelpaa tähän tilaukseen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:102
 msgid "Error while processing"
-msgstr ""
+msgstr "Virhe käsittelyn aikana"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:104
 msgid "The order is already marked as paid"
-msgstr ""
+msgstr "Tilaus on jo merkitty maksetuksi"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:106
 msgid "Order already paid"
-msgstr ""
+msgstr "Tilaus on jo maksettu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:123
 msgid "Discard"
-msgstr ""
+msgstr "Hylkää"
 
 #: pretix/plugins/banktransfer/views.py:146
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
 msgstr ""
+"Negatiivinen summa, mutta hyvitystä ei voi kirjata, luo ensin manuaalinen "
+"hyvitys."
 
 #: pretix/plugins/banktransfer/views.py:172
 msgid "Problem sending email."
-msgstr ""
+msgstr "Ongelma sähköpostin lähettämisessä."
 
 #: pretix/plugins/banktransfer/views.py:198
 msgid "Unknown order code"
-msgstr ""
+msgstr "Tuntematon tilauskoodi"
 
 #: pretix/plugins/banktransfer/views.py:355
 msgid "Search text"
-msgstr ""
+msgstr "Hae tekstiä"
 
 #: pretix/plugins/banktransfer/views.py:356
 msgid "min"
-msgstr ""
+msgstr "minimi"
 
 #: pretix/plugins/banktransfer/views.py:357
 msgid "max"
-msgstr ""
+msgstr "maximi"
 
 #: pretix/plugins/banktransfer/views.py:366
 msgid "Filter form is not valid."
-msgstr ""
+msgstr "Suodatinlomake ei ole voimassa."
 
 #: pretix/plugins/banktransfer/views.py:409
 msgid "All unresolved transactions have been discarded."
-msgstr ""
+msgstr "Kaikki ratkaisemattomat tapahtumat on hylätty."
 
 #: pretix/plugins/banktransfer/views.py:429
 msgid "You must choose a file to import."
-msgstr ""
+msgstr "Sinun on valittava tuotava tiedosto."
 
 #: pretix/plugins/banktransfer/views.py:433
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
 msgstr ""
+"Emme pystyneet tunnistamaan tämän tuonnin tiedostotyyppiä. Ota yhteyttä "
+"asiakaspalveluun saadaksesi apua."
 
 #: pretix/plugins/banktransfer/views.py:446
 #: pretix/plugins/banktransfer/views.py:495
 msgid "We were unable to process your input."
-msgstr ""
+msgstr "Emme pystyneet käsittelemään syötettäsi."
 
 #: pretix/plugins/banktransfer/views.py:460
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
 msgstr ""
+"Olen pahoillani, mutta emme pystyneet tuomaan tätä CSV-tiedostoa. Ota "
+"yhteyttä asiakaspalveluun saadaksesi apua."
 
 #: pretix/plugins/banktransfer/views.py:465
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
 msgstr ""
+"Olen pahoillani, mutta havaitsimme tämän tiedoston olevan tyhjä. Ota "
+"yhteyttä asiakaspalveluun saadaksesi apua."
 
 #: pretix/plugins/banktransfer/views.py:485
 msgid "Invalid input data."
-msgstr ""
+msgstr "Virheelliset syöttötiedot."
 
 #: pretix/plugins/banktransfer/views.py:489
 msgid "You need to select the column containing the payment reference."
-msgstr ""
+msgstr "Sinun on valittava sarake, joka sisältää maksuviitteen."
 
 #: pretix/plugins/banktransfer/views.py:570
 msgid "No currency has been selected."
@@ -27286,10 +27323,12 @@ msgid ""
 "We could not find bank account information for the refund {refund_id}. It "
 "was marked as failed."
 msgstr ""
+"Emme löytäneet pankkitilin tietoja palautusta varten {refund_id}. Se "
+"merkittiin epäonnistuneeksi."
 
 #: pretix/plugins/banktransfer/views.py:751
 msgid "No valid orders have been found."
-msgstr ""
+msgstr "Voimassa olevia tilauksia ei ole löydetty."
 
 #: pretix/plugins/banktransfer/views.py:905 pretix/presale/checkoutflow.py:1012
 #: pretix/presale/checkoutflow.py:1018
@@ -27300,7 +27339,7 @@ msgstr "Ole hyvä ja anna kelvollinen sähköpostiosoite."
 msgid ""
 "No pending bank transfer payment found. Maybe the order has been paid "
 "already?"
-msgstr ""
+msgstr "Odottavaa pankkisiirtomaksua ei löydy. Ehkä tilaus on jo maksettu?"
 
 #: pretix/plugins/banktransfer/views.py:915
 msgid "Sending invoices via email is disabled by the event organizer."
@@ -27308,20 +27347,22 @@ msgstr "Tapahtuman järjestäjä on kieltänyt laskujen lähettämisen sähköpo
 
 #: pretix/plugins/banktransfer/views.py:920
 msgid "No invoice found, please request an invoice first."
-msgstr ""
+msgstr "Laskua ei löytynyt, pyydä ensin lasku."
 
 #: pretix/plugins/banktransfer/views.py:932
 #, python-brace-format
 msgid "Sending the latest invoice via email to {email}."
-msgstr ""
+msgstr "Viimeisimmän laskun lähettäminen sähköpostitse osoitteeseen {email}."
 
 #: pretix/plugins/checkinlists/apps.py:47
 msgid "Check-in list exporter"
-msgstr ""
+msgstr "Kirjautumislistan viejä"
 
 #: pretix/plugins/checkinlists/apps.py:51
 msgid "This plugin allows you to generate check-in lists for your conference."
 msgstr ""
+"Tämän laajennuksen avulla voit luoda ilmoittautumislistoja konferenssiasi "
+"varten."
 
 #: pretix/plugins/checkinlists/exporters.py:91
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
@@ -27330,19 +27371,19 @@ msgstr "Sisällytä liput vain tämän alueen päivämäärille."
 
 #: pretix/plugins/checkinlists/exporters.py:95
 msgid "Include QR-code secret"
-msgstr ""
+msgstr "Sisällytä QR-koodi salaisuus"
 
 #: pretix/plugins/checkinlists/exporters.py:100
 msgid "Only tickets requiring special attention"
-msgstr ""
+msgstr "Vain erityistä huomiota vaativat liput"
 
 #: pretix/plugins/checkinlists/exporters.py:133
 msgid "Include questions"
-msgstr ""
+msgstr "Sisällytä kysymykset"
 
 #: pretix/plugins/checkinlists/exporters.py:301
 msgid "Check-in list (PDF)"
-msgstr ""
+msgstr "Ilmoittautumislista (PDF)"
 
 #: pretix/plugins/checkinlists/exporters.py:302
 #: pretix/plugins/checkinlists/exporters.py:473
@@ -27357,34 +27398,38 @@ msgid ""
 "Download a PDF version of a check-in list that can be used to check people "
 "in at the event without digital methods."
 msgstr ""
+"Lataa PDF-versio sisäänkirjautumislistasta, jota voit käyttää "
+"sisäänkirjautumiseen tapahtumassa ilman digitaalisia menetelmiä."
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:371
 msgctxt "tablehead"
 msgid "paid"
-msgstr ""
+msgstr "maksettu"
 
 #: pretix/plugins/checkinlists/exporters.py:474
 msgid ""
 "Download a spreadsheet with all attendees that are included in a check-in "
 "list."
 msgstr ""
+"Lataa laskentataulukko, jossa on kaikki osallistujat, jotka sisältyvät "
+"ilmoittautumislistaan."
 
 #: pretix/plugins/checkinlists/exporters.py:497
 msgid "Checked out"
-msgstr ""
+msgstr "Kirjattu ulos"
 
 #: pretix/plugins/checkinlists/exporters.py:497
 #: pretix/plugins/checkinlists/exporters.py:762
 msgid "Automatically checked in"
-msgstr ""
+msgstr "Automaattisesti kirjattu sisään"
 
 #: pretix/plugins/checkinlists/exporters.py:503
 #: pretix/plugins/checkinlists/exporters.py:691
 #: pretix/plugins/checkinlists/exporters.py:756
 #: pretix/plugins/paypal/payment.py:123 pretix/plugins/paypal2/payment.py:120
 msgid "Secret"
-msgstr ""
+msgstr "Salainen"
 
 #: pretix/plugins/checkinlists/exporters.py:669
 msgid "Valid check-in codes"
@@ -27395,16 +27440,21 @@ msgid ""
 "Download a spreadsheet with all valid check-in barcodes e.g. for import into "
 "a different system. Does not included blocked codes or personal data."
 msgstr ""
+"Lataa laskentataulukko, jossa on kaikki voimassa olevat lähtöselvityksen "
+"viivakoodit, esimerkiksi tuotavaksi toiseen järjestelmään. Ei sisällä "
+"estettyjä koodeja tai henkilötietoja."
 
 #: pretix/plugins/checkinlists/exporters.py:739
 msgid "Check-in log (all scans)"
-msgstr ""
+msgstr "Sisäänkirjautumisloki (kaikki skannaukset)"
 
 #: pretix/plugins/checkinlists/exporters.py:741
 msgid ""
 "Download a spreadsheet with one line for every scan that happened at your "
 "check-in stations."
 msgstr ""
+"Lataa laskentataulukko, jossa on yksi rivi jokaista check-in-asemilla "
+"tapahtunutta skannausta varten."
 
 #: pretix/plugins/checkinlists/exporters.py:760
 msgid "Offline"
@@ -27412,97 +27462,105 @@ msgstr "Offline-tilassa"
 
 #: pretix/plugins/checkinlists/exporters.py:761
 msgid "Offline override"
-msgstr ""
+msgstr "Offline ohitus"
 
 #: pretix/plugins/checkinlists/exporters.py:765
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:83
 msgid "Error message"
-msgstr ""
+msgstr "Virheviesti"
 
 #: pretix/plugins/checkinlists/exporters.py:766
 msgid "Upload date"
-msgstr ""
+msgstr "Tiedoston lähetyspäivä"
 
 #: pretix/plugins/checkinlists/exporters.py:767
 msgid "Upload time"
-msgstr ""
+msgstr "Tiedoston lähetysaika"
 
 #: pretix/plugins/checkinlists/exporters.py:818
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: pretix/plugins/checkinlists/exporters.py:850
 msgid "Successful scans only"
-msgstr ""
+msgstr "Vain onnistuneet skannaukset"
 
 #: pretix/plugins/checkinlists/exporters.py:871
 msgid "All check-in lists"
-msgstr ""
+msgstr "Kaikki tarkistuslistat"
 
 #: pretix/plugins/manualpayment/apps.py:37
 msgid "A fully customizable payment method for manual processing."
-msgstr ""
+msgstr "Täysin mukautettava maksutapa manuaalista käsittelyä varten."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
 #: pretix/plugins/paypal/payment.py:75 pretix/plugins/paypal2/payment.py:82
 #: pretix/plugins/paypal2/payment.py:138 pretix/plugins/paypal2/payment.py:1080
 #: pretix/plugins/paypal2/payment.py:1081 pretix/plugins/stripe/payment.py:1816
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
 "Accept payments with your PayPal account. PayPal is one of the most popular "
 "payment methods world-wide."
 msgstr ""
+"Hyväksy maksut PayPal-tililläsi. PayPal on yksi suosituimmista maksutavoista "
+"maailmanlaajuisesti."
 
 #: pretix/plugins/paypal/payment.py:91 pretix/plugins/paypal2/payment.py:376
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
 msgstr ""
+"PayPal-hiekkalaatikkoa käytetään, voit testata lähettämättä rahaa, mutta "
+"tarvitset PayPal-hiekkalaatikkokäyttäjän kirjautuaksesi sisään."
 
 #: pretix/plugins/paypal/payment.py:103
 msgid "PayPal account"
-msgstr ""
+msgstr "PayPal-tili"
 
 #: pretix/plugins/paypal/payment.py:116 pretix/plugins/paypal2/payment.py:113
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr ""
+msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #: pretix/plugins/paypal/payment.py:117 pretix/plugins/paypal2/payment.py:114
 msgid "Click here for a tutorial on how to obtain the required keys"
-msgstr ""
+msgstr "Klikkaa tästä saadaksesi ohjeet tarvittavien avainten hankkimiseen"
 
 #: pretix/plugins/paypal/payment.py:129 pretix/plugins/paypal2/payment.py:126
 #: pretix/plugins/stripe/payment.py:258
 msgid "Endpoint"
-msgstr ""
+msgstr "Loppupiste"
 
 #: pretix/plugins/paypal/payment.py:141 pretix/plugins/paypal2/payment.py:200
 msgid "Reference prefix"
-msgstr ""
+msgstr "Viite-etuliite"
 
 #: pretix/plugins/paypal/payment.py:142 pretix/plugins/paypal2/payment.py:201
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
 msgstr ""
+"Kaikki tähän syötetyt arvot lisätään tavallisen varausviitteen eteen, joka "
+"sisältää tilausnumeron."
 
 #: pretix/plugins/paypal/payment.py:148 pretix/plugins/paypal2/payment.py:207
 msgid "Reference postfix"
-msgstr ""
+msgstr "Viite postfix"
 
 #: pretix/plugins/paypal/payment.py:149 pretix/plugins/paypal2/payment.py:208
 msgid ""
 "Any value entered here will be added behind the regular booking reference "
 "containing the order number."
 msgstr ""
+"Kaikki tähän syötetyt arvot lisätään tavallisen varausviitteen taakse, joka "
+"sisältää tilausnumeron."
 
 #: pretix/plugins/paypal/payment.py:187 pretix/plugins/paypal2/payment.py:261
 msgid "Disconnect from PayPal"
-msgstr ""
+msgstr "Katkaise yhteys PayPaliin"
 
 #: pretix/plugins/paypal/payment.py:241 pretix/plugins/paypal/payment.py:307
 #: pretix/plugins/paypal/payment.py:345 pretix/plugins/paypal/payment.py:360
@@ -27515,7 +27573,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:1014
 #: pretix/plugins/paypal2/payment.py:1110
 msgid "We had trouble communicating with PayPal"
-msgstr ""
+msgstr "Meillä oli vaikeuksia kommunikoida PayPalin kanssa"
 
 #: pretix/plugins/paypal/payment.py:374 pretix/plugins/paypal/payment.py:383
 #: pretix/plugins/paypal/payment.py:457 pretix/plugins/paypal2/payment.py:637
@@ -27525,6 +27583,8 @@ msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
+"Emme pystyneet käsittelemään maksuasi. Katso alta lisätietoja siitä, miten "
+"voit jatkaa."
 
 #: pretix/plugins/paypal/payment.py:438 pretix/plugins/paypal/payment.py:447
 #: pretix/plugins/paypal2/payment.py:783
@@ -27532,32 +27592,34 @@ msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"PayPal ei ole vielä hyväksynyt maksua. Ilmoitamme sinulle heti, kun maksu on "
+"suoritettu."
 
 #: pretix/plugins/paypal/payment.py:472 pretix/plugins/paypal2/payment.py:811
 #: pretix/plugins/stripe/payment.py:985
 msgid "There was an error sending the confirmation mail."
-msgstr ""
+msgstr "Vahvistussähköpostin lähettämisessä tapahtui virhe."
 
 #: pretix/plugins/paypal/payment.py:565 pretix/plugins/paypal/payment.py:572
 #: pretix/plugins/paypal2/payment.py:962 pretix/plugins/paypal2/payment.py:983
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr ""
+msgstr "Summan palauttaminen PayPalin kautta epäonnistui: {}"
 
 #: pretix/plugins/paypal/payment.py:707 pretix/plugins/paypal/payment.py:715
 #: pretix/plugins/paypal2/payment.py:1060
 #: pretix/plugins/paypal2/payment.py:1068
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Tämän laskun maksu on jo vastaanotettu."
 
 #: pretix/plugins/paypal/payment.py:708 pretix/plugins/paypal/payment.py:716
 #: pretix/plugins/paypal2/payment.py:1061
 #: pretix/plugins/paypal2/payment.py:1069
 msgid "PayPal payment ID"
-msgstr ""
+msgstr "PayPal-maksun tunnus"
 
 #: pretix/plugins/paypal/payment.py:710 pretix/plugins/paypal2/payment.py:1063
 msgid "PayPal sale ID"
-msgstr ""
+msgstr "PayPal-myyntitunnus"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:19
@@ -27565,6 +27627,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Edellä mainittu kokonaissumma nostetaan PayPal-tililtäsi oston vahvistamisen "
+"jälkeen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -27572,31 +27636,36 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
+"Kun olet klikannut Jatka, ohjaamme sinut PayPaliin täyttämään maksutietosi. "
+"Tämän jälkeen sinut ohjataan takaisin tänne tarkastelemaan ja vahvistamaan "
+"tilauksesi."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:6
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:7
 msgid "Sale ID"
-msgstr ""
+msgstr "Myyntitunnus"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:35
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:11
 msgid "Last update"
-msgstr ""
+msgstr "Viimeisin päivitys"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:37
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:71
 msgid "Total value"
-msgstr ""
+msgstr "Kokonaisarvo"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Yrityksemme suorittaa maksusi PayPalin kautta epäonnistui. Yritä uudelleen "
+"tai ota meihin yhteyttä."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:15
@@ -27604,36 +27673,39 @@ msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"Odotamme vastausta PayPalilta maksua koskevaan kysymykseen. Ota yhteyttä, "
+"jos tämä kestää yli muutaman tunnin."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "Maksuprosessi on käynnistetty uudessa ikkunassa."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
+"Maksutietojen syöttämiseen tarkoitettu ikkuna ei avautunut tai se suljettiin?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:25
 msgid "Click here in order to open the window."
-msgstr ""
+msgstr "Klikkaa tästä avataksesi ikkunan."
 
 #: pretix/plugins/paypal/views.py:107 pretix/plugins/paypal2/views.py:319
 msgid "Invalid response from PayPal received."
-msgstr ""
+msgstr "PayPalilta saatu virheellinen vastaus."
 
 #: pretix/plugins/paypal/views.py:123 pretix/plugins/paypal2/views.py:340
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "Näyttää siltä, että peruutit PayPal-maksun"
 
 #: pretix/plugins/paypal/views.py:255 pretix/plugins/paypal2/views.py:531
 msgid "Your PayPal account has been disconnected."
-msgstr ""
+msgstr "PayPal-tilisi yhteys on katkaistu."
 
 #: pretix/plugins/paypal2/apps.py:40
 msgid ""
@@ -27643,6 +27715,10 @@ msgid ""
 "even need a PayPal account. PayPal is one of the most popular payment "
 "methods world-wide."
 msgstr ""
+"Hyväksy maksut PayPal-tililläsi. Tavallisten PayPal-maksujen lisäksi voit "
+"nyt tarjota asiakkaillesi maksuja myös monilla paikallisilla maksutavoilla, "
+"kuten eps, iDEAL ja monet muut - he eivät edes tarvitse PayPal-tiliä. PayPal "
+"on yksi suosituimmista maksutavoista maailmanlaajuisesti."
 
 #: pretix/plugins/paypal2/payment.py:99
 msgid "PayPal Merchant ID"
@@ -27654,6 +27730,9 @@ msgid ""
 "have the option to revert back to paying with their PayPal account. For this "
 "reason, this payment method is always active."
 msgstr ""
+"Vaikka asiakas valitsisi vaihtoehtoisen maksutavan, hänellä on aina "
+"mahdollisuus palata maksamaan PayPal-tilillään. Tästä syystä tämä maksutapa "
+"on aina aktiivinen."
 
 #: pretix/plugins/paypal2/payment.py:149
 msgid "Alternative Payment Methods"
@@ -27668,10 +27747,15 @@ msgid ""
 "shoppers location. For German merchants, this is the direct successor of "
 "PayPal Plus."
 msgstr ""
+"PayPal-tilin kautta suoritettavien maksujen lisäksi voit tarjota "
+"asiakkaillesi mahdollisuuden maksaa luottokortilla ja muilla paikallisilla "
+"maksutavoilla, kuten eps, iDEAL ja monilla muilla - vaikka heillä ei olisi "
+"PayPal-tiliä. Hyväksyttävät maksutavat määritetään ostajan sijainnin "
+"perusteella. Saksalaisille kauppiaille tämä on PayPal Plussan suora seuraaja."
 
 #: pretix/plugins/paypal2/payment.py:166
 msgid "Disable SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA-suoraveloituksen poistaminen käytöstä"
 
 #: pretix/plugins/paypal2/payment.py:168
 msgid ""
@@ -27681,10 +27765,15 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
+"Asiakas ei voi peruuttaa useimpia maksutapoja ilmoittamatta tarkkaa asiaa "
+"kauppiaalle, mutta SEPA-suoraveloitus voidaan peruuttaa napin "
+"painalluksella. Tästä syystä - ja tapahtumasi luonteesta riippuen - saatat "
+"haluta poistaa SEPA-suoraveloitusmaksut käytöstä, jotta vähennät kalliiden "
+"takaisinkirjausten riskiä."
 
 #: pretix/plugins/paypal2/payment.py:182
 msgid "Enable Buy Now Pay Later"
-msgstr ""
+msgstr "Ota käyttöön Osta nyt, maksa myöhemmin"
 
 #: pretix/plugins/paypal2/payment.py:184
 msgid ""
@@ -27692,6 +27781,8 @@ msgid ""
 "pay in multiple installments or within 30 days. You, as the merchant, are "
 "getting your money right away."
 msgstr ""
+"Tarjoa asiakkaillesi mahdollisuus ostaa nyt (tiettyyn rajaan asti) ja maksaa "
+"useissa erissä tai 30 päivän kuluessa. Sinä kauppiaana saat rahasi heti."
 
 #: pretix/plugins/paypal2/payment.py:216
 msgid "-- Automatic --"
@@ -27707,26 +27798,32 @@ msgid ""
 "clicking on the following button, you can either create a new PayPal account "
 "or connect pretix to an existing one."
 msgstr ""
+"Jotta voit hyväksyä maksuja PayPalin kautta, tarvitset tilin PayPalissa. "
+"Napsauttamalla seuraavaa painiketta voit joko luoda uuden PayPal-tilin tai "
+"liittää pretixin olemassa olevaan tiliin."
 
 #: pretix/plugins/paypal2/payment.py:251
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr ""
+msgstr "Yhdistä {icon} PayPal"
 
 #: pretix/plugins/paypal2/payment.py:265
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
+"Määritä PayPal Webhook seuraavaan päätepisteeseen, jotta voit peruuttaa "
+"tilaukset automaattisesti, kun maksut palautetaan ulkoisesti."
 
 #: pretix/plugins/paypal2/payment.py:276
 msgid "PayPal does not process payments in your event's currency."
-msgstr ""
+msgstr "PayPal ei käsittele maksuja tapahtuman valuutassa."
 
 #: pretix/plugins/paypal2/payment.py:277
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
 msgstr ""
+"Tarkista tältä PayPal-sivulta täydellinen luettelo tuetuista valuutoista."
 
 #: pretix/plugins/paypal2/payment.py:282
 msgid ""
@@ -27736,10 +27833,15 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
+"PayPal tukee tapahtumasi valuuttaa maksu- ja saldovaluuttana vain maan "
+"sisäisillä tileillä. Tämä tarkoittaa, että sekä vastaanottavan että "
+"lähettävän PayPal-tilin on oltava luotu samassa maassa ja että niissä on "
+"käytettävä samaa valuuttaa. Maan ulkopuoliset tilit eivät voi lähettää "
+"maksuja."
 
 #: pretix/plugins/paypal2/payment.py:334 pretix/plugins/paypal2/views.py:248
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr ""
+msgstr "PayPal-yhteyden muodostamisessa tapahtui virhe, yritä uudelleen."
 
 #: pretix/plugins/paypal2/payment.py:466 pretix/plugins/paypal2/payment.py:598
 #: pretix/plugins/paypal2/payment.py:658 pretix/plugins/paypal2/payment.py:721
@@ -27750,25 +27852,31 @@ msgid ""
 "again, there is a high chance of the payment succeeding on a second or third "
 "attempt. You can also try other payment methods, if available."
 msgstr ""
+"Maksusi on epäonnistunut tunnetun ongelman vuoksi PayPalissa. Yritä "
+"uudelleen, sillä on suuri mahdollisuus, että maksu onnistuu toisella tai "
+"kolmannella yrityksellä. Voit myös kokeilla muita maksutapoja, jos ne ovat "
+"käytettävissä."
 
 #: pretix/plugins/paypal2/payment.py:476 pretix/plugins/paypal2/payment.py:1010
 msgid ""
 "Something went wrong when requesting the payment status. Please try again."
-msgstr ""
+msgstr "Jokin meni pieleen, kun maksun tilaa pyydettiin. Yritä uudelleen."
 
 #: pretix/plugins/paypal2/payment.py:485 pretix/plugins/paypal2/payment.py:1019
 msgid "You may need to enable JavaScript for PayPal payments."
-msgstr ""
+msgstr "Sinun on ehkä otettava JavaScript käyttöön PayPal-maksuja varten."
 
 #: pretix/plugins/paypal2/payment.py:953
 msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
+"Summan palauttaminen PayPalin kautta epäonnistui: Alkuperäinen maksu ei "
+"sisällä vaadittuja tietoja automaattisen palautuksen myöntämiseksi."
 
 #: pretix/plugins/paypal2/payment.py:1087
 msgid "PayPal APM"
-msgstr ""
+msgstr "PayPal APM"
 
 #: pretix/plugins/paypal2/payment.py:1088
 msgid "PayPal Alternative Payment Methods"
@@ -27776,11 +27884,11 @@ msgstr "Vaihtoehtoiset PayPal-maksutavat"
 
 #: pretix/plugins/paypal2/signals.py:58
 msgid "Payment completed."
-msgstr ""
+msgstr "Maksu suoritettu."
 
 #: pretix/plugins/paypal2/signals.py:59
 msgid "Payment denied."
-msgstr ""
+msgstr "Maksu evätty."
 
 #: pretix/plugins/paypal2/signals.py:60
 msgid "Payment refunded."
@@ -27966,28 +28074,36 @@ msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
+"PayPalista palatessa tapahtui virhe: istunnon parametri ei täsmää. Yritä "
+"uudelleen."
 
 #: pretix/plugins/paypal2/views.py:267
 msgid ""
 "The email address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
+"PayPal-tilisi sähköpostiosoitetta ei ole vielä vahvistettu. Sinun on tehtävä "
+"tämä ennen kuin voit aloittaa maksujen vastaanottamisen."
 
 #: pretix/plugins/paypal2/views.py:273
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"PayPal-tilisi on nyt yhdistetty pretixiin. Voit muuttaa asetuksia "
+"yksityiskohtaisesti alla."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 msgid "Old check-in device API"
-msgstr ""
+msgstr "Vanha sisäänkirjautumislaitteen API"
 
 #: pretix/plugins/pretixdroid/apps.py:39
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
 msgstr ""
+"Tämän laajennuksen avulla voit käyttää pretixdroid- ja pretixdesk-"
+"sovelluksia tapahtumassasi."
 
 #: pretix/plugins/reports/accountingreport.py:58
 msgid "Accounting report"
@@ -27997,16 +28113,17 @@ msgstr "Kirjanpitoraportti"
 msgid ""
 "Download a PDF report of all sales and payments within a given time frame."
 msgstr ""
+"Lataa PDF-raportti kaikista myynneistä ja maksuista tietyn ajanjakson aikana."
 
 #: pretix/plugins/reports/accountingreport.py:62
 #: pretix/plugins/reports/exporters.py:246
 msgctxt "export_category"
 msgid "Analysis"
-msgstr ""
+msgstr "Analyysi"
 
 #: pretix/plugins/reports/accountingreport.py:82
 msgid "Ignore test mode orders"
-msgstr ""
+msgstr "Älä ota huomioon testitilan tilauksia"
 
 #: pretix/plugins/reports/accountingreport.py:90
 msgid "Split event series by date"
@@ -28014,11 +28131,11 @@ msgstr "Jaa tapahtumasarja päivämäärän mukaan"
 
 #: pretix/plugins/reports/accountingreport.py:128
 msgid "End"
-msgstr ""
+msgstr "Loppu"
 
 #: pretix/plugins/reports/accountingreport.py:139
 msgid "Report includes test orders which may be deleted later!"
-msgstr ""
+msgstr "Raportti sisältää testitilaukset, jotka voidaan poistaa myöhemmin!"
 
 #: pretix/plugins/reports/accountingreport.py:144
 msgid ""
@@ -28027,18 +28144,22 @@ msgid ""
 "might therefore be inaccurate with regards to orders that were changed in "
 "the time frame."
 msgstr ""
+"Raportin aikaväli sisältää tietoja, jotka on tuotettu vanhalla "
+"ohjelmistoversiolla, joka ei vielä tallentanut kaikkia raportin luomiseen "
+"tarvittavia tietoja. Raportti saattaa siksi olla epätarkka niiden tilausten "
+"osalta, joita on muutettu kyseisellä aikavälillä."
 
 #: pretix/plugins/reports/accountingreport.py:644
 #: pretix/plugins/reports/accountingreport.py:694
 #, python-brace-format
 msgid "Pending payments at {datetime}"
-msgstr ""
+msgstr "Vireillä olevat maksut {datetime} päivämäärällä"
 
 #: pretix/plugins/reports/accountingreport.py:751
 #: pretix/plugins/reports/accountingreport.py:789
 #, python-brace-format
 msgid "Total gift card value at {datetime}"
-msgstr ""
+msgstr "Lahjakortin kokonaisarvo {datetime} päivämäärällä"
 
 #: pretix/plugins/reports/accountingreport.py:770
 msgid "Gift card transactions (credit)"
@@ -28054,53 +28175,53 @@ msgstr "Avaa kohteet"
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
-msgstr ""
+msgstr "Raportin viejä"
 
 #: pretix/plugins/reports/apps.py:51
 msgid "Generate printable reports about your sales."
-msgstr ""
+msgstr "Luo tulostettavia raportteja myynnistäsi."
 
 #: pretix/plugins/reports/exporters.py:97
 #, python-format
 msgid "Page %d of %d"
-msgstr ""
+msgstr "Sivu %d / %d"
 
 #: pretix/plugins/reports/exporters.py:200
 #, python-format
 msgid "Page %d"
-msgstr ""
+msgstr "Sivu %d"
 
 #: pretix/plugins/reports/exporters.py:202
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "Luotu: %s"
 
 #: pretix/plugins/reports/exporters.py:245
 msgid "Order overview (PDF)"
-msgstr ""
+msgstr "Tilauskatsaus (PDF)"
 
 #: pretix/plugins/reports/exporters.py:247
 msgid "Download a PDF version of the key sales numbers per ticket type."
-msgstr ""
+msgstr "Lataa PDF-versio tärkeimmistä myyntiluvuista lipputyypeittäin."
 
 #: pretix/plugins/reports/exporters.py:275
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:58
 msgid "Orders by product"
-msgstr ""
+msgstr "Tilaukset tuotteittain"
 
 #: pretix/plugins/reports/exporters.py:275
 msgid "(excl. taxes)"
-msgstr ""
+msgstr "(ilman veroja)"
 
 #: pretix/plugins/reports/exporters.py:275
 msgid "(incl. taxes)"
-msgstr ""
+msgstr "(sisältää verot)"
 
 #: pretix/plugins/reports/exporters.py:285
 #: pretix/plugins/reports/exporters.py:304
 #, python-brace-format
 msgid "{axis} between {start} and {end}"
-msgstr ""
+msgstr "{axis} välillä {start} ja {end}"
 
 #: pretix/plugins/reports/exporters.py:390
 #: pretix/plugins/reports/exporters.py:391
@@ -28109,46 +28230,48 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:394
 #: pretix/plugins/reports/exporters.py:395
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:477
 msgid "Tax split list (PDF)"
-msgstr ""
+msgstr "Veronjakoluettelo (PDF)"
 
 #: pretix/plugins/reports/exporters.py:479
 msgid "Download a PDF list with the tax amounts included in each order."
-msgstr ""
+msgstr "Lataa PDF-luettelo kuhunkin tilaukseen sisältyvistä veromääristä."
 
 #: pretix/plugins/reports/exporters.py:556
 #, python-brace-format
 msgid "Orders by tax rate ({currency})"
-msgstr ""
+msgstr "Tilaukset verokannan mukaan ({currency})"
 
 #: pretix/plugins/reports/exporters.py:565
 #: pretix/plugins/reports/exporters.py:794
 #: pretix/plugins/reports/exporters.py:846
 #: pretix/plugins/reports/exporters.py:887
 msgid "Gross"
-msgstr ""
+msgstr "Brutto"
 
 #: pretix/plugins/reports/exporters.py:565
 #: pretix/plugins/reports/exporters.py:795
 #: pretix/plugins/reports/exporters.py:847
 #: pretix/plugins/reports/exporters.py:887
 msgid "Tax"
-msgstr ""
+msgstr "Vero"
 
 #: pretix/plugins/reports/exporters.py:650
 msgid "Tax split list"
-msgstr ""
+msgstr "Veronjakoluettelo"
 
 #: pretix/plugins/reports/exporters.py:652
 msgid "Download a spreadsheet with the tax amounts included in each order."
 msgstr ""
+"Lataa laskentataulukko, joka sisältää kuhunkin tilaukseen sisältyvät "
+"veromäärät."
 
 #: pretix/plugins/reports/exporters.py:658
 msgid "Taxes by country"
-msgstr ""
+msgstr "Verot maittain"
 
 #: pretix/plugins/reports/exporters.py:659
 msgid "Business customers"
@@ -28162,23 +28285,27 @@ msgstr "Maakoodi"
 #: pretix/plugins/returnurl/apps.py:30 pretix/plugins/returnurl/apps.py:33
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:5
 msgid "Redirection from order page"
-msgstr ""
+msgstr "Uudelleenohjaus tilaussivulta"
 
 #: pretix/plugins/returnurl/apps.py:37
 msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
+"Tämän laajennuksen avulla voit linkittää maksuja ja ohjata takaisin "
+"jälkikäteen. Tämä on hyödyllistä yhdessä API:n kanssa."
 
 #: pretix/plugins/returnurl/signals.py:90
 msgid "Redirection"
-msgstr ""
+msgstr "Uudelleenohjaus"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:7
 msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
+"Tämä ominaisuus on hyödyllinen, jos käytät vain pretixin maksukomponenttia "
+"mutta rakennat oman kassaliittymän muita vaiheita varten."
 
 #: pretix/plugins/returnurl/views.py:37
 msgid "Base redirection URLs"
@@ -28190,14 +28317,18 @@ msgid ""
 "prefixes. Enter one or more allowed URL prefix per line. URL prefixes must "
 "include a slash after the hostname."
 msgstr ""
+"Uudelleenohjaus sallitaan vain URL-osoitteisiin, jotka alkavat jollakin "
+"näistä etuliitteistä. Kirjoita yksi tai useampi sallittu URL-etuliite riviä "
+"kohti. URL-etuliitteissä on oltava isäntänimen jälkeen vinoviiva."
 
 #: pretix/plugins/sendmail/apps.py:38
 msgid "Send out emails to all your customers or specific groups of customers."
 msgstr ""
+"Lähetä sähköposteja kaikille asiakkaillesi tai tietyille asiakasryhmille."
 
 #: pretix/plugins/sendmail/forms.py:60
 msgid "Attachment"
-msgstr ""
+msgstr "Liitetiedosto"
 
 #: pretix/plugins/sendmail/forms.py:63
 msgid ""
@@ -28205,11 +28336,14 @@ msgid ""
 "being sorted into spam folders. We recommend only using PDFs of no more than "
 "2 MB in size."
 msgstr ""
+"Liitetiedoston lähettäminen lisää mahdollisuutta, että sähköpostisi ei saavu "
+"perille tai lajitellaan roskapostikansioon. Suosittelemme käyttämään vain "
+"PDF-tiedostoja, joiden koko on enintään 2 Mt."
 
 #: pretix/plugins/sendmail/forms.py:91
 msgctxt "sendmail_form"
 msgid "Waiting for"
-msgstr ""
+msgstr "Odotetaan"
 
 #: pretix/plugins/sendmail/forms.py:97 pretix/plugins/sendmail/forms.py:171
 #: pretix/plugins/sendmail/forms.py:349
@@ -28221,11 +28355,12 @@ msgstr "Rajoita tiettyyn tapahtumapäivään"
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting at or after"
 msgstr ""
+"Rajoitetaan tapahtumapäiviin, jotka alkavat tiettyyn aikaan tai sen jälkeen"
 
 #: pretix/plugins/sendmail/forms.py:108 pretix/plugins/sendmail/forms.py:182
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting before"
-msgstr ""
+msgstr "Rajoitetaan tapahtumapäiviin, jotka alkavat ennen"
 
 #: pretix/plugins/sendmail/forms.py:149
 msgctxt "sendmail_form"
@@ -28235,11 +28370,11 @@ msgstr "Lähetä osoitteeseen"
 #: pretix/plugins/sendmail/forms.py:159
 msgctxt "sendmail_form"
 msgid "Restrict to products"
-msgstr ""
+msgstr "Rajoita tuotteisiin"
 
 #: pretix/plugins/sendmail/forms.py:164
 msgid "Filter check-in status"
-msgstr ""
+msgstr "Suodata sisäänkirjautumisen tila"
 
 #: pretix/plugins/sendmail/forms.py:168
 msgctxt "sendmail_form"
@@ -28254,40 +28389,46 @@ msgstr "Sisällytä vain tällä päivämäärällä ja sen jälkeen tehdyt tila
 #: pretix/plugins/sendmail/forms.py:192
 msgctxt "sendmail_form"
 msgid "Restrict to orders created before"
-msgstr ""
+msgstr "Rajoita tilauksiin, jotka on luotu ennen"
 
 #: pretix/plugins/sendmail/forms.py:218
 msgid "Everyone who placed an order"
-msgstr ""
+msgstr "Kaikki tilauksen tehneet"
 
 #: pretix/plugins/sendmail/forms.py:222 pretix/plugins/sendmail/models.py:234
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr ""
+"Jokainen osallistuja (palautetaan tilauksen yhteyshenkilöön, jos "
+"osallistujan sähköpostiosoitetta ei ole annettu)"
 
 #: pretix/plugins/sendmail/forms.py:224 pretix/plugins/sendmail/models.py:235
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr ""
+"Molemmat (kaikki tilauksen yhteysosoitteet ja kaikkien osallistujien "
+"sähköpostiosoitteet)"
 
 #: pretix/plugins/sendmail/forms.py:230
 msgid "Attachment of tickets is disabled in this event's email settings."
 msgstr ""
+"Lippujen liittäminen on poistettu käytöstä tämän tapahtuman "
+"sähköpostiasetuksissa."
 
 #: pretix/plugins/sendmail/forms.py:234 pretix/plugins/sendmail/forms.py:388
 #: pretix/plugins/sendmail/views.py:267
 msgid "payment pending but already confirmed"
-msgstr ""
+msgstr "maksu vireillä, mutta jo vahvistettu"
 
 #: pretix/plugins/sendmail/forms.py:235 pretix/plugins/sendmail/forms.py:390
 #: pretix/plugins/sendmail/views.py:268
 msgid "payment pending (except unapproved or already confirmed)"
-msgstr ""
+msgstr "maksu vireillä (paitsi hyväksymättömät tai jo vahvistetut)"
 
 #: pretix/plugins/sendmail/forms.py:239 pretix/plugins/sendmail/forms.py:394
 #: pretix/plugins/sendmail/views.py:266
 msgid "pending with payment overdue"
-msgstr ""
+msgstr "vireillä ja maksu erääntynyt"
 
 #: pretix/plugins/sendmail/forms.py:242
 msgctxt "sendmail_form"
@@ -28297,52 +28438,52 @@ msgstr "Rajoita tilauksiin, joilla on status"
 #: pretix/plugins/sendmail/forms.py:267 pretix/plugins/sendmail/forms.py:271
 msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
-msgstr ""
+msgstr "Rajoita vastaanottajiin, joilla on sisäänkirjautuminen listalla"
 
 #: pretix/plugins/sendmail/forms.py:373
 msgid "Type of schedule time"
-msgstr ""
+msgstr "Aikataulutyyppi aika"
 
 #: pretix/plugins/sendmail/forms.py:376
 msgid "Absolute"
-msgstr ""
+msgstr "Ehdottomasti"
 
 #: pretix/plugins/sendmail/forms.py:377
 msgid "Relative, before event start"
-msgstr ""
+msgstr "Suhteellinen, ennen tapahtuman alkua"
 
 #: pretix/plugins/sendmail/forms.py:378
 msgid "Relative, before event end"
-msgstr ""
+msgstr "Suhteellinen, ennen tapahtuman päättymistä"
 
 #: pretix/plugins/sendmail/forms.py:379
 msgid "Relative, after event start"
-msgstr ""
+msgstr "Suhteellinen, tapahtuman alkamisen jälkeen"
 
 #: pretix/plugins/sendmail/forms.py:380
 msgid "Relative, after event end"
-msgstr ""
+msgstr "Suhteellinen, tapahtuman päättymisen jälkeen"
 
 #: pretix/plugins/sendmail/forms.py:397
 msgctxt "sendmail_from"
 msgid "Restrict to orders with status"
-msgstr ""
+msgstr "Rajoita tilauksiin, joilla on status"
 
 #: pretix/plugins/sendmail/forms.py:412
 msgid "Please specify the send date"
-msgstr ""
+msgstr "Ilmoita lähetyspäivä"
 
 #: pretix/plugins/sendmail/forms.py:417
 msgid "Please specify the offset days and time"
-msgstr ""
+msgstr "Ilmoita siirtopäivät ja kellonaika"
 
 #: pretix/plugins/sendmail/forms.py:428
 msgid "Please specify a product"
-msgstr ""
+msgstr "Määritä tuote"
 
 #: pretix/plugins/sendmail/models.py:51
 msgid "scheduled"
-msgstr ""
+msgstr "ajastettu"
 
 #: pretix/plugins/sendmail/models.py:52
 msgid "failed"
@@ -28350,15 +28491,15 @@ msgstr "epäonnistui"
 
 #: pretix/plugins/sendmail/models.py:53
 msgid "completed"
-msgstr ""
+msgstr "valmis"
 
 #: pretix/plugins/sendmail/models.py:54
 msgid "missed"
-msgstr ""
+msgstr "puuttunut"
 
 #: pretix/plugins/sendmail/models.py:233
 msgid "Everyone who created a ticket order"
-msgstr ""
+msgstr "Kaikki, jotka ovat luoneet lipputilauksen"
 
 #: pretix/plugins/sendmail/models.py:239
 msgid "Everyone"
