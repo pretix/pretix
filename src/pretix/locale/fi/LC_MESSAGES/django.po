@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-08 16:00+0000\n"
+"PO-Revision-Date: 2025-02-08 22:16+0000\n"
 "Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -26070,15 +26070,15 @@ msgstr "Moodi"
 
 #: pretix/multidomain/models.py:69
 msgid "Known domain"
-msgstr ""
+msgstr "Tunnettu domaini"
 
 #: pretix/multidomain/models.py:70
 msgid "Known domains"
-msgstr ""
+msgstr "Tunnetut domainit"
 
 #: pretix/plugins/autocheckin/apps.py:30 pretix/plugins/autocheckin/apps.py:33
 msgid "Automated check-in"
-msgstr ""
+msgstr "Automaattinen sisäänkirjautuminen"
 
 #: pretix/plugins/autocheckin/apps.py:34 pretix/plugins/badges/apps.py:34
 #: pretix/plugins/banktransfer/apps.py:35
@@ -26090,11 +26090,12 @@ msgstr ""
 #: pretix/plugins/stripe/apps.py:35 pretix/plugins/ticketoutputpdf/apps.py:48
 #: pretix/plugins/webcheckin/apps.py:34
 msgid "the pretix team"
-msgstr ""
+msgstr "pretix tiimi"
 
 #: pretix/plugins/autocheckin/apps.py:39
 msgid "Automatically check-in specific tickets after they have been sold."
 msgstr ""
+"Kirjaa tietyt liput automaattisesti sisään sen jälkeen, kun ne on myyty."
 
 #: pretix/plugins/autocheckin/forms.py:60
 #: pretix/plugins/autocheckin/models.py:82
@@ -26110,6 +26111,7 @@ msgid ""
 "When restricting by payment method, the rule should run after the payment "
 "was received."
 msgstr ""
+"Maksutavan rajoittaessa säännön tulee toimia maksun vastaanottamisen jälkeen."
 
 #: pretix/plugins/autocheckin/models.py:36
 msgid "After order was placed"
@@ -26124,6 +26126,8 @@ msgid ""
 "If you keep this empty, all lists that match the purchased product will be "
 "used."
 msgstr ""
+"Jos pidät tämän tyhjänä, käytetään kaikkia ostettua tuotetta vastaavia "
+"listoja."
 
 #: pretix/plugins/autocheckin/models.py:59
 msgid "All sales channels"
@@ -26187,7 +26191,7 @@ msgstr "Automaattisen sisäänkirjautumisen säännöt"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:11
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
 msgid "You haven't created any rules yet."
-msgstr ""
+msgstr "Et ole vielä luonut sääntöjä."
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:17
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:22
@@ -26200,11 +26204,11 @@ msgstr "Maksutavat"
 
 #: pretix/plugins/autocheckin/views.py:119 pretix/plugins/sendmail/views.py:603
 msgid "Your rule has been created."
-msgstr ""
+msgstr "Sääntösi on luotu."
 
 #: pretix/plugins/autocheckin/views.py:209 pretix/plugins/sendmail/views.py:730
 msgid "The selected rule has been deleted."
-msgstr ""
+msgstr "Valittu sääntö on poistettu."
 
 #: pretix/plugins/badges/apps.py:30 pretix/plugins/badges/apps.py:33
 #: pretix/plugins/badges/signals.py:54
@@ -26214,7 +26218,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
 msgid "Badges"
-msgstr ""
+msgstr "Kulkukortit"
 
 #: pretix/plugins/badges/apps.py:38
 msgid ""
@@ -26222,57 +26226,63 @@ msgid ""
 "download the badges in the backend or automatically print them with our "
 "check-in apps."
 msgstr ""
+"Luo automaattisesti kulkukortteja tai nimilappuja osallistujillesi. Voit "
+"ladata ne taustaohjelmassa tai tulostaa ne automaattisesti "
+"sisäänkirjautumissovelluksillamme."
 
 #: pretix/plugins/badges/exporters.py:89
 msgid "One badge per page"
-msgstr ""
+msgstr "Yksi Kulkukortti per sivu"
 
 #: pretix/plugins/badges/exporters.py:97
 msgid "4 landscape A6 pages on one A4 page"
-msgstr ""
+msgstr "4 vaakasuuntaista A6-sivua yhdellä A4-sivulla"
 
 #: pretix/plugins/badges/exporters.py:105
 msgid "4 portrait A6 pages on one A4 page"
-msgstr ""
+msgstr "4 pystysuuntaista A6-sivua yhdellä A4-sivulla"
 
 #: pretix/plugins/badges/exporters.py:113
 msgid "8 landscape A7 pages on one A4 page"
-msgstr ""
+msgstr "8 vaakasuuntaista A7-sivua yhdellä A4-sivulla"
 
 #: pretix/plugins/badges/exporters.py:121
 msgid "8 portrait A7 pages on one A4 page"
-msgstr ""
+msgstr "8 pystysuuntaista A7-sivua yhdellä A4-sivulla"
 
 #: pretix/plugins/badges/exporters.py:353
 msgid "None of the selected products is configured to print badges."
 msgstr ""
+"Mitään valituista tuotteista ei ole määritetty tulostamaan kulkukortteja."
 
 #: pretix/plugins/badges/exporters.py:421
 msgid "Attendee badges"
-msgstr ""
+msgstr "Osallistujien kulkukortit"
 
 #: pretix/plugins/badges/exporters.py:422
 #: pretix/plugins/ticketoutputpdf/exporters.py:69
 msgctxt "export_category"
 msgid "PDF collections"
-msgstr ""
+msgstr "PDF-kokoelmat"
 
 #: pretix/plugins/badges/exporters.py:423
 msgid "Download all attendee badges as one large PDF for printing."
 msgstr ""
+"Lataa kaikki osallistujien kulkukortit yhtenä suurena PDF-tiedostona "
+"tulostettavaksi."
 
 #: pretix/plugins/badges/exporters.py:444
 #: pretix/plugins/ticketoutputpdf/exporters.py:80
 msgid "Include pending orders"
-msgstr ""
+msgstr "Sisällä odottavat tilaukset"
 
 #: pretix/plugins/badges/exporters.py:449
 msgid "Include add-on or bundled positions"
-msgstr ""
+msgstr "Sisällytä lisäosat tai niputetut paikat"
 
 #: pretix/plugins/badges/exporters.py:454
 msgid "Rendering option"
-msgstr ""
+msgstr "Renderöintivaihtoehto"
 
 #: pretix/plugins/badges/exporters.py:459
 msgid ""
@@ -26281,6 +26291,9 @@ msgid ""
 "Please note that your individual badge layouts must already be in the "
 "correct size."
 msgstr ""
+"Tämän vaihtoehdon avulla voit kohdistaa useita merkkejä yhdelle sivulle, jos "
+"esimerkiksi haluat tulostaa tarraarkille tavallisella toimistotulostimella. "
+"Huomaa, että yksittäisten merkkiasettelujen on oltava jo oikean kokoisia."
 
 #: pretix/plugins/badges/exporters.py:465
 msgid "Start event date"
@@ -26288,7 +26301,7 @@ msgstr "Tapahtuman alkamispäivä"
 
 #: pretix/plugins/badges/exporters.py:468
 msgid "Only include tickets for dates on or after this date."
-msgstr ""
+msgstr "Sisällytä vain tämän päivämäärän tai sen jälkeisten päivien liput."
 
 #: pretix/plugins/badges/exporters.py:472
 msgid "End event date"
@@ -26312,7 +26325,7 @@ msgstr "Tilauksen päättymispäivä"
 
 #: pretix/plugins/badges/exporters.py:489
 msgid "Only include tickets for dates on or before this date."
-msgstr ""
+msgstr "Sisällytä vain tämän päivämäärän tai sitä aikaisempien päivien liput."
 
 #: pretix/plugins/badges/exporters.py:493
 #: pretix/plugins/checkinlists/exporters.py:117
@@ -26320,7 +26333,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:677
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Sort by"
-msgstr ""
+msgstr "Lajittele"
 
 #: pretix/plugins/badges/exporters.py:661
 #: pretix/plugins/ticketoutputpdf/exporters.py:242
@@ -26329,64 +26342,68 @@ msgid ""
 "invalid values in your databases, such as answers to number questions which "
 "are not a number."
 msgstr ""
+"Tietojasi ei voitu muuntaa pyydetyllä tavalla. Tämä voi johtua "
+"tietokantojesi virheellisistä arvoista, kuten vastauksista "
+"numerokysymyksiin, jotka eivät ole numeroita."
 
 #: pretix/plugins/badges/forms.py:33
 msgid "Template"
-msgstr ""
+msgstr "Malli"
 
 #: pretix/plugins/badges/forms.py:34
 msgid ""
 "You can modify the layout or change to a different page size in the next "
 "step."
 msgstr ""
+"Voit muokata asettelua tai vaihtaa toiseen sivukokoon seuraavassa vaiheessa."
 
 #: pretix/plugins/badges/forms.py:51
 msgid "(Do not print badges)"
-msgstr ""
+msgstr "(Älä tulosta kulkukortteja)"
 
 #: pretix/plugins/badges/forms.py:84
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:15
 msgid "Badge layout"
-msgstr ""
+msgstr "Kulkukortin layout"
 
 #: pretix/plugins/badges/signals.py:176
 msgid "Badge layout created."
-msgstr ""
+msgstr "Kulkukortin layout luotu."
 
 #: pretix/plugins/badges/signals.py:177
 msgid "Badge layout deleted."
-msgstr ""
+msgstr "Kulkukortin layout poistettu."
 
 #: pretix/plugins/badges/signals.py:178
 msgid "Badge layout changed."
-msgstr ""
+msgstr "Kulkukortin layout muutettu."
 
 #: pretix/plugins/badges/signals.py:182
 #, python-brace-format
 msgid "Badge layout {val}"
-msgstr ""
+msgstr "Kulkukortin layout {val}"
 
 #: pretix/plugins/badges/templates.py:83
 msgid "A6 landscape"
-msgstr ""
+msgstr "A6 vaakataso"
 
 #: pretix/plugins/badges/templates.py:88
 msgid "A6 portrait"
-msgstr ""
+msgstr "A6 pystysuunta"
 
 #: pretix/plugins/badges/templates.py:93
 msgid "A7 landscape"
-msgstr ""
+msgstr "A7 vaakasuunta"
 
 #: pretix/plugins/badges/templates.py:98
 msgid "A7 portrait"
-msgstr ""
+msgstr "A7 pystysuunta"
 
 #: pretix/plugins/badges/templates.py:104
 #, python-brace-format
 msgid "{width} x {height} mm butterfly badge"
-msgstr ""
+msgstr "{width} x {height} mm perhosmerkki"
 
 #: pretix/plugins/badges/templates.py:203
 #: pretix/plugins/badges/templates.py:208
@@ -26402,24 +26419,25 @@ msgstr ""
 #: pretix/plugins/badges/templates.py:259
 #, python-brace-format
 msgid "{width} x {height} mm label"
-msgstr ""
+msgstr "{width} x {height} mm etiketti"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
 msgid "Print badges"
-msgstr ""
+msgstr "Tulosta kulkukortit"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Haluatko varmasti poistaa kulkukortin layoutin <strong>%(layout)s</strong>?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr ""
+msgstr "Kulkukortti layout:%(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:26
 msgid "Save & continue"
@@ -26427,34 +26445,34 @@ msgstr "Tallenna ja jatka"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
-msgstr ""
+msgstr "Et ole luonut vielä yhtään kulkukortin layouttia."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
 msgid "Create a new badge layout"
-msgstr ""
+msgstr "Luo uusi kulkukortin layout"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:63
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
 msgid "Make default"
-msgstr ""
+msgstr "Aseta oletusarvoksi"
 
 #: pretix/plugins/badges/views.py:89
 msgid "The new badge layout has been created."
-msgstr ""
+msgstr "Uusi kulkukortin layout on luotu."
 
 #: pretix/plugins/badges/views.py:150 pretix/plugins/badges/views.py:180
 #: pretix/plugins/badges/views.py:210
 msgid "The requested badge layout does not exist."
-msgstr ""
+msgstr "Pyydettyä nimilapun layoutia ei ole olemassa."
 
 #: pretix/plugins/badges/views.py:192
 msgid "The selected badge layout been deleted."
-msgstr ""
+msgstr "Valittu kulkukortin layout on poistettu."
 
 #: pretix/plugins/badges/views.py:214
 msgid "Badge layout: {}"
-msgstr ""
+msgstr "Kulkukortin layout: {}"
 
 #: pretix/plugins/banktransfer/apps.py:31
 #: pretix/plugins/banktransfer/apps.py:34
@@ -26462,18 +26480,20 @@ msgstr ""
 #: pretix/plugins/banktransfer/signals.py:50
 #: pretix/plugins/banktransfer/signals.py:87
 msgid "Bank transfer"
-msgstr ""
+msgstr "Tilisiirto"
 
 #: pretix/plugins/banktransfer/apps.py:39
 msgid ""
 "Accept payments from your customers using classical wire transfer methods "
 "with your own bank account."
 msgstr ""
+"Hyväksy maksut asiakkailta perinteisillä pankkisiirtotavoilla omalla "
+"pankkitililläsi."
 
 #: pretix/plugins/banktransfer/apps.py:53
 msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
-msgstr ""
+msgstr "Asenna python-paketti chardet parantaaksesi CSV-tuontiominaisuuksia."
 
 #: pretix/plugins/banktransfer/payment.py:75
 msgid ""
@@ -26483,18 +26503,22 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"Olen ymmärtänyt, että ihmiset maksavat lipun hinnan suoraan pankkitililleni, "
+"eikä pretix voi automaattisesti tietää mitä maksuja on saapunut. Siksi joko "
+"merkitsen maksut suoritetuiksi manuaalisesti tai tuon säännöllisesti "
+"digitaalisen tiliotteen antaakseni tarvittavat tiedot."
 
 #: pretix/plugins/banktransfer/payment.py:82
 msgid "Bank account type"
-msgstr ""
+msgstr "Pankkitili tyyppi"
 
 #: pretix/plugins/banktransfer/payment.py:85
 msgid "SEPA bank account"
-msgstr ""
+msgstr "SEPA-pankkitili"
 
 #: pretix/plugins/banktransfer/payment.py:86
 msgid "Other bank account"
-msgstr ""
+msgstr "Muu pankkitili"
 
 #: pretix/plugins/banktransfer/payment.py:91
 msgid "Name of account holder"
