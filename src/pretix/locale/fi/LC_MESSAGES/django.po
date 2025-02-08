@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
 "PO-Revision-Date: 2025-02-08 22:16+0000\n"
-"Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
+"Last-Translator: Karoliina Grohn <karoliina.grohn@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -26522,13 +26522,15 @@ msgstr "Muu pankkitili"
 
 #: pretix/plugins/banktransfer/payment.py:91
 msgid "Name of account holder"
-msgstr ""
+msgstr "Tilin omistajan nimi"
 
 #: pretix/plugins/banktransfer/payment.py:93
 msgid ""
 "Please note: special characters other than letters, numbers, and some "
 "punctuation can cause problems with some banks."
 msgstr ""
+"Huomioithan: erikoismerkit lukuunottamatta kirjaimia, numeroita ja joitakin "
+"välimerkkejä saattavat aiheuttaa ongelmia joissakin pankeissa."
 
 #: pretix/plugins/banktransfer/payment.py:103
 #: pretix/plugins/banktransfer/payment.py:466
@@ -26538,7 +26540,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:113
 #: pretix/plugins/banktransfer/payment.py:467
@@ -26546,16 +26548,17 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:16
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
+#, fuzzy
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:123
 msgid "Name of bank"
-msgstr ""
+msgstr "Pankin nimi"
 
 #: pretix/plugins/banktransfer/payment.py:133
 msgid "Bank account details"
-msgstr ""
+msgstr "Tilitiedot"
 
 #: pretix/plugins/banktransfer/payment.py:136
 msgid ""
@@ -26563,6 +26566,9 @@ msgid ""
 "transfer payment. If you have lots of international customers, they might "
 "need your full address and your bank's full address."
 msgstr ""
+"Sisällytä kaikki, mitä asiakkaasi saattavat tarvita pankkisiirtomaksun "
+"lähettämiseen. Jos sinulla on paljon kansainvälisiä asiakkaita, he saattavat "
+"tarvita osoitteesi ja pankkisi osoitteen kokonaisuudessaan."
 
 #: pretix/plugins/banktransfer/payment.py:142
 msgid ""
@@ -26570,36 +26576,41 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
+"SEPA-tilien osalta voit jättää tämän kohdan tyhjäksi. Muussa tapauksessa "
+"lisää kaikki, mitä asiakkaasi tarvitsevat rahansiirtoa varten, esim. "
+"tilinumerot, reititysnumerot, osoitteet jne."
 
 #: pretix/plugins/banktransfer/payment.py:161
 msgid "Do not include hyphens in the payment reference."
-msgstr ""
+msgstr "Maksuviitteessä ei saa olla väliviivoja."
 
 #: pretix/plugins/banktransfer/payment.py:162
 msgid "This is required in some countries."
-msgstr ""
+msgstr "Tämä vaaditaan joissakin maissa."
 
 #: pretix/plugins/banktransfer/payment.py:166
 msgid "Include invoice number in the payment reference."
-msgstr ""
+msgstr "Sisällytä laskun numero maksuviitteeseen."
 
 #: pretix/plugins/banktransfer/payment.py:170
 msgid "Prefix for the payment reference"
-msgstr ""
+msgstr "Maksuviitteen etuliite"
 
 #: pretix/plugins/banktransfer/payment.py:174
 msgid "Additional text to show on pending orders"
-msgstr ""
+msgstr "Vireillä olevissa tilauksissa näytettävä lisäteksti"
 
 #: pretix/plugins/banktransfer/payment.py:175
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
 msgstr ""
+"Tämä teksti näytetään tilauksen vahvistussivulla vireillä olevien tilausten "
+"vakiotekstin lisäksi."
 
 #: pretix/plugins/banktransfer/payment.py:184
 msgid "IBAN blocklist for refunds"
-msgstr ""
+msgstr "IBAN-estoluettelo palautuksia varten"
 
 #: pretix/plugins/banktransfer/payment.py:187
 msgid ""
@@ -26611,12 +26622,22 @@ msgid ""
 "can e.g. ban DE0012345 to ban all German IBANs with the bank identifier "
 "starting with 12345."
 msgstr ""
+"Laita yksi IBAN tai IBAN-etuliite riviä kohti. Järjestelmä ei yritä lähettää "
+"palautuksia mihinkään näistä IBAN-tunnuksista. Hyödyllinen esim. jos saat "
+"paljon ”välitettyjä maksuja” kolmannen osapuolen maksupalveluntarjoajalta. "
+"Voit myös luetella maakoodeja, kuten ”GB”, jos et halua koskaan lähettää "
+"palautuksia tietyn maan IBAN-tilinumeroihin. Tarkistusmerkit jätetään "
+"huomiotta vertailussa, joten voit esimerkiksi kieltää DE0012345:n "
+"kieltämällä kaikki saksalaiset IBAN-tunnukset, joiden pankkitunnus alkaa "
+"12345:llä."
 
 #: pretix/plugins/banktransfer/payment.py:218
 msgid ""
 "Allow users to enter an additional email address that the invoice will be "
 "sent to."
 msgstr ""
+"Anna käyttäjien syöttää ylimääräinen sähköpostiosoite, johon lasku "
+"lähetetään."
 
 #: pretix/plugins/banktransfer/payment.py:220
 msgid ""
@@ -26625,6 +26646,10 @@ msgid ""
 "sent to this email address, subsequent invoice corrections will not be sent "
 "automatically. Only the invoice will be sent, no additional information."
 msgstr ""
+"Tämä edellyttää, että laskun luontiasetukset sallivat laskun luomisen heti "
+"maksutavan valinnan jälkeen. Vain lasku lähetetään tähän "
+"sähköpostiosoitteeseen, myöhempiä laskun korjauksia ei lähetetä "
+"automaattisesti. Vain lasku lähetetään, ei lisätietoja."
 
 #: pretix/plugins/banktransfer/payment.py:229
 msgid "Invoice email subject"
@@ -26643,19 +26668,21 @@ msgid ""
 "Only allow choosing this payment provider for customers who enter an invoice "
 "address and select \"Business or institutional customer\"."
 msgstr ""
+"Salli tämän palveluntarjoajan valitseminen vain asiakkaille, jotka antavat "
+"laskutusosoitteen ja valitsevat vaihtoehdon ”Yritys- tai yhteisöasiakas”."
 
 #: pretix/plugins/banktransfer/payment.py:288
 msgid "Please fill out your bank account details."
-msgstr ""
+msgstr "Ole hyvä ja anna tilitietosi."
 
 #: pretix/plugins/banktransfer/payment.py:292
 msgid "Please enter your bank account details."
-msgstr ""
+msgstr "Ole hyvä ja kirjoita tilitietosi."
 
 #: pretix/plugins/banktransfer/payment.py:332
 msgid ""
 "Please additionally send my invoice directly to our accounting department"
-msgstr ""
+msgstr "Ole hyvä ja lähetä laskuni lisäksi suoraan tilitoimistoomme"
 
 #: pretix/plugins/banktransfer/payment.py:336
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:132
@@ -26667,11 +26694,13 @@ msgid ""
 "The invoice recipient will receive an email which includes the invoice and "
 "your email address so they know who placed this order."
 msgstr ""
+"Laskun vastaanottaja saa sähköpostiviestin, joka sisältää laskun ja "
+"sähköpostiosoitteesi, jotta hän tietää, kuka teki tilauksen."
 
 #: pretix/plugins/banktransfer/payment.py:457
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
 msgid "Please transfer the full amount to the following bank account:"
-msgstr ""
+msgstr "Ole hyvä ja siirrä koko summa seuraavalle pankkitilille:"
 
 #: pretix/plugins/banktransfer/payment.py:465
 #: pretix/plugins/banktransfer/payment.py:654
@@ -26683,7 +26712,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:32
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:35
 msgid "Account holder"
-msgstr ""
+msgstr "Tilinomistaja"
 
 #: pretix/plugins/banktransfer/payment.py:468
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:17
@@ -26695,20 +26724,20 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:47
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:55
 msgid "Bank"
-msgstr ""
+msgstr "Pankki"
 
 #: pretix/plugins/banktransfer/payment.py:548
 msgid "Invalid IBAN/BIC"
-msgstr ""
+msgstr "Viallinen IBAN/BIC"
 
 #: pretix/plugins/banktransfer/payment.py:624
 #, python-brace-format
 msgid "Bank account {iban}"
-msgstr ""
+msgstr "Pankkitili {iban}"
 
 #: pretix/plugins/banktransfer/payment.py:640
 msgid "Can only create a bank transfer refund from an existing payment."
-msgstr ""
+msgstr "Voit luoda pankkisiirtopalautuksen vain olemassa olevasta maksusta."
 
 #: pretix/plugins/banktransfer/payment.py:660
 msgid "BIC (optional)"
@@ -26725,7 +26754,7 @@ msgstr "Epäkelpo syöte, katso tiedot alta."
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:12
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:9
 msgid "Payer"
-msgstr ""
+msgstr "Maksaja"
 
 #: pretix/plugins/banktransfer/refund_export.py:93
 msgid "Refund"
@@ -26738,7 +26767,7 @@ msgstr "Hyvitys"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:4
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:7
 msgid "Import bank data"
-msgstr ""
+msgstr "Tuo pankkitiedot"
 
 #: pretix/plugins/banktransfer/signals.py:66
 #: pretix/plugins/banktransfer/signals.py:102
@@ -26747,7 +26776,7 @@ msgstr "Vie hyvitykset"
 
 #: pretix/plugins/banktransfer/signals.py:126
 msgid "The invoice was sent to the designated email address."
-msgstr ""
+msgstr "Lasku lähetettiin annettuun sähköpostiosoitteeseen."
 
 #: pretix/plugins/banktransfer/signals.py:132
 #, python-brace-format
@@ -26766,20 +26795,28 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Hei,\n"
+"\n"
+"Sait tämän viestin, koska  {event} tilaus tehtiin osoittesta  {order_email} "
+"ja meitä on pyydetty lähettämään lasku sinulle.\n"
+"\n"
+"Ystävällisin terveisin,  \n"
+"\n"
+" {event} tiimi"
 
 #: pretix/plugins/banktransfer/tasks.py:171
 msgid "Automatic split to multiple orders not possible."
-msgstr ""
+msgstr "Useampien tilausten automaattinen jakaminen ei mahdollinen."
 
 #: pretix/plugins/banktransfer/tasks.py:187
 msgid "The order has already been canceled."
-msgstr ""
+msgstr "Tilaus on jo peruttu."
 
 #: pretix/plugins/banktransfer/tasks.py:193
 #: pretix/plugins/banktransfer/views.py:106
 #: pretix/plugins/banktransfer/views.py:193
 msgid "Currencies do not match."
-msgstr ""
+msgstr "Valuutat eivät täsmää."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:6
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:6
@@ -26787,6 +26824,8 @@ msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
+"Kun saat ostoksesi valmiiksi, pyydämme sinua siirtämään rahat seuraavalle "
+"pankkitilille henkilökohtaista viitekoodia käyttäen:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
@@ -26794,12 +26833,14 @@ msgid ""
 "Please do not yet start a payment. We'll assign you a personal reference "
 "code after you completed the order."
 msgstr ""
+"Älä alota vielä maksua. Annamme sinulle henkilökohtaisen viitenumeron, kun "
+"tilauksesi on valmis."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:39
 msgid "Reference code (important):"
-msgstr ""
+msgstr "Viitenumero (tärkeä):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:31
@@ -26807,6 +26848,8 @@ msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
 msgstr ""
+"Annamme sinulle henkilökohtaisen viitekoodin, jota voit käyttää tilauksen "
+"tekemisen jälkeen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
@@ -26814,11 +26857,13 @@ msgid ""
 "After completing your purchase, we will ask you to transfer the money to our "
 "bank account, using a personal reference code."
 msgstr ""
+"Pyydämme sinua siirtämään rahat pankkitilillemme henkilökohtaista "
+"viitenumeroa käyttäen, kun tilauksesi on valmis."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:43
 #, python-format
 msgid "We will send a copy of your invoice directly to %(recipient)s."
-msgstr ""
+msgstr "Lähetämme kopion laskustasi suoraan %(recipient)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:6
 msgid "Send invoice to"
@@ -26834,7 +26879,7 @@ msgstr "Siirron summa"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:38
 msgid "Reference code"
-msgstr ""
+msgstr "Viitenumero"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -26842,6 +26887,9 @@ msgid ""
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
 msgstr ""
+"Emme ole pystyneet määrittämään automaattisesti, miten tiedostosi sarakkeet "
+"on kohdistettu. Auta meitä valitsemalla, mitkä sarakkeet sisältävät "
+"millaisia tietoja."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:95
 msgid ""
@@ -32315,11 +32363,12 @@ msgstr ""
 #: pretix/presale/views/cart.py:439
 msgid "We applied the voucher to as many products in your cart as we could."
 msgstr ""
+"Sovelsimme kuponkia niin moneen tuotteeseen ostoskorissasi kuin pystyimme."
 
 #: pretix/presale/views/cart.py:458 pretix/presale/views/cart.py:466
 msgid ""
 "The gift card has been saved to your cart. Please continue your checkout."
-msgstr ""
+msgstr "Lahjakortti on tallennettu ostoskoriisi. Ole hyvä ja jatka maksamaan."
 
 #: pretix/presale/views/cart.py:502
 msgid "Your cart has been updated."
@@ -32336,18 +32385,20 @@ msgstr "Tuotteet lisätty ostoskoriin onnistuneesti."
 #: pretix/presale/views/cart.py:570 pretix/presale/views/event.py:536
 #: pretix/presale/views/widget.py:377
 msgid "Tickets for this event cannot be purchased on this sales channel."
-msgstr ""
+msgstr "Tämän tapahtuman lippuja ei voi ostaa tältä ostokanavalta."
 
 #: pretix/presale/views/cart.py:709
 msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
 msgstr ""
+"Lahjakortti on tallennettu ostoskoriisi. Ole hyvä ja valitse tuotteet, jotka "
+"haluat ostaa."
 
 #: pretix/presale/views/cart.py:737
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
-msgstr ""
+msgstr "Emme pystyneet löytämään määriteltyä päivämäärää."
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
@@ -32362,20 +32413,25 @@ msgid ""
 "Your account has been created. Please follow the link in the email we sent "
 "you to activate your account and choose a password."
 msgstr ""
+"Tilisi on luotu. Ole hyvä ja seuraa sähköpostiisi lähetettyä linkkiä tilisi "
+"aktivointiin ja salasanan valintaan."
 
 #: pretix/presale/views/customer.py:268 pretix/presale/views/customer.py:271
 #: pretix/presale/views/customer.py:607 pretix/presale/views/customer.py:613
 msgid "You clicked an invalid link."
-msgstr ""
+msgstr "Valitsit virheellisen linkin."
 
 #: pretix/presale/views/customer.py:291
 msgid "Your new password has been set! You can now use it to log in."
 msgstr ""
+"Uusi salasanasi on asetettu! Voit nyt käyttää sitä sisäänkirjautumiseen."
 
 #: pretix/presale/views/customer.py:331
 msgid ""
 "We've sent you an email with further instructions on resetting your password."
 msgstr ""
+"Olemme lähettäneet sinulle sähköpostin, jossa on tarkemmat ohjeet salasanan "
+"palauttamiseen."
 
 #: pretix/presale/views/customer.py:575
 msgid ""
@@ -32383,12 +32439,17 @@ msgid ""
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
 msgstr ""
+"Muutokset on tallennettu. Olemme lähettäneet sinulle sähköpostin, jossa on "
+"linkki sähköpostiosoitteesi päivittämiseen. Tilisi sähköposti vaihtuu heti, "
+"kun avaat linkin."
 
 #: pretix/presale/views/customer.py:624
 msgid ""
 "Your email address has not been updated since the address is already in use "
 "for another customer account."
 msgstr ""
+"Sähköpostiosoitettasi ei ole päivitetty, koska osoite on jo toisen "
+"asiakastilin käytössä."
 
 #: pretix/presale/views/customer.py:627
 msgid "Your email address has been updated."
@@ -32400,25 +32461,27 @@ msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
 msgstr ""
+"Emme pystyneet käyttämään sisäänkirjautumistasi, koska sähköpostiosoite "
+"{email} on jo käytössä eri tilillä tässä systeemissä."
 
 #: pretix/presale/views/event.py:895
 msgid "Unknown event code or not authorized to access this event."
-msgstr ""
+msgstr "Tuntematon tapahtumakoodi tai ei oikeutta päästä tapahtumaan."
 
 #: pretix/presale/views/event.py:902
 msgctxt "subevent"
 msgid "No date selected."
-msgstr ""
+msgstr "Päivämäärää ei ole valittu."
 
 #: pretix/presale/views/event.py:905
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr ""
+msgstr "Tuntematon päivämäärä."
 
 #: pretix/presale/views/event.py:930 pretix/presale/views/event.py:938
 #: pretix/presale/views/event.py:941
 msgid "Please go back and try again."
-msgstr ""
+msgstr "Palaa takaisin ja yritä uudelleen."
 
 #: pretix/presale/views/event.py:954
 msgid "Fake date time"
@@ -32434,29 +32497,29 @@ msgstr "Tämä ominaisuus on käytettävissä vain testitilassa."
 
 #: pretix/presale/views/event.py:985
 msgid "Time machine disabled!"
-msgstr ""
+msgstr "Aikakone poissa käytöstä!"
 
 #: pretix/presale/views/order.py:367 pretix/presale/views/order.py:432
 #: pretix/presale/views/order.py:513
 msgid "The payment for this order cannot be continued."
-msgstr ""
+msgstr "Tämän tilauksen maksua ei voida jatkaa."
 
 #: pretix/presale/views/order.py:372 pretix/presale/views/order.py:441
 #: pretix/presale/views/order.py:522 pretix/presale/views/order.py:564
 msgid "The payment is too late to be accepted."
-msgstr ""
+msgstr "Maksu on liian myöhässä hyväksyttäväksi."
 
 #: pretix/presale/views/order.py:461
 msgid "An invoice has been generated."
-msgstr ""
+msgstr "Lasku on luotu."
 
 #: pretix/presale/views/order.py:559
 msgid "The payment method for this order cannot be changed."
-msgstr ""
+msgstr "Tämän tilauksen maksutapaa ei voi muuttaa."
 
 #: pretix/presale/views/order.py:570
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "Tämän tilauksen maksua käsitellään parhaillaan."
 
 #: pretix/presale/views/order.py:851 pretix/presale/views/order.py:923
 msgid "You cannot modify this order"
@@ -32497,33 +32560,35 @@ msgstr "Et tehnyt yhtään muutosta."
 
 #: pretix/presale/views/order.py:1636
 msgid "You may not change your order in a way that reduces the total price."
-msgstr ""
+msgstr "Tilausta ei voi muuttaa tavalla, joka pienentää loppusummaa."
 
 #: pretix/presale/views/order.py:1638
 msgid "You may only change your order in a way that increases the total price."
-msgstr ""
+msgstr "Tilausta voi muuttaa ainoastaan loppusummaa kasvattavalla tavalla."
 
 #: pretix/presale/views/order.py:1640
 msgid "You may not change your order in a way that changes the total price."
-msgstr ""
+msgstr "Tilausta ei voi muuttaa tavalla, joka vaikuttaa loppusummaan."
 
 #: pretix/presale/views/order.py:1642
 msgid "You may not change your order in a way that would require a refund."
-msgstr ""
+msgstr "Tilausta ei voi muuttaa tavalla, joka vaatisi hyvitystä."
 
 #: pretix/presale/views/order.py:1650
 msgid ""
 "You may not change your order in a way that increases the total price since "
 "payments are no longer being accepted for this event."
 msgstr ""
+"Tilausta ei voi muuttaa loppusummaa korottavalla tavalla, koska tähän "
+"tapahtumaan ei enää hyväksytä maksuja."
 
 #: pretix/presale/views/order.py:1665 pretix/presale/views/order.py:1696
 msgid "You cannot change this order."
-msgstr ""
+msgstr "Tätä tilausta ei voi muuttaa."
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
-msgstr ""
+msgstr "Meillä oli vaikeuksia tietojenne käsittelyssä."
 
 #: pretix/presale/views/user.py:70
 #, python-brace-format
@@ -32533,32 +32598,45 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Jos antamasi sähköpostiosoite on voimassa ja lippu on tilattu sillä, olemme "
+"jo lähettäneet sinulle sähköpostiviestin, jossa on linkki lippuusi, "
+"viimeisen {number} tunnin aikana. Jos sähköposti ei ole saapunut, tarkista "
+"roskapostikansiosi. Tarkista myös, että olet käyttänyt oikeaa "
+"sähköpostiosoitetta."
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
+"Meillä on juuri nyt vaikeuksia sähköpostien lähettämisessä. Ole hyvä ja "
+"palaa asiaan myöhemmin."
 
 #: pretix/presale/views/user.py:94
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
+"s tämä käyttäjä on tehnyt tilauksia, hän saa sähköpostiviestin, jossa on "
+"hänen tilauskoodinsa."
 
 #: pretix/presale/views/waiting.py:127
 msgid ""
 "No ticket types are available for the waiting list, have a look at the "
 "ticket shop instead."
 msgstr ""
+"Odotuslistalle ei ole saatavilla lipputyyppejä, katso sen sijaan "
+"lippukaupasta."
 
 #: pretix/presale/views/waiting.py:137 pretix/presale/views/waiting.py:161
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "Odotuslistat eivät ole käytössä tässä tapahtumassa."
 
 #: pretix/presale/views/waiting.py:173
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"Et voi lisätä itseäsi odotuslistalle, sillä tämä tuote on saatavissa tällä "
+"hetkellä."
 
 #: pretix/presale/views/waiting.py:180
 #, python-brace-format
@@ -32566,50 +32644,53 @@ msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
+"Olemme lisänneet sinut odotuslistalle. Lähetämme sähköpostin osoitteeseen "
+"{email} heti, kun tämä tuote on taas saatavilla."
 
 #: pretix/presale/views/waiting.py:208
 msgid "We could not find you on our waiting list."
-msgstr ""
+msgstr "Emme löytäneet sinua odotuslistalta."
 
 #: pretix/presale/views/waiting.py:212
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
 msgstr ""
+"Paikkasi odotuslistalla ei ole enää voimassa tai se on jo käytetty. Emme voi "
+"tehdä muuta."
 
 #: pretix/presale/views/waiting.py:222
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
-msgstr ""
+msgstr "Kiitos paljon! Annamme paikkasi odotuslistalla jollekulle toiselle."
 
 #: pretix/presale/views/widget.py:372
 msgid "This ticket shop is currently disabled."
-msgstr ""
+msgstr "Lippukauppa ei ole tällä hetkellä käytössä."
 
 #: pretix/presale/views/widget.py:386
 msgid "The selected date does not exist in this event series."
-msgstr ""
+msgstr "Valittu päivämäärä ei ole käytössä tässä tapahtumasarjassa."
 
 #: pretix/presale/views/widget.py:449
 #, python-format
 msgid "from %(start_date)s"
-msgstr ""
+msgstr "alkaen %(start_date)s"
 
 #: pretix/settings.py:789
 msgid "User profile only"
-msgstr ""
+msgstr "Käyttäjäprofiili ainoastaan"
 
 #: pretix/settings.py:790
 msgid "Read access"
-msgstr ""
+msgstr "Lue käyttöoikeudet"
 
 #: pretix/settings.py:791
 msgid "Write access"
-msgstr ""
+msgstr "Kirjoita käyttöoikeudet"
 
 #: pretix/settings.py:802
-#, fuzzy
 msgid "Kosovo"
 msgstr "Kosovo"
 
