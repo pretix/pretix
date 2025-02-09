@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
 "PO-Revision-Date: 2025-02-09 22:00+0000\n"
-"Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
+"Last-Translator: Karoliina Grohn <karoliina.grohn@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -31499,7 +31499,7 @@ msgstr "%(value)s ilman veroja"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:322
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
-msgstr ""
+msgstr "Anna %(item)s hinta %(currency)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
@@ -31509,17 +31509,17 @@ msgstr "%(num)s saatavilla"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:4
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:4
 msgid "calendar navigation"
-msgstr ""
+msgstr "kalenterinavigointi"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:9
 #, python-format
 msgid "Show previous month, %(month)s"
-msgstr ""
+msgstr "Näytä edellinen kuukausi, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:22
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:24
 msgid "Select month to show"
-msgstr ""
+msgstr "Valitse näytettävä kuukausi"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:32
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:36
@@ -31532,24 +31532,24 @@ msgstr "Mene"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:39
 #, python-format
 msgid "Show next month, %(month)s"
-msgstr ""
+msgstr "Näytä seuraava kuukausi, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:9
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:54
 #, python-format
 msgid "Show previous week, %(week)s"
-msgstr ""
+msgstr "Näytä edellinen viikko, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:22
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:26
 msgid "Select week to show"
-msgstr ""
+msgstr "Valitse näytettävä viikko"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:43
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:59
 #, python-format
 msgid "Show next week, %(week)s"
-msgstr ""
+msgstr "Näytä seuraava viikko, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:33
 #: pretix/presale/templates/pretixpresale/organizers/index.html:94
@@ -31560,7 +31560,7 @@ msgstr "Lisätietoja"
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:13
 msgctxt "form"
 msgid "has error"
-msgstr ""
+msgstr "on virhe"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:14
 #: pretix/presale/templates/pretixpresale/event/index.html:18
@@ -31570,18 +31570,21 @@ msgid ""
 "                Calendar for %(datetime)s\n"
 "            "
 msgstr ""
+"\n"
+"                Kalenteri  %(datetime)s\n"
+"            "
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "Your cart, general information, add products to your cart"
-msgstr ""
+msgstr "Ostoskorisi, perustiedot, lisää tuotteita ostoskoriisi"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "General information, add products to your cart"
-msgstr ""
+msgstr "Yleistiedot, lisää tuotteita ostoskoriisi"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:68
 msgid "Please select a date to redeem your voucher."
-msgstr ""
+msgstr "Ole hyvä ja valitse päivämäärä, jolloin haluat käyttää kuponkisi."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:86
 msgid "View other date"
@@ -31589,7 +31592,7 @@ msgstr "Näytä toinen päivämäärä"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:89
 msgid "Choose date to book a ticket"
-msgstr ""
+msgstr "Valitse päivämäärä lippuvaraukselle"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:152
 #: pretix/presale/views/waiting.py:141 pretix/presale/views/widget.py:756
@@ -31614,6 +31617,9 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
+"Jotkin yllä olevan istumapaikkakartan kategoriat on tällä hetkellä myyty "
+"loppuun. Voit halutessasi lisätä itsesi jonotuslistalle. Ilmoitamme, jos "
+"paikkoja vapautuu jälleen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:211
 msgid "Join waiting list"
@@ -31623,7 +31629,7 @@ msgstr "Liity jonotuslistalle"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:438
 msgctxt "free_tickets"
 msgid "Register"
-msgstr ""
+msgstr "Rekisteröidy"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:232
 #: pretix/presale/templates/pretixpresale/event/voucher.html:443
@@ -31659,7 +31665,7 @@ msgstr "Tämä lippukauppa on tällä hetkellä pois päältä."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
-msgstr ""
+msgstr "Ainoastaan tunnistautuneille tiimiläisille."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:11
 msgid "Please try again later."
@@ -31691,16 +31697,22 @@ msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
 msgstr ""
+"Ole hyvä ja ota huomioon, että odotamme yhä hyväksyntää tapahtuman "
+"järjestäjältä ennen tilauksesi vahvistamista."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
 msgstr ""
+"Ole hyvä ja huomioi, että odotamme yhä tapahtuman järjestäjän hyväksyntää "
+"ennen kuin tilaus voidaan maksaa ja suorittaa loppuun."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
 msgstr ""
+"Ole hyvä ja huomioi, että odotamme yhä maksua, jotta prosessi saadaan "
+"loppuun."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 msgid ""
@@ -31744,11 +31756,13 @@ msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
+"Olemme vastaanottaneet tilauksen peruutuspyyntösi. Odotathan "
+"kärsivällisesti, kun tapahtumajärjestäjä tekee päätöksen perumisesta."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:143
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
-msgstr ""
+msgstr "Hyvityssumma %(amount)s lähetetään sinulle pian, olethan kärsivällinen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
@@ -31760,16 +31774,18 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
+"Olemme hyvittäneet %(amount)s lahjakortille. Voit käyttää seuraavaa "
+"lahjakorttikoodia maksamiseen seuraavan kerran, kun asioit kanssamme:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:162
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "Lahjakortin tämän hetkinen arvo on %(value)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:169
 #, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr ""
+msgstr "Tämä lahjakortti on voimassa %(expiry)s saakka."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:180
 #, python-format
@@ -31777,6 +31793,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
+"Sinulle on lähetetty %(amount)s hyvitys. Maksutavastasi riippuen hyvitys "
+"näkyy tililläsi viimeistään 14 päivän kuluessa."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 #: pretix/presale/templates/pretixpresale/event/position.html:33
@@ -31792,13 +31810,13 @@ msgstr "Muuta tietoja"
 #: pretix/presale/templates/pretixpresale/event/order.html:262
 msgid ""
 "You need to select a payment method above before you can request an invoice."
-msgstr ""
+msgstr "Sinun täytyy valita maksutapa ennen kuin voit pyytää laskua."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:267
 #: pretix/presale/templates/pretixpresale/event/order.html:274
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
-msgstr ""
+msgstr "Pyydä laskua"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:286
 msgid "Your information"
@@ -31810,12 +31828,12 @@ msgstr "Muuta tietojasi"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
 msgid "Internal Reference"
-msgstr ""
+msgstr "Sisäinen viite"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:349
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr ""
+msgstr "Muuta tai peruuta tilauksesi"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:351
 msgctxt "action"
@@ -31832,10 +31850,12 @@ msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
 msgstr ""
+"Jos haluat vaihtaa ostamiasi tuotteita, voit klikata nappia muuttaaksesi "
+"tilaustasi."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:369
 msgid "Change order"
-msgstr ""
+msgstr "Muuta tilausta"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:381
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
@@ -31863,7 +31883,7 @@ msgstr "Palautus voidaan maksaa alkuperäisellä maksutavalla tai lahjakorttina.
 #: pretix/presale/templates/pretixpresale/event/order.html:430
 #: pretix/presale/templates/pretixpresale/event/order.html:451
 msgid "The refund will be issued to your original payment method."
-msgstr ""
+msgstr "Hyvitys maksetaan alkuperäiselle maksatavallesi."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:396
 #: pretix/presale/templates/pretixpresale/event/order.html:409
