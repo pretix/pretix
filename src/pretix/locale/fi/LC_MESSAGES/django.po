@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-09 07:00+0000\n"
+"PO-Revision-Date: 2025-02-09 13:07+0000\n"
 "Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -26548,7 +26548,6 @@ msgstr "IBAN"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:16
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
-#, fuzzy
 msgid "BIC"
 msgstr "BIC"
 
@@ -28503,19 +28502,19 @@ msgstr "Kaikki, jotka ovat luoneet lipputilauksen"
 
 #: pretix/plugins/sendmail/models.py:239
 msgid "Everyone"
-msgstr ""
+msgstr "Jokainen"
 
 #: pretix/plugins/sendmail/models.py:240
 msgid "Anyone who is or was checked in"
-msgstr ""
+msgstr "Jokainen, joka on, tai jotka ovat olleet kirjautuneina sisään"
 
 #: pretix/plugins/sendmail/models.py:241
 msgid "Anyone who never checked in before"
-msgstr ""
+msgstr "Jokainen, joka ei ole koskaan kirjautunut sisään ennen"
 
 #: pretix/plugins/sendmail/models.py:252
 msgid "Limit products"
-msgstr ""
+msgstr "Rajoita tuotteita"
 
 #: pretix/plugins/sendmail/models.py:255
 msgid "Restrict to orders with status"
@@ -28527,77 +28526,77 @@ msgstr "Rajoita tilauksiin, joilla on kirjautumis-status"
 
 #: pretix/plugins/sendmail/models.py:274
 msgid "Send date"
-msgstr ""
+msgstr "Lähetä päivämäärä"
 
 #: pretix/plugins/sendmail/models.py:276
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
 msgid "Time of day"
-msgstr ""
+msgstr "Kellonaika"
 
 #: pretix/plugins/sendmail/models.py:282
 msgid "Send email to"
-msgstr ""
+msgstr "Lähetä sähköpostia osoitteeseen"
 
 #: pretix/plugins/sendmail/models.py:287
 msgid "Only enabled rules are actually sent"
-msgstr ""
+msgstr "Vain käytössä olevat säännöt lähetetään"
 
 #: pretix/plugins/sendmail/models.py:334
 #, python-brace-format
 msgid "on {date} at {time}"
-msgstr ""
+msgstr "Päivämäärällä {date} kello {time}"
 
 #: pretix/plugins/sendmail/models.py:340
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d päivä tapahtuman lopun jälkeen, klo %(time)s"
+msgstr[1] "%(count)d päivää tapahtuman lopun jälkeen, klo %(time)s"
 
 #: pretix/plugins/sendmail/models.py:349
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d päivä ennen tapahtuman loppua klo %(time)s"
+msgstr[1] "%(count)d päivää ennen tapahtuman loppua klo %(time)s"
 
 #: pretix/plugins/sendmail/models.py:359
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d päivä tapahtuman alun jälkeen klo %(time)s"
+msgstr[1] "%(count)d päivää tapahtuman alun jälkeen klo %(time)s"
 
 #: pretix/plugins/sendmail/models.py:368
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d päivä ennen tapahtuman alkua klo %(time)s"
+msgstr[1] "%(count)d päivää ennen tapahtuman alkua klo %(time)s"
 
 #: pretix/plugins/sendmail/signals.py:101
 msgid "Scheduled emails"
-msgstr ""
+msgstr "Ajastetut sähköpostit"
 
 #: pretix/plugins/sendmail/signals.py:121
 msgid "Mass email was sent to customers or attendees."
-msgstr ""
+msgstr "Joukkosähköposti lähetettiin asiakkaille tai osallistujille."
 
 #: pretix/plugins/sendmail/signals.py:122
 msgid "Mass email was sent to waiting list entries."
-msgstr ""
+msgstr "Jonotuslistalle ilmoittautuneille lähetettiin joukkosähköposti."
 
 #: pretix/plugins/sendmail/signals.py:127
 msgid "The order received a mass email."
-msgstr ""
+msgstr "Tilaus sai joukkosähköpostin."
 
 #: pretix/plugins/sendmail/signals.py:128
 msgid "A ticket holder of this order received a mass email."
-msgstr ""
+msgstr "Tämän tilauksen lipun haltija sai joukkosähköpostin."
 
 #: pretix/plugins/sendmail/signals.py:133
 msgid "An email rule was created"
-msgstr ""
+msgstr "Sähköpostisääntö luotiin"
 
 #: pretix/plugins/sendmail/signals.py:134
 msgid "An email rule was updated"
@@ -28605,15 +28604,15 @@ msgstr "Sähköpostisääntö päivitetty"
 
 #: pretix/plugins/sendmail/signals.py:135
 msgid "A scheduled email was sent to the order"
-msgstr ""
+msgstr "Tilaukseen lähetettiin ajoitettu sähköposti"
 
 #: pretix/plugins/sendmail/signals.py:136
 msgid "A scheduled email was sent to a ticket holder"
-msgstr ""
+msgstr "Lipun haltijalle lähetettiin aikataulutettu sähköposti"
 
 #: pretix/plugins/sendmail/signals.py:137
 msgid "An email rule was deleted"
-msgstr ""
+msgstr "Sähköpostisääntö poistettiin"
 
 #: pretix/plugins/sendmail/signals.py:140
 #, python-brace-format
@@ -28625,35 +28624,37 @@ msgid ""
 "This page shows you all mass emails you sent out manually. It does not "
 "include emails sent out automatically."
 msgstr ""
+"Tällä sivulla näkyvät kaikki manuaalisesti lähettämäsi joukkosähköpostit. Se "
+"ei sisällä automaattisesti lähetettyjä sähköposteja."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:35
 msgid "Send a new email based on this"
-msgstr ""
+msgstr "Lähetä uusi sähköposti tämän perusteella"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:2
 msgid "Sent to orders:"
-msgstr ""
+msgstr "Lähetetty tilauksiin:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:11
 msgid "All customers not checked in"
-msgstr ""
+msgstr "Kaikki asiakkaat, jotka eivät ole kirjautuneet sisään"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:23
 msgid "Attendee contact addresses"
-msgstr ""
+msgstr "Osallistujien yhteystiedot"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:25
 msgid "All contact addresses"
-msgstr ""
+msgstr "Kaikki yhteystiedot"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:27
 msgid "Order contact addresses"
-msgstr ""
+msgstr "Yhteystietojen osoitteiden tilaaminen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:6
 msgid "Create Email Rule"
-msgstr ""
+msgstr "Luo sähköpostisääntö"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:9
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
@@ -28661,6 +28662,8 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
 msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr ""
+"Ajoitettuja sähköposteja ei lähetetä niin kauan kuin lippukauppasi on "
+"offline-tilassa."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:63
@@ -28669,77 +28672,82 @@ msgid ""
 "your configured date. Typically, this will not be more than 10 minutes. Your "
 "email will never be sent earlier than the time you configured."
 msgstr ""
+"Teknisistä syistä sähköposti saatetaan itse asiassa lähettää hieman "
+"määritettyä päivämäärää myöhemmin. Yleensä tämä ei ole yli 10 minuuttia. "
+"Sähköpostiasi ei koskaan lähetetä ennen määrittämääsi ajankohtaa."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:6
 msgid "Delete Email Rule"
-msgstr ""
+msgstr "Poista sähköpostisääntö"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the rule <strong>%(subject)s</strong>?"
-msgstr ""
+msgstr "Haluatko varmasti poistaa säännön <strong>%(subject)s</strong>?"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:6
 msgid "Inspect Email Rule"
-msgstr ""
+msgstr "Tarkista sähköpostisääntö"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:8
 msgid "This page shows when your rule is planned to be sent."
-msgstr ""
+msgstr "Tällä sivulla näkyy, milloin sääntö on tarkoitus lähettää."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:18
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:29
 msgid "Email subject"
-msgstr ""
+msgstr "Sähköpostin aihe"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:30
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:31
 msgid "Scheduled time"
-msgstr ""
+msgstr "Ajastettu aika"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:35
 msgid "Last schedule computation"
-msgstr ""
+msgstr "Viimeinen aikataulun laskenta"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
 msgid "Scheduled email rules"
-msgstr ""
+msgstr "Ajoitetun sähköpostin säännöt"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
 "Email rules allow you to automatically send emails to your customers at a "
 "specific time before or after your event."
 msgstr ""
+"Sähköpostisääntöjen avulla voit lähettää sähköpostiviestejä asiakkaillesi "
+"automaattisesti tiettynä ajankohtana ennen tapahtumaa tai sen jälkeen."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:101
 msgid "Create a new rule"
-msgstr ""
+msgstr "Uuden säännön luominen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:33
 msgctxt "subevent"
 msgid "Sent / Total dates"
-msgstr ""
+msgstr "Lähetetyt / yhteensä päivämäärät"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:52
 msgid "Next execution:"
-msgstr ""
+msgstr "Seuraava toteutus:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:56
 msgid "unknown"
-msgstr ""
+msgstr "tuntematon"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:60
 msgid "Last execution:"
-msgstr ""
+msgstr "Viimeinen toteutus:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:82
 msgid "Inspect scheduled times"
-msgstr ""
+msgstr "Tarkista ajoitetut ajat"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:83
 msgid "Use as a template for a new rule"
@@ -28748,17 +28756,20 @@ msgstr "Käytä mallina uudelle säännölle"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:7
 msgid "Update Email Rule"
-msgstr ""
+msgstr "Päivitä sähköpostisääntö"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:21
 msgid ""
 "This email has already been sent for all existing dates. Changing it will "
 "have no effect unless you create additional dates in this event series."
 msgstr ""
+"Tämä sähköposti on jo lähetetty kaikille olemassa oleville päivämäärille. "
+"Sen muuttamisella ei ole vaikutusta, ellet luo lisäpäivämääriä tähän "
+"tapahtumasarjaan."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:23
 msgid "This email has already been sent. Changing it will have no effect."
-msgstr ""
+msgstr "Tämä sähköposti on jo lähetetty. Sen muuttamisella ei ole vaikutusta."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:28
 msgid ""
@@ -28766,18 +28777,21 @@ msgid ""
 "Changing it will only have an effect on dates for which the email has not "
 "yet been sent."
 msgstr ""
+"Tämä sähköposti on jo lähetetty joillekin sarjasi päivämäärille. Sen "
+"muuttaminen vaikuttaa vain päivämääriin, joille sähköpostia ei ole vielä "
+"lähetetty."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:76
 msgid "You need to preview your email before you can send it."
-msgstr ""
+msgstr "Sinun on esikatseltava sähköpostisi, ennen kuin voit lähettää sen."
 
 #: pretix/plugins/sendmail/views.py:172
 msgid "You supplied an invalid log entry ID"
-msgstr ""
+msgstr "Annoit virheellisen lokimerkinnän tunnuksen"
 
 #: pretix/plugins/sendmail/views.py:185
 msgid "There are no matching recipients for your selection."
-msgstr ""
+msgstr "Valinnallesi ei ole vastaavia vastaanottajia."
 
 #: pretix/plugins/sendmail/views.py:220
 #, python-format
@@ -28785,6 +28799,8 @@ msgid ""
 "Your message has been queued and will be sent to the contact addresses of %s "
 "in the next few minutes."
 msgstr ""
+"Viestisi on asetettu jonoon, ja se lähetetään %s:n yhteystieto-osoitteisiin "
+"muutaman minuutin kuluessa."
 
 #: pretix/plugins/sendmail/views.py:250
 msgid "Orders or attendees"
@@ -28795,19 +28811,23 @@ msgid ""
 "Send an email to every customer, or to every person a ticket has been "
 "purchased for, or a combination of both."
 msgstr ""
+"Lähetä sähköpostia jokaiselle asiakkaalle tai jokaiselle henkilölle, jolle "
+"lippu on ostettu, tai molempien yhdistelmä."
 
 #: pretix/plugins/sendmail/views.py:417
 #, python-format
 msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s vastaava tilaus"
+msgstr[1] "%(number)s vastaavat tilaukset"
 
 #: pretix/plugins/sendmail/views.py:449
 msgid ""
 "Send an email to every person currently waiting to receive a voucher through "
 "the waiting list feature."
 msgstr ""
+"Lähetä sähköpostia jokaiselle henkilölle, joka odottaa tällä hetkellä "
+"kupongin saamista odotuslistaominaisuuden kautta."
 
 #: pretix/plugins/sendmail/views.py:516
 #, python-format
@@ -28821,25 +28841,28 @@ msgstr[1] "%(number)s jonotuslista merkinnät"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:8
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:10
 msgid "Statistics"
-msgstr ""
+msgstr "Tilastot"
 
 #: pretix/plugins/statistics/apps.py:37
 msgid "Get a birds-eye view of your event sales with graphical statistics."
 msgstr ""
+"Hanki lintuperspektiivi tapahtumamyynnistäsi graafisten tilastojen avulla."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:19
 msgid "Orders by day"
-msgstr ""
+msgstr "Päiväkohtaiset tilaukset"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:25
 msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
 "payment."
 msgstr ""
+"Useissa maksuissa maksetut tilaukset näytetään viimeisen maksun "
+"päivämäärällä."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:34
 msgid "Revenue over time"
-msgstr ""
+msgstr "Tulot ajan myötä"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:40
 msgctxt "subevent"
@@ -28847,72 +28870,78 @@ msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
 msgstr ""
+"Jos valitset yhden päivämäärän, maksutapamaksuja ei luetella tässä, koska ei "
+"ehkä ole selvää, mihin päivämäärään ne kuuluvat."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:48
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
 msgstr ""
+"Vain täysin maksetut tilaukset lasketaan. Useissa maksuissa maksetut "
+"tilaukset näytetään viimeisen maksun päivämäärällä."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:67
 msgid "Seating Overview"
-msgstr ""
+msgstr "Istuinten yleiskatsaus"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
 msgid "Sold Seats"
-msgstr ""
+msgstr "Myydyt paikat"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:80
 msgid "Blocked Seats"
-msgstr ""
+msgstr "Estetyt paikat"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:86
 msgid "Free Seats"
-msgstr ""
+msgstr "Vapaat paikat"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:94
 msgid "Seating Sales Potentials"
-msgstr ""
+msgstr "Paikkamyynti potentiaali"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:102
 msgid "Unsold Seats"
-msgstr ""
+msgstr "Myymättömät paikat"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:103
 msgid "Potential Profits"
-msgstr ""
+msgstr "Voittopotentiaali"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:107
 msgid "Minimum Price"
-msgstr ""
+msgstr "Minimihinta"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
 msgid "Available"
-msgstr ""
+msgstr "Käytettävissä"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
 msgid "On Sale"
-msgstr ""
+msgstr "Myynnissä"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:136
 msgid "Not on Sale"
-msgstr ""
+msgstr "Ei myynnissä"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:146
 msgid "Seats not attributed to any specific product"
-msgstr ""
+msgstr "Istuimet, joita ei ole liitetty mihinkään tiettyyn tuotteeseen"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:172
 msgid ""
 "We will show you a variety of statistics about your sales right here, as "
 "soon as the first orders are submitted!"
 msgstr ""
+"Näytämme sinulle erilaisia tilastoja myynnistäsi täällä, heti kun "
+"ensimmäiset tilaukset on lähetetty!"
 
 #: pretix/plugins/stripe/apps.py:31 pretix/plugins/stripe/apps.py:34
 #: pretix/plugins/stripe/payment.py:163
 msgid "Stripe"
-msgstr ""
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/apps.py:40
 msgid ""
@@ -28920,6 +28949,9 @@ msgid ""
 "Stripe supports payments via credit cards as well as many local payment "
 "methods such as iDEAL, Alipay,and many more."
 msgstr ""
+"Hyväksy maksuja Stripen kautta, joka on maailmanlaajuisesti suosittu "
+"maksupalveluntarjoaja. Stripe tukee maksuja luottokorteilla sekä monia "
+"paikallisia maksutapoja, kuten iDEAL, Alipay ja monet muut."
 
 #: pretix/plugins/stripe/forms.py:40
 #, python-format
@@ -28927,18 +28959,20 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
+"Annettu avain \"%(value)s\" ei näytä kelvolliselta. Sen pitäisi alkaa "
+"%(prefix)s."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:159
 msgid "Stripe Connect: App fee (percent)"
-msgstr ""
+msgstr "Stripe Connect: Sovellusmaksu (prosenttia)"
 
 #: pretix/plugins/stripe/forms.py:55 pretix/plugins/stripe/signals.py:163
 msgid "Stripe Connect: App fee (max)"
-msgstr ""
+msgstr "Stripe Connect: Sovellusmaksu (max)"
 
 #: pretix/plugins/stripe/forms.py:59 pretix/plugins/stripe/signals.py:167
 msgid "Stripe Connect: App fee (min)"
-msgstr ""
+msgstr "Stripe Connect: Sovellusmaksu (min)"
 
 #: pretix/plugins/stripe/payment.py:192
 msgid ""
@@ -28946,14 +28980,17 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
+"Jotta voit hyväksyä maksuja Stripen kautta, tarvitset tilin Stripessä. "
+"Napsauttamalla seuraavaa painiketta voit joko luoda uuden Stripe-tilin, "
+"yhdistää pretixin olemassa olevaan."
 
 #: pretix/plugins/stripe/payment.py:196
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "Yhdistä Stripeen"
 
 #: pretix/plugins/stripe/payment.py:206
 msgid "Disconnect from Stripe"
-msgstr ""
+msgstr "Katkaise yhteys Stripeen"
 
 #: pretix/plugins/stripe/payment.py:210
 msgid ""
@@ -28962,19 +28999,23 @@ msgid ""
 "automatically cancel orders when charges are refunded externally and to "
 "process asynchronous payment methods like SOFORT."
 msgstr ""
+"Määritä <a href=\"https://dashboard.stripe.com/account/webhooks\">Stripe "
+"Webhook</a> seuraavaan päätepisteeseen, jotta voit peruuttaa tilaukset "
+"automaattisesti, kun veloitukset hyvitetään ulkoisesti, ja käsitellä "
+"asynkronisia maksutapoja, kuten SOFORT."
 
 #: pretix/plugins/stripe/payment.py:222
 msgid "Enable MOTO payments for resellers"
-msgstr ""
+msgstr "Ota MOTO-maksut käyttöön jälleenmyyjille"
 
 #: pretix/plugins/stripe/payment.py:224
 msgid ""
 "Gated feature (needs to be enabled for your account by Stripe support first)"
-msgstr ""
+msgstr "Porttiominaisuus (Stripe-tuen on ensin otettava se käyttöön tililläsi)"
 
 #: pretix/plugins/stripe/payment.py:232
 msgid "Stripe Integration security guide"
-msgstr ""
+msgstr "Stripe-integraation tietoturvaopas"
 
 #: pretix/plugins/stripe/payment.py:226
 #, python-format
@@ -28986,30 +29027,38 @@ msgid ""
 "like the 40 page SAQ D. Please consult the %s for further information on "
 "this subject."
 msgstr ""
+"Voimme merkitä jälleenmyyjäliittymän kautta tekemäsi luottokorttitapahtuman "
+"MOTOksi (postimyynti / puhelinmyynti), mikä vapauttaa heidät vahvan "
+"asiakkaan tunnistamisen (SCA) vaatimuksista. Kuitenkin: Kun otat tämän "
+"ominaisuuden käyttöön, sinun on täytettävä vuosittaiset PCI-DSS-"
+"itsearviointilomakkeet, kuten 40-sivuinen SAQ D. Katso %s:stä lisätietoja "
+"tästä aiheesta."
 
 #: pretix/plugins/stripe/payment.py:248 pretix/plugins/stripe/payment.py:253
 msgid "Stripe account"
-msgstr ""
+msgstr "Stripe-tili"
 
 #: pretix/plugins/stripe/payment.py:261
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "Live"
 
 #: pretix/plugins/stripe/payment.py:262
 msgctxt "stripe"
 msgid "Testing"
-msgstr ""
+msgstr "Testaus"
 
 #: pretix/plugins/stripe/payment.py:264
 msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
 msgstr ""
+"Jos tapahtumasi on testitilassa, käytämme aina Stripen "
+"testisovellusliittymää tästä asetuksesta riippumatta."
 
 #: pretix/plugins/stripe/payment.py:277
 msgid "Publishable key"
-msgstr ""
+msgstr "Julkaistava avain"
 
 #: pretix/plugins/stripe/payment.py:280
 msgid "Generate API keys"
@@ -29021,20 +29070,23 @@ msgid ""
 "generate you API keys with the recommended permission level for optimal "
 "usage with pretix."
 msgstr ""
+"Yllä oleva painike asentaa Stripe-sovelluksemme tilillesi ja luo sinulle API-"
+"avaimet suositellulla käyttöoikeustasolla optimaaliseen käyttöön pretixin "
+"kanssa."
 
 #: pretix/plugins/stripe/payment.py:291
 msgid "Secret key"
-msgstr ""
+msgstr "Salainen avain"
 
 #: pretix/plugins/stripe/payment.py:300
 msgid ""
 "The country in which your Stripe-account is registered in. Usually, this is "
 "your country of residence."
-msgstr ""
+msgstr "Maa, jossa Stripe-tilisi on rekisteröity. Yleensä tämä on asuinmaasi."
 
 #: pretix/plugins/stripe/payment.py:309
 msgid "Check for Apple Pay/Google Pay"
-msgstr ""
+msgstr "Tarkista Apple Pay/Google Pay"
 
 #: pretix/plugins/stripe/payment.py:313
 msgid ""
@@ -29044,10 +29096,14 @@ msgid ""
 "take into consideration if Google Pay/Apple Pay has been disabled in the "
 "Stripe Dashboard."
 msgstr ""
+"pretix yrittää tarkistaa, tukeeko asiakkaan verkkoselain lompakkopohjaisia "
+"maksutapoja, kuten Apple Pay tai Google Pay, ja näyttää ne näkyvästi "
+"luottokorttimaksutavan yhteydessä. Tämä tunnistus ei ota huomioon, jos "
+"Google Pay/Apple Pay on poistettu käytöstä Stripe Dashboardissa."
 
 #: pretix/plugins/stripe/payment.py:322
 msgid "Statement descriptor postfix"
-msgstr ""
+msgstr "Lausekkeen kuvaaja postfix"
 
 #: pretix/plugins/stripe/payment.py:323
 #, python-brace-format
@@ -29058,14 +29114,18 @@ msgid ""
 "of characters is allowed. We do not recommend entering more than {cnt} "
 "characters into this field."
 msgstr ""
+"Kaikki tähän syötetyt arvot näkyvät asiakkaan luottokorttilaskussa tai "
+"pankkitilitapahtumassa. Lisäämme automaattisesti tilauskoodin sen eteen. "
+"Huomaa, että maksutavasta riippuen vain hyvin rajoitettu määrä merkkejä on "
+"sallittu. Emme suosittele syöttämään tähän kenttään yli {cnt} merkkiä."
 
 #: pretix/plugins/stripe/payment.py:337
 msgid "Credit card payments"
-msgstr ""
+msgstr "Luottokorttimaksut"
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1527
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:344 pretix/plugins/stripe/payment.py:352
 #: pretix/plugins/stripe/payment.py:360 pretix/plugins/stripe/payment.py:395
@@ -29078,24 +29138,28 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before they work properly."
 msgstr ""
+"Jotkin maksutavat on ehkä otettava käyttöön Stripe-tilisi asetuksissa, ennen "
+"kuin ne toimivat oikein."
 
 #: pretix/plugins/stripe/payment.py:350 pretix/plugins/stripe/payment.py:1552
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1564
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:366
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA Direct Debit"
 
 #: pretix/plugins/stripe/payment.py:369
 msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before work properly."
 msgstr ""
+"Jotkin maksutavat on ehkä otettava käyttöön Stripe-tilisi asetuksissa, ennen "
+"kuin ne toimivat oikein."
 
 #: pretix/plugins/stripe/payment.py:372
 msgid ""
@@ -29104,68 +29168,76 @@ msgid ""
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
+"SEPA-suoraveloitusmaksuja Stripen kautta <strong>ei</strong> käsitellä "
+"välittömästi, mutta joissakin tapauksissa niiden vahvistaminen voi kestää "
+"jopa <strong> 14 päivää</strong>. Aktivoi tämä maksutapa vain, jos "
+"maksuehtosi sallii tämän viiveen."
 
 #: pretix/plugins/stripe/payment.py:380
 msgid "SEPA Creditor Mandate Name"
-msgstr ""
+msgstr "SEPA-velkojan mandaatin nimi"
 
 #: pretix/plugins/stripe/payment.py:382
 msgid ""
 "Please provide your SEPA Creditor Mandate Name, that will be displayed to "
 "the user."
-msgstr ""
+msgstr "Anna SEPA-velkojan valtakirjan nimi, joka näytetään käyttäjälle."
 
 #: pretix/plugins/stripe/payment.py:393 pretix/plugins/stripe/payment.py:1677
 msgid "EPS"
-msgstr ""
+msgstr "EPS"
 
 #: pretix/plugins/stripe/payment.py:401 pretix/plugins/stripe/payment.py:1708
 msgid "Multibanco"
-msgstr ""
+msgstr "Multibanco"
 
 #: pretix/plugins/stripe/payment.py:409 pretix/plugins/stripe/payment.py:1730
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:417 pretix/plugins/stripe/payment.py:1769
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:433 pretix/plugins/stripe/payment.py:1823
 msgid "Swish"
-msgstr ""
+msgstr "Swish"
 
 #: pretix/plugins/stripe/payment.py:449 pretix/plugins/stripe/payment.py:1318
 msgid "Affirm"
-msgstr ""
+msgstr "Vahvista"
 
 #: pretix/plugins/stripe/payment.py:454
 msgid "Only available for payments between $50 and $30,000."
-msgstr ""
+msgstr "Käytettävissä vain 50–30 000 dollarin maksuissa."
 
 #: pretix/plugins/stripe/payment.py:460 pretix/plugins/stripe/payment.py:1363
 msgid "Klarna"
-msgstr ""
+msgstr "Klarna"
 
 #: pretix/plugins/stripe/payment.py:467
 msgid ""
 "Klarna and Stripe will decide which of the payment methods offered by Klarna "
 "are available to the user."
 msgstr ""
+"Klarna ja Stripe päättävät, mitkä Klarnan tarjoamista maksutavoista ovat "
+"käyttäjän käytettävissä."
 
 #: pretix/plugins/stripe/payment.py:469
 msgid ""
 "Klarna's terms of services do not allow it to be used by charities or "
 "political organizations."
 msgstr ""
+"Klarnan käyttöehdot eivät salli hyväntekeväisyysjärjestöjen tai poliittisten "
+"järjestöjen käyttää sitä."
 
 #: pretix/plugins/stripe/payment.py:487
 msgid "MobilePay"
-msgstr ""
+msgstr "MobilePay"
 
 #: pretix/plugins/stripe/payment.py:497
 msgid "Destination"
-msgstr ""
+msgstr "Kohde"
 
 #: pretix/plugins/stripe/payment.py:527 pretix/plugins/stripe/payment.py:1433
 #, python-brace-format
@@ -29174,71 +29246,80 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"Stripe-laajennus toimii testitilassa. Voit käyttää yhtä <a {args}>monista "
+"testikorteista</a> tapahtuman suorittamiseen. Rahaa ei varsinaisesti "
+"siirretä."
 
 #: pretix/plugins/stripe/payment.py:720
 msgid "No payment information found."
-msgstr ""
+msgstr "Maksutietoja ei löytynyt."
 
 #: pretix/plugins/stripe/payment.py:758
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
 msgstr ""
+"Meillä oli vaikeuksia kommunikoida Stripen kanssa. Yritä uudelleen ja ota "
+"yhteyttä tukeen, jos ongelma jatkuu."
 
 #: pretix/plugins/stripe/payment.py:762
 msgid "Stripe returned an error"
-msgstr ""
+msgstr "Stripe palautti virheen"
 
 #: pretix/plugins/stripe/payment.py:834
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr ""
+msgstr "Sinun on ehkä otettava JavaScript käyttöön Stripe-maksuja varten."
 
 #: pretix/plugins/stripe/payment.py:929 pretix/plugins/stripe/payment.py:1051
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr ""
+msgstr "Stripe ilmoitti kortissasi olevasta virheestä: %s"
 
 #: pretix/plugins/stripe/payment.py:947 pretix/plugins/stripe/payment.py:1063
 msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
+"Meillä oli vaikeuksia kommunikoida Stripen kanssa. Yritä uudelleen ja ota "
+"meihin yhteyttä, jos ongelma jatkuu."
 
 #: pretix/plugins/stripe/payment.py:988
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"Maksusi odottaa suorittamista. Ilmoitamme sinulle heti, kun maksu on "
+"suoritettu."
 
 #: pretix/plugins/stripe/payment.py:996
 msgid "Your payment failed. Please try again."
-msgstr ""
+msgstr "Maksusi epäonnistui. Yritä uudelleen."
 
 #: pretix/plugins/stripe/payment.py:1002
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr ""
+msgstr "Stripe ilmoitti virheestä: %s"
 
 #: pretix/plugins/stripe/payment.py:1103
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "Luottokortti Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1104
 msgid "Credit card"
-msgstr ""
+msgstr "Luottokortti"
 
 #: pretix/plugins/stripe/payment.py:1186
 #, python-brace-format
 msgid "expires {month}/{year}"
-msgstr ""
+msgstr "Päättyy {month}/{year}"
 
 #: pretix/plugins/stripe/payment.py:1191
 msgid "SEPA Debit via Stripe"
-msgstr ""
+msgstr "SEPA Debitmaksu Stripe:n kautta"
 
 #: pretix/plugins/stripe/payment.py:1192
 msgid "SEPA Debit"
-msgstr ""
+msgstr "Sebit Debitmaksu"
 
 #: pretix/plugins/stripe/payment.py:1232
 msgid "Account Holder Name"
@@ -29246,11 +29327,11 @@ msgstr "Tilinhaltijan nimi"
 
 #: pretix/plugins/stripe/payment.py:1237
 msgid "Account Holder Street"
-msgstr ""
+msgstr "Tilinomistajan katuosoite"
 
 #: pretix/plugins/stripe/payment.py:1249
 msgid "Account Holder Postal Code"
-msgstr ""
+msgstr "Tilinomistajan postinumero"
 
 #: pretix/plugins/stripe/payment.py:1261
 msgid "Account Holder City"
@@ -29258,23 +29339,23 @@ msgstr "Tilinhaltijan kaupunki"
 
 #: pretix/plugins/stripe/payment.py:1273
 msgid "Account Holder Country"
-msgstr ""
+msgstr "Tilinomistajan maa"
 
 #: pretix/plugins/stripe/payment.py:1317
 msgid "Affirm via Stripe"
-msgstr ""
+msgstr "Vahvista Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1362
 msgid "Klarna via Stripe"
-msgstr ""
+msgstr "Klarna Strippen kautta"
 
 #: pretix/plugins/stripe/payment.py:1479
 msgid "giropay via Stripe"
-msgstr ""
+msgstr "giropay Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1480
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:1483
 msgid ""
@@ -29282,46 +29363,53 @@ msgid ""
 "German banks, usually after one-time activation. Please keep your online "
 "banking account and login information available."
 msgstr ""
+"giropay on online-maksutapa, joka on kaikkien saksalaisten pankkien "
+"asiakkaiden käytettävissä, yleensä kertaluonteisen aktivoinnin jälkeen. Pidä "
+"verkkopankkitilisi ja kirjautumistietosi saatavilla."
 
 #: pretix/plugins/stripe/payment.py:1505 pretix/plugins/stripe/payment.py:1573
 #: pretix/plugins/stripe/payment.py:1686
 msgid "unknown name"
-msgstr ""
+msgstr "tuntematon nimi"
 
 #: pretix/plugins/stripe/payment.py:1513 pretix/plugins/stripe/payment.py:1538
 #: pretix/plugins/stripe/payment.py:1581 pretix/plugins/stripe/payment.py:1694
 #: pretix/plugins/stripe/payment.py:1755
 #, python-brace-format
 msgid "Bank account at {bank}"
-msgstr ""
+msgstr "Pankkitili {bank}-pankissa"
 
 #: pretix/plugins/stripe/payment.py:1526
 msgid "iDEAL via Stripe"
-msgstr ""
+msgstr "iDEAL Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1530
 msgid ""
 "iDEAL is an online payment method available to customers of Dutch banks. "
 "Please keep your online banking account and login information available."
 msgstr ""
+"iDEAL on online-maksutapa, joka on hollantilaisten pankkien asiakkaiden "
+"käytettävissä. Pidä verkkopankkitilisi ja kirjautumistietosi saatavilla."
 
 #: pretix/plugins/stripe/payment.py:1551
 msgid "Alipay via Stripe"
-msgstr ""
+msgstr "Alipay Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1556
 msgid ""
 "This payment method is available to customers of the Chinese payment system "
 "Alipay. Please keep your login information available."
 msgstr ""
+"Tämä maksutapa on kiinalaisen Alipay-maksujärjestelmän asiakkaiden "
+"käytettävissä. Pidä kirjautumistietosi saatavilla."
 
 #: pretix/plugins/stripe/payment.py:1563
 msgid "Bancontact via Stripe"
-msgstr ""
+msgstr "Bancontact Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1594
 msgid "SOFORT via Stripe"
-msgstr ""
+msgstr "SOFORT Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1595
 msgid "SOFORT (instant bank transfer)"
@@ -29329,49 +29417,51 @@ msgstr "SOFORT (välitön pankkisiirto)"
 
 #: pretix/plugins/stripe/payment.py:1624
 msgid "Country of your bank"
-msgstr ""
+msgstr "Pankkisi maa"
 
 #: pretix/plugins/stripe/payment.py:1625
 msgid "Germany"
-msgstr ""
+msgstr "Saksa"
 
 #: pretix/plugins/stripe/payment.py:1626
 msgid "Austria"
-msgstr ""
+msgstr "Itävalta"
 
 #: pretix/plugins/stripe/payment.py:1627
 msgid "Belgium"
-msgstr ""
+msgstr "Belgia"
 
 #: pretix/plugins/stripe/payment.py:1628
 msgid "Netherlands"
-msgstr ""
+msgstr "Alankomaat"
 
 #: pretix/plugins/stripe/payment.py:1629
 msgid "Spain"
-msgstr ""
+msgstr "Espanja"
 
 #: pretix/plugins/stripe/payment.py:1665
 #, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr ""
+msgstr "Pankkitili {iban} osoitteessa {bank}"
 
 #: pretix/plugins/stripe/payment.py:1676
 msgid "EPS via Stripe"
-msgstr ""
+msgstr "EPS Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1707
 msgid "Multibanco via Stripe"
-msgstr ""
+msgstr "Multibanco Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1711
 msgid ""
 "Multibanco is a payment method available to Portuguese bank account holders."
 msgstr ""
+"Multibanco on maksutapa, joka on portugalilaisten pankkitilien haltijoiden "
+"käytettävissä."
 
 #: pretix/plugins/stripe/payment.py:1729
 msgid "Przelewy24 via Stripe"
-msgstr ""
+msgstr "Przelewy24 Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1733
 msgid ""
@@ -29379,128 +29469,140 @@ msgid ""
 "banks. Please keep your online banking account and login information "
 "available."
 msgstr ""
+"Przelewy24 on online-maksutapa, joka on puolalaisten pankkien asiakkaiden "
+"käytettävissä. Pidä verkkopankkitilisi ja kirjautumistietosi saatavilla."
 
 #: pretix/plugins/stripe/payment.py:1768
 msgid "WeChat Pay via Stripe"
-msgstr ""
+msgstr "WeChat Pay Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1773
 msgid ""
 "This payment method is available to users of the Chinese app WeChat. Please "
 "keep your login information available."
 msgstr ""
+"Tämä maksutapa on kiinalaisen WeChat-sovelluksen käyttäjien käytettävissä. "
+"Pidä kirjautumistietosi saatavilla."
 
 #: pretix/plugins/stripe/payment.py:1796
 msgid "Revolut Pay via Stripe"
-msgstr ""
+msgstr "Revolut Pay Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1797
 msgid "Revolut Pay"
-msgstr ""
+msgstr "Revolut Pay"
 
 #: pretix/plugins/stripe/payment.py:1801
 msgid ""
 "This payment method is available to users of the Revolut app. Please keep "
 "your login information available."
 msgstr ""
+"Tämä maksutapa on Revolut-sovelluksen käyttäjien käytettävissä. Pidä "
+"kirjautumistietosi saatavilla."
 
 #: pretix/plugins/stripe/payment.py:1815
 msgid "PayPal via Stripe"
-msgstr ""
+msgstr "PayPal Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1822
 msgid "Swish via Stripe"
-msgstr ""
+msgstr "Swish Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1827
 msgid ""
 "This payment method is available to users of the Swedish apps Swish and "
 "BankID. Please have your app ready."
 msgstr ""
+"Tämä maksutapa on ruotsalaisten sovellusten Swish ja BankID käyttäjien "
+"käytettävissä. Pidä sovelluksesi valmiina."
 
 #: pretix/plugins/stripe/payment.py:1846
 msgid "TWINT via Stripe"
-msgstr ""
+msgstr "TWINT Stripen kautta"
 
 #: pretix/plugins/stripe/payment.py:1851
 msgid ""
 "This payment method is available to users of the Swiss app TWINT. Please "
 "have your app ready."
 msgstr ""
+"Tämä maksutapa on sveitsiläisen TWINT-sovelluksen käyttäjien käytettävissä. "
+"Pidä sovelluksesi valmiina."
 
 #: pretix/plugins/stripe/payment.py:1873
 msgid ""
 "This payment method is available to MobilePay app users in Denmark and "
 "Finland. Please have your app ready."
 msgstr ""
+"Tämä maksutapa on MobilePay-sovelluksen käyttäjien käytettävissä Tanskassa "
+"ja Suomessa. Pidä sovelluksesi valmiina."
 
 #: pretix/plugins/stripe/signals.py:92
 msgid "Charge succeeded."
-msgstr ""
+msgstr "Maksu onnistui."
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge refunded."
-msgstr ""
+msgstr "Maksu palautetaan."
 
 #: pretix/plugins/stripe/signals.py:94
 msgid "Charge updated."
-msgstr ""
+msgstr "Maksu päivitetty."
 
 #: pretix/plugins/stripe/signals.py:95
 msgid "Charge pending"
-msgstr ""
+msgstr "Maksu odottaa"
 
 #: pretix/plugins/stripe/signals.py:96
 msgid "Payment authorized."
-msgstr ""
+msgstr "Maksu valtuutettu."
 
 #: pretix/plugins/stripe/signals.py:97
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "Maksun valtuutus peruutettu."
 
 #: pretix/plugins/stripe/signals.py:98
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "Maksun valtuutus epäonnistui."
 
 #: pretix/plugins/stripe/signals.py:104
 msgid "Charge failed. Reason: {}"
-msgstr ""
+msgstr "Maksutapahtuma epäonnistui. Syy: {}"
 
 #: pretix/plugins/stripe/signals.py:106
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "Ristiritta luotu. Syy: {}"
 
 #: pretix/plugins/stripe/signals.py:108
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "Ristiriita päivitetty. Syy: {}"
 
 #: pretix/plugins/stripe/signals.py:110
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "Ristiriita suljettu. Syy: {}"
 
 #: pretix/plugins/stripe/signals.py:113
 msgid "Stripe reported an event: {}"
-msgstr ""
+msgstr "Stripe ilmoitti tapahtumasta: {}"
 
 #: pretix/plugins/stripe/signals.py:124
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Stripe Connect: Stripe Stripe: Asiakastunnus"
 
 #: pretix/plugins/stripe/signals.py:131
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Stripe Connect: Salainen avain"
 
 #: pretix/plugins/stripe/signals.py:138
 msgid "Stripe Connect: Publishable key"
-msgstr ""
+msgstr "Stripe Connect: Julkaistavissa oleva avain"
 
 #: pretix/plugins/stripe/signals.py:145
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Stripe Connect: Salainen avain (testi)"
 
 #: pretix/plugins/stripe/signals.py:152
 msgid "Stripe Connect: Publishable key (test)"
-msgstr ""
+msgstr "Stripe Connect: Julkaistavissa oleva avain (testi)"
 
 #: pretix/plugins/stripe/signals.py:178
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:3
@@ -29508,26 +29610,26 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:6
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:9
 msgid "Stripe Connect"
-msgstr ""
+msgstr "Stripe Connect"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "Kokonaismäärä veloitetaan luottokortiltasi."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:12
 msgid "Card type"
-msgstr ""
+msgstr "Kortin tyyppi"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 msgid "The total amount will be withdrawn from your bank account."
-msgstr ""
+msgstr "Kokonaismäärä veloitetaan pankkitililtäsi."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:23
 msgid "Banking Institution"
-msgstr ""
+msgstr "Pankkilaitos"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:25
@@ -29543,46 +29645,54 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
+"Kun olet lähettänyt tilauksesi, ohjaamme sinut maksupalveluntarjoajalle "
+"maksun suorittamista varten. Tämän jälkeen sinut ohjataan takaisin tänne "
+"saadaksesi lippusi."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
 "This transaction will be marked as Mail Order/Telephone Order, exempting it "
 "from Strong Customer Authentication (SCA) whenever possible"
 msgstr ""
+"Tämä maksutapahtuma merkitään postimyynniksi/puhelintilaukseksi, jolloin se "
+"vapautetaan mahdollisuuksien mukaan asiakkaan vahvan tunnistamisen (SCA) "
+"piiristä"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:19
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr ""
+msgstr "Jos haluat maksaa luottokortilla, ota JavaScript käyttöön."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:25
 msgid ""
 "You already entered a card number that we will use to charge the payment "
 "amount."
-msgstr ""
+msgstr "Olet jo antanut korttinumeron, jota käytämme maksun veloittamiseen."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:36
 msgid "Use a different card"
-msgstr ""
+msgstr "Käytä eri korttia"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:66
 msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"Maksuasi käsittelee Stripe, Inc. Luottokorttitietosi siirretään suoraan "
+"Stripeen, eivätkä ne koskaan päädy palvelillimme."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
 msgid "For a SEPA Debit payment, please turn on JavaScript."
-msgstr ""
+msgstr "SEPA Debit -maksua varten ota JavaScript käyttöön."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:19
 msgid ""
 "You already entered a bank account that we will use to charge the payment "
 "amount."
-msgstr ""
+msgstr "Olet jo antanut pankkitilin, jota käytämme maksun veloittamiseen."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:30
 msgid "Use a different account"
-msgstr ""
+msgstr "Käytä eri tiliä"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:54
 #, python-format
@@ -29598,14 +29708,24 @@ msgid ""
 "statement that you can obtain from your bank. You agree to receive "
 "notifications for future debits up to 2 days before they occur."
 msgstr ""
+"Antamalla maksutietosi ja vahvistamalla tämän maksun valtuutat (A) "
+"%(sepa_creditor_name)s ja Stripe, maksupalveluntarjoajamme ja/tai PPRO, sen "
+"paikallinen palveluntarjoaja, lähettämään pankillesi ohjeet tilisi "
+"veloittamiseksi ja (B) pankkisi veloittamaan tiliäsi näiden ohjeiden "
+"mukaisesti. Osana oikeuksiasi sinulla on oikeus saada pankiltasi hyvitystä "
+"pankkisi kanssa tekemäsi sopimuksen ehtojen mukaisesti. Palautusta on "
+"haettava 8 viikon kuluessa siitä päivästä, jona tiliäsi veloitettiin. "
+"Oikeutesi selitetään selvityksessä, jonka saat pankistasi. Suostut saamaan "
+"ilmoitukset tulevista veloituksista enintään 2 päivää ennen niiden "
+"tapahtumista."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:7
 msgid "Charge ID"
-msgstr ""
+msgstr "Maksun tunnus"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:18
 msgid "MOTO"
-msgstr ""
+msgstr "MOTO"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:26
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:34
@@ -29615,7 +29735,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:64
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:67
 msgid "Payer name"
-msgstr ""
+msgstr "Maksajan nimi"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
 msgid "Do you really want to disconnect your Stripe account?"
@@ -29634,14 +29754,16 @@ msgid ""
 "In your online bank account or from an ATM, choose \"Payment and other "
 "services\"."
 msgstr ""
+"Valitse verkkopankkitililläsi tai pankkiautomaatista ”Maksaminen ja muut "
+"palvelut”."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:14
 msgid "Click \"Payments of services/shopping\"."
-msgstr ""
+msgstr "Napsauta ”Palvelujen/ostosten maksut”."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:19
 msgid "Enter the entity number, reference number, and amount."
-msgstr ""
+msgstr "Kirjoita yksikön numero, viitenumero ja määrä."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
 msgid "Entity number:"
@@ -29656,55 +29778,63 @@ msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
+"Odotamme vastausta maksupalveluntarjoajalta maksuasi koskien. Ota meihin "
+"yhteyttä, jos tämä kestää kauemmin kuin muutaman päivän."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:42
 msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
+"Sinun on vahvistettava maksusi. Klikkaa alla olevaa linkkiä tai aloita uusi "
+"maksu."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:48
 msgid "Confirm payment"
-msgstr ""
+msgstr "Vahvista maksutapahtuma"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:54
 msgid ""
 "Please scan the barcode below to complete your WeChat payment. Once you have "
 "completed your payment, you can refresh this page."
 msgstr ""
+"Skannaa alla oleva viivakoodi saadaksesi WeChat-maksun suoritettua. Kun olet "
+"suorittanut maksun, voit päivittää tämän sivun."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:62
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr ""
+msgstr "Maksutapahtumaa ei voitu suorittaa seuraavasta syystä:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
 msgid "Confirm payment: %(code)s"
-msgstr ""
+msgstr "Vahvista maksu: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:20
 msgid "Confirming your payment…"
-msgstr ""
+msgstr "Maksun vahvistaminen…"
 
 #: pretix/plugins/stripe/views.py:104 pretix/plugins/stripe/views.py:110
 #: pretix/plugins/stripe/views.py:137 pretix/plugins/stripe/views.py:149
 msgid "An error occurred during connecting with Stripe, please try again."
-msgstr ""
+msgstr "Stripeen yhdistämisen aikana tapahtui virhe, yritä uudelleen."
 
 #: pretix/plugins/stripe/views.py:157 pretix/plugins/stripe/views.py:159
 msgid "Stripe returned an error: {}"
-msgstr ""
+msgstr "Stripe palautti virheen: {}"
 
 #: pretix/plugins/stripe/views.py:162
 msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Stripe-tilisi on nyt yhdistetty pretixiin. Voit muuttaa asetuksia "
+"yksityiskohtaisesti alla."
 
 #: pretix/plugins/stripe/views.py:476
 msgid "Your Stripe account has been disconnected."
-msgstr ""
+msgstr "Stripe-tilisi yhteys on katkaistu."
 
 #: pretix/plugins/stripe/views.py:506 pretix/plugins/stripe/views.py:525
 #: pretix/plugins/stripe/views.py:530
@@ -29712,21 +29842,25 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Maksuprosessissa tapahtui virhe. Tarkista sähköpostissasi oleva linkki "
+"jatkaaksesi."
 
 #: pretix/plugins/stripe/views.py:562
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
 msgstr ""
+"Meillä oli ongelmia korttimaksun hyväksymisessä. Yritä uudelleen ja ota "
+"meihin yhteyttä, jos ongelma jatkuu."
 
 #: pretix/plugins/stripe/views.py:590 pretix/plugins/stripe/views.py:593
 msgid "Sorry, there was an error in the payment process."
-msgstr ""
+msgstr "Valitettavasti maksuprosessissa tapahtui virhe."
 
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
 msgid "PDF ticket output"
-msgstr ""
+msgstr "PDF-lipun tulostus"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:52
 msgid ""
