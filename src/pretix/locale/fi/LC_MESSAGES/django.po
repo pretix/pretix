@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
 "PO-Revision-Date: 2025-02-09 13:07+0000\n"
-"Last-Translator: Hannu Kaakinen <hannu.kaakinen@om.org>\n"
+"Last-Translator: Karoliina Grohn <karoliina.grohn@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -29963,8 +29963,9 @@ msgid "Ticket layouts"
 msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:10
+#, fuzzy
 msgid "You haven't created any layouts yet."
-msgstr ""
+msgstr "Et ole luonut vielä asetelmaa."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:17
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:24
@@ -29972,8 +29973,9 @@ msgid "Create a new layout"
 msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:63
+#, fuzzy
 msgid "PDF output"
-msgstr ""
+msgstr "PDF"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:65
 msgid "Download tickets (PDF)"
@@ -32513,8 +32515,8 @@ msgstr "Tililläsi ei ole vielä jäsenyyksiä."
 #, python-format
 msgid "%(counter)s item"
 msgid_plural "%(counter)s items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(counter)s tuote"
+msgstr[1] "%(counter)s tuotteet"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:78
 msgid "You don’t have any orders in your account yet."
@@ -32530,7 +32532,7 @@ msgstr "Salasanan nollaus"
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
 msgid "Set a new password for your account"
-msgstr ""
+msgstr "Aseta uusi salasana tilillesi"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:5
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:10
@@ -32539,17 +32541,17 @@ msgstr "Poista profiili"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:15
 msgid "Do you really want to delete the following profile from your account?"
-msgstr ""
+msgstr "Haluatko todella poistaa seuraavan profiilin tililtäsi?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:5
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:11
 #: pretix/presale/views/customer.py:378
 msgid "Attendee profiles"
-msgstr ""
+msgstr "Osaanottajaprofiili"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:37
 msgid "You don’t have any attendee profiles in your account yet."
-msgstr ""
+msgstr "Sinulla ei ole vielä osanottajaprofiileja tililläsi."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
@@ -32558,19 +32560,19 @@ msgstr "Rekisteröityminen"
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
 #, python-format
 msgid "Create a new account at %(org)s"
-msgstr ""
+msgstr "Luo uusi tili %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
 msgid "Log in to an existing account"
-msgstr ""
+msgstr "Kirjaudu sisään olemassa olevalle tilille"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:20
 msgid "Request a new password"
-msgstr ""
+msgstr "Pyydä uutta salasanaa"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:10
 msgid "Event list"
-msgstr ""
+msgstr "Tapahtumalista"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:39
 msgid "Past events"
@@ -32587,7 +32589,7 @@ msgstr "Useita päivämääriä"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
 msgid "No archived events found."
-msgstr ""
+msgstr "Arkistoituja tapahtumia ei löydy."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
 msgid "Show upcoming"
@@ -32604,7 +32606,7 @@ msgstr "Näytä menneet tapahtumat"
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr ""
+msgstr "Sivu %(page)s%(of)s"
 
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
@@ -32614,15 +32616,15 @@ msgstr "Pyyntöäsi käsitellään …"
 #: pretix/presale/utils.py:271 pretix/presale/utils.py:417
 #: pretix/presale/utils.py:418
 msgid "The selected event was not found."
-msgstr ""
+msgstr "Valittua tapahtumaa ei löytynyt."
 
 #: pretix/presale/utils.py:381
 msgid "This feature is not enabled."
-msgstr ""
+msgstr "Tämä toiminto ei ole sallittu."
 
 #: pretix/presale/utils.py:427 pretix/presale/utils.py:433
 msgid "The selected organizer was not found."
-msgstr ""
+msgstr "Valittua järjestäjää ei löytynyt."
 
 #: pretix/presale/views/__init__.py:272
 #, python-brace-format
@@ -32630,10 +32632,12 @@ msgid ""
 "Your selected payment method can only be used for a payment of at least "
 "{amount}."
 msgstr ""
+"Valitsemaasi maksutapaa voi käyttää ainoastaan vähintään {amount} kokoisen "
+"summan maksamiseen."
 
 #: pretix/presale/views/cart.py:200
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "Ole hyvä ja anna vain positiivisia lukuja."
 
 #: pretix/presale/views/cart.py:439
 msgid "We applied the voucher to as many products in your cart as we could."
