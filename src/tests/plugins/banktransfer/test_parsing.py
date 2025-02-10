@@ -40,3 +40,5 @@ def test_date_formats():
 
     assert dt == parse_date("2020-07-01")
     assert dt == parse_date("2020-7-1")
+
+    assert dt == parse_date("01/07/2020", "GB")
