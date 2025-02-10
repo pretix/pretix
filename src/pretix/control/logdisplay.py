@@ -325,7 +325,7 @@ class OrderChangedSplitFrom(OrderLogEntryType):
 })
 class CheckinErrorLogEntryType(OrderLogEntryType):
     def display(self, logentry: LogEntry, data):
-        self.display_plain(self.plain, logentry, data)
+        return self.display_plain(self.plain, logentry, data)
 
     def display_plain(self, plain, logentry: LogEntry, data):
         if isinstance(plain, tuple):
