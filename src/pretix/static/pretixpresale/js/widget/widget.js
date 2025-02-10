@@ -77,6 +77,13 @@ var strings = {
         'FR': django.gettext('Fr'),
         'SA': django.gettext('Sa'),
         'SU': django.gettext('Su'),
+        'MONDAY': django.gettext('Monday'),
+        'TUESDAY': django.gettext('Tuesday'),
+        'WEDNESDAY': django.gettext('Wednesday'),
+        'THURSDAY': django.gettext('Thursday'),
+        'FRIDAY': django.gettext('Friday'),
+        'SATURDAY': django.gettext('Saturday'),
+        'SUNDAY': django.gettext('Sunday'),
     },
     'months': {
         '01': django.gettext('January'),
@@ -990,10 +997,10 @@ Vue.component('pretix-widget-event-form', {
     template: ('<div class="pretix-widget-event-form">'
         // Back navigation
         + '<div class="pretix-widget-event-list-back" v-if="$root.events || $root.weeks || $root.days">'
-        + '<a href="#" @click.prevent.stop="back_to_list" v-if="!$root.subevent">&lsaquo; '
+        + '<a :href="href" rel="back" @click.prevent.stop="back_to_list" v-if="!$root.subevent">&lsaquo; '
         + strings['back_to_list']
         + '</a>'
-        + '<a href="#" @click.prevent.stop="back_to_list" v-if="$root.subevent">&lsaquo; '
+        + '<a :href="href" rel="back" @click.prevent.stop="back_to_list" v-if="$root.subevent">&lsaquo; '
         + strings['back_to_dates']
         + '</a>'
         + '</div>'
@@ -1097,6 +1104,9 @@ Vue.component('pretix-widget-event-form', {
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
+        href: function () {
+            return this.$root.event?.event_url || this.$root.parent_stack[this.$root.parent_stack.length-1];
+        },
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && (this.$root.events || this.$root.weeks || this.$root.days));
         },
@@ -1140,6 +1150,11 @@ Vue.component('pretix-widget-event-form', {
         back_to_list: function() {
             this.$root.target_url = this.$root.parent_stack.pop();
             this.$root.error = null;
+            if (!this.$root.subevent) {
+                // reset if we are not in a series
+                this.$root.name = null;
+                this.$root.frontpage_text = null;
+            }
             this.$root.subevent = null;
             this.$root.offset = 0;
             this.$root.append_events = false;
@@ -1151,6 +1166,12 @@ Vue.component('pretix-widget-event-form', {
             } else {
                 this.$root.view = "weeks";
             }
+
+            var $el = this.$root.$el;
+            this.$root.$nextTick(function() {
+                // wait for redraw, then focus content element for better a11y
+                $el.focus();
+            });
         },
         calculate_buy_disabled: function() {
             var i, j, k;
@@ -1218,7 +1239,7 @@ Vue.component('pretix-widget-event-list-filter-form', {
 });
 
 Vue.component('pretix-widget-event-list-entry', {
-    template: ('<a :class="classObject" @click.prevent.stop="select">'
+    template: ('<a :href="href" :class="classObject" @click.prevent.stop="select">'
         + '<div class="pretix-widget-event-list-entry-name">{{ event.name }}</div>'
         + '<div class="pretix-widget-event-list-entry-date">{{ event.date_range }}</div>'
         + '<div class="pretix-widget-event-list-entry-location">{{ location }}</div>'  // hidden by css for now, but
@@ -1241,7 +1262,10 @@ Vue.component('pretix-widget-event-list-entry', {
         },
         location: function () {
             return this.event.location.replace(/\s*\n\s*/g, ', ');
-        }
+        },
+        href: function () {
+            return this.event.event_url + (this.event.subevent ? this.event.subevent + '/' : '');
+        },
     },
     methods: {
         select: function () {
@@ -1258,7 +1282,7 @@ Vue.component('pretix-widget-event-list-entry', {
 Vue.component('pretix-widget-event-list', {
     template: ('<div class="pretix-widget-event-list">'
         + '<div class="pretix-widget-back" v-if="$root.weeks || $root.parent_stack.length > 0">'
-        + '<a href="#" @click.prevent.stop="back_to_calendar" role="button">&lsaquo; '
+        + '<a :href="href" rel="prev" @click.prevent.stop="back_to_calendar">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1274,9 +1298,16 @@ Vue.component('pretix-widget-event-list', {
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && this.$root.parent_stack.length > 0);
         },
+        href: function () {
+            return this.$root.$weeks ? this.$root.event.event_url : this.$root.parent_stack[this.$root.parent_stack.length-1];
+        },
     },
     methods: {
         back_to_calendar: function () {
+            // make sure to always focus content element
+            this.$nextTick(function () {
+                this.$root.$el.focus();
+            });
             this.$root.offset = 0;
             this.$root.append_events = false;
             if (this.$root.weeks) {
@@ -1301,7 +1332,7 @@ Vue.component('pretix-widget-event-list', {
 });
 
 Vue.component('pretix-widget-event-calendar-event', {
-    template: ('<a :class="classObject" @click.prevent.stop="select">'
+    template: ('<a :href="href" :class="classObject" @click.prevent.stop="select" v-bind:aria-describedby="describedby">'
         + '<strong class="pretix-widget-event-calendar-event-name">'
         + '{{ event.name }}'
         + '</strong>'
@@ -1309,9 +1340,13 @@ Vue.component('pretix-widget-event-calendar-event', {
         + '<div class="pretix-widget-event-calendar-event-availability" v-if="!event.continued && event.availability.text">{{ event.availability.text }}</div>'
         + '</a>'),
     props: {
-        event: Object
+        event: Object,
+        describedby: String,
     },
     computed: {
+        href: function () {
+            return this.event.event_url + (this.event.subevent ? this.event.subevent + '/' : '');
+        },
         classObject: function () {
             var o = {
                 'pretix-widget-event-calendar-event': true
@@ -1337,11 +1372,11 @@ Vue.component('pretix-widget-event-calendar-event', {
 
 Vue.component('pretix-widget-event-week-cell', {
     template: ('<div :class="classObject" @click.prevent.stop="selectDay">'
-        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day" :id="id">'
         + '{{ dayhead }}'
         + '</div>'
         + '<div class="pretix-widget-event-calendar-events" v-if="day">'
-        + '<pretix-widget-event-calendar-event v-for="e in day.events" :event="e"></pretix-widget-event-calendar-event>'
+        + '<pretix-widget-event-calendar-event v-for="e in day.events" :event="e" :describedby="id"></pretix-widget-event-calendar-event>'
         + '</div>'
         + '</div>'),
     props: {
@@ -1367,6 +1402,9 @@ Vue.component('pretix-widget-event-week-cell', {
         }
     },
     computed: {
+        id: function () {
+            return this.day ? this.$root.html_id + '-' + this.day.date : '';
+        },
         dayhead: function () {
             if (!this.day) {
                 return;
@@ -1402,7 +1440,7 @@ Vue.component('pretix-widget-event-week-cell', {
 
 Vue.component('pretix-widget-event-calendar-cell', {
     template: ('<td :class="classObject" @click.prevent.stop="selectDay">'
-        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day" v-bind:aria-label="date">'
         + '{{ daynum }}'
         + '</div>'
         + '<div class="pretix-widget-event-calendar-events" v-if="day">'
@@ -1437,6 +1475,9 @@ Vue.component('pretix-widget-event-calendar-cell', {
                 return;
             }
             return this.day.date.substr(8);
+        },
+        date: function () {
+            return this.day ? (new Date(this.day.date)).toLocaleDateString() : '';
         },
         classObject: function () {
             var o = {};
@@ -1495,26 +1536,26 @@ Vue.component('pretix-widget-event-calendar', {
 
         // Calendar navigation
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth" role="button">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" :href="prev_href" @click.prevent.stop="prevmonth">&laquo; '
         + strings['previous_month']
         + '</a> '
         + '<strong>{{ monthname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth" role="button">'
+        + '<a class="pretix-widget-event-calendar-next-month" :href="next_href" @click.prevent.stop="nextmonth">'
         + strings['next_month']
         + ' &raquo;</a>'
         + '</div>'
 
         // Calendar
-        + '<table class="pretix-widget-event-calendar-table">'
+        + '<table class="pretix-widget-event-calendar-table" :id="id" tabindex="0" v-bind:aria-label="monthname">'
         + '<thead>'
         + '<tr>'
-        + '<th>' + strings['days']['MO'] + '</th>'
-        + '<th>' + strings['days']['TU'] + '</th>'
-        + '<th>' + strings['days']['WE'] + '</th>'
-        + '<th>' + strings['days']['TH'] + '</th>'
-        + '<th>' + strings['days']['FR'] + '</th>'
-        + '<th>' + strings['days']['SA'] + '</th>'
-        + '<th>' + strings['days']['SU'] + '</th>'
+        + '<th aria-label="' + strings['days']['MONDAY'] + '">' + strings['days']['MO'] + '</th>'
+        + '<th aria-label="' + strings['days']['TUESDAY'] + '">' + strings['days']['TU'] + '</th>'
+        + '<th aria-label="' + strings['days']['WEDNESDAY'] + '">' + strings['days']['WE'] + '</th>'
+        + '<th aria-label="' + strings['days']['THURSDAY'] + '">' + strings['days']['TH'] + '</th>'
+        + '<th aria-label="' + strings['days']['FRIDAY'] + '">' + strings['days']['FR'] + '</th>'
+        + '<th aria-label="' + strings['days']['SATURDAY'] + '">' + strings['days']['SA'] + '</th>'
+        + '<th aria-label="' + strings['days']['SUNDAY'] + '">' + strings['days']['SU'] + '</th>'
         + '</tr>'
         + '</thead>'
         + '<tbody>'
@@ -1528,7 +1569,41 @@ Vue.component('pretix-widget-event-calendar', {
         },
         monthname: function () {
             return strings['months'][this.$root.date.substr(5, 2)] + ' ' + this.$root.date.substr(0, 4);
-        }
+        },
+        month: function () {
+            return parseInt(this.$root.date.substr(5, 2));
+        },
+        year: function () {
+            return parseInt(this.$root.date.substr(0, 4));
+        },
+        prev_month_date: function () {
+            var pm = this.month - 1;
+            return String(this.year - (pm ? 0 : 1)) + "-" + padNumber((pm || 12), 2);
+        },
+        next_month_date: function () {
+            var pm = this.month + 1;
+            return String(this.year + (pm > 12 ? 1 : 0)) + "-" + padNumber(pm % 12, 2);
+        },
+        id: function () {
+            return this.$root.html_id + "-event-calendar-table";
+        },
+        base_href: function () {
+            return this.$root.event?.event_url || this.$root.target_url;
+        },
+        prev_href: function () {
+            return [
+                this.base_href,
+                '?style=calendar&date=',
+                this.prev_month_date
+            ].join('');
+        },
+        next_href: function () {
+            return [
+                this.base_href,
+                '?style=calendar&date=',
+                this.next_month_date
+            ].join('');
+        },
     },
     methods: {
         back_to_list: function () {
@@ -1538,28 +1613,14 @@ Vue.component('pretix-widget-event-calendar', {
             this.$root.frontpage_text = null;
         },
         prevmonth: function () {
-            var curMonth = parseInt(this.$root.date.substr(5, 2));
-            var curYear = parseInt(this.$root.date.substr(0, 4));
-            curMonth--;
-            if (curMonth < 1) {
-                curMonth = 12;
-                curYear--;
-            }
-            this.$root.date = String(curYear) + "-" + padNumber(curMonth, 2) + "-01";
+            this.$root.date = this.prev_month_date + "-01";
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         },
         nextmonth: function () {
-            var curMonth = parseInt(this.$root.date.substr(5, 2));
-            var curYear = parseInt(this.$root.date.substr(0, 4));
-            curMonth++;
-            if (curMonth > 12) {
-                curMonth = 1;
-                curYear++;
-            }
-            this.$root.date = String(curYear) + "-" + padNumber(curMonth, 2) + "-01";
+            this.$root.date = this.next_month_date + "-01";
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         }
     },
 });
@@ -1584,17 +1645,17 @@ Vue.component('pretix-widget-event-week-calendar', {
         // Calendar navigation
         + '<div class="pretix-widget-event-description" v-if="$root.frontpage_text && display_event_info" v-html="$root.frontpage_text"></div>'
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevweek" role="button">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" :href="prev_href" @click.prevent.stop="prevweek" role="button">&laquo; '
         + strings['previous_week']
         + '</a> '
         + '<strong>{{ weekname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextweek" role="button">'
+        + '<a class="pretix-widget-event-calendar-next-month" :href="next_href" @click.prevent.stop="nextweek" role="button">'
         + strings['next_week']
         + ' &raquo;</a>'
         + '</div>'
 
         // Actual calendar
-        + '<div class="pretix-widget-event-week-table">'
+        + '<div class="pretix-widget-event-week-table" :id="id" tabindex="0" v-bind:aria-label="weekname">'
         + '<div class="pretix-widget-event-week-col" v-for="d in $root.days">'
         + '<pretix-widget-event-week-cell :day="d">'
         + '</pretix-widget-event-week-cell>'
@@ -1607,10 +1668,48 @@ Vue.component('pretix-widget-event-week-calendar', {
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && this.$root.parent_stack.length > 0);
         },
+        week: function () {
+            return this.$root.week[1];
+        },
+        year: function () {
+            return this.$root.week[0];
+        },
         weekname: function () {
-            var curWeek = this.$root.week[1];
-            var curYear = this.$root.week[0];
-            return curWeek + ' / ' + curYear;
+            return this.week + ' / ' + this.year;
+        },
+        prev_week_date: function () {
+            var w = this.week - 1;
+            if (!w) {
+                return (this.year - 1) + "-W" + getISOWeeks(this.year - 1);
+            }
+            return this.year + "-W" + w;
+        },
+        next_week_date: function () {
+            var w = this.week + 1;
+            if (w > getISOWeeks(this.year)) {
+                return String(this.year + 1) + "-W1";
+            }
+            return String(this.year) + "-W" + w;
+        },
+        id: function () {
+            return this.$root.html_id + "-event-week-table";
+        },
+        base_href: function () {
+            return this.$root.event?.event_url || this.$root.target_url;
+        },
+        prev_href: function () {
+            return [
+                this.base_href,
+                '?style=week&date=',
+                this.prev_week_date
+            ].join('');
+        },
+        next_href: function () {
+            return [
+                this.base_href,
+                '?style=week&date=',
+                this.next_week_date
+            ].join('');
         },
     },
     methods: {
@@ -1621,34 +1720,20 @@ Vue.component('pretix-widget-event-week-calendar', {
             this.$root.view = "events";
         },
         prevweek: function () {
-            var curWeek = this.$root.week[1];
-            var curYear = this.$root.week[0];
-            curWeek--;
-            if (curWeek < 1) {
-                curYear--;
-                curWeek = getISOWeeks(curYear);
-            }
-            this.$root.week = [curYear, curWeek];
+            this.$root.week = this.prev_week_date.split("-W");
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         },
         nextweek: function () {
-            var curWeek = this.$root.week[1];
-            var curYear = this.$root.week[0];
-            curWeek++;
-            if (curWeek > getISOWeeks(curYear)) {
-                curWeek = 1;
-                curYear++;
-            }
-            this.$root.week = [curYear, curWeek];
+            this.$root.week = this.next_week_date.split("-W");
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         }
     },
 });
 
 Vue.component('pretix-widget', {
-    template: ('<div class="pretix-widget-wrapper" ref="wrapper">'
+    template: ('<div class="pretix-widget-wrapper" ref="wrapper" tabindex="0" role="article" v-bind:aria-label="$root.name">'
         + '<div :class="classObject">'
         + shared_loading_fragment
         + '<div class="pretix-widget-error-message" v-if="$root.error && $root.view !== \'event\'">{{ $root.error }}</div>'
@@ -1757,7 +1842,7 @@ var shared_root_methods = {
             }
         });
     },
-    reload: function () {
+    reload: function (opt = {}) {
         var url;
         if (this.$root.is_button) {
             return;
@@ -1874,6 +1959,15 @@ var shared_root_methods = {
                 // If we're on desktop and someone selects a seating-only event in a calendar, let's open it right away,
                 // but only if the person didn't close it before.
                 root.startseating()
+            } else {
+                // make sure to only move focus to content element when it had focus before the reload/click
+                // this is needed because reload is also called on initial load and we do not want to move focus on initial load
+                if (root.$el.contains(document.activeElement)) {
+                    root.$nextTick(function() {
+                        // wait for redraw, then focus content element for better a11y
+                        (opt.focus ? document.querySelector(opt.focus) : root.$el).focus();
+                    });
+                }
             }
         }, function (error) {
             root.categories = [];
