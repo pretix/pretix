@@ -401,6 +401,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'customer_accounts',
         'customer_accounts_native',
         'customer_accounts_link_by_email',
+        'customer_accounts_disallow_anonymous_access',
         'invoice_regenerate_allowed',
         'contact_mail',
         'imprint_url',
