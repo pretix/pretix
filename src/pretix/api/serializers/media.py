@@ -47,9 +47,6 @@ class NestedOrderMiniSerializer(I18nAwareModelSerializer):
 class NestedOrderPositionSerializer(OrderPositionSerializer):
     order = NestedOrderMiniSerializer()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
 
 class NestedGiftCardSerializer(GiftCardSerializer):
 
