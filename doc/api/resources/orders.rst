@@ -2242,6 +2242,9 @@ otherwise, such as splitting an order or changing fees.
    * ``patch_fees``: A list of objects with the two keys ``fee`` specifying an order fee ID and
      ``body`` specifying the desired changed values of the position (``value``).
 
+   * ``create_fees``: A list of objects describing new order fees with the fields ``fee_type``, ``value``, ``description``,
+     ``internal_type``, ``tax_rule``
+
    * ``cancel_fees``: A list of objects with the single key ``fee`` specifying an order fee ID.
 
    * ``recalculate_taxes``: If set to ``"keep_net"``, all taxes will be recalculated based on the tax rule and invoice
