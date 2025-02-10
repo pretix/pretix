@@ -123,7 +123,7 @@ LANGUAGES_RTL = {
     'ar', 'hw'
 }
 LANGUAGES_INCUBATING = {
-    'fi', 'pt-br', 'gl',
+    'pt-br', 'gl',
 }
 LANGUAGES = ALL_LANGUAGES
 LOCALE_PATHS = [
