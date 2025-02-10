@@ -103,4 +103,4 @@ API
 
 .. automodule:: pretix.api.signals
    :no-index:
-   :members: register_device_security_profile
+   :members: register_device_security_profile, order_api_details, orderposition_api_details
