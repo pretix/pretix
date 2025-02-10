@@ -80,6 +80,17 @@
           "nowhitespace": {
             "description": "Whether a barcode should be rendered without margins. Only used for type 'barcodearea'.",
             "type": "boolean"
+          },
+          "color": {
+            "description": "QR color as a tuple of three integers in the 0-255 range and one float in the 0-1 range. The last value (alpha) is ignored by the current implementation but might be used in the future.",
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "minItems": 3,
+            "maxItems": 4
           }
         },
         "additionalProperties": false
