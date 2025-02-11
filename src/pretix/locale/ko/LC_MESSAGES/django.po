@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-06 18:00+0000\n"
-"Last-Translator: 조정화 <junghwa.jo@om.org>\n"
+"PO-Revision-Date: 2025-02-11 20:00+0000\n"
+"Last-Translator: deborahfoell <deborah.foell@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -391,11 +391,11 @@ msgid "Medium connected to other event"
 msgstr "다른 이벤트와 연결된 매체"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:686
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr "\"{applicationion_name}\" 애플리케이션이 계정에 액세스할 수 있는 권한을 "
+msgstr "\"{application_name}\" 애플리케이션이 계정에 액세스할 수 있는 권한을 "
 "부여받았습니다."
 
 #: pretix/api/views/order.py:607 pretix/control/views/orders.py:1588
