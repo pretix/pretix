@@ -477,7 +477,7 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, AsyncFormView):
                 log_entries.append(
                     v.log_action('pretix.voucher.added', data=data, user=self.request.user, save=False)
                 )
-            LogEntry.objects.bulk_create(log_entries)
+            LogEntry.bulk_create_and_postprocess(log_entries)
             form.post_bulk_save(batch_vouchers)
             batch_vouchers.clear()
             set_progress(len(voucherids) / total_num * (50. if form.cleaned_data['send'] else 100.))
@@ -619,19 +619,22 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
                 'forbidden': self.objects.exclude(redeemed=0),
             })
         elif request.POST.get('action') == 'delete_confirm':
+            log_entries = []
             for obj in self.objects:
                 if obj.allow_delete():
-                    obj.log_action('pretix.voucher.deleted', user=self.request.user)
+                    log_entries.append(obj.log_action('pretix.voucher.deleted', user=self.request.user, save=False))
                     CartPosition.objects.filter(addon_to__voucher=obj).delete()
                     obj.cartposition_set.all().delete()
                     obj.delete()
                 else:
-                    obj.log_action('pretix.voucher.changed', user=self.request.user, data={
+                    log_entries.append(obj.log_action('pretix.voucher.changed', user=self.request.user, data={
                         'max_usages': min(obj.redeemed, obj.max_usages),
                         'bulk': True
-                    })
+                    }), save=False)
                     obj.max_usages = min(obj.redeemed, obj.max_usages)
                     obj.save(update_fields=['max_usages'])
+
+            LogEntry.bulk_create_and_postprocess(log_entries)
             messages.success(request, _('The selected vouchers have been deleted or disabled.'))
         return redirect(self.get_success_url())
 
