@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -26,11 +27,16 @@ from pretix.base.models import WaitingListEntry
 
 
 class WaitingListSerializer(I18nAwareModelSerializer):
+    locale = serializers.ChoiceField(choices=[])
 
     class Meta:
         model = WaitingListEntry
         fields = ('id', 'created', 'name', 'name_parts', 'email', 'phone', 'voucher', 'item', 'variation', 'locale', 'subevent', 'priority')
         read_only_fields = ('id', 'created', 'voucher')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["locale"].choices = self.context['event'].settings.locales
 
     def validate(self, data):
         data = super().validate(data)
