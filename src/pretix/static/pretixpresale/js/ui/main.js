@@ -387,14 +387,14 @@ $(function () {
             var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
             $first_ticket_form.find("[id$=" + this.id.substring(3) + "]").val(this.value);
             if (this.placeholder) {
-                $first_ticket_form.find("[placeholder='" + this.placeholder + "']").val(this.value);
+                $first_ticket_form.find("[placeholder='" + CSS.escape(this.placeholder) + "']").val(this.value);
             }
             var label = $("label[for=" + this.id +"]").first().contents().filter(function () {
                 return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
             }).text().trim();
             if (label) {
                 // match to placeholder and label
-                $first_ticket_form.find("[placeholder='" + label + "']").val(this.value);
+                $first_ticket_form.find("[placeholder='" + CSS.escape(label) + "']").val(this.value);
                 var v = this.value;
                 $first_ticket_form.find("label").each(function() {
                     var text = $(this).first().contents().filter(function () {
