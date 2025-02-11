@@ -169,11 +169,10 @@ class LogEntry(models.Model):
     def bulk_create_and_postprocess(cls, objects):
         if connections['default'].features.can_return_rows_from_bulk_insert:
             cls.objects.bulk_create(objects)
-            cls.bulk_postprocess(objects)
         else:
             for le in objects:
                 le.save()
-            cls.bulk_postprocess(objects)
+        cls.bulk_postprocess(objects)
 
     @classmethod
     def bulk_postprocess(cls, objects):
