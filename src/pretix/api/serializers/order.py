@@ -1102,6 +1102,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
+    locale = serializers.ChoiceField(choices=[])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1109,6 +1110,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         self.fields['customer'].queryset = self.context['event'].organizer.customers.all()
         self.fields['expires'].required = False
         self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
+        self.fields["locale"].choices = self.context['event'].settings.locales
 
     class Meta:
         model = Order
