@@ -1102,7 +1102,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
-    locale = serializers.ChoiceField(choices=[])
+    locale = serializers.ChoiceField(choices=[], required=False, allow_null=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

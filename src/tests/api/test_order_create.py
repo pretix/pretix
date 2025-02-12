@@ -623,6 +623,23 @@ def test_order_create_sales_channel_invalid(token_client, organizer, event, item
 
 
 @pytest.mark.django_db
+def test_order_create_locale_optional(token_client, organizer, event, item, quota, question):
+    event.settings.locale = "de"
+    event.settings.locales = ["en", "de"]
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    del res['locale']
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data["locale"] == event.settings.locale
+
+
+@pytest.mark.django_db
 def test_order_create_locale_invalid(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk

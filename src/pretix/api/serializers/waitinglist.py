@@ -27,7 +27,7 @@ from pretix.base.models import WaitingListEntry
 
 
 class WaitingListSerializer(I18nAwareModelSerializer):
-    locale = serializers.ChoiceField(choices=[])
+    locale = serializers.ChoiceField(choices=[], required=False, allow_null=True)
 
     class Meta:
         model = WaitingListEntry
@@ -65,5 +65,8 @@ class WaitingListSerializer(I18nAwareModelSerializer):
             )
         if data.get('name_parts') and '_scheme' not in data.get('name_parts'):
             data['name_parts']['_scheme'] = event.settings.name_scheme
+
+        if data.get('locale', None) is None:
+            data['locale'] = event.settings.locale
 
         return data
