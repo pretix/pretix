@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-12 11:50+0000\n"
+"PO-Revision-Date: 2025-02-12 11:51+0000\n"
 "Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -33000,7 +33000,7 @@ msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
 msgstr ""
-"Pode escolher entre %(min_count)s e %(max_count)s opções desta categoria."
+"Podes escolher entre %(min_count)s e %(max_count)s opções desta categoria."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:64
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:258
