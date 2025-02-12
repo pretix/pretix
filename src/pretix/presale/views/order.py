@@ -120,7 +120,7 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
 
             else:
                 if self.request.customer:
-                    if order.customer.id == self.request.customer.id:
+                    if order.customer_id == self.request.customer.pk:
                         return order
                     else:
                         return None
