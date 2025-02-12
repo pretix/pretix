@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-12 15:27+0000\n"
+"PO-Revision-Date: 2025-02-12 15:56+0000\n"
 "Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -3568,7 +3568,7 @@ msgstr "Precisa selecionar uma variação para este produto."
 #: pretix/control/forms/filter.py:632 pretix/control/forms/filter.py:637
 #: pretix/control/forms/filter.py:642
 msgid "Invoice address"
-msgstr "Endereço de facturação"
+msgstr "Endereço de faturação"
 
 #: pretix/base/modelimport_orders.py:251 pretix/base/modelimport_orders.py:397
 msgid "Please enter a valid country code."
@@ -10890,16 +10890,16 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"recebemos com sucesso o seu pedido {event}. Como pediu\n"
-"um produto que requer a aprovação pelo organizador do evento, pedimos-lhe "
+"recebemos com sucesso o teu pedido {event}. Como pediste\n"
+"um produto que requer a aprovação pelo organizador do evento, pedimos-te "
 "que\n"
-"ser paciente e esperar para o nosso próximo e-mail.\n"
+"sejas paciente e esperes pelo nosso próximo email.\n"
 "\n"
-"Pode mudar os detalhes do seu pedido e ver o seu estado em\n"
+"Podes mudar os detalhes do teu pedido e ver o seu estado em\n"
 "{url}\n"
 "\n"
 "Cumprimentos,\n"
-"A sua equipa {event}"
+"A Equipa {event}"
 
 #: pretix/base/settings.py:2263
 #, python-brace-format
@@ -10920,17 +10920,17 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"recebemos com sucesso o seu pedido para {event} com um valor total\n"
-"de {total_with_currency}. Por favor, concluir o pagamento antes de "
+"recebemos com sucesso o teu pedido para {event} com um valor total\n"
+"de {total_with_currency}. Por favor, conclui o pagamento antes de "
 "{expire_date}.\n"
 "\n"
 "{payment_info}\n"
 "\n"
-"Pode mudar os detalhes do seu pedido e ver o seu estado em\n"
+"Podes mudar os detalhes do teu pedido e ver o seu estado em\n"
 "{url}\n"
 "\n"
 "Cumprimentos,\n"
-"A sua equipa {event}"
+"A Equipa {event}"
 
 #: pretix/base/settings.py:2281
 msgid "Attachment for new orders"
@@ -11010,7 +11010,7 @@ msgstr ""
 #: pretix/base/settings.py:2341
 #, python-brace-format
 msgid "Payment received for your order: {code}"
-msgstr "Pagamento recebido para o seu pedido: {code}"
+msgstr "Pagamento recebido para o teu pedido: {code}"
 
 #: pretix/base/settings.py:2345
 #, python-brace-format
@@ -11029,15 +11029,15 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"recebemos o seu pagamento para {event}. Obrigado!\n"
+"recebemos o teu pagamento para {event}. Obrigado!\n"
 "\n"
 "{payment_info}\n"
 "\n"
-"Pode mudar os detalhes do seu pedido e ver o seu estado em\n"
+"Podes mudar os detalhes do teu pedido e ver o seu estado em\n"
 "{url}\n"
 "\n"
 "Cumprimentos,\n"
-"A sua equipa {event}"
+"A Equipa {event}"
 
 #: pretix/base/settings.py:2363
 #, python-brace-format
@@ -11102,15 +11102,15 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"ainda não recebemos o pagamento total para o seu pedido {event}.\n"
-"Tenha em mente que só garantimos o seu pedido se recebermos\n"
-"seu pagamento antes {expire_date}.\n"
+"ainda não recebemos o pagamento total do teu pedido {event}.\n"
+"Tem em mente que só garantimos a tua inscrição se recebermos\n"
+"o teu pagamento antes de {expire_date}.\n"
 "\n"
-"Pode visualizar as informações de pagamento e o estado do seu pedido em\n"
+"Podes visualizar as informações de pagamento e o estado do teu pedido em\n"
 "{url}\n"
 "\n"
 "Cumprimentos,\n"
-"A sua equipa {event}"
+"A Equipa {event}"
 
 #: pretix/base/settings.py:2412
 #, python-brace-format
@@ -11133,14 +11133,14 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"Ainda não recebemos um pagamento completo para o pedido para o {event}.\n"
-"Tenha em atenção que tem de pagar antes de {expire_date}.\n"
+"Ainda não recebemos o pagamento completo da tua inscrição para o {event}.\n"
+"Tem em atenção que tens de pagar antes de {expire_date}.\n"
 "\n"
-"Pode ver as informações de pagamento e o estado do pedido em\n"
+"Podes ver as informações de pagamento e o estado do pedido em\n"
 "{url}\n"
 "\n"
 "Com os melhores cumprimentos\n"
-"A sua equipa {event}"
+"A Equipa {event}"
 
 #: pretix/base/settings.py:2429
 #, python-brace-format
@@ -11166,10 +11166,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2449
-#, fuzzy, python-brace-format
-#| msgid "Payment received for your order: {code}"
+#, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "Pagamento recebido para o seu pedido: {code}"
+msgstr "Pagamento recebido para o teu pedido: {code}"
 
 #: pretix/base/settings.py:2453
 #, fuzzy, python-brace-format
