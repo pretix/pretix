@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-09 22:00+0000\n"
-"Last-Translator: Karoliina Grohn <karoliina.grohn@om.org>\n"
+"PO-Revision-Date: 2025-02-12 15:27+0000\n"
+"Last-Translator: Johanna Ketola <johanna.ketola@om.org>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -21,75 +21,75 @@ msgstr ""
 
 #: pretix/_base_settings.py:87
 msgid "English"
-msgstr "Englanti"
+msgstr "englanti"
 
 #: pretix/_base_settings.py:88
 msgid "German"
-msgstr "Saksa"
+msgstr "saksa"
 
 #: pretix/_base_settings.py:89
 msgid "German (informal)"
-msgstr "Saksa (Epävirallinen)"
+msgstr "saksa (puhekieli)"
 
 #: pretix/_base_settings.py:90
 msgid "Arabic"
-msgstr "Arabia"
+msgstr "arabia"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr "Baski"
+msgstr "baski"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
-msgstr "Katalaani"
+msgstr "katalaani"
 
 #: pretix/_base_settings.py:93
 msgid "Chinese (simplified)"
-msgstr "Kiina (Yksinkertaistettu)"
+msgstr "kiina (yksinkertaistettu)"
 
 #: pretix/_base_settings.py:94
 msgid "Chinese (traditional)"
-msgstr "Kiina (Perinteinen)"
+msgstr "kiina (perinteinen)"
 
 #: pretix/_base_settings.py:95
 msgid "Czech"
-msgstr "Tšekki"
+msgstr "tšekki"
 
 #: pretix/_base_settings.py:96
 msgid "Danish"
-msgstr "Tanska"
+msgstr "tanska"
 
 #: pretix/_base_settings.py:97
 msgid "Dutch"
-msgstr "Hollanti"
+msgstr "hollanti"
 
 #: pretix/_base_settings.py:98
 msgid "Dutch (informal)"
-msgstr "Hollanti (Epävirallinen)"
+msgstr "hollanti (puhekieli)"
 
 #: pretix/_base_settings.py:99
 msgid "French"
-msgstr "Ranska"
+msgstr "ranska"
 
 #: pretix/_base_settings.py:100
 msgid "Finnish"
-msgstr "Suomi"
+msgstr "suomi"
 
 #: pretix/_base_settings.py:101
 msgid "Galician"
-msgstr "Galego"
+msgstr "galego"
 
 #: pretix/_base_settings.py:102
 msgid "Greek"
-msgstr "Kreikka"
+msgstr "kreikka"
 
 #: pretix/_base_settings.py:103
 msgid "Indonesian"
-msgstr "Indonesia"
+msgstr "indonesia"
 
 #: pretix/_base_settings.py:104
 msgid "Italian"
-msgstr "Italia"
+msgstr "italia"
 
 #: pretix/_base_settings.py:105
 msgid "Japanese"
@@ -97,51 +97,51 @@ msgstr "japani"
 
 #: pretix/_base_settings.py:106
 msgid "Latvian"
-msgstr "Latvia"
+msgstr "latvia"
 
 #: pretix/_base_settings.py:107
 msgid "Norwegian Bokmål"
-msgstr "Norja (Kirjakieli)"
+msgstr "norja (kirjakieli)"
 
 #: pretix/_base_settings.py:108
 msgid "Polish"
-msgstr "Puola"
+msgstr "puola"
 
 #: pretix/_base_settings.py:109
 msgid "Portuguese (Portugal)"
-msgstr "Portugali (Portugali)"
+msgstr "portugali (Portugali)"
 
 #: pretix/_base_settings.py:110
 msgid "Portuguese (Brazil)"
-msgstr "Portugali (Brazilia)"
+msgstr "portugali (Brasilia)"
 
 #: pretix/_base_settings.py:111
 msgid "Romanian"
-msgstr "Romania"
+msgstr "romania"
 
 #: pretix/_base_settings.py:112
 msgid "Russian"
-msgstr "Venäjä"
+msgstr "venäjä"
 
 #: pretix/_base_settings.py:113
 msgid "Slovak"
-msgstr "Slovakki"
+msgstr "slovakki"
 
 #: pretix/_base_settings.py:114
 msgid "Swedish"
-msgstr "Ruotsi"
+msgstr "ruotsi"
 
 #: pretix/_base_settings.py:115
 msgid "Spanish"
-msgstr "Espania"
+msgstr "espanja"
 
 #: pretix/_base_settings.py:116
 msgid "Turkish"
-msgstr "Turkki"
+msgstr "turkki"
 
 #: pretix/_base_settings.py:117
 msgid "Ukrainian"
-msgstr "Ukraina"
+msgstr "ukraina"
 
 #: pretix/api/auth/devicesecurity.py:58
 msgid ""
