@@ -103,7 +103,7 @@ from pretix.presale.views.robots import NoSearchIndexViewMixin
 class OrderDetailMixin(NoSearchIndexViewMixin):
     def _allow_anonymous_access(self):
         return not (self.request.organizer.settings.customer_accounts and
-                    self.request.organizer.settings.customer_accounts_disallow_anonymous_access)
+                    self.request.organizer.settings.customer_accounts_require_login_for_order_access)
 
     @cached_property
     def order(self):

@@ -171,7 +171,7 @@ DEFAULTS = {
             widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
         )
     },
-    'customer_accounts_disallow_anonymous_access': {
+    'customer_accounts_require_login_for_order_access': {
         'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
