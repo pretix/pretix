@@ -149,6 +149,9 @@ class LayoutSetDefault(EventPermissionRequiredMixin, DetailView):
         except BadgeLayout.DoesNotExist:
             raise Http404(_("The requested badge layout does not exist."))
 
+    def get(self, request, *args, **kwargs):
+        return self.http_method_not_allowed(request, *args, **kwargs)
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         messages.success(self.request, _('Your changes have been saved.'))
