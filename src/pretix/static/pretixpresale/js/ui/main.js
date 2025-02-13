@@ -710,7 +710,11 @@ function copy_answers(elements, answers) {
                 input.val(answers.filter("[name$=" + suffix + "]").val());
                 break;
             case "select":
-                input.val(answers.filter("[name$=" + suffix + "]").find(":selected").val()).change();
+                // save answer as data-attribute so if external event changes select-element/options it can select correct entries
+                // currently used when country => state changes
+                var answer = answers.filter("[name$=" + suffix + "]").find(":selected").val();
+                input.prop("data-selected-value", answer);
+                input.val(answer).change();
                 break;
             case "input":
                 switch (attributeType) {
