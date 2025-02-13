@@ -8,200 +8,204 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-02-13 22:00+0000\n"
+"Last-Translator: Andrias Magnussen <andrias.magnussen@om.org>\n"
+"Language-Team: Faroese <https://translate.pretix.eu/projects/pretix/pretix/"
+"fo/>\n"
 "Language: fo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
-msgstr ""
+msgstr "Enskt"
 
 #: pretix/_base_settings.py:88
 msgid "German"
-msgstr ""
+msgstr "Týskt"
 
 #: pretix/_base_settings.py:89
 msgid "German (informal)"
-msgstr ""
+msgstr "Týskt (gerandismál)"
 
 #: pretix/_base_settings.py:90
 msgid "Arabic"
-msgstr ""
+msgstr "Arabiskt"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr ""
+msgstr "Baskiskt"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
-msgstr ""
+msgstr "Katalanskt"
 
 #: pretix/_base_settings.py:93
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Kinesiskt (einfalt)"
 
 #: pretix/_base_settings.py:94
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Kinesiskt (siðbundi)"
 
 #: pretix/_base_settings.py:95
 msgid "Czech"
-msgstr ""
+msgstr "Kekkiskt"
 
 #: pretix/_base_settings.py:96
 msgid "Danish"
-msgstr ""
+msgstr "Danskt"
 
 #: pretix/_base_settings.py:97
 msgid "Dutch"
-msgstr ""
+msgstr "Hollendskt"
 
 #: pretix/_base_settings.py:98
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Hollendskt (gerandismál)"
 
 #: pretix/_base_settings.py:99
 msgid "French"
-msgstr ""
+msgstr "Franskt"
 
 #: pretix/_base_settings.py:100
 msgid "Finnish"
-msgstr ""
+msgstr "Finskt"
 
 #: pretix/_base_settings.py:101
 msgid "Galician"
-msgstr ""
+msgstr "Galisiskt"
 
 #: pretix/_base_settings.py:102
 msgid "Greek"
-msgstr ""
+msgstr "Grikst"
 
 #: pretix/_base_settings.py:103
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesiskt"
 
 #: pretix/_base_settings.py:104
 msgid "Italian"
-msgstr ""
+msgstr "Italienskt"
 
 #: pretix/_base_settings.py:105
 msgid "Japanese"
-msgstr ""
+msgstr "Japanskt"
 
 #: pretix/_base_settings.py:106
 msgid "Latvian"
-msgstr ""
+msgstr "Lettiskt"
 
 #: pretix/_base_settings.py:107
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norskt (Bokmål)"
 
 #: pretix/_base_settings.py:108
 msgid "Polish"
-msgstr ""
+msgstr "Polskt"
 
 #: pretix/_base_settings.py:109
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portugisiskt (Portugal)"
 
 #: pretix/_base_settings.py:110
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portogisiskt (Brasilia)"
 
 #: pretix/_base_settings.py:111
 msgid "Romanian"
-msgstr ""
+msgstr "Rumenskt"
 
 #: pretix/_base_settings.py:112
 msgid "Russian"
-msgstr ""
+msgstr "Russiskt"
 
 #: pretix/_base_settings.py:113
 msgid "Slovak"
-msgstr ""
+msgstr "Slovakiskt"
 
 #: pretix/_base_settings.py:114
 msgid "Swedish"
-msgstr ""
+msgstr "Svenskt"
 
 #: pretix/_base_settings.py:115
 msgid "Spanish"
-msgstr ""
+msgstr "Spanskt"
 
 #: pretix/_base_settings.py:116
 msgid "Turkish"
-msgstr ""
+msgstr "Turkist"
 
 #: pretix/_base_settings.py:117
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrainskt"
 
 #: pretix/api/auth/devicesecurity.py:58
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Full atgongd til eindina (les og broyt bíleggingina og gávukortið, síggj "
+"produkt og stillingar)"
 
 #: pretix/api/auth/devicesecurity.py:80
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:118
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (kiosk-modus, ongin samstilling av ordrum, ongin leiting)"
 
 #: pretix/api/auth/devicesecurity.py:153
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (einans online, ongin ordra samstilling)"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:402
 msgid "Application name"
-msgstr ""
+msgstr "Nýtsluskipanar navn"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:421
 msgid "Redirection URIs"
-msgstr ""
+msgstr "URL til víðarstilling"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:422
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Listi yvir góðkend URL við millumrúmi"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr ""
+msgstr "Listi yvir góðkent URL eftir útritan við millumrúmi"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
 msgid "Client ID"
-msgstr ""
+msgstr "Samleiki hjá kunda"
 
 #: pretix/api/models.py:55
 msgid "Client secret"
-msgstr ""
+msgstr "Loyndarmál hjá kunda"
 
 #: pretix/api/models.py:116
 msgid "Enable webhook"
-msgstr ""
+msgstr "Virkna webhook"
 
 #: pretix/api/models.py:117
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Target URL"
 
 #: pretix/api/models.py:118 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:286
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Øll tiltøk (eisini tiltøk, sum nýliga eru stovnað)"
 
 #: pretix/api/models.py:119 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:287
 msgid "Limit to events"
-msgstr ""
+msgstr "Vís einans tiltøk"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:1077
@@ -215,135 +219,150 @@ msgstr ""
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:521
 msgid "Comment"
-msgstr ""
+msgstr "Viðmerking"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1384
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Produkt \"{}\" er ikki knýtt at eini kvotu."
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1667
 #: pretix/base/models/items.py:1916 pretix/base/models/items.py:2174
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Eitt ella fleiri produkt eru ikki partur av hesum tiltaki."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:2185 pretix/base/models/items.py:2188
 #: pretix/base/models/waitinglist.py:305 pretix/base/models/waitinglist.py:308
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "Partstiltakið er ikki partur av hesum tiltaki."
 
 #: pretix/api/serializers/event.py:231
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Tiltøk kunnu ikki almannakunngerast. Kvotur og gjaldsmøguleikar skulu "
+"leggjast afturat, áðrenn tilber at selja atgongumerki."
 
 #: pretix/api/serializers/event.py:246 pretix/api/serializers/event.py:551
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Metadataeginleikin '{name}' finnist ikki."
 
 #: pretix/api/serializers/event.py:249 pretix/api/serializers/event.py:554
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr ""
+msgstr "Metadataeginleikin '{name}' loyvir ikki virðinum  {value}."
 
 #: pretix/api/serializers/event.py:293
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Ókent plugin: '{name}'."
 
 #: pretix/api/serializers/event.py:296
 #, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr ""
+msgstr "Avmarkað plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Valdi produktbólkur {name} finnist ikki."
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:1266
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "Bólkaða eindin kann ikki vera sama eind, sum tann sum verður bólkað."
 
 #: pretix/api/serializers/item.py:210 pretix/control/forms/item.py:1268
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Bólkaða eindin kann ikki hava egnar pakkar."
 
 #: pretix/api/serializers/item.py:298
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Dagføringar av add-ons, pakkum ella variatiónum umvegis PATCH/PUT verður "
+"ikki stuðla. Vinarliga nýt tilskilaða endapunktið."
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
 msgstr ""
+"Í løtuni eru tað einans atgongugevandi produkt, sum kunnu fáa persónligan "
+"dám."
 
 #: pretix/api/serializers/item.py:317
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Gávukort skulu ikki tengjast at MVG, sum víkja frá 0, tí MVG verður lagt "
+"omaná upphæddina, tá ið gávukortið verður brúkt."
 
 #: pretix/api/serializers/item.py:322 pretix/control/forms/item.py:773
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "Gávukort kunnu ikki eisini vera atgongu produkt."
 
 #: pretix/api/serializers/item.py:519
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Dagføringar møguleikin umvegis PATCH/PUT er ikki undirbygdur. Vinarliga nýt "
+"tilskilaða endapunktið."
 
 #: pretix/api/serializers/item.py:533 pretix/control/forms/item.py:177
 msgid "Question cannot depend on a question asked during check-in."
 msgstr ""
+"Ein spurningur kann ikki verða tengdur at einum spurningi undir innritan."
 
 #: pretix/api/serializers/item.py:538 pretix/control/forms/item.py:182
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Ein samansettur samanhangur er millum spurningarnar."
 
 #: pretix/api/serializers/item.py:543 pretix/control/forms/item.py:191
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Ein tílíkur spurningur kann ikki verða settur undir innritan."
 
 #: pretix/api/serializers/item.py:546 pretix/control/forms/item.py:199
 msgid "This type of question cannot be shown during check-in."
-msgstr ""
+msgstr "Ein tílíkur spurningur kann ikki verða vístur undir innritan."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
+"Eitt medium við sama navni og fílslagi er longu í konto hjá tínum "
+"felagsskapi."
 
 #: pretix/api/serializers/order.py:78
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "{input} er ikki ein valmøguleiki."
 
 #: pretix/api/serializers/order.py:1345 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1530
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "Setrið \"{seat}\", sum tú hevur valt er ikki tøkt."
 
 #: pretix/api/serializers/order.py:1371 pretix/api/serializers/order.py:1378
 msgid "The product \"{}\" is not available on this date."
-msgstr ""
+msgstr "Produktið \"{}\" er ikki tøkt hendan dagin."
 
 #: pretix/api/serializers/order.py:1393 pretix/api/views/cart.py:200
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
+"Tað eru ikki nóg nógvar eindir eftir á kvotuni \"{}\" til at gjøgnumføra "
+"hesi boð."
 
 #: pretix/api/serializers/organizer.py:103
 #: pretix/control/forms/organizer.py:888 pretix/presale/forms/customer.py:445
 msgid "An account with this email address is already registered."
-msgstr ""
+msgstr "Ein konta er longu skrásett við hesum telduposti."
 
 #: pretix/api/serializers/organizer.py:236
 #: pretix/control/forms/organizer.py:737
@@ -351,176 +370,178 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Eitt gávukort við sama loyndarmáli er longu í skipanin hjá tínum felagsskapi "
+"ella knýtt at hesum."
 
 #: pretix/api/serializers/organizer.py:327
 #: pretix/control/views/organizer.py:769
 msgid "pretix account invitation"
-msgstr ""
+msgstr "pretix-konto innbjóðing"
 
 #: pretix/api/serializers/organizer.py:349
 #: pretix/control/views/organizer.py:868
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Hesin brúkarin er longu bjóðaður við í hendan bólkin."
 
 #: pretix/api/serializers/organizer.py:365
 #: pretix/control/views/organizer.py:885
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Hesin brúkarin hevur longu atgongd til bólkin."
 
 #: pretix/api/views/cart.py:209
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr ""
+msgstr "Hendan avsláttarkotan er longu uppbrúkt."
 
 #: pretix/api/views/checkin.py:610 pretix/api/views/checkin.py:617
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Media er knýtt at øðrum tiltaki"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:686
 #, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr ""
+msgstr "Applikatiónin \"{application_name}\" hevur nú atgongd til tína konto."
 
 #: pretix/api/views/order.py:607 pretix/control/views/orders.py:1588
 #: pretix/presale/views/order.py:741 pretix/presale/views/order.py:814
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Tilber ikki at skriva ein faktura til hendan ordran."
 
 #: pretix/api/views/order.py:612 pretix/control/views/orders.py:1590
 #: pretix/presale/views/order.py:743 pretix/presale/views/order.py:816
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Ein fakturi er longu til hendan ordran."
 
 #: pretix/api/views/order.py:638 pretix/control/views/orders.py:1716
 #: pretix/control/views/users.py:143
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "Tað bar ikki til at senda teldupostin. Vinarliga royn aftur seinni."
 
 #: pretix/api/views/order.py:718 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:798
 msgid "One of the selected products is not available in the selected country."
-msgstr ""
+msgstr "Eitt av produktunum, sum tú hevur valt, er ikki tøkt í valda landinum."
 
 #: pretix/api/webhooks.py:237 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr ""
+msgstr "Nýggj bílegging umbiðin"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr ""
+msgstr "Nýggj bílegging krevur góðkenning"
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Bílegging merkt sum goldin"
 
 #: pretix/api/webhooks.py:249 pretix/base/models/checkin.py:354
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1549
 msgid "Order canceled"
-msgstr ""
+msgstr "Bílegging strikað"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr ""
+msgstr "Bílegging endur upptikin"
 
 #: pretix/api/webhooks.py:257 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr ""
+msgstr "Bílegging útgingin"
 
 #: pretix/api/webhooks.py:261
 msgid "Order expiry date changed"
-msgstr ""
+msgstr "Dagfesting fyri, nær bíleggingin gongur út, er broytt"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr ""
+msgstr "Bíleggingar upplýsingar broyttir"
 
 #: pretix/api/webhooks.py:269 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Bústaður hjá tí, sum hevur bílagt, er broyttur"
 
 #: pretix/api/webhooks.py:273 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr ""
+msgstr "Bílegging broytt"
 
 #: pretix/api/webhooks.py:277
 msgid "Refund of payment created"
-msgstr ""
+msgstr "Afturrindan upprættað"
 
 #: pretix/api/webhooks.py:281 pretix/base/notifications.py:293
 msgid "External refund of payment"
-msgstr ""
+msgstr "Uttanhýsins afturrindan"
 
 #: pretix/api/webhooks.py:285
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "Afturrindan umbiðin av kunda"
 
 #: pretix/api/webhooks.py:289
 msgid "Refund of payment completed"
-msgstr ""
+msgstr "Afturrindan gjøgnumførd"
 
 #: pretix/api/webhooks.py:293
 msgid "Refund of payment canceled"
-msgstr ""
+msgstr "Afturrindan avlýst"
 
 #: pretix/api/webhooks.py:297
 msgid "Refund of payment failed"
-msgstr ""
+msgstr "Afturrindan misseydnað"
 
 #: pretix/api/webhooks.py:301
 msgid "Payment confirmed"
-msgstr ""
+msgstr "Gjald váttað"
 
 #: pretix/api/webhooks.py:305
 msgid "Order approved"
-msgstr ""
+msgstr "Bílegging váttað"
 
 #: pretix/api/webhooks.py:309
 msgid "Order denied"
-msgstr ""
+msgstr "Bílegging avvíst"
 
 #: pretix/api/webhooks.py:313
 msgid "Order deleted"
-msgstr ""
+msgstr "Bílegging strikað"
 
 #: pretix/api/webhooks.py:317
 msgid "Ticket checked in"
-msgstr ""
+msgstr "Atgongumerki kekka inn"
 
 #: pretix/api/webhooks.py:321
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "Atgongumerkja kekk inn avlýst"
 
 #: pretix/api/webhooks.py:325
 msgid "Event created"
-msgstr ""
+msgstr "Tiltak stovnað"
 
 #: pretix/api/webhooks.py:329
 msgid "Event details changed"
-msgstr ""
+msgstr "Upplýsingar í samband við tiltak broyttir"
 
 #: pretix/api/webhooks.py:333
 msgid "Event deleted"
-msgstr ""
+msgstr "Tiltak strikað"
 
 #: pretix/api/webhooks.py:337
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr ""
+msgstr "Dagfesting løgd afturat tiltaki"
 
 #: pretix/api/webhooks.py:341
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr ""
+msgstr "Dagfesting til tiltakið broytt"
 
 #: pretix/api/webhooks.py:345
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr ""
+msgstr "Dagfesting til tiltakið strikað"
 
 #: pretix/api/webhooks.py:349
 msgid ""
