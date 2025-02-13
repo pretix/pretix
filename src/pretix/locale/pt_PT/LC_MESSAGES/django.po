@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-02-12 16:55+0000\n"
+"PO-Revision-Date: 2025-02-13 22:00+0000\n"
 "Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -3167,7 +3167,7 @@ msgstr "Empresa ou organização"
 
 #: pretix/base/forms/widgets.py:238
 msgid "Individual customer"
-msgstr "Cliente individual"
+msgstr "Participante individual"
 
 #: pretix/base/invoice.py:86
 #, python-format
@@ -5976,7 +5976,7 @@ msgstr "Organizador"
 #: pretix/base/models/orders.py:2124
 msgctxt "refund_source"
 msgid "Customer"
-msgstr "Cliente"
+msgstr "Participante"
 
 #: pretix/base/models/orders.py:2125
 msgctxt "refund_source"
@@ -7087,7 +7087,7 @@ msgstr ""
 #: pretix/base/payment.py:500
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr "O pagamento para esta factura já foi recebido."
+msgstr "O pagamento para esta fatura já foi recebido."
 
 #: pretix/base/payment.py:977
 msgid "Automatic refunds are not supported by this payment provider."
@@ -7860,14 +7860,12 @@ msgstr[1] ""
 "Não é possível selecionar mais de %(max)s itens do produto %(product)s."
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1544
-#, fuzzy, python-format
-#| msgid ""
-#| "You need to select at least %(min)s items of the product %(product)s."
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] "Precisa selecionar pelo menos %(min)s itens do produto %(product)s."
-msgstr[1] "Precisa selecionar pelo menos %(min)s itens do produto %(product)s."
+msgstr[0] "Precisas selecionar pelo menos %(min)s itens do produto %(product)s."
+msgstr[1] "Precisas selecionar pelo menos %(min)s itens do produto %(product)s."
 
 #: pretix/base/services/cart.py:140
 #, fuzzy, python-format
@@ -8081,10 +8079,7 @@ msgstr[1] ""
 "produto %(base)s."
 
 #: pretix/base/services/cart.py:202 pretix/base/services/orders.py:196
-#, fuzzy, python-format
-#| msgid ""
-#| "You need to select at least %(min)s add-ons from the category %(cat)s for "
-#| "the product %(base)s."
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -8092,11 +8087,11 @@ msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr[0] ""
-"Precisa selecionar pelo menos %(min)s add-ons da categoria %(cat)s para a o "
-"produto %(base)s."
+"Precisas selecionar pelo menos %(min)s complementos da categoria %(cat)s "
+"para a o produto %(base)s."
 msgstr[1] ""
-"Precisa selecionar pelo menos %(min)s add-ons da categoria %(cat)s para a o "
-"produto %(base)s."
+"Precisas selecionar pelo menos %(min)s complementos da categoria %(cat)s "
+"para a o produto %(base)s."
 
 #: pretix/base/services/cart.py:206 pretix/base/services/orders.py:200
 #, fuzzy, python-format
@@ -8459,7 +8454,7 @@ msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
-"Está a receber este e-mail porque alguém fez um pedido para {event} por si."
+"Estás a receber este email porque alguém fez um pedido para o {event} por ti."
 
 #: pretix/base/services/mail.py:282 pretix/base/services/mail.py:298
 #, python-brace-format
@@ -8473,7 +8468,7 @@ msgstr ""
 #: pretix/base/services/mail.py:294
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr "Está a receber este e-mail porque fez um pedido para {event}."
+msgstr "Estás a receber este email porque fizeste um pedido para o {event}."
 
 #: pretix/base/services/mail.py:478
 msgctxt "attachment_filename"
@@ -8653,8 +8648,8 @@ msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
-"O preço de alguns dos itens no seu carrinho mudou entretanto. Por favor, "
-"veja abaixo para mais detalhes."
+"O preço de alguns dos itens no teu carrinho mudou entretanto. Por favor, vê "
+"abaixo para mais detalhes."
 
 #: pretix/base/services/orders.py:140
 msgid "An internal error occurred, please try again."
@@ -8671,10 +8666,7 @@ msgid "Your cart is empty."
 msgstr "Seu carrinho está vazio."
 
 #: pretix/base/services/orders.py:145
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot select more than %(max)s items of the product %(product)s. We "
-#| "removed the surplus items from your cart."
+#, python-format
 msgid ""
 "You cannot select more than %(max)s item of the product %(product)s. We "
 "removed the surplus items from your cart."
@@ -8683,10 +8675,10 @@ msgid_plural ""
 "removed the surplus items from your cart."
 msgstr[0] ""
 "Não é possível selecionar mais de %(max)s itens do produto %(product)s. "
-"Removemos os artigos em excesso do seu carrinho."
+"Removemos os artigos em excesso do teu carrinho."
 msgstr[1] ""
 "Não é possível selecionar mais de %(max)s itens do produto %(product)s. "
-"Removemos os artigos em excesso do seu carrinho."
+"Removemos os artigos em excesso do teu carrinho."
 
 #: pretix/base/services/orders.py:154
 msgid "The booking period has ended."
@@ -8697,7 +8689,7 @@ msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
-"O código do voucher utilizado para um dos itens no seu carrinho não é "
+"O código do voucher utilizado para um dos itens no teu carrinho não é "
 "conhecido na nossa base de dados."
 
 #: pretix/base/services/orders.py:162
@@ -8706,32 +8698,32 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"O código do voucher utilizado para um dos itens no seu carrinho já foi usado "
-"o número máximo de vezes permitido. Removemos este item do seu carrinho."
+"O código do voucher utilizado para um dos itens no teu carrinho já foi usado "
+"o número máximo de vezes permitido. Removemos este item do teu carrinho."
 
 #: pretix/base/services/orders.py:166
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"O código do voucher utilizado para um dos itens no seu carrinho já foi "
-"muitas vezes. Ajustamos o preço do item no seu carrinho."
+"O código do voucher utilizado para um dos itens no teu carrinho já foi usado "
+"muitas vezes. Ajustamos o preço do item no teu carrinho."
 
 #: pretix/base/services/orders.py:170
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
-"O código do voucher utilizado para um dos itens no seu carrinho expirou. "
-"Removemos este item do seu carrinho."
+"O código do voucher utilizado para um dos itens no teu carrinho expirou. "
+"Removemos este item do teu carrinho."
 
 #: pretix/base/services/orders.py:173
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
-"O código do voucher utilizado para um dos itens no seu carrinho não é válido "
-"para este item. Removemos este item do seu carrinho."
+"O código do voucher utilizado para um dos itens no teu carrinho não é válido "
+"para este item. Removemos este item do teu carrinho."
 
 #: pretix/base/services/orders.py:175
 msgid "You need a valid voucher code to order one of the products."
@@ -10436,10 +10428,8 @@ msgid "Do not allow changes after"
 msgstr "Não permitir mudanças após"
 
 #: pretix/base/settings.py:1783
-#, fuzzy
-#| msgid "The payment for this invoice has already been received."
 msgid "Allow change even though the ticket has already been checked in"
-msgstr "O pagamento para esta factura já foi recebido."
+msgstr "Permitir alterações mesmo que a inscrição já tenha sido registada"
 
 #: pretix/base/settings.py:1784
 msgid ""
@@ -10788,14 +10778,14 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"recebeu esta mensagem porque nos pediu para lhe enviar o link\n"
-"para o seu pedido para {event}.\n"
+"recebeste esta mensagem porque pediste-nos para te enviarmos o link\n"
+"para o teu pedido para o {event}.\n"
 "\n"
-"Pode mudar os detalhes do pedido e ver o seu estado em \n"
+"Podes mudar os detalhes do pedido e ver o seu estado em \n"
 "{url}\n"
 "\n"
 "Cumprimentos,\n"
-"A sua equipa {event}"
+"A Equipa do {event}"
 
 #: pretix/base/settings.py:2188
 #, python-brace-format
@@ -12416,8 +12406,8 @@ msgid ""
 "If this takes longer than a few minutes, please refresh this page or contact "
 "us."
 msgstr ""
-"Se isto demorar mais do que alguns minutos, por favor, atualize esta página "
-"ou contacte-nos."
+"Se isto demorar mais do que alguns minutos, por favor, atualiza esta página "
+"ou contacta-nos."
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -12469,7 +12459,7 @@ msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
 msgstr ""
-"Está a receber este e-mail porque alguém assinou-lo para o seguinte evento:"
+"Estás a receber este email porque alguém inscreveu-te para o seguinte evento:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
@@ -12479,7 +12469,7 @@ msgstr "Evento:"
 #: pretix/base/templates/pretixbase/email/order_details.html:26
 #: pretix/base/templates/pretixbase/email/order_details.html:77
 msgid "Order code:"
-msgstr "Código de pedido:"
+msgstr "Código do pedido:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
 msgid "created by"
@@ -12530,7 +12520,7 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
-msgstr "Carregue a foto"
+msgstr "Faz upload da foto"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:14
 #, python-format
@@ -13553,7 +13543,7 @@ msgstr "União Europeia"
 
 #: pretix/control/forms/event.py:1492
 msgid "Any customer"
-msgstr "Qualquer cliente"
+msgstr "Qualquer participante"
 
 #: pretix/control/forms/event.py:1493
 msgid "Individual"
@@ -17344,7 +17334,7 @@ msgstr "Aceitar de qualquer forma"
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
 msgid "Customers"
-msgstr "Clientes"
+msgstr "Participantes"
 
 #: pretix/control/navigation.py:588
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:4
@@ -28890,8 +28880,8 @@ msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
-"Após a conclusão da sua compra, pediremos-lhe que transfira o dinheiro para "
-"a seguinte conta bancária, utilizando um código de referência pessoal:"
+"Após a conclusão da tua compra, pedir-te-emos que transfiras o dinheiro para "
+"uma conta bancária, utilizando um código de referência pessoal."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
@@ -29342,7 +29332,7 @@ msgstr "Problema ao enviar e-mail."
 
 #: pretix/plugins/banktransfer/views.py:198
 msgid "Unknown order code"
-msgstr "Código de pedido desconhecido"
+msgstr "Código do pedido desconhecido"
 
 #: pretix/plugins/banktransfer/views.py:355
 msgid "Search text"
@@ -29701,7 +29691,7 @@ msgstr "Reembolso do montante via PayPal falhou: {}"
 #: pretix/plugins/paypal2/payment.py:1060
 #: pretix/plugins/paypal2/payment.py:1068
 msgid "The payment for this invoice has already been received."
-msgstr "O pagamento para esta factura já foi recebido."
+msgstr "O pagamento para esta fatura já foi recebido."
 
 #: pretix/plugins/paypal/payment.py:708 pretix/plugins/paypal/payment.py:716
 #: pretix/plugins/paypal2/payment.py:1061
@@ -32325,7 +32315,7 @@ msgstr ""
 
 #: pretix/presale/forms/checkout.py:70
 msgid "Email address (repeated)"
-msgstr "Endereço de E-mail (repetido)"
+msgstr "Endereço de Email (repetido)"
 
 #: pretix/presale/forms/checkout.py:71
 msgid ""
@@ -32628,7 +32618,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "We're now trying to book these add-ons for you!"
-msgstr "Estamos agora a tentar reservar estes add-ons para si!"
+msgstr "Estamos agora a tentar reservar estes produtos adicionais para ti!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
 msgid "Additional options for"
@@ -32701,11 +32691,11 @@ msgstr "Consulta os detalhes abaixo e confirma o teu pedido."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:14
 msgid "Please hang tight, we're finalizing your order!"
-msgstr "Por favor, aguarde, estamos finalizando o seu pedido!"
+msgstr "Por favor, aguarda, estamos a finalizar o teu pedido!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:22
 msgid "Add or remove tickets"
-msgstr "Adicionar ou remover bilhetes"
+msgstr "Adicionar ou remover inscrição"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:44
 msgid "Modify payment"
@@ -33288,7 +33278,7 @@ msgstr "Descontado"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:287
 msgid "Okay, we're removing that…"
-msgstr "Ok, estamos a remover isso …"
+msgstr "Ok, estamos a remover isto …"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:294
@@ -33322,7 +33312,7 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
-"Uma vez que os itens estão no seu carrinho, você terá %(time)s minutos para "
+"Uma vez que os itens estão no teu carrinho, terás %(time)s minutos para "
 "concluir a compra."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:327
@@ -33383,7 +33373,7 @@ msgstr "Continue com o processo de compra"
 #: pretix/presale/templates/pretixpresale/event/index.html:229
 #: pretix/presale/templates/pretixpresale/event/voucher.html:440
 msgid "Proceed with checkout"
-msgstr "Prossiga com o check-out"
+msgstr "Continuar com o checkout"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:63
 msgid "Empty cart"
@@ -33817,7 +33807,7 @@ msgstr "A venda para este evento terá início em %(date)s às %(time)s."
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:61
 msgid "We're now trying to reserve this for you!"
-msgstr "Nós agora estamos tentando reservar isto para si!"
+msgstr "Nós agora estamos a tentar reservar isto para ti!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:202
 msgid ""
@@ -34475,7 +34465,7 @@ msgstr "a partir de %(minprice)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:429
 #, python-format
 msgid "You need to select at least %(number)s products."
-msgstr "Precisa selecionar pelo menos %(number)s produtos."
+msgstr "Precisas selecionar pelo menos %(number)s produtos."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
