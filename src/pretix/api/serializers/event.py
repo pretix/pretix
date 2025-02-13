@@ -930,6 +930,8 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_from_country',
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
+        'order_phone_asked',
+        'order_phone_required',
         'name_scheme',
         'reusable_media_type_barcode',
         'reusable_media_type_nfc_uid',
