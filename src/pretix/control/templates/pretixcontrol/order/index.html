@@ -560,8 +560,8 @@
                                                 {% if line.street or line.zipcode or line.city or line.country %}
                                                     {{ line.street|default_if_none:""|linebreaksbr }}<br>
                                                     {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
+                                                    {% if line.state %}{{ line.state_for_address }}<br>{% endif %}
                                                     {{ line.country.name|default_if_none:"" }}
-                                                    {% if line.state %}<br>{{ line.state }}{% endif %}
                                                 {% else %}
                                                     <em>{% trans "not answered" %}</em>
                                                 {% endif %}
