@@ -37,7 +37,13 @@ DEFAULT_TICKET_LAYOUT = '''[
         "content": "secret",
         "text": "",
         "text_i18n": {},
-        "nowhitespace": false
+        "nowhitespace": false,
+        "color": [
+            0,
+            0,
+            0,
+            1
+        ]
     },
     {
         "type": "poweredby",
