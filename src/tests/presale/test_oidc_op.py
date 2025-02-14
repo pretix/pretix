@@ -209,6 +209,37 @@ def test_authorize_with_prompt_none(env, client, ssoclient):
 
 
 @pytest.mark.django_db
+def test_authorize_with_invalid_pkce_method(env, client, ssoclient):
+    url = f'/bigevents/oauth2/v1/authorize?' \
+          f'client_id={ssoclient[0].client_id}&' \
+          f'redirect_uri=https://example.net&' \
+          f'response_type=code&state=STATE&scope=openid+profile&' \
+          f'code_challenge=pkce_value&code_challenge_method=plain'
+    r = client.get(url)
+    assert r.status_code == 302
+    assert r.headers['Location'] == 'https://example.net?' \
+                                    'error=invalid_request&' \
+                                    'error_description=code_challenge+transform+algorithm+not+supported&' \
+                                    'state=STATE'
+
+
+@pytest.mark.django_db
+def test_authorize_with_missing_pkce_if_required(env, client, ssoclient):
+    ssoclient[0].require_pkce = True
+    ssoclient[0].save()
+    url = f'/bigevents/oauth2/v1/authorize?' \
+          f'client_id={ssoclient[0].client_id}&' \
+          f'redirect_uri=https://example.net&' \
+          f'response_type=code&state=STATE&scope=openid+profile'
+    r = client.get(url)
+    assert r.status_code == 302
+    assert r.headers['Location'] == 'https://example.net?' \
+                                    'error=invalid_request&' \
+                                    'error_description=code_challenge+%28PKCE%29+required&' \
+                                    'state=STATE'
+
+
+@pytest.mark.django_db
 def test_authorize_require_login_if_prompt_requires_it_or_is_expired(env, client, ssoclient):
     with freeze_time("2021-04-10T11:00:00+02:00"):
         r = client.post('/bigevents/account/login', {
@@ -286,7 +317,7 @@ def test_token_require_client_id(env, client, ssoclient):
     assert b'unsupported_grant_type' in r.content
 
 
-def _authorization_step(client, ssoclient):
+def _authorization_step(client, ssoclient, code_challenge=None):
     r = client.post('/bigevents/account/login', {
         'email': 'john@example.org',
         'password': 'foo',
@@ -299,6 +330,8 @@ def _authorization_step(client, ssoclient):
           f'client_id={ssoclient[0].client_id}&' \
           f'redirect_uri=https://example.net&' \
           f'response_type=code&state=STATE&scope=openid+profile+email+phone'
+    if code_challenge:
+        url += f'&code_challenge={code_challenge}&code_challenge_method=S256'
     r = client.get(url)
     assert r.status_code == 302
     m = re.match(r'https://example.net\?code=([a-z0-9A-Z]{64})&state=STATE', r.headers['Location'])
@@ -371,6 +404,55 @@ def test_token_success(env, client, ssoclient):
     # Assert that auth token is revoked after reuse
     with scopes_disabled():
         CustomerSSOAccessToken.objects.get(token=d['access_token']).expires < now()
+
+
+@pytest.mark.django_db
+def test_token_pkce_required_if_used_in_authorization(env, client, ssoclient):
+    code = _authorization_step(client, ssoclient, "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM")
+
+    r = client.post('/bigevents/oauth2/v1/token', {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': 'https://example.net',
+    }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(f'{ssoclient[0].client_id}:{ssoclient[1]}'.encode()).decode())
+    assert r.status_code == 400
+    d = json.loads(r.content)
+    assert d['error'] == 'invalid_grant'
+    assert d['error_description'] == 'Missing of code_verifier'
+
+
+@pytest.mark.django_db
+def test_token_pkce_incorrect(env, client, ssoclient):
+    code = _authorization_step(client, ssoclient, "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM")
+
+    r = client.post('/bigevents/oauth2/v1/token', {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': 'https://example.net',
+        'code_verifier': "WRONG",
+    }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(f'{ssoclient[0].client_id}:{ssoclient[1]}'.encode()).decode())
+    assert r.status_code == 400
+    d = json.loads(r.content)
+    assert d['error'] == 'invalid_grant'
+    assert d['error_description'] == 'Mismatch of code_verifier with code_challenge'
+
+
+@pytest.mark.django_db
+def test_token_success_pkce(env, client, ssoclient):
+    # this is the sample from the actual RFC
+    code_verifier = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
+    code = _authorization_step(client, ssoclient, "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM")
+
+    r = client.post('/bigevents/oauth2/v1/token', {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': 'https://example.net',
+        'code_verifier': code_verifier,
+    }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(f'{ssoclient[0].client_id}:{ssoclient[1]}'.encode()).decode())
+    print(r.content)
+    assert r.status_code == 200
+    d = json.loads(r.content)
+    assert d['access_token']
 
 
 @pytest.mark.django_db
