@@ -83,8 +83,8 @@ from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
 )
 from pretix.base.settings import (
-    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SALUTATIONS,
-    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL,
+    PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
 )
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.timemachine import time_machine_now
@@ -1088,16 +1088,19 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             cc = str(self.initial['country'])
         elif self.instance and self.instance.country:
             cc = str(self.instance.country)
+        state_label = pgettext_lazy('address', 'State')
         if cc and cc in COUNTRIES_WITH_STATE_IN_ADDRESS:
             types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
             statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
             c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
+            if cc in COUNTRY_STATE_LABEL:
+                state_label = COUNTRY_STATE_LABEL[cc]
         elif fprefix + 'state' in self.data:
             self.data = self.data.copy()
             del self.data[fprefix + 'state']
 
         self.fields['state'] = forms.ChoiceField(
-            label=pgettext_lazy('address', 'State'),
+            label=state_label,
             required=False,
             choices=c,
             widget=forms.Select(attrs={
