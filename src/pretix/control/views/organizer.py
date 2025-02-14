@@ -46,7 +46,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
-from django.db import connections, transaction
+from django.db import transaction
 from django.db.models import (
     Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch,
     ProtectedError, Q, Subquery, Sum,
@@ -1159,13 +1159,7 @@ class DeviceBulkUpdateView(DeviceQueryMixin, OrganizerDetailViewMixin, Organizer
                 obj.log_action('pretix.device.changed', data=data, user=self.request.user, save=False)
             )
 
-        if connections['default'].features.can_return_rows_from_bulk_insert:
-            LogEntry.objects.bulk_create(log_entries, batch_size=200)
-            LogEntry.bulk_postprocess(log_entries)
-        else:
-            for le in log_entries:
-                le.save()
-            LogEntry.bulk_postprocess(log_entries)
+        LogEntry.bulk_create_and_postprocess(log_entries)
 
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
