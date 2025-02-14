@@ -5183,7 +5183,7 @@ div[class^='highlight'] pre {
 
 .wy-side-nav-search > a img.logo, .wy-side-nav-search .wy-dropdown > a img.logo {
     display: block;
-    margin: 0 auto;
+    margin: 0 auto 10px;
     height: 50px;
     width: auto;
     border-radius: 0;

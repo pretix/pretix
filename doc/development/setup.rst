@@ -5,7 +5,7 @@ Development setup
 
 This tutorial helps you to get started hacking with pretix on your own computer. You need this to
 be able to contribute to pretix, but it might also be helpful if you want to write your own plugins.
-If you want to install pretix on a server for actual usage, go to the :ref:`admindocs` instead.
+If you want to install pretix on a server for actual usage, go to the [administrator documentation](https://docs.pretix.eu/self-hosting/) instead.
 
 Obtain a copy of the source code
 --------------------------------
@@ -18,7 +18,7 @@ External Dependencies
 ---------------------
 Your should install the following on your system:
 
-* Python 3.5 or newer
+* Python 3.9 or newer
 * ``pip`` for Python 3 (Debian package: ``python3-pip``)
 * ``python-dev`` for Python 3 (Debian package: ``python3-dev``)
 * On Debian/Ubuntu: ``python-venv`` for Python 3 (Debian package: ``python3-venv``)
@@ -33,7 +33,7 @@ Your should install the following on your system:
 Your local python environment
 -----------------------------
 
-Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.4
+Please execute ``python -V`` or ``python3 -V`` to make sure you have Python 3.9
 (or newer) installed. Also make sure you have pip for Python 3 installed, you can
 execute ``pip3 -V`` to check. Then use Python's internal tools to create a virtual
 environment and activate it for your current session::
