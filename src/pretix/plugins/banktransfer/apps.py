@@ -40,6 +40,8 @@ class BankTransferApp(AppConfig):
                         "bank account.")
         settings_links = [
             ((_("Payment"), _("Bank transfer")), "control:event.settings.payment.provider", {"provider": "banktransfer"}),
+            ((_("Bank transfer"), _("Import bank data")), "plugins:banktransfer:import", {}),
+            ((_("Bank transfer"), _("Export refunds")), "plugins:banktransfer:refunds.list", {}),
         ]
 
     def ready(self):

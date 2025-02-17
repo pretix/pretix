@@ -443,7 +443,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                                             format_html(mark_safe("<b>{}</b>"), pluginmeta.name)),
                                 '</p><p>',
                             ] + [
-                                format_html(mark_safe('<a href="{}" class="btn btn-default">{}</a>'), url, text)
+                                format_html(mark_safe('<a href="{}" class="btn btn-default">{}</a> '), url, text)
                                 for url, text in links
                             ] + ['</p>']
                         else:
