@@ -22,7 +22,7 @@
                 <fieldset>
                     <legend>{{ catlabel }}</legend>
                     <div class="plugin-list">
-                        {% for plugin in plist %}
+                        {% for plugin, is_active, settings_links in plist %}
                             <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}">
                             {% if plugin.featured %}
                                <div class="panel panel-default">
@@ -49,7 +49,7 @@
                                                 {% if show_meta %}
                                                     <span class="text-muted text-sm">{{ plugin.version }}</span>
                                                 {% endif %}
-                                                {% if plugin.module in plugins_active %}
+                                                {% if is_active %}
                                                     <span class="label label-success">
                                                         <span class="fa fa-check" aria-hidden="true"></span>
                                                         {% trans "Active" %}
@@ -66,8 +66,20 @@
                                             <div class="plugin-action">
                                                 <span class="text-muted">{% trans "Not available" %}</span>
                                             </div>
-                                        {% elif plugin.module in plugins_active %}
+                                        {% elif is_active %}
                                             <div class="plugin-action flip">
+                                                {% if settings_links %}
+                                                    <div class="btn-group">
+                                                      <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
+                                                        <span class="fa fa-cog"></span> <span class="caret"></span>
+                                                      </button>
+                                                      <ul class="dropdown-menu">
+                                                        {% for link in settings_links %}
+                                                            <li><a href="{{ link.0 }}">{{ link.1 }}</a></li>
+                                                        {% endfor %}
+                                                      </ul>
+                                                    </div>
+                                                {% endif %}
                                                 <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
                                                         value="disable">{% trans "Disable" %}</button>
                                             </div>

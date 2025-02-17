@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
+import logging
 import operator
 import re
 from collections import OrderedDict
@@ -62,8 +63,9 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.html import conditional_escape
+from django.utils.html import conditional_escape, format_html
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
 from django.views.generic import FormView, ListView
@@ -108,6 +110,8 @@ from ...helpers.format import (
 )
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
+
+logger = logging.getLogger(__name__)
 
 
 class EventSettingsViewMixin:
@@ -339,12 +343,29 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
     def get_object(self, queryset=None) -> Event:
         return self.request.event
 
-    def get_context_data(self, *args, **kwargs) -> dict:
+    def available_plugins(self, event):
         from pretix.base.plugins import get_all_plugins
 
+        return (p for p in get_all_plugins(event) if not p.name.startswith('.')
+                   and getattr(p, 'visible', True))
+
+    def prepare_settings_links(self, pluginmeta):
+        links = getattr(pluginmeta, 'settings_links', [])
+        try:
+            return [
+                (
+                    reverse(urlname, kwargs={"organizer": self.request.organizer.slug, "event": self.request.event.slug, **kwargs}),
+                    " > ".join(map(str, linktext)) if isinstance(linktext, tuple) else linktext,
+                ) for linktext, urlname, kwargs in links
+            ]
+        except:
+            logger.exception('Failed to resolve settings links.')
+            return []
+
+    def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        plugins = [p for p in get_all_plugins(self.object) if not p.name.startswith('.')
-                   and getattr(p, 'visible', True)]
+        plugins = list(self.available_plugins(self.object))
+
         order = [
             'FEATURE',
             'PAYMENT',
@@ -375,12 +396,16 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         )
         plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
 
+        active_plugins = self.object.get_plugins()
+        def plugin_details(plugin):
+            is_active = plugin.module in active_plugins
+            settings_links = self.prepare_settings_links(plugin) if is_active else None
+            return (plugin, is_active, settings_links)
         context['plugins'] = sorted([
-            (c, labels.get(c, c), plist, any(getattr(p, 'picture', None) for p in plist))
+            (c, labels.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
             for c, plist
             in plugins_grouped
         ], key=lambda c: (order.index(c[0]), c[1]) if c[0] in order else (999, str(c[1])))
-        context['plugins_active'] = self.object.get_plugins()
         context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
         return context
 
