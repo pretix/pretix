@@ -41,6 +41,9 @@ class Paypal2App(AppConfig):
                         "also offer payments in a variety of local payment methods such as eps, iDEAL, and "
                         "many more to your customers - they don't even need a PayPal account. PayPal is one of the "
                         "most popular payment methods world-wide.")
+        settings_links = [
+            ((_("Payment"), _("PayPal")), "control:event.settings.payment.provider", {"provider": "paypal_settings"}),
+        ]
 
     def ready(self):
         from . import signals  # NOQA

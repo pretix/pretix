@@ -38,6 +38,9 @@ class BankTransferApp(AppConfig):
         version = version
         description = _("Accept payments from your customers using classical wire transfer methods with your own "
                         "bank account.")
+        settings_links = [
+            ((_("Payment"), _("Bank transfer")), "control:event.settings.payment.provider", {"provider": "banktransfer"}),
+        ]
 
     def ready(self):
         from . import signals  # NOQA
