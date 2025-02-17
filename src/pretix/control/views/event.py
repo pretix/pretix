@@ -415,13 +415,10 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        from pretix.base.plugins import get_all_plugins
-
         self.object = self.get_object()
 
         plugins_available = {
-            p.module: p for p in get_all_plugins(self.object)
-            if not p.name.startswith('.') and getattr(p, 'visible', True)
+            p.module: p for p in self.available_plugins(self.object)
         }
 
         with transaction.atomic():
@@ -429,19 +426,38 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
-                        if getattr(plugins_available[module], 'restricted', False):
+                        pluginmeta = plugins_available[module]
+                        if getattr(pluginmeta, 'restricted', False):
                             if module not in request.event.settings.allowed_restricted_plugins:
                                 continue
 
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
                         self.object.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
+
+                        links = self.prepare_settings_links(pluginmeta)
+                        if links:
+                            info = [
+                                '<p>',
+                                format_html(_('The plugin {} is now active, you can configure it now:'),
+                                            format_html(mark_safe("<b>{}</b>"), pluginmeta.name)),
+                                '</p><p>',
+                            ] + [
+                                format_html(mark_safe('<a href="{}" class="btn btn-default">{}</a>'), url, text)
+                                for url, text in links
+                            ] + ['</p>']
+                        else:
+                            info = [
+                                format_html(_('The plugin {} is now active.'),
+                                            format_html(mark_safe("<b>{}</b>"), pluginmeta.name)),
+                            ]
+                        messages.success(self.request, mark_safe("".join(info)))
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
                                                       data={'plugin': module})
                         self.object.disable_plugin(module)
+                        messages.success(self.request, _('The plugin has been disabled.'))
             self.object.save()
-        messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
