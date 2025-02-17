@@ -216,21 +216,22 @@ class CheckoutSessionSerializer(serializers.ModelSerializer):
             for p in payments
         ]
 
-        steps = get_steps(
-            self.context["event"],
-            cartpos,
-            getattr(checkout, "invoice_address", None),
-            checkout.session_data,
-            total,
-        )
         d["steps"] = {}
-        for step in steps:
-            applicable = step.is_applicable()
-            valid = not applicable or step.is_valid()
-            d["steps"][step.identifier] = {
-                "applicable": applicable,
-                "valid": valid,
-            }
+        if cartpos:
+            steps = get_steps(
+                self.context["event"],
+                cartpos,
+                getattr(checkout, "invoice_address", None),
+                checkout.session_data,
+                total,
+            )
+            for step in steps:
+                applicable = step.is_applicable()
+                valid = not applicable or step.is_valid()
+                d["steps"][step.identifier] = {
+                    "applicable": applicable,
+                    "valid": valid,
+                }
 
         return d
 

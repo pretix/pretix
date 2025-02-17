@@ -75,12 +75,12 @@ class PaymentStep(CheckoutStep):
         r.event = self.event
         r.organizer = self.event.organizer
         self.cart_session.setdefault("fake_request", {})
-        cart_id = self.cart_positions[0].cart_id
+        cart_id = self.cart_positions[0].cart_id if self.cart_positions else None
         r.session = UserDict(
             {
                 f"current_cart_event_{self.event.pk}": cart_id,
                 "carts": {cart_id: self.cart_session},
-            }
+            } if cart_id else {}
         )
         r.session.session_key = cart_id
         return r
