@@ -31,7 +31,15 @@ $(function () {
     var show_dialog = !storage_val;
     var consent_checkboxes = $("#cookie-consent-details input[type=checkbox][name]");
     var consent_modal = $("#cookie-consent-modal");
-    if (storage_val) {
+    var widget_consent = $("#cookie-consent-from-widget").text();
+    if (widget_consent) {
+        widget_consent = JSON.parse(widget_consent);
+        storage_val = {}
+        consent_checkboxes.each(function () {
+            this.checked = storage_val[this.name] = widget_consent.indexOf(this.name) > -1;
+        })
+        show_dialog = false
+    } else if (storage_val) {
         storage_val = JSON.parse(storage_val);
         consent_checkboxes.each(function () {
             if (typeof storage_val[this.name] === "undefined") {
@@ -43,14 +51,6 @@ $(function () {
         })
     } else {
         storage_val = {}
-        var consented = $("#cookie-consent-from-widget").text();
-        if (consented) {
-            consented = JSON.parse(consented);
-            consent_checkboxes.each(function () {
-                this.checked = storage_val[this.name] = consented.indexOf(this.name) > -1;
-            })
-            show_dialog = false
-        }
     }
     update_consent(storage_val);
 
