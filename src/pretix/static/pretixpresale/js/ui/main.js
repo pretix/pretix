@@ -546,7 +546,13 @@ $(function () {
             var $add = $("<span>")
             $add.append($("<span>").addClass("fa fa-globe"))
             if ($(this).is("[data-time-short]")) {
-                $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+                if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
+                    $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+                    // $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
+                } else {
+                    $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+                    // $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
+                }
             } else {
                 $add.addClass("text-muted")
                 $add.append(" " + gettext("Your local time:") + " ")
