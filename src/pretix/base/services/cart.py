@@ -623,6 +623,9 @@ class CartManager:
 
             if p.is_bundled:
                 continue
+                
+            if p.custom_price_input and p.custom_price_input != p.listed_price:
+                continue
 
             if p.listed_price is None:
                 if p.addon_to_id and is_included_for_free(p.item, p.addon_to):
