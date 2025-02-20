@@ -392,14 +392,14 @@ $(function () {
         if (!copy_to_first_ticket) return;
 
         var source = this;
-        var source_label = get_label_text_for_id(source);
+        var source_label = source.placeholder || get_label_text_for_id(source);
 
         var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
         var $candidates = $first_ticket_form.find(source.tagName + ":not([type='checkbox'], [type='radio'])");
         var $match = $candidates.filter(function() {
             return (
                 this.id.endsWith(source.id.substring(3))
-                || this.placeholder === source.placeholder
+                || this.placeholder === source_label
                 || get_label_text_for_id(this.id) === source_label
             );
         }).first();
