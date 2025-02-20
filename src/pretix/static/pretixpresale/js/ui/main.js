@@ -314,6 +314,12 @@ function setup_week_calendar() {
     }
 }
 
+function get_label_text_for_id(id) {
+    return $("label[for=" + id +"]").first().contents().filter(function () {
+        return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
+    }).text().trim();
+}
+
 $(function () {
     "use strict";
 
@@ -383,29 +389,21 @@ $(function () {
     })
     $("select[id^=id_name_parts], input[id^=id_name_parts_], #id_email, #id_street, #id_company, #id_zipcode," +
         " #id_city, #id_country, #id_state").change(function () {
-        if (copy_to_first_ticket) {
-            var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
-            $first_ticket_form.find("[id$=" + this.id.substring(3) + "]").val(this.value);
-            if (this.placeholder) {
-                $first_ticket_form.find("[placeholder='" + CSS.escape(this.placeholder) + "']").val(this.value);
-            }
-            var label = $("label[for=" + this.id +"]").first().contents().filter(function () {
-                return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
-            }).text().trim();
-            if (label) {
-                // match to placeholder and label
-                $first_ticket_form.find("[placeholder='" + CSS.escape(label) + "']").val(this.value);
-                var v = this.value;
-                $first_ticket_form.find("label").each(function() {
-                    var text = $(this).first().contents().filter(function () {
-                        return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
-                    }).text().trim();
-                    if (text == label) {
-                        $("#" + this.getAttribute("for")).val(v);
-                    }
-                });
-            }
-        }
+        if (!copy_to_first_ticket) return;
+
+        var source = this;
+        var source_label = get_label_text_for_id(source);
+
+        var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
+        var $candidates = $first_ticket_form.find(source.tagName + ":not([type='checkbox'], [type='radio'])");
+        var $match = $candidates.filter(function() {
+            return (
+                this.id.endsWith(source.id.substring(3))
+                || this.placeholder === source.placeholder
+                || get_label_text_for_id(this.id) === source_label
+            );
+        }).first();
+        $match.val(this.value).trigger("change");
     }).trigger("change");
     attendee_address_fields.change(function () {
         copy_to_first_ticket = false;
