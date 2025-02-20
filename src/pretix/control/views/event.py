@@ -1677,3 +1677,6 @@ class EventQRCode(EventPermissionRequiredMixin, View):
             r = HttpResponse(byte_io.read(), content_type='image/' + filetype)
             r['Content-Disposition'] = f'inline; filename="qrcode-{request.event.slug}.{filetype}"'
             return r
+
+
+#class DataSyncSettings
