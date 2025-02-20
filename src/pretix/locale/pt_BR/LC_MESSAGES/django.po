@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-31 01:00+0000\n"
-"Last-Translator: Lorhan Sohaky <lorhansohaky@gmail.com>\n"
+"PO-Revision-Date: 2025-02-18 11:00+0000\n"
+"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3321,11 +3321,10 @@ msgid "Single price: {net_price} net / {gross_price} gross"
 msgstr "Preço único: {net_price} líquido / {gross_price} bruto"
 
 #: pretix/base/invoice.py:668
-#, fuzzy, python-brace-format
-#| msgid "Original price"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Preço original"
+msgstr "Preço simples: {price}"
 
 #: pretix/base/invoice.py:686 pretix/base/invoice.py:692
 msgctxt "invoice"
@@ -3333,11 +3332,9 @@ msgid "Invoice total"
 msgstr "Total da fatura"
 
 #: pretix/base/invoice.py:702
-#, fuzzy
-#| msgid "Paid orders"
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Ordens pagas"
+msgstr "Pagamentos recebidos"
 
 #: pretix/base/invoice.py:707
 msgctxt "invoice"
@@ -3345,18 +3342,14 @@ msgid "Outstanding payments"
 msgstr "Pagamentos pendentes"
 
 #: pretix/base/invoice.py:724
-#, fuzzy
-#| msgid "Gift card"
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Cartão Presente"
+msgstr "Pago com cartão-presente"
 
 #: pretix/base/invoice.py:729
-#, fuzzy
-#| msgid "Payment date"
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr "Data de pagamento"
+msgstr "Valor remanescente"
 
 #: pretix/base/invoice.py:778
 msgctxt "invoice"
@@ -3379,18 +3372,14 @@ msgid "Included taxes"
 msgstr "Taxas incluídas"
 
 #: pretix/base/invoice.py:838
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, this corresponds to:"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"Usando a taxa de conversão de 1: {rate} como publicado pelo Banco Central "
-"Europeu na {date}, isto corresponde á:"
+"Usando a taxa de conversão de 1: {rate} como publicado pelo {authority} na "
+"{date}, isto corresponde a:"
 
 #: pretix/base/invoice.py:853
 #, fuzzy, python-brace-format
@@ -4692,10 +4681,10 @@ msgid "Owned by ticket holder"
 msgstr "Fatura para"
 
 #: pretix/base/models/giftcards.py:93
-#, fuzzy
-#| msgid "The slug may only contain letters, numbers, dots and dashes."
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
-msgstr "A campo pode conter apenas letras, números, pontos e traços."
+msgstr ""
+"O código do cartão-presente pode conter apenas letras, números, pontos e "
+"traços."
 
 #: pretix/base/models/giftcards.py:105
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
@@ -4704,10 +4693,8 @@ msgid "Special terms and conditions"
 msgstr "Termos e condições especiais"
 
 #: pretix/base/models/giftcards.py:219 pretix/base/models/giftcards.py:223
-#, fuzzy
-#| msgid "Category description"
 msgid "Manual transaction"
-msgstr "Descrição da categoria"
+msgstr "Transação manual"
 
 #: pretix/base/models/invoices.py:185
 #, python-format
@@ -4752,10 +4739,8 @@ msgstr ""
 
 #: pretix/base/models/items.py:114 pretix/base/models/items.py:159
 #: pretix/control/forms/item.py:99
-#, fuzzy
-#| msgid "Product category"
 msgid "Normal category"
-msgstr "Categoria de produtos"
+msgstr "Categoria normal"
 
 #: pretix/base/models/items.py:115 pretix/control/forms/item.py:112
 msgid "Normal + cross-selling category"
@@ -4811,10 +4796,8 @@ msgid "Add-on category"
 msgstr "Categoria de produtos"
 
 #: pretix/base/models/items.py:222 pretix/base/models/items.py:278
-#, fuzzy
-#| msgid "Optional. No products will be sold before this date."
 msgid "Disable product for this date"
-msgstr "Opcional. Nenhum produto será vendido antes desta data."
+msgstr "Desabilitar produto para esta data"
 
 #: pretix/base/models/items.py:226 pretix/base/models/items.py:282
 #: pretix/base/models/items.py:564
@@ -4827,23 +4810,16 @@ msgid "This product will not be sold after the given date."
 msgstr "Este produto não será vendido após a data indicada."
 
 #: pretix/base/models/items.py:436
-#, fuzzy
-#| msgid "Event start date"
 msgid "Event validity (default)"
-msgstr "Data de início do evento"
+msgstr "Validade do evento (padrão)"
 
 #: pretix/base/models/items.py:437
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Fixed time frame"
-msgstr "Cliente"
+msgstr "Prazo fixo"
 
 #: pretix/base/models/items.py:438
-#, fuzzy
-#| msgid "Gift card"
 msgid "Dynamic validity"
-msgstr "Cartão Presente"
+msgstr "Validade dinâmica"
 
 #: pretix/base/models/items.py:444 pretix/control/forms/item.py:660
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
@@ -4921,10 +4897,8 @@ msgstr ""
 "que são comprados como complemento para outros produtos."
 
 #: pretix/base/models/items.py:512 pretix/base/models/items.py:1175
-#, fuzzy
-#| msgid "Default price"
 msgid "Suggested price"
-msgstr "Preço padrão"
+msgstr "Preço sugerido"
 
 #: pretix/base/models/items.py:513 pretix/base/models/items.py:1176
 msgid ""
@@ -4944,10 +4918,8 @@ msgstr ""
 "Quer comprar este produto ou não permitir que uma pessoa entre no seu evento"
 
 #: pretix/base/models/items.py:532
-#, fuzzy
-#| msgid "Is an admission ticket"
 msgid "Is a personalized ticket"
-msgstr "É um bilhete de admissão"
+msgstr "É um ingresso personalizado"
 
 #: pretix/base/models/items.py:534
 #, fuzzy
@@ -5178,10 +5150,8 @@ msgid "Membership duration in months"
 msgstr "Duração da assinatura em meses"
 
 #: pretix/base/models/items.py:728
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity"
-msgstr "Válido até"
+msgstr "Validade"
 
 #: pretix/base/models/items.py:730
 msgid ""
@@ -5205,16 +5175,12 @@ msgstr ""
 "alteração, mas manterão a validade atual."
 
 #: pretix/base/models/items.py:738 pretix/control/forms/item.py:728
-#, fuzzy
-#| msgid "Gift card"
 msgid "Start of validity"
-msgstr "Cartão Presente"
+msgstr "Início da validade"
 
 #: pretix/base/models/items.py:739
-#, fuzzy
-#| msgid "End of presale"
 msgid "End of validity"
-msgstr "Fim a pré venda"
+msgstr "Fim da validade"
 
 #: pretix/base/models/items.py:742
 msgid "Minutes"
@@ -5369,10 +5335,8 @@ msgid "This is shown below the variation name in lists."
 msgstr "Isso é mostrado abaixo do nome da variação nas listas."
 
 #: pretix/base/models/items.py:1182
-#, fuzzy
-#| msgid "New order requires approval"
 msgid "Require approval"
-msgstr "Novo pedido precisa ser aprovado"
+msgstr "Requer aprovação"
 
 #: pretix/base/models/items.py:1184
 #, fuzzy
@@ -5399,16 +5363,12 @@ msgid "Membership types"
 msgstr "Tipos de assinaturas"
 
 #: pretix/base/models/items.py:1206
-#, fuzzy
-#| msgid "This product will not be sold before the given date."
 msgid "This variation will not be sold before the given date."
-msgstr "Este produto não será vendido antes da data indicada."
+msgstr "Esta variação não será vendida antes da data indicada."
 
 #: pretix/base/models/items.py:1216
-#, fuzzy
-#| msgid "This product will not be sold after the given date."
 msgid "This variation will not be sold after the given date."
-msgstr "Este produto não será vendido após a data indicada."
+msgstr "Esta variação não será vendida após a data indicada."
 
 #: pretix/base/models/items.py:1224
 msgid "Sell on all sales channels the product is sold on"
@@ -5474,10 +5434,8 @@ msgstr ""
 "os add-ons normalmente custem dinheiro individualmente."
 
 #: pretix/base/models/items.py:1476
-#, fuzzy
-#| msgid "Allow product to be canceled"
 msgid "Allow the same product to be selected multiple times"
-msgstr "Permitir que o produto seja cancelado"
+msgstr "Permitir que o mesmo produto seja selecionado múltiplas vezes"
 
 #: pretix/base/models/items.py:1495
 msgid "The add-on's category must belong to the same event as the item."
@@ -11440,6 +11398,8 @@ msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
 msgstr ""
+"Ao clicar em \"Aceitar todos os cookies\", você concorda em armazenar "
+"cookies e utilizar tecnologias similares em seu dispositivo."
 
 #: pretix/base/settings.py:3311
 #, fuzzy
@@ -11461,10 +11421,8 @@ msgid "Secondary dialog text"
 msgstr ""
 
 #: pretix/base/settings.py:3332
-#, fuzzy
-#| msgid "Payment date"
 msgid "Privacy settings"
-msgstr "Data de pagamento"
+msgstr "Preferências de privacidade"
 
 #: pretix/base/settings.py:3337
 msgid "Dialog title"
@@ -11472,7 +11430,7 @@ msgstr ""
 
 #: pretix/base/settings.py:3343
 msgid "Accept all cookies"
-msgstr ""
+msgstr "Aceitar todos os cookies"
 
 #: pretix/base/settings.py:3348
 #, fuzzy
@@ -11520,12 +11478,12 @@ msgstr ""
 #: pretix/base/settings.py:3429
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr ""
+msgstr "Sra"
 
 #: pretix/base/settings.py:3430
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr ""
+msgstr "Sr"
 
 #: pretix/base/settings.py:3431
 msgctxt "person_name_salutation"
@@ -11559,7 +11517,7 @@ msgstr "Sobrenome"
 #: pretix/base/settings.py:3687
 msgctxt "person_name_sample"
 msgid "John"
-msgstr ""
+msgstr "João"
 
 #: pretix/base/settings.py:3469 pretix/base/settings.py:3485
 #: pretix/base/settings.py:3501 pretix/base/settings.py:3517
@@ -11568,27 +11526,25 @@ msgstr ""
 #: pretix/base/settings.py:3657 pretix/base/settings.py:3688
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr ""
+msgstr "Silva"
 
 #: pretix/base/settings.py:3475 pretix/base/settings.py:3491
 #: pretix/base/settings.py:3523 pretix/base/settings.py:3642
 #: pretix/base/settings.py:3664
 msgctxt "person_name"
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: pretix/base/settings.py:3483 pretix/base/settings.py:3499
 #: pretix/base/settings.py:3532 pretix/base/settings.py:3655
 #: pretix/base/settings.py:3686
 msgctxt "person_name_sample"
 msgid "Dr"
-msgstr ""
+msgstr "Dr"
 
 #: pretix/base/settings.py:3507 pretix/base/settings.py:3524
-#, fuzzy
-#| msgid "Device name"
 msgid "First name"
-msgstr "Nome do dispositivo"
+msgstr "Nome"
 
 #: pretix/base/settings.py:3508 pretix/base/settings.py:3525
 #, fuzzy
@@ -11600,7 +11556,7 @@ msgstr "Nome do dispositivo"
 #: pretix/control/forms/organizer.py:651
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr ""
+msgstr "João Silva"
 
 #: pretix/base/settings.py:3595
 #, fuzzy
@@ -11627,7 +11583,7 @@ msgstr "Cancelamento"
 #: pretix/base/settings.py:3685
 msgctxt "person_name_sample"
 msgid "Mr"
-msgstr ""
+msgstr "Sr"
 
 #: pretix/base/settings.py:3667
 msgctxt "person_name"
@@ -18175,7 +18131,7 @@ msgstr "Organizadores"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr ""
+msgstr "Este é o registro SPF encontrado em seu domínio:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
@@ -24293,7 +24249,7 @@ msgstr "Produto"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:264
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:124
 msgid "Add a new quota"
-msgstr ""
+msgstr "Adicionar uma quota nova"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:485
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:128
