@@ -620,12 +620,11 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
             })
         elif request.POST.get('action') == 'delete_confirm':
             log_entries = []
+            to_delete = []
             for obj in self.objects:
                 if obj.allow_delete():
                     log_entries.append(obj.log_action('pretix.voucher.deleted', user=self.request.user, save=False))
-                    CartPosition.objects.filter(addon_to__voucher=obj).delete()
-                    obj.cartposition_set.all().delete()
-                    obj.delete()
+                    to_delete.append(obj.pk)
                 else:
                     log_entries.append(obj.log_action('pretix.voucher.changed', user=self.request.user, data={
                         'max_usages': min(obj.redeemed, obj.max_usages),
@@ -633,6 +632,11 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
                     }), save=False)
                     obj.max_usages = min(obj.redeemed, obj.max_usages)
                     obj.save(update_fields=['max_usages'])
+
+            if to_delete:
+                CartPosition.objects.filter(addon_to__voucher_id__in=to_delete).delete()
+                CartPosition.objects.filter(voucher_id__in=to_delete).delete()
+                Voucher.objects.filter(pk__in=to_delete).delete()
 
             LogEntry.bulk_create_and_postprocess(log_entries)
             messages.success(request, _('The selected vouchers have been deleted or disabled.'))

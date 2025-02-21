@@ -167,8 +167,8 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                     if not obj.voucher_id:
                         log_entries.append(obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user, save=False))
                         to_delete.append(obj.pk)
-                LogEntry.bulk_create_and_postprocess(log_entries)
                 WaitingListEntry.objects.filter(id__in=to_delete).delete()
+                LogEntry.bulk_create_and_postprocess(log_entries)
             messages.success(request, _('The selected entries have been deleted.'))
             return self._redirect_back()
 
