@@ -38,7 +38,8 @@ $(function () {
         consent_checkboxes.each(function () {
             this.checked = storage_val[this.name] = widget_consent.indexOf(this.name) > -1;
         })
-        show_dialog = false
+        show_dialog = false;
+        $("#cookie-consent-reopen").hide();
     } else if (storage_val) {
         storage_val = JSON.parse(storage_val);
         consent_checkboxes.each(function () {
