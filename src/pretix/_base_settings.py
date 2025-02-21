@@ -93,6 +93,7 @@ ALL_LANGUAGES = [
     ('zh-hans', _('Chinese (simplified)')),
     ('zh-hant', _('Chinese (traditional)')),
     ('cs', _('Czech')),
+    ('hr', _('Croatian')),
     ('da', _('Danish')),
     ('nl', _('Dutch')),
     ('nl-informal', _('Dutch (informal)')),
