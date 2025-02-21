@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2024-05-23 14:03+0000\n"
-"Last-Translator: Serhii Horichenko <m@sgg.im>\n"
+"PO-Revision-Date: 2025-02-21 19:00+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.10\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -32502,26 +32502,26 @@ msgstr ""
 "відповідно змініть налаштування свого браузера."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:17
-#, python-format
+#, fuzzy, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
 msgstr[0] ""
 "Однина\n"
-"Вам необхідно обрати одну опцію з цієї категорії."
-msgstr[1] ""
-"Множина\n"
-"Вам обрати %(min_count)s опції з цієї категорії."
-msgstr[2] ""
-"Множина\n"
+"Вам необхідно обрати одну опцію з цієї категорії.Множина\n"
+"Вам обрати %(min_count)s опції з цієї категорії.Множина\n"
 "Вам обрати %(min_count)s опцій з цієї категорії."
+msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:26
-#, python-format
+#, fuzzy, python-format
 msgid "You can choose %(max_count)s option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] "Ви можете обрати одну опцію з цієї категорії."
-msgstr[1] "Ви можете обрати %(max_count)s опції з цієї категорії."
-msgstr[2] "Ви можете обрати %(max_count)s опцій з цієї категорії."
+msgstr[0] ""
+"Ви можете обрати одну опцію з цієї категорії.Ви можете обрати %(max_count)s "
+"опції з цієї категорії.Ви можете обрати %(max_count)s опцій з цієї категорії."
+msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:34
 #, python-format
@@ -32799,12 +32799,14 @@ msgid "Usage:"
 msgstr "Використання:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:138
-#, python-format
+#, fuzzy, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
-msgstr[0] "Цей квиток було використано один раз."
-msgstr[1] "Цей квиток було використано кілька разів."
-msgstr[2] "Цей квиток було використано %(count)s разів."
+msgstr[0] ""
+"Цей квиток було використано один раз.Цей квиток було використано кілька "
+"разів.Цей квиток було використано %(count)s разів."
+msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:170
 msgid "No attendee name provided"
@@ -32891,12 +32893,12 @@ msgid "Current value:"
 msgstr "Поточна вартість"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:463
-#, python-format
+#, fuzzy, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Один продукт"
-msgstr[1] "%(num)s продукти"
-msgstr[2] "%(num)s продуктів"
+msgstr[0] "Один продукт%(num)s продукти%(num)s продуктів"
+msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:477
 #, python-format
