@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2024-09-16 13:00+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"PO-Revision-Date: 2025-02-21 19:00+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.10\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -32414,12 +32414,12 @@ msgid "Current value:"
 msgstr "Валюта"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:463
-#, python-format
+#, fuzzy, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Один продукт"
-msgstr[1] "Дополнительные продукты"
-msgstr[2] "Много продуктов"
+msgstr[0] "Один продуктДополнительные продуктыМного продуктов"
+msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:477
 #, fuzzy, python-format
