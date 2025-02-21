@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2025-01-31 01:00+0000\n"
-"Last-Translator: Chislon <chislon@gmail.com>\n"
+"PO-Revision-Date: 2025-02-21 19:00+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -19302,7 +19302,7 @@ msgstr "是否確實要刪除商品<strong>%(item)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:22
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:24
-#, python-format
+#, fuzzy, python-format
 msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
 msgstr[0] "這將導致%(count)s的優惠券不可用.這將導致 %(count)s的優惠券不可用."
@@ -24625,7 +24625,7 @@ msgid "Soon"
 msgstr "很快地"
 
 #: pretix/control/views/dashboards.py:561
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
 msgstr[0] ""
@@ -25135,7 +25135,7 @@ msgid_plural "Your invoices"
 msgstr[0] "你的發票"
 
 #: pretix/control/views/orders.py:537
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -28600,7 +28600,7 @@ msgid "on {date} at {time}"
 msgstr "在{date}在{time}"
 
 #: pretix/plugins/sendmail/models.py:340
-#, python-format
+#, fuzzy, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
 msgstr[0] ""
@@ -28620,11 +28620,10 @@ msgid_plural "%(count)d days after event start at %(time)s"
 msgstr[0] "%(count)d 事件在%(time)s開始後的一天"
 
 #: pretix/plugins/sendmail/models.py:368
-#, python-format
+#, fuzzy, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
-msgstr[0] ""
-"%(count)d 事件在%(time)s開始的前一天 , 事件在%(time)s開始前的%(count)d天"
+msgstr[0] "%(count)d 事件在%(time)s開始的前一天 , 事件在%(time)s開始前的%(count)d天"
 
 #: pretix/plugins/sendmail/signals.py:101
 msgid "Scheduled emails"
@@ -28873,7 +28872,7 @@ msgid ""
 msgstr "通過等候名單功能，向當前等待接收優惠券的每個人發送電子郵件。"
 
 #: pretix/plugins/sendmail/views.py:516
-#, python-format
+#, fuzzy, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
 msgstr[0] "%(number)s的等待名單條目%(number)s的等待名單條目"
@@ -30754,12 +30753,11 @@ msgstr[0] ""
 "你需要從此類別中選擇一個選項。你需要從此類別中選擇%(min_count)s的選項。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:26
-#, python-format
+#, fuzzy, python-format
 msgid "You can choose %(max_count)s option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] ""
-"你可以從此類別中選擇%(max_count)s選項。你可以從此類別中選擇%(max_count)s選"
-"項。"
+msgstr[0] "你可以從此類別中選擇%(max_count)s選項。你可以從此類別中選擇%(max_count)s選項"
+"。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:34
 #, python-format
