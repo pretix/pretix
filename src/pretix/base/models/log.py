@@ -37,7 +37,7 @@ import logging
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
+from django.db import connections, models
 from django.utils.functional import cached_property
 
 from pretix.base.logentrytype_registry import log_entry_types, make_link
@@ -164,6 +164,15 @@ class LogEntry(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         raise TypeError("Logs cannot be deleted.")
+
+    @classmethod
+    def bulk_create_and_postprocess(cls, objects):
+        if connections['default'].features.can_return_rows_from_bulk_insert:
+            cls.objects.bulk_create(objects)
+        else:
+            for le in objects:
+                le.save()
+        cls.bulk_postprocess(objects)
 
     @classmethod
     def bulk_postprocess(cls, objects):
