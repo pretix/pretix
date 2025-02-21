@@ -542,6 +542,7 @@ class ConfigurationView(View):
             'token_endpoint_auth_methods_supported': [
                 'client_secret_post', 'client_secret_basic'
             ],
+            'code_challenge_methods_supported': ['S256'],
             'claims_supported': [
                 'iss',
                 'aud',

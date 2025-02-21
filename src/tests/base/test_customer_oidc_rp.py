@@ -236,7 +236,8 @@ def provider(organizer):
                 "response_modes_supported": ["query"],
                 "grant_types_supported": ["authorization_code"],
                 "scopes_supported": ["openid", "email", "profile"],
-                "claims_supported": ["email", "sub"]
+                "claims_supported": ["email", "sub"],
+                "code_challenge_methods_supported": ["plain", "S256"],
             }
         }
     )
@@ -253,6 +254,19 @@ def test_authorize_url(provider):
         "redirect_uri=https%3A%2F%2Fredirect%3Ffoo%3Dbar&"
         "code_challenge=S1ZnvzwMZHrWOO62nENdJ6jhODhf7VfyZFBIXQyrTKo&"
         "code_challenge_method=S256"
+    ) == oidc_authorize_url(provider, "state_val", "https://redirect?foo=bar", "pkce_value")
+
+
+@pytest.mark.django_db
+def test_authorize_url_no_pkce(provider):
+    del provider.configuration["provider_config"]["code_challenge_methods_supported"]
+    assert (
+        "https://example.com/authorize?"
+        "response_type=code&"
+        "client_id=abc123&"
+        "scope=openid+email+profile&"
+        "state=state_val&"
+        "redirect_uri=https%3A%2F%2Fredirect%3Ffoo%3Dbar"
     ) == oidc_authorize_url(provider, "state_val", "https://redirect?foo=bar", "pkce_value")
 
 

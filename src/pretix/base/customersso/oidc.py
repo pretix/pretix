@@ -163,7 +163,7 @@ def oidc_authorize_url(provider, state, redirect_uri, pkce_code_verifier):
     if "query_parameters" in provider.configuration and provider.configuration["query_parameters"]:
         params.update(parse_qsl(provider.configuration["query_parameters"]))
 
-    if pkce_code_verifier:
+    if pkce_code_verifier and "S256" in provider.configuration['provider_config'].get('code_challenge_methods_supported', []):
         params["code_challenge"] = base64.urlsafe_b64encode(hashlib.sha256(pkce_code_verifier.encode()).digest()).decode().rstrip("=")
         params["code_challenge_method"] = "S256"
 
@@ -192,7 +192,7 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         'redirect_uri': redirect_uri,
     }
 
-    if pkce_code_verifier:
+    if pkce_code_verifier and "S256" in provider.configuration['provider_config'].get('code_challenge_methods_supported', []):
         params["code_verifier"] = pkce_code_verifier
 
     if token_endpoint_auth_method == 'client_secret_post':
