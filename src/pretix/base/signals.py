@@ -567,8 +567,8 @@ order_expiry_changed = EventPluginSignal()
 """
 Arguments: ``order``
 
-This signal is sent out every time an order expiry date is changed. The order object is given
-as the first argument.
+This signal is sent out every time an order expiry date is changed as an explicit operation (i.e. not if
+this is the result of an approval or order change). The order object is given as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
