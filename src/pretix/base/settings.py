@@ -2987,7 +2987,7 @@ Your {organizer} team"""))  # noqa: W291
             help_text=_('This picture will be used as a preview if you post links to your ticket shop on social media. '
                         'Facebook advises to use a picture size of 1200 x 630 pixels, however some platforms like '
                         'WhatsApp and Reddit only show a square preview, so we recommend to make sure it still looks good '
-                        'only the center square is shown. If you do not fill this, we will use the logo given above.')
+                        'if only the center square is shown. If you do not fill this, we will use the logo given above.')
         ),
         'serializer_class': UploadedFileField,
         'serializer_kwargs': dict(
