@@ -330,16 +330,16 @@ class BasePaymentProvider:
                  label=_('Enable payment method'),
                  required=False,
              )),
-            ('_availability_date',
-             RelativeDateField(
-                 label=_('Available until'),
-                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
-                 required=False,
-             )),
             ('_availability_start',
              RelativeDateField(
                  label=_('Available from'),
                  help_text=_('Users will not be able to choose this payment provider before the given date.'),
+                 required=False,
+             )),
+            ('_availability_date',
+             RelativeDateField(
+                 label=_('Available until'),
+                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
                  required=False,
              )),
             ('_total_min',
