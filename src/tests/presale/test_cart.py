@@ -1727,8 +1727,8 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].price_after_voucher, Decimal('23.00'))
 
         response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug),
-                                   {'voucher': v.code},
-                                   follow=True)
+                                    {'voucher': v.code},
+                                    follow=True)
 
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1758,8 +1758,8 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=True)
 
         response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug),
-                                   {'voucher': v.code},
-                                   follow=True)
+                                    {'voucher': v.code},
+                                    follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('We did not find any position in your cart that we could use this voucher for', doc.select('.alert-danger')[0].text)
 
