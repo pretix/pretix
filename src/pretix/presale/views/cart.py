@@ -386,6 +386,11 @@ def get_or_create_cart_id(request, create=True):
             if 'carts' in request.session:
                 request.session['carts'][current_id] = {}
         else:
+            if 'widget_data' in request.GET:
+                try:
+                    request.session['carts'][current_id]['widget_data'] = json.loads(request.GET.get('widget_data'))
+                except ValueError:
+                    pass
             return current_id
 
     cart_data = {}
