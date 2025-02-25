@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-02-25 11:41+0000\n"
+"PO-Revision-Date: 2025-02-25 11:51+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -4069,7 +4069,7 @@ msgstr "Öffentlich"
 #: pretix/base/models/customers.py:388
 msgctxt "openidconnect"
 msgid "Authorization code"
-msgstr "Authorisierungscode"
+msgstr "Autorisierungscode"
 
 #: pretix/base/models/customers.py:389
 msgctxt "openidconnect"
@@ -15406,7 +15406,7 @@ msgid ""
 "Optional query parameters, that will be added to calls to the authorization "
 "endpoint. Enter as: {example}"
 msgstr ""
-"Optionale Query-Parameter, die zu Aufrufen des Authorisierungs-Endpunktes "
+"Optionale Query-Parameter, die zu Aufrufen des Autorisierungs-Endpunktes "
 "hinzugefügt werden. Beispiel: {example}"
 
 #: pretix/control/forms/organizer.py:1109
@@ -17780,7 +17780,7 @@ msgstr "Zahlungsanwendung"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:86
 msgid "Authorization Code"
-msgstr "Authorisierungscode"
+msgstr "Autorisierungscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
 msgid "Transaction ID"
