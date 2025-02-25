@@ -2271,7 +2271,7 @@ otherwise, such as splitting an order or changing fees.
             "position": 12374,
             "body": {
               "item": 12,
-              "variation": None,
+              "variation": null,
               "subevent": 562,
               "seat": "seat-guid-2",
               "price": "99.99",
@@ -2292,7 +2292,7 @@ otherwise, such as splitting an order or changing fees.
         "create_positions": [
           {
             "item": 12,
-            "variation": None,
+            "variation": null,
             "subevent": 562,
             "seat": "seat-guid-2",
             "price": "99.99",
