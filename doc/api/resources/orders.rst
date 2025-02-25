@@ -2305,7 +2305,7 @@ otherwise, such as splitting an order or changing fees.
             "fee": 49
           }
         ],
-        "change_fees": [
+        "patch_fees": [
           {
             "fee": 51,
             "body": {
