@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-01-31 14:13+0000\n"
+"PO-Revision-Date: 2025-02-25 11:41+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10.1\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:87
@@ -55,7 +55,7 @@ msgstr "Tschechisch"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Kroatisch"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -4094,10 +4094,8 @@ msgid "Grant type"
 msgstr "Art des Grants"
 
 #: pretix/base/models/customers.py:420
-#, fuzzy
-#| msgid "Required question"
 msgid "Require PKCE extension"
-msgstr "Antwort erforderlich"
+msgstr "PKCE-Erweiterung erfordern"
 
 #: pretix/base/models/customers.py:432
 msgid "Allowed access scopes"
@@ -7081,11 +7079,11 @@ msgid "The payment for this invoice has already been received."
 msgstr "Die Rechnung wurde bereits beglichen."
 
 #: pretix/base/payment.py:970
-#, fuzzy
-#| msgid "This payment can not be canceled at the moment."
 msgid ""
 "This payment is already being processed and can not be canceled any more."
-msgstr "Diese Zahlung kann im Moment nicht abgebrochen werden."
+msgstr ""
+"Diese Zahlung wird bereits verarbeitet und kann nicht mehr abgebrochen "
+"werden."
 
 #: pretix/base/payment.py:984
 msgid "Automatic refunds are not supported by this payment provider."
@@ -9917,10 +9915,8 @@ msgstr ""
 "(z.B. Englisch)."
 
 #: pretix/base/settings.py:1311
-#, fuzzy
-#| msgid "This is not an event series."
 msgid "This shop represents an event"
-msgstr "Dies ist keine Veranstaltungsreihe."
+msgstr "Dieser Shop repräsentiert eine Veranstaltung"
 
 #: pretix/base/settings.py:1313
 msgid ""
@@ -9930,6 +9926,13 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"Entfernen Sie dieses Häkchen, wenn Sie nur Dinge verkaufen, die kein "
+"bestimmtes Datum haben, wie z.B. Gutscheine oder Tickets, die zu einem "
+"beliebigem Zeitpunkt genutzt werden können. Das System zeigt dann das "
+"Veranstaltungsdatum an einigen Stellen wie z.B. der Veranstaltungs-"
+"Startseite nicht mehr an. Beachten Sie, dass pretix trotzdem ein System ist, "
+"das für Veranstaltungen konzipiert ist und das Datum an anderen Stellen "
+"möglicherweise trotzdem auftaucht."
 
 #: pretix/base/settings.py:1326
 msgid "Show event end date"
@@ -15420,7 +15423,7 @@ msgstr "Telefonnummern-Feld"
 #: pretix/control/forms/organizer.py:1047
 msgctxt "sso_oidc"
 msgid "Query parameters"
-msgstr ""
+msgstr "Query-Parameter"
 
 #: pretix/control/forms/organizer.py:1048
 #, python-brace-format
@@ -15429,6 +15432,8 @@ msgid ""
 "Optional query parameters, that will be added to calls to the authorization "
 "endpoint. Enter as: {example}"
 msgstr ""
+"Optionale Query-Parameter, die zu Aufrufen des Authorisierungs-Endpunktes "
+"hinzugefügt werden. Beispiel: {example}"
 
 #: pretix/control/forms/organizer.py:1109
 msgid "Invalidate old client secret and generate a new one"
@@ -24644,10 +24649,8 @@ msgid "Size (mm)"
 msgstr "Größe (mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:327
-#, fuzzy
-#| msgid "Text color"
 msgid "QR color"
-msgstr "Textfarbe"
+msgstr "QR-Farbe"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:342
 msgid "Render without whitespace"
@@ -35053,18 +35056,14 @@ msgstr ""
 "mehr akzeptiert werden."
 
 #: pretix/presale/views/order.py:1646
-#, fuzzy
-#| msgid ""
-#| "You may not change your order in a way that increases the total price "
-#| "since payments are no longer being accepted for this event."
 msgid ""
 "You may not change your order in a way that requires additional payment "
 "while we are processing your current payment. Please check back after your "
 "current payment has been accepted."
 msgstr ""
-"Sie können Ihre Bestellung nicht so ändern, dass sich der Gesamtbetrag "
-"erhöht. Der Grund dafür ist, dass für diese Veranstaltung keine Zahlungen "
-"mehr akzeptiert werden."
+"Sie können Ihre Bestellung nicht so ändern, dass eine weitere Zahlung "
+"notwendig ist, während der vorherige Zahlungsvorgang noch verarbeitet wird. "
+"Bitte versuchen Sie es erneut, wenn die aktuelle Zahlung abgeschlossen ist."
 
 #: pretix/presale/views/order.py:1662 pretix/presale/views/order.py:1693
 msgid "You cannot change this order."
