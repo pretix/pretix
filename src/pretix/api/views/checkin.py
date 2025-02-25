@@ -163,12 +163,27 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         kwargs = {}
 
-        if not serializer.validated_data.get('position'):
-            kwargs['position'] = OrderPosition.all.filter(
-                secret=serializer.validated_data['raw_barcode']
-            ).first()
-
         clist = self.get_object()
+
+        if not serializer.validated_data.get('position'):
+            # an offline checkin failed, let's see whether a ticket with the given secret actually exists and just
+            # was not synced in time, so we can enrich the log message
+            try:
+                candidate_position = OrderPosition.all.get(
+                    organizer=self.request.organizer,
+                    secret=serializer.validated_data['raw_barcode']
+                )
+            except (OrderPosition.DoesNotExist, OrderPosition.MultipleObjectsReturned):
+                pass
+            else:
+                if candidate_position.event.pk != clist.event.pk and 'candidate_checkin_lists' in self.request.data:
+                    try:
+                        clist = candidate_position.event.checkin_lists.get(pk__in=self.request.data['candidate_checkin_lists'])
+                    except CheckinList.DoesNotExist:
+                        pass  # ignore if candidate position's event was not active on device, if list was deleted in between
+                if candidate_position.event.pk == clist.event.pk:
+                    kwargs['position'] = candidate_position
+
         if serializer.validated_data.get('nonce'):
             if kwargs.get('position'):
                 prev = kwargs['position'].all_checkins.filter(nonce=serializer.validated_data['nonce']).first()
