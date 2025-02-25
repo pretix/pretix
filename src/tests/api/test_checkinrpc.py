@@ -812,7 +812,7 @@ def test_store_failed_other_event(token_client, organizer, clist, event, clist_e
     ), {
         'raw_barcode': 'xyzabc',
         'error_reason': 'invalid',
-        'events_and_checkin_lists': [(event.slug, clist.pk), (event2.slug, clist_event2.pk)],
+        'candidate_checkin_lists': [clist.pk, clist_event2.pk],
         'nonce': '333',
     }, format='json')
     assert resp.status_code == 201

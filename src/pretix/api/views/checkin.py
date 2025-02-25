@@ -176,17 +176,11 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             except (OrderPosition.DoesNotExist, OrderPosition.MultipleObjectsReturned):
                 pass
             else:
-                if candidate_position.event.pk != clist.event.pk and 'events_and_checkin_lists' in self.request.data:
+                if candidate_position.event.pk != clist.event.pk and 'candidate_checkin_lists' in self.request.data:
                     try:
-                        list_id = next(list_id for event_slug, list_id in self.request.data['events_and_checkin_lists']
-                                       if event_slug == candidate_position.event.slug)
-                    except StopIteration:  # ignore if candidate position's event was not active on device
-                        pass
-                    else:
-                        try:
-                            clist = candidate_position.event.checkin_lists.get(pk=list_id)
-                        except CheckinList.DoesNotExist:  # ignore if list deleted in between
-                            pass
+                        clist = candidate_position.event.checkin_lists.get(pk__in=self.request.data['candidate_checkin_lists'])
+                    except CheckinList.DoesNotExist:
+                        pass  # ignore if candidate position's event was not active on device, if list was deleted in between
                 if candidate_position.event.pk == clist.event.pk:
                     kwargs['position'] = candidate_position
 
