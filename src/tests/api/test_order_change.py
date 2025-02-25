@@ -1797,6 +1797,13 @@ def test_order_change_cancel_and_create(token_client, organizer, event, order, q
                 'price': '99.99'
             },
         ],
+        'create_fees': [
+            {
+                'value': '5.99',
+                'fee_type': 'service',
+                'description': 'Service fee',
+            },
+        ],
         'cancel_fees': [
             {
                 'fee': f.pk,
@@ -1818,6 +1825,11 @@ def test_order_change_cancel_and_create(token_client, organizer, event, order, q
         assert p_new.price == Decimal('99.99')
         f.refresh_from_db()
         assert f.canceled
+        f_new = order.all_fees.get(fee_type=OrderFee.FEE_TYPE_SERVICE)
+        assert f_new.value == Decimal('5.99')
+        assert f_new.description == "Service fee"
+        assert f_new.internal_type == ""
+        assert f_new.tax_value == Decimal('0.00')
 
 
 @pytest.mark.django_db

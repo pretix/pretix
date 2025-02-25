@@ -75,8 +75,9 @@ positions                             list of objects            List of order p
 fees                                  list of objects            List of fees included in the order total. By default, only
                                                                  non-canceled fees are included.
 ├ id                                  integer                    Internal ID of the fee record
-├ fee_type                            string                     Type of fee (currently ``payment``, ``passbook``,
-                                                                 ``other``)
+├ fee_type                            string                     Type of fee (currently ``payment``, ``shipping``,
+                                                                 ``service``, ``cancellation``, ``insurance``, ``late``,
+                                                                 ``other``, ``giftcard``)
 ├ value                               money (string)             Fee amount
 ├ description                         string                     Human-readable string with more details (can be empty)
 ├ internal_type                       string                     Internal string (i.e. ID of the payment provider),
@@ -2244,6 +2245,9 @@ otherwise, such as splitting an order or changing fees.
 
    * ``cancel_fees``: A list of objects with the single key ``fee`` specifying an order fee ID.
 
+   * ``create_fees``: A list of objects describing new order fees with the fields ``fee_type``, ``value``, ``description``,
+     ``internal_type``, ``tax_rule``
+
    * ``recalculate_taxes``: If set to ``"keep_net"``, all taxes will be recalculated based on the tax rule and invoice
      address, the net price will be kept. If set to ``"keep_gross"``, the gross price will be kept. If set to ``null``
      (the default) the taxes are not recalculated.
@@ -2263,22 +2267,22 @@ otherwise, such as splitting an order or changing fees.
       Content-Type: application/json
 
       {
-        "cancel_positions": [
-          {
-            "position": 12373
-          }
-        ],
         "patch_positions": [
           {
             "position": 12374,
             "body": {
               "item": 12,
-              "variation": None,
+              "variation": null,
               "subevent": 562,
               "seat": "seat-guid-2",
               "price": "99.99",
               "tax_rule": 15
             }
+          }
+        ],
+        "cancel_positions": [
+          {
+            "position": 12373
           }
         ],
         "split_positions": [
@@ -2289,7 +2293,7 @@ otherwise, such as splitting an order or changing fees.
         "create_positions": [
           {
             "item": 12,
-            "variation": None,
+            "variation": null,
             "subevent": 562,
             "seat": "seat-guid-2",
             "price": "99.99",
@@ -2297,17 +2301,26 @@ otherwise, such as splitting an order or changing fees.
             "attendee_name": "Peter",
           }
         ],
-        "cancel_fees": [
-          {
-            "fee": 49
-          }
-        ],
-        "change_fees": [
+        "patch_fees": [
           {
             "fee": 51,
             "body": {
               "value": "12.00"
             }
+          }
+        ],
+        "cancel_fees": [
+          {
+            "fee": 49
+          }
+        ],
+        "create_fees": [
+          {
+            "fee_type": "other",
+            "value": "1.50",
+            "description": "Example Fee",
+            "internal_type": "",
+            "tax_rule": 15
           }
         ],
         "reissue_invoice": true,
