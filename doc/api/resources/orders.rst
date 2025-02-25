@@ -2312,7 +2312,15 @@ otherwise, such as splitting an order or changing fees.
           {
             "fee": 49
           }
-        ]
+        ],
+        "create_fees": [
+          {
+            "fee_type": "other",
+            "value": "1.50",
+            "description": "Example Fee",
+            "internal_type": "",
+            "tax_rule": 15
+          }
         ],
         "reissue_invoice": true,
         "send_email": true,
