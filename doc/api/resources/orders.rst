@@ -2242,10 +2242,10 @@ otherwise, such as splitting an order or changing fees.
    * ``patch_fees``: A list of objects with the two keys ``fee`` specifying an order fee ID and
      ``body`` specifying the desired changed values of the position (``value``).
 
+   * ``cancel_fees``: A list of objects with the single key ``fee`` specifying an order fee ID.
+
    * ``create_fees``: A list of objects describing new order fees with the fields ``fee_type``, ``value``, ``description``,
      ``internal_type``, ``tax_rule``
-
-   * ``cancel_fees``: A list of objects with the single key ``fee`` specifying an order fee ID.
 
    * ``recalculate_taxes``: If set to ``"keep_net"``, all taxes will be recalculated based on the tax rule and invoice
      address, the net price will be kept. If set to ``"keep_gross"``, the gross price will be kept. If set to ``null``
@@ -2266,11 +2266,6 @@ otherwise, such as splitting an order or changing fees.
       Content-Type: application/json
 
       {
-        "cancel_positions": [
-          {
-            "position": 12373
-          }
-        ],
         "patch_positions": [
           {
             "position": 12374,
@@ -2282,6 +2277,11 @@ otherwise, such as splitting an order or changing fees.
               "price": "99.99",
               "tax_rule": 15
             }
+          }
+        ],
+        "cancel_positions": [
+          {
+            "position": 12373
           }
         ],
         "split_positions": [
@@ -2300,11 +2300,6 @@ otherwise, such as splitting an order or changing fees.
             "attendee_name": "Peter",
           }
         ],
-        "cancel_fees": [
-          {
-            "fee": 49
-          }
-        ],
         "patch_fees": [
           {
             "fee": 51,
@@ -2312,6 +2307,12 @@ otherwise, such as splitting an order or changing fees.
               "value": "12.00"
             }
           }
+        ],
+        "cancel_fees": [
+          {
+            "fee": 49
+          }
+        ]
         ],
         "reissue_invoice": true,
         "send_email": true,
