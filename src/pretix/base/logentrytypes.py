@@ -80,7 +80,7 @@ class OrderLogEntryType(EventLogEntryType):
     content_type = Order
 
     def object_link_args(self, order):
-        return {'code': order.code}
+        return {'event': order.event.slug, 'code': order.code}
 
     def object_link_display_name(self, order):
         return order.code
