@@ -30,7 +30,7 @@ Auth
 Authentication
 Authenticator
 Authentifizierungsmechanismus
-Authorisierungscode
+Autorisierungscode
 Backend
 Badge
 Badges
@@ -235,6 +235,7 @@ PayPals
 PayU
 PCI
 Personalisierung
+PKCE
 Platzhalterzeichen
 Play
 Plugin
@@ -254,6 +255,7 @@ Professional
 Przelewy
 pt
 px
+Query
 QR
 rabattiert
 Rabattierung
