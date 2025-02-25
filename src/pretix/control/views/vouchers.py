@@ -629,7 +629,7 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
                     log_entries.append(obj.log_action('pretix.voucher.changed', user=self.request.user, data={
                         'max_usages': min(obj.redeemed, obj.max_usages),
                         'bulk': True
-                    }), save=False)
+                    }, save=False))
                     obj.max_usages = min(obj.redeemed, obj.max_usages)
                     obj.save(update_fields=['max_usages'])
 
