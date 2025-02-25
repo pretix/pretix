@@ -347,7 +347,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         from pretix.base.plugins import get_all_plugins
 
         return (p for p in get_all_plugins(event) if not p.name.startswith('.')
-                   and getattr(p, 'visible', True))
+                and getattr(p, 'visible', True))
 
     def prepare_settings_links(self, pluginmeta):
         links = getattr(pluginmeta, 'settings_links', [])
@@ -397,6 +397,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
 
         active_plugins = self.object.get_plugins()
+
         def plugin_details(plugin):
             is_active = plugin.module in active_plugins
             settings_links = self.prepare_settings_links(plugin) if is_active else None

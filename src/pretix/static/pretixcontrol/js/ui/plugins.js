@@ -11,7 +11,6 @@ $(function() {
             active: !!$(el).has('[data-is-active]').length,
         }
     });
-    console.log(plugins)
     function SearchMatcher(term, fields) {
         this.searchFor = term.toLowerCase().split(/\s+/);
         this.fields = fields;
@@ -65,7 +64,7 @@ $(function() {
         }
         matches.sort(function (a,b) { return (b[0]-a[0]) || strcmp(a[1].sortName, b[1].sortName); })
         $results.append(matches.map(function(res) { return $(res[1].html).prepend('<span class="pull-right">' + res[1].categoryLabel + '</span>'); }))
-        $results.find(".panel-body, .panel, .featured-plugin").removeClass("panel-body panel featured-plugin");
+        $results.find(".panel-body, .panel, .featured-plugin, .btn-lg").removeClass("panel-body panel featured-plugin btn-lg");
         if (matches.length === 0) {
             $results.append(gettext("No results"));
         }
