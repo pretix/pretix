@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
 "PO-Revision-Date: 2025-02-26 22:00+0000\n"
-"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
+"Last-Translator: Cornelius Kibelka <ckibelka-ctr@wikimedia.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -9828,6 +9828,12 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"Desmarque essa caixa se estiver vendendo apenas algo que não tenha uma data "
+"específica, como cartões-presente ou um ingresso que possa ser usado a "
+"qualquer momento. O sistema deixará de mostrar a data do evento em alguns "
+"lugares, como a página inicial do evento. Observe que o pretix ainda é um "
+"sistema construído em torno de eventos e a data ainda pode aparecer em "
+"outros lugares."
 
 #: pretix/base/settings.py:1326
 msgid "Show event end date"
@@ -10555,6 +10561,8 @@ msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
 msgstr ""
+"Isso deve apontar, por exemplo, para uma parte de seu site que explica como "
+"você usa os dados coletados em sua loja de ingressos."
 
 #: pretix/base/settings.py:2077
 #, fuzzy
@@ -10568,6 +10576,8 @@ msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
 msgstr ""
+"Os ingressos nunca serão anexados se forem maiores que {size} para evitar "
+"problemas de entrega de e-mail."
 
 #: pretix/base/settings.py:2090 pretix/plugins/sendmail/forms.py:201
 #: pretix/plugins/sendmail/models.py:270
@@ -10582,16 +10592,21 @@ msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
+"Se ativado, anexaremos um arquivo de calendário do tipo .ics aos e-mails de "
+"confirmação do pedido."
 
 #: pretix/base/settings.py:2100
 msgid "Attach calendar files only after order has been paid"
-msgstr ""
+msgstr "Anexe arquivos de calendário somente após o pagamento do pedido"
 
 #: pretix/base/settings.py:2101
 msgid ""
 "Use this if you e.g. put a private access link into the calendar file to "
 "make sure people only receive it after their payment was confirmed."
 msgstr ""
+"Use isso se, por exemplo, você colocar um link de acesso privado no arquivo "
+"de calendário para garantir que as pessoas só o recebam após a confirmação "
+"do pagamento."
 
 #: pretix/base/settings.py:2110
 #, fuzzy
@@ -10608,28 +10623,36 @@ msgid ""
 "data as calendar entries are often shared with an unspecified number of "
 "people."
 msgstr ""
+"Você pode usar isso para compartilhar informações com os participantes, como "
+"informações de viagem ou o link para um evento digital. Se você o mantiver "
+"vazio, colocaremos um link para a loja do evento, o horário de admissão e o "
+"nome do organizador. Não permitimos o uso de marcadores de posição com dados "
+"confidenciais específicos de pessoas, pois as entradas de calendário "
+"geralmente são compartilhadas com um número não especificado de pessoas."
 
 #: pretix/base/settings.py:2126
 msgid "Subject prefix"
-msgstr ""
+msgstr "Prefixo do assunto"
 
 #: pretix/base/settings.py:2127
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
 msgstr ""
+"Isso será anexado ao assunto de todos os e-mails enviados, formatado como "
+"[prefixo]. Escolha, por exemplo, uma forma abreviada do nome de seu evento."
 
 #: pretix/base/settings.py:2141 pretix/control/forms/mailsetup.py:35
 #: pretix/control/forms/mailsetup.py:108
 #: pretix/control/templates/pretixcontrol/event/mail.html:39
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:40
 msgid "Sender address"
-msgstr ""
+msgstr "Endereço do remetente"
 
 #: pretix/base/settings.py:2142 pretix/control/forms/mailsetup.py:36
 #: pretix/control/forms/mailsetup.py:109
 msgid "Sender address for outgoing emails"
-msgstr ""
+msgstr "Endereço do remetente para e-mails enviados"
 
 #: pretix/base/settings.py:2151
 #, fuzzy
@@ -10642,12 +10665,14 @@ msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr ""
+"Nome do remetente usado em conjunto com o endereço do remetente para e-mails "
+"enviados. O padrão é o nome do evento."
 
 #: pretix/base/settings.py:2170 pretix/base/settings.py:2227
 #: pretix/base/settings.py:2244 pretix/base/settings.py:2262
 #, python-brace-format
 msgid "Your order: {code}"
-msgstr ""
+msgstr "Seu pedido: {code}"
 
 #: pretix/base/settings.py:2174 pretix/base/settings.py:2207
 #: pretix/base/settings.py:2312 pretix/base/settings.py:2545
@@ -10701,6 +10726,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Oi,\n"
+"\n"
+"alguém solicitou uma lista de seus pedidos para {event}.\n"
+"A lista é a seguinte:\n"
+"\n"
+"{orders}\n"
+"\n"
+"Atenciosamente,  \n"
+"Sua equipe de {event}"
 
 #: pretix/base/settings.py:2211
 #, python-brace-format
@@ -10826,6 +10860,15 @@ msgid ""
 "sent before payment is confirmed or the order is approved. To avoid this "
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
+"Esse arquivo será anexado ao primeiro e-mail que enviarmos para cada novo "
+"pedido. Portanto, ele será combinado com os textos “Pedido feito”, “Pedido "
+"gratuito” ou “Pedido recebido” acima. Ele será enviado tanto para os "
+"contatos do pedido quanto para os participantes. Você pode usá-lo, por "
+"exemplo, para enviar seus termos de serviço. Não o utilize para enviar "
+"informações não públicas, pois esse arquivo pode ser enviado antes da "
+"confirmação do pagamento ou da aprovação do pedido. Para evitar que esse e-"
+"mail essencial seja enviado para spam, você só pode carregar arquivos PDF de "
+"até {size} MB."
 
 #: pretix/base/settings.py:2316
 #, python-brace-format
@@ -10869,6 +10912,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Oi,\n"
+"\n"
+"seu pedido para {event} foi alterado.\n"
+"\n"
+"Você pode visualizar o status do seu pedido em\n"
+"{url}\n"
+"\n"
+"Atenciosamente,  \n"
+"Sua equipe de {event}"
 
 #: pretix/base/settings.py:2344
 #, python-brace-format
@@ -10890,6 +10942,18 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Oi,\n"
+"\n"
+"recebemos com sucesso seu pagamento para {event}. Obrigado!\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Você pode alterar os detalhes do seu pedido e visualizar o status do seu "
+"pedido em\n"
+"{url}\n"
+"\n"
+"Atenciosamente,  \n"
+"Sua equipe de {event}"
 
 #: pretix/base/settings.py:2366
 #, fuzzy, python-brace-format
@@ -10910,6 +10974,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Olá {attendee_name},\n"
+"\n"
+"o ingresso para {event} que foi encomendado para você já foi pago.\n"
+"\n"
+"Você pode ver os detalhes e o status do seu ingresso aqui:\n"
+"{url}\n"
+"\n"
+"Com os melhores cumprimentos,  \n"
+"Sua equipe de {event}"
 
 #: pretix/base/settings.py:2387 pretix/control/forms/event.py:1134
 #: pretix/control/forms/event.py:1234 pretix/plugins/sendmail/models.py:275
@@ -10921,6 +10994,8 @@ msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
 msgstr ""
+"Esse e-mail será enviado tantos dias antes da expiração do pedido. Se o "
+"valor for 0, o e-mail nunca será enviado."
 
 #: pretix/base/settings.py:2397
 #, fuzzy, python-brace-format
@@ -10960,7 +11035,7 @@ msgstr ""
 #: pretix/base/settings.py:2415
 #, python-brace-format
 msgid "Your order is pending payment: {code}"
-msgstr ""
+msgstr "Seu pedido está pendente de pagamento: {code}"
 
 #: pretix/base/settings.py:2419
 #, python-brace-format
@@ -10976,6 +11051,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Oi,\n"
+"\n"
+"ainda não recebemos o pagamento integral de seu pedido para {event}.\n"
+"Lembre-se de que o pagamento deve ser feito antes de {expire_date}.\n"
+"\n"
+"Você pode visualizar as informações de pagamento e o status do seu pedido "
+"em\n"
+"{url}\n"
+"\n"
+"Atenciosamente,  \n"
+"Sua equipe de {event}"
 
 #: pretix/base/settings.py:2432
 #, fuzzy, python-brace-format
