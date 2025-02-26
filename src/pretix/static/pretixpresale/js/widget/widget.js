@@ -1978,9 +1978,13 @@ var shared_root_computed = {
     },
     formAction: function () {
         if (!this.useIframe && this.is_button && this.items.length === 0) {
-            var target = this.target_url;
+            var target;
             if (this.voucher_code) {
                 target = this.target_url + 'redeem';
+            } else if (this.subevent) {
+                target = this.target_url + this.subevent + '/';
+            } else {
+                target = this.target_url;
             }
             return target;
         }
