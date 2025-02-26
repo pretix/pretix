@@ -313,9 +313,9 @@ Vue.component('availbox', {
         waiting_list_url: function () {
             var u
             if (this.item.has_variations) {
-                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
             } else {
-                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
             }
             if (this.$root.subevent) {
                 u += '&subevent=' + this.$root.subevent
@@ -786,6 +786,7 @@ var shared_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
+        redirect_url += this.$root.consent_parameter;
         this.$root.overlay.frame_src = redirect_url;
     },
     voucher_open: function (voucher) {
@@ -797,6 +798,7 @@ var shared_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
+        redirect_url += this.$root.consent_parameter;
         if (this.$root.useIframe) {
             this.$root.overlay.frame_src = redirect_url;
         } else {
@@ -815,7 +817,7 @@ var shared_methods = {
             redirect_url += '&take_cart_id=' + this.$root.cart_id;
         }
         if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
         }
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
@@ -1923,6 +1925,7 @@ var shared_root_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
+        redirect_url += this.$root.consent_parameter;
         if (this.$root.useIframe) {
             this.$root.overlay.frame_src = redirect_url;
         } else {
@@ -2029,8 +2032,20 @@ var shared_root_computed = {
         }
         return has_priced || cnt_items > 1;
     },
+    consent_parameter: function () {
+        if (typeof this.widget_data["consent"] !== "undefined") {
+            return "&consent=" + encodeURIComponent(this.widget_data["consent"]);
+        }
+        return "";
+    },
     widget_data_json: function () {
-        return JSON.stringify(this.widget_data);
+        var cloned_data = Object.assign({}, this.widget_data);
+        if (typeof cloned_data["consent"] !== "undefined") {
+            // Remove consent as we pass it differently. We still keep it as widget_data in the input to avoid breaking
+            // the JS API of the widget.
+            delete cloned_data["consent"];
+        }
+        return JSON.stringify(cloned_data);
     },
     additionalURLParams: function () {
         if (!window.location.search.indexOf('utm_')) {

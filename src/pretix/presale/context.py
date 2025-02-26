@@ -52,7 +52,6 @@ from .signals import (
     footer_link, global_footer_link, global_html_footer, global_html_head,
     global_html_page_header, html_footer, html_head, html_page_header,
 )
-from .views.cart import cart_session, get_or_create_cart_id
 from .views.theme import _get_source_cache_key
 
 logger = logging.getLogger(__name__)
@@ -157,10 +156,9 @@ def _default_context(request):
         ctx['languages'] = [get_language_info(code) for code in request.event.settings.locales]
 
         ctx['cookie_providers'] = get_cookie_providers(request.event, request)
-        if get_or_create_cart_id(request, create=False):
-            c = cart_session(request)
-            if "widget_data" in c and c["widget_data"].get("consent"):
-                ctx['cookie_consent_from_widget'] = c["widget_data"].get("consent").split(",")
+        if 'requested_consent_from_widget' in request.session:
+            # We only need to present this to the frontend once, JavaScript will then save it to localStorage/sessionStorage
+            ctx['cookie_consent_from_widget'] = request.session.pop("requested_consent_from_widget").split(",")
 
         if request.resolver_match:
             ctx['cart_namespace'] = request.resolver_match.kwargs.get('cart_namespace', '')
