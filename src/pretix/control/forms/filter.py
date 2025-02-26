@@ -196,7 +196,6 @@ class OrderFilterForm(FilterForm):
         label=_('Search for…'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search for…'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -980,7 +979,6 @@ class OrderPaymentSearchFilterForm(forms.Form):
         label=_('Search for…'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search for…'),
-            'autofocus': 'autofocus'
         }),
         required=False,
     )
@@ -1242,7 +1240,6 @@ class SubEventFilterForm(FilterForm):
         label=_('Event name'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Event name'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1375,7 +1372,6 @@ class OrganizerFilterForm(FilterForm):
         label=_('Organizer name'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Organizer name'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1433,7 +1429,6 @@ class GiftCardFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1485,7 +1480,6 @@ class CustomerFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1558,7 +1552,6 @@ class ReusableMediaFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1613,7 +1606,6 @@ class TeamFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1695,7 +1687,6 @@ class EventFilterForm(FilterForm):
         label=_('Event name'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Event name'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1878,7 +1869,6 @@ class CheckinListAttendeeFilterForm(FilterForm):
         label=_('Search attendee…'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search attendee…'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -2027,7 +2017,6 @@ class UserFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -2119,7 +2108,6 @@ class VoucherFilterForm(FilterForm):
         label=_('Search voucher'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search voucher'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -2597,7 +2585,6 @@ class DeviceFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
