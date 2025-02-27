@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-02-26 08:00+0000\n"
+"PO-Revision-Date: 2025-02-27 18:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
@@ -104,7 +104,7 @@ msgstr "BLIK"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
 msgid "Trustly"
-msgstr "Trustly"
+msgstr "Confiável"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
 msgid "Zimpler"
@@ -383,8 +383,8 @@ msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
-"Atualmente não podemos acessar o servidor, mas continuamos tentando. Último "
-"código de erro: {code}"
+"Não conseguimos acessar o servidor, mas continuaremos tentando. Último "
+"código do erro: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
@@ -580,7 +580,7 @@ msgstr "Caixa de texto"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:912
 msgid "Barcode area"
-msgstr "Área de código de barras"
+msgstr "Área do código de barras"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:914
 msgid "Image area"
@@ -596,7 +596,7 @@ msgstr "Objeto"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:922
 msgid "Ticket design"
-msgstr "Design de bilhetes"
+msgstr "Design do ingresso"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1259
 msgid "Saving failed."
@@ -605,7 +605,7 @@ msgstr "Erro ao salvar."
 #: pretix/static/pretixcontrol/js/ui/editor.js:1328
 #: pretix/static/pretixcontrol/js/ui/editor.js:1379
 msgid "Error while uploading your PDF file, please try again."
-msgstr "Erro durante o upload do seu arquivo PDF, tente novamente."
+msgstr "Erro durante o envio do seu arquivo PDF. Por favor, tente novamente."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1362
 msgid "Do you really want to leave the editor without saving your changes?"
@@ -760,7 +760,7 @@ msgstr "Diminuir quantidade"
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr "AUmentar quantidade"
+msgstr "Aumentar quantidade"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
@@ -991,7 +991,7 @@ msgstr "Escolha uma data diferente"
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
 msgid "Back"
-msgstr "VOltar"
+msgstr "Voltar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgctxt "widget"
@@ -1032,7 +1032,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:71
 msgctxt "widget"
 msgid "Load more"
-msgstr ""
+msgstr "Carregar mais"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:73
 msgid "Mo"
