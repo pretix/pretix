@@ -1,0 +1,64 @@
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+{% load escapejson %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {% trans "Data Sync" %}
+        </h3>
+    </div>
+    <div class="panel-body">
+    {{ test.hello }}
+        <table class="table table-condensed">
+        <tbody>
+            {% for pending in queued_sync_jobs %}
+                <tr>
+                    <td>{{ pending.sync_provider }}</td>
+                    <td>
+                        {% if pending.failed_attempts %}
+                            <i class="fa fa-warning"></i>
+                            {% blocktrans trimmed with num=pending.failed_attempts max=pending.max_retry_attempts %}
+                            Error, retry {{ num }} of {{ max }}
+                            {% endblocktrans %}{% if pending.not_before %},
+                                {% blocktrans trimmed with datetime=pending.not_before %}
+                                waiting until {{ datetime }}
+                                {% endblocktrans %}
+                            {% endif %}
+                        {% elif pending.not_before %}
+                            {% blocktrans trimmed with datetime=pending.not_before %}
+                            Waiting until {{ datetime }}
+                            {% endblocktrans %}
+                        {% else %}
+                            <i class="fa fa-hourglass"></i> {% trans "Pending" %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=pending.sync_provider %}" method="post" class="form-inline">
+                            {% csrf_token %}
+                            {% if pending.not_before %}
+                            <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
+                            {% endif %}
+                            <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-trash"></i> {% trans "Cancel" %}</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for identifier, display_name in non_pending_providers %}
+                <tr>
+                    <td>{{ display_name }}</td>
+                    <td>-</td>
+                    <td>
+                        <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
+                            <input type="hidden" name="queue_sync" value="true">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+        </table>
+    </div>
+</div>
