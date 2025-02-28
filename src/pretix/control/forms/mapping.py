@@ -2,8 +2,11 @@ from django import forms
 from django.forms import formset_factory
 from django.utils.translation import gettext_lazy as _
 
+from pretix.base.datasync.datasync import (
+    MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
+)
 from pretix.base.datasync.sourcefields import QUESTION_TYPE_IDENTIFIERS
-from pretix.base.datasync.datasync import MODE_SET_IF_NEW, MODE_SET_IF_EMPTY, MODE_OVERWRITE, MODE_APPEND_LIST
+
 
 class PropertyMappingForm(forms.Form):
     pretix_field = forms.CharField()

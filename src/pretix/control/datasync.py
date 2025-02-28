@@ -3,12 +3,13 @@ from django.dispatch import receiver
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
 from django.template.loader import get_template
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.datasync.datasync import sync_targets
 from pretix.base.models import Event, Order
 from pretix.control.signals import order_info
 from pretix.control.views.orders import OrderView
-from django.utils.translation import gettext_lazy as _
+
 
 @receiver(order_info, dispatch_uid="datasync_control_order_info")
 def on_control_order_info(sender: Event, request, order: Order, **kwargs):

@@ -1,3 +1,4 @@
+import json
 import logging
 from collections import namedtuple
 from datetime import datetime, timedelta
@@ -8,16 +9,16 @@ import sentry_sdk
 from django.db import models
 from django.db.models import Q
 from django.dispatch import receiver
-from django_scopes import scopes_disabled, scope
-
-from pretix.base.datasync.sourcefields import get_data_fields, ORDER, EVENT, EVENT_OR_SUBEVENT, ORDER_POSITION
-from pretix.base.models import Order, Event
 from django.utils.translation import gettext_lazy as _
+from django_scopes import scope, scopes_disabled
 
+from pretix.base.datasync.sourcefields import (
+    EVENT, EVENT_OR_SUBEVENT, ORDER, ORDER_POSITION, get_data_fields,
+)
+from pretix.base.models import Event, Order
 from pretix.base.services.tasks import TransactionAwareTask
-from pretix.base.signals import periodic_task, EventPluginRegistry
+from pretix.base.signals import EventPluginRegistry, periodic_task
 from pretix.celery_app import app
-import json
 
 logger = logging.getLogger(__name__)
 
