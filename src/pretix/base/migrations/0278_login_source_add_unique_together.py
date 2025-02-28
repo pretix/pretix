@@ -7,15 +7,22 @@ def remove_duplicates(apps, schema_editor):
     UserKnownLoginSource = apps.get_model("pretixbase", "UserKnownLoginSource")
     unique_fields = ["user", "agent_type", "device_type", "os_type", "country"]
 
-    duplicates = UserKnownLoginSource.objects.values(*unique_fields)
+    duplicates = (
+        UserKnownLoginSource.objects
+        .values(*unique_fields)
         .order_by()
         .annotate(latest_id=models.Max('id'), count=models.Count('id'))
         .filter(count__gt=1)
+    )
 
     for duplicate in duplicates:
-        MyModel.objects.filter(**{x: duplicate[x] for x in unique_fields})
-        .exclude(id=duplicate["latest_id"])
-        .delete()
+        (
+            UserKnownLoginSource.objects
+            .filter(**{x: duplicate[x] for x in unique_fields})
+            .exclude(id=duplicate["latest_id"])
+            .delete()
+        )
+
 
 class Migration(migrations.Migration):
 
