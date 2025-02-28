@@ -74,7 +74,7 @@ AVAILABLE_MODELS = {
 }
 
 
-def get_data_fields(event):
+def get_data_fields(event, for_model=None):
     """
     Returns tuple of (required_input, key, label, type, enum_opts, getter)
 
@@ -376,6 +376,14 @@ def get_data_fields(event):
                 None,
                 get_payment_date,
             ),
+            (
+                ORDER,
+                "order_locale",
+                _("Order locale country code"),
+                Question.TYPE_COUNTRYCODE,
+                None,
+                lambda order: order.locale.split("_")[0],
+            ),
         ]
         + [
             (
@@ -400,7 +408,15 @@ def get_data_fields(event):
             for q in event.questions.all().prefetch_related("options")
         ]
     )
-    return src_fields
+    if for_model:
+        available_inputs = AVAILABLE_MODELS[for_model]
+        return [
+            (required_input, key, label, qtype, enum_opts, getter)
+            for required_input, key, label, qtype, enum_opts, getter in src_fields
+            if required_input in available_inputs
+        ]
+    else:
+        return src_fields
 
 
 def translate_property_mappings(property_mapping, checkin_list_map):
@@ -418,3 +434,18 @@ def get_enum_opts(q):
         return [(opt.identifier, opt.answer) for opt in q.options.all()]
     else:
         return None
+
+QUESTION_TYPE_IDENTIFIERS = {
+    Question.TYPE_NUMBER: "NUMBER",
+    Question.TYPE_STRING: "STRING",
+    Question.TYPE_TEXT: "TEXT",
+    Question.TYPE_BOOLEAN: "BOOLEAN",
+    Question.TYPE_CHOICE: "CHOICE",
+    Question.TYPE_CHOICE_MULTIPLE: "CHOICE_MULTIPLE",
+    Question.TYPE_FILE: "FILE",
+    Question.TYPE_DATE: "DATE",
+    Question.TYPE_TIME: "TIME",
+    Question.TYPE_DATETIME: "DATETIME",
+    Question.TYPE_COUNTRYCODE: "COUNTRYCODE",
+    Question.TYPE_PHONENUMBER: "PHONENUMBER",
+}

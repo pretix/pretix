@@ -420,6 +420,23 @@ class OrderPrintLogEntryType(OrderLogEntryType):
             type=dict(PrintLog.PRINT_TYPES)[data["type"]],
         )
 
+@log_entry_types.new_from_dict({
+    "pretix.event.order.data_sync.success": _("Ticket data successfully transferred to {provider}."),
+})
+class OrderDataSyncLogentrytype(OrderLogEntryType):
+    pass
+
+
+@log_entry_types.new_from_dict({
+    "pretix.event.order.data_sync.failed": _("Error while transferring ticket data to {provider}:"),
+})
+class OrderDataSyncErrorLogentrytype(OrderLogEntryType):
+    def display(self, logentry, data):
+        errmes = data["error"]
+        if not isinstance(errmes, list):
+            errmes = [errmes]
+        return mark_safe(escape(self.plain) + "".join("<p>" + escape(msg) + "</p>" for msg in errmes))
+
 
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")
 def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
