@@ -35,6 +35,9 @@ class StatisticsApp(AppConfig):
         version = version
         category = 'FEATURE'
         description = _("Get a birds-eye view of your event sales with graphical statistics.")
+        settings_links = [
+            ((_("Orders"), _("Statistics")), "plugins:statistics:index", {}),
+        ]
 
     def ready(self):
         from . import signals  # NOQA
