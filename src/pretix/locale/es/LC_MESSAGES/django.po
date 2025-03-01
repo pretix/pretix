@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-01-30 12:39+0000\n"
+"PO-Revision-Date: 2025-03-01 15:14+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -57,7 +57,7 @@ msgstr "Checo"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Croata"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -4098,10 +4098,8 @@ msgid "Grant type"
 msgstr "Tipo de subvención"
 
 #: pretix/base/models/customers.py:420
-#, fuzzy
-#| msgid "Required question"
 msgid "Require PKCE extension"
-msgstr "Pregunta requerida"
+msgstr "Extensión PKCE requerida"
 
 #: pretix/base/models/customers.py:432
 msgid "Allowed access scopes"
@@ -7081,11 +7079,9 @@ msgid "The payment for this invoice has already been received."
 msgstr "El pago de esta factura ya se ha recibido."
 
 #: pretix/base/payment.py:970
-#, fuzzy
-#| msgid "This payment can not be canceled at the moment."
 msgid ""
 "This payment is already being processed and can not be canceled any more."
-msgstr "Este pago no puede ser cancelado en este momento."
+msgstr "Este pago ya se está procesando y ya no se puede cancelar."
 
 #: pretix/base/payment.py:984
 msgid "Automatic refunds are not supported by this payment provider."
@@ -9915,10 +9911,8 @@ msgstr ""
 "mundo (como el inglés)."
 
 #: pretix/base/settings.py:1311
-#, fuzzy
-#| msgid "This is not an event series."
 msgid "This shop represents an event"
-msgstr "Esta no es una serie de eventos."
+msgstr "Esta tienda representa un evento"
 
 #: pretix/base/settings.py:1313
 msgid ""
@@ -9928,6 +9922,12 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"Desmarcar esta casilla si sólo vende algo que no tiene una fecha específica, "
+"como tarjetas regalo o una entrada que se puede utilizar en cualquier "
+"momento. El sistema dejará de mostrar la fecha del evento en algunos lugares "
+"como la página de inicio del evento. Tenga en cuenta que pretix sigue siendo "
+"un sistema construido en torno a los eventos y la fecha todavía puede "
+"aparecer en otros lugares."
 
 #: pretix/base/settings.py:1326
 msgid "Show event end date"
@@ -15388,7 +15388,7 @@ msgstr "Campo teléfono"
 #: pretix/control/forms/organizer.py:1047
 msgctxt "sso_oidc"
 msgid "Query parameters"
-msgstr ""
+msgstr "Parámetros de búsqueda"
 
 #: pretix/control/forms/organizer.py:1048
 #, python-brace-format
@@ -15397,6 +15397,8 @@ msgid ""
 "Optional query parameters, that will be added to calls to the authorization "
 "endpoint. Enter as: {example}"
 msgstr ""
+"Parámetros de consulta opcionales, que se añadirán a las llamadas al "
+"endpoint de autorización. Introducir como: {example}"
 
 #: pretix/control/forms/organizer.py:1109
 msgid "Invalidate old client secret and generate a new one"
@@ -24633,10 +24635,8 @@ msgid "Size (mm)"
 msgstr "Tamaño (mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:327
-#, fuzzy
-#| msgid "Text color"
 msgid "QR color"
-msgstr "Color del texto"
+msgstr "Color del QR"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:342
 msgid "Render without whitespace"
@@ -32585,7 +32585,7 @@ msgstr "Realizar pedido"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:209
 msgid "Submit registration"
-msgstr "Enviar registro"
+msgstr "Confirmar reserva"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:18
 msgid "Log in with a customer account"
@@ -35007,17 +35007,14 @@ msgstr ""
 "no se aceptan pagos para este evento."
 
 #: pretix/presale/views/order.py:1646
-#, fuzzy
-#| msgid ""
-#| "You may not change your order in a way that increases the total price "
-#| "since payments are no longer being accepted for this event."
 msgid ""
 "You may not change your order in a way that requires additional payment "
 "while we are processing your current payment. Please check back after your "
 "current payment has been accepted."
 msgstr ""
-"No puede cambiar su pedido de manera que aumente el precio total ya que ya "
-"no se aceptan pagos para este evento."
+"No podrá modificar su pedido de forma que requiera un pago adicional "
+"mientras estemos procesando su pago actual. Vuelva a comprobarlo después de "
+"que se haya aceptado su pago actual."
 
 #: pretix/presale/views/order.py:1662 pretix/presale/views/order.py:1693
 msgid "You cannot change this order."
