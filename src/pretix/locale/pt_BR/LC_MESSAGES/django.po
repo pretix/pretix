@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-02-28 12:27+0000\n"
+"PO-Revision-Date: 2025-03-01 04:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -12239,7 +12239,7 @@ msgstr "Não foi possível analisar sua solicitação."
 #: pretix/base/templates/500.html:22 pretix/base/templates/csrffail.html:26
 #: pretix/presale/templates/pretixpresale/event/offline.html:13
 msgid "Take a step back"
-msgstr ""
+msgstr "Dê um passo para trás"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/400_hostname.html:48
 #: pretix/base/templates/403.html:13 pretix/base/templates/500.html:23
@@ -12262,6 +12262,8 @@ msgid ""
 "Your browser told us that you want to access \"%(header_host)s\". "
 "Unfortunately, we don't have any content for this domain."
 msgstr ""
+"Seu navegador nos disse que você deseja acessar \"%(header_host)s\". "
+"Infelizmente, não temos nenhum conteúdo para este domínio."
 
 #: pretix/base/templates/400_hostname.html:17
 msgid ""
@@ -12269,10 +12271,13 @@ msgid ""
 "probably caused due to the fact that either your configuration includes the "
 "wrong site URL or your reverse proxy is sending the wrong header."
 msgstr ""
+"Parece que esta é uma nova instalação do pretix. Essa mensagem de erro "
+"provavelmente é causada pelo fato de que sua configuração inclui o URL do "
+"site errado ou seu proxy reverso está enviando o cabeçalho errado."
 
 #: pretix/base/templates/400_hostname.html:24
 msgid "Expected host according to configuration"
-msgstr ""
+msgstr "Host esperado de acordo com a configuração"
 
 #: pretix/base/templates/400_hostname.html:26
 #, fuzzy
@@ -12286,13 +12291,16 @@ msgstr "ignorado"
 
 #: pretix/base/templates/400_hostname.html:35
 msgid "Derived host from headers"
-msgstr ""
+msgstr "Host derivado de cabeçalhos"
 
 #: pretix/base/templates/400_hostname.html:40
 msgid ""
 "If you just configured this as a domain for your ticket shop, you now need "
 "to set this up as a \"custom domain\" in your organizer account."
 msgstr ""
+"Se você acabou de configurar isso como um domínio para sua loja de "
+"ingressos, agora você precisa configurá-lo como um \"domínio personalizado\" "
+"em sua conta de organizador."
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
@@ -12319,6 +12327,7 @@ msgstr "Não encontrado"
 #: pretix/base/templates/404.html:9
 msgid "I'm afraid we could not find the the resource you requested."
 msgstr ""
+"Receio que não tenhamos conseguido encontrar o recurso que você solicitou."
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
@@ -12346,22 +12355,28 @@ msgid ""
 "We could not verify that this request really was sent from you. For security "
 "reasons, we therefore cannot process it."
 msgstr ""
+"Não foi possível verificar se essa solicitação realmente foi enviada por "
+"você. Por razões de segurança, não podemos processá-la."
 
 #: pretix/base/templates/csrffail.html:20
 msgid ""
 "Please go back to the last page, refresh this page and then try again. If "
 "the problem persists, please get in touch with us."
 msgstr ""
+"Volte para a última página, atualize-a e tente novamente. Se o problema "
+"persistir, entre em contato conosco."
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
 msgid "We are preparing your file for download …"
-msgstr ""
+msgstr "Estamos preparando seu arquivo para download …"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:23
 msgid ""
 "If this takes longer than a few minutes, please refresh this page or contact "
 "us."
 msgstr ""
+"Se isso demorar mais do que alguns minutos, atualize esta página ou entre em "
+"contato conosco."
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -12405,10 +12420,11 @@ msgstr "Clique aqui desative todas as notificações imediatamente."
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
 msgstr ""
+"Clique aqui para visualizar e alterar suas configurações de notificação:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
-msgstr ""
+msgstr "Clique aqui desative todas as notificações imediatamente:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
 msgid ""
@@ -12848,7 +12864,7 @@ msgstr "O provedor de pagamento \"{name}\" não pode mais ser selecionado"
 #: pretix/base/validators.py:51
 #, python-format
 msgid "This field has an invalid value: %(value)s."
-msgstr ""
+msgstr "Este campo tem um valor inválido: %(value)s."
 
 #: pretix/base/views/errors.py:48
 msgid ""
@@ -13995,11 +14011,11 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:2103
 msgid "Quota handling"
-msgstr ""
+msgstr "Gerenciamento de cotas"
 
 #: pretix/control/forms/filter.py:2107
 msgid "Allow to ignore quota"
-msgstr ""
+msgstr "Permitir ignorar a cota"
 
 #: pretix/control/forms/filter.py:2112 pretix/control/forms/filter.py:2114
 msgid "Filter by tag"
@@ -16465,7 +16481,7 @@ msgstr "Notificações estão desabilitadas."
 
 #: pretix/control/logdisplay.py:691
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "Suas configurações de notificação foram alteradas."
 
 #: pretix/control/logdisplay.py:692
 #, fuzzy
@@ -16495,7 +16511,7 @@ msgstr "Seu carrinho foi atualizado."
 
 #: pretix/control/logdisplay.py:700 pretix/control/logdisplay.py:701
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr ""
+msgstr "Um cupom foi enviado para uma pessoa na lista de espera."
 
 #: pretix/control/logdisplay.py:702
 msgid "An entry has been removed from the waiting list."
@@ -19225,7 +19241,7 @@ msgstr "Suas alterações foram salvas."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:36
 msgid "Top recommendation"
-msgstr ""
+msgstr "Recomendação principal"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:40
 msgid "Experimental feature"
