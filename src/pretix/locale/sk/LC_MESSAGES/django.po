@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-02-21 19:00+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-03-01 15:14+0000\n"
+"Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
 ">\n"
 "Language: sk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8178,7 +8178,7 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "Prosím, dokončite svoju platbu do {expire_date}."
+msgstr "Termín na zaplatenie máte do {expire_date}."
 
 #: pretix/base/services/invoices.py:115
 #, python-brace-format
@@ -17472,7 +17472,7 @@ msgstr "ID transakcie"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
 msgid "Reference"
-msgstr "Odkaz"
+msgstr "Referencia platby"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:100
 msgid "Terminal ID"
@@ -27811,7 +27811,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/payment.py:457
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
 msgid "Please transfer the full amount to the following bank account:"
-msgstr "Celú sumu, prosím, preveďte na nasledujúci bankový účet:"
+msgstr "Platbu vykonajte podľa nasledujúcich bankových údajov:"
 
 #: pretix/plugins/banktransfer/payment.py:465
 #: pretix/plugins/banktransfer/payment.py:654
@@ -27963,7 +27963,7 @@ msgid ""
 "bank account, using a personal reference code."
 msgstr ""
 "Po dokončení nákupu vás požiadame o prevod peňazí na náš bankový účet "
-"pomocou osobného referenčného kódu."
+"pomocou referencie platby."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:43
 #, python-format
@@ -31583,7 +31583,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:207
 msgid "Place binding order"
-msgstr "Umiestnenie záväznej objednávky"
+msgstr "Zadať záväznú objednávku"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:209
 msgid "Submit registration"
@@ -32713,7 +32713,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
-msgstr "Upozorňujeme, že na dokončenie procesu stále čakáme na vašu platbu."
+msgstr ""
+"Vezmite prosím na vedomie, že pre dokončenie objednávky je potrebná úhrada."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 msgid ""
@@ -32721,8 +32722,8 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
-"Ak sa chcete k objednávke dostať neskôr, založte si alebo uložte odkaz na "
-"túto stránku. E-mail s odkazom sme vám poslali aj na vami zadanú adresu."
+"Ak sa chcete k objednávke dostať neskôr, uložte si odkaz na túto stránku. "
+"Odkaz sme Vám poslali aj e-mailom."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
@@ -32740,7 +32741,7 @@ msgstr "Zobrazenie v backende"
 #: pretix/presale/templates/pretixpresale/event/order.html:90
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr "Platba vo výške %(total)s za túto objednávku ešte stále prebieha."
+msgstr "Prosím, uhraďte platbu vo výške %(total)s za túto objednávku."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:95
 #, python-format
