@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2024-12-10 06:00+0000\n"
-"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2025-03-02 12:55+0000\n"
+"Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.10.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -56,7 +56,7 @@ msgstr "Tsjechisch"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Kroatische"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -96,7 +96,7 @@ msgstr "Italiaans"
 
 #: pretix/_base_settings.py:106
 msgid "Japanese"
-msgstr ""
+msgstr "Japanse"
 
 #: pretix/_base_settings.py:107
 msgid "Latvian"
@@ -2533,7 +2533,7 @@ msgstr "Bedrag"
 #: pretix/plugins/reports/accountingreport.py:495
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:29
 msgid "Payment method"
-msgstr "Betalingsmethode"
+msgstr "Betaalmethode"
 
 #: pretix/base/exporters/orderlist.py:1077
 msgid "Matching ID"
@@ -3417,6 +3417,8 @@ msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"De plugin in kwestie is momenteel niet actief. Om het te activeren, klik "
+"hier om naar de plugin instellingen te gaan."
 
 #: pretix/base/logentrytype_registry.py:53
 #, fuzzy
@@ -6251,7 +6253,7 @@ msgstr "Agenda-uitnodigingen"
 #: pretix/base/models/tax.py:148
 msgctxt "tax_code"
 msgid "Standard rate"
-msgstr ""
+msgstr "Standaard tarief"
 
 #: pretix/base/models/tax.py:152
 #, fuzzy
@@ -6265,6 +6267,7 @@ msgctxt "tax_code"
 msgid ""
 "Averaged rate (other revenue in a agricultural and silvicultural business)"
 msgstr ""
+"Gemiddeld tarief (andere omzet in een agriculturele en bosbouwkundig bedrijf)"
 
 #: pretix/base/models/tax.py:164
 #, fuzzy
@@ -29557,13 +29560,14 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr "Het betalingsproces is begonnen in een nieuw venster."
+msgstr "Het betalingsproces is begonnen in een nieuwe venster."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr "Is het venster om uw betaling uit te voeren niet geopend?"
+msgstr ""
+"Het venster om je betaling in te voeren is niet geopend of was gesloten?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
@@ -31047,7 +31051,7 @@ msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:366
 msgid "SEPA Direct Debit"
-msgstr "SEPA Direct Debit"
+msgstr "SEPA Automatische Incasso"
 
 #: pretix/plugins/stripe/payment.py:369
 msgid ""
@@ -31705,7 +31709,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:62
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr "De betaling kon om de volgende reden niet voltooid worden:"
+msgstr "De betaling kon om de volgende reden niet worden voltooid:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
@@ -31744,8 +31748,8 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
-"Sorry, er trad een fout op in het betalingsproces. Klik op de link in uw "
-"email om door te gaan."
+"Sorry, er was een fout in het betalingsproces. Klik op de link in je e-mail "
+"om door te gaan."
 
 #: pretix/plugins/stripe/views.py:562
 msgid ""
