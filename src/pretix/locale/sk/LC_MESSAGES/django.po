@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-01 15:22+0000\n"
+"PO-Revision-Date: 2025-03-02 12:55+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
 ">\n"
@@ -13438,7 +13438,7 @@ msgstr "Zaplatené alebo potvrdené"
 #: pretix/control/templates/pretixcontrol/orders/overview.html:87
 #: pretix/plugins/reports/exporters.py:386
 msgid "Pending"
-msgstr "Čaká sa na"
+msgstr "Čakajúce"
 
 #: pretix/control/forms/filter.py:218
 #: pretix/control/templates/pretixcontrol/items/question.html:29
