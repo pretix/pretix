@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-02-21 05:00+0000\n"
+"PO-Revision-Date: 2025-03-02 12:55+0000\n"
 "Last-Translator: Robert Rigo <kontakt@bicikli.hr>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -6583,7 +6583,7 @@ msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
 msgstr ""
-"Sjedalo \"{id}\" trenutno nije dostupno (blokirano, već prodano ili za "
+"Sjedalo \"{id}\" trenutno nije dostupno (blokirano, već prodano ili "
 "drugačiji vaučer)."
 
 #: pretix/base/models/waitinglist.py:64
@@ -7599,9 +7599,9 @@ msgstr ""
 #, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ne možeš odabrari više od %s stavke po narudžbi."
+msgstr[1] "Ne možeš odabrari više od %s stavke po narudžbi."
+msgstr[2] "Ne možeš odabrari više od %s stavki po narudžbi."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1539
 #, python-format
@@ -10177,7 +10177,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2231
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10190,6 +10190,21 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Hej,\n"
+"\n"
+"tvoja narudžba ulaznice za događaj {event} uspješna je. Budući da ste "
+"naručili besplatnu ulaznicu,\n"
+"plaćanje nije potrebno.\n"
+"\n"
+"Možete promijeniti podatke o svojoj narudžbi i pratiti status narudžbe na:\n"
+"{url}\n"
+"\n"
+"Molba, ukoliko ne možete doći na događaj, molimo vas otkažite narudžbu uz "
+"pomoć priloženog linka. Na taj način omogućavate drugima, koji čekaju "
+"slobodno mjesto, da dođu na događaj.\n"
+"\n"
+"Puno hvala,  \n"
+"Robert i Željka"
 
 #: pretix/base/settings.py:2248
 #, python-brace-format
@@ -10454,7 +10469,7 @@ msgid "Order canceled: {code}"
 msgstr "Narudžba otkazana: {code}"
 
 #: pretix/base/settings.py:2507
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10468,6 +10483,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Pozdrav,\n"
+"\n"
+"tvoja narudžba broj {code} za događaj {event} otkazana je.\n"
+"\n"
+"{comment}\n"
+"\n"
+"Možete pregledati pojedinosti svoje narudžbe na:\n"
+"{url}\n"
+"\n"
+"Puno hvala,  \n"
+"Robert i Željka"
 
 #: pretix/base/settings.py:2521
 #, python-brace-format
@@ -10512,7 +10538,7 @@ msgid "Order approved and confirmed: {code}"
 msgstr "Narudžba odobrena i potvrđena: {code}"
 
 #: pretix/base/settings.py:2565
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10525,6 +10551,18 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Pozdrav,\n"
+"\n"
+"Odobrili smo vašu narudžbu za {event} i rado ćemo vas dočekati na našem "
+"događaju.\n"
+"Budući da ste naručili samo besplatne proizvode, nije potrebno izvršiti "
+"plaćanje.\n"
+"\n"
+"Možete promijeniti podatke o svojoj narudžbi i pratiti status narudžbe na:\n"
+"{url}\n"
+"\n"
+"Puno hvala,  \n"
+"Robert i Željka"
 
 #: pretix/base/settings.py:2598
 #, python-brace-format
@@ -10868,6 +10906,9 @@ msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
+"Provjerite da unesete ispravnu email adresu. Poslat ćemo vam potvrdu "
+"narudžbe koja uključuje link koji će vam trebati za pristup vašoj narudžbi "
+"kasnije."
 
 #: pretix/base/settings.py:3126
 msgid "Help text of the email field"
@@ -11377,7 +11418,7 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "pokreće <a %(a_attr)s>pretix</a>"
+msgstr "Ovu platformu pokreće tvrtka <a %(a_attr)s>Pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:2
 msgid "Your export failed."
@@ -13864,7 +13905,7 @@ msgid "Canceled: {event}"
 msgstr "Otkazano: {event}"
 
 #: pretix/control/forms/orders.py:945
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13880,9 +13921,23 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Pozdrav,\n"
+"\n"
+"putem ove poruke, sa žaljem vas obavještavamo da je događaj {event} otkazan."
+"\n"
+"\n"
+"Povrat iznosa od {refund_amount} izvršit ćemo na isti način na koji je "
+"uplaćen.\n"
+"\n"
+"Možete pregledati pojedinosti svoje narudžbe na::\n"
+"\n"
+"{url}\n"
+"\n"
+"Hvala na razumijevanju,  \n"
+"Robert i Željka"
 
 #: pretix/control/forms/orders.py:972
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13894,6 +13949,15 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Pozdrav,\n"
+"\n"
+"putem ove poruke, sa žaljem vas obavještavamo da je događaj {event} otkazan."
+"\n"
+"\n"
+"Stoga neće dobiti priliku naručiti ulaznicu putem liste čekanja.\n"
+"\n"
+"Hvala na razumijevanju,  \n"
+"Robert i Željka"
 
 #: pretix/control/forms/orders.py:1004 pretix/plugins/sendmail/forms.py:115
 #: pretix/plugins/sendmail/forms.py:208
@@ -19150,7 +19214,7 @@ msgstr "Neograničeno"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:14
 msgid "Fully reserved"
-msgstr "Potpuno rezervirano"
+msgstr "Popunjeno"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:16
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:102
@@ -29359,7 +29423,7 @@ msgstr "Kontaktirajte organizatora događaja"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:129
 #: pretix/presale/templates/pretixpresale/organizers/base.html:101
 msgid "Privacy policy"
-msgstr "Pravila o privatnosti"
+msgstr "Pravila o zaštiti privatnosti"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:225
 #: pretix/presale/templates/pretixpresale/organizers/base.html:104
@@ -29441,7 +29505,7 @@ msgstr "Košarica je istekla"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
 msgid "Show full cart"
-msgstr "Prikaži punu košaricu"
+msgstr "Prikaži cijelu košaricu"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:84
@@ -29524,7 +29588,7 @@ msgstr "Podnesite obvezujuću narudžbu"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:209
 msgid "Submit registration"
-msgstr "Pošaljite registraciju"
+msgstr "Pošalji"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:18
 msgid "Log in with a customer account"
@@ -29921,7 +29985,7 @@ msgstr "Više nije dostupno."
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:23
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:85
 msgid "FULLY BOOKED"
-msgstr "POTPUNO REZERVIRANO"
+msgstr "POPUNJENO"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:25
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:87
@@ -30076,8 +30140,9 @@ msgstr "Trenutna vrijednost:"
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)s proizvod"
+msgstr[1] "%(num)s proizvoda"
+msgstr[2] "%(num)s proizvoda"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:477
 #, python-format
@@ -30111,7 +30176,7 @@ msgstr "Nastavite s naplatom"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:63
 msgid "Empty cart"
-msgstr "Prazna košarica"
+msgstr "Isprazni košaricu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:68
 #: pretix/presale/templates/pretixpresale/event/index.html:246
@@ -30410,7 +30475,7 @@ msgstr "Postavite cijenu u %(currency)s za %(item)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr "%(num)s trenutno dostupno"
+msgstr "Trenutno dostupno: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:4
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:4
@@ -30494,7 +30559,7 @@ msgstr "Molimo odaberite datum za iskorištenje vašeg vaučera."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:86
 msgid "View other date"
-msgstr "Pogledaj drugi datum"
+msgstr "Pogledaj/odaberi drugi datum"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:89
 msgid "Choose date to book a ticket"
@@ -30621,6 +30686,9 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Molimo vas da spremite poveznicu na ovu stranicu ako želite kasnije "
+"pristupiti svojoj narudžbi. Također smo vam poslali e-mail s poveznicom na "
+"adresu koju ste naveli."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
@@ -30858,6 +30926,8 @@ msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"Ako otkažete ovu narudžbu, sve karte će biti poništene i više ih nećete moći "
+"koristiti. Ovu radnju nije moguće poništiti."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:62
 #, python-format
@@ -31040,6 +31110,9 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"Ako ste izgubili poveznicu do svoje narudžbe ili narudžbi, unesite e-mail "
+"adresu koju ste koristili za narudžbu. Poslat ćemo vam e-mail s poveznicama "
+"na sve narudžbe koje ste izvršili koristeći tu e-mail adresu."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
@@ -31111,6 +31184,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"Ako upaznice ponovno postanu dostupne, obavijestit ćemo prve osobe na listi "
+"čekanja. Ako vas obavijestimo, imat ćete %(hours)s sati vremena da naručite "
+"ulaznicu prije nego što je dodijelimo sljedećoj osobi na listi."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
@@ -31118,6 +31194,9 @@ msgid ""
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
+"Imajte na umu da ćete dobiti samo jednu ulaznicu. Ako trebate više ulaznica, "
+"morate se više puta dodati na listu čekanja. Ne postoji jamstvo da ćete "
+"dobiti određeni broj ulaznica."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
@@ -31133,6 +31212,8 @@ msgid ""
 "been added to the waiting list. We will only contact you once a spot opens "
 "up."
 msgstr ""
+"<strong>Nećete</strong> primiti e-mail potvrdu nakon što budete dodani na "
+"listu čekanja. Kontaktirat ćemo vas samo kada se otvori mjesto."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:44
 msgid "Add me to the list"
@@ -31213,7 +31294,7 @@ msgstr "Rezerviraj sada"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:73
 #: pretix/presale/views/widget.py:433
 msgid "Fully booked"
-msgstr "Potpuno rezervirano"
+msgstr "Popunjeno"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:114
 #, python-format
@@ -31869,6 +31950,8 @@ msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
+"Dodali smo vas na listu čekanja. Poslat ćemo e-mail na {email} čim ova "
+"ulaznica ponovno postane dostupan."
 
 #: pretix/presale/views/waiting.py:208
 msgid "We could not find you on our waiting list."
