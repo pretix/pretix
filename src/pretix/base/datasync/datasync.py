@@ -83,9 +83,10 @@ def sync_all():
             .prefetch_related("order__event")
             .filter(Q(not_before__isnull=True) | Q(not_before__lt=datetime.now()))[:1000]
         )
-        grouped = groupby(sorted(queue, key=lambda q: (q.sync_target, q.order.event)), lambda q: (q.sync_target, q.order.event))
+        grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.order.event)), lambda q: (q.sync_provider, q.order.event))
         for (target, event), queued_orders in grouped:
-            target_cls = sync_targets.get(identifier=target)
+            target_cls, meta = sync_targets.get(identifier=target, active_in=event)
+            # TODO: what should i do if the sync plugin got deactivated in the meantime?
             sync_event_to_target(event, target_cls, queued_orders)
 
 
@@ -110,9 +111,7 @@ class OutboundSyncProvider:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if not exc_type:
-            self.do_after_event()
-        self.do_finally()
+        self.close()
 
     @classmethod
     @property
@@ -127,19 +126,13 @@ class OutboundSyncProvider:
             triggered_by=triggered_by,
             not_before=not_before)
 
-    def do_after_event(self):
-        pass
-
-    def do_finally(self):
-        pass
-
     def next_retry_date(self, sq):
         return datetime.now() + timedelta(days=1)
 
     def sync_queued_orders(self, queued_orders):
         for sq in queued_orders:
             try:
-                self.sync_order(sq.order)
+                mapped_objects = self.sync_order(sq.order)
             except SyncConfigError as e:
                 logger.warning(
                     f"Could not sync order {sq.order.code} to {self.__name__} (config error)",
@@ -159,7 +152,7 @@ class OutboundSyncProvider:
                 sq.failed_attempts += 1
                 sq.not_before = self.next_retry_date(sq)
                 logger.exception(
-                    f"Could not sync order {sq.order.code} to {self.__name__} (transient error, attempt #{sq.failed_attempts})"
+                    f"Could not sync order {sq.order.code} to {type(self).__name__} (transient error, attempt #{sq.failed_attempts})"
                 )
                 if sq.failed_attempts >= self.max_attempts:
                     sentry_sdk.capture_exception(e)
@@ -174,6 +167,9 @@ class OutboundSyncProvider:
                 else:
                     sq.save()
             else:
+                sq.order.log_action(
+                    "pretix.event.order.data_sync.success", {"objects": mapped_objects}
+                )
                 sq.delete()
 
     def order_valid_for_sync(self, order):
@@ -234,7 +230,7 @@ class OutboundSyncProvider:
             logger.debug("Skipping order (not valid for sync)", order)
             return
 
-        logger.debug("Syncing order", order)
+        logger.debug("Syncing order %r", order)
         positions = list(
             order.all_positions.filter(item__admission=True)
             .prefetch_related("answers", "answers__question")
@@ -258,8 +254,18 @@ class OutboundSyncProvider:
                 ]
             else:
                 raise SyncConfigError("Invalid pretix model '{}'".format(mapping.pretix_model))
-        order.log_action(
-            "pretix.event.order.data_sync.success", {"objects": mapped_objects}
-        )
+        self.finalize_sync_order(order)
+        return mapped_objects
 
+    """
+    Called after sync_object has been called successfully for all objects of a specific order. Can be used for saving
+    bulk information per order. 
+    """
+    def finalize_sync_order(self, order):
+        pass
 
+    """
+    Called after all orders of an event have been synced. Can be used for clean-up tasks (closing a session etc).
+    """
+    def close(self):
+        pass
