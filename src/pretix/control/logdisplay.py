@@ -47,6 +47,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.datasync.datasync import sync_targets
 from pretix.base.logentrytypes import (
     DiscountLogEntryType, EventLogEntryType, ItemCategoryLogEntryType,
     ItemLogEntryType, LogEntryType, OrderLogEntryType, QuestionLogEntryType,
@@ -420,6 +421,36 @@ class OrderPrintLogEntryType(OrderLogEntryType):
             ) if logentry.event else data["datetime"],
             type=dict(PrintLog.PRINT_TYPES)[data["type"]],
         )
+
+
+@log_entry_types.new_from_dict({
+    "pretix.event.order.data_sync.success": _("Ticket data successfully transferred to {provider}."),
+})
+class OrderDataSyncLogentrytype(OrderLogEntryType):
+    def display(self, logentry, data):
+        links = []
+        if data.get('provider') and data.get('objects'):
+            prov, meta = sync_targets.get(identifier=data['provider'])
+            if prov:
+                for objs in data['objects'].values():
+                    links.append(", ".join(
+                        prov.get_external_link_html(logentry.event, obj['external_link_href'], obj['external_link_display_name'])
+                        for obj in objs
+                        if obj and 'external_link_href' in obj and 'external_link_display_name' in obj
+                    ))
+
+        return mark_safe(super().display(logentry, data) + "".join("<p>" + link + "</p>" for link in links))
+
+
+@log_entry_types.new_from_dict({
+    "pretix.event.order.data_sync.failed": _("Error while transferring ticket data to {provider}:"),
+})
+class OrderDataSyncErrorLogentrytype(OrderLogEntryType):
+    def display(self, logentry, data):
+        errmes = data["error"]
+        if not isinstance(errmes, list):
+            errmes = [errmes]
+        return mark_safe(escape(self.plain) + "".join("<p>" + escape(msg) + "</p>" for msg in errmes))
 
 
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")
