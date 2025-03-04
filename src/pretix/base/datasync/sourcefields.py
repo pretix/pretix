@@ -426,7 +426,7 @@ def translate_property_mappings(property_mapping, checkin_list_map):
 
     for mapping in mappings:
         if mapping["pretix_field"].startswith("checkin_date_"):
-            old_id = int(mapping["pretix_field"][len("checkin_date_") :])
+            old_id = int(mapping["pretix_field"][len("checkin_date_"):])
             mapping["pretix_field"] = "checkin_date_%d" % checkin_list_map[old_id].pk
     return json.dumps(mappings)
 
@@ -436,6 +436,7 @@ def get_enum_opts(q):
         return [(opt.identifier, opt.answer) for opt in q.options.all()]
     else:
         return None
+
 
 QUESTION_TYPE_IDENTIFIERS = {
     Question.TYPE_NUMBER: "NUMBER",

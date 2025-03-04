@@ -12,10 +12,11 @@
     {{ test.hello }}
         <table class="table table-condensed">
         <tbody>
-            {% for pending in queued_sync_jobs %}
+            {% for identifier, display_name, pending, objects in providers %}
                 <tr>
-                    <td>{{ pending.sync_provider }}</td>
+                    <td>{{ display_name }}</td>
                     <td>
+                    {% if pending %}
                         {% if pending.failed_attempts %}
                             <i class="fa fa-warning"></i>
                             {% blocktrans trimmed with num=pending.failed_attempts max=pending.max_retry_attempts %}
@@ -32,32 +33,40 @@
                         {% else %}
                             <i class="fa fa-hourglass"></i> {% trans "Pending" %}
                         {% endif %}
+                        (triggered by {{ pending.triggered_by }} at {{ pending.triggered }})
+                    {% else %}
+                        -
+                    {% endif %}
                     </td>
-                    <td>
-                        <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=pending.sync_provider %}" method="post" class="form-inline">
-                            {% csrf_token %}
-                            {% if pending.not_before %}
-                            <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
-                            {% endif %}
-                            <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-trash"></i> {% trans "Cancel" %}</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-            {% for identifier, display_name in non_pending_providers %}
-                <tr>
-                    <td>{{ display_name }}</td>
-                    <td>-</td>
-                    <td>
+                    <td align="right">
                         <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
-                            <input type="hidden" name="queue_sync" value="true">
+                            {% if pending %}
+                                {% if pending.not_before %}
+                                <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
+                                {% endif %}
+                                <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-trash"></i> {% trans "Cancel" %}</button>
+                            {% else %}
+                                    <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
+                                    <input type="hidden" name="queue_sync" value="true">
+                            {% endif %}
                         </form>
                     </td>
                 </tr>
+                {% for obj in objects %}
+                    <tr>
+                        <td></td>
+                        <td>
+                            {% if obj.external_link_html %}
+                                {{ obj.external_link_html }}
+                            {% else %}
+                                {{ obj.external_object_type }} with {{ obj.external_pk_name }} = {{ obj.external_pk_value }}
+                            {% endif %}
+                        </td>
+                        <td align="right">{{ obj.timestamp }}</td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
-
         </tbody>
         </table>
     </div>
