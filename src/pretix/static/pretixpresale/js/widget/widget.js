@@ -313,9 +313,9 @@ Vue.component('availbox', {
         waiting_list_url: function () {
             var u
             if (this.item.has_variations) {
-                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
             } else {
-                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
             }
             if (this.$root.subevent) {
                 u += '&subevent=' + this.$root.subevent
@@ -786,6 +786,7 @@ var shared_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
+        redirect_url += this.$root.consent_parameter;
         this.$root.overlay.frame_src = redirect_url;
     },
     voucher_open: function (voucher) {
@@ -797,6 +798,7 @@ var shared_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
+        redirect_url += this.$root.consent_parameter;
         if (this.$root.useIframe) {
             this.$root.overlay.frame_src = redirect_url;
         } else {
@@ -815,7 +817,7 @@ var shared_methods = {
             redirect_url += '&take_cart_id=' + this.$root.cart_id;
         }
         if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
         }
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
@@ -1017,6 +1019,7 @@ Vue.component('pretix-widget-event-form', {
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
+        + '<input v-if="$root.consent_parameter_value" type="hidden" name="consent" :value="$root.consent_parameter_value" />'
 
         // Error message
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
@@ -1072,6 +1075,7 @@ Vue.component('pretix-widget-event-form', {
         + '</div>'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
+        + '<input v-if="$root.consent_parameter_value" type="hidden" name="consent" :value="$root.consent_parameter_value" />'
         + '<input type="hidden" name="locale" value="' + lang + '" />'
         + '<div class="pretix-widget-voucher-button-wrap">'
         + '<button @click="$parent.redeem">' + strings.redeem + '</button>'
@@ -1706,6 +1710,7 @@ Vue.component('pretix-button', {
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<input type="hidden" name="locale" :value="$root.lang" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
+        + '<input v-if="$root.consent_parameter_value" type="hidden" name="consent" :value="$root.consent_parameter_value" />'
         + '<input type="hidden" v-for="item in $root.items" :name="item.item" :value="item.count" />'
         + '<button class="pretix-button" @click="buy" v-html="$root.button_text"></button>'
         + '</form>'
@@ -1923,6 +1928,7 @@ var shared_root_methods = {
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
+        redirect_url += this.$root.consent_parameter;
         if (this.$root.useIframe) {
             this.$root.overlay.frame_src = redirect_url;
         } else {
@@ -2033,8 +2039,26 @@ var shared_root_computed = {
         }
         return has_priced || cnt_items > 1;
     },
+    consent_parameter_value: function () {
+        if (typeof this.widget_data["consent"] !== "undefined") {
+            return encodeURIComponent(this.widget_data["consent"]);
+        }
+        return "";
+    },
+    consent_parameter: function () {
+        if (typeof this.widget_data["consent"] !== "undefined") {
+            return "&consent=" + encodeURIComponent(this.widget_data["consent"]);
+        }
+        return "";
+    },
     widget_data_json: function () {
-        return JSON.stringify(this.widget_data);
+        var cloned_data = Object.assign({}, this.widget_data);
+        if (typeof cloned_data["consent"] !== "undefined") {
+            // Remove consent as we pass it differently. We still keep it as widget_data in the input to avoid breaking
+            // the JS API of the widget.
+            delete cloned_data["consent"];
+        }
+        return JSON.stringify(cloned_data);
     },
     additionalURLParams: function () {
         if (!window.location.search.indexOf('utm_')) {
