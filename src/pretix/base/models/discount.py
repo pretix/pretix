@@ -39,6 +39,23 @@ from pretix.base.models.base import LoggedModel
 PositionInfo = namedtuple('PositionInfo', ['item_id', 'subevent_id', 'line_price_gross', 'is_addon_to', 'voucher_discount'])
 
 
+def subevent_in_range(subevent_id, event_date_from, event_date_until):
+    from .event import SubEvent
+
+    # No need to check if there is no range
+    if not (event_date_from and event_date_until):
+        return True
+
+    subevent = SubEvent.objects.get(id=subevent_id)
+    # TODO good datetime checks
+    if event_date_from and event_date_until:
+        return subevent.date_from >= event_date_from and subevent.date_until <= event_date_until
+    elif event_date_from:
+        return subevent.date_from >= event_date_from
+    elif event_date_until:
+        return subevent.date_until <= event_date_until
+
+
 class Discount(LoggedModel):
     SUBEVENT_MODE_MIXED = 'mixed'
     SUBEVENT_MODE_SAME = 'same'
@@ -169,6 +186,17 @@ class Discount(LoggedModel):
         help_text=_("If this option is checked, products that already received a discount through a voucher will not "
                     "be discounted. However, products that use a voucher only to e.g. unlock a hidden product or gain "
                     "access to sold-out quota will still receive the discount."),
+    )
+
+    event_date_from = models.DateTimeField(
+        verbose_name=_("Available for events from"),
+        null=True,
+        blank=True,
+    )
+    event_date_until = models.DateTimeField(
+        verbose_name=_("Available for events until"),
+        null=True,
+        blank=True,
     )
 
     # more feature ideas:
@@ -360,6 +388,7 @@ class Discount(LoggedModel):
                 (self.condition_all_products or item_id in limit_products) and
                 (self.condition_apply_to_addons or not is_addon_to) and
                 (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
+                and (not subevent_id or subevent_in_range(subevent_id, self.event_date_from, self.event_date_until))
             )
         ]
 
