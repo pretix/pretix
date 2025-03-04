@@ -51,6 +51,9 @@ class TicketOutputPdfApp(AppConfig):
         featured = True
         description = _("Issue tickets as PDF files, usable on any device. Our drag-and-drop editor allows you to "
                         "customize the layout of the PDF files to your brand.")
+        settings_links = [
+            ((_("Settings"), _("Tickets")), "control:event.settings.tickets", {}),
+        ]
 
     def ready(self):
         from . import signals  # NOQA
