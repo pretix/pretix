@@ -226,12 +226,13 @@ class CheckInListMixin(BaseExporter):
                     NullIf('addon_to__attendee_name_cached', Value('')),
                     NullIf('order__invoice_address__name_cached', Value('')),
                     'order__code'
-                )
+                ),
+                'pk',
             )
         elif sort == 'code':
-            qs = qs.order_by(*o, 'order__code')
+            qs = qs.order_by(*o, 'order__code', 'positionid', 'pk')
         elif sort == 'order_datetime':
-            qs = qs.order_by(*o, '-order__datetime')
+            qs = qs.order_by(*o, '-order__datetime', 'pk')
         elif sort.startswith('name:'):
             part = sort[5:]
             qs = qs.annotate(
@@ -244,7 +245,8 @@ class CheckInListMixin(BaseExporter):
                 resolved_name_part=JSONExtract('resolved_name', part)
             ).order_by(
                 *o,
-                'resolved_name_part'
+                'resolved_name_part',
+                'pk',
             )
 
         if form_data.get('attention_only'):
