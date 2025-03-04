@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-02 22:00+0000\n"
-"Last-Translator: Robert Rigo <kontakt@bicikli.hr>\n"
+"PO-Revision-Date: 2025-03-04 14:28+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hr/>\n"
 "Language: hr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10.1\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -10177,7 +10177,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2231
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10190,21 +10190,6 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej,\n"
-"\n"
-"tvoja narudžba ulaznice za događaj {event} uspješna je. Budući da ste "
-"naručili besplatnu ulaznicu,\n"
-"plaćanje nije potrebno.\n"
-"\n"
-"Možete promijeniti podatke o svojoj narudžbi i pratiti status narudžbe na:\n"
-"{url}\n"
-"\n"
-"Molba, ukoliko ne možete doći na događaj, molimo vas otkažite narudžbu uz "
-"pomoć priloženog linka. Na taj način omogućavate drugima, koji čekaju "
-"slobodno mjesto, da dođu na događaj.\n"
-"\n"
-"Puno hvala,  \n"
-"Robert i Željka"
 
 #: pretix/base/settings.py:2248
 #, python-brace-format
@@ -10433,7 +10418,7 @@ msgid "You have been selected from the waitinglist for {event}"
 msgstr "Odabrani ste s liste čekanja za {event}"
 
 #: pretix/base/settings.py:2474
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10462,33 +10447,6 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej,\n"
-"\n"
-"prijavili ste se na listu čekanja za događaj {event},\n"
-"za {product}.\n"
-"\n"
-"Imamo spremnu ulaznicu za vas! Možete ju preuzeti u putem interenta\n"
-"slijedećih {hours} sata unosom slijedećeg voucher kôda:\n"
-"\n"
-"{code}\n"
-"\n"
-"Ili, jednostavno kliknite na slijedeći link:\n"
-"\n"
-"{url}\n"
-"\n"
-"Imajte na umu da je ova poveznica valjana samo sljedećih {hours} sati!\n"
-"Ako ne iskoristite vaučer u tom roku, kartu ćemo dodijeliti sljedećoj osobi "
-"na listi.\n"
-"\n"
-"Ako vam kartu VIŠE NIJE potrebna, molimo vas da kliknete na sljedeću "
-"poveznicu \n"
-"kako biste nas obavijestili. Na taj način možemo što prije poslati kartu "
-"sljedećoj osobi na listi čekanja:\n"
-"\n"
-"{url_remove}\n"
-"\n"
-"Puno hvala,  \n"
-"Robert i Željka"
 
 #: pretix/base/settings.py:2503
 #, python-brace-format
@@ -10496,7 +10454,7 @@ msgid "Order canceled: {code}"
 msgstr "Narudžba otkazana: {code}"
 
 #: pretix/base/settings.py:2507
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10510,17 +10468,6 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Pozdrav,\n"
-"\n"
-"tvoja narudžba broj {code} za događaj {event} otkazana je.\n"
-"\n"
-"{comment}\n"
-"\n"
-"Možete pregledati pojedinosti svoje narudžbe na:\n"
-"{url}\n"
-"\n"
-"Puno hvala,  \n"
-"Robert i Željka"
 
 #: pretix/base/settings.py:2521
 #, python-brace-format
@@ -10565,7 +10512,7 @@ msgid "Order approved and confirmed: {code}"
 msgstr "Narudžba odobrena i potvrđena: {code}"
 
 #: pretix/base/settings.py:2565
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10578,18 +10525,6 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Pozdrav,\n"
-"\n"
-"Odobrili smo vašu narudžbu za {event} i rado ćemo vas dočekati na našem "
-"događaju.\n"
-"Budući da ste naručili samo besplatne proizvode, nije potrebno izvršiti "
-"plaćanje.\n"
-"\n"
-"Možete promijeniti podatke o svojoj narudžbi i pratiti status narudžbe na:\n"
-"{url}\n"
-"\n"
-"Puno hvala,  \n"
-"Robert i Željka"
 
 #: pretix/base/settings.py:2598
 #, python-brace-format
@@ -13932,7 +13867,7 @@ msgid "Canceled: {event}"
 msgstr "Otkazano: {event}"
 
 #: pretix/control/forms/orders.py:945
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13948,23 +13883,9 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Pozdrav,\n"
-"\n"
-"putem ove poruke, sa žaljem vas obavještavamo da je događaj {event} otkazan."
-"\n"
-"\n"
-"Povrat iznosa od {refund_amount} izvršit ćemo na isti način na koji je "
-"uplaćen.\n"
-"\n"
-"Možete pregledati pojedinosti svoje narudžbe na::\n"
-"\n"
-"{url}\n"
-"\n"
-"Hvala na razumijevanju,  \n"
-"Robert i Željka"
 
 #: pretix/control/forms/orders.py:972
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13976,15 +13897,6 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Pozdrav,\n"
-"\n"
-"putem ove poruke, sa žaljem vas obavještavamo da je događaj {event} otkazan."
-"\n"
-"\n"
-"Stoga neće dobiti priliku naručiti ulaznicu putem liste čekanja.\n"
-"\n"
-"Hvala na razumijevanju,  \n"
-"Robert i Željka"
 
 #: pretix/control/forms/orders.py:1004 pretix/plugins/sendmail/forms.py:115
 #: pretix/plugins/sendmail/forms.py:208
