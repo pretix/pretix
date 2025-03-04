@@ -736,6 +736,7 @@ var shared_methods = {
             } else {
                 url = url + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
             }
+            url += this.$root.consent_parameter;
             if (this.$root.additionalURLParams) {
                 url += '&' + this.$root.additionalURLParams;
             }
@@ -817,8 +818,9 @@ var shared_methods = {
             redirect_url += '&take_cart_id=' + this.$root.cart_id;
         }
         if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
+            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
         }
+        redirect_url += this.$root.consent_parameter;
         if (this.$root.additionalURLParams) {
             redirect_url += '&' + this.$root.additionalURLParams;
         }
@@ -1971,6 +1973,7 @@ var shared_root_computed = {
         if (this.subevent) {
             form_target += "&subevent=" + this.subevent;
         }
+        form_target += this.$root.consent_parameter;
         if (this.$root.additionalURLParams) {
             form_target += '&' + this.$root.additionalURLParams;
         }
@@ -2006,6 +2009,7 @@ var shared_root_computed = {
         if (cookie) {
             form_target += "&take_cart_id=" + cookie;
         }
+        form_target += this.$root.consent_parameter
         return form_target
     },
     newTabTarget: function () {
