@@ -1,3 +1,5 @@
+from itertools import groupby
+
 from django.contrib import messages
 from django.dispatch import receiver
 from django.http import HttpResponseNotAllowed
@@ -14,24 +16,23 @@ from pretix.control.views.orders import OrderView
 @receiver(order_info, dispatch_uid="datasync_control_order_info")
 def on_control_order_info(sender: Event, request, order: Order, **kwargs):
     providers = [provider for provider, meta in sync_targets.filter(active_in=sender)]
-    if not providers: return ""
+    if not providers:
+        return ""
 
-    queued = order.queued_sync_jobs.all()
-    queued_provider_ids = {p.sync_provider for p in queued}
-    non_pending = [(provider.identifier, provider.display_name) for provider in providers if provider.identifier not in queued_provider_ids]
-
-    #sync_logs = order.all_logentries().filter(action_type__in=(
-    #    "pretix.event.order.data_sync.success",
-    #    "pretix.event.order.data_sync.failed"
-    #))
+    queued = {p.sync_provider: p for p in order.queued_sync_jobs.all()}
+    objects = {
+        provider: list(objects)
+        for (provider, objects)
+        in groupby(order.synced_objects.order_by('sync_provider').all(), key=lambda o: o.sync_provider)
+    }
+    providers = [(provider.identifier, provider.display_name, queued.get(provider.identifier), objects.get(provider.identifier)) for provider in providers]
 
     template = get_template("pretixcontrol/datasync/control_order_info.html")
     ctx = {
         "order": order,
         "request": request,
         "event": sender,
-        "non_pending_providers": non_pending,
-        "queued_sync_jobs": queued,
+        "providers": providers,
     }
     return template.render(ctx, request=request)
 
