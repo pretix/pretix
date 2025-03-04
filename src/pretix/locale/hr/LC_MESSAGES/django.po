@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-04 14:28+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2025-03-04 16:16+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hr/>\n"
 "Language: hr\n"
@@ -16808,7 +16808,7 @@ msgstr "Valjani check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:68
 msgid "Additional information required"
-msgstr "Potrebne dodatne informacije"
+msgstr "Potrebne su dodatne informacije"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
