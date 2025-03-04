@@ -602,6 +602,9 @@ class UserKnownLoginSource(models.Model):
     country = FastCountryField(null=True, blank=True)
     last_seen = models.DateTimeField()
 
+    class Meta:
+        unique_together = ('user', 'agent_type', 'device_type', 'os_type', 'country')
+
 
 class StaffSession(models.Model):
     user = models.ForeignKey('User', on_delete=models.PROTECT)
