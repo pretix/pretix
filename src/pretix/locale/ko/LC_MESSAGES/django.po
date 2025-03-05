@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-05 05:00+0000\n"
+"PO-Revision-Date: 2025-03-05 15:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -290,17 +290,14 @@ msgstr ""
 "다. 전용 중첩은 마지막 지점에서 사용해주세요."
 
 #: pretix/api/serializers/item.py:306
-#, fuzzy
 msgid "Only admission products can currently be personalized."
 msgstr "현재 입장권 상품만 개인화할 수 있습니다."
 
 #: pretix/api/serializers/item.py:317
-#, fuzzy
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
-msgstr ""
-"기프트 카드 상품은 0이 아닌 세율과 연결되어서는 안됩니다. 왜냐하면 판매세는 "
+msgstr "기프트 카드 상품은 0이 아닌 세율과 연결되어서는 안됩니다. 왜냐하면 판매세는 "
 "기프트 카드가 사용될 때 부과되기 때문입니다."
 
 #: pretix/api/serializers/item.py:322 pretix/control/forms/item.py:774
@@ -308,13 +305,11 @@ msgid "Gift card products should not be admission products at the same time."
 msgstr "기프트 카드 상품은 동시에 입장권 상품이 될 수 없습니다."
 
 #: pretix/api/serializers/item.py:519
-#, fuzzy
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
-msgstr ""
-"옵션을 PATCH/PUT을 통해 업데이트 하는 것은 지원되지 않습니다. 전용 중첩 마지"
-"막 지점을 사용하세요."
+msgstr "옵션을 PATCH/PUT을 통해 업데이트 하는 것은 지원되지 않습니다. 전용 중첩 "
+"마지막 지점을 사용하세요."
 
 #: pretix/api/serializers/item.py:533 pretix/control/forms/item.py:178
 msgid "Question cannot depend on a question asked during check-in."
@@ -333,7 +328,6 @@ msgid "This type of question cannot be shown during check-in."
 msgstr "체크인 중에는 이러한 유형의 질문을 표시할 수 없습니다."
 
 #: pretix/api/serializers/media.py:108
-#, fuzzy
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
@@ -355,7 +349,6 @@ msgid "The product \"{}\" is not available on this date."
 msgstr "\"{}\" 제품은 이 날짜에 구매할 수 없습니다."
 
 #: pretix/api/serializers/order.py:1422 pretix/api/views/cart.py:200
-#, fuzzy
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr "할당량 \"{}\"에 작업을 수행할 수 있는 할당량이 충분하지 않습니다."
@@ -576,7 +569,7 @@ msgstr "대기자 명단 항목 추가"
 
 #: pretix/api/webhooks.py:374
 msgid "Waiting list entry changed"
-msgstr ""
+msgstr "대기자명단 항목이 변경되었습니다."
 
 #: pretix/api/webhooks.py:378
 msgid "Waiting list entry deleted"
