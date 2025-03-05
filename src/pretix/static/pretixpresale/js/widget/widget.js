@@ -765,41 +765,11 @@ var shared_methods = {
     redeem: function (event) {
         if (this.$root.useIframe) {
             event.preventDefault();
-        } else {
-            if (this.$root.additionalURLParams) {
-                var params = new URLSearchParams(this.$root.additionalURLParams);
-                for (var [key, value] of params.entries()) {
-                    if (!event.target.form.elements[key]) {
-                        var input = document.createElement("input");
-                        input.type = "hidden";
-                        input.name = key;
-                        input.value = value;
-                        event.target.form.appendChild(input);
-                    }
-                }
-            }
-            return;
         }
-        var redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(this.voucher) + '&subevent=' + this.$root.subevent;
-        if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
-        }
-        if (this.$root.additionalURLParams) {
-            redirect_url += '&' + this.$root.additionalURLParams;
-        }
-        redirect_url += this.$root.consent_parameter;
-        this.$root.overlay.frame_src = redirect_url;
+        this.voucher_open(this.voucher);
     },
     voucher_open: function (voucher) {
-        var redirect_url;
-        redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(voucher);
-        if (this.$root.widget_data) {
-            redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
-        }
-        if (this.$root.additionalURLParams) {
-            redirect_url += '&' + this.$root.additionalURLParams;
-        }
-        redirect_url += this.$root.consent_parameter;
+        var redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(voucher);
         if (this.$root.useIframe) {
             this.$root.overlay.frame_src = redirect_url;
         } else {
@@ -1075,10 +1045,6 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-voucher-input-wrap">'
         + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
         + '</div>'
-        + '<input type="hidden" name="subevent" :value="$root.subevent" />'
-        + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
-        + '<input v-if="$root.consent_parameter_value" type="hidden" name="consent" :value="$root.consent_parameter_value" />'
-        + '<input type="hidden" name="locale" value="' + lang + '" />'
         + '<div class="pretix-widget-voucher-button-wrap">'
         + '<button @click="$parent.redeem">' + strings.redeem + '</button>'
         + '</div>'
@@ -1972,6 +1938,9 @@ var shared_root_computed = {
         }
         if (this.subevent) {
             form_target += "&subevent=" + this.subevent;
+        }
+        if (this.$root.widget_data) {
+            form_target += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
         }
         form_target += this.$root.consent_parameter;
         if (this.$root.additionalURLParams) {
