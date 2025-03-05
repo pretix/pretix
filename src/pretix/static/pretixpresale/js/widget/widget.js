@@ -765,8 +765,8 @@ var shared_methods = {
     redeem: function (event) {
         if (this.$root.useIframe) {
             event.preventDefault();
+            this.voucher_open(this.voucher);
         }
-        this.voucher_open(this.voucher);
     },
     voucher_open: function (voucher) {
         var redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(voucher);
@@ -1045,6 +1045,7 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-voucher-input-wrap">'
         + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
         + '</div>'
+        + '<input type="hidden" v-for="p in hiddenParams" :name="p[0]" :value="p[1]" />'
         + '<div class="pretix-widget-voucher-button-wrap">'
         + '<button @click="$parent.redeem">' + strings.redeem + '</button>'
         + '</div>'
@@ -1102,7 +1103,13 @@ Vue.component('pretix-widget-event-form', {
             } else {
                 return strings.buy;
             }
-        }
+        },
+        hiddenParams: function () {
+            var params = new URL(this.$root.voucherFormTarget).searchParams;
+            params.delete("iframe");
+            params.delete("take_cart_id");
+            return [...params.entries()];
+        },
     },
     methods: {
         focus_voucher_field: function() {
