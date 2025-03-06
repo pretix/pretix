@@ -511,6 +511,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 'require_cookie': 'true',
                 'cart_id': request.GET.get('take_cart_id'),
                 **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
+                **({"widget_data": request.GET.get('widget_data')} if request.GET.get('widget_data') else {}),
                 **utm_params,
             }))
         elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
@@ -526,6 +527,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     "src": "widget",
                     **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
                     **({"take_cart_id": request.GET.get('cart_id')} if request.GET.get('cart_id') else {}),
+                    **({"widget_data": request.GET.get('widget_data')} if request.GET.get('widget_data') else {}),
                     **utm_params,
                 })
             })
