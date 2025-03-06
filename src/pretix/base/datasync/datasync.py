@@ -223,7 +223,10 @@ class OutboundSyncProvider:
 
     def get_field_value(self, inputs, mapping_entry):
         key = mapping_entry["pretix_field"]
-        required_input, label, ptype, enum_opts, getter = self.data_fields.get(key)
+        try:
+            required_input, label, ptype, enum_opts, getter = self.data_fields[key]
+        except KeyError:
+            raise SyncConfigError(['Field "%s" is not valid for %s. Please check your %s settings.' % (key, "/".join(inputs.keys()), self.display_name)])
         input = inputs[required_input]
         val = getter(input)
         if isinstance(val, list):
@@ -271,7 +274,7 @@ class OutboundSyncProvider:
 
     def sync_order(self, order):
         if not self.order_valid_for_sync(order):
-            logger.debug("Skipping order (not valid for sync)", order)
+            logger.debug("Skipping order %r (not valid for sync)", order)
             return
 
         logger.debug("Syncing order %r", order)

@@ -438,7 +438,7 @@ class OrderDataSyncLogentrytype(OrderLogEntryType):
                         if obj and 'external_link_href' in obj and 'external_link_display_name' in obj
                     ))
 
-        return mark_safe(super().display(logentry, data) + "".join("<p>" + link + "</p>" for link in links))
+        return mark_safe(escape(super().display(logentry, data)) + "".join("<p>" + link + "</p>" for link in links))
 
 
 @log_entry_types.new_from_dict({
@@ -449,7 +449,7 @@ class OrderDataSyncErrorLogentrytype(OrderLogEntryType):
         errmes = data["error"]
         if not isinstance(errmes, list):
             errmes = [errmes]
-        return mark_safe(escape(self.plain) + "".join("<p>" + escape(msg) + "</p>" for msg in errmes))
+        return mark_safe(escape(super().display(logentry, data)) + "".join("<p>" + escape(msg) + "</p>" for msg in errmes))
 
 
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")
