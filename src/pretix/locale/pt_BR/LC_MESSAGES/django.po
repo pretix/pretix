@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-05 15:00+0000\n"
+"PO-Revision-Date: 2025-03-06 11:31+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -10483,10 +10483,8 @@ msgstr "Não lidar com reembolsos automaticamente"
 
 #: pretix/base/settings.py:1982
 #: pretix/control/templates/pretixcontrol/order/index.html:148
-#, fuzzy
-#| msgid "Required question"
 msgid "Refund method"
-msgstr "Pergunta obrigatória"
+msgstr "Método de reembolso"
 
 #: pretix/base/settings.py:2008 pretix/base/settings.py:2021
 msgid "Terms of cancellation"
@@ -10631,10 +10629,8 @@ msgid "Sender address for outgoing emails"
 msgstr "Endereço do remetente para e-mails enviados"
 
 #: pretix/base/settings.py:2151
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Sender name"
-msgstr "Nome do participante"
+msgstr "Nome do remetente"
 
 #: pretix/base/settings.py:2152
 msgid ""
@@ -10820,10 +10816,8 @@ msgstr ""
 "Organização {event}"
 
 #: pretix/base/settings.py:2284
-#, fuzzy
-#| msgid "Can view orders"
 msgid "Attachment for new orders"
-msgstr "Pode ver os pedidos"
+msgstr "Anexos para novos pedidos"
 
 #: pretix/base/settings.py:2289
 #, python-brace-format
@@ -11350,10 +11344,9 @@ msgstr ""
 "Organização {event}"
 
 #: pretix/base/settings.py:2635 pretix/base/settings.py:2651
-#, fuzzy, python-brace-format
-#| msgid "Presale not started"
+#, python-brace-format
 msgid "Your ticket is ready for download: {code}"
-msgstr "Pré-venda não iniciada"
+msgstr "Seu ingresso está pronto para download: {code}"
 
 #: pretix/base/settings.py:2639
 #, python-brace-format
@@ -11570,10 +11563,8 @@ msgstr "Respeitado apenas em navegadores modernos."
 
 #: pretix/base/settings.py:2882 pretix/base/settings.py:2925
 #: pretix/control/forms/organizer.py:520
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Header image"
-msgstr "Nome do participante"
+msgstr "Imagem do cabeçalho"
 
 #: pretix/base/settings.py:2885
 msgid ""
@@ -11884,10 +11875,8 @@ msgid "\"Accept\" button description"
 msgstr "Descrição do botão \"Aceitar\""
 
 #: pretix/base/settings.py:3357
-#, fuzzy
-#| msgid "Required question"
 msgid "Required cookies only"
-msgstr "Pergunta obrigatória"
+msgstr "Apenas cookies obrigatórios"
 
 #: pretix/base/settings.py:3362
 msgid "\"Reject\" button description"
@@ -16199,34 +16188,24 @@ msgid "This object has been created by cloning."
 msgstr "Seu carrinho foi atualizado."
 
 #: pretix/control/logdisplay.py:624
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "The organizer has been changed."
-msgstr "Seu carrinho foi atualizado."
+msgstr "O organizador foi alterado."
 
 #: pretix/control/logdisplay.py:625
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "The organizer settings have been changed."
-msgstr "Seu carrinho foi atualizado."
+msgstr "As configurações do organizador foram alteradas."
 
 #: pretix/control/logdisplay.py:626 pretix/control/logdisplay.py:749
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "The footer links have been changed."
-msgstr "Seu carrinho foi atualizado."
+msgstr "Os links de rodapé foram alterados."
 
 #: pretix/control/logdisplay.py:627 pretix/control/logdisplay.py:673
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "A scheduled export has been added."
-msgstr "Seu carrinho foi atualizado."
+msgstr "Uma exportação agendada foi adicionada."
 
 #: pretix/control/logdisplay.py:628 pretix/control/logdisplay.py:674
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "A scheduled export has been changed."
-msgstr "Seu carrinho foi atualizado."
+msgstr "Uma exportação agendada foi alterada."
 
 #: pretix/control/logdisplay.py:629 pretix/control/logdisplay.py:675
 msgid "A scheduled export has been deleted."
@@ -16274,16 +16253,12 @@ msgid "A new gift card issuer has been accepted."
 msgstr "O evento selecionado não foi encontrado."
 
 #: pretix/control/logdisplay.py:638
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "The webhook has been created."
-msgstr "Seu carrinho foi atualizado."
+msgstr "O webhook foi criado."
 
 #: pretix/control/logdisplay.py:639
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "The webhook has been changed."
-msgstr "Seu carrinho foi atualizado."
+msgstr "O webhook foi alterado."
 
 #: pretix/control/logdisplay.py:640
 msgid "The webhook call retry jobs have been manually expedited."
@@ -30323,6 +30298,8 @@ msgid ""
 "This payment method is available to users of the Chinese app WeChat. Please "
 "keep your login information available."
 msgstr ""
+"Este método de pagamento está disponível para usuários do aplicativo chinês "
+"WeChat. Por favor, mantenha suas informações de login acessíveis."
 
 #: pretix/plugins/stripe/payment.py:1796
 msgid "Revolut Pay via Stripe"
@@ -30337,6 +30314,8 @@ msgid ""
 "This payment method is available to users of the Revolut app. Please keep "
 "your login information available."
 msgstr ""
+"Este método de pagamento está disponível para usuários do aplicativo "
+"Revolut. Por favor, mantenha suas informações de login disponíveis."
 
 #: pretix/plugins/stripe/payment.py:1815
 msgid "PayPal via Stripe"
@@ -30939,7 +30918,7 @@ msgstr ""
 
 #: pretix/presale/checkoutflow.py:1387 pretix/presale/views/order.py:676
 msgid "Please select a payment method."
-msgstr ""
+msgstr "Por favor, selecione um método de pagamento."
 
 #: pretix/presale/checkoutflow.py:1414 pretix/presale/checkoutflow.py:1428
 #: pretix/presale/checkoutflow.py:1439
@@ -30949,7 +30928,7 @@ msgstr "Por favor, selecione um método de pagamento para prosseguir."
 #: pretix/presale/checkoutflow.py:1444 pretix/presale/views/order.py:435
 #: pretix/presale/views/order.py:502
 msgid "The payment information you entered was incomplete."
-msgstr ""
+msgstr "A informação de pagamento informada está incompleta."
 
 #: pretix/presale/checkoutflow.py:1489
 msgctxt "checkoutflow"
@@ -30964,6 +30943,8 @@ msgstr ""
 msgid ""
 "There was an error sending the confirmation mail. Please try again later."
 msgstr ""
+"Ocorreu um erro ao enviar o email de confirmação. Por favor, tente novamente "
+"mais tarde."
 
 #: pretix/presale/forms/checkout.py:70
 msgid "Email address (repeated)"
@@ -30979,7 +30960,7 @@ msgstr ""
 
 #: pretix/presale/forms/checkout.py:110
 msgid "Please enter the same email address twice."
-msgstr ""
+msgstr "Por favor, informe o endereço de email novamente."
 
 #: pretix/presale/forms/checkout.py:125
 msgid "Save to address"
@@ -30999,7 +30980,7 @@ msgstr ""
 
 #: pretix/presale/forms/checkout.py:166
 msgid "Save to profile"
-msgstr ""
+msgstr "Salvar no perfil"
 
 #: pretix/presale/forms/checkout.py:167
 msgid "Create new profile"
@@ -31039,7 +31020,7 @@ msgstr ""
 #: pretix/presale/forms/customer.py:190
 #, python-brace-format
 msgid "What is the result of {num1} + {num2}?"
-msgstr ""
+msgstr "Qual o resultado de {num1} + {num2}?"
 
 #: pretix/presale/forms/customer.py:236
 msgid "Please enter the correct result."
@@ -31049,6 +31030,8 @@ msgstr ""
 #: pretix/presale/forms/customer.py:328
 msgid "For security reasons, please wait 10 minutes before you try again."
 msgstr ""
+"Por raqzões de segurança, por favor, aguarde 10 minutos antes de tentar "
+"novamente."
 
 #: pretix/presale/forms/customer.py:329
 msgid "A user with this email address is not known in our system."
@@ -31834,7 +31817,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:15
 msgid "Price per item"
-msgstr ""
+msgstr "Preço por item"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:18
 msgid "Price total"
@@ -31885,18 +31868,18 @@ msgstr "Nome do participante"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:223
 msgid "The image you previously uploaded"
-msgstr ""
+msgstr "A imagem enviada anteriormente"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:269
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:342
 msgid "The price of this product was reduced because of an automatic discount."
-msgstr ""
+msgstr "O preço deste produto foi reduzido devido um desconto automático."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:273
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:346
 #, python-format
 msgid "%(percent)s %% Discount"
-msgstr ""
+msgstr "%(percent)s %% de desconto"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:277
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:350
@@ -31905,25 +31888,25 @@ msgstr "Descontado"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:287
 msgid "Okay, we're removing that…"
-msgstr ""
+msgstr "Certo, estamos removendo isto…"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:294
 #, python-format
 msgid "Remove %(item)s from your cart"
-msgstr ""
+msgstr "Remover %(item)s do carrinho"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:297
 #, python-format
 msgid "Remove one %(item)s from your cart"
-msgstr ""
+msgstr "Remover um %(item)s do carrinho"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:299
 #, python-format
 msgid ""
 "Remove one %(item)s from your cart. You currently have %(count)s in your "
 "cart."
-msgstr ""
+msgstr "Remover um %(item)s do carrinho. Você possui %(count)s no carrinho."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:307
 msgid "We're trying to reserve another one for you!"
@@ -31944,7 +31927,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:327
 #, python-format
 msgid "Add one more %(item)s to your cart"
-msgstr ""
+msgstr "Adicionar um ou mais %(item)s no carrinho"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:329
 #, python-format
@@ -32034,12 +32017,15 @@ msgid ""
 "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s\" to "
 "\"%(new_item)s – %(new_variation)s\""
 msgstr ""
+"Alterar posição #%(positionid)s de \"%(old_item)s – %(old_variation)s\" para "
+"\"%(new_item)s – %(new_variation)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:23
 #, python-format
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s\" to \"%(new_item)s\""
 msgstr ""
+"Alterar posição #%(positionid)s de \"%(old_item)s\" para \"%(new_item)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:56
@@ -32052,32 +32038,32 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:40
 #, python-format
 msgid "Change date of position #%(positionid)s from \"%(old)s\" to \"%(new)s\""
-msgstr ""
+msgstr "Alterar data da posição #%(positionid)s de \"%(old)s\" para \"%(new)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:50
 #, python-format
 msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
-msgstr ""
+msgstr "Alterar preço da posição #%(positionid)s de %(old)s para %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:70
 #, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr ""
+msgstr "Adicionar posição (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:74
 #, python-format
 msgid "Add position (%(item)s)"
-msgstr ""
+msgstr "Adicionar posição (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:95
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s – %(variation)s)"
-msgstr ""
+msgstr "Excluir posição #%(positionid)s (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:99
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s)"
-msgstr ""
+msgstr "Excluir posição #%(positionid)s (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:121
 msgid "Total price change"
@@ -32117,6 +32103,8 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
+"O reembolso será emitido na forma de um cartão-presente que você pode usar "
+"para compras futuras."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:155
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:147
@@ -32126,6 +32114,9 @@ msgid ""
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
+"O valor do reembolso será enviado automaticamente de volta para o seu método "
+"de pagamento original. Dependendo do método de pagamento, aguarde até duas "
+"semanas antes que isso apareça em seu extrato."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:161
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:165
