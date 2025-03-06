@@ -2108,7 +2108,7 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Event description"),
-            widget=I18nMarkdownTextarea,
+            widget=I18nTextarea,
             help_text=_(
                 "You can use this to share information with your attendees, such as travel information or the link to a digital event. "
                 "If you keep it empty, we will put a link to the event shop, the admission time, and your organizer name in there. "
