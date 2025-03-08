@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-01-14 09:56+0000\n"
-"Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
+"PO-Revision-Date: 2025-03-08 21:00+0000\n"
+"Last-Translator: Samuel Bramming <samuel.bramming@teenstreet.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -33,7 +33,7 @@ msgstr "Arabisk"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr ""
+msgstr "Basque"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
@@ -93,7 +93,7 @@ msgstr "Italiensk"
 
 #: pretix/_base_settings.py:106
 msgid "Japanese"
-msgstr ""
+msgstr "Japansk"
 
 #: pretix/_base_settings.py:107
 msgid "Latvian"
@@ -101,7 +101,7 @@ msgstr "Lettisk"
 
 #: pretix/_base_settings.py:108
 msgid "Norwegian Bokmål"
-msgstr "Norsk (Bokmål)"
+msgstr "Norsk"
 
 #: pretix/_base_settings.py:109
 msgid "Polish"
@@ -109,7 +109,7 @@ msgstr "Polsk"
 
 #: pretix/_base_settings.py:110
 msgid "Portuguese (Portugal)"
-msgstr "Portugisisk (Portugal)"
+msgstr "Portugisisk"
 
 #: pretix/_base_settings.py:111
 msgid "Portuguese (Brazil)"
@@ -148,7 +148,7 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
-"Fuld adgang til enhed (se og ændre bestillinger og gavekort, se produkter og "
+"Fuld adgang til enhed (se og ændre bestillinger, gavekort, produkter og "
 "indstillinger)"
 
 #: pretix/api/auth/devicesecurity.py:80
@@ -157,8 +157,7 @@ msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:118
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
-"pretixSCAN (kiosk-modus, ingen synkronisering af bestillinger, ingen søgning)"
+msgstr "pretixSCAN (kiosk, ingen synkronisering af bestillinger, ingen søgning)"
 
 #: pretix/api/auth/devicesecurity.py:153
 msgid "pretixSCAN (online only, no order sync)"
@@ -166,15 +165,15 @@ msgstr "pretixSCAN (kun online, ingen synkronisering af bestillinger)"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:402
 msgid "Application name"
-msgstr "Applikationsnavn"
+msgstr "Ansøger navn"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:425
 msgid "Redirection URIs"
-msgstr "Viderestillingsurler"
+msgstr "Viderestillings URL's"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:426
 msgid "Allowed URIs list, space separated"
-msgstr "Liste af tilladte urler adskilt af mellemrum"
+msgstr "Liste af tilladte URL adskilt af mellemrum"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
@@ -201,12 +200,12 @@ msgstr "Target URL"
 #: pretix/api/models.py:118 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:286
 msgid "All events (including newly created ones)"
-msgstr "Alle arrangementer (inkl. nyoprettede begivenheder)"
+msgstr "Alle arrangementer (inkl. ny oprettet)"
 
 #: pretix/api/models.py:119 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:287
 msgid "Limit to events"
-msgstr "Vis kun arrangementer"
+msgstr "Vis kun events"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:1077
@@ -2605,7 +2604,7 @@ msgstr "Gavekortoverførsler"
 #: pretix/base/exporters/orderlist.py:1288
 msgctxt "export_category"
 msgid "Gift cards"
-msgstr "Gavekort"
+msgstr "Voucher"
 
 #: pretix/base/exporters/orderlist.py:1184
 msgid "Download a spreadsheet of all gift card transactions."
@@ -2685,7 +2684,7 @@ msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
 "Download et regneark med alle betalinger og tilbagebetalinger, som "
-"indeholder gavekort."
+"indeholder voucher"
 
 #: pretix/base/exporters/orderlist.py:1259
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:16
@@ -2697,11 +2696,11 @@ msgstr "Udsteder"
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
 #: pretix/plugins/reports/accountingreport.py:898
 msgid "Gift cards"
-msgstr "Gavekort"
+msgstr "Voucher"
 
 #: pretix/base/exporters/orderlist.py:1289
 msgid "Download a spreadsheet of all gift cards including their current value."
-msgstr "Download et regneark af alle gavekort inkl. deres aktuelle værdi."
+msgstr "Download et regneark af alle voucher's inkl. deres aktuelle værdi."
 
 #: pretix/base/exporters/orderlist.py:1296
 msgid "Show value at"
@@ -5190,7 +5189,7 @@ msgstr "Den valgte medietype kan på dette tidspunkt ikke bruges til billetter."
 #: pretix/base/models/items.py:996
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr "Den valgte medietype kan for tiden ikke bruges til gavekort."
+msgstr "Den valgte medietype kan lige nu ikke anvendes som voucher."
 
 #: pretix/base/models/items.py:998
 msgid ""
@@ -5198,8 +5197,8 @@ msgid ""
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
 msgstr ""
-"Du kan på dette tidspunkt ikke oprette gavekort med en politik for "
-"genanvendelige medier. Gavekort for nogle genanvendelige medier kan i stedet "
+"Du kan på dette tidspunkt ikke oprette voucher med en politik for "
+"genanvendelige medier. Voucher for nogle genanvendelige medier kan i stedet "
 "for oprettes eller oplades direkte ved POS'en."
 
 #: pretix/base/models/items.py:1006
@@ -6126,7 +6125,7 @@ msgstr "Kan administrere genanvendelige medier"
 
 #: pretix/base/models/organizer.py:319
 msgid "Can manage gift cards"
-msgstr "Kan administrere gavekort"
+msgstr "Kan administrere voucher"
 
 #: pretix/base/models/organizer.py:323
 msgid "Can change event settings"
@@ -7162,7 +7161,7 @@ msgstr "Dette gavekort kan kun blive brugt i testmodus."
 #: pretix/base/payment.py:1437 pretix/base/payment.py:1500
 #: pretix/base/payment.py:1549
 msgid "Only test gift cards can be used in test mode."
-msgstr "Kun testgavekort kan bruges under testmodus."
+msgstr "Kun testvouchers kan bruges under testmodus."
 
 #: pretix/base/payment.py:1439 pretix/base/payment.py:1503
 #: pretix/base/payment.py:1551
@@ -7180,7 +7179,7 @@ msgstr "Dette gavekort bliver allerede brugt til din betaling."
 #: pretix/base/payment.py:1460 pretix/base/payment.py:1486
 #: pretix/base/payment.py:1529
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr "Du kan ikke betale med et gavekort, når du køber et gavekort."
+msgstr "Du kan ikke betale med en voucher, når du køber en voucher"
 
 #: pretix/base/payment.py:1476 pretix/base/payment.py:1519
 msgid ""
@@ -8030,7 +8029,7 @@ msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
-"Du har indtastet et gavekort i stedet for en voucher. Gavekort kan indtastes "
+"Du har indtastet et voucher i stedet for en voucher. Voucher kan indtastes "
 "senere, når du bliver bedt om dine betalingsoplysninger."
 
 #: pretix/base/services/cart.py:216
@@ -9002,8 +9001,8 @@ msgid ""
 "different tickets or gift cards later."
 msgstr ""
 "Funktionen \"Genanvendelige medier\" gør det muligt at forbinde billetter og "
-"gavekort med fysiske medier som armbånd eller chipkort, der kan genbruges "
-"til andre billetter eller gavekort senere."
+"voucher med fysiske medier som armbånd eller chipkort, der kan genbruges til "
+"andre billetter eller voucher senere."
 
 #: pretix/base/settings.py:218
 msgid "Length of barcodes"
@@ -9829,6 +9828,11 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"Fjern markeringen i denne boks, hvis du kun sælger noget uden en specifik "
+"dato, såsom en voucher eller en billet, der kan bruges når som helst. "
+"Systemet vil derefter stoppe med at vise eventdatoen nogle steder, såsom "
+"eventets startside. Bemærk, at pretix stadig er et system bygget omkring "
+"events, og datoen kan stadig vises andre steder."
 
 #: pretix/base/settings.py:1326
 msgid "Show event end date"
@@ -10407,9 +10411,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1976 pretix/base/settings.py:1986
-#, fuzzy
 msgid "All refunds are issued as gift cards"
-msgstr "Kreditkort"
+msgstr "Alle refunderinger udstedes som vouchers."
 
 #: pretix/base/settings.py:1977 pretix/base/settings.py:1987
 msgid "Do not handle refunds automatically at all"
@@ -11599,6 +11602,9 @@ msgid ""
 "the year after this many years. If you keep it empty, gift cards do not have "
 "an explicit expiry date."
 msgstr ""
+"Hvis du angiver et tal her, udløber vouchers som standard ved udgangen af "
+"året efter det angivne antal år. Hvis du lader feltet være tomt, vil "
+"vouchers ikke have en specifik udløbsdato."
 
 #: pretix/base/settings.py:3301
 msgid "Enable cookie consent management features"
@@ -12840,6 +12846,8 @@ msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
 msgstr ""
+"Du har konfigureret vouchers til at være gyldige i {} år plus det år, hvor "
+"voucheren udstedes."
 
 #: pretix/control/forms/event.py:787
 msgid "Tax rule for payment fees"
@@ -14204,6 +14212,9 @@ msgid ""
 "restrict the validity of the gift card. A validity of gift cards can be set "
 "in your organizer settings."
 msgstr ""
+"Angiv ikke en specifik gyldighed for voucher-produkter, da det ikke vil "
+"begrænse vouchernes gyldighed. Gyldigheden af vouchers kan indstilles i dine "
+"arrangørindstillinger."
 
 #: pretix/control/forms/item.py:785 pretix/control/forms/item.py:1052
 msgid ""
@@ -14681,6 +14692,12 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
+"Manuelle refunderinger oprettes og vises på listen over manuelle "
+"refunderinger. Når dette kombineres med den automatiske "
+"refunderingsfunktion, vil kun betalinger med en betalingsmetode, der ikke "
+"understøtter automatiske refunderinger, være på din liste over manuelle "
+"refunderinger. Fjern markeringen, hvis du vil refundere nogle ordrer ved at "
+"udligne med andre ordrer eller udstede vouchers."
 
 #: pretix/control/forms/orders.py:868
 msgid ""
@@ -19957,6 +19974,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/item/index.html:66
 msgid "Examples: Merchandise, donations, gift cards, add-ons to a main ticket."
 msgstr ""
+"Eksempler: Merchandise, donationer, vouchers, tilføjelser til en billet."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:68
 #: pretix/control/templates/pretixcontrol/item/index.html:76
@@ -21943,6 +21961,10 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
+"Da du refunderer dine kunders ordrer til vouchers, bør du forklare dem, "
+"hvordan de får adgang til deres vouchers. Den nemmeste måde at gøre dette på "
+"er at inkludere en forklaring og et link til deres ordre ved hjælp af den "
+"her tilgængelige e-mailfunktion."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:64
 msgid ""
@@ -22919,7 +22941,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:245
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:277
 msgid "NFC media can currently only be connected to gift cards."
-msgstr ""
+msgstr "NFC-medier kan i øjeblikket kun tilknyttes vouchers."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:251
 msgid ""
@@ -23030,19 +23052,20 @@ msgid "Invite organizer"
 msgstr "Alle arrangører"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:8
-#, fuzzy
 msgid "Gift cards acceptance"
-msgstr "Gavekort"
+msgstr "Accept af vouchers."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:11
 msgid ""
 "This feature allows you to configure acceptance of gift cards across "
 "multiple organizer accounts."
 msgstr ""
+"Denne funktion giver dig mulighed for at konfigurere accept af vouchers på "
+"tværs af flere arrangørkonti."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:18
 msgid "Other organizers you accept gift cards from"
-msgstr ""
+msgstr "Andre arrangører, du accepterer vouchers fra."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:23
 msgid ""
@@ -23050,6 +23073,9 @@ msgid ""
 "do so, the other organizer can add you to their list and afterwards, you can "
 "confirm this here."
 msgstr ""
+"Du accepterer endnu ikke vouchers fra andre arrangører. Hvis du ønsker at "
+"gøre det, kan den anden arrangør tilføje dig til deres liste, og derefter "
+"kan du bekræfte dette her."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:49
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:128
@@ -23076,7 +23102,7 @@ msgstr "Tidslinje"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:84
 msgid "Other organizers accepting gift cards from you"
-msgstr ""
+msgstr "Andre arrangører, der accepterer vouchers fra dig"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:87
 msgid ""
@@ -23087,6 +23113,11 @@ msgid ""
 "responsibility to handle the exchange of money to offset the transactions "
 "between the two organizers."
 msgstr ""
+"Du kan invitere andre arrangører til at acceptere dine vouchers. Efter du "
+"har gjort dette, skal de gå til den samme side i deres konto og acceptere "
+"din invitation. Bemærk, at andre arrangører også vil kunne tilføje penge til "
+"vouchers, som du skal indsamle fra dem. Det er dit ansvar at håndtere "
+"pengeudvekslingen for at udligne transaktionerne mellem de to arrangører."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:95
 msgid ""
@@ -23108,15 +23139,16 @@ msgid "Invite new organizer"
 msgstr "Opret arrangør"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:8
-#, fuzzy
 msgid "Issued gift cards"
-msgstr "Kreditkort"
+msgstr "Udstedte vouchers"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:13
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
+"Du har endnu ikke udstedt nogen vouchers. Du kan enten oprette et produkt i "
+"en eventbutik for at sælge vouchers, eller du kan manuelt udstede vouchers."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:50
@@ -26508,7 +26540,7 @@ msgstr "Det valgte spørgsmål er blevet slettet."
 #: pretix/control/views/organizer.py:1520
 #: pretix/control/views/organizer.py:1557
 msgid "Gift cards are not allowed to have negative values."
-msgstr ""
+msgstr "Vouchers må ikke have negative værdier."
 
 #: pretix/control/views/organizer.py:1547
 #, fuzzy
@@ -33965,7 +33997,7 @@ msgstr ""
 
 #: pretix/settings.py:802
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #~ msgid "Show event times and dates on the ticket shop"
 #~ msgstr "Vis arrangementers tidspunkter og datoer i billet-shoppen"
