@@ -515,7 +515,12 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             }))
         elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
             # We've been passed data from a widget, we need to create a cart session to store it.
-            get_or_create_cart_id(request, cache_widget_data=True)
+            return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode({
+                'require_cookie': 'true',
+                'cart_id': get_or_create_cart_id(request, cache_widget_data=True),
+                **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
+                **utm_params,
+            }))
         elif 'require_cookie' in request.GET and settings.SESSION_COOKIE_NAME not in request.COOKIES and \
                 '__Host-' + settings.SESSION_COOKIE_NAME not in self.request.COOKIES:
             # Cookies are in fact not supported
@@ -643,10 +648,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
         else:
             context['cart_redirect'] = self.request.path
-
-        if 'cart_namespace' in self.kwargs and self.request.GET.get('iframe') == '1' and 'take_cart_id' in self.request.GET:
-            from pretix.presale.views.cart import get_or_create_cart_id
-            context['take_cart_id_param'] = '&take_cart_id=' + get_or_create_cart_id(self.request)
 
         return context
 
