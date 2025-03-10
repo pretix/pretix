@@ -504,17 +504,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             # User has clicked "Open in a new tab" link in widget
             get_or_create_cart_id(request)
             return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode(utm_params))
-        elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
-            # Widget just opened, a cart already exists. Let's do a stupid redirect to check if cookies are disabled
-            get_or_create_cart_id(request)
-            return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode({
-                'require_cookie': 'true',
-                'cart_id': request.GET.get('take_cart_id'),
-                **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
-                **utm_params,
-            }))
-        elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
-            # We've been passed data from a widget, we need to create a cart session to store it.
+        elif request.GET.get('iframe', '') == '1' and (
+                'take_cart_id' in request.GET or len(self.request.GET.get('widget_data', '{}')) > 3
+        ):
+            # Widget just opened, a cart already exists or we have been passed widget_data.
+            # Let's do a stupid redirect to check if cookies are disabled.
             return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode({
                 'require_cookie': 'true',
                 'cart_id': get_or_create_cart_id(request, cache_widget_data=True),
