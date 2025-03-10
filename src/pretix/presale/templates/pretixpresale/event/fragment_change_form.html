@@ -21,11 +21,7 @@
                             </label>
                             <div class="col-md-9 form-control-text">
                                 <ul class="addon-list">
-                                    {{ position.subevent.name }} &middot; {{ position.subevent.get_date_range_display_as_html }}
-                                    {% if position.event.settings.show_times %}
-                                        <span class="fa fa-clock-o" aria-hidden="true"></span>
-                                        {{ position.subevent.date_from|date:"TIME_FORMAT" }}
-                                    {% endif %}
+                                    {{ position.subevent.name }} &middot; {{ position.subevent.get_date_range_display_with_times_as_html }}
                                 </ul>
                             </div>
                         </div>
