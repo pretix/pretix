@@ -9,7 +9,6 @@
         </h3>
     </div>
     <div class="panel-body">
-    {{ test.hello }}
         <table class="table table-condensed">
         <tbody>
             {% for identifier, display_name, pending, objects in providers %}
@@ -20,20 +19,20 @@
                         {% if pending.failed_attempts %}
                             <i class="fa fa-warning"></i>
                             {% blocktrans trimmed with num=pending.failed_attempts max=pending.max_retry_attempts %}
-                            Error, retry {{ num }} of {{ max }}
+                            Error, retry {{ num }} of {{ max }}.
                             {% endblocktrans %}{% if pending.not_before %},
-                                {% blocktrans trimmed with datetime=pending.not_before %}
-                                waiting until {{ datetime }}
+                                {% blocktrans trimmed with datetime=pending.not_before|date:"SHORT_DATETIME_FORMAT" %}
+                                Waiting until {{ datetime }}.
                                 {% endblocktrans %}
                             {% endif %}
                         {% elif pending.not_before %}
-                            {% blocktrans trimmed with datetime=pending.not_before %}
-                            Waiting until {{ datetime }}
+                            {% blocktrans trimmed with datetime=pending.not_before|date:"SHORT_DATETIME_FORMAT" %}
+                            Waiting until {{ datetime }}.
                             {% endblocktrans %}
                         {% else %}
                             <i class="fa fa-hourglass"></i> {% trans "Pending" %}
                         {% endif %}
-                        (triggered by {{ pending.triggered_by }} at {{ pending.triggered }})
+                        (triggered by {{ pending.triggered_by }} at {{ pending.triggered|date:"SHORT_DATETIME_FORMAT" }})
                     {% else %}
                         -
                     {% endif %}
