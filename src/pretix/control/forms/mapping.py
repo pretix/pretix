@@ -21,11 +21,11 @@ class PropertyMappingForm(forms.Form):
         ]
     )
 
-    def __init__(self, pretix_fields, external_fields_id, *args, **kwargs):
+    def __init__(self, pretix_fields, external_fields_id, available_modes, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["pretix_field"] = forms.ChoiceField(
             label=_("pretix Field"),
-            choices=pretix_fields_choices(pretix_fields),
+            choices=pretix_fields_choices(pretix_fields, kwargs.get("initial", {}).get("pretix_field")),
             required=False,
         )
         if external_fields_id:
@@ -40,6 +40,9 @@ class PropertyMappingForm(forms.Form):
             self.fields["external_field"].choices = [
                 (self["external_field"].value(), self["external_field"].value()),
             ]
+        self.fields["overwrite"].choices = [
+            (key, label) for (key, label) in self.fields["overwrite"].choices if key in available_modes
+        ]
         print(self.fields)
 
 
@@ -51,11 +54,12 @@ class PropertyMappingFormSet(formset_factory(
 )):
     template_name = "pretixcontrol/datasync/property_mapping_formset.html"
 
-    def __init__(self, pretix_fields, external_fields, prefix, *args, **kwargs):
+    def __init__(self, pretix_fields, external_fields, available_modes, prefix, *args, **kwargs):
         super().__init__(
             form_kwargs={
                 "pretix_fields": pretix_fields,
                 "external_fields_id": prefix + "external-fields" if external_fields else None,
+                "available_modes": available_modes,
             },
             prefix=prefix,
             *args, **kwargs)
@@ -68,8 +72,9 @@ class PropertyMappingFormSet(formset_factory(
         return ctx
 
 
-def pretix_fields_choices(pretix_fields):
+def pretix_fields_choices(pretix_fields, initial_choice):
     return [
-        (key, label + " [" + QUESTION_TYPE_IDENTIFIERS[ptype] + "]")
-        for (required_input, key, label, ptype, enum_opts, getter) in pretix_fields
+        (f.key, f.label + " [" + QUESTION_TYPE_IDENTIFIERS[f.type] + "]")
+        for f in pretix_fields
+        if not f.deprecated or f.key == initial_choice
     ]

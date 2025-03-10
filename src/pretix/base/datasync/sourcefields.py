@@ -1,4 +1,5 @@
 import json
+from collections import namedtuple
 from functools import partial
 
 from django.db.models import Max
@@ -65,6 +66,10 @@ def first_checkin_on_list(list_pk, position):
     if checkin:
         return isoformat_or_none(checkin.datetime)
 
+def split_name_on_last_space(name, part):
+    name_parts = name.rsplit(" ", 1)
+    return name_parts[part] if len(name_parts) > part else ""
+
 
 ORDER_POSITION = 'position'
 ORDER = 'order'
@@ -74,6 +79,13 @@ AVAILABLE_MODELS = {
     'OrderPosition': (ORDER_POSITION, ORDER, EVENT_OR_SUBEVENT, EVENT),
     'Order': (ORDER, EVENT),
 }
+
+
+DataFieldInfo = namedtuple(
+    'DataFieldInfo',
+    field_names=('required_input', 'key', 'label', 'type', 'enum_opts', 'getter', 'deprecated'),
+    defaults=[False]
+)
 
 
 def get_data_fields(event, for_model=None):
@@ -91,7 +103,7 @@ def get_data_fields(event, for_model=None):
 
     src_fields = (
         [
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_name",
                 _("Attendee name"),
@@ -102,7 +114,7 @@ def get_data_fields(event, for_model=None):
             ),
         ]
         + [
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_name_" + k,
                 _("Attendee") + ": " + label,
@@ -116,11 +128,12 @@ def get_data_fields(event, for_model=None):
                     ).get(k, ""),
                     k,
                 ),
+                deprecated=len(name_scheme["fields"]) == 1,
             )
             for k, label, w in name_scheme["fields"]
         ]
         + [
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_email",
                 _("Attendee email"),
@@ -129,7 +142,7 @@ def get_data_fields(event, for_model=None):
                 lambda position: position.attendee_email
                 or (position.addon_to.attendee_email if position.addon_to else None),
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_or_order_email",
                 _("Attendee or order email"),
@@ -139,7 +152,7 @@ def get_data_fields(event, for_model=None):
                 or (position.addon_to.attendee_email if position.addon_to else None)
                 or position.order.email,
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_company",
                 _("Attendee company"),
@@ -147,7 +160,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda position: position.company or (position.addon_to.company if position.addon_to else None),
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_street",
                 _("Attendee address street"),
@@ -155,7 +168,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda position: position.street or (position.addon_to.street if position.addon_to else None),
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_zipcode",
                 _("Attendee address ZIP code"),
@@ -163,7 +176,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda position: position.zipcode or (position.addon_to.zipcode if position.addon_to else None),
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_city",
                 _("Attendee address city"),
@@ -171,7 +184,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda position: position.city or (position.addon_to.city if position.addon_to else None),
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "attendee_country",
                 _("Attendee address country"),
@@ -181,7 +194,7 @@ def get_data_fields(event, for_model=None):
                     position.country or (position.addon_to.attendee_name if position.addon_to else "")
                 ),
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "invoice_address_company",
                 _("Invoice address company"),
@@ -189,7 +202,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: order.invoice_address.company,
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "invoice_address_name",
                 _("Invoice address name"),
@@ -199,7 +212,7 @@ def get_data_fields(event, for_model=None):
             ),
         ]
         + [
-            (
+            DataFieldInfo(
                 ORDER,
                 "invoice_address_name_" + k,
                 _("Invoice address") + ": " + label,
@@ -211,11 +224,12 @@ def get_data_fields(event, for_model=None):
                     ),
                     k,
                 ),
+                deprecated=len(name_scheme["fields"]) == 1,
             )
             for k, label, w in name_scheme["fields"]
         ]
         + [
-            (
+            DataFieldInfo(
                 ORDER,
                 "invoice_address_street",
                 _("Invoice address street"),
@@ -223,7 +237,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: order.invoice_address.street,
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "invoice_address_zipcode",
                 _("Invoice address ZIP code"),
@@ -231,7 +245,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: order.invoice_address.zipcode,
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "invoice_address_city",
                 _("Invoice address city"),
@@ -239,7 +253,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: order.invoice_address.city,
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "invoice_address_country",
                 _("Invoice address country"),
@@ -247,7 +261,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: str(order.invoice_address.country),
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "email",
                 _("Order email"),
@@ -255,7 +269,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: order.email,
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "order_code",
                 _("Order code"),
@@ -263,7 +277,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: order.code,
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "event_order_code",
                 _("Event and order code"),
@@ -271,7 +285,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: order.full_code,
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "order_total",
                 _("Order total"),
@@ -279,7 +293,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: str(order.total),
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "product",
                 _("Product and variation name"),
@@ -290,7 +304,7 @@ def get_data_fields(event, for_model=None):
                     + ((" – " + str(position.variation.value)) if position.variation else "")
                 ),
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "product_id",
                 _("Product ID"),
@@ -298,7 +312,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda position: position.item.pk,
             ),
-            (
+            DataFieldInfo(
                 EVENT,
                 "event_slug",
                 _("Event short form"),
@@ -306,7 +320,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda event: str(event.slug),
             ),
-            (
+            DataFieldInfo(
                 EVENT,
                 "event_name",
                 _("Event name"),
@@ -314,7 +328,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda event: str(event.name),
             ),
-            (
+            DataFieldInfo(
                 EVENT_OR_SUBEVENT,
                 "event_date_from",
                 _("Event start date"),
@@ -322,7 +336,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda event_or_subevent: isoformat_or_none(event_or_subevent.date_from),
             ),
-            (
+            DataFieldInfo(
                 EVENT_OR_SUBEVENT,
                 "event_date_to",
                 _("Event end date"),
@@ -330,7 +344,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda event_or_subevent: isoformat_or_none(event_or_subevent.date_to),
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "voucher_code",
                 _("Voucher code"),
@@ -338,7 +352,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda position: position.voucher.code if position.voucher_id else "",
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "ticket_id",
                 _("Ticket ID"),
@@ -346,7 +360,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda position: position.code,
             ),
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "ticket_price",
                 _("Ticket price"),
@@ -354,7 +368,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda position: str(position.price),
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "order_status",
                 _("Order status"),
@@ -362,7 +376,7 @@ def get_data_fields(event, for_model=None):
                 Order.STATUS_CHOICE,
                 lambda order: [str(order.status)],
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "order_date",
                 _("Order date and time"),
@@ -370,7 +384,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 lambda order: order.datetime.isoformat(),
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "payment_date",
                 _("Payment date and time"),
@@ -378,7 +392,7 @@ def get_data_fields(event, for_model=None):
                 None,
                 get_payment_date,
             ),
-            (
+            DataFieldInfo(
                 ORDER,
                 "order_locale",
                 _("Order locale country code"),
@@ -388,7 +402,7 @@ def get_data_fields(event, for_model=None):
             ),
         ]
         + [
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "checkin_date_" + str(cl.pk),
                 _("Check-in datetime on list {}").format(cl.name),
@@ -399,7 +413,7 @@ def get_data_fields(event, for_model=None):
             for cl in event.checkin_lists.all()
         ]
         + [
-            (
+            DataFieldInfo(
                 ORDER_POSITION,
                 "question_" + q.identifier,
                 _("Question: {name}").format(name=str(q.question)),
@@ -410,12 +424,54 @@ def get_data_fields(event, for_model=None):
             for q in event.questions.all().prefetch_related("options")
         ]
     )
+    if not any(field_name == "given_name" for field_name, label, weight in name_scheme["fields"]):
+        src_fields += [
+            DataFieldInfo(
+                ORDER_POSITION,
+                "attendee_name_given_name",
+                _("Attendee") + ": " + _("Given name") + " (⚠️ auto-generated, not recommended)",
+                Question.TYPE_STRING,
+                None,
+                lambda position: split_name_on_last_space(position.attendee_name, part=0),
+                deprecated=True,
+            ),
+            DataFieldInfo(
+                ORDER,
+                "invoice_address_name_given_name",
+                _("Invoice address") + ": " + _("Given name") + " (⚠️ auto-generated, not recommended)",
+                Question.TYPE_STRING,
+                None,
+                lambda order: split_name_on_last_space(order.invoice_address.name, part=0),
+                deprecated=True,
+            ),
+        ]
+
+    if not any(field_name == "family_name" for field_name, label, weight in name_scheme["fields"]):
+        src_fields += [
+            DataFieldInfo(
+                ORDER_POSITION,
+                "attendee_name_family_name",
+                _("Attendee") + ": " + _("Family name") + " (⚠️ auto-generated, not recommended)",
+                Question.TYPE_STRING,
+                None,
+                lambda position: split_name_on_last_space(position.attendee_name.rsplit, part=1),
+                deprecated=True,
+            ),
+            DataFieldInfo(
+                ORDER,
+                "invoice_address_name_family_name",
+                _("Invoice address") + ": " + _("Family name") + " (⚠️ auto-generated, not recommended)",
+                Question.TYPE_STRING,
+                None,
+                lambda order: split_name_on_last_space(order.invoice_address.name, part=1),
+                deprecated=True,
+            ),
+        ]
+
     if for_model:
         available_inputs = AVAILABLE_MODELS[for_model]
         return [
-            (required_input, key, label, qtype, enum_opts, getter)
-            for required_input, key, label, qtype, enum_opts, getter in src_fields
-            if required_input in available_inputs
+            f for f in src_fields if f.required_input in available_inputs
         ]
     else:
         return src_fields

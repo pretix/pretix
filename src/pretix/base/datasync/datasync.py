@@ -217,8 +217,8 @@ class OutboundSyncProvider:
     @cached_property
     def data_fields(self):
         return {
-            key: (from_model, label, ptype, enum_opts, getter)
-            for (from_model, key, label, ptype, enum_opts, getter) in get_data_fields(self.event)
+            f.key: (f.required_input, f.label, f.type, f.enum_opts, f.getter)
+            for f in get_data_fields(self.event)
         }
 
     def get_field_value(self, inputs, mapping_entry):
