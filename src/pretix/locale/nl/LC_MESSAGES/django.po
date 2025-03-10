@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-02 12:55+0000\n"
-"Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
+"PO-Revision-Date: 2025-03-10 21:00+0000\n"
+"Last-Translator: MaartenUreel <maarten@ureel.be>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3761,7 +3761,7 @@ msgstr ""
 #: pretix/base/modelimport_vouchers.py:306 pretix/base/models/vouchers.py:519
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "U moet het product \"{prod}\" kiezen voor deze stoel."
+msgstr "U dient het product \"{prod}\" te selecteren voor deze zitplaats."
 
 #: pretix/base/modelimport_vouchers.py:318 pretix/base/models/vouchers.py:285
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
@@ -4361,7 +4361,7 @@ msgstr "Evenementenreeks"
 
 #: pretix/base/models/event.py:635 pretix/base/models/event.py:1513
 msgid "Seating plan"
-msgstr "Stoelplattegrond"
+msgstr "Zitplaatsplattegrond"
 
 #: pretix/base/models/event.py:642 pretix/base/models/items.py:675
 msgid "Sell on all sales channels"
@@ -6285,27 +6285,29 @@ msgstr "Btw-tarief"
 #: pretix/base/models/tax.py:171
 msgctxt "tax_code"
 msgid "Services outside of scope of tax"
-msgstr ""
+msgstr "Niet belastbaar"
 
 #: pretix/base/models/tax.py:174
 msgctxt "tax_code"
 msgid "Exempt from tax (no reason given)"
-msgstr ""
+msgstr "Belastingvrij (geen reden opgegeven)"
 
 #: pretix/base/models/tax.py:177
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr ""
+msgstr "Vrijgestelde producten"
 
 #: pretix/base/models/tax.py:180
 msgctxt "tax_code"
 msgid "Free export item, VAT not charged"
-msgstr ""
+msgstr "Vrije uitvoer, geen BTW"
 
 #: pretix/base/models/tax.py:183
 msgctxt "tax_code"
 msgid "VAT exempt for EEA intra-community supply of goods and services"
 msgstr ""
+"BTW vrijgesteld voor EEA intracommunautaire leveringen van goederen en "
+"diensten"
 
 #: pretix/base/models/tax.py:187
 #, fuzzy
@@ -6317,7 +6319,7 @@ msgstr "Sociale functies"
 #: pretix/base/models/tax.py:189
 msgctxt "tax_code"
 msgid "Canary Islands general indirect tax"
-msgstr ""
+msgstr "Canarische Eilanden algemeen belastingtarief"
 
 #: pretix/base/models/tax.py:190
 msgctxt "tax_code"
@@ -7327,7 +7329,7 @@ msgstr "John Doe"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:186
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:189
 msgid "Attendee company"
-msgstr "Bedrijf van gast"
+msgstr "Bedrijf aanwezige"
 
 #: pretix/base/pdf.py:178 pretix/base/pdf.py:336
 #: pretix/base/services/tickets.py:119 pretix/control/views/pdf.py:111
@@ -7736,8 +7738,8 @@ msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
-"We konden uw verzoek niet verwerken omdat de server overbelast was. Probeer "
-"het opnieuw."
+"We konden uw aanvraag niet verwerken omdat de server bezet was. Probeer het "
+"opnieuw."
 
 #: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:260
 msgid "You did not select any products."
@@ -15610,7 +15612,7 @@ msgstr "Het aantal keren dat ELKE van deze vouchers kan worden gebruikt."
 
 #: pretix/control/forms/vouchers.py:347
 msgid "Specific seat IDs"
-msgstr "Specifieke stoelnummers"
+msgstr "Specifieke zitplaatsnummers"
 
 #: pretix/control/forms/vouchers.py:364
 msgid "CSV input needs to contain a header row in the first line."
@@ -31830,7 +31832,7 @@ msgstr "Alternatief tickets"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr "Ticketlay-out"
+msgstr "Ticket lay-out"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
