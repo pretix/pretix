@@ -44,6 +44,10 @@ $(function () {
                             );
                         }
 
+                        if ('label' in options) {
+                            dependent.closest(".form-group").find(".control-label").text(options.label);
+                        }
+
                         const required = 'required' in options && options.required && isRequired && visible;
                         dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
                         dependent.prop("required", required);
