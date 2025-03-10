@@ -507,11 +507,12 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         elif request.GET.get('iframe', '') == '1' and (
                 'take_cart_id' in request.GET or len(self.request.GET.get('widget_data', '{}')) > 3
         ):
-            # Widget just opened, a cart already exists or we have been passed widget_data.
+            # Widget just opened, and a cart already exists or we have been passed widget_data.
             # Let's do a stupid redirect to check if cookies are disabled.
             return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode({
                 'require_cookie': 'true',
-                'cart_id': get_or_create_cart_id(request, cache_widget_data=True),
+                'cart_id': get_or_create_cart_id(request),
+                **({"widget_data": request.GET.get('widget_data')} if len(self.request.GET.get('widget_data', '{}')) > 3 else {}),
                 **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
                 **utm_params,
             }))
@@ -528,6 +529,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     "src": "widget",
                     **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
                     **({"take_cart_id": request.GET.get('cart_id')} if request.GET.get('cart_id') else {}),
+                    **({"widget_data": request.GET.get('widget_data')} if len(self.request.GET.get('widget_data', '{}')) > 3 else {}),
                     **utm_params,
                 })
             })

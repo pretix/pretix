@@ -307,7 +307,7 @@ def create_empty_cart_id(request, replace_current=True):
     return new_id
 
 
-def get_or_create_cart_id(request, create=True, cache_widget_data=False):
+def get_or_create_cart_id(request, create=True):
     """
     This method returns the cart ID in use for this request or creates a new cart ID if required.
 
@@ -404,9 +404,6 @@ def get_or_create_cart_id(request, create=True, cache_widget_data=False):
             cart_data['widget_data'] = json.loads(request.GET.get('widget_data'))
         except ValueError:
             pass
-        else:
-            if cache_widget_data:
-                widget_data_cache.set('widget_data_{}'.format(new_id), cart_data['widget_data'], 600)
 
     if 'carts' not in request.session:
         request.session['carts'] = {}
