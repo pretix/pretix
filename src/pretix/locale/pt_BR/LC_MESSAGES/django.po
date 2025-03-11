@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-10 21:00+0000\n"
+"PO-Revision-Date: 2025-03-11 07:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -22574,7 +22574,7 @@ msgstr "Tipo de canal"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:5
 msgid "Delete sales channel:"
-msgstr "Excluir canal de vendas"
+msgstr "Excluir canal de vendas:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:10
 msgid "Are you sure you want to delete this sales channel?"
@@ -25857,13 +25857,13 @@ msgstr ""
 
 #: pretix/control/views/oauth.py:169
 msgid "Access for the selected application has been revoked."
-msgstr ""
+msgstr "Acesso à aplicação selecionada foi revogado."
 
 #: pretix/control/views/orders.py:244
 #, python-brace-format
 msgid ""
 "Successfully executed the action \"{label}\" on {success} of {total} orders."
-msgstr ""
+msgstr "Ação \"{label}\" executada com sucesso em {success} de {total} pedidos."
 
 #: pretix/control/views/orders.py:535
 msgid "Your invoice"
@@ -25886,7 +25886,17 @@ msgid_plural ""
 "\n"
 "Your {event} team"
 msgstr[0] ""
+"Olá,\n"
+"\n"
+"Sua fatura encontra-se anexada a este email.\n"
+"\n"
+"Organização {event}"
 msgstr[1] ""
+"Olá,\n"
+"\n"
+"Suas faturas encontram-se anexadas a este email.\n"
+"\n"
+"Organização {event}"
 
 #: pretix/control/views/orders.py:673 pretix/plugins/banktransfer/views.py:901
 #: pretix/presale/views/order.py:158 pretix/presale/views/order.py:240
@@ -25915,10 +25925,12 @@ msgid ""
 "The order could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
+"O pedido não pode ser excluído pois algumas restrições (e.g. dados criados "
+"por plugins) não permitem."
 
 #: pretix/control/views/orders.py:811
 msgid "Only orders created in test mode can be deleted."
-msgstr ""
+msgstr "Apenas pedidos criados em modo de teste podem ser excluídos."
 
 #: pretix/control/views/orders.py:832
 msgid "The order has been denied and is therefore now canceled."
@@ -26000,28 +26012,36 @@ msgid ""
 "time. Please have a look at the order details and check if your refund is "
 "still necessary."
 msgstr ""
+"Já existe um reembolso sendo processado ao mesmo tempo. Por favor, acesse os "
+"detalhes do pedido e verifique se o seu reembolso ainda é necessário."
 
 #: pretix/control/views/orders.py:1248
 msgid "You entered an order in an event with a different currency."
-msgstr ""
+msgstr "Você inseriu um pedido em um evento com uma moeda diferente."
 
 #: pretix/control/views/orders.py:1299
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
 msgstr ""
+"Você não pode reembolsar mais do que o valor de um pagamento que ainda não "
+"foi reembolsado."
 
 #: pretix/control/views/orders.py:1304
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
 msgstr ""
+"Você selecionou um reembolso parcial para uma forma de pagamento que suporta "
+"apenas reembolsos totais."
 
 #: pretix/control/views/orders.py:1334
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
 msgstr ""
+"Um dos reembolsos não foi processado. Você deve tentar reembolsar novamente "
+"de uma maneira diferente. A mensagem de erro foi: {}"
 
 #: pretix/control/views/orders.py:1340
 msgid "A refund of {} has been processed."
@@ -26032,6 +26052,8 @@ msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
+"Um reembolso de {} foi salvo, mas ainda não totalmente executado. Você pode "
+"marcá-lo como concluído abaixo."
 
 #: pretix/control/views/orders.py:1373
 msgid ""
@@ -26055,16 +26077,28 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Olá,\n"
+"\n"
+"O valor de {amount} foi reembolsado pelo seu pedido.\n"
+"\n"
+"Você pode usar o código de cartão-presente {giftcard} para pagar compras de "
+"ingressos futuras em nossa loja.\n"
+"\n"
+"Organização {event}"
 
 #: pretix/control/views/orders.py:1394
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr ""
+"Os reembolsos selecionados não correspondem ao valor total do reembolso "
+"selecionado."
 
 #: pretix/control/views/orders.py:1522
 msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
 msgstr ""
+"O pedido foi marcado como pago, mas não foi possível enviar um e-mail de "
+"confirmação."
 
 #: pretix/control/views/orders.py:1525
 msgid "The payment has been created successfully."
@@ -26075,6 +26109,8 @@ msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
 msgstr ""
+"O pedido foi cancelado. Agora você pode selecionar como deseja transferir o "
+"dinheiro de volta para o usuário."
 
 #: pretix/control/views/orders.py:1610 pretix/control/views/orders.py:1614
 msgid "No VAT ID specified."
@@ -30278,10 +30314,8 @@ msgid "Enter the entity number, reference number, and amount."
 msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:25
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Entity number:"
-msgstr "Número do pedido"
+msgstr "Número da entidade:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
 msgid "Reference number:"
