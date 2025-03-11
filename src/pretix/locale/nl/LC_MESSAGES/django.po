@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-10 21:00+0000\n"
+"PO-Revision-Date: 2025-03-11 15:09+0000\n"
 "Last-Translator: MaartenUreel <maarten@ureel.be>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -6329,16 +6329,18 @@ msgstr ""
 #: pretix/base/models/tax.py:191
 msgctxt "tax_code"
 msgid "Transferred (VAT), only in Italy"
-msgstr ""
+msgstr "Overgedragen (BTW), enkel in Italië"
 
 #: pretix/base/models/tax.py:195
 msgid "Exempt with specific reason"
-msgstr ""
+msgstr "Uitgesloten met specifieke reden"
 
 #: pretix/base/models/tax.py:198
 msgctxt "tax_code"
 msgid "Exempt based on article 79, point c of Council Directive 2006/112/EC"
 msgstr ""
+"Uitgesloten onder artikel 79, punt c van de richtlijn 2006/112/EG van de "
+"Raad van de EU"
 
 #: pretix/base/models/tax.py:205 pretix/base/models/tax.py:218
 #: pretix/base/models/tax.py:244
@@ -6348,6 +6350,8 @@ msgid ""
 "Exempt based on article {article}, section {section} ({letter}) of Council "
 "Directive 2006/112/EC"
 msgstr ""
+"Uitgesloten op basis van artikel {article}, paragraaf {section} ({letter}) "
+"van de richtlijn 2006/112/EC van de Raad van de EU"
 
 #: pretix/base/models/tax.py:231
 #, python-brace-format
@@ -6356,11 +6360,15 @@ msgid ""
 "Exempt based on article {article}, section ({letter}) of Council Directive "
 "2006/112/EC"
 msgstr ""
+"Uitgesloten op basis van artikel {article}, paragraaf {letter} van de "
+"richtlijn 2006/112/EC van de Raad van de EU"
 
 #: pretix/base/models/tax.py:252
 msgctxt "tax_code"
 msgid "Exempt based on article 309 of Council Directive 2006/112/EC"
 msgstr ""
+"Uitgesloten op basis van artikel 309 van de richtlijn 2006/112/EC van de "
+"Raad van de EU"
 
 #: pretix/base/models/tax.py:254
 msgctxt "tax_code"
