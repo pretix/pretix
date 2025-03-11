@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-11 07:00+0000\n"
+"PO-Revision-Date: 2025-03-11 15:09+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -245,8 +245,9 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"Os eventos não podem ser criados como 'ao vivo'. As quotas e o pagamento "
-"devem ser adicionados ao evento antes que as vendas possam ser lançadas."
+"Os eventos não podem ser criados como 'ativo'. As cotas e métodos de "
+"pagamento devem ser adicionados ao evento antes que as vendas possam ser "
+"iniciadas."
 
 #: pretix/api/serializers/event.py:246 pretix/api/serializers/event.py:551
 #, python-brace-format
@@ -3700,7 +3701,7 @@ msgstr "Orçamento de desconto máximo"
 #: pretix/base/modelimport_vouchers.py:119 pretix/base/models/vouchers.py:225
 #: pretix/control/forms/filter.py:2106
 msgid "Reserve ticket from quota"
-msgstr "Reservar ingressos da quota"
+msgstr "Reservar ingresso da cota"
 
 #: pretix/base/modelimport_vouchers.py:127 pretix/base/models/vouchers.py:233
 msgid "Allow to bypass quota"
@@ -6487,7 +6488,7 @@ msgstr "Sem efeito"
 
 #: pretix/base/models/vouchers.py:172
 msgid "Set product price to"
-msgstr "Defina o preço do produto como"
+msgstr "Definir preço do produto para"
 
 #: pretix/base/models/vouchers.py:173
 msgid "Subtract from product price"
@@ -6495,7 +6496,7 @@ msgstr "Subtrair do preço do produto"
 
 #: pretix/base/models/vouchers.py:174
 msgid "Reduce product price by (%)"
-msgstr "Reduza o preço do produto em (%)"
+msgstr "Reduzir preço do produto em (%)"
 
 #: pretix/base/models/vouchers.py:197
 msgid "Number of times this voucher can be redeemed."
@@ -21550,10 +21551,9 @@ msgid "Voucher code used:"
 msgstr "Código de cupom utilizado:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:424
-#, fuzzy, python-format
-#| msgid "Maximum amount per order"
+#, python-format
 msgid "Used %(amount)s discount from budget"
-msgstr "Quantidade máxima por pedido"
+msgstr "Desconto de %(amount)s usado do orçamento"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:445
 msgid ""
@@ -24222,7 +24222,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "You can change this option in the product settings."
-msgstr "Você pode alterar esta opção nas configurações do produto"
+msgstr "Você pode alterar esta opção nas configurações do produto."
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:11
 msgid "You haven't created any dates for this event series yet."
@@ -26895,11 +26895,8 @@ msgid "Known domains"
 msgstr "Domínios conhecidos"
 
 #: pretix/plugins/autocheckin/apps.py:30 pretix/plugins/autocheckin/apps.py:33
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Automated check-in"
-msgstr "Nenhuma data selecionada."
+msgstr "Check-in automatizado"
 
 #: pretix/plugins/autocheckin/apps.py:34 pretix/plugins/badges/apps.py:34
 #: pretix/plugins/banktransfer/apps.py:35
@@ -26980,11 +26977,8 @@ msgstr "Uma regra de check-in automático foi excluída"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Create auto check-in rule"
-msgstr "Nenhuma data selecionada."
+msgstr "Criar regra de check-in automático"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
@@ -28393,7 +28387,7 @@ msgstr "Resposta inválida do PayPal recebida."
 
 #: pretix/plugins/paypal/views.py:123 pretix/plugins/paypal2/views.py:340
 msgid "It looks like you canceled the PayPal payment"
-msgstr "Parece que você cancelou o pagamento ao PayPal."
+msgstr "Parece que você cancelou o pagamento ao PayPal"
 
 #: pretix/plugins/paypal/views.py:255 pretix/plugins/paypal2/views.py:531
 msgid "Your PayPal account has been disconnected."
@@ -30319,7 +30313,7 @@ msgstr "Número da entidade:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:26
 msgid "Reference number:"
-msgstr "Número de referêncua"
+msgstr "Número de referência:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:35
 msgid ""
@@ -30453,10 +30447,9 @@ msgid "Ticket layout changed."
 msgstr "O slug do evento não pode ser alterado."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:143
-#, fuzzy, python-brace-format
-#| msgid "Default timezone"
+#, python-brace-format
 msgid "Ticket layout {val}"
-msgstr "Fuso-horário padrão"
+msgstr "Modelo de ingresso {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/control_order_position_buttons.html:7
 msgid "Alternative ticket"
@@ -30478,10 +30471,9 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
-#, fuzzy, python-format
-#| msgid "Device name"
+#, python-format
 msgid "Ticket layout: %(name)s"
-msgstr "Nome do dispositivo"
+msgstr "Modelo de ingresso: %(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
@@ -30561,22 +30553,16 @@ msgid "Ticket PDF layout: {}"
 msgstr ""
 
 #: pretix/plugins/webcheckin/apps.py:30 pretix/plugins/webcheckin/apps.py:33
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Web-based check-in"
-msgstr "Nenhuma data selecionada."
+msgstr "Check-in na web"
 
 #: pretix/plugins/webcheckin/apps.py:38
 msgid "Turn your browser into a check-in device to perform access control."
 msgstr ""
 
 #: pretix/plugins/webcheckin/signals.py:36
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Web Check-in"
-msgstr "Nenhuma data selecionada."
+msgstr "Check-in na Web"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
 msgid "Check-in"
@@ -32018,11 +32004,9 @@ msgstr "Mostrar imagem em tamanho real de %(item)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:344
 #: pretix/presale/templates/pretixpresale/event/voucher.html:204
 #: pretix/presale/templates/pretixpresale/event/voucher.html:359
-#, fuzzy, python-format
-#| msgctxt "invoice"
-#| msgid "Included taxes"
+#, python-format
 msgid "%(value)s incl. taxes"
-msgstr "Taxas incluídas"
+msgstr "%(value)s de taxas incluídas"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:197
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:350
@@ -33450,7 +33434,7 @@ msgstr "Você não pode modificar esta ordem"
 #: pretix/presale/views/order.py:1008 pretix/presale/views/order.py:1013
 #: pretix/presale/views/order.py:1018
 msgid "You chose an invalid cancellation fee."
-msgstr "Você escolheu uma taxa inválida de cancelamento"
+msgstr "Você escolheu uma taxa de cancelamento inválida."
 
 #: pretix/presale/views/order.py:1034
 msgid "Canceled by customer"
