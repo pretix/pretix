@@ -736,6 +736,9 @@ var shared_methods = {
             } else {
                 url = url + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
             }
+            if (this.$root.widget_data) {
+                url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+            }
             url += this.$root.consent_parameter;
             if (this.$root.additionalURLParams) {
                 url += '&' + this.$root.additionalURLParams;
