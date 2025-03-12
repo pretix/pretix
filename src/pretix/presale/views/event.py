@@ -500,33 +500,37 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         self.subevent = None
         utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_")}
+        pass_through_url_params = utm_params | \
+            {k: v for k, v in request.GET.items() if k in ("locale", "consent")} | \
+            ({"widget_data": request.GET.get('widget_data')} if len(self.request.GET.get('widget_data', '{}')) > 3 else {})
+
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
             get_or_create_cart_id(request)
             return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode(utm_params))
-        elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
-            # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
-            get_or_create_cart_id(request)
+        elif request.GET.get('iframe', '') == '1' and (
+                'take_cart_id' in request.GET or len(self.request.GET.get('widget_data', '{}')) > 3 or 'consent' in request.GET
+        ):
+            # Widget just opened, and a cart already exists or we have been passed widget_data.
+            # Let's do a stupid redirect to check if cookies are disabled.
             return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode({
                 'require_cookie': 'true',
-                'cart_id': request.GET.get('take_cart_id'),
-                **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
-                **utm_params,
+                'cart_id': get_or_create_cart_id(request),
+                **pass_through_url_params,
             }))
-        elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
-            # We've been passed data from a widget, we need to create a cart session to store it.
-            get_or_create_cart_id(request)
         elif 'require_cookie' in request.GET and settings.SESSION_COOKIE_NAME not in request.COOKIES and \
                 '__Host-' + settings.SESSION_COOKIE_NAME not in self.request.COOKIES:
             # Cookies are in fact not supported
             r = render(request, 'pretixpresale/event/cookies.html', {
                 'url': eventreverse(
-                    request.event, "presale:event.index", kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''}
+                    request.event, "presale:event.index", kwargs={
+                        'cart_namespace': kwargs.get('cart_namespace') or '',
+                        **({"subevent": kwargs['subevent']} if kwargs.get('subevent') else {}),
+                    }
                 ) + "?" + urlencode({
                     "src": "widget",
-                    **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
                     **({"take_cart_id": request.GET.get('cart_id')} if request.GET.get('cart_id') else {}),
-                    **utm_params,
+                    **pass_through_url_params,
                 })
             })
             r._csp_ignore = True
