@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-05 15:00+0000\n"
+"PO-Revision-Date: 2025-03-12 07:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -573,23 +573,23 @@ msgstr "대기자명단 항목이 변경되었습니다."
 
 #: pretix/api/webhooks.py:378
 msgid "Waiting list entry deleted"
-msgstr ""
+msgstr "대기자 명단 항목 삭제"
 
 #: pretix/api/webhooks.py:382
 msgid "Waiting list entry received voucher"
-msgstr ""
+msgstr "대기자 명단 항목이 바우처를 받았습니다"
 
 #: pretix/api/webhooks.py:386
 msgid "Customer account created"
-msgstr ""
+msgstr "고객계정 생성"
 
 #: pretix/api/webhooks.py:390
 msgid "Customer account changed"
-msgstr ""
+msgstr "고객계정이 변경되었습니다"
 
 #: pretix/api/webhooks.py:394
 msgid "Customer account anonymized"
-msgstr ""
+msgstr "고객 계정 익명화되었습니다"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:960
@@ -602,20 +602,20 @@ msgstr ""
 #: pretix/plugins/banktransfer/payment.py:679
 #: pretix/presale/forms/customer.py:140
 msgid "This field is required."
-msgstr ""
+msgstr "이 필드는 필수입니다."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "우편번호를 XXX 형식으로 입력합니다."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "우편번호를 XXXX 형식으로 입력합니다."
 
 #: pretix/base/auth.py:146
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{시스템} 사용자"
 
 #: pretix/base/auth.py:155 pretix/base/exporters/customers.py:67
 #: pretix/base/exporters/orderlist.py:261
@@ -640,91 +640,95 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:30
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 msgid "Email"
-msgstr ""
+msgstr "이메일"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:672
 #: pretix/base/models/customers.py:96 pretix/control/forms/mailsetup.py:55
 #: pretix/presale/forms/customer.py:60 pretix/presale/forms/customer.py:290
 msgid "Password"
-msgstr ""
+msgstr "비밀번호"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "비밀번호는 숫자와 알파벳 문자가 모두 포함되어야 합니다"
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, python-format
+#, fuzzy, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
 msgstr[0] ""
+"비밀번호가 이전 비밀번호와 동일하지 않을 수 있습니다.\n"
+"귀하의 비밀번호는 %(history_length) 이전 비밀번호와 동일하지 않을 수 "
+"있습니다."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
-msgstr ""
+msgstr "온라인 상점"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "결제 시스템(애플리케이션 프로그램 인터페이스)"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
-msgstr ""
+msgstr "결제 시스템 판매 채널에는 내장된 기능이 없지만 사용자 지정 통합에 사용할 수 "
+"있습니다."
 
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr ""
+msgstr "{a_attr}>pretix</a>를 기반으로 {name}에 의해  작동합니다"
 
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "pretix</a>로 작동되는 <%(a_attr)s> 티켓팅"
 
 #: pretix/base/context.py:61
 msgid "source code"
-msgstr ""
+msgstr "소스코드"
 
 #: pretix/base/customersso/oidc.py:61
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "설정 옵션 \"{name}\"이(가) 없습니다."
 
 #: pretix/base/customersso/oidc.py:69 pretix/base/customersso/oidc.py:74
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
-msgstr ""
+msgstr "\"{url}\"에서 설정을 검색할 수 없습니다. 오류 메시지: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:80 pretix/base/customersso/oidc.py:85
 #: pretix/base/customersso/oidc.py:90 pretix/base/customersso/oidc.py:95
 #: pretix/base/customersso/oidc.py:100 pretix/base/customersso/oidc.py:105
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "호환되지 않는 단일 로그인(Single Sign On) 제공자: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:111
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr ""
+msgstr "요청에 \"범위\"가 포함되지 않았습니다."
 
 #: pretix/base/customersso/oidc.py:117
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
-msgstr ""
+msgstr "요청한 범위 \"{scope}\"가 있지만 제공자는 다음 {scope} 만 지원합니다"
 
 #: pretix/base/customersso/oidc.py:127
 #, python-brace-format
 msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
-msgstr ""
+msgstr "필드 \"{field}\"를 요청하고 있지만 제공자는 이것만 지원합니다: {fields}"
 
 #: pretix/base/customersso/oidc.py:219 pretix/base/customersso/oidc.py:226
 #: pretix/base/customersso/oidc.py:245 pretix/base/customersso/oidc.py:262
@@ -733,13 +737,14 @@ msgstr ""
 #: pretix/presale/views/customer.py:866
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "로그인에 실패했습니다. 오류 메시지: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:252
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
-msgstr ""
+msgstr "이 계정의 이메일 주소가 아직 확인되지 않았습니다. 먼저 고객 계정의 이메일 "
+"주소를 확인해 주십시요."
 
 #: pretix/base/email.py:203 pretix/base/exporters/items.py:157
 #: pretix/base/exporters/items.py:205 pretix/control/views/main.py:322
@@ -750,39 +755,39 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "기본 설정"
 
 #: pretix/base/email.py:210
 msgid "Simple with logo"
-msgstr ""
+msgstr "로고가 있는  깔끔한 디자인"
 
 #: pretix/base/exporter.py:187 pretix/base/exporter.py:320
 msgid "Export format"
-msgstr ""
+msgstr "내보내기 형식"
 
 #: pretix/base/exporter.py:189
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "엑셀(.xlsx)"
 
 #: pretix/base/exporter.py:190 pretix/base/exporter.py:312
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "콤마로 구분된 값 형식"
 
 #: pretix/base/exporter.py:191 pretix/base/exporter.py:313
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "엑셀 스타일의 CVS파일"
 
 #: pretix/base/exporter.py:192 pretix/base/exporter.py:314
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "세미콜론으로 구분된 CSV파일"
 
 #: pretix/base/exporter.py:308
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "복합 엑셀 (.xlsx)"
 
 #: pretix/base/exporters/answers.py:54
 msgid "Question answer file uploads"
-msgstr ""
+msgstr "질문과 답변 (Q&A) 파일 업로드"
 
 #: pretix/base/exporters/answers.py:55 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:87
@@ -793,20 +798,21 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:651
 msgctxt "export_category"
 msgid "Order data"
-msgstr ""
+msgstr "주문 데이터"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
-msgstr ""
+msgstr "주문을 작성할 때 고객이 업로드한 모든 파일을 포함한 ZIP 파일을 "
+"다운로드하세요."
 
 #: pretix/base/exporters/answers.py:66 pretix/base/models/items.py:1766
 #: pretix/control/navigation.py:172
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "질문들"
 
 #: pretix/base/exporters/answers.py:76 pretix/base/exporters/orderlist.py:583
 #: pretix/base/exporters/orderlist.py:898
@@ -840,7 +846,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html:20
 msgctxt "subevent"
 msgid "Date"
-msgstr ""
+msgstr "날짜"
 
 #: pretix/base/exporters/answers.py:79 pretix/base/exporters/answers.py:88
 #: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1607
@@ -858,21 +864,21 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:351
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "모든 날짜"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:606
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
 msgid "Customer accounts"
-msgstr ""
+msgstr "고객 계정"
 
 #: pretix/base/exporters/customers.py:51
 msgctxt "export_category"
 msgid "Customer accounts"
-msgstr ""
+msgstr "고객 계정"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
-msgstr ""
+msgstr "현재 등록된 모든 고객 계정의 스프레드시트를 다운로드합니다."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:82
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:29
@@ -880,19 +886,19 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:36
 #: pretix/presale/templates/pretixpresale/organizers/customer_base.html:37
 msgid "Customer ID"
-msgstr ""
+msgstr "고객 아이디"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:32
 msgid "SSO provider"
-msgstr ""
+msgstr "단일 로그인 제공자"
 
 #: pretix/base/exporters/customers.py:66 pretix/base/models/customers.py:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:36
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:49
 msgid "External identifier"
-msgstr ""
+msgstr "외부 식별자(외부 서비스 이용자)"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:445
@@ -910,14 +916,14 @@ msgstr ""
 #: pretix/presale/forms/waitinglist.py:78
 #: pretix/presale/templates/pretixpresale/event/order.html:303
 msgid "Phone number"
-msgstr ""
+msgstr "전화번호"
 
 #: pretix/base/exporters/customers.py:69 pretix/base/models/auth.py:246
 #: pretix/base/models/customers.py:97 pretix/base/models/orders.py:3263
 #: pretix/base/settings.py:3599 pretix/base/settings.py:3611
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Full name"
-msgstr ""
+msgstr "성명"
 
 #: pretix/base/exporters/customers.py:74 pretix/base/exporters/invoices.py:206
 #: pretix/base/exporters/invoices.py:214 pretix/base/exporters/invoices.py:332
@@ -961,25 +967,25 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:34
 #: pretix/presale/templates/pretixpresale/event/order.html:311
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:99
 msgid "Account active"
-msgstr ""
+msgstr "계정 활동"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:100
 msgid "Verified email address"
-msgstr ""
+msgstr "확인된 이메일 주소"
 
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:68
 msgid "Last login"
-msgstr ""
+msgstr "마지막 로그인"
 
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:102
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:66
 msgid "Registration date"
-msgstr ""
+msgstr "등록 날짜"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
@@ -987,7 +993,7 @@ msgstr ""
 #: pretix/control/forms/event.py:1612 pretix/control/forms/exports.py:49
 #: pretix/control/forms/exports.py:88 pretix/control/views/waitinglist.py:315
 msgid "Language"
-msgstr ""
+msgstr "언어"
 
 #: pretix/base/exporters/customers.py:82
 #: pretix/base/exporters/reusablemedia.py:53
@@ -995,7 +1001,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:72
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:68
 msgid "Notes"
-msgstr ""
+msgstr "메모"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -1035,7 +1041,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:815
 #: pretix/plugins/checkinlists/exporters.py:816
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -1058,23 +1064,23 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:815
 #: pretix/plugins/checkinlists/exporters.py:816
 msgid "No"
-msgstr ""
+msgstr "아니오"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
 msgctxt "export_category"
 msgid "Invoices"
-msgstr ""
+msgstr "송장"
 
 #: pretix/base/exporters/dekodi.py:43
 msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
-msgstr ""
+msgstr "표준화된 송장 데이터 포맷에서 사용할 수 있는 형식으로 송장을 다운로드합니다."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "이벤트 티켓 {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:74
 #: pretix/base/exporters/orderlist.py:128
@@ -1087,28 +1093,29 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:698
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
 msgid "Date range"
-msgstr ""
+msgstr "날짜 범위"
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
-msgstr ""
+msgstr "이 기간 동안 발행된 송장만 포함합니다. 송장 날짜가 항상 주문 또는 결제 "
+"날짜와 일치하는 것은 아닙니다."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
-msgstr ""
+msgstr "이벤트 자료"
 
 #: pretix/base/exporters/events.py:48
 msgctxt "export_category"
 msgid "Event data"
-msgstr ""
+msgstr "이벤트 자료"
 
 #: pretix/base/exporters/events.py:49
 msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
-msgstr ""
+msgstr "주최자 계정의 모든 이벤트에 대한 정보가 포함된 스프레드시트를 다운로드하세요."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:441
@@ -1120,78 +1127,78 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:68
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 msgid "Event name"
-msgstr ""
+msgstr "이벤트 이름"
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:575
 #: pretix/base/models/organizer.py:91
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr ""
+msgstr "짧은 형식"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:577
 msgid "Shop is live"
-msgstr ""
+msgstr "상점이 운영중입니다"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:579
 msgid "Event currency"
-msgstr ""
+msgstr "이벤트 화폐(통화)"
 
 #: pretix/base/exporters/events.py:61 pretix/base/models/auth.py:261
 #: pretix/base/models/exports.py:133 pretix/control/forms/exports.py:93
 msgid "Timezone"
-msgstr ""
+msgstr "시간대"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:582
 #: pretix/base/models/event.py:1471 pretix/base/settings.py:3224
 #: pretix/base/settings.py:3234 pretix/control/forms/subevents.py:480
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
-msgstr ""
+msgstr "이벤트 시작시간"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:584
 #: pretix/base/models/event.py:1473 pretix/base/pdf.py:286
 #: pretix/control/forms/subevents.py:485
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
-msgstr ""
+msgstr "이벤트 마감시간"
 
 #: pretix/base/exporters/events.py:64 pretix/base/models/event.py:586
 #: pretix/base/models/event.py:1475 pretix/control/forms/subevents.py:490
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr ""
+msgstr "입장 시간"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:598
 #: pretix/base/models/event.py:1484 pretix/control/forms/subevents.py:93
 msgid "Start of presale"
-msgstr ""
+msgstr "사전 판매 시작"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:592
 #: pretix/base/models/event.py:1478 pretix/control/forms/subevents.py:99
 msgid "End of presale"
-msgstr ""
+msgstr "사전 판매 마감"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:351
 #: pretix/base/models/event.py:604 pretix/base/models/event.py:1490
 msgid "Location"
-msgstr ""
+msgstr "장소"
 
 #: pretix/base/exporters/events.py:68 pretix/base/models/event.py:607
 #: pretix/base/models/event.py:1493
 msgid "Latitude"
-msgstr ""
+msgstr "위도"
 
 #: pretix/base/exporters/events.py:69 pretix/base/models/event.py:615
 #: pretix/base/models/event.py:1501
 msgid "Longitude"
-msgstr ""
+msgstr "경도"
 
 #: pretix/base/exporters/events.py:70 pretix/base/models/event.py:627
 #: pretix/base/models/event.py:1516
 #: pretix/control/templates/pretixcontrol/event/index.html:128
 #: pretix/control/templates/pretixcontrol/order/index.html:997
 msgid "Internal comment"
-msgstr ""
+msgstr "내부 의견"
 
 #: pretix/base/exporters/invoices.py:82 pretix/base/models/orders.py:1751
 #: pretix/base/models/orders.py:2160 pretix/control/forms/filter.py:204
@@ -1206,13 +1213,13 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
-msgstr ""
+msgstr "결제 제공자"
 
 #: pretix/base/exporters/invoices.py:84 pretix/base/exporters/invoices.py:86
 #: pretix/control/forms/filter.py:206 pretix/control/forms/filter.py:1020
 #: pretix/control/forms/filter.py:2284
 msgid "All payment providers"
-msgstr ""
+msgstr "총 지불 제공자"
 
 #: pretix/base/exporters/invoices.py:92
 msgid ""
@@ -1220,18 +1227,21 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
+"이 결제 제공업체와 최소 한 번 이상 결제를 시도한 주문에 대한 송장만 "
+"포함됩니다. 여기에는 다른 제공업체와 함께 완전히 또는 부분적으로 결제된 일부 "
+"주문 송장도 포함될 수 있습니다."
 
 #: pretix/base/exporters/invoices.py:126
 msgid "All invoices"
-msgstr ""
+msgstr "모든 송장"
 
 #: pretix/base/exporters/invoices.py:127
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
-msgstr ""
+msgstr "시스템에서 생성된 모든 송장을 PDF 파일의 ZIP 파일로 다운로드합니다."
 
 #: pretix/base/exporters/invoices.py:178
 msgid "Invoice data"
-msgstr ""
+msgstr "송장 자료"
 
 #: pretix/base/exporters/invoices.py:179
 msgid ""
@@ -1239,6 +1249,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"시스템에서 생성한 모든 송장의 데이터가 포함된 스프레드시트를 다운로드합니다. "
+"스프레드시트에는 모든 송장에 대해 한 줄이 있는 스프레드시트와 모든 송장의 "
+"모든 위치에 대해 한 줄이 있는 스프레드시트 두 장이 포함되어 있습니다."
 
 #: pretix/base/exporters/invoices.py:191 pretix/base/shredder.py:576
 #: pretix/control/templates/pretixcontrol/order/index.html:267
@@ -1247,15 +1260,15 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:235
 #: pretix/presale/templates/pretixpresale/event/order.html:256
 msgid "Invoices"
-msgstr ""
+msgstr "송장"
 
 #: pretix/base/exporters/invoices.py:192
 msgid "Invoice lines"
-msgstr ""
+msgstr "송장 라인"
 
 #: pretix/base/exporters/invoices.py:199 pretix/base/exporters/invoices.py:318
 msgid "Invoice number"
-msgstr ""
+msgstr "송장 번호"
 
 #: pretix/base/exporters/invoices.py:200 pretix/base/exporters/invoices.py:327
 #: pretix/base/exporters/orderlist.py:1214
@@ -1270,7 +1283,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:750
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:6
 msgid "Date"
-msgstr ""
+msgstr "날짜"
 
 #: pretix/base/exporters/invoices.py:201 pretix/base/exporters/invoices.py:328
 #: pretix/base/exporters/orderlist.py:261
@@ -1297,7 +1310,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:884
 #: pretix/plugins/ticketoutputpdf/exporters.py:96
 msgid "Order code"
-msgstr ""
+msgstr "주문 번호"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/forms/auth.py:160 pretix/base/modelimport_orders.py:59
@@ -1307,15 +1320,15 @@ msgstr ""
 #: pretix/control/views/waitinglist.py:314
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:134
 msgid "Email address"
-msgstr ""
+msgstr "이메일 주소"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
-msgstr ""
+msgstr "송장 형태"
 
 #: pretix/base/exporters/invoices.py:204 pretix/base/exporters/invoices.py:331
 msgid "Cancellation of"
-msgstr ""
+msgstr "취소"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:207
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:209
@@ -1325,7 +1338,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:336
 #: pretix/base/exporters/invoices.py:337 pretix/base/exporters/invoices.py:338
 msgid "Invoice sender:"
-msgstr ""
+msgstr "송장  발송인"
 
 #: pretix/base/exporters/invoices.py:207 pretix/base/exporters/invoices.py:333
 #: pretix/base/exporters/orderlist.py:269
@@ -1341,7 +1354,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:88
 #: pretix/presale/templates/pretixpresale/event/order.html:315
 msgid "Address"
-msgstr ""
+msgstr "주소"
 
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:216
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:342
@@ -1356,7 +1369,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:533
 #: pretix/plugins/reports/exporters.py:841
 msgid "ZIP code"
-msgstr ""
+msgstr "우편번호"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -1371,7 +1384,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:534
 #: pretix/plugins/reports/exporters.py:842
 msgid "City"
-msgstr ""
+msgstr "도시"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -1392,11 +1405,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:92
 #: pretix/presale/templates/pretixpresale/event/order.html:319
 msgid "Country"
-msgstr ""
+msgstr "국가"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
 msgid "Tax ID"
-msgstr ""
+msgstr "납세자 식별 번호"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
@@ -1410,7 +1423,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid "VAT ID"
-msgstr ""
+msgstr "부가가치세 식별 번호"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:216
@@ -1423,7 +1436,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:345 pretix/base/exporters/invoices.py:346
 #: pretix/base/exporters/invoices.py:347 pretix/base/exporters/invoices.py:348
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "송장 수취인"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:339
 #: pretix/base/exporters/orderlist.py:262
@@ -1440,11 +1453,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
 #: pretix/presale/templates/pretixpresale/event/order.html:307
 msgid "Company"
-msgstr ""
+msgstr "회사"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
 msgid "Street address"
-msgstr ""
+msgstr "도로명"
 
 #: pretix/base/exporters/invoices.py:219 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/orderlist.py:269
@@ -1460,45 +1473,45 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:322
 msgctxt "address"
 msgid "State"
-msgstr ""
+msgstr "지역"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
 #: pretix/base/models/orders.py:3281 pretix/base/models/orders.py:3316
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:103
 msgid "Beneficiary"
-msgstr ""
+msgstr "수혜자"
 
 #: pretix/base/exporters/invoices.py:222 pretix/base/exporters/invoices.py:348
 #: pretix/base/modelimport_orders.py:299 pretix/base/models/orders.py:3276
 #: pretix/control/templates/pretixcontrol/order/index.html:986
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:111
 msgid "Internal reference"
-msgstr ""
+msgstr "내부 참조"
 
 #: pretix/base/exporters/invoices.py:223 pretix/base/models/tax.py:162
 #: pretix/control/forms/event.py:1502
 msgid "Reverse charge"
-msgstr ""
+msgstr "역방향 부가가치세(역부과)"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "외국 통화 표시"
 
 #: pretix/base/exporters/invoices.py:225
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "외환 환율"
 
 #: pretix/base/exporters/invoices.py:226
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "총액 (세금포함)"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "총액 (세금 미포함)"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Payment matching IDs"
-msgstr ""
+msgstr "결제 대사(매칭) 아이디"
 
 #: pretix/base/exporters/invoices.py:229 pretix/base/exporters/invoices.py:349
 #: pretix/base/exporters/orderlist.py:289
@@ -1507,42 +1520,42 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/payment.html:11
 #: pretix/control/views/event.py:358
 msgid "Payment providers"
-msgstr ""
+msgstr "결제 제공자"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 msgid "Cancellation"
-msgstr ""
+msgstr "취소"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 #: pretix/control/templates/pretixcontrol/order/index.html:271
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgid "Invoice"
-msgstr ""
+msgstr "송장"
 
 #: pretix/base/exporters/invoices.py:319
 msgid "Line number"
-msgstr ""
+msgstr "줄 번호"
 
 #: pretix/base/exporters/invoices.py:320 pretix/base/exporters/orderlist.py:449
 #: pretix/base/models/items.py:492 pretix/base/models/items.py:1154
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:32
 msgid "Description"
-msgstr ""
+msgstr "상세 설명"
 
 #: pretix/base/exporters/invoices.py:321 pretix/control/forms/orders.py:341
 msgid "Gross price"
-msgstr ""
+msgstr "총액 (세금 포함 가격)"
 
 #: pretix/base/exporters/invoices.py:322
 msgid "Net price"
-msgstr ""
+msgstr "세전 가격(기본 가격)"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:453
 #: pretix/base/exporters/orderlist.py:594
 #: pretix/base/exporters/orderlist.py:904 pretix/base/models/orders.py:2324
 #: pretix/base/models/orders.py:2496 pretix/base/models/orders.py:3016
 msgid "Tax value"
-msgstr ""
+msgstr "세액(세금 금액)"
 
 #: pretix/base/exporters/invoices.py:324 pretix/base/exporters/orderlist.py:451
 #: pretix/base/exporters/orderlist.py:592
@@ -1554,60 +1567,60 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:793
 #: pretix/plugins/reports/exporters.py:838
 msgid "Tax rate"
-msgstr ""
+msgstr "세율"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Tax name"
-msgstr ""
+msgstr "세금 명칭"
 
 #: pretix/base/exporters/invoices.py:326
 msgid "Event start date"
-msgstr ""
+msgstr "이벤트 시작일"
 
 #: pretix/base/exporters/invoices.py:350 pretix/base/pdf.py:278
 msgid "Event end date"
-msgstr ""
+msgstr "이벤트 마감일"
 
 #: pretix/base/exporters/items.py:49
 msgid "Product data"
-msgstr ""
+msgstr "상품 데이터"
 
 #: pretix/base/exporters/items.py:50 pretix/base/exporters/orderlist.py:1128
 msgctxt "export_category"
 msgid "Product data"
-msgstr ""
+msgstr "상품 데이터"
 
 #: pretix/base/exporters/items.py:51
 msgid "Download a spreadsheet with details about all products and variations."
-msgstr ""
+msgstr "모든 제품과 변형에 대한 세부 정보가 담긴 스프레드시트를 다운로드하세요."
 
 #: pretix/base/exporters/items.py:57 pretix/base/exporters/orderlist.py:588
 #: pretix/base/exporters/orderlist.py:890
 msgid "Product ID"
-msgstr ""
+msgstr "상품 식별 아이디"
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:590
 #: pretix/base/exporters/orderlist.py:892
 msgid "Variation ID"
-msgstr ""
+msgstr "상품 변형 아이디"
 
 #: pretix/base/exporters/items.py:59 pretix/base/models/items.py:142
 #: pretix/base/pdf.py:151
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr ""
+msgstr "상품 카테고리"
 
 #: pretix/base/exporters/items.py:60 pretix/base/models/discount.py:62
 #: pretix/base/models/items.py:96 pretix/base/models/items.py:483
 #: pretix/base/models/tax.py:320 pretix/control/forms/organizer.py:264
 #: pretix/control/templates/pretixcontrol/items/discounts.html:57
 msgid "Internal name"
-msgstr ""
+msgstr "내부 이름(지명 이름)"
 
 #: pretix/base/exporters/items.py:64 pretix/base/models/items.py:480
 msgid "Item name"
-msgstr ""
+msgstr "항목 이름"
 
 #: pretix/base/exporters/items.py:68 pretix/base/exporters/orderlist.py:589
 #: pretix/base/exporters/orderlist.py:893
@@ -1615,7 +1628,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1493 pretix/base/models/orders.py:2988
 #: pretix/plugins/checkinlists/exporters.py:693
 msgid "Variation"
-msgstr ""
+msgstr "변동"
 
 #: pretix/base/exporters/items.py:71 pretix/base/exporters/reusablemedia.py:48
 #: pretix/base/models/customers.py:57 pretix/base/models/customers.py:403
@@ -1627,7 +1640,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/plugins.html:55
 #: pretix/control/templates/pretixcontrol/users/index.html:51
 msgid "Active"
-msgstr ""
+msgstr "활동"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:75
 #: pretix/control/forms/event.py:984 pretix/control/navigation.py:508
@@ -1635,32 +1648,32 @@ msgstr ""
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
 msgid "Sales channels"
-msgstr ""
+msgstr "판매 채널"
 
 #: pretix/base/exporters/items.py:73 pretix/base/models/items.py:497
 #: pretix/base/models/items.py:1165
 #: pretix/control/templates/pretixcontrol/items/index.html:43
 msgid "Default price"
-msgstr ""
+msgstr "기본값"
 
 #: pretix/base/exporters/items.py:74 pretix/base/models/items.py:505
 #: pretix/control/templates/pretixcontrol/items/index.html:131
 msgid "Free price input"
-msgstr ""
+msgstr "무료 가격 입력"
 
 #: pretix/base/exporters/items.py:75 pretix/base/models/items.py:520
 msgid "Sales tax"
-msgstr ""
+msgstr "판매 세금"
 
 #: pretix/base/exporters/items.py:76 pretix/base/models/items.py:525
 msgid "Is an admission ticket"
-msgstr ""
+msgstr "입장권(입장 티켓)"
 
 #: pretix/base/exporters/items.py:77
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
 msgid "Personalized ticket"
-msgstr ""
+msgstr "맞춤 티켓"
 
 #: pretix/base/exporters/items.py:78 pretix/base/models/items.py:539
 msgid "Generate tickets"
@@ -1687,7 +1700,7 @@ msgstr "티켓 생성"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:66
 #: pretix/presale/views/widget.py:422
 msgid "Waiting list"
-msgstr ""
+msgstr "대기명단"
 
 #: pretix/base/exporters/items.py:80 pretix/base/models/discount.py:80
 #: pretix/base/models/items.py:224 pretix/base/models/items.py:280
@@ -1698,7 +1711,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:171
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:149
 msgid "Available from"
-msgstr ""
+msgstr "~ 부터 이용 가능"
 
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:85
 #: pretix/base/models/items.py:229 pretix/base/models/items.py:285
@@ -1708,97 +1721,99 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:176
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:154
 msgid "Available until"
-msgstr ""
+msgstr "다음까지 사용가능"
 
 #: pretix/base/exporters/items.py:82 pretix/base/models/items.py:609
 msgid "This product can only be bought using a voucher."
-msgstr ""
+msgstr "이 제품은 바우처를 통해서만 구매할 수 있습니다."
 
 #: pretix/base/exporters/items.py:83 pretix/base/models/items.py:622
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
-msgstr ""
+msgstr "이 제품은 해당 제품과 일치하는 바우처가 교환된 경우에만 표시됩니다."
 
 #: pretix/base/exporters/items.py:84 pretix/base/models/items.py:615
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "이 제품을 구매하려면 승인이 필요합니다"
 
 #: pretix/base/exporters/items.py:85 pretix/base/models/items.py:628
 msgid "Only sell this product as part of a bundle"
-msgstr ""
+msgstr "이 제품은 번들 상품(단독 판매가 아니라 묶음 패키지)의 일부로만 판매됩니다"
 
 #: pretix/base/exporters/items.py:86 pretix/base/models/items.py:635
 msgid "Allow product to be canceled or changed"
-msgstr ""
+msgstr "제품 취소 또는 변경 허용합니다"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:641
 msgid "Minimum amount per order"
-msgstr ""
+msgstr "주문마다 최소금액"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:648
 msgid "Maximum amount per order"
-msgstr ""
+msgstr "주문마다 최대금액"
 
 #: pretix/base/exporters/items.py:89 pretix/base/exporters/orderlist.py:282
 #: pretix/base/modelimport_orders.py:610 pretix/base/models/items.py:656
 #: pretix/base/models/items.py:1241 pretix/base/models/orders.py:282
 #: pretix/plugins/checkinlists/exporters.py:520
 msgid "Requires special attention"
-msgstr ""
+msgstr "특별 주의 요망"
 
 #: pretix/base/exporters/items.py:90 pretix/base/exporters/orderlist.py:283
 #: pretix/base/modelimport_orders.py:618 pretix/base/models/items.py:663
 #: pretix/base/models/items.py:1248 pretix/base/models/orders.py:289
 #: pretix/plugins/checkinlists/exporters.py:522
 msgid "Check-in text"
-msgstr ""
+msgstr "체크인 텍스트"
 
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:668
 #: pretix/base/models/items.py:1168
 msgid "Original price"
-msgstr ""
+msgstr "원가"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:685
 msgid "This product is a gift card"
-msgstr ""
+msgstr "이 제품은 선물카드입니다"
 
 #: pretix/base/exporters/items.py:93 pretix/base/models/items.py:691
 #: pretix/base/models/items.py:1189
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:41
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:167
 msgid "Require a valid membership"
-msgstr ""
+msgstr "유효한 회원자격 필요"
 
 #: pretix/base/exporters/items.py:94 pretix/base/models/items.py:700
 #: pretix/base/models/items.py:1198
 msgid "Hide without a valid membership"
-msgstr ""
+msgstr "유효한 회원자격 없이 숨김"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:86
 msgid "Order data"
-msgstr ""
+msgstr "주문 정보"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
-msgstr ""
+msgstr "모든 주문에 대한 구조화된 JSON 형식 파일로 다운로드합니다. 이는  제 3자 "
+"시스템에서 가져오기에 유용할 수 있습니다."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
-msgstr ""
+msgstr "이메일 주소(텍스트 파일)"
 
 #: pretix/base/exporters/mail.py:54
 msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
-msgstr ""
+msgstr "구매자나 티켓 소지자로부터 수집한 모든 이메일 주소가 포함된 텍스트 파일을 "
+"다운로드합니다."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:487
 #: pretix/plugins/reports/exporters.py:669
 msgid "Filter by status"
-msgstr ""
+msgstr "상태별 여과기"
 
 #: pretix/base/exporters/orderlist.py:88
 msgid ""
@@ -1806,6 +1821,9 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"모든 주문의 스프레드시트를 다운로드합니다. 스프레드시트에는 각 주문에 대한 "
+"라인이 있는 시트, 각 주문 위치에 대한 라인이 있는 시트, 주문에 추가 요금이 "
+"부과될 때마다 라인이 있는 시트 등 세 가지가 포함됩니다."
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:332
 #: pretix/control/navigation.py:255 pretix/control/navigation.py:362
@@ -1818,33 +1836,33 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:13
 #: pretix/presale/views/customer.py:360
 msgid "Orders"
-msgstr ""
+msgstr "주문"
 
 #: pretix/base/exporters/orderlist.py:101 pretix/base/models/orders.py:2545
 #: pretix/base/notifications.py:205
 msgid "Order positions"
-msgstr ""
+msgstr "주문 위치"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Order fees"
-msgstr ""
+msgstr "주문 수수료"
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Only paid orders"
-msgstr ""
+msgstr "유료주문만 가능함"
 
 #: pretix/base/exporters/orderlist.py:116
 msgid "Include payment amounts"
-msgstr ""
+msgstr "결제금액 포함"
 
 #: pretix/base/exporters/orderlist.py:122
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "복수 선택한  답을 한 열에 그룹화 하여서 표시함"
 
 #: pretix/base/exporters/orderlist.py:131
 #: pretix/plugins/reports/exporters.py:701
 msgid "Only include orders created within this date range."
-msgstr ""
+msgstr "이 날짜 범위 내에서 생성된 주문만 포함합니다."
 
 #: pretix/base/exporters/orderlist.py:135 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:234 pretix/plugins/badges/exporters.py:499
@@ -1852,13 +1870,14 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:454
 #: pretix/plugins/ticketoutputpdf/exporters.py:97
 msgid "Event date"
-msgstr ""
+msgstr "이벤트 날짜"
 
 #: pretix/base/exporters/orderlist.py:138
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
-msgstr ""
+msgstr "이 범위 내의 날짜에 대한 최소 하나의 티켓을 포함한 주문만 포함하세요. 주문이 "
+"혼합된 경우 다른 날짜도 포함됩니다!"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:440
@@ -1869,7 +1888,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1658
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr ""
+msgstr "이벤트 슬러그(짧고 간결한 문자열)"
 
 #: pretix/base/exporters/orderlist.py:261 pretix/base/notifications.py:201
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:25
@@ -1878,7 +1897,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:49
 msgid "Order total"
-msgstr ""
+msgstr "주문 합계"
 
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:443
@@ -1918,7 +1937,7 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:34
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:79
 msgid "Status"
-msgstr ""
+msgstr "상태"
 
 #: pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:446
@@ -1940,7 +1959,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:691
 #: pretix/plugins/reports/exporters.py:884
 msgid "Order date"
-msgstr ""
+msgstr "주문 날짜"
 
 #: pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:447
@@ -1948,87 +1967,87 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:881
 #: pretix/plugins/checkinlists/exporters.py:519
 msgid "Order time"
-msgstr ""
+msgstr "주문 시간"
 
 #: pretix/base/exporters/orderlist.py:270
 msgid "Custom address field"
-msgstr ""
+msgstr "사용자 지정 주소"
 
 #: pretix/base/exporters/orderlist.py:270
 msgid "Date of last payment"
-msgstr ""
+msgstr "마지막 지불 날짜"
 
 #: pretix/base/exporters/orderlist.py:270 pretix/base/services/stats.py:237
 msgid "Fees"
-msgstr ""
+msgstr "수수료"
 
 #: pretix/base/exporters/orderlist.py:270
 #: pretix/base/exporters/orderlist.py:657 pretix/base/modelimport_orders.py:472
 #: pretix/control/templates/pretixcontrol/order/index.html:192
 #: pretix/control/templates/pretixcontrol/pdf/index.html:232
 msgid "Order locale"
-msgstr ""
+msgstr "주문 장소"
 
 #: pretix/base/exporters/orderlist.py:275
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr ""
+msgstr "세율 {%}의 세금으로 총합"
 
 #: pretix/base/exporters/orderlist.py:276
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr ""
+msgstr "순세율 {세율}% 세금"
 
 #: pretix/base/exporters/orderlist.py:277
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr ""
+msgstr "세율 % 세금에서의 세금 가치"
 
 #: pretix/base/exporters/orderlist.py:280
 msgid "Invoice numbers"
-msgstr ""
+msgstr "송장 번호"
 
 #: pretix/base/exporters/orderlist.py:281
 #: pretix/base/exporters/orderlist.py:656 pretix/base/modelimport_orders.py:540
 #: pretix/control/forms/filter.py:584
 #: pretix/control/templates/pretixcontrol/order/index.html:189
 msgid "Sales channel"
-msgstr ""
+msgstr "판매채널"
 
 #: pretix/base/exporters/orderlist.py:285
 #: pretix/base/exporters/orderlist.py:621 pretix/base/models/orders.py:277
 #: pretix/control/forms/filter.py:240
 msgid "Follow-up date"
-msgstr ""
+msgstr "추적 날짜"
 
 #: pretix/base/exporters/orderlist.py:286
 #: pretix/control/templates/pretixcontrol/orders/index.html:151
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:208
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:51
 msgid "Positions"
-msgstr ""
+msgstr "직책"
 
 #: pretix/base/exporters/orderlist.py:287
 #: pretix/base/exporters/orderlist.py:658 pretix/base/models/orders.py:321
 #: pretix/control/forms/filter.py:566
 msgid "Email address verified"
-msgstr ""
+msgstr "이메일 주소 확인"
 
 #: pretix/base/exporters/orderlist.py:288
 #: pretix/base/exporters/orderlist.py:465
 #: pretix/base/exporters/orderlist.py:659
 msgid "External customer ID"
-msgstr ""
+msgstr "외부고객  아이디"
 
 #: pretix/base/exporters/orderlist.py:293
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Paid by {method}"
-msgstr ""
+msgstr "{방법}으로 결제됨"
 
 #: pretix/base/exporters/orderlist.py:448
 #: pretix/base/exporters/orderlist.py:894
 msgid "Fee type"
-msgstr ""
+msgstr "수수료 유형"
 
 #: pretix/base/exporters/orderlist.py:450
 #: pretix/base/exporters/orderlist.py:591
@@ -2045,7 +2064,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:497
 #: pretix/plugins/reports/accountingreport.py:314
 msgid "Price"
-msgstr ""
+msgstr "가격"
 
 #: pretix/base/exporters/orderlist.py:452
 #: pretix/base/exporters/orderlist.py:593
@@ -2054,25 +2073,25 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:16
 #: pretix/control/templates/pretixcontrol/order/change.html:165
 msgid "Tax rule"
-msgstr ""
+msgstr "세금 규칙"
 
 #: pretix/base/exporters/orderlist.py:455
 #: pretix/base/exporters/orderlist.py:460
 #: pretix/base/exporters/orderlist.py:644
 #: pretix/base/exporters/orderlist.py:648 pretix/base/pdf.py:330
 msgid "Invoice address name"
-msgstr ""
+msgstr "송장 주소 이름"
 
 #: pretix/base/exporters/orderlist.py:480
 #: pretix/base/exporters/orderlist.py:683 pretix/base/models/orders.py:205
 msgid "canceled"
-msgstr ""
+msgstr "취소"
 
 #: pretix/base/exporters/orderlist.py:575
 #: pretix/base/exporters/orderlist.py:887
 #: pretix/plugins/checkinlists/exporters.py:755
 msgid "Position ID"
-msgstr ""
+msgstr "직책 아이디"
 
 #: pretix/base/exporters/orderlist.py:584
 #: pretix/base/exporters/orderlist.py:1139
@@ -2090,7 +2109,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:510
 #: pretix/plugins/checkinlists/exporters.py:699
 msgid "Start date"
-msgstr ""
+msgstr "시작일"
 
 #: pretix/base/exporters/orderlist.py:585
 #: pretix/base/exporters/orderlist.py:1140
@@ -2103,7 +2122,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:511
 #: pretix/plugins/checkinlists/exporters.py:700
 msgid "End date"
-msgstr ""
+msgstr "마감일"
 
 #: pretix/base/exporters/orderlist.py:587
 #: pretix/base/exporters/orderlist.py:891 pretix/base/modelimport_orders.py:109
@@ -2131,7 +2150,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:91
 msgid "Product"
-msgstr ""
+msgstr "상품"
 
 #: pretix/base/exporters/orderlist.py:595
 #: pretix/base/exporters/orderlist.py:600 pretix/base/forms/questions.py:661
@@ -2150,7 +2169,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:50
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:37
 msgid "Attendee name"
-msgstr ""
+msgstr "참석자 이름"
 
 #: pretix/base/exporters/orderlist.py:602 pretix/base/forms/questions.py:667
 #: pretix/base/models/customers.py:307 pretix/base/models/orders.py:1510
@@ -2160,7 +2179,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:176
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:179
 msgid "Attendee email"
-msgstr ""
+msgstr "참석자 이메일"
 
 #: pretix/base/exporters/orderlist.py:609 pretix/base/models/vouchers.py:312
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -2168,42 +2187,42 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:171
 msgid "Voucher"
-msgstr ""
+msgstr "바우처"
 
 #: pretix/base/exporters/orderlist.py:610
 msgid "Pseudonymization ID"
-msgstr ""
+msgstr "가명화  아이디"
 
 #: pretix/base/exporters/orderlist.py:611 pretix/control/forms/filter.py:677
 #: pretix/control/templates/pretixcontrol/order/change.html:280
 msgid "Ticket secret"
-msgstr ""
+msgstr "티켓 기밀사항"
 
 #: pretix/base/exporters/orderlist.py:612 pretix/base/modelimport_orders.py:570
 #: pretix/base/modelimport_vouchers.py:272
 #: pretix/plugins/checkinlists/exporters.py:523
 msgid "Seat ID"
-msgstr ""
+msgstr "좌석 아이디"
 
 #: pretix/base/exporters/orderlist.py:613
 #: pretix/plugins/checkinlists/exporters.py:524
 msgid "Seat name"
-msgstr ""
+msgstr "좌석 이름"
 
 #: pretix/base/exporters/orderlist.py:614
 #: pretix/plugins/checkinlists/exporters.py:525
 msgid "Seat zone"
-msgstr ""
+msgstr "좌석 구역"
 
 #: pretix/base/exporters/orderlist.py:615
 #: pretix/plugins/checkinlists/exporters.py:526
 msgid "Seat row"
-msgstr ""
+msgstr "좌석 열"
 
 #: pretix/base/exporters/orderlist.py:616
 #: pretix/plugins/checkinlists/exporters.py:527
 msgid "Seat number"
-msgstr ""
+msgstr "좌석 번호"
 
 #: pretix/base/exporters/orderlist.py:617
 #: pretix/control/templates/pretixcontrol/order/change.html:224
@@ -2212,7 +2231,7 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "차단됨"
 
 #: pretix/base/exporters/orderlist.py:618 pretix/base/modelimport_orders.py:500
 #: pretix/base/models/orders.py:2512
@@ -2222,7 +2241,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:46
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:55
 msgid "Valid from"
-msgstr ""
+msgstr "유효한 출처"
 
 #: pretix/base/exporters/orderlist.py:619 pretix/base/modelimport_orders.py:508
 #: pretix/base/modelimport_vouchers.py:111 pretix/base/models/orders.py:2517
@@ -2234,36 +2253,36 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:48
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:61
 msgid "Valid until"
-msgstr ""
+msgstr "다음까지 유효함"
 
 #: pretix/base/exporters/orderlist.py:620
 msgid "Order comment"
-msgstr ""
+msgstr "주문 의견"
 
 #: pretix/base/exporters/orderlist.py:622
 msgid "Add-on to position ID"
-msgstr ""
+msgstr "직책 아이디에 추가기능"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:340
 msgid "Invoice address street"
-msgstr ""
+msgstr "송장 도로명"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:345
 msgid "Invoice address ZIP code"
-msgstr ""
+msgstr "송장 주소 우편번호"
 
 #: pretix/base/exporters/orderlist.py:650 pretix/base/pdf.py:350
 msgid "Invoice address city"
-msgstr ""
+msgstr "송장 주소 도시"
 
 #: pretix/base/exporters/orderlist.py:651 pretix/base/pdf.py:360
 msgid "Invoice address country"
-msgstr ""
+msgstr "송장 주소 국가"
 
 #: pretix/base/exporters/orderlist.py:652
 msgctxt "address"
 msgid "Invoice address state"
-msgstr ""
+msgstr "송장 주소 상태"
 
 #: pretix/base/exporters/orderlist.py:660 pretix/control/navigation.py:305
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:6
@@ -2273,11 +2292,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:162
 #: pretix/plugins/checkinlists/apps.py:44
 msgid "Check-in lists"
-msgstr ""
+msgstr "체크인 목록"
 
 #: pretix/base/exporters/orderlist.py:822
 msgid "Order transaction data"
-msgstr ""
+msgstr "주문 거래 데이터"
 
 #: pretix/base/exporters/orderlist.py:824
 msgid ""
@@ -2285,10 +2304,13 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"주문에 대한 모든 실질적인 변경 사항, 즉 제품, 가격 또는 세율에 대한 모든 "
+"변경 사항에 대한 스프레드시트를 다운로드하세요. 이 정보는 2021년 10월 이후에 "
+"출시된 프리픽스 버전의 변경 사항에만 정확합니다."
 
 #: pretix/base/exporters/orderlist.py:840
 msgid "Only include transactions created within this date range."
-msgstr ""
+msgstr "이 날짜 범위 내에서 생성된 트랜잭션만 포함합니다."
 
 #: pretix/base/exporters/orderlist.py:875 pretix/base/models/event.py:654
 #: pretix/base/models/items.py:468 pretix/base/models/items.py:2031
@@ -2305,7 +2327,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:95
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:56
 msgid "Event"
-msgstr ""
+msgstr "이벤트"
 
 #: pretix/base/exporters/orderlist.py:877
 #: pretix/base/exporters/orderlist.py:1216
@@ -2319,19 +2341,19 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:75
 msgid "Currency"
-msgstr ""
+msgstr "통화"
 
 #: pretix/base/exporters/orderlist.py:883
 msgid "Transaction date"
-msgstr ""
+msgstr "거래 날짜"
 
 #: pretix/base/exporters/orderlist.py:884
 msgid "Transaction time"
-msgstr ""
+msgstr "거래 시간"
 
 #: pretix/base/exporters/orderlist.py:885
 msgid "Old data"
-msgstr ""
+msgstr "이전 데이터"
 
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/items.py:1554
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
@@ -2342,70 +2364,71 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:242
 #: pretix/presale/templates/pretixpresale/event/voucher.html:398
 msgid "Quantity"
-msgstr ""
+msgstr "양"
 
 #: pretix/base/exporters/orderlist.py:895
 msgid "Internal fee type"
-msgstr ""
+msgstr "내부 수수료 유형"
 
 #: pretix/base/exporters/orderlist.py:897
 msgctxt "subevent"
 msgid "Date ID"
-msgstr ""
+msgstr "날짜 아이디"
 
 #: pretix/base/exporters/orderlist.py:902
 msgid "Tax rule ID"
-msgstr ""
+msgstr "세금 규정 아이디"
 
 #: pretix/base/exporters/orderlist.py:905
 #: pretix/plugins/reports/accountingreport.py:319
 msgid "Gross total"
-msgstr ""
+msgstr "총액"
 
 #: pretix/base/exporters/orderlist.py:906
 #: pretix/plugins/reports/accountingreport.py:318
 msgid "Tax total"
-msgstr ""
+msgstr "세금 총액"
 
 #: pretix/base/exporters/orderlist.py:916
 msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
-msgstr ""
+msgstr "이 값은 정보 제공 목적으로 제공되며, 원본 거래 데이터의 일부가 아니며 거래 "
+"이후 변경되었을 수 있습니다."
 
 #: pretix/base/exporters/orderlist.py:939
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "유산 유형으로 전환"
 
 #: pretix/base/exporters/orderlist.py:1001
 msgid "Payments and refunds"
-msgstr ""
+msgstr "결제 및 환불"
 
 #: pretix/base/exporters/orderlist.py:1003
 msgid "Download a spreadsheet of all payments or refunds of every order."
-msgstr ""
+msgstr "모든 주문에 대한 모든 결제 또는 환불 스프레드시트를 다운로드하세요."
 
 #: pretix/base/exporters/orderlist.py:1012
 msgid "Date range (payment date)"
-msgstr ""
+msgstr "날짜 범위(결제 날짜)"
 
 #: pretix/base/exporters/orderlist.py:1015
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
-msgstr ""
+msgstr "이를 사용하면 확인되지 않은 결제나 완료되지 않은 환불이 제외됩니다."
 
 #: pretix/base/exporters/orderlist.py:1019
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "날짜 범위(거래 시작)"
 
 #: pretix/base/exporters/orderlist.py:1025
 msgid "Payment states"
-msgstr ""
+msgstr "결제 현황"
 
 #: pretix/base/exporters/orderlist.py:1033
 msgid "Refund states"
-msgstr ""
+msgstr "환불 현황"
 
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1217
@@ -2421,7 +2444,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:70
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:23
 msgid "Order"
-msgstr ""
+msgstr "주문"
 
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1259
@@ -2429,23 +2452,23 @@ msgstr ""
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:5
 msgid "Payment ID"
-msgstr ""
+msgstr "결제 아이디"
 
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1357
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:59
 msgid "Creation date"
-msgstr ""
+msgstr "생성 날짜"
 
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/control/templates/pretixcontrol/order/index.html:841
 msgid "Completion date"
-msgstr ""
+msgstr "완료 날짜"
 
 #: pretix/base/exporters/orderlist.py:1077
 msgid "Status code"
-msgstr ""
+msgstr "상태 코드"
 
 #: pretix/base/exporters/orderlist.py:1077
 #: pretix/base/exporters/orderlist.py:1215
@@ -2462,7 +2485,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr ""
+msgstr "양"
 
 #: pretix/base/exporters/orderlist.py:1077
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:102
@@ -2473,82 +2496,82 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:495
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:29
 msgid "Payment method"
-msgstr ""
+msgstr "지불 방법"
 
 #: pretix/base/exporters/orderlist.py:1077
 msgid "Matching ID"
-msgstr ""
+msgstr "매칭 아이디"
 
 #: pretix/base/exporters/orderlist.py:1077
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
 msgid "Payment details"
-msgstr ""
+msgstr "결제 명세서"
 
 #: pretix/base/exporters/orderlist.py:1127
 msgid "Quota availabilities"
-msgstr ""
+msgstr "할당량 가용성"
 
 #: pretix/base/exporters/orderlist.py:1129
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
-msgstr ""
+msgstr "현재 이용 가능한 할당량을 포함한 모든 할당량의 스프레드시트를 다운로드합니다."
 
 #: pretix/base/exporters/orderlist.py:1134
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
 msgid "Quota name"
-msgstr ""
+msgstr "할당량 이름"
 
 #: pretix/base/exporters/orderlist.py:1134
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
 msgid "Total quota"
-msgstr ""
+msgstr "총 할당량"
 
 #: pretix/base/exporters/orderlist.py:1134
 #: pretix/control/templates/pretixcontrol/event/cancel.html:20
 #: pretix/control/views/item.py:958
 msgid "Paid orders"
-msgstr ""
+msgstr "유료주문"
 
 #: pretix/base/exporters/orderlist.py:1134 pretix/control/views/item.py:963
 msgid "Pending orders"
-msgstr ""
+msgstr "보류중인 주문"
 
 #: pretix/base/exporters/orderlist.py:1134
 msgid "Blocking vouchers"
-msgstr ""
+msgstr "바우처 차단"
 
 #: pretix/base/exporters/orderlist.py:1135 pretix/control/views/item.py:982
 msgid "Current user's carts"
-msgstr ""
+msgstr "현재 사용자 카트"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Exited orders"
-msgstr ""
+msgstr "종료된 주문"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Current availability"
-msgstr ""
+msgstr "현재 가용성"
 
 #: pretix/base/exporters/orderlist.py:1152
 #: pretix/base/exporters/orderlist.py:1159
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
 #: pretix/control/views/item.py:989
 msgid "Infinite"
-msgstr ""
+msgstr "막대한"
 
 #: pretix/base/exporters/orderlist.py:1181
 msgid "Gift card transactions"
-msgstr ""
+msgstr "선물카드 거래"
 
 #: pretix/base/exporters/orderlist.py:1183
 #: pretix/base/exporters/orderlist.py:1288
 msgctxt "export_category"
 msgid "Gift cards"
-msgstr ""
+msgstr "선물 카드"
 
 #: pretix/base/exporters/orderlist.py:1184
 msgid "Download a spreadsheet of all gift card transactions."
-msgstr ""
+msgstr "모든 선물 카드의 스프레드시트를 다운로드 하세요"
 
 #: pretix/base/exporters/orderlist.py:1212
 #: pretix/base/exporters/orderlist.py:1259
@@ -2560,7 +2583,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:156
 msgid "Gift card code"
-msgstr ""
+msgstr "선물 카드 코드"
 
 #: pretix/base/exporters/orderlist.py:1213
 #: pretix/base/exporters/orderlist.py:1302
@@ -2569,7 +2592,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:1413 pretix/control/forms/filter.py:1416
 #: pretix/control/templates/pretixcontrol/event/live.html:75
 msgid "Test mode"
-msgstr ""
+msgstr "테스트 모드"
 
 #: pretix/base/exporters/orderlist.py:1218 pretix/base/models/organizer.py:96
 #: pretix/control/forms/event.py:110 pretix/control/forms/event.py:116
@@ -2585,7 +2608,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:112
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:9
 msgid "Organizer"
-msgstr ""
+msgstr "주최자"
 
 #: pretix/base/exporters/orderlist.py:1225 pretix/base/invoice.py:573
 #: pretix/control/templates/pretixcontrol/base.html:280
@@ -2613,40 +2636,40 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:72
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:42
 msgid "TEST MODE"
-msgstr ""
+msgstr "테스트 모드"
 
 #: pretix/base/exporters/orderlist.py:1240
 msgid "Gift card redemptions"
-msgstr ""
+msgstr "선물카드 상환"
 
 #: pretix/base/exporters/orderlist.py:1242
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
-msgstr ""
+msgstr "선물카드를 포함한 환불이나 모든 결제의 스프레드시트를 다운로드하세요"
 
 #: pretix/base/exporters/orderlist.py:1259
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:16
 msgid "Issuer"
-msgstr ""
+msgstr "발행인"
 
 #: pretix/base/exporters/orderlist.py:1286 pretix/control/navigation.py:538
 #: pretix/control/navigation.py:556
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
 #: pretix/plugins/reports/accountingreport.py:898
 msgid "Gift cards"
-msgstr ""
+msgstr "선물 카드"
 
 #: pretix/base/exporters/orderlist.py:1289
 msgid "Download a spreadsheet of all gift cards including their current value."
-msgstr ""
+msgstr "모든 선물 카드의 현재 가치를 포함한 스프레드시트를 다운로드하세요."
 
 #: pretix/base/exporters/orderlist.py:1296
 msgid "Show value at"
-msgstr ""
+msgstr "가격 표시 위치"
 
 #: pretix/base/exporters/orderlist.py:1299
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "보고 시점으로 기본 설정되어 있습니다."
 
 #: pretix/base/exporters/orderlist.py:1304
 #: pretix/base/exporters/orderlist.py:1314 pretix/control/forms/filter.py:518
@@ -2668,24 +2691,24 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:104
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
-msgstr ""
+msgstr "전체"
 
 #: pretix/base/exporters/orderlist.py:1306 pretix/control/forms/filter.py:1417
 msgid "Live"
-msgstr ""
+msgstr "라이브"
 
 #: pretix/base/exporters/orderlist.py:1315 pretix/control/forms/filter.py:1425
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
 msgid "Empty"
-msgstr ""
+msgstr "결여"
 
 #: pretix/base/exporters/orderlist.py:1316 pretix/control/forms/filter.py:1426
 msgid "Valid and with value"
-msgstr ""
+msgstr "유효하고 가치 있음"
 
 #: pretix/base/exporters/orderlist.py:1317 pretix/control/forms/filter.py:1427
 msgid "Expired and with value"
-msgstr ""
+msgstr "만료되고 가치있음"
 
 #: pretix/base/exporters/orderlist.py:1318 pretix/control/forms/filter.py:227
 #: pretix/control/forms/filter.py:1428 pretix/control/forms/filter.py:2097
@@ -2696,22 +2719,22 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:378
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:26
 msgid "Expired"
-msgstr ""
+msgstr "만료됨"
 
 #: pretix/base/exporters/orderlist.py:1356 pretix/base/models/giftcards.py:98
 msgid "Test mode card"
-msgstr ""
+msgstr "테스트 모드 카드"
 
 #: pretix/base/exporters/orderlist.py:1358
 #: pretix/base/modelimport_orders.py:516 pretix/base/models/giftcards.py:102
 #: pretix/control/templates/pretixcontrol/order/index.html:202
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:62
 msgid "Expiry date"
-msgstr ""
+msgstr "만료 날짜"
 
 #: pretix/base/exporters/orderlist.py:1359 pretix/control/forms/orders.py:881
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "특별기간과 조건"
 
 #: pretix/base/exporters/orderlist.py:1361
 #: pretix/control/templates/pretixcontrol/order/change.html:98
@@ -2719,19 +2742,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:68
 msgid "Current value"
-msgstr ""
+msgstr "현재 가격"
 
 #: pretix/base/exporters/orderlist.py:1362
 msgid "Created in order"
-msgstr ""
+msgstr "순서대로 생성됨"
 
 #: pretix/base/exporters/orderlist.py:1363
 msgid "Last invoice number of order"
-msgstr ""
+msgstr "주문의 마지막 송장 번호"
 
 #: pretix/base/exporters/orderlist.py:1364
 msgid "Last invoice date of order"
-msgstr ""
+msgstr "주문 마지막 송장 날짜"
 
 #: pretix/base/exporters/reusablemedia.py:34 pretix/control/navigation.py:616
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:204
@@ -2740,7 +2763,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:9
 msgid "Reusable media"
-msgstr ""
+msgstr "재사용 가능한 미디어"
 
 #: pretix/base/exporters/reusablemedia.py:35
 msgctxt "export_category"
