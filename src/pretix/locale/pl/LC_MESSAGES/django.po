@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-03 16:00+0000\n"
+"PO-Revision-Date: 2025-03-12 19:00+0000\n"
 "Last-Translator: Wiktor Przybylski <wikprzybylski@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10.1\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -4312,7 +4312,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:571 pretix/base/models/organizer.py:87
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "Krótka forma może zawierać tylko litery, cyfry, kropki i myślniki."
+msgstr "Slug powinien zawierać jedynie litery, cyfry, kropki lub myślniki."
 
 #: pretix/base/models/event.py:588 pretix/base/models/event.py:1464
 msgid "Show in lists"
