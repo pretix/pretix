@@ -260,11 +260,11 @@ class RegistrationForm(forms.Form):
         customer, created = self.request.organizer.customers.get_or_create(
             email=self.cleaned_data['email'],
             defaults={
-                "name_parts":self.cleaned_data['name_parts'],
-                "phone":self.cleaned_data.get('phone'),
-                "is_active":True,
-                "is_verified":False,
-                "locale":get_language_without_region(),
+                "name_parts": self.cleaned_data['name_parts'],
+                "phone": self.cleaned_data.get('phone'),
+                "is_active": True,
+                "is_verified": False,
+                "locale": get_language_without_region(),
             }
         )
         if created:
