@@ -127,8 +127,7 @@
                         {% if request.event.has_subevents %}
                             {% if cl.subevent %}
                                 <td>
-                                    {{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }}
-                                    {{ cl.subevent.date_from|date:"TIME_FORMAT" }}
+                                    {{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display_with_times }}
                                 </td>
                             {% else %}
                                 <td>
