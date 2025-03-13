@@ -185,9 +185,9 @@ class EventMixin:
         else:
             df, dt = self.date_from, self.date_to
             show_times = try_to_show_times and self.settings.show_times and (
-                # Show date to if start and end are on the same day ("08:00-10:00")
+                # Show times if start and end are on the same day ("08:00-10:00")
                 dt.astimezone(tz).date() == df.astimezone(tz).date() or
-                # Show date to if start and end are on consecutive days and less than 24h ("23:00-03:00")
+                # Show times if start and end are on consecutive days and less than 24h ("23:00-03:00")
                 (dt.astimezone(tz).date() == df.astimezone(tz).date() + timedelta(days=1) and
                  dt.astimezone(tz).time() < df.astimezone(tz).time())
             )
