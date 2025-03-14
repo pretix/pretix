@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-14 15:24+0000\n"
+"PO-Revision-Date: 2025-03-15 01:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -1436,7 +1436,7 @@ msgstr "País"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
 msgid "Tax ID"
-msgstr "Tax ID"
+msgstr "ID do Imposto"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
@@ -2962,7 +2962,7 @@ msgstr "Este email já foi cadastrado. Por favor, utilize o formulário de login
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:283 pretix/presale/forms/customer.py:371
 msgid "Please enter the same password twice"
-msgstr "Digite a mesma senha duas vezes"
+msgstr "Informe a senha novamente"
 
 #: pretix/base/forms/auth.py:172 pretix/base/forms/auth.py:224
 #: pretix/presale/forms/customer.py:296 pretix/presale/forms/customer.py:390
@@ -4609,7 +4609,7 @@ msgstr "Transacão manual"
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr "Tax ID: %s"
+msgstr "ID do Imposto: %s"
 
 #: pretix/base/models/invoices.py:191 pretix/base/services/invoices.py:139
 #, python-format
@@ -6454,7 +6454,7 @@ msgstr ""
 #: pretix/base/models/tax.py:426
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr "incl. {rate}% {name}"
+msgstr "inclui {rate}% {name}"
 
 #: pretix/base/models/tax.py:428
 #, python-brace-format
@@ -7434,7 +7434,7 @@ msgstr "12345"
 
 #: pretix/base/pdf.py:351 pretix/base/services/invoices.py:479
 msgid "Sample city"
-msgstr "Sample city"
+msgstr "Cidade de Exemplo"
 
 #: pretix/base/pdf.py:355
 msgid "Invoice address state"
@@ -15351,7 +15351,7 @@ msgstr "Disponível_até"
 
 #: pretix/control/forms/subevents.py:466
 msgid "Exclude these dates instead of adding them."
-msgstr "Excluir estas datas ao invés de adicioná-las"
+msgstr "Exclua estas datas ao invés de adicioná-las."
 
 #: pretix/control/forms/users.py:122 pretix/control/views/user.py:231
 msgid "Your changes could not be saved. See below for details."
@@ -17588,7 +17588,7 @@ msgstr[0] ""
 "ingresso</strong>?"
 msgstr[1] ""
 "Está certo de que quer excluir permanentemente os check-ins de "
-"<strong>%(count)s ingresso</strong>."
+"<strong>%(count)s ingressos</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:24
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
@@ -19544,12 +19544,12 @@ msgstr "Taxa"
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
 #, python-format
 msgid "incl. %(rate)s %%"
-msgstr "incl. %(rate)s %%"
+msgstr "inclui %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
 #, python-format
 msgid "excl. %(rate)s %%"
-msgstr "excl. %(rate)s %%"
+msgstr "exclui %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:13
@@ -19830,7 +19830,7 @@ msgstr "Juiz faz com que whisky de malte baixe logo preço de venda."
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html:3
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
 msgid "Quota:"
-msgstr "Quota:"
+msgstr "Cota:"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html:3
 #, python-format
@@ -25122,8 +25122,8 @@ msgid ""
 "                                        "
 msgstr ""
 "\n"
-"                                            Waiting, product %(num)sx "
-"available\n"
+"                                            Aguardando, produto disponível "
+"%(num)sx\n"
 "                                        "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:246
@@ -28451,7 +28451,7 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:25
 msgid "Click here in order to open the window."
-msgstr "Clique aqui para abrir a janela."
+msgstr "Clique no pedido para abrir a janela."
 
 #: pretix/plugins/paypal/views.py:107 pretix/plugins/paypal2/views.py:319
 msgid "Invalid response from PayPal received."
@@ -30208,11 +30208,11 @@ msgstr "Cobrança bem-sucedida."
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge refunded."
-msgstr "Cobrança reembolsada"
+msgstr "Cobrança reembolsada."
 
 #: pretix/plugins/stripe/signals.py:94
 msgid "Charge updated."
-msgstr "Cobrança atualizada"
+msgstr "Cobrança atualizada."
 
 #: pretix/plugins/stripe/signals.py:95
 msgid "Charge pending"
@@ -30645,7 +30645,7 @@ msgstr "Modelo de ingresso padrão"
 
 #: pretix/plugins/ticketoutputpdf/views.py:119
 msgid "The new ticket layout has been created."
-msgstr "O novo modelo de ingresso foi criado"
+msgstr "O novo modelo de ingresso foi criado."
 
 #: pretix/plugins/ticketoutputpdf/views.py:168
 #: pretix/plugins/ticketoutputpdf/views.py:198
