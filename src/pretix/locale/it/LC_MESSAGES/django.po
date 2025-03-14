@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-14 16:07+0000\n"
-"Last-Translator: Rosariocastellana <rosariocastellana@gmail.com>\n"
+"PO-Revision-Date: 2025-03-14 16:08+0000\n"
+"Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -21152,9 +21152,8 @@ msgstr "Impostazioni account"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:28
 #: pretix/control/templates/pretixcontrol/organizers/export.html:28
-#, fuzzy
 msgid "Next run:"
-msgstr "mesi"
+msgstr "Prossima esecuzione:"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:32
 #: pretix/control/templates/pretixcontrol/organizers/export.html:32
@@ -21633,10 +21632,8 @@ msgid "Channel type"
 msgstr "Tipo di scansione"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:5
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Delete sales channel:"
-msgstr "Canali di vendita"
+msgstr "Cancella canale di vendita:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:10
 msgid "Are you sure you want to delete this sales channel?"
@@ -21649,10 +21646,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:6
-#, fuzzy
-#| msgid "Sales channel"
 msgid "Sales channel:"
-msgstr "Canali di vendita"
+msgstr "Canale di vendita:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:8
 msgid ""
