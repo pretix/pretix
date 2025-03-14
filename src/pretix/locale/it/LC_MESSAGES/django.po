@@ -401,7 +401,7 @@ msgstr ""
 
 #: pretix/api/views/checkin.py:610 pretix/api/views/checkin.py:617
 msgid "Medium connected to other event"
-msgstr "Mezzo connesso ad altro evento"
+msgstr "Mezzo connesso a un altro evento"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:693
 #, python-brace-format
