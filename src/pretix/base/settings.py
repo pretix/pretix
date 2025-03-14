@@ -2883,7 +2883,7 @@ Your {organizer} team"""))  # noqa: W291
             ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('If you provide a logo image, we will by default not show your event name and date '
-                        'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                        'in the page header. By default, we show your logo with a size of up to 1120x120 pixels. You '
                         'can increase the size with the setting below. We recommend not using small details on the picture '
                         'as it will be resized on smaller screens.')
         ),
@@ -2926,7 +2926,7 @@ Your {organizer} team"""))  # noqa: W291
             ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('If you provide a logo image, we will by default not show your organization name '
-                        'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                        'in the page header. By default, we show your logo with a size of up to 1120x120 pixels. You '
                         'can increase the size with the setting below. We recommend not using small details on the picture '
                         'as it will be resized on smaller screens.')
         ),
