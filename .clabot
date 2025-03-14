@@ -1,5 +1,5 @@
 {
   "contributors": "https://crm.rami.io/cla/check/?project=pretix&checkContributor=",
-  "message": "Hey there! :) Thank you very much for offering a contribution to pretix! For legal reasons, we need you to sign a Contributor License Agreement in order to be able to merge the code. Sorry for the hassle :( Please download the agreement from https://pretix.eu/about/en/cla and send a signed copy to support@pretix.eu. Feel free to also contact us there or via comments here if you have any questions!",
+  "message": "Hey there! :) Thank you very much for offering a contribution to pretix! For legal reasons, we need you to sign a Contributor License Agreement in order to be able to merge the code. Sorry for the hassle :( Please download the agreement from https://pretix.eu/about/en/cla and send a signed copy to support@pretix.eu. Feel free to also contact us there or via comments here if you have any questions!\n\nFeel free to ignore me on documentation changes, translations, and trivial PRs like typo fixes (and similar single-line changes) – we can merge these without a CLA as well.",
   "label": "cla-signed"
 }
