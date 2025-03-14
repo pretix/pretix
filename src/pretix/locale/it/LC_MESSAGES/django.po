@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-02-27 18:00+0000\n"
-"Last-Translator: Elisabetta D'Agostino <elisa.branda@om.org>\n"
+"PO-Revision-Date: 2025-03-14 15:24+0000\n"
+"Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1\n"
+"X-Generator: Weblate 5.10.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -183,7 +183,7 @@ msgstr "Lista delle URI autorizzate, separate da spazio"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Lista delle URI Dopo  Logout autorizzate, separate da spazio"
+msgstr "Elenco degli URI di post-logout consentiti, separati da uno spazio"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:110
@@ -1128,7 +1128,7 @@ msgstr ""
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
-msgstr "Data dell'evento"
+msgstr "Dati dell'evento"
 
 #: pretix/base/exporters/events.py:48
 msgctxt "export_category"
@@ -4679,7 +4679,6 @@ msgid "Normal category"
 msgstr "Categoria normale"
 
 #: pretix/base/models/items.py:115 pretix/control/forms/item.py:112
-#, fuzzy
 msgid "Normal + cross-selling category"
 msgstr "Categoria normale + cross-selling"
 
@@ -7576,20 +7575,20 @@ msgstr[0] "Non puoi selezionare più di %s elemento per ogni ordine."
 msgstr[1] "Non puoi selezionare più di %s elementi per ogni ordine."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1539
-#, fuzzy, python-format
+#, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] "Devi scegliere almeno %(min)s biglietti di %(product)s"
-msgstr[1] "Devi scegliere almeno %(min)s biglietti di %(product)s"
+msgstr[0] "Non puoi selezionare più di %(max)s biglietto di %(product)s."
+msgstr[1] "Non puoi selezionare più di %(max)s biglietti di %(product)s."
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1544
-#, fuzzy, python-format
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] "Devi scegliere almeno %(min)s biglietti di %(product)s"
-msgstr[1] "Devi scegliere almeno %(min)s biglietti di %(product)s"
+msgstr[0] "Devi scegliere almeno %(min)s biglietto di %(product)s."
+msgstr[1] "Devi scegliere almeno %(min)s biglietti di %(product)s."
 
 #: pretix/base/services/cart.py:140
 #, python-format
@@ -7752,26 +7751,34 @@ msgid "You can not select two variations of the same add-on product."
 msgstr ""
 
 #: pretix/base/services/cart.py:197 pretix/base/services/orders.py:191
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can select at most %(max)s add-on from the category %(cat)s for the "
 "product %(base)s."
 msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
-msgstr[0] "Devi scegliere almeno %(min)s biglietti di %(product)s"
-msgstr[1] "Devi scegliere almeno %(min)s biglietti di %(product)s"
+msgstr[0] ""
+"Puoi scegliere un massimo di %(max)s add-on dalla categoria %(cat)s per il "
+"prodotto %(base)s."
+msgstr[1] ""
+"Puoi scegliere un massimo di %(max)s add-on dalla categoria %(cat)s per il "
+"prodotto %(base)s."
 
 #: pretix/base/services/cart.py:202 pretix/base/services/orders.py:196
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-on from the category %(cat)s for the "
 "product %(base)s."
 msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
-msgstr[0] "Devi scegliere almeno %(min)s biglietti di %(product)s"
-msgstr[1] "Devi scegliere almeno %(min)s biglietti di %(product)s"
+msgstr[0] ""
+"Devi scegliere almeno %(min)s add-on dalla categoria %(cat)s per il prodotto "
+"%(base)s."
+msgstr[1] ""
+"Devi scegliere almeno %(min)s add-on dalla categoria %(cat)s per il prodotto "
+"%(base)s."
 
 #: pretix/base/services/cart.py:206 pretix/base/services/orders.py:200
 #, fuzzy, python-format
@@ -8283,15 +8290,19 @@ msgid "Your cart is empty."
 msgstr "Il tuo carrello è vuoto."
 
 #: pretix/base/services/orders.py:145
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You cannot select more than %(max)s item of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
-msgstr[0] "Devi scegliere almeno %(min)s biglietti di %(product)s"
-msgstr[1] "Devi scegliere almeno %(min)s biglietti di %(product)s"
+msgstr[0] ""
+"Non puoi selezionare più di %(max)s elemento del prodotto %(product)s. "
+"Abbiamo rimosso gli elementi in eccesso dal tuo carrello."
+msgstr[1] ""
+"Non puoi selezionare più di %(max)s elementi del prodotto %(product)s. "
+"Abbiamo rimosso gli elementi in eccesso dal tuo carrello."
 
 #: pretix/base/services/orders.py:154
 #, fuzzy
@@ -10311,8 +10322,8 @@ msgstr ""
 "Puoi cambiare i dettagli del tuo ordine e vedere lo stato qui:\n"
 "{url}\n"
 "\n"
-"Un saluto,  \n"
-" {event} "
+"Un saluto,\n"
+"il team di {event}"
 
 #: pretix/base/settings.py:2366
 #, fuzzy, python-brace-format
@@ -10689,10 +10700,11 @@ msgstr ""
 "{comment}\n"
 "\n"
 "Puoi vedere i dettagli qui:\n"
+"\n"
 "{url}\n"
 "\n"
-"Un saluto,  \n"
-"{event}"
+"Un saluto,\n"
+"Il team di {event}"
 
 #: pretix/base/settings.py:2617
 #, python-brace-format
@@ -14164,10 +14176,12 @@ msgstr ""
 "utilizzato.\n"
 "\n"
 "Puoi vedere lo stato del tuo ordine qui:\n"
+"\n"
 "{url}\n"
 "\n"
-"Un saluto,  \n"
-"{event}"
+"Un saluto,\n"
+"\n"
+"Il team di {event}"
 
 #: pretix/control/forms/orders.py:972
 #, python-brace-format
@@ -14186,10 +14200,11 @@ msgstr ""
 "\n"
 "siamo spiacenti di informati che l'evento {event} è stato annullato.\n"
 "\n"
-"Non riceverai nessun biglietto dalla lista d'attesa a cui sei sicritto.\n"
+"Non riceverai nessun biglietto dalla lista d'attesa a cui sei iscritto.\n"
 "\n"
-"Un saluto,  \n"
-"{event}"
+"Un saluto,\n"
+"\n"
+"Il team di {event}"
 
 #: pretix/control/forms/orders.py:1004 pretix/plugins/sendmail/forms.py:115
 #: pretix/plugins/sendmail/forms.py:208
@@ -14541,7 +14556,7 @@ msgid "Your voucher for {event}"
 msgstr "Il tuo Voucher per {event}"
 
 #: pretix/control/forms/vouchers.py:282
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -14562,13 +14577,12 @@ msgstr ""
 "\n"
 "{voucher_list}\n"
 "\n"
-"Puoi utiliizzarli nel nostro negozio, qui:\n"
+"Puoi riscattarli nel nostro negozio al seguente indirizzo:\n"
 "\n"
 "{url}\n"
 "\n"
-"Un saluto,  \n"
-"\n"
-"{event}"
+"Un saluto,\n"
+"Il team di {event}"
 
 #: pretix/control/forms/vouchers.py:288
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:28
@@ -17321,6 +17335,7 @@ msgstr ""
 "%(url)s\n"
 "\n"
 "Un saluto\n"
+"Il team di pretix\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -18154,9 +18169,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:6
-#, fuzzy
 msgid "Available plugins"
-msgstr "Disponibile"
+msgstr "Plugin disponibili"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:8
 msgid ""
@@ -22615,11 +22629,11 @@ msgid "This page shows all calls to your webhook in the past 30 days."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:14
-#, fuzzy, python-format
+#, python-format
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
-msgstr[0] "La data dell'evento ès tata creata."
-msgstr[1] "La data dell'evento ès tata creata."
+msgstr[0] "Un webhook è programmato per essere riprovato."
+msgstr[1] "%(count)s webhook sono programmati per essere riprovati."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
 msgid "Retry now"
@@ -23004,9 +23018,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
-#, fuzzy
 msgid "Available placeholders"
-msgstr "Disponibile"
+msgstr "Segnaposto disponibili"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:19
 msgid ""
@@ -25043,10 +25056,11 @@ msgstr ""
 "Ciao,\n"
 "\n"
 "Sfortunatamente non siamo in grado di soddisfare la tua richiesta e abbiamo "
-"annullato il tuo rodine.\n"
+"annullato il tuo ordine.\n"
 "\n"
-"Un saluto,  \n"
-"{event}"
+"Un saluto,\n"
+"\n"
+"Il team di {event}"
 
 #: pretix/control/views/orders.py:1052
 msgid ""
@@ -25128,11 +25142,12 @@ msgstr ""
 "\n"
 "abbiamo rimborsato {amount} per il tuo ordine.\n"
 "\n"
-"Puoi utilizzare la Gift Card {giftcard} per pagare altri biglietti futuri "
-"nel nostro shop.\n"
+"Puoi utilizzare il codice per una gift card {giftcard} per pagare altri "
+"biglietti futuri nel nostro shop.\n"
 "\n"
-"Un saluto,  \n"
-"{event}"
+"Un saluto,\n"
+"\n"
+"Il team di {event}"
 
 #: pretix/control/views/orders.py:1394
 msgid "The refunds you selected do not match the selected total refund amount."
@@ -26678,7 +26693,7 @@ msgid "Invoice {invoice_number}"
 msgstr "Numero fattura"
 
 #: pretix/plugins/banktransfer/signals.py:137
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -26691,13 +26706,12 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"hai richiesto di inviarti il link del tuo ordine per {event}.\n"
+"ricevi questo messaggio perché è stato richiesto un ordine da {order_email} "
+"per l'evento {event} ed è stato richiesto di inoltrarti la ricevuta.\n"
 "\n"
-"Puoi cambiare i dettagli del tuo ordine e vedere lo stato qui:\n"
-"{url}\n"
+"Un saluto,\n"
 "\n"
-"Un saluto,  \n"
-" {event}"
+"Il team di {event}"
 
 #: pretix/plugins/banktransfer/tasks.py:171
 msgid "Automatic split to multiple orders not possible."
@@ -28679,11 +28693,11 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/sendmail/views.py:516
-#, fuzzy, python-format
+#, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] "Abilita lista d'attesa"
-msgstr[1] "Abilita lista d'attesa"
+msgstr[0] "C'è %(number)s elemento in lista d'attesa"
+msgstr[1] "Ci sono %(number)s elementi in lista d'attesa"
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
@@ -32046,12 +32060,11 @@ msgid "Calendar"
 msgstr "Calendario"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:29
-#, fuzzy, python-format
-#| msgid "Upcoming events"
+#, python-format
 msgid "%(count)s event"
 msgid_plural "%(count)s events"
-msgstr[0] "Prossimi eventi"
-msgstr[1] "Prossimi eventi"
+msgstr[0] "%(count)s evento"
+msgstr[1] "%(count)s eventi"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:68
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
@@ -32622,7 +32635,7 @@ msgstr "Non ti è consentito accedere alla modalità macchina del tempo."
 
 #: pretix/presale/views/event.py:968
 msgid "This feature is only available in test mode."
-msgstr "This feature is only available in test mode."
+msgstr "Questa funzione è disponibile solo in modalità test."
 
 #: pretix/presale/views/event.py:985
 #, fuzzy
