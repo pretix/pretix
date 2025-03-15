@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-15 20:49+0000\n"
+"PO-Revision-Date: 2025-03-16 05:00+0000\n"
 "Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -6723,17 +6723,22 @@ msgstr ""
 #: pretix/base/models/vouchers.py:384
 msgid "You can not select a subevent if your event is not an event series."
 msgstr ""
+"Non è possibile selezionare un sottoevento se l'evento non è una serie di "
+"eventi."
 
 #: pretix/base/models/vouchers.py:482
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
+"Non è possibile creare un buono che blocca la quota poiché il prodotto o la "
+"quota selezionati sono attualmente esauriti o completamente riservati."
 
 #: pretix/base/models/vouchers.py:504
 #, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr "L'identificativo {id} del posto non appartiene a questo evento."
+msgstr ""
+"L'identificativo del posto specificato \"{id}\" non esiste per questo evento."
 
 #: pretix/base/models/vouchers.py:508
 #, python-brace-format
@@ -6741,68 +6746,69 @@ msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
 msgstr ""
-"Il posto \"{id}\" non è al momento dispoinibile (bloccato, già venduto o per "
-"un voucher differente)."
+"Il posto \"{id}\" non è al momento disponibile (bloccato, già venduto o per "
+"un buono differente)."
 
 #: pretix/base/models/waitinglist.py:64
 msgid "On waiting list since"
-msgstr ""
+msgstr "In lista d'attesa da"
 
 #: pretix/base/models/waitinglist.py:84
 msgid "Assigned voucher"
-msgstr ""
+msgstr "Buono assegnato"
 
 #: pretix/base/models/waitinglist.py:93
 msgid "The product the user waits for."
-msgstr ""
+msgstr "Il prodotto che l'utente stava aspettando."
 
 #: pretix/base/models/waitinglist.py:101
 msgid "The variation of the product selected above."
-msgstr ""
+msgstr "La variante del prodotto selezionato sopra."
 
 #: pretix/base/models/waitinglist.py:113
 msgid "Waiting list entry"
-msgstr ""
+msgstr "Voce in lista d'attesa"
 
 #: pretix/base/models/waitinglist.py:114
 msgid "Waiting list entries"
-msgstr ""
+msgstr "Voci in lista d'attesa"
 
 #: pretix/base/models/waitinglist.py:159
 msgid "This product is currently not available."
 msgstr "Questo prodotto non è al momento disponibile."
 
 #: pretix/base/models/waitinglist.py:186
-#, fuzzy
 msgid "No seat with this product is currently available."
-msgstr "Questo prodotto non è al momento disponibile."
+msgstr "Al momento non è disponibile alcun posto con questo prodotto."
 
 #: pretix/base/models/waitinglist.py:189
 msgid "A voucher has already been sent to this person."
-msgstr ""
+msgstr "Un buono è stato già inviato a questa persona."
 
 #: pretix/base/models/waitinglist.py:191
 msgid "This entry is anonymized and can no longer be used."
-msgstr ""
+msgstr "Questo inserimento è anonimizzato e non può più essere utilizzato."
 
 #: pretix/base/models/waitinglist.py:204
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
-msgstr ""
+msgstr "Creato automaticamente dalla voce della lista d'attesa per {email}"
 
 #: pretix/base/models/waitinglist.py:295
 msgid "The selected item does not belong to this event."
-msgstr ""
+msgstr "L'elemento selezionato non appartiene a questo evento."
 
 #: pretix/base/models/waitinglist.py:297
 msgid "Please select a specific variation of this product."
-msgstr ""
+msgstr "Per favore, seleziona una variante specifica per questo prodotto."
 
 #: pretix/base/models/waitinglist.py:315
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
 msgstr ""
+"Sei già in questa lista d'attesa! Ti faremo sapere non appena avremo un "
+"biglietto disponibile per te."
 
 #: pretix/base/notifications.py:192 pretix/control/navigation.py:193
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:20
@@ -6817,11 +6823,11 @@ msgstr "Date"
 #: pretix/plugins/reports/accountingreport.py:317
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:438
 msgid "Net total"
-msgstr ""
+msgstr "Totale netto"
 
 #: pretix/base/notifications.py:202
 msgid "Pending amount"
-msgstr ""
+msgstr "Ammontare rimanente"
 
 #: pretix/base/notifications.py:204 pretix/control/forms/filter.py:211
 #: pretix/control/forms/modelimport.py:81
@@ -6830,7 +6836,7 @@ msgstr "Stato ordine"
 
 #: pretix/base/notifications.py:222
 msgid "Purchased products"
-msgstr ""
+msgstr "Prodotti comprati"
 
 #: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:384
 #: pretix/base/services/placeholders.py:393
@@ -6841,12 +6847,13 @@ msgstr "Vedi i dettagli dell'ordine"
 #: pretix/base/notifications.py:234
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr ""
+msgstr "È stato effettuato un nuovo ordine: {order.code}"
 
 #: pretix/base/notifications.py:240
 #, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
 msgstr ""
+"È stato effettuato un nuovo ordine che richiede approvazione: {order.code}"
 
 #: pretix/base/notifications.py:246
 #, python-brace-format
@@ -6856,7 +6863,7 @@ msgstr "L'ordine {order.code} è stato segnato come pagato."
 #: pretix/base/notifications.py:252
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr ""
+msgstr "L'ordine {order.code} è stato annullato."
 
 #: pretix/base/notifications.py:258
 #, python-brace-format
@@ -6866,80 +6873,83 @@ msgstr "L'ordine {order.code} è stato riattivato."
 #: pretix/base/notifications.py:264
 #, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr ""
+msgstr "L'ordine {order.code} è stato segnato come scaduto."
 
 #: pretix/base/notifications.py:270
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
 msgstr ""
+"Le informazioni sul biglietto dell'ordine {order.code} sono state modificate."
 
 #: pretix/base/notifications.py:276
 #, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr ""
+msgstr "L'indirizzo di contatto dell'ordine {order.code} è stato modificato."
 
 #: pretix/base/notifications.py:282
 #, python-brace-format
 msgid "Order {order.code} has been changed."
-msgstr ""
+msgstr "L'ordine {order.code} è stato cambiato."
 
 #: pretix/base/notifications.py:287
 msgid "Order has been overpaid"
-msgstr "L'ordine è stato sovrapagato"
+msgstr "L'ordine è stato pagato in eccesso"
 
 #: pretix/base/notifications.py:288
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr ""
+msgstr "L'ordine {order.code} è stato pagato in eccesso."
 
 #: pretix/base/notifications.py:294
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr ""
+msgstr "Si è verificato un rimborso esterno per {order.code}."
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
-msgstr ""
+msgstr "Rimborso richiesto"
 
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr ""
+msgstr "Ti è stato richiesto di emettere un rimborso per {order.code}."
 
 #: pretix/base/payment.py:86
 msgctxt "payment"
 msgid "Apple Pay"
-msgstr ""
+msgstr "Apple Pay"
 
 #: pretix/base/payment.py:87
 msgctxt "payment"
 msgid "Google Pay"
-msgstr ""
+msgstr "Google Pay"
 
 #: pretix/base/payment.py:256
 #: pretix/presale/templates/pretixpresale/event/order.html:115
 msgid "Pay now"
-msgstr ""
+msgstr "Paga ora"
 
 #: pretix/base/payment.py:330
 msgid "Enable payment method"
-msgstr ""
+msgstr "Abilita metodo di pagamento"
 
 #: pretix/base/payment.py:336
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
+"Dopo la data indicata, gli utenti non potranno più scegliere questo "
+"fornitore di servizi di pagamento."
 
 #: pretix/base/payment.py:342
-#, fuzzy
-#| msgid "This variation will not be sold before the given date."
 msgid ""
 "Users will not be able to choose this payment provider before the given date."
-msgstr "Questa variante non sarà venduta prima della data indicata."
+msgstr ""
+"Gli utenti non potranno scegliere questo fornitore di servizi di pagamento "
+"prima della data indicata."
 
 #: pretix/base/payment.py:347
 msgid "Minimum order total"
-msgstr ""
+msgstr "Minimo ordine totale"
 
 #: pretix/base/payment.py:348
 msgid ""
@@ -6947,10 +6957,14 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Questo pagamento sarà disponibile solo se il totale dell'ordine è uguale o "
+"superiore al valore indicato. Il totale dell'ordine per questo scopo può "
+"essere calcolato senza tenere conto delle commissioni imposte da questo "
+"metodo di pagamento."
 
 #: pretix/base/payment.py:358
 msgid "Maximum order total"
-msgstr ""
+msgstr "Massimo ordine totale"
 
 #: pretix/base/payment.py:359
 msgid ""
@@ -6958,10 +6972,14 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Questo pagamento sarà disponibile solo se il totale dell'ordine è uguale o "
+"inferiore al valore indicato. Il totale dell'ordine per questo scopo può "
+"essere calcolato senza tenere conto delle commissioni imposte da questo "
+"metodo di pagamento."
 
 #: pretix/base/payment.py:369 pretix/base/payment.py:378
 msgid "Additional fee"
-msgstr ""
+msgstr "Tariffa aggiuntiva"
 
 #: pretix/base/payment.py:370
 msgid "Absolute value"
@@ -6969,11 +6987,11 @@ msgstr "Valore assoluto"
 
 #: pretix/base/payment.py:379
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Percentuale dell'ordine totale."
 
 #: pretix/base/payment.py:385
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Calcola la commissione dal valore totale, commissione inclusa."
 
 #: pretix/base/payment.py:386
 #, python-brace-format
@@ -6983,10 +7001,15 @@ msgid ""
 "rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"Ti consigliamo di abilitare questa opzione se vuoi che i tuoi utenti paghino "
+"le commissioni di pagamento del tuo fornitore di servizi di pagamento. <a "
+"href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\">Clicca qui per "
+"informazioni dettagliate su cosa fa.</a> Non dimenticare di impostare le "
+"commissioni corrette qui sopra!"
 
 #: pretix/base/payment.py:394
 msgid "Text on invoices"
-msgstr ""
+msgstr "Testo su fatture"
 
 #: pretix/base/payment.py:395
 msgid ""
@@ -6995,10 +7018,14 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Verrà stampato appena sotto le cifre di pagamento e sopra il testo di "
+"chiusura sulle fatture. Verrà utilizzato solo se la fattura viene generata "
+"prima che l'ordine venga pagato. Se la fattura viene generata in seguito, "
+"mostrerà un testo che indica che è già stata pagata."
 
 #: pretix/base/payment.py:404
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Limita ai Paesi"
 
 #: pretix/base/payment.py:406
 msgid ""
@@ -7006,11 +7033,17 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
+"Consenti di scegliere questo fornitore di pagamento solo per gli indirizzi "
+"di fatturazione nei paesi selezionati. Se non selezioni alcun paese, sono "
+"consentiti tutti i paesi. Questa opzione è abilitata solo se è richiesto "
+"l'indirizzo di fatturazione."
 
 #: pretix/base/payment.py:425
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
 msgstr ""
+"Consenti l'utilizzo di questo fornitore di servizi di pagamento solo nei "
+"canali di vendita selezionati."
 
 #: pretix/base/payment.py:429
 msgid "Hide payment method"
@@ -7021,6 +7054,8 @@ msgid ""
 "The payment method will not be shown by default but only to people who enter "
 "the shop through a special link."
 msgstr ""
+"Il metodo di pagamento non verrà mostrato di default, ma solo a chi accederà "
+"allo shop tramite un link apposito."
 
 #: pretix/base/payment.py:438
 msgid "Link to enable payment method"
@@ -7029,37 +7064,44 @@ msgstr "Link per abilitare metodo di pagamento"
 #: pretix/base/payment.py:447
 msgid "Share this link with customers who should use this payment method."
 msgstr ""
+"Condividi questo link con i clienti che dovrebbero utilizzare questo metodo "
+"di pagamento."
 
 #: pretix/base/payment.py:452
 msgid "Do not send a payment reminder mail"
-msgstr ""
+msgstr "Non inviare una mail di promemoria di pagamento"
 
 #: pretix/base/payment.py:453
 msgid ""
 "Users will not receive a reminder mail to pay for their order before it "
 "expires if they have chosen this payment method."
 msgstr ""
+"Se hanno scelto questo metodo di pagamento, gli utenti non riceveranno un'e-"
+"mail di promemoria per pagare l'ordine prima della scadenza."
 
 #: pretix/base/payment.py:500
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Il pagamento per questa fattura è già stato ricevuto."
 
 #: pretix/base/payment.py:970
 msgid ""
 "This payment is already being processed and can not be canceled any more."
 msgstr ""
+"Questo pagamento è già in fase di elaborazione e non può più essere "
+"annullato."
 
 #: pretix/base/payment.py:984
 msgid "Automatic refunds are not supported by this payment provider."
 msgstr ""
+"Questo fornitore di servizi di pagamento non supporta i rimborsi automatici."
 
 #: pretix/base/payment.py:1075
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
 msgstr ""
-"Il pagamento non è richiesto per questo ordine perchè include solo prodotti "
+"Non è richiesto alcun pagamento poiché questo ordine include solo prodotti "
 "gratuiti."
 
 #: pretix/base/payment.py:1082
@@ -7068,7 +7110,7 @@ msgstr "Gratuito"
 
 #: pretix/base/payment.py:1114
 msgid "Box office"
-msgstr ""
+msgstr "Botteghino"
 
 #: pretix/base/payment.py:1162 pretix/base/payment.py:1181
 #: pretix/plugins/manualpayment/apps.py:30
@@ -7081,6 +7123,8 @@ msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
+"In modalità test, puoi semplicemente contrassegnare manualmente questo "
+"ordine come pagato nel backend dopo averlo creato."
 
 #: pretix/base/payment.py:1188 pretix/base/payment.py:1329
 #: pretix/plugins/banktransfer/payment.py:156
@@ -7096,12 +7140,13 @@ msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
-"Questo testo compare durante l'acquisto quando l'utente sceglie il metodo di "
-"pagamento. Dovrà dare una breve spiegazione sul metodo scelto."
+"Questo testo comparirà durante l'acquisto quando l'utente sceglie il metodo "
+"di pagamento. Dovrà dare una breve spiegazione sul metodo scelto."
 
 #: pretix/base/payment.py:1198
 msgid "Payment process description in order confirmation emails"
 msgstr ""
+"Descrizione del processo di pagamento nelle e-mail di conferma dell'ordine"
 
 #: pretix/base/payment.py:1199
 #, python-brace-format
@@ -7111,10 +7156,14 @@ msgid ""
 "payment. You can use the placeholders {order}, {amount}, {currency} and "
 "{amount_with_currency}."
 msgstr ""
+"Questo testo verrà incluso per il segnaposto {payment_info} nelle e-mail di "
+"conferma dell'ordine. Dovrebbe istruire l'utente su come procedere con il "
+"pagamento. Puoi usare i segnaposto {order}, {amount}, {currency} e "
+"{amount_with_currency}."
 
 #: pretix/base/payment.py:1206
 msgid "Payment process description for pending orders"
-msgstr ""
+msgstr "Descrizione del processo di pagamento per gli ordini in sospeso"
 
 #: pretix/base/payment.py:1207
 #, python-brace-format
@@ -7123,16 +7172,23 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
+"Questo testo verrà mostrato nella pagina di conferma dell'ordine per gli "
+"ordini in sospeso. Dovrebbe istruire l'utente su come procedere con il "
+"pagamento. Puoi usare i segnaposto {order}, {amount}, {currency} e "
+"{amount_with_currency}."
 
 #: pretix/base/payment.py:1215 pretix/plugins/banktransfer/payment.py:151
 msgid ""
 "Create an invoice for orders using bank transfer immediately if the event is "
 "otherwise configured to create invoices after payment is completed."
 msgstr ""
+"Crea immediatamente una fattura per gli ordini effettuati tramite bonifico "
+"bancario, se l'evento è altrimenti configurato per creare fatture dopo il "
+"completamento del pagamento."
 
 #: pretix/base/payment.py:1266
 msgid "Offsetting"
-msgstr ""
+msgstr "Compensazione"
 
 #: pretix/base/payment.py:1280 pretix/control/views/orders.py:1244
 msgid "You entered an order that could not be found."
@@ -7141,12 +7197,11 @@ msgstr "Hai inserito un ordine che non è stato trovato."
 #: pretix/base/payment.py:1309
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr ""
+msgstr "Bilanciato rispetto agli ordini: %s"
 
 #: pretix/base/payment.py:1335
-#, fuzzy
 msgid "Payment method description"
-msgstr "Nome del metodo di pagamento"
+msgstr "Descrizione del metodo di pagamento"
 
 #: pretix/base/payment.py:1352
 msgid "In test mode, only test cards will work."
@@ -7155,12 +7210,12 @@ msgstr "Nella modalità test funzionano solo carte di test."
 #: pretix/base/payment.py:1433 pretix/base/payment.py:1494
 #: pretix/base/payment.py:1539 pretix/base/payment.py:1541
 msgid "This gift card does not support this currency."
-msgstr "Questa gift card non supporta questa valuta."
+msgstr "Questa carta regalo non supporta questa valuta."
 
 #: pretix/base/payment.py:1435 pretix/base/payment.py:1497
 #: pretix/base/payment.py:1547
 msgid "This gift card can only be used in test mode."
-msgstr "Questa gift card può essere utilizzata solo in modalità test."
+msgstr "Questa carta regalo può essere utilizzata solo in modalità test."
 
 #: pretix/base/payment.py:1437 pretix/base/payment.py:1500
 #: pretix/base/payment.py:1549
@@ -7170,48 +7225,54 @@ msgstr "Solo carte regalo di test possono essere usate in modalità di test."
 #: pretix/base/payment.py:1439 pretix/base/payment.py:1503
 #: pretix/base/payment.py:1551
 msgid "This gift card is no longer valid."
-msgstr "Questa gift card non è più valida."
+msgstr "Questa carta regalo non è più valida."
 
 #: pretix/base/payment.py:1441 pretix/base/payment.py:1506
 msgid "All credit on this gift card has been used."
-msgstr "Tutti i crediti di questa gift card sono stati utilizzati."
+msgstr "Il credito di questa carta regalo è stato usato."
 
 #: pretix/base/payment.py:1445
 msgid "This gift card is already used for your payment."
-msgstr "Questa gift card è già stata utilizzzta per il tuo pagamento."
+msgstr "Questa carta regalo è già stata utilizzata per il tuo pagamento."
 
 #: pretix/base/payment.py:1460 pretix/base/payment.py:1486
 #: pretix/base/payment.py:1529
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr "Non puoi pagare con una gift card quando stai comprando una gift card."
+msgstr ""
+"Non puoi pagare con una carta regalo quando stai comprando una carta regalo."
 
 #: pretix/base/payment.py:1476 pretix/base/payment.py:1519
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
+"Hai inserito un buono invece di una carta regalo. I buoni possono essere "
+"inseriti solo nella prima pagina del negozio sotto la selezione del prodotto."
 
 #: pretix/base/payment.py:1479 pretix/base/payment.py:1522
 msgid "This gift card is not known."
-msgstr ""
+msgstr "Questa carta regalo è sconosciuta."
 
 #: pretix/base/payment.py:1481 pretix/base/payment.py:1524
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
+"Questa carta regalo non può essere riscattata perché il suo codice non è "
+"univoco. Contatta l'organizzatore di questo evento."
 
 #: pretix/base/payment.py:1543
 msgid "This gift card is not accepted by this event organizer."
 msgstr ""
+"Questa carta regalo non è accettata dall'organizzatore di questo evento."
 
 #: pretix/base/payment.py:1545
 msgid "This gift card was used in the meantime. Please try again."
-msgstr "Questa gift card è stata già usata. Prova di nuovo."
+msgstr "Questa gift card è stata già usata nel frattempo. Prova di nuovo."
 
 #: pretix/base/pdf.py:96
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Codice del biglietto (contenuto del codice a barre)"
 
 #: pretix/base/pdf.py:108
 msgid "Order position number"
@@ -7225,7 +7286,7 @@ msgstr "Numero posizione ordine"
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:798 pretix/control/views/pdf.py:94
 msgid "Sample product"
-msgstr ""
+msgstr "Prodotto campione"
 
 #: pretix/base/pdf.py:126
 msgid "Variation name"
