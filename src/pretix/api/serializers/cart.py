@@ -176,7 +176,7 @@ class BaseCartPositionCreateSerializer(I18nAwareModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('_quotas')
-        answers_data = validated_data.pop('answers')
+        answers_data = validated_data.pop('answers', [])
 
         attendee_name = validated_data.pop('attendee_name', '')
         if attendee_name and not validated_data.get('attendee_name_parts'):
