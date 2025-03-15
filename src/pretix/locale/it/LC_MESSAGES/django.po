@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
 "PO-Revision-Date: 2025-03-15 18:00+0000\n"
-"Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
+"Last-Translator: Rosariocastellana <rosariocastellana@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -16250,7 +16250,7 @@ msgstr "Pagamenti"
 
 #: pretix/control/navigation.py:376
 msgid "User settings"
-msgstr ""
+msgstr "Impostazioni utente"
 
 #: pretix/control/navigation.py:387
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
