@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-15 18:00+0000\n"
-"Last-Translator: Rosariocastellana <rosariocastellana@gmail.com>\n"
+"PO-Revision-Date: 2025-03-15 20:49+0000\n"
+"Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -2815,19 +2815,19 @@ msgstr "Ultima data di fatturazione dell'ordine"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:9
 msgid "Reusable media"
-msgstr "Media Riutilizzabile"
+msgstr "Media riutilizzabile"
 
 #: pretix/base/exporters/reusablemedia.py:35
 msgctxt "export_category"
 msgid "Reusable media"
-msgstr "Media Riutilizzabile"
+msgstr "Media riutilizzabile"
 
 #: pretix/base/exporters/reusablemedia.py:36
 msgid ""
 "Download a spread sheet with the data of all reusable medias on your account."
 msgstr ""
 "Scarica un foglio di calcolo con le informazioni con i dati di tutti i media "
-"riutlizzabili dell' account."
+"riutilizzabili dell' account."
 
 #: pretix/base/exporters/reusablemedia.py:46 pretix/base/models/media.py:67
 msgctxt "reusable_medium"
@@ -6111,6 +6111,8 @@ msgstr "Membri del team"
 #: pretix/base/models/organizer.py:289
 msgid "Require all members of this team to use two-factor authentication"
 msgstr ""
+"Richiedi a tutti i membri di questo team di utilizzare l'autenticazione a "
+"due fattori"
 
 #: pretix/base/models/organizer.py:290
 msgid ""
@@ -6118,56 +6120,63 @@ msgid ""
 "up two-factor authentication or leave the team. The setting may take a few "
 "minutes to become effective for all users."
 msgstr ""
+"Se attivi questa opzione, tutti i membri del team dovranno impostare "
+"l'autenticazione a due fattori o abbandonare il team. L'impostazione "
+"potrebbe richiedere alcuni minuti per diventare effettiva per tutti gli "
+"utenti."
 
 #: pretix/base/models/organizer.py:297
 msgid "Can create events"
-msgstr ""
+msgstr "Può creare eventi"
 
 #: pretix/base/models/organizer.py:301
 msgid "Can change teams and permissions"
-msgstr ""
+msgstr "Può cambiare team e permessi"
 
 #: pretix/base/models/organizer.py:305
 msgid "Can change organizer settings"
-msgstr ""
+msgstr "Può cambiare impostazioni organizzatore"
 
 #: pretix/base/models/organizer.py:306
 msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
+"Chi dispone di questa impostazione può accedere alla maggior parte dei dati "
+"di tutti i tuoi eventi, ad esempio tramite i report sulla privacy, quindi "
+"fai attenzione a chi aggiungi a questo team!"
 
 #: pretix/base/models/organizer.py:311
 msgid "Can manage customer accounts"
-msgstr ""
+msgstr "Può gestire account clienti"
 
 #: pretix/base/models/organizer.py:315
 msgid "Can manage reusable media"
-msgstr ""
+msgstr "Può gestire media riutilizzabili"
 
 #: pretix/base/models/organizer.py:319
 msgid "Can manage gift cards"
-msgstr ""
+msgstr "Può gestire carte regalo"
 
 #: pretix/base/models/organizer.py:323
 msgid "Can change event settings"
-msgstr ""
+msgstr "Può cambiare impostazioni eventi"
 
 #: pretix/base/models/organizer.py:327
 msgid "Can change product settings"
-msgstr ""
+msgstr "Può cambiare impostazioni prodotti"
 
 #: pretix/base/models/organizer.py:331
 msgid "Can view orders"
-msgstr ""
+msgstr "Può vedere ordini"
 
 #: pretix/base/models/organizer.py:335
 msgid "Can change orders"
-msgstr ""
+msgstr "Può cambiare ordini"
 
 #: pretix/base/models/organizer.py:339
 msgid "Can perform check-ins"
-msgstr ""
+msgstr "Può effettuare check-in"
 
 #: pretix/base/models/organizer.py:340
 msgid ""
@@ -6175,41 +6184,42 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"Ciò include la ricerca dei partecipanti, che può essere utilizzata per "
+"ottenere informazioni personali sui partecipanti. Gli utenti con "
+"\"può cambiare ordini\" possono anche eseguire il check-in."
 
 #: pretix/base/models/organizer.py:345
 msgid "Can view vouchers"
-msgstr ""
+msgstr "Può vedere buoni"
 
 #: pretix/base/models/organizer.py:349
 msgid "Can change vouchers"
-msgstr ""
+msgstr "Può cambiare buoni"
 
 #: pretix/base/models/organizer.py:353
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr ""
+msgstr "%(name)s su %(object)s"
 
 #: pretix/base/models/organizer.py:385
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:64
 msgid "Team"
-msgstr ""
+msgstr "Team"
 
 #: pretix/base/models/organizer.py:386 pretix/control/navigation.py:527
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:6
 msgid "Teams"
-msgstr ""
+msgstr "Team"
 
 #: pretix/base/models/organizer.py:406
 #, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr ""
+msgstr "Invita '{email}' al team '{team}'"
 
 #: pretix/base/models/organizer.py:538
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
-#, fuzzy
-#| msgid "Internal identifier"
 msgid "Identifier"
-msgstr "identificatore interno"
+msgstr "Identificatore"
 
 #: pretix/base/models/organizer.py:548
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:54
@@ -6220,21 +6230,24 @@ msgstr "Tipo"
 #: pretix/base/models/seating.py:45 pretix/base/models/tax.py:305
 #: pretix/base/pdf.py:1269
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "Il tuo file di layout non è un file JSON valido."
 
 #: pretix/base/models/seating.py:54 pretix/base/models/seating.py:78
 msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgstr ""
+"Il tuo file di layout non è una planimetria valida. Messaggio di errore: {}"
 
 #: pretix/base/models/seating.py:63
 #, python-brace-format
 msgid "Seat with zone {zone}, row {row}, and number {number} has no seat ID."
 msgstr ""
+"Il posto a sedere con zona {zone}, fila {row} e numero {number} non ha un "
+"identificativo."
 
 #: pretix/base/models/seating.py:71
 #, python-brace-format
 msgid "Multiple seats have the same ID: {id}"
-msgstr ""
+msgstr "Più posti a sedere hanno lo stesso ID: {id}"
 
 #: pretix/base/models/seating.py:199
 #, python-brace-format
@@ -6247,93 +6260,87 @@ msgid "Seat {number}"
 msgstr "Posto {number}"
 
 #: pretix/base/models/tax.py:144
-#, fuzzy
 msgid "Standard rates"
-msgstr "Tutte le fatture"
+msgstr "Tariffe standard"
 
 #: pretix/base/models/tax.py:148
 msgctxt "tax_code"
 msgid "Standard rate"
-msgstr ""
+msgstr "Tariffa standard"
 
 #: pretix/base/models/tax.py:152
-#, fuzzy
-#| msgid "Regenerate"
 msgctxt "tax_code"
 msgid "Reduced rate"
-msgstr "Rigenera"
+msgstr "Tariffa ridotta"
 
 #: pretix/base/models/tax.py:156
 msgctxt "tax_code"
 msgid ""
 "Averaged rate (other revenue in a agricultural and silvicultural business)"
-msgstr ""
+msgstr "Tasso medio (altre entrate in un'azienda agricola e selvicolturale)"
 
 #: pretix/base/models/tax.py:164
-#, fuzzy
-#| msgid "Reverse charge"
 msgctxt "tax_code"
 msgid "Reverse charge"
-msgstr "Accredito"
+msgstr "Addebito inverso"
 
 #: pretix/base/models/tax.py:168
-#, fuzzy
-#| msgid "Tax rate"
 msgid "Tax free"
-msgstr "Tassazione"
+msgstr "Esente da tasse"
 
 #: pretix/base/models/tax.py:171
 msgctxt "tax_code"
 msgid "Services outside of scope of tax"
-msgstr ""
+msgstr "Servizi fuori dall'ambito fiscale"
 
 #: pretix/base/models/tax.py:174
 msgctxt "tax_code"
 msgid "Exempt from tax (no reason given)"
-msgstr ""
+msgstr "Esente da tasse (nessuna ragione fornita)"
 
 #: pretix/base/models/tax.py:177
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr ""
+msgstr "Beni a tasso zero"
 
 #: pretix/base/models/tax.py:180
 msgctxt "tax_code"
 msgid "Free export item, VAT not charged"
-msgstr ""
+msgstr "Articolo di libera esportazione, IVA non addebitata"
 
 #: pretix/base/models/tax.py:183
 msgctxt "tax_code"
 msgid "VAT exempt for EEA intra-community supply of goods and services"
-msgstr ""
+msgstr "Esenzione IVA per la fornitura intracomunitaria di beni e servizi SEE"
 
 #: pretix/base/models/tax.py:187
 msgid "Special cases"
-msgstr ""
+msgstr "Casi speciali"
 
 #: pretix/base/models/tax.py:189
 msgctxt "tax_code"
 msgid "Canary Islands general indirect tax"
-msgstr ""
+msgstr "Tassa generale indiretta delle Isole Canarie"
 
 #: pretix/base/models/tax.py:190
 msgctxt "tax_code"
 msgid "Tax for production, services and importation in Ceuta and Melilla"
-msgstr ""
+msgstr "Tassa per produzione, servizi e importazioni di Ceuta e Melilla"
 
 #: pretix/base/models/tax.py:191
 msgctxt "tax_code"
 msgid "Transferred (VAT), only in Italy"
-msgstr ""
+msgstr "Trasferito (IVA), solo in Italia"
 
 #: pretix/base/models/tax.py:195
 msgid "Exempt with specific reason"
-msgstr ""
+msgstr "Esente per ragione specifica"
 
 #: pretix/base/models/tax.py:198
 msgctxt "tax_code"
 msgid "Exempt based on article 79, point c of Council Directive 2006/112/EC"
 msgstr ""
+"Esente ex art. 79, punto c) della Direttiva del Consiglio UE 2006/112/EC"
 
 #: pretix/base/models/tax.py:205 pretix/base/models/tax.py:218
 #: pretix/base/models/tax.py:244
@@ -6343,6 +6350,8 @@ msgid ""
 "Exempt based on article {article}, section {section} ({letter}) of Council "
 "Directive 2006/112/EC"
 msgstr ""
+"Esente ex art. {article}, sezione {section} ({letter}) della Direttiva del "
+"Consiglio UE 2006/112/EC"
 
 #: pretix/base/models/tax.py:231
 #, python-brace-format
@@ -6351,36 +6360,39 @@ msgid ""
 "Exempt based on article {article}, section ({letter}) of Council Directive "
 "2006/112/EC"
 msgstr ""
+"Esente ex art. {article}, sezione ({letter}) della Direttiva del Consiglio "
+"UE 2006/112/EC"
 
 #: pretix/base/models/tax.py:252
 msgctxt "tax_code"
 msgid "Exempt based on article 309 of Council Directive 2006/112/EC"
-msgstr ""
+msgstr "Esente ex art. 309 della Direttiva del Consiglio UE 2006/112/EC"
 
 #: pretix/base/models/tax.py:254
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr ""
+msgstr "Acquisto intracomunitario di mezzi di trasporto usati"
 
 #: pretix/base/models/tax.py:256
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of second hand goods"
-msgstr ""
+msgstr "Acquisto intracomunitario di beni di seconda mano"
 
 #: pretix/base/models/tax.py:258
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of works of art"
-msgstr ""
+msgstr "Acquisto intracomunitario di opere d'arte"
 
 #: pretix/base/models/tax.py:260
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of collectors items and antiques"
 msgstr ""
+"Acquisizione intracomunitaria di oggetti da collezione e di antiquariato"
 
 #: pretix/base/models/tax.py:262
 msgctxt "tax_code"
 msgid "France domestic VAT franchise in base"
-msgstr ""
+msgstr "Franchising IVA nazionale in Francia in base"
 
 #: pretix/base/models/tax.py:264
 msgctxt "tax_code"
@@ -6388,6 +6400,8 @@ msgid ""
 "France domestic Credit Notes without VAT, due to supplier forfeit of VAT for "
 "discount"
 msgstr ""
+"Note di credito nazionali in Francia senza IVA, a causa della perdita "
+"dell'IVA da parte del fornitore per lo sconto"
 
 #: pretix/base/models/tax.py:314
 msgid "Your set of rules is not valid. Error message: {}"
@@ -6395,38 +6409,41 @@ msgstr "Il tuo set di regole non è valido. Messaggio di errore: {}"
 
 #: pretix/base/models/tax.py:325
 msgid "Official name"
-msgstr ""
+msgstr "Nome ufficiale"
 
 #: pretix/base/models/tax.py:326
 msgid "Should be short, e.g. \"VAT\""
-msgstr ""
+msgstr "Deve essere corto, p.es. \"IVA\""
 
 #: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1509
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
-#, fuzzy
-#| msgid "Status code"
 msgid "Tax code"
-msgstr "Codice Status"
+msgstr "Codice tassa"
 
 #: pretix/base/models/tax.py:331
 msgid ""
 "If you help us understand what this tax rules legally is, we can use this "
 "information for eInvoices, exporting to accounting system, etc."
 msgstr ""
+"Se ci aiuti a capire quali sono le norme fiscali dal punto di vista legale, "
+"possiamo utilizzare queste informazioni per le fatture elettroniche, "
+"l'esportazione nel sistema contabile, ecc."
 
 #: pretix/base/models/tax.py:351
 msgid "The configured product prices include the tax amount"
-msgstr ""
+msgstr "I prezzi dei prodotti configurati includono l'importo dell'imposta"
 
 #: pretix/base/models/tax.py:355
 msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
+"Mantieni costante l'importo lordo se l'aliquota fiscale cambia in base "
+"all'indirizzo di fatturazione"
 
 #: pretix/base/models/tax.py:359
 msgid "Use EU reverse charge taxation rules"
-msgstr ""
+msgstr "Utilizza le norme UE sulla tassazione inversa"
 
 #: pretix/base/models/tax.py:363
 msgid ""
@@ -6434,10 +6451,13 @@ msgid ""
 "business customers in other EU countries in a way that works for all "
 "organizers. Use custom rules instead."
 msgstr ""
+"Questa funzionalità verrà rimossa in futuro poiché non gestisce l'IVA per i "
+"clienti non commerciali in altri paesi dell'UE in un modo che funzioni per "
+"tutti gli organizzatori. Utilizza invece regole personalizzate."
 
 #: pretix/base/models/tax.py:365
 msgid "DEPRECATED"
-msgstr ""
+msgstr "DEPRECATO"
 
 #: pretix/base/models/tax.py:366
 msgid ""
@@ -6448,45 +6468,60 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"Non consigliato. La maggior parte degli eventi NON sarà qualificata per "
+"l'addebito inverso poiché il luogo di tassazione è la sede dell'evento. "
+"Questa opzione disabilita l'addebito dell'IVA per tutti i clienti al di "
+"fuori dell'UE e per i clienti aziendali in diversi paesi dell'UE che hanno "
+"inserito un identificatore IVA UE valido. Abilita questa opzione solo dopo "
+"aver consultato un consulente fiscale. Nessuna garanzia fornita per il "
+"corretto calcolo delle imposte. UTILIZZA A TUO RISCHIO."
 
 #: pretix/base/models/tax.py:374 pretix/plugins/stripe/payment.py:299
 msgid "Merchant country"
-msgstr ""
+msgstr "Paese del commerciante"
 
 #: pretix/base/models/tax.py:376
 msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
+"Il tuo Paese di residenza. Questo è il Paese in cui la regola "
+"dell'inversione contabile dell'UE non si applicherà, se configurata sopra."
 
 #: pretix/base/models/tax.py:412
 msgid "You need to set your home country to use the reverse charge feature."
 msgstr ""
+"Per utilizzare la funzione di addebito inverso, è necessario impostare il "
+"Paese di residenza."
 
 #: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1556
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
 msgstr ""
+"Non ha senso combinare questo codice fiscale con un'aliquota fiscale diversa "
+"da zero."
 
 #: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1560
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
 msgstr ""
+"Non ha senso combinare questo codice fiscale con un'aliquota fiscale pari a "
+"zero."
 
 #: pretix/base/models/tax.py:426
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr "Incluso {rate}% {name}"
+msgstr "incluso {rate}% {name}"
 
 #: pretix/base/models/tax.py:428
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr ""
+msgstr "più {rate}% {name}"
 
 #: pretix/base/models/tax.py:430
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:46
 msgid "reverse charge enabled"
-msgstr ""
+msgstr "addebito inverso abilitato"
 
 #: pretix/base/models/tax.py:568
 msgctxt "invoice"
@@ -6494,31 +6529,33 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
+"Reverse Charge: secondo gli articoli 194 e 196 della direttiva 2006/112/CEE "
+"del Consiglio, l'obbligo IVA ricade sul destinatario del servizio."
 
 #: pretix/base/models/tax.py:574
 msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
-msgstr ""
+msgstr "L'obbligo IVA ricade sul destinatario del servizio."
 
 #: pretix/base/models/vouchers.py:171
 msgid "No effect"
-msgstr ""
+msgstr "Nessun effetto"
 
 #: pretix/base/models/vouchers.py:172
 msgid "Set product price to"
-msgstr ""
+msgstr "Imposta il prezzo del prodotto su"
 
 #: pretix/base/models/vouchers.py:173
 msgid "Subtract from product price"
-msgstr ""
+msgstr "Sottrai dal prezzo del prodotto"
 
 #: pretix/base/models/vouchers.py:174
 msgid "Reduce product price by (%)"
-msgstr ""
+msgstr "Riduci il prezzo del prodotto di (%)"
 
 #: pretix/base/models/vouchers.py:197
 msgid "Number of times this voucher can be redeemed."
-msgstr ""
+msgstr "Numero di volte questo buono può essere utilizzato."
 
 #: pretix/base/models/vouchers.py:201 pretix/control/views/vouchers.py:120
 msgid "Redeemed"
@@ -6532,6 +6569,12 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
+"Se impostato su più di uno, il buono deve essere riscattato per questo "
+"numero di prodotti quando viene utilizzato per la prima volta. Negli "
+"utilizzi successivi, può essere utilizzato anche per un numero inferiore di "
+"prodotti. Nota che ciò significa che il numero totale di utilizzi in alcuni "
+"casi può essere inferiore a questo limite, ad esempio in caso di "
+"cancellazioni."
 
 #: pretix/base/models/vouchers.py:214
 msgid ""
@@ -6539,6 +6582,9 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
+"Questo è l'importo monetario massimo che verrà scontato utilizzando questo "
+"buono per tutti gli utilizzi. Se questa somma viene raggiunta, il buono non "
+"può più essere utilizzato."
 
 #: pretix/base/models/vouchers.py:227
 msgid ""
@@ -6546,12 +6592,17 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
+"Se attivato, questo buono verrà sottratto dalle quote dei prodotti "
+"interessati, in modo tale che sia garantito che chiunque abbia questo codice "
+"buono riceva un biglietto."
 
 #: pretix/base/models/vouchers.py:235
 msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
+"Se attivato, il possessore di questo codice buono può acquistare i "
+"biglietti, non ce ne sono più."
 
 #: pretix/base/models/vouchers.py:254 pretix/control/forms/vouchers.py:69
 msgid ""
@@ -6559,19 +6610,25 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
+"Questo prodotto viene aggiunto al carrello dell'utente se il buono viene "
+"riscattato. Invece di un prodotto specifico, puoi anche selezionare una "
+"quota. In questo caso, possono essere selezionati tutti i prodotti assegnati "
+"a questa quota."
 
 #: pretix/base/models/vouchers.py:265
 msgid "This variation of the product select above is being used."
-msgstr ""
+msgstr "Viene utilizzata questa variante del prodotto selezionato sopra."
 
 #: pretix/base/models/vouchers.py:274
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
+"Se abilitato, il buono è valido per qualsiasi prodotto interessato da questa "
+"quota."
 
 #: pretix/base/models/vouchers.py:281
 msgid "Specific seat"
-msgstr ""
+msgstr "Posto specifico"
 
 #: pretix/base/models/vouchers.py:288
 msgid ""
@@ -6579,20 +6636,26 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
+"Puoi usare questo campo per raggruppare più buoni insieme. Se inserisci lo "
+"stesso valore per più buoni, puoi ottenere statistiche su quanti di essi "
+"sono stati riscattati ecc."
 
 #: pretix/base/models/vouchers.py:313 pretix/control/navigation.py:267
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:8
 msgid "Vouchers"
-msgstr ""
+msgstr "Buoni"
 
 #: pretix/base/models/vouchers.py:339
 msgid "You cannot select a quota that belongs to a different event."
 msgstr ""
+"Non è possibile selezionare una quota che appartiene a un evento diverso."
 
 #: pretix/base/models/vouchers.py:341
 msgid "You cannot select a quota and a specific product at the same time."
 msgstr ""
+"Non è possibile selezionare una quota e un prodotto specifico allo stesso "
+"momento."
 
 #: pretix/base/models/vouchers.py:344
 msgid ""
@@ -6600,31 +6663,38 @@ msgid ""
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
 msgstr ""
+"Non è possibile selezionare un prodotto disponibile solo come prodotto "
+"aggiuntivo o come parte di un bundle, poiché i buoni non possono essere "
+"applicati a prodotti aggiuntivi o a prodotti in bundle."
 
 #: pretix/base/models/vouchers.py:348
-#, fuzzy
 msgid "You cannot select a product that belongs to a different event."
-msgstr "Non puoi scegliere questo posto."
+msgstr ""
+"Non è possibile selezionare un prodotto che appartiene a un evento diverso."
 
 #: pretix/base/models/vouchers.py:350 pretix/base/models/vouchers.py:360
 msgid ""
 "You cannot select a variation without having selected a product that "
 "provides variations."
 msgstr ""
+"Non è possibile selezionare una variante senza aver prima selezionato un "
+"prodotto che offre varianti."
 
 #: pretix/base/models/vouchers.py:353
 msgid "This variation does not belong to this product."
-msgstr ""
+msgstr "Questa variante non appartiene a questo prodotto."
 
 #: pretix/base/models/vouchers.py:355
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr ""
+msgstr "Al momento non è possibile creare buoni per prodotti aggiuntivi."
 
 #: pretix/base/models/vouchers.py:357 pretix/base/models/vouchers.py:469
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
 msgstr ""
+"È necessario selezionare un prodotto o una quota specifica se questo buono "
+"deve prenotare i biglietti."
 
 #: pretix/base/models/vouchers.py:367
 #, python-format
@@ -6632,17 +6702,23 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
+"Questo buono è già stato riscattato %(redeemed)s volte. Non puoi ridurre il "
+"numero massimo di utilizzi al di sotto di questo numero."
 
 #: pretix/base/models/vouchers.py:376
 msgid ""
 "The maximum number of usages may not be lower than the minimum number of "
 "usages."
 msgstr ""
+"Il numero massimo di utilizzi non può essere inferiore al numero minimo di "
+"utilizzi."
 
 #: pretix/base/models/vouchers.py:382 pretix/base/models/vouchers.py:451
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
+"Se vuoi che questo buono blocchi una quota, devi selezionare una data "
+"specifica."
 
 #: pretix/base/models/vouchers.py:384
 msgid "You can not select a subevent if your event is not an event series."
