@@ -30,81 +30,80 @@
             </div>
         </div>
     </div>
-    {% if events %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 class="panel-title">
-                    <b>
-                    {% if "old" in request.GET %}
-                        {% trans "Past events" %}
-                    {% else %}
-                        {% trans "Upcoming events" %}
-                    {% endif %}
-                    </b>
-                </h2>
-            </div>
-        {% if filter_form.fields %}
-            <div class="panel-subhead">
-                {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
-            </div>
-        {% endif %}
-            <div class="panel-body">
-                <dl class="full-width-list alternating-rows">
-                {% for e in events %}{% eventurl e "presale:event.index" as url %}
-                    <div class="row">
-                        <dt class="col-md-4 col-xs-12"><a href="{{ url }}">{{ e.name }}</a></dt>
-                        <dd class="col-md-3 col-xs-12">
-                        {% if e.settings.show_dates_on_frontpage %}
-                            {% if e.has_subevents %}
-                                {% icon "calendar" %} {% trans "Multiple dates" context "subevent" %}
-                                <br>
-                                <span class="text-muted">
-                                   {{ e.daterange|default:e.get_date_range_display_as_html }}
-                                </span>
-                            {% else %}
-                                {{ e.daterange|default:e.get_date_range_display_as_html }}
-                                {% if e.settings.show_times %}
-                                    {% timezone e.tzname %}
-                                        <br>
-                                        <span class="text-muted" data-time="{{ e.date_from.isoformat }}" data-timezone="{{ e.tzname }}">
-                                            {% icon "clock-o" %}
-                                            {{ e.date_from|date:"TIME_FORMAT" }}
-                                            {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
-                                                – {{ e.date_to|date:"TIME_FORMAT" }}
-                                            {% endif %}
-                                        </span>
-                                    {% endtimezone %}
-                                {% endif %}
-                            {% endif %}
-                        {% else %}
-                            &nbsp;
-                        {% endif %}
-                        </dd>
-                        <dd class="col-md-3 col-xs-6">
-                            <small>
-                                {% include "pretixpresale/fragment_event_list_status.html" with event=e %}
-                            </small>
-                        </dd>
-                        <dd class="col-md-2 col-xs-6 text-right flip">
-                            <a class="btn btn-primary btn-block" href="{{ url }}{% if e.has_subevents and e.match_by_subevents %}{{ filterquery }}{% endif %}">
-                                {% if e.has_subevents %}{% icon "ticket" %} {% trans "Tickets" %}
-                                {% elif e.presale_is_running and e.best_availability_state == 100 %}
-                                    {% icon "ticket" %} {% trans "Tickets" %}
-                                {% else %}
-                                    {% icon "info" %} {% trans "More info" %}
-                                {% endif %}
-                            </a>
-                        </dd>
-                    </div>
-                {% endfor %}
-                </dl>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                <b>
+                {% if "old" in request.GET %}
+                    {% trans "Past events" %}
+                {% else %}
+                    {% trans "Upcoming events" %}
+                {% endif %}
+                </b>
+            </h2>
+        </div>
+    {% if filter_form.fields %}
+        <div class="panel-subhead">
+            {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
         </div>
     {% endif %}
-    {% if "old" in request.GET %}
-        <p><em>{% if not events %}{% trans "No archived events found." %} {% endif %}<a href="?{% url_replace request "old" "" %}">{% trans "Show upcoming" %}</a></em></p>
-    {% else %}
-        <p><em>{% if not events %}{% trans "No public upcoming events found." %} {% endif %}<a href="?{% url_replace request "old" "1" %}">{% trans "Show past events" %}</a></em></p>
-    {% endif %}
+        <div class="panel-body">
+            <dl class="full-width-list alternating-rows">
+            {% for e in events %}{% eventurl e "presale:event.index" as url %}
+                <div class="row">
+                    <dt class="col-md-4 col-xs-12"><a href="{{ url }}">{{ e.name }}</a></dt>
+                    <dd class="col-md-3 col-xs-12">
+                    {% if e.settings.show_dates_on_frontpage %}
+                        {% if e.has_subevents %}
+                            {% icon "calendar" %} {% trans "Multiple dates" context "subevent" %}
+                            <br>
+                            <span class="text-muted">
+                               {{ e.daterange|default:e.get_date_range_display_as_html }}
+                            </span>
+                        {% else %}
+                            {{ e.daterange|default:e.get_date_range_display_as_html }}
+                            {% if e.settings.show_times %}
+                                {% timezone e.tzname %}
+                                    <br>
+                                    <span class="text-muted" data-time="{{ e.date_from.isoformat }}" data-timezone="{{ e.tzname }}">
+                                        {% icon "clock-o" %}
+                                        {{ e.date_from|date:"TIME_FORMAT" }}
+                                        {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
+                                            – {{ e.date_to|date:"TIME_FORMAT" }}
+                                        {% endif %}
+                                    </span>
+                                {% endtimezone %}
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
+                    </dd>
+                    <dd class="col-md-3 col-xs-6">
+                        <small>
+                            {% include "pretixpresale/fragment_event_list_status.html" with event=e %}
+                        </small>
+                    </dd>
+                    <dd class="col-md-2 col-xs-6 text-right flip">
+                        <a class="btn btn-primary btn-block" href="{{ url }}{% if e.has_subevents and e.match_by_subevents %}{{ filterquery }}{% endif %}">
+                            {% if e.has_subevents %}{% icon "ticket" %} {% trans "Tickets" %}
+                            {% elif e.presale_is_running and e.best_availability_state == 100 %}
+                                {% icon "ticket" %} {% trans "Tickets" %}
+                            {% else %}
+                                {% icon "info" %} {% trans "More info" %}
+                            {% endif %}
+                        </a>
+                    </dd>
+                </div>
+            {% empty %}
+                {% if "old" in request.GET %}
+                    <p><em>{% if not events %}{% trans "No archived events found." %} {% endif %}<a href="?{% url_replace request "old" "" %}">{% trans "Show upcoming" %}</a></em></p>
+                {% else %}
+                    <p><em>{% if not events %}{% trans "No public upcoming events found." %} {% endif %}<a href="?{% url_replace request "old" "1" %}">{% trans "Show past events" %}</a></em></p>
+                {% endif %}
+            {% endfor %}
+            </dl>
+        </div>
+    </div>
     {% include "pretixpresale/pagination.html" %}
 {% endblock %}
