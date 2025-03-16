@@ -11,7 +11,7 @@
     <a class="btn btn-primary btn-lg" target="_blank"
             href="{% url "plugins:ticketoutputpdf:getdefault" organizer=request.organizer.slug event=request.event.slug %}">
         <span class="fa fa-paint-brush"></span>
-        {% trans "Open Layout Designer" %}
+        {% trans "Open layout editor" %}
     </a>
     <a class="btn btn-default btn-lg" target="_blank"
             href="{% url "plugins:ticketoutputpdf:index" organizer=request.organizer.slug event=request.event.slug %}">
