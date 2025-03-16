@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-15 18:00+0000\n"
+"PO-Revision-Date: 2025-03-16 19:00+0000\n"
 "Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/it/>\n"
@@ -523,11 +523,11 @@ msgstr "Almeno una delle condizioni sottostanti (oppure)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
 msgid "Event start"
-msgstr "Evento inizia"
+msgstr "Inizio evento"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
 msgid "Event end"
-msgstr "Evento termina"
+msgstr "Fine evento"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
 msgid "Event admission"
