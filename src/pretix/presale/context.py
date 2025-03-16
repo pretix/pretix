@@ -40,7 +40,7 @@ from django.utils.translation import get_language_info
 from django_scopes import get_scope
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.settings import GlobalSettingsObject
+from pretix.base.settings import COUNTRY_STATE_LABEL, GlobalSettingsObject
 from pretix.helpers.i18n import (
     get_javascript_format_without_seconds, get_moment_locale,
 )
@@ -189,6 +189,7 @@ def _default_context(request):
     ctx['html_locale'] = translation.get_language_info(get_language_without_region()).get('public_code', translation.get_language())
     ctx['settings'] = pretix_settings
     ctx['django_settings'] = settings
+    ctx['COUNTRY_STATE_LABEL'] = COUNTRY_STATE_LABEL
 
     ctx['ie_deprecation_warning'] = 'MSIE' in request.headers.get('User-Agent', '') or 'Trident/' in request.headers.get('User-Agent', '')
 

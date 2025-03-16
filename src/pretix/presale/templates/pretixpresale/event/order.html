@@ -7,6 +7,7 @@
 {% load eventurl %}
 {% load phone_format %}
 {% load rich_text %}
+{% load getitem %}
 {% block title %}
     {% if "thanks" in request.GET or "paid" in request.GET %}
         {% trans "Thank you!" %}
@@ -319,7 +320,7 @@
                             <dt>{% trans "Country" %}</dt>
                             <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
                             {% if order.invoice_address.state %}
-                                <dt>{% trans "State" context "address" %}</dt>
+                                <dt>{% trans "State" context "address" as state_label %}{{ COUNTRY_STATE_LABEL|getitem:order.invoice_address.country.code|default:state_label }}</dt>
                                 <dd>{{ order.invoice_address.state_name }}</dd>
                             {% endif %}
                             {% if request.event.settings.invoice_address_vatid and order.invoice_address.vat_id %}

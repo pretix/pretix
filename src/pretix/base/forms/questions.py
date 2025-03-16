@@ -721,7 +721,7 @@ class BaseQuestionsForm(forms.Form):
                     'data-country-information-url': reverse('js_helpers.states'),
                 }),
             )
-            c = [('', pgettext_lazy('address', 'Select state'))]
+            c = [('', '---')]
             fprefix = str(self.prefix) + '-' if self.prefix is not None and self.prefix != '-' else ''
             cc = None
             state = None
@@ -1079,7 +1079,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['country'].choices = CachedCountries()
         self.fields['country'].widget.attrs['data-country-information-url'] = reverse('js_helpers.states')
 
-        c = [('', pgettext_lazy('address', 'Select state'))]
+        c = [('', '---')]
         fprefix = self.prefix + '-' if self.prefix else ''
         cc = None
         if fprefix + 'country' in self.data:

@@ -43,7 +43,7 @@ from django.utils.translation import get_language
 from django_scopes import scope
 
 from pretix.base.models.auth import StaffSession
-from pretix.base.settings import GlobalSettingsObject
+from pretix.base.settings import COUNTRY_STATE_LABEL, GlobalSettingsObject
 from pretix.control.navigation import (
     get_event_navigation, get_global_navigation, get_organizer_navigation,
 )
@@ -140,6 +140,7 @@ def _default_context(request):
     ctx['js_time_format'] = get_javascript_format('TIME_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
     ctx['select2locale'] = get_language()[:2]
+    ctx['COUNTRY_STATE_LABEL'] = COUNTRY_STATE_LABEL
 
     ctx['warning_update_available'] = False
     ctx['warning_update_check_active'] = False
