@@ -25,6 +25,8 @@ import socket
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.forms import SecretKeySettingsField, SettingsForm
@@ -54,6 +56,15 @@ class SMTPMailForm(SettingsForm):
     smtp_password = SecretKeySettingsField(
         label=_("Password"),
         required=False,
+        validators=[RegexValidator(
+            r"^[A-Za-z0-9!\"#$%&'()*+,-./:;<=>?@\^_`{}|~]+$",
+            message=format_lazy(
+                _("The password contains characters not supported by our email system. Please only use characters "
+                  "A-Z, a-z, 0-9, and common special characters ({characters})."),
+
+                characters=r'!"#$%%&\'()*+,-./:;<=>?@\^_`{}|~'
+            )
+        )]
     )
     smtp_use_tls = forms.BooleanField(
         label=_("Use STARTTLS"),
