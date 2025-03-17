@@ -3712,6 +3712,14 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     'MY': (['State', 'Federal territory'], 'long'),
     'MX': (['State', 'Federal district'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
+    'IT': (['Province', 'Free municipal consortium', 'Metropolitan city', 'Autonomous province',
+            'Free municipal consortium', 'Decentralized regional entity'], 'short'),
+}
+COUNTRY_STATE_LABEL = {
+    # Countries in which the "State" field should not be called "State"
+    'CA': pgettext_lazy('address', 'Province'),
+    'JP': pgettext_lazy('address', 'Prefecture'),
+    'IT': pgettext_lazy('address', 'Province'),
 }
 
 settings_hierarkey = Hierarkey(attribute_name='settings')

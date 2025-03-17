@@ -9,6 +9,7 @@
 {% load eventsignal %}
 {% load l10n %}
 {% load phone_format %}
+{% load getitem %}
 {% block title %}
     {% blocktrans trimmed with code=order.code %}
         Order details: {{ code }}
@@ -560,8 +561,8 @@
                                                 {% if line.street or line.zipcode or line.city or line.country %}
                                                     {{ line.street|default_if_none:""|linebreaksbr }}<br>
                                                     {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
+                                                    {% if line.state %}{{ line.state_for_address }}<br>{% endif %}
                                                     {{ line.country.name|default_if_none:"" }}
-                                                    {% if line.state %}<br>{{ line.state }}{% endif %}
                                                 {% else %}
                                                     <em>{% trans "not answered" %}</em>
                                                 {% endif %}
@@ -959,7 +960,7 @@
                                     <dt>{% trans "Country" %}</dt>
                                     <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
                                     {% if order.invoice_address.state %}
-                                        <dt>{% trans "State" context "address" %}</dt>
+                                        <dt>{% trans "State" context "address" as state_label %}{{ COUNTRY_STATE_LABEL|getitem:order.invoice_address.country.code|default:state_label }}</dt>
                                         <dd>{{ order.invoice_address.state_name }}</dd>
                                     {% endif %}
                                     {% if request.event.settings.invoice_address_vatid %}
