@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-02-04 20:00+0000\n"
+"PO-Revision-Date: 2025-03-17 17:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -57,7 +57,7 @@ msgstr "チェコ語"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "クロアチア語"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -4065,10 +4065,8 @@ msgid "Grant type"
 msgstr "グラントタイプ"
 
 #: pretix/base/models/customers.py:420
-#, fuzzy
-#| msgid "Required question"
 msgid "Require PKCE extension"
-msgstr "質問を要求"
+msgstr "PKCEエクステンションを要求"
 
 #: pretix/base/models/customers.py:432
 msgid "Allowed access scopes"
@@ -6951,11 +6949,9 @@ msgid "The payment for this invoice has already been received."
 msgstr "この請求書の支払いはすでに受領済みです。"
 
 #: pretix/base/payment.py:970
-#, fuzzy
-#| msgid "This payment can not be canceled at the moment."
 msgid ""
 "This payment is already being processed and can not be canceled any more."
-msgstr "現時点ではこの支払いはキャンセルできません。"
+msgstr "この支払いは処理中のため、キャンセルできません。"
 
 #: pretix/base/payment.py:984
 msgid "Automatic refunds are not supported by this payment provider."
@@ -9653,10 +9649,8 @@ msgstr ""
 "される言語に関連しています（例：英語）。"
 
 #: pretix/base/settings.py:1311
-#, fuzzy
-#| msgid "This is not an event series."
 msgid "This shop represents an event"
-msgstr "これはイベントシリーズではありません。"
+msgstr "このショップは、イベントを代理しています"
 
 #: pretix/base/settings.py:1313
 msgid ""
@@ -9666,6 +9660,11 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"ギフトカードやいつでも使用できるチケットなど、特定の日付のないもののみを販売"
+"している場合は、このボックスのチェックを外します。その後、イベント開始ページ"
+"などの一部の場所で、システムはイベント日付の表示を停止します。Pretixはまだイ"
+"ベントを中心に構築されたシステムであり、日付は他の場所でも表示される可能性が"
+"あることに注意してください。"
 
 #: pretix/base/settings.py:1326
 msgid "Show event end date"
@@ -14980,7 +14979,7 @@ msgstr "電話番号の入力欄"
 #: pretix/control/forms/organizer.py:1047
 msgctxt "sso_oidc"
 msgid "Query parameters"
-msgstr ""
+msgstr "クエリのパラメータ"
 
 #: pretix/control/forms/organizer.py:1048
 #, python-brace-format
@@ -14988,7 +14987,8 @@ msgctxt "sso_oidc"
 msgid ""
 "Optional query parameters, that will be added to calls to the authorization "
 "endpoint. Enter as: {example}"
-msgstr ""
+msgstr "認証エンドポイントへの呼び出しに追加されるオプションのクエリパラメータ。この"
+"ように入力: {example}"
 
 #: pretix/control/forms/organizer.py:1109
 msgid "Invalidate old client secret and generate a new one"
@@ -23978,10 +23978,8 @@ msgid "Size (mm)"
 msgstr "サイズ（mm）"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:327
-#, fuzzy
-#| msgid "Text color"
 msgid "QR color"
-msgstr "テキストの色"
+msgstr "QRコードの色"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:342
 msgid "Render without whitespace"
@@ -34090,17 +34088,12 @@ msgstr ""
 "更はできません。"
 
 #: pretix/presale/views/order.py:1646
-#, fuzzy
-#| msgid ""
-#| "You may not change your order in a way that increases the total price "
-#| "since payments are no longer being accepted for this event."
 msgid ""
 "You may not change your order in a way that requires additional payment "
 "while we are processing your current payment. Please check back after your "
 "current payment has been accepted."
-msgstr ""
-"支払いはこのイベントでは受け付けていないため、合計金額を増やすような注文の変"
-"更はできません。"
+msgstr "現在の支払いを処理する間、追加の支払いが必要な方法で注文を変更することはでき"
+"ません。現在の支払いが承認されたら、また確認してください。"
 
 #: pretix/presale/views/order.py:1662 pretix/presale/views/order.py:1693
 msgid "You cannot change this order."
