@@ -81,13 +81,13 @@ def _default_context(request):
         'DEBUG': settings.DEBUG,
     }
     _html_head = []
-    if hasattr(request, 'event') and request.user.is_authenticated:
+    if getattr(request, 'event', None) and request.user.is_authenticated:
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
     ctx['html_head'] = "".join(_html_head)
 
     _js_payment_weekdays_disabled = '[]'
-    if getattr(request, 'event', None) and hasattr(request, 'organizer') and request.user.is_authenticated:
+    if getattr(request, 'event', None) and getattr(request, 'organizer', None) and request.user.is_authenticated:
         ctx['nav_items'] = get_event_navigation(request)
 
         if request.event.settings.get('payment_term_weekdays'):
