@@ -44,3 +44,13 @@ def modelcopy(obj: models.Model, **kwargs):
         else:
             setattr(n, f.name, copy.deepcopy(val))
     return n
+
+
+# django 5 contains this in django.utils.choices.flatten_choices
+def flatten_choices(choices):
+    """Flatten choices by removing nested values."""
+    for value_or_group, label_or_nested in choices or ():
+        if isinstance(label_or_nested, (list, tuple)):
+            yield from label_or_nested
+        else:
+            yield value_or_group, label_or_nested

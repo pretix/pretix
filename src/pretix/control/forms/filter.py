@@ -70,6 +70,7 @@ from pretix.helpers.database import (
 )
 from pretix.helpers.dicts import move_to_end
 from pretix.helpers.i18n import get_format_without_seconds, i18ncomp
+from pretix.helpers.models import flatten_choices
 
 PAYMENT_PROVIDERS = []
 
@@ -177,10 +178,10 @@ class FilterForm(forms.Form):
             elif isinstance(v, Model):
                 val = '"' + str(v) + '"'
             elif isinstance(f, forms.MultipleChoiceField):
-                valdict = dict(f.choices)
+                valdict = dict(flatten_choices(f.choices))
                 val = ' or '.join([str(valdict.get(m)) for m in v])
             elif isinstance(f, forms.ChoiceField):
-                val = str(dict(f.choices).get(v))
+                val = str(dict(flatten_choices(f.choices)).get(v))
             elif isinstance(v, datetime):
                 val = date_format(v, 'SHORT_DATETIME_FORMAT')
             elif isinstance(v, Decimal):
