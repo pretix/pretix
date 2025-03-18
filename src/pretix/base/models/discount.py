@@ -35,25 +35,9 @@ from django_scopes import ScopedManager
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
+from pretix.base.models.event import SubEvent
 
 PositionInfo = namedtuple('PositionInfo', ['item_id', 'subevent_id', 'line_price_gross', 'is_addon_to', 'voucher_discount'])
-
-
-def subevent_in_range(subevent_id, event_date_from, event_date_until):
-    from .event import SubEvent
-
-    # No need to check if there is no range
-    if not (event_date_from and event_date_until):
-        return True
-
-    subevent = SubEvent.objects.get(id=subevent_id)
-    # TODO good datetime checks
-    if event_date_from and event_date_until:
-        return subevent.date_from >= event_date_from and subevent.date_until <= event_date_until
-    elif event_date_from:
-        return subevent.date_from >= event_date_from
-    elif event_date_until:
-        return subevent.date_until <= event_date_until
 
 
 class Discount(LoggedModel):
@@ -380,6 +364,24 @@ class Discount(LoggedModel):
         if not self.condition_all_products:
             limit_products = {p.pk for p in self.condition_limit_products.all()}
 
+        subevent_ids = {subevent_id for subevent_id in positions.values()}
+        if self.event_date_from and self.event_date_until:
+            subevents = SubEvent.objects.all().filter(pk__in=subevent_ids).filter(
+                date_from__gte=self.event_date_from,
+                date_from__lte=self.event_date_until,
+            ).values_list('pk', flat=True)
+        elif self.event_date_from:
+            subevents = SubEvent.objects.all().filter(pk__in=subevent_ids).filter(
+                date_from__gte=self.event_date_from,
+            ).values_list('pk', flat=True)
+        elif self.event_date_until:
+            subevents = SubEvent.objects.all().filter(pk__in=subevent_ids).filter(
+                date_from__lte=self.event_date_until,
+            ).values_list('pk', flat=True)
+        else:
+            subevents = SubEvent.objects.values_list('pk', flat=True)
+        subevents_in_range = set(subevents)
+
         # First, filter out everything not even covered by our product scope
         condition_candidates = [
             idx
@@ -388,7 +390,7 @@ class Discount(LoggedModel):
                 (self.condition_all_products or item_id in limit_products) and
                 (self.condition_apply_to_addons or not is_addon_to) and
                 (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
-                and (not subevent_id or subevent_in_range(subevent_id, self.event_date_from, self.event_date_until))
+                and (not subevent_id or subevent_id in subevents_in_range)
             )
         ]
 
