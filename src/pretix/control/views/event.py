@@ -441,16 +441,16 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                             info = [
                                 '<p>',
                                 format_html(_('The plugin {} is now active, you can configure it here:'),
-                                            format_html(mark_safe("<strong>{}</strong>"), pluginmeta.name)),
+                                            format_html("<strong>{}</strong>", pluginmeta.name)),
                                 '</p><p>',
                             ] + [
-                                format_html(mark_safe('<a href="{}" class="btn btn-default">{}</a> '), url, text)
+                                format_html('<a href="{}" class="btn btn-default">{}</a> ', url, text)
                                 for url, text in links
                             ] + ['</p>']
                         else:
                             info = [
                                 format_html(_('The plugin {} is now active.'),
-                                            format_html(mark_safe("<strong>{}</strong>"), pluginmeta.name)),
+                                            format_html("<strong>{}</strong>", pluginmeta.name)),
                             ]
                         messages.success(self.request, mark_safe("".join(info)))
                     else:

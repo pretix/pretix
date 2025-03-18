@@ -286,7 +286,7 @@ class OrderChangedSplit(OrderChangeLogEntryType):
             _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}'),
             old_item=escape(old_item),
             posid=data.get('positionid', '?'),
-            order=format_html(mark_safe('<a href="{}">{}</a>'), url, data['new_order']),
+            order=format_html('<a href="{}">{}</a>', url, data['new_order']),
             old_price=money_filter(Decimal(data['old_price']), event.currency),
         )
 
@@ -303,7 +303,7 @@ class OrderChangedSplitFrom(OrderLogEntryType):
         })
         return format_html(
             _('This order has been created by splitting the order {order}'),
-            order=format_html(mark_safe('<a href="{}">{}</a>'), url, data['original_order']),
+            order=format_html('<a href="{}">{}</a>', url, data['original_order']),
         )
 
 
