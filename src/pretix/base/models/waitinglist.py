@@ -286,6 +286,8 @@ class WaitingListEntry(LoggedModel):
                         'subject': subject,
                         'message': email_content,
                         'recipient': recipient,
+                        'attach_other_files': attach_other_files,
+                        'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
                     }
                 )
 

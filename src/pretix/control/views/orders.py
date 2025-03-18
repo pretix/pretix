@@ -135,6 +135,7 @@ from pretix.control.views import PaginationMixin
 from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
+from pretix.helpers.hierarkey import clean_filename
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
 
@@ -2460,6 +2461,20 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
             Q(action_type__contains="order.position.email")
         )
         return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        for l in ctx["logs"]:
+            if l.parsed_data.get("invoices"):
+                l.parsed_invoices = Invoice.objects.filter(
+                    event=self.request.event,
+                    pk__in=l.parsed_data["invoices"],
+                )
+            if l.parsed_data.get("attach_other_files"):
+                l.parsed_other_files = [
+                    clean_filename(os.path.basename(f)) for f in l.parsed_data["attach_other_files"]
+                ]
+        return ctx
 
 
 class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):

@@ -38,7 +38,9 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import Checkin, Event, InvoiceAddress, Order, User
+from pretix.base.models import (
+    CachedFile, Checkin, Event, InvoiceAddress, Order, User,
+)
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
@@ -56,6 +58,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
     orders = Order.objects.filter(pk__in=objects, event=event)
     subject = LazyI18nString(subject)
     message = LazyI18nString(message)
+    attachments_for_log = [cf.filename for cf in CachedFile.objects.filter(pk__in=attachments)] if attachments else []
 
     for o in orders:
         send_to_order = recipients in ('both', 'orders')
@@ -134,7 +137,11 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                                 'position': p.positionid,
                                 'subject': format_map(subject.localize(o.locale), email_context),
                                 'message': format_map(message.localize(o.locale), email_context),
-                                'recipient': p.attendee_email
+                                'recipient': p.attendee_email,
+                                'attach_tickets': attach_tickets,
+                                'attach_ical': attach_ical,
+                                'attach_other_files': [],
+                                'attach_cached_files': attachments_for_log,
                             }
                         )
                 except SendMailException:
@@ -162,7 +169,11 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                         data={
                             'subject': format_map(subject.localize(o.locale), email_context),
                             'message': format_map(message.localize(o.locale), email_context),
-                            'recipient': o.email
+                            'recipient': o.email,
+                            'attach_tickets': attach_tickets,
+                            'attach_ical': attach_ical,
+                            'attach_other_files': [],
+                            'attach_cached_files': attachments_for_log,
                         }
                     )
             except SendMailException:
