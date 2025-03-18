@@ -429,11 +429,7 @@
                                 {% endif %}
                                 {% if line.subevent %}
                                     <br/>
-                                    <span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
-                                    {% if event.settings.show_times %}
-                                        <span class="fa fa-clock-o"></span>
-                                        {{ line.subevent.date_from|date:"TIME_FORMAT" }}
-                                    {% endif %}
+                                    <span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display_with_times }}
                                 {% endif %}
                                 {% if line.used_membership %}
                                     <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span>

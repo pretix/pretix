@@ -533,8 +533,8 @@ $(function () {
     form_handlers($("body"));
 
     var local_tz = moment.tz.guess()
-    $("span[data-timezone], small[data-timezone]").each(function() {
-        var t = moment.tz($(this).attr("data-time"), $(this).attr("data-timezone"))
+    $("span[data-timezone], small[data-timezone], time[data-timezone]").each(function() {
+        var t = moment.tz($(this).attr("datetime") || $(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
         var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
 
@@ -544,6 +544,7 @@ $(function () {
         });
         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
             var $add = $("<span>")
+            $add.append(" ")
             $add.append($("<span>").addClass("fa fa-globe"))
             if ($(this).is("[data-time-short]")) {
                 $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat"))))

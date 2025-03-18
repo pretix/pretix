@@ -35,6 +35,7 @@
 import datetime
 import sys
 import time
+import zoneinfo
 from datetime import date, timedelta
 from decimal import Decimal
 
@@ -2457,6 +2458,57 @@ class EventTest(TestCase):
         item.hide_without_voucher = True
         item.save()
         assert Event.annotated(Event.objects, 'web').first().active_quotas == []
+
+    @classscope(attr='organizer')
+    def test_date_range_display(self):
+        tz = zoneinfo.ZoneInfo("Europe/Berlin")
+        sets = (
+            (
+                datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
+                datetime.datetime(2025, 3, 9, 22, 0, 0, tzinfo=tz),
+                'Sun, March 9th, 2025',
+                '<time datetime="2025-03-09">Sun, March 9th, 2025</time>',
+                'Sun, March 9th, 2025 20:00–21:00',
+                '<time datetime="2025-03-09">Sun, March 9th, 2025</time> '
+                '<time datetime="2025-03-09T21:00:00+01:00" data-timezone="UTC" data-time-short>20:00–21:00</time>'
+            ),
+            (
+                datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
+                datetime.datetime(2025, 3, 10, 3, 0, 0, tzinfo=tz),
+                'March 9th – 10th, 2025',
+                '<time datetime="2025-03-09">March 9th</time> – <time datetime="2025-03-10">10th, 2025</time>',
+                'March 9th – 10th, 2025 20:00–02:00',
+                '<time datetime="2025-03-09">March 9th</time> – <time datetime="2025-03-10">10th, 2025</time> '
+                '<time datetime="2025-03-09T21:00:00+01:00" data-timezone="UTC" data-time-short>20:00–02:00</time>'
+            ),
+            (
+                datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
+                datetime.datetime(2025, 3, 12, 14, 0, 0, tzinfo=tz),
+                'March 9th – 12th, 2025',
+                '<time datetime="2025-03-09">March 9th</time> – <time datetime="2025-03-12">12th, 2025</time>',
+                'March 9th – 12th, 2025',
+                '<time datetime="2025-03-09">March 9th</time> – <time datetime="2025-03-12">12th, 2025</time>',
+            ),
+            (
+                datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
+                None,
+                'Sun, March 9th, 2025',
+                '<time datetime="2025-03-09">Sun, March 9th, 2025</time>',
+                'Sun, March 9th, 2025 20:00',
+                '<time datetime="2025-03-09">Sun, March 9th, 2025</time> '
+                '<time datetime="2025-03-09T21:00:00+01:00" data-timezone="UTC" data-time-short>20:00</time>'
+            ),
+        )
+
+        for i, (df, dt, expected, expected_html, expected_with_times, expected_with_times_html) in enumerate(sets):
+            event = Event.objects.create(
+                organizer=self.organizer, name='Dummy', slug=f'dummy{i}',
+                date_from=df, date_to=dt,
+            )
+            assert event.get_date_range_display() == expected
+            assert event.get_date_range_display(as_html=True) == expected_html
+            assert event.get_date_range_display(try_to_show_times=True) == expected_with_times
+            assert event.get_date_range_display(try_to_show_times=True, as_html=True) == expected_with_times_html
 
 
 class SubEventTest(TestCase):

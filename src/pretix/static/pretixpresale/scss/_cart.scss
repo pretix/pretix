@@ -83,7 +83,7 @@
         position: relative;
         padding-left: 1.4em;
         text-indent: 0;
-        .fa, svg {
+        & > .fa, & > svg, & > dd > .fa, & > dd > svg {
             position: absolute;
             left: 0;
             top: .22em;
