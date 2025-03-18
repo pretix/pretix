@@ -57,7 +57,7 @@ class SMTPMailForm(SettingsForm):
         label=_("Password"),
         required=False,
         validators=[RegexValidator(
-            r"^[A-Za-z0-9!\"#$%&'()*+,-./:;<=>?@\^_`{}|~]+$",
+            r"^[A-Za-z0-9!\"#$%&'()*+,./:;<=>?@\^_`{}|~-]+$",
             message=format_lazy(
                 _("The password contains characters not supported by our email system. Please only use characters "
                   "A-Z, a-z, 0-9, and common special characters ({characters})."),
