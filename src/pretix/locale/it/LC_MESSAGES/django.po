@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-16 19:00+0000\n"
-"Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
+"PO-Revision-Date: 2025-03-19 01:00+0000\n"
+"Last-Translator: Rosariocastellana <rosariocastellana@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -13966,7 +13966,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:448
 msgid "Number of tickets"
-msgstr ""
+msgstr "Numero di biglietti"
 
 #: pretix/control/forms/item.py:580
 msgid "Quota name is required."
