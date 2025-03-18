@@ -204,7 +204,7 @@ class EventMixin:
 
             if as_html:
                 d = format_html(
-                    d + ' <time datetime="{}" data-timezone="{}" data-time-short>{}</span>',
+                    d + ' <time datetime="{}" data-timezone="{}" data-time-short>{}</time>',
                     self.date_from.isoformat(),
                     str(self.timezone),
                     time_str,
