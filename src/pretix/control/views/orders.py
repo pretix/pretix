@@ -172,6 +172,26 @@ class OrderSearch(OrderSearchMixin, EventPermissionRequiredMixin, TemplateView):
         ctx['forms'] = self.get_forms()
         return ctx
 
+    def post(self, request, *args, **kwargs):
+        all_valid = True
+        for f in self.get_forms():
+            if not f.is_valid():
+                all_valid = False
+
+        if all_valid:
+            data = request.POST.copy()
+            data.pop('csrfmiddlewaretoken', None)
+            return redirect(reverse(
+                "control:event.orders",
+                kwargs={
+                    "event": request.event.slug,
+                    "organizer": request.event.organizer.slug,
+                }
+            ) + '?' + data.urlencode())
+        else:
+            messages.error(request, _("We could not process your input. See below for details."))
+            return self.get(request, *args, **kwargs)
+
 
 class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, AsyncFormView):
     template_name = 'pretixcontrol/orders/bulk_action.html'
