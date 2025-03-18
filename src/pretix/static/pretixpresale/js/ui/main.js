@@ -554,12 +554,12 @@ $(function () {
                     // $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
                 }
             } else {
-                $add.addClass("text-muted")
+                // $add.addClass("text-muted")
                 $add.append(" " + gettext("Your local time:") + " ")
                 if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
+                    $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
                 } else {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
+                    $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
                 }
             }
             // $add.insertAfter($(this));
@@ -570,6 +570,52 @@ $(function () {
             });
         }
     });
+
+    // $(".frag-event-info").each(function() {
+    //     var fei = $(this);
+    //     var $infodiv = fei.find(".info-row").first();
+    //     var $newinfodiv = $("<div>");
+    //     $newinfodiv.addClass("info-row");
+    //     $newinfodiv.append($("<span>").addClass("fa fa-globe fa-fw"));
+    //     // aria-hidden="true" title="{% trans "When does the event happen?" %}"></span>
+
+    //     var $newp = $("<p>");
+    //     $newp.append($("<span>").addClass("sr-only"));
+
+    //     fei.find("span[data-timezone], small[data-timezone]").first().each(function() {
+    //         var tsp = $(this)
+    //         var t = moment.tz(tsp.attr("data-time"), tsp.attr("data-timezone"))
+    //         var tz = moment.tz.zone(tsp.attr("data-timezone"))
+
+    //         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
+    //             var $add = $("<span>")
+    //             //$add.append($("<span>").addClass("fa fa-globe"))
+    //             if (tsp.is("[data-time-short]")) {
+    //                 if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
+    //                     $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+    //                     // $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
+    //                 } else {
+    //                     $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+    //                     // $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
+    //                 }
+    //             } else {
+    //                 // $add.addClass("text-muted")
+    //                 // $add.append(" " + gettext("Your local time:") + " ")
+    //                 if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
+    //                     $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+    //                 } else {
+    //                     $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+    //                 }
+    //             }
+    //             // $add.insertBefore(infodiv);
+    //             $newp.append($add);
+    //         }
+    //     });
+
+    //     $newinfodiv.append($newp);
+    //     $newinfodiv.insertBefore($infodiv);
+    //     // fei.append($newinfodiv.append($newp))
+    // });
 
     // For a very weird reason, window width is 0 on an initial load of the widget
     if ($(window).width() > 0) {

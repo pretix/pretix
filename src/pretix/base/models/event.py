@@ -215,6 +215,12 @@ class EventMixin:
         return pytz_deprecation_shim.timezone(self.settings.timezone)
 
     @property
+    def tzstr(self):
+        tz = pytz_deprecation_shim.timezone(self.settings.timezone)
+        dftz = self.date_from.astimezone(tz)
+        return dftz.tzname()
+
+    @property
     def effective_presale_end(self):
         """
         Returns the effective presale end date, taking for subevents into consideration if the presale end

@@ -14,9 +14,10 @@
             {{ subev.get_date_range_display_as_html }}
             {% if event.settings.show_times %}
                 <br>
-                <span data-time="{{ subev.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
+                <span data-time="{{ subev.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-tzstr="{{ subev.tzstr }}" data-time-short>
+                    <br>
                     {% icon "clock-o" %}
-                    <time datetime="{{ subev.date_from.isoformat }}">{{ subev.date_from|date:"TIME_FORMAT" }}</time>
+                    <time datetime="{{ subev.date_from.isoformat }}">{{ subev.date_from|date:"TIME_FORMAT" }} {{ subev.tzstr }}</time>
                 </span>
             {% endif %}
         </dd>

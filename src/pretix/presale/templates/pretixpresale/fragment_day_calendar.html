@@ -68,12 +68,12 @@
                     {% if not event.continued %}
                         {% if event.time %}
                             <span class="event-time" data-time="{{ event.event.date_from.isoformat }}"
-                                  data-timezone="{{ event.timezone }}" data-time-short>
+                                  data-timezone="{{ event.timezone }}" data-tzstr="{{ event.event.tzstr }}" data-time-short>
                                     <span class="fa fa-clock-o" aria-hidden="true"></span>
                                 {% if not show_names|default_if_none:True %}
                                     <strong>
                                 {% endif %}
-                                <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }} {{ event.timezone }}</time>
+                                <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }} {{ event.event.tzstr }}</time>
                                 {% if event.time_end %}
                                     <span role="img" aria-label="{% trans "to" context "timerange" %}">–</span>
                                     <time datetime="{{ event.time_end|date:"H:i" }}">{{ event.time_end|date:"TIME_FORMAT" }}</time>
