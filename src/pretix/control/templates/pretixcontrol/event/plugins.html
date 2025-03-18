@@ -90,14 +90,14 @@
                                             <div class="plugin-action flip">
                                                 {% if settings_links %}
                                                     <div class="btn-group">
-                                                      <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
-                                                        <span class="fa fa-cog"></span> <span class="caret"></span>
-                                                      </button>
-                                                      <ul class="dropdown-menu">
-                                                        {% for link in settings_links %}
-                                                            <li><a href="{{ link.0 }}">{{ link.1 }}</a></li>
-                                                        {% endfor %}
-                                                      </ul>
+                                                        <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
+                                                            <span class="fa fa-cog"></span> <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            {% for link in settings_links %}
+                                                                <li><a href="{{ link.0 }}">{{ link.1 }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
                                                     </div>
                                                 {% endif %}
                                                 <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
