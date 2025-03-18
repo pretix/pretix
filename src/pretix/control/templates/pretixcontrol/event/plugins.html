@@ -15,18 +15,17 @@
             {% trans "Your changes have been saved." %}
         </div>
     {% endif %}
-    <p>
-        <div class="row">
-            <div class="col-lg-10">
-                <input type="search" id="plugin_search_input" class="form-control" placeholder="{% trans "Search" %}">
-            </div>
-            <div class="col-lg-2">
-                <div class="checkbox">
-                    <label><input type="checkbox" id="plugin_only_active"> {% trans "Show only active plugins" %}</label>
-                </div>
+    <div class="row">
+        <div class="col-lg-10">
+            <p><input type="search" id="plugin_search_input" class="form-control" placeholder="{% trans "Search" %}"></p>
+        </div>
+        <div class="col-lg-2 text-right">
+            <div class="btn-group btn-group-flex" data-toggle="buttons">
+                <label class="btn btn-primary-if-active active"><input type="radio" name="plugin_state_filter" value="all" checked> {% trans "All" %}</label>
+                <label class="btn btn-primary-if-active"><input type="radio" name="plugin_state_filter" value="active"> {% trans "Active" %}</label>
             </div>
         </div>
-    </p>
+    </div>
     <form action="" method="post" class="form-horizontal form-plugins">
         {% csrf_token %}
         <div id="plugin_search_results" class="panel panel-default collapse">

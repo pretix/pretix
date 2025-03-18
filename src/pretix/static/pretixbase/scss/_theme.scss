@@ -114,6 +114,10 @@ input[type=number]::-webkit-outer-spin-button {
   background: transparent;
   border: transparent;
 }
+
+.btn-group-flex { display: flex; }
+.btn-group-flex > .btn { flex: 1; }
+
 .panel-heading {
   border-radius: 0;
 }

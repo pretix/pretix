@@ -48,13 +48,13 @@ $(function() {
     function search() {
         $results.html("");
         var value = $("#plugin_search_input").val();
-        var only_active = $("#plugin_only_active").prop("checked");
+        var only_active = $("input[name=plugin_state_filter][value=active]").prop("checked");
         if (!value && !only_active) {
             $results_box.hide(); $plugin_tabs.show();
             return;
         }
         $results_box.show(); $plugin_tabs.hide();
-        var matcher = new SearchMatcher(this.value, ["description", "module", "name"]);
+        var matcher = new SearchMatcher(value, ["description", "module", "name"]);
         var matches = [];
         for(const plugin of plugins) {
             if (only_active && !plugin.active) continue;
@@ -69,9 +69,10 @@ $(function() {
             $results.append(gettext("No results"));
         }
     }
-    $("#plugin_search_input, #plugin_only_active").on("input", search);
+    $("#plugin_search_input").on("input", search);
+    $("input[name=plugin_state_filter]").on("change", search);
     $results_box.find("button.close").on("click", function() {
-        $("#plugin_only_active").prop("checked", false);
+        $("input[name=plugin_state_filter][value=all]").prop("checked", true).trigger("click");
         $("#plugin_search_input").val("").trigger("input");
     });
     if (location.search) {
