@@ -38,7 +38,7 @@ class AutoCheckinApp(AppConfig):
         description = _(
             "Automatically check-in specific tickets after they have been sold."
         )
-        settings_links = [
+        navigation_links = [
             ((_("Check-in"), _("Auto check-in")), "plugins:autocheckin:index", {}),
         ]
 

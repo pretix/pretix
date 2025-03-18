@@ -349,8 +349,8 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         return (p for p in get_all_plugins(event) if not p.name.startswith('.')
                 and getattr(p, 'visible', True))
 
-    def prepare_settings_links(self, pluginmeta):
-        links = getattr(pluginmeta, 'settings_links', [])
+    def prepare_links(self, pluginmeta, key):
+        links = getattr(pluginmeta, key, [])
         try:
             return [
                 (
@@ -400,8 +400,9 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
 
         def plugin_details(plugin):
             is_active = plugin.module in active_plugins
-            settings_links = self.prepare_settings_links(plugin) if is_active else None
-            return (plugin, is_active, settings_links)
+            settings_links = self.prepare_links(plugin, 'settings_links') if is_active else None
+            navigation_links = self.prepare_links(plugin, 'navigation_links') if is_active else None
+            return (plugin, is_active, settings_links, navigation_links)
         context['plugins'] = sorted([
             (c, labels.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
             for c, plist
@@ -436,7 +437,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                                                       data={'plugin': module})
                         self.object.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
 
-                        links = self.prepare_settings_links(pluginmeta)
+                        links = self.prepare_links(pluginmeta, 'settings_links')
                         if links:
                             info = [
                                 '<p>',

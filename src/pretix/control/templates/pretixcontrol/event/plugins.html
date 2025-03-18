@@ -42,7 +42,7 @@
                 <fieldset data-plugin-category="{{ cat }}" data-plugin-category-label="{{ catlabel }}">
                     <legend>{{ catlabel }}</legend>
                     <div class="plugin-list">
-                        {% for plugin, is_active, settings_links in plist %}
+                        {% for plugin, is_active, settings_links, navigation_links in plist %}
                             <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}" data-plugin-module="{{ plugin.module }}" data-plugin-name="{{ plugin.name }}">
                             {% if plugin.featured %}
                                <div class="panel panel-default">
@@ -88,10 +88,22 @@
                                             </div>
                                         {% elif is_active %}
                                             <div class="plugin-action flip">
+                                                {% if navigation_links %}
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
+                                                            <span class="fa fa-compass"></span> {% trans "Go to" %} <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            {% for link in navigation_links %}
+                                                                <li><a href="{{ link.0 }}">{{ link.1 }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                {% endif %}
                                                 {% if settings_links %}
                                                     <div class="btn-group">
                                                         <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
-                                                            <span class="fa fa-cog"></span> <span class="caret"></span>
+                                                            <span class="fa fa-cog"></span> {% trans "Settings" %} <span class="caret"></span>
                                                         </button>
                                                         <ul class="dropdown-menu">
                                                             {% for link in settings_links %}
