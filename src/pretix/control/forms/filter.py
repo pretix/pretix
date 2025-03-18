@@ -848,11 +848,17 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             ).distinct()
         for q in self.event.questions.all():
             if fdata.get(f'question_{q.pk}'):
-                if q.type == Question.TYPE_BOOLEAN:
+                if q.type in (Question.TYPE_BOOLEAN, Question.TYPE_NUMBER):
                     answers = QuestionAnswer.objects.filter(
                         question_id=q.pk,
                         orderposition__order_id=OuterRef('pk'),
                         answer__exact=fdata.get(f'question_{q.pk}')
+                    )
+                elif q.type in (Question.TYPE_DATE, Question.TYPE_TIME, Question.TYPE_DATETIME):
+                    answers = QuestionAnswer.objects.filter(
+                        question_id=q.pk,
+                        orderposition__order_id=OuterRef('pk'),
+                        answer__exact=str(fdata.get(f'question_{q.pk}'))
                     )
                 elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
                     answers = QuestionAnswer.objects.filter(
