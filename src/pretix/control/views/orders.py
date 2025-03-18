@@ -2491,10 +2491,12 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         for l in ctx["logs"]:
-            if l.parsed_data.get("invoices"):
+            invoice_ids = l.parsed_data.get("invoices")
+            if invoice_ids:
+                if type(invoice_ids) is int: invoice_ids = [invoice_ids]
                 l.parsed_invoices = Invoice.objects.filter(
                     event=self.request.event,
-                    pk__in=l.parsed_data["invoices"],
+                    pk__in=invoice_ids,
                 )
             if l.parsed_data.get("attach_other_files"):
                 l.parsed_other_files = [
