@@ -1115,7 +1115,7 @@ var editor = {
     },
 
     _on_keydown: function (e) {
-        var step = e.shiftKey ? editor._mm2px(10) : editor._mm2px(1);
+        var step = e.shiftKey ? editor._mm2px(10) : (e.altKey ? editor._mm2px(0.1) : editor._mm2px(1));
         var thing = editor.fabric.getActiveObject();
         if ($("#source-container").is(':visible')) {
             return true;
