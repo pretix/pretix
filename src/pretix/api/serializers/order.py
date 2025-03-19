@@ -46,6 +46,7 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
     InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
 )
+from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -494,6 +495,18 @@ class OrderPositionListSerializer(serializers.ListSerializer):
         return data
 
 
+class OrderPositionPluginDataField(serializers.Field):
+    def to_representation(self, value: OrderPosition):
+        d = {}
+        if value and value.pk:
+            for recv, resp in orderposition_api_details.send(
+                sender=self.context.get("event") or value.order.event,
+                orderposition=value
+            ):
+                d.update(resp)
+        return d
+
+
 class OrderPositionSerializer(I18nAwareModelSerializer):
     checkins = CheckinSerializer(many=True, read_only=True)
     print_logs = PrintLogSerializer(many=True, read_only=True)
@@ -504,6 +517,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     seat = InlineSeatSerializer(read_only=True)
     country = CompatibleCountryField(source='*')
     attendee_name = serializers.CharField(required=False)
+    plugin_data = OrderPositionPluginDataField(source='*', allow_null=True, read_only=True)
 
     class Meta:
         list_serializer_class = OrderPositionListSerializer
@@ -513,7 +527,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'print_logs', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
                   'print_logs', 'downloads', 'answers', 'tax_rule', 'tax_code', 'pseudonymization_id', 'pdf_data', 'seat',
-                  'canceled', 'valid_from', 'valid_until', 'blocked', 'voucher_budget_use')
+                  'canceled', 'valid_from', 'valid_until', 'blocked', 'voucher_budget_use', 'plugin_data')
         read_only_fields = (
             'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
             'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'tax_code', 'pseudonymization_id',
@@ -730,6 +744,18 @@ class OrderListSerializer(serializers.ListSerializer):
         return data
 
 
+class OrderPluginDataField(serializers.Field):
+    def to_representation(self, value: Order):
+        d = {}
+        if value and value.pk:
+            for recv, resp in order_api_details.send(
+                sender=self.context.get("event") or value.event,
+                order=value
+            ):
+                d.update(resp)
+        return d
+
+
 class OrderSerializer(I18nAwareModelSerializer):
     event = SlugRelatedField(slug_field='slug', read_only=True)
     invoice_address = InvoiceAddressSerializer(allow_null=True)
@@ -747,6 +773,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
+    plugin_data = OrderPluginDataField(source='*', allow_null=True, read_only=True)
 
     class Meta:
         model = Order
@@ -755,7 +782,7 @@ class OrderSerializer(I18nAwareModelSerializer):
             'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
-            'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date'
+            'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date', 'plugin_data',
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
@@ -1075,6 +1102,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
+    locale = serializers.ChoiceField(choices=[], required=False, allow_null=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1082,6 +1110,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         self.fields['customer'].queryset = self.context['event'].organizer.customers.all()
         self.fields['expires'].required = False
         self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
+        self.fields["locale"].choices = self.context['event'].settings.locales
 
     class Meta:
         model = Order

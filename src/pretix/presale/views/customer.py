@@ -676,6 +676,8 @@ class SSOLoginView(RedirectBackMixin, View):
                 popup_origin = None
 
         nonce = get_random_string(32)
+        pkce_code_verifier = get_random_string(64)
+        request.session[f'pretix_customerauth_{self.provider.pk}_pkce_code_verifier'] = pkce_code_verifier
         request.session[f'pretix_customerauth_{self.provider.pk}_nonce'] = nonce
         request.session[f'pretix_customerauth_{self.provider.pk}_popup_origin'] = popup_origin
         request.session[f'pretix_customerauth_{self.provider.pk}_cross_domain_requested'] = self.request.GET.get("request_cross_domain_customer_auth") == "true"
@@ -684,7 +686,7 @@ class SSOLoginView(RedirectBackMixin, View):
         })
 
         if self.provider.method == "oidc":
-            return redirect_to_url(oidc_authorize_url(self.provider, f'{nonce}%{next_url}', redirect_uri))
+            return redirect_to_url(oidc_authorize_url(self.provider, f'{nonce}%{next_url}', redirect_uri, pkce_code_verifier))
         else:
             raise Http404("Unknown SSO method.")
 
@@ -718,6 +720,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                 )
             return HttpResponseRedirect(redirect_to)
         r = super().dispatch(request, *args, **kwargs)
+        request.session.pop(f'pretix_customerauth_{self.provider.pk}_pkce_code_verifier', None)
         request.session.pop(f'pretix_customerauth_{self.provider.pk}_nonce', None)
         request.session.pop(f'pretix_customerauth_{self.provider.pk}_popup_origin', None)
         request.session.pop(f'pretix_customerauth_{self.provider.pk}_cross_domain_requested', None)
@@ -763,6 +766,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                     self.provider,
                     request.GET.get('code'),
                     redirect_uri,
+                    request.session.get(f'pretix_customerauth_{self.provider.pk}_pkce_code_verifier'),
                 )
             except ValidationError as e:
                 for msg in e:

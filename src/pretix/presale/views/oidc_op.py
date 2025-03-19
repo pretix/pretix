@@ -72,6 +72,9 @@ We currently do not implement the following optional parts of the spec:
 We also implement the Discovery extension (without issuer discovery)
 as per https://openid.net/specs/openid-connect-discovery-1_0.html
 
+We also implement the PKCE extension for OAuth:
+https://www.rfc-editor.org/rfc/rfc7636
+
 The implementation passed the certification tests against the following profiles, but we did not
 acquire formal certification:
 
@@ -136,19 +139,22 @@ class AuthorizeView(View):
             self._construct_redirect_uri(redirect_uri, response_mode, qs)
         )
 
-    def _require_login(self, request, client, scope, redirect_uri, response_type, response_mode, state, nonce):
+    def _require_login(self, request, client, scope, redirect_uri, response_type, response_mode, state, nonce,
+                       code_challenge, code_challenge_method):
         form = AuthenticationForm(data=request.POST if "login-email" in request.POST else None, request=request,
                                   prefix="login")
         if "login-email" in request.POST and form.is_valid():
             customer_login(request, form.get_customer())
-            return self._success(client, scope, redirect_uri, response_type, response_mode, state, nonce, form.get_customer())
+            return self._success(client, scope, redirect_uri, response_type, response_mode, state, nonce,
+                                 code_challenge, code_challenge_method, form.get_customer())
         else:
             return render(request, 'pretixpresale/organizers/customer_login.html', {
                 'providers': [],
                 'form': form,
             })
 
-    def _success(self, client, scope, redirect_uri, response_type, response_mode, state, nonce, customer):
+    def _success(self, client, scope, redirect_uri, response_type, response_mode, state, nonce, code_challenge,
+                 code_challenge_method, customer):
         response_type = response_type.split(' ')
         qs = {}
         id_token_kwargs = {}
@@ -162,6 +168,8 @@ class AuthorizeView(View):
                 expires=now() + timedelta(minutes=10),
                 auth_time=get_customer_auth_time(self.request),
                 nonce=nonce,
+                code_challenge=code_challenge,
+                code_challenge_method=code_challenge_method,
             )
             qs['code'] = grant.code
             id_token_kwargs['with_code'] = grant.code
@@ -209,6 +217,8 @@ class AuthorizeView(View):
         prompt = request_data.get("prompt")
         response_type = request_data.get("response_type")
         scope = request_data.get("scope", "").split(" ")
+        code_challenge = request_data.get("code_challenge")
+        code_challenge_method = request_data.get("code_challenge_method")
 
         if not client_id:
             return self._final_error("invalid_request", "client_id missing")
@@ -244,15 +254,26 @@ class AuthorizeView(View):
                                         response_mode, state)
 
         if "id_token_hint" in request_data:
-            self._redirect_error("invalid_request", "id_token_hint currently not supported by this server",
-                                 redirect_uri, response_mode, state)
+            return self._redirect_error("invalid_request", "id_token_hint currently not supported by this server",
+                                        redirect_uri, response_mode, state)
+
+        if code_challenge and code_challenge_method != "S256":
+            # "Clients re permitted to use "plain" only if they cannot support "S256" for some technical reason and
+            # know via out-of-band configuration that the S256 MUST be implemented, plain is not mandatory."
+            return self._redirect_error("invalid_request", "code_challenge transform algorithm not supported",
+                                        redirect_uri, response_mode, state)
+
+        if client.require_pkce and not code_challenge:
+            return self._redirect_error("invalid_request", "code_challenge (PKCE) required",
+                                        redirect_uri, response_mode, state)
 
         has_valid_session = bool(request.customer)
         if has_valid_session and max_age:
             try:
                 has_valid_session = int(time.time() - get_customer_auth_time(request)) < int(max_age)
             except ValueError:
-                self._redirect_error("invalid_request", "invalid max_age value", redirect_uri, response_mode, state)
+                return self._redirect_error("invalid_request", "invalid max_age value", redirect_uri,
+                                            response_mode, state)
 
         if not has_valid_session and prompt and prompt == "none":
             return self._redirect_error("interaction_required", "user is not logged in but no prompt is allowed",
@@ -261,9 +282,11 @@ class AuthorizeView(View):
             has_valid_session = False
 
         if has_valid_session:
-            return self._success(client, scope, redirect_uri, response_type, response_mode, state, nonce, request.customer)
+            return self._success(client, scope, redirect_uri, response_type, response_mode, state, nonce, code_challenge,
+                                 code_challenge_method, request.customer)
         else:
-            return self._require_login(request, client, scope, redirect_uri, response_type, response_mode, state, nonce)
+            return self._require_login(request, client, scope, redirect_uri, response_type, response_mode, state, nonce,
+                                       code_challenge, code_challenge_method)
 
 
 class TokenView(View):
@@ -360,6 +383,24 @@ class TokenView(View):
                 "error": "invalid_grant",
                 "error_description": "Mismatch of redirect_uri"
             }, status=400)
+
+        if grant.code_challenge:
+            if not request.POST.get("code_verifier"):
+                return JsonResponse({
+                    "error": "invalid_grant",
+                    "error_description": "Missing of code_verifier"
+                }, status=400)
+
+            if grant.code_challenge_method == "S256":
+                expected_challenge = base64.urlsafe_b64encode(hashlib.sha256(request.POST["code_verifier"].encode()).digest()).decode().rstrip("=")
+                print(grant.code_challenge, expected_challenge)
+                if expected_challenge != grant.code_challenge:
+                    return JsonResponse({
+                        "error": "invalid_grant",
+                        "error_description": "Mismatch of code_verifier with code_challenge"
+                    }, status=400)
+            else:
+                raise ValueError("Unsupported code_challenge_method in database")
 
         with transaction.atomic():
             token = self.client.access_tokens.create(
@@ -502,6 +543,7 @@ class ConfigurationView(View):
             'token_endpoint_auth_methods_supported': [
                 'client_secret_post', 'client_secret_basic'
             ],
+            'code_challenge_methods_supported': ['S256'],
             'claims_supported': [
                 'iss',
                 'aud',

@@ -1,5 +1,5 @@
-Developer documentation
-=======================
+Plugin & core development
+=========================
 
 .. toctree::
    :maxdepth: 2

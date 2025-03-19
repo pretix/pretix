@@ -93,7 +93,7 @@ class MarkdownTextarea(forms.Textarea):
             '<div class="i18n-form-group">%s<div class="i18n-field-markdown-note">%s</div></div>' % (
                 super()._render(template_name, context, renderer=None),
                 _("You can use {markup_name} in this field.").format(
-                    markup_name='<a href="https://docs.pretix.eu/en/latest/user/markdown.html" target="_blank">Markdown</a>'
+                    markup_name='<a href="https://docs.pretix.eu/guides/markdown/" target="_blank">Markdown</a>'
                 )
             )
         )
@@ -104,7 +104,7 @@ class I18nMarkdownTextarea(i18nfield.forms.I18nTextarea):
         rendered_widgets = rendered_widgets + [
             '<div class="i18n-field-markdown-note">%s</div>' % (
                 _("You can use {markup_name} in this field.").format(
-                    markup_name='<a href="https://docs.pretix.eu/en/latest/user/markdown.html" target="_blank">Markdown</a>'
+                    markup_name='<a href="https://docs.pretix.eu/guides/markdown/" target="_blank">Markdown</a>'
                 )
             )
         ]
@@ -116,7 +116,7 @@ class I18nMarkdownTextInput(i18nfield.forms.I18nTextInput):
         rendered_widgets = rendered_widgets + [
             '<div class="i18n-field-markdown-note">%s</div>' % (
                 _("You can use {markup_name} in this field.").format(
-                    markup_name='<a href="https://docs.pretix.eu/en/latest/user/markdown.html" target="_blank">Markdown</a>'
+                    markup_name='<a href="https://docs.pretix.eu/guides/markdown/" target="_blank">Markdown</a>'
                 )
             )
         ]

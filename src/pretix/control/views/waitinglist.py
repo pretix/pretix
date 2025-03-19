@@ -49,7 +49,7 @@ from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
 from django.views.generic import ListView
 
-from pretix.base.models import Item, Quota, WaitingListEntry
+from pretix.base.models import Item, LogEntry, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
@@ -160,10 +160,15 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 'forbidden': self.get_queryset().filter(voucher__isnull=False),
             })
         elif request.POST.get('action') == 'delete_confirm':
-            for obj in self.get_queryset(force_filtered=True):
-                if not obj.voucher_id:
-                    obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
-                    obj.delete()
+            with transaction.atomic():
+                log_entries = []
+                to_delete = []
+                for obj in self.get_queryset(force_filtered=True):
+                    if not obj.voucher_id:
+                        log_entries.append(obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user, save=False))
+                        to_delete.append(obj.pk)
+                WaitingListEntry.objects.filter(id__in=to_delete).delete()
+                LogEntry.bulk_create_and_postprocess(log_entries)
             messages.success(request, _('The selected entries have been deleted.'))
             return self._redirect_back()
 
@@ -186,16 +191,17 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
 
         if 'move_top' in request.POST:
             try:
-                wle = WaitingListEntry.objects.get(
-                    pk=request.POST.get('move_top'), event=self.request.event,
-                )
-                wle.priority = self.request.event.waitinglistentries.aggregate(m=Max('priority'))['m'] + 1
-                wle.save(update_fields=['priority'])
-                wle.log_action(
-                    'pretix.event.orders.waitinglist.changed',
-                    data={'priority': wle.priority},
-                    user=self.request.user,
-                )
+                with transaction.atomic():
+                    wle = WaitingListEntry.objects.get(
+                        pk=request.POST.get('move_top'), event=self.request.event,
+                    )
+                    wle.priority = self.request.event.waitinglistentries.aggregate(m=Max('priority'))['m'] + 1
+                    wle.save(update_fields=['priority'])
+                    wle.log_action(
+                        'pretix.event.orders.waitinglist.changed',
+                        data={'priority': wle.priority},
+                        user=self.request.user,
+                    )
                 messages.success(request, _('The waiting list entry has been moved to the top.'))
                 return self._redirect_back()
             except WaitingListEntry.DoesNotExist:
@@ -204,16 +210,17 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
 
         if 'move_end' in request.POST:
             try:
-                wle = WaitingListEntry.objects.get(
-                    pk=request.POST.get('move_end'), event=self.request.event,
-                )
-                wle.priority = self.request.event.waitinglistentries.aggregate(m=Min('priority'))['m'] - 1
-                wle.save(update_fields=['priority'])
-                wle.log_action(
-                    'pretix.event.orders.waitinglist.changed',
-                    data={'priority': wle.priority},
-                    user=self.request.user,
-                )
+                with transaction.atomic():
+                    wle = WaitingListEntry.objects.get(
+                        pk=request.POST.get('move_end'), event=self.request.event,
+                    )
+                    wle.priority = self.request.event.waitinglistentries.aggregate(m=Min('priority'))['m'] - 1
+                    wle.save(update_fields=['priority'])
+                    wle.log_action(
+                        'pretix.event.orders.waitinglist.changed',
+                        data={'priority': wle.priority},
+                        user=self.request.user,
+                    )
                 messages.success(request, _('The waiting list entry has been moved to the end of the list.'))
                 return self._redirect_back()
             except WaitingListEntry.DoesNotExist:

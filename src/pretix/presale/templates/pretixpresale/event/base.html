@@ -15,6 +15,8 @@
 {% block custom_header %}
     {% if event.settings.meta_noindex %}
         <meta name="robots" content="noindex, nofollow">
+    {% elif "date" in request.GET or "old" in request.GET %}
+        <meta name="robots" content="noindex, follow">
     {% endif %}
     <meta property="og:type" content="website" />
     {% if social_image %}

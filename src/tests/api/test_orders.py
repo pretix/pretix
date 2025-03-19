@@ -236,6 +236,7 @@ TEST_ORDERPOSITION_RES = {
     ],
     "subevent": None,
     "canceled": False,
+    "plugin_data": {},
 }
 TEST_PAYMENTS_RES = [
     {
@@ -333,6 +334,7 @@ TEST_ORDER_RES = {
     "payments": TEST_PAYMENTS_RES,
     "refunds": TEST_REFUNDS_RES,
     "cancellation_date": None,
+    "plugin_data": {},
 }
 
 

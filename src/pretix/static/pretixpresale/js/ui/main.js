@@ -387,14 +387,14 @@ $(function () {
             var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
             $first_ticket_form.find("[id$=" + this.id.substring(3) + "]").val(this.value);
             if (this.placeholder) {
-                $first_ticket_form.find("[placeholder='" + this.placeholder + "']").val(this.value);
+                $first_ticket_form.find("[placeholder='" + CSS.escape(this.placeholder) + "']").val(this.value);
             }
             var label = $("label[for=" + this.id +"]").first().contents().filter(function () {
                 return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
             }).text().trim();
             if (label) {
                 // match to placeholder and label
-                $first_ticket_form.find("[placeholder='" + label + "']").val(this.value);
+                $first_ticket_form.find("[placeholder='" + CSS.escape(label) + "']").val(this.value);
                 var v = this.value;
                 $first_ticket_form.find("label").each(function() {
                     var text = $(this).first().contents().filter(function () {
@@ -533,8 +533,8 @@ $(function () {
     form_handlers($("body"));
 
     var local_tz = moment.tz.guess()
-    $("span[data-timezone], small[data-timezone]").each(function() {
-        var t = moment.tz($(this).attr("data-time"), $(this).attr("data-timezone"))
+    $("span[data-timezone], small[data-timezone], time[data-timezone]").each(function() {
+        var t = moment.tz($(this).attr("datetime") || $(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
         var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
 
@@ -544,6 +544,7 @@ $(function () {
         });
         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
             var $add = $("<span>")
+            $add.append(" ")
             $add.append($("<span>").addClass("fa fa-globe"))
             if ($(this).is("[data-time-short]")) {
                 if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
@@ -717,7 +718,10 @@ function copy_answers(elements, answers) {
                 input.val(answers.filter("[name$=" + suffix + "]").val());
                 break;
             case "select":
-                input.val(answers.filter("[name$=" + suffix + "]").find(":selected").val()).change();
+                // save answer as data-attribute so if external event changes select-element/options it can select correct entries
+                // currently used when country => state changes
+                var answer = answers.filter("[name$=" + suffix + "]").find(":selected").val();
+                input.prop("data-selected-value", answer).val(answer).change();
                 break;
             case "input":
                 switch (attributeType) {

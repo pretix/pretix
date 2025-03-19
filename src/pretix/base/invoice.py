@@ -62,6 +62,58 @@ from pretix.presale.style import get_fonts
 logger = logging.getLogger(__name__)
 
 
+def addon_aware_groupby(iterable, key, is_addon):
+    """
+    We use groupby() to visually group identical lines on an invoice. For example, instead of
+
+    Product 1       5.00 EUR
+    Product 1       5.00 EUR
+    Product 1       5.00 EUR
+    Product 2       7.00 EUR
+
+    We want to print
+
+    3x Product 1    5.00 EUR = 15.00 EUR
+    Product 2       7.00 EUR
+
+    However, this fails for setups with addon-products since groupby() only groups consecutive
+    lines with the same identity. So in
+
+    Product 1       5.00 EUR
+    + Addon 1       2.00 EUR
+    Product 1       5.00 EUR
+    + Addon 1       2.00 EUR
+    Product 1       5.00 EUR
+    + Addon 2       3.00 EUR
+
+    There is no consecutive repetition of the same entity. This function provides a specialised groupby which
+    understands the product/addon relationship and packs groups of these addons together if they are, in fact,
+    identical groups:
+
+    2x Product 1    5.00 EUR = 10.00 EUR
+    + 2x Addon 1    2.00 EUR =  4.00 EUR
+    Product 1       5.00 EUR
+    + Addon 2       3.00 EUR
+    """
+    packed_groups = []
+
+    for i in iterable:
+        if is_addon(i):
+            packed_groups[-1].append(i)
+        else:
+            packed_groups.append([i])
+    # Each packed_groups element contains a list with the parent product as first element, and any addon products following
+
+    def _reorder(packed_groups):
+        # Emit the products as individual products again, reordered by "all parent products, then all addon products"
+        # within each group.
+        for _, repeated_groups in groupby(packed_groups, key=lambda g: tuple(key(a) for a in g)):
+            for repeated_items in zip(*repeated_groups):
+                yield from repeated_items
+
+    return groupby(_reorder(packed_groups), key)
+
+
 class NumberedCanvas(Canvas):
     def __init__(self, *args, **kwargs):
         self.font_regular = kwargs.pop('font_regular')
@@ -644,7 +696,11 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     line.event_date_from, line.event_date_to)
 
         total = Decimal('0.00')
-        for (description, tax_rate, tax_name, net_value, gross_value, *ignored), lines in groupby(self.invoice.lines.all(), key=_group_key):
+        for (description, tax_rate, tax_name, net_value, gross_value, *ignored), lines in addon_aware_groupby(
+            self.invoice.lines.all(),
+            key=_group_key,
+            is_addon=lambda l: l.description.startswith("  +"),
+        ):
             lines = list(lines)
             if has_taxes:
                 if len(lines) > 1:

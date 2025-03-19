@@ -1475,7 +1475,9 @@ class CountriesAndEUAndStates(CountriesAndEU):
     def __iter__(self):
         for country_code, country_name in super().__iter__():
             yield country_code, country_name
-            if country_code in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            if country_code in COUNTRIES_WITH_STATE_IN_ADDRESS and country_code not in {"IT"}:
+                # Special case for Italy: Provinces are used in addresses, but are too low-level to
+                # have influence on taxes, so we avoid the bloat in the list of selectable countries.
                 types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[country_code]
                 yield from sorted(((state.code, country_name + " - " + state.name)
                                    for state in pycountry.subdivisions.get(country_code=country_code)

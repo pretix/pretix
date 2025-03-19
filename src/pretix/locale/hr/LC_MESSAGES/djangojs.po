@@ -7,18 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2024-11-17 00:00+0000\n"
-"Last-Translator: Pavle Ergović <pavleergovic@gmail.com>\n"
-"Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/hr/>\n"
+"POT-Creation-Date: 2025-02-25 10:10+0000\n"
+"PO-Revision-Date: 2025-03-16 10:17+0000\n"
+"Last-Translator: Robert Rigo <kontakt@bicikli.hr>\n"
+"Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.8.3\n"
+"X-Generator: Weblate 5.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -246,7 +246,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
-msgstr ""
+msgstr "Iskorišteno"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 msgid "Cancel"
@@ -263,7 +263,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Additional information required"
-msgstr ""
+msgstr "Potrebne su dodatne informacije"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Valid ticket"
@@ -549,52 +549,52 @@ msgstr ""
 msgid "Check-in QR"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:543
+#: pretix/static/pretixcontrol/js/ui/editor.js:549
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:894
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Group of objects"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#: pretix/static/pretixcontrol/js/ui/editor.js:908
 msgid "Text object (deprecated)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:910
 msgid "Text box"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:903
+#: pretix/static/pretixcontrol/js/ui/editor.js:912
 msgid "Barcode area"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:905
+#: pretix/static/pretixcontrol/js/ui/editor.js:914
 msgid "Image area"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:907
+#: pretix/static/pretixcontrol/js/ui/editor.js:916
 msgid "Powered by pretix"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:909
+#: pretix/static/pretixcontrol/js/ui/editor.js:918
 msgid "Object"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:913
+#: pretix/static/pretixcontrol/js/ui/editor.js:922
 msgid "Ticket design"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1250
+#: pretix/static/pretixcontrol/js/ui/editor.js:1259
 msgid "Saving failed."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1319
-#: pretix/static/pretixcontrol/js/ui/editor.js:1370
+#: pretix/static/pretixcontrol/js/ui/editor.js:1328
+#: pretix/static/pretixcontrol/js/ui/editor.js:1379
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1353
+#: pretix/static/pretixcontrol/js/ui/editor.js:1362
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 
@@ -657,7 +657,7 @@ msgstr ""
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1084
+#: pretix/static/pretixcontrol/js/ui/main.js:1090
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -692,8 +692,9 @@ msgstr ""
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Stavke u vašoj košarici rezervirane su još jednu  minutu."
+msgstr[1] "Stavke u vašoj košarici rezervirane su još {num} minute."
+msgstr[2] "Stavke u vašoj košarici rezervirane su još {num} minuta."
 
 #: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -790,7 +791,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Rezerviraj"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
@@ -837,7 +838,7 @@ msgstr ""
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "Trenutno dostupno: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
@@ -858,7 +859,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "Currently not available"
-msgstr ""
+msgstr "Trenutno nedostupno"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 #, javascript-format
@@ -920,12 +921,12 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Iskoristi vaučer"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Iskoristi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
@@ -960,7 +961,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "Odaberi drugi datum"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
@@ -999,6 +1000,9 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"Neke ili sve kategorije ulaznica trenutno su rasprodane. Ako želite, možete "
+"se dodati na listu čekanja. Obavijestit ćemo vas ako se mjesta ponovno "
+"oslobode."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
 msgctxt "widget"

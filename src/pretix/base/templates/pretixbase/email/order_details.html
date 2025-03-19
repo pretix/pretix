@@ -15,10 +15,7 @@
                 {{ event.name }}
                 <br>
                 {% if event.has_subevents and ev.name|upper != event.name|upper %}{{ ev.name }}<br>{% endif %}
-                {{ ev.get_date_range_display }}
-                {% if event.settings.show_times %}
-                    {{ ev.date_from|date:"TIME_FORMAT" }}
-                {% endif %}
+                {{ ev.get_date_range_display_with_times }}
             </td>
         </tr>
         <tr>
@@ -107,10 +104,7 @@
                                         {% if groupkey.2.name|upper != event.name|upper %}
                                             {{ groupkey.2.name }} &middot;
                                         {% endif %}
-                                        {{ groupkey.2.get_date_range_display }}
-                                        {% if event.settings.show_times %}
-                                            {{ groupkey.2.date_from|date:"TIME_FORMAT" }}
-                                        {% endif %}
+                                        {{ groupkey.2.get_date_range_display_with_times }}
                                         {% if groupkey.2.location %}
                                             <br>
                                             {{ groupkey.2.location|oneline }}

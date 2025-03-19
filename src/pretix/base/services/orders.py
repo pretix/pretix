@@ -98,8 +98,9 @@ from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
     order_approved, order_canceled, order_changed, order_denied, order_expired,
-    order_fee_calculation, order_paid, order_placed, order_reactivated,
-    order_split, order_valid_if_pending, periodic_task, validate_order,
+    order_expiry_changed, order_fee_calculation, order_paid, order_placed,
+    order_reactivated, order_split, order_valid_if_pending, periodic_task,
+    validate_order,
 )
 from pretix.base.timemachine import time_machine_now, time_machine_now_assigned
 from pretix.celery_app import app
@@ -302,6 +303,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
                     'state_change': was_expired
                 }
             )
+            order_expiry_changed.send(sender=order.event, order=order)
 
         if was_expired:
             num_invoices = order.invoices.filter(is_cancellation=False).count()

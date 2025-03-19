@@ -62,12 +62,7 @@
                         <span class="fa fa-calendar fa-fw" aria-hidden="true"></span> {{ line.subevent.name }}
                         <br>
                         <span class="text-muted" aria-hidden="true">
-                            {{ line.subevent.get_date_range_display }}
-                            {% if event.settings.show_times %}
-                                &middot; <span data-time="{{ line.subevent.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}" data-time-short>
-                                {{ line.subevent.get_time_range_display }}
-                            </span>
-                            {% endif %}
+                            {{ line.subevent.get_date_range_display_with_times_as_html }}
                         </span>
                         <span class="sr-only">
                             <time datetime="{% if event.settings.show_times %}{{ line.subevent.date_from.isoformat }}{% else %}{{ line.subevent.date_from|date:"Y-m-d" }}{% endif %}">{{ line.subevent.get_date_from_display }}</time>
@@ -200,8 +195,8 @@
                                         <span data-toggle="tooltip" title="{% trans "Attendee address" %}">
                                             {{ line.street|default_if_none:""|linebreaksbr }}<br>
                                             {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
+                                            {% if line.state %}{{ line.state_for_address }}<br>{% endif %}
                                             {{ line.country.name|default_if_none:"" }}
-                                            {% if line.state %}<br>{{ line.state }}{% endif %}
                                         </span>
                                     </dd>
                                 {% endif %}

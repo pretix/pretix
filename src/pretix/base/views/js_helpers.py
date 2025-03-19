@@ -21,12 +21,15 @@
 #
 import pycountry
 from django.http import JsonResponse
+from django.utils.translation import pgettext
 
 from pretix.base.addressvalidation import (
     COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED,
 )
 from pretix.base.models.tax import VAT_ID_COUNTRIES
-from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+from pretix.base.settings import (
+    COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL,
+)
 
 
 def states(request):
@@ -35,7 +38,11 @@ def states(request):
         'street': {'required': True},
         'zipcode': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
         'city': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
-        'state': {'visible': cc in COUNTRIES_WITH_STATE_IN_ADDRESS, 'required': cc in COUNTRIES_WITH_STATE_IN_ADDRESS},
+        'state': {
+            'visible': cc in COUNTRIES_WITH_STATE_IN_ADDRESS,
+            'required': cc in COUNTRIES_WITH_STATE_IN_ADDRESS,
+            'label': COUNTRY_STATE_LABEL.get(cc, pgettext('address', 'State')),
+        },
         'vat_id': {'visible': cc in VAT_ID_COUNTRIES, 'required': False},
     }
     if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:

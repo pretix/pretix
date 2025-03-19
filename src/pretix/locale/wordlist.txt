@@ -107,6 +107,7 @@ OXXO
 Pago
 PayU
 PCI
+PKCE
 PDFs
 percentual
 personalization
@@ -125,6 +126,7 @@ pretixSCAN
 Przelewy
 Pseudonymization
 px
+Query
 Reddit
 redemptions
 Referer
@@ -162,6 +164,7 @@ txt
 UID
 uncanceled
 uncategorized
+Uncheck
 undeletable
 unredeemed
 URIs

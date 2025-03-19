@@ -1113,7 +1113,7 @@ class SSOClientForm(I18nModelForm):
     class Meta:
         model = CustomerSSOClient
         fields = ['is_active', 'name', 'client_id', 'client_type', 'authorization_grant_type', 'redirect_uris',
-                  'allowed_scopes']
+                  'allowed_scopes', 'require_pkce']
         widgets = {
             'authorization_grant_type': forms.RadioSelect,
             'client_type': forms.RadioSelect,

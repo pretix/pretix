@@ -30,6 +30,19 @@ class HintMismatchError(Exception):
     pass
 
 
+def check_row_length(data, hint, row):
+    valid_lengths = [hint['cols']]
+    header = data[0]
+
+    for i in range(len(header) - 1, 0, -1):
+        if header[i]:
+            break
+        else:
+            valid_lengths.append(hint['cols'] - (len(header) - i))
+
+    return None not in row and len(row) in valid_lengths
+
+
 def parse(data, hint):
     result = []
     if 'cols' not in hint:
@@ -39,7 +52,7 @@ def parse(data, hint):
     good_hint = False
     for row in data:
         resrow = {}
-        if None in row or len(row) != hint['cols']:
+        if not check_row_length(data, hint, row):
             # Wrong column count
             continue
         if hint.get('payer') is not None:
