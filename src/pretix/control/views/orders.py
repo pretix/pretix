@@ -2493,7 +2493,8 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
         for l in ctx["logs"]:
             invoice_ids = l.parsed_data.get("invoices")
             if invoice_ids:
-                if type(invoice_ids) is int: invoice_ids = [invoice_ids]
+                if type(invoice_ids) is int:
+                    invoice_ids = [invoice_ids]
                 l.parsed_invoices = Invoice.objects.filter(
                     event=self.request.event,
                     pk__in=invoice_ids,
