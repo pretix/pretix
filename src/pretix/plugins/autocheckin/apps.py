@@ -38,6 +38,9 @@ class AutoCheckinApp(AppConfig):
         description = _(
             "Automatically check-in specific tickets after they have been sold."
         )
+        navigation_links = [
+            ((_("Check-in"), _("Auto check-in")), "plugins:autocheckin:index", {}),
+        ]
 
     def ready(self):
         from . import signals  # NOQA

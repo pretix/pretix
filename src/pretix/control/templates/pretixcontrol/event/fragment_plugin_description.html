@@ -7,7 +7,7 @@
             {% endblocktrans %}</p>
     {% endif %}
 {% endif %}
-<p>{{ plugin.description|safe }}</p>
+<p class="plugin-description">{{ plugin.description|safe }}</p>
 {% if plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
     <p class="text-muted">
         <span class="fa fa-info-circle" aria-hidden="true"></span>

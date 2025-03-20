@@ -36,6 +36,9 @@ class WebCheckinApp(AppConfig):
         experimental = True
         category = "FEATURE"
         description = _("Turn your browser into a check-in device to perform access control.")
+        navigation_links = [
+            ((_("Check-in"), _("Web Check-in")), "plugins:webcheckin:index", {}),
+        ]
 
     def ready(self):
         from . import signals  # NOQA
