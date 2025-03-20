@@ -364,23 +364,19 @@ class Discount(LoggedModel):
         if not self.condition_all_products:
             limit_products = {p.pk for p in self.condition_limit_products.all()}
 
-        subevent_ids = {subevent_id for subevent_id in positions.values()}
-        if self.event_date_from and self.event_date_until:
-            subevents = SubEvent.objects.all().filter(pk__in=subevent_ids).filter(
-                date_from__gte=self.event_date_from,
-                date_from__lte=self.event_date_until,
-            ).values_list('pk', flat=True)
-        elif self.event_date_from:
-            subevents = SubEvent.objects.all().filter(pk__in=subevent_ids).filter(
-                date_from__gte=self.event_date_from,
-            ).values_list('pk', flat=True)
-        elif self.event_date_until:
-            subevents = SubEvent.objects.all().filter(pk__in=subevent_ids).filter(
-                date_from__lte=self.event_date_until,
-            ).values_list('pk', flat=True)
-        else:
-            subevents = SubEvent.objects.values_list('pk', flat=True)
-        subevents_in_range = set(subevents)
+        subevents_in_range = None
+        if self.event_date_from or self.event_date_until:
+            subevent_ids = {
+                subevent_id
+                for (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)
+                in positions.values()
+            }
+            subevents_qs = SubEvent.objects.all().filter(pk__in=subevent_ids)
+            if self.event_date_from:
+                subevents_qs = subevents_qs.filter(date_from__gte=self.event_date_from)
+            if self.event_date_until:
+                subevents_qs = subevents_qs.filter(date_from__lt=self.event_date_until)
+            subevents_in_range = subevents_qs.values_list('pk', flat=True)
 
         # First, filter out everything not even covered by our product scope
         condition_candidates = [
@@ -390,7 +386,7 @@ class Discount(LoggedModel):
                 (self.condition_all_products or item_id in limit_products) and
                 (self.condition_apply_to_addons or not is_addon_to) and
                 (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
-                and (not subevent_id or subevent_id in subevents_in_range)
+                and (not subevent_id or subevents_in_range is None or subevent_id in subevents_in_range)
             )
         ]
 
