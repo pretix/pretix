@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-25 10:10+0000\n"
-"PO-Revision-Date: 2025-03-19 01:00+0000\n"
+"PO-Revision-Date: 2025-03-21 00:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.3\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -815,7 +815,7 @@ msgstr "Uploads de arquivos de respostas"
 #: pretix/plugins/reports/exporters.py:651
 msgctxt "export_category"
 msgid "Order data"
-msgstr "Informações do pedido"
+msgstr "Dados do pedido"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
@@ -1615,7 +1615,7 @@ msgstr "Dados do produto"
 #: pretix/base/exporters/items.py:50 pretix/base/exporters/orderlist.py:1128
 msgctxt "export_category"
 msgid "Product data"
-msgstr "Informações do produto"
+msgstr "Dados do produto"
 
 #: pretix/base/exporters/items.py:51
 msgid "Download a spreadsheet with details about all products and variations."
@@ -1850,9 +1850,12 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
-"Baixe uma planilha de todos os pedidos. A planilha incluirá três abas, uma "
-"com uma linha para cada pedido, uma com uma linha para cada posição do "
-"pedido e uma com uma linha para cada taxa adicional cobrada em um pedido."
+"A planilha exportada conterá informações de todos os seus pedidos, "
+"organizadas em três abas: (1) uma contendo uma linha para cada pedido; (2) "
+"outra contendo uma linha para cada item do pedido; (3) uma terceira contendo "
+"uma linha para cada taxa adicional cobrada em um pedido. Você pode exportar "
+"cada uma das abas individualmente selecionando a opção correspondente no "
+"campo 'Formato de exportação'."
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:332
 #: pretix/control/navigation.py:255 pretix/control/navigation.py:362
@@ -1891,7 +1894,7 @@ msgstr "Mostrar respostas de múltipla escolha agrupadas em uma coluna"
 #: pretix/base/exporters/orderlist.py:131
 #: pretix/plugins/reports/exporters.py:701
 msgid "Only include orders created within this date range."
-msgstr "Inclua apenas pedidos criados dentro desse período."
+msgstr "Apenas pedidos criados dentro deste período serão incluídos."
 
 #: pretix/base/exporters/orderlist.py:135 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:234 pretix/plugins/badges/exporters.py:499
@@ -5861,7 +5864,7 @@ msgstr "cancelado"
 #: pretix/base/models/orders.py:1725
 msgctxt "payment_state"
 msgid "failed"
-msgstr "falhou"
+msgstr "com falha"
 
 #: pretix/base/models/orders.py:1726
 msgctxt "payment_state"
@@ -5896,7 +5899,7 @@ msgstr "concluído"
 #: pretix/base/models/orders.py:2113
 msgctxt "refund_state"
 msgid "failed"
-msgstr "falhou"
+msgstr "com falha"
 
 #: pretix/base/models/orders.py:2115
 msgctxt "refund_state"
@@ -12537,7 +12540,7 @@ msgstr "por semana"
 #: pretix/base/timeframes.py:121
 msgctxt "reporting_timeframe"
 msgid "Current week to date"
-msgstr "Semana atual até hoje"
+msgstr "Semana atual"
 
 #: pretix/base/timeframes.py:130
 msgctxt "reporting_timeframe"
@@ -12563,12 +12566,12 @@ msgstr "por mês"
 #: pretix/base/timeframes.py:157
 msgctxt "reporting_timeframe"
 msgid "Current month to date"
-msgstr "Mês atual até hoje"
+msgstr "Mês atual"
 
 #: pretix/base/timeframes.py:166
 msgctxt "reporting_timeframe"
 msgid "Previous month"
-msgstr "Mês passado"
+msgstr "Mês anterior"
 
 #: pretix/base/timeframes.py:175
 msgctxt "reporting_timeframe"
@@ -12589,7 +12592,7 @@ msgstr "por trimestre"
 #: pretix/base/timeframes.py:193
 msgctxt "reporting_timeframe"
 msgid "Current quarter to date"
-msgstr "Trimestre atual até hoje"
+msgstr "Trimestre atual"
 
 #: pretix/base/timeframes.py:202
 msgctxt "reporting_timeframe"
@@ -12615,12 +12618,12 @@ msgstr "por ano"
 #: pretix/base/timeframes.py:231
 msgctxt "reporting_timeframe"
 msgid "Current year to date"
-msgstr "Ano atual até hoje"
+msgstr "Ano atual"
 
 #: pretix/base/timeframes.py:240
 msgctxt "reporting_timeframe"
 msgid "Previous year"
-msgstr "Ano passado"
+msgstr "Ano anterior"
 
 #: pretix/base/timeframes.py:249
 msgctxt "reporting_timeframe"
@@ -12663,7 +12666,7 @@ msgstr "Período de tempo personalizado"
 #: pretix/base/timeframes.py:326
 msgctxt "reporting_timeframe"
 msgid "All time"
-msgstr "Todo o tempo"
+msgstr "Todo o período"
 
 #: pretix/base/timeline.py:60
 msgctxt "timeline"
@@ -14674,7 +14677,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:165 pretix/control/forms/orders.py:212
 #: pretix/control/forms/orders.py:226
 msgid "Notify customer by email"
-msgstr "Notificar cliente por email"
+msgstr "Notificar cliente por e-mail"
 
 #: pretix/control/forms/orders.py:172
 msgid "Keep a cancellation fee of"
@@ -14711,6 +14714,8 @@ msgstr ""
 #: pretix/control/forms/orders.py:227
 msgid "A mail will only be sent if the order is fully paid after this."
 msgstr ""
+"O e-mail será enviado somente se o pagamento completo do pedido for "
+"realizado."
 
 #: pretix/control/forms/orders.py:234
 msgid "Payment amount"
@@ -19101,7 +19106,7 @@ msgstr "Lembrete de pagamento"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:108
 msgid "Payment failed"
-msgstr "Pagamento falhou"
+msgstr "Pagamento com falha"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 msgid "Waiting list notification"
@@ -22362,7 +22367,7 @@ msgstr "Cancelar todos os pedidos"
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:4
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:7
 msgid "Data export"
-msgstr ""
+msgstr "Exportação de dados"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:11
 #: pretix/control/templates/pretixcontrol/organizers/export.html:11
@@ -22443,6 +22448,8 @@ msgid ""
 "Your generated Excel file will have <strong>multiple sheets</strong>. Some "
 "data you are looking for might not be on the first sheet."
 msgstr ""
+"O arquivo Excel gerado terá <strong>diversas abas</strong>. Alguns dos dados "
+"que você está buscando pode não estar na primeira aba."
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:52
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:53
@@ -23822,7 +23829,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:73
 msgid "Failed"
-msgstr "Falhou"
+msgstr "Com falha"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:83
 msgid "Request URL"
@@ -29562,7 +29569,7 @@ msgstr "agendado"
 
 #: pretix/plugins/sendmail/models.py:52
 msgid "failed"
-msgstr "falhou"
+msgstr "com falha"
 
 #: pretix/plugins/sendmail/models.py:53
 msgid "completed"
