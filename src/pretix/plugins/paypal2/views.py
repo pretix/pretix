@@ -38,6 +38,7 @@ from decimal import Decimal
 from django.contrib import messages
 from django.core import signing
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
@@ -62,6 +63,7 @@ from pretix.base.payment import PaymentException
 from pretix.base.services.cart import add_payment_to_cart, get_fees
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
+from pretix.helpers import OF_SELF
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_request import (
@@ -450,26 +452,29 @@ def webhook(request, *args, **kwargs):
                 logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
                 return HttpResponse('Refund not found', status=500)
 
-            known_refunds = {r.info_data.get('id'): r for r in payment.refunds.all()}
-            if refund['id'] not in known_refunds:
-                payment.create_external_refund(
-                    amount=abs(Decimal(refund['amount']['value'])),
-                    info=json.dumps(refund.dict() if not isinstance(refund, dict) else refund)
-                )
-            elif known_refunds.get(refund['id']).state in (
-                    OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT) and refund['status'] == 'COMPLETED':
-                known_refunds.get(refund['id']).done()
-
-            if 'seller_payable_breakdown' in refund and 'total_refunded_amount' in refund['seller_payable_breakdown']:
-                known_sum = payment.refunds.filter(
-                    state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
-                               OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_SOURCE_EXTERNAL)
-                ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
-                total_refunded_amount = Decimal(refund['seller_payable_breakdown']['total_refunded_amount']['value'])
-                if known_sum < total_refunded_amount:
+            with transaction.atomic():
+                # Lock payment in case a refund is currently still running
+                payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
+                known_refunds = {r.info_data.get('id'): r for r in payment.refunds.all()}
+                if refund['id'] not in known_refunds:
                     payment.create_external_refund(
-                        amount=total_refunded_amount - known_sum
+                        amount=abs(Decimal(refund['amount']['value'])),
+                        info=json.dumps(refund.dict() if not isinstance(refund, dict) else refund)
                     )
+                elif known_refunds.get(refund['id']).state in (
+                        OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT) and refund['status'] == 'COMPLETED':
+                    known_refunds.get(refund['id']).done()
+
+                if 'seller_payable_breakdown' in refund and 'total_refunded_amount' in refund['seller_payable_breakdown']:
+                    known_sum = payment.refunds.filter(
+                        state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                                   OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_SOURCE_EXTERNAL)
+                    ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+                    total_refunded_amount = Decimal(refund['seller_payable_breakdown']['total_refunded_amount']['value'])
+                    if known_sum < total_refunded_amount:
+                        payment.create_external_refund(
+                            amount=total_refunded_amount - known_sum
+                        )
         elif sale['status'] == 'REFUNDED':
             known_sum = payment.refunds.filter(
                 state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,

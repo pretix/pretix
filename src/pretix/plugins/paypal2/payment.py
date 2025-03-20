@@ -916,53 +916,55 @@ class PaypalMethod(BasePaymentProvider):
 
     def execute_refund(self, refund: OrderRefund):
         self.init_api()
+        with transaction.atomic():
+            # Lock payment that we are creating refund for to prevent race condition with incoming webhook
+            OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=refund.payment_id)
+            try:
+                pp_payment = None
+                payment_info_data = None
+                # Legacy PayPal - get up to date info data first
+                if "purchase_units" not in refund.payment.info_data:
+                    req = OrdersGetRequest(refund.payment.info_data['cart'])
+                    response = self.client.execute(req)
+                    payment_info_data = response.result.dict()
+                else:
+                    payment_info_data = refund.payment.info_data
 
-        try:
-            pp_payment = None
-            payment_info_data = None
-            # Legacy PayPal - get up to date info data first
-            if "purchase_units" not in refund.payment.info_data:
-                req = OrdersGetRequest(refund.payment.info_data['cart'])
-                response = self.client.execute(req)
-                payment_info_data = response.result.dict()
-            else:
-                payment_info_data = refund.payment.info_data
-
-            for res in payment_info_data['purchase_units'][0]['payments']['captures']:
-                if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED']:
-                    pp_payment = res['id']
-                    break
-
-            if not pp_payment:
-                req = OrdersGetRequest(payment_info_data['id'])
-                response = self.client.execute(req)
-                for res in response.result.purchase_units[0].payments.captures:
+                for res in payment_info_data['purchase_units'][0]['payments']['captures']:
                     if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED']:
-                        pp_payment = res.id
+                        pp_payment = res['id']
                         break
 
-            req = CapturesRefundRequest(pp_payment)
-            req.request_body({
-                "amount": {
-                    "value": self.format_price(refund.amount),
-                    "currency_code": refund.order.event.currency
-                }
-            })
-            response = self.client.execute(req)
-        except KeyError:
-            raise PaymentException(_('Refunding the amount via PayPal failed: The original payment does not contain '
-                                     'the required information to issue an automated refund.'))
-        except IOError as e:
-            refund.order.log_action('pretix.event.order.refund.failed', {
-                'local_id': refund.local_id,
-                'provider': refund.provider,
-                'error': str(e)
-            })
-            logger.error('execute_refund: {}'.format(str(e)))
-            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(e)))
+                if not pp_payment:
+                    req = OrdersGetRequest(payment_info_data['id'])
+                    response = self.client.execute(req)
+                    for res in response.result.purchase_units[0].payments.captures:
+                        if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED']:
+                            pp_payment = res.id
+                            break
 
-        refund.info = json.dumps(response.result.dict())
-        refund.save(update_fields=['info'])
+                req = CapturesRefundRequest(pp_payment)
+                req.request_body({
+                    "amount": {
+                        "value": self.format_price(refund.amount),
+                        "currency_code": refund.order.event.currency
+                    }
+                })
+                response = self.client.execute(req)
+            except KeyError:
+                raise PaymentException(_('Refunding the amount via PayPal failed: The original payment does not contain '
+                                         'the required information to issue an automated refund.'))
+            except IOError as e:
+                refund.order.log_action('pretix.event.order.refund.failed', {
+                    'local_id': refund.local_id,
+                    'provider': refund.provider,
+                    'error': str(e)
+                })
+                logger.error('execute_refund: {}'.format(str(e)))
+                raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(e)))
+
+            refund.info = json.dumps(response.result.dict())
+            refund.save(update_fields=['info'])
 
         req = RefundsGetRequest(response.result.id)
         response = self.client.execute(req)
