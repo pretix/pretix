@@ -379,9 +379,9 @@ $(function () {
         return false;
     });
     var copy_to_first_ticket = true;
-    var attendee_address_fields = $("input[id*=attendee_name_parts_], input[id*=attendee_email], .questions-form" +
-        " input[id$=company], .questions-form[id$=street], .questions-form input[id$=zipcode], .questions-form" +
-        " input[id$=city]");
+    var attendee_address_fields = $("input[id*=attendee_name_parts_], input[id*=attendee_email], " +
+        ".questions-form input[id$=company], .questions-form input[id$=street], .questions-form input[id$=zipcode], " +
+        ".questions-form input[id$=city]");
     attendee_address_fields.each(function () {
         if ($(this).val()) {
             copy_to_first_ticket = false;
