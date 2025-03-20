@@ -144,8 +144,19 @@ class OutboundSyncProvider:
     def display_name(cls):
         return str(cls.identifier)
 
+    """
+    Adds an order to the sync queue. May only be called on derived classes which define an "identifier" attribute.
+     
+    Should be called in the appropriate signal receivers, e.g.:
+        
+        @receiver(order_placed, dispatch_uid="mysync_order_placed")
+        def on_order_placed(sender, order, **kwargs):
+            MySyncProvider.enqueue_order(order, "order_placed")
+    """
     @classmethod
     def enqueue_order(cls, order, triggered_by, not_before=None):
+        if not hasattr(cls, 'identifier'):
+            raise TypeError('Call this method on a derived class that defines an "identifier" attribute.')
         OrderSyncQueue.objects.create(
             order=order,
             sync_provider=cls.identifier,
@@ -247,6 +258,30 @@ class OutboundSyncProvider:
             for m in property_mapping
         ]
 
+    """
+    This method is called for each object that needs to be created/updated in the external system -- which these are is
+    determined by the implementation of the `mapping` property.
+    
+    TODO: describe the parameters
+    
+    This method needs to be idempotent, i.e. calling it multiple times with the same input values should create
+    only a single object in the target system. 
+    
+    Subsequent calls with the same mapping and pk_value should update the existing object, instead of creating a new one.
+    In a SQL database, you might use an "INSERT OR UPDATE" or "UPSERT" statement; many REST APIs provide an equivalent API call.
+    """
+    def sync_object_with_properties(
+            self,
+            pk_field,
+            pk_value,
+            properties: list,
+            inputs: dict,
+            mapping,
+            mapped_objects: dict,
+            **kwargs,
+    ):
+        raise NotImplementedError()
+
     def sync_object(
             self,
             inputs: dict,
@@ -261,7 +296,14 @@ class OutboundSyncProvider:
         if not pk_value:
             return None
 
-        info = self.sync_object_with_properties(inputs, mapping, mapped_objects, pk_value, properties)
+        info = self.sync_object_with_properties(
+            pk_field=mapping.external_pk,
+            pk_value=pk_value,
+            properties=properties,
+            inputs=inputs,
+            mapping=mapping,
+            mapped_objects=mapped_objects,
+        )
         OrderSyncLink.objects.create(
             order=inputs.get(ORDER), order_position=inputs.get(ORDER_POSITION), sync_provider=self.identifier,
             external_object_type=info.get('object_type'),
