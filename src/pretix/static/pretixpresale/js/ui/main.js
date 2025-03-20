@@ -392,9 +392,9 @@ $(function () {
         var $match = $candidates.filter(function() {
             return (
                 this.id.endsWith(source.id.substring(3))
-                || this.placeholder === source.placeholder
-                || this.placeholder === source_label
-                || get_label_text_for_id(this.id) === source_label
+                || (this.placeholder && this.placeholder === source.placeholder)
+                || (this.placeholder && this.placeholder === source_label)
+                || (source_label && get_label_text_for_id(this.id) === source_label)
             );
         }).first();
         $match.val(this.value).trigger("change");
