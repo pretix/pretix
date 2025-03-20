@@ -350,7 +350,7 @@ $(function () {
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 
-    // Copy answers
+    // Handlers for "Copy answers from above" buttons
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -378,19 +378,12 @@ $(function () {
         copy_answers(elements, answers);
         return false;
     });
-    var copy_to_first_ticket = true;
-    var attendee_address_fields = $("input[id*=attendee_name_parts_], input[id*=attendee_email], " +
-        ".questions-form input[id$=company], .questions-form input[id$=street], .questions-form input[id$=zipcode], " +
-        ".questions-form input[id$=city]");
-    attendee_address_fields.each(function () {
-        if ($(this).val()) {
-            copy_to_first_ticket = false;
-        }
-    })
-    $("select[id^=id_name_parts], input[id^=id_name_parts_], #id_email, #id_street, #id_company, #id_zipcode," +
-        " #id_city, #id_country, #id_state").change(function () {
-        if (!copy_to_first_ticket) return;
 
+    // Automatically copy answers from invoice to first attendee
+    var attendee_address_fields = $("input[id*=attendee_name_parts_], input[id*=attendee_email], " +
+        ".questions-form input[id$=company], .questions-form input[id$=street], " +
+        ".questions-form input[id$=zipcode], .questions-form input[id$=city]");
+    function copy_to_first_ticket () {
         var source = this;
         var source_label = get_label_text_for_id(source.id);
 
@@ -405,10 +398,17 @@ $(function () {
             );
         }).first();
         $match.val(this.value).trigger("change");
-    }).trigger("change");
-    attendee_address_fields.on("input", function () {
-        copy_to_first_ticket = false;
-    });
+    }
+    function valueIsEmpty(el) { return !el.value; }
+    if (attendee_address_fields.every(valueIsEmpty)) {
+        var invoice_address_fields = $("select[id^=id_name_parts], input[id^=id_name_parts_], #id_email, #id_street, " +
+            "#id_company, #id_zipcode, #id_city, #id_country, #id_state");
+        invoice_address_fields.on("change", copy_to_first_ticket).trigger("change");
+        attendee_address_fields.once("input", function () {
+            invoice_address_fields.off("change", copy_to_first_ticket);
+        });
+    }
+
     questions_init_profiles($("body"));
 
     if (sessionStorage) {
