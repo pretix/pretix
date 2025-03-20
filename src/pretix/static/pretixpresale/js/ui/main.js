@@ -314,6 +314,12 @@ function setup_week_calendar() {
     }
 }
 
+function get_label_text_for_id(id) {
+    return $("label[for=" + id +"]").first().contents().filter(function () {
+        return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
+    }).text().trim();
+}
+
 $(function () {
     "use strict";
 
@@ -344,7 +350,7 @@ $(function () {
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 
-    // Copy answers
+    // Handlers for "Copy answers from above" buttons
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -372,44 +378,37 @@ $(function () {
         copy_answers(elements, answers);
         return false;
     });
-    var copy_to_first_ticket = true;
-    var attendee_address_fields = $("input[id*=attendee_name_parts_], input[id*=attendee_email], .questions-form" +
-        " input[id$=company], .questions-form[id$=street], .questions-form input[id$=zipcode], .questions-form" +
-        " input[id$=city]");
-    attendee_address_fields.each(function () {
-        if ($(this).val()) {
-            copy_to_first_ticket = false;
-        }
-    })
-    $("select[id^=id_name_parts], input[id^=id_name_parts_], #id_email, #id_street, #id_company, #id_zipcode," +
-        " #id_city, #id_country, #id_state").change(function () {
-        if (copy_to_first_ticket) {
-            var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
-            $first_ticket_form.find("[id$=" + this.id.substring(3) + "]").val(this.value);
-            if (this.placeholder) {
-                $first_ticket_form.find("[placeholder='" + CSS.escape(this.placeholder) + "']").val(this.value);
-            }
-            var label = $("label[for=" + this.id +"]").first().contents().filter(function () {
-                return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
-            }).text().trim();
-            if (label) {
-                // match to placeholder and label
-                $first_ticket_form.find("[placeholder='" + CSS.escape(label) + "']").val(this.value);
-                var v = this.value;
-                $first_ticket_form.find("label").each(function() {
-                    var text = $(this).first().contents().filter(function () {
-                        return this.nodeType != Node.ELEMENT_NODE || !this.classList.contains("sr-only");
-                    }).text().trim();
-                    if (text == label) {
-                        $("#" + this.getAttribute("for")).val(v);
-                    }
-                });
-            }
-        }
-    }).trigger("change");
-    attendee_address_fields.change(function () {
-        copy_to_first_ticket = false;
-    });
+
+    // Automatically copy answers from invoice to first attendee
+    var attendee_address_fields = $("input[id*=attendee_name_parts_], input[id*=attendee_email], " +
+        ".questions-form input[id$=company], .questions-form input[id$=street], " +
+        ".questions-form input[id$=zipcode], .questions-form input[id$=city]");
+    function copy_to_first_ticket () {
+        var source = this;
+        var source_label = get_label_text_for_id(source.id);
+
+        var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
+        var $candidates = $first_ticket_form.find(source.tagName + ":not([type='checkbox'], [type='radio'])");
+        var $match = $candidates.filter(function() {
+            return (
+                this.id.endsWith(source.id.substring(3))
+                || (this.placeholder && this.placeholder === source.placeholder)
+                || (this.placeholder && this.placeholder === source_label)
+                || (source_label && get_label_text_for_id(this.id) === source_label)
+            );
+        }).first();
+        $match.val(this.value).trigger("change");
+    }
+    function valueIsEmpty(el) { return !el.value; }
+    if (attendee_address_fields.toArray().every(valueIsEmpty)) {
+        var invoice_address_fields = $("select[id^=id_name_parts], input[id^=id_name_parts_], #id_email, #id_street, " +
+            "#id_company, #id_zipcode, #id_city, #id_country, #id_state");
+        invoice_address_fields.on("change", copy_to_first_ticket).trigger("change");
+        attendee_address_fields.one("input", function () {
+            invoice_address_fields.off("change", copy_to_first_ticket);
+        });
+    }
+
     questions_init_profiles($("body"));
 
     if (sessionStorage) {
