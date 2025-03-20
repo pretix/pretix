@@ -406,7 +406,7 @@ $(function () {
         }).first();
         $match.val(this.value).trigger("change");
     }).trigger("change");
-    attendee_address_fields.change(function () {
+    attendee_address_fields.on("input", function () {
         copy_to_first_ticket = false;
     });
     questions_init_profiles($("body"));
