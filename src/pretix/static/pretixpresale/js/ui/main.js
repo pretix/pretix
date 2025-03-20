@@ -400,11 +400,11 @@ $(function () {
         $match.val(this.value).trigger("change");
     }
     function valueIsEmpty(el) { return !el.value; }
-    if (attendee_address_fields.every(valueIsEmpty)) {
+    if (attendee_address_fields.toArray().every(valueIsEmpty)) {
         var invoice_address_fields = $("select[id^=id_name_parts], input[id^=id_name_parts_], #id_email, #id_street, " +
             "#id_company, #id_zipcode, #id_city, #id_country, #id_state");
         invoice_address_fields.on("change", copy_to_first_ticket).trigger("change");
-        attendee_address_fields.once("input", function () {
+        attendee_address_fields.one("input", function () {
             invoice_address_fields.off("change", copy_to_first_ticket);
         });
     }
