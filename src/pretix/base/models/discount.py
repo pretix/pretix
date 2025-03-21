@@ -35,6 +35,7 @@ from django_scopes import ScopedManager
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
+from pretix.base.models.event import SubEvent
 
 PositionInfo = namedtuple('PositionInfo', ['item_id', 'subevent_id', 'line_price_gross', 'is_addon_to', 'voucher_discount'])
 
@@ -169,6 +170,17 @@ class Discount(LoggedModel):
         help_text=_("If this option is checked, products that already received a discount through a voucher will not "
                     "be discounted. However, products that use a voucher only to e.g. unlock a hidden product or gain "
                     "access to sold-out quota will still receive the discount."),
+    )
+
+    event_date_from = models.DateTimeField(
+        verbose_name=_("Available for events from"),
+        null=True,
+        blank=True,
+    )
+    event_date_until = models.DateTimeField(
+        verbose_name=_("Available for events until"),
+        null=True,
+        blank=True,
     )
 
     # more feature ideas:
@@ -352,6 +364,20 @@ class Discount(LoggedModel):
         if not self.condition_all_products:
             limit_products = {p.pk for p in self.condition_limit_products.all()}
 
+        subevents_in_range = None
+        if self.event_date_from or self.event_date_until:
+            subevent_ids = {
+                subevent_id
+                for (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)
+                in positions.values()
+            }
+            subevents_qs = SubEvent.objects.all().filter(pk__in=subevent_ids)
+            if self.event_date_from:
+                subevents_qs = subevents_qs.filter(date_from__gte=self.event_date_from)
+            if self.event_date_until:
+                subevents_qs = subevents_qs.filter(date_from__lt=self.event_date_until)
+            subevents_in_range = subevents_qs.values_list('pk', flat=True)
+
         # First, filter out everything not even covered by our product scope
         condition_candidates = [
             idx
@@ -360,6 +386,7 @@ class Discount(LoggedModel):
                 (self.condition_all_products or item_id in limit_products) and
                 (self.condition_apply_to_addons or not is_addon_to) and
                 (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
+                and (not subevent_id or subevents_in_range is None or subevent_id in subevents_in_range)
             )
         ]
 
