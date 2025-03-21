@@ -1049,6 +1049,66 @@ def test_available_until(event, item):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def test_event_date_from(event, item, subevent):
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20,
+                  event_date_from=now() + timedelta(days=2))
+    d1.save()
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50,
+                  event_date_from=now() - timedelta(days=1))
+    d2.save()
+
+    # (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount)
+    positions = (
+        (item.pk, subevent.pk, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, subevent.pk, Decimal('100.00'), False, False, Decimal('0.00')),
+    )
+
+    assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('50.00'), Decimal('50.00')]
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_event_date_until(event, item, subevent):
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20,
+                  event_date_until=now() + timedelta(days=2))
+    d1.save()
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50,
+                  event_date_until=now() - timedelta(days=1))
+    d2.save()
+
+    # (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount)
+    positions = (
+        (item.pk, subevent.pk, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, subevent.pk, Decimal('100.00'), False, False, Decimal('0.00')),
+    )
+
+    assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('80.00'), Decimal('80.00')]
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_event_date_from_until(event, item, subevent):
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20,
+                  event_date_from=now() + timedelta(days=1), event_date_until=now() + timedelta(days=2))
+    d1.save()
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50,
+                  event_date_from=now() - timedelta(days=2), event_date_until=now() - timedelta(days=1))
+    d2.save()
+    d3 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=80,
+                  event_date_from=now() - timedelta(seconds=1), event_date_until=now() + timedelta(days=1))
+    d3.save()
+
+    # (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount)
+    positions = (
+        (item.pk, subevent.pk, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, subevent.pk, Decimal('100.00'), False, False, Decimal('0.00')),
+    )
+
+    assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('20.00'), Decimal('20.00')]
+
+
+@pytest.mark.django_db
+@scopes_disabled()
 def test_discount_other_products_min_count(event, item, item2):
     # "For every 5 item2, one item1 gets in for free"
     d1 = Discount(
