@@ -205,7 +205,11 @@ var form_handlers = function (el) {
                     return;
                 }
                 if ($timepicker.val() === "") {
-                    date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    if ($(this).attr("name").includes("_until") || $(this).attr("name").includes("_end")) {
+                        date.set({'hour': 23, 'minute': 59, 'second': 59});
+                    } else {
+                        date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    }
                     $timepicker.data('DateTimePicker').date(date);
                 }
             });
