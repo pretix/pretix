@@ -127,7 +127,13 @@ class NamePartsWidget(forms.MultiWidget):
             if fname == 'title' and self.titles:
                 widgets.append(Select(attrs=a, choices=[('', '')] + [(d, d) for d in self.titles[1]]))
             elif fname == 'salutation':
-                widgets.append(Select(attrs=a, choices=[('', '---'), ('empty', '')] + PERSON_NAME_SALUTATIONS))
+                widgets.append(Select(
+                    attrs=a,
+                    choices=[
+                        ('', '---'),
+                        ('empty', '({})'.format(pgettext_lazy("name_salutation", "not specified"))),
+                    ] + PERSON_NAME_SALUTATIONS
+                ))
             else:
                 widgets.append(self.widget(attrs=a))
         super().__init__(widgets, attrs)
@@ -245,7 +251,10 @@ class NamePartsFormField(forms.MultiValueField):
                 d.pop('validators', None)
                 field = forms.ChoiceField(
                     **d,
-                    choices=[('', '---'), ('empty', '')] + PERSON_NAME_SALUTATIONS
+                    choices=[
+                        ('', '---'),
+                        ('empty', '({})'.format(pgettext_lazy("name_salutation", "not specified"))),
+                    ] + PERSON_NAME_SALUTATIONS
                 )
             else:
                 field = forms.CharField(**defaults)
