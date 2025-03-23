@@ -6,4 +6,5 @@ Table of contents
 
    api/index
    development/index
+   admin/index
 

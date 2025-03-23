@@ -45,12 +45,12 @@
             <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Two-factor authentication" %}</label>
             <div class="col-md-9 static-form-row">
                 {% if user.require_2fa %}
-                    <span class="label label-success">{% trans "Enabled" %}</span> &nbsp;
+                    <span class="label label-success">{% trans "Enable" %}</span> &nbsp;
                     <a href="{% url "control:user.settings.2fa" %}">
                         {% trans "Change two-factor settings" %}
                     </a>
                 {% else %}
-                    <span class="label label-default">{% trans "Disabled" %}</span> &nbsp;
+                    <span class="label label-default">{% trans "Disable" %}</span> &nbsp;
                     <a href="{% url "control:user.settings.2fa" %}">
                         {% trans "Enable" %}
                     </a>
