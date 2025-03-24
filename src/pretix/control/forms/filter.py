@@ -270,6 +270,7 @@ class OrderFilterForm(FilterForm):
             matching_positions = OrderPosition.objects.filter(
                 Q(
                     Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
+                    | Q(company__icontains=u)
                     | Q(secret__istartswith=u)
                     | Q(pseudonymization_id__istartswith=u)
                 )
