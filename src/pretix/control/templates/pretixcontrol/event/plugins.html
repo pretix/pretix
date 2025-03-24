@@ -10,20 +10,40 @@
             software functionality, connect your event to third-party services, or apply other forms of customizations.
         {% endblocktrans %}
     </p>
+    {% if "success" in request.GET %}
+        <div class="alert alert-success">
+            {% trans "Your changes have been saved." %}
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-lg-10">
+            <p><input type="search" id="plugin_search_input" class="form-control" placeholder="{% trans "Search" %}"></p>
+        </div>
+        <div class="col-lg-2 text-right">
+            <p class="btn-group btn-group-flex" data-toggle="buttons">
+                <label class="btn btn-primary-if-active active"><input type="radio" name="plugin_state_filter" value="all" checked> {% trans "All" %}</label>
+                <label class="btn btn-primary-if-active"><input type="radio" name="plugin_state_filter" value="active"> {% trans "Active" %}</label>
+            </p>
+        </div>
+    </div>
     <form action="" method="post" class="form-horizontal form-plugins">
         {% csrf_token %}
-        {% if "success" in request.GET %}
-            <div class="alert alert-success">
-                {% trans "Your changes have been saved." %}
+        <div id="plugin_search_results" class="panel panel-default collapse">
+            <div class="panel-heading">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+                {% trans "Search results" %}
             </div>
-        {% endif %}
-        <div class="tabbed-form">
+            <div class="panel-body">
+                <div class="plugin-list"></div>
+            </div>
+        </div>
+        <div id="plugin_tabs"><div class="tabbed-form">
             {% for cat, catlabel, plist, has_pictures in plugins %}
-                <fieldset>
+                <fieldset data-plugin-category="{{ cat }}" data-plugin-category-label="{{ catlabel }}">
                     <legend>{{ catlabel }}</legend>
                     <div class="plugin-list">
-                        {% for plugin in plist %}
-                            <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}">
+                        {% for plugin, is_active, settings_links, navigation_links in plist %}
+                            <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}" data-plugin-module="{{ plugin.module }}" data-plugin-name="{{ plugin.name }}">
                             {% if plugin.featured %}
                                <div class="panel panel-default">
                                     <div class="panel-body">
@@ -49,8 +69,8 @@
                                                 {% if show_meta %}
                                                     <span class="text-muted text-sm">{{ plugin.version }}</span>
                                                 {% endif %}
-                                                {% if plugin.module in plugins_active %}
-                                                    <span class="label label-success">
+                                                {% if is_active %}
+                                                    <span class="label label-success" data-is-active>
                                                         <span class="fa fa-check" aria-hidden="true"></span>
                                                         {% trans "Active" %}
                                                     </span>
@@ -66,8 +86,32 @@
                                             <div class="plugin-action">
                                                 <span class="text-muted">{% trans "Not available" %}</span>
                                             </div>
-                                        {% elif plugin.module in plugins_active %}
+                                        {% elif is_active %}
                                             <div class="plugin-action flip">
+                                                {% if navigation_links %}
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
+                                                            <span class="fa fa-compass"></span> {% trans "Go to" %} <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            {% for link in navigation_links %}
+                                                                <li><a href="{{ link.0 }}">{{ link.1 }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                {% endif %}
+                                                {% if settings_links %}
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
+                                                            <span class="fa fa-cog"></span> {% trans "Settings" %} <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            {% for link in settings_links %}
+                                                                <li><a href="{{ link.0 }}">{{ link.1 }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                {% endif %}
                                                 <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
                                                         value="disable">{% trans "Disable" %}</button>
                                             </div>
@@ -86,6 +130,7 @@
                     </div>
                 </fieldset>
             {% endfor %}
-        </div>
+        </div></div>
     </form>
+    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/plugins.js" %}"></script>
 {% endblock %}

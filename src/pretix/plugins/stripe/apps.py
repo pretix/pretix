@@ -40,6 +40,9 @@ class StripeApp(AppConfig):
         description = _("Accept payments via Stripe, a globally popular payment service provider. Stripe supports "
                         "payments via credit cards as well as many local payment methods such as iDEAL, Alipay,"
                         "and many more.")
+        settings_links = [
+            ((_("Payment"), _("Stripe")), "control:event.settings.payment.provider", {"provider": "stripe_settings"}),
+        ]
 
     def ready(self):
         from . import signals, tasks  # NOQA

@@ -35,3 +35,6 @@ class ManualPaymentApp(AppConfig):
         version = version
         category = 'PAYMENT'
         description = _("A fully customizable payment method for manual processing.")
+        settings_links = [
+            ((_("Payment"), _("Manual payment")), "control:event.settings.payment.provider", {"provider": "manual"}),
+        ]

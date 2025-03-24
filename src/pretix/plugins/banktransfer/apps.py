@@ -38,6 +38,13 @@ class BankTransferApp(AppConfig):
         version = version
         description = _("Accept payments from your customers using classical wire transfer methods with your own "
                         "bank account.")
+        settings_links = [
+            ((_("Payment"), _("Bank transfer")), "control:event.settings.payment.provider", {"provider": "banktransfer"}),
+        ]
+        navigation_links = [
+            ((_("Bank transfer"), _("Import bank data")), "plugins:banktransfer:import", {}),
+            ((_("Bank transfer"), _("Export refunds")), "plugins:banktransfer:refunds.list", {}),
+        ]
 
     def ready(self):
         from . import signals  # NOQA

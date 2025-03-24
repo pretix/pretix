@@ -84,6 +84,8 @@ A working example would be:
             restricted = False
             description = _("This plugin allows you to receive payments via PayPal")
             compatibility = "pretix>=2.7.0"
+            settings_links = []
+            navigation_links = []
 
 
     default_app_config = 'pretix_paypal.PaypalApp'
@@ -184,6 +186,28 @@ your Django app label.
 .. WARNING:: If you define custom URLs and views, you are currently on your own
    with checking that the calling user is logged in, has appropriate permissions,
    etc. We plan on providing native support for this in a later version.
+
+To make your plugin views easily discoverable, you can specify links for "Go to"
+and "Settings" buttons next to your entry on the plugin page. These links should be
+added to the ``navigation_links`` and ``settings_links``, respectively, in the
+``PretixPluginMeta`` class.
+
+Each array entry consists of a tuple ``(label, urlname, kwargs)``. For the label,
+either a string or a tuple of strings can be specified. In the latter case, the provided
+strings will be merged with a separator indicating they are successive navigation steps
+the user would need to take to reach the page via the regular menu
+(e.g. "Payment > Bank transfer" as below).
+
+.. code-block:: python
+
+        settings_links = [
+            ((_("Payment"), _("Bank transfer")), "control:event.settings.payment.provider", {"provider": "banktransfer"}),
+        ]
+        navigation_links = [
+            ((_("Bank transfer"), _("Import bank data")), "plugins:banktransfer:import", {}),
+            ((_("Bank transfer"), _("Export refunds")), "plugins:banktransfer:refunds.list", {}),
+        ]
+
 
 .. _Django app: https://docs.djangoproject.com/en/3.0/ref/applications/
 .. _signal dispatcher: https://docs.djangoproject.com/en/3.0/topics/signals/
