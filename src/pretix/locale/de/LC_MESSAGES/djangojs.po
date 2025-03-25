@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:46+0000\n"
-"PO-Revision-Date: 2025-01-22 16:00+0000\n"
+"PO-Revision-Date: 2025-03-25 16:25+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -686,10 +686,8 @@ msgid "Calculating default price…"
 msgstr "Berechne Standardpreis…"
 
 #: pretix/static/pretixcontrol/js/ui/plugins.js:69
-#, fuzzy
-#| msgid "Search results"
 msgid "No results"
-msgstr "Suchergebnisse"
+msgstr "Keine Ergebnisse"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
