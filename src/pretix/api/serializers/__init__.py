@@ -96,7 +96,7 @@ class SalesChannelMigrationMixin:
 
             if data.get("all_sales_channels") and set(data["sales_channels"]) != all_channels:
                 raise ValidationError({
-                    "limit_sales_channels": [
+                    "all_sales_channels": [
                         "If 'all_sales_channels' is set, the legacy attribute 'sales_channels' must not be set or set to "
                         "the list of all sales channels."
                     ]
