@@ -80,7 +80,7 @@ class SalesChannelMigrationMixin:
             raise ValueError("organizer not in context")
 
     def to_internal_value(self, data):
-        if "sales_channels" in data:
+        if data.get("sales_channels") is not None:
             prefetch_related_objects([self.organizer], "sales_channels")
             all_channels = {
                 s.identifier for s in
@@ -109,6 +109,8 @@ class SalesChannelMigrationMixin:
             else:
                 data["all_sales_channels"] = False
                 data["limit_sales_channels"] = data["sales_channels"]
+
+        if "sales_channels" in data:
             del data["sales_channels"]
 
         if data.get("all_sales_channels"):
