@@ -173,12 +173,12 @@ class Discount(LoggedModel):
     )
 
     event_date_from = models.DateTimeField(
-        verbose_name=_("Available for events from"),
+        verbose_name=_("Available for dates from"),
         null=True,
         blank=True,
     )
     event_date_until = models.DateTimeField(
-        verbose_name=_("Available for events until"),
+        verbose_name=_("Available for dates until"),
         null=True,
         blank=True,
     )
