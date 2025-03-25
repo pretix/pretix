@@ -80,7 +80,14 @@ class SalesChannelMigrationMixin:
             raise ValueError("organizer not in context")
 
     def to_internal_value(self, data):
-        if data.get("sales_channels") is not None:
+        if "sales_channels" in data:
+            if data["sales_channels"] is None:
+                raise ValidationError({
+                    "sales_channels": [
+                        "The legacy attribute 'sales_channels' cannot be set to None, it must be a list."
+                    ]
+                })
+
             prefetch_related_objects([self.organizer], "sales_channels")
             all_channels = {
                 s.identifier for s in
@@ -110,7 +117,6 @@ class SalesChannelMigrationMixin:
                 data["all_sales_channels"] = False
                 data["limit_sales_channels"] = data["sales_channels"]
 
-        if "sales_channels" in data:
             del data["sales_channels"]
 
         if data.get("all_sales_channels"):
