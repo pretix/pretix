@@ -73,7 +73,9 @@ def test_same_month_german():
         df = date(2003, 2, 1)
         dt = date(2003, 2, 3)
         assert daterange(df, dt) == "1.–3. Februar 2003"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1.</time><span aria-hidden="true">–</span><span class="sr-only"> bis </span><time datetime="2003-02-03">3. Februar 2003</time>'
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1.</time>' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> bis </span>' \
+                                                  '<time datetime="2003-02-03">3. Februar 2003</time>'
 
 
 def test_same_month_english():
@@ -81,7 +83,9 @@ def test_same_month_english():
         df = date(2003, 2, 1)
         dt = date(2003, 2, 3)
         assert daterange(df, dt) == "Feb. 1st – 3rd, 2003"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1st</time> <span aria-hidden="true">–</span><span class="sr-only"> until </span> <time datetime="2003-02-03">3rd, 2003</time>'
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1st</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
+                                                  '<time datetime="2003-02-03">3rd, 2003</time>'
 
 
 def test_same_month_spanish():
@@ -89,7 +93,9 @@ def test_same_month_spanish():
         df = date(2003, 2, 1)
         dt = date(2003, 2, 3)
         assert daterange(df, dt) == "1 – 3 de febrero de 2003"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1</time> <span aria-hidden="true">–</span><span class="sr-only"> hasta </span> <time datetime="2003-02-03">3 de febrero de 2003</time>'
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> hasta </span> ' \
+                                                  '<time datetime="2003-02-03">3 de febrero de 2003</time>'
 
 
 def test_same_year_german():
@@ -97,7 +103,9 @@ def test_same_year_german():
         df = date(2003, 2, 1)
         dt = date(2003, 4, 3)
         assert daterange(df, dt) == "1. Februar – 3. April 2003"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1. Februar</time> <span aria-hidden="true">–</span><span class="sr-only"> bis </span> <time datetime="2003-04-03">3. April 2003</time>'
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1. Februar</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> bis </span> ' \
+                                                  '<time datetime="2003-04-03">3. April 2003</time>'
 
 
 def test_same_year_english():
@@ -105,7 +113,9 @@ def test_same_year_english():
         df = date(2003, 2, 1)
         dt = date(2003, 4, 3)
         assert daterange(df, dt) == "Feb. 1st – April 3rd, 2003"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1st</time> <span aria-hidden="true">–</span><span class="sr-only"> until </span> <time datetime="2003-04-03">April 3rd, 2003</time>'
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1st</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
+                                                  '<time datetime="2003-04-03">April 3rd, 2003</time>'
 
 
 def test_same_year_spanish():
@@ -113,7 +123,9 @@ def test_same_year_spanish():
         df = date(2003, 2, 1)
         dt = date(2003, 4, 3)
         assert daterange(df, dt) == "1 de febrero – 3 de abril de 2003"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1 de febrero</time> <span aria-hidden="true">–</span><span class="sr-only"> hasta </span> <time datetime="2003-04-03">3 de abril de 2003</time>'
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1 de febrero</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> hasta </span> ' \
+                                                  '<time datetime="2003-04-03">3 de abril de 2003</time>'
 
 
 def test_different_dates_german():
@@ -121,7 +133,9 @@ def test_different_dates_german():
         df = date(2003, 2, 1)
         dt = date(2005, 4, 3)
         assert daterange(df, dt) == "1. Februar 2003 – 3. April 2005"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1. Februar 2003</time> <span aria-hidden="true">–</span><span class="sr-only"> bis </span> <time datetime="2005-04-03">3. April 2005</time>'
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1. Februar 2003</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> bis </span> ' \
+                                                  '<time datetime="2005-04-03">3. April 2005</time>'
 
 
 def test_different_dates_english():
@@ -129,7 +143,9 @@ def test_different_dates_english():
         df = date(2003, 2, 1)
         dt = date(2005, 4, 3)
         assert daterange(df, dt) == "Feb. 1, 2003 – April 3, 2005"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1, 2003</time> <span aria-hidden="true">–</span><span class="sr-only"> until </span> <time datetime="2005-04-03">April 3, 2005</time>'
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1, 2003</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
+                                                  '<time datetime="2005-04-03">April 3, 2005</time>'
 
 
 def test_different_dates_spanish():
@@ -137,7 +153,8 @@ def test_different_dates_spanish():
         df = date(2003, 2, 1)
         dt = date(2005, 4, 3)
         assert daterange(df, dt) == "1 de febrero de 2003 – 3 de abril de 2005"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1 de febrero de 2003</time> <span aria-hidden="true">–</span><span class="sr-only"> hasta </span> ' \
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1 de febrero de 2003</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> hasta </span> ' \
                                                   '<time datetime="2005-04-03">3 de abril de 2005</time>'
 
 
@@ -146,7 +163,8 @@ def test_different_dates_other_lang():
         df = date(2003, 2, 1)
         dt = date(2005, 4, 3)
         assert daterange(df, dt) == "01 Şubat 2003 – 03 Nisan 2005"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">01 Şubat 2003</time> <span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">01 Şubat 2003</time> ' \
+                                                  '<span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
                                                   '<time datetime="2005-04-03">03 Nisan 2005</time>'
 
 
@@ -155,13 +173,15 @@ def test_datetime_same_day():
         df = datetime(2003, 2, 1, 9, 0)
         dt = datetime(2003, 2, 1, 10, 0)
         assert datetimerange(df, dt) == "01.02.2003 09:00 – 10:00"
-        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">01.02.2003 09:00</time> <span aria-hidden="true">–</span><span class="sr-only"> bis </span> ' \
+        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">01.02.2003 09:00</time> ' \
+                                                      '<span aria-hidden="true">–</span><span class="sr-only"> bis </span> ' \
                                                       '<time datetime="2003-02-01 10:00">10:00</time>'
     with language('en', 'US'):
         df = datetime(2003, 2, 1, 9, 0)
         dt = datetime(2003, 2, 1, 10, 0)
         assert datetimerange(df, dt) == "02/01/2003 9 a.m. – 10 a.m."
-        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">02/01/2003 9 a.m.</time> <span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
+        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">02/01/2003 9 a.m.</time> ' \
+                                                      '<span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
                                                       '<time datetime="2003-02-01 10:00">10 a.m.</time>'
 
 
@@ -170,11 +190,13 @@ def test_datetime_different_day():
         df = datetime(2003, 2, 1, 9, 0)
         dt = datetime(2003, 2, 2, 10, 0)
         assert datetimerange(df, dt) == "01.02.2003 09:00 – 02.02.2003 10:00"
-        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">01.02.2003 09:00</time> <span aria-hidden="true">–</span><span class="sr-only"> bis </span> ' \
+        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">01.02.2003 09:00</time> ' \
+                                                      '<span aria-hidden="true">–</span><span class="sr-only"> bis </span> ' \
                                                       '<time datetime="2003-02-02 10:00">02.02.2003 10:00</time>'
     with language('en', 'US'):
         df = datetime(2003, 2, 1, 9, 0)
         dt = datetime(2003, 2, 2, 10, 0)
         assert datetimerange(df, dt) == "02/01/2003 9 a.m. – 02/02/2003 10 a.m."
-        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">02/01/2003 9 a.m.</time> <span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
+        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">02/01/2003 9 a.m.</time> ' \
+                                                      '<span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
                                                       '<time datetime="2003-02-02 10:00">02/02/2003 10 a.m.</time>'
