@@ -52,9 +52,12 @@
                         </p>
                         <pre>{{ log.parsed_data.message }}</pre>
                         <ul class="list-unstyled">
+                            {% comment %}
+                            {# Unfortunately, we do not have reliable info whether tickets were attached. #}
                             {% if log.parsed_data.attach_tickets %}
                                 <li><span class="fa fa-files-o fa-fw"></span> {% trans "Tickets" %}</li>
                             {% endif %}
+                            {% endcomment %}
                             {% if log.parsed_data.attach_ical %}
                                 <li><span class="fa fa-calendar-o fa-fw"></span> {% trans "Calendar invite" %}</li>
                             {% endif %}
