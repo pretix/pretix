@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-03-17 17:00+0000\n"
+"PO-Revision-Date: 2025-03-27 00:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.3\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -12238,18 +12238,14 @@ msgid "MA"
 msgstr "MA"
 
 #: pretix/base/settings.py:3720 pretix/base/settings.py:3722
-#, fuzzy
-#| msgid "Provider name"
 msgctxt "address"
 msgid "Province"
-msgstr "Nom du fournisseur"
+msgstr "Province"
 
 #: pretix/base/settings.py:3721
-#, fuzzy
-#| msgid "Use feature"
 msgctxt "address"
 msgid "Prefecture"
-msgstr "Utiliser la fonction"
+msgstr "Préfecture"
 
 #: pretix/base/settings.py:3810 pretix/control/forms/event.py:228
 msgid ""
@@ -14846,6 +14842,9 @@ msgid ""
 "only use characters A-Z, a-z, 0-9, and common special characters "
 "({characters})."
 msgstr ""
+"Le mot de passe contient des caractères qui ne sont pas pris en charge par "
+"notre système de messagerie. Veuillez utiliser uniquement les caractères A-"
+"Z, a-z, 0-9 et les caractères spéciaux courants ({characters})."
 
 #: pretix/control/forms/mailsetup.py:70
 msgid "Use STARTTLS"
@@ -15209,10 +15208,9 @@ msgid "Recipient"
 msgstr "Destinataire"
 
 #: pretix/control/forms/orders.py:768
-#, fuzzy, python-brace-format
-#| msgid "Attach ticket files"
+#, python-brace-format
 msgid "Attach {file}"
-msgstr "Joindre les fichiers de tickets"
+msgstr "Joindre {file}"
 
 #: pretix/control/forms/orders.py:796
 msgid ""
@@ -18007,13 +18005,7 @@ msgid "Delete check-ins"
 msgstr "Supprimer les enregistrements"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to permanently delete the check-ins of <strong>one "
-#| "ticket</strong>."
-#| msgid_plural ""
-#| "Are you sure you want to permanently delete the check-ins of "
-#| "<strong>%(count)s tickets</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to permanently delete the check-ins of <strong>one "
 "ticket</strong>?"
@@ -19572,10 +19564,8 @@ msgid "Disabled"
 msgstr "Désactivé"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:57
-#, fuzzy
-#| msgid "Enable waiting list"
 msgid "Enable additional payment plugins"
-msgstr "Activer la liste d'attente"
+msgstr "Activer des plugins de paiement supplémentaires"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:66
 msgid "Deadlines"
@@ -19680,10 +19670,8 @@ msgid "Your changes have been saved."
 msgstr "Vos modifications ont été enregistrées."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:34
-#, fuzzy
-#| msgid "Check results"
 msgid "Search results"
-msgstr "Vérifier les résultats"
+msgstr "Résultats de la recherche"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:56
 msgid "Top recommendation"
@@ -19703,16 +19691,12 @@ msgstr "Non disponible"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:93
 #: pretix/control/templates/pretixcontrol/event/plugins.html:105
-#, fuzzy
-#| msgid "Login settings"
 msgid "Open plugin settings"
-msgstr "Paramètres de connexion"
+msgstr "Ouvrir les paramètres du plugin"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:94
-#, fuzzy
-#| msgid "Go to shop"
 msgid "Go to"
-msgstr "Accéder à la boutique"
+msgstr "Aller à"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:116
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
@@ -22598,11 +22582,8 @@ msgid "Subject:"
 msgstr "Sujet :"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:59
-#, fuzzy
-#| msgctxt "attachment_filename"
-#| msgid "Calendar invite"
 msgid "Calendar invite"
-msgstr "Invitation au calendrier"
+msgstr "Invitation à l'agenda"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
@@ -26677,13 +26658,11 @@ msgstr "Fonctionnalités de l’API"
 
 #: pretix/control/views/event.py:444
 msgid "The plugin {} is now active, you can configure it here:"
-msgstr ""
+msgstr "Le plugin {} est maintenant actif, vous pouvez le configurer ici :"
 
 #: pretix/control/views/event.py:453
-#, fuzzy
-#| msgid "The relevant plugin is currently not active."
 msgid "The plugin {} is now active."
-msgstr "Le plugin correspondant n'est pas activé."
+msgstr "Le plugin {} est maintenant actif."
 
 #: pretix/control/views/event.py:516
 msgid ""
@@ -27171,12 +27150,10 @@ msgid "Access for the selected application has been revoked."
 msgstr "L’accès à l’application sélectionnée a été révoqué."
 
 #: pretix/control/views/orders.py:192
-#, fuzzy
-#| msgid "We could not save your changes. See below for details."
 msgid "We could not process your input. See below for details."
 msgstr ""
-"Nous n'avons pas pu enregistrer vos modifications. Voir ci-dessous pour plus "
-"de détails."
+"Nous n'avons pas pu traiter votre demande. Voir ci-dessous pour plus de "
+"détails."
 
 #: pretix/control/views/orders.py:265
 #, python-brace-format
@@ -32299,10 +32276,8 @@ msgstr ""
 "moderne et une connexion Internet décente."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
-#, fuzzy
-#| msgid "Open Layout Designer"
 msgid "Open layout editor"
-msgstr "Ouvrir l'outil de mise en page"
+msgstr "Ouvrir l'éditeur de mise en page"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Advanced mode (multiple layouts)"
