@@ -111,10 +111,15 @@ def daterange(df, dt, as_html=False):
 def datetimerange(df, dt, as_html=False):
     if as_html:
         base_format = format_html("<time datetime=\"{}\">{{}}</time>{{}}<time datetime=\"{}\">{{}}</time>", _date(df, "Y-m-d H:i"), _date(dt, "Y-m-d H:i"))
+        until = format_html(
+            " <span aria-hidden=\"true\">–</span><span class=\"sr-only\"> {until} </span> ",
+            until=pgettext_lazy("timerange", "until")
+        )
     else:
         base_format = "{}{}{}"
+        until = " – "
 
     if df.year == dt.year and df.month == dt.month and df.day == dt.day:
         return format_html(base_format, _date(df, "SHORT_DATE_FORMAT") + " " + _date(df, "TIME_FORMAT"), until, _date(dt, "TIME_FORMAT"))
     else:
-        return format_html(base_format, _date(df, "SHORT_DATETIME_FORMAT"), " – ", _date(dt, "SHORT_DATETIME_FORMAT"))
+        return format_html(base_format, _date(df, "SHORT_DATETIME_FORMAT"), until, _date(dt, "SHORT_DATETIME_FORMAT"))
