@@ -50,7 +50,7 @@ def daterange(df, dt, as_html=False):
         if as_html:
             base_format = format_html("<time datetime=\"{}\">{{}}</time>{{}}<time datetime=\"{}\">{{}}</time>", _date(df, "Y-m-d"), _date(dt, "Y-m-d"))
             until = format_html(
-                " <span aria-hidden=\"true\">–</span><span class=\"sr-only\">{until}</span> ",
+                " <span aria-hidden=\"true\">–</span><span class=\"sr-only\"> {until} </span> ",
                 until=pgettext_lazy("timerange", "until")
             )
         else:
