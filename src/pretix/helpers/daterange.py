@@ -33,7 +33,10 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from django.utils.html import format_html
-from django.utils.translation import get_language, gettext_lazy as _
+from django.utils.safestring import mark_safe
+from django.utils.translation import (
+    get_language, gettext_lazy as _, pgettext_lazy,
+)
 
 from pretix.helpers.templatetags.date_fast import date_fast as _date
 
@@ -48,23 +51,28 @@ def daterange(df, dt, as_html=False):
     else:
         if as_html:
             base_format = format_html("<time datetime=\"{}\">{{}}</time>{{}}<time datetime=\"{}\">{{}}</time>", _date(df, "Y-m-d"), _date(dt, "Y-m-d"))
+            until = format_html(
+                " <span aria-hidden=\"true\">–</span><span class=\"sr-only\"> {until} </span> ",
+                until=pgettext_lazy("timerange", "until")
+            )
         else:
             base_format = "{}{}{}"
+            until = " – "
 
     if lng.startswith("de"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
             return format_html(base_format, _date(df, "D, j. F Y"))
         elif df.year == dt.year and df.month == dt.month:
-            return format_html(base_format, _date(df, "j."), "–", _date(dt, "j. F Y"))
+            return format_html(base_format, _date(df, "j."), mark_safe(until.strip()), _date(dt, "j. F Y"))
         elif df.year == dt.year:
-            return format_html(base_format, _date(df, "j. F"), " – ", _date(dt, "j. F Y"))
+            return format_html(base_format, _date(df, "j. F"), until, _date(dt, "j. F Y"))
     elif lng.startswith("en"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
             return format_html(base_format, _date(df, "D, N jS, Y"))
         elif df.year == dt.year and df.month == dt.month:
-            return format_html(base_format, _date(df, "N jS"), " – ", _date(dt, "jS, Y"))
+            return format_html(base_format, _date(df, "N jS"), until, _date(dt, "jS, Y"))
         elif df.year == dt.year:
-            return format_html(base_format, _date(df, "N jS"), " – ", _date(dt, "N jS, Y"))
+            return format_html(base_format, _date(df, "N jS"), until, _date(dt, "N jS, Y"))
     elif lng.startswith("es"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
             return format_html(base_format, _date(df, "DATE_FORMAT"))
@@ -72,14 +80,14 @@ def daterange(df, dt, as_html=False):
             return format_html(
                 base_format,
                 _date(df, "j"),
-                " - ",
+                until,
                 "{} de {} de {}".format(_date(dt, "j"), _date(dt, "F"), _date(dt, "Y"))
             )
         elif df.year == dt.year:
             return format_html(
                 base_format,
                 "{} de {}".format(_date(df, "j"), _date(df, "F")),
-                " - ",
+                until,
                 "{} de {} de {}".format(_date(dt, "j"), _date(dt, "F"), _date(dt, "Y"))
             )
 
@@ -89,24 +97,31 @@ def daterange(df, dt, as_html=False):
     if as_html:
         base_format = "<time datetime=\"{}\">{}</time>"
         return format_html(
-            "{date_from} – {date_to}",
+            "{date_from}{until}{date_to}",
             date_from=format_html(base_format, _date(df, "Y-m-d"), _date(df, "DATE_FORMAT")),
             date_to=format_html(base_format, _date(dt, "Y-m-d"), _date(dt, "DATE_FORMAT")),
+            until=until,
         )
 
-    return _("{date_from} – {date_to}").format(
+    return _("{date_from}{until}{date_to}").format(
         date_from=_date(df, "DATE_FORMAT"),
         date_to=_date(dt, "DATE_FORMAT"),
+        until=until,
     )
 
 
 def datetimerange(df, dt, as_html=False):
     if as_html:
         base_format = format_html("<time datetime=\"{}\">{{}}</time>{{}}<time datetime=\"{}\">{{}}</time>", _date(df, "Y-m-d H:i"), _date(dt, "Y-m-d H:i"))
+        until = format_html(
+            " <span aria-hidden=\"true\">–</span><span class=\"sr-only\"> {until} </span> ",
+            until=pgettext_lazy("timerange", "until")
+        )
     else:
         base_format = "{}{}{}"
+        until = " – "
 
     if df.year == dt.year and df.month == dt.month and df.day == dt.day:
-        return format_html(base_format, _date(df, "SHORT_DATE_FORMAT") + " " + _date(df, "TIME_FORMAT"), " – ", _date(dt, "TIME_FORMAT"))
+        return format_html(base_format, _date(df, "SHORT_DATE_FORMAT") + " " + _date(df, "TIME_FORMAT"), until, _date(dt, "TIME_FORMAT"))
     else:
-        return format_html(base_format, _date(df, "SHORT_DATETIME_FORMAT"), " – ", _date(dt, "SHORT_DATETIME_FORMAT"))
+        return format_html(base_format, _date(df, "SHORT_DATETIME_FORMAT"), until, _date(dt, "SHORT_DATETIME_FORMAT"))

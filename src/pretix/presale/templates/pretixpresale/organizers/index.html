@@ -1,5 +1,6 @@
 {% extends "pretixpresale/organizers/base.html" %}
 {% load i18n %}
+{% load date_fast %}
 {% load icon %}
 {% load rich_text %}
 {% load tz %}
@@ -68,9 +69,10 @@
                                         <br>
                                         <span class="text-muted" data-time="{{ e.date_from.isoformat }}" data-timezone="{{ e.tzname }}">
                                             {% icon "clock-o" %}
-                                            {{ e.date_from|date:"TIME_FORMAT" }}
+                                            <time datetime="{{ e.date_from|date_fast:"H:i" }}">{{ e.date_from|date:"TIME_FORMAT" }}</time>
                                             {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
-                                                – {{ e.date_to|date:"TIME_FORMAT" }}
+                                                <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span>
+                                                <time datetime="{{ e.date_to|date_fast:"H:i" }}">{{ e.date_to|date:"TIME_FORMAT" }}</time>
                                             {% endif %}
                                         </span>
                                     {% endtimezone %}
