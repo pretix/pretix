@@ -1570,12 +1570,26 @@ Vue.component('pretix-widget-event-calendar', {
             this.$root.frontpage_text = null;
         },
         prevmonth: function () {
-            this.$root.date = this.prev_month_date + "-01";
+            var curMonth = parseInt(this.$root.date.substr(5, 2));
+            var curYear = parseInt(this.$root.date.substr(0, 4));
+            curMonth--;
+            if (curMonth < 1) {
+                curMonth = 12;
+                curYear--;
+            }
+            this.$root.date = String(curYear) + "-" + padNumber(curMonth, 2) + "-01";
             this.$root.loading++;
             this.$root.reload({focus: '#'+this.id});
         },
         nextmonth: function () {
-            this.$root.date = this.next_month_date + "-01";
+            var curMonth = parseInt(this.$root.date.substr(5, 2));
+            var curYear = parseInt(this.$root.date.substr(0, 4));
+            curMonth++;
+            if (curMonth > 12) {
+                curMonth = 1;
+                curYear++;
+            }
+            this.$root.date = String(curYear) + "-" + padNumber(curMonth, 2) + "-01";
             this.$root.loading++;
             this.$root.reload({focus: '#'+this.id});
         }
