@@ -1518,7 +1518,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             self.context['event'],
             order.sales_channel,
             [
-                (cp.item_id, cp.subevent_id, cp.price, bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
+                (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.price,
+                 bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
                 for cp in order_positions
             ]
         )
