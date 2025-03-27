@@ -173,12 +173,12 @@ class Discount(LoggedModel):
                     "access to sold-out quota will still receive the discount."),
     )
 
-    event_date_from = models.DateTimeField(
+    subevent_date_from = models.DateTimeField(
         verbose_name=_("Available for dates from"),
         null=True,
         blank=True,
     )
-    event_date_until = models.DateTimeField(
+    subevent_date_until = models.DateTimeField(
         verbose_name=_("Available for dates until"),
         null=True,
         blank=True,
@@ -375,8 +375,8 @@ class Discount(LoggedModel):
                 (self.condition_apply_to_addons or not is_addon_to) and
                 (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
                 and (not subevent_id or (
-                    self.event_date_from is None or self.event_date_from and subevent_date_from >= self.event_date_from)) and (
-                        self.event_date_until is None or self.event_date_until and subevent_date_from < self.event_date_until)
+                    self.subevent_date_from is None or subevent_date_from >= self.subevent_date_from)) and (
+                        self.subevent_date_until is None or subevent_date_from < self.subevent_date_until)
             )
         ]
 

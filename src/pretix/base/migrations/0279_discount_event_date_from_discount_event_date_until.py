@@ -12,12 +12,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='discount',
-            name='event_date_from',
+            name='subevent_date_from',
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
             model_name='discount',
-            name='event_date_until',
+            name='subevent_date_until',
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

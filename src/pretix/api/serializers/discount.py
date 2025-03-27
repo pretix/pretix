@@ -38,7 +38,7 @@ class DiscountSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     class Meta:
         model = Discount
         fields = ('id', 'active', 'internal_name', 'position', 'all_sales_channels', 'limit_sales_channels',
-                  'available_from', 'available_until', 'subevent_mode', 'event_date_from', 'event_date_until',
+                  'available_from', 'available_until', 'subevent_mode', 'subevent_date_from', 'subevent_date_until',
                   'condition_all_products', 'condition_limit_products', 'condition_apply_to_addons',
                   'condition_min_count', 'condition_min_value', 'benefit_discount_matching_percent',
                   'benefit_only_apply_to_cheapest_n_matches', 'benefit_same_products', 'benefit_limit_products',
