@@ -174,12 +174,12 @@ class Discount(LoggedModel):
     )
 
     subevent_date_from = models.DateTimeField(
-        verbose_name=_("Available for dates from"),
+        verbose_name=pgettext_lazy("subevent", "Available for dates starting from"),
         null=True,
         blank=True,
     )
     subevent_date_until = models.DateTimeField(
-        verbose_name=_("Available for dates until"),
+        verbose_name=pgettext_lazy("subevent", "Available for dates starting until"),
         null=True,
         blank=True,
     )
@@ -376,7 +376,7 @@ class Discount(LoggedModel):
                 (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
                 and (not subevent_id or (
                     self.subevent_date_from is None or subevent_date_from >= self.subevent_date_from)) and (
-                        self.subevent_date_until is None or subevent_date_from < self.subevent_date_until)
+                        self.subevent_date_until is None or subevent_date_from <= self.subevent_date_until)
             )
         ]
 
