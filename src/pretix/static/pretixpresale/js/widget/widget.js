@@ -1625,14 +1625,10 @@ Vue.component('pretix-widget-event-week-calendar', {
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && this.$root.parent_stack.length > 0);
         },
-        week: function () {
-            return this.$root.week[1];
-        },
-        year: function () {
-            return this.$root.week[0];
-        },
         weekname: function () {
-            return this.week + ' / ' + this.year;
+            var curWeek = this.$root.week[1];
+            var curYear = this.$root.week[0];
+            return curWeek + ' / ' + curYear;
         },
         id: function () {
             return this.$root.html_id + "-event-week-table";
@@ -1646,12 +1642,26 @@ Vue.component('pretix-widget-event-week-calendar', {
             this.$root.view = "events";
         },
         prevweek: function () {
-            this.$root.week = this.prev_week_date.split("-W");
+            var curWeek = this.$root.week[1];
+            var curYear = this.$root.week[0];
+            curWeek--;
+            if (curWeek < 1) {
+                curYear--;
+                curWeek = getISOWeeks(curYear);
+            }
+            this.$root.week = [curYear, curWeek];
             this.$root.loading++;
             this.$root.reload({focus: '#'+this.id});
         },
         nextweek: function () {
-            this.$root.week = this.next_week_date.split("-W");
+            var curWeek = this.$root.week[1];
+            var curYear = this.$root.week[0];
+            curWeek++;
+            if (curWeek > getISOWeeks(curYear)) {
+                curWeek = 1;
+                curYear++;
+            }
+            this.$root.week = [curYear, curWeek];
             this.$root.loading++;
             this.$root.reload({focus: '#'+this.id});
         }
