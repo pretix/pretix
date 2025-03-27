@@ -997,10 +997,10 @@ Vue.component('pretix-widget-event-form', {
     template: ('<div class="pretix-widget-event-form">'
         // Back navigation
         + '<div class="pretix-widget-event-list-back" v-if="$root.events || $root.weeks || $root.days">'
-        + '<a :href="href" rel="back" @click.prevent.stop="back_to_list" v-if="!$root.subevent">&lsaquo; '
+        + '<a href="#" rel="back" @click.prevent.stop="back_to_list" v-if="!$root.subevent">&lsaquo; '
         + strings['back_to_list']
         + '</a>'
-        + '<a :href="href" rel="back" @click.prevent.stop="back_to_list" v-if="$root.subevent">&lsaquo; '
+        + '<a href="#" rel="back" @click.prevent.stop="back_to_list" v-if="$root.subevent">&lsaquo; '
         + strings['back_to_dates']
         + '</a>'
         + '</div>'
@@ -1104,9 +1104,6 @@ Vue.component('pretix-widget-event-form', {
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
-        href: function () {
-            return this.$root.event?.event_url || this.$root.parent_stack[this.$root.parent_stack.length-1];
-        },
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && (this.$root.events || this.$root.weeks || this.$root.days));
         },
@@ -1239,7 +1236,7 @@ Vue.component('pretix-widget-event-list-filter-form', {
 });
 
 Vue.component('pretix-widget-event-list-entry', {
-    template: ('<a :href="href" :class="classObject" @click.prevent.stop="select">'
+    template: ('<a href="#" :class="classObject" @click.prevent.stop="select">'
         + '<div class="pretix-widget-event-list-entry-name">{{ event.name }}</div>'
         + '<div class="pretix-widget-event-list-entry-date">{{ event.date_range }}</div>'
         + '<div class="pretix-widget-event-list-entry-location">{{ location }}</div>'  // hidden by css for now, but
@@ -1262,10 +1259,7 @@ Vue.component('pretix-widget-event-list-entry', {
         },
         location: function () {
             return this.event.location.replace(/\s*\n\s*/g, ', ');
-        },
-        href: function () {
-            return this.event.event_url + (this.event.subevent ? this.event.subevent + '/' : '');
-        },
+        }
     },
     methods: {
         select: function () {
@@ -1282,7 +1276,7 @@ Vue.component('pretix-widget-event-list-entry', {
 Vue.component('pretix-widget-event-list', {
     template: ('<div class="pretix-widget-event-list">'
         + '<div class="pretix-widget-back" v-if="$root.weeks || $root.parent_stack.length > 0">'
-        + '<a :href="href" rel="prev" @click.prevent.stop="back_to_calendar">&lsaquo; '
+        + '<a href="#" rel="prev" @click.prevent.stop="back_to_calendar">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1297,9 +1291,6 @@ Vue.component('pretix-widget-event-list', {
     computed: {
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && this.$root.parent_stack.length > 0);
-        },
-        href: function () {
-            return this.$root.$weeks ? this.$root.event.event_url : this.$root.parent_stack[this.$root.parent_stack.length-1];
         },
     },
     methods: {
@@ -1332,7 +1323,7 @@ Vue.component('pretix-widget-event-list', {
 });
 
 Vue.component('pretix-widget-event-calendar-event', {
-    template: ('<a :href="href" :class="classObject" @click.prevent.stop="select" v-bind:aria-describedby="describedby">'
+    template: ('<a href="#" :class="classObject" @click.prevent.stop="select" v-bind:aria-describedby="describedby">'
         + '<strong class="pretix-widget-event-calendar-event-name">'
         + '{{ event.name }}'
         + '</strong>'
@@ -1344,9 +1335,6 @@ Vue.component('pretix-widget-event-calendar-event', {
         describedby: String,
     },
     computed: {
-        href: function () {
-            return this.event.event_url + (this.event.subevent ? this.event.subevent + '/' : '');
-        },
         classObject: function () {
             var o = {
                 'pretix-widget-event-calendar-event': true
@@ -1536,11 +1524,11 @@ Vue.component('pretix-widget-event-calendar', {
 
         // Calendar navigation
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" :href="prev_href" @click.prevent.stop="prevmonth">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth">&laquo; '
         + strings['previous_month']
         + '</a> '
         + '<strong>{{ monthname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" :href="next_href" @click.prevent.stop="nextmonth">'
+        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth">'
         + strings['next_month']
         + ' &raquo;</a>'
         + '</div>'
@@ -1570,39 +1558,8 @@ Vue.component('pretix-widget-event-calendar', {
         monthname: function () {
             return strings['months'][this.$root.date.substr(5, 2)] + ' ' + this.$root.date.substr(0, 4);
         },
-        month: function () {
-            return parseInt(this.$root.date.substr(5, 2));
-        },
-        year: function () {
-            return parseInt(this.$root.date.substr(0, 4));
-        },
-        prev_month_date: function () {
-            var pm = this.month - 1;
-            return String(this.year - (pm ? 0 : 1)) + "-" + padNumber((pm || 12), 2);
-        },
-        next_month_date: function () {
-            var pm = this.month + 1;
-            return String(this.year + (pm > 12 ? 1 : 0)) + "-" + padNumber(pm % 12, 2);
-        },
         id: function () {
             return this.$root.html_id + "-event-calendar-table";
-        },
-        base_href: function () {
-            return this.$root.event?.event_url || this.$root.target_url;
-        },
-        prev_href: function () {
-            return [
-                this.base_href,
-                '?style=calendar&date=',
-                this.prev_month_date
-            ].join('');
-        },
-        next_href: function () {
-            return [
-                this.base_href,
-                '?style=calendar&date=',
-                this.next_month_date
-            ].join('');
         },
     },
     methods: {
@@ -1645,11 +1602,11 @@ Vue.component('pretix-widget-event-week-calendar', {
         // Calendar navigation
         + '<div class="pretix-widget-event-description" v-if="$root.frontpage_text && display_event_info" v-html="$root.frontpage_text"></div>'
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" :href="prev_href" @click.prevent.stop="prevweek" role="button">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevweek" role="button">&laquo; '
         + strings['previous_week']
         + '</a> '
         + '<strong>{{ weekname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" :href="next_href" @click.prevent.stop="nextweek" role="button">'
+        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextweek" role="button">'
         + strings['next_week']
         + ' &raquo;</a>'
         + '</div>'
@@ -1677,39 +1634,8 @@ Vue.component('pretix-widget-event-week-calendar', {
         weekname: function () {
             return this.week + ' / ' + this.year;
         },
-        prev_week_date: function () {
-            var w = this.week - 1;
-            if (!w) {
-                return (this.year - 1) + "-W" + getISOWeeks(this.year - 1);
-            }
-            return this.year + "-W" + w;
-        },
-        next_week_date: function () {
-            var w = this.week + 1;
-            if (w > getISOWeeks(this.year)) {
-                return String(this.year + 1) + "-W1";
-            }
-            return String(this.year) + "-W" + w;
-        },
         id: function () {
             return this.$root.html_id + "-event-week-table";
-        },
-        base_href: function () {
-            return this.$root.event?.event_url || this.$root.target_url;
-        },
-        prev_href: function () {
-            return [
-                this.base_href,
-                '?style=week&date=',
-                this.prev_week_date
-            ].join('');
-        },
-        next_href: function () {
-            return [
-                this.base_href,
-                '?style=week&date=',
-                this.next_week_date
-            ].join('');
         },
     },
     methods: {
