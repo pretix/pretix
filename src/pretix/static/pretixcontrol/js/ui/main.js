@@ -205,7 +205,7 @@ var form_handlers = function (el) {
                     return;
                 }
                 if ($timepicker.val() === "") {
-                    if ($(this).attr("name").includes("_until") || $(this).attr("name").includes("_end")) {
+                    if (/_(until|end|to)(_|$)/.test($(this).attr("name"))) {
                         date.set({'hour': 23, 'minute': 59, 'second': 59});
                     } else {
                         date.set({'hour': 0, 'minute': 0, 'second': 0});
