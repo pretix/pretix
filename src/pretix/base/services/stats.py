@@ -134,13 +134,13 @@ def order_overview(
         qs = qs.filter(item__admission=True)
         items = items.filter(admission=True)
 
-    if date_from and isinstance(date_from, date):
+    if date_from and isinstance(date_from, date) and not isinstance(date_from, datetime):
         date_from = make_aware(datetime.combine(
             date_from,
             time(hour=0, minute=0, second=0, microsecond=0)
         ), event.timezone)
 
-    if date_until and isinstance(date_until, date):
+    if date_until and isinstance(date_until, date) and not isinstance(date_until, datetime):
         date_until = make_aware(datetime.combine(
             date_until + timedelta(days=1),
             time(hour=0, minute=0, second=0, microsecond=0)
