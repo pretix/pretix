@@ -44,7 +44,9 @@ import dateutil
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import (
+    BadRequest, PermissionDenied, ValidationError,
+)
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
@@ -953,7 +955,7 @@ class DeviceQueryMixin:
             if self.filter_form.is_valid():
                 qs = self.filter_form.filter_qs(qs)
         else:
-            raise PermissionDenied()
+            raise BadRequest("No devices selected")
 
         return qs
 
