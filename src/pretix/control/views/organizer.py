@@ -44,7 +44,9 @@ import dateutil
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import (
+    BadRequest, PermissionDenied, ValidationError,
+)
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
@@ -944,13 +946,16 @@ class DeviceQueryMixin:
         qs = self.request.organizer.devices.prefetch_related(
             'limit_events', 'gate',
         ).order_by('revoked', '-device_id')
-        if self.filter_form.is_valid():
-            qs = self.filter_form.filter_qs(qs)
 
         if 'device' in self.request_data and '__ALL' not in self.request_data:
             qs = qs.filter(
                 id__in=self.request_data.getlist('device')
             )
+        elif self.request.method == 'GET' or '__ALL' in self.request_data:
+            if self.filter_form.is_valid():
+                qs = self.filter_form.filter_qs(qs)
+        else:
+            raise BadRequest("No devices selected")
 
         return qs
 
