@@ -326,12 +326,17 @@ class EventWizard(SafeSessionWizardView):
                 event.set_defaults()
 
             if basics_data['tax_rate'] is not None:
-                default_tax_rule = self.clone_from.cached_default_tax_rule
+                if self.clone_from:
+                    default_tax_rule = self.clone_from.cached_default_tax_rule
+                elif copy_data and copy_data['copy_from_event']:
+                    default_tax_rule = from_event.cached_default_tax_rule
+                else:
+                    default_tax_rule = None
                 if not default_tax_rule or default_tax_rule.rate != basics_data['tax_rate']:
                     event.tax_rules.create(
                         name=LazyI18nString.from_gettext(gettext('VAT')),
                         rate=basics_data['tax_rate'],
-                        default=True,
+                        default=not default_tax_rule,
                     )
 
             event.settings.set('timezone', basics_data['timezone'])

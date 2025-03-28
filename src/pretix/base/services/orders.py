@@ -62,6 +62,7 @@ from django.utils.translation import gettext as _, gettext_lazy, ngettext_lazy
 from django_scopes import scopes_disabled
 
 from pretix.api.models import OAuthApplication
+from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
@@ -507,6 +508,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
             oauth_application = OAuthApplication.objects.get(pk=oauth_application)
         if isinstance(cancellation_fee, str):
             cancellation_fee = Decimal(cancellation_fee)
+        elif isinstance(cancellation_fee, (float, int)):
+            cancellation_fee = round_decimal(cancellation_fee, order.event.currency)
 
         tax_mode = tax_mode or order.event.settings.tax_rule_cancellation
 

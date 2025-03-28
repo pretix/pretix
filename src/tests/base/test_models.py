@@ -2270,7 +2270,7 @@ class EventTest(TestCase):
         assert que1new.type == que1.type
         assert que1new.items.get(pk=i1new.pk)
         assert event2.settings.foo_setting == '23'
-        assert event2.settings.cached_default_tax_rule == trnew
+        assert event2.cached_default_tax_rule == trnew
         assert event2.checkin_lists.count() == 1
         clnew = event2.checkin_lists.first()
         assert [i.pk for i in clnew.limit_products.all()] == [i1new.pk]

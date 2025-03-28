@@ -1535,7 +1535,7 @@ def get_fees(event, request, total, invoice_address, payments, positions):
 
             if payment_fee:
                 if event.settings.tax_rule_payment == "default":
-                    payment_fee_tax_rule = event.cached_default_tax_rule
+                    payment_fee_tax_rule = event.cached_default_tax_rule or TaxRule.zero()
                 else:
                     payment_fee_tax_rule = TaxRule.zero()
                 payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross', invoice_address=invoice_address)
