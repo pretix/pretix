@@ -27,6 +27,7 @@ from django.dispatch import receiver
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import resolve, reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from paypalhttp import HttpResponse
 
@@ -110,7 +111,19 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         text = _('Dispute closed. Status: {}').format(data['data']['object']['status'])
 
     if text:
-        return _('Stripe reported an event: {}').format(text)
+        text = _('Stripe reported an event: {}').format(text)
+
+    try:
+        receipt_url = data['data']['object']['receipt_url']
+    except:
+        receipt_url = None
+    if text and receipt_url:
+        text = format_html(
+            '{text}<br><a href="{url}" target="_blank">{link_text}</a>',
+            text=text, url=receipt_url, link_text=_("Payment receipt")
+        )
+
+    return text
 
 
 settings_hierarkey.add_default('payment_stripe_method_card', True, bool)
