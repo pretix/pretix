@@ -922,7 +922,6 @@ var editor = {
             $("#toolbox-heading").text(gettext("Ticket design"));
             $("#pdf-info-width").val(editor._px2mm(editor.pdf_viewport.width).toFixed(2));
             $("#pdf-info-height").val(editor._px2mm(editor.pdf_viewport.height).toFixed(2));
-            editor._paper_size_warning();
         }
         editor._update_toolbox_values();
     },
