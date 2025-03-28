@@ -1055,6 +1055,7 @@ DEFAULTS = {
         'serializer_kwargs': dict(
             choices=(
                 ('none', _('Charge no taxes')),
+                ('split', _('Use same taxes as order positions (split according to net prices)')),
                 ('default', _('Use default tax rate')),
             ),
         ),
@@ -1063,6 +1064,7 @@ DEFAULTS = {
             widget=forms.RadioSelect,
             choices=(
                 ('none', _('Charge no taxes')),
+                ('split', _('Use same taxes as order positions (split according to net prices)')),
                 ('default', _('Use default tax rate')),
             ),
         )

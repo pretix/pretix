@@ -1117,7 +1117,7 @@ class OrderCancelTests(TestCase):
         self.order.save()
         self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
         with pytest.raises(OrderError):
-            cancel_order(self.order.pk, cancellation_fee=50)
+            cancel_order(self.order.pk, cancellation_fee=Decimal("50.00"))
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         assert self.order.total == 46
@@ -1131,7 +1131,7 @@ class OrderCancelTests(TestCase):
         self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
         self.op1.voucher = self.event.vouchers.create(item=self.ticket, redeemed=1)
         self.op1.save()
-        cancel_order(self.order.pk, cancellation_fee=2.5)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.50"))
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         self.op1.refresh_from_db()
@@ -1158,7 +1158,7 @@ class OrderCancelTests(TestCase):
         self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
         self.op1.voucher = self.event.vouchers.create(item=self.ticket, redeemed=1)
         self.op1.save()
-        cancel_order(self.order.pk, cancellation_fee=2.5)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.50"))
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         self.op1.refresh_from_db()
@@ -1172,7 +1172,7 @@ class OrderCancelTests(TestCase):
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
             provider='testdummy_partialrefund'
         )
-        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.amount == Decimal('44.00')
@@ -1190,7 +1190,7 @@ class OrderCancelTests(TestCase):
             provider='giftcard',
             info='{"gift_card": %d}' % gc.pk
         )
-        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.amount == Decimal('44.00')
@@ -1209,7 +1209,7 @@ class OrderCancelTests(TestCase):
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
             provider='testdummy_partialrefund'
         )
-        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert gc.value == Decimal('0.00')
@@ -1224,7 +1224,7 @@ class OrderCancelTests(TestCase):
             provider='testdummy_partialrefund'
         )
         with pytest.raises(OrderError):
-            cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+            cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         assert gc.value == Decimal('20.00')
 
     @classscope(attr='o')
@@ -1234,7 +1234,7 @@ class OrderCancelTests(TestCase):
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
             provider='testdummy_fullrefund'
         )
-        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         assert not self.order.refunds.exists()
         assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
 

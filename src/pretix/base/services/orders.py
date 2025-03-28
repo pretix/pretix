@@ -96,6 +96,7 @@ from pretix.base.services.pricing import (
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
+from pretix.base.services.tax import split_fee_for_taxes
 from pretix.base.signals import (
     order_approved, order_canceled, order_changed, order_denied, order_expired,
     order_expiry_changed, order_fee_calculation, order_paid, order_placed,
@@ -486,7 +487,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
 
 def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device=None, oauth_application=None,
-                  cancellation_fee=None, keep_fees=None, cancel_invoice=True, comment=None):
+                  cancellation_fee=None, keep_fees=None, cancel_invoice=True, comment=None, tax_mode=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -506,6 +507,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
             oauth_application = OAuthApplication.objects.get(pk=oauth_application)
         if isinstance(cancellation_fee, str):
             cancellation_fee = Decimal(cancellation_fee)
+
+        tax_mode = tax_mode or order.event.settings.tax_rule_cancellation
 
         if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
@@ -533,7 +536,9 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 m.save()
 
         if cancellation_fee:
+            positions = []
             for position in order.positions.all():
+                positions.append(position)
                 if position.voucher:
                     Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
                 position.canceled = True
@@ -546,23 +551,39 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 if keep_fees and fee in keep_fees:
                     new_fee -= fee.value
                 else:
+                    positions.append(fee)
                     fee.canceled = True
                     fee.save(update_fields=['canceled'])
 
             if new_fee:
-                if order.event.settings.tax_rule_cancellation == "default":
-                    tax_rule = order.event.cached_default_tax_rule
+                tax_rule_zero = TaxRule.zero()
+                if tax_mode == "default":
+                    fee_values = [(order.event.cached_default_tax_rule or tax_rule_zero, new_fee)]
+                elif tax_mode == "split":
+                    fee_values = split_fee_for_taxes(positions, new_fee, order.event)
                 else:
-                    tax_rule = None
+                    fee_values = [(tax_rule_zero, new_fee)]
 
-                f = OrderFee(
-                    fee_type=OrderFee.FEE_TYPE_CANCELLATION,
-                    value=new_fee,
-                    tax_rule=tax_rule,
-                    order=order,
-                )
-                f._calculate_tax()
-                f.save()
+                try:
+                    ia = order.invoice_address
+                except InvoiceAddress.DoesNotExist:
+                    ia = None
+
+                for tax_rule, price in fee_values:
+                    tax_rule = tax_rule or tax_rule_zero
+                    tax = tax_rule.tax(
+                        price, invoice_address=ia, base_price_is="gross"
+                    )
+                    f = OrderFee(
+                        fee_type=OrderFee.FEE_TYPE_CANCELLATION,
+                        value=price,
+                        order=order,
+                        tax_rate=tax.rate,
+                        tax_code=tax.code,
+                        tax_value=tax.tax,
+                        tax_rule=tax_rule,
+                    )
+                    f.save()
 
             if cancellation_fee > order.total:
                 raise OrderError(_('The cancellation fee cannot be higher than the total amount of this order.'))

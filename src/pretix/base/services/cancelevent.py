@@ -32,7 +32,7 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderFee, OrderPosition, OrderRefund,
-    SubEvent, User, WaitingListEntry,
+    SubEvent, TaxRule, User, WaitingListEntry,
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, mail
@@ -40,6 +40,7 @@ from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _cancel_order, _try_auto_refund,
 )
 from pretix.base.services.tasks import ProfiledEventTask
+from pretix.base.services.tax import split_fee_for_taxes
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.format import format_map
@@ -268,19 +269,34 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                 fee += Decimal(keep_fee_percentage) / Decimal('100.00') * total
             fee = round_decimal(min(fee, o.payment_refund_sum), event.currency)
             if fee:
-                if self.order.event.settings.tax_rule_cancellation == "default":
-                    tax_rule = event.cached_default_tax_rule
+                tax_rule_zero = TaxRule.zero()
+                if event.settings.tax_rule_cancellation == "default":
+                    fee_values = [(event.cached_default_tax_rule or tax_rule_zero, fee)]
+                elif event.settings.tax_rule_cancellation == "split":
+                    fee_values = split_fee_for_taxes(positions, fee, event)
                 else:
-                    tax_rule = None
+                    fee_values = [(tax_rule_zero, fee)]
 
-                f = OrderFee(
-                    fee_type=OrderFee.FEE_TYPE_CANCELLATION,
-                    value=fee,
-                    order=o,
-                    tax_rule=tax_rule,
-                )
-                f._calculate_tax()
-                ocm.add_fee(f)
+                try:
+                    ia = o.invoice_address
+                except InvoiceAddress.DoesNotExist:
+                    ia = None
+
+                for tax_rule, price in fee_values:
+                    tax_rule = tax_rule or tax_rule_zero
+                    tax = tax_rule.tax(
+                        price, invoice_address=ia, base_price_is="gross"
+                    )
+                    f = OrderFee(
+                        fee_type=OrderFee.FEE_TYPE_CANCELLATION,
+                        value=price,
+                        order=o,
+                        tax_rate=tax.rate,
+                        tax_code=tax.code,
+                        tax_value=tax.tax,
+                        tax_rule=tax_rule,
+                    )
+                    ocm.add_fee(f)
 
             ocm.commit()
             refund_amount = o.payment_refund_sum - o.total

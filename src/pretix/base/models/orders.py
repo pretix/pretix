@@ -2373,12 +2373,12 @@ class OrderFee(models.Model):
             self.fee_type, self.value
         )
 
-    def _calculate_tax(self, tax_rule=None):
+    def _calculate_tax(self, tax_rule=None, invoice_address=None):
         if tax_rule:
             self.tax_rule = tax_rule
 
         try:
-            ia = self.order.invoice_address
+            ia = invoice_address or self.order.invoice_address
         except InvoiceAddress.DoesNotExist:
             ia = None
 
