@@ -1113,13 +1113,6 @@ class Event(EventMixin, LoggedModel):
                 newname = default_storage.save(fname, fi)
                 s.value = 'file://' + newname
                 settings_to_save.append(s)
-            elif s.key == 'tax_rate_default':
-                try:
-                    if int(s.value) in tax_map:
-                        s.value = tax_map.get(int(s.value)).pk
-                        settings_to_save.append(s)
-                except ValueError:
-                    pass
             elif s.key.startswith('payment_') and s.key.endswith('__restrict_to_sales_channels'):
                 data = other.settings._unserialize(s.value, as_type=list)
                 data = [ident for ident in data if ident in valid_sales_channel_identifers]
@@ -1197,6 +1190,10 @@ class Event(EventMixin, LoggedModel):
                 pp = p(self)
                 renderers[pp.identifier] = pp
         return renderers
+
+    @cached_property
+    def cached_default_tax_rule(self):
+        return self.tax_rules.filter(default=True).first()
 
     @cached_property
     def ticket_secret_generators(self) -> dict:

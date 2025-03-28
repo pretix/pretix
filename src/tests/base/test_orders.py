@@ -1258,7 +1258,7 @@ class OrderChangeManagerTests(TestCase):
                 provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CREATED, amount=self.order.total
             )
             self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
-            self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+            self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'), default=True)
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rule=self.tr7,
                                               default_price=Decimal('23.00'), admission=True)
             self.ticket2 = Item.objects.create(event=self.event, name='Other ticket', tax_rule=self.tr7,
@@ -1868,7 +1868,6 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_payment_fee_calculation(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
         self.ocm.change_price(self.op1, Decimal('24.00'))
@@ -1882,7 +1881,6 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_pending_free_order_stays_pending(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         self.ocm.change_price(self.op1, Decimal('0.00'))
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
@@ -2270,7 +2268,6 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_recalculate_country_rate(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
         self.ocm._recalculate_total_and_payment_fee()
@@ -2303,7 +2300,6 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_recalculate_country_rate_keep_gross(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
         self.ocm._recalculate_total_and_payment_fee()
@@ -2334,7 +2330,6 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_recalculate_reverse_charge(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
         self.ocm._recalculate_total_and_payment_fee()
@@ -2493,7 +2488,6 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_split_pending_payment_fees(self):
         # Set payment fees
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('2.00'))
         prov.settings.set('_fee_abs', Decimal('1.00'))
@@ -2697,7 +2691,6 @@ class OrderChangeManagerTests(TestCase):
         ia = self._enable_reverse_charge()
 
         # Set payment fees
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('2.00'))
         prov.settings.set('_fee_reverse_calc', False)
@@ -2791,7 +2784,6 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_split_paid_payment_fees(self):
         # Set payment fees
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('2.00'))
         prov.settings.set('_fee_abs', Decimal('1.00'))

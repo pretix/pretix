@@ -550,10 +550,15 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     fee.save(update_fields=['canceled'])
 
             if new_fee:
+                if order.event.settings.tax_rule_cancellation == "default":
+                    tax_rule = order.event.cached_default_tax_rule
+                else:
+                    tax_rule = None
+
                 f = OrderFee(
                     fee_type=OrderFee.FEE_TYPE_CANCELLATION,
                     value=new_fee,
-                    tax_rule=order.event.settings.tax_rate_default,
+                    tax_rule=tax_rule,
                     order=order,
                 )
                 f._calculate_tax()

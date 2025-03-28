@@ -2382,8 +2382,8 @@ class OrderFee(models.Model):
         except InvoiceAddress.DoesNotExist:
             ia = None
 
-        if not self.tax_rule and self.fee_type == "payment" and self.order.event.settings.tax_rate_default:
-            self.tax_rule = self.order.event.settings.tax_rate_default
+        if not self.tax_rule and self.fee_type == "payment" and self.order.event.settings.tax_rule_payment == "default":
+            self.tax_rule = self.order.event.cached_default_tax_rule
 
         if self.tax_rule:
             tax = self.tax_rule.tax(self.value, base_price_is='gross', invoice_address=ia, force_fixed_gross_price=True)

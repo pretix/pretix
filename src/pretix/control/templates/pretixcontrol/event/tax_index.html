@@ -24,6 +24,7 @@
                 <thead>
                 <tr>
                     <th>{% trans "Name" %}</th>
+                    <th>{% trans "Default" %}</th>
                     <th>{% trans "Rate" %}</th>
                     <th class="action-col-2"></th>
                 </tr>
@@ -35,6 +36,22 @@
                             <strong><a href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
                                 {{ tr.internal_name|default:tr.name }}
                             </a></strong>
+                        </td>
+                        <td>
+                            {% if tr.default %}
+                                <span class="text-success">
+                                    <span class="fa fa-check"></span>
+                                    {% trans "Default" %}
+                                </span>
+                            {% else %}
+                                <form class="form-inline" method="post"
+                                      action="{% url "control:event.settings.tax.default" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-default btn-sm">
+                                        {% trans "Make default" %}
+                                    </button>
+                                </form>
+                            {% endif %}
                         </td>
                         <td>
                             {% if tr.price_includes_tax %}

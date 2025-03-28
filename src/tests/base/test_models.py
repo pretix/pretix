@@ -2215,7 +2215,7 @@ class EventTest(TestCase):
             is_public=True,
         )
         event1.meta_values.create(property=prop, value="DE")
-        tr7 = event1.tax_rules.create(rate=Decimal('7.00'))
+        tr7 = event1.tax_rules.create(rate=Decimal('7.00'), default=True)
         c1 = event1.categories.create(name='Tickets')
         c2 = event1.categories.create(name='Workshops')
         i1 = event1.items.create(name='Foo', default_price=Decimal('13.00'), tax_rule=tr7,
@@ -2228,7 +2228,6 @@ class EventTest(TestCase):
         que1 = event1.questions.create(question="Age", type="N")
         que1.items.add(i1)
         event1.settings.foo_setting = 23
-        event1.settings.tax_rate_default = tr7
         cl1 = event1.checkin_lists.create(
             name="All", all_products=False,
             rules={
@@ -2271,7 +2270,7 @@ class EventTest(TestCase):
         assert que1new.type == que1.type
         assert que1new.items.get(pk=i1new.pk)
         assert event2.settings.foo_setting == '23'
-        assert event2.settings.tax_rate_default == trnew
+        assert event2.settings.cached_default_tax_rule == trnew
         assert event2.checkin_lists.count() == 1
         clnew = event2.checkin_lists.first()
         assert [i.pk for i in clnew.limit_products.all()] == [i1new.pk]

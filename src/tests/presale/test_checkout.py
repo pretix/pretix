@@ -483,7 +483,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         assert cr1.price == Decimal('23.00')
 
     def test_custom_tax_rules_blocked_on_fee(self):
-        self.tr7 = self.event.tax_rules.create(rate=7)
+        self.tr7 = self.event.tax_rules.create(rate=7, default=True)
         self.tr7.custom_rules = json.dumps([
             {'country': 'AT', 'address_type': 'business_vat_id', 'action': 'reverse'},
             {'country': 'ZZ', 'address_type': '', 'action': 'block'},
@@ -492,7 +492,6 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('payment_banktransfer__fee_percent', 20)
         self.event.settings.set('payment_banktransfer__fee_reverse_calc', False)
-        self.event.settings.set('tax_rate_default', self.tr7)
         self.event.settings.invoice_address_vatid = True
 
         with scopes_disabled():

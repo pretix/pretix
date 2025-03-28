@@ -181,8 +181,9 @@ class EventWizard(SafeSessionWizardView):
                 initial['location'] = self.clone_from.location
                 initial['timezone'] = self.clone_from.settings.timezone
                 initial['locale'] = self.clone_from.settings.locale
-                if self.clone_from.settings.tax_rate_default:
-                    initial['tax_rate'] = self.clone_from.settings.tax_rate_default.rate
+                tax_rule = self.clone_from.cached_default_tax_rule
+                if tax_rule:
+                    initial['tax_rate'] = tax_rule.rate
         if 'organizer' in self.request.GET:
             if step == 'foundation':
                 try:
@@ -325,10 +326,12 @@ class EventWizard(SafeSessionWizardView):
                 event.set_defaults()
 
             if basics_data['tax_rate'] is not None:
-                if not event.settings.tax_rate_default or event.settings.tax_rate_default.rate != basics_data['tax_rate']:
-                    event.settings.tax_rate_default = event.tax_rules.create(
+                default_tax_rule = self.clone_from.cached_default_tax_rule
+                if not default_tax_rule or default_tax_rule.rate != basics_data['tax_rate']:
+                    event.tax_rules.create(
                         name=LazyI18nString.from_gettext(gettext('VAT')),
-                        rate=basics_data['tax_rate']
+                        rate=basics_data['tax_rate'],
+                        default=True,
                     )
 
             event.settings.set('timezone', basics_data['timezone'])

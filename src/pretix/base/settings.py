@@ -66,7 +66,7 @@ from pretix.api.serializers.fields import (
 )
 from pretix.api.serializers.i18n import I18nURLField
 from pretix.base.forms import I18nMarkdownTextarea, I18nURLFormField
-from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
+from pretix.base.models.tax import VAT_ID_COUNTRIES
 from pretix.base.reldate import (
     RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
     SerializerRelativeDateField, SerializerRelativeDateTimeField,
@@ -1027,9 +1027,45 @@ DEFAULTS = {
             widget=forms.CheckboxInput,
         )
     },
-    'tax_rate_default': {
-        'default': None,
-        'type': TaxRule
+    'tax_rule_payment': {
+        'default': 'default',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('default', _('Use default tax rate')),
+                ('none', _('Charge no taxes')),
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Tax handling on payment fees"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('default', _('Use default tax rate')),
+                ('none', _('Charge no taxes')),
+            ),
+        )
+    },
+    'tax_rule_cancellation': {
+        'default': 'none',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('none', _('Charge no taxes')),
+                ('default', _('Use default tax rate')),
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Tax handling on cancellation fees"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('none', _('Charge no taxes')),
+                ('default', _('Use default tax rate')),
+            ),
+        )
     },
     'invoice_generate': {
         'default': 'False',

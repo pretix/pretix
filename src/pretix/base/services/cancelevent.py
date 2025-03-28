@@ -268,11 +268,16 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                 fee += Decimal(keep_fee_percentage) / Decimal('100.00') * total
             fee = round_decimal(min(fee, o.payment_refund_sum), event.currency)
             if fee:
+                if self.order.event.settings.tax_rule_cancellation == "default":
+                    tax_rule = event.cached_default_tax_rule
+                else:
+                    tax_rule = None
+
                 f = OrderFee(
                     fee_type=OrderFee.FEE_TYPE_CANCELLATION,
                     value=fee,
                     order=o,
-                    tax_rule=o.event.settings.tax_rate_default,
+                    tax_rule=tax_rule,
                 )
                 f._calculate_tax()
                 ocm.add_fee(f)
