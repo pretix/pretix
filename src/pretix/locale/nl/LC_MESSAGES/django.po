@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-03-29 21:00+0000\n"
+"PO-Revision-Date: 2025-03-30 16:00+0000\n"
 "Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -1592,7 +1592,7 @@ msgstr "Belastingwaarde"
 #: pretix/plugins/reports/exporters.py:793
 #: pretix/plugins/reports/exporters.py:838
 msgid "Tax rate"
-msgstr "Btw-tarief"
+msgstr "Belastingtarief"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Tax name"
@@ -2535,7 +2535,7 @@ msgstr "Bedrag"
 #: pretix/plugins/reports/accountingreport.py:495
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:29
 msgid "Payment method"
-msgstr "Betaalmethode"
+msgstr "Betalingsmethode"
 
 #: pretix/base/exporters/orderlist.py:1077
 msgid "Matching ID"
@@ -3298,7 +3298,7 @@ msgstr "Aantal"
 #: pretix/base/invoice.py:683 pretix/base/invoice.py:833
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr "Btw-tarief"
+msgstr "Belastingtarief"
 
 #: pretix/base/invoice.py:684
 msgctxt "invoice"
@@ -6355,7 +6355,7 @@ msgstr ""
 #: pretix/base/models/tax.py:254
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr ""
+msgstr "Intracommunautaire aankoop van tweedehands transportmogelijkheden"
 
 #: pretix/base/models/tax.py:256
 msgctxt "tax_code"
@@ -6399,7 +6399,7 @@ msgstr "Moet kort zijn, bijv. \"btw\""
 #: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1511
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Tax code"
-msgstr "Belastingstarief"
+msgstr "Belastingtarief"
 
 #: pretix/base/models/tax.py:331
 msgid ""
@@ -9885,6 +9885,12 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"Vink dit vakje uit als u alleen iets verkoopt dat geen specifieke datum "
+"heeft, zoals cadeaubonnen of een ticket dat op elk moment gebruikt kan "
+"worden. Het systeem zal de evenementdatum dan niet meer weergeven op sommige "
+"plaatsen, zoals de startpagina van het evenement. Hou er evenwel rekening "
+"mee dat pretix een systeem is dat voor evenementen is ontworpen en dat de "
+"datum nog altijd op andere plaatsen kan verschijnen."
 
 #: pretix/base/settings.py:1326
 msgid "Show event end date"
@@ -12501,17 +12507,17 @@ msgstr "Foto uploaden"
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:14
 #, python-format
 msgid "%(number)s days %(relation)s %(relation_to)s"
-msgstr ""
+msgstr "%(number)s dagen %(relation)s %(relation_to)s"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:14
 #, python-format
 msgid "%(number)s minutes %(relation)s %(relation_to)s"
-msgstr ""
+msgstr "%(number)s minuten %(relation)s %(relation_to)s"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:18
 #, python-format
 msgid "%(number)s days %(relation)s %(relation_to)s at %(time_of_day)s"
-msgstr ""
+msgstr "%(number)s dagen %(relation)s %(relation_to)s om %(time_of_day)s"
 
 #: pretix/base/templates/pretixbase/redirect.html:5
 #: pretix/base/templates/pretixbase/redirect.html:9
@@ -13023,7 +13029,7 @@ msgstr "Je kan altijd later belastingregels configureren."
 
 #: pretix/control/forms/event.py:148
 msgid "Sales tax rate"
-msgstr "Btw-tarief"
+msgstr "Belastingtarief"
 
 #: pretix/control/forms/event.py:149
 msgid ""
@@ -13092,7 +13098,7 @@ msgstr "Standaard ({value})"
 
 #: pretix/control/forms/event.py:384 pretix/control/forms/event.py:397
 msgid "Domain"
-msgstr ""
+msgstr "Domein"
 
 #: pretix/control/forms/event.py:388
 msgid "You can configure this in your organizer settings."
@@ -14652,6 +14658,9 @@ msgid ""
 "only use characters A-Z, a-z, 0-9, and common special characters "
 "({characters})."
 msgstr ""
+"Het wachtwoord bevat tekens die niet worden ondersteund door ons e-"
+"mailsysteem. Gebruik alleen de tekens A-Z, a-z, 0-9 en algemene speciale "
+"tekens ({characters})."
 
 #: pretix/control/forms/mailsetup.py:70
 msgid "Use STARTTLS"
@@ -14966,6 +14975,9 @@ msgid ""
 "Note that payment fees have a special semantic and might automatically be "
 "changed if the payment method of the order is changed."
 msgstr ""
+"Hou er rekening mee dat betalingskosten een speciale semantiek hebben en "
+"automatisch kunnen worden gewijzigd als de betalingsmethode van de "
+"bestelling wordt gewijzigd."
 
 #: pretix/control/forms/orders.py:628
 #: pretix/control/templates/pretixcontrol/order/change.html:214
@@ -15231,6 +15243,8 @@ msgid ""
 "Do not choose an event for this mode. You can assign events to this domain "
 "in event settings."
 msgstr ""
+"Hit is niet mogelijk een evenement te kiezen in deze modus. U kan "
+"evenementen toewijzen aan dit domein in de evenementinstellingen."
 
 #: pretix/control/forms/organizer.py:195
 msgid "You need to choose an event."
@@ -15238,7 +15252,7 @@ msgstr "U moet een evenement kiezen."
 
 #: pretix/control/forms/organizer.py:227
 msgid "You may set only one organizer domain."
-msgstr ""
+msgstr "Er kan maximaal 1 organisatordomein gekozen worden."
 
 #: pretix/control/forms/organizer.py:334
 msgid ""
@@ -15356,7 +15370,7 @@ msgstr "Telefoonnummerveld"
 #: pretix/control/forms/organizer.py:1047
 msgctxt "sso_oidc"
 msgid "Query parameters"
-msgstr ""
+msgstr "Filterparameters"
 
 #: pretix/control/forms/organizer.py:1048
 #, python-brace-format
@@ -23726,6 +23740,8 @@ msgid ""
 "The domain needs to be configured on your webserver before it can be used "
 "here."
 msgstr ""
+"Het domein moet worden geconfigureerd op uw eigen webserver voordat het hier "
+"kan worden gebruikt."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:358
 msgid "Add domain"
@@ -26339,7 +26355,7 @@ msgstr "API-functies"
 
 #: pretix/control/views/event.py:444
 msgid "The plugin {} is now active, you can configure it here:"
-msgstr ""
+msgstr "De plugin {} is nu geactiveerd, u kunt hem hier configureren:"
 
 #: pretix/control/views/event.py:453
 msgid "The plugin {} is now active."
@@ -27919,7 +27935,7 @@ msgstr "Domeinnaam"
 
 #: pretix/multidomain/models.py:50
 msgid "Mode"
-msgstr ""
+msgstr "Modus"
 
 #: pretix/multidomain/models.py:69
 msgid "Known domain"
@@ -34724,7 +34740,7 @@ msgstr ""
 #: pretix/presale/views/cart.py:460 pretix/presale/views/cart.py:468
 msgid ""
 "The gift card has been saved to your cart. Please continue your checkout."
-msgstr ""
+msgstr "De cadeaubon is opgeslagen in uw winkelmandje. Ga verder met afrekenen."
 
 #: pretix/presale/views/cart.py:504
 msgid "Your cart has been updated."
@@ -34749,6 +34765,8 @@ msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
 msgstr ""
+"De cadeaubon is opgeslagen in uw winkelmandje. Selecteer nu de producten die "
+"u wil kopen."
 
 #: pretix/presale/views/cart.py:739
 msgctxt "subevent"
@@ -34951,17 +34969,14 @@ msgstr ""
 "omdat er geen betalingen meer geaccepteerd worden voor dit evenement."
 
 #: pretix/presale/views/order.py:1646
-#, fuzzy
-#| msgid ""
-#| "You may not change your order in a way that increases the total price "
-#| "since payments are no longer being accepted for this event."
 msgid ""
 "You may not change your order in a way that requires additional payment "
 "while we are processing your current payment. Please check back after your "
 "current payment has been accepted."
 msgstr ""
-"U kunt de bestelling niet aanpassen dat de totaalprijs in verhoging brengt "
-"omdat er geen betalingen meer geaccepteerd worden voor dit evenement."
+"U kunt uw bestelling niet wijzigen op een manier die aanvullende betaling "
+"vereist terwijl we uw huidige betaling aan het verwerken zijn. Probeer het "
+"opnieuw nadat uw huidige betaling is geaccepteerd."
 
 #: pretix/presale/views/order.py:1662 pretix/presale/views/order.py:1693
 msgid "You cannot change this order."
