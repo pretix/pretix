@@ -28,6 +28,7 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from freezegun import freeze_time
 from i18nfield.strings import LazyI18nString
 from tests.const import SAMPLE_PNG
 
@@ -148,6 +149,7 @@ TEST_ORDERPOSITION1_RES = {
     "order__status": "p",
     "order__require_approval": False,
     "order__valid_if_pending": False,
+    "order__locale": "en",
     "order": "FOO",
     "positionid": 1,
     "item": 1,
@@ -200,7 +202,7 @@ def clist_event2(event2):
     return c
 
 
-def _redeem(token_client, org, clist, p, body=None, query=''):
+def _redeem(token_client, org, clist, p, body=None, query='', headers={}):
     body = body or {}
     if isinstance(clist, list):
         body['lists'] = [c.pk for c in clist]
@@ -209,7 +211,7 @@ def _redeem(token_client, org, clist, p, body=None, query=''):
     body['secret'] = p
     return token_client.post('/api/v1/organizers/{}/checkinrpc/redeem/{}'.format(
         org.slug, query,
-    ), body, format='json')
+    ), body, format='json', headers={})
 
 
 @pytest.mark.django_db
@@ -1050,3 +1052,28 @@ def test_checkin_no_pdf_data(token_client, event, team, organizer, clist_all, or
     resp = token_client.get(
         '/api/v1/organizers/{}/checkinrpc/search/?list={}&search=dummy&pdf_data=true'.format(organizer.slug, clist_all.pk))
     assert not resp.data['results'][0].get('pdf_data')
+
+
+@pytest.mark.django_db
+def test_reason_explanation_localization(token_client, organizer, clist, other_item, event, order):
+    event.settings.locales = ["de", "en"]
+    order.locale = "de"
+    order.save()
+    with scopes_disabled():
+        p = order.positions.first()
+    p.valid_from = datetime.datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
+    p.save()
+    with freeze_time("2020-01-01 10:45:00"):
+        resp = _redeem(token_client, organizer, clist, 'z3fsn8jyufm5kpk768q69gkbyr5f4h6w', {})
+        assert resp.status_code == 400
+        assert resp.data["status"] == "error"
+        assert resp.data["reason"] == "invalid_time"
+        assert resp.data["reason_explanation"] == "This ticket is only valid after 2020-01-01 12:00."
+
+        resp = _redeem(token_client, organizer, clist, 'z3fsn8jyufm5kpk768q69gkbyr5f4h6w', {
+            "use_order_locale": True
+        })
+        assert resp.status_code == 400
+        assert resp.data["status"] == "error"
+        assert resp.data["reason"] == "invalid_time"
+        assert resp.data["reason_explanation"] == "Erst ab 01.01.2020 12:00 gültig."

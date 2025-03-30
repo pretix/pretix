@@ -54,6 +54,11 @@ Checking a ticket in
                         this request twice with the same nonce, the second request will also succeed but will always
                         create only one check-in object even when the previous request was successful as well. This
                         allows for a certain level of idempotency and enables you to re-try after a connection failure.
+   :<json boolean use_order_locale: Specifies that pretix should use the customer's language (``locale`` field from the
+                                    order) when building texts (currently only the ``reason_explanation`` response field).
+                                    Defaults to ``false`` in which case the server will determine the language (currently
+                                    the event default language, might change in the future with support for the
+                                    ``Accept-Language`` header).
    :>json string status: ``"ok"``, ``"incomplete"``, or ``"error"``
    :>json string reason: Reason code, only set on status ``"error"``, see below for possible values.
    :>json string reason_explanation: Human-readable explanation, only set on status ``"error"`` and reason ``"rules"``, can be null.
@@ -62,7 +67,9 @@ Checking a ticket in
                            will only include check-ins for the selected list. (2) An additional boolean property
                            ``require_attention`` will inform you whether either the order or the item have the
                            ``checkin_attention`` flag set. (3) If ``attendee_name`` is empty, it may automatically fall
-                           back to values from a parent product or from invoice addresses.
+                           back to values from a parent product or from invoice addresses. (4) Additional properties
+                           ``order__status``, ``order__valid_if_pending``, ``order__require_approval``, and
+                           ``order__locale`` are included with details form the order for convenience.
    :>json boolean require_attention: Whether or not the ``require_attention`` flag is set on the item or order.
    :>json list checkin_texts: List of additional texts to show to the user.
    :>json object list: Excerpt of information about the matching :ref:`check-in list <rest-checkinlists>` (if any was found),
