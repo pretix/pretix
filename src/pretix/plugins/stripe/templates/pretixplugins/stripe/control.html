@@ -84,4 +84,12 @@
             <dd>{{ payment_info.message }}</dd>
         {% endif %}
     </dl>
+
+    {% if payment_info.latest_charge.receipt_url %}
+        <p>
+            <a href="{{ payment_info.latest_charge.receipt_url }}" target="_blank">
+                <span class="fa fa-file-text"></span> {% trans "Payment receipt" %}
+            </a>
+        </p>
+    {% endif %}
 {% endif %}
