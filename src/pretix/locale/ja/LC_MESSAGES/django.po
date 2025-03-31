@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-03-17 17:00+0000\n"
+"PO-Revision-Date: 2025-03-31 15:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.3\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -11782,18 +11782,14 @@ msgid "MA"
 msgstr "MA"
 
 #: pretix/base/settings.py:3720 pretix/base/settings.py:3722
-#, fuzzy
-#| msgid "Provider name"
 msgctxt "address"
 msgid "Province"
-msgstr "イベント名"
+msgstr "州・省"
 
 #: pretix/base/settings.py:3721
-#, fuzzy
-#| msgid "Price effect"
 msgctxt "address"
 msgid "Prefecture"
-msgstr "価格の効果"
+msgstr "県"
 
 #: pretix/base/settings.py:3810 pretix/control/forms/event.py:228
 msgid ""
@@ -14321,6 +14317,9 @@ msgid ""
 "only use characters A-Z, a-z, 0-9, and common special characters "
 "({characters})."
 msgstr ""
+"パスワードには、当社のメールシステムでサポートされていない文字が含まれていま"
+"す。文字A-Z、a-z、0-9、および一般的な特殊文字({characters})"
+"のみを使用してください 。"
 
 #: pretix/control/forms/mailsetup.py:70
 msgid "Use STARTTLS"
@@ -14670,10 +14669,9 @@ msgid "Recipient"
 msgstr "受取人"
 
 #: pretix/control/forms/orders.py:768
-#, fuzzy, python-brace-format
-#| msgid "Attach ticket files"
+#, python-brace-format
 msgid "Attach {file}"
-msgstr "チケットのファイルを添付"
+msgstr "添付する {file}"
 
 #: pretix/control/forms/orders.py:796
 msgid ""
@@ -17394,22 +17392,15 @@ msgid "Delete check-ins"
 msgstr "チケットのチェックインが完了しました"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to permanently delete the check-ins of <strong>one "
-#| "ticket</strong>."
-#| msgid_plural ""
-#| "Are you sure you want to permanently delete the check-ins of "
-#| "<strong>%(count)s tickets</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to permanently delete the check-ins of <strong>one "
 "ticket</strong>?"
 msgid_plural ""
 "Are you sure you want to permanently delete the check-ins of "
 "<strong>%(count)s tickets</strong>?"
-msgstr[0] ""
-"<strong>%(count)s 枚のチケット</strong>について、チェックインを永久に削除して"
-"も構いませんか？"
+msgstr[0] "<strong>%(count)s "
+"枚のチケット</strong>について、チェックインを永久に削除しても構いませんか？"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:24
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
@@ -18914,10 +18905,8 @@ msgid "Disabled"
 msgstr "無効です"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:57
-#, fuzzy
-#| msgid "Enable waiting list"
 msgid "Enable additional payment plugins"
-msgstr "待ちリストを有効にする"
+msgstr "追加の支払い方法のプラグインを有効にする"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:66
 msgid "Deadlines"
@@ -19015,10 +19004,8 @@ msgid "Your changes have been saved."
 msgstr "変更が保存されました。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:34
-#, fuzzy
-#| msgid "Check results"
 msgid "Search results"
-msgstr "結果を確認します"
+msgstr "結果を検索する"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:56
 msgid "Top recommendation"
@@ -19038,16 +19025,12 @@ msgstr "売り切れ又は在庫なし"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:93
 #: pretix/control/templates/pretixcontrol/event/plugins.html:105
-#, fuzzy
-#| msgid "Login settings"
 msgid "Open plugin settings"
-msgstr "ログイン設定"
+msgstr "プラグインの設定を開く"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:94
-#, fuzzy
-#| msgid "Go to shop"
 msgid "Go to"
-msgstr "ショップに行く"
+msgstr "進む"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:116
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
@@ -21828,9 +21811,6 @@ msgid "Subject:"
 msgstr "Subject:"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:59
-#, fuzzy
-#| msgctxt "attachment_filename"
-#| msgid "Calendar invite"
 msgid "Calendar invite"
 msgstr "カレンダーの招待"
 
@@ -25771,13 +25751,11 @@ msgstr "APIの機能"
 
 #: pretix/control/views/event.py:444
 msgid "The plugin {} is now active, you can configure it here:"
-msgstr ""
+msgstr "プラグイン {} が現在有効です。こちらで設定できます:"
 
 #: pretix/control/views/event.py:453
-#, fuzzy
-#| msgid "The relevant plugin is currently not active."
 msgid "The plugin {} is now active."
-msgstr "関連するプラグインは、現在無効です。"
+msgstr "プラグイン {} が現在有効です。"
 
 #: pretix/control/views/event.py:516
 msgid ""
@@ -26250,10 +26228,8 @@ msgid "Access for the selected application has been revoked."
 msgstr "選択されたアプリケーションへのアクセスが取り消されました。"
 
 #: pretix/control/views/orders.py:192
-#, fuzzy
-#| msgid "We could not save your changes. See below for details."
 msgid "We could not process your input. See below for details."
-msgstr "変更を保存できませんでした。詳細は下記参照。"
+msgstr "入力内容を処理できませんでした。詳細は下記参照。"
 
 #: pretix/control/views/orders.py:265
 #, python-brace-format
@@ -31191,10 +31167,8 @@ msgstr ""
 "が、最新のブラウザと良好なインターネット接続が必要です。"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
-#, fuzzy
-#| msgid "Open Layout Designer"
 msgid "Open layout editor"
-msgstr "レイアウトデザイナーを開く"
+msgstr "レイアウト・エディターを開く"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Advanced mode (multiple layouts)"
