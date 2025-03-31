@@ -111,7 +111,7 @@ dev = [
   "coverage",
   "coveralls",
   "fakeredis==2.26.*",
-  "flake8==7.1.*",
+  "flake8==7.2.*",
   "freezegun",
   "isort==6.0.*",
   "pep8-naming==0.14.*",
