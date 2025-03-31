@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-03-21 00:00+0000\n"
-"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
+"PO-Revision-Date: 2025-04-01 05:00+0000\n"
+"Last-Translator: Fernando Luiz <contato@ferlbo.tec.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -12016,11 +12016,9 @@ msgid "MA"
 msgstr "MA"
 
 #: pretix/base/settings.py:3720 pretix/base/settings.py:3722
-#, fuzzy
-#| msgid "Provider name"
 msgctxt "address"
 msgid "Province"
-msgstr "Nome do provedor"
+msgstr "Província"
 
 #: pretix/base/settings.py:3721
 #, fuzzy
@@ -13686,7 +13684,7 @@ msgstr "Acompanhamento configurado"
 
 #: pretix/control/forms/filter.py:242
 msgid "Follow-up due"
-msgstr ""
+msgstr "Acompanhamento pendente"
 
 #: pretix/control/forms/filter.py:462 pretix/control/forms/filter.py:1898
 #: pretix/control/forms/filter.py:2153 pretix/control/forms/filter.py:2457
@@ -14134,7 +14132,7 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:103
 msgid "ApplePay MerchantID Domain Association"
-msgstr ""
+msgstr "Associação de Domínio ApplePay MerchantID"
 
 #: pretix/control/forms/global_settings.py:104
 #, python-brace-format
@@ -14499,12 +14497,17 @@ msgid ""
 "restrict the validity of the gift card. A validity of gift cards can be set "
 "in your organizer settings."
 msgstr ""
+"Não defina uma validade específica para produtos de vale-presente, pois isso "
+"não restringirá a validade do vale-presente. Uma validade de vale-presente "
+"pode ser definida nas configurações do seu organizador."
 
 #: pretix/control/forms/item.py:785 pretix/control/forms/item.py:1052
 msgid ""
 "If a valid membership is required, at least one valid membership type needs "
 "to be selected."
 msgstr ""
+"Se for necessária uma associação válida, pelo menos um tipo de associação "
+"válido precisa ser selecionado."
 
 #: pretix/control/forms/item.py:796
 msgid ""
@@ -14599,6 +14602,8 @@ msgid ""
 "only use characters A-Z, a-z, 0-9, and common special characters "
 "({characters})."
 msgstr ""
+"A senha contém caracteres não suportados pelo nosso sistema de e-mail. Use "
+"apenas caracteres A-Z, a-z, 0-9 e caracteres especiais comuns ({characters})."
 
 #: pretix/control/forms/mailsetup.py:70
 msgid "Use STARTTLS"
@@ -14751,6 +14756,8 @@ msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
 msgstr ""
+"Será incluído no e-mail de notificação quando o respectivo espaço reservado "
+"estiver presente no texto do e-mail configurado."
 
 #: pretix/control/forms/orders.py:229
 msgid "A mail will only be sent if the order is fully paid after this."
@@ -14823,11 +14830,11 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:312
 msgid "Allow to overbook quotas when performing this operation"
-msgstr ""
+msgstr "Permitir overbooking de cotas ao executar esta operação"
 
 #: pretix/control/forms/orders.py:328
 msgid "Add-on to"
-msgstr ""
+msgstr "Add-on para"
 
 #: pretix/control/forms/orders.py:333
 #: pretix/control/templates/pretixcontrol/checkin/index.html:104
@@ -14885,6 +14892,8 @@ msgid ""
 "This affects both the ticket secret (often used as a QR code) as well as the "
 "link used to individually access the ticket."
 msgstr ""
+"Isso afeta tanto o segredo do ingresso (geralmente usado como um código QR) "
+"quanto o link usado para acessar o ingresso individualmente."
 
 #: pretix/control/forms/orders.py:501
 msgid "Cancel this position"
@@ -14896,7 +14905,7 @@ msgstr "Dividir em novo pedido"
 
 #: pretix/control/forms/orders.py:571
 msgid "(No membership)"
-msgstr ""
+msgstr "(Sem assinatura)"
 
 #: pretix/control/forms/orders.py:602
 msgid "Remove this fee"
@@ -14926,6 +14935,9 @@ msgid ""
 "to the order page to the user and the user will need to download his tickets "
 "again. The old versions will be invalid."
 msgstr ""
+"Regenera os segredos do pedido e do ingresso. Você precisará reenviar o link "
+"para a página do pedido para o usuário e o usuário precisará baixar seus "
+"tíquetes novamente. As versões antigas serão inválidas."
 
 #: pretix/control/forms/orders.py:724 pretix/plugins/sendmail/forms.py:196
 msgid "Attach tickets"
@@ -14950,10 +14962,9 @@ msgid "Recipient"
 msgstr "Destinatário"
 
 #: pretix/control/forms/orders.py:768
-#, fuzzy, python-brace-format
-#| msgid "Attach ticket files"
+#, python-brace-format
 msgid "Attach {file}"
-msgstr "Anexar arquivos do ingresso"
+msgstr "Anexar {file}"
 
 #: pretix/control/forms/orders.py:796
 msgid ""
@@ -15003,7 +15014,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:870
 msgid "Create refund in the manual refund to-do list"
-msgstr ""
+msgstr "Criar reembolso na lista de tarefas de reembolso manual"
 
 #: pretix/control/forms/orders.py:873
 msgid ""
@@ -15013,12 +15024,20 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
+"Serão criados reembolsos manuais que serão listados na lista de afazeres de "
+"reembolso manual. Quando combinados com a funcionalidade de reembolso "
+"automático, apenas pagamentos com um método de pagamento que não suporte "
+"reembolsos automáticos estarão na sua lista de afazeres de reembolso manual. "
+"Não marque se você deseja reembolsar alguns dos pedidos compensando com "
+"pedidos diferentes ou emitindo vales-presente."
 
 #: pretix/control/forms/orders.py:879
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
 msgstr ""
+"Reembolsar o valor do pedido para um vale-presente em vez do método de "
+"pagamento original"
 
 #: pretix/control/forms/orders.py:885
 msgid "Gift card validity"
@@ -15299,7 +15318,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:1109
 msgid "Invalidate old client secret and generate a new one"
-msgstr ""
+msgstr "Invalidar segredo antigo do cliente e gerar um novo"
 
 #: pretix/control/forms/organizer.py:1142
 msgid "Organizer short name"
@@ -15405,7 +15424,7 @@ msgstr "Dia"
 
 #: pretix/control/forms/rrule.py:112 pretix/control/forms/rrule.py:151
 msgid "Weekend day"
-msgstr ""
+msgstr "Dia do fim de semana"
 
 #: pretix/control/forms/subevents.py:118
 msgid "Keep the current values"
@@ -15693,7 +15712,7 @@ msgstr "Posição #{posid} criada: {item} ({price})."
 #: pretix/control/logdisplay.py:233
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr ""
+msgstr "Um novo segredo foi gerado para a posição #{posid}."
 
 #: pretix/control/logdisplay.py:241
 #, python-brace-format
@@ -15724,6 +15743,7 @@ msgstr "Um bloqueio foi removido para a posição #{posid}."
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
+"Posição #{posid} ({old_item}, {old_price}) dividida em novo pedido: {order}"
 
 #: pretix/control/logdisplay.py:304
 #, python-brace-format
@@ -15860,7 +15880,7 @@ msgstr "As configurações de um provedor de pagamento foram alteradas."
 
 #: pretix/control/logdisplay.py:431 pretix/control/logdisplay.py:740
 msgid "The settings of a ticket output provider have been changed."
-msgstr ""
+msgstr "As configurações de um provedor de saída de ingressos foram alteradas."
 
 #: pretix/control/logdisplay.py:437
 msgid "Blocked manually"
@@ -15885,11 +15905,11 @@ msgstr "O pedido foi marcado como não pago."
 
 #: pretix/control/logdisplay.py:446
 msgid "The order's secret has been changed."
-msgstr ""
+msgstr "O segredo do pedido foi alterado."
 
 #: pretix/control/logdisplay.py:447
 msgid "The order's expiry date has been changed."
-msgstr ""
+msgstr "A data de validade do pedido foi alterada."
 
 #: pretix/control/logdisplay.py:448
 msgid "The order has been set to be usable before it is paid."
@@ -15990,7 +16010,7 @@ msgstr "A data de acompanhamento do pedido foi atualizada."
 
 #: pretix/control/logdisplay.py:474
 msgid "The order's flag to require attention at check-in has been toggled."
-msgstr ""
+msgstr "O marcador do pedido para exigir atenção no check-in foi alternado."
 
 #: pretix/control/logdisplay.py:476
 msgid "The order's check-in text has been changed."
@@ -16000,6 +16020,8 @@ msgstr "O texto de check-in do pedido foi alterado."
 msgid ""
 "The order's flag to be considered valid even if unpaid has been toggled."
 msgstr ""
+"O marcador do pedido para ser considerado válido mesmo se não pago foi "
+"alternado."
 
 #: pretix/control/logdisplay.py:479
 #, python-brace-format
@@ -16296,6 +16318,7 @@ msgstr "O webhook foi alterado."
 #: pretix/control/logdisplay.py:639
 msgid "The webhook call retry jobs have been manually expedited."
 msgstr ""
+"Os trabalhos de repetição de chamada do webhook foram agilizados manualmente."
 
 #: pretix/control/logdisplay.py:640
 msgid "The webhook call retry jobs have been dropped."
@@ -16431,6 +16454,8 @@ msgid ""
 "A first login using {agent_type} on {os_type} from {country} has been "
 "detected."
 msgstr ""
+"Foi detectado um primeiro login usando {agent_type} em {os_type} de "
+"{country}."
 
 #: pretix/control/logdisplay.py:680 pretix/control/views/user.py:490
 #: pretix/control/views/user.py:550 pretix/control/views/user.py:609
@@ -16444,7 +16469,7 @@ msgstr "A autenticação de dois fatores foi desativada."
 
 #: pretix/control/logdisplay.py:682 pretix/control/views/user.py:642
 msgid "Your two-factor emergency codes have been regenerated."
-msgstr ""
+msgstr "Seus códigos de emergência de dois fatores foram regenerados."
 
 #: pretix/control/logdisplay.py:683
 msgid "A two-factor emergency code has been generated."
@@ -16511,19 +16536,19 @@ msgstr "Um cupom foi enviado para uma pessoa na lista de espera."
 
 #: pretix/control/logdisplay.py:701
 msgid "An entry has been removed from the waiting list."
-msgstr ""
+msgstr "Uma inscrição foi removida da lista de espera."
 
 #: pretix/control/logdisplay.py:702
 msgid "An entry has been transferred to another waiting list."
-msgstr ""
+msgstr "Uma inscrição foi transferida para outra lista de espera."
 
 #: pretix/control/logdisplay.py:703
 msgid "An entry has been changed on the waiting list."
-msgstr ""
+msgstr "Uma entrada foi alterada na lista de espera."
 
 #: pretix/control/logdisplay.py:704
 msgid "An entry has been added to the waiting list."
-msgstr ""
+msgstr "Uma entrada foi adicionada à lista de espera."
 
 #: pretix/control/logdisplay.py:705
 msgid "The team has been created."
@@ -16607,6 +16632,8 @@ msgstr "O token de acesso ao dispositivo foi regerado."
 #: pretix/control/logdisplay.py:723
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
+"O dispositivo notificou o servidor sobre uma atualização de hardware ou "
+"software."
 
 #: pretix/control/logdisplay.py:724
 msgid "The gift card has been created."
@@ -17187,6 +17214,9 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"Se você já tem uma conta neste site com um endereço de e-mail diferente, "
+"você pode <a %(login_href)s>fazer login</a> primeiro e depois clicar neste "
+"link novamente para aceitar o convite com sua conta existente."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
@@ -17556,7 +17586,7 @@ msgstr "ID do dispositivo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:6
 msgid "Receipt ID"
-msgstr ""
+msgstr "ID do Recibo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "ID"
@@ -17622,7 +17652,7 @@ msgstr "Código do comerciante"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:80
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:110
 msgid "Card Entry Mode"
-msgstr ""
+msgstr "Modo de entrada de Cartão"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:58
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:82
@@ -17692,13 +17722,7 @@ msgid "Delete check-ins"
 msgstr "Excluir check-ins"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to permanently delete the check-ins of <strong>one "
-#| "ticket</strong>."
-#| msgid_plural ""
-#| "Are you sure you want to permanently delete the check-ins of "
-#| "<strong>%(count)s tickets</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to permanently delete the check-ins of <strong>one "
 "ticket</strong>?"
@@ -17907,7 +17931,7 @@ msgstr "Marcado automaticamente como não presente: %(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:397
 #, python-format
 msgid "Additional entry scan: %(date)s"
-msgstr ""
+msgstr "Verificação de entrada adicional: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:85
 #, python-format
@@ -17918,7 +17942,7 @@ msgstr "Leitura offline. Hora do upload: %(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:399
 #, python-format
 msgid "Automatically checked in: %(date)s"
-msgstr ""
+msgstr "Check-in automático: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:92
 msgid "Failed in offline mode"
@@ -18007,7 +18031,7 @@ msgstr "Fez checkin mas saiu"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:186
 msgid "Checked in automatically"
-msgstr ""
+msgstr "Check-in feito automaticamente"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:198
 #, python-format
@@ -18016,11 +18040,11 @@ msgstr "Saída: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:213
 msgid "Check-In selected attendees"
-msgstr ""
+msgstr "Check-in dos participantes selecionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:217
 msgid "Check-Out selected attendees"
-msgstr ""
+msgstr "Desmarcar os participantes selecionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:226
 msgid "Delete all check-ins of selected attendees"
@@ -18136,6 +18160,11 @@ msgid ""
 "do this process by printing out the list on paper, using this web interface "
 "or by using one of our mobile or desktop apps to automatically scan tickets."
 msgstr ""
+"Você pode criar listas de check-in que você pode usar, por exemplo, na "
+"entrada do seu evento para rastrear quem está vindo e se eles realmente "
+"compraram um ingresso. Você pode fazer esse processo imprimindo a lista em "
+"papel, usando esta interface da web ou usando um dos nossos aplicativos "
+"móveis ou de desktop para escanear ingressos automaticamente."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:17
 msgid ""
@@ -18146,6 +18175,13 @@ msgid ""
 "festival with festival passes that allow access to every or multiple "
 "performances as well as tickets only valid for single performances."
 msgstr ""
+"Você pode criar várias listas de check-in para separar várias partes do seu "
+"evento, por exemplo, se você tiver entradas separadas para vários tipos de "
+"ingresso. Listas de check-in diferentes são completamente independentes: se "
+"um ingresso aparecer em duas listas, ele será válido uma vez em cada lista. "
+"Isso pode ser útil se você executar um festival com passes de festival que "
+"permitem acesso a todas ou várias apresentações, bem como ingressos válidos "
+"apenas para apresentações únicas."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:26
 msgid ""
@@ -18154,14 +18190,19 @@ msgid ""
 "are connected on the organizer level, you do not have to create a new device "
 "for every event but can reuse them over and over again."
 msgstr ""
+"Se você tiver as permissões apropriadas de nível de organizador, você pode "
+"conectar novos dispositivos à sua conta e usá-los para validar ingressos. "
+"Como os dispositivos são conectados no nível do organizador, você não "
+"precisa criar um novo dispositivo para cada evento, mas pode reutilizá-los "
+"várias vezes."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:58
 msgid "Your search did not match any check-in lists."
-msgstr ""
+msgstr "Sua pesquisa não encontrou nenhuma lista de check-in."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:60
 msgid "You haven't created any check-in lists yet."
-msgstr ""
+msgstr "Você ainda não criou nenhuma lista de check-in."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:68
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:80
