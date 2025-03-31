@@ -2309,7 +2309,7 @@ class OrderChangeManager:
                 op.position.tax_rate = op.price.rate
                 op.position.tax_value = op.price.tax
                 op.position.tax_code = op.price.code
-                op.position.save()
+                op.position.save(update_fields=['price', 'tax_rate', 'tax_value', 'tax_code'])
             elif isinstance(op, self.TaxRuleOperation):
                 if isinstance(op.position, OrderPosition):
                     self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
