@@ -22,6 +22,8 @@
 import logging
 import os
 import re
+from collections import defaultdict
+from decimal import Decimal
 from xml.etree import ElementTree
 
 import requests
@@ -32,7 +34,9 @@ from zeep import Client, Transport
 from zeep.cache import SqliteCache
 from zeep.exceptions import Fault
 
-from pretix.base.models.tax import cc_to_vat_prefix, is_eu_country
+from pretix.base.decimal import round_decimal
+from pretix.base.models import CartPosition, Event, OrderFee
+from pretix.base.models.tax import TaxRule, cc_to_vat_prefix, is_eu_country
 
 logger = logging.getLogger(__name__)
 error_messages = {
@@ -226,3 +230,64 @@ def validate_vat_id(vat_id, country_code):
         return _validate_vat_id_NO(vat_id, country_code)
 
     raise VATIDTemporaryError(f'VAT ID should not be entered for country {country_code}')
+
+
+def split_fee_for_taxes(positions: list, fee_value: Decimal, event: Event):
+    """
+    Given a list of either OrderPosition, OrderFee or CartPosition objects and the total value
+    of a fee, this will return a list of [(tax_rule, fee_value)] tuples that distributes the
+    taxes over the same tax rules as the positions with a value representative to the value
+    the tax rule.
+
+    Since the input fee_value is a gross value, we also split it by the gross percentages of
+    positions. This will lead to the same result as if we split the net value by net percentages,
+    but is easier to compute.
+    """
+    d = defaultdict(lambda: Decimal("0.00"))
+    tax_rule_zero = TaxRule.zero()
+    trs = {}
+    for p in positions:
+        if isinstance(p, CartPosition):
+            tr = p.item.tax_rule
+            v = p.price
+        elif isinstance(p, OrderFee):
+            tr = p.tax_rule
+            v = p.value
+        else:
+            tr = p.tax_rule
+            v = p.price
+        if not tr:
+            tr = tax_rule_zero
+        # use tr.pk as key as tax_rule_zero is not hashable
+        d[tr.pk] += v
+        trs[tr.pk] = tr
+
+    base_values = sorted([(trs[key], value) for key, value in d.items()], key=lambda t: t[0].rate)
+    sum_base = sum(value for key, value in base_values)
+    if sum_base:
+        fee_values = [
+            (key, round_decimal(fee_value * value / sum_base, event.currency))
+            for key, value in base_values
+        ]
+        sum_fee = sum(value for key, value in fee_values)
+
+        # If there are rounding differences, we fix them up, but always leaning to the benefit of the tax
+        # authorities
+        if sum_fee > fee_value:
+            fee_values[0] = (
+                fee_values[0][0],
+                fee_values[0][1] + (fee_value - sum_fee),
+            )
+        elif sum_fee < fee_value:
+            fee_values[-1] = (
+                fee_values[-1][0],
+                fee_values[-1][1] + (fee_value - sum_fee),
+            )
+    elif len(d) == 1:
+        # Rare edge case: All positions are 0-valued, but have a common tax rate. Could happen e.g. with a discount
+        # that reduces all positions to 0, but not the shipping fees. Let's use that tax rate!
+        fee_values = [(list(trs.values())[0], fee_value)]
+    else:
+        # All positions are zero-valued, and we have no clear tax rate, so we use the default tax rate.
+        fee_values = [(event.cached_default_tax_rule or tax_rule_zero, fee_value)]
+    return fee_values
