@@ -43,6 +43,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
 

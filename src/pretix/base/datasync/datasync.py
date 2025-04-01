@@ -1,3 +1,25 @@
+#
+# This file is part of pretix (Community Edition).
+#
+# Copyright (C) 2014-2020 Raphael Michel and contributors
+# Copyright (C) 2020-2025 rami.io GmbH and contributors
+#
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+# Public License as published by the Free Software Foundation in version 3 of the License.
+#
+# ADDITIONAL TERMS APPLY: Pursuant to Section 7 of the GNU Affero General Public License, additional terms are
+# applicable granting you additional permissions and placing additional restrictions on your usage of this software.
+# Please refer to the pretix LICENSE file to obtain the full terms applicable to this work. If you did not receive
+# this file, see <https://pretix.eu/about/en/license>.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
+# <https://www.gnu.org/licenses/>.
+#
+
 import json
 import logging
 from collections import namedtuple
@@ -146,9 +168,9 @@ class OutboundSyncProvider:
 
     """
     Adds an order to the sync queue. May only be called on derived classes which define an "identifier" attribute.
-     
+
     Should be called in the appropriate signal receivers, e.g.:
-        
+
         @receiver(order_placed, dispatch_uid="mysync_order_placed")
         def on_order_placed(sender, order, **kwargs):
             MySyncProvider.enqueue_order(order, "order_placed")
@@ -261,12 +283,12 @@ class OutboundSyncProvider:
     """
     This method is called for each object that needs to be created/updated in the external system -- which these are is
     determined by the implementation of the `mapping` property.
-    
+
     TODO: describe the parameters
-    
+
     This method needs to be idempotent, i.e. calling it multiple times with the same input values should create
-    only a single object in the target system. 
-    
+    only a single object in the target system.
+
     Subsequent calls with the same mapping and pk_value should update the existing object, instead of creating a new one.
     In a SQL database, you might use an "INSERT OR UPDATE" or "UPSERT" statement; many REST APIs provide an equivalent API call.
     """
