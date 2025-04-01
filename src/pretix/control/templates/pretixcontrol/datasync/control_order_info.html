@@ -5,17 +5,27 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
-            {% trans "Data Sync" %}
+            {% trans "Data transfer to external systems" %}
         </h3>
     </div>
-    <div class="panel-body">
-        <table class="table table-condensed">
-        <tbody>
-            {% for identifier, display_name, pending, objects in providers %}
-                <tr>
-                    <td>{{ display_name }}</td>
-                    <td>
+    <ul class="list-group">
+        {% for identifier, display_name, pending, objects in providers %}
+            <li class="list-group-item">
+                <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline pull-right">
+                    {% csrf_token %}
                     {% if pending %}
+                        {% if pending.not_before %}
+                        <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
+                        {% endif %}
+                        <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-times"></i> {% trans "Cancel" %}</button>
+                    {% else %}
+                            <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
+                            <input type="hidden" name="queue_sync" value="true">
+                    {% endif %}
+                </form>
+                <p><b>{{ display_name }}</b></p>
+                {% if pending %}
+                    <p>
                         {% if pending.failed_attempts %}
                             <i class="fa fa-warning"></i>
                             {% blocktrans trimmed with num=pending.failed_attempts max=pending.max_retry_attempts %}
@@ -32,41 +42,25 @@
                         {% else %}
                             <i class="fa fa-hourglass"></i> {% trans "Pending" %}
                         {% endif %}
-                        (triggered by {{ pending.triggered_by }} at {{ pending.triggered|date:"SHORT_DATETIME_FORMAT" }})
-                    {% else %}
-                        -
-                    {% endif %}
-                    </td>
-                    <td align="right">
-                        <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline">
-                            {% csrf_token %}
-                            {% if pending %}
-                                {% if pending.not_before %}
-                                <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
-                                {% endif %}
-                                <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-trash"></i> {% trans "Cancel" %}</button>
-                            {% else %}
-                                    <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
-                                    <input type="hidden" name="queue_sync" value="true">
-                            {% endif %}
-                        </form>
-                    </td>
-                </tr>
-                {% for obj in objects %}
-                    <tr>
-                        <td></td>
-                        <td>
+                        <span class="text-muted">(triggered by {{ pending.triggered_by }} at {{ pending.triggered|date:"SHORT_DATETIME_FORMAT" }})</span>
+                    </p>
+                {% endif %}
+
+                <ul>
+                    {% for obj in objects %}
+                        <li>
                             {% if obj.external_link_html %}
                                 {{ obj.external_link_html }}
                             {% else %}
-                                {{ obj.external_object_type }} with {{ obj.external_pk_name }} = {{ obj.external_pk_value }}
+                                {{ obj.external_object_type }}
+                                {% trans "identified by" %} {{ obj.external_pk_name }}
+                                <em>{{ obj.external_pk_value }}</em>
                             {% endif %}
-                        </td>
-                        <td align="right">{{ obj.timestamp }}</td>
-                    </tr>
-                {% endfor %}
-            {% endfor %}
-        </tbody>
-        </table>
-    </div>
+                            &nbsp; <time class="text-muted" datetime="{{ obj.timestamp.isoformat }}">{{ obj.timestamp }}</time>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
