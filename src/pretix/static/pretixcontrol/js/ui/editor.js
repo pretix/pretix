@@ -898,6 +898,7 @@ var editor = {
 
     _update_toolbox: function () {
         var selected = editor.fabric.getActiveObjects();
+        $(".object-buttons button").prop("disabled", selected.length == 0);
         if (selected.length > 1) {
             $("#toolbox").attr("data-type", "group");
             $("#toolbox-heading").text(gettext("Group of objects"));
@@ -1048,8 +1049,11 @@ var editor = {
     },
 
     _cut: function () {
-        editor._history_modification_in_progress = true;
         var thing = editor.fabric.getActiveObject();
+        if (!thing) {
+            return false;
+        }
+        editor._history_modification_in_progress = true;
         if (thing.type === "activeSelection") {
             editor.clipboard = editor.dump(thing._objects);
             thing.forEachObject(function (o) {
@@ -1066,8 +1070,11 @@ var editor = {
     },
 
     _copy: function () {
-        editor._history_modification_in_progress = true;
         var thing = editor.fabric.getActiveObject();
+        if (!thing) {
+            return false;
+        }
+        editor._history_modification_in_progress = true;
         if (thing.type === "activeSelection") {
             editor.clipboard = editor.dump(thing._objects);
         } else {
@@ -1100,6 +1107,9 @@ var editor = {
 
     _delete: function () {
         var thing = editor.fabric.getActiveObject();
+        if (!thing) {
+            return false;
+        }
         if (thing.type === "activeSelection") {
             thing.forEachObject(function (o) {
                 editor.fabric.remove(o);

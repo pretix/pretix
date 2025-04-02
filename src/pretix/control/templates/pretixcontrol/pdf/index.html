@@ -26,26 +26,26 @@
         <div class="col-md-9">
             <div class="panel panel-default panel-pdf-editor">
                 <div class="panel-heading">
-                    <div class="pull-right flip">
+                    <form method="post" action="" id="preview-form" target="_blank" class="pull-right flip">
+                        {% csrf_token %}
+                        <input type="hidden" value="" name="data">
+                        <input type="hidden" value="" name="background">
+                        <input type="hidden" value="true" name="preview">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm" id="toolbox-source"
                                     title="{% trans "Code" %}">
                                 {% icon "code" %}
                             </button>
-                            <button type="button" class="btn btn-default btn-sm" id="toolbox-paste"
-                                    title="{% trans "Paste" %}">
-                                {% icon "paste" %}
-                            </button>
-                            <button type="button" class="btn btn-default btn-sm" id="toolbox-undo"
-                                    title="{% trans "Undo" %}">
-                                {% icon "undo" %}
-                            </button>
-                            <button type="button" class="btn btn-default btn-sm" id="toolbox-redo"
-                                    title="{% trans "Redo" %}">
-                                {% icon "repeat" %}
+                            <button type="submit" class="btn btn-default btn-sm" id="editor-preview">
+                                {% icon "eye" %}
+                                {% trans "Preview" %}
                             </button>
                         </div>
-                    </div>
+                        <button type="submit" class="btn btn-primary btn-sm btn-save" id="editor-save">
+                            {% icon "save" %}
+                            {% trans "Save" %}
+                        </button>
+                    </form>
                     <div class="btn-group add-buttons">
                         <button class="btn btn-default btn-sm" id="editor-add-textcontainer" disabled>
                             <span class="fa fa-font"></span>
@@ -101,6 +101,33 @@
                                     </button>
                                 </li>
                         </div>
+                    </div>
+                    <div class="btn-group object-buttons">
+                        <button type="button" class="btn btn-default btn-sm" id="toolbox-cut"
+                                title="{% trans "Cut" %}">
+                            {% icon "cut" %}
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" id="toolbox-copy"
+                                title="{% trans "Copy" %}">
+                            {% icon "copy" %}
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" id="toolbox-paste"
+                                title="{% trans "Paste" %}">
+                            {% icon "paste" %}
+                        <button type="button" class="btn btn-default btn-sm" id="toolbox-delete"
+                                title="{% trans "Delete" %}">
+                            {% icon "trash" class="text-danger" %}
+                        </button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm" id="toolbox-undo"
+                                title="{% trans "Undo" %}">
+                            {% icon "undo" %}
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm" id="toolbox-redo"
+                                title="{% trans "Redo" %}">
+                            {% icon "repeat" %}
+                        </button>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -209,22 +236,6 @@
         <div class="col-md-3" id="editor-toolbox-area">
             <div class="panel panel-default" id="toolbox">
                 <div class="panel-heading">
-                    <div class="pull-right object-buttons flip">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-cut"
-                                    title="{% trans "Cut" %}">
-                                <span class="fa fa-cut"></span>
-                            </button>
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-copy"
-                                    title="{% trans "Copy" %}">
-                                <span class="fa fa-copy"></span>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-xs" id="toolbox-delete"
-                                    title="{% trans "Delete" %}">
-                                <span class="fa fa-trash"></span>
-                            </button>
-                        </div>
-                    </div>
                     <span id="toolbox-heading">
                         {% trans "Loading…" %}
                     </span>
@@ -544,21 +555,6 @@
                     </div>
                 </div>
             </div>
-            <form method="post" action="" id="preview-form" target="_blank">
-                <div class="form-group submit-group">
-                    {% csrf_token %}
-                    <input type="hidden" value="" name="data">
-                    <input type="hidden" value="" name="background">
-                    <input type="hidden" value="true" name="preview">
-                    <button type="submit" class="btn btn-default btn-lg" id="editor-preview">
-                        {% trans "Preview" %}
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-save" id="editor-save">
-                        <span class="fa fa-fw fa-save"></span>
-                        {% trans "Save" %}
-                    </button>
-                </div>
-            </form>
             <p>&nbsp;</p>
             <div class="alert alert-info" id="version-notice">
                 {% blocktrans trimmed with print_version="2.18" scan_version="1.22" %}
