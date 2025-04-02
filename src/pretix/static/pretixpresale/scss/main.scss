@@ -1,6 +1,40 @@
 // before variables.scss because it only affects presale, not control
 $body-bg: #f5f5f5 !default;
 
+$font-size-base: 0.875rem !default;/* 14px/16px = 0.875rem */
+
+$font-size-large:         ($font-size-base * 1.25) !default;
+$font-size-small:         ($font-size-base * .85) !default;
+
+$font-size-h1:            ($font-size-base * 2.6) !default;
+$font-size-h2:            ($font-size-base * 2.15) !default;
+$font-size-h3:            ($font-size-base * 1.7) !default;
+$font-size-h4:            ($font-size-base * 1.25) !default;
+$font-size-h5:            $font-size-base !default;
+$font-size-h6:            ($font-size-base * .85) !default;
+
+$line-height-base:        1.428571429 !default;
+$line-height-computed:    ($font-size-base * $line-height-base) !default;
+$line-height-large:       1.3333333 !default; // extra decimals for Win 8.1 Chrome
+$line-height-small:       1.5 !default;
+
+
+$padding-base-vertical:     0.4285714286rem !default;/* 6px / 14px */
+$padding-base-horizontal:   0.8571428571rem !default;/* 12px / 14px */
+$padding-large-vertical:    0.7142857143rem !default;/* 10px / 14px */
+$padding-large-horizontal:  1.1428571429rem !default;/* 16px / 14px */
+$padding-small-vertical:    0.3571428571rem !default;/* 5px / 14px */
+$padding-small-horizontal:  0.7142857143rem !default;/* 10px / 14px */
+$padding-xs-vertical:       0.07142857143rem !default;/* 1px / 14px */
+$padding-xs-horizontal:     0.3571428571rem !default;/* 5px / 14px */
+$navbar-height:             3.5714285714rem !default;/* 50px / 14px */
+
+
+$input-height-base:              ($line-height-computed + ($padding-base-vertical * 2) + 0.1428571429rem) !default; /* 2px@14px = 0.1428571429rem */
+$input-height-large:             ($font-size-large * $line-height-large) + ($padding-large-vertical * 2) + 0.1428571429rem !default;
+$input-height-small:             ($font-size-small * $line-height-small) + ($padding-small-vertical * 2) + 0.1428571429rem !default;
+
+
 /* imports */
 @import "../../pretixbase/scss/_theme_variables.scss";
 @import "../../pretixbase/scss/bootstrap_vars.scss";
@@ -19,6 +53,19 @@ $body-bg: #f5f5f5 !default;
 @import "_calendar.scss";
 @import "_checkout.scss";
 @import "../../pretixbase/scss/webfont.scss";
+
+html {
+  font-size: 1em;
+}
+.panel-title {
+  font-size: ($font-size-base * 1.125);
+}
+.lead {
+  font-size: ($font-size-base * 1.15);
+}
+small, .small {
+  font-size: (100% * $font-size-small / $font-size-base);
+}
 
 /* See https://github.com/pretix/pretix/pull/761 */
 .bootstrap-datetimepicker-widget table td span {
