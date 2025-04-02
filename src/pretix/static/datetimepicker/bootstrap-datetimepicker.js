@@ -947,7 +947,6 @@
 
                 input.blur();
 
-                // custom edit: do not date.clone() as this breaks when minDate/maxDate is outside of date's month
                 //viewDate = date.clone();
 
                 return picker;
