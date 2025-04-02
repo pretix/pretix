@@ -1244,6 +1244,9 @@ var editor = {
         } else {
             $("#editor-save").addClass("btn-success").removeClass("btn-primary").find(".fa").attr("class", "fa fa-fw fa-check");
         }
+
+        $("#toolbox-undo").prop("disabled", editor._history_pos == editor.history.length-1);
+        $("#toolbox-redo").prop("disabled", editor._history_pos == 0);
     },
 
     _save: function () {
