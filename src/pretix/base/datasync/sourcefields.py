@@ -27,7 +27,7 @@ from functools import partial
 from django.db.models import Max
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.models import Checkin, Order, Question
+from pretix.base.models import Checkin, InvoiceAddress, Order, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
 
@@ -109,6 +109,13 @@ DataFieldInfo = namedtuple(
     field_names=('required_input', 'key', 'label', 'type', 'enum_opts', 'getter', 'deprecated'),
     defaults=[False]
 )
+
+
+def get_invoice_address_or_empty(order):
+    try:
+        return order.invoice_address
+    except InvoiceAddress.DoesNotExist:
+        return InvoiceAddress()
 
 
 def get_data_fields(event, for_model=None):
@@ -223,7 +230,7 @@ def get_data_fields(event, for_model=None):
                 _("Invoice address company"),
                 Question.TYPE_STRING,
                 None,
-                lambda order: order.invoice_address.company,
+                lambda order: get_invoice_address_or_empty(order).company,
             ),
             DataFieldInfo(
                 ORDER,
@@ -231,7 +238,7 @@ def get_data_fields(event, for_model=None):
                 _("Invoice address name"),
                 Question.TYPE_STRING,
                 None,
-                lambda order: order.invoice_address.name,
+                lambda order: get_invoice_address_or_empty(order).name,
             ),
         ]
         + [
@@ -242,7 +249,7 @@ def get_data_fields(event, for_model=None):
                 Question.TYPE_STRING,
                 None,
                 partial(
-                    lambda k, order: (order.invoice_address.name_parts or {}).get(
+                    lambda k, order: (get_invoice_address_or_empty(order).name_parts or {}).get(
                         k, ""
                     ),
                     k,
@@ -258,7 +265,7 @@ def get_data_fields(event, for_model=None):
                 _("Invoice address street"),
                 Question.TYPE_STRING,
                 None,
-                lambda order: order.invoice_address.street,
+                lambda order: get_invoice_address_or_empty(order).street,
             ),
             DataFieldInfo(
                 ORDER,
@@ -266,7 +273,7 @@ def get_data_fields(event, for_model=None):
                 _("Invoice address ZIP code"),
                 Question.TYPE_STRING,
                 None,
-                lambda order: order.invoice_address.zipcode,
+                lambda order: get_invoice_address_or_empty(order).zipcode,
             ),
             DataFieldInfo(
                 ORDER,
@@ -274,7 +281,7 @@ def get_data_fields(event, for_model=None):
                 _("Invoice address city"),
                 Question.TYPE_STRING,
                 None,
-                lambda order: order.invoice_address.city,
+                lambda order: get_invoice_address_or_empty(order).city,
             ),
             DataFieldInfo(
                 ORDER,
@@ -282,7 +289,7 @@ def get_data_fields(event, for_model=None):
                 _("Invoice address country"),
                 Question.TYPE_COUNTRYCODE,
                 None,
-                lambda order: str(order.invoice_address.country),
+                lambda order: str(get_invoice_address_or_empty(order).country),
             ),
             DataFieldInfo(
                 ORDER,
@@ -464,7 +471,7 @@ def get_data_fields(event, for_model=None):
                 _("Invoice address") + ": " + _("Given name") + " (⚠️ auto-generated, not recommended)",
                 Question.TYPE_STRING,
                 None,
-                lambda order: split_name_on_last_space(order.invoice_address.name, part=0),
+                lambda order: split_name_on_last_space(get_invoice_address_or_empty(order).name, part=0),
                 deprecated=True,
             ),
         ]
@@ -486,7 +493,7 @@ def get_data_fields(event, for_model=None):
                 _("Invoice address") + ": " + _("Family name") + " (⚠️ auto-generated, not recommended)",
                 Question.TYPE_STRING,
                 None,
-                lambda order: split_name_on_last_space(order.invoice_address.name, part=1),
+                lambda order: split_name_on_last_space(get_invoice_address_or_empty(order).name, part=1),
                 deprecated=True,
             ),
         ]
