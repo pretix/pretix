@@ -66,7 +66,6 @@ class PropertyMappingForm(forms.Form):
         self.fields["overwrite"].choices = [
             (key, label) for (key, label) in self.fields["overwrite"].choices if key in available_modes
         ]
-        print(self.fields)
 
 
 class PropertyMappingFormSet(formset_factory(

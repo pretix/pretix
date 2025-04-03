@@ -165,12 +165,10 @@ class FakeSyncAPI:
         t = self.fake_database[table]
         for idx, record in enumerate(t):
             if record.get(search_by_attribute) == search_for_value:
-                print("match:",table,idx,search_by_attribute,search_for_value,record)
                 return {**record, "_id": idx}
         return None
 
     def create_or_update_object(self, table, record):
-        print("upsert", table, record)
         t = self.fake_database[table]
         if record.get("_id") is not None:
             t[record["_id"]].update(record)
