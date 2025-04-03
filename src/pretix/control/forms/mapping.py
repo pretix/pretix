@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import json
 
 from django import forms
 from django.forms import formset_factory
@@ -76,7 +77,9 @@ class PropertyMappingFormSet(formset_factory(
 )):
     template_name = "pretixcontrol/datasync/property_mapping_formset.html"
 
-    def __init__(self, pretix_fields, external_fields, available_modes, prefix, *args, **kwargs):
+    def __init__(self, pretix_fields, external_fields, available_modes, prefix, *args, initial_json=None, **kwargs):
+        if initial_json:
+            kwargs["initial"] = json.loads(initial_json)
         super().__init__(
             form_kwargs={
                 "pretix_fields": pretix_fields,
@@ -92,6 +95,10 @@ class PropertyMappingFormSet(formset_factory(
         ctx["external_fields"] = self.external_fields
         ctx["external_fields_id"] = self.prefix + "external-fields"
         return ctx
+
+    def to_property_mapping_json(self):
+        mappings = [f.cleaned_data for f in self.ordered_forms]
+        return json.dumps(mappings)
 
 
 def pretix_fields_choices(pretix_fields, initial_choice):
