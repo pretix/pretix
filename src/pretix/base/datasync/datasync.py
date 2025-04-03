@@ -23,7 +23,7 @@
 import json
 import logging
 from collections import namedtuple
-from datetime import datetime, timedelta
+from datetime import timedelta
 from functools import cached_property
 from itertools import groupby
 
@@ -31,6 +31,7 @@ import sentry_sdk
 from django.db import models
 from django.db.models import Q
 from django.dispatch import receiver
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
 
@@ -53,6 +54,7 @@ MODE_APPEND_LIST = "append"
 class OrderSyncQueue(models.Model):
     class Meta:
         unique_together = (("order", "sync_provider"),)
+        ordering = ("triggered",)
 
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, related_name="queued_sync_jobs"
@@ -130,7 +132,7 @@ def sync_all():
             OrderSyncQueue.objects
             .select_related("order")
             .prefetch_related("order__event")
-            .filter(Q(not_before__isnull=True) | Q(not_before__lt=datetime.now()))[:1000]
+            .filter(Q(not_before__isnull=True) | Q(not_before__lt=now()))[:1000]
         )
         grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.order.event)), lambda q: (q.sync_provider, q.order.event))
         for (target, event), queued_orders in grouped:
@@ -200,7 +202,7 @@ class OutboundSyncProvider:
     Optionally override to configure a different retry backoff behavior
     """
     def next_retry_date(self, sq):
-        return datetime.now() + timedelta(hours=1)
+        return now() + timedelta(hours=1)
 
     """
     Optionally override this method to exclude certain orders from sync by returning False
