@@ -19,8 +19,412 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from pretix.base.datasync.datasync import MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW, MODE_APPEND_LIST
+import json
+from collections import defaultdict, namedtuple
+from datetime import timedelta
+from decimal import Decimal
+
+import pytest
+from django.utils.timezone import now
+from django_scopes import scope
+
+from pretix.base.datasync.datasync import OutboundSyncProvider, StaticMapping, MODE_OVERWRITE, MODE_SET_IF_EMPTY, \
+    MODE_SET_IF_NEW, MODE_APPEND_LIST, sync_all, sync_targets
 from pretix.base.datasync.utils import assign_properties
+from pretix.base.models import Organizer, Event, Order, Item, OrderPosition
+
+
+@pytest.fixture(scope='function')
+def event():
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=o, name='Dummy', slug='dummy',
+        date_from=now(),
+        plugins='pretix.plugins.banktransfer,testplugin'
+    )
+    event.settings.name_scheme = 'given_family'
+    with scope(organizer=o):
+        o1 = Order.objects.create(
+            code='1AAA', event=event, email='anonymous@example.org',
+            status=Order.STATUS_PENDING, locale='en',
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=46,
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+        )
+        o2 = Order.objects.create(
+            code='2EEE', event=event, email='ephemeral@example.com',
+            status=Order.STATUS_PENDING, locale='en',
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=23,
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+        )
+        ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                     default_price=Decimal('23.00'), admission=True)
+        OrderPosition.objects.create(
+            order=o1, item=ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'given_name': "Alice", 'family_name': "Anonymous"}, positionid=1
+        )
+        OrderPosition.objects.create(
+            order=o1, item=ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'given_name': "Charlie", 'family_name': "C."}, positionid=2
+        )
+        OrderPosition.objects.create(
+            order=o2, item=ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'given_name': "Eve", 'family_name': "Ephemeral"}, positionid=1
+        )
+        yield event
+
+
+def expected_order_sync_result():
+    return {
+        'ticketorders': [
+            {
+                '_id': 0,
+                'ordernumber': 'DUMMY-1AAA',
+                'orderemail': 'anonymous@example.org',
+                'status': 'pending',
+                'total': '46.00',
+            },
+            {
+                '_id': 1,
+                'ordernumber': 'DUMMY-2EEE',
+                'orderemail': 'ephemeral@example.com',
+                'status': 'pending',
+                'total': '23.00',
+            },
+        ],
+    }
+
+
+def expected_sync_result_with_associations():
+    return {
+        'tickets': [
+            {
+                '_id': 0,
+                'ticketnumber': '1AAA-1',
+                'amount': '23.00',
+                'firstname': 'Alice',
+                'lastname': 'Anonymous',
+                'status': 'pending',
+                'links': [],
+            },
+            {
+                '_id': 1,
+                'ticketnumber': '1AAA-2',
+                'amount': '23.00',
+                'firstname': 'Charlie',
+                'lastname': 'C.',
+                'status': 'pending',
+                'links': [],
+            },
+            {
+                '_id': 2,
+                'ticketnumber': '2EEE-1',
+                'amount': '23.00',
+                'firstname': 'Eve',
+                'lastname': 'Ephemeral',
+                'status': 'pending',
+                'links': [],
+            },
+        ],
+        'ticketorders': [
+            {
+                '_id': 0,
+                'ordernumber': 'DUMMY-1AAA',
+                'orderemail': 'anonymous@example.org',
+                'firstname': '',
+                'lastname': '',
+                'status': 'pending',
+                'links': ['link:tickets:0', 'link:tickets:1'],
+            },
+            {
+                '_id': 1,
+                'ordernumber': 'DUMMY-2EEE',
+                'orderemail': 'ephemeral@example.com',
+                'firstname': '',
+                'lastname': '',
+                'status': 'pending',
+                'links': ['link:tickets:2'],
+            },
+        ],
+    }
+
+
+def _register_with_fake_plugin_name(registry, obj, plugin_name):
+    class App:
+        name = plugin_name
+    registry.register(obj)
+    registry.registered_entries[obj]['plugin'] = App
+
+
+class FakeSyncAPI:
+    def __init__(self):
+        self.fake_database = defaultdict(list)
+
+    def retrieve_object(self, table, search_by_attribute, search_for_value):
+        t = self.fake_database[table]
+        for idx, record in enumerate(t):
+            if record.get(search_by_attribute) == search_for_value:
+                print("match:",table,idx,search_by_attribute,search_for_value,record)
+                return {**record, "_id": idx}
+        return None
+
+    def create_or_update_object(self, table, record):
+        print("upsert", table, record)
+        t = self.fake_database[table]
+        if record.get("_id") is not None:
+            t[record["_id"]].update(record)
+        else:
+            record["_id"] = len(t)
+            t.append(record)
+        return record
+
+
+class SimpleOrderSync(OutboundSyncProvider):
+    identifier = "example1"
+    fake_api_client = None
+
+    @property
+    def mappings(self):
+        return [
+            StaticMapping(
+                pk=1,
+                pretix_model='Order', external_object_type='ticketorders',
+                pretix_pk='event_order_code', external_pk='ordernumber',
+                property_mapping=json.dumps([
+                    {
+                        "pretix_field": "email",
+                        "external_field": "orderemail",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "order_status",
+                        "external_field": "status",
+                        "value_map": json.dumps({
+                            Order.STATUS_PENDING: "pending",
+                            Order.STATUS_PAID: "paid",
+                            Order.STATUS_EXPIRED: "expired",
+                            Order.STATUS_CANCELED: "canceled",
+                            Order.STATUS_REFUNDED: "refunded",
+                        }),
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "order_total",
+                        "external_field": "total",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                ])
+            )
+        ]
+
+    def sync_object_with_properties(
+            self,
+            pk_field,
+            pk_value,
+            properties: list,
+            inputs: dict,
+            mapping,
+            mapped_objects: dict,
+            **kwargs,
+    ):
+        pre_existing_object = self.fake_api_client.retrieve_object(mapping.external_object_type, pk_field, pk_value)
+        update_values = assign_properties(properties, pre_existing_object or {}, is_new=pre_existing_object is None)
+        result = self.fake_api_client.create_or_update_object(mapping.external_object_type, {
+            **update_values,
+            pk_field: pk_value,
+            "_id": pre_existing_object and pre_existing_object.get("_id"),
+        })
+
+        return {
+            "object_type": mapping.external_object_type,
+            "pk_field": pk_field,
+            "pk_value": pk_value,
+            "external_link_href": f"https://external-system.example.com/backend/link/to/{mapping.external_object_type}/123/",
+            "external_link_display_name": "Contact #123 - Jane Doe",
+            "my_result": result,
+        }
+
+
+@pytest.mark.django_db
+def test_simple_order_sync(event):
+    _register_with_fake_plugin_name(sync_targets, SimpleOrderSync, 'testplugin')
+
+    for order in event.orders.order_by("code").all():
+        SimpleOrderSync.enqueue_order(order, 'testcase')
+
+    SimpleOrderSync.fake_api_client = FakeSyncAPI()
+
+    sync_all()
+
+    expected = expected_order_sync_result()
+    assert SimpleOrderSync.fake_api_client.fake_database == expected
+
+    order_1a = event.orders.get(code='1AAA')
+    order_1a.status = Order.STATUS_PAID
+    order_1a.save()
+
+    for order in event.orders.order_by("code").all():
+        SimpleOrderSync.enqueue_order(order, 'testcase')
+
+    sync_all()
+
+    expected['ticketorders'][0]['status'] = 'paid'
+    assert SimpleOrderSync.fake_api_client.fake_database == expected
+
+
+StaticMappingWithAssociations = namedtuple('StaticMappingWithAssociations', (
+    'pk', 'pretix_model', 'external_object_type', 'pretix_pk', 'external_pk', 'property_mapping', 'association_mapping'
+))
+AssociationMapping = namedtuple('AssociationMapping', (
+    'via_mapping_pk'
+))
+
+class OrderAndTicketAssociationSync(OutboundSyncProvider):
+    identifier = "example2"
+    fake_api_client = None
+
+    @property
+    def mappings(self):
+        return [
+            StaticMappingWithAssociations(
+                pk=1,
+                pretix_model='OrderPosition', external_object_type='tickets',
+                pretix_pk='ticket_id', external_pk='ticketnumber',
+                property_mapping=json.dumps([
+                    {
+                        "pretix_field": "ticket_price",
+                        "external_field": "amount",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "attendee_name_given_name",
+                        "external_field": "firstname",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "attendee_name_family_name",
+                        "external_field": "lastname",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "order_status",
+                        "external_field": "status",
+                        "value_map": json.dumps({
+                            Order.STATUS_PENDING: "pending",
+                            Order.STATUS_PAID: "paid",
+                            Order.STATUS_EXPIRED: "expired",
+                            Order.STATUS_CANCELED: "canceled",
+                            Order.STATUS_REFUNDED: "refunded",
+                        }),
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                ]),
+                association_mapping=[],
+            ),
+            StaticMappingWithAssociations(
+                pk=2,
+                pretix_model='Order', external_object_type='ticketorders',
+                pretix_pk='event_order_code', external_pk='ordernumber',
+                property_mapping=json.dumps([
+                    {
+                        "pretix_field": "email",
+                        "external_field": "orderemail",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "invoice_address_name_given_name",
+                        "external_field": "firstname",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "invoice_address_name_family_name",
+                        "external_field": "lastname",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "order_status",
+                        "external_field": "status",
+                        "value_map": json.dumps({
+                            Order.STATUS_PENDING: "pending",
+                            Order.STATUS_PAID: "paid",
+                            Order.STATUS_EXPIRED: "expired",
+                            Order.STATUS_CANCELED: "canceled",
+                            Order.STATUS_REFUNDED: "refunded",
+                        }),
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                ]),
+                association_mapping=[
+                    AssociationMapping(via_mapping_pk=1)
+                ],
+            ),
+        ]
+
+    def sync_object_with_properties(
+            self,
+            pk_field,
+            pk_value,
+            properties: list,
+            inputs: dict,
+            mapping,
+            mapped_objects: dict,
+            **kwargs,
+    ):
+        pre_existing_object = self.fake_api_client.retrieve_object(mapping.external_object_type, pk_field, pk_value)
+        update_values = assign_properties(properties, pre_existing_object or {}, is_new=pre_existing_object is None)
+        result = self.fake_api_client.create_or_update_object(mapping.external_object_type, {
+            **update_values,
+            pk_field: pk_value,
+            "_id": pre_existing_object and pre_existing_object.get("_id"),
+            "links": [f"link:{obj['object_type']}:{obj['my_result']['_id']}" for am in mapping.association_mapping for obj in mapped_objects[am.via_mapping_pk]]
+        })
+
+        return {
+            "object_type": mapping.external_object_type,
+            "pk_field": pk_field,
+            "pk_value": pk_value,
+            "external_link_href": f"https://external-system.example.com/backend/link/to/{mapping.external_object_type}/123/",
+            "external_link_display_name": "Contact #123 - Jane Doe",
+            "my_result": result,
+        }
+
+
+@pytest.mark.django_db
+def test_association_sync(event):
+    _register_with_fake_plugin_name(sync_targets, OrderAndTicketAssociationSync, 'testplugin')
+
+    for order in event.orders.order_by("code").all():
+        OrderAndTicketAssociationSync.enqueue_order(order, 'testcase')
+
+    OrderAndTicketAssociationSync.fake_api_client = FakeSyncAPI()
+
+    sync_all()
+
+    expected = expected_sync_result_with_associations()
+    assert OrderAndTicketAssociationSync.fake_api_client.fake_database == expected
+
+    order_1a = event.orders.get(code='1AAA')
+    order_1a.status = Order.STATUS_PAID
+    order_1a.save()
+
+    for order in event.orders.order_by("code").all():
+        OrderAndTicketAssociationSync.enqueue_order(order, 'testcase')
+
+    sync_all()
+
+    expected['tickets'][0]['status'] = 'paid'
+    expected['tickets'][1]['status'] = 'paid'
+    expected['ticketorders'][0]['status'] = 'paid'
+    assert OrderAndTicketAssociationSync.fake_api_client.fake_database == expected
 
 
 def test_assign_properties():
@@ -95,7 +499,7 @@ def test_assign_properties():
     ) == {"colors": "red"}
     assert assign_properties(
         [("colors", "red", MODE_APPEND_LIST)], {"colors": "red"}, is_new=False
-    ) == {"colors": "red"}
+    ) == {}
     assert assign_properties(
         [("colors", "red", MODE_APPEND_LIST)], {"colors": "blue"}, is_new=False
     ) == {"colors": "blue;red"}
@@ -107,4 +511,4 @@ def test_assign_properties():
     ) == {"colors": ["green", "blue", "red"]}
     assert assign_properties(
         [("colors", "green", MODE_APPEND_LIST)], {"colors": ["green","blue"]}, is_new=False, list_sep=None
-    ) == {"colors": ["green", "blue"]}
+    ) == {}
