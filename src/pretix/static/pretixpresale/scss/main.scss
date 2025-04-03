@@ -55,17 +55,26 @@ $input-height-small:             ($font-size-small * $line-height-small) + ($pad
 @import "../../pretixbase/scss/webfont.scss";
 
 html {
-  font-size: 1em;
+    font-size: 1em;
 }
+
+/* fixe for bootstrap using px-values for fontsize */
 .panel-title {
-  font-size: ($font-size-base * 1.125);
+    font-size: ($font-size-base * 1.125);
 }
 .lead {
-  font-size: ($font-size-base * 1.15);
+    font-size: ($font-size-base * 1.15);
 }
 small, .small {
-  font-size: (100% * $font-size-small / $font-size-base);
+    font-size: (100% * $font-size-small / $font-size-base);
 }
+pre {
+    padding: ($line-height-computed / 2);
+    font-size: $font-size-base;
+}
+
+
+
 
 /* See https://github.com/pretix/pretix/pull/761 */
 .bootstrap-datetimepicker-widget table td span {
