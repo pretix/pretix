@@ -28,10 +28,12 @@ import pytest
 from django.utils.timezone import now
 from django_scopes import scope
 
-from pretix.base.datasync.datasync import OutboundSyncProvider, StaticMapping, MODE_OVERWRITE, MODE_SET_IF_EMPTY, \
-    MODE_SET_IF_NEW, MODE_APPEND_LIST, sync_all, sync_targets
+from pretix.base.datasync.datasync import (
+    MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
+    OutboundSyncProvider, StaticMapping, sync_all, sync_targets,
+)
 from pretix.base.datasync.utils import assign_properties
-from pretix.base.models import Organizer, Event, Order, Item, OrderPosition
+from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
 
 
 @pytest.fixture(scope='function')
@@ -280,6 +282,7 @@ AssociationMapping = namedtuple('AssociationMapping', (
     'via_mapping_pk'
 ))
 
+
 class OrderAndTicketAssociationSync(OutboundSyncProvider):
     identifier = "example2"
     fake_api_client = None
@@ -505,8 +508,8 @@ def test_assign_properties():
         [("colors", "red", MODE_APPEND_LIST)], {"colors": "green;blue"}, is_new=False
     ) == {"colors": "green;blue;red"}
     assert assign_properties(
-        [("colors", "red", MODE_APPEND_LIST)], {"colors": ["green","blue"]}, is_new=False, list_sep=None
+        [("colors", "red", MODE_APPEND_LIST)], {"colors": ["green", "blue"]}, is_new=False, list_sep=None
     ) == {"colors": ["green", "blue", "red"]}
     assert assign_properties(
-        [("colors", "green", MODE_APPEND_LIST)], {"colors": ["green","blue"]}, is_new=False, list_sep=None
+        [("colors", "green", MODE_APPEND_LIST)], {"colors": ["green", "blue"]}, is_new=False, list_sep=None
     ) == {}
