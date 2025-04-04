@@ -257,8 +257,14 @@ class Registry:
                      When a new entry is registered, all accessor functions are called with the new entry as parameter.
                      Their return value is stored as the metadata value for that key.
         """
-        self.registered_entries = dict()
         self.keys = keys
+        self.clear()
+
+    def clear(self):
+        """
+        Removes all entries from the registry.
+        """
+        self.registered_entries = dict()
         self.by_key = {key: {} for key in self.keys.keys()}
 
     def register(self, *objs):

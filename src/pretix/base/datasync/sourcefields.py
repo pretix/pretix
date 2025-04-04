@@ -492,7 +492,7 @@ def get_data_fields(event, for_model=None):
                 _("Attendee") + ": " + _("Family name") + " (⚠️ auto-generated, not recommended)",
                 Question.TYPE_STRING,
                 None,
-                lambda position: split_name_on_last_space(position.attendee_name.rsplit, part=1),
+                lambda position: split_name_on_last_space(position.attendee_name, part=1),
                 deprecated=True,
             ),
             DataFieldInfo(

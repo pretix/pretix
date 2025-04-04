@@ -33,7 +33,9 @@ from pretix.base.datasync.datasync import (
     OutboundSyncProvider, StaticMapping, sync_all, sync_targets,
 )
 from pretix.base.datasync.utils import assign_properties
-from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
+from pretix.base.models import (
+    Event, InvoiceAddress, Item, Order, Organizer, Question,
+)
 
 
 @pytest.fixture(scope='function')
@@ -46,6 +48,15 @@ def event():
     )
     event.settings.name_scheme = 'given_family'
     with scope(organizer=o):
+        ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                     default_price=Decimal('23.00'), admission=True)
+        question = ticket.questions.create(question="Whats's your favourite colour?", type=Question.TYPE_STRING,
+                                           event=event, required=False, identifier="FAV_COLOR")
+        question2 = ticket.questions.create(question="Food preference", type=Question.TYPE_CHOICE,
+                                            event=event, required=False, identifier="FOOD_PREF")
+        option1 = question2.options.create(identifier="F1", answer="vegetarian")
+        option2 = question2.options.create(identifier="F2", answer="vegan")
+
         o1 = Order.objects.create(
             code='1AAA', event=event, email='anonymous@example.org',
             status=Order.STATUS_PENDING, locale='en',
@@ -53,6 +64,19 @@ def event():
             total=46,
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
+        op1 = o1.positions.create(
+            item=ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'_scheme': 'given_family', 'given_name': "Alice", 'family_name': "Anonymous"}, positionid=1
+        )
+        op1.answers.create(question=question, answer="#3b1c4a")
+        op1.answers.create(question=question2, answer="vegan").options.set([option2])
+        op2 = o1.positions.create(
+            item=ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'_scheme': 'given_family', 'given_name': "Charlie", 'family_name': "de l'Exemple"}, positionid=2
+        )
+        op2.answers.create(question=question, answer="Red")
+        op2.answers.create(question=question2, answer="vegetarian").options.set([option1])
+
         o2 = Order.objects.create(
             code='2EEE', event=event, email='ephemeral@example.com',
             status=Order.STATUS_PENDING, locale='en',
@@ -60,19 +84,9 @@ def event():
             total=23,
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
-        ticket = Item.objects.create(event=event, name='Early-bird ticket',
-                                     default_price=Decimal('23.00'), admission=True)
-        OrderPosition.objects.create(
-            order=o1, item=ticket, variation=None,
-            price=Decimal("23.00"), attendee_name_parts={'given_name': "Alice", 'family_name': "Anonymous"}, positionid=1
-        )
-        OrderPosition.objects.create(
-            order=o1, item=ticket, variation=None,
-            price=Decimal("23.00"), attendee_name_parts={'given_name': "Charlie", 'family_name': "C."}, positionid=2
-        )
-        OrderPosition.objects.create(
-            order=o2, item=ticket, variation=None,
-            price=Decimal("23.00"), attendee_name_parts={'given_name': "Eve", 'family_name': "Ephemeral"}, positionid=1
+        o2.positions.create(
+            item=ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'_scheme': 'given_family', 'given_name': "Eve", 'family_name': "Ephemeral"}, positionid=1
         )
         yield event
 
@@ -86,6 +100,7 @@ def expected_order_sync_result():
                 'orderemail': 'anonymous@example.org',
                 'status': 'pending',
                 'total': '46.00',
+                'payment_date': None,
             },
             {
                 '_id': 1,
@@ -93,6 +108,7 @@ def expected_order_sync_result():
                 'orderemail': 'ephemeral@example.com',
                 'status': 'pending',
                 'total': '23.00',
+                'payment_date': None,
             },
         ],
     }
@@ -108,6 +124,8 @@ def expected_sync_result_with_associations():
                 'firstname': 'Alice',
                 'lastname': 'Anonymous',
                 'status': 'pending',
+                'fav_color': '#3b1c4a',
+                'food': 'VEGAN',
                 'links': [],
             },
             {
@@ -115,8 +133,10 @@ def expected_sync_result_with_associations():
                 'ticketnumber': '1AAA-2',
                 'amount': '23.00',
                 'firstname': 'Charlie',
-                'lastname': 'C.',
+                'lastname': "de l'Exemple",
                 'status': 'pending',
+                'fav_color': 'Red',
+                'food': 'VEGETARIAN',
                 'links': [],
             },
             {
@@ -126,6 +146,8 @@ def expected_sync_result_with_associations():
                 'firstname': 'Eve',
                 'lastname': 'Ephemeral',
                 'status': 'pending',
+                'fav_color': '',
+                'food': '',
                 'links': [],
             },
         ],
@@ -153,6 +175,8 @@ def expected_sync_result_with_associations():
 
 
 def _register_with_fake_plugin_name(registry, obj, plugin_name):
+    registry.clear()
+
     class App:
         name = plugin_name
     registry.register(obj)
@@ -216,6 +240,12 @@ class SimpleOrderSync(OutboundSyncProvider):
                         "value_map": "",
                         "overwrite": MODE_OVERWRITE,
                     },
+                    {
+                        "pretix_field": "payment_date",
+                        "external_field": "payment_date",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
                 ])
             )
         ]
@@ -263,6 +293,8 @@ def test_simple_order_sync(event):
     assert SimpleOrderSync.fake_api_client.fake_database == expected
 
     order_1a = event.orders.get(code='1AAA')
+    paydate = now()
+    order_1a.payments.create(payment_date=paydate, amount=order_1a.total)
     order_1a.status = Order.STATUS_PAID
     order_1a.save()
 
@@ -272,6 +304,7 @@ def test_simple_order_sync(event):
     sync_all()
 
     expected['ticketorders'][0]['status'] = 'paid'
+    expected['ticketorders'][0]['payment_date'] = paydate.isoformat()
     assert SimpleOrderSync.fake_api_client.fake_database == expected
 
 
@@ -322,6 +355,21 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
                             Order.STATUS_EXPIRED: "expired",
                             Order.STATUS_CANCELED: "canceled",
                             Order.STATUS_REFUNDED: "refunded",
+                        }),
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "question_FAV_COLOR",
+                        "external_field": "fav_color",
+                        "value_map": "",
+                        "overwrite": MODE_OVERWRITE,
+                    },
+                    {
+                        "pretix_field": "question_FOOD_PREF",
+                        "external_field": "food",
+                        "value_map": json.dumps({
+                            "F1": "VEGETARIAN",
+                            "F2": "VEGAN",
                         }),
                         "overwrite": MODE_OVERWRITE,
                     },
@@ -425,6 +473,31 @@ def test_association_sync(event):
     expected['tickets'][0]['status'] = 'paid'
     expected['tickets'][1]['status'] = 'paid'
     expected['ticketorders'][0]['status'] = 'paid'
+    assert OrderAndTicketAssociationSync.fake_api_client.fake_database == expected
+
+
+@pytest.mark.django_db
+def test_legacy_name_splitting(event):
+    _register_with_fake_plugin_name(sync_targets, OrderAndTicketAssociationSync, 'testplugin')
+
+    for order in event.orders.order_by("code").all():
+        OrderAndTicketAssociationSync.enqueue_order(order, 'testcase')
+    InvoiceAddress.objects.create(order=order, name_parts={'_scheme': 'full', 'full_name': 'A B C D'})
+    order.refresh_from_db()
+    print(order.invoice_address.name_parts)
+    print(order.invoice_address.name)
+
+    event.settings.name_scheme = 'full'
+
+    OrderAndTicketAssociationSync.fake_api_client = FakeSyncAPI()
+
+    sync_all()
+
+    expected = expected_sync_result_with_associations()
+    expected['tickets'][1]['firstname'] = "Charlie de"  # yes, this splits incorrectly, hence it's legacy
+    expected['tickets'][1]['lastname'] = "l'Exemple"
+    expected['ticketorders'][1]['firstname'] = "A B C"
+    expected['ticketorders'][1]['lastname'] = "D"
     assert OrderAndTicketAssociationSync.fake_api_client.fake_database == expected
 
 
