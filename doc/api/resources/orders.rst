@@ -1943,6 +1943,8 @@ Manipulating individual positions
 
    * ``valid_until``
 
+   * ``secret``
+
    Changing parameters such as ``item`` or ``price`` will **not** automatically trigger creation of a new invoice,
    you need to take care of that yourself.
 
