@@ -29,15 +29,15 @@
                         {% if pending.failed_attempts %}
                             <i class="fa fa-warning"></i>
                             {% blocktrans trimmed with num=pending.failed_attempts max=pending.max_retry_attempts %}
-                            Error, retry {{ num }} of {{ max }}.
-                            {% endblocktrans %}{% if pending.not_before %},
+                            Error. Retry {{ num }} of {{ max }}.
+                            {% endblocktrans %}{% if pending.not_before %}
                                 {% blocktrans trimmed with datetime=pending.not_before|date:"SHORT_DATETIME_FORMAT" %}
-                                Waiting until {{ datetime }}.
+                                Waiting until {{ datetime }}
                                 {% endblocktrans %}
                             {% endif %}
                         {% elif pending.not_before %}
                             {% blocktrans trimmed with datetime=pending.not_before|date:"SHORT_DATETIME_FORMAT" %}
-                            Waiting until {{ datetime }}.
+                            Waiting until {{ datetime }}
                             {% endblocktrans %}
                         {% else %}
                             <i class="fa fa-hourglass"></i> {% trans "Pending" %}
@@ -58,6 +58,8 @@
                             {% endif %}
                             &nbsp; <time class="text-muted" datetime="{{ obj.timestamp.isoformat }}">{{ obj.timestamp }}</time>
                         </li>
+                    {% empty %}
+                        <li>{% trans "No data transmitted." %}</li>
                     {% endfor %}
                 </ul>
             </li>
