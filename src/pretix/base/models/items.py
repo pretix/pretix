@@ -1836,7 +1836,7 @@ class Question(LoggedModel):
                 ))
                 llen = len(answer.split(','))
             elif all(isinstance(o, QuestionOption) for o in answer):
-                return o
+                return answer
             else:
                 l_ = list(self.options.filter(
                     Q(pk__in=[a for a in answer if isinstance(a, int) or a.isdigit()]) |
