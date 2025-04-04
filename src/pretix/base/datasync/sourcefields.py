@@ -385,7 +385,7 @@ def get_data_fields(event, for_model=None):
             DataFieldInfo(
                 ORDER_POSITION,
                 "ticket_id",
-                _("Ticket ID"),
+                _("Order code and position number"),
                 Question.TYPE_STRING,
                 None,
                 lambda position: position.code,
@@ -429,6 +429,14 @@ def get_data_fields(event, for_model=None):
                 Question.TYPE_COUNTRYCODE,
                 None,
                 lambda order: order.locale.split("_")[0],
+            ),
+            DataFieldInfo(
+                ORDER_POSITION,
+                "position_id",
+                _("Order position ID"),
+                Question.TYPE_NUMBER,
+                None,
+                lambda op: op.pk,
             ),
         ]
         + [
