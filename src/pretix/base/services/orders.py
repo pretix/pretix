@@ -1563,7 +1563,8 @@ class OrderChangeManager:
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
     CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee', 'price_diff'))
-    RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
+    RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position', 'force_secret'))
+    ChangeSecretOperation = namedtuple('ChangeSecretOperation', ('position', 'new_secret'))
     ChangeValidFromOperation = namedtuple('ChangeValidFromOperation', ('position', 'valid_from'))
     ChangeValidUntilOperation = namedtuple('ChangeValidUntilOperation', ('position', 'valid_until'))
     AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
@@ -1670,6 +1671,9 @@ class OrderChangeManager:
 
     def regenerate_secret(self, position: OrderPosition):
         self._operations.append(self.RegenerateSecretOperation(position))
+
+    def change_ticket_secret(self, position: OrderPosition, new_secret: str):
+        self._operations.append(self.ChangeSecretOperation(position, new_secret))
 
     def change_valid_from(self, position: OrderPosition, new_value: datetime):
         self._operations.append(self.ChangeValidFromOperation(position, new_value))
@@ -2428,11 +2432,24 @@ class OrderChangeManager:
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
             elif isinstance(op, self.RegenerateSecretOperation):
-                op.position.web_secret = generate_secret()
+                op.position.web_secret = op.force_secret or generate_secret()
                 op.position.save(update_fields=["web_secret"])
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate=True, save=True
                 )
+                if op.position in secret_dirty:
+                    secret_dirty.remove(op.position)
+                tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
+                                                             'order': self.order.pk})
+                self.order.log_action('pretix.event.order.changed.secret', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                })
+            elif isinstance(op, self.ChangeSecretOperation):
+                if OrderPosition.all.filter(order__event=self.event, secret=op.new_secret).exists():
+                    raise OrderError('You cannot assign a position secret that already exists.')
+                op.position.secret = op.new_secret
+                op.position.save(update_fields=["secret"])
                 if op.position in secret_dirty:
                     secret_dirty.remove(op.position)
                 tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
