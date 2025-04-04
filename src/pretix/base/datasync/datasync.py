@@ -134,7 +134,7 @@ def sync_all():
             .prefetch_related("order__event")
             .filter(Q(not_before__isnull=True) | Q(not_before__lt=now()))[:1000]
         )
-        grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.order.event)), lambda q: (q.sync_provider, q.order.event))
+        grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.order.event.pk)), lambda q: (q.sync_provider, q.order.event))
         for (target, event), queued_orders in grouped:
             target_cls, meta = sync_targets.get(identifier=target, active_in=event)
             # TODO: what should i do if the sync plugin got deactivated in the meantime?
