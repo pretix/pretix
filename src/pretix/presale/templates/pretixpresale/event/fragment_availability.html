@@ -19,10 +19,10 @@
     </div>
 {% elif avail <= 10 %}
     <div class="col-md-2 col-sm-3 col-xs-6 availability-box gone">
-        {% if price != None and not price %}
-            <strong>{% trans "FULLY BOOKED" %}</strong>
-        {% else %}
+        {% if price or original_price %}
             <strong>{% trans "SOLD OUT" %}</strong>
+        {% else %}
+            <strong>{% trans "FULLY BOOKED" %}</strong>
         {% endif %}
         {% if allow_waitinglist and item.allow_waitinglist %}
             <br/>
