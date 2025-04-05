@@ -947,7 +947,7 @@
 
                 input.blur();
 
-                viewDate = date.clone();
+                //viewDate = date.clone();
 
                 return picker;
             },
