@@ -46,7 +46,6 @@ app_cache = {}
 
 
 def _populate_app_cache():
-    global app_cache
     apps.check_apps_ready()
     for ac in apps.app_configs.values():
         app_cache[ac.name] = ac
