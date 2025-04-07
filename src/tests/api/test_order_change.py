@@ -1469,6 +1469,31 @@ def test_position_update_change_price_and_tax_rule(token_client, organizer, even
 
 
 @pytest.mark.django_db
+def test_position_update_secret(token_client, organizer, event, order, item):
+    with scopes_disabled():
+        order.positions.create(item=item, price=Decimal('23.00'), secret='alreadyused')
+        p = order.positions.first()
+        psw = p.web_secret
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, p.pk,
+        ), format='json', data={'secret': 'nobodyknows'}
+    )
+    assert resp.status_code == 200
+    p.refresh_from_db()
+    with scopes_disabled():
+        assert 'nobodyknows' == p.secret
+        assert psw == p.web_secret
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, p.pk,
+        ), format='json', data={'secret': 'alreadyused'}
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
 def test_position_add_simple(token_client, organizer, event, order, quota, item):
     with scopes_disabled():
         assert order.positions.count() == 1

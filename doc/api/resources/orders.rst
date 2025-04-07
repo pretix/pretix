@@ -1943,8 +1943,13 @@ Manipulating individual positions
 
    * ``valid_until``
 
+   * ``secret``
+
    Changing parameters such as ``item`` or ``price`` will **not** automatically trigger creation of a new invoice,
    you need to take care of that yourself.
+
+   Changing ``secret`` does not cause a new PDF ticket to be sent to the customer, nor does it cause the old secret
+   to be added to the revocation list, even if your ticket generator uses one.
 
    **Example request**:
 
