@@ -1563,7 +1563,7 @@ class OrderChangeManager:
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
     CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee', 'price_diff'))
-    RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position', 'force_secret'))
+    RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
     ChangeSecretOperation = namedtuple('ChangeSecretOperation', ('position', 'new_secret'))
     ChangeValidFromOperation = namedtuple('ChangeValidFromOperation', ('position', 'valid_from'))
     ChangeValidUntilOperation = namedtuple('ChangeValidUntilOperation', ('position', 'valid_until'))
@@ -2432,7 +2432,7 @@ class OrderChangeManager:
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
             elif isinstance(op, self.RegenerateSecretOperation):
-                op.position.web_secret = op.force_secret or generate_secret()
+                op.position.web_secret = generate_secret()
                 op.position.save(update_fields=["web_secret"])
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate=True, save=True
