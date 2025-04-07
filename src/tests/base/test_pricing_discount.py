@@ -1071,11 +1071,11 @@ def test_subevent_date_from(event, item, subevent):
 @scopes_disabled()
 def test_subevent_date_until(event, item, subevent):
     subevent_date = subevent.date_from  # prevent test timing errors
-    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20,
-                  subevent_date_until=subevent_date + timedelta(days=1))
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50,
+                  subevent_date_until=subevent_date - timedelta(seconds=1))
     d1.save()
-    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50,
-                  subevent_date_until=subevent_date)
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20,
+                  subevent_date_until=subevent_date + timedelta(days=1))
     d2.save()
 
     # (item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, is_bundled, voucher_discount)
