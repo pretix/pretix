@@ -3,136 +3,145 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:46+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-04-09 10:00+0000\n"
+"Last-Translator: 조정화 <junghwa.jo@om.org>\n"
+"Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
+"ko/>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr ""
+msgstr "유로로 표시됨"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr ""
+msgstr "의견"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
 msgid "PayPal"
-msgstr ""
+msgstr "페이팔 (온라인 결제 시스템)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
 msgid "Venmo"
-msgstr ""
+msgstr "벤모 (모바일 간편 송금 서비스-P2P의 개인간 결제 플랫폼)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
 #: pretix/static/pretixpresale/js/walletdetection.js:38
 msgid "Apple Pay"
-msgstr ""
+msgstr "애플 페이 (모바일 간편 결제 시스템 -NFC 기반 전자 지갑 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:37
 msgid "Itaú"
-msgstr ""
+msgstr "이따우 (브라질 대형 민간 은행)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
 msgid "PayPal Credit"
-msgstr ""
+msgstr "페이팔  신용 결제 서비스"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
 msgid "Credit Card"
-msgstr ""
+msgstr "신용카드"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
 msgid "PayPal Pay Later"
-msgstr ""
+msgstr "페이팔 후불 결제 서비스"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
 msgid "iDEAL"
-msgstr ""
+msgstr "아이디얼 (네덜란드 온라인 뱅킹 결제 시스템)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA 자동이체 (유럽 단일 결제 지역 자동이체 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
 msgid "Bancontact"
-msgstr ""
+msgstr "반콘택트 (벨기에 직불 결제 시스템)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
 msgid "giropay"
-msgstr ""
+msgstr "지로페이 (독일 온라인 은행 계좌 이체 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
 msgid "SOFORT"
-msgstr ""
+msgstr "조포르트 (PIN과 TAN 인증을 이용한 유럽 온라인 뱅킹 기반 결제 수단)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
 msgid "eps"
-msgstr ""
+msgstr "이피에스 (오스트리아 실시간 은행 계좌  이체 결제 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
 msgid "MyBank"
-msgstr ""
+msgstr "마이뱅크 (SEPA 기반 온라인 결제 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
 msgid "Przelewy24"
-msgstr ""
+msgstr "프세레비24 (폴란드 인터넷 뱅킹 기반 결제 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
 msgid "Verkkopankki"
-msgstr ""
+msgstr "핀란드 온라인 뱅킹 결제 시스템"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
 msgid "PayU"
-msgstr ""
+msgstr "페이유 (인도 및 중남미 글로벌 결제 게이트 웨이, 신용카드,은행 이체, 디지털 "
+"지갑의 결제를 지원)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
 msgid "BLIK"
-msgstr ""
+msgstr "블릭 (폴란드  모바일 결제 시스템, 앱기반 OR코드/코드 입력 방식 결제 수단)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
 msgid "Trustly"
 msgstr ""
+"트러스트리 (스웨덴에 본사를 둔 핀테크 기업, 유럽 및 미국의 핀테크 기반으로 "
+"무카드 온라인 결제 수단, 실시간 은행 이체 결제 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
 msgid "Zimpler"
-msgstr ""
+msgstr "짐플러 (스웨덴 기반의 온라인 계좌 이체 결제 서비스, 핀테크 기반으로 한 "
+"유럽내 디지털 결제 솔루션)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
 msgid "Maxima"
 msgstr ""
+"막시마 (발트3국-리투아니아, 라트비아, 에스토니아를 중심으로 한 대형 수퍼마켓 "
+"체인의 멤버쉽 카드와 앱을 통한 포인트/선불카드 결제 방식)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
 msgid "OXXO"
-msgstr ""
+msgstr "멕시코 비은행 고객의 현금 결제를 위한 온라인 현금 결제 수단"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
 msgid "Boleto"
-msgstr ""
+msgstr "볼레토 (브라질의 신용카드 없이 온라인 현금 기반 결제 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
 msgid "WeChat Pay"
-msgstr ""
+msgstr "위챗페이 (중국 모바일 결제 및 디지털 지갑 서비스- OR코드, 인앱, 미니 "
+"프로그램 결제 지원)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
 msgid "Mercado Pago"
-msgstr ""
+msgstr "라틴 아메리카 최대 전자 상거래 플랫폼-온라인, 오프라인 결제, 송금, 투자, "
+"신용 다양한 금융 서비스 제공"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "Continue"
-msgstr ""
+msgstr "계속"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:244
@@ -141,219 +150,220 @@ msgstr ""
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "결제 확인 중"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:254
 msgid "Payment method unavailable"
-msgstr ""
+msgstr "결제 방법을 사용할 수 없습니다"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr ""
+msgstr "주문 완료"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr ""
+msgstr "유료 주문"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr ""
+msgstr "총 수익"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
-msgstr ""
+msgstr "스트라이프(미국의 핀기업 온라인 결제 시스템) 에  문의하기"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
 msgid "Total"
-msgstr ""
+msgstr "합계"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
 msgid "Contacting your bank …"
-msgstr ""
+msgstr "은행에 문의하기"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr ""
+msgstr "확인 목록 선택"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr ""
+msgstr "현재 활성된 확인 목록을 찾을 수 없습니다."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
-msgstr ""
+msgstr "확인 목록 전환"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
-msgstr ""
+msgstr "검색 결과"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
 msgid "No tickets found"
-msgstr ""
+msgstr "티켓을 찾을 수 없습니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
 msgid "Result"
-msgstr ""
+msgstr "결과"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
-msgstr ""
+msgstr "이 티켓은 특별한 주의가 필요합니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
 msgid "Switch direction"
-msgstr ""
+msgstr "방향 전환"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr ""
+msgstr "항목"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
-msgstr ""
+msgstr "출구"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
-msgstr ""
+msgstr "티켓 스캔 또는 검색 후 반품 버튼을 누릅니다…"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
-msgstr ""
+msgstr "더 로드하기"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
 msgid "Valid"
-msgstr ""
+msgstr "유효하다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
 msgid "Unpaid"
-msgstr ""
+msgstr "미지급"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
 msgid "Canceled"
-msgstr ""
+msgstr "취소하다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Confirmed"
-msgstr ""
+msgstr "확정하다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Approval pending"
-msgstr ""
+msgstr "승인 대기중"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
-msgstr ""
+msgstr "상환하다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 msgid "Cancel"
-msgstr ""
+msgstr "취소"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket not paid"
-msgstr ""
+msgstr "미결제 티켓"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
+msgstr "이 티켓은 아직 결제되지 않았습니다. 계속하시겠습니까?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Additional information required"
-msgstr ""
+msgstr "추가 정보가 필요합니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Valid ticket"
-msgstr ""
+msgstr "유효한 티켓"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Exit recorded"
-msgstr ""
+msgstr "기록이 종료하다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Ticket already used"
-msgstr ""
+msgstr "이미 사용된 티켓입니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Information required"
-msgstr ""
+msgstr "필수 정보"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Unknown ticket"
-msgstr ""
+msgstr "알 수 없는  티켓입니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "여기에서는 티켓 형이 허용되지 않습니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Entry not allowed"
-msgstr ""
+msgstr "항목이 허용되지 않습니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "티켓코드가 변경/취소되었습니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
-msgstr ""
+msgstr "차단된 티켓입니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket not valid at this time"
-msgstr ""
+msgstr "현재 티켓이 유효하지 않습니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order canceled"
-msgstr ""
+msgstr "취소된 주문"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "티켓코드가 명부에서 확인되지 않습니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
-msgstr ""
+msgstr "승인되지 않은 주문입니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Checked-in Tickets"
-msgstr ""
+msgstr "체크인 티켓입니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
 msgid "Valid Tickets"
-msgstr ""
+msgstr "유효한 티켓입니다"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
 msgid "Currently inside"
-msgstr ""
+msgstr "내부적으로 유통되는"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:138
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "No"
-msgstr ""
+msgstr "아니오"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
-msgstr ""
+msgstr "마감"
 
 #: pretix/static/pretixbase/js/asynctask.js:58
 #: pretix/static/pretixbase/js/asynctask.js:135
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
-msgstr ""
+msgstr "요청이 현재 처리 중입니다. 이벤트 크기에 따라 최대 몇 분 정도 소요될 수 "
+"있습니다."
 
 #: pretix/static/pretixbase/js/asynctask.js:63
 #: pretix/static/pretixbase/js/asynctask.js:140
 msgid "Your request has been queued on the server and will soon be processed."
-msgstr ""
+msgstr "귀하의 요청이 서버에 대기 중이며 곧 처리될 예정입니다."
 
 #: pretix/static/pretixbase/js/asynctask.js:69
 #: pretix/static/pretixbase/js/asynctask.js:146
@@ -362,34 +372,37 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
+"귀하의 요청이 서버에 도착했지만 여전히 처리되기를 기다리고 있습니다. 이 "
+"작업이 2분 이상 소요되는 경우 저희에게 연락하시거나 브라우저로 돌아가서 다시 "
+"시도해 주시기 바랍니다."
 
 #: pretix/static/pretixbase/js/asynctask.js:105
 #: pretix/static/pretixbase/js/asynctask.js:193
 #: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "{code} 유형의 오류가 발생했습니다."
 
 #: pretix/static/pretixbase/js/asynctask.js:108
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
-msgstr ""
+msgstr "현재 서버에 연결할 수 없지만 계속 시도하고 있습니다. 마지막 오류 코드: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
-msgstr ""
+msgstr "요청이 너무 오래 걸렸습니다. 다시 시도해 주세요."
 
 #: pretix/static/pretixbase/js/asynctask.js:201
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
-msgstr ""
+msgstr "현재 서버에 연결할 수 없습니다. 다시 시도해 주세요. 오류 코드: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:230
 msgid "We are processing your request …"
-msgstr ""
+msgstr "귀하의 요청을 처리하고 있습니다"
 
 #: pretix/static/pretixbase/js/asynctask.js:238
 msgid ""
@@ -397,602 +410,614 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"현재 귀하의 요청을 서버로 전송하고 있습니다. 이 작업이 1분 이상 소요되는 "
+"경우 인터넷 연결을 확인한 다음 이 페이지를 다시 로드한 후 다시 시도해 주세요."
 
 #: pretix/static/pretixbase/js/asynctask.js:301
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
-msgstr ""
+msgstr "마지막 메시지입니다"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr ""
+msgstr "복사하였습니다"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "복사하기 위해 콘트롤-C를 누르십시오"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
 msgid "is one of"
-msgstr ""
+msgstr "다음 중 하나입니다"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
 msgid "is before"
-msgstr ""
+msgstr "이전의 것입니다"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
 msgid "is after"
-msgstr ""
+msgstr "이후의 것입니다"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
 msgid "="
-msgstr ""
+msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
-msgstr ""
+msgstr "상품"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
-msgstr ""
+msgstr "상품 변동"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
-msgstr ""
+msgstr "탑승구"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
-msgstr ""
+msgstr "현재 날짜와 시간"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr ""
+msgstr "현재 요일(1=월요일, 7=일요일)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Current entry status"
-msgstr ""
+msgstr "현재 진입 상태"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
-msgstr ""
+msgstr "이전 항목 수"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "Number of previous entries since midnight"
-msgstr ""
+msgstr "자정 이후의 이전 항목 수"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
 msgid "Number of previous entries since"
-msgstr ""
+msgstr "이후 이전 항목 수"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
 msgid "Number of previous entries before"
-msgstr ""
+msgstr "이전 항목 수"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
-msgstr ""
+msgstr "이전 항목이 있는 일수"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
 msgid "Number of days with a previous entry since"
-msgstr ""
+msgstr "이전 항목이 포함된 일수"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
 msgid "Number of days with a previous entry before"
-msgstr ""
+msgstr "이전 항목이 포함된 일수"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
-msgstr ""
+msgstr "마지막 항목(-1번째 항목) 이후 몇 분 동안"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
 msgid "Minutes since first entry (-1 on first entry)"
-msgstr ""
+msgstr "첫 번째 항목 이후 시간(-1번째 항목)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
 msgid "All of the conditions below (AND)"
-msgstr ""
+msgstr "아래의 모든 조건 (AND)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
 msgid "At least one of the conditions below (OR)"
-msgstr ""
+msgstr "아래 조건 중 하나 이상(OR)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
 msgid "Event start"
-msgstr ""
+msgstr "이벤트 시작"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
 msgid "Event end"
-msgstr ""
+msgstr "이벤트 종료"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
 msgid "Event admission"
-msgstr ""
+msgstr "이벤트 입장"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
 msgid "custom date and time"
-msgstr ""
+msgstr "사용자 지정 날짜 및 시간"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
 msgid "custom time"
-msgstr ""
+msgstr "맞춤 시간"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
 msgid "Tolerance (minutes)"
-msgstr ""
+msgstr "허용 오차(분)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
 msgid "Add condition"
-msgstr ""
+msgstr "조건 추가"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
 msgid "minutes"
-msgstr ""
+msgstr "회의록"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
 msgid "Duplicate"
-msgstr ""
+msgstr "중복"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
 msgctxt "entry_status"
 msgid "present"
-msgstr ""
+msgstr "현재"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
 msgctxt "entry_status"
 msgid "absent"
-msgstr ""
+msgstr "부재"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
-msgstr ""
+msgstr "체크인 QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:549
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
+msgstr "다음과 같은 이유로 PDF 배경 파일을 로드할 수 없습니다:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Group of objects"
-msgstr ""
+msgstr "물품 그룹"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:908
 msgid "Text object (deprecated)"
-msgstr ""
+msgstr "물품  원본 (비평가됨)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:910
 msgid "Text box"
-msgstr ""
+msgstr "원문 상자"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:912
 msgid "Barcode area"
-msgstr ""
+msgstr "바코드 영역"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:914
 msgid "Image area"
-msgstr ""
+msgstr "이미지 영역"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:916
 msgid "Powered by pretix"
-msgstr ""
+msgstr "프리틱스(오픈 소스 이벤트 티켓팅 플랫폼)로 추진된다"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:918
 msgid "Object"
-msgstr ""
+msgstr "물품"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:922
 msgid "Ticket design"
-msgstr ""
+msgstr "티켓 디자인"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1259
 msgid "Saving failed."
-msgstr ""
+msgstr "저장에 실패했습니다"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1328
 #: pretix/static/pretixcontrol/js/ui/editor.js:1379
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "PDF 파일을 업로드하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1362
 msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
+msgstr "변경 사항을 저장하지 않고 편집 기능을 나가고 싶으신가요?"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr ""
+msgstr "에러가 발생했습니다"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr ""
+msgstr "메시지 생성 중"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:109
 msgid "Unknown error."
-msgstr ""
+msgstr "알수 없는 에러입니다"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:318
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "당신의 색깔은 대비가 뛰어나고 읽기 매우 쉽습니다!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:322
 msgid "Your color has decent contrast and is probably good-enough to read!"
-msgstr ""
+msgstr "당신의 색깔은 대비가 적당하고 읽기에 충분할 것입니다!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:326
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
-msgstr ""
+msgstr "흰색 배경의 텍스트 대비 색상이 좋지 않습니다. 더 어두운 색상을 선택해 주세요."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:442
 #: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "Search query"
-msgstr ""
+msgstr "질문을 검색하다"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:460
 msgid "All"
-msgstr ""
+msgstr "전부"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "None"
-msgstr ""
+msgstr "아무것도 없다"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "Selected only"
-msgstr ""
+msgstr "선택된 경우에만"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:808
 msgid "Enter page number between 1 and %(max)s."
-msgstr ""
+msgstr "페이지 번호를 1에서 %(최대)초 사이로 입력합니다."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:811
 msgid "Invalid page number."
-msgstr ""
+msgstr "페이지 번호가 잘못되었습니다."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:969
 msgid "Use a different name internally"
-msgstr ""
+msgstr "내부적으로 다른 이름을 사용합니다"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1009
 msgid "Click to close"
-msgstr ""
+msgstr "종료를 클릭해 주세요"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1090
 msgid "You have unsaved changes!"
-msgstr ""
+msgstr "귀하는 변경을 저장하지 않았습니다"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
-msgstr ""
+msgstr "기본 값을 계산 하는 중"
 
 #: pretix/static/pretixcontrol/js/ui/plugins.js:69
 msgid "No results"
-msgstr ""
+msgstr "결과 없음"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "다른것"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr ""
+msgstr "총계"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
 msgstr[0] ""
-msgstr[1] ""
+"단수형\n"
+"(한 번 더 날짜)\n"
+"복수형\n"
+"({num}개의 추가 날짜)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr ""
+msgstr "카트에 있는 상품은 더 이상 예약되지 않습니다. 주문이 가능한 한 주문을 완료할 "
+"수 있습니다."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
-msgstr ""
+msgstr "카트가 만료되었습니다"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
-msgstr[1] ""
+"단수형\n"
+"카트에 있는 물품들은 1분 동안 예약되어 있습니다.\n"
+"복수형\n"
+"카트에 있는 물품들은 {num}분 동안 예약되어 있습니다."
 
 #: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr ""
+msgstr "주최자는 %(통화)의 %(금액)을 보관합니다"
 
 #: pretix/static/pretixpresale/js/ui/main.js:211
 msgid "You get %(currency)s %(amount)s back"
-msgstr ""
+msgstr "%(통화)의 %(금액)을 돌려받습니다"
 
 #: pretix/static/pretixpresale/js/ui/main.js:227
 msgid "Please enter the amount the organizer can keep."
-msgstr ""
+msgstr "주최자가 보관할 수 있는 금액을 입력해 주세요"
 
 #: pretix/static/pretixpresale/js/ui/main.js:445
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "티켓 유형 중 하나에 대한 수량을 입력해 주세요."
 
 #: pretix/static/pretixpresale/js/ui/main.js:497
 msgid "required"
-msgstr ""
+msgstr "필수사항"
 
 #: pretix/static/pretixpresale/js/ui/main.js:541
 #: pretix/static/pretixpresale/js/ui/main.js:561
 msgid "Time zone:"
-msgstr ""
+msgstr "시간대"
 
 #: pretix/static/pretixpresale/js/ui/main.js:552
 msgid "Your local time:"
-msgstr ""
+msgstr "귀하의 지역시간"
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
 msgid "Google Pay"
-msgstr ""
+msgstr "구글 페이(구글의 간편 결제 서비스)"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "총량"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "수량 감소"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "수량 증가"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "가격"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
-msgstr ""
+msgstr "원래 가격: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
-msgstr ""
+msgstr "새 가격: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "Select"
-msgstr ""
+msgstr "선택"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr ""
+msgstr "%s 선택"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr ""
+msgstr "변형 선택 %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "품절"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "구입"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "등록"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "예약"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "무료"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "%(currency)의 %(가격)에서"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
-msgstr ""
+msgstr "%s의 이미지"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "포함: %(세율)% %(세금명)"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "잉여 %(세율)% %(세금명)"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "세금 포함"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "잉여 세금"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "현재 사용 가능: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "바우처만 사용 가능"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Not yet available"
-msgstr ""
+msgstr "아직 사용할 수 없음"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "더 이상 사용할 수 없음"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "Currently not available"
-msgstr ""
+msgstr "현재 사용할 수 없음"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "주문할 최소 금액: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "매표소 닫음"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "매표소를 로드할 수 없습니다."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
-msgstr ""
+msgstr "현재 이 매표소에는 많은 사용자가 있습니다. 계속하려면 새 탭에서 상점을 열어 "
+"주세요."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr ""
+msgstr "매표소 열림"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "카트를 만들 수 없습니다. 나중에 다시 시도해 주세요"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
-msgstr ""
+msgstr "현재 이 티켓샵에 사용자가 너무 많아서 장바구니를 만들 수 없습니다. 새 탭에서 "
+"다시 시도하려면 \"계속\"을 클릭하세요."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "대기명단"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
-msgstr ""
+msgstr "현재 이 이벤트에 대한 활성 카트가 있습니다. 더 많은 제품을 선택하면 기존 "
+"카트에 추가됩니다."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "체크아웃 재개"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "바우처를 상환하다"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "상환"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "바우처 코드"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "종료"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "계속"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgctxt "widget"
 msgid "Show variants"
-msgstr ""
+msgstr "옵션을 보여주세요"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgctxt "widget"
 msgid "Hide variants"
-msgstr ""
+msgstr "옵션을 숨겨주세요"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr ""
+msgstr "다른 이벤트 선택하십시요"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "다른 날짜를 선택하십시요"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "이전으로 돌아가기"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "다음 달"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "이전 달"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
 msgid "Next week"
-msgstr ""
+msgstr "다음 주"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgctxt "widget"
 msgid "Previous week"
-msgstr ""
+msgstr "이전 주"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "개방형 좌석 선택"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgctxt "widget"
@@ -1001,84 +1026,86 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"현재 일부 또는 모든 티켓 카테고리가 매진되었습니다. 원하시면 대기자 명단에 "
+"추가하실 수 있습니다. 그런 다음 좌석이 다시 이용 가능한지 알려드리겠습니다."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
 msgctxt "widget"
 msgid "Load more"
-msgstr ""
+msgstr "더 로드하기"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:73
 msgid "Mo"
-msgstr ""
+msgstr "월요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:74
 msgid "Tu"
-msgstr ""
+msgstr "화요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:75
 msgid "We"
-msgstr ""
+msgstr "수요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:76
 msgid "Th"
-msgstr ""
+msgstr "목요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:77
 msgid "Fr"
-msgstr ""
+msgstr "금요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "Sa"
-msgstr ""
+msgstr "토요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:79
 msgid "Su"
-msgstr ""
+msgstr "일요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "January"
-msgstr ""
+msgstr "1월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "February"
-msgstr ""
+msgstr "2월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
 msgid "March"
-msgstr ""
+msgstr "3월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "April"
-msgstr ""
+msgstr "4월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "May"
-msgstr ""
+msgstr "5월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "June"
-msgstr ""
+msgstr "6월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:88
 msgid "July"
-msgstr ""
+msgstr "7월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:89
 msgid "August"
-msgstr ""
+msgstr "8월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "September"
-msgstr ""
+msgstr "9월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:91
 msgid "October"
-msgstr ""
+msgstr "10월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:92
 msgid "November"
-msgstr ""
+msgstr "11월"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:93
 msgid "December"
-msgstr ""
+msgstr "12일"
