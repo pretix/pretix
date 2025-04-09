@@ -328,6 +328,7 @@ $(function () {
     "use strict";
 
     $("body").removeClass("nojs");
+    moment.locale($("body").attr("data-datetimelocale"));
 
     var scrollpos = sessionStorage ? sessionStorage.getItem('scrollpos') : 0;
     if (scrollpos) {
