@@ -55,6 +55,7 @@
                         <dd>{{ line.voucher.code }}</dd>
                     </div>
                 {% endif %}
+
                 {% if line.subevent %}
                     <div class="cart-icon-details">
                         <dt class="sr-only">{% trans "Date:" context "subevent" %}</dt>
@@ -91,6 +92,7 @@
                     {% endif %}
                     {% endif %}
                 {% endif %}
+
                 {% if line.used_membership %}
                     <div class="cart-icon-details">
                         <dt class="sr-only">{% trans "Membership:" %}</dt>

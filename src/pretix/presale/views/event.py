@@ -567,7 +567,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         )
 
         context['allow_waitinglist'] = context['ev'].waiting_list_active and context['ev'].presale_is_running
-
+        context['bundled_series'] = ('bundle_series_events' in context['ev'].meta_data and context['ev'].meta_data['bundle_series_events'] == "true")
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
             items, display_add_to_cart = get_grouped_items(
@@ -628,6 +628,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['frontpage_text'] = templating_context.format(str(self.request.event.settings.frontpage_text))
 
         if self.request.event.has_subevents:
+            # Fetch all items
             context['subevent_list'] = SimpleLazyObject(self._subevent_list_context)
             context['subevent_list_cache_key'] = self._subevent_list_cachekey()
 
@@ -667,136 +668,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context = {}
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
-        if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=time_machine_now()).count() > 50:
-            if self.request.event.settings.event_list_type not in ("calendar", "week"):
-                self.request.event.settings.event_list_type = "calendar"
-            context['list_type'] = "calendar"
-
-        if context['list_type'] == "calendar":
-            self._set_month_year()
-            tz = self.request.event.timezone
-            _, ndays = calendar.monthrange(self.year, self.month)
-            before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
-            after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
-
-            if self.request.event.settings.event_calendar_future_only:
-                limit_before = time_machine_now().astimezone(tz)
-            else:
-                limit_before = before
-
-            context['date'] = date(self.year, self.month, 1)
-            context['before'] = before
-            context['after'] = after
-
-            ebd = defaultdict(list)
-            add_subevents_for_days(
-                filter_qs_by_attr(
-                    self.request.event.subevents_annotated(
-                        self.request.sales_channel,
-                        voucher,
-                    ).using(settings.DATABASE_REPLICA),
-                    self.request
-                ),
-                limit_before, after, ebd, set(), self.request.event,
-                self.kwargs.get('cart_namespace'),
-                voucher,
-            )
-
-            # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
-            # in the calendar. We previously only looked at the current time range for this condition which caused weird side-effects, so we need
-            # an extra query to look at the entire series. For performance reasons, we have a limit on how many different names we look at.
-            context['show_names'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) < 2 or self.request.event.cache.get_or_set(
-                'has_different_subevent_names',
-                lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
-                timeout=120,
-            )
-            context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
-            context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
-            context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
-            if self.request.event.settings.event_calendar_future_only:
-                context['years'] = range(time_machine_now().year, time_machine_now().year + 3)
-            else:
-                context['years'] = range(time_machine_now().year - 2, time_machine_now().year + 3)
-
-            context['has_before'], context['has_after'] = has_before_after(
-                Event.objects.none(),
-                SubEvent.objects.filter(
-                    event=self.request.event,
-                ),
-                before,
-                after,
-                future_only=self.request.event.settings.event_calendar_future_only
-            )
-        elif context['list_type'] == "week":
-            self._set_week_year()
-            tz = self.request.event.timezone
-            week = isoweek.Week(self.year, self.week)
-            before = datetime(
-                week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=tz
-            ) - timedelta(days=1)
-            after = datetime(
-                week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz
-            ) + timedelta(days=1)
-
-            if self.request.event.settings.event_calendar_future_only:
-                limit_before = time_machine_now().astimezone(tz)
-            else:
-                limit_before = before
-
-            context['date'] = week.monday()
-            context['before'] = before
-            context['after'] = after
-
-            ebd = defaultdict(list)
-            add_subevents_for_days(
-                filter_qs_by_attr(
-                    self.request.event.subevents_annotated(
-                        self.request.sales_channel,
-                        voucher=voucher,
-                    ).using(settings.DATABASE_REPLICA),
-                    self.request
-                ),
-                limit_before, after, ebd, set(), self.request.event,
-                self.kwargs.get('cart_namespace'),
-                voucher,
-            )
-
-            # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
-            # in the calendar. We previously only looked at the current time range for this condition which caused weird side-effects, so we need
-            # an extra query to look at the entire series. For performance reasons, we have a limit on how many different names we look at.
-            context['show_names'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) < 2 or self.request.event.cache.get_or_set(
-                'has_different_subevent_names',
-                lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
-                timeout=120,
-            )
-            context['days'] = days_for_template(ebd, week, future_only=self.request.event.settings.event_calendar_future_only)
-            years = (self.year - 1, self.year, self.year + 1)
-            weeks = []
-            for year in years:
-                weeks += [
-                    (date_fromisocalendar(year, i + 1, 1), date_fromisocalendar(year, i + 1, 7))
-                    for i in range(53 if date(year, 12, 31).isocalendar()[1] == 53 else 52)
-                    if not self.request.event.settings.event_calendar_future_only or
-                    date_fromisocalendar(year, i + 1, 7) > time_machine_now().astimezone(tz).replace(tzinfo=None)
-                ]
-            context['weeks'] = [[w for w in weeks if w[0].year == year] for year in years]
-            context['week_format'] = get_format('WEEK_FORMAT')
-            if context['week_format'] == 'WEEK_FORMAT':
-                context['week_format'] = WEEK_FORMAT
-            context['short_month_day_format'] = get_format('SHORT_MONTH_DAY_FORMAT')
-            if context['short_month_day_format'] == 'SHORT_MONTH_DAY_FORMAT':
-                context['short_month_day_format'] = SHORT_MONTH_DAY_FORMAT
-
-            context['has_before'], context['has_after'] = has_before_after(
-                Event.objects.none(),
-                SubEvent.objects.filter(
-                    event=self.request.event,
-                ),
-                before,
-                after,
-                future_only=self.request.event.settings.event_calendar_future_only
-            )
-        else:
+        if ('bundle_series_events' in self.request.event.meta_data and self.request.event.meta_data['bundle_series_events'] == "true") or (context['list_type'] not in ("calendar", "week")):
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(
                     self.request.event.subevents_annotated(
@@ -811,6 +683,137 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     se for se in context['subevent_list']
                     if not se.presale_has_ended and (se.best_availability_state is None or se.best_availability_state >= Quota.AVAILABILITY_RESERVED)
                 ]
+        else:
+            if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=time_machine_now()).count() > 50:
+                if self.request.event.settings.event_list_type not in ("calendar", "week"):
+                    self.request.event.settings.event_list_type = "calendar"
+                context['list_type'] = "calendar"
+
+            if context['list_type'] == "calendar":
+                self._set_month_year()
+                tz = self.request.event.timezone
+                _, ndays = calendar.monthrange(self.year, self.month)
+                before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
+                after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
+
+                if self.request.event.settings.event_calendar_future_only:
+                    limit_before = time_machine_now().astimezone(tz)
+                else:
+                    limit_before = before
+
+                context['date'] = date(self.year, self.month, 1)
+                context['before'] = before
+                context['after'] = after
+
+                ebd = defaultdict(list)
+                add_subevents_for_days(
+                    filter_qs_by_attr(
+                        self.request.event.subevents_annotated(
+                            self.request.sales_channel,
+                            voucher,
+                        ).using(settings.DATABASE_REPLICA),
+                        self.request
+                    ),
+                    limit_before, after, ebd, set(), self.request.event,
+                    self.kwargs.get('cart_namespace'),
+                    voucher,
+                )
+
+                # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
+                # in the calendar. We previously only looked at the current time range for this condition which caused weird side-effects, so we need
+                # an extra query to look at the entire series. For performance reasons, we have a limit on how many different names we look at.
+                context['show_names'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) < 2 or self.request.event.cache.get_or_set(
+                    'has_different_subevent_names',
+                    lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
+                    timeout=120,
+                )
+                context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
+                context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
+                context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
+                if self.request.event.settings.event_calendar_future_only:
+                    context['years'] = range(time_machine_now().year, time_machine_now().year + 3)
+                else:
+                    context['years'] = range(time_machine_now().year - 2, time_machine_now().year + 3)
+
+                context['has_before'], context['has_after'] = has_before_after(
+                    Event.objects.none(),
+                    SubEvent.objects.filter(
+                        event=self.request.event,
+                    ),
+                    before,
+                    after,
+                    future_only=self.request.event.settings.event_calendar_future_only
+                )
+            elif context['list_type'] == "week":
+                self._set_week_year()
+                tz = self.request.event.timezone
+                week = isoweek.Week(self.year, self.week)
+                before = datetime(
+                    week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=tz
+                ) - timedelta(days=1)
+                after = datetime(
+                    week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz
+                ) + timedelta(days=1)
+
+                if self.request.event.settings.event_calendar_future_only:
+                    limit_before = time_machine_now().astimezone(tz)
+                else:
+                    limit_before = before
+
+                context['date'] = week.monday()
+                context['before'] = before
+                context['after'] = after
+
+                ebd = defaultdict(list)
+                add_subevents_for_days(
+                    filter_qs_by_attr(
+                        self.request.event.subevents_annotated(
+                            self.request.sales_channel,
+                            voucher=voucher,
+                        ).using(settings.DATABASE_REPLICA),
+                        self.request
+                    ),
+                    limit_before, after, ebd, set(), self.request.event,
+                    self.kwargs.get('cart_namespace'),
+                    voucher,
+                )
+
+                # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
+                # in the calendar. We previously only looked at the current time range for this condition which caused weird side-effects, so we need
+                # an extra query to look at the entire series. For performance reasons, we have a limit on how many different names we look at.
+                context['show_names'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) < 2 or self.request.event.cache.get_or_set(
+                    'has_different_subevent_names',
+                    lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
+                    timeout=120,
+                )
+                context['days'] = days_for_template(ebd, week, future_only=self.request.event.settings.event_calendar_future_only)
+                years = (self.year - 1, self.year, self.year + 1)
+                weeks = []
+                for year in years:
+                    weeks += [
+                        (date_fromisocalendar(year, i + 1, 1), date_fromisocalendar(year, i + 1, 7))
+                        for i in range(53 if date(year, 12, 31).isocalendar()[1] == 53 else 52)
+                        if not self.request.event.settings.event_calendar_future_only or
+                        date_fromisocalendar(year, i + 1, 7) > time_machine_now().astimezone(tz).replace(tzinfo=None)
+                    ]
+                context['weeks'] = [[w for w in weeks if w[0].year == year] for year in years]
+                context['week_format'] = get_format('WEEK_FORMAT')
+                if context['week_format'] == 'WEEK_FORMAT':
+                    context['week_format'] = WEEK_FORMAT
+                context['short_month_day_format'] = get_format('SHORT_MONTH_DAY_FORMAT')
+                if context['short_month_day_format'] == 'SHORT_MONTH_DAY_FORMAT':
+                    context['short_month_day_format'] = SHORT_MONTH_DAY_FORMAT
+
+                context['has_before'], context['has_after'] = has_before_after(
+                    Event.objects.none(),
+                    SubEvent.objects.filter(
+                        event=self.request.event,
+                    ),
+                    before,
+                    after,
+                    future_only=self.request.event.settings.event_calendar_future_only
+                )
+
         return context
 
 

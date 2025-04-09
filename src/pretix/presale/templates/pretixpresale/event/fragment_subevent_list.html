@@ -2,6 +2,16 @@
 {% load icon %}
 {% load eventurl %}
 
+{% if 'bundle_series_events' in event.meta_data and event.meta_data.bundle_series_events == "true" %}
+    {% if "voucher" in request.GET %}
+        <div class="cart-icon-details">
+            <dt><span class="fa fa-tags fa-fw" aria-hidden="true"></span> {% trans "Voucher code used:" %}</dt>
+            <dd>{{ request.GET.voucher|urlencode }}</dd>
+            <input type="hidden" name="_voucher_code" value="{{ request.GET.voucher|urlencode }}">
+        </div>
+    {% endif %}
+{% endif %}
+
 <dl class="full-width-list alternating-rows">
 {% for subev in subevent_list.subevent_list %}
     <div class="row">
@@ -27,6 +37,10 @@
             </small>
         </dd>
         <dd class="col-md-2 col-xs-6 text-right flip">
+        {% if 'bundle_series_events' in subev.meta_data and subev.meta_data.bundle_series_events == "true" %}
+            {% icon "info" %} <i>Bundled Event</i>
+            <input type="hidden" name="bundled-subevent-item_" value="{{ event.id }}_{{ subev.id }}">
+        {% else %}
             <a class="btn btn-primary btn-block" href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&amp;subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}">
                 {% if subev.presale_is_running and subev.best_availability_state == 100 %}
                     {% icon "ticket" %} {% trans "Tickets" %}
@@ -34,6 +48,7 @@
                     {% icon "info" %} {% trans "More info" %}
                 {% endif %}
             </a>
+        {% endif %}
         </dd>
     </div>
 {% endfor %}

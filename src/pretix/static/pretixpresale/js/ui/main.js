@@ -428,6 +428,9 @@ $(function () {
         }
     });
     var update_cart_form = function () {
+        var $pageDetails = $('head');
+        var bundle = $pageDetails.find('meta[property="og:bundle_series_events"]').attr("content");
+
         var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
         if (!is_enabled) {
             $(".input-item-count").each(function () {
@@ -441,14 +444,12 @@ $(function () {
                 }
             });
         }
-        if (!is_enabled && (!$(".has-seating").length || $("#seating-dummy-item-count").length)) {
+        if (!bundle && !is_enabled && (!$(".has-seating").length || $("#seating-dummy-item-count").length)) {
             $("#btn-add-to-cart").prop("disabled", !is_enabled).popover({
                 'content': function () { return gettext("Please enter a quantity for one of the ticket types.") },
                 'placement': 'top',
                 'trigger': 'hover focus'
             });
-        } else {
-            $("#btn-add-to-cart").prop("disabled", false).popover("destroy")
         }
     };
     update_cart_form();

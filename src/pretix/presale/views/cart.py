@@ -166,12 +166,13 @@ def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_r
         except ValueError:
             pass
     elif 'subevent' in request.POST:
+        #  single subevent
         try:
             subevent = int(request.POST.get('subevent'))
         except ValueError:
             pass
 
-    if not key.startswith('item_') and not key.startswith('variation_') and not key.startswith('seat_'):
+    if not key.startswith('item_') and not key.startswith('variation_') and not key.startswith('seat_') and not key.startswith('bundled-subevent'):
         return
 
     parts = key.split("_")
@@ -224,6 +225,22 @@ def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_r
                 'voucher': voucher,
                 'voucher_ignore_if_redeemed': voucher_ignore_if_redeemed,
                 'subevent': subevent
+            }
+        except ValueError:
+            raise CartError(_('Please enter numbers only.'))
+    elif key.startswith('bundled-subevent-item_'):
+        try:
+            subparts = value.split("_", 2)
+            e_id = int(subparts[0])
+            subevent_id = int(subparts[1])
+            return {
+                'item': e_id,
+                'variation': None,
+                'count': 1,
+                'price': price,
+                'voucher': voucher,
+                'voucher_ignore_if_redeemed': voucher_ignore_if_redeemed,
+                'subevent': subevent_id
             }
         except ValueError:
             raise CartError(_('Please enter numbers only.'))

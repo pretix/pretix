@@ -91,12 +91,19 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
         tickc = opqs.filter(
             order__event=sender, item__admission=True,
             order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
-        ).count()
+        )
 
         paidc = opqs.filter(
             order__event=sender, item__admission=True,
             order__status=Order.STATUS_PAID,
-        ).count()
+        )
+
+        if ('bundle_series_events' in sender.meta_data and sender.meta_data['bundle_series_events'] == "true"):
+            tickc = tickc.values('order__customer').distinct().count()
+            paidc = paidc.values('order__customer').distinct().count()
+        else:
+            tickc = tickc.count()
+            paidc = paidc.count()
 
         if subevent:
             rev = opqs.filter(

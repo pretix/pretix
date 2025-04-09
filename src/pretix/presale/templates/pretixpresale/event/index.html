@@ -37,6 +37,14 @@
     {% else %}
         <meta property="og:url" content="{% abseventurl request.event "presale:event.index" %}" />
     {% endif %}
+
+    {% for k, v in ev.meta_data.items %}
+        <meta property="og:{{ k }}" content="{{ v }}" />
+    {% endfor %}
+
+    {% if event_logo %}
+        <meta property="og:image" content="{{ event_logo|thumb:'5000x120' }}" />
+    {% endif %}
 {% endblock %}
 {% block content %}
 
@@ -63,60 +71,65 @@
                 </div>
             {% endif %}
 
-            {% if request.GET.voucher %}
+            <!-- {% if request.GET.voucher %}
                 <div class="alert alert-info">
                     <p>{% trans "Please select a date to redeem your voucher." %}</p>
                 </div>
-            {% endif %}
+            {% endif %} -->
         {% endif %}
 
-
-    {% if subevent_list_foldable %}
-        <details class="panel panel-{% if show_cart %}primary{% else %}default{% endif %}">
-            <summary class="panel-heading">
-    {% else %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-    {% endif %}
-                <h3 class="panel-title"><b>
-                {% if subevent_list_foldable %}
-                    {% if show_cart %}
-                        {% trans "Add tickets for a different date" %}
-                    {% else %}
-                        {% trans "View other date" %}
+        {% if 'bundle_series_events' in ev.meta_data and ev.meta_data.bundle_series_events == "true" %}
+            <h3 class="panel-title"><b>
+                Bundled Event Series
+            </b></h3>
+        {% else %}
+            {% if subevent_list_foldable %}
+                <details class="panel panel-{% if show_cart %}primary{% else %}default{% endif %}">
+                    <summary class="panel-heading">
+            {% else %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+            {% endif %}
+                        <h3 class="panel-title"><b>
+                        {% if subevent_list_foldable %}
+                            {% if show_cart %}
+                                {% trans "Add tickets for a different date" %}
+                            {% else %}
+                                {% trans "View other date" %}
+                            {% endif %}
+                        {% else %}
+                            {% trans "Choose date to book a ticket" %}
+                        {% endif %}</b>
+                        </h3>
+            {% if subevent_list_foldable %}
+                    </summary>
+                    <div>
+            {% else %}
+                    </div>
+            {% endif %}
+                    {% if filter_form.fields %}
+                        <div class="panel-subhead">
+                            {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
+                        </div>
                     {% endif %}
-                {% else %}
-                    {% trans "Choose date to book a ticket" %}
-                {% endif %}</b>
-                </h3>
-    {% if subevent_list_foldable %}
-            </summary>
-            <div>
-    {% else %}
-            </div>
-    {% endif %}
-            {% if filter_form.fields %}
-                <div class="panel-subhead">
-                    {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
+                        <div class="panel-body">
+                            {% cache_large 15 subevent_list subevent_list_cache_key %}
+                                {% if subevent_list.list_type == "calendar" %}
+                                    {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
+                                {% elif subevent_list.list_type == "week" %}
+                                    {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
+                                {% else %}
+                                    {% include "pretixpresale/event/fragment_subevent_list.html" %}
+                                {% endif %}
+                            {% endcache_large %}
+                        </div>
+            {% if subevent_list_foldable %}
+                    </div>
+                </details>
+            {% else %}
                 </div>
             {% endif %}
-                <div class="panel-body">
-                    {% cache_large 15 subevent_list subevent_list_cache_key %}
-                        {% if subevent_list.list_type == "calendar" %}
-                            {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
-                        {% elif subevent_list.list_type == "week" %}
-                            {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
-                        {% else %}
-                            {% include "pretixpresale/event/fragment_subevent_list.html" %}
-                        {% endif %}
-                    {% endcache_large %}
-                </div>
-    {% if subevent_list_foldable %}
-            </div>
-        </details>
-    {% else %}
-        </div>
-    {% endif %}
+        {% endif %}
 
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
@@ -226,7 +239,7 @@
                                         {% if allfree %}
                                             <i class="fa fa-check" aria-hidden="true"></i> {% trans "Register" context "free_tickets" %}
                                         {% else %}
-                                           <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Proceed with checkout" %}
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Proceed with checkout" %}
                                         {% endif %}
                                     {% else %}
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Add to cart" %}
@@ -239,7 +252,42 @@
                 {% endif %}
             </form>
         {% endif %}
+    {% elif event.has_subevents %}
+        {% if 'bundle_series_events' in ev.meta_data and ev.meta_data.bundle_series_events == "true" %}
+            <!-- allow booking all events in a series -->
+            <form method="post" data-asynctask
+                data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
+                data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
+                class="{% if event.seating_plan_id %}has-seating{% endif %}"
+                action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next_error={{ request.path|urlencode }}">
+                {% csrf_token %}
+
+                {% include "pretixpresale/event/fragment_subevent_list.html" %}
+                {% if ev.presale_is_running %}
+                    <div class="front-page">
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-8 col-xs-12">
+                                <button class="btn btn-block btn-primary btn-lg" type="submit" id="btn-add-to-cart">
+                                    {% if request.event.settings.redirect_to_checkout_directly %}
+                                        {% if allfree %}
+                                            <i class="fa fa-check" aria-hidden="true"></i> {% trans "Register" context "free_tickets" %}
+                                        {% else %}
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Proceed with checkout" %}
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Register for all days" %}
+                                    {% endif %}
+                                </button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                {% endif %}
+            </form>
+        {% endif %}
     {% endif %}
+
+
     </main>
     {% if show_vouchers %}
         <aside class="front-page" aria-labelledby="redeem-a-voucher">
