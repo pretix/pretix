@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-02-21 19:00+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-04-08 18:00+0000\n"
+"Last-Translator: Menaouer Chaabi <98581961+DerJimno@users.noreply.github.com>"
+"\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -385,10 +386,6 @@ msgid "This user already has permissions for this team."
 msgstr "هذا المستخدم لديه تصاريح سابقة لهذا الفريق."
 
 #: pretix/api/views/cart.py:209
-#, fuzzy
-#| msgid ""
-#| "This voucher code has already been used the maximum number of times "
-#| "allowed."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
 msgstr "تم استخدام رمز كود الخصم هذا سابقا لأقصى عدد مسموح به من المرات."
@@ -452,10 +449,8 @@ msgid "Order expired"
 msgstr "الطلب منتهي الصلاحية"
 
 #: pretix/api/webhooks.py:261
-#, fuzzy
-#| msgid "The order's expiry date has been changed."
 msgid "Order expiry date changed"
-msgstr "تم تغيير تاريخ انتهاء النظام و."
+msgstr "تم تغيير تاريخ نهاية الطلب"
 
 #: pretix/api/webhooks.py:265 pretix/base/notifications.py:269
 msgid "Order information changed"
