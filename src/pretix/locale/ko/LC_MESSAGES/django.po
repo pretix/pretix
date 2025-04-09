@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-04-02 10:00+0000\n"
+"PO-Revision-Date: 2025-04-09 10:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -439,7 +439,7 @@ msgstr "결제된 것으로 표시된 주문"
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1570
 msgid "Order canceled"
-msgstr "주문취소"
+msgstr "취소된 주문"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
@@ -2548,7 +2548,7 @@ msgstr "총 할당량"
 #: pretix/control/templates/pretixcontrol/event/cancel.html:20
 #: pretix/control/views/item.py:958
 msgid "Paid orders"
-msgstr "유료주문"
+msgstr "유료 주문"
 
 #: pretix/base/exporters/orderlist.py:1134 pretix/control/views/item.py:963
 msgid "Pending orders"
@@ -2710,7 +2710,7 @@ msgstr "보고 시점으로 기본 설정되어 있습니다."
 #: pretix/plugins/reports/accountingreport.py:104
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
-msgstr "전체"
+msgstr "전부"
 
 #: pretix/base/exporters/orderlist.py:1306 pretix/control/forms/filter.py:1421
 msgid "Live"
@@ -3510,7 +3510,7 @@ msgstr "여러 개의 일치하는 제품이 발견되었습니다."
 #: pretix/base/modelimport_vouchers.py:205 pretix/base/models/items.py:1256
 #: pretix/base/models/vouchers.py:263 pretix/base/models/waitinglist.py:99
 msgid "Product variation"
-msgstr "제품 변형"
+msgstr "상품 변동"
 
 #: pretix/base/modelimport_orders.py:159
 #: pretix/base/modelimport_vouchers.py:225
@@ -3892,11 +3892,11 @@ msgstr "항목"
 
 #: pretix/base/models/checkin.py:337
 msgid "Exit"
-msgstr "출입구"
+msgstr "출구"
 
 #: pretix/base/models/checkin.py:355
 msgid "Unknown ticket"
-msgstr "무명인 티켓"
+msgstr "알 수 없는  티켓입니다"
 
 #: pretix/base/models/checkin.py:356
 msgid "Ticket not paid"
@@ -3908,7 +3908,7 @@ msgstr "관습 규칙에 의해 금지됨"
 
 #: pretix/base/models/checkin.py:358
 msgid "Ticket code revoked/changed"
-msgstr "티켓 코드가 취소/변경되었습니다"
+msgstr "티켓코드가 변경/취소되었습니다"
 
 #: pretix/base/models/checkin.py:359
 msgid "Information required"
@@ -3916,15 +3916,15 @@ msgstr "필수 정보"
 
 #: pretix/base/models/checkin.py:360
 msgid "Ticket already used"
-msgstr "이미 사용된 티켓"
+msgstr "이미 사용된 티켓입니다"
 
 #: pretix/base/models/checkin.py:361
 msgid "Ticket type not allowed here"
-msgstr "여기서는 티켓 유형이 허용되지 않습니다"
+msgstr "여기에서는 티켓 형이 허용되지 않습니다"
 
 #: pretix/base/models/checkin.py:362
 msgid "Ticket code is ambiguous on list"
-msgstr "티켓 코드가 목록에 모호합니다"
+msgstr "티켓코드가 명부에서 확인되지 않습니다"
 
 #: pretix/base/models/checkin.py:363
 msgid "Server error"
@@ -3932,11 +3932,11 @@ msgstr "서버 에러"
 
 #: pretix/base/models/checkin.py:364
 msgid "Ticket blocked"
-msgstr "차단된 티켓"
+msgstr "차단된 티켓입니다"
 
 #: pretix/base/models/checkin.py:365
 msgid "Order not approved"
-msgstr "주문이 승인되지 않았습니다"
+msgstr "승인되지 않은 주문입니다"
 
 #: pretix/base/models/checkin.py:366
 msgid "Ticket not valid at this time"
@@ -4053,7 +4053,7 @@ msgstr "이 식별자는 이미 다른 질문에 사용되고 있습니다."
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:765
 msgid "Gate"
-msgstr "개찰구"
+msgstr "탑승구"
 
 #: pretix/base/models/devices.py:131
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:83
@@ -4909,19 +4909,19 @@ msgstr "이 제품은 다음과 같은 유형의 멤버십을 생성합니다"
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
-msgstr ""
+msgstr "멤버십 기간은 이벤트 또는 이벤트 시리즈 날짜의 기간과 동일합니다"
 
 #: pretix/base/models/items.py:717
 msgid "Membership duration in days"
-msgstr ""
+msgstr "멤버십 기간(일)"
 
 #: pretix/base/models/items.py:721
 msgid "Membership duration in months"
-msgstr ""
+msgstr "멤버십 기간(개월)"
 
 #: pretix/base/models/items.py:728
 msgid "Validity"
-msgstr ""
+msgstr "유효성"
 
 #: pretix/base/models/items.py:730
 msgid ""
@@ -4934,50 +4934,56 @@ msgid ""
 "change the settings here later, existing tickets will not be affected by the "
 "change but keep their current validity."
 msgstr ""
+"정기 이벤트 또는 시간 슬롯이 있는 이벤트 시리즈를 설정할 때 일반적으로 이 "
+"값을 변경할 필요가 없습니다. 기본 설정은 티켓의 유효 시간이 제품이 아닌 "
+"이벤트 및 체크인 구성에 의해 결정된다는 것을 의미합니다. 다른 옵션은 동적 "
+"시작 날짜가 있는 1년짜리 티켓 예약과 같이 실현해야 하는 경우에만 사용하세요. "
+"유효 기간은 티켓과 함께 저장되므로 나중에 설정을 변경하면 기존 티켓은 변경의 "
+"영향을 받지 않고 현재 유효 기간을 유지합니다."
 
 #: pretix/base/models/items.py:738 pretix/control/forms/item.py:729
 msgid "Start of validity"
-msgstr ""
+msgstr "유효성 시작"
 
 #: pretix/base/models/items.py:739
 msgid "End of validity"
-msgstr ""
+msgstr "유효 기간 종료"
 
 #: pretix/base/models/items.py:742
 msgid "Minutes"
-msgstr ""
+msgstr "분"
 
 #: pretix/base/models/items.py:746
 msgid "Hours"
-msgstr ""
+msgstr "시간"
 
 #: pretix/base/models/items.py:750
 msgid "Days"
-msgstr ""
+msgstr "날"
 
 #: pretix/base/models/items.py:754
 msgid "Months"
-msgstr ""
+msgstr "달"
 
 #: pretix/base/models/items.py:757
 msgid "Customers can select the validity start date"
-msgstr ""
+msgstr "고객은 유효한 시작 날짜를 선택할 수 있습니다"
 
 #: pretix/base/models/items.py:758
 msgid "If not selected, the validity always starts at the time of purchase."
-msgstr ""
+msgstr "선택하지 않으면 유효성은 항상 구매 시에 시작됩니다."
 
 #: pretix/base/models/items.py:763
 msgid "Maximum future start"
-msgstr ""
+msgstr "최대치의 미래 시작"
 
 #: pretix/base/models/items.py:764
 msgid "The selected start date may only be this many days in the future."
-msgstr ""
+msgstr "선택한 시작 날짜는 앞으로 이 정도일 수 있습니다."
 
 #: pretix/base/models/items.py:770
 msgid "Reusable media policy"
-msgstr ""
+msgstr "재사용 가능한 미디어 정책"
 
 #: pretix/base/models/items.py:772
 msgid ""
@@ -4988,10 +4994,15 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
+"이 제품을 재사용 가능한 물리적 매체에 보관해야 하는 경우 물리적 미디어 "
+"정책을 첨부할 수 있습니다. 일회용 바코드만 사용하는 일반 티켓에는 필요하지 "
+"않으며, 재생 시즌 티켓이나 충전식 기프트 카드 손목밴드와 같은 제품에만 "
+"필요합니다. 이 기능은 티켓팅 및 인쇄 설정의 특정 구성도 필요로 하는 고급 "
+"기능입니다."
 
 #: pretix/base/models/items.py:782
 msgid "Reusable media type"
-msgstr ""
+msgstr "재사용 가능한 미디어 유형"
 
 #: pretix/base/models/items.py:784
 msgid ""
@@ -4999,6 +5010,9 @@ msgid ""
 "Note that not all media types support all types of products, and not all "
 "media types are supported across all sales channels or check-in processes."
 msgstr ""
+"이 제품에 사용할 물리적 매체 유형을 선택합니다. 모든 미디어 유형이 모든 "
+"유형의 제품을 지원하는 것은 아니며, 모든 판매 채널 또는 체크인 프로세스에서 "
+"모든 미디어 유형이 지원되는 것도 아닙니다."
 
 #: pretix/base/models/items.py:795 pretix/base/models/items.py:1701
 #: pretix/control/forms/filter.py:421 pretix/control/forms/filter.py:1895
@@ -5016,26 +5030,27 @@ msgstr ""
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:31
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:32
 msgid "Products"
-msgstr ""
+msgstr "상품"
 
 #: pretix/base/models/items.py:988
 msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
-msgstr ""
+msgstr "사용 가능한 미디어 정책을 선택할 경우, 재사용 가능한 미디어 유형도 선택해야 "
+"합니다."
 
 #: pretix/base/models/items.py:992
 msgid "The selected media type is not enabled in your organizer settings."
-msgstr ""
+msgstr "선택한 미디어 유형이 정리함 설정에서 활성화되지 않았습니다."
 
 #: pretix/base/models/items.py:994
 msgid "The selected media type does not support usage for tickets currently."
-msgstr ""
+msgstr "선택한 미디어 유형이 현재 티켓 사용을 지원하지 않습니다"
 
 #: pretix/base/models/items.py:996
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr ""
+msgstr "선택한 미디어 유형은 현재 기프트 카드 사용을 지원하지 않습니다."
 
 #: pretix/base/models/items.py:998
 msgid ""
@@ -5043,32 +5058,35 @@ msgid ""
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
 msgstr ""
+"현재 재사용 가능한 미디어 정책으로 기프트 카드를 만들 수 없습니다. 대신 일부 "
+"재사용 가능한 미디어 유형의 기프트 카드는 POS에서 직접 만들거나 충전할 수 "
+"있습니다."
 
 #: pretix/base/models/items.py:1006
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
-msgstr ""
+msgstr "주문당 최대 수는 주문당 최소 수보다 적을 수 없습니다."
 
 #: pretix/base/models/items.py:1012
 msgid "The item's category must belong to the same event as the item."
-msgstr ""
+msgstr "항목의 카테고리는 항목과 동일한 이벤트에 속해야 합니다."
 
 #: pretix/base/models/items.py:1017
 msgid "The item's tax rule must belong to the same event as the item."
-msgstr ""
+msgstr "항목의 세금 규정은 항목과 동일한 이벤트에 속해야 합니다."
 
 #: pretix/base/models/items.py:1023
 msgid "The item's availability cannot end before it starts."
-msgstr ""
+msgstr "항목의 가용성은 시작하기 전에 종료될 수 없습니다."
 
 #: pretix/base/models/items.py:1155
 msgid "This is shown below the variation name in lists."
-msgstr ""
+msgstr "이것은 목록의 변형 이름 아래에 나와 있습니다."
 
 #: pretix/base/models/items.py:1182
 msgid "Require approval"
-msgstr ""
+msgstr "승인 필요"
 
 #: pretix/base/models/items.py:1184
 msgid ""
@@ -5077,24 +5095,27 @@ msgid ""
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
+"이 변형이 주문의 일부인 경우, 주문은 \"승인\" 상태가 되며 결제 및 완료되기 "
+"전에 사용자의 확인이 필요합니다. 예를 들어 특정 그룹만 이용할 수 있는 할인 "
+"티켓의 경우 이를 사용할 수 있습니다."
 
 #: pretix/base/models/items.py:1194 pretix/control/navigation.py:579
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
 msgid "Membership types"
-msgstr ""
+msgstr "멥버쉽 유형"
 
 #: pretix/base/models/items.py:1206
 msgid "This variation will not be sold before the given date."
-msgstr ""
+msgstr "이 변형 제품은 지정된 날짜 이전에 판매되지 않습니다."
 
 #: pretix/base/models/items.py:1216
 msgid "This variation will not be sold after the given date."
-msgstr ""
+msgstr "이 변형 제품은 지정된 날짜 이후에는 판매되지 않습니다."
 
 #: pretix/base/models/items.py:1224
 msgid "Sell on all sales channels the product is sold on"
-msgstr ""
+msgstr "제품이 판매되는 모든 판매 채널에서 판매하기"
 
 #: pretix/base/models/items.py:1230
 msgid ""
@@ -5513,7 +5534,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:34
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:45
 msgid "Canceled"
-msgstr ""
+msgstr "취소하다"
 
 #: pretix/base/models/memberships.py:134
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:116
@@ -6247,7 +6268,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:201 pretix/control/views/vouchers.py:120
 msgid "Redeemed"
-msgstr ""
+msgstr "상환하다"
 
 #: pretix/base/models/vouchers.py:206
 msgid ""
@@ -7264,15 +7285,15 @@ msgstr ""
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
-msgstr ""
+msgstr "이벤트 시작"
 
 #: pretix/base/reldate.py:36
 msgid "Event end"
-msgstr ""
+msgstr "이벤트 종료"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
-msgstr ""
+msgstr "이벤트 입장"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
@@ -12240,7 +12261,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:380
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Approval pending"
-msgstr ""
+msgstr "승인 대기중"
 
 #: pretix/control/forms/filter.py:241
 msgid "Follow-up configured"
@@ -12393,7 +12414,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:2025 pretix/control/forms/filter.py:2027
 #: pretix/control/forms/filter.py:2593 pretix/control/forms/filter.py:2595
 msgid "Search query"
-msgstr ""
+msgstr "질문을 검색하다"
 
 #: pretix/control/forms/filter.py:1499 pretix/control/forms/filter.py:1571
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:46
@@ -12507,7 +12528,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:2090
 msgid "Valid"
-msgstr ""
+msgstr "유효하다"
 
 #: pretix/control/forms/filter.py:2091
 msgid "Unredeemed"
@@ -15567,7 +15588,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:66
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
 msgid "Continue"
-msgstr ""
+msgstr "계속"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -16037,7 +16058,7 @@ msgstr[0] ""
 #: pretix/presale/templates/pretixpresale/event/position_change.html:24
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:44
 msgid "Cancel"
-msgstr ""
+msgstr "취소"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:27
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:24
@@ -16151,7 +16172,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:766
 msgid "Result"
-msgstr ""
+msgstr "결과"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:392
@@ -16447,7 +16468,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:68
 msgid "Additional information required"
-msgstr ""
+msgstr "추가 정보가 필요합니다"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
@@ -17177,7 +17198,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:50
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:80
 msgid "No results"
-msgstr ""
+msgstr "결과 없음"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:7
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:11
@@ -17377,7 +17398,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:34
 msgid "Search results"
-msgstr ""
+msgstr "검색 결과"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:56
 msgid "Top recommendation"
@@ -18156,51 +18177,51 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:16
 msgid "January"
-msgstr ""
+msgstr "1월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:17
 msgid "February"
-msgstr ""
+msgstr "2월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:18
 msgid "March"
-msgstr ""
+msgstr "3월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:19
 msgid "April"
-msgstr ""
+msgstr "4월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:20
 msgid "May"
-msgstr ""
+msgstr "5월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:21
 msgid "June"
-msgstr ""
+msgstr "6월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:22
 msgid "July"
-msgstr ""
+msgstr "7월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:23
 msgid "August"
-msgstr ""
+msgstr "8월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:24
 msgid "September"
-msgstr ""
+msgstr "9월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:25
 msgid "October"
-msgstr ""
+msgstr "10월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:26
 msgid "November"
-msgstr ""
+msgstr "11월"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:27
 msgid "December"
-msgstr ""
+msgstr "12일"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:32
 msgid "Generate report"
@@ -18558,7 +18579,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
-msgstr ""
+msgstr "회의록"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:217
 msgid "hours"
@@ -18906,7 +18927,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Count"
-msgstr ""
+msgstr "총계"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:92
 msgid "Percentage"
@@ -19795,7 +19816,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:957
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:456
 msgid "Total"
-msgstr ""
+msgstr "합계"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:709
 #: pretix/presale/templates/pretixpresale/event/order.html:210
@@ -21977,7 +21998,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:485
 msgid "Text box"
-msgstr ""
+msgstr "원문 상자"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:489
 msgid "Text (deprecated)"
@@ -25938,7 +25959,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr ""
+msgstr "의견"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
@@ -26206,7 +26227,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:1082
 #: pretix/plugins/paypal2/payment.py:1083 pretix/plugins/stripe/payment.py:1816
 msgid "PayPal"
-msgstr ""
+msgstr "페이팔 (온라인 결제 시스템)"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
@@ -27661,7 +27682,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1527
 msgid "iDEAL"
-msgstr ""
+msgstr "아이디얼 (네덜란드 온라인 뱅킹 결제 시스템)"
 
 #: pretix/plugins/stripe/payment.py:344 pretix/plugins/stripe/payment.py:352
 #: pretix/plugins/stripe/payment.py:360 pretix/plugins/stripe/payment.py:395
@@ -27681,11 +27702,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1564
 msgid "Bancontact"
-msgstr ""
+msgstr "반콘택트 (벨기에 직불 결제 시스템)"
 
 #: pretix/plugins/stripe/payment.py:366
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA 자동이체 (유럽 단일 결제 지역 자동이체 서비스)"
 
 #: pretix/plugins/stripe/payment.py:369
 msgid ""
@@ -27721,11 +27742,12 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:409 pretix/plugins/stripe/payment.py:1730
 msgid "Przelewy24"
-msgstr ""
+msgstr "프세레비24 (폴란드 인터넷 뱅킹 기반 결제 서비스)"
 
 #: pretix/plugins/stripe/payment.py:417 pretix/plugins/stripe/payment.py:1769
 msgid "WeChat Pay"
-msgstr ""
+msgstr "위챗페이 (중국 모바일 결제 및 디지털 지갑 서비스- OR코드, 인앱, 미니 "
+"프로그램 결제 지원)"
 
 #: pretix/plugins/stripe/payment.py:433 pretix/plugins/stripe/payment.py:1823
 msgid "Swish"
@@ -27870,7 +27892,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1480
 msgid "giropay"
-msgstr ""
+msgstr "지로페이 (독일 온라인 은행 계좌 이체 서비스)"
 
 #: pretix/plugins/stripe/payment.py:1483
 msgid ""
@@ -28396,7 +28418,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
-msgstr ""
+msgstr "티켓 디자인"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
 msgid "You can modify the design after you saved this page."
@@ -28913,7 +28935,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr ""
+msgstr "카트가 만료되었습니다"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
 msgid "Show full cart"
@@ -29547,7 +29569,8 @@ msgstr ""
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr ""
+msgstr "카트에 있는 상품은 더 이상 예약되지 않습니다. 주문이 가능한 한 주문을 완료할 "
+"수 있습니다."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:497
 msgid "Overview of your ordered products."
@@ -30970,7 +30993,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "귀하의 요청을 처리하고 있습니다"
 
 #: pretix/presale/utils.py:271 pretix/presale/utils.py:417
 #: pretix/presale/utils.py:418
