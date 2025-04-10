@@ -68,7 +68,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
-from django.views.generic import FormView, ListView
+from django.views.generic import DetailView, FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
@@ -1271,6 +1271,8 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
 
     @transaction.atomic
     def form_valid(self, form):
+        if not self.request.event.tax_rules.exists():
+            form.instance.default = True
         form.instance.event = self.request.event
         form.instance.custom_rules = json.dumps([
             f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
@@ -1349,6 +1351,50 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return super().form_invalid(form)
+
+
+class TaxDefault(EventSettingsViewMixin, EventPermissionRequiredMixin, DetailView):
+    model = TaxRule
+    permission = 'can_change_event_settings'
+
+    def get_object(self, queryset=None) -> TaxRule:
+        try:
+            return self.request.event.tax_rules.get(
+                id=self.kwargs['rule']
+            )
+        except TaxRule.DoesNotExist:
+            raise Http404(_("The requested tax rule does not exist."))
+
+    def get(self, request, *args, **kwargs):
+        return self.http_method_not_allowed(request, *args, **kwargs)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        messages.success(self.request, _('Your changes have been saved.'))
+        obj = self.get_object()
+        if not obj.default:
+            for tr in self.request.event.tax_rules.filter(default=True):
+                tr.log_action(
+                    'pretix.event.taxrule.changed', user=self.request.user, data={
+                        'default': False,
+                    }
+                )
+                tr.default = False
+                tr.save(update_fields=['default'])
+            obj.log_action(
+                'pretix.event.taxrule.changed', user=self.request.user, data={
+                    'default': True,
+                }
+            )
+            obj.default = True
+            obj.save(update_fields=['default'])
+        return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
 
 
 class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, CompatDeleteView):

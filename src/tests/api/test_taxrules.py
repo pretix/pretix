@@ -31,6 +31,7 @@ TEST_TAXRULE_RES = {
     'keep_gross_if_rate_changes': False,
     'name': {'en': 'VAT'},
     'rate': '19.00',
+    'default': True,
     'code': 'S/standard',
     'price_includes_tax': True,
     'eu_reverse_charge': False,
@@ -81,6 +82,42 @@ def test_rule_create(token_client, organizer, event):
 
 
 @pytest.mark.django_db
+def test_rule_create_auto_default(token_client, organizer, event):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/taxrules/'.format(organizer.slug, event.slug),
+        {
+            "name": {"en": "VAT", "de": "MwSt"},
+            "rate": "19.00",
+            "price_includes_tax": True,
+            "eu_reverse_charge": False,
+            "home_country": "DE",
+            "default": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    rule = TaxRule.objects.get(pk=resp.data['id'])
+    assert rule.default
+
+
+@pytest.mark.django_db
+def test_rule_create_only_one_default(token_client, taxrule, organizer, event):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/taxrules/'.format(organizer.slug, event.slug),
+        {
+            "name": {"en": "VAT", "de": "MwSt"},
+            "rate": "19.00",
+            "price_includes_tax": True,
+            "eu_reverse_charge": False,
+            "home_country": "DE",
+            "default": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
 def test_rule_update(token_client, organizer, event, taxrule):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/taxrules/{}/'.format(organizer.slug, event.slug, taxrule.pk),
@@ -101,6 +138,8 @@ def test_rule_update(token_client, organizer, event, taxrule):
 
 @pytest.mark.django_db
 def test_rule_delete(token_client, organizer, event, taxrule):
+    taxrule.default = False
+    taxrule.save()
     resp = token_client.delete(
         '/api/v1/organizers/{}/events/{}/taxrules/{}/'.format(organizer.slug, event.slug, taxrule.pk),
     )
