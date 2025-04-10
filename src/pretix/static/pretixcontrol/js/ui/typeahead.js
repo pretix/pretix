@@ -1,6 +1,6 @@
 /*global $,u2f */
 $(function () {
-    $('.sidebar .dropdown, ul.navbar-nav .dropdown, .navbar-events-collapse').on('shown.bs.collapse shown.bs.dropdown', function () {
+    $('.context-selector.dropdown').on('shown.bs.collapse shown.bs.dropdown', function () {
         $(this).parent().find("input").val("").trigger('forceRunQuery').focus();
     });
     $('.dropdown-menu .form-box input').click(function (e) {

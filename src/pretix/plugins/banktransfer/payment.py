@@ -410,7 +410,7 @@ class BankTransfer(BasePaymentProvider):
                         'message': email_content,
                         'position': None,
                         'recipient': email,
-                        'invoices': invoice.pk,
+                        'invoices': [invoice.pk],
                         'attach_tickets': False,
                         'attach_ical': False,
                     }

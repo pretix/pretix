@@ -467,6 +467,9 @@ def iframe_entry_view_wrapper(view_func):
         if 'iframe' in request.GET:
             request.session['iframe_session'] = True
 
+        if request.GET.get("consent"):
+            request.session["requested_consent_from_widget"] = request.GET["consent"]
+
         locale = request.GET.get('locale')
         if locale and locale in [lc for lc, ll in settings.LANGUAGES]:
             lng = locale

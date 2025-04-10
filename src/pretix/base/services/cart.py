@@ -624,6 +624,9 @@ class CartManager:
             if p.is_bundled:
                 continue
 
+            if p.custom_price_input and p.custom_price_input != p.listed_price:
+                continue
+
             if p.listed_price is None:
                 if p.addon_to_id and is_included_for_free(p.item, p.addon_to):
                     listed_price = Decimal('0.00')
@@ -1346,8 +1349,10 @@ class CartManager:
 
                 op.position.price_after_voucher = op.price_after_voucher
                 op.position.voucher = op.voucher
+                if op.position.custom_price_input and op.position.custom_price_input == op.position.listed_price:
+                    op.position.custom_price_input = op.price_after_voucher
                 # op.position.price will be set in recompute_final_prices_and_taxes
-                op.position.save(update_fields=['price_after_voucher', 'voucher'])
+                op.position.save(update_fields=['price_after_voucher', 'voucher', 'custom_price_input'])
                 vouchers_ok[op.voucher] -= 1
 
                 if op.voucher.all_bundles_included or op.voucher.all_addons_included:
@@ -1393,7 +1398,8 @@ class CartManager:
             self.event,
             self._sales_channel.identifier,
             [
-                (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled, cp.listed_price - cp.price_after_voucher)
+                (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.line_price_gross,
+                 bool(cp.addon_to), cp.is_bundled, cp.listed_price - cp.price_after_voucher)
                 for cp in positions
             ]
         )

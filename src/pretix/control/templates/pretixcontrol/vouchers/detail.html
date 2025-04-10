@@ -125,6 +125,15 @@
                 <button type="submit" class="btn btn-primary btn-save">
                     {% trans "Save" %}
                 </button>
+                {% if voucher.pk %}
+                    <div class="pull-left">
+                        <a href="{% url "control:event.voucher.delete" organizer=request.organizer.slug event=request.event.slug voucher=voucher.pk %}"
+                           class="btn btn-danger btn-lg">
+                            <span class="fa fa-trash"></span>
+                            {% trans "Delete voucher" %}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
     </form>

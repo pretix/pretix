@@ -30,7 +30,7 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.order import (
     AnswerCreateSerializer, AnswerSerializer, CompatibleCountryField,
-    OrderPositionCreateSerializer,
+    OrderFeeCreateSerializer, OrderPositionCreateSerializer,
 )
 from pretix.base.models import ItemVariation, Order, OrderFee, OrderPosition
 from pretix.base.services.orders import OrderError
@@ -100,6 +100,54 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
                 return validated_data['order'].positions.order_by('-positionid').first()
             else:
                 return OrderPosition()  # fake to appease DRF
+        except OrderError as e:
+            raise ValidationError(str(e))
+
+
+class OrderFeeCreateForExistingOrderSerializer(OrderFeeCreateSerializer):
+    order = serializers.SlugRelatedField(slug_field='code', queryset=Order.objects.none(), required=True, allow_null=False)
+    value = serializers.DecimalField(required=True, allow_null=False, decimal_places=2,
+                                     max_digits=13)
+    internal_type = serializers.CharField(required=False, default="")
+
+    class Meta:
+        model = OrderFee
+        fields = ('order', 'fee_type', 'value', 'description', 'internal_type', 'tax_rule')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.context:
+            return
+        self.fields['order'].queryset = self.context['event'].orders.all()
+        self.fields['tax_rule'].queryset = self.context['event'].tax_rules.all()
+        if 'order' in self.context:
+            del self.fields['order']
+
+    def validate(self, data):
+        data = super().validate(data)
+        if 'order' in self.context:
+            data['order'] = self.context['order']
+        return data
+
+    def create(self, validated_data):
+        ocm = self.context['ocm']
+
+        try:
+            f = OrderFee(
+                order=validated_data['order'],
+                fee_type=validated_data['fee_type'],
+                value=validated_data.get('value'),
+                description=validated_data.get('description'),
+                internal_type=validated_data.get('internal_type'),
+                tax_rule=validated_data.get('tax_rule'),
+            )
+            f._calculate_tax()
+            ocm.add_fee(f)
+            if self.context.get('commit', True):
+                ocm.commit()
+                return validated_data['order'].fees.order_by('-pk').first()
+            else:
+                return OrderFee()  # fake to appease DRF
         except OrderError as e:
             raise ValidationError(str(e))
 
@@ -203,7 +251,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderPosition
         fields = (
-            'item', 'variation', 'subevent', 'seat', 'price', 'tax_rule', 'valid_from', 'valid_until'
+            'item', 'variation', 'subevent', 'seat', 'price', 'tax_rule', 'valid_from', 'valid_until', 'secret'
         )
 
     def __init__(self, *args, **kwargs):
@@ -271,6 +319,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
         tax_rule = validated_data.get('tax_rule', instance.tax_rule)
         valid_from = validated_data.get('valid_from', instance.valid_from)
         valid_until = validated_data.get('valid_until', instance.valid_until)
+        secret = validated_data.get('secret', instance.secret)
 
         change_item = None
         if item != instance.item or variation != instance.variation:
@@ -302,6 +351,9 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
 
             if valid_until != instance.valid_until:
                 ocm.change_valid_until(instance, valid_until)
+
+            if secret != instance.secret:
+                ocm.change_ticket_secret(instance, secret)
 
             if self.context.get('commit', True):
                 ocm.commit()
@@ -399,6 +451,9 @@ class OrderChangeOperationSerializer(serializers.Serializer):
             many=True, required=False, context=self.context
         )
         self.fields['split_positions'] = SelectPositionSerializer(
+            many=True, required=False, context=self.context
+        )
+        self.fields['create_fees'] = OrderFeeCreateForExistingOrderSerializer(
             many=True, required=False, context=self.context
         )
         self.fields['patch_fees'] = PatchFeeSerializer(

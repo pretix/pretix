@@ -51,6 +51,44 @@
                                 {{ log.parsed_data.subject }}</strong>
                         </p>
                         <pre>{{ log.parsed_data.message }}</pre>
+                        <ul class="list-unstyled">
+                            {% comment %}
+                            {# Unfortunately, we do not have reliable info whether tickets were attached. #}
+                            {% if log.parsed_data.attach_tickets %}
+                                <li><span class="fa fa-files-o fa-fw"></span> {% trans "Tickets" %}</li>
+                            {% endif %}
+                            {% endcomment %}
+                            {% if log.parsed_data.attach_ical %}
+                                <li><span class="fa fa-calendar-o fa-fw"></span> {% trans "Calendar invite" %}</li>
+                            {% endif %}
+                            {% if log.parsed_data.invoices %}
+                                {% for i in log.parsed_invoices %}
+                                    <li>
+                                        <span class="fa fa-file-o fa-fw"></span>
+                                        <a href="{% url "control:event.invoice.download" invoice=i.pk event=request.event.slug organizer=request.event.organizer.slug %}" target="_blank">
+                                            {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}{% trans "Invoice" %}{% endif %}
+                                            {{ i.number }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if log.parsed_data.attach_other_files %}
+                                {% for f in log.parsed_other_files %}
+                                    <li>
+                                        <span class="fa fa-file-o fa-fw"></span>
+                                        {{ f }}
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if log.parsed_data.attach_cached_files %}
+                                {% for f in log.parsed_data.attach_cached_files %}
+                                    <li>
+                                        <span class="fa fa-file-o fa-fw"></span>
+                                        {{ f }}
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
                     {% endif %}
                 </li>
             {% endfor %}

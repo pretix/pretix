@@ -93,6 +93,7 @@ ALL_LANGUAGES = [
     ('zh-hans', _('Chinese (simplified)')),
     ('zh-hant', _('Chinese (traditional)')),
     ('cs', _('Czech')),
+    ('hr', _('Croatian')),
     ('da', _('Danish')),
     ('nl', _('Dutch')),
     ('nl-informal', _('Dutch (informal)')),
@@ -123,7 +124,7 @@ LANGUAGES_RTL = {
     'ar', 'hw'
 }
 LANGUAGES_INCUBATING = {
-    'fi', 'pt-br', 'gl',
+    'pt-br', 'gl',
 }
 LANGUAGES = ALL_LANGUAGES
 LOCALE_PATHS = [
@@ -258,7 +259,7 @@ COMPRESS_FILTERS = {
 CURRENCIES = [
     c for c in currencies
     if c.alpha_3 not in {
-        'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XPD', 'XPT', 'XSU', 'XTS', 'XUA',
+        'USN', 'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XPD', 'XPT', 'XSU', 'XTS', 'XUA',
     }
 ]
 CURRENCY_PLACES = {

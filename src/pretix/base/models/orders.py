@@ -1199,6 +1199,8 @@ class Order(LockModel, LoggedModel):
                         'invoices': [i.pk for i in invoices] if invoices else [],
                         'attach_tickets': attach_tickets,
                         'attach_ical': attach_ical,
+                        'attach_other_files': attach_other_files,
+                        'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
                     }
                 )
 
@@ -2857,6 +2859,8 @@ class OrderPosition(AbstractPosition):
                         'invoices': [i.pk for i in invoices] if invoices else [],
                         'attach_tickets': attach_tickets,
                         'attach_ical': attach_ical,
+                        'attach_other_files': attach_other_files,
+                        'attach_cached_files': [],
                     }
                 )
 

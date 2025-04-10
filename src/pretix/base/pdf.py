@@ -822,6 +822,10 @@ class Renderer:
         kwargs = {}
         if o.get('nowhitespace', False):
             kwargs['barBorder'] = 0
+
+        if o.get('color'):
+            kwargs['barFillColor'] = Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255)
+
         qrw = QrCodeWidget(content, barLevel=level, barHeight=reqs, barWidth=reqs, **kwargs)
         d = Drawing(reqs, reqs)
         d.add(qrw)

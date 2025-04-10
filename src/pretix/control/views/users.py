@@ -28,6 +28,7 @@ from django.contrib.auth import (
     BACKEND_SESSION_KEY, get_user_model, load_backend, login,
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -108,6 +109,7 @@ class UserEditView(AdministratorPermissionRequiredMixin, RecentAuthenticationReq
     def get_success_url(self):
         return reverse('control:users.edit', kwargs=self.kwargs)
 
+    @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
 

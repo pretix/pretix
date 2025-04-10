@@ -104,9 +104,26 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
 
         scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
         sample = {k: str(v) for k, v in scheme['sample'].items()}
-        p = order.positions.create(item=item, attendee_name_parts=sample, price=item.default_price)
-        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p)
-        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p)
+        p = order.positions.create(
+            item=item,
+            attendee_name_parts=sample,
+            company=_("Sample company"),
+            price=item.default_price
+        )
+        order.positions.create(
+            item=item2,
+            attendee_name_parts=sample,
+            company=_("Sample company"),
+            price=item.default_price,
+            addon_to=p
+        )
+        order.positions.create(
+            item=item2,
+            attendee_name_parts=sample,
+            company=_("Sample company"),
+            price=item.default_price,
+            addon_to=p
+        )
 
         InvoiceAddress.objects.create(order=order, name_parts=sample, company=_("Sample company"))
         return p

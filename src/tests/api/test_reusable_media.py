@@ -203,7 +203,8 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "canceled": False,
             "valid_from": None,
             "valid_until": None,
-            "blocked": None
+            "blocked": None,
+            "plugin_data": {},
         }
         assert resp.data["linked_giftcard"] == {
             "id": giftcard.pk,

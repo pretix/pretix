@@ -205,7 +205,11 @@ var form_handlers = function (el) {
                     return;
                 }
                 if ($timepicker.val() === "") {
-                    date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    if (/_(until|end|to)(_|$)/.test($(this).attr("name"))) {
+                        date.set({'hour': 23, 'minute': 59, 'second': 59});
+                    } else {
+                        date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    }
                     $timepicker.data('DateTimePicker').date(date);
                 }
             });
@@ -1065,11 +1069,17 @@ function add_log_expand_handlers(el) {
         } else if ($a.is("[data-expandpayment]")) {
             url += 'payment/'
         }
+        function format_data(data) {
+            return Object.entries(data).map(([key, value]) =>
+                $("<div>").append(
+                    $("<b>").text(key + ': '),
+                    $("<span>").text(JSON.stringify(value, null, 2))));
+        }
         $.getJSON(url + '?pk=' + id, function (data) {
             if ($a.parent().tagName === "p") {
-                $("<pre>").text(JSON.stringify(data.data, null, 2)).insertAfter($a.parent());
+                $("<pre>").append(format_data(data)).insertAfter($a.parent());
             } else {
-                $("<pre>").text(JSON.stringify(data.data, null, 2)).appendTo($a.parent());
+                $("<pre>").append(format_data(data)).appendTo($a.parent());
             }
             $a.remove();
         });
