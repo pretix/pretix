@@ -1210,7 +1210,7 @@ class Event(EventMixin, LoggedModel):
         Returns the currently configured ticket secret generator.
         """
         tsgs = self.ticket_secret_generators
-        return tsgs.get(self.settings.ticket_secret_generator, tsgs.get('random'))
+        return tsgs.get(self.settings.ticket_secret_generator, 'random')
 
     def get_data_shredders(self) -> dict:
         """
