@@ -158,11 +158,13 @@ def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_r
         return
 
     subevent = None
+    prefix = ''
     if key.startswith('subevent_'):
         try:
             parts = key.split('_', 2)
             subevent = int(parts[1])
             key = parts[2]
+            prefix = f'subevent_{subevent}_'
         except ValueError:
             pass
     elif 'subevent' in request.POST:
@@ -176,7 +178,7 @@ def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_r
         return
 
     parts = key.split("_")
-    price = request.POST.get('price_' + "_".join(parts[1:]), "")
+    price = request.POST.get(prefix + 'price_' + "_".join(parts[1:]), "")
 
     if key.startswith('seat_'):
         try:

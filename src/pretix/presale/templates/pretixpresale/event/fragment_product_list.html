@@ -266,7 +266,7 @@
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    {% include "pretixpresale/event/fragment_availability.html" with price=var.display_price.gross avail=var.cached_availability.0 event=event item=item var=var %}
+                                    {% include "pretixpresale/event/fragment_availability.html" with price=var.display_price.gross original_price=var.original_price.gross avail=var.cached_availability.0 event=event item=item var=var %}
                                 {% endif %}
                                 <div class="clearfix"></div>
                             </article>
@@ -419,7 +419,7 @@
                             {% endif %}
                         </div>
                     {% else %}
-                        {% include "pretixpresale/event/fragment_availability.html" with price=item.display_price.gross avail=item.cached_availability.0 event=event item=item var=0 %}
+                        {% include "pretixpresale/event/fragment_availability.html" with price=item.display_price.gross original_price=item.original_price.gross avail=item.cached_availability.0 event=event item=item var=0 %}
                     {% endif %}
                     <div class="clearfix"></div>
                 </article>
