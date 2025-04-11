@@ -409,16 +409,20 @@ class CartManager:
             ):
                 if op.item.require_voucher and op.voucher is None:
                     if getattr(op, 'voucher_ignored', False):
-                        raise CartError(error_messages['voucher_redeemed'])
-                    raise CartError(error_messages['voucher_required'])
+                        raise CartError("L412: " + error_messages['voucher_redeemed'])
+                    raise CartError("L413: " + error_messages['voucher_required'])
 
                 if (
                     (op.item.hide_without_voucher or (op.variation and op.variation.hide_without_voucher)) and
                     (op.voucher is None or not op.voucher.show_hidden_items)
                 ):
                     if getattr(op, 'voucher_ignored', False):
-                        raise CartError(error_messages['voucher_redeemed'])
-                    raise CartError(error_messages['voucher_required'])
+                        raise CartError("L420: " + error_messages['voucher_redeemed'])
+                    raise CartError("L421: " + error_messages['voucher_required'])
+
+            if ('bundle_series_events' in self.event.meta_data and self.event.meta_data['bundle_series_events'] == "true"):
+                if op.item.require_voucher and not self.event.vouchers.exists() and getattr(op, 'voucher_ignored', False):
+                    raise CartError(f"A voucher is required to register for these bundled events: [{op.item.require_voucher} vs {self.event.vouchers.exists()}]")
 
             if not op.item.is_available() or (op.variation and not op.variation.is_available()):
                 raise CartError(error_messages['unavailable'])
@@ -439,17 +443,17 @@ class CartManager:
                     raise CartError(error_messages['unavailable'])
 
             if op.subevent and op.item.pk in op.subevent.item_overrides and not op.subevent.item_overrides[op.item.pk].is_available():
-                raise CartError("L442: " + error_messages['not_for_sale'])
+                raise CartError(error_messages['not_for_sale'])
 
             if op.subevent and op.variation and op.variation.pk in op.subevent.var_overrides and \
                     not op.subevent.var_overrides[op.variation.pk].is_available():
-                raise CartError("L446: " + error_messages['not_for_sale'])
+                raise CartError(error_messages['not_for_sale'])
 
             if op.item.has_variations and not op.variation:
-                raise CartError("L449: " + error_messages['not_for_sale'])
+                raise CartError(error_messages['not_for_sale'])
 
             if op.variation and op.variation.item_id != op.item.pk:
-                raise CartError("L452: " + error_messages['not_for_sale'])
+                raise CartError(error_messages['not_for_sale'])
 
             if op.voucher and not op.voucher.applies_to(op.item, op.variation):
                 raise CartError(error_messages['voucher_invalid_item'])
@@ -608,33 +612,53 @@ class CartManager:
         if not voucher.is_active():
             raise CartError(error_messages['voucher_expired'])
 
-        for p in self.positions:
-            if p.voucher_id:
-                continue
+        if ('bundle_series_events' in self.event.meta_data and self.event.meta_data['bundle_series_events'] == "true"):
+            # If the event is a bundle series event, we need to check if the voucher is valid for the current event
+            for p in self.positions:
+                if not voucher.applies_to(self.event, p.item):
+                    raise CartError(error_messages['voucher_invalid_item'])
 
-            if not voucher.applies_to(p.item, p.variation):
-                continue
-
-            if voucher.seat and voucher.seat != p.seat:
-                continue
-
-            if voucher.subevent_id and voucher.subevent_id != p.subevent_id:
-                continue
-
-            if p.is_bundled:
-                continue
-
-            if p.listed_price is None:
-                if p.addon_to_id and is_included_for_free(p.item, p.addon_to):
-                    listed_price = Decimal('0.00')
+                if p.listed_price is None:
+                    if p.addon_to_id and is_included_for_free(p.item, p.addon_to):
+                        listed_price = Decimal('0.00')
+                    else:
+                        listed_price = get_listed_price(p.item, p.variation, p.subevent)
                 else:
-                    listed_price = get_listed_price(p.item, p.variation, p.subevent)
-            else:
-                listed_price = p.listed_price
-            price_after_voucher = voucher.calculate_price(listed_price)
+                    listed_price = p.listed_price
+                price_after_voucher = voucher.calculate_price(listed_price)
 
+                ops.append((listed_price - price_after_voucher, self.VoucherOperation(p, voucher, price_after_voucher)))
+
+            # only use 1 voucher for the whole series instead of per bundled series event
             voucher_use_diff[voucher] += 1
-            ops.append((listed_price - price_after_voucher, self.VoucherOperation(p, voucher, price_after_voucher)))
+        else:
+            for p in self.positions:
+                if p.voucher_id:
+                    continue
+
+                if not voucher.applies_to(p.item, p.variation):
+                    continue
+
+                if voucher.seat and voucher.seat != p.seat:
+                    continue
+
+                if voucher.subevent_id and voucher.subevent_id != p.subevent_id:
+                    continue
+
+                if p.is_bundled:
+                    continue
+
+                if p.listed_price is None:
+                    if p.addon_to_id and is_included_for_free(p.item, p.addon_to):
+                        listed_price = Decimal('0.00')
+                    else:
+                        listed_price = get_listed_price(p.item, p.variation, p.subevent)
+                else:
+                    listed_price = p.listed_price
+                price_after_voucher = voucher.calculate_price(listed_price)
+
+                voucher_use_diff[voucher] += 1
+                ops.append((listed_price - price_after_voucher, self.VoucherOperation(p, voucher, price_after_voucher)))
 
         for voucher, cnt in list(voucher_use_diff.items()):
             if 0 < cnt < voucher.min_usages_remaining:
@@ -796,6 +820,12 @@ class CartManager:
                         raise CartError(error_messages['price_not_a_number'])
                 if custom_price > 99_999_999_999:
                     raise CartError(error_messages['price_too_high'])
+
+            # don't apply vouchers to events in a bundled series
+            if ('bundle_series_events' in self.event.meta_data and self.event.meta_data['bundle_series_events'] == "true"):
+                if i.get('voucher'):
+                    # voucher = None
+                    voucher_ignored = True
 
             op = self.AddOperation(
                 count=i['count'],
@@ -1238,24 +1268,45 @@ class CartManager:
                             invoice_address=self.invoice_address,
                             bundled_sum=sum([pp.count * pp.price_after_voucher for pp in op.bundled]),
                         )
-                        cp = CartPosition(
-                            event=self.event,
-                            item=op.item,
-                            variation=op.variation,
-                            expires=self._expiry,
-                            cart_id=self.cart_id,
-                            voucher=op.voucher,
-                            addon_to=op.addon_to if op.addon_to else None,
-                            subevent=op.subevent,
-                            seat=op.seat,
-                            listed_price=op.listed_price,
-                            price_after_voucher=op.price_after_voucher,
-                            custom_price_input=op.custom_price_input,
-                            custom_price_input_is_net=op.custom_price_input_is_net,
-                            line_price_gross=line_price.gross,
-                            tax_rate=line_price.rate,
-                            price=line_price.gross,
-                        )
+
+                        if ('bundle_series_events' in self.event.meta_data and self.event.meta_data['bundle_series_events'] == "true"):
+                            cp = CartPosition(
+                                event=self.event,
+                                item=op.item,
+                                variation=op.variation,
+                                expires=self._expiry,
+                                cart_id=self.cart_id,
+                                voucher=None,
+                                addon_to=op.addon_to if op.addon_to else None,
+                                subevent=op.subevent,
+                                seat=op.seat,
+                                listed_price=op.listed_price,
+                                price_after_voucher=op.price_after_voucher,
+                                custom_price_input=op.custom_price_input,
+                                custom_price_input_is_net=op.custom_price_input_is_net,
+                                line_price_gross=line_price.gross,
+                                tax_rate=line_price.rate,
+                                price=line_price.gross,
+                            )
+                        else:
+                            cp = CartPosition(
+                                event=self.event,
+                                item=op.item,
+                                variation=op.variation,
+                                expires=self._expiry,
+                                cart_id=self.cart_id,
+                                voucher=op.voucher,
+                                addon_to=op.addon_to if op.addon_to else None,
+                                subevent=op.subevent,
+                                seat=op.seat,
+                                listed_price=op.listed_price,
+                                price_after_voucher=op.price_after_voucher,
+                                custom_price_input=op.custom_price_input,
+                                custom_price_input_is_net=op.custom_price_input_is_net,
+                                line_price_gross=line_price.gross,
+                                tax_rate=line_price.rate,
+                                price=line_price.gross,
+                            )
                         if self.event.settings.attendee_names_asked:
                             scheme = PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)
                             if 'attendee-name' in self._widget_data:

@@ -758,14 +758,14 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
         if cp.seat:
             seats_seen.add(cp.seat)
 
-        if cp.item.require_voucher and cp.voucher is None and not cp.is_bundled:
+        if cp.item.require_voucher and cp.voucher is None and not cp.is_bundled and not ('bundle_series_events' in event.meta_data and event.meta_data['bundle_series_events'] == "true"):
             delete(cp)
             err = err or error_messages['voucher_required']
             break
 
         if (cp.item.hide_without_voucher or (cp.variation and cp.variation.hide_without_voucher)) and (
                 cp.voucher is None or not cp.voucher.show_hidden_items or not cp.voucher.applies_to(cp.item, cp.variation)
-        ) and not cp.is_bundled:
+        ) and not cp.is_bundled and not ('bundle_series_events' in event.meta_data and event.meta_data['bundle_series_events'] == "true"):
             delete(cp)
             err = error_messages['voucher_required']
             break

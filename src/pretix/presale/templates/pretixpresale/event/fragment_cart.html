@@ -6,6 +6,12 @@
 {% load money %}
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 <div role="table" aria-label="{% trans "Your cart" %}" aria-describedby="{% if cart.is_ordered %}cart-description{% else%}cart-deadline{% endif %}" aria-rowcount="{{ cart.positions|length|add:2 }}">
+    <!-- {% if request.event.vouchers_exist and request.event.bundled_series %}
+    <div class="cart-icon-details">
+        <dt><span class="fa fa-tags fa-fw" aria-hidden="true"></span> {% trans "Voucher code used:" %}</dt>
+        <dd>Voucher applied</dd>
+    </div>
+    {% endif %} -->
     <div class="sr-only" role="rowgroup">
         <div class="sr-only" role="row">
             <span role="columnheader" aria-sort="none">{% trans "Product" %}</span>
@@ -50,6 +56,7 @@
                     </div>
                 {% endif %}
                 {% if line.voucher %}
+                    <!-- and not request.event.bundled_series %} -->
                     <div class="cart-icon-details">
                         <dt><span class="fa fa-tags fa-fw" aria-hidden="true"></span> {% trans "Voucher code used:" %}</dt>
                         <dd>{{ line.voucher.code }}</dd>
