@@ -1921,7 +1921,7 @@ class Question(LoggedModel):
         if self.valid_datetime_max and self.valid_datetime_min and self.valid_datetime_min > self.valid_datetime_max:
             raise ValidationError(_("The maximum date must not be before the minimum value."))
         if self.valid_number_max and self.valid_number_min and self.valid_number_min > self.valid_number_max:
-            raise ValidationError(_("The maximum date must not be lower than the minimum value."))
+            raise ValidationError(_("The maximum value must not be lower than the minimum value."))
         super().clean()
 
 
