@@ -36,6 +36,7 @@
 from django.urls import include, re_path
 from django.views.generic.base import RedirectView
 
+from pretix.control.datasync import ControlSyncJob
 from pretix.control.views import (
     auth, checkin, dashboards, discounts, event, geo, global_settings, item,
     main, modelimport, oauth, orders, organizer, pdf, search, shredder,
@@ -427,6 +428,8 @@ urlpatterns = [
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/cancellationrequests/(?P<req>\d+)/delete$',
                 orders.OrderCancellationRequestDelete.as_view(),
                 name='event.order.cancellationrequests.delete'),
+        re_path(r'^orders/(?P<code>[0-9A-Z]+)/sync_job/(?P<provider>[^/]+)/$', ControlSyncJob.as_view(),
+                name='event.order.sync_job'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/transactions/$', orders.OrderTransactions.as_view(), name='event.order.transactions'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/$', orders.OrderDetail.as_view(), name='event.order'),
         re_path(r'^invoice/(?P<invoice>[^/]+)$', orders.InvoiceDownload.as_view(),
