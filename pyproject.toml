@@ -87,7 +87,7 @@ dependencies = [
   "pytz",
   "pytz-deprecation-shim==0.1.*",
   "pyuca",
-  "qrcode==8.0",
+  "qrcode==8.1",
   "redis==5.2.*",
   "reportlab==4.3.*",
   "requests==2.31.*",
