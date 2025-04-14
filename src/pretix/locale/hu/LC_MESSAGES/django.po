@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2024-12-10 06:00+0000\n"
+"PO-Revision-Date: 2025-04-14 23:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -560,26 +560,20 @@ msgid "Shop taken offline"
 msgstr ""
 
 #: pretix/api/webhooks.py:362
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "Test-Mode of shop has been activated"
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/api/webhooks.py:366
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "Test-Mode of shop has been deactivated"
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/api/webhooks.py:370
 msgid "Waiting list entry added"
 msgstr ""
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "Waiting list entry changed"
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/api/webhooks.py:378
 #, fuzzy
@@ -5308,16 +5302,12 @@ msgid "Invalid number input."
 msgstr ""
 
 #: pretix/base/models/items.py:1869 pretix/base/models/items.py:1893
-#, fuzzy
-#| msgid "Event list"
 msgid "Please choose a later date."
-msgstr "Eseménylista"
+msgstr "Kérjük válassz egy későbbi időpontot."
 
 #: pretix/base/models/items.py:1871 pretix/base/models/items.py:1895
-#, fuzzy
-#| msgid "Event list"
 msgid "Please choose an earlier date."
-msgstr "Eseménylista"
+msgstr "Kérjük válassz egy korábbi időpontot."
 
 #: pretix/base/models/items.py:1874
 msgid "Invalid date input."
@@ -6309,10 +6299,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/vouchers.py:348
-#, fuzzy
-#| msgid "You cannot modify this order"
 msgid "You cannot select a product that belongs to a different event."
-msgstr "Nem módosíthatod ezt a rendelést"
+msgstr "Nem választhatsz egy terméket ami egy másik eseményhez tartozik."
 
 #: pretix/base/models/vouchers.py:350 pretix/base/models/vouchers.py:360
 msgid ""
@@ -7032,7 +7020,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:294
 msgid "Event end weekday"
-msgstr ""
+msgstr "Esemény végének napja"
 
 #: pretix/base/pdf.py:299
 msgid "Event admission date and time"
@@ -7388,12 +7376,11 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/cart.py:126
-#, fuzzy, python-format
-#| msgid "You cannot modify this order"
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "Nem módosíthatod ezt a rendelést"
-msgstr[1] "Nem módosíthatod ezt a rendelést"
+msgstr[0] "Nem válaszhatsz több mint %s tételt ebben a rendelésben."
+msgstr[1] "Nem válaszhatsz több mint %s tételt ebben a rendelésben."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1541
 #, python-format
@@ -7404,14 +7391,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1546
-#, fuzzy, python-format
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] "Válassz egy dátumot."
-msgstr[1] "Válassz egy dátumot."
+msgstr[0] ""
+"Legalább %(min)s darabot kell választanod ebből a termékből: %(product)s"
+msgstr[1] ""
+"Legalább %(min)s darabot kell választanod ebből a termékből: %(product)s"
 
 #: pretix/base/services/cart.py:140
 #, python-format
@@ -7428,13 +7415,11 @@ msgstr[1] ""
 #: pretix/presale/templates/pretixpresale/event/index.html:167
 #: pretix/presale/views/waiting.py:145 pretix/presale/views/widget.py:763
 msgid "The booking period for this event has not yet started."
-msgstr "Az elővétel ehhez az eseményhez még nem kezdődött el."
+msgstr "Az esemény foglalási időszaka még nem kezdődött el."
 
 #: pretix/base/services/cart.py:145
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The booking period for this event has ended."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "Az esemény foglalási időszaka véget ért."
 
 #: pretix/base/services/cart.py:146
 msgid ""
@@ -7447,6 +7432,8 @@ msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"Az esemény foglalási időszaka még nem kezdődött el. Az érintett tételek el "
+"lettek távolítva a kosárból."
 
 #: pretix/base/services/cart.py:151 pretix/base/services/orders.py:182
 msgid ""
@@ -7578,26 +7565,28 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: pretix/base/services/cart.py:202 pretix/base/services/orders.py:197
-#, fuzzy, python-format
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-on from the category %(cat)s for the "
 "product %(base)s."
 msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
-msgstr[0] "Válassz egy dátumot."
-msgstr[1] "Válassz egy dátumot."
+msgstr[0] ""
+"Legalább %(min)s kiegészítőt kell választanod a %(cat)s kategóriából ehhez a "
+"termékhez: %(base)s"
+msgstr[1] ""
+"Legalább %(min)s kiegészítőt kell választanod a %(cat)s kategóriából ehhez a "
+"termékhez: %(base)s"
 
 #: pretix/base/services/cart.py:206 pretix/base/services/orders.py:201
-#, fuzzy, python-format
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
+#, python-format
 msgid ""
 "You can select every add-on from the category %(cat)s for the product "
 "%(base)s at most once."
-msgstr "Válassz egy dátumot."
+msgstr ""
+"Fejenként legfeljebb egyszer választhatod a %(cat)s kategóriából a "
+"kiegészítőket ehhez a termékhez: %(base)s"
 
 #: pretix/base/services/cart.py:207
 msgid ""
@@ -8105,10 +8094,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: pretix/base/services/orders.py:155
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The booking period has ended."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "A foglalási időszak véget ért."
 
 #: pretix/base/services/orders.py:161
 msgid ""
@@ -9167,10 +9154,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1311
-#, fuzzy
-#| msgid "This is not an event series."
 msgid "This shop represents an event"
-msgstr "Ez nem egy eseménysorozat."
+msgstr "Ez egy esemény boltja"
 
 #: pretix/base/settings.py:1313
 msgid ""
@@ -30955,16 +30940,14 @@ msgstr "Válassz időpontot a foglaláshoz"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:152
 #: pretix/presale/views/waiting.py:141 pretix/presale/views/widget.py:756
-#, fuzzy
-#| msgid "The presale for this event is over or has not yet started."
 msgid "The booking period for this event is over."
-msgstr "Az elővétel ehhez eseményhez még nem kezdődött el."
+msgstr "Az esemény foglalási időszaka véget ért."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:160
 #: pretix/presale/views/widget.py:758
 #, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
-msgstr "A foglalási időszak kezdete erre az eseményre: %(date)s %(time)s."
+msgstr "Az esemény foglalási időszakának kezdete: %(date)s %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:182
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
@@ -32124,10 +32107,8 @@ msgid "Your cart is empty"
 msgstr "A kosarad üres"
 
 #: pretix/presale/views/checkout.py:59
-#, fuzzy
-#| msgid "The presale for this event is over or has not yet started."
 msgid "The booking period for this event is over or has not yet started."
-msgstr "Az elővétel ehhez eseményhez még nem kezdődött el."
+msgstr "Az esemény foglalási időszaka még nem kezdődött el."
 
 #: pretix/presale/views/customer.py:247
 msgid ""
