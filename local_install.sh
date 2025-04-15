@@ -29,11 +29,11 @@ BASE=pretix_dev # pretix for production
 source /var/pretix_dev/venv/bin/activate
 pip install -U pip setuptools wheel gunicorn
 pip install --target=static.dist .
-python -m pretix migrate
+python -m pretix_dev migrate
 cd src
 make npminstall
 cd ..
-python -m pretix rebuild
+python -m pretix_dev rebuild
 
 #server {
 #    listen 8347 default_server;
@@ -68,7 +68,7 @@ python -m pretix rebuild
 #}
 
 ## once installed
-source /var/pretix_dev/venv/bin/activate
+source /var/pretix/venv/bin/activate
 rm -rf static.dist/ && pip install --target=static.dist .
 
 ## as a sudoer

@@ -81,9 +81,9 @@ class EventList(PaginationMixin, ListView):
             max_to=Max('subevents__date_to'),
             max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
         ).annotate(
-            order_from=Coalesce('min_from', 'date_from'),
+            order_from=Coalesce('max_from', 'date_from'),
             order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
-        )
+        ).order_by("-order_from")
 
         qs = qs.prefetch_related(
             Prefetch('quotas',
@@ -289,6 +289,17 @@ class EventWizard(SafeSessionWizardView):
                     )
                     t.members.add(self.request.user)
                     t.limit_events.add(event)
+                    t.log_action('pretix.team.created', user=self.request.user, data={
+                        '_created_by_event_wizard': True,
+                        'name': t.name,
+                        'can_change_event_settings': True,
+                        'can_change_items': True,
+                        'can_view_orders': True,
+                        'can_change_orders': True,
+                        'can_view_vouchers': True,
+                        'can_change_vouchers': True,
+                        'limit_events': [event.pk],
+                    })
 
             logdata = {}
             for f in form_list:

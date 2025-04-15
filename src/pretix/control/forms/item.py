@@ -120,6 +120,7 @@ class CategoryForm(I18nModelForm):
         self.fields['cross_selling_condition'].widget.attrs['data-disable-dependent'] = 'true'
         self.fields['cross_selling_condition'].widget.choices = self.fields['cross_selling_condition'].widget.choices[1:]
         self.fields['cross_selling_condition'].required = False
+        self.fields['cross_selling_condition']._required = True  # Do not display "Optional" label
 
         self.fields['cross_selling_match_products'].widget = forms.CheckboxSelectMultiple(
             attrs={

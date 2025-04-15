@@ -28,7 +28,7 @@
             <code>Host: {{ request.headers.Host }}</code>
             {% if xfh %}
             <br>
-            <code>X-Forwarded-For: {{ xfh }}</code>
+            <code>X-Forwarded-Host: {{ xfh }}</code>
             {% if not settings.USE_X_FORWARDED_HOST %}({% trans "ignored" %}){% endif %}
             {% endif %}
         </dd>

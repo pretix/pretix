@@ -63,7 +63,8 @@ from pretix.api.serializers.order import (
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
-    OrderFeeChangeSerializer, OrderPositionChangeSerializer,
+    OrderFeeChangeSerializer, OrderFeeCreateForExistingOrderSerializer,
+    OrderPositionChangeSerializer,
     OrderPositionCreateForExistingOrderSerializer,
     OrderPositionInfoPatchSerializer,
 )
@@ -184,7 +185,7 @@ with scopes_disabled():
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
 
-            matching_positions = OrderPosition.objects.filter(
+            matching_positions = OrderPosition.all.filter(
                 Q(order=OuterRef('pk')) & Q(
                     Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
                     | Q(secret__istartswith=u)
@@ -707,7 +708,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             )
 
     def create(self, request, *args, **kwargs):
-        if 'send_mail' in request.data and 'send_email' not in request.data:
+        if 'send_mail' in request.data and 'send_email' not in request.data and isinstance(request.data, dict):
             request.data['send_email'] = request.data['send_mail']
         serializer = OrderCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
@@ -987,6 +988,12 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             for r in serializer.validated_data.get('cancel_fees', []):
                 ocm.cancel_fee(r['fee'])
                 canceled_fees.add(r['fee'])
+
+            for r in serializer.validated_data.get('create_fees', []):
+                pos_serializer = OrderFeeCreateForExistingOrderSerializer(
+                    context={'ocm': ocm, 'commit': False, 'event': request.event, **self.get_serializer_context()},
+                )
+                pos_serializer.create(r)
 
             for r in serializer.validated_data.get('patch_fees', []):
                 if r['fee'] in canceled_fees:

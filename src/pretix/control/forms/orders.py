@@ -33,6 +33,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import os.path
 from datetime import date, datetime, time
 from decimal import Decimal
 
@@ -68,6 +69,7 @@ from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.services.pricing import get_price
 from pretix.control.forms import SplitDateTimeField
 from pretix.control.forms.widgets import Select2
+from pretix.helpers.hierarkey import clean_filename
 from pretix.helpers.money import change_decimal_field
 
 
@@ -723,6 +725,9 @@ class OrderMailForm(forms.Form):
         help_text=_("Will be ignored if tickets exceed a given size limit to ensure email deliverability."),
         required=False
     )
+    attach_new_order = forms.BooleanField(
+        required=False
+    )
     attach_invoices = forms.ModelMultipleChoiceField(
         label=_("Attach invoices"),
         widget=forms.CheckboxSelectMultiple,
@@ -759,6 +764,12 @@ class OrderMailForm(forms.Form):
         self.fields['attach_invoices'].queryset = order.invoices.all()
         self._set_field_placeholders('message', ['event', 'order'])
         self._set_field_placeholders('subject', ['event', 'order'])
+        if order.event.settings.mail_attachment_new_order:
+            self.fields['attach_new_order'].label = _('Attach {file}').format(
+                file=clean_filename(os.path.basename(order.event.settings.mail_attachment_new_order.name))
+            )
+        else:
+            del self.fields['attach_new_order']
 
 
 class OrderPositionMailForm(OrderMailForm):

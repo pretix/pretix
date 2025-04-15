@@ -477,7 +477,8 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'zipcode': None,
                 'state': None,
                 'country': None,
-                'canceled': False
+                'canceled': False,
+                'plugin_data': {},
             }
         ],
         'downloads': [],
@@ -487,7 +488,8 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         'refunds': [],
         'require_approval': False,
         'sales_channel': 'web',
-        'cancellation_date': None
+        'cancellation_date': None,
+        'plugin_data': {},
     }
 
 
@@ -533,13 +535,15 @@ def test_order_create_positionids_addons_simulated(token_client, organizer, even
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
          'voucher': None, 'tax_rate': '19.00', 'tax_code': 'S/standard', 'tax_value': '3.67', 'discount': None, 'voucher_budget_use': None,
          'addon_to': None, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': item.tax_rule_id,
-         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None},
+         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None,
+         'plugin_data': {}},
         {'id': 0, 'order': '', 'positionid': 2, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
          'voucher': None, 'tax_rate': '19.00', 'tax_code': 'S/standard', 'tax_value': '3.67', 'discount': None, 'voucher_budget_use': None,
          'addon_to': 1, 'subevent': None, 'checkins': [], 'print_logs': [], 'downloads': [], 'answers': [], 'tax_rule': item.tax_rule_id,
-         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None}
+         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None,
+         'plugin_data': {}}
     ]
 
 
@@ -616,6 +620,38 @@ def test_order_create_sales_channel_invalid(token_client, organizer, event, item
     )
     assert resp.status_code == 400
     assert resp.data == {'sales_channel': ['Object with identifier=foo does not exist.']}
+
+
+@pytest.mark.django_db
+def test_order_create_locale_optional(token_client, organizer, event, item, quota, question):
+    event.settings.locale = "de"
+    event.settings.locales = ["en", "de"]
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    del res['locale']
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data["locale"] == event.settings.locale
+
+
+@pytest.mark.django_db
+def test_order_create_locale_invalid(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['locale'] = 'klingon'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'locale': ['"klingon" is not a valid choice.']}
 
 
 @pytest.mark.django_db

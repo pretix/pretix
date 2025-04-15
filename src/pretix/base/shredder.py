@@ -370,7 +370,7 @@ class WaitingListShredder(BaseDataShredder):
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
         yield 'waiting-list.json', 'application/json', json.dumps([
-            WaitingListSerializer(wle).data
+            WaitingListSerializer(wle, context={"event": self.event}).data
             for wle in self.event.waitinglistentries.all()
         ], indent=4)
 

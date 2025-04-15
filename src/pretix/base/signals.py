@@ -46,7 +46,6 @@ app_cache = {}
 
 
 def _populate_app_cache():
-    global app_cache
     apps.check_apps_ready()
     for ac in apps.app_configs.values():
         app_cache[ac.name] = ac
@@ -559,6 +558,16 @@ Arguments: ``order``
 
 This signal is sent out every time an order is marked as expired. The order object is given
 as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+order_expiry_changed = EventPluginSignal()
+"""
+Arguments: ``order``
+
+This signal is sent out every time an order expiry date is changed as an explicit operation (i.e. not if
+this is the result of an approval or order change). The order object is given as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

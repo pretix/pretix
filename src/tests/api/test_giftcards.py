@@ -162,6 +162,7 @@ def test_giftcard_detail_expand(token_client, organizer, event, giftcard):
         "tax_rule": None,
         "pseudonymization_id": op.pseudonymization_id,
         "pdf_data": {},
+        "plugin_data": {},
         "seat": None,
         "canceled": False,
         "valid_from": None,

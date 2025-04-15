@@ -479,7 +479,8 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
             if event.has_subevents:
                 event.daterange = daterange(
                     event.min_from.astimezone(event.tzname),
-                    (event.max_fromto or event.max_to or event.max_from).astimezone(event.tzname)
+                    (event.max_fromto or event.max_to or event.max_from).astimezone(event.tzname),
+                    as_html=True,
                 )
 
         query_data = self.request.GET.copy()

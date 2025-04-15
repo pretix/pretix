@@ -59,7 +59,7 @@ def get_event_navigation(request: HttpRequest):
                     'event': request.event.slug,
                     'organizer': request.event.organizer.slug,
                 }),
-                'active': url.url_name == 'event.settings.payment',
+                'active': url.url_name in ('event.settings.payment', 'event.settings.payment.provider'),
             },
             {
                 'label': _('Plugins'),

@@ -330,16 +330,16 @@ class BasePaymentProvider:
                  label=_('Enable payment method'),
                  required=False,
              )),
-            ('_availability_date',
-             RelativeDateField(
-                 label=_('Available until'),
-                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
-                 required=False,
-             )),
             ('_availability_start',
              RelativeDateField(
                  label=_('Available from'),
                  help_text=_('Users will not be able to choose this payment provider before the given date.'),
+                 required=False,
+             )),
+            ('_availability_date',
+             RelativeDateField(
+                 label=_('Available until'),
+                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
                  required=False,
              )),
             ('_total_min',
@@ -1307,6 +1307,9 @@ class OffsettingProvider(BasePaymentProvider):
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
         return _('Balanced against orders: %s' % ', '.join(payment.info_data['orders']))
+
+    def refund_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
+        return self.payment_control_render(request, payment)
 
 
 class GiftCardPayment(BasePaymentProvider):

@@ -36,6 +36,9 @@ class ReturnURLApp(AppConfig):
         category = 'API'
         description = _("This plugin allows to link to payments and redirect back afterwards. This is useful in "
                         "combination with our API.")
+        settings_links = [
+            ((_("Settings"), _("Redirection")), "plugins:returnurl:settings", {}),
+        ]
 
     def ready(self):
         from . import signals  # NOQA

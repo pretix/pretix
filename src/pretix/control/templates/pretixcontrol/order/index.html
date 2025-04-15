@@ -9,6 +9,7 @@
 {% load eventsignal %}
 {% load l10n %}
 {% load phone_format %}
+{% load getitem %}
 {% block title %}
     {% blocktrans trimmed with code=order.code %}
         Order details: {{ code }}
@@ -397,7 +398,7 @@
                                         {% elif c.auto_checked_in %}
                                             <span class="fa fa-fw fa-magic text-success" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically checked in: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
                                         {% else %}
-                                            <span class="fa fa-fw fa-check {% if c.list.consider_tickets_used %}text-success{% else %}text-muted{% endif %}" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Entry scan: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
+                                            <span class="fa fa-fw {% if c.list.consider_tickets_used %}text-success fa-check{% else %}text-muted fa-check-circle-o{% endif %}" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Entry scan: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
@@ -428,11 +429,7 @@
                                 {% endif %}
                                 {% if line.subevent %}
                                     <br/>
-                                    <span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
-                                    {% if event.settings.show_times %}
-                                        <span class="fa fa-clock-o"></span>
-                                        {{ line.subevent.date_from|date:"TIME_FORMAT" }}
-                                    {% endif %}
+                                    <span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display_with_times }}
                                 {% endif %}
                                 {% if line.used_membership %}
                                     <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span>
@@ -560,8 +557,8 @@
                                                 {% if line.street or line.zipcode or line.city or line.country %}
                                                     {{ line.street|default_if_none:""|linebreaksbr }}<br>
                                                     {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
+                                                    {% if line.state %}{{ line.state_for_address }}<br>{% endif %}
                                                     {{ line.country.name|default_if_none:"" }}
-                                                    {% if line.state %}<br>{{ line.state }}{% endif %}
                                                 {% else %}
                                                     <em>{% trans "not answered" %}</em>
                                                 {% endif %}
@@ -959,7 +956,7 @@
                                     <dt>{% trans "Country" %}</dt>
                                     <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
                                     {% if order.invoice_address.state %}
-                                        <dt>{% trans "State" context "address" %}</dt>
+                                        <dt>{% trans "State" context "address" as state_label %}{{ COUNTRY_STATE_LABEL|getitem:order.invoice_address.country.code|default:state_label }}</dt>
                                         <dd>{{ order.invoice_address.state_name }}</dd>
                                     {% endif %}
                                     {% if request.event.settings.invoice_address_vatid %}

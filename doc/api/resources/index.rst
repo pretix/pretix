@@ -22,6 +22,7 @@ at :ref:`plugin-docs`.
    questions
    question_options
    quotas
+   seats
    orders
    invoices
    vouchers
@@ -43,8 +44,16 @@ at :ref:`plugin-docs`.
    exporters
    scheduled_exports
    shredders
+   banktransfer
+   ticketoutputpdf
+   badges
    sendmail_rules
    auto_checkin_rules
+   campaigns
+   certificates
+   digital
+   exhibitors
+   imported_secrets
+   shipping
    billing_invoices
    billing_var
-   seats
