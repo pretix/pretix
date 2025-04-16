@@ -82,7 +82,15 @@ var form_handlers = function (el) {
                     Math.abs(+new Date(opts.minDate) - new Date()) < Math.abs(+new Date(opts.maxDate) - new Date())
             ) ? opts.minDate : opts.maxDate;
         }
-        $(this).datetimepicker(opts);
+        $(this).datetimepicker(opts).on("dp.hide", function() {
+            // when min/max is used in datetimepicker, closing and re-opening the picker opens at the wrong date
+            // therefore keep the current viewDate and re-set it after datetimepicker is done hiding
+            var $dtp = $(this).data("DateTimePicker");
+            var currentViewDate = $dtp.viewDate();
+            window.setTimeout(function () {
+                $dtp.viewDate(currentViewDate);
+            }, 50);
+        });
         if ($(this).parent().is('.splitdatetimerow')) {
             $(this).on("dp.change", function (ev) {
                 var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
