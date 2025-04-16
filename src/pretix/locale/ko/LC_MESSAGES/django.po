@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-04-16 10:00+0000\n"
-"Last-Translator: 조정화 <junghwa.jo@om.org>\n"
+"PO-Revision-Date: 2025-04-16 16:12+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -615,9 +615,9 @@ msgid "Enter a postal code in the format XXXX."
 msgstr "우편번호를 XXXX 형식으로 입력합니다."
 
 #: pretix/base/auth.py:146
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{system} User"
-msgstr "{시스템} 사용자"
+msgstr ""
 
 #: pretix/base/auth.py:155 pretix/base/exporters/customers.py:67
 #: pretix/base/exporters/orderlist.py:261
@@ -663,8 +663,8 @@ msgid_plural ""
 "passwords."
 msgstr[0] ""
 "비밀번호가 이전 비밀번호와 동일하지 않을 수 있습니다.\n"
-"귀하의 비밀번호는 %(history_length) 이전 비밀번호와 동일하지 않을 수 있습니"
-"다."
+"귀하의 비밀번호는 %(history_length)s 이전 비밀번호와 동일하지 않을 수 "
+"있습니다."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -2005,19 +2005,19 @@ msgid "Order locale"
 msgstr "주문 지역 설정"
 
 #: pretix/base/exporters/orderlist.py:275
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr "세율 {%}의 세금으로 총합"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:276
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr "순세율 {세율}% 세금"
+msgstr "순세율 %{rate} 세금"
 
 #: pretix/base/exporters/orderlist.py:277
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr "세율 % 세금에서의 세금 가치"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:280
 msgid "Invoice numbers"
@@ -2056,9 +2056,9 @@ msgid "External customer ID"
 msgstr "외부고객  아이디"
 
 #: pretix/base/exporters/orderlist.py:293
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paid by {method}"
-msgstr "{방법}으로 결제됨"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:448
 #: pretix/base/exporters/orderlist.py:894
@@ -2909,13 +2909,12 @@ msgid "You can use {markup_name} in this field."
 msgstr "이 필드에서 {markup_name}을(를) 사용할 수 있습니다."
 
 #: pretix/base/forms/__init__.py:178
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
-msgstr ""
-"기술적인 이유로 인해 마스크해야 하는 입력(예: 비밀번호)을 %(값)s로 설정할 수 "
-"없습니다."
+msgstr "기술적인 이유로 인해 마스크해야 하는 입력(예: 비밀번호)을 %(value)s로 설정할 "
+"수 없습니다."
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/auth.py:179
 msgid "Keep me logged in"
@@ -3110,9 +3109,9 @@ msgstr ""
 "\"를 사용하려면 \"{\" 및 \"}\"으로 두 배로 표시해야 합니다."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:804
-#, fuzzy, python-format
+#, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr "잘못된 자리 표시자: {%(값)}"
+msgstr "잘못된 자리 표시자: {%(value)s}"
 
 #: pretix/base/forms/widgets.py:68
 #, python-format
@@ -3140,10 +3139,10 @@ msgid "Individual customer"
 msgstr "개별 고객"
 
 #: pretix/base/invoice.py:138
-#, fuzzy, python-format
+#, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "%d 페이지"
+msgstr ""
 
 #: pretix/base/invoice.py:375
 msgctxt "invoice"
@@ -3218,10 +3217,10 @@ msgid "Invoice {num}"
 msgstr "송장 {num}"
 
 #: pretix/base/invoice.py:621
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "고객 참조: {참조}"
+msgstr "고객 참조: {reference}"
 
 #: pretix/base/invoice.py:629
 msgctxt "invoice"
@@ -3291,7 +3290,7 @@ msgstr "단일 가격: {net_price} 순 / {gross_price} 총합"
 #, fuzzy, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "단일 가격: {가격}"
+msgstr "단일 가격: {price}"
 
 #: pretix/base/invoice.py:742 pretix/base/invoice.py:748
 msgctxt "invoice"
@@ -3339,23 +3338,20 @@ msgid "Included taxes"
 msgstr "세금 포함"
 
 #: pretix/base/invoice.py:894
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"날짜}에 {당국}에서 발표한 1:{rate}의 변환율을 사용하면 다음과 같습니다:"
 
 #: pretix/base/invoice.py:909
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"{날짜}에 {당국}에서 게시한 1:{rate}의 변환율을 사용하면 송장 총액이 {총합}에 "
-"해당합니다."
 
 #: pretix/base/invoice.py:923
 msgid "Default invoice renderer (European-style letter)"
@@ -5661,24 +5657,24 @@ msgid "This order is not yet approved by the event organizer."
 msgstr "이 주문은 아직 행사 주최자에 의해 승인되지 않았습니다"
 
 #: pretix/base/models/orders.py:1060
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr "주문한 제품 \"{아이템}\"은 더 이상 사용할 수 없습니다."
+msgstr "주문한 제품 \"{item}\"은 더 이상 사용할 수 없습니다."
 
 #: pretix/base/models/orders.py:1061
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr "좌석 \"{좌석}\"은 더 이상 사용할 수 없습니다."
+msgstr "좌석 \"{seat}\"은 더 이상 사용할 수 없습니다."
 
 #: pretix/base/models/orders.py:1062
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr "바우처 \"{바우처}\"에는 더 이상 예산이 충분하지 않습니다."
+msgstr "바우처 \"{voucher}\"에는 더 이상 예산이 충분하지 않습니다."
 
 #: pretix/base/models/orders.py:1063
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr "그동안 \"{바우처}\" 바우처가 사용되었습니다."
+msgstr "그동안 \"{voucher}\" 바우처가 사용되었습니다."
 
 #: pretix/base/models/orders.py:1405
 msgid "<file>"
@@ -5983,9 +5979,9 @@ msgid "Can change vouchers"
 msgstr "바우처를 변경할 수 있습니다"
 
 #: pretix/base/models/organizer.py:353
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s on %(object)s"
-msgstr "%(이름)의 %(객체)"
+msgstr ""
 
 #: pretix/base/models/organizer.py:385
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:64
@@ -5998,9 +5994,9 @@ msgid "Teams"
 msgstr "팀들"
 
 #: pretix/base/models/organizer.py:406
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr "'이메일'을 위해 '팀'에 초대하기"
+msgstr ""
 
 #: pretix/base/models/organizer.py:538
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
@@ -7314,7 +7310,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/exporters.py:99
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "참석자 이름: {파트}"
+msgstr "참석자 이름: {part}"
 
 #: pretix/base/pdf.py:671
 msgid "Invoice address name for salutation"
@@ -19392,7 +19388,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/transactions.html:11
 #, python-format
 msgid "Back to order %(order)s"
-msgstr "주문 %(주문)로 돌아가기"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html:24
 msgid ""
