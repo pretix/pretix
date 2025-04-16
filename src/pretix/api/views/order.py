@@ -452,10 +452,9 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         comment = request.data.get('comment', None)
         cancellation_fee = request.data.get('cancellation_fee', None)
         if cancellation_fee:
-            try:
-                cancellation_fee = float(Decimal(cancellation_fee))
-            except:
-                cancellation_fee = None
+            cancellation_fee = serializers.DecimalField(max_digits=13, decimal_places=2).to_internal_value(
+                cancellation_fee,
+            )
 
         order = self.get_object()
         if not order.cancel_allowed():
