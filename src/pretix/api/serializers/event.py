@@ -681,8 +681,18 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
 
     class Meta:
         model = TaxRule
-        fields = ('id', 'name', 'rate', 'code', 'price_includes_tax', 'eu_reverse_charge', 'home_country',
-                  'internal_name', 'keep_gross_if_rate_changes', 'custom_rules')
+        fields = ('id', 'name', 'default', 'rate', 'code', 'price_includes_tax', 'eu_reverse_charge', 'home_country',
+                  'internal_name', 'keep_gross_if_rate_changes', 'custom_rules', 'default')
+
+    def create(self, validated_data):
+        if "default" not in validated_data and not self.context["event"].tax_rules.exists():
+            validated_data["default"] = True
+        return super().create(validated_data)
+
+    def validate_default(self, value):
+        if value and self.context["event"].tax_rules.filter(default=True).exists():
+            raise ValidationError("There already is a default tax rule in this event.")
+        return value
 
 
 class EventSettingsSerializer(SettingsSerializer):
@@ -708,6 +718,8 @@ class EventSettingsSerializer(SettingsSerializer):
         'allow_modifications_after_checkin',
         'last_order_modification_date',
         'show_quota_left',
+        'tax_rule_payment',
+        'tax_rule_cancellation',
         'waiting_list_enabled',
         'waiting_list_auto_disable',
         'waiting_list_hours',
@@ -938,6 +950,8 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_random_uid',
         'system_question_order',
+        'tax_rule_payment',
+        'tax_rule_cancellation',
     ]
 
     def __init__(self, *args, **kwargs):

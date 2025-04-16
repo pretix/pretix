@@ -104,6 +104,7 @@ event_urls = [
     "settings/tax/add",
     "settings/tax/1/",
     "settings/tax/1/delete",
+    "settings/tax/1/default",
     "items/",
     "items/add",
     "items/1/",
@@ -318,6 +319,7 @@ event_permission_urls = [
     ("can_change_event_settings", "settings/tax/1/", 404, HTTP_GET),
     ("can_change_event_settings", "settings/tax/add", 200, HTTP_GET),
     ("can_change_event_settings", "settings/tax/1/delete", 404, HTTP_GET),
+    ("can_change_event_settings", "settings/tax/1/default", 404, HTTP_POST),
     ("can_change_event_settings", "comment/", 405, HTTP_GET),
     # Lists are currently not access-controlled
     # ("can_change_items", "items/", 200),
