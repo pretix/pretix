@@ -322,6 +322,9 @@ def base_placeholders(sender, **kwargs):
             'code', ['order'], lambda order: order.code, 'F8VVL'
         ),
         SimpleFunctionalTextPlaceholder(
+            'secret', ['order'], lambda order: order.secret, '6zzjnumtsx136ddy'
+        ),
+        SimpleFunctionalTextPlaceholder(
             'total', ['order'], lambda order: LazyNumber(order.total), lambda event: LazyNumber(Decimal('42.23'))
         ),
         SimpleFunctionalTextPlaceholder(
