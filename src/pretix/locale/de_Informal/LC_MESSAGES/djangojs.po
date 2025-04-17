@@ -1025,7 +1025,7 @@ msgstr "Vorherige Woche"
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr "Saalplan öffnen"
+msgstr "Sitzplan öffnen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgctxt "widget"
