@@ -1714,6 +1714,29 @@ class OrderChangeManagerTests(TestCase):
             self.ocm.change_price(self.op1, 25)
 
     @classscope(attr='o')
+    def test_cancel_and_change_addon(self):
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se1
+        self.op2.save()
+        self.quota.subevent = se2
+        self.quota.save()
+        op3 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None, addon_to=self.op1,
+            price=Decimal("0.00"), positionid=3, subevent=se1,
+        )
+
+        self.ocm.cancel(self.op1)
+        self.ocm.change_subevent(op3, se2)
+        self.ocm.commit()
+        # Expected: the addon is also canceled
+        # Bug we had: the addon is not canceled
+        op3.refresh_from_db()
+        assert op3.canceled
+
+    @classscope(attr='o')
     def test_cancel_all_in_order(self):
         self.ocm.cancel(self.op1)
         self.ocm.cancel(self.op2)
