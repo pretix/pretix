@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-03-25 16:25+0000\n"
+"PO-Revision-Date: 2025-04-19 18:35+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -24514,7 +24514,7 @@ msgid ""
 msgstr ""
 "Bitte beachte, dass der Editor nur eine grobe Vorschau bieten kann. Einige "
 "Details, z.B. die Textdarstellung, können auf den finalen Tickets leicht "
-"anders aussehen. Du kannst den \"Vorschau\"-Knopf rechts benutzen um eine "
+"anders aussehen. Du kannst den \"Vorschau\"-Button rechts benutzen um eine "
 "präzisere Vorschau zu erhalten."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:123
@@ -27785,7 +27785,7 @@ msgid ""
 "into your account."
 msgstr ""
 "Bitte beachte, dass du die Zwei-Faktor-Authentifizierung noch mit dem unten "
-"verfügbaren Knopf für dein Konto aktivieren musst, damit der zweite Faktor "
+"verfügbaren Button für dein Konto aktivieren musst, damit der zweite Faktor "
 "für den Login erforderlich ist."
 
 #: pretix/control/views/user.py:501 pretix/control/views/user.py:561
@@ -29961,7 +29961,7 @@ msgstr ""
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
 msgstr ""
-"Bitte klicke auf den \"Mit PayPal bezahlen\" Knopf, um mit der Zahlung zu "
+"Bitte klicke auf den Button \"Mit PayPal bezahlen\", um mit der Zahlung zu "
 "beginnen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:13
@@ -34001,7 +34001,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:468
 msgid "You can cancel this order using the following button."
-msgstr "Du kannst diese Bestellung mit dem folgenden Knopf stornieren."
+msgstr "Du kannst diese Bestellung mit dem folgenden Button stornieren."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
