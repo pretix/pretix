@@ -465,6 +465,28 @@ DEFAULTS = {
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-order_phone_asked'}),
         )
     },
+    'tax_rounding': {
+        'default': 'line',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'form_kwargs': dict(
+            label=_("Rounding of taxes"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('line', _('Rounding every line individually')),
+                ('sum_by_net', _('Rounding by order total, keeping net prices stable')),
+                ('sum_by_gross', _('Rounding by order total, keeping gross prices stable')),
+            ),
+        ),
+        'serializer_kwargs': dict(
+            choices=(
+                ('line', _('Rounding every line individually')),
+                ('sum_by_net', _('Rounding by order total, keeping net prices stable')),
+                ('sum_by_gross', _('Rounding by order total, keeping gross prices stable')),
+            ),
+        ),
+    },
     'invoice_address_asked': {
         'default': 'True',
         'type': bool,
