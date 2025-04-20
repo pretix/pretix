@@ -54,6 +54,7 @@ from pretix.base.models import (
     QuestionAnswer, QuestionOption, TaxRule,
 )
 from pretix.base.services.cart import get_fees
+from pretix.base.services.pricing import apply_rounding
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.cookies import set_cookie_without_samesite
 from pretix.multidomain.urlreverse import eventreverse
@@ -147,6 +148,34 @@ class CartMixin:
                             'question': value.label
                         })
 
+        total = sum(p.price for p in lcp)
+
+        if order:
+            fees = order.fees.all()
+        elif lcp:
+            try:
+                fees = get_fees(
+                    self.request.event, self.request, total, self.invoice_address,
+                    payments if payments is not None else self.cart_session.get('payments', []),
+                    cartpos
+                )
+            except TaxRule.SaleNotAllowed:
+                # ignore for now, will fail on order creation
+                fees = []
+        else:
+            fees = []
+
+        if not order:
+            apply_rounding(self.request.event.settings.tax_rounding, self.request.event.currency, [*lcp, *fees])
+            print([(p.price, p.tax_value, ) for p in lcp])
+            total = sum(p.price for p in lcp)
+
+        net_total = sum(p.price - p.tax_value for p in lcp)
+        tax_total = sum(p.tax_value for p in lcp)
+        total += sum([f.value for f in fees])
+        net_total += sum([f.net_value for f in fees])
+        tax_total += sum([f.tax_value for f in fees])
+
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
@@ -177,7 +206,7 @@ class CartMixin:
                     pos.subevent_id,
                     pos.item_id,
                     pos.variation_id,
-                    pos.price,
+                    pos.net_price if self.request.event.settings.display_net_prices else pos.price,
                     (pos.voucher_id or 0),
                     (pos.seat_id or 0),
                     pos.valid_from,
@@ -203,29 +232,6 @@ class CartMixin:
                 group.cache_answers(all=False)
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
-
-        total = sum(p.total for p in positions)
-        net_total = sum(p.net_total for p in positions)
-        tax_total = sum(p.total - p.net_total for p in positions)
-
-        if order:
-            fees = order.fees.all()
-        elif positions:
-            try:
-                fees = get_fees(
-                    self.request.event, self.request, total, self.invoice_address,
-                    payments if payments is not None else self.cart_session.get('payments', []),
-                    cartpos
-                )
-            except TaxRule.SaleNotAllowed:
-                # ignore for now, will fail on order creation
-                fees = []
-        else:
-            fees = []
-
-        total += sum([f.value for f in fees])
-        net_total += sum([f.net_value for f in fees])
-        tax_total += sum([f.tax_value for f in fees])
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()

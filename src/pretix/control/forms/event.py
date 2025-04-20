@@ -882,6 +882,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_logo_image',
         'invoice_renderer_highlight_order_code',
         'invoice_renderer_font',
+        'tax_rounding',
     ]
 
     invoice_generate_sales_channels = forms.MultipleChoiceField(

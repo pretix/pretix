@@ -681,6 +681,16 @@
                                         </small>
                                     {% endif %}
                                 {% endif %}
+                                {% if django_settings.DEBUG %}
+                                    <br/>
+                                    <small>
+                                        price = {{ line.price|floatformat:2 }}<br>
+                                        rounding_correction = {{ line.price_includes_rounding_correction|floatformat:2 }}<br>
+                                        tax_value = {{ line.tax_value|floatformat:2 }}<br>
+                                        tax_value_rounding_correction = {{ line.tax_value_includes_rounding_correction|floatformat:2 }}<br>
+                                        voucher_budget_use = {{ line.voucher_budget_use|floatformat:2 }}
+                                    </small>
+                                {% endif %}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -720,6 +730,16 @@
                                             {% endblocktrans %}
                                         </small>
                                     {% endif %}
+                                {% endif %}
+                                {% if django_settings.DEBUG %}
+                                    <br/>
+                                    <small>
+                                        price = {{ fee.value|floatformat:2 }}<br>
+                                        rounding_correction = {{ fee.value_includes_rounding_correction|floatformat:2 }}<br>
+                                        tax_value = {{ fee.tax_value|floatformat:2 }}<br>
+                                        tax_value_rounding_correction = {{ fee.tax_value_includes_rounding_correction|floatformat:2 }}<br>
+                                        voucher_budget_use = {{ fee.voucher_budget_use|floatformat:2 }}
+                                    </small>
                                 {% endif %}
                             </div>
                             <div class="clearfix"></div>

@@ -95,7 +95,7 @@ from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
 )
 from pretix.base.services.pricing import (
-    apply_discounts, get_listed_price, get_price,
+    apply_discounts, apply_rounding, get_listed_price, get_price,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
@@ -976,7 +976,8 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
 def _get_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
               meta_info: dict, event: Event, require_approval=False):
     fees = []
-    total = sum([c.price for c in positions])
+    # Pre-rounding, pre-fee total is used for fee calculation
+    total = sum([c.price - c.price_includes_rounding_correction for c in positions])
 
     gift_cards = []  # for backwards compatibility
     for p in payment_requests:
@@ -987,40 +988,53 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
                                                  meta_info=meta_info, positions=positions, gift_cards=gift_cards):
         if resp:
             fees += resp
-    total += sum(f.value for f in fees)
 
-    total_remaining = total
+    for fee in fees:
+        fee._calculate_tax(invoice_address=address, event=event)
+        if fee.tax_rule and not fee.tax_rule.pk:
+            fee.tax_rule = None  # TODO: deprecate
+
+    # Apply rounding to get final total in case no payment fees will be added
+    apply_rounding(event.settings.tax_rounding, event.currency, [*positions, *fees])
+    total = sum([c.price for c in positions]) + sum([f.value for f in fees])
+
+    payments_assigned = Decimal("0.00")
     for p in payment_requests:
         # This algorithm of treating min/max values and fees needs to stay in sync between the following
         # places in the code base:
         # - pretix.base.services.cart.get_fees
         # - pretix.base.services.orders._get_fees
         # - pretix.presale.views.CartMixin.current_selected_payments
-        if p.get('min_value') and total_remaining < Decimal(p['min_value']):
+        if p.get('min_value') and total - payments_assigned < Decimal(p['min_value']):
             p['payment_amount'] = Decimal('0.00')
             continue
 
-        to_pay = total_remaining
+        to_pay = max(total - payments_assigned, Decimal("0.00"))
         if p.get('max_value') and to_pay > Decimal(p['max_value']):
             to_pay = min(to_pay, Decimal(p['max_value']))
 
         payment_fee = p['pprov'].calculate_fee(to_pay)
-        total_remaining += payment_fee
-        to_pay += payment_fee
-
-        if p.get('max_value') and to_pay > Decimal(p['max_value']):
-            to_pay = min(to_pay, Decimal(p['max_value']))
-
-        total_remaining -= to_pay
-
-        p['payment_amount'] = to_pay
         if payment_fee:
             pf = OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
                           internal_type=p['pprov'].identifier)
+            pf._calculate_tax(invoice_address=address, event=event)
             fees.append(pf)
             p['fee'] = pf
 
-    if total_remaining != Decimal('0.00') and not require_approval:
+            # Re-apply rounding as grand total has changed
+            apply_rounding(event.settings.tax_rounding, event.currency, [*positions, *fees])
+            total = sum([c.price for c in positions]) + sum([f.value for f in fees])
+
+            # Re-calculate to_pay as grand total has changed
+            to_pay = max(total - payments_assigned, Decimal("0.00"))
+
+            if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                to_pay = min(to_pay, Decimal(p['max_value']))
+
+        payments_assigned += to_pay
+        p['payment_amount'] = to_pay
+
+    if total != payments_assigned and not require_approval:
         raise OrderError(_("The selected payment methods do not cover the total balance."))
 
     return fees
@@ -1038,10 +1052,13 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         raise OrderError(e.message)
 
     require_approval = any(p.requires_approval(invoice_address=address) for p in positions)
+
+    # Final calculation of fees, also performs final rounding
     try:
         fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
     except TaxRule.SaleNotAllowed:
         raise OrderError(error_messages['country_blocked'])
+
     total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
     order = Order(
@@ -1073,12 +1090,6 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
 
     for fee in fees:
         fee.order = order
-        try:
-            fee._calculate_tax()
-        except TaxRule.SaleNotAllowed:
-            raise OrderError(error_messages['country_blocked'])
-        if fee.tax_rule and not fee.tax_rule.pk:
-            fee.tax_rule = None  # TODO: deprecate
         fee.save()
 
     # Safety check: Is the amount we're now going to charge the same amount the user has been shown when they
@@ -2759,9 +2770,12 @@ class OrderChangeManager:
         ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
         return payment_sum - refund_sum
 
-    def _recalculate_total_and_payment_fee(self):
-        total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
+    def _recalculate_rounding_total_and_payment_fee(self):
+        positions = list(self.order.positions.all())
+        fees = list(self.order.fees.all())
+        total = sum([p.price for p in positions]) + sum([f.value for f in fees])
         payment_fee = Decimal('0.00')
+        fee_changed = False
         if self.open_payment:
             current_fee = Decimal('0.00')
             fee = None
@@ -2789,13 +2803,31 @@ class OrderChangeManager:
                 fee.value = payment_fee
                 fee._calculate_tax()
                 fee.save()
+                fee_changed = True
                 if not self.open_payment.fee:
                     self.open_payment.fee = fee
                     self.open_payment.save(update_fields=['fee'])
             elif fee and not fee.canceled:
                 fee.delete()
+                fee_changed = True
 
-        self.order.total = total + payment_fee
+        if fee_changed:
+            fees = list(self.order.fees.all())
+
+        print("round", positions, fees)
+        changed = apply_rounding(self.order.event.settings.tax_rounding, self.order.event.currency, [*positions, *fees])
+        for l in changed:
+            if isinstance(l, OrderPosition):
+                l.save(update_fields=[
+                    "price", "price_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+                ])
+            elif isinstance(l, OrderFee):
+                l.save(update_fields=[
+                    "value", "value_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+                ])
+        total = sum([p.price for p in positions]) + sum([f.value for f in fees])
+
+        self.order.total = total
         self.order.save()
 
     def _check_order_size(self):
@@ -2988,7 +3020,7 @@ class OrderChangeManager:
                 self._perform_operations()
             except TaxRule.SaleNotAllowed:
                 raise OrderError(self.error_messages['tax_rule_country_blocked'])
-            self._recalculate_total_and_payment_fee()
+            self._recalculate_rounding_total_and_payment_fee()
             self._check_paid_price_change()
             self._check_paid_to_free()
             if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):

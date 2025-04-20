@@ -633,7 +633,9 @@ class OrderTransactions(OrderView):
         ctx['sums'] = self.order.transactions.aggregate(
             sum_count=Sum('count'),
             full_price=Sum(F('count') * F('price')),
+            full_price_includes_rounding_correction=Sum(F('count') * F('price_includes_rounding_correction')),
             full_tax_value=Sum(F('count') * F('tax_value')),
+            full_tax_value_includes_rounding_correction=Sum(F('count') * F('tax_value_includes_rounding_correction')),
         )
         return ctx
 

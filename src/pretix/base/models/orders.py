@@ -1259,7 +1259,8 @@ class Order(LockModel, LoggedModel):
         keys = set(target_transaction_count.keys()) | set(current_transaction_count.keys())
         create = []
         for k in keys:
-            positionid, itemid, variationid, subeventid, price, taxrate, taxruleid, taxvalue, feetype, internaltype, taxcode = k
+            (positionid, itemid, variationid, subeventid, price, price_includes_rounding_correction, taxrate,
+             taxruleid, taxvalue, taxvalue_includes_rounding_correction, feetype, internaltype, taxcode) = k
             d = target_transaction_count[k] - current_transaction_count[k]
             if d:
                 create.append(Transaction(
@@ -1272,9 +1273,11 @@ class Order(LockModel, LoggedModel):
                     variation_id=variationid,
                     subevent_id=subeventid,
                     price=price,
+                    price_includes_rounding_correction=price_includes_rounding_correction,
                     tax_rate=taxrate,
                     tax_rule_id=taxruleid,
                     tax_value=taxvalue,
+                    tax_value_includes_rounding_correction=taxvalue_includes_rounding_correction,
                     tax_code=taxcode,
                     fee_type=feetype,
                     internal_type=internaltype,
@@ -1498,6 +1501,9 @@ class AbstractPosition(models.Model):
     price = models.DecimalField(
         decimal_places=2, max_digits=13,
         verbose_name=_("Price")
+    )
+    price_includes_rounding_correction = models.DecimalField(
+        max_digits=13, decimal_places=2, default=Decimal("0.00")
     )
     attendee_name_cached = models.CharField(
         max_length=255,
@@ -2322,6 +2328,9 @@ class OrderFee(models.Model):
         decimal_places=2, max_digits=13,
         verbose_name=_("Value")
     )
+    value_includes_rounding_correction = models.DecimalField(
+        max_digits=13, decimal_places=2, default=Decimal("0.00")
+    )
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
@@ -2349,6 +2358,9 @@ class OrderFee(models.Model):
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
         verbose_name=_('Tax value')
+    )
+    tax_value_includes_rounding_correction = models.DecimalField(
+        max_digits=13, decimal_places=2, default=Decimal("0.00")
     )
     canceled = models.BooleanField(default=False)
 
@@ -2398,17 +2410,23 @@ class OrderFee(models.Model):
             self.fee_type, self.value
         )
 
-    def _calculate_tax(self, tax_rule=None, invoice_address=None):
+    def _calculate_tax(self, tax_rule=None, invoice_address=None, event=None):
         if tax_rule:
             self.tax_rule = tax_rule
 
-        try:
-            ia = invoice_address or self.order.invoice_address
-        except InvoiceAddress.DoesNotExist:
+        if invoice_address:
+            ia = invoice_address
+        elif hasattr(self, "order"):
+            try:
+                ia = self.order.invoice_address
+            except InvoiceAddress.DoesNotExist:
+                ia = None
+        else:
             ia = None
 
-        if not self.tax_rule and self.fee_type == "payment" and self.order.event.settings.tax_rule_payment == "default":
-            self.tax_rule = self.order.event.cached_default_tax_rule
+        event = event or self.order.event
+        if not self.tax_rule and self.fee_type == "payment" and event.settings.tax_rule_payment == "default":
+            self.tax_rule = event.cached_default_tax_rule
 
         if self.tax_rule:
             tax = self.tax_rule.tax(self.value, base_price_is='gross', invoice_address=ia, force_fixed_gross_price=True)
@@ -2442,6 +2460,24 @@ class OrderFee(models.Model):
     def delete(self, **kwargs):
         self.order.touch()
         super().delete(**kwargs)
+
+    # For historical reasons, OrderFee has "value", but OrderPosition has "price". These properties
+    # help using them the same way.
+    @property
+    def price(self):
+        return self.value
+
+    @price.setter
+    def price(self, value):
+        self.value = value
+
+    @property
+    def price_includes_rounding_correction(self):
+        return self.value_includes_rounding_correction
+
+    @price_includes_rounding_correction.setter
+    def price_includes_rounding_correction(self, value):
+        self.value_includes_rounding_correction = value
 
 
 class OrderPosition(AbstractPosition):
@@ -2521,6 +2557,9 @@ class OrderPosition(AbstractPosition):
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
         verbose_name=_('Tax value')
+    )
+    tax_value_includes_rounding_correction = models.DecimalField(
+        max_digits=13, decimal_places=2, default=Decimal("0.00"),
     )
 
     secret = models.CharField(max_length=255, null=False, blank=False, db_index=True)
@@ -2694,7 +2733,14 @@ class OrderPosition(AbstractPosition):
                         setattr(op, f.name, cp_mapping[cartpos.addon_to_id])
                 else:
                     setattr(op, f.name, getattr(cartpos, f.name))
-            op._calculate_tax()
+
+            op.tax_value = cartpos.tax_value
+            op.tax_value_includes_rounding_correction = cartpos.tax_value_includes_rounding_correction
+            op.tax_rate = cartpos.tax_rate
+            op.tax_code = cartpos.tax_code
+            op.tax_rule = cartpos.item.tax_rule
+            # todo: is removing this safe? op._calculate_tax()
+
             if cartpos.voucher:
                 op.voucher_budget_use = cartpos.listed_price - cartpos.price_after_voucher
 
@@ -3027,6 +3073,9 @@ class Transaction(models.Model):
         decimal_places=2, max_digits=13,
         verbose_name=_("Price")
     )
+    price_includes_rounding_correction = models.DecimalField(
+        max_digits=13, decimal_places=2, default=Decimal("0.00")
+    )
     tax_rate = models.DecimalField(
         max_digits=7, decimal_places=2,
         verbose_name=_('Tax rate')
@@ -3043,6 +3092,9 @@ class Transaction(models.Model):
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
         verbose_name=_('Tax value')
+    )
+    tax_value_includes_rounding_correction = models.DecimalField(
+        max_digits=13, decimal_places=2, default=Decimal("0.00")
     )
     fee_type = models.CharField(
         max_length=100, choices=OrderFee.FEE_TYPES, null=True, blank=True
@@ -3073,14 +3125,19 @@ class Transaction(models.Model):
     @staticmethod
     def key(obj):
         if isinstance(obj, Transaction):
-            return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type, obj.tax_code)
+            return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price,
+                    obj.price_includes_rounding_correction, obj.tax_rate, obj.tax_rule_id,
+                    obj.tax_value, obj.tax_value_includes_rounding_correction, obj.fee_type,
+                    obj.internal_type, obj.tax_code)
         elif isinstance(obj, OrderPosition):
-            return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, None, None, obj.tax_code)
+            return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price,
+                    obj.price_includes_rounding_correction, obj.tax_rate, obj.tax_rule_id,
+                    obj.tax_value, obj.tax_value_includes_rounding_correction, None,
+                    None, obj.tax_code)
         elif isinstance(obj, OrderFee):
-            return (None, None, None, None, obj.value, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type, obj.tax_code)
+            return (None, None, None, None, obj.value, obj.value_includes_rounding_correction,
+                    obj.tax_rate, obj.tax_rule_id, obj.tax_value, obj.tax_value_includes_rounding_correction,
+                    obj.fee_type, obj.internal_type, obj.tax_code)
         raise ValueError('invalid state')  # noqa
 
     @property
@@ -3090,6 +3147,14 @@ class Transaction(models.Model):
     @property
     def full_tax_value(self):
         return self.tax_value * self.count
+
+    @property
+    def full_price_includes_rounding_correction(self):
+        return self.price_includes_rounding_correction * self.count
+
+    @property
+    def full_tax_value_includes_rounding_correction(self):
+        return self.tax_value_includes_rounding_correction * self.count
 
 
 class CartPosition(AbstractPosition):
@@ -3131,6 +3196,13 @@ class CartPosition(AbstractPosition):
         max_digits=7, decimal_places=2, default=Decimal('0.00'),
         verbose_name=_('Tax rate')
     )
+    tax_code = models.CharField(
+        max_length=190,
+        null=True, blank=True,
+    )
+    tax_value_includes_rounding_correction = models.DecimalField(
+        max_digits=13, decimal_places=2, default=Decimal("0.00")
+    )
     listed_price = models.DecimalField(
         decimal_places=2, max_digits=13, null=True,
     )
@@ -3171,9 +3243,15 @@ class CartPosition(AbstractPosition):
 
     @property
     def tax_value(self):
-        net = round_decimal(self.price - (self.price * (1 - 100 / (100 + self.tax_rate))),
+        price = self.price - self.price_includes_rounding_correction
+        net = round_decimal(price - (price * (1 - 100 / (100 + self.tax_rate))),
                             self.event.currency)
-        return self.price - net
+        return self.price - self.price_includes_rounding_correction - net + self.tax_value_includes_rounding_correction
+
+    @tax_value.setter
+    def tax_value(self, value):
+        # ignore, tax value is always computed on the fly
+        pass
 
     @cached_property
     def sort_key(self):

@@ -23,15 +23,17 @@ import re
 from collections import defaultdict
 from datetime import datetime
 from decimal import Decimal
-from typing import List, Optional, Tuple, Union
+from itertools import groupby
+from typing import List, Literal, Optional, Tuple, Union
 
 from django import forms
+from django.conf import settings
 from django.db.models import Q
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation,
-    SalesChannel, Voucher,
+    AbstractPosition, CartPosition, InvoiceAddress, Item, ItemAddOn,
+    ItemVariation, OrderFee, OrderPosition, SalesChannel, Voucher,
 )
 from pretix.base.models.discount import Discount, PositionInfo
 from pretix.base.models.event import Event, SubEvent
@@ -136,7 +138,8 @@ def get_listed_price(item: Item, variation: ItemVariation = None, subevent: SubE
 
 
 def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, custom_price_input_is_net: bool,
-                   tax_rule: TaxRule, invoice_address: InvoiceAddress, bundled_sum: Decimal, is_bundled=False) -> TaxedPrice:
+                   tax_rule: TaxRule, invoice_address: InvoiceAddress, bundled_sum: Decimal,
+                   is_bundled=False) -> TaxedPrice:
     if not tax_rule:
         tax_rule = TaxRule(
             name='',
@@ -152,7 +155,8 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
                                  override_tax_code=price.code, invoice_address=invoice_address,
                                  subtract_from_gross=bundled_sum)
         else:
-            price = tax_rule.tax(max(custom_price_input, price.gross), base_price_is='gross', override_tax_rate=price.rate,
+            price = tax_rule.tax(max(custom_price_input, price.gross), base_price_is='gross',
+                                 override_tax_rate=price.rate,
                                  override_tax_code=price.code, invoice_address=invoice_address,
                                  subtract_from_gross=bundled_sum)
     else:
@@ -164,7 +168,7 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
 
 def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
                     positions: List[Tuple[int, Optional[int], Optional[datetime], Decimal, bool, bool, Decimal]],
-                    collect_potential_discounts: Optional[defaultdict]=None) -> List[Tuple[Decimal, Optional[Discount]]]:
+                    collect_potential_discounts: Optional[defaultdict] = None) -> List[Tuple[Decimal, Optional[Discount]]]:
     """
     Applies any dynamic discounts to a cart
 
@@ -203,3 +207,102 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
         new_prices.update(result)
 
     return [new_prices.get(idx, (p[3], None)) for idx, p in enumerate(positions)]
+
+
+def apply_rounding(rounding_mode: Literal["line", "sum_by_gross", "sum_by_net"], currency: str,
+                   lines: List[Union[OrderPosition, CartPosition, OrderFee]]) -> list:
+    """
+    Given a a list of order positions / cart positions / order fees (may be mixed), applies the given rounding mode
+    and mutates the ``price``, ``price_includes_rounding_correction``, ``tax_value``, and
+    ``tax_value_includes_rounding_correction`` attributes.
+
+    When rounding mode is set to ``"line"``, the tax will be computed and rounded individually for every line.
+
+    When rounding mode is set to ``"sum_by_gross"``, the tax values of the individual lines will be adjusted such that
+    the per-taxrate/taxcode subtotal is rounded correctly. The gross prices will stay constant.
+
+    When rounding mode is set to ``"sum_by_net"``, the gross prices and tax values of the individual lines will be
+    adjusted such that the per-taxrate/taxcode subtotal is rounded correctly. The net prices will stay constant.
+
+    :param rounding_mode: One of ``"line"``, ``"sum_by_gross"``, or ``"sum_by_net"``.
+    :param currency: Currency that will be used to determine rounding precision
+    :param lines: List of order/cart contents
+    :return: Collection of ``lines`` members that have been changed and may need to be persisted to the database.
+    """
+
+    def _key(line):
+        return (line.tax_rate, line.tax_code)
+
+    places = settings.CURRENCY_PLACES.get(currency, 2)
+    minimum_unit = Decimal('1') / 10 ** places
+    changed = []
+
+    if rounding_mode == "sum_by_net":
+        for (tax_rate, tax_code), lines in groupby(sorted(lines, key=_key), key=_key):
+            lines = list(sorted(lines, key=lambda l: -(l.price - l.price_includes_rounding_correction)))
+            net_total = sum(
+                l.price - l.price_includes_rounding_correction - l.tax_value + l.tax_value_includes_rounding_correction
+                for l in lines
+            )
+            gross_total = sum(l.price - l.price_includes_rounding_correction for l in lines)
+            target_gross_total = round_decimal((net_total * (1 + tax_rate / 100)), currency)
+
+            diff = target_gross_total - gross_total
+            diff_sgn = -1 if diff < 0 else 1
+            for l in lines:
+                if diff:
+                    apply_diff = diff_sgn * minimum_unit
+                    l.price = l.price - l.price_includes_rounding_correction + apply_diff
+                    l.price_includes_rounding_correction = diff_sgn * minimum_unit
+                    l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction + apply_diff
+                    l.tax_value_includes_rounding_correction = apply_diff
+                    diff -= apply_diff
+                    changed.append(l)
+                elif l.price_includes_rounding_correction or l.tax_value_includes_rounding_correction:
+                    l.price = l.price - l.price_includes_rounding_correction
+                    l.price_includes_rounding_correction = Decimal("0.00")
+                    l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction
+                    l.tax_value_includes_rounding_correction = Decimal("0.00")
+                    changed.append(l)
+
+    elif rounding_mode == "sum_by_gross":
+        for (tax_rate, tax_code), lines in groupby(sorted(lines, key=_key), key=_key):
+            lines = list(sorted(lines, key=lambda l: -(l.price - l.price_includes_rounding_correction)))
+            net_total = sum(
+                l.price - l.price_includes_rounding_correction - l.tax_value + l.tax_value_includes_rounding_correction
+                for l in lines
+            )
+            gross_total = sum(l.price - l.price_includes_rounding_correction for l in lines)
+            target_net_total = round_decimal(gross_total - (gross_total * (1 - 100 / (100 + tax_rate))), currency)
+
+            diff = target_net_total - net_total
+            diff_sgn = -1 if diff < 0 else 1
+            for l in lines:
+                if diff:
+                    apply_diff = diff_sgn * minimum_unit
+                    l.price = l.price - l.price_includes_rounding_correction
+                    l.price_includes_rounding_correction = Decimal("0.00")
+                    l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction - apply_diff
+                    l.tax_value_includes_rounding_correction = -apply_diff
+                    diff -= apply_diff
+                    changed.append(l)
+                elif l.price_includes_rounding_correction or l.tax_value_includes_rounding_correction:
+                    l.price = l.price - l.price_includes_rounding_correction
+                    l.price_includes_rounding_correction = Decimal("0.00")
+                    l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction
+                    l.tax_value_includes_rounding_correction = Decimal("0.00")
+                    changed.append(l)
+
+    elif rounding_mode == "line":
+        for l in lines:
+            if l.price_includes_rounding_correction or l.tax_value_includes_rounding_correction:
+                l.price = l.price - l.price_includes_rounding_correction
+                l.price_includes_rounding_correction = Decimal("0.00")
+                l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction
+                l.tax_value_includes_rounding_correction = Decimal("0.00")
+                changed.append(l)
+
+    else:
+        raise ValueError("Unknown rounding_mode")
+
+    return changed
