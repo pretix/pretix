@@ -42,7 +42,7 @@ from django.db.models.functions import Cast
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
-from django.utils.translation import pgettext
+from django.utils.translation import gettext_lazy as _, pgettext
 from django_scopes import ScopedManager
 
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
@@ -110,6 +110,19 @@ class Invoice(models.Model):
     :param file: The filename of the rendered invoice
     :type file: File
     """
+    TRANSMISSION_STATUS_PENDING = "pending"
+    TRANSMISSION_STATUS_INFLIGHT = "inflight"
+    TRANSMISSION_STATUS_COMPLETED = "completed"
+    TRANSMISSION_STATUS_FAILED = "failed"
+    TRANSMISSION_STATUS_UNKNOWN = "unknown"
+    TRANSMISSION_STATUS_CHOICES = (
+        (TRANSMISSION_STATUS_PENDING, _("pending transmission")),
+        (TRANSMISSION_STATUS_INFLIGHT, _("currently being transmitted")),
+        (TRANSMISSION_STATUS_COMPLETED, _("transmitted")),
+        (TRANSMISSION_STATUS_FAILED, _("failed")),
+        (TRANSMISSION_STATUS_UNKNOWN, _("unknown")),
+    )
+
     order = models.ForeignKey('Order', related_name='invoices', db_index=True, on_delete=models.CASCADE)
     organizer = models.ForeignKey('Organizer', related_name='invoices', db_index=True, on_delete=models.PROTECT)
     event = models.ForeignKey('Event', related_name='invoices', db_index=True, on_delete=models.CASCADE)
@@ -139,6 +152,7 @@ class Invoice(models.Model):
     invoice_to_country = FastCountryField(null=True)
     invoice_to_vat_id = models.TextField(null=True)
     invoice_to_beneficiary = models.TextField(null=True)
+    invoice_to_transmission_info = models.JSONField(null=True, blank=True)
     internal_reference = models.TextField(blank=True)
     custom_field = models.CharField(max_length=255, null=True)
 
@@ -158,14 +172,28 @@ class Invoice(models.Model):
 
     shredded = models.BooleanField(default=False)
 
-    # The field sent_to_organizer records whether this invocie was already sent to the organizer by a configured
+    # The field sent_to_organizer records whether this invoice was already sent to the organizer by a configured
     # mechanism such as email.
     # NULL: The cronjob that handles sending did not yet run.
     # True: The invoice was sent.
     # False: The invoice wasn't sent and never will, because sending was not configured at the time of the check.
     sent_to_organizer = models.BooleanField(null=True, blank=True)
 
-    sent_to_customer = models.DateTimeField(null=True, blank=True)
+    transmission_type = models.CharField(
+        max_length=255,
+        default="email",
+    )
+    transmission_provider = models.CharField(
+        max_length=255,
+        null=True, blank=True,
+    )
+    transmission_status = models.CharField(
+        max_length=255,
+        choices=TRANSMISSION_STATUS_CHOICES,
+        default=TRANSMISSION_STATUS_UNKNOWN,
+    )
+    transmission_date = models.DateTimeField(null=True, blank=True)
+    transmission_info = models.JSONField(null=True, blank=True)
 
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename, max_length=255)
 
