@@ -121,6 +121,7 @@ LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_RTL = {
+    # When adding more right-to-left languages, also update pretix/static/pretixbase/scss/_rtl.scss
     'ar', 'hw'
 }
 LANGUAGES_INCUBATING = {
