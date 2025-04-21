@@ -41,8 +41,11 @@ class TransmissionType:
     def public_name(self):
         return self.verbose_name
 
-    def is_available(self, country: Country, is_business: bool):
+    def is_available(self, event, country: Country, is_business: bool):
         raise NotImplementedError
+
+    def invoice_address_form_fields_required(self, country: Country, is_business: bool):
+        return set()
 
     def validate_address(self, ia: InvoiceAddress):
         pass
@@ -62,24 +65,28 @@ class EmailTransmissionType(TransmissionType):
     @property
     def invoice_address_form_fields(self) -> dict:
         return {
-            "transmission_email_to_order": forms.BooleanField(
-                label=_("Send invoice to order email address"),
+            "transmission_email_other": forms.BooleanField(
+                label=_("Send invoice directly to accounting department"),
+                help_text=_("If not selected, the invoice will be sent to you using the email address listed above."),
                 required=False,
             ),
             "transmission_email_address": forms.EmailField(
                 label=_("Email address for invoice"),
                 widget=forms.EmailInput(
-                    attrs={"data-inverse-dependency": "#id_transmission_email_address"}
+                    attrs={"data-display-dependency": "#id_transmission_email_other"}
                 )
             )
         }
+
+    def is_available(self, event, country: Country, is_business: bool):
+        return str(country) != "IT"  # todo: fixme
 
 
 class ItalianSdITransmissionType(TransmissionType):
     identifier = "it_sdi"
     verbose_name = pgettext_lazy("italian_invoice", "Exchange System (SdI)")
 
-    def is_available(self, country: Country, is_business: bool):
+    def is_available(self, event, country: Country, is_business: bool):
         # TODO: only when a matching provider is installed
         # or make it a setting?
         return str(country) == "IT"
@@ -92,7 +99,7 @@ class ItalianSdITransmissionType(TransmissionType):
                 required=False,
             ),
             "transmission_it_sdi_pec": forms.EmailField(
-                label=pgettext_lazy("italian_invoice", "Address for certified email"),
+                label=pgettext_lazy("italian_invoice", "Address for certified electronical mail"),
                 widget=forms.EmailInput(
                     attrs={"data-inverse-dependency": "#id_transmission_email_address"}
                 )
@@ -105,8 +112,13 @@ class ItalianSdITransmissionType(TransmissionType):
             ),
         }
 
+    def invoice_address_form_fields_required(self, country: Country, is_business: bool):
+        if is_business:
+            return {"vat_id", "transmission_it_sdi_pec", "transmission_it_sdi_recipient_code"}
+        return {"transmission_it_sdi_codice_fiscale"}
+
 
 TRANSMISSION_TYPES = [
-    EmailTransmissionType,
-    ItalianSdITransmissionType,
+    EmailTransmissionType(),
+    ItalianSdITransmissionType(),
 ]

@@ -21,19 +21,23 @@
 #
 import pycountry
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils.translation import pgettext
+from django_countries.fields import Country
+from django_scopes import scope
 
 from pretix.base.addressvalidation import (
     COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED,
 )
+from pretix.base.invoicing.transmission import TRANSMISSION_TYPES
+from pretix.base.models import Organizer
 from pretix.base.models.tax import VAT_ID_COUNTRIES
 from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL,
 )
 
 
-def states(request):
-    cc = request.GET.get("country", "DE")
+def _info(cc):
     info = {
         'street': {'required': True},
         'zipcode': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
@@ -46,13 +50,63 @@ def states(request):
         'vat_id': {'visible': cc in VAT_ID_COUNTRIES, 'required': False},
     }
     if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
-        return JsonResponse({'data': [], **info, })
+        return {'data': [], **info}
     types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
     statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
-    return JsonResponse({
+    return {
         'data': [
             {'name': s.name, 'code': s.code[3:]}
             for s in sorted(statelist, key=lambda s: s.name)
         ],
         **info,
-    })
+    }
+
+
+def address_form(request):
+    cc = request.GET.get("country", "DE")
+    info = _info(cc)
+
+    if request.GET.get("invoice") == "true":
+        # Do not consider live=True, as this does not expose sensitive information and we also want it accessible
+        # from e.g. the backend when the event is not yet life.
+        organizer = get_object_or_404(Organizer, slug=request.GET.get("organizer"))
+        with scope(organizer=organizer):
+            event = get_object_or_404(organizer.events, slug=request.GET.get("event"))
+            country = Country(cc)
+            is_business = request.GET.get("is_business") == "business"
+            selected_transmission_type = request.GET.get("transmission_type")
+
+            info["transmission_type"] = {
+                "visible": True,
+            }
+            info["transmission_types"] = [
+                {'name': str(t.public_name), 'code': t.identifier}
+                for t in TRANSMISSION_TYPES if t.is_available(
+                    event=event,
+                    country=country,
+                    is_business=is_business
+                )
+            ]
+            if selected_transmission_type not in [t["code"] for t in info["transmission_types"]]:
+                # The previously selected transmission type is no longer selectable, e.g. because
+                # of a country change. To avoid a second roundtrip to this endpoint, let's show
+                # the fields as if the first remaining option were selected (which is what the client
+                # side will now do).
+                selected_transmission_type = info["transmission_types"][0]["code"]
+
+            for transmission_type in TRANSMISSION_TYPES:
+                required = transmission_type.invoice_address_form_fields_required(
+                    country=country,
+                    is_business=is_business
+                )
+                if transmission_type.identifier == selected_transmission_type:
+                    for k, v in info.items():
+                        if k in required:
+                            v["required"] = True
+                for k, f in transmission_type.invoice_address_form_fields.items():
+                    info[k] = {
+                        "visible": transmission_type.identifier == selected_transmission_type,
+                        "required": transmission_type.identifier == selected_transmission_type and k in required
+                    }
+
+    return JsonResponse(info)
