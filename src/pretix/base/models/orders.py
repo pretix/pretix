@@ -3286,6 +3286,9 @@ class InvoiceAddress(models.Model):
         blank=True
     )
 
+    transmission_type = models.CharField(max_length=255, default="email")
+    transmission_info = models.JSONField(null=True, blank=True)
+
     objects = ScopedManager(organizer='order__event__organizer')
     profiles = ScopedManager(organizer='customer__organizer')
 
