@@ -54,7 +54,6 @@ from django.core.validators import (
 from django.db.models import QuerySet
 from django.forms import Select, widgets
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
-from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -78,6 +77,7 @@ from pretix.base.forms.widgets import (
 from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
+from pretix.base.invoicing.transmission import TRANSMISSION_TYPES
 from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
@@ -736,7 +736,7 @@ class BaseQuestionsForm(forms.Form):
                 initial=country,
                 widget=forms.Select(attrs={
                     'autocomplete': 'country',
-                    'data-country-information-url': reverse('js_helpers.states'),
+                    'data-trigger-address-info': 'on',
                 }),
             )
             c = [('', '---')]
@@ -1142,6 +1142,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if (not kwargs.get('instance') or not kwargs['instance'].country) and not kwargs["initial"].get("country"):
             kwargs['initial']['country'] = guess_country_from_request(self.request, self.event)
 
+        if kwargs.get('instance'):
+            kwargs['initial'].update(kwargs['instance'].transmission_info)
+
         super().__init__(*args, **kwargs)
 
         self.fields["company"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
@@ -1163,7 +1166,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             ])
 
         self.fields['country'].choices = CachedCountries()
-        self.fields['country'].widget.attrs['data-country-information-url'] = reverse('js_helpers.states')
+        self.fields['country'].widget.attrs['data-trigger-address-info'] = 'on'
 
         c = [('', '---')]
         fprefix = self.prefix + '-' if self.prefix else ''
@@ -1250,6 +1253,23 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 else:
                     v.widget.attrs['autocomplete'] = 'section-invoice billing ' + autocomplete
 
+        self.fields['is_business'].widget.attrs['data-trigger-address-info'] = 'on'
+        self.fields['transmission_type'] = forms.ChoiceField(
+            label=_('Invoice transmission method'),
+            choices=[
+                (t.identifier, t.public_name) for t in TRANSMISSION_TYPES
+            ]
+        )
+        self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
+        for transmission_type in TRANSMISSION_TYPES:
+            for k, f in transmission_type.invoice_address_form_fields.items():
+                self.fields[k] = f
+                f._required = f.required
+                f.required = False
+                f.widget.is_required = False
+                if 'required' in f.widget.attrs:
+                    del f.widget.attrs['required']
+
     def clean(self):
         from pretix.base.addressvalidation import \
             validate_address  # local import to prevent impact on startup time
@@ -1302,6 +1322,26 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                     messages.warning(self.request, e.message)
         else:
             self.instance.vat_id_validated = False
+
+        for transmission_type in TRANSMISSION_TYPES:
+            if transmission_type.identifier != data.get("transmission_type"):
+                continue
+
+            if not transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
+                raise ValidationError({
+                    "transmission_type": _("The selected transmission type is not available in your country or for "
+                                           "your type of address.")
+                })
+
+            required_fields = transmission_type.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
+            for r in required_fields:
+                if not data.get(r):
+                    raise ValidationError({r: _("This field is required for the selected type of invoice transmission.")})
+
+            self.instance.transmission_type = transmission_type.identifier
+            self.instance.transmission_info = {
+                k: data.get(k) for k in transmission_type.invoice_address_form_fields
+            }
 
 
 class BaseInvoiceNameForm(BaseInvoiceAddressForm):
