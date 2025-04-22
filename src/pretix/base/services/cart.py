@@ -417,8 +417,8 @@ class CartManager:
                     (op.voucher is None or not op.voucher.show_hidden_items)
                 ):
                     if getattr(op, 'voucher_ignored', False):
-                        raise CartError("L420: " + error_messages['voucher_redeemed'])
-                    raise CartError("L421: " + error_messages['voucher_required'])
+                        raise CartError(error_messages['voucher_redeemed'])
+                    raise CartError(error_messages['voucher_required'])
 
             if ('bundle_series_events' in self.event.meta_data and self.event.meta_data['bundle_series_events'] == "true"):
                 if op.item.require_voucher and not self.event.vouchers.exists() and getattr(op, 'voucher_ignored', False):
@@ -1269,44 +1269,44 @@ class CartManager:
                             bundled_sum=sum([pp.count * pp.price_after_voucher for pp in op.bundled]),
                         )
 
-                        if ('bundle_series_events' in self.event.meta_data and self.event.meta_data['bundle_series_events'] == "true"):
-                            cp = CartPosition(
-                                event=self.event,
-                                item=op.item,
-                                variation=op.variation,
-                                expires=self._expiry,
-                                cart_id=self.cart_id,
-                                voucher=None,
-                                addon_to=op.addon_to if op.addon_to else None,
-                                subevent=op.subevent,
-                                seat=op.seat,
-                                listed_price=op.listed_price,
-                                price_after_voucher=op.price_after_voucher,
-                                custom_price_input=op.custom_price_input,
-                                custom_price_input_is_net=op.custom_price_input_is_net,
-                                line_price_gross=line_price.gross,
-                                tax_rate=line_price.rate,
-                                price=line_price.gross,
-                            )
-                        else:
-                            cp = CartPosition(
-                                event=self.event,
-                                item=op.item,
-                                variation=op.variation,
-                                expires=self._expiry,
-                                cart_id=self.cart_id,
-                                voucher=op.voucher,
-                                addon_to=op.addon_to if op.addon_to else None,
-                                subevent=op.subevent,
-                                seat=op.seat,
-                                listed_price=op.listed_price,
-                                price_after_voucher=op.price_after_voucher,
-                                custom_price_input=op.custom_price_input,
-                                custom_price_input_is_net=op.custom_price_input_is_net,
-                                line_price_gross=line_price.gross,
-                                tax_rate=line_price.rate,
-                                price=line_price.gross,
-                            )
+                        # if ('bundle_series_events' in self.event.meta_data and self.event.meta_data['bundle_series_events'] == "true"):
+                        #     cp = CartPosition(
+                        #         event=self.event,
+                        #         item=op.item,
+                        #         variation=op.variation,
+                        #         expires=self._expiry,
+                        #         cart_id=self.cart_id,
+                        #         voucher=None,
+                        #         addon_to=op.addon_to if op.addon_to else None,
+                        #         subevent=op.subevent,
+                        #         seat=op.seat,
+                        #         listed_price=op.listed_price,
+                        #         price_after_voucher=op.price_after_voucher,
+                        #         custom_price_input=op.custom_price_input,
+                        #         custom_price_input_is_net=op.custom_price_input_is_net,
+                        #         line_price_gross=line_price.gross,
+                        #         tax_rate=line_price.rate,
+                        #         price=line_price.gross,
+                        #     )
+                        # else:
+                        cp = CartPosition(
+                            event=self.event,
+                            item=op.item,
+                            variation=op.variation,
+                            expires=self._expiry,
+                            cart_id=self.cart_id,
+                            voucher=op.voucher,
+                            addon_to=op.addon_to if op.addon_to else None,
+                            subevent=op.subevent,
+                            seat=op.seat,
+                            listed_price=op.listed_price,
+                            price_after_voucher=op.price_after_voucher,
+                            custom_price_input=op.custom_price_input,
+                            custom_price_input_is_net=op.custom_price_input_is_net,
+                            line_price_gross=line_price.gross,
+                            tax_rate=line_price.rate,
+                            price=line_price.gross,
+                        )
                         if self.event.settings.attendee_names_asked:
                             scheme = PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)
                             if 'attendee-name' in self._widget_data:

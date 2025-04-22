@@ -241,6 +241,7 @@ class CartMixin:
             'positions': positions,
             'invoice_address': self.invoice_address,
             'all_with_voucher': all(p.voucher_id for p in positions),
+            'bundled_series': self.request.event.meta_data.get('bundle_series_events'),
             'raw': cartpos,
             'total': total,
             'net_total': net_total,

@@ -16,9 +16,13 @@
 {% for subev in subevent_list.subevent_list %}
     <div class="row">
         <dt class="col-md-4 col-xs-12">
-            <a href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&amp;subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}">
+            {% if 'bundle_series_events' in subev.meta_data and subev.meta_data.bundle_series_events == "true" %}
                 {{ subev.name }}
-            </a>
+            {% else %}
+                <a href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&amp;subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}">
+                    {{ subev.name }}
+                </a>
+            {% endif %}
         </dt>
         <dd class="col-md-3 col-xs-12">
             {{ subev.get_date_range_display_as_html }}

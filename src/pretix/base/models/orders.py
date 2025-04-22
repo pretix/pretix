@@ -2660,6 +2660,22 @@ class OrderPosition(AbstractPosition):
 
         ops = []
         cp_mapping = {}
+        bundled = False
+        bundled_voucher = None
+
+        for i, cartpos in enumerate(sorted(cp, key=lambda c: c.sort_key)):
+            ev = cartpos.event
+            if ('bundle_series_events' in ev.meta_data and ev.meta_data['bundle_series_events'] == "true"):
+                bundled = True
+                if cartpos.voucher:
+                    bundled_voucher = cartpos.voucher
+
+        if bundled and bundled_voucher is not None:
+            Voucher.objects.filter(pk=bundled_voucher.pk).update(redeemed=F('redeemed') + 1)
+            bundled_voucher.log_action('pretix.voucher.redeemed', {
+                'order_code': order.code
+            })
+
         # The sorting key ensures that all addons come directly after the position they refer to
         for i, cartpos in enumerate(sorted(cp, key=lambda c: c.sort_key)):
             op = OrderPosition(order=order)
@@ -2697,11 +2713,13 @@ class OrderPosition(AbstractPosition):
                 answ.orderposition = op
                 answ.cartposition = None
                 answ.save()
-            if cartpos.voucher:
-                Voucher.objects.filter(pk=cartpos.voucher.pk).update(redeemed=F('redeemed') + 1)
-                cartpos.voucher.log_action('pretix.voucher.redeemed', {
-                    'order_code': order.code
-                })
+
+            if not bundled:
+                if cartpos.voucher:
+                    Voucher.objects.filter(pk=cartpos.voucher.pk).update(redeemed=F('redeemed') + 1)
+                    cartpos.voucher.log_action('pretix.voucher.redeemed', {
+                        'order_code': order.code
+                    })
 
         # Delete afterwards. Deleting in between might cause deletion of things related to add-ons
         # due to the deletion cascade.
