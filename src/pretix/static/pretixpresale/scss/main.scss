@@ -105,18 +105,22 @@ a, .btn-link {
 button:focus, a:focus, .btn:focus, summary:focus,
 /*button:active, a:active, .btn:active, summary:active,*/
 button:active:focus, a:active:focus, .btn:active:focus, summary:active:focus,
-input:focus, .form-control:focus, .btn-checkbox:has(input:focus) {
+input:focus, .form-control:focus, .btn-checkbox:has(input:focus),
+.input-item-count-group:has(input:focus), .input-group-price:has(input:focus) {
     outline: 2px solid $link-hover-color;
     outline-offset: 2px;
 }
 input:focus, .form-control:focus {
     border-color: $input-border;
-    z-index: 2;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.btn-checkbox input:focus {
+.btn-checkbox input:focus, .input-item-count-group input:focus, .input-group-price input:focus {
     outline: none;
+}
+/* border-radius on these containers is needed for correctly rounded focus-outlines */
+.input-item-count-group, .input-group-price {
+    border-radius: var(--pretix-border-radius-base);
 }
 
 footer {
