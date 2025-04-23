@@ -18,7 +18,7 @@
     {% include "pretixpresale/fragment_js.html" %}
     <meta name="referrer" content="origin">
     {{ html_head|safe }}
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block custom_header %}{% endblock %}
     {% if settings.favicon %}
         <link rel="icon" href="{{ settings.favicon|thumb:'16x16^' }}">
