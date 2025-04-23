@@ -2660,19 +2660,20 @@ class OrderPosition(AbstractPosition):
 
         ops = []
         cp_mapping = {}
-        bundled = False
-        bundled_voucher = None
+        bundled_series = False
+        bundled_series_voucher = None
 
         for i, cartpos in enumerate(sorted(cp, key=lambda c: c.sort_key)):
             ev = cartpos.event
             if ('bundle_series_events' in ev.meta_data and ev.meta_data['bundle_series_events'] == "true"):
-                bundled = True
+                bundled_series = True
                 if cartpos.voucher:
-                    bundled_voucher = cartpos.voucher
+                    bundled_series_voucher = cartpos.voucher
+                    break
 
-        if bundled and bundled_voucher is not None:
-            Voucher.objects.filter(pk=bundled_voucher.pk).update(redeemed=F('redeemed') + 1)
-            bundled_voucher.log_action('pretix.voucher.redeemed', {
+        if bundled_series and bundled_series_voucher is not None:
+            Voucher.objects.filter(pk=bundled_series_voucher.pk).update(redeemed=F('redeemed') + 1)
+            bundled_series_voucher.log_action('pretix.voucher.redeemed', {
                 'order_code': order.code
             })
 
@@ -2714,7 +2715,7 @@ class OrderPosition(AbstractPosition):
                 answ.cartposition = None
                 answ.save()
 
-            if not bundled:
+            if not bundled_series:
                 if cartpos.voucher:
                     Voucher.objects.filter(pk=cartpos.voucher.pk).update(redeemed=F('redeemed') + 1)
                     cartpos.voucher.log_action('pretix.voucher.redeemed', {

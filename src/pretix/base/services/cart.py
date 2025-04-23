@@ -409,8 +409,8 @@ class CartManager:
             ):
                 if op.item.require_voucher and op.voucher is None:
                     if getattr(op, 'voucher_ignored', False):
-                        raise CartError("L412: " + error_messages['voucher_redeemed'])
-                    raise CartError("L413: " + error_messages['voucher_required'])
+                        raise CartError(error_messages['voucher_redeemed'])
+                    raise CartError(error_messages['voucher_required'])
 
                 if (
                     (op.item.hide_without_voucher or (op.variation and op.variation.hide_without_voucher)) and
