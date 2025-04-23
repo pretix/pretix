@@ -301,8 +301,8 @@
                             <p>
                         {% endif %}
                         {% if item.free_price %}
+                            <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name currency=event.currency %}Set price in {{ currency }} for {{ item }}{% endblocktrans %}</label>
                             <div class="input-group input-group-price">
-                                <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name currency=event.currency %}Set price in {{ currency }} for {{ item }}{% endblocktrans %}</label>
                                 <span class="input-group-addon" aria-hidden="true">{{ event.currency }}</span>
                                 <input type="number" class="form-control input-item-price" placeholder="0"
                                        id="{{ form_prefix }}price-item-{{ item.pk }}"
