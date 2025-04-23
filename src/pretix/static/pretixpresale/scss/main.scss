@@ -60,7 +60,7 @@ html {
 
 @media (max-width: $screen-xs-max) {
     /* scale everything to 1rem so older/smaller iPhones do not zoom inputs on focus */
-    body, .form-control {
+    .form-control {
         font-size: 1rem;
     }
 }
