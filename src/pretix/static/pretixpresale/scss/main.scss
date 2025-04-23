@@ -31,9 +31,9 @@ $padding-xs-horizontal:     0.3571428571rem !default;/* 5px / 14px */
 $navbar-height:             3.5714285714rem !default;/* 50px / 14px */
 
 
-$input-height-base:              ($line-height-computed + ($padding-base-vertical * 2) + 0.1428571429rem) !default; /* 2px@14px = 0.1428571429rem */
-$input-height-large:             ($font-size-large * $line-height-large) + ($padding-large-vertical * 2) + 0.1428571429rem !default;
-$input-height-small:             ($font-size-small * $line-height-small) + ($padding-small-vertical * 2) + 0.1428571429rem !default;
+$input-height-base:              ($line-height-computed + ($padding-base-vertical * 2)) !default;
+$input-height-large:             ($font-size-large * $line-height-large) + ($padding-large-vertical * 2) !default;
+$input-height-small:             ($font-size-small * $line-height-small) + ($padding-small-vertical * 2) !default;
 
 
 /* imports */
