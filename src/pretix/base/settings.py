@@ -1308,10 +1308,13 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Show event times and dates on the ticket shop"),
-            help_text=_("If disabled, no date or time will be shown on the ticket shop's front page. This settings "
-                        "also affects a few other locations, however it should not be expected that the date of the "
-                        "event is shown nowhere to users."),
+            label=_("This shop represents an event"),
+            help_text=_(
+                "Uncheck this box if you are only selling something that has no specific date, such as gift cards or a "
+                "ticket that can be used any time. The system will then stop showing the event date in some places like "
+                "the event start page. Note that pretix still is a system built around events and the date may still "
+                "show up in other places."
+            ),
         )
     },
     'show_date_to': {
@@ -2105,7 +2108,7 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Event description"),
-            widget=I18nMarkdownTextarea,
+            widget=I18nTextarea,
             help_text=_(
                 "You can use this to share information with your attendees, such as travel information or the link to a digital event. "
                 "If you keep it empty, we will put a link to the event shop, the admission time, and your organizer name in there. "
@@ -2984,7 +2987,7 @@ Your {organizer} team"""))  # noqa: W291
             help_text=_('This picture will be used as a preview if you post links to your ticket shop on social media. '
                         'Facebook advises to use a picture size of 1200 x 630 pixels, however some platforms like '
                         'WhatsApp and Reddit only show a square preview, so we recommend to make sure it still looks good '
-                        'only the center square is shown. If you do not fill this, we will use the logo given above.')
+                        'if only the center square is shown. If you do not fill this, we will use the logo given above.')
         ),
         'serializer_class': UploadedFileField,
         'serializer_kwargs': dict(
@@ -3288,6 +3291,8 @@ Your {organizer} team"""))  # noqa: W291
             label=_('Validity of gift card codes in years'),
             help_text=_('If you set a number here, gift cards will by default expire at the end of the year after this '
                         'many years. If you keep it empty, gift cards do not have an explicit expiry date.'),
+            min_value=0,
+            max_value=99,
         )
     },
     'cookie_consent': {
@@ -3707,6 +3712,14 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     'MY': (['State', 'Federal territory'], 'long'),
     'MX': (['State', 'Federal district'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
+    'IT': (['Province', 'Free municipal consortium', 'Metropolitan city', 'Autonomous province',
+            'Free municipal consortium', 'Decentralized regional entity'], 'short'),
+}
+COUNTRY_STATE_LABEL = {
+    # Countries in which the "State" field should not be called "State"
+    'CA': pgettext_lazy('address', 'Province'),
+    'JP': pgettext_lazy('address', 'Prefecture'),
+    'IT': pgettext_lazy('address', 'Province'),
 }
 
 settings_hierarkey = Hierarkey(attribute_name='settings')

@@ -70,6 +70,7 @@ from pretix.helpers.database import (
 )
 from pretix.helpers.dicts import move_to_end
 from pretix.helpers.i18n import get_format_without_seconds, i18ncomp
+from pretix.helpers.models import flatten_choices
 
 PAYMENT_PROVIDERS = []
 
@@ -177,10 +178,10 @@ class FilterForm(forms.Form):
             elif isinstance(v, Model):
                 val = '"' + str(v) + '"'
             elif isinstance(f, forms.MultipleChoiceField):
-                valdict = dict(f.choices)
+                valdict = dict(flatten_choices(f.choices))
                 val = ' or '.join([str(valdict.get(m)) for m in v])
             elif isinstance(f, forms.ChoiceField):
-                val = str(dict(f.choices).get(v))
+                val = str(dict(flatten_choices(f.choices)).get(v))
             elif isinstance(v, datetime):
                 val = date_format(v, 'SHORT_DATETIME_FORMAT')
             elif isinstance(v, Decimal):
@@ -196,7 +197,6 @@ class OrderFilterForm(FilterForm):
         label=_('Search for…'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search for…'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -849,11 +849,17 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             ).distinct()
         for q in self.event.questions.all():
             if fdata.get(f'question_{q.pk}'):
-                if q.type == Question.TYPE_BOOLEAN:
+                if q.type in (Question.TYPE_BOOLEAN, Question.TYPE_NUMBER):
                     answers = QuestionAnswer.objects.filter(
                         question_id=q.pk,
                         orderposition__order_id=OuterRef('pk'),
                         answer__exact=fdata.get(f'question_{q.pk}')
+                    )
+                elif q.type in (Question.TYPE_DATE, Question.TYPE_TIME, Question.TYPE_DATETIME):
+                    answers = QuestionAnswer.objects.filter(
+                        question_id=q.pk,
+                        orderposition__order_id=OuterRef('pk'),
+                        answer__exact=str(fdata.get(f'question_{q.pk}'))
                     )
                 elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
                     answers = QuestionAnswer.objects.filter(
@@ -980,7 +986,6 @@ class OrderPaymentSearchFilterForm(forms.Form):
         label=_('Search for…'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search for…'),
-            'autofocus': 'autofocus'
         }),
         required=False,
     )
@@ -1242,7 +1247,6 @@ class SubEventFilterForm(FilterForm):
         label=_('Event name'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Event name'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1375,7 +1379,6 @@ class OrganizerFilterForm(FilterForm):
         label=_('Organizer name'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Organizer name'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1433,7 +1436,6 @@ class GiftCardFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1485,7 +1487,6 @@ class CustomerFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1558,7 +1559,6 @@ class ReusableMediaFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1613,7 +1613,6 @@ class TeamFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1695,7 +1694,6 @@ class EventFilterForm(FilterForm):
         label=_('Event name'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Event name'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -1878,7 +1876,6 @@ class CheckinListAttendeeFilterForm(FilterForm):
         label=_('Search attendee…'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search attendee…'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -2027,7 +2024,6 @@ class UserFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -2119,7 +2115,6 @@ class VoucherFilterForm(FilterForm):
         label=_('Search voucher'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search voucher'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
@@ -2597,7 +2592,6 @@ class DeviceFilterForm(FilterForm):
         label=_('Search query'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search query'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )

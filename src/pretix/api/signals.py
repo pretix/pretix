@@ -26,7 +26,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.api.models import ApiCall, WebHookCall
-from pretix.base.signals import periodic_task
+from pretix.base.signals import EventPluginSignal, periodic_task
 from pretix.helpers.periodic import minimum_interval
 
 register_webhook_events = Signal()
@@ -41,6 +41,28 @@ register_device_security_profile = Signal()
 This signal is sent out to get all known device security_profiles. Receivers should
 return an instance of a subclass of ``pretix.api.auth.devicesecurity.BaseSecurityProfile``
 or a list of such instances.
+"""
+
+order_api_details = EventPluginSignal()
+"""
+Arguments: ``order``
+
+This signal is sent out to fill the ``plugin_details`` field of the order API. Receivers
+should return a dictionary that is combined with the dictionaries of all other plugins.
+Note that doing database or network queries in receivers to this signal is discouraged
+and could cause serious performance issues. The main purpose is to provide information
+from e.g. ``meta_info`` to the API consumer,
+"""
+
+orderposition_api_details = EventPluginSignal()
+"""
+Arguments: ``orderposition``
+
+This signal is sent out to fill the ``plugin_details`` field of the order API. Receivers
+should return a dictionary that is combined with the dictionaries of all other plugins.
+Note that doing database or network queries in receivers to this signal is discouraged
+and could cause serious performance issues. The main purpose is to provide information
+from e.g. ``meta_info`` to the API consumer,
 """
 
 

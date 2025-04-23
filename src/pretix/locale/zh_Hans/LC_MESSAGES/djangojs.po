@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 13:18+0000\n"
+"POT-Creation-Date: 2025-02-25 10:10+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -569,58 +569,58 @@ msgstr ""
 msgid "Check-in QR"
 msgstr "签到QR码"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:543
+#: pretix/static/pretixcontrol/js/ui/editor.js:549
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "由于以下原因无法加载PDF背景文件:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:894
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Group of objects"
 msgstr "对象组"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#: pretix/static/pretixcontrol/js/ui/editor.js:908
 #, fuzzy
 #| msgid "Text object"
 msgid "Text object (deprecated)"
 msgstr "文本对象"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:910
 #, fuzzy
 #| msgid "Text object"
 msgid "Text box"
 msgstr "文本对象"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:903
+#: pretix/static/pretixcontrol/js/ui/editor.js:912
 msgid "Barcode area"
 msgstr "条码区"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:905
+#: pretix/static/pretixcontrol/js/ui/editor.js:914
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "条码区"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:907
+#: pretix/static/pretixcontrol/js/ui/editor.js:916
 msgid "Powered by pretix"
 msgstr "由pretix驱动"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:909
+#: pretix/static/pretixcontrol/js/ui/editor.js:918
 msgid "Object"
 msgstr "对象"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:913
+#: pretix/static/pretixcontrol/js/ui/editor.js:922
 msgid "Ticket design"
 msgstr "门票设计"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1250
+#: pretix/static/pretixcontrol/js/ui/editor.js:1259
 msgid "Saving failed."
 msgstr "保存失败."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1319
-#: pretix/static/pretixcontrol/js/ui/editor.js:1370
+#: pretix/static/pretixcontrol/js/ui/editor.js:1328
+#: pretix/static/pretixcontrol/js/ui/editor.js:1379
 msgid "Error while uploading your PDF file, please try again."
 msgstr "上传PDF文件时出错，请重试。"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1353
+#: pretix/static/pretixcontrol/js/ui/editor.js:1362
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "你真的想离开编辑器而不保存你的更改吗?"
 
@@ -683,7 +683,7 @@ msgstr "在内部使用一个不同的名称"
 msgid "Click to close"
 msgstr "点此关闭"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1084
+#: pretix/static/pretixcontrol/js/ui/main.js:1090
 msgid "You have unsaved changes!"
 msgstr ""
 

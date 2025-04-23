@@ -83,8 +83,8 @@ from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
 )
 from pretix.base.settings import (
-    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SALUTATIONS,
-    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL,
+    PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
 )
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.timemachine import time_machine_now
@@ -721,7 +721,7 @@ class BaseQuestionsForm(forms.Form):
                     'data-country-information-url': reverse('js_helpers.states'),
                 }),
             )
-            c = [('', pgettext_lazy('address', 'Select state'))]
+            c = [('', '---')]
             fprefix = str(self.prefix) + '-' if self.prefix is not None and self.prefix != '-' else ''
             cc = None
             state = None
@@ -1079,7 +1079,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['country'].choices = CachedCountries()
         self.fields['country'].widget.attrs['data-country-information-url'] = reverse('js_helpers.states')
 
-        c = [('', pgettext_lazy('address', 'Select state'))]
+        c = [('', '---')]
         fprefix = self.prefix + '-' if self.prefix else ''
         cc = None
         if fprefix + 'country' in self.data:
@@ -1088,16 +1088,19 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             cc = str(self.initial['country'])
         elif self.instance and self.instance.country:
             cc = str(self.instance.country)
+        state_label = pgettext_lazy('address', 'State')
         if cc and cc in COUNTRIES_WITH_STATE_IN_ADDRESS:
             types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
             statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
             c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
+            if cc in COUNTRY_STATE_LABEL:
+                state_label = COUNTRY_STATE_LABEL[cc]
         elif fprefix + 'state' in self.data:
             self.data = self.data.copy()
             del self.data[fprefix + 'state']
 
         self.fields['state'] = forms.ChoiceField(
-            label=pgettext_lazy('address', 'State'),
+            label=state_label,
             required=False,
             choices=c,
             widget=forms.Select(attrs={

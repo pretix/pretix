@@ -469,3 +469,21 @@ def test_wle_send_voucher_unavailable(token_client, organizer, event, item, wle,
     assert resp.status_code == 400
     wle.refresh_from_db()
     assert not wle.voucher
+
+
+@pytest.mark.django_db
+def test_wle_locale_optional(token_client, organizer, event, item, quota):
+    event.settings.locale = "de"
+    event.settings.locales = ["en", "de"]
+    quota.size = 0
+    quota.save()
+    wle = create_wle(
+        token_client, organizer, event,
+        data={
+            'email': 'testdummy@pretix.eu',
+            'item': item.pk,
+            'variation': None,
+            'subevent': None
+        },
+    )
+    assert wle.locale == "de"

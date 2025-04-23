@@ -165,6 +165,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
 
         if not serializer.validated_data.get('position'):
             kwargs['position'] = OrderPosition.all.filter(
+                order__event=self.request.event,
                 secret=serializer.validated_data['raw_barcode']
             ).first()
 

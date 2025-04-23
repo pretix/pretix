@@ -43,7 +43,7 @@ from django.utils.translation import get_language
 from django_scopes import scope
 
 from pretix.base.models.auth import StaffSession
-from pretix.base.settings import GlobalSettingsObject
+from pretix.base.settings import COUNTRY_STATE_LABEL, GlobalSettingsObject
 from pretix.control.navigation import (
     get_event_navigation, get_global_navigation, get_organizer_navigation,
 )
@@ -81,13 +81,13 @@ def _default_context(request):
         'DEBUG': settings.DEBUG,
     }
     _html_head = []
-    if hasattr(request, 'event') and request.user.is_authenticated:
+    if getattr(request, 'event', None) and request.user.is_authenticated:
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
     ctx['html_head'] = "".join(_html_head)
 
     _js_payment_weekdays_disabled = '[]'
-    if getattr(request, 'event', None) and hasattr(request, 'organizer') and request.user.is_authenticated:
+    if getattr(request, 'event', None) and getattr(request, 'organizer', None) and request.user.is_authenticated:
         ctx['nav_items'] = get_event_navigation(request)
 
         if request.event.settings.get('payment_term_weekdays'):
@@ -140,6 +140,7 @@ def _default_context(request):
     ctx['js_time_format'] = get_javascript_format('TIME_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
     ctx['select2locale'] = get_language()[:2]
+    ctx['COUNTRY_STATE_LABEL'] = COUNTRY_STATE_LABEL
 
     ctx['warning_update_available'] = False
     ctx['warning_update_check_active'] = False

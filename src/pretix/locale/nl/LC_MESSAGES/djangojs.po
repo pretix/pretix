@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2024-10-23 14:30+0000\n"
-"Last-Translator: arjan-s <github@anymore.nl>\n"
+"POT-Creation-Date: 2025-02-25 10:10+0000\n"
+"PO-Revision-Date: 2025-03-02 12:55+0000\n"
+"Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.10.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -30,7 +30,7 @@ msgstr "Opmerking:"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
 msgid "Venmo"
@@ -59,19 +59,19 @@ msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
-msgstr "SEPA Direct Debit"
+msgstr "SEPA Automatische Incasso"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
 msgid "SOFORT"
@@ -159,7 +159,7 @@ msgstr "Betaalde bestellingen"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr "Totaalomzet"
+msgstr "Totaal omzet"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
@@ -564,53 +564,53 @@ msgstr ""
 msgid "Check-in QR"
 msgstr "QR-code voor check-in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:543
+#: pretix/static/pretixcontrol/js/ui/editor.js:549
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Het PDF-achtergrondbestand kon niet geladen worden met als reden:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:894
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Group of objects"
 msgstr "Groep van objecten"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#: pretix/static/pretixcontrol/js/ui/editor.js:908
 #, fuzzy
 msgid "Text object (deprecated)"
 msgstr "Tekstobject"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:910
 msgid "Text box"
 msgstr "Tekstkader"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:903
+#: pretix/static/pretixcontrol/js/ui/editor.js:912
 msgid "Barcode area"
 msgstr "Barcode gebied"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:905
+#: pretix/static/pretixcontrol/js/ui/editor.js:914
 msgid "Image area"
 msgstr "Afbeeldingsgebied"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:907
+#: pretix/static/pretixcontrol/js/ui/editor.js:916
 msgid "Powered by pretix"
 msgstr "Mogelijk gemaakt door pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:909
+#: pretix/static/pretixcontrol/js/ui/editor.js:918
 msgid "Object"
 msgstr "Object"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:913
+#: pretix/static/pretixcontrol/js/ui/editor.js:922
 msgid "Ticket design"
 msgstr "Ticketontwerp"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1250
+#: pretix/static/pretixcontrol/js/ui/editor.js:1259
 msgid "Saving failed."
 msgstr "Opslaan mislukt."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1319
-#: pretix/static/pretixcontrol/js/ui/editor.js:1370
+#: pretix/static/pretixcontrol/js/ui/editor.js:1328
+#: pretix/static/pretixcontrol/js/ui/editor.js:1379
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Probleem bij het uploaden van het PDF-bestand, probeer het opnieuw."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1353
+#: pretix/static/pretixcontrol/js/ui/editor.js:1362
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Wilt u de editor verlaten zonder uw wijzigingen op te slaan?"
 
@@ -676,7 +676,7 @@ msgstr "Gebruik intern een andere naam"
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1084
+#: pretix/static/pretixcontrol/js/ui/main.js:1090
 msgid "You have unsaved changes!"
 msgstr "U heeft nog niet opgeslagen wijzigingen!"
 

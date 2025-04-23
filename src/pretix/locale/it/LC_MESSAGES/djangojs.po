@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 13:18+0000\n"
-"PO-Revision-Date: 2023-05-18 01:00+0000\n"
-"Last-Translator: M C <micasadmail@gmail.com>\n"
-"Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/it/>\n"
+"POT-Creation-Date: 2025-02-25 10:10+0000\n"
+"PO-Revision-Date: 2025-03-16 19:00+0000\n"
+"Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
+"Language-Team: Italian <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.10.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -210,7 +210,7 @@ msgstr "Cambia direzione"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr "Inserimento"
+msgstr "Ingresso"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
@@ -455,7 +455,7 @@ msgstr "Varianti prodotto"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
-msgstr ""
+msgstr "Cancello"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
@@ -523,11 +523,11 @@ msgstr "Almeno una delle condizioni sottostanti (oppure)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
 msgid "Event start"
-msgstr "Evento inizia"
+msgstr "Inizio evento"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
 msgid "Event end"
-msgstr "Evento termina"
+msgstr "Fine evento"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
 msgid "Event admission"
@@ -571,56 +571,56 @@ msgstr ""
 msgid "Check-in QR"
 msgstr "Check-in con QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:543
+#: pretix/static/pretixcontrol/js/ui/editor.js:549
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Il file PDF di sfondo non può essere caricato per le seguenti ragioni:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:894
+#: pretix/static/pretixcontrol/js/ui/editor.js:903
 msgid "Group of objects"
 msgstr "Gruppo di oggetti"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:899
+#: pretix/static/pretixcontrol/js/ui/editor.js:908
 #, fuzzy
 #| msgid "Text object"
 msgid "Text object (deprecated)"
 msgstr "Oggetto testo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:910
 #, fuzzy
 #| msgid "Text object"
 msgid "Text box"
 msgstr "Oggetto testo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:903
+#: pretix/static/pretixcontrol/js/ui/editor.js:912
 msgid "Barcode area"
 msgstr "Area codice a barra"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:905
+#: pretix/static/pretixcontrol/js/ui/editor.js:914
 msgid "Image area"
 msgstr "Area immagini"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:907
+#: pretix/static/pretixcontrol/js/ui/editor.js:916
 msgid "Powered by pretix"
 msgstr "Powered by Pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:909
+#: pretix/static/pretixcontrol/js/ui/editor.js:918
 msgid "Object"
 msgstr "Oggetto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:913
+#: pretix/static/pretixcontrol/js/ui/editor.js:922
 msgid "Ticket design"
 msgstr "Design biglietto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1250
+#: pretix/static/pretixcontrol/js/ui/editor.js:1259
 msgid "Saving failed."
 msgstr "Salvataggio fallito."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1319
-#: pretix/static/pretixcontrol/js/ui/editor.js:1370
+#: pretix/static/pretixcontrol/js/ui/editor.js:1328
+#: pretix/static/pretixcontrol/js/ui/editor.js:1379
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Errore durante il caricamento del tuo file PDF, prova di nuovo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1353
+#: pretix/static/pretixcontrol/js/ui/editor.js:1362
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Vuoi davvero abbandonare l'editor senza salvare le modifiche?"
 
@@ -685,7 +685,7 @@ msgstr "Utilizza un nome diverso internamente"
 msgid "Click to close"
 msgstr "Clicca per chiudere"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1084
+#: pretix/static/pretixcontrol/js/ui/main.js:1090
 msgid "You have unsaved changes!"
 msgstr "Hai cambiamenti non salvati!"
 

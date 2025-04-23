@@ -674,7 +674,7 @@ def replace_images_with_cid_paths(body_html):
     if body_html:
         email = BeautifulSoup(body_html, "lxml")
         cid_images = []
-        for image in email.findAll('img'):
+        for image in email.find_all('img'):
             original_image_src = image['src']
 
             try:

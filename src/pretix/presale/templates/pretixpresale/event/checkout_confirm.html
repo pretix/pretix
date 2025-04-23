@@ -4,6 +4,7 @@
 {% load money %}
 {% load eventurl %}
 {% load eventsignal %}
+{% load getitem %}
 {% block title %}{% trans "Review order" %}{% endblock %}
 {% block content %}
 <main aria-label="{% trans "Review order" %}">
@@ -92,7 +93,7 @@
                                 <dt>{% trans "Country" %}</dt>
                                 <dd>{{ addr.country.name }}</dd>
                                 {% if addr.state %}
-                                    <dt>{% trans "State" context "address" %}</dt>
+                                    <dt>{% trans "State" context "address" as state_label %}{{ COUNTRY_STATE_LABEL|getitem:addr.country.code|default:state_label }}</dt>
                                     <dd>{{ addr.state_name }}</dd>
                                 {% endif %}
                                 {% if request.event.settings.invoice_address_vatid and addr.vat_id %}
