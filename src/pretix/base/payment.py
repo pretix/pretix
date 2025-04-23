@@ -1308,6 +1308,9 @@ class OffsettingProvider(BasePaymentProvider):
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
         return _('Balanced against orders: %s' % ', '.join(payment.info_data['orders']))
 
+    def refund_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
+        return self.payment_control_render(request, payment)
+
 
 class GiftCardPayment(BasePaymentProvider):
     identifier = "giftcard"

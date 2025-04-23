@@ -2476,18 +2476,26 @@ class EventTest(TestCase):
                 datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
                 datetime.datetime(2025, 3, 10, 3, 0, 0, tzinfo=tz),
                 'March 9th – 10th, 2025',
-                '<time datetime="2025-03-09">March 9th</time> – <time datetime="2025-03-10">10th, 2025</time>',
+                '<time datetime="2025-03-09">March 9th</time> '
+                '<span aria-hidden="true">–</span><span class="sr-only"> until </span> '
+                '<time datetime="2025-03-10">10th, 2025</time>',
                 'March 9th – 10th, 2025 20:00–02:00',
-                '<time datetime="2025-03-09">March 9th</time> – <time datetime="2025-03-10">10th, 2025</time> '
+                '<time datetime="2025-03-09">March 9th</time> '
+                '<span aria-hidden="true">–</span><span class="sr-only"> until </span> '
+                '<time datetime="2025-03-10">10th, 2025</time> '
                 '<time datetime="2025-03-09T21:00:00+01:00" data-timezone="UTC" data-time-short>20:00–02:00</time>'
             ),
             (
                 datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
                 datetime.datetime(2025, 3, 12, 14, 0, 0, tzinfo=tz),
                 'March 9th – 12th, 2025',
-                '<time datetime="2025-03-09">March 9th</time> – <time datetime="2025-03-12">12th, 2025</time>',
+                '<time datetime="2025-03-09">March 9th</time> '
+                '<span aria-hidden="true">–</span><span class="sr-only"> until </span> '
+                '<time datetime="2025-03-12">12th, 2025</time>',
                 'March 9th – 12th, 2025',
-                '<time datetime="2025-03-09">March 9th</time> – <time datetime="2025-03-12">12th, 2025</time>',
+                '<time datetime="2025-03-09">March 9th</time> '
+                '<span aria-hidden="true">–</span><span class="sr-only"> until </span> '
+                '<time datetime="2025-03-12">12th, 2025</time>',
             ),
             (
                 datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),

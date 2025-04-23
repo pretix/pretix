@@ -45,6 +45,7 @@ var strings = {
     'loading_error_429': django.pgettext('widget', 'There are currently a lot of users in this ticket shop. Please ' +
         'open the shop in a new tab to continue.'),
     'open_new_tab': django.pgettext('widget', 'Open ticket shop'),
+    'checkout': django.pgettext('widget', 'Checkout'),
     'cart_error': django.pgettext('widget', 'The cart could not be created. Please try again later'),
     'cart_error_429': django.pgettext('widget', 'We could not create your cart, since there are currently too many ' +
         'users in this ticket shop. Please click "Continue" to retry in a new tab.'),
@@ -77,6 +78,13 @@ var strings = {
         'FR': django.gettext('Fr'),
         'SA': django.gettext('Sa'),
         'SU': django.gettext('Su'),
+        'MONDAY': django.gettext('Monday'),
+        'TUESDAY': django.gettext('Tuesday'),
+        'WEDNESDAY': django.gettext('Wednesday'),
+        'THURSDAY': django.gettext('Thursday'),
+        'FRIDAY': django.gettext('Friday'),
+        'SATURDAY': django.gettext('Saturday'),
+        'SUNDAY': django.gettext('Sunday'),
     },
     'months': {
         '01': django.gettext('January'),
@@ -820,17 +828,18 @@ var shared_loading_fragment = (
 );
 
 var shared_iframe_fragment = (
-    '<div :class="frameClasses" role="dialog" aria-modal="true" >'
+    '<div :class="frameClasses" role="dialog" aria-modal="true" aria-label="'+strings.checkout+'">'
     + '<div class="pretix-widget-frame-loading" v-show="$root.frame_loading">'
     + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
     + '</div>'
     + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
     + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent.stop="close" role="button" aria-label="'+strings.close+'">'
-    + '<svg height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+    + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
     + '</a></div>'
     + '<iframe frameborder="0" width="650" height="650" @load="iframeLoaded" '
     + '        :name="$root.parent.widget_id" src="about:blank" v-once'
     + '        allow="autoplay *; camera *; fullscreen *; payment *"'
+    + '        title="'+strings.checkout+'"'
     + '        referrerpolicy="origin">'
     + 'Please enable frames in your browser!'
     + '</iframe>'
@@ -862,7 +871,7 @@ var shared_lightbox_fragment = (
                 + '<figcaption v-if="$root.lightbox.description">{{$root.lightbox.description}}</figcaption>'
             + '</figure>'
             + '<button type="button" class="pretix-widget-lightbox-close" @click="lightboxClose" aria-label="'+strings.close+'">'
-                + '<svg height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+                + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
             + '</button>'
         + '</div>'
     + '</div>'
@@ -964,10 +973,10 @@ Vue.component('pretix-widget-event-form', {
     template: ('<div class="pretix-widget-event-form">'
         // Back navigation
         + '<div class="pretix-widget-event-list-back" v-if="$root.events || $root.weeks || $root.days">'
-        + '<a href="#" @click.prevent.stop="back_to_list" v-if="!$root.subevent">&lsaquo; '
+        + '<a href="#" rel="back" @click.prevent.stop="back_to_list" v-if="!$root.subevent">&lsaquo; '
         + strings['back_to_list']
         + '</a>'
-        + '<a href="#" @click.prevent.stop="back_to_list" v-if="$root.subevent">&lsaquo; '
+        + '<a href="#" rel="back" @click.prevent.stop="back_to_list" v-if="$root.subevent">&lsaquo; '
         + strings['back_to_dates']
         + '</a>'
         + '</div>'
@@ -1119,6 +1128,11 @@ Vue.component('pretix-widget-event-form', {
         back_to_list: function() {
             this.$root.target_url = this.$root.parent_stack.pop();
             this.$root.error = null;
+            if (!this.$root.subevent) {
+                // reset if we are not in a series
+                this.$root.name = null;
+                this.$root.frontpage_text = null;
+            }
             this.$root.subevent = null;
             this.$root.offset = 0;
             this.$root.append_events = false;
@@ -1130,6 +1144,12 @@ Vue.component('pretix-widget-event-form', {
             } else {
                 this.$root.view = "weeks";
             }
+
+            var $el = this.$root.$el;
+            this.$root.$nextTick(function() {
+                // wait for redraw, then focus content element for better a11y
+                $el.focus();
+            });
         },
         calculate_buy_disabled: function() {
             var i, j, k;
@@ -1197,7 +1217,7 @@ Vue.component('pretix-widget-event-list-filter-form', {
 });
 
 Vue.component('pretix-widget-event-list-entry', {
-    template: ('<a :class="classObject" @click.prevent.stop="select">'
+    template: ('<a href="#" :class="classObject" @click.prevent.stop="select">'
         + '<div class="pretix-widget-event-list-entry-name">{{ event.name }}</div>'
         + '<div class="pretix-widget-event-list-entry-date">{{ event.date_range }}</div>'
         + '<div class="pretix-widget-event-list-entry-location">{{ location }}</div>'  // hidden by css for now, but
@@ -1237,7 +1257,7 @@ Vue.component('pretix-widget-event-list-entry', {
 Vue.component('pretix-widget-event-list', {
     template: ('<div class="pretix-widget-event-list">'
         + '<div class="pretix-widget-back" v-if="$root.weeks || $root.parent_stack.length > 0">'
-        + '<a href="#" @click.prevent.stop="back_to_calendar" role="button">&lsaquo; '
+        + '<a href="#" rel="prev" @click.prevent.stop="back_to_calendar">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1256,6 +1276,10 @@ Vue.component('pretix-widget-event-list', {
     },
     methods: {
         back_to_calendar: function () {
+            // make sure to always focus content element
+            this.$nextTick(function () {
+                this.$root.$el.focus();
+            });
             this.$root.offset = 0;
             this.$root.append_events = false;
             if (this.$root.weeks) {
@@ -1280,7 +1304,7 @@ Vue.component('pretix-widget-event-list', {
 });
 
 Vue.component('pretix-widget-event-calendar-event', {
-    template: ('<a :class="classObject" @click.prevent.stop="select">'
+    template: ('<a href="#" :class="classObject" @click.prevent.stop="select" v-bind:aria-describedby="describedby">'
         + '<strong class="pretix-widget-event-calendar-event-name">'
         + '{{ event.name }}'
         + '</strong>'
@@ -1288,7 +1312,8 @@ Vue.component('pretix-widget-event-calendar-event', {
         + '<div class="pretix-widget-event-calendar-event-availability" v-if="!event.continued && event.availability.text">{{ event.availability.text }}</div>'
         + '</a>'),
     props: {
-        event: Object
+        event: Object,
+        describedby: String,
     },
     computed: {
         classObject: function () {
@@ -1316,11 +1341,11 @@ Vue.component('pretix-widget-event-calendar-event', {
 
 Vue.component('pretix-widget-event-week-cell', {
     template: ('<div :class="classObject" @click.prevent.stop="selectDay">'
-        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day" :id="id">'
         + '{{ dayhead }}'
         + '</div>'
         + '<div class="pretix-widget-event-calendar-events" v-if="day">'
-        + '<pretix-widget-event-calendar-event v-for="e in day.events" :event="e"></pretix-widget-event-calendar-event>'
+        + '<pretix-widget-event-calendar-event v-for="e in day.events" :event="e" :describedby="id"></pretix-widget-event-calendar-event>'
         + '</div>'
         + '</div>'),
     props: {
@@ -1346,6 +1371,9 @@ Vue.component('pretix-widget-event-week-cell', {
         }
     },
     computed: {
+        id: function () {
+            return this.day ? this.$root.html_id + '-' + this.day.date : '';
+        },
         dayhead: function () {
             if (!this.day) {
                 return;
@@ -1381,7 +1409,7 @@ Vue.component('pretix-widget-event-week-cell', {
 
 Vue.component('pretix-widget-event-calendar-cell', {
     template: ('<td :class="classObject" @click.prevent.stop="selectDay">'
-        + '<div class="pretix-widget-event-calendar-day" v-if="day">'
+        + '<div class="pretix-widget-event-calendar-day" v-if="day" v-bind:aria-label="date">'
         + '{{ daynum }}'
         + '</div>'
         + '<div class="pretix-widget-event-calendar-events" v-if="day">'
@@ -1416,6 +1444,9 @@ Vue.component('pretix-widget-event-calendar-cell', {
                 return;
             }
             return this.day.date.substr(8);
+        },
+        date: function () {
+            return this.day ? (new Date(this.day.date)).toLocaleDateString() : '';
         },
         classObject: function () {
             var o = {};
@@ -1474,26 +1505,26 @@ Vue.component('pretix-widget-event-calendar', {
 
         // Calendar navigation
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth" role="button">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth">&laquo; '
         + strings['previous_month']
         + '</a> '
         + '<strong>{{ monthname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth" role="button">'
+        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth">'
         + strings['next_month']
         + ' &raquo;</a>'
         + '</div>'
 
         // Calendar
-        + '<table class="pretix-widget-event-calendar-table">'
+        + '<table class="pretix-widget-event-calendar-table" :id="id" tabindex="0" v-bind:aria-label="monthname">'
         + '<thead>'
         + '<tr>'
-        + '<th>' + strings['days']['MO'] + '</th>'
-        + '<th>' + strings['days']['TU'] + '</th>'
-        + '<th>' + strings['days']['WE'] + '</th>'
-        + '<th>' + strings['days']['TH'] + '</th>'
-        + '<th>' + strings['days']['FR'] + '</th>'
-        + '<th>' + strings['days']['SA'] + '</th>'
-        + '<th>' + strings['days']['SU'] + '</th>'
+        + '<th aria-label="' + strings['days']['MONDAY'] + '">' + strings['days']['MO'] + '</th>'
+        + '<th aria-label="' + strings['days']['TUESDAY'] + '">' + strings['days']['TU'] + '</th>'
+        + '<th aria-label="' + strings['days']['WEDNESDAY'] + '">' + strings['days']['WE'] + '</th>'
+        + '<th aria-label="' + strings['days']['THURSDAY'] + '">' + strings['days']['TH'] + '</th>'
+        + '<th aria-label="' + strings['days']['FRIDAY'] + '">' + strings['days']['FR'] + '</th>'
+        + '<th aria-label="' + strings['days']['SATURDAY'] + '">' + strings['days']['SA'] + '</th>'
+        + '<th aria-label="' + strings['days']['SUNDAY'] + '">' + strings['days']['SU'] + '</th>'
         + '</tr>'
         + '</thead>'
         + '<tbody>'
@@ -1507,7 +1538,10 @@ Vue.component('pretix-widget-event-calendar', {
         },
         monthname: function () {
             return strings['months'][this.$root.date.substr(5, 2)] + ' ' + this.$root.date.substr(0, 4);
-        }
+        },
+        id: function () {
+            return this.$root.html_id + "-event-calendar-table";
+        },
     },
     methods: {
         back_to_list: function () {
@@ -1526,7 +1560,7 @@ Vue.component('pretix-widget-event-calendar', {
             }
             this.$root.date = String(curYear) + "-" + padNumber(curMonth, 2) + "-01";
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         },
         nextmonth: function () {
             var curMonth = parseInt(this.$root.date.substr(5, 2));
@@ -1538,7 +1572,7 @@ Vue.component('pretix-widget-event-calendar', {
             }
             this.$root.date = String(curYear) + "-" + padNumber(curMonth, 2) + "-01";
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         }
     },
 });
@@ -1573,7 +1607,7 @@ Vue.component('pretix-widget-event-week-calendar', {
         + '</div>'
 
         // Actual calendar
-        + '<div class="pretix-widget-event-week-table">'
+        + '<div class="pretix-widget-event-week-table" :id="id" tabindex="0" v-bind:aria-label="weekname">'
         + '<div class="pretix-widget-event-week-col" v-for="d in $root.days">'
         + '<pretix-widget-event-week-cell :day="d">'
         + '</pretix-widget-event-week-cell>'
@@ -1590,6 +1624,9 @@ Vue.component('pretix-widget-event-week-calendar', {
             var curWeek = this.$root.week[1];
             var curYear = this.$root.week[0];
             return curWeek + ' / ' + curYear;
+        },
+        id: function () {
+            return this.$root.html_id + "-event-week-table";
         },
     },
     methods: {
@@ -1609,7 +1646,7 @@ Vue.component('pretix-widget-event-week-calendar', {
             }
             this.$root.week = [curYear, curWeek];
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         },
         nextweek: function () {
             var curWeek = this.$root.week[1];
@@ -1621,13 +1658,13 @@ Vue.component('pretix-widget-event-week-calendar', {
             }
             this.$root.week = [curYear, curWeek];
             this.$root.loading++;
-            this.$root.reload();
+            this.$root.reload({focus: '#'+this.id});
         }
     },
 });
 
 Vue.component('pretix-widget', {
-    template: ('<div class="pretix-widget-wrapper" ref="wrapper">'
+    template: ('<div class="pretix-widget-wrapper" ref="wrapper" tabindex="0" role="article" v-bind:aria-label="$root.name">'
         + '<div :class="classObject">'
         + shared_loading_fragment
         + '<div class="pretix-widget-error-message" v-if="$root.error && $root.view !== \'event\'">{{ $root.error }}</div>'
@@ -1737,7 +1774,7 @@ var shared_root_methods = {
             }
         });
     },
-    reload: function () {
+    reload: function (opt = {}) {
         var url;
         if (this.$root.is_button) {
             return;
@@ -1854,6 +1891,15 @@ var shared_root_methods = {
                 // If we're on desktop and someone selects a seating-only event in a calendar, let's open it right away,
                 // but only if the person didn't close it before.
                 root.startseating()
+            } else {
+                // make sure to only move focus to content element when it had focus before the reload/click
+                // this is needed because reload is also called on initial load and we do not want to move focus on initial load
+                if (root.$el.contains(document.activeElement)) {
+                    root.$nextTick(function() {
+                        // wait for redraw, then focus content element for better a11y
+                        (opt.focus ? document.querySelector(opt.focus) : root.$el).focus();
+                    });
+                }
             }
         }, function (error) {
             root.categories = [];

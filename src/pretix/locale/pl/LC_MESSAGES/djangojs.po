@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 10:10+0000\n"
+"POT-Creation-Date: 2025-03-25 15:46+0000\n"
 "PO-Revision-Date: 2025-03-03 16:00+0000\n"
 "Last-Translator: Wiktor Przybylski <wikprzybylski@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -682,6 +682,12 @@ msgstr "Masz niezapisane zmiany!"
 msgid "Calculating default price…"
 msgstr "Liczenie domyślnej ceny…"
 
+#: pretix/static/pretixcontrol/js/ui/plugins.js:69
+#, fuzzy
+#| msgid "Search results"
+msgid "No results"
+msgstr "Wyniki wyszukiwania"
+
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
 msgstr "Inne"
@@ -728,15 +734,15 @@ msgstr "Otrzymasz %(amount)s %(currency)s z powrotem"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Wprowadź kwotę, którą organizator może zachować."
 
-#: pretix/static/pretixpresale/js/ui/main.js:446
+#: pretix/static/pretixpresale/js/ui/main.js:445
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Proszę wybrać liczbę dla jednego z typów biletów."
 
-#: pretix/static/pretixpresale/js/ui/main.js:498
+#: pretix/static/pretixpresale/js/ui/main.js:497
 msgid "required"
 msgstr "wymagane"
 
-#: pretix/static/pretixpresale/js/ui/main.js:542
+#: pretix/static/pretixpresale/js/ui/main.js:541
 #: pretix/static/pretixpresale/js/ui/main.js:561
 msgid "Time zone:"
 msgstr "Strefa czasowa:"

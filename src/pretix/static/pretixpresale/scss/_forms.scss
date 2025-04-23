@@ -31,6 +31,32 @@ a.btn, button.btn {
   display: inline;
 }
 
+.form-horizontal {
+  /* Fix bootstrap using absolute px for fontsize-derived values based on rem */
+  .radio,
+  .checkbox,
+  .radio-inline,
+  .checkbox-inline {
+    padding-top: calc(#{$padding-base-vertical} + 1px);
+  }
+  .radio,
+  .checkbox {
+    min-height: calc(#{$line-height-computed} + #{$padding-base-vertical} + 1px);
+  }
+  @media (min-width: $screen-sm-min) {
+    .control-label {
+      padding-top: calc(#{$padding-base-vertical} + 1px);
+    }
+  }
+}
+output {
+  padding-top: $padding-base-vertical;
+}
+.form-control-static {
+  padding-top: calc(#{$padding-base-vertical} + 1px);
+  padding-bottom: calc(#{$padding-base-vertical} + 1px);
+}
+
 .form-control + .form-control-feedback {
   /* Fix for https://github.com/FortAwesome/Font-Awesome/issues/4313 */
   position: absolute;

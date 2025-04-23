@@ -196,7 +196,15 @@ var form_handlers = function (el) {
         }
         if ($(this).is('[data-is-payment-date]'))
             opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
-        $(this).datetimepicker(opts);
+        $(this).datetimepicker(opts).on("dp.hide", function() {
+            // when min/max is used in datetimepicker, closing and re-opening the picker opens at the wrong date
+            // therefore keep the current viewDate and re-set it after datetimepicker is done hiding
+            var $dtp = $(this).data("DateTimePicker");
+            var currentViewDate = $dtp.viewDate();
+            window.setTimeout(function () {
+                $dtp.viewDate(currentViewDate);
+            }, 50);
+        });
         if ($(this).parent().is('.splitdatetimerow')) {
             $(this).on("dp.change", function (ev) {
                 var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
@@ -205,7 +213,11 @@ var form_handlers = function (el) {
                     return;
                 }
                 if ($timepicker.val() === "") {
-                    date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    if (/_(until|end|to)(_|$)/.test($(this).attr("name"))) {
+                        date.set({'hour': 23, 'minute': 59, 'second': 59});
+                    } else {
+                        date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    }
                     $timepicker.data('DateTimePicker').date(date);
                 }
             });

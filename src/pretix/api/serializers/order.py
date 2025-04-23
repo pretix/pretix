@@ -607,6 +607,7 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
     order__status = serializers.SlugRelatedField(read_only=True, slug_field='status', source='order')
     order__valid_if_pending = serializers.SlugRelatedField(read_only=True, slug_field='valid_if_pending', source='order')
     order__require_approval = serializers.SlugRelatedField(read_only=True, slug_field='require_approval', source='order')
+    order__locale = serializers.SlugRelatedField(read_only=True, slug_field='locale', source='order')
 
     class Meta:
         model = OrderPosition
@@ -615,7 +616,7 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'print_logs', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat',
                   'require_attention', 'order__status', 'order__valid_if_pending', 'order__require_approval',
-                  'valid_from', 'valid_until', 'blocked')
+                  'order__locale', 'valid_from', 'valid_until', 'blocked')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1518,7 +1519,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             self.context['event'],
             order.sales_channel,
             [
-                (cp.item_id, cp.subevent_id, cp.price, bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
+                (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.price,
+                 bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
                 for cp in order_positions
             ]
         )

@@ -44,7 +44,9 @@ import dateutil
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import (
+    BadRequest, PermissionDenied, ValidationError,
+)
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
@@ -204,9 +206,9 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
             max_to=Max('subevents__date_to'),
             max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
         ).annotate(
-            order_from=Coalesce('min_from', 'date_from'),
+            order_from=Coalesce('max_from', 'date_from'),
             order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
-        )
+        ).order_by("-order_from")
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
         return qs
@@ -944,13 +946,16 @@ class DeviceQueryMixin:
         qs = self.request.organizer.devices.prefetch_related(
             'limit_events', 'gate',
         ).order_by('revoked', '-device_id')
-        if self.filter_form.is_valid():
-            qs = self.filter_form.filter_qs(qs)
 
         if 'device' in self.request_data and '__ALL' not in self.request_data:
             qs = qs.filter(
                 id__in=self.request_data.getlist('device')
             )
+        elif self.request.method == 'GET' or '__ALL' in self.request_data:
+            if self.filter_form.is_valid():
+                qs = self.filter_form.filter_qs(qs)
+        else:
+            raise BadRequest("No devices selected")
 
         return qs
 

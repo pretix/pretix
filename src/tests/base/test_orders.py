@@ -3244,6 +3244,18 @@ class OrderChangeManagerTests(TestCase):
         assert nop.tax_value == Decimal('0.00')
 
     @classscope(attr='o')
+    def test_change_taxrate_and_keep_net(self):
+        self.ocm.change_tax_rule(self.op1, self.tr19)
+        self.ocm.recalculate_taxes(keep='net')
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        nop = self.order.positions.first()
+        assert nop.price == Decimal('25.59')
+        assert nop.tax_rule == self.tr19
+        assert nop.tax_rate == Decimal('19.00')
+        assert nop.tax_value == Decimal('4.09')
+
+    @classscope(attr='o')
     def test_change_taxrate_to_country_specific(self):
         self.tr19.eu_reverse_charge = True
         self.tr19.custom_rules = json.dumps([

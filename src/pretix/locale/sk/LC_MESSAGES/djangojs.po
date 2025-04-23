@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 10:10+0000\n"
+"POT-Creation-Date: 2025-03-25 15:46+0000\n"
 "PO-Revision-Date: 2025-03-01 15:14+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -673,6 +673,10 @@ msgstr ""
 msgid "Calculating default price…"
 msgstr ""
 
+#: pretix/static/pretixcontrol/js/ui/plugins.js:69
+msgid "No results"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
 msgstr ""
@@ -718,15 +722,15 @@ msgstr ""
 msgid "Please enter the amount the organizer can keep."
 msgstr "Zadajte sumu, ktorú si organizátor môže ponechať."
 
-#: pretix/static/pretixpresale/js/ui/main.js:446
+#: pretix/static/pretixpresale/js/ui/main.js:445
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Vyberte si prosím aspoň jednu vstupenku."
 
-#: pretix/static/pretixpresale/js/ui/main.js:498
+#: pretix/static/pretixpresale/js/ui/main.js:497
 msgid "required"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:542
+#: pretix/static/pretixpresale/js/ui/main.js:541
 #: pretix/static/pretixpresale/js/ui/main.js:561
 msgid "Time zone:"
 msgstr ""

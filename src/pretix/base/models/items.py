@@ -1836,7 +1836,7 @@ class Question(LoggedModel):
                 ))
                 llen = len(answer.split(','))
             elif all(isinstance(o, QuestionOption) for o in answer):
-                return o
+                return answer
             else:
                 l_ = list(self.options.filter(
                     Q(pk__in=[a for a in answer if isinstance(a, int) or a.isdigit()]) |
@@ -1914,6 +1914,15 @@ class Question(LoggedModel):
         for item in items:
             if event != item.event:
                 raise ValidationError(_('One or more items do not belong to this event.'))
+
+    def clean(self):
+        if self.valid_date_max and self.valid_date_min and self.valid_date_min > self.valid_date_max:
+            raise ValidationError(_("The maximum date must not be before the minimum value."))
+        if self.valid_datetime_max and self.valid_datetime_min and self.valid_datetime_min > self.valid_datetime_max:
+            raise ValidationError(_("The maximum date must not be before the minimum value."))
+        if self.valid_number_max and self.valid_number_min and self.valid_number_min > self.valid_number_max:
+            raise ValidationError(_("The maximum value must not be lower than the minimum value."))
+        super().clean()
 
 
 class QuestionOption(models.Model):

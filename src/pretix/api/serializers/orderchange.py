@@ -251,7 +251,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderPosition
         fields = (
-            'item', 'variation', 'subevent', 'seat', 'price', 'tax_rule', 'valid_from', 'valid_until'
+            'item', 'variation', 'subevent', 'seat', 'price', 'tax_rule', 'valid_from', 'valid_until', 'secret'
         )
 
     def __init__(self, *args, **kwargs):
@@ -319,6 +319,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
         tax_rule = validated_data.get('tax_rule', instance.tax_rule)
         valid_from = validated_data.get('valid_from', instance.valid_from)
         valid_until = validated_data.get('valid_until', instance.valid_until)
+        secret = validated_data.get('secret', instance.secret)
 
         change_item = None
         if item != instance.item or variation != instance.variation:
@@ -350,6 +351,9 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
 
             if valid_until != instance.valid_until:
                 ocm.change_valid_until(instance, valid_until)
+
+            if secret != instance.secret:
+                ocm.change_ticket_secret(instance, secret)
 
             if self.context.get('commit', True):
                 ocm.commit()

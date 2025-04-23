@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 10:10+0000\n"
+"POT-Creation-Date: 2025-03-25 15:46+0000\n"
 "PO-Revision-Date: 2025-01-31 01:00+0000\n"
 "Last-Translator: Chislon <chislon@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
@@ -668,6 +668,12 @@ msgstr "你有未儲存的變更！"
 msgid "Calculating default price…"
 msgstr "計算預設價格…"
 
+#: pretix/static/pretixcontrol/js/ui/plugins.js:69
+#, fuzzy
+#| msgid "Search results"
+msgid "No results"
+msgstr "搜尋結果"
+
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
 msgstr "其他人"
@@ -710,15 +716,15 @@ msgstr "你拿回 %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "請輸入主辦方可以保留的金額。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:446
+#: pretix/static/pretixpresale/js/ui/main.js:445
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "請輸入其中一種門票類型的數量。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:498
+#: pretix/static/pretixpresale/js/ui/main.js:497
 msgid "required"
 msgstr "需要"
 
-#: pretix/static/pretixpresale/js/ui/main.js:542
+#: pretix/static/pretixpresale/js/ui/main.js:541
 #: pretix/static/pretixpresale/js/ui/main.js:561
 msgid "Time zone:"
 msgstr "時區："
