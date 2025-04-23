@@ -39,6 +39,9 @@ $input-height-small:             ($font-size-small * $line-height-small) + ($pad
 /* imports */
 @import "../../pretixbase/scss/_theme_variables.scss";
 @import "../../pretixbase/scss/bootstrap_vars.scss";
+
+$headings-small-color: $text-muted;
+
 @import "../../bootstrap/scss/_bootstrap_reduced.scss";
 @import "../../pretixbase/scss/_theme.scss";
 @import "../../lightbox/css/lightbox.scss";
