@@ -59,6 +59,13 @@ html {
     font-size: 1em;
 }
 
+@media (max-width: $screen-xs-max) {
+    /* scale everything to 1rem so older/smaller iPhones do not zoom inputs on focus */
+    .form-control {
+        font-size: 1rem;
+    }
+}
+
 /* fixe for bootstrap using px-values for fontsize */
 .panel-title {
     font-size: ($font-size-base * 1.125);
