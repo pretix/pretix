@@ -1,7 +1,7 @@
 // before variables.scss because it only affects presale, not control
 $body-bg: #f5f5f5 !default;
 
-$font-size-base: 0.875rem !default;/* 14px/16px = 0.875rem */
+$font-size-base: 1rem !default;/* 14px/16px = 0.875rem */
 
 $font-size-large:         ($font-size-base * 1.25) !default;
 $font-size-small:         ($font-size-base * .85) !default;
