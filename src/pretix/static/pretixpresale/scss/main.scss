@@ -1,7 +1,7 @@
 // before variables.scss because it only affects presale, not control
 $body-bg: #f5f5f5 !default;
 
-$font-size-base: 1rem !default;/* 14px/16px = 0.875rem */
+$font-size-base: 0.875rem !default;/* 14px/16px = 0.875rem */
 
 $font-size-large:         ($font-size-base * 1.25) !default;
 $font-size-small:         ($font-size-base * .85) !default;
@@ -56,6 +56,13 @@ $input-height-small:             ($font-size-small * $line-height-small) + ($pad
 
 html {
     font-size: 1em;
+}
+
+@media (max-width: $screen-xs-max) {
+    /* scale everything to 1rem so older/smaller iPhones do not zoom inputs on focus */
+    body, .form-control {
+        font-size: 1rem;
+    }
 }
 
 /* fixe for bootstrap using px-values for fontsize */
