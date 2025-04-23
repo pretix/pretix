@@ -221,7 +221,7 @@ def checkin_list_env():
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name_parts={'full_name': "a4"},  # a3 attendee is a4
+        attendee_name_parts={'full_name': "a4attendee"},  # a3 attendee is a4attendee
         attendee_email="a3company@dummy.test"
     )
 
@@ -267,7 +267,7 @@ def test_checkins_list_ordering(client, checkin_list_env, order_key, expected):
     ('status=3&item=&user=', ['A3Ticket']),
     ('status=&item=&user=a3dummy', ['A3Ticket']),  # match order email
     ('status=&item=&user=a3dummy', ['A3Ticket']),  # match order email,
-    ('status=&item=&user=a4', ['A3Ticket']),  # match attendee name
+    ('status=&item=&user=a4attendee', ['A3Ticket']),  # match attendee name
     ('status=&item=&user=a3company', ['A3Ticket']),  # match attendee email
     ('status=1&item=&user=a3company', ['A3Ticket']),
 ])

@@ -1349,6 +1349,26 @@ def test_order_mark_canceled_pending(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_order_mark_canceled_pending_fee_with_tax(token_client, organizer, event, order, taxrule):
+    djmail.outbox = []
+    event.settings.tax_rate_default = taxrule
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
+            organizer.slug, event.slug, order.code
+        ), data={
+            'cancellation_fee': '7.00'
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data['status'] == Order.STATUS_PENDING
+    assert len(djmail.outbox) == 1
+    with scopes_disabled():
+        of = order.fees.get()
+    assert of.value == Decimal("7.00")
+    assert of.tax_rate == taxrule.rate
+
+
+@pytest.mark.django_db
 def test_order_mark_canceled_pending_fee_not_allowed(token_client, organizer, event, order):
     djmail.outbox = []
     resp = token_client.post(

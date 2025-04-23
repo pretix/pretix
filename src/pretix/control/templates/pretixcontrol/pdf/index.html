@@ -183,7 +183,53 @@
                         </div>
                     {% endif %}
                     <div class="row control-group pdf-info">
+                        <div class="col-sm-12">
+                            <label for="pdf-info-locale">{% trans "Preferred language" %}</label><br>
+                            <select class="form-control" id="pdf-info-locale">
+                                <option value="">{% trans "Order locale" %}</option>
+                                {% for l in locales %}
+                                    <option value="{{ l.0 }}">{{ l.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row control-group pdf-info">
                         <hr/>
+                        <div class="col-sm-12">
+                            <label>{% trans "Upload PDF as background" %}</label>
+                            <p class="text-muted">
+                                {% blocktrans trimmed %}
+                                    You can upload a PDF to use as a custom background.
+                                    The paper size will match the PDF.
+                                {% endblocktrans %}
+                            </p>
+                            <p>
+                                <span class="btn btn-default fileinput-button background-button btn-block">
+                                    <i class="fa fa-upload"></i>
+                                    <span>{% trans "Upload PDF as background" %}</span>
+                                    <input id="fileupload" type="file" name="background" accept="application/pdf">
+                                </span>
+                            </p>
+                            <p class="text-center">
+                                <a class="btn btn-link background-download-button" href="{{ pdf }}" target="_blank">
+                                    <i class="fa fa-download"></i>
+                                    <span class="small">{% trans "Download current background" %}</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row control-group pdf-info">
+                        <div class="col-sm-12">
+                            <label>{% trans "Or choose custom paper size" %}</label>
+                            <p class="text-muted">
+                                {% blocktrans trimmed %}
+                                    To manually change the paper size, you need to create a new, empty background.
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row control-group pdf-info">
                         <div class="col-sm-6">
                             <label for="pdf-info-width">{% trans "Width (mm)" %}</label><br>
                             <input type="number" id="pdf-info-width" class="input-block-level form-control">
@@ -195,45 +241,12 @@
                     </div>
                     <div class="row control-group pdf-info">
                         <div class="col-sm-12">
-                            <label>{% trans "Background PDF" %}</label><br>
                             <p>
-                                <button class="btn btn-default background-button" id="pdf-empty">
+                                <button class="btn btn-default background-button btn-block" id="pdf-empty">
+                                    <i class="fa fa-file-o"></i>
                                     {% trans "Create empty background" %}
                                 </button>
                             </p>
-                            <span class="btn btn-default fileinput-button background-button">
-                                <i class="fa fa-upload"></i>
-                                <span>{% trans "Upload custom background" %}</span>
-                                <input id="fileupload" type="file" name="background" accept="application/pdf">
-                            </span>
-                        </div>
-                        <div class="col-sm-12 help-inline">
-                            <p>
-                                {% blocktrans trimmed %}
-                                    After you changed the page size, you need to create a new empty background. If you
-                                    want to use a custom background, it already needs to have the correct size.
-                                {% endblocktrans %}
-                            </p>
-                        </div>
-                        <div class="col-sm-12">
-                            <p>
-                                <a class="btn btn-default background-download-button" href="{{ pdf }}" target="_blank">
-                                    <i class="fa fa-download"></i>
-                                    <span>{% trans "Download current background" %}</span>
-                                </a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="row control-group pdf-info">
-                        <hr/>
-                        <div class="col-sm-12">
-                            <label for="pdf-info-locale">{% trans "Preferred language" %}</label><br>
-                            <select class="form-control" id="pdf-info-locale">
-                                <option value="">{% trans "Order locale" %}</option>
-                                {% for l in locales %}
-                                    <option value="{{ l.0 }}">{{ l.1 }}</option>
-                                {% endfor %}
-                            </select>
                         </div>
                     </div>
                     <div class="row control-group poweredby">

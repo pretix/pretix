@@ -35,6 +35,10 @@ subevent_mode                            strings                    Determines h
                                                                     ``"same"`` (discount is only applied for groups within
                                                                     the same date), or ``"distinct"`` (discount is only applied
                                                                     for groups with no two same dates).
+subevent_date_from                       datetime                   The first date time of a subevent to which this discount can be applied
+                                                                    (or ``null``). Ignored in non-series events.
+subevent_date_until                      datetime                   The last date time of a subevent to which this discount can be applied
+                                                                    (or ``null``). Ignored in non-series events.
 condition_all_products                   boolean                    If ``true``, the discount condition applies to all items.
 condition_limit_products                 list of integers           If ``condition_all_products`` is not set, this is a list
                                                                     of internal item IDs that the discount condition applies to.
@@ -105,6 +109,8 @@ Endpoints
             "available_from": null,
             "available_until": null,
             "subevent_mode": "mixed",
+            "subevent_date_from": null,
+            "subevent_date_until": null,
             "condition_all_products": true,
             "condition_limit_products": [],
             "condition_apply_to_addons": true,
@@ -163,6 +169,8 @@ Endpoints
         "available_from": null,
         "available_until": null,
         "subevent_mode": "mixed",
+        "subevent_date_from": null,
+        "subevent_date_until": null,
         "condition_all_products": true,
         "condition_limit_products": [],
         "condition_apply_to_addons": true,
@@ -207,6 +215,8 @@ Endpoints
         "available_from": null,
         "available_until": null,
         "subevent_mode": "mixed",
+        "subevent_date_from": null,
+        "subevent_date_until": null,
         "condition_all_products": true,
         "condition_limit_products": [],
         "condition_apply_to_addons": true,
@@ -240,6 +250,8 @@ Endpoints
         "available_from": null,
         "available_until": null,
         "subevent_mode": "mixed",
+        "subevent_date_from": null,
+        "subevent_date_until": null,
         "condition_all_products": true,
         "condition_limit_products": [],
         "condition_apply_to_addons": true,
@@ -302,6 +314,8 @@ Endpoints
         "available_from": null,
         "available_until": null,
         "subevent_mode": "mixed",
+        "subevent_date_from": null,
+        "subevent_date_until": null,
         "condition_all_products": true,
         "condition_limit_products": [],
         "condition_apply_to_addons": true,

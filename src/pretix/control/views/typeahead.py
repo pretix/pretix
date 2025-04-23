@@ -37,7 +37,7 @@ from zoneinfo import ZoneInfo
 
 from dateutil.parser import parse
 from django.core.exceptions import PermissionDenied
-from django.db.models import F, Max, Min, Q
+from django.db.models import Count, F, Max, Min, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -326,6 +326,9 @@ def nav_context_list(request):
         qs_orga = Organizer.objects.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
     if query:
         qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
+    qs_orga = qs_orga.annotate(
+        n_events=Count("events")
+    ).order_by("-n_events")
 
     if query and len(query) >= 3:
         qs_orders = Order.objects.filter(

@@ -84,6 +84,7 @@ class CheckinRPCRedeemInputSerializer(serializers.Serializer):
     type = serializers.ChoiceField(choices=Checkin.CHECKIN_TYPES, default=Checkin.TYPE_ENTRY)
     ignore_unpaid = serializers.BooleanField(default=False, required=False)
     questions_supported = serializers.BooleanField(default=True, required=False)
+    use_order_locale = serializers.BooleanField(default=False, required=False)
     nonce = serializers.CharField(required=False, allow_null=True)
     datetime = serializers.DateTimeField(required=False, allow_null=True)
     answers = serializers.JSONField(required=False, allow_null=True)

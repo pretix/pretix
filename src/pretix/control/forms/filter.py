@@ -267,9 +267,10 @@ class OrderFilterForm(FilterForm):
                 Q(invoice_no__in=invoice_nos)
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
-            matching_positions = OrderPosition.objects.filter(
+            matching_positions = OrderPosition.all.filter(
                 Q(
                     Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
+                    | Q(company__icontains=u)
                     | Q(secret__istartswith=u)
                     | Q(pseudonymization_id__istartswith=u)
                 )

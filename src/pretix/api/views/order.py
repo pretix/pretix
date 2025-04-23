@@ -185,7 +185,7 @@ with scopes_disabled():
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
 
-            matching_positions = OrderPosition.objects.filter(
+            matching_positions = OrderPosition.all.filter(
                 Q(order=OuterRef('pk')) & Q(
                     Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
                     | Q(secret__istartswith=u)
@@ -452,10 +452,9 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         comment = request.data.get('comment', None)
         cancellation_fee = request.data.get('cancellation_fee', None)
         if cancellation_fee:
-            try:
-                cancellation_fee = float(Decimal(cancellation_fee))
-            except:
-                cancellation_fee = None
+            cancellation_fee = serializers.DecimalField(max_digits=13, decimal_places=2).to_internal_value(
+                cancellation_fee,
+            )
 
         order = self.get_object()
         if not order.cancel_allowed():
