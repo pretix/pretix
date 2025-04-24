@@ -32,6 +32,7 @@ from django.contrib.auth.password_validation import (
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
@@ -68,16 +69,24 @@ class AuthenticationForm(forms.Form):
         'invalid_login': _(
             "We have not found an account with this email address and password."
         ),
+        'invalid_login_email': _('Please verify that you entered the correct email addess.'),
+        'invalid_login_password': _('Please enter the correct password.'),
         'inactive': _("This account is disabled."),
         'unverified': _("You have not yet activated your account and set a password. Please click the link in the "
-                        "email we sent you. Click \"Reset password\" to receive a new email in case you cannot find "
-                        "it again."),
+                        "email we sent you. In case you cannot find it, click \"Forgot your password?\" to receive "
+                        "a new email."),
     }
 
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
         self.customer_cache = None
         super().__init__(*args, **kwargs)
+        self.fields['password'].help_text = "<a href='{}'>{}</a>".format(
+            reverse('presale:organizer.customer.resetpw', kwargs={
+                'organizer': request.organizer.slug,
+            }),
+            _('Forgot your password?')
+        )
 
     def clean(self):
         email = self.cleaned_data.get('email')
@@ -94,6 +103,8 @@ class AuthenticationForm(forms.Form):
                 if u.check_password(password):
                     self.customer_cache = u
             if self.customer_cache is None:
+                self.add_error("email", self.error_messages['invalid_login_email'])
+                self.add_error("password", self.error_messages['invalid_login_password'])
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],
                     code='invalid_login',
@@ -110,15 +121,9 @@ class AuthenticationForm(forms.Form):
 
     def confirm_login_allowed(self, user):
         if not user.is_active:
-            raise forms.ValidationError(
-                self.error_messages['inactive'],
-                code='inactive',
-            )
-        if not user.is_verified:
-            raise forms.ValidationError(
-                self.error_messages['unverified'],
-                code='unverified',
-            )
+            self.add_error("email", self.error_messages['inactive'])
+        elif not user.is_verified:
+            self.add_error("password", self.error_messages['unverified'])
 
     def get_customer(self):
         return self.customer_cache

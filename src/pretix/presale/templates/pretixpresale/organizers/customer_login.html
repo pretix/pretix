@@ -7,48 +7,65 @@
 {% block content %}
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <h2>
+            {% if request.organizer.settings.customer_accounts_native %}
+                <form action="" method="post" class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title">   
+                            {% blocktrans trimmed with org=request.organizer.name %}
+                                Sign in to your account at {{ org }}
+                            {% endblocktrans %}
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            {% bootstrap_form form layout="checkout" %}
+                        </div>
+                    </div>
+                    <div class="row checkout-button-row blank-after">
+                        <div class="col-md-8 col-sm-6 hidden-xs">
+                            <a class="btn btn-link btn-lg"
+                               href="{% eventurl request.organizer "presale:organizer.customer.register" %}">
+                                <small>
+                                    {% icon "address-book-o" %}
+                                    {% trans "Create account" %}
+                                </small>
+                            </a>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <button class="btn btn-block btn-primary btn-lg" type="submit">
+                                {% icon "sign-in" %}
+                                {% trans "Log in" %}
+                            </button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="row visible-xs">
+                        <div class="col-xs-12 text-center">
+                            <a
+                               href="{% eventurl request.organizer "presale:organizer.customer.register" %}">
+                                    {% icon "address-book-o" %}
+                                    {% trans "Create account" %}
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            {% else %}
+                <h2>
                 {% blocktrans trimmed with org=request.organizer.name %}
                     Sign in to your account at {{ org }}
                 {% endblocktrans %}
-            </h2>
-            <form action="" method="post">
-                {% csrf_token %}
-                {% if request.organizer.settings.customer_accounts_native %}
-                    {% bootstrap_form form %}
-                    <div class="form-group buttons">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">
-                            {% icon "sign-in" %}
-                            {% trans "Log in" %}
-                        </button>
-                    </div>
+                </h2>
+            {% endif %}
+
+            {% for provider in providers %}
+                {% if provider.is_active %}
+                    <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?{{ request.META.QUERY_STRING }}"
+                       class="btn btn-primary btn-lg btn-block">
+                        {{ provider.button_label }}
+                    </a>
                 {% endif %}
-                {% for provider in providers %}
-                    {% if provider.is_active %}
-                        <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?{{ request.META.QUERY_STRING }}"
-                           class="btn btn-primary btn-lg btn-block">
-                            {{ provider.button_label }}
-                        </a>
-                    {% endif %}
-                {% endfor %}
-                {% if request.organizer.settings.customer_accounts_native %}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a class="btn btn-link btn-block"
-                               href="{% eventurl request.organizer "presale:organizer.customer.register" %}">
-                               {% icon "address-book-o" %}
-                                {% trans "Create account" %}
-                            </a>
-                        </div>
-                        <div class="col-md-6">
-                            <a class="btn btn-link btn-block"
-                               href="{% eventurl request.organizer "presale:organizer.customer.resetpw" %}">
-                                {% trans "Reset password" %}
-                            </a>
-                        </div>
-                    </div>
-                {% endif %}
-            </form>
+            {% endfor %}
         </div>
     </div>
     <p>&nbsp;</p>
