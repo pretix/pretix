@@ -252,7 +252,7 @@ details {
     input:not(:last-child), select:not(:last-child) {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
-      border-right: none;
+      border-bottom: none;
     }
   }
 }
