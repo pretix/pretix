@@ -1582,6 +1582,27 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == self.op1.price + self.op2.price
 
     @classscope(attr='o')
+    def test_change_price_reverse_charge_success(self):
+        self._enable_reverse_charge()
+        self.op1.tax_rate = Decimal("0.00")
+        self.op1.tax_value = Decimal("0.00")
+        self.op1.tax_code = "AE"
+        self.op1.save()
+        self.op2.tax_rate = Decimal("0.00")
+        self.op2.tax_value = Decimal("0.00")
+        self.op2.tax_code = "AE"
+        self.op2.save()
+        self.ocm.change_price(self.op1, Decimal('1000.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.ticket
+        assert self.op1.price == Decimal('1000.00')
+        assert self.op1.tax_value == Decimal('0.00')
+        assert self.op1.tax_rate == Decimal('0.00')
+        assert self.order.total == self.op1.price + self.op2.price
+
+    @classscope(attr='o')
     def test_cancel_success(self):
         s = self.op1.secret
         self.ocm.cancel(self.op1)
@@ -1988,6 +2009,22 @@ class OrderChangeManagerTests(TestCase):
         nop = self.order.positions.last()
         assert nop.item == self.shirt
         assert nop.price == Decimal('10.08')
+        assert nop.tax_rate == Decimal('0.00')
+        assert nop.tax_value == Decimal('0.00')
+        assert self.order.total == self.op1.price + self.op2.price + nop.price
+        assert nop.positionid == 3
+        assert self.order.transactions.filter(item=self.shirt).last().tax_code == "AE"
+
+    @classscope(attr='o')
+    def test_add_item_with_price_reverse_charge(self):
+        self._enable_reverse_charge()
+        self.ocm.add_position(self.shirt, None, Decimal("1.00"), None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('1.00')
         assert nop.tax_rate == Decimal('0.00')
         assert nop.tax_value == Decimal('0.00')
         assert self.order.total == self.op1.price + self.op2.price + nop.price

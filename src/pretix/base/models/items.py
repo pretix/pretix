@@ -821,7 +821,8 @@ class Item(LoggedModel):
     def ask_attendee_data(self):
         return self.admission and self.personalized
 
-    def tax(self, price=None, base_price_is='auto', currency=None, invoice_address=None, override_tax_rate=None, include_bundled=False):
+    def tax(self, price=None, base_price_is='auto', currency=None, invoice_address=None, override_tax_rate=None,
+            include_bundled=False, force_fixed_gross_price=False):
         price = price if price is not None else self.default_price
 
         bundled_sum = Decimal('0.00')
@@ -850,7 +851,7 @@ class Item(LoggedModel):
         else:
             t = self.tax_rule.tax(price, base_price_is=base_price_is, invoice_address=invoice_address,
                                   override_tax_rate=override_tax_rate, currency=currency or self.event.currency,
-                                  subtract_from_gross=bundled_sum)
+                                  subtract_from_gross=bundled_sum, force_fixed_gross_price=force_fixed_gross_price)
 
         if bundled_sum:
             t.name = "MIXED!"
