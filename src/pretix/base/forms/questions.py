@@ -58,6 +58,7 @@ from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from django.utils.text import format_lazy
 from django.utils.timezone import get_current_timezone
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries import countries
@@ -870,6 +871,23 @@ class BaseQuestionsForm(forms.Form):
                     attrs['data-min'] = q.valid_date_min.isoformat()
                 if q.valid_date_max:
                     attrs['data-max'] = q.valid_date_max.isoformat()
+                if not help_text:
+                    if q.valid_date_min and q.valid_date_max:
+                        help_text = format_lazy(
+                            'Please enter a date after {min} and before {max}.',
+                            min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
+                            max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
+                        )
+                    elif q.valid_date_min:
+                        help_text = format_lazy(
+                            'Please enter a date after {min}.',
+                            min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
+                        )
+                    elif q.valid_date_max:
+                        help_text = format_lazy(
+                            'Please enter a date before {max}.',
+                            max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
+                        )
                 field = forms.DateField(
                     label=label, required=required,
                     help_text=help_text,
@@ -888,6 +906,23 @@ class BaseQuestionsForm(forms.Form):
                     widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             elif q.type == Question.TYPE_DATETIME:
+                if not help_text:
+                    if q.valid_datetime_min and q.valid_datetime_max:
+                        help_text = format_lazy(
+                            'Please enter a date after {min} and before {max}.',
+                            min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
+                            max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
+                        )
+                    elif q.valid_datetime_min:
+                        help_text = format_lazy(
+                            'Please enter a date after {min}.',
+                            min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
+                        )
+                    elif q.valid_datetime_max:
+                        help_text = format_lazy(
+                            'Please enter a date before {max}.',
+                            max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
+                        )
                 field = SplitDateTimeField(
                     label=label, required=required,
                     help_text=help_text,
