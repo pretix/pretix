@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:44+0000\n"
-"PO-Revision-Date: 2025-03-12 19:00+0000\n"
-"Last-Translator: Wiktor Przybylski <wikprzybylski@gmail.com>\n"
+"PO-Revision-Date: 2025-04-26 03:00+0000\n"
+"Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.11\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -58,7 +58,7 @@ msgstr "Czeski"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Chorwacki"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -3422,18 +3422,16 @@ msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"Odpowiednia wtyczka nie jest obecnie aktywna. Aby ją aktywować, kliknij "
+"tutaj, aby przejść do ustawień wtyczki."
 
 #: pretix/base/logentrytype_registry.py:53
-#, fuzzy
-#| msgid "The selected ticket shop is currently not available."
 msgid "The relevant plugin is currently not active."
-msgstr "Wybrany sklep z biletami nie jest obecnie dostępny."
+msgstr "Odpowiednia wtyczka jest obecnie nieaktywna."
 
 #: pretix/base/logentrytypes.py:49
-#, fuzzy
-#| msgid "Delete"
 msgid "(deleted)"
-msgstr "Usuń"
+msgstr "(usunięty)"
 
 #: pretix/base/logentrytypes.py:78
 #, python-brace-format
@@ -4083,10 +4081,8 @@ msgid "Grant type"
 msgstr "Typ dotacji"
 
 #: pretix/base/models/customers.py:420
-#, fuzzy
-#| msgid "Required question"
 msgid "Require PKCE extension"
-msgstr "Wymagana odpowiedź"
+msgstr "Wymaga rozszerzenia PKCE"
 
 #: pretix/base/models/customers.py:432
 msgid "Allowed access scopes"
@@ -5966,10 +5962,8 @@ msgid "Insurance fee"
 msgstr "Opłata ubezpieczeniowa"
 
 #: pretix/base/models/orders.py:2291
-#, fuzzy
-#| msgid "Other fees"
 msgid "Late fee"
-msgstr "Inne opłaty"
+msgstr "Opłata za zwłokę"
 
 #: pretix/base/models/orders.py:2292
 msgid "Other fees"
@@ -6217,15 +6211,13 @@ msgid "Seat {number}"
 msgstr "Miejsce {number}"
 
 #: pretix/base/models/tax.py:144
-#, fuzzy
-#| msgid "Calendar invites"
 msgid "Standard rates"
-msgstr "Zaproszenia do kalendarza"
+msgstr "Stawki standardowe"
 
 #: pretix/base/models/tax.py:148
 msgctxt "tax_code"
 msgid "Standard rate"
-msgstr ""
+msgstr "Stawka standardowa"
 
 #: pretix/base/models/tax.py:152
 msgctxt "tax_code"
@@ -6236,7 +6228,7 @@ msgstr "Stawka ulgowa"
 msgctxt "tax_code"
 msgid ""
 "Averaged rate (other revenue in a agricultural and silvicultural business)"
-msgstr ""
+msgstr "Uśredniona stawka (inne dochody w działalności rolniczej i leśnej)"
 
 #: pretix/base/models/tax.py:164
 msgctxt "tax_code"
@@ -6291,11 +6283,11 @@ msgstr "Podatek od produkcji, usług i importu w Ceucie i Melilli"
 #: pretix/base/models/tax.py:191
 msgctxt "tax_code"
 msgid "Transferred (VAT), only in Italy"
-msgstr ""
+msgstr "Przeniesiony (VAT), tylko we Włoszech"
 
 #: pretix/base/models/tax.py:195
 msgid "Exempt with specific reason"
-msgstr ""
+msgstr "Zwolniony z konkretnego powodu"
 
 #: pretix/base/models/tax.py:198
 msgctxt "tax_code"
@@ -6352,7 +6344,7 @@ msgstr "Wewnątrzwspólnotowe nabycie przedmiotów kolekcjonerskich i antyków"
 #: pretix/base/models/tax.py:262
 msgctxt "tax_code"
 msgid "France domestic VAT franchise in base"
-msgstr ""
+msgstr "Francja krajowa franczyza VAT w podstawie"
 
 #: pretix/base/models/tax.py:264
 msgctxt "tax_code"
@@ -6360,6 +6352,8 @@ msgid ""
 "France domestic Credit Notes without VAT, due to supplier forfeit of VAT for "
 "discount"
 msgstr ""
+"Francja krajowe noty kredytowe bez podatku VAT, ze względu na utratę podatku "
+"VAT przez dostawcę z tytułu rabatu"
 
 #: pretix/base/models/tax.py:314
 msgid "Your set of rules is not valid. Error message: {}"
@@ -6375,16 +6369,16 @@ msgstr "Powinna być krótkia, np. \"VAT\""
 
 #: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1511
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
-#, fuzzy
-#| msgid "Barcode"
 msgid "Tax code"
-msgstr "Kod kreskowy"
+msgstr "Przepisy podatkowe"
 
 #: pretix/base/models/tax.py:331
 msgid ""
 "If you help us understand what this tax rules legally is, we can use this "
 "information for eInvoices, exporting to accounting system, etc."
 msgstr ""
+"Jeśli pomożesz nam zrozumieć, jakie są te przepisy podatkowe, będziemy mogli "
+"wykorzystać te informacje do e-faktur, eksportu do systemu księgowego itp."
 
 #: pretix/base/models/tax.py:351
 msgid "The configured product prices include the tax amount"
@@ -6456,6 +6450,8 @@ msgstr ""
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
 msgstr ""
+"Połączenie tych przepisów podatkowych z niezerową stawką podatkową nie ma "
+"sensu."
 
 #: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1562
 msgid ""
