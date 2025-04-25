@@ -874,18 +874,18 @@ class BaseQuestionsForm(forms.Form):
                 if not help_text:
                     if q.valid_date_min and q.valid_date_max:
                         help_text = format_lazy(
-                            'Please enter a date after {min} and before {max}.',
+                            'Please enter a date between {min} and {max}.',
                             min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
                             max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
                         )
                     elif q.valid_date_min:
                         help_text = format_lazy(
-                            'Please enter a date after {min}.',
+                            'Please enter a date not earlier than {min}.',
                             min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
                         )
                     elif q.valid_date_max:
                         help_text = format_lazy(
-                            'Please enter a date before {max}.',
+                            'Please enter a date not later than {max}.',
                             max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
                         )
                 field = forms.DateField(
@@ -909,18 +909,18 @@ class BaseQuestionsForm(forms.Form):
                 if not help_text:
                     if q.valid_datetime_min and q.valid_datetime_max:
                         help_text = format_lazy(
-                            'Please enter a date after {min} and before {max}.',
+                            'Please enter a date and time between {min} and {max}.',
                             min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
                             max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
                         )
                     elif q.valid_datetime_min:
                         help_text = format_lazy(
-                            'Please enter a date after {min}.',
+                            'Please enter a date and time not earlier than {min}.',
                             min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
                         )
                     elif q.valid_datetime_max:
                         help_text = format_lazy(
-                            'Please enter a date before {max}.',
+                            'Please enter a date and time not later than {max}.',
                             max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
                         )
                 field = SplitDateTimeField(
