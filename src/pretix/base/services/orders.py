@@ -1689,7 +1689,8 @@ class OrderChangeManager:
 
     def change_price(self, position: OrderPosition, price: Decimal):
         tax_rule = self._current_tax_rules().get(position.pk, position.tax_rule) or TaxRule.zero()
-        price = tax_rule.tax(price, base_price_is='gross')
+        price = tax_rule.tax(price, base_price_is='gross', invoice_address=self._invoice_address,
+                             force_fixed_gross_price=True)
 
         if position.issued_gift_cards.exists():
             raise OrderError(self.error_messages['gift_card_change'])
@@ -1754,7 +1755,8 @@ class OrderChangeManager:
         self._operations.append(self.AddFeeOperation(fee, fee.value))
 
     def change_fee(self, fee: OrderFee, value: Decimal):
-        value = (fee.tax_rule or TaxRule.zero()).tax(value, base_price_is='gross')
+        value = (fee.tax_rule or TaxRule.zero()).tax(value, base_price_is='gross', invoice_address=self._invoice_address,
+                                                     force_fixed_gross_price=True)
         self._totaldiff += value.gross - fee.value
         self._invoice_dirty = True
         self._operations.append(self.FeeValueOperation(fee, value, value.gross - fee.value))
@@ -1789,7 +1791,8 @@ class OrderChangeManager:
             if price is None:
                 price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
             elif not isinstance(price, TaxedPrice):
-                price = item.tax(price, base_price_is='gross', invoice_address=self._invoice_address)
+                price = item.tax(price, base_price_is='gross', invoice_address=self._invoice_address,
+                                 force_fixed_gross_price=True)
         except TaxRule.SaleNotAllowed:
             raise OrderError(self.error_messages['tax_rule_country_blocked'])
 
