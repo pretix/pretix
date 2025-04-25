@@ -252,6 +252,7 @@ details {
     input:not(:last-child), select:not(:last-child) {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
+      border-bottom: none;
     }
   }
 }
@@ -271,6 +272,7 @@ details {
     input:not(:last-child), select:not(:last-child)  {
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
+      border-right: none;
     }
     [data-size="1"] {
       flex-grow: 1;
