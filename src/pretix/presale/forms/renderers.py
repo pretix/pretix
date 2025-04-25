@@ -33,6 +33,7 @@ def render_label(content, label_for=None, label_class=None, label_title='', labe
     """
     Render a label with content
     """
+    tag = 'label'
     attrs = attrs or {}
     if label_for:
         attrs['for'] = label_for
@@ -58,6 +59,7 @@ def render_label(content, label_for=None, label_class=None, label_title='', labe
         attrs['class'] += ' label-empty'
         # usually checkboxes have overall empty labels and special labels per checkbox
         # => remove for-attribute as well as "required"-text appended to label
+        tag = 'div'
         if 'for' in attrs:
             del attrs['for']
     elif not optional:
@@ -66,7 +68,7 @@ def render_label(content, label_for=None, label_class=None, label_title='', labe
     builder = '<{tag}{attrs}>{content}{opt}</{tag}>'
     return format_html(
         builder,
-        tag='label',
+        tag=tag,
         attrs=mark_safe(flatatt(attrs)) if attrs else '',
         opt=mark_safe(opt),
         content=text_value(content),

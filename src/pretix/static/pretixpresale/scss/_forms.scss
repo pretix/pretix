@@ -145,10 +145,22 @@ output {
   color: $brand-primary;
   font-weight: bold;
 }
-.form-group.required .control-label:after {
-  content: '*';
-  color: $brand-primary;
+.label-required {
+  color: $text-muted;
+  display: block;
+  font-weight: normal;
+  font-style: normal;
 }
+.checkbox .label-required {
+  display: inline;
+  &:before {
+    content: " (";
+  }
+  &:after {
+    content: ")";
+  }
+}
+
 .form-control-text {
   padding-top: 7px;
 }
