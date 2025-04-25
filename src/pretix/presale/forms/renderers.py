@@ -63,7 +63,7 @@ def render_label(content, label_for=None, label_class=None, label_title='', labe
         if 'for' in attrs:
             del attrs['for']
     elif not optional:
-        opt += '<i class="sr-only label-required">, {}</i>'.format(pgettext('form', 'required'))
+        opt += '<i class="label-required">{}</i>'.format(pgettext('form', 'required'))
 
     builder = '<{tag}{attrs}>{content}{opt}</{tag}>'
     return format_html(
