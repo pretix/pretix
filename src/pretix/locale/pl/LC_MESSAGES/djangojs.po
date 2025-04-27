@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-25 15:46+0000\n"
-"PO-Revision-Date: 2025-03-03 16:00+0000\n"
-"Last-Translator: Wiktor Przybylski <wikprzybylski@gmail.com>\n"
+"PO-Revision-Date: 2025-04-28 01:00+0000\n"
+"Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10.1\n"
+"X-Generator: Weblate 5.11\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -683,10 +683,8 @@ msgid "Calculating default price…"
 msgstr "Liczenie domyślnej ceny…"
 
 #: pretix/static/pretixcontrol/js/ui/plugins.js:69
-#, fuzzy
-#| msgid "Search results"
 msgid "No results"
-msgstr "Wyniki wyszukiwania"
+msgstr "Brak wyników"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
