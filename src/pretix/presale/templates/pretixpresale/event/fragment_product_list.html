@@ -262,7 +262,7 @@
                             </a>
                         {% endif %}
                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                            <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h{{ headline_level|default:3 }}>
+                            <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h{{ headline_level|default:3|add:1 }}>
                             {% if item.description %}
                                 <div id="{{ form_prefix }}item-{{ item.pk }}-description" class="product-description">
                                     {{ item.description|localize|rich_text }}
