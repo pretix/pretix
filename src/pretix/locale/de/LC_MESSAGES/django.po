@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-04-19 18:35+0000\n"
+"PO-Revision-Date: 2025-04-28 11:32+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2988,11 +2988,9 @@ msgid "Repeat password"
 msgstr "Passwort wiederholen"
 
 #: pretix/base/forms/questions.py:134 pretix/base/forms/questions.py:256
-#, fuzzy
-#| msgid "No country specified."
 msgctxt "name_salutation"
 msgid "not specified"
-msgstr "Es wurde kein Land angegeben."
+msgstr "keine Angabe"
 
 #: pretix/base/forms/questions.py:219
 msgid "Please do not use special characters in names."
@@ -4268,20 +4266,14 @@ msgstr ""
 "trotzdem gewährt."
 
 #: pretix/base/models/discount.py:177
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr "Alle Termine beginnend vor"
+msgstr "Verfügbar für Termine beginnend ab"
 
 #: pretix/base/models/discount.py:182
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "Alle Termine beginnend vor"
+msgstr "Verfügbar für Termine beginnend bis"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -5595,19 +5587,12 @@ msgid "Unknown country code."
 msgstr "Unbekanntes Länderkürzel."
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum date must not be before the minimum value."
-msgstr "Die minimale Anzahl muss unter der maximalen Anzahl liegen."
+msgstr "Das späteste Datum darf nicht vor dem frühesten Datum liegen."
 
 #: pretix/base/models/items.py:1925
-#, fuzzy
-#| msgid ""
-#| "The maximum number of usages may not be lower than the minimum number of "
-#| "usages."
 msgid "The maximum value must not be lower than the minimum value."
-msgstr ""
-"Die minimale Anzahl an Verwendungen muss unter der maximalen Anzahl liegen."
+msgstr "Der maximale Wert darf nicht unter dem minimalen Wert liegen."
 
 #: pretix/base/models/items.py:1942
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -11725,13 +11710,6 @@ msgid "Header image"
 msgstr "Header-Bild"
 
 #: pretix/base/settings.py:2885
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your event name "
-#| "and date in the page header. By default, we show your logo with a size of "
-#| "up to 1140x120 pixels. You can increase the size with the setting below. "
-#| "We recommend not using small details on the picture as it will be resized "
-#| "on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. If you use a white background, we show your logo "
@@ -11740,8 +11718,9 @@ msgid ""
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
 "Wenn Sie ein Bild hochladen, zeigen wir den Namen und das Datum der "
-"Veranstaltung nicht mehr oben auf der Seite an. Standardmäßig zeigen wir das "
-"Bild mit einer Größe von bis zu 1140x120 Pixeln an. Sie können diese Größe "
+"Veranstaltung nicht mehr oben auf der Seite an. Wenn Sie einen weißen "
+"Hintergrund verwenden, zeigen wir das Bild mit einer Größe von bis zu "
+"1140x120 Pixeln an, ansonsten mit 1120x120 Pixeln. Sie können diese Größe "
 "mit den Einstellungen weiter unten vergrößern. Wir raten davon ab, filigrane "
 "Details im Bild zu verwenden, da es auf kleineren Bildschirmen auch kleiner "
 "dargestellt wird."
@@ -11771,13 +11750,6 @@ msgstr ""
 "Veranstaltungstitel wird immer angezeigt."
 
 #: pretix/base/settings.py:2929 pretix/control/forms/organizer.py:524
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your "
-#| "organization name in the page header. By default, we show your logo with "
-#| "a size of up to 1140x120 pixels. You can increase the size with the "
-#| "setting below. We recommend not using small details on the picture as it "
-#| "will be resized on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. If you use a white background, we show your logo "
@@ -11786,11 +11758,11 @@ msgid ""
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
 "Wenn Sie ein Bild hochladen, zeigen wir den Namen des Veranstalters nicht "
-"mehr oben auf der Seite an. Standardmäßig zeigen wir das Bild mit einer "
-"Größe von bis zu 1140x120 Pixeln an. Sie können diese Größe mit den "
-"Einstellungen weiter unten vergrößern. Wir raten davon ab, filigrane Details "
-"im Bild zu verwenden, da es auf kleineren Bildschirmen auch kleiner "
-"dargestellt wird."
+"mehr oben auf der Seite an. Wenn Sie einen weißen Hintergrund nutzen, zeigen "
+"wir das Bild mit einer Größe von bis zu 1140x120 Pixeln an, ansonsten mit "
+"1120x120 Pixeln. Sie können diese Größe mit den Einstellungen weiter unten "
+"vergrößern. Wir raten davon ab, filigrane Details im Bild zu verwenden, da "
+"es auf kleineren Bildschirmen auch kleiner dargestellt wird."
 
 #: pretix/base/settings.py:2959
 msgid "Use header image also for events without an individually uploaded logo"
@@ -24658,32 +24630,32 @@ msgstr "Bevorzugte Sprache"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:200
 #: pretix/control/templates/pretixcontrol/pdf/index.html:210
-#, fuzzy
-#| msgid "Upload custom background"
 msgid "Upload PDF as background"
-msgstr "Eigenen Hintergrund hochladen"
+msgstr "PDF als Hintergrund hochladen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:202
 msgid ""
 "You can upload a PDF to use as a custom background. The paper size will "
 "match the PDF."
 msgstr ""
+"Sie können ein PDF als eigenen Hintergrund hochladen. Die Papiergröße wird "
+"auf das PDF angepasst."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:217
 msgid "Download current background"
 msgstr "Aktuellen Hintergrund herunterladen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:224
-#, fuzzy
-#| msgid "Date chosen by customer"
 msgid "Or choose custom paper size"
-msgstr "Wunschdatum des Kunden"
+msgstr "oder Papiergröße selbst wählen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:226
 msgid ""
 "To manually change the paper size, you need to create a new, empty "
 "background."
 msgstr ""
+"Um manuell die Papiergröße auszuwählen, müssen Sie einen neuen, leeren "
+"Hintergrund erstellen."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:234
 #: pretix/control/templates/pretixcontrol/pdf/index.html:321
@@ -28081,10 +28053,9 @@ msgid "until"
 msgstr "bis"
 
 #: pretix/helpers/daterange.py:106
-#, fuzzy, python-brace-format
-#| msgid "{date_from} – {date_to}"
+#, python-brace-format
 msgid "{date_from}{until}{date_to}"
-msgstr "{date_from} – {date_to}"
+msgstr "{date_from}{until}{date_to}"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
@@ -31860,10 +31831,8 @@ msgid "Payer name"
 msgstr "Name des Zahlenden"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:91
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment receipt"
-msgstr "Zahlungsgebühr"
+msgstr "Zahlungsbeleg"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
 msgid "Do you really want to disconnect your Stripe account?"
