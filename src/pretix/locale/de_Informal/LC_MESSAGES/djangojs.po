@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:08+0000\n"
-"PO-Revision-Date: 2025-03-25 16:25+0000\n"
+"PO-Revision-Date: 2025-04-28 12:21+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -919,12 +919,9 @@ msgid "Open ticket shop"
 msgstr "Ticketshop öffnen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Checkout"
-msgstr "Kauf fortsetzen"
+msgstr "Buchung"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
@@ -1081,31 +1078,31 @@ msgstr "So"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 msgid "Monday"
-msgstr ""
+msgstr "Montag"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "Tuesday"
-msgstr ""
+msgstr "Dienstag"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "Wednesday"
-msgstr ""
+msgstr "Mittwoch"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
 msgid "Thursday"
-msgstr ""
+msgstr "Donnerstag"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "Friday"
-msgstr ""
+msgstr "Freitag"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "Saturday"
-msgstr ""
+msgstr "Samstag"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "Sunday"
-msgstr ""
+msgstr "Sonntag"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "January"
