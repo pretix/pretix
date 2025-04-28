@@ -23,6 +23,7 @@ import gettext as gettext_module
 import json
 import os
 import re
+from datetime import datetime
 from functools import lru_cache
 
 from django.apps import apps
@@ -222,3 +223,14 @@ def get_language_score(locale):
     else:
         score = len(list(catalog.items())) or 1
     return score
+
+
+def parse_date_localized(date_str):
+    dt = None
+    for f in get_format('DATE_INPUT_FORMATS'):
+        try:
+            dt = datetime.strptime(date_str, f)
+            break
+        except (ValueError, TypeError):
+            continue
+    return dt
