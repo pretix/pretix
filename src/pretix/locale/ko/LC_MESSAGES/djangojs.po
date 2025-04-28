@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-25 15:46+0000\n"
+"POT-Creation-Date: 2025-04-28 11:08+0000\n"
 "PO-Revision-Date: 2025-04-16 10:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -96,23 +96,26 @@ msgstr "핀란드 온라인 뱅킹 결제 시스템"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
 msgid "PayU"
-msgstr "페이유 (인도 및 중남미 글로벌 결제 게이트 웨이, 신용카드,은행 이체, 디지털 "
-"지갑의 결제를 지원)"
+msgstr ""
+"페이유 (인도 및 중남미 글로벌 결제 게이트 웨이, 신용카드,은행 이체, 디지털 지"
+"갑의 결제를 지원)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
 msgid "BLIK"
-msgstr "블릭 (폴란드  모바일 결제 시스템, 앱기반 OR코드/코드 입력 방식 결제 수단)"
+msgstr ""
+"블릭 (폴란드  모바일 결제 시스템, 앱기반 OR코드/코드 입력 방식 결제 수단)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
 msgid "Trustly"
 msgstr ""
-"트러스트리 (스웨덴에 본사를 둔 핀테크 기업, 유럽 및 미국의 핀테크 기반으로 "
-"무카드 온라인 결제 수단, 실시간 은행 이체 결제 서비스)"
+"트러스트리 (스웨덴에 본사를 둔 핀테크 기업, 유럽 및 미국의 핀테크 기반으로 무"
+"카드 온라인 결제 수단, 실시간 은행 이체 결제 서비스)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
 msgid "Zimpler"
-msgstr "짐플러 (스웨덴 기반의 온라인 계좌 이체 결제 서비스, 핀테크 기반으로 한 "
-"유럽내 디지털 결제 솔루션)"
+msgstr ""
+"짐플러 (스웨덴 기반의 온라인 계좌 이체 결제 서비스, 핀테크 기반으로 한 유럽"
+"내 디지털 결제 솔루션)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
 msgid "Maxima"
@@ -130,13 +133,15 @@ msgstr "볼레토 (브라질의 신용카드 없이 온라인 현금 기반 결�
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
 msgid "WeChat Pay"
-msgstr "위챗페이 (중국 모바일 결제 및 디지털 지갑 서비스- OR코드, 인앱, 미니 "
-"프로그램 결제 지원)"
+msgstr ""
+"위챗페이 (중국 모바일 결제 및 디지털 지갑 서비스- OR코드, 인앱, 미니 프로그"
+"램 결제 지원)"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
 msgid "Mercado Pago"
-msgstr "라틴 아메리카 최대 전자 상거래 플랫폼-온라인, 오프라인 결제, 송금, 투자, "
-"신용 다양한 금융 서비스 제공"
+msgstr ""
+"라틴 아메리카 최대 전자 상거래 플랫폼-온라인, 오프라인 결제, 송금, 투자, 신"
+"용 다양한 금융 서비스 제공"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
@@ -357,8 +362,9 @@ msgstr "마감"
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
-msgstr "요청이 현재 처리 중입니다. 이벤트 크기에 따라 최대 몇 분 정도 소요될 수 "
-"있습니다."
+msgstr ""
+"요청이 현재 처리 중입니다. 이벤트 크기에 따라 최대 몇 분 정도 소요될 수 있습"
+"니다."
 
 #: pretix/static/pretixbase/js/asynctask.js:63
 #: pretix/static/pretixbase/js/asynctask.js:140
@@ -372,9 +378,9 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
-"귀하의 요청이 서버에 도착했지만 여전히 처리되기를 기다리고 있습니다. 이 "
-"작업이 2분 이상 소요되는 경우 저희에게 연락하시거나 브라우저로 돌아가서 다시 "
-"시도해 주시기 바랍니다."
+"귀하의 요청이 서버에 도착했지만 여전히 처리되기를 기다리고 있습니다. 이 작업"
+"이 2분 이상 소요되는 경우 저희에게 연락하시거나 브라우저로 돌아가서 다시 시도"
+"해 주시기 바랍니다."
 
 #: pretix/static/pretixbase/js/asynctask.js:105
 #: pretix/static/pretixbase/js/asynctask.js:193
@@ -387,7 +393,8 @@ msgstr "{code} 유형의 오류가 발생했습니다."
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
-msgstr "현재 서버에 연결할 수 없지만 계속 시도하고 있습니다. 마지막 오류 코드: {code}"
+msgstr ""
+"현재 서버에 연결할 수 없지만 계속 시도하고 있습니다. 마지막 오류 코드: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
@@ -410,8 +417,8 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
-"현재 귀하의 요청을 서버로 전송하고 있습니다. 이 작업이 1분 이상 소요되는 "
-"경우 인터넷 연결을 확인한 다음 이 페이지를 다시 로드한 후 다시 시도해 주세요."
+"현재 귀하의 요청을 서버로 전송하고 있습니다. 이 작업이 1분 이상 소요되는 경"
+"우 인터넷 연결을 확인한 다음 이 페이지를 다시 로드한 후 다시 시도해 주세요."
 
 #: pretix/static/pretixbase/js/asynctask.js:301
 #: pretix/static/pretixcontrol/js/ui/main.js:71
@@ -598,16 +605,16 @@ msgstr "물품"
 msgid "Ticket design"
 msgstr "티켓 디자인"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1259
+#: pretix/static/pretixcontrol/js/ui/editor.js:1258
 msgid "Saving failed."
 msgstr "저장에 실패했습니다"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1328
-#: pretix/static/pretixcontrol/js/ui/editor.js:1379
+#: pretix/static/pretixcontrol/js/ui/editor.js:1327
+#: pretix/static/pretixcontrol/js/ui/editor.js:1378
 msgid "Error while uploading your PDF file, please try again."
 msgstr "PDF 파일을 업로드하는 동안 오류가 발생했습니다. 다시 시도해 주세요."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1362
+#: pretix/static/pretixcontrol/js/ui/editor.js:1361
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "변경 사항을 저장하지 않고 편집 기능을 나가고 싶으신가요?"
 
@@ -623,54 +630,55 @@ msgstr "메시지 생성 중"
 msgid "Unknown error."
 msgstr "알수 없는 에러입니다"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:318
+#: pretix/static/pretixcontrol/js/ui/main.js:330
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "당신의 색깔은 대비가 뛰어나고 읽기 매우 쉽습니다!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:322
+#: pretix/static/pretixcontrol/js/ui/main.js:334
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "당신의 색깔은 대비가 적당하고 읽기에 충분할 것입니다!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:326
+#: pretix/static/pretixcontrol/js/ui/main.js:338
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
-msgstr "흰색 배경의 텍스트 대비 색상이 좋지 않습니다. 더 어두운 색상을 선택해 주세요."
+msgstr ""
+"흰색 배경의 텍스트 대비 색상이 좋지 않습니다. 더 어두운 색상을 선택해 주세요."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:442
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:454
+#: pretix/static/pretixcontrol/js/ui/main.js:474
 msgid "Search query"
 msgstr "질문을 검색하다"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:460
+#: pretix/static/pretixcontrol/js/ui/main.js:472
 msgid "All"
 msgstr "전부"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:473
 msgid "None"
 msgstr "아무것도 없다"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:465
+#: pretix/static/pretixcontrol/js/ui/main.js:477
 msgid "Selected only"
 msgstr "선택된 경우에만"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:808
+#: pretix/static/pretixcontrol/js/ui/main.js:820
 msgid "Enter page number between 1 and %(max)s."
 msgstr "페이지 번호를 1에서 %(최대)초 사이로 입력합니다."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:811
+#: pretix/static/pretixcontrol/js/ui/main.js:823
 msgid "Invalid page number."
 msgstr "페이지 번호가 잘못되었습니다."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:969
+#: pretix/static/pretixcontrol/js/ui/main.js:981
 msgid "Use a different name internally"
 msgstr "내부적으로 다른 이름을 사용합니다"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1009
+#: pretix/static/pretixcontrol/js/ui/main.js:1021
 msgid "Click to close"
 msgstr "종료를 클릭해 주세요"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1090
+#: pretix/static/pretixcontrol/js/ui/main.js:1102
 msgid "You have unsaved changes!"
 msgstr "귀하는 변경을 저장하지 않았습니다"
 
@@ -703,7 +711,8 @@ msgstr[0] ""
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "카트에 있는 상품은 더 이상 예약되지 않습니다. 주문이 가능한 한 주문을 완료할 "
+msgstr ""
+"카트에 있는 상품은 더 이상 예약되지 않습니다. 주문이 가능한 한 주문을 완료할 "
 "수 있습니다."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
@@ -719,32 +728,32 @@ msgstr[0] ""
 "복수형\n"
 "카트에 있는 물품들은 {num}분 동안 예약되어 있습니다."
 
-#: pretix/static/pretixpresale/js/ui/main.js:203
+#: pretix/static/pretixpresale/js/ui/main.js:215
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "주최자는 %(통화)의 %(금액)을 보관합니다"
 
-#: pretix/static/pretixpresale/js/ui/main.js:211
+#: pretix/static/pretixpresale/js/ui/main.js:223
 msgid "You get %(currency)s %(amount)s back"
 msgstr "%(통화)의 %(금액)을 돌려받습니다"
 
-#: pretix/static/pretixpresale/js/ui/main.js:227
+#: pretix/static/pretixpresale/js/ui/main.js:239
 msgid "Please enter the amount the organizer can keep."
 msgstr "주최자가 보관할 수 있는 금액을 입력해 주세요"
 
-#: pretix/static/pretixpresale/js/ui/main.js:445
+#: pretix/static/pretixpresale/js/ui/main.js:458
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "티켓 유형 중 하나에 대한 수량을 입력해 주세요."
 
-#: pretix/static/pretixpresale/js/ui/main.js:497
+#: pretix/static/pretixpresale/js/ui/main.js:510
 msgid "required"
 msgstr "필수사항"
 
-#: pretix/static/pretixpresale/js/ui/main.js:541
-#: pretix/static/pretixpresale/js/ui/main.js:561
+#: pretix/static/pretixpresale/js/ui/main.js:554
+#: pretix/static/pretixpresale/js/ui/main.js:574
 msgid "Time zone:"
 msgstr "시간대"
 
-#: pretix/static/pretixpresale/js/ui/main.js:552
+#: pretix/static/pretixpresale/js/ui/main.js:565
 msgid "Your local time:"
 msgstr "귀하의 지역시간"
 
@@ -905,7 +914,8 @@ msgctxt "widget"
 msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
-msgstr "현재 이 매표소에는 많은 사용자가 있습니다. 계속하려면 새 탭에서 상점을 열어 "
+msgstr ""
+"현재 이 매표소에는 많은 사용자가 있습니다. 계속하려면 새 탭에서 상점을 열어 "
 "주세요."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
@@ -914,198 +924,236 @@ msgid "Open ticket shop"
 msgstr "매표소 열림"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Resume checkout"
+msgctxt "widget"
+msgid "Checkout"
+msgstr "체크아웃 재개"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "카트를 만들 수 없습니다. 나중에 다시 시도해 주세요"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:49
+#: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
-msgstr "현재 이 티켓샵에 사용자가 너무 많아서 장바구니를 만들 수 없습니다. 새 탭에서 "
+msgstr ""
+"현재 이 티켓샵에 사용자가 너무 많아서 장바구니를 만들 수 없습니다. 새 탭에서 "
 "다시 시도하려면 \"계속\"을 클릭하세요."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "대기명단"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js:53
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
-msgstr "현재 이 이벤트에 대한 활성 카트가 있습니다. 더 많은 제품을 선택하면 기존 "
-"카트에 추가됩니다."
+msgstr ""
+"현재 이 이벤트에 대한 활성 카트가 있습니다. 더 많은 제품을 선택하면 기존 카트"
+"에 추가됩니다."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js:55
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "체크아웃 재개"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "바우처를 상환하다"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:56
+#: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
 msgid "Redeem"
 msgstr "상환"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:57
+#: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "바우처 코드"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/js/widget/widget.js:59
 msgctxt "widget"
 msgid "Close"
 msgstr "종료"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:60
 msgctxt "widget"
 msgid "Continue"
 msgstr "계속"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgctxt "widget"
 msgid "Show variants"
 msgstr "옵션을 보여주세요"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Hide variants"
 msgstr "옵션을 숨겨주세요"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "다른 이벤트 선택하십시요"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "다른 날짜를 선택하십시요"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgctxt "widget"
 msgid "Back"
 msgstr "이전으로 돌아가기"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgctxt "widget"
 msgid "Next month"
 msgstr "다음 달"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
 msgid "Previous month"
 msgstr "이전 달"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgctxt "widget"
 msgid "Next week"
 msgstr "다음 주"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:69
 msgctxt "widget"
 msgid "Previous week"
 msgstr "이전 주"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:70
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "개방형 좌석 선택"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:71
 msgctxt "widget"
 msgid ""
 "Some or all ticket categories are currently sold out. If you want, you can "
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
-"현재 일부 또는 모든 티켓 카테고리가 매진되었습니다. 원하시면 대기자 명단에 "
-"추가하실 수 있습니다. 그런 다음 좌석이 다시 이용 가능한지 알려드리겠습니다."
+"현재 일부 또는 모든 티켓 카테고리가 매진되었습니다. 원하시면 대기자 명단에 추"
+"가하실 수 있습니다. 그런 다음 좌석이 다시 이용 가능한지 알려드리겠습니다."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:71
+#: pretix/static/pretixpresale/js/widget/widget.js:72
 msgctxt "widget"
 msgid "Load more"
 msgstr "더 로드하기"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:73
+#: pretix/static/pretixpresale/js/widget/widget.js:74
 msgid "Mo"
 msgstr "월요일"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:74
+#: pretix/static/pretixpresale/js/widget/widget.js:75
 msgid "Tu"
 msgstr "화요일"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:75
+#: pretix/static/pretixpresale/js/widget/widget.js:76
 msgid "We"
 msgstr "수요일"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:76
+#: pretix/static/pretixpresale/js/widget/widget.js:77
 msgid "Th"
 msgstr "목요일"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:77
+#: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "Fr"
 msgstr "금요일"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:78
+#: pretix/static/pretixpresale/js/widget/widget.js:79
 msgid "Sa"
 msgstr "토요일"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:79
+#: pretix/static/pretixpresale/js/widget/widget.js:80
 msgid "Su"
 msgstr "일요일"
 
+#: pretix/static/pretixpresale/js/widget/widget.js:81
+msgid "Monday"
+msgstr ""
+
 #: pretix/static/pretixpresale/js/widget/widget.js:82
+msgid "Tuesday"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:83
+msgid "Wednesday"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:84
+msgid "Thursday"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:85
+msgid "Friday"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:86
+msgid "Saturday"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:87
+msgid "Sunday"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "January"
 msgstr "1월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:83
+#: pretix/static/pretixpresale/js/widget/widget.js:91
 msgid "February"
 msgstr "2월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:84
+#: pretix/static/pretixpresale/js/widget/widget.js:92
 msgid "March"
 msgstr "3월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:85
+#: pretix/static/pretixpresale/js/widget/widget.js:93
 msgid "April"
 msgstr "4월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:86
+#: pretix/static/pretixpresale/js/widget/widget.js:94
 msgid "May"
 msgstr "5월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:87
+#: pretix/static/pretixpresale/js/widget/widget.js:95
 msgid "June"
 msgstr "6월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:88
+#: pretix/static/pretixpresale/js/widget/widget.js:96
 msgid "July"
 msgstr "7월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:89
+#: pretix/static/pretixpresale/js/widget/widget.js:97
 msgid "August"
 msgstr "8월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:90
+#: pretix/static/pretixpresale/js/widget/widget.js:98
 msgid "September"
 msgstr "9월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:91
+#: pretix/static/pretixpresale/js/widget/widget.js:99
 msgid "October"
 msgstr "10월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:92
+#: pretix/static/pretixpresale/js/widget/widget.js:100
 msgid "November"
 msgstr "11월"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:93
+#: pretix/static/pretixpresale/js/widget/widget.js:101
 msgid "December"
 msgstr "12일"
