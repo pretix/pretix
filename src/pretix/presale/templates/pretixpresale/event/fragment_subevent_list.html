@@ -16,6 +16,7 @@
                 <br>
                 <span data-time="{{ subev.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
                     {% icon "clock-o" %}
+                    <span class="sr-only">{% trans "Time of day" %}</span>
                     <time datetime="{{ subev.date_from.isoformat }}">{{ subev.date_from|date:"TIME_FORMAT" }}</time>
                 </span>
             {% endif %}
