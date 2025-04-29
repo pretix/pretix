@@ -1463,6 +1463,10 @@ class GiftCardPayment(BasePaymentProvider):
                 messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
                 return
 
+        if not request.POST.get("giftcard"):
+            messages.error(request, _("Please enter the code of your gift card."))
+            return
+
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
                 secret=request.POST.get("giftcard").strip()
