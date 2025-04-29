@@ -25,6 +25,7 @@ import os
 import re
 from datetime import datetime
 from functools import lru_cache
+from typing import Optional
 
 from django.apps import apps
 from django.conf import settings
@@ -225,7 +226,8 @@ def get_language_score(locale):
     return score
 
 
-def parse_date_localized(date_str):
+def parse_date_localized(date_str) -> Optional[datetime]:
+    """Parses a date according to the localized date input formats. Returns None if invalid."""
     dt = None
     for f in get_format('DATE_INPUT_FORMATS'):
         try:
