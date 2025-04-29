@@ -295,7 +295,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     {
                         'id': item.pk,
                         'name': str(item.name),
-                        'picture': get_picture(self.request.event, item.picture, '60x60^') if item.picture else None,
+                        'picture': get_picture(self.request.event, item.picture, '120x120^') if item.picture else None,
                         'picture_fullsize': get_picture(self.request.event, item.picture) if item.picture else None,
                         'description': str(rich_text(item.description, safelinks=False)) if item.description else None,
                         'has_variations': item.has_variations,

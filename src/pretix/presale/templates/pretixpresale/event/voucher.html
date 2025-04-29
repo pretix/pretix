@@ -93,8 +93,9 @@
                                                     {# Yes, double-escape to prevent XSS in lightbox #}
                                                data-lightbox="{{ item.id }}"
                                                aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
-                                            <img src="{{ item.picture|thumb:'60x60^' }}"
-                                                        alt="{{ item.name }}"/>
+                                            <img src="{{ item.picture|thumb:'120x120^' }}"
+                                                 width="60"
+                                                 alt="{{ item.name }}"/>
                                             </a>
                                         {% endif %}
                                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
@@ -274,7 +275,8 @@
                                                 {# Yes, double-escape to prevent XSS in lightbox #}
                                            data-lightbox="{{ item.id }}"
                                            aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
-                                            <img src="{{ item.picture|thumb:'60x60^' }}"
+                                            <img src="{{ item.picture|thumb:'120x120^' }}"
+                                                 width="60"
                                                  alt="{{ item.name }}"/>
                                         </a>
                                     {% endif %}
