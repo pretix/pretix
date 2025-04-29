@@ -71,6 +71,7 @@
         {% endif %}
 
 
+        {% if subevent_list.visible_events %}
     {% if subevent_list_foldable %}
         <details class="panel panel-{% if show_cart %}primary{% else %}default{% endif %}">
             <summary class="panel-heading">
@@ -117,6 +118,7 @@
     {% else %}
         </div>
     {% endif %}
+        {% endif %}
 
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
