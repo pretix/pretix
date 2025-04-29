@@ -2219,8 +2219,7 @@ class OrderChangeManager:
 
         for op in self._operations:
             if isinstance(op, self.ItemOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.item', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
@@ -2246,8 +2245,7 @@ class OrderChangeManager:
                 secret_dirty.add(position)
                 position.save()
             elif isinstance(op, self.MembershipOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.membership', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
@@ -2257,8 +2255,7 @@ class OrderChangeManager:
                 position.used_membership = op.membership
                 position.save()
             elif isinstance(op, self.SeatOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.seat', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
@@ -2271,8 +2268,7 @@ class OrderChangeManager:
                 secret_dirty.add(position)
                 position.save()
             elif isinstance(op, self.SubeventOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.subevent', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
@@ -2299,19 +2295,17 @@ class OrderChangeManager:
                 op.fee._calculate_tax()
                 op.fee.save()
             elif isinstance(op, self.FeeValueOperation):
-                fee_cache.setdefault(op.fee.pk, op.fee)
-                fee = fee_cache[op.fee.pk]
+                fee = fee_cache.setdefault(op.fee.pk, op.fee)
                 self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
                     'fee': fee.pk,
                     'old_price': fee.value,
                     'new_price': op.value.gross
                 })
-                op.fee.value = op.value.gross
-                op.fee._calculate_tax()
-                op.fee.save()
+                fee.value = op.value.gross
+                fee._calculate_tax()
+                fee.save()
             elif isinstance(op, self.PriceOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.price', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
@@ -2326,8 +2320,7 @@ class OrderChangeManager:
                 position.save(update_fields=['price', 'tax_rate', 'tax_value', 'tax_code'])
             elif isinstance(op, self.TaxRuleOperation):
                 if isinstance(op.position, OrderPosition):
-                    position_cache.setdefault(op.position.pk, op.position)
-                    position = position_cache[op.position.pk]
+                    position = position_cache.setdefault(op.position.pk, op.position)
                     self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
                         'position': position.pk,
                         'positionid': position.positionid,
@@ -2335,28 +2328,29 @@ class OrderChangeManager:
                         'old_taxrule': position.tax_rule.pk if position.tax_rule else None,
                         'new_taxrule': op.tax_rule.pk
                     })
+                    position._calculate_tax(op.tax_rule)
+                    position.save()
                 elif isinstance(op.position, OrderFee):
-                    fee_cache.setdefault(op.position.pk, op.position)
-                    position = fee_cache[op.position.pk]
+                    fee = fee_cache.setdefault(op.position.pk, op.position)
                     self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
-                        'fee': position.pk,
-                        'fee_type': position.fee_type,
-                        'old_taxrule': position.tax_rule.pk if position.tax_rule else None,
+                        'fee': fee.pk,
+                        'fee_type': fee.fee_type,
+                        'old_taxrule': fee.tax_rule.pk if fee.tax_rule else None,
                         'new_taxrule': op.tax_rule.pk
                     })
-                position._calculate_tax(op.tax_rule)
-                position.save()
+                    fee._calculate_tax(op.tax_rule)
+                    fee.save()
             elif isinstance(op, self.CancelFeeOperation):
+                fee = fee_cache.setdefault(op.fee.pk, op.fee)
                 self.order.log_action('pretix.event.order.changed.cancelfee', user=self.user, auth=self.auth, data={
-                    'fee': op.fee.pk,
-                    'fee_type': op.fee.fee_type,
-                    'old_price': op.fee.value,
+                    'fee': fee.pk,
+                    'fee_type': fee.fee_type,
+                    'old_price': fee.value,
                 })
-                op.fee.canceled = True
-                op.fee.save(update_fields=['canceled'])
+                fee.canceled = True
+                fee.save(update_fields=['canceled'])
             elif isinstance(op, self.CancelOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 for gc in position.issued_gift_cards.all():
                     gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
                     if gc.value < position.price:
@@ -2373,8 +2367,7 @@ class OrderChangeManager:
                     m.save()
 
                 for opa in position.addons.all():
-                    position_cache.setdefault(opa.pk, opa)
-                    opa = position_cache[opa.pk]
+                    opa = position_cache.setdefault(opa.pk, opa)
                     for gc in opa.issued_gift_cards.all():
                         gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
                         if gc.value < opa.position.price:
@@ -2448,12 +2441,10 @@ class OrderChangeManager:
                     'valid_until': op.valid_until.isoformat() if op.valid_until else None,
                 })
             elif isinstance(op, self.SplitOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 split_positions.append(position)
             elif isinstance(op, self.RegenerateSecretOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 position.web_secret = generate_secret()
                 position.save(update_fields=["web_secret"])
                 assign_ticket_secret(
@@ -2468,8 +2459,7 @@ class OrderChangeManager:
                     'positionid': position.positionid,
                 })
             elif isinstance(op, self.ChangeValidFromOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.valid_from', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
@@ -2480,8 +2470,7 @@ class OrderChangeManager:
                 position.save(update_fields=['valid_from'])
                 secret_dirty.add(position)
             elif isinstance(op, self.ChangeValidUntilOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.valid_until', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
@@ -2492,8 +2481,7 @@ class OrderChangeManager:
                 position.save(update_fields=['valid_until'])
                 secret_dirty.add(position)
             elif isinstance(op, self.AddBlockOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.add_block', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
@@ -2517,8 +2505,7 @@ class OrderChangeManager:
                         }
                     )
             elif isinstance(op, self.RemoveBlockOperation):
-                position_cache.setdefault(op.position.pk, op.position)
-                position = position_cache[op.position.pk]
+                position = position_cache.setdefault(op.position.pk, op.position)
                 self.order.log_action('pretix.event.order.changed.remove_block', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
