@@ -100,13 +100,13 @@ def get_srcset_sizes(size):
     w, h = size.split("x")
     for m in (2, 3):
         if w.endswith("_"):
-            new_w = f"{int(w.rstrip("_")) * m}_"
+            new_w = f"{int(w.rstrip('_')) * m}_"
         else:
             new_w = f"{int(w) * m}"
         if h.endswith("_"):
-            new_h = f"{int(h.rstrip("_")) * m}_"
+            new_h = f"{int(h.rstrip('_')) * m}_"
         elif h.endswith("^"):
-            new_h = f"{int(h.rstrip("^")) * m}^"
+            new_h = f"{int(h.rstrip('^')) * m}^"
         else:
             new_h = f"{int(h) * m}"
 
