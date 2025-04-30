@@ -82,6 +82,8 @@ var form_handlers = function (el) {
                     Math.abs(+new Date(opts.minDate) - new Date()) < Math.abs(+new Date(opts.maxDate) - new Date())
             ) ? opts.minDate : opts.maxDate;
         }
+        var alert = $('<span role="alert"></span>');
+        $("#"+this.getAttribute("aria-describedby")).prepend(alert);
         $(this).datetimepicker(opts).on("dp.hide", function() {
             // when min/max is used in datetimepicker, closing and re-opening the picker opens at the wrong date
             // therefore keep the current viewDate and re-set it after datetimepicker is done hiding
@@ -90,7 +92,18 @@ var form_handlers = function (el) {
             window.setTimeout(function () {
                 $dtp.viewDate(currentViewDate);
             }, 50);
+        }).on('dp.error', function (e) {
+            console.log(this, e.date, e.oldDate, opts["minDate"], opts["maxDate"]);
+            alert.text("Mist, das ist ein Fehler! ");
+            // TODO: 
+            var self = this;
+            window.setTimeout(function () {
+                console.log(self);
+                //self.focus();
+            }, 50);
         });
+        
+
         if ($(this).parent().is('.splitdatetimerow')) {
             $(this).on("dp.change", function (ev) {
                 var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
