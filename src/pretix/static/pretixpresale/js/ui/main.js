@@ -314,6 +314,49 @@ function setup_basics(el) {
             $(this).parent().parent().find('.addon-variation-description').stop().slideDown();
         }
     });
+
+    // tabs - see https://www.w3.org/WAI/ARIA/apg/patterns/tabs/examples/tabs-automatic/ for reference
+    el.find('.tabcontainer').each(function() {
+        var currentTab;
+        function setCurrentTab(tab) {
+            if (tab == currentTab) return;
+            if (currentTab) {
+                currentTab.setAttribute('aria-selected', 'false');
+                currentTab.tabIndex = -1;
+                currentTab.classList.replace('btn-primary', 'btn-link');
+                document.getElementById(currentTab.getAttribute('aria-controls')).setAttribute('hidden', 'hidden');
+            }
+            tab.setAttribute('aria-selected', 'true');
+            tab.removeAttribute('tabindex');
+            tab.classList.replace('btn-link', 'btn-primary');
+            document.getElementById(tab.getAttribute('aria-controls')).removeAttribute('hidden');
+            currentTab = tab;
+        }
+        var tabs = $('button[role=tab]').on('keydown', function(event) {
+            if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].indexOf(event.key) == -1) {
+                return;
+            }
+            event.stopPropagation();
+            event.preventDefault();
+
+            if (event.key == 'ArrowLeft') {
+                setCurrentTab(currentTab.previousElementSibling || lastTab);
+            } else if (event.key == 'ArrowRight') {
+                setCurrentTab(currentTab.nextElementSibling || firstTab);
+            } else if (event.key == 'Home') {
+                setCurrentTab(firstTab);
+            } else if (event.key == 'End') {
+                setCurrentTab(lastTab);
+            }
+            currentTab.focus();
+        }).on('click', function (event) {
+            setCurrentTab(this);
+        });
+        
+        var firstTab = tabs.first().get(0);
+        var lastTab = tabs.last().get(0);
+        setCurrentTab(tabs.filter('[aria-selected=true]').get(0));
+    });
 }
 
 function setup_week_calendar() {
