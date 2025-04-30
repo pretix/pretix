@@ -95,10 +95,10 @@ SCT
                     </div>
                 {% endif %}
             </div>
-            <div id="banktransfer_qrcodes_tabs" role="tablist" aria-labelledby="banktransfer_qrcodes_label">
+            <div id="banktransfer_qrcodes_tabs" role="tablist" aria-labelledby="banktransfer_qrcodes_label" class="blank-after btn-group">
             {% if swiss_qrbill %}
                 <button
-                    class="btn btn-link"
+                    class="btn btn-default"
                     id="banktransfer_qrcodes_qrbill_tab"
                     type="button"
                     role="tab"
@@ -108,7 +108,7 @@ SCT
             {% endif %}
             {% if eu_barcodes %}
                 <button
-                    class="btn btn-link"
+                    class="btn btn-default"
                     id="banktransfer_qrcodes_girocode_tab"
                     type="button"
                     role="tab"
@@ -116,7 +116,7 @@ SCT
                     aria-selected="{{ swiss_qrbill|yesno:"false,true" }}"
                     tabindex="-1">EPC-QR</button>
                 <button
-                    class="btn btn-link"
+                    class="btn btn-default"
                     id="banktransfer_qrcodes_bezahlcode_tab"
                     type="button"
                     role="tab"

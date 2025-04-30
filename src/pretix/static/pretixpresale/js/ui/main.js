@@ -323,12 +323,12 @@ function setup_basics(el) {
             if (currentTab) {
                 currentTab.setAttribute('aria-selected', 'false');
                 currentTab.tabIndex = -1;
-                currentTab.classList.replace('btn-primary', 'btn-link');
+                currentTab.classList.remove('active');
                 document.getElementById(currentTab.getAttribute('aria-controls')).setAttribute('hidden', 'hidden');
             }
             tab.setAttribute('aria-selected', 'true');
             tab.removeAttribute('tabindex');
-            tab.classList.replace('btn-link', 'btn-primary');
+            tab.classList.add('active');
             document.getElementById(tab.getAttribute('aria-controls')).removeAttribute('hidden');
             currentTab = tab;
         }
