@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-03-30 16:00+0000\n"
-"Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2025-05-01 02:00+0000\n"
+"Last-Translator: Foxy Hunter <matthias.vancoillie@outlook.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -2980,11 +2980,9 @@ msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
 #: pretix/base/forms/questions.py:134 pretix/base/forms/questions.py:256
-#, fuzzy
-#| msgid "No country specified."
 msgctxt "name_salutation"
 msgid "not specified"
-msgstr "Geen land opgegeven."
+msgstr "Niet opgegeven"
 
 #: pretix/base/forms/questions.py:219
 msgid "Please do not use special characters in names."
@@ -3999,7 +3997,7 @@ msgstr "Bestelling niet goedgekeurd"
 
 #: pretix/base/models/checkin.py:366
 msgid "Ticket not valid at this time"
-msgstr "Ticket is niet geldig op dit moment"
+msgstr "Ticket is op dit moment niet geldig"
 
 #: pretix/base/models/customers.py:55
 msgid "Provider name"
@@ -4253,20 +4251,14 @@ msgstr ""
 "uitverkochte producten zullen nog steeds een korting krijgen."
 
 #: pretix/base/models/discount.py:177
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr "Alle subevenementen beginnend voor"
+msgstr "Beschikbaar vanaf de volgende datums"
 
 #: pretix/base/models/discount.py:182
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "Alle subevenementen beginnend voor"
+msgstr "Beschikbaar voor startdatums tot"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -5576,20 +5568,12 @@ msgid "Unknown country code."
 msgstr "Onbekende landcode."
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum date must not be before the minimum value."
-msgstr "Het maximale aantal moet groter zijn dan het minimum aantal."
+msgstr "De maximumdatum mag niet vóór de minimumwaarde liggen."
 
 #: pretix/base/models/items.py:1925
-#, fuzzy
-#| msgid ""
-#| "The maximum number of usages may not be lower than the minimum number of "
-#| "usages."
 msgid "The maximum value must not be lower than the minimum value."
-msgstr ""
-"Het maximum aantal keer gebruikt mag niet lager zijn dan het minimum aantal "
-"keer gebruikt."
+msgstr "De maximum waarde mag niet lager zijn dan de minimum waarde."
 
 #: pretix/base/models/items.py:1942
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -6298,8 +6282,6 @@ msgstr ""
 "Gemiddeld tarief (andere omzet in een agriculturele en bosbouwkundig bedrijf)"
 
 #: pretix/base/models/tax.py:164
-#, fuzzy
-#| msgid "Reverse charge"
 msgctxt "tax_code"
 msgid "Reverse charge"
 msgstr "Omgekeerde belastingheffing"
@@ -6347,7 +6329,7 @@ msgstr "Canarische Eilanden algemeen belastingtarief"
 #: pretix/base/models/tax.py:190
 msgctxt "tax_code"
 msgid "Tax for production, services and importation in Ceuta and Melilla"
-msgstr ""
+msgstr "Belasting op productie, diensten en invoer in Ceuta en Melilla"
 
 #: pretix/base/models/tax.py:191
 msgctxt "tax_code"
@@ -6416,14 +6398,14 @@ msgstr "Intracommunautaire aankoop van verzamelobjecten en antiek"
 #: pretix/base/models/tax.py:262
 msgctxt "tax_code"
 msgid "France domestic VAT franchise in base"
-msgstr ""
+msgstr "Franse btw-vrijstelling (binnenlands, franchise)"
 
 #: pretix/base/models/tax.py:264
 msgctxt "tax_code"
 msgid ""
 "France domestic Credit Notes without VAT, due to supplier forfeit of VAT for "
 "discount"
-msgstr ""
+msgstr "Franse binnenlandse creditnota, geen betw door korting van leverancier"
 
 #: pretix/base/models/tax.py:314
 msgid "Your set of rules is not valid. Error message: {}"
@@ -6447,6 +6429,9 @@ msgid ""
 "If you help us understand what this tax rules legally is, we can use this "
 "information for eInvoices, exporting to accounting system, etc."
 msgstr ""
+"Wanneer je ons helpt te begrijpen wat deze belastingsregels juridisch "
+"inhouden, kunnen we deze informatie inzetten voor e-facturen, het exporteren "
+"naar het boekhoudsysteem, enz."
 
 #: pretix/base/models/tax.py:351
 msgid "The configured product prices include the tax amount"
@@ -6516,11 +6501,15 @@ msgstr "U moet uw thuisland instellen om de verleggingsfunctie te gebruiken."
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
 msgstr ""
+"Een combinatie van deze belastingcode met een belastingtarief groter dan nul "
+"is niet logisch."
 
 #: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1562
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
 msgstr ""
+"Een combinatie van deze belastingscode met een belastingstarief van nul is "
+"niet logisch."
 
 #: pretix/base/models/tax.py:426
 #, python-brace-format
@@ -11660,13 +11649,6 @@ msgid "Header image"
 msgstr "Header-afbeelding"
 
 #: pretix/base/settings.py:2885
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your event name "
-#| "and date in the page header. By default, we show your logo with a size of "
-#| "up to 1140x120 pixels. You can increase the size with the setting below. "
-#| "We recommend not using small details on the picture as it will be resized "
-#| "on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. If you use a white background, we show your logo "
@@ -11705,13 +11687,6 @@ msgstr ""
 "organisator dan zal de titel altijd getoond worden."
 
 #: pretix/base/settings.py:2929 pretix/control/forms/organizer.py:524
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your "
-#| "organization name in the page header. By default, we show your logo with "
-#| "a size of up to 1140x120 pixels. You can increase the size with the "
-#| "setting below. We recommend not using small details on the picture as it "
-#| "will be resized on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. If you use a white background, we show your logo "
@@ -11721,7 +11696,7 @@ msgid ""
 msgstr ""
 "Als u een logo opgeeft zullen we standaard niet uw organisatienaam in de "
 "paginaheader tonen. We tonen uw logo standaard met een maximumgrootte van "
-"1140x120 pixels. U kunt deze grootte aanpassen met de instelling hieronder. "
+"1120x120 pixels. U kunt deze grootte aanpassen met de instelling hieronder. "
 "We raden aan om geen kleine details op de afbeelding te gebruiken, omdat de "
 "afbeelding op kleinere schermen zal worden geschaald."
 
@@ -13570,6 +13545,8 @@ msgid ""
 "A combination of this calculation mode with a non-zero tax rate does not "
 "make sense."
 msgstr ""
+"Een combinatie van deze berekeningsmodus met een belastingstarief groter dan "
+"nul is niet logisch."
 
 #: pretix/control/forms/event.py:1550 pretix/control/forms/event.py:1554
 msgid "This combination of calculation mode and tax code does not make sense."
@@ -13786,7 +13763,7 @@ msgstr "Goedgekeurd, wacht op betaling"
 #: pretix/plugins/reports/exporters.py:380
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Approval pending"
-msgstr "Wachtend op goedkeuring"
+msgstr "Goedkeuring in afwachting"
 
 #: pretix/control/forms/filter.py:241
 msgid "Follow-up configured"
@@ -15008,6 +14985,8 @@ msgid ""
 "This affects both the ticket secret (often used as a QR code) as well as the "
 "link used to individually access the ticket."
 msgstr ""
+"Dit heeft invloed op zowel het ticketgeheim (vaak gebruikt als QR-code) als "
+"de link waarmee het ticket individueel kan worden geopend."
 
 #: pretix/control/forms/orders.py:501
 msgid "Cancel this position"
@@ -15434,6 +15413,8 @@ msgid ""
 "Optional query parameters, that will be added to calls to the authorization "
 "endpoint. Enter as: {example}"
 msgstr ""
+"Optionele queryparameters, die worden toegevoegd aan oproepen naar het "
+"autorisatie-eindpunt. Voer in als:  {example}"
 
 #: pretix/control/forms/organizer.py:1110
 msgid "Invalidate old client secret and generate a new one"
@@ -23679,9 +23660,9 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
-"In sommige rechtsgebieden, waaronder de Europese Unie, is toestemming van de "
-"gebruiker vereist voordat u cookies of vergelijkbare technologie mag "
-"gebruiken voor analyses, tracking, betaling of soortgelijke doeleinden."
+"Bepaalde rechtsgebieden, zoals de Europese Unie, vereisen de toestemming van "
+"de gebruiker voordat je cookies of soortgelijke technologieën mag gebruiken "
+"voor analyses, tracking, betalingen of soortgelijke doeleinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:172
 msgid ""
@@ -23713,12 +23694,12 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
-"Niettemin blijft het uw verantwoordelijkheid om ervoor te zorgen dat uw "
-"ticketshop aan alle toepasselijke wetten voldoet. Wij proberen u te helpen "
-"met deze instellingen, maar kunnen geen aansprakelijkheid aanvaarden omdat "
-"wij onder andere niet de exacte configuratie van uw ticketshop, de "
-"juridische details van het toepasselijke rechtsgebied en de overeenkomsten "
-"tussen u en de gebruikte derde aanbieders kennen."
+"Het is uiteindelijk uw verantwoordelijkheid om ervoor te zorgen dat u "
+"voldoet aan alle relevante wetgeving. Wij bieden deze instellingen ter "
+"ondersteuning, maar kunnen geen aansprakelijkheid dragen, aangezien wij de "
+"exacte configuratie van uw gebruik van pretix, de juridische details in uw "
+"rechtsgebied, of de afspraken met derden zoals betalings- of "
+"trackingaanbieders niet kennen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:210
 msgid "Barcode media"
@@ -24553,32 +24534,32 @@ msgstr "Voorkeurstaal"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:200
 #: pretix/control/templates/pretixcontrol/pdf/index.html:210
-#, fuzzy
-#| msgid "Upload custom background"
 msgid "Upload PDF as background"
-msgstr "Upload aangepaste achtergrond"
+msgstr "Upload PDF als achtergrond"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:202
 msgid ""
 "You can upload a PDF to use as a custom background. The paper size will "
 "match the PDF."
 msgstr ""
+"Je kunt een PDF uploaden om als aangepaste achtergrond te gebruiken. De "
+"papier-grootte zal overeenkomen met dat van de PDF."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:217
 msgid "Download current background"
 msgstr "Download huidige achtergrond"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:224
-#, fuzzy
-#| msgid "Date chosen by customer"
 msgid "Or choose custom paper size"
-msgstr "Datum gekozen door klant"
+msgstr "Of kies een aangepaste papier-grootte"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:226
 msgid ""
 "To manually change the paper size, you need to create a new, empty "
 "background."
 msgstr ""
+"Om manueel de papier-grootte te kunnen aanpassen, moet je eerst een nieuwe, "
+"lege, achtergrond maken."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:234
 #: pretix/control/templates/pretixcontrol/pdf/index.html:321
@@ -27962,10 +27943,9 @@ msgid "until"
 msgstr "tot"
 
 #: pretix/helpers/daterange.py:106
-#, fuzzy, python-brace-format
-#| msgid "{date_from} – {date_to}"
+#, python-brace-format
 msgid "{date_from}{until}{date_to}"
-msgstr "{date_from} – {date_to}"
+msgstr "{date_from}{until}{date_to}"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
@@ -31726,10 +31706,8 @@ msgid "Payer name"
 msgstr "Naam betaler"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:91
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment receipt"
-msgstr "Betalingskosten"
+msgstr "Betalingsbewijs"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
 msgid "Do you really want to disconnect your Stripe account?"
