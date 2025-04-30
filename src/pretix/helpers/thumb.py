@@ -96,6 +96,23 @@ def get_minsize(size):
     return (min_width, min_height)
 
 
+def get_srcset_sizes(size):
+    w, h = size.split("x")
+    for m in (2, 3):
+        if w.endswith("_"):
+            new_w = f"{int(w.rstrip("_")) * m}_"
+        else:
+            new_w = f"{int(w) * m}"
+        if h.endswith("_"):
+            new_h = f"{int(h.rstrip("_")) * m}_"
+        elif h.endswith("^"):
+            new_h = f"{int(h.rstrip("^")) * m}^"
+        else:
+            new_h = f"{int(h) * m}"
+
+        yield f"{new_w}x{new_h}", f"{m}x"
+
+
 def get_sizes(size, imgsize):
     crop = False
     if size.endswith('^'):
@@ -141,6 +158,7 @@ def get_sizes(size, imgsize):
 def resize_image(image, size):
     # before we calc thumbnail, we need to check and apply EXIF-orientation
     image = ImageOps.exif_transpose(image)
+    old_size = image.size
 
     new_size, crop = get_sizes(size, image.size)
     image = image.resize(new_size, resample=Resampling.LANCZOS)
@@ -161,11 +179,12 @@ def resize_image(image, size):
         new_y = (image.height - new_height) // 2
 
         image = image.crop((new_x, new_y, new_x + new_width, new_y + new_height))
+        new_size = image.size
 
-    return image
+    return image, new_size != old_size
 
 
-def create_thumbnail(source, size, formats=None):
+def create_thumbnail(source, size, formats=None, only_if_resized=False):
     source_name = str(source)
 
     # HACK: this ensures that the file is opened in binary mode, which is not guaranteed otherwise, esp. for
@@ -181,10 +200,17 @@ def create_thumbnail(source, size, formats=None):
         raise ThumbnailError('Could not load image')
 
     frames = []
+    any_resized = False
     durations = []
     for f in ImageSequence.Iterator(image):
         durations.append(f.info.get("duration", 1000))
-        frames.append(resize_image(f, size))
+        img, resized = resize_image(f, size)
+        any_resized = any_resized or resized
+        frames.append(img)
+
+    if not any_resized and only_if_resized:
+        return
+
     image_out = frames[0]
     save_kwargs = {}
     source_ext = os.path.splitext(source_name)[1].lower()
@@ -223,10 +249,10 @@ def create_thumbnail(source, size, formats=None):
     return t
 
 
-def get_thumbnail(source, size, formats=None):
+def get_thumbnail(source, size, formats=None, only_if_resized=False):
     # Assumes files are immutable
     try:
         source_name = str(source)
         return Thumbnail.objects.get(source=source_name, size=size)
     except Thumbnail.DoesNotExist:
-        return create_thumbnail(source, size, formats=formats)
+        return create_thumbnail(source, size, formats=formats, only_if_resized=only_if_resized)
