@@ -26,85 +26,98 @@ from pretix.helpers.thumb import resize_image
 
 def test_no_resize():
     img = Image.new('RGB', (40, 20))
-    img = resize_image(img, "100x100")
+    img, resized = resize_image(img, "100x100")
     width, height = img.size
+    assert not resized
     assert width == 40
     assert height == 20
 
     img = Image.new('RGB', (40, 20))
-    img = resize_image(img, "100x100^")
+    img, resized = resize_image(img, "100x100^")
     width, height = img.size
+    assert not resized
     assert width == 40
     assert height == 20
 
 
 def test_resize():
     img = Image.new('RGB', (40, 20))
-    img = resize_image(img, "10x10")
+    img, resized = resize_image(img, "10x10")
     width, height = img.size
+    assert resized
     assert width == 10
     assert height == 5
 
     img = Image.new('RGB', (40, 20))
-    img = resize_image(img, "100x10")
+    img, resized = resize_image(img, "100x10")
     width, height = img.size
+    assert resized
     assert width == 20
     assert height == 10
 
     img = Image.new('RGB', (40, 20))
-    img = resize_image(img, "10x100")
+    img, resized = resize_image(img, "10x100")
     width, height = img.size
+    assert resized
     assert width == 10
     assert height == 5
 
 
 def test_crop():
     img = Image.new('RGB', (40, 20))
-    img = resize_image(img, "10x10^")
+    img, resized = resize_image(img, "10x10^")
     width, height = img.size
+    assert resized
     assert width == 10
     assert height == 10
 
 
 def test_exactsize():
     img = Image.new('RGB', (6912, 3456))
-    img = resize_image(img, "600_x5000")
+    img, resized = resize_image(img, "600_x5000")
     width, height = img.size
+    assert resized
     assert width == 600
     assert height == 300
 
     img = Image.new('RGB', (60, 20))
-    img = resize_image(img, "10_x10")
+    img, resized = resize_image(img, "10_x10")
     width, height = img.size
+    assert resized
     assert width == 10
     assert height == 3
 
     img = Image.new('RGB', (10, 20))
-    img = resize_image(img, "10_x10")
+    img, resized = resize_image(img, "10_x10")
     width, height = img.size
+    assert resized
     assert width == 10
     assert height == 10
 
     img = Image.new('RGB', (60, 20))
-    img = resize_image(img, "10x10_")
+    img, resized = resize_image(img, "10x10_")
     width, height = img.size
+    assert resized
     assert width == 10
     assert height == 10
 
     img = Image.new('RGB', (20, 60))
-    img = resize_image(img, "10x10_")
+    img, resized = resize_image(img, "10x10_")
     width, height = img.size
+    assert resized
     assert width == 3
     assert height == 10
 
     img = Image.new('RGB', (20, 60))
-    img = resize_image(img, "10_x10_")
+    img, resized = resize_image(img, "10_x10_")
     width, height = img.size
+    assert resized
     assert width == 10
     assert height == 10
 
     img = Image.new('RGB', (20, 60))
-    img = resize_image(img, "100_x100_")
+    img, resized = resize_image(img, "100_x100_")
     width, height = img.size
+    assert resized
     assert width == 100
     assert height == 100

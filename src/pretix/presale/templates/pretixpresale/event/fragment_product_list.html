@@ -39,6 +39,7 @@
                                    data-lightbox="{{ item.id }}"
                                    aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
                                     <img src="{{ item.picture|thumb:'60x60^' }}"
+                                         srcset="{{ item.picture|thumbset:'60x60^' }}"
                                          alt="{{ item.name }}"/>
                                 </a>
                             {% endif %}
@@ -258,6 +259,7 @@
                                data-lightbox="{{ item.id }}"
                                aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
                                 <img src="{{ item.picture|thumb:'60x60^' }}"
+                                     srcset="{{ item.picture|thumbset:'60x60^' }}"
                                      alt="{{ item.name }}"/>
                             </a>
                         {% endif %}
