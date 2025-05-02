@@ -70,6 +70,7 @@ from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
 )
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.i18n import parse_date_localized
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.organizer import EventListFilterForm
@@ -927,10 +928,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _set_date(self):
         if 'date' in self.request.GET:
             self.tz = self.request.organizer.timezone
-            try:
-                self.date = dateutil.parser.parse(self.request.GET.get('date')).date()
-            except ValueError:
-                self.date = now().astimezone(self.tz).date()
+            self.date = parse_date_localized(self.request.GET.get('date')).date() or now().astimezone(self.tz).date()
         else:
             self._set_date_to_next_event()
 

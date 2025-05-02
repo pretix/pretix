@@ -42,7 +42,7 @@ from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.utils.formats import date_format, get_format
+from django.utils.formats import date_format
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, pgettext
 
@@ -56,7 +56,7 @@ from pretix.control.permissions import (
     event_permission_required, organizer_permission_required,
 )
 from pretix.helpers.daterange import daterange
-from pretix.helpers.i18n import i18ncomp
+from pretix.helpers.i18n import i18ncomp, parse_date_localized
 
 
 def serialize_user(u):
@@ -408,13 +408,7 @@ def subevent_select2(request, **kwargs):
     qf = Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
     tz = request.event.timezone
 
-    dt = None
-    for f in get_format('DATE_INPUT_FORMATS'):
-        try:
-            dt = datetime.strptime(query, f)
-            break
-        except (ValueError, TypeError):
-            continue
+    dt = parse_date_localized(query)
 
     if dt:
         dt_start = make_aware(datetime.combine(dt.date(), time(hour=0, minute=0, second=0)), tz)
@@ -458,13 +452,7 @@ def quotas_select2(request, **kwargs):
     qf = Q(name__icontains=query) | Q(subevent__name__icontains=i18ncomp(query))
     tz = request.event.timezone
 
-    dt = None
-    for f in get_format('DATE_INPUT_FORMATS'):
-        try:
-            dt = datetime.strptime(query, f)
-            break
-        except (ValueError, TypeError):
-            continue
+    dt = parse_date_localized(query)
 
     if dt and request.event.has_subevents:
         dt_start = make_aware(datetime.combine(dt.date(), time(hour=0, minute=0, second=0)), tz)
