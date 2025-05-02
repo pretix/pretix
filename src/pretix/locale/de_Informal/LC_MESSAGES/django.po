@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-04-28 11:32+0000\n"
+"PO-Revision-Date: 2025-05-02 09:46+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -15329,7 +15329,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:195
 msgid "You need to choose an event."
-msgstr "Du musst eine Veranstaltung auswählen."
+msgstr "Du musst eine Veranstaltung wählen."
 
 #: pretix/control/forms/organizer.py:227
 msgid "You may set only one organizer domain."
@@ -28036,7 +28036,7 @@ msgstr "Alternative Veranstalterdomain für einzelne Veranstaltungen"
 
 #: pretix/multidomain/models.py:38
 msgid "Event domain"
-msgstr "Veranstaltungsdomain"
+msgstr "Veranstaltungs-Domain"
 
 #: pretix/multidomain/models.py:44
 msgid "Domain name"
