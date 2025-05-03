@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-04-29 01:00+0000\n"
-"Last-Translator: Davide Manzella <manzella.davide97@gmail.com>\n"
+"PO-Revision-Date: 2025-05-03 19:00+0000\n"
+"Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -9084,37 +9084,44 @@ msgstr "Permetti utilizzo di plugin con restrizioni"
 
 #: pretix/base/settings.py:158
 msgid "Allow customers to create accounts"
-msgstr "Permetti ai clienti di creare account"
+msgstr "Permetti ai clienti di creare un account"
 
 #: pretix/base/settings.py:159
 msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
+"Ciò consentirà ai clienti di registrare un account sul vostro negozio di "
+"biglietti. Questo è un prerequisito per alcune funzioni avanzate come le "
+"iscrizioni."
 
 #: pretix/base/settings.py:169
 msgid "Allow customers to log in with email address and password"
-msgstr ""
+msgstr "Permetti ai clienti di loggarsi con un indirizzo email e una password"
 
 #: pretix/base/settings.py:170
 msgid ""
 "If disabled, you will need to connect one or more single-sign-on providers."
 msgstr ""
+"Se è disattivato, sarà necessario collegare uno o più provider single-sign-"
+"on."
 
 #: pretix/base/settings.py:180
-#, fuzzy
 msgid "Match orders based on email address"
-msgstr "Email partecipante"
+msgstr "Abbina gli ordini in base all'indirizzo e-mail"
 
 #: pretix/base/settings.py:181
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"Ciò consentirà ai clienti registrati di accedere agli ordini effettuati con "
+"lo stesso indirizzo e-mail, anche se il cliente non ha effettuato il login "
+"durante l'acquisto."
 
 #: pretix/base/settings.py:191
 msgid "Activate re-usable media"
-msgstr ""
+msgstr "Attiva supporti riutilizzabili"
 
 #: pretix/base/settings.py:192
 msgid ""
@@ -9122,53 +9129,61 @@ msgid ""
 "with physical media such as wristbands or chip cards that may be re-used for "
 "different tickets or gift cards later."
 msgstr ""
+"La funzione di supporto riutilizzabile consente di collegare i biglietti e "
+"le carte regalo con supporti fisici come braccialetti o chip card che "
+"possono essere riutilizzati in seguito per altri biglietti o carte regalo."
 
 #: pretix/base/settings.py:218
-#, fuzzy
 msgid "Length of barcodes"
-msgstr "Codice biglietto"
+msgstr "Lunghezza dei codici a barre"
 
 #: pretix/base/settings.py:247
 msgid ""
 "Automatically create a new gift card if a previously unknown chip is seen"
 msgstr ""
+"Crea automaticamente una nuova carta regalo se viene visto un chip "
+"precedentemente sconosciuto"
 
 #: pretix/base/settings.py:260 pretix/base/settings.py:291
-#, fuzzy
 msgid "Gift card currency"
-msgstr "Codice Gift Card"
+msgstr "Valuta della carta regalo"
 
 #: pretix/base/settings.py:278
 msgid "Automatically create a new gift card if a new chip is encoded"
 msgstr ""
+"Crea automaticamente una nuova carta regalo se viene codificato un nuovo chip"
 
 #: pretix/base/settings.py:300
 msgid "Use UID protection feature of NFC chip"
-msgstr ""
+msgstr "Utilizza la funzione di protezione UID del chip NFC"
 
 #: pretix/base/settings.py:316
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "Numero massimo di elementi per ordine"
 
 #: pretix/base/settings.py:317
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "I prodotti aggiuntivi non verranno conteggiati."
 
 #: pretix/base/settings.py:326
 msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
 msgstr ""
+"Mostra il prezzo netto anziché il prezzo lordo nella lista dei prodotti (non "
+"raccomandato!)"
 
 #: pretix/base/settings.py:327
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
+"Indipendentemente dalla vostra scelta, il carrello mostrerà i prezzi lordi, "
+"poiché questo è il prezzo che deve essere pagato."
 
 #: pretix/base/settings.py:338
 msgid "Hide prices on attendee ticket page"
-msgstr ""
+msgstr "Nascondi i prezzi nella pagina dei biglietti per i partecipanti"
 
 #: pretix/base/settings.py:339
 msgid ""
@@ -9177,10 +9192,14 @@ msgid ""
 "page of the individual attendees. The ticket buyer will of course see the "
 "price."
 msgstr ""
+"Se una persona acquista più biglietti e si inviano e-mail a tutti i "
+"partecipanti, con questa opzione il prezzo del biglietto non verrà mostrato "
+"nella pagina dei biglietti dei singoli partecipanti. L'acquirente del "
+"biglietto vedrà ovviamente il prezzo."
 
 #: pretix/base/settings.py:357
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "Chiedi il nome dei partecipanti"
 
 #: pretix/base/settings.py:358
 msgid "Ask for a name for all personalized tickets."
