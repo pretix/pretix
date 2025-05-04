@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-02-12 15:27+0000\n"
-"Last-Translator: Johanna Ketola <johanna.ketola@om.org>\n"
+"PO-Revision-Date: 2025-05-04 16:00+0000\n"
+"Last-Translator: Pekka Sarkola <pekka.sarkola@gispo.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -57,7 +57,7 @@ msgstr "tšekki"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Kroatia"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -2887,7 +2887,7 @@ msgstr "Odottaa lunastusta"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:223
 #: pretix/control/views/waitinglist.py:329
 msgid "Voucher redeemed"
-msgstr "Kuponi lunastettu"
+msgstr "Kuponki lunastettu"
 
 #: pretix/base/exporters/waitinglist.py:80
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:116
@@ -4245,7 +4245,7 @@ msgstr ""
 #: pretix/base/models/discount.py:177
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr ""
+msgstr "Saatavilla lähtien"
 
 #: pretix/base/models/discount.py:182
 #, fuzzy
@@ -9794,7 +9794,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1311
 msgid "This shop represents an event"
-msgstr ""
+msgstr "Tämä kauppaa koskee tapahtumaa"
 
 #: pretix/base/settings.py:1313
 msgid ""
@@ -12805,15 +12805,15 @@ msgstr "Tehtävä on suoritettu."
 #: pretix/control/forms/__init__.py:205
 #, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr ""
+msgstr "Älä lataa tiedostoja, jotka ovat suurempia kuin {size}!"
 
 #: pretix/control/forms/__init__.py:227
 msgid "Filetype not allowed!"
-msgstr ""
+msgstr "Tiedostomuoto ei ole sallittu!"
 
 #: pretix/control/forms/__init__.py:330
 msgid "Community translations"
-msgstr ""
+msgstr "Yhteisön käännökset"
 
 #: pretix/control/forms/__init__.py:332
 #, python-brace-format
@@ -12843,7 +12843,7 @@ msgstr ""
 
 #: pretix/control/forms/checkin.py:176
 msgid "Barcode"
-msgstr ""
+msgstr "Viivakoodi"
 
 #: pretix/control/forms/checkin.py:179
 msgid "Check-in time"
@@ -12869,11 +12869,11 @@ msgstr "Kaikki portit"
 
 #: pretix/control/forms/event.py:91
 msgid "Use languages"
-msgstr ""
+msgstr "Käytä kieliä"
 
 #: pretix/control/forms/event.py:93
 msgid "Choose all languages that your event should be available in."
-msgstr ""
+msgstr "Valitse kaikki kielet, joita tapahtumasi käyttää."
 
 #: pretix/control/forms/event.py:96
 msgid "This is an event series"
@@ -12886,19 +12886,19 @@ msgstr ""
 
 #: pretix/control/forms/event.py:136 pretix/control/forms/event.py:518
 msgid "Event timezone"
-msgstr ""
+msgstr "Tapahtuman aikavyöhyke"
 
 #: pretix/control/forms/event.py:143
 msgid "I don't want to specify taxes now"
-msgstr ""
+msgstr "En halua määritellä veroja nyt"
 
 #: pretix/control/forms/event.py:144
 msgid "You can always configure tax rates later."
-msgstr ""
+msgstr "Voit aina määritellä verojen määrn myöhemmin."
 
 #: pretix/control/forms/event.py:148
 msgid "Sales tax rate"
-msgstr ""
+msgstr "Arvonlisävero"
 
 #: pretix/control/forms/event.py:149
 msgid ""
@@ -12927,6 +12927,8 @@ msgid ""
 "Sample Conference Center\n"
 "Heidelberg, Germany"
 msgstr ""
+"Esimerkki konferenssikeskus\n"
+"Helsinki, Finland"
 
 #: pretix/control/forms/event.py:232
 msgid "Your default locale must be specified."
@@ -12956,7 +12958,7 @@ msgstr "Oletus ({value})"
 
 #: pretix/control/forms/event.py:384 pretix/control/forms/event.py:397
 msgid "Domain"
-msgstr ""
+msgstr "Verkkotunnus"
 
 #: pretix/control/forms/event.py:388
 msgid "You can configure this in your organizer settings."
@@ -13009,7 +13011,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:689
 msgid "Do not ask"
-msgstr ""
+msgstr "Älä kysy"
 
 #: pretix/control/forms/event.py:690
 msgid "Ask, but do not require input"
@@ -13393,7 +13395,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1723
 msgid "Payment via Stripe"
-msgstr ""
+msgstr "Maksut Stripen kautta"
 
 #: pretix/control/forms/event.py:1724
 msgid ""
@@ -13894,7 +13896,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/plugins/checkinlists/exporters.py:761
 msgid "Device"
-msgstr ""
+msgstr "Laite"
 
 #: pretix/control/forms/filter.py:2389 pretix/control/forms/filter.py:2424
 #: pretix/control/forms/filter.py:2615
@@ -14229,7 +14231,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:447
 msgid "Size"
-msgstr ""
+msgstr "Koko"
 
 #: pretix/control/forms/item.py:448
 msgid "Number of tickets"
@@ -14332,7 +14334,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:1079
 msgid "Add-ons"
-msgstr ""
+msgstr "Lisäosat"
 
 #: pretix/control/forms/item.py:1103
 msgid "You added the same add-on category twice"
@@ -14361,7 +14363,7 @@ msgstr ""
 #: pretix/control/forms/item.py:1236 pretix/control/forms/orders.py:367
 #: pretix/control/forms/orders.py:557
 msgid "inactive"
-msgstr ""
+msgstr "Ei käytössä"
 
 #: pretix/control/forms/mailsetup.py:42
 msgid "Hostname"
@@ -14588,7 +14590,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:23
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:100
 msgid "Seat"
-msgstr ""
+msgstr "Istumapaikka"
 
 #: pretix/control/forms/orders.py:336
 #: pretix/control/templates/pretixcontrol/order/change.html:182
@@ -14609,7 +14611,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:552 pretix/control/forms/orders.py:570
 #: pretix/control/forms/orders.py:598
 msgid "(Unchanged)"
-msgstr ""
+msgstr "(Muuttumaton)"
 
 #: pretix/control/forms/orders.py:469 pretix/control/forms/orders.py:593
 msgid "New price (gross)"
@@ -14694,7 +14696,7 @@ msgstr "Liitä laskut"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:20
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:30
 msgid "Recipient"
-msgstr ""
+msgstr "Vastaanottaja"
 
 #: pretix/control/forms/orders.py:768
 #, fuzzy, python-brace-format
@@ -15032,7 +15034,7 @@ msgstr "Myyntikanava samalla tunnuksella on jo olemassa."
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:139
 msgctxt "form"
 msgid "Optional"
-msgstr ""
+msgstr "Valinnainen"
 
 #: pretix/control/forms/renderers.py:148
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:26
@@ -15045,23 +15047,23 @@ msgstr "muuta"
 
 #: pretix/control/forms/rrule.py:35
 msgid "year(s)"
-msgstr ""
+msgstr "vuosi(a)"
 
 #: pretix/control/forms/rrule.py:36
 msgid "month(s)"
-msgstr ""
+msgstr "kuukausi(a)"
 
 #: pretix/control/forms/rrule.py:37
 msgid "week(s)"
-msgstr ""
+msgstr "viikko(ja)"
 
 #: pretix/control/forms/rrule.py:38
 msgid "day(s)"
-msgstr ""
+msgstr "päiviä"
 
 #: pretix/control/forms/rrule.py:43
 msgid "Interval"
-msgstr ""
+msgstr "Aikaväli"
 
 #: pretix/control/forms/rrule.py:69
 msgid "Number of repetitions"
@@ -15074,27 +15076,27 @@ msgstr ""
 #: pretix/control/forms/rrule.py:86 pretix/control/forms/rrule.py:133
 msgctxt "rrule"
 msgid "first"
-msgstr ""
+msgstr "ensimmäinen"
 
 #: pretix/control/forms/rrule.py:87 pretix/control/forms/rrule.py:134
 msgctxt "rrule"
 msgid "second"
-msgstr ""
+msgstr "toinen"
 
 #: pretix/control/forms/rrule.py:88 pretix/control/forms/rrule.py:135
 msgctxt "rrule"
 msgid "third"
-msgstr ""
+msgstr "kolmas"
 
 #: pretix/control/forms/rrule.py:89 pretix/control/forms/rrule.py:136
 msgctxt "rrule"
 msgid "last"
-msgstr ""
+msgstr "viimeinen"
 
 #: pretix/control/forms/rrule.py:110 pretix/control/forms/rrule.py:149
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:21
 msgid "Day"
-msgstr ""
+msgstr "Päivä"
 
 #: pretix/control/forms/rrule.py:112 pretix/control/forms/rrule.py:151
 msgid "Weekend day"
@@ -15140,7 +15142,7 @@ msgstr ""
 
 #: pretix/control/forms/vouchers.py:262
 msgid "Codes"
-msgstr ""
+msgstr "Koodit"
 
 #: pretix/control/forms/vouchers.py:264
 msgid ""
@@ -15191,11 +15193,11 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:42
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:25
 msgid "Recipients"
-msgstr ""
+msgstr "Vastaanottajaat"
 
 #: pretix/control/forms/vouchers.py:292
 msgid "or"
-msgstr ""
+msgstr "tai"
 
 #: pretix/control/forms/vouchers.py:296
 msgid ""
@@ -15444,7 +15446,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:343 pretix/control/logdisplay.py:345
 #: pretix/control/logdisplay.py:891 pretix/control/logdisplay.py:893
 msgid "(unknown)"
-msgstr ""
+msgstr "(tuntematon)"
 
 #: pretix/control/logdisplay.py:365
 #, python-brace-format
@@ -16544,7 +16546,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr ""
+msgstr "Kojelauta"
 
 #: pretix/control/navigation.py:49 pretix/control/navigation.py:382
 #: pretix/control/navigation.py:487
@@ -16559,7 +16561,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:19
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:15
 msgid "General"
-msgstr ""
+msgstr "Yleinen"
 
 #: pretix/control/navigation.py:57
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:151
@@ -16571,7 +16573,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:43
 #: pretix/presale/templates/pretixpresale/event/order.html:86
 msgid "Payment"
-msgstr ""
+msgstr "Maksut"
 
 #: pretix/control/navigation.py:73 pretix/control/views/event.py:1516
 #: pretix/control/views/event.py:1518 pretix/control/views/event.py:1550
@@ -16593,17 +16595,17 @@ msgstr ""
 
 #: pretix/control/navigation.py:97
 msgid "Invoicing"
-msgstr ""
+msgstr "Laskutus"
 
 #: pretix/control/navigation.py:105
 msgctxt "action"
 msgid "Cancellation"
-msgstr ""
+msgstr "Peruutus"
 
 #: pretix/control/navigation.py:113
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
 msgid "Widget"
-msgstr ""
+msgstr "Pienoisohjelma"
 
 #: pretix/control/navigation.py:126 pretix/control/navigation.py:435
 #: pretix/control/navigation.py:480
@@ -16613,11 +16615,11 @@ msgstr ""
 #: pretix/plugins/returnurl/apps.py:40
 #: pretix/plugins/ticketoutputpdf/apps.py:55
 msgid "Settings"
-msgstr ""
+msgstr "Asetukset"
 
 #: pretix/control/navigation.py:164
 msgid "Categories"
-msgstr ""
+msgstr "Kategoriat"
 
 #: pretix/control/navigation.py:180
 msgid "Discounts"
@@ -16625,7 +16627,7 @@ msgstr "Alennukset"
 
 #: pretix/control/navigation.py:213
 msgid "Overview"
-msgstr ""
+msgstr "Yleiskuva"
 
 #: pretix/control/navigation.py:221
 #: pretix/control/templates/pretixcontrol/order/index.html:828
@@ -16635,11 +16637,11 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:684
 #: pretix/presale/templates/pretixpresale/event/order.html:137
 msgid "Refunds"
-msgstr ""
+msgstr "Maksupalautukset"
 
 #: pretix/control/navigation.py:247
 msgid "Import"
-msgstr ""
+msgstr "Tuonti"
 
 #: pretix/control/navigation.py:276
 msgid "All vouchers"
@@ -16647,12 +16649,12 @@ msgstr ""
 
 #: pretix/control/navigation.py:284
 msgid "Tags"
-msgstr ""
+msgstr "Tagit"
 
 #: pretix/control/navigation.py:296
 msgctxt "navigation"
 msgid "Check-in"
-msgstr ""
+msgstr "Ilmoittautumiset"
 
 #: pretix/control/navigation.py:313
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
@@ -16672,20 +16674,20 @@ msgstr "Etsi"
 #: pretix/plugins/reports/accountingreport.py:677
 #: pretix/plugins/reports/accountingreport.py:871
 msgid "Payments"
-msgstr ""
+msgstr "Maksut"
 
 #: pretix/control/navigation.py:376
 msgid "User settings"
-msgstr ""
+msgstr "Käyttäjän asetukset"
 
 #: pretix/control/navigation.py:387
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
 msgid "Notifications"
-msgstr ""
+msgstr "Ilmoitukset"
 
 #: pretix/control/navigation.py:392
 msgid "2FA"
-msgstr ""
+msgstr "2FA"
 
 #: pretix/control/navigation.py:397
 msgid "Authorized apps"
@@ -16713,7 +16715,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:7
 msgid "Global settings"
-msgstr ""
+msgstr "Yleiset asetukset"
 
 #: pretix/control/navigation.py:440
 msgid "Update check"
@@ -16761,7 +16763,7 @@ msgstr "SSO palveluntarjoajat"
 
 #: pretix/control/navigation.py:626 pretix/control/navigation.py:633
 msgid "Devices"
-msgstr ""
+msgstr "Laitteet"
 
 #: pretix/control/permissions.py:72 pretix/control/permissions.py:109
 #: pretix/control/permissions.py:140 pretix/control/permissions.py:157
@@ -16798,13 +16800,13 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
 msgid "Login"
-msgstr ""
+msgstr "Sisäänkirjautuminen"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr ""
+msgstr "Rekisteröinti"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:20
@@ -16830,7 +16832,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:14
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:18
 #: pretix/control/templates/pretixcontrol/user/reauth.html:22
@@ -16903,7 +16905,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:54
 msgid "Error:"
-msgstr ""
+msgstr "Virhe:"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:7
 msgid "Set new password"
@@ -16979,7 +16981,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:20
 msgid "Save"
-msgstr ""
+msgstr "Tallenna"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
@@ -17129,7 +17131,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:15
 msgid "ZVT Terminal"
@@ -17350,7 +17352,7 @@ msgstr[1] ""
 #: pretix/presale/templates/pretixpresale/event/position_change.html:24
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:44
 msgid "Cancel"
-msgstr ""
+msgstr "Peruuta"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:27
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:24
@@ -17396,7 +17398,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:34
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:29
 msgid "Delete"
-msgstr ""
+msgstr "Poista"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -17445,7 +17447,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:91
 #: pretix/presale/templates/pretixpresale/fragment_event_list_filter.html:21
 msgid "Filter"
-msgstr ""
+msgstr "Suodatin"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 msgid "Your search did not match any check-ins."
@@ -17464,7 +17466,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:766
 msgid "Result"
-msgstr ""
+msgstr "Tulos"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:392
@@ -17534,11 +17536,11 @@ msgstr "Ilmoittautumis-simulaattori"
 #: pretix/control/templates/pretixcontrol/orders/overview.html:20
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:64
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:32
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:73
 msgid "No attendee record was found."
@@ -17556,7 +17558,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/index.html:114
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
 msgid "Timestamp"
-msgstr ""
+msgstr "Aikaleima"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:125
 #: pretix/control/templates/pretixcontrol/orders/index.html:165
@@ -17622,7 +17624,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:33
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:128
 msgid "Advanced"
-msgstr ""
+msgstr "Edistynyt"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:50
 msgid ""
@@ -17669,7 +17671,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:117
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:85
 msgid "Edit"
-msgstr ""
+msgstr "Muokkaa"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:89
 msgid "Visualize"
@@ -17740,7 +17742,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:72
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:69
 msgid "Clone"
-msgstr ""
+msgstr "Monista"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:22
 msgid ""
@@ -18211,7 +18213,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:271
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
 msgid "Optional"
-msgstr ""
+msgstr "Valinnainen"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:22
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:57
@@ -18537,7 +18539,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:97
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:120
 msgid "Preview"
-msgstr ""
+msgstr "Esikatselu"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:87
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:58
@@ -18615,7 +18617,7 @@ msgstr "Ota jonotuslista käyttöön"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:66
 msgid "Deadlines"
-msgstr ""
+msgstr "Määräpäivät"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:74
 msgctxt "unit"
@@ -18629,7 +18631,7 @@ msgstr "päivää"
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:25
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:16
 msgid "Back"
-msgstr ""
+msgstr "Takaisin"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:15
 msgid "Payment provider:"
@@ -18637,7 +18639,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:21
 msgid "Warning:"
-msgstr ""
+msgstr "Varoitus:"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:22
 msgid ""
@@ -18755,7 +18757,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:10
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:18
 msgid "Congratulations!"
-msgstr ""
+msgstr "Onnittelut!"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:16
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:12
@@ -18806,7 +18808,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 #: pretix/control/views/event.py:378
 msgid "Features"
-msgstr ""
+msgstr "Ominaisuudet"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:134
 msgid ""
@@ -18848,7 +18850,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:21
 msgid "Basics"
-msgstr ""
+msgstr "Perusteet"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:40
 #: pretix/control/templates/pretixcontrol/item/create.html:144
@@ -18864,7 +18866,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/settings.html:59
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:126
 msgid "Localization"
-msgstr ""
+msgstr "Lokalisointi"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:66
 msgid "Customer and attendee data"
@@ -18904,7 +18906,7 @@ msgstr "Muutoksia tehtyihin tilauksiin"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:130
 msgid "Texts"
-msgstr ""
+msgstr "Tekstit"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:137
 msgid "Confirmation text"
@@ -19826,7 +19828,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:28
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:62
 msgid "Add-On"
-msgstr ""
+msgstr "Lisäosa"
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:86
 msgid "Add a new add-on"
@@ -19871,7 +19873,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/index.html:154
 msgid "Availability"
-msgstr ""
+msgstr "Saatavuus"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:184
 msgid "Tickets & Badges"
@@ -19889,7 +19891,7 @@ msgstr "Kesto"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
-msgstr ""
+msgstr "minuuttia"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:217
 msgid "hours"
@@ -20013,7 +20015,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/discount.html:43
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:53
 msgid "OR"
-msgstr ""
+msgstr "TAI"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:53
 msgctxt "discount"
@@ -20112,7 +20114,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Closed"
-msgstr ""
+msgstr "Suljettu"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:5
 msgid "Sold out (pending orders)"
@@ -20125,7 +20127,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:11
 msgid "Unlimited"
-msgstr ""
+msgstr "Rajoittamaton"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:14
 msgid "Fully reserved"
@@ -20144,7 +20146,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:19
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:7
 msgid "taxes"
-msgstr ""
+msgstr "verot"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:10
 msgid ""
@@ -20551,7 +20553,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:18
 msgid "Permissions"
-msgstr ""
+msgstr "Oikeudet"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:59
 msgid "No applications have access to your pretix account."
@@ -20838,7 +20840,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:40
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
-msgstr ""
+msgstr "(valinnainen)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
@@ -21115,7 +21117,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:690
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:444
 msgid "Taxes"
-msgstr ""
+msgstr "Verot"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:699
 #: pretix/control/templates/pretixcontrol/orders/overview.html:89
@@ -21173,7 +21175,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:839
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:60
 msgid "Source"
-msgstr ""
+msgstr "Lähde"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:872
 msgid "Cancel transfer"
@@ -21199,7 +21201,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:140
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:30
 msgid "Change"
-msgstr ""
+msgstr "Vaihda"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:954
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:91
@@ -21467,7 +21469,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:44
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:89
 msgid "Send"
-msgstr ""
+msgstr "Lähetä"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:5
 #: pretix/control/templates/pretixcontrol/order/transactions.html:8
@@ -21996,7 +21998,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Sales"
-msgstr ""
+msgstr "Myynti"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:11
 msgid "Revenue (gross)"
@@ -22026,7 +22028,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/overview.html:80
 #: pretix/plugins/reports/exporters.py:382
 msgid "Purchased"
-msgstr ""
+msgstr "Ostettu"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:189
 msgid ""
@@ -22604,7 +22606,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:67
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:120
 msgid "Remove"
-msgstr ""
+msgstr "Poista"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
 msgid "Accept"
@@ -22911,7 +22913,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:21
 msgid "Member"
-msgstr ""
+msgstr "Jäsen"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:36
 msgid "Two-factor authentication enabled"
@@ -22939,7 +22941,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:85
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:134
 msgid "Add"
-msgstr ""
+msgstr "Lisää"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:92
 msgid "API tokens"
@@ -22955,7 +22957,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:38
 msgid "Members"
-msgstr ""
+msgstr "Jäsenet"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:54
 #, python-format
@@ -23007,7 +23009,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:73
 msgid "Failed"
-msgstr ""
+msgstr "Epäonnistunut"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:83
 msgid "Request URL"
@@ -23090,7 +23092,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:31
 #: pretix/plugins/banktransfer/refund_export.py:46
 msgid "Code"
-msgstr ""
+msgstr "Koodi"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:35
 msgid "Paste"
@@ -23158,7 +23160,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:141
 #: pretix/control/templates/pretixcontrol/pdf/index.html:173
 msgid "Loading…"
-msgstr ""
+msgstr "Lataa…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:144
 msgid "Start editing"
@@ -23166,12 +23168,12 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:159
 msgid "Cut"
-msgstr ""
+msgstr "Leikkaa"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:163
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:54
 msgid "Copy"
-msgstr ""
+msgstr "Kopioi"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:180
 msgid "Layout name"
@@ -23225,15 +23227,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:254
 msgid "Style"
-msgstr ""
+msgstr "Tyyli"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:256
 msgid "Dark"
-msgstr ""
+msgstr "Tumma"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:257
 msgid "Light"
-msgstr ""
+msgstr "Vaalea"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:263
 msgid "Image content"
@@ -23262,7 +23264,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:292
 msgid "Other…"
-msgstr ""
+msgstr "Muu…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:302
 msgid "Show available placeholders"
@@ -23534,7 +23536,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:258
 msgctxt "subevent"
 msgid "Preview"
-msgstr ""
+msgstr "Esikatselu"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:265
 msgctxt "subevent"
@@ -24040,13 +24042,13 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/notifications.html:72
 #: pretix/control/templates/pretixcontrol/user/settings.html:20
 msgid "On"
-msgstr ""
+msgstr "Päällä"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:71
 #: pretix/control/templates/pretixcontrol/user/settings.html:24
 msgid "Off"
-msgstr ""
+msgstr "Poissa"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:75
 msgid "You have no permission to receive this notification"
@@ -24206,7 +24208,7 @@ msgstr "Etuliite (valinnainen)"
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
 msgctxt "number_of_things"
 msgid "Number"
-msgstr ""
+msgstr "Numero"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
@@ -25084,7 +25086,7 @@ msgstr "Kaikkia kohteita ei ole valittu."
 
 #: pretix/control/views/item.py:471
 msgid "Street"
-msgstr ""
+msgstr "Katu"
 
 #: pretix/control/views/item.py:573 pretix/control/views/item.py:747
 #: pretix/control/views/item.py:769
@@ -25702,7 +25704,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:570
 msgid "Administrators"
-msgstr ""
+msgstr "Ylläpitäjät"
 
 #: pretix/control/views/organizer.py:633
 msgid "The team has been created. You can now add members to the team."
