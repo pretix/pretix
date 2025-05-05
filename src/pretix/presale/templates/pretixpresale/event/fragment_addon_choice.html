@@ -205,7 +205,7 @@
                                         {% else %}
                                             <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
                                                 <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}</legend>
-                                                <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}, {{ var }}: {% trans "Decrease quantity" %}">-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                     {% if var.initial %}value="{{ var.initial }}"{% endif %}
                                                     {% if item.free_price %}
@@ -215,7 +215,7 @@
                                                     id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     aria-label="{% trans "Quantity" %}">
-                                                <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                                <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}">+</button>
                                             </fieldset>
                                         {% endif %}
                                     </div>
@@ -351,7 +351,7 @@
                             {% else %}
                                 <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
                                     <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}</legend>
-                                    <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                    <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}: {% trans "Decrease quantity" %}">-</button>
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                         {% if item.free_price %}
                                            data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
@@ -361,7 +361,7 @@
                                         name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                         id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                         aria-label="{% trans "Quantity" %}">
-                                    <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                    <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}: {% trans "Increase quantity" %}">+</button>
                                 </fieldset>
                             {% endif %}
                         </div>
