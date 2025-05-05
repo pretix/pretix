@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-05-03 19:00+0000\n"
+"PO-Revision-Date: 2025-05-05 09:40+0000\n"
 "Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -2988,12 +2988,9 @@ msgid "Repeat password"
 msgstr "Ripeti la password"
 
 #: pretix/base/forms/questions.py:134 pretix/base/forms/questions.py:256
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date was specified."
 msgctxt "name_salutation"
 msgid "not specified"
-msgstr "Nessuna data è stata specificata."
+msgstr "non specificato"
 
 #: pretix/base/forms/questions.py:219
 msgid "Please do not use special characters in names."
@@ -4272,14 +4269,12 @@ msgstr ""
 #: pretix/base/models/discount.py:177
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr ""
+msgstr "Disponibile per le date a partire da"
 
 #: pretix/base/models/discount.py:182
-#, fuzzy
-#| msgid "Available until"
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "Disponibile fino a"
+msgstr "Disponibile per le date fino a"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -5592,20 +5587,12 @@ msgid "Unknown country code."
 msgstr "Codice del paese sconosciuto."
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum date must not be before the minimum value."
-msgstr "Il conteggio massimo deve essere superiore al conteggio minimo."
+msgstr "La data massima non può essere prima del valore minimo."
 
 #: pretix/base/models/items.py:1925
-#, fuzzy
-#| msgid ""
-#| "The maximum number of usages may not be lower than the minimum number of "
-#| "usages."
 msgid "The maximum value must not be lower than the minimum value."
-msgstr ""
-"Il numero massimo di utilizzi non può essere inferiore al numero minimo di "
-"utilizzi."
+msgstr "Il valore massimo non può essere inferiore al valore minimo."
 
 #: pretix/base/models/items.py:1942
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -23326,10 +23313,8 @@ msgid "Download current background"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:224
-#, fuzzy
-#| msgid "Canceled by customer"
 msgid "Or choose custom paper size"
-msgstr "Cancellato dal cliente"
+msgstr "Oppure scegli un formato carta personalizzato"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:226
 msgid ""
@@ -26418,28 +26403,18 @@ msgid "until"
 msgstr "Data fino a"
 
 #: pretix/helpers/daterange.py:106
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "{from_date}\n"
-#| "until {to_date}"
+#, python-brace-format
 msgid "{date_from}{until}{date_to}"
-msgstr ""
-"{from_date}\n"
-"a {to_date}"
+msgstr "{date_from}{until}{date_to}"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
-#, fuzzy
-#| msgid ""
-#| "The file you uploaded has a very large number of pixels, please upload an "
-#| "image no larger than 10000 x 10000 pixels."
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload a "
 "picture with smaller dimensions."
 msgstr ""
 "Il file che hai caricato ha un numero molto elevato di pixel, per favore "
-"carica un'immagine che abbia 10000 x 10000 pixel."
+"carica un'immagine di dimensione più piccola."
 
 #: pretix/helpers/security.py:166
 msgid "Login from new source detected"
@@ -30044,10 +30019,8 @@ msgid "Payer name"
 msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:91
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment receipt"
-msgstr "Commissione di pagamento"
+msgstr "Ricevuta di pagamento"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
 msgid "Do you really want to disconnect your Stripe account?"
