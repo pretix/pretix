@@ -2265,7 +2265,7 @@ class OrderChangeManagerTests(TestCase):
         self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -2298,7 +2298,7 @@ class OrderChangeManagerTests(TestCase):
         self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -2329,7 +2329,7 @@ class OrderChangeManagerTests(TestCase):
         self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
