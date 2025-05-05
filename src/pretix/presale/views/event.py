@@ -705,7 +705,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 self.kwargs.get('cart_namespace'),
                 voucher,
             )
-            context['visible_events'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) > 0
 
             # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
             # in the calendar. We previously only looked at the current time range for this condition which caused weird side-effects, so we need
@@ -765,7 +764,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 self.kwargs.get('cart_namespace'),
                 voucher,
             )
-            context['visible_events'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) > 0
 
             # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
             # in the calendar. We previously only looked at the current time range for this condition which caused weird side-effects, so we need
