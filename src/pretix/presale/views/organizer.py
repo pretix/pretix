@@ -928,7 +928,9 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _set_date(self):
         if 'date' in self.request.GET:
             self.tz = self.request.organizer.timezone
-            self.date = parse_date_localized(self.request.GET.get('date')).date() or now().astimezone(self.tz).date()
+            self.date = (
+                parse_date_localized(self.request.GET.get('date')) or now().astimezone(self.tz)
+            ).date()
         else:
             self._set_date_to_next_event()
 
