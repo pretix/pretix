@@ -83,7 +83,8 @@ var form_handlers = function (el) {
                     Math.abs(+new Date(opts.minDate) - new Date()) < Math.abs(+new Date(opts.maxDate) - new Date())
             ) ? opts.minDate : opts.maxDate;
         }
-        var alert = $('label[for=' + this.id + '] .label-alert');
+        var container = $(this).closest(".form-group");
+        var alert = $('.label-alert', container);
         $(this).datetimepicker(opts).on("dp.hide", function() {
             // when min/max is used in datetimepicker, closing and re-opening the picker opens at the wrong date
             // therefore keep the current viewDate and re-set it after datetimepicker is done hiding
@@ -93,6 +94,7 @@ var form_handlers = function (el) {
                 $dtp.viewDate(currentViewDate);
             }, 50);
         }).on('dp.error', function (e) {
+            container.addClass("has-error");
             if (e.date) {
                 if (e.date.isBefore(opts["minDate"])) {
                     alert.text(gettext("The date you entered is too early."));
@@ -107,7 +109,13 @@ var form_handlers = function (el) {
                 self.focus();
             }, 50);
         }).on('dp.change', function (e) {
+            container.removeClass("has-error");
             alert.text("");
+        }).on('blur', function (e) {
+            if (!this.value) {
+                container.removeClass("has-error");
+                alert.text("");
+            }
         });
         
 

@@ -154,6 +154,10 @@ output {
   font-size: 85%;
   color: $text-muted;
 }
+.has-error .label-required,
+.has-error .label-alert {
+  color: inherit;
+}
 .label-required {
   &:before {
     content: " (";
