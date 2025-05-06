@@ -42,4 +42,4 @@ class PretixControlConfig(AppConfig):
     def ready(self):
         from .views import dashboards  # noqa
         from . import logdisplay  # noqa
-        from . import datasync  # noqa
+        from .views import datasync  # noqa
