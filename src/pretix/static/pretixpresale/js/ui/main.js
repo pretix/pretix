@@ -111,7 +111,7 @@ var form_handlers = function (el) {
         }).on('dp.change', function (e) {
             container.removeClass("has-error");
             alert.text("");
-        }).on('blur', function (e) {
+        }).on('blur', function (e) {// dp.change does not trigger when changed to empty string - although documentation notes otherwise
             if (!this.value) {
                 container.removeClass("has-error");
                 alert.text("");
