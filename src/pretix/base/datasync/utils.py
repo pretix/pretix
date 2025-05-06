@@ -22,9 +22,9 @@
 
 from typing import List, Tuple
 
-from pretix.base.datasync.datasync import (
+from pretix.base.datasync.datasync import SyncConfigError
+from pretix.base.models.datasync import (
     MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
-    SyncConfigError,
 )
 
 

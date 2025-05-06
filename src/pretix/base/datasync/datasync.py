@@ -28,7 +28,6 @@ from functools import cached_property
 from itertools import groupby
 
 import sentry_sdk
-from django.db import models
 from django.db.models import Q
 from django.dispatch import receiver
 from django.utils.timezone import now
@@ -39,75 +38,11 @@ from pretix.base.datasync.sourcefields import (
     EVENT, EVENT_OR_SUBEVENT, ORDER, ORDER_POSITION, get_data_fields,
 )
 from pretix.base.logentrytype_registry import make_link
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models.datasync import OrderSyncLink, OrderSyncQueue
 from pretix.base.signals import EventPluginRegistry, periodic_task
 from pretix.celery_app import app
 
 logger = logging.getLogger(__name__)
-
-MODE_OVERWRITE = "overwrite"
-MODE_SET_IF_NEW = "if_new"
-MODE_SET_IF_EMPTY = "if_empty"
-MODE_APPEND_LIST = "append"
-
-
-class OrderSyncQueue(models.Model):
-    class Meta:
-        unique_together = (("order", "sync_provider"),)
-        ordering = ("triggered",)
-
-    order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name="queued_sync_jobs"
-    )
-    sync_provider = models.CharField(blank=False, null=False, max_length=128)
-    triggered_by = models.CharField(blank=False, null=False, max_length=128)
-    triggered = models.DateTimeField(blank=False, null=False, auto_now_add=True)
-    failed_attempts = models.PositiveIntegerField(default=0)
-    not_before = models.DateTimeField(blank=True, null=True)
-
-    @cached_property
-    def _provider_class_info(self):
-        return sync_targets.get(identifier=self.sync_provider)
-
-    @property
-    def provider_class(self):
-        return self._provider_class_info[0]
-
-    @property
-    def is_provider_active(self):
-        return self._provider_class_info[1]
-
-    @property
-    def max_retry_attempts(self):
-        return self.provider_class.max_attempts
-
-
-class OrderSyncLink(models.Model):
-    class Meta:
-        indexes = [
-            models.Index(fields=("order", "sync_provider")),
-        ]
-    order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name="synced_objects"
-    )
-    sync_provider = models.CharField(blank=False, null=False, max_length=128)
-    order_position = models.ForeignKey(
-        OrderPosition, on_delete=models.CASCADE, related_name="synced_objects", blank=True, null=True,
-    )
-    external_object_type = models.CharField(blank=False, null=False, max_length=128)
-    external_id_field = models.CharField(blank=False, null=False, max_length=128)
-    id_value = models.CharField(blank=False, null=False, max_length=128)
-    external_link_href = models.CharField(blank=True, null=True, max_length=255)
-    external_link_display_name = models.CharField(blank=True, null=True, max_length=255)
-    timestamp = models.DateTimeField(blank=False, null=False, auto_now_add=True)
-
-    def external_link_html(self):
-        if not self.external_link_display_name:
-            return None
-
-        prov, meta = sync_targets.get(identifier=self.sync_provider)
-        if prov:
-            return prov.get_external_link_html(self.order.event, self.external_link_href, self.external_link_display_name)
 
 
 @receiver(periodic_task, dispatch_uid="data_sync_periodic")
