@@ -55,9 +55,6 @@ needs to provide a list of mappings, with at least the properties defined in
             ]
 
 
-.. autoclass:: pretix.base.datasync.datasync.OutboundSyncProvider
-   :members: mappings
-
 Currently, we support ``Order`` and ``OrderPosition`` as data sources, with the data fields defined in
 :func:`pretix.base.datasync.sourcefields.get_data_fields`.
 
@@ -70,9 +67,6 @@ For each order that was enqueued using ``enqueue_order``:
   ``sync_object_with_properties`` per order position,
 - ``finalize_sync_order`` is called one time after all calls to ``sync_object_with_properties``.
 
-
-.. autoclass:: pretix.base.datasync.datasync.OutboundSyncProvider
-   :members: sync_object_with_properties, finalize_sync_order
 
 For example implementations, see the test cases in :package:``tests.base.test_datasync``.
 In :class:`SimpleOrderSync`, a basic data transfer of order data only is
@@ -128,3 +122,6 @@ shown. Therein, a ``sync_object_with_properties`` method is defined like as foll
 In :class:`OrderAndTicketAssociationSync`, an example is given where orders, order positions,
 and the association between them are transferred.
 
+
+.. autoclass:: pretix.base.datasync.datasync.OutboundSyncProvider
+   :members:
