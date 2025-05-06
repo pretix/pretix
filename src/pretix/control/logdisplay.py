@@ -424,9 +424,9 @@ class OrderPrintLogEntryType(OrderLogEntryType):
 
 
 @log_entry_types.new_from_dict({
-    "pretix.event.order.data_sync.success": _("Ticket data successfully transferred to {provider}."),
+    "pretix.event.order.data_sync.success": _("Data successfully transferred to {provider}."),
 })
-class OrderDataSyncLogentrytype(OrderLogEntryType):
+class OrderDataSyncLogEntryType(OrderLogEntryType):
     def display(self, logentry, data):
         links = []
         if data.get('provider') and data.get('objects'):
@@ -443,9 +443,9 @@ class OrderDataSyncLogentrytype(OrderLogEntryType):
 
 
 @log_entry_types.new_from_dict({
-    "pretix.event.order.data_sync.failed": _("Error while transferring ticket data to {provider}:"),
+    "pretix.event.order.data_sync.failed": _("Error while transferring data to {provider}:"),
 })
-class OrderDataSyncErrorLogentrytype(OrderLogEntryType):
+class OrderDataSyncErrorLogEntryType(OrderLogEntryType):
     def display(self, logentry, data):
         errmes = data["error"]
         if not isinstance(errmes, list):

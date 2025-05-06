@@ -38,7 +38,7 @@ class PropertyMappingForm(forms.Form):
     overwrite = forms.ChoiceField(
         choices=[
             (MODE_OVERWRITE, _("Overwrite")),
-            (MODE_SET_IF_NEW, _("Fill if new contact")),
+            (MODE_SET_IF_NEW, _("Fill if new")),
             (MODE_SET_IF_EMPTY, _("Fill if empty")),
             (MODE_APPEND_LIST, _("Add to list")),
         ]
@@ -47,7 +47,7 @@ class PropertyMappingForm(forms.Form):
     def __init__(self, pretix_fields, external_fields_id, available_modes, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["pretix_field"] = forms.ChoiceField(
-            label=_("pretix Field"),
+            label=_("pretix field"),
             choices=pretix_fields_choices(pretix_fields, kwargs.get("initial", {}).get("pretix_field")),
             required=False,
         )
