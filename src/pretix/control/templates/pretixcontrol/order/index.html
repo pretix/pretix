@@ -989,8 +989,14 @@
                                         <dt>{{ request.event.settings.invoice_address_custom_field }}</dt>
                                         <dd>{{ order.invoice_address.custom_field }}</dd>
                                     {% endif %}
-                                    <dt>{% trans "Internal reference" %}</dt>
-                                    <dd>{{ order.invoice_address.internal_reference }}</dd>
+                                    {% if order.invoice_address.internal_reference %}
+                                        <dt>{% trans "Internal reference" %}</dt>
+                                        <dd>{{ order.invoice_address.internal_reference }}</dd>
+                                    {% endif %}
+                                    {% for k, v in order.invoice_address.describe_transmission %}
+                                        <dt>{{ k }}</dt>
+                                        <dd>{{ v }}</dd>
+                                    {% endfor %}
                                 </dl>
                             </div>
                         </div>

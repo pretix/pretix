@@ -335,6 +335,10 @@
                                 <dt>{% trans "Internal Reference" %}</dt>
                                 <dd>{{ order.invoice_address.internal_reference }}</dd>
                             {% endif %}
+                            {% for k, v in order.invoice_address.describe_transmission %}
+                                <dt>{{ k }}</dt>
+                                <dd>{{ v }}</dd>
+                            {% endfor %}
                         {% endif %}
                     </dl>
                 </div>
