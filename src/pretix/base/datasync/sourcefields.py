@@ -97,7 +97,7 @@ def split_name_on_last_space(name, part):
 ORDER_POSITION = 'position'
 ORDER = 'order'
 EVENT = 'event'
-SUBEVENT_OR_EVENT = 'subevent_or_event'
+EVENT_OR_SUBEVENT = 'event_or_subevent'
 AVAILABLE_MODELS = {
     'OrderPosition': (ORDER_POSITION, ORDER, EVENT_OR_SUBEVENT, EVENT),
     'Order': (ORDER, EVENT),
