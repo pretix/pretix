@@ -1144,6 +1144,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         "_state_for_address": a.state_for_address,
                         "_name": a.name,
                         "is_business": "business" if a.is_business else "individual",
+                        **a.transmission_info,
                     }
                     if a.name_parts:
                         name_parts = a.name_parts
@@ -1165,7 +1166,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
                     for k in (
                         "company", "street", "zipcode", "city", "country", "state",
-                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
+                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary",
+                        "transmission_type",
                     ):
                         v = getattr(a, k) or ""
                         # always add all values of an address even when empty,
