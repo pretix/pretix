@@ -364,7 +364,7 @@ class OutboundSyncProvider:
 
         logger.debug("Syncing order %r", order)
         positions = list(
-            order.all_positions.filter(item__admission=True)
+            order.all_positions
             .prefetch_related("answers", "answers__question")
             .select_related(
                 "voucher",
