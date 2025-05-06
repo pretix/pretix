@@ -81,10 +81,33 @@ def sync_all():
             sync_event_to_target(event, target_cls, queued_orders)
 
 
-class SyncConfigError(Exception):
+class BaseSyncError(Exception):
     def __init__(self, messages, full_message=None):
         self.messages = messages
         self.full_message = full_message
+
+
+class UnrecoverableSyncError(BaseSyncError):
+    """
+    A SyncProvider encountered a permanent problem, where a retry will not be successful.
+    """
+    log_action_type = "pretix.event.order.data_sync.failed.permanent"
+
+
+class SyncConfigError(UnrecoverableSyncError):
+    """
+    A SyncProvider is misconfigured in a way where a retry without configuration change will
+    not be successful.
+    """
+    log_action_type = "pretix.event.order.data_sync.failed.config"
+
+
+class RecoverableSyncError(BaseSyncError):
+    """
+    A SyncProvider has encountered a temporary problem, and the sync should be retried
+    at a later time.
+    """
+    pass
 
 
 StaticMapping = namedtuple('StaticMapping', ('pk', 'pretix_model', 'external_object_type', 'pretix_id_field', 'external_id_field', 'property_mapping'))
@@ -180,35 +203,40 @@ class OutboundSyncProvider:
         for sq in queued_orders:
             try:
                 mapped_objects = self.sync_order(sq.order)
-            except SyncConfigError as e:
+            except UnrecoverableSyncError as e:
                 logger.warning(
-                    f"Could not sync order {sq.order.code} to {type(self).__name__} (config error)",
+                    f"Could not sync order {sq.order.code} to {type(self).__name__}",
                     exc_info=True,
                 )
-                sq.order.log_action("pretix.event.order.data_sync.failed", {
+                sq.order.log_action(e.log_action_type, {
                     "provider": self.identifier,
                     "error": e.messages,
                     "full_message": e.full_message,
                 })
                 sq.delete()
-            except Exception as e:
-                # TODO: different handling per Exception, or even per HTTP response code?
-                #       otherwise, SyncProviders should always throw SyncConfigError in non-recoverable situations
+            except RecoverableSyncError as e:
                 sq.failed_attempts += 1
                 sq.not_before = self.next_retry_date(sq)
-                logger.exception(
-                    f"Could not sync order {sq.order.code} to {type(self).__name__} (transient error, attempt #{sq.failed_attempts})"
+                logger.info(
+                    f"Could not sync order {sq.order.code} to {type(self).__name__} (transient error, attempt #{sq.failed_attempts})",
+                    exc_info=True,
                 )
                 if sq.failed_attempts >= self.max_attempts:
                     sentry_sdk.capture_exception(e)
-                    sq.order.log_action("pretix.event.order.data_sync.failed", {
+                    sq.order.log_action("pretix.event.order.data_sync.failed.exceeded", {
                         "provider": self.identifier,
-                        "error": [_("Maximum number of retries exceeded.")],
-                        "full_message": str(e),
+                        "error": e.messages,
+                        "full_message": e.full_message,
                     })
                     sq.delete()
                 else:
                     sq.save()
+            except Exception as e:
+                logger.exception(
+                    f"Could not sync order {sq.order.code} to {type(self).__name__} (unhandled exception)"
+                )
+                sentry_sdk.capture_exception(e)
+                sq.delete()
             else:
                 sq.order.log_action("pretix.event.order.data_sync.success", {
                     "provider": self.identifier,
