@@ -38,7 +38,7 @@ from pretix.base.datasync.sourcefields import (
     EVENT, EVENT_OR_SUBEVENT, ORDER, ORDER_POSITION, get_data_fields,
 )
 from pretix.base.logentrytype_registry import make_link
-from pretix.base.models.datasync import OrderSyncResult, OrderSyncQueue
+from pretix.base.models.datasync import OrderSyncQueue, OrderSyncResult
 from pretix.base.signals import EventPluginRegistry, periodic_task
 from pretix.celery_app import app
 
