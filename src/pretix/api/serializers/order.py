@@ -42,6 +42,7 @@ from rest_framework.reverse import reverse
 
 from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
+from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
     InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
@@ -49,6 +50,7 @@ from pretix.api.serializers.item import (
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
+from pretix.base.invoicing.transmission import TRANSMISSION_TYPES
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Invoice, InvoiceAddress, InvoiceLine, Item,
     ItemVariation, Order, OrderPosition, Question, QuestionAnswer,
@@ -102,6 +104,13 @@ class CountryField(serializers.Field):
         return str(src) if src else None
 
 
+class TransmissionInfoSerializer(serializers.Serializer):
+    def __init__(self, *args, transmission_type, **kwargs):
+        super().__init__(*args, **kwargs)
+        for k, v in transmission_type.invoice_address_form_fields.items():
+            self.fields[k] = form_field_to_serializer_field(v)
+
+
 class InvoiceAddressSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
     name = serializers.CharField(required=False)
@@ -146,6 +155,41 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
             if not pycountry.subdivisions.get(code=cc + '-' + data.get('state')):
                 raise ValidationError(
                     {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
+                )
+
+        if data.get("transmission_type"):
+            for t in TRANSMISSION_TYPES:
+                if data.get("transmission_type") == t.identifier:
+                    if not t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
+                        raise ValidationError({
+                            "transmission_type": "The selected transmission type is not available for this country or address type."
+                        })
+
+                    ts = TransmissionInfoSerializer(transmission_type=t, data=data.get("transmission_info", {}))
+                    try:
+                        ts.is_valid(raise_exception=True)
+                    except ValidationError as e:
+                        raise ValidationError(
+                            {"transmission_info": e.detail}
+                        )
+                    data["transmission_info"] = ts.validated_data
+
+                    required_fields = t.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
+                    for r in required_fields:
+                        if r in self.fields:
+                            if not data.get(r):
+                                raise ValidationError(
+                                    {r: "This field is required for the selected type of invoice transmission."}
+                                )
+                        else:
+                            if not ts.validated_data.get(r):
+                                raise ValidationError(
+                                    {"transmission_info": {r: "This field is required for the selected type of invoice transmission."}}
+                                )
+                    break
+            else:
+                raise ValidationError(
+                    {"transmission_type": "Unknown transmission type."}
                 )
 
         return data
