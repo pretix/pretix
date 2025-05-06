@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-02-21 19:00+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-05-06 16:20+0000\n"
+"Last-Translator: KC Tseng <tkc0204@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.11.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -57,7 +57,7 @@ msgstr "捷克語"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "克羅埃西亞語"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -2910,11 +2910,9 @@ msgid "Repeat password"
 msgstr "重複"
 
 #: pretix/base/forms/questions.py:134 pretix/base/forms/questions.py:256
-#, fuzzy
-#| msgid "No country specified."
 msgctxt "name_salutation"
 msgid "not specified"
-msgstr "未指定國家/地區。"
+msgstr "未指定"
 
 #: pretix/base/forms/questions.py:219
 msgid "Please do not use special characters in names."
@@ -3980,10 +3978,8 @@ msgid "Grant type"
 msgstr "授權類型"
 
 #: pretix/base/models/customers.py:420
-#, fuzzy
-#| msgid "Required question"
 msgid "Require PKCE extension"
-msgstr "必填題"
+msgstr "需要交換驗證碼用的驗證密鑰(PKCE)擴充功能"
 
 #: pretix/base/models/customers.py:432
 msgid "Allowed access scopes"
@@ -4139,12 +4135,9 @@ msgstr ""
 "產品僅限於例如解鎖隱藏產品或獲得售罄配額仍可享折扣。"
 
 #: pretix/base/models/discount.py:177
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr "之前開始的所有日期"
+msgstr "適用日期始於"
 
 #: pretix/base/models/discount.py:182
 #, fuzzy
@@ -5333,18 +5326,12 @@ msgid "Unknown country code."
 msgstr "未知國家代碼."
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum date must not be before the minimum value."
-msgstr "最大計數需要大於最小計數。"
+msgstr "最大日期不得早於最小值。"
 
 #: pretix/base/models/items.py:1925
-#, fuzzy
-#| msgid ""
-#| "The maximum number of usages may not be lower than the minimum number of "
-#| "usages."
 msgid "The maximum value must not be lower than the minimum value."
-msgstr "最大使用次數，不得低於最小使用次數。"
+msgstr "最大值不得低於最小值。"
 
 #: pretix/base/models/items.py:1942
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -6738,11 +6725,9 @@ msgid "The payment for this invoice has already been received."
 msgstr "此發票的付款已收到。"
 
 #: pretix/base/payment.py:970
-#, fuzzy
-#| msgid "This payment can not be canceled at the moment."
 msgid ""
 "This payment is already being processed and can not be canceled any more."
-msgstr "此付款目前無法取消。"
+msgstr "此付款已在處理中，無法取消。"
 
 #: pretix/base/payment.py:984
 msgid "Automatic refunds are not supported by this payment provider."
@@ -7087,7 +7072,7 @@ msgstr "活動從工作日開始"
 #: pretix/base/pdf.py:266 pretix/base/pdf.py:295
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1240
 msgid "Friday"
-msgstr "星期五"
+msgstr "週五"
 
 #: pretix/base/pdf.py:270
 msgid "Event end date and time"
@@ -7762,27 +7747,27 @@ msgstr "工作日"
 
 #: pretix/base/services/checkin.py:358 pretix/control/forms/filter.py:1236
 msgid "Monday"
-msgstr "星期一"
+msgstr "週一"
 
 #: pretix/base/services/checkin.py:359 pretix/control/forms/filter.py:1237
 msgid "Tuesday"
-msgstr "星期二"
+msgstr "週二"
 
 #: pretix/base/services/checkin.py:360 pretix/control/forms/filter.py:1238
 msgid "Wednesday"
-msgstr "星期三"
+msgstr "週三"
 
 #: pretix/base/services/checkin.py:361 pretix/control/forms/filter.py:1239
 msgid "Thursday"
-msgstr "星期四"
+msgstr "週四"
 
 #: pretix/base/services/checkin.py:363 pretix/control/forms/filter.py:1241
 msgid "Saturday"
-msgstr "星期六"
+msgstr "週六"
 
 #: pretix/base/services/checkin.py:364 pretix/control/forms/filter.py:1242
 msgid "Sunday"
-msgstr "星期天"
+msgstr "週日"
 
 #: pretix/base/services/checkin.py:368
 #, python-brace-format
@@ -9315,6 +9300,9 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"如果您僅出售無特定日期的物品（例如：禮品卡或可隨時使用的門票），請取消勾選此"
+"方塊。系統將停止在某些地方（如：活動開始頁面）顯示活動日期。請注意，pretix "
+"仍然是一個圍繞建立活動的系統，日期可能仍會出現在其他地方。"
 
 #: pretix/base/settings.py:1326
 msgid "Show event end date"
@@ -10920,13 +10908,6 @@ msgid "Header image"
 msgstr "標題圖像"
 
 #: pretix/base/settings.py:2885
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your event name "
-#| "and date in the page header. By default, we show your logo with a size of "
-#| "up to 1140x120 pixels. You can increase the size with the setting below. "
-#| "We recommend not using small details on the picture as it will be resized "
-#| "on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. If you use a white background, we show your logo "
@@ -10934,9 +10915,10 @@ msgid ""
 "pixels. You can increase the size with the setting below. We recommend not "
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
-"如果你提供徽章標誌圖片，默認情況下，我們不會在頁眉中顯示您的活動名稱和日期。"
-"默認情況下，我們顯示的徽標大小最大為1140x120圖元。您可以使用以下設置增加大"
-"小。我們建議不要在圖片上使用小細節，因為它將在較小的螢幕上調整大小。"
+"如果你提供標誌圖片，預設情況下，我們不會在頁首中顯示您的活動名稱和日期。如果"
+"您使用白色背景的標誌，我們顯示標誌尺寸最大為1140x120像素，其餘情況的最大尺寸"
+"為您1120x120像素。您可以使用下列設定擴大尺寸。我們建議不要在圖片上使用小細節"
+"，因為它的尺寸將在較小的螢幕被調整。"
 
 #: pretix/base/settings.py:2906 pretix/base/settings.py:2949
 msgid "Use header image in its full size"
@@ -10960,13 +10942,6 @@ msgstr ""
 "的標題圖像，則將忽略此選項，並始終顯示活動標題。"
 
 #: pretix/base/settings.py:2929 pretix/control/forms/organizer.py:524
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your "
-#| "organization name in the page header. By default, we show your logo with "
-#| "a size of up to 1140x120 pixels. You can increase the size with the "
-#| "setting below. We recommend not using small details on the picture as it "
-#| "will be resized on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. If you use a white background, we show your logo "
@@ -10974,10 +10949,11 @@ msgid ""
 "pixels. You can increase the size with the setting below. We recommend not "
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
-"如果你提供徽章標誌圖片，預設值情況下，我們不會在頁面抬頭中顯示你的活動名稱和"
-"日期。預設值情況下，我們顯示的徽章標誌圖片大小最大為1140x120圖元。你可以使用"
-"以下設置增加大小。我們建議不要在圖片上使用小細節，因為圖片將在較小的螢幕上調"
-"整大小。"
+"如果你提供標誌圖片，預設情況下，我們不會在頁首中顯示你的活動名稱和日期。如果"
+"你使用白色背景，我們顯示的標誌尺寸最大為1140x120像素。否則最大尺寸為 "
+"1120x120 "
+"像素。你可以使用下列設定增加大小。我們建議不要在圖片上使用小細節，因為圖片將"
+"在較小的螢幕上調整尺寸。"
 
 #: pretix/base/settings.py:2959
 msgid "Use header image also for events without an individually uploaded logo"
@@ -11352,18 +11328,14 @@ msgid "MA"
 msgstr "MA"
 
 #: pretix/base/settings.py:3722 pretix/base/settings.py:3724
-#, fuzzy
-#| msgid "Provider name"
 msgctxt "address"
 msgid "Province"
-msgstr "提供者名稱"
+msgstr "省"
 
 #: pretix/base/settings.py:3723
-#, fuzzy
-#| msgid "Price effect"
 msgctxt "address"
 msgid "Prefecture"
-msgstr "價格效應"
+msgstr "縣/州/區"
 
 #: pretix/base/settings.py:3812 pretix/control/forms/event.py:228
 msgid ""
@@ -13372,7 +13344,7 @@ msgstr "小冊子磁磚屬性"
 
 #: pretix/control/forms/global_settings.py:103
 msgid "ApplePay MerchantID Domain Association"
-msgstr ""
+msgstr "ApplePay 網域憑證驗證"
 
 #: pretix/control/forms/global_settings.py:104
 #, python-brace-format
@@ -13798,7 +13770,8 @@ msgid ""
 "The password contains characters not supported by our email system. Please "
 "only use characters A-Z, a-z, 0-9, and common special characters "
 "({characters})."
-msgstr ""
+msgstr "密碼包含我們電子郵件系統不支援的字元。僅接受字元 A-Z、a-z、0-9 "
+"和常見的特殊字元 ({characters})。"
 
 #: pretix/control/forms/mailsetup.py:70
 msgid "Use STARTTLS"
@@ -14132,7 +14105,7 @@ msgstr "收件人"
 #, fuzzy, python-brace-format
 #| msgid "Attach ticket files"
 msgid "Attach {file}"
-msgstr "附加票證檔"
+msgstr "附件{files}"
 
 #: pretix/control/forms/orders.py:796
 msgid ""
@@ -14448,7 +14421,7 @@ msgstr "電話欄位"
 #: pretix/control/forms/organizer.py:1048
 msgctxt "sso_oidc"
 msgid "Query parameters"
-msgstr ""
+msgstr "查詢參數"
 
 #: pretix/control/forms/organizer.py:1049
 #, python-brace-format
@@ -14456,7 +14429,7 @@ msgctxt "sso_oidc"
 msgid ""
 "Optional query parameters, that will be added to calls to the authorization "
 "endpoint. Enter as: {example}"
-msgstr ""
+msgstr "可選查詢參數，將被加入到對授權端的呼叫。輸入為：{example}"
 
 #: pretix/control/forms/organizer.py:1110
 msgid "Invalidate old client secret and generate a new one"
@@ -16770,20 +16743,14 @@ msgid "Delete check-ins"
 msgstr "刪除簽到"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to permanently delete the check-ins of <strong>one "
-#| "ticket</strong>."
-#| msgid_plural ""
-#| "Are you sure you want to permanently delete the check-ins of "
-#| "<strong>%(count)s tickets</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to permanently delete the check-ins of <strong>one "
 "ticket</strong>?"
 msgid_plural ""
 "Are you sure you want to permanently delete the check-ins of "
 "<strong>%(count)s tickets</strong>?"
-msgstr[0] "你確定要永久刪除<strong>%(count)s 張票</strong>的簽到清單嗎？"
+msgstr[0] "你確定要永久刪除<strong>%(count)s 張票</strong>的報到紀錄嗎？"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:24
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
@@ -17443,6 +17410,18 @@ msgid ""
 "Best regards,  \n"
 "Your %(instance)s team\n"
 msgstr ""
+"你好，\n"
+"\n"
+"偵測到有人從不尋常或新位置登入您的 %(instance)s 帳戶。登入是在 %(country)s "
+"使用 %(os)s 系統的 %(agent)s 執行。\n"
+"\n"
+"如果這是您，您可以放心忽略這封電子郵件。\n"
+"\n"
+"如果這不是您本人，我們建議您在帳戶設定中變更密碼：\n"
+"\n"
+"%(url)s\n"
+"\n"
+"%(instance)s 團隊 敬上\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
 #, python-format
@@ -18209,10 +18188,8 @@ msgid "Disabled"
 msgstr "禁用"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:57
-#, fuzzy
-#| msgid "Enable waiting list"
 msgid "Enable additional payment plugins"
-msgstr "啟動候補名單"
+msgstr "啟用其他支付外掛"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:66
 msgid "Deadlines"
@@ -18308,10 +18285,8 @@ msgid "Your changes have been saved."
 msgstr "你的更改已儲存。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:34
-#, fuzzy
-#| msgid "Check results"
 msgid "Search results"
-msgstr "檢查結果"
+msgstr "搜尋結果"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:56
 msgid "Top recommendation"
@@ -18331,16 +18306,12 @@ msgstr "無法使用"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:93
 #: pretix/control/templates/pretixcontrol/event/plugins.html:105
-#, fuzzy
-#| msgid "Login settings"
 msgid "Open plugin settings"
-msgstr "登錄設定"
+msgstr "開啟外掛設定"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:94
-#, fuzzy
-#| msgid "Go to shop"
 msgid "Go to"
-msgstr "到商店"
+msgstr "前往"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:116
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
@@ -19143,18 +19114,21 @@ msgid ""
 "If you have a pretix Enterprise license, this report must be submitted to "
 "pretix support when your license renews. It may also be requested by pretix "
 "support to aid debugging of problems."
-msgstr ""
+msgstr "如果您擁有 "
+"Pretix企業版許可證，必須在許可證續約時將此報告提交給pretix支援團隊。 pretix "
+"支援人員可能會要求以協助調試問題。"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:8
 msgid ""
 "It serves two purposes: Collecting useful information that might help with "
 "debugging problems in your pretix installation, and verifying that your "
 "usage of pretix is in compliance with the Enterprise license you purchased."
-msgstr ""
+msgstr "它有兩個目的：收集可能有助於調試 pretix 安裝中問題的有用資訊，"
+"以及驗證您使用pretix 時是否符合您購買的企業許可證。"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:14
 msgid "First month of license term:"
-msgstr ""
+msgstr "許可期限的第一個月："
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:16
 msgid "January"
@@ -19477,10 +19451,10 @@ msgstr "是否確實要刪除商品<strong>%(item)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:22
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:24
-#, fuzzy, python-format
+#, python-format
 msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
-msgstr[0] "這將導致%(count)s的優惠券不可用.這將導致 %(count)s的優惠券不可用."
+msgstr[0] "這將導致%(count)s張優惠券無法使用。"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:29
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:31
@@ -19861,20 +19835,13 @@ msgid "taxes"
 msgstr "稅"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:10
-#, fuzzy
-#| msgid ""
-#| "Below, you find a list of all available products. You can click on a "
-#| "product name to inspect and change product details. You can also use the "
-#| "buttons on the right to change the order of products within a give "
-#| "category."
 msgid ""
 "Below, you find a list of all available products. You can click on a product "
 "name to inspect and change product details. You can also use the buttons on "
 "the right to change the order of products or move products to a different "
 "category."
-msgstr ""
-"下面，你可以找到所有可用產品的清單。你可以按下產品名稱來檢查和更改產品詳細資"
-"訊。你還可以使用右側的按鈕更改給定類別中產品的順序。"
+msgstr "下面，你可以找到所有可用產品的清單。你可以按下產品名稱來檢查和更改產品詳細資"
+"訊。你也可使用右側按鈕變更產品順序或將其移至其他類別。"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:19
 msgid "You haven't created any products yet."
