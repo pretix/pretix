@@ -443,7 +443,9 @@ class OrderDataSyncLogEntryType(OrderLogEntryType):
 
 
 @log_entry_types.new_from_dict({
-    "pretix.event.order.data_sync.failed": _("Error while transferring data to {provider}:"),
+    "pretix.event.order.data_sync.failed.config": _("Transferring data to {provider} failed due to invalid configuration:"),
+    "pretix.event.order.data_sync.failed.exceeded": _("Maximum number of retries exceeded while transferring data to {provider}:"),
+    "pretix.event.order.data_sync.failed.permanent": _("Error while transferring data to {provider}:"),
 })
 class OrderDataSyncErrorLogEntryType(OrderLogEntryType):
     def display(self, logentry, data):
