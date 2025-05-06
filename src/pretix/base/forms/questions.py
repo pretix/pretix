@@ -1066,7 +1066,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             kwargs['initial']['country'] = guess_country_from_request(self.request, self.event)
 
         if kwargs.get('instance'):
-            kwargs['initial'].update(kwargs['instance'].transmission_info)
+            kwargs['initial'].update(kwargs['instance'].transmission_info or {})
+            kwargs['initial']['transmission_type'] = kwargs['instance'].transmission_type
 
         super().__init__(*args, **kwargs)
 
