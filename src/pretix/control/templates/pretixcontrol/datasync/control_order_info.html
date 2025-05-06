@@ -56,7 +56,7 @@
                                 {% trans "identified by" %} {{ obj.external_pk_name }}
                                 <em>{{ obj.external_pk_value }}</em>
                             {% endif %}
-                            &nbsp; <time class="text-muted" datetime="{{ obj.timestamp.isoformat }}">{{ obj.timestamp }}</time>
+                            &nbsp; <time class="text-muted" datetime="{{ obj.transmitted.isoformat }}">{{ obj.transmitted }}</time>
                         </li>
                     {% empty %}
                         <li>{% trans "No data transmitted." %}</li>

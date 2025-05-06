@@ -45,7 +45,7 @@ def on_control_order_info(sender: Event, request, order: Order, **kwargs):
     objects = {
         provider: list(objects)
         for (provider, objects)
-        in groupby(order.synced_objects.order_by('sync_provider').all(), key=lambda o: o.sync_provider)
+        in groupby(order.sync_results.order_by('sync_provider').all(), key=lambda o: o.sync_provider)
     }
     providers = [(provider.identifier, provider.display_name, queued.get(provider.identifier), objects.get(provider.identifier)) for provider in providers]
 

@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="OrderSyncLink",
+            name="OrderSyncResult",
             fields=[
                 (
                     "id",
@@ -49,19 +49,19 @@ class Migration(migrations.Migration):
                 ),
                 ("sync_provider", models.CharField(max_length=128)),
                 ("external_object_type", models.CharField(max_length=128)),
-                ("external_pk_name", models.CharField(max_length=128)),
-                ("external_pk_value", models.CharField(max_length=128)),
+                ("external_id_field", models.CharField(max_length=128)),
+                ("id_value", models.CharField(max_length=128)),
                 ("external_link_href", models.CharField(max_length=255, null=True)),
                 (
                     "external_link_display_name",
                     models.CharField(max_length=255, null=True),
                 ),
-                ("timestamp", models.DateTimeField(auto_now_add=True)),
+                ("transmitted", models.DateTimeField(auto_now_add=True)),
                 (
                     "order",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="synced_objects",
+                        related_name="sync_results",
                         to="pretixbase.order",
                     ),
                 ),
@@ -70,7 +70,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="synced_objects",
+                        related_name="sync_results",
                         to="pretixbase.orderposition",
                     ),
                 ),

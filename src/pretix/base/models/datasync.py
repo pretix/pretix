@@ -68,20 +68,20 @@ class OrderSyncQueue(models.Model):
         return self.provider_class.max_attempts
 
 
-class OrderSyncLink(models.Model):
+class OrderSyncResult(models.Model):
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name="synced_objects"
+        Order, on_delete=models.CASCADE, related_name="sync_results"
     )
     sync_provider = models.CharField(blank=False, null=False, max_length=128)
     order_position = models.ForeignKey(
-        OrderPosition, on_delete=models.CASCADE, related_name="synced_objects", blank=True, null=True,
+        OrderPosition, on_delete=models.CASCADE, related_name="sync_results", blank=True, null=True,
     )
     external_object_type = models.CharField(blank=False, null=False, max_length=128)
     external_id_field = models.CharField(blank=False, null=False, max_length=128)
     id_value = models.CharField(blank=False, null=False, max_length=128)
     external_link_href = models.CharField(blank=True, null=True, max_length=255)
     external_link_display_name = models.CharField(blank=True, null=True, max_length=255)
-    timestamp = models.DateTimeField(blank=False, null=False, auto_now_add=True)
+    transmitted = models.DateTimeField(blank=False, null=False, auto_now_add=True)
 
     class Meta:
         indexes = [

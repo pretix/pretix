@@ -38,7 +38,7 @@ from pretix.base.datasync.sourcefields import (
     EVENT, EVENT_OR_SUBEVENT, ORDER, ORDER_POSITION, get_data_fields,
 )
 from pretix.base.logentrytype_registry import make_link
-from pretix.base.models.datasync import OrderSyncLink, OrderSyncQueue
+from pretix.base.models.datasync import OrderSyncResult, OrderSyncQueue
 from pretix.base.signals import EventPluginRegistry, periodic_task
 from pretix.celery_app import app
 
@@ -309,7 +309,7 @@ class OutboundSyncProvider:
             mapping=mapping,
             mapped_objects=mapped_objects,
         )
-        OrderSyncLink.objects.create(
+        OrderSyncResult.objects.create(
             order=inputs.get(ORDER), order_position=inputs.get(ORDER_POSITION), sync_provider=self.identifier,
             external_object_type=info.get('object_type'),
             external_id_field=info.get('external_id_field'),
@@ -332,7 +332,7 @@ class OutboundSyncProvider:
                 "voucher",
             )
         )
-        order.synced_objects.filter(sync_provider=self.identifier).delete()
+        order.sync_results.filter(sync_provider=self.identifier).delete()
         order_inputs = {ORDER: order, EVENT: self.event}
         mapped_objects = {}
         for mapping in self.mappings:
