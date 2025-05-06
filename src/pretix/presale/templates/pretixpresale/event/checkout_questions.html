@@ -6,11 +6,6 @@
 {% load escapejson %}
 {% block inner %}
     <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
-    <p class="required-legend" aria-hidden="true">
-        {% blocktrans trimmed %}
-            You need to fill all fields that are marked with <span>*</span> to continue.
-        {% endblocktrans %}
-    </p>
     {% if profiles_data %}
         {{ profiles_data|json_script:"profiles_json" }}
     {% endif %}
