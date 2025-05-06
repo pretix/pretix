@@ -110,7 +110,7 @@ class OutboundSyncProvider:
     @classmethod
     def enqueue_order(cls, order, triggered_by, not_before=None):
         """
-        Adds an order to the sync queue. May only be called on derived classes which define an "identifier" attribute.
+        Adds an order to the sync queue. May only be called on derived classes which define an ``identifier`` attribute.
 
         Should be called in the appropriate signal receivers, e.g.::
 
@@ -151,7 +151,7 @@ class OutboundSyncProvider:
 
     def order_valid_for_sync(self, order):
         """
-        Optionally override this method to exclude certain orders from sync by returning False
+        Optionally override this method to exclude certain orders from sync by returning ``False``
         """
         return True
 
@@ -160,7 +160,7 @@ class OutboundSyncProvider:
         """
         Implementations must override this property to provide the data mappings as a list of objects.
 
-        They can return instances of the StaticMapping namedtuple defined above, or create their own
+        They can return instances of the ``StaticMapping`` `namedtuple` defined above, or create their own
         class (e.g. a Django model).
 
         :return: The returned objects must have at least the following properties:
@@ -263,16 +263,16 @@ class OutboundSyncProvider:
         This method is called for each object that needs to be created/updated in the external system -- which these are is
         determined by the implementation of the `mapping` property.
 
-        :param external_id_field: Identifier field in the external system as provided in mapping.external_identifier
-        :param id_value: Identifier contents as retrieved from the property specified by mapping.pretix_identifier of the model
-                         specified by mapping.pretix_model
-        :param properties: All properties defined in mapping.property_mapping, as list of three-tuples
-                           (external_field, value, overwrite)
+        :param external_id_field: Identifier field in the external system as provided in ``mapping.external_identifier``
+        :param id_value: Identifier contents as retrieved from the property specified by ``mapping.pretix_identifier`` of the model
+                         specified by ``mapping.pretix_model``
+        :param properties: All properties defined in ``mapping.property_mapping``, as list of three-tuples
+                           ``(external_field, value, overwrite)``
         :param inputs: All pretix model instances from which data can be retrieved for this mapping
-        :param mapping: The mapping object as returned by self.mappings
+        :param mapping: The mapping object as returned by ``self.mappings``
         :param mapped_objects: Information about objects that were synced in the same sync run, by mapping definitions
-                               *before* the current one in order of self.mappings.
-                               Type is a dictionary {mapping.pk: [list of return values of this method]}
+                               *before* the current one in order of ``self.mappings``.
+                               Type is a dictionary ``{mapping.pk: [list of return values of this method]}``
                                Useful to create associations between objects in the target system.
 
         Example code to create return value::
@@ -293,7 +293,7 @@ class OutboundSyncProvider:
         only a single object in the target system.
 
         Subsequent calls with the same mapping and pk_value should update the existing object, instead of creating a new one.
-        In a SQL database, you might use an "INSERT OR UPDATE" or "UPSERT" statement; many REST APIs provide an equivalent API call.
+        In a SQL database, you might use an `INSERT OR UPDATE` or `UPSERT` statement; many REST APIs provide an equivalent API call.
         """
         raise NotImplementedError()
 
@@ -364,13 +364,14 @@ class OutboundSyncProvider:
 
     def finalize_sync_order(self, order):
         """
-        Called after sync_object has been called successfully for all objects of a specific order. Can be used for saving
-        bulk information per order.
+        Called after ``sync_object`` has been called successfully for all objects of a specific order. Can
+        be used for saving bulk information per order.
         """
         pass
 
     def close(self):
         """
-        Called after all orders of an event have been synced. Can be used for clean-up tasks (closing a session etc).
+        Called after all orders of an event have been synced. Can be used for clean-up tasks (e.g. closing
+        a session).
         """
         pass
