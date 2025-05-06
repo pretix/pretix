@@ -76,9 +76,6 @@ def address_form(request):
             is_business = request.GET.get("is_business") == "business"
             selected_transmission_type = request.GET.get("transmission_type")
 
-            info["transmission_type"] = {
-                "visible": True,
-            }
             info["transmission_types"] = [
                 {'name': str(t.public_name), 'code': t.identifier}
                 for t in TRANSMISSION_TYPES if t.is_available(
@@ -87,6 +84,11 @@ def address_form(request):
                     is_business=is_business
                 )
             ]
+            info["transmission_type"] = {
+                # Hide transmission type if email is the only type since that's basically the backwards-compatible
+                # option
+                "visible": [t["code"] for t in info["transmission_types"]] != ["email"],
+            }
             if selected_transmission_type not in [t["code"] for t in info["transmission_types"]]:
                 # The previously selected transmission type is no longer selectable, e.g. because
                 # of a country change. To avoid a second roundtrip to this endpoint, let's show
@@ -99,13 +101,19 @@ def address_form(request):
                     country=country,
                     is_business=is_business
                 )
+                visible = transmission_type.invoice_address_form_fields_visible(
+                    country=country,
+                    is_business=is_business
+                )
                 if transmission_type.identifier == selected_transmission_type:
                     for k, v in info.items():
                         if k in required:
                             v["required"] = True
+                        if k in visible:
+                            v["visible"] = True
                 for k, f in transmission_type.invoice_address_form_fields.items():
                     info[k] = {
-                        "visible": transmission_type.identifier == selected_transmission_type,
+                        "visible": transmission_type.identifier == selected_transmission_type and k in visible,
                         "required": transmission_type.identifier == selected_transmission_type and k in required
                     }
 

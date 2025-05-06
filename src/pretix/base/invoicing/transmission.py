@@ -50,6 +50,9 @@ class TransmissionType:
     def invoice_address_form_fields_required(self, country: Country, is_business: bool):
         return set()
 
+    def invoice_address_form_fields_visible(self, country: Country, is_business: bool):
+        return self.invoice_address_form_fields.keys()
+
     def validate_address(self, ia: InvoiceAddress):
         pass
 
@@ -80,6 +83,12 @@ class EmailTransmissionType(TransmissionType):
                 )
             )
         }
+
+    def invoice_address_form_fields_visible(self, country: Country, is_business: bool):
+        if is_business:
+            # We don't want ask non-business users if they have an accounting department ;)
+            return {"transmission_email_other", "transmission_email_address"}
+        return set()
 
     def is_available(self, event, country: Country, is_business: bool):
         return str(country) != "IT"  # todo: fixme
