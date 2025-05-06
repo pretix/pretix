@@ -117,6 +117,10 @@ class OutboundSyncProvider:
             @receiver(order_placed, dispatch_uid="mysync_order_placed")
             def on_order_placed(sender, order, **kwargs):
                 MySyncProvider.enqueue_order(order, "order_placed")
+
+        :param order: the Order that should be synced
+        :param triggered_by: the reason why the order should be synced, e.g. name of the signal
+                             (currently only used internally for logging)
         """
         if not hasattr(cls, 'identifier'):
             raise TypeError('Call this method on a derived class that defines an "identifier" attribute.')
