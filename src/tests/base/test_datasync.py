@@ -29,12 +29,14 @@ from django.utils.timezone import now
 from django_scopes import scope
 
 from pretix.base.datasync.datasync import (
-    MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
     OutboundSyncProvider, StaticMapping, sync_all, sync_targets,
 )
 from pretix.base.datasync.utils import assign_properties
 from pretix.base.models import (
     Event, InvoiceAddress, Item, Order, Organizer, Question,
+)
+from pretix.base.models.datasync import (
+    MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
 )
 
 
@@ -252,26 +254,26 @@ class SimpleOrderSync(OutboundSyncProvider):
 
     def sync_object_with_properties(
             self,
-            pk_field,
-            pk_value,
+            external_id_field,
+            id_value,
             properties: list,
             inputs: dict,
             mapping,
             mapped_objects: dict,
             **kwargs,
     ):
-        pre_existing_object = self.fake_api_client.retrieve_object(mapping.external_object_type, pk_field, pk_value)
+        pre_existing_object = self.fake_api_client.retrieve_object(mapping.external_object_type, external_id_field, id_value)
         update_values = assign_properties(properties, pre_existing_object or {}, is_new=pre_existing_object is None)
         result = self.fake_api_client.create_or_update_object(mapping.external_object_type, {
             **update_values,
-            pk_field: pk_value,
+            external_id_field: id_value,
             "_id": pre_existing_object and pre_existing_object.get("_id"),
         })
 
         return {
             "object_type": mapping.external_object_type,
-            "pk_field": pk_field,
-            "pk_value": pk_value,
+            "external_id_field": external_id_field,
+            "id_value": id_value,
             "external_link_href": f"https://external-system.example.com/backend/link/to/{mapping.external_object_type}/123/",
             "external_link_display_name": "Contact #123 - Jane Doe",
             "my_result": result,
@@ -420,27 +422,27 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
 
     def sync_object_with_properties(
             self,
-            pk_field,
-            pk_value,
+            external_id_field,
+            id_value,
             properties: list,
             inputs: dict,
             mapping,
             mapped_objects: dict,
             **kwargs,
     ):
-        pre_existing_object = self.fake_api_client.retrieve_object(mapping.external_object_type, pk_field, pk_value)
+        pre_existing_object = self.fake_api_client.retrieve_object(mapping.external_object_type, external_id_field, id_value)
         update_values = assign_properties(properties, pre_existing_object or {}, is_new=pre_existing_object is None)
         result = self.fake_api_client.create_or_update_object(mapping.external_object_type, {
             **update_values,
-            pk_field: pk_value,
+            external_id_field: id_value,
             "_id": pre_existing_object and pre_existing_object.get("_id"),
             "links": [f"link:{obj['object_type']}:{obj['my_result']['_id']}" for am in mapping.association_mapping for obj in mapped_objects[am.via_mapping_pk]]
         })
 
         return {
             "object_type": mapping.external_object_type,
-            "pk_field": pk_field,
-            "pk_value": pk_value,
+            "external_id_field": external_id_field,
+            "id_value": id_value,
             "external_link_href": f"https://external-system.example.com/backend/link/to/{mapping.external_object_type}/123/",
             "external_link_display_name": "Contact #123 - Jane Doe",
             "my_result": result,
