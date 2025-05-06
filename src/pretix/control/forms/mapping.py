@@ -25,10 +25,10 @@ from django import forms
 from django.forms import formset_factory
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.datasync.datasync import (
+from pretix.base.datasync.sourcefields import QUESTION_TYPE_IDENTIFIERS
+from pretix.base.models.datasync import (
     MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
 )
-from pretix.base.datasync.sourcefields import QUESTION_TYPE_IDENTIFIERS
 
 
 class PropertyMappingForm(forms.Form):
