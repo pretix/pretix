@@ -1148,8 +1148,12 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
 
+        # Individuals do not have a company name or VAT ID
         self.fields["company"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
         self.fields["vat_id"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
+
+        # The internal reference is a very business-specific field and might confuse non-business users
+        self.fields["internal_reference"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
 
         if not self.ask_vat_id:
             del self.fields['vat_id']
