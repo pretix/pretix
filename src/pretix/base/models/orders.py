@@ -3404,6 +3404,24 @@ class InvoiceAddress(models.Model):
         })
         return d
 
+    def describe_transmission(self):
+        from pretix.base.invoicing.transmission import TRANSMISSION_TYPES
+        data = []
+
+        for t in TRANSMISSION_TYPES:
+            if t.identifier == self.transmission_type:
+                data.append((_("Transmission type"), t.public_name))
+                for k, f in t.invoice_address_form_fields.items():
+                    v = self.transmission_info.get(k)
+                    if v is True:
+                        v = _("Yes")
+                    elif v is False:
+                        v = _("No")
+                    if v:
+                        data.append((f.label, v))
+                break
+        return data
+
 
 def cachedticket_name(instance, filename: str) -> str:
     secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
