@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-05-02 09:46+0000\n"
+"PO-Revision-Date: 2025-05-06 16:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -6103,7 +6103,7 @@ msgstr "Zertifikat"
 #: pretix/base/models/orders.py:3468 pretix/control/views/event.py:390
 #: pretix/control/views/event.py:395
 msgid "Other"
-msgstr "Sonstiges"
+msgstr "Sonstige"
 
 #: pretix/base/models/organizer.py:79
 msgid ""
