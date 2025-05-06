@@ -72,7 +72,12 @@ def sync_all():
         grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.order.event.pk)), lambda q: (q.sync_provider, q.order.event))
         for (target, event), queued_orders in grouped:
             target_cls, meta = sync_targets.get(identifier=target, active_in=event)
-            # TODO: what should i do if the sync plugin got deactivated in the meantime?
+
+            if not target_cls:
+                # sync plugin not found (plugin deactivated or uninstalled) -> drop outstanding jobs
+                for sq in queued_orders:
+                    sq.delete()
+
             sync_event_to_target(event, target_cls, queued_orders)
 
 
