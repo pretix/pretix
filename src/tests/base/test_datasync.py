@@ -214,7 +214,7 @@ class SimpleOrderSync(OutboundSyncProvider):
             StaticMapping(
                 pk=1,
                 pretix_model='Order', external_object_type='ticketorders',
-                pretix_pk='event_order_code', external_pk='ordernumber',
+                pretix_id_field='event_order_code', external_id_field='ordernumber',
                 property_mapping=json.dumps([
                     {
                         "pretix_field": "email",
@@ -309,7 +309,7 @@ def test_simple_order_sync(event):
 
 
 StaticMappingWithAssociations = namedtuple('StaticMappingWithAssociations', (
-    'pk', 'pretix_model', 'external_object_type', 'pretix_pk', 'external_pk', 'property_mapping', 'association_mapping'
+    'pk', 'pretix_model', 'external_object_type', 'pretix_id_field', 'external_id_field', 'property_mapping', 'association_mapping'
 ))
 AssociationMapping = namedtuple('AssociationMapping', (
     'via_mapping_pk'
@@ -326,7 +326,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
             StaticMappingWithAssociations(
                 pk=1,
                 pretix_model='OrderPosition', external_object_type='tickets',
-                pretix_pk='ticket_id', external_pk='ticketnumber',
+                pretix_id_field='ticket_id', external_id_field='ticketnumber',
                 property_mapping=json.dumps([
                     {
                         "pretix_field": "ticket_price",
@@ -379,7 +379,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
             StaticMappingWithAssociations(
                 pk=2,
                 pretix_model='Order', external_object_type='ticketorders',
-                pretix_pk='event_order_code', external_pk='ordernumber',
+                pretix_id_field='event_order_code', external_id_field='ordernumber',
                 property_mapping=json.dumps([
                     {
                         "pretix_field": "email",

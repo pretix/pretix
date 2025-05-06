@@ -33,27 +33,27 @@ def assign_properties(
 ):
     out = {}
 
-    for k, v, mode in new_values:
+    for field_name, v, mode in new_values:
         if mode == MODE_OVERWRITE:
-            out[k] = v
+            out[field_name] = v
             continue
         elif mode == MODE_SET_IF_NEW and not is_new:
             continue
         if not v:
             continue
 
-        current_value = old_values.get(k, out.get(k, ""))
+        current_value = old_values.get(field_name, out.get(field_name, ""))
         if mode in (MODE_SET_IF_EMPTY, MODE_SET_IF_NEW):
             if not current_value:
-                out[k] = v
+                out[field_name] = v
         elif mode == MODE_APPEND_LIST:
-            _add_to_list(out, k, current_value, v, list_sep)
+            _add_to_list(out, field_name, current_value, v, list_sep)
         else:
             raise SyncConfigError(["Invalid update mode " + mode])
     return out
 
 
-def _add_to_list(out, key, current_value, new_item, list_sep):
+def _add_to_list(out, field_name, current_value, new_item, list_sep):
     new_item = str(new_item)
     if list_sep is not None:
         new_item = new_item.replace(list_sep, "")
@@ -64,4 +64,4 @@ def _add_to_list(out, key, current_value, new_item, list_sep):
         new_list = current_value + [new_item]
         if list_sep is not None:
             new_list = list_sep.join(new_list)
-        out[key] = new_list
+        out[field_name] = new_list
