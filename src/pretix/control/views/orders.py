@@ -551,7 +551,10 @@ class OrderDetail(OrderView):
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = self.order.pending_sum
 
-        unsent_invoices = [ii.pk for ii in ctx['invoices'] if not ii.sent_to_customer]
+        unsent_invoices = [
+            ii.pk for ii in ctx['invoices']
+            if ii.transmission_type == "email" and ii.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED
+        ]
         if unsent_invoices:
             with language(self.order.locale):
                 ctx['invoices_send_link'] = reverse('control:event.order.sendmail', kwargs={

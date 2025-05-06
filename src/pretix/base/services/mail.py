@@ -658,8 +658,15 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             raise SendMailException('Failed to send an email to {}.'.format(to))
         else:
             for i in invoices_sent:
-                i.sent_to_customer = now()
-                i.save(update_fields=['sent_to_customer'])
+                if i.transmission_provider == "email" and i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
+                    i.transmission_date = now()
+                    i.transmission_provider = "email"
+                    i.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
+                    i.transmission_info = {"recipients": to}
+                    i.save(update_fields=[
+                        "transmission_date", "transmission_provider", "transmission_status",
+                        "transmission_info"
+                    ])
 
 
 def mail_send(*args, **kwargs):
