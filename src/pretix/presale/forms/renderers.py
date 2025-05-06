@@ -65,6 +65,8 @@ def render_label(content, label_for=None, label_class=None, label_title='', labe
     elif not optional:
         opt += '<i class="label-required">{}</i>'.format(pgettext('form', 'required'))
 
+    opt += '<strong class="label-alert" role="alert"></strong>'
+
     builder = '<{tag}{attrs}>{content}{opt}</{tag}>'
     return format_html(
         builder,

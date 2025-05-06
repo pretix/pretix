@@ -60,6 +60,7 @@ var form_handlers = function (el) {
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
             showClear: !$(this).prop("required"),
+            keepInvalid: true,
             icons: {
                 time: 'fa fa-clock-o',
                 date: 'fa fa-calendar',
@@ -82,8 +83,7 @@ var form_handlers = function (el) {
                     Math.abs(+new Date(opts.minDate) - new Date()) < Math.abs(+new Date(opts.maxDate) - new Date())
             ) ? opts.minDate : opts.maxDate;
         }
-        var alert = $('<span role="alert"></span>');
-        $("#"+this.getAttribute("aria-describedby")).prepend(alert);
+        var alert = $('label[for=' + this.id + '] .label-alert');
         $(this).datetimepicker(opts).on("dp.hide", function() {
             // when min/max is used in datetimepicker, closing and re-opening the picker opens at the wrong date
             // therefore keep the current viewDate and re-set it after datetimepicker is done hiding
@@ -93,14 +93,21 @@ var form_handlers = function (el) {
                 $dtp.viewDate(currentViewDate);
             }, 50);
         }).on('dp.error', function (e) {
-            console.log(this, e.date, e.oldDate, opts["minDate"], opts["maxDate"]);
-            alert.text("Mist, das ist ein Fehler! ");
-            // TODO: 
+            if (e.date) {
+                if (e.date.isBefore(opts["minDate"])) {
+                    alert.text(gettext("The date you entered is too early."));
+                } else if (e.date.isAfter(opts["maxDate"])) {
+                    alert.text(gettext("The date you entered is too late."));
+                }
+            } else {
+                alert.text(gettext("We could not recognize the date you entered."));
+            }
             var self = this;
             window.setTimeout(function () {
-                console.log(self);
-                //self.focus();
+                self.focus();
             }, 50);
+        }).on('dp.change', function (e) {
+            alert.text("");
         });
         
 

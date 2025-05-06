@@ -145,20 +145,37 @@ output {
   color: $brand-primary;
   font-weight: bold;
 }
-.label-required {
-  color: $text-muted;
-  display: block;
+
+.label-required,
+.label-alert {
+  display: inline;
   font-weight: normal;
   font-style: normal;
   font-size: 85%;
+  color: $text-muted;
 }
-.checkbox .label-required {
-  display: inline;
+.label-required {
   &:before {
     content: " (";
   }
   &:after {
     content: ")";
+  }
+}
+.label-alert:not(:empty):before {
+  content: " – ";
+}
+@media (min-width: $screen-md-min) {
+  .form-group:not(:has(.checkbox)) {
+    .label-required,
+    .label-alert:not(:empty) {
+      display: block;
+    }
+    .label-required:before,
+    .label-required:after,
+    .label-alert:before {
+      content: "";
+    }
   }
 }
 
