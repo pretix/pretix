@@ -31,7 +31,6 @@ import sentry_sdk
 from django.db.models import Q
 from django.dispatch import receiver
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.datasync.sourcefields import (
