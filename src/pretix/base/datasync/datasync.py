@@ -119,7 +119,8 @@ class OutboundSyncProvider:
             order=order,
             sync_provider=cls.identifier,
             triggered_by=triggered_by,
-            not_before=not_before)
+            not_before=not_before,
+        )
 
     @classmethod
     def get_external_link_info(cls, event, external_link_href, external_link_display_name):

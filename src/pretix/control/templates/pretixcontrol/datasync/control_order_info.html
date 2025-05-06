@@ -42,7 +42,9 @@
                         {% else %}
                             <i class="fa fa-hourglass"></i> {% trans "Pending" %}
                         {% endif %}
-                        <span class="text-muted">(triggered by {{ pending.triggered_by }} at {{ pending.triggered|date:"SHORT_DATETIME_FORMAT" }})</span>
+                        <span class="text-muted">({% blocktrans trimmed with datetime=pending.triggered|date:"SHORT_DATETIME_FORMAT" %}triggered at {{ datetime }}
+                        {% endblocktrans %})</span>
+                        <!-- {{ pending.triggered_by }} / {{ pending.triggered }} -->
                     </p>
                 {% endif %}
 

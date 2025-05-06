@@ -97,7 +97,7 @@ def split_name_on_last_space(name, part):
 ORDER_POSITION = 'position'
 ORDER = 'order'
 EVENT = 'event'
-EVENT_OR_SUBEVENT = 'event_or_subevent'
+SUBEVENT_OR_EVENT = 'subevent_or_event'
 AVAILABLE_MODELS = {
     'OrderPosition': (ORDER_POSITION, ORDER, EVENT_OR_SUBEVENT, EVENT),
     'Order': (ORDER, EVENT),
@@ -122,8 +122,7 @@ def get_data_fields(event, for_model=None):
     """
     Returns tuple of (required_input, key, label, type, enum_opts, getter)
 
-    type is one of the hubspot data types as specified in
-    https://developers.hubspot.com/docs/api/crm/properties#property-type-and-fieldtype-values
+    Type is one of the Question types as defined in Question.TYPE_CHOICES.
     """
     name_scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
     name_headers = []
