@@ -3322,6 +3322,7 @@ class InvoiceAddress(models.Model):
             self.internal_reference,
             (_('Beneficiary') + ': ' + self.beneficiary) if self.beneficiary else '',
         ]
+        parts += [f'{k}: {v}' for k, v in self.describe_transmission()]
         return '\n'.join([str(p).strip() for p in parts if p and str(p).strip()])
 
     @property
@@ -3376,6 +3377,8 @@ class InvoiceAddress(models.Model):
             'custom_field': self.custom_field,
             'internal_reference': self.internal_reference,
             'beneficiary': self.beneficiary,
+            'transmission_type': self.transmission_type,
+            **self.transmission_info,
         })
         return d
 
