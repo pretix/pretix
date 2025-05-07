@@ -815,6 +815,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     se for se in context['subevent_list']
                     if not se.presale_has_ended and (se.best_availability_state is None or se.best_availability_state >= Quota.AVAILABILITY_RESERVED)
                 ]
+            context['visible_events'] = len(context['subevent_list']) > 0
         return context
 
 
