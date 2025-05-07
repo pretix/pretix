@@ -28,7 +28,8 @@ from functools import cached_property
 from itertools import groupby
 
 import sentry_sdk
-from django.db.models import Q
+from django.db.models import F, Window
+from django.db.models.functions import RowNumber
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scope, scopes_disabled
@@ -64,9 +65,15 @@ def sync_all():
     with scopes_disabled():
         queue = (
             OrderSyncQueue.objects
+            .filter(not_before__lt=now())
+            .order_by(Window(
+                expression=RowNumber(),
+                partition_by=[F("event_id")],
+                order_by="not_before",
+            ))
             .select_related("order")
-            .prefetch_related("order__event")
-            .filter(Q(not_before__isnull=True) | Q(not_before__lt=now()))[:1000]
+            .prefetch_related("event")
+            [:1000]
         )
         grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.order.event.pk)), lambda q: (q.sync_provider, q.order.event))
         for (target, event), queued_orders in grouped:
