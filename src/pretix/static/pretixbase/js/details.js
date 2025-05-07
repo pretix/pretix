@@ -39,6 +39,19 @@ setup_collapsible_details = function (el) {
                 }
             });
         }, { once: true });
+
+        var container = this.closest('details.sneak-peek-container');
+        if (container) {
+            function removeSneekPeakWhenClosed(e) {
+                if (e.newState == "closed") {
+                    container.removeEventListener("toggle", removeSneekPeakWhenClosed);
+                    trigger.remove();
+                    content.removeAttribute('aria-hidden');
+                    content.classList.remove('sneak-peek-content');
+                }
+            }
+            container.addEventListener("toggle", removeSneekPeakWhenClosed);
+        }
     });
 
     var isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
