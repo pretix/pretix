@@ -2,39 +2,43 @@
 
 setup_collapsible_details = function (el) {
 
-    el.find('details.sneak-peek:not([open])').each(function() {
-        this.open = true;
-        var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)');
-        var container = this;
-
-        if (Array.prototype.reduce.call($elements, function (h, e) {
-            return h + $(e).outerHeight();
-        }, 0) < 200) {
-            $(".sneak-peek-trigger", this).remove();
-            $(container).removeClass('sneak-peek');
-            container.style.removeProperty('height');
+    el.find('.sneak-peek-trigger').each(function() {
+        var trigger = this;
+        var button = this.querySelector('button');
+        var content = document.getElementById(button.getAttribute('aria-controls'));
+        if (content.scrollHeight < 200) {
+            trigger.remove();
+            content.classList.remove('sneak-peek-content');
             return;
         }
+        content.setAttribute('aria-hidden', 'true');
+        button.setAttribute('aria-expanded', 'false');
+        button.addEventListener('click', function (e) {
+            button.setAttribute('aria-expanded', 'true');
+            content.setAttribute('aria-hidden', 'false');
 
-        $elements.attr('aria-hidden', 'true');
-
-        var trigger = $('summary, .sneak-peek-trigger button', container);
-        function onclick(e) {
-            e.preventDefault();
-
-            container.addEventListener('transitionend', function() {
-                $(container).removeClass('sneak-peek');
-                container.style.removeProperty('height');
+            content.addEventListener('transitionend', function() {
+                content.classList.remove('sneak-peek-content');
+                content.style.removeProperty('height');
+                // we need to keep the trigger/button in the DOM to not irritate screenreaders toggling visibility
+                trigger.classList.add('sr-only');
             }, {once: true});
-            container.style.height = container.scrollHeight + 'px';
-            $('.sneak-peek-trigger', container).fadeOut(function() {
-                $(this).remove();
-            });
-            $elements.removeAttr('aria-hidden');
+            content.style.height = content.scrollHeight + 'px';
 
-            trigger.off('click', onclick);
-        }
-        trigger.on('click', onclick);
+            button.addEventListener('click', function (e) {
+                // this will be called by screenreader users if they kept focus on the button after expanding
+                // we need to keep the trigger/button in the DOM to not irritate screenreaders toggling visibility
+                var expanded = button.getAttribute('aria-expanded') == 'true';
+                button.setAttribute('aria-expanded', !expanded);
+                content.setAttribute('aria-hidden', expanded);
+            });
+            button.addEventListener('blur', function (e) {
+                // if content is visible and the user leaves the button, we can safely remove the trigger/button
+                if (button.getAttribute('aria-expanded') == 'true') {
+                    trigger.remove();
+                }
+            });
+        }, { once: true });
     });
 
     var isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
@@ -43,10 +47,12 @@ setup_collapsible_details = function (el) {
             return true;
         }
         var $details = $(this).closest("details");
+        /*
         if ($details.hasClass('sneak-peek')) {
             // if sneak-peek is active, needs to be handled differently
             return true;
         }
+        */
         var isOpen = $details.prop("open");
         var $detailsNotSummary = $details.children(':not(summary)');
         if ($detailsNotSummary.is(':animated')) {
@@ -71,10 +77,12 @@ setup_collapsible_details = function (el) {
             // Space or Enter is pressed — trigger the `click` event on the `summary` element
             // Opera already seems to trigger the `click` event when Enter is pressed
             var $details = $(this).closest("details");
+            /*
             if ($details.hasClass('sneak-peek')) {
                 // if sneak-peek is active, needs to be handled differently
                 return true;
             }
+            */
             event.preventDefault();
             $(this).click();
         }

@@ -521,11 +521,16 @@ details summary {
     transform: rotate(-90deg);
 }
 
-details.sneak-peek {
+.sneak-peek-container {
     position: relative;
-    height: 11em;
+}
+.sneak-peek-content {
+    height: 8em;
     overflow: hidden;
     transition: height .5s;
+}
+.nojs .sneak-peek-content {
+    height: auto;
 }
 .sneak-peek-trigger {
     display: grid;
@@ -540,6 +545,14 @@ details.sneak-peek {
     bottom: 0;
     left: 0;
     z-index: 10;
+    opacity: 1;
+    transition: opacity .5s;
+}
+.nojs .sneak-peek-trigger {
+    display: none;
+}
+.sneak-peek-trigger:has(button[aria-expanded="true"]) {
+    opacity: 0;
 }
 
 form.download-btn-form {
