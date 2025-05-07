@@ -148,9 +148,10 @@ class OutboundSyncProvider:
             raise TypeError('Call this method on a derived class that defines an "identifier" attribute.')
         OrderSyncQueue.objects.create(
             order=order,
+            event=order.event,
             sync_provider=cls.identifier,
             triggered_by=triggered_by,
-            not_before=not_before,
+            not_before=not_before or now(),
         )
 
     @classmethod
@@ -235,6 +236,11 @@ class OutboundSyncProvider:
                     f"Could not sync order {sq.order.code} to {type(self).__name__} (unhandled exception)"
                 )
                 sentry_sdk.capture_exception(e)
+                sq.order.log_action("pretix.event.order.data_sync.failed.internal", {
+                    "provider": self.identifier,
+                    "error": [],
+                    "full_message": str(e),
+                })
                 sq.delete()
             else:
                 sq.order.log_action("pretix.event.order.data_sync.success", {

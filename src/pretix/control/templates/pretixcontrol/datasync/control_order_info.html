@@ -14,7 +14,7 @@
                 <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline pull-right">
                     {% csrf_token %}
                     {% if pending %}
-                        {% if pending.not_before %}
+                        {% if pending.not_before > now %}
                         <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
                         {% endif %}
                         <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-times"></i> {% trans "Cancel" %}</button>
@@ -35,7 +35,7 @@
                                 Waiting until {{ datetime }}
                                 {% endblocktrans %}
                             {% endif %}
-                        {% elif pending.not_before %}
+                        {% elif pending.not_before > now %}
                             {% blocktrans trimmed with datetime=pending.not_before|date:"SHORT_DATETIME_FORMAT" %}
                             Waiting until {{ datetime }}
                             {% endblocktrans %}
