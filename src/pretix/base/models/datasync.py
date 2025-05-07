@@ -25,7 +25,7 @@ from functools import cached_property
 
 from django.db import models
 
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Event, Order, OrderPosition
 
 logger = logging.getLogger(__name__)
 
@@ -40,11 +40,14 @@ class OrderSyncQueue(models.Model):
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, related_name="queued_sync_jobs"
     )
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="queued_sync_jobs"
+    )
     sync_provider = models.CharField(blank=False, null=False, max_length=128)
     triggered_by = models.CharField(blank=False, null=False, max_length=128)
     triggered = models.DateTimeField(blank=False, null=False, auto_now_add=True)
     failed_attempts = models.PositiveIntegerField(default=0)
-    not_before = models.DateTimeField(blank=True, null=True)
+    not_before = models.DateTimeField(blank=False, null=False, db_index=True)
 
     class Meta:
         unique_together = (("order", "sync_provider"),)

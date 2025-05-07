@@ -27,6 +27,7 @@ from django.dispatch import receiver
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
 from django.template.loader import get_template
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.datasync.datasync import sync_targets
@@ -55,6 +56,7 @@ def on_control_order_info(sender: Event, request, order: Order, **kwargs):
         "request": request,
         "event": sender,
         "providers": providers,
+        "now": now(),
     }
     return template.render(ctx, request=request)
 
@@ -74,7 +76,7 @@ class ControlSyncJob(OrderView):
             messages.success(self.request, _('The sync job has been canceled.'))
         elif self.request.POST.get("run_job_now"):
             job = self.order.queued_sync_jobs.get(pk=self.request.POST.get("run_job_now"))
-            job.not_before = None
+            job.not_before = now()
             job.save()
             messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
 
