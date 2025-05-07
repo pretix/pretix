@@ -248,41 +248,17 @@ div.front-page {
 .calendar-nav li {
     padding: 10px 0;
 }
-/*
 .calendar-nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
+    display: flex;
+    align-items: end;
 }
 .calendar-nav li {
-    grid-column: 1 / 3;
-    grid-row: 1 / 1;
+    width: 60%;
 }
-.calendar-nav li:first-child {
-    grid-column: 1 / 2;
-    grid-row: 2 / 2;
-}
+.calendar-nav li:first-child,
 .calendar-nav li:last-child {
-    grid-column: 2 / 3;
-    grid-row: 2 / 2;
+    width: 20%;
 }
-
-@media (min-width: $screen-sm-min) {
-    */
-    .calendar-nav {
-        display: flex;
-        align-items: end;
-    }
-    .calendar-nav li {
-        width: 50%;
-    }
-    .calendar-nav li:first-child,
-    .calendar-nav li:last-child {
-        width: 25%;
-    }
-/*
-}
-*/
 
 
 .subevent-toggle {

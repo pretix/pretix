@@ -9,7 +9,7 @@
                 <a href="?{% url_replace request "date" subevent_list.before|date:"o-\WW" %}"
                     class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with week=subevent_list.before|date:subevent_list.week_format %}Show previous week, {{ week }}{% endblocktrans %}">
                     {% icon "arrow-left" %}
-                    {{ subevent_list.before|date:subevent_list.week_format }}
+                    <span class="hidden-xs">{{ subevent_list.before|date:subevent_list.week_format }}</span>
                 </a>
             {% endif %}
         </li>
@@ -52,7 +52,7 @@
             {% if subevent_list.has_after %}
                 <a href="?{% url_replace request "date" subevent_list.after|date:"o-\WW" %}"
                     class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with week=subevent_list.after|date:subevent_list.week_format %}Show next week, {{ week }}{% endblocktrans %}">
-                    {{ subevent_list.after|date:subevent_list.week_format }}
+                    <span class="hidden-xs">{{ subevent_list.after|date:subevent_list.week_format }}</span>
                     {% icon "arrow-right" %}
                 </a>
             {% endif %}
@@ -65,13 +65,13 @@
         <a href="?{% url_replace request "date" subevent_list.before|date:"o-\WW" %}"
            class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with week=subevent_list.before|date:subevent_list.week_format %}Show previous week, {{ week }}{% endblocktrans %}">
             <span class="fa fa-arrow-left" aria-hidden="true"></span>
-            {{ subevent_list.before|date:subevent_list.week_format }}
+            <span class="hidden-xs">{{ subevent_list.before|date:subevent_list.week_format }}</span>
         </a>
     </div>
     <div class="col-xs-6 text-right flip">
         <a href="?{% url_replace request "date" subevent_list.after|date:"o-\WW" %}"
            class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with week=subevent_list.after|date:subevent_list.week_format %}Show next week, {{ week }}{% endblocktrans %}">
-            {{ subevent_list.after|date:subevent_list.week_format }}
+            <span class="hidden-xs">{{ subevent_list.after|date:subevent_list.week_format }}</span>
             <span class="fa fa-arrow-right" aria-hidden="true"></span>
         </a>
     </div>
