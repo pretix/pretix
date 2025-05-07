@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-05-07 06:00+0000\n"
+"PO-Revision-Date: 2025-05-07 10:03+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -7279,166 +7279,168 @@ msgstr "12345"
 
 #: pretix/base/pdf.py:351 pretix/base/services/invoices.py:479
 msgid "Sample city"
-msgstr ""
+msgstr "견본 도시"
 
 #: pretix/base/pdf.py:355
 msgid "Invoice address state"
-msgstr ""
+msgstr "송장 주소 상태"
 
 #: pretix/base/pdf.py:356
 msgid "Sample State"
-msgstr ""
+msgstr "견본 상태"
 
 #: pretix/base/pdf.py:361
 msgid "Atlantis"
-msgstr ""
+msgstr "아틀란티스 주"
 
 #: pretix/base/pdf.py:365
 msgid "List of Add-Ons"
-msgstr ""
+msgstr "추가기능목록"
 
 #: pretix/base/pdf.py:366
 msgid ""
 "Add-on 1\n"
 "2x Add-on 2"
 msgstr ""
+"추가기능 1\n"
+"2x 추가기능 2"
 
 #: pretix/base/pdf.py:372 pretix/control/forms/filter.py:1380
 #: pretix/control/forms/filter.py:1382
 #: pretix/control/templates/pretixcontrol/organizers/index.html:42
 msgid "Organizer name"
-msgstr ""
+msgstr "주최자 이름"
 
 #: pretix/base/pdf.py:373
 msgid "Event organizer company"
-msgstr ""
+msgstr "이벤트 주최 회사"
 
 #: pretix/base/pdf.py:377
 msgid "Organizer info text"
-msgstr ""
+msgstr "주최자 정보 텍스트"
 
 #: pretix/base/pdf.py:378
 msgid "Event organizer info text"
-msgstr ""
+msgstr "이벤트 주최자 정보 텍스트"
 
 #: pretix/base/pdf.py:382 pretix/base/pdf.py:383
 msgid "Event info text"
-msgstr ""
+msgstr "이벤트 정보 텍스트"
 
 #: pretix/base/pdf.py:387
 msgid "Printing date"
-msgstr ""
+msgstr "인쇄 날짜"
 
 #: pretix/base/pdf.py:395
 msgid "Printing date and time"
-msgstr ""
+msgstr "인쇄 날짜 및 시간"
 
 #: pretix/base/pdf.py:403
 msgid "Printing time"
-msgstr ""
+msgstr "인쇄 시간"
 
 #: pretix/base/pdf.py:411 pretix/control/forms/item.py:731
 msgid "Purchase date"
-msgstr ""
+msgstr "구매 날짜"
 
 #: pretix/base/pdf.py:419
 msgid "Purchase date and time"
-msgstr ""
+msgstr "구매 날짜 및 시간"
 
 #: pretix/base/pdf.py:427
 msgid "Purchase time"
-msgstr ""
+msgstr "구매 시간"
 
 #: pretix/base/pdf.py:435
 msgid "Validity start date"
-msgstr ""
+msgstr "유효 시작 날짜"
 
 #: pretix/base/pdf.py:443
 msgid "Validity start date and time"
-msgstr ""
+msgstr "유효 시작 날짜 및 시간"
 
 #: pretix/base/pdf.py:451
 msgid "Validity start time"
-msgstr ""
+msgstr "유효성 시작 시간"
 
 #: pretix/base/pdf.py:459
 msgid "Validity end date"
-msgstr ""
+msgstr "유효기간 종료일"
 
 #: pretix/base/pdf.py:467
 msgid "Validity end date and time"
-msgstr ""
+msgstr "유효 기간 종료 날짜 및 시간"
 
 #: pretix/base/pdf.py:475
 msgid "Validity end time"
-msgstr ""
+msgstr "유효성 종료 시간"
 
 #: pretix/base/pdf.py:483
 msgid "Reusable Medium ID"
-msgstr ""
+msgstr "재사용 가능한 매체 ID"
 
 #: pretix/base/pdf.py:488
 msgid "Seat: Full name"
-msgstr ""
+msgstr "좌석: 전체 이름"
 
 #: pretix/base/pdf.py:489
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "1층, 3열, 4번 좌석"
 
 #: pretix/base/pdf.py:491 pretix/base/pdf.py:497
 #: pretix/control/forms/orders.py:332
 msgid "General admission"
-msgstr ""
+msgstr "일반 입장권"
 
 #: pretix/base/pdf.py:494
 msgid "Seat: zone"
-msgstr ""
+msgstr "좌석: 구역"
 
 #: pretix/base/pdf.py:495
 msgid "Ground floor"
-msgstr ""
+msgstr "1층"
 
 #: pretix/base/pdf.py:500
 msgid "Seat: row"
-msgstr ""
+msgstr "좌석: 행"
 
 #: pretix/base/pdf.py:505
 msgid "Seat: seat number"
-msgstr ""
+msgstr "좌석 번호: 좌석 번호"
 
 #: pretix/base/pdf.py:510
 msgid "Date and time of first scan"
-msgstr ""
+msgstr "첫 번째 스캔 날짜 및 시간"
 
 #: pretix/base/pdf.py:516
 msgid "Gift card: Issuance date"
-msgstr ""
+msgstr "기프트 카드: 발행일"
 
 #: pretix/base/pdf.py:521
 msgid "Gift card: Expiration date"
-msgstr ""
+msgstr "기프트 카드: 만료일"
 
 #: pretix/base/pdf.py:562 pretix/base/pdf.py:600 pretix/base/pdf.py:606
 #: pretix/plugins/badges/exporters.py:504
 #: pretix/plugins/ticketoutputpdf/exporters.py:102
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Question: {question}"
-msgstr ""
+msgstr "질문:"
 
 #: pretix/base/pdf.py:601 pretix/base/pdf.py:607
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<Answer: {question}>"
-msgstr ""
+msgstr "<답변: {질문}>"
 
 #: pretix/base/pdf.py:648
 msgid "Attendee name for salutation"
-msgstr ""
+msgstr "경례를 위한 참석자 이름"
 
 #: pretix/base/pdf.py:649 pretix/base/pdf.py:672
 #: pretix/base/services/placeholders.py:696
 #: pretix/control/forms/organizer.py:658
 msgid "Mr Doe"
-msgstr ""
+msgstr "미스터 도"
 
 #: pretix/base/pdf.py:655 pretix/base/pdf.py:662
 #: pretix/plugins/badges/exporters.py:501
@@ -7451,16 +7453,16 @@ msgstr "참석자 이름: {part}"
 
 #: pretix/base/pdf.py:671
 msgid "Invoice address name for salutation"
-msgstr ""
+msgstr "경례용 송장 주소 이름"
 
 #: pretix/base/pdf.py:678
 #, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr ""
+msgstr "송장 주소 이름: {part}"
 
 #: pretix/base/pdf.py:1278
 msgid "Your layout file is not a valid layout. Error message: {}"
-msgstr ""
+msgstr "레이아웃 파일이 유효한 레이아웃이 아닙니다. 오류 메시지: {}"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
@@ -7476,93 +7478,98 @@ msgstr "이벤트 입장"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
-msgstr ""
+msgstr "사전 판매 시작"
 
 #: pretix/base/reldate.py:39
 msgid "Presale end"
-msgstr ""
+msgstr "사전판매 종료"
 
 #: pretix/base/reldate.py:183
 msgid "before"
-msgstr ""
+msgstr "전에"
 
 #: pretix/base/reldate.py:184
 msgid "after"
-msgstr ""
+msgstr "나중에"
 
 #: pretix/base/reldate.py:292 pretix/base/reldate.py:456
 msgid "Fixed date:"
-msgstr ""
+msgstr "고정날짜"
 
 #: pretix/base/reldate.py:293 pretix/base/reldate.py:457
 msgid "Relative date:"
-msgstr ""
+msgstr "상대 날짜:"
 
 #: pretix/base/reldate.py:294
 msgid "Relative time:"
-msgstr ""
+msgstr "상대 시간"
 
 #: pretix/base/reldate.py:302 pretix/base/reldate.py:460
 msgid "Not set"
-msgstr ""
+msgstr "설정되지 않음"
 
 #: pretix/base/secrets.py:119
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "무작위로 설정된 기본값은 모든 프리틱스(오픈소스 기반의 행사 티켓팅 플랫폼) "
+"애플리케이션과 함께 작동합니다"
 
 #: pretix/base/secrets.py:150
 msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
-msgstr ""
+msgstr "프리틱스 서명 수정 1(매우 큰 이벤트의 경우 오프라인 스캔의 의미 변경 - "
+"자세한 내용은 문서 또는 지원을 참조하십시오)"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
 msgid "Event canceled"
-msgstr ""
+msgstr "이벤트 취소"
 
 #: pretix/base/services/cart.py:101 pretix/base/services/modelimport.py:194
 #: pretix/base/services/orders.py:151
 msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
-msgstr ""
+msgstr "서버가 너무 바빠서 요청을 완전히 처리할 수 없었습니다. 다시 시도해 주세요."
 
 #: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:262
 msgid "You did not select any products."
-msgstr ""
+msgstr "당신은 어떤 제품도 선택하지 않았습니다."
 
 #: pretix/base/services/cart.py:105
 msgid "Unknown cart position."
-msgstr ""
+msgstr "알 수 없는 카트 위치."
 
 #: pretix/base/services/cart.py:106
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr ""
+msgstr "날짜가 지정되지 않았습니다."
 
 #: pretix/base/services/cart.py:107 pretix/base/services/orders.py:188
 msgid "You selected a product which is not available for sale."
-msgstr ""
+msgstr "판매할 수 없는 제품을 선택하셨습니다."
 
 #: pretix/base/services/cart.py:109
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
-msgstr ""
+msgstr "선택하신 일부 제품은 더 이상 사용할 수 없습니다. 자세한 내용은 아래를 "
+"참조하세요."
 
 #: pretix/base/services/cart.py:113
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
-msgstr ""
+msgstr "선택하신 제품 중 일부는 더 이상 선택하신 수량으로 제공되지 않습니다. 자세한 "
+"내용은 아래를 참조하세요."
 
 #: pretix/base/services/cart.py:117
 #, python-format
 msgid ""
 "Some of the products you selected are no longer available. The following "
 "products are affected and have not been added to your cart: %s"
-msgstr ""
+msgstr "선택한 일부 제품은 더 이상 사용할 수 없습니다. 다음 제품은 영향을 받아 "
+"장바구니에 추가되지 않았습니다: %s"
 
 #: pretix/base/services/cart.py:121
 #, python-format
@@ -7570,33 +7577,43 @@ msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. The following products are affected and have not been added to "
 "your cart: %s"
-msgstr ""
+msgstr "선택한 일부 제품은 더 이상 사용할 수 없습니다. 다음 제품은 영향을 받아 "
+"장바구니에 추가되지 않았습니다: %s"
 
 #: pretix/base/services/cart.py:126
-#, python-format
+#, fuzzy, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
 msgstr[0] ""
-msgstr[1] ""
+"단수형\n"
+"주문당 %s개 이상의 품목을 선택할 수 없습니다.\n"
+"복수형\n"
+"주문당 %s개 이상의 품목을 선택할 수 없습니다."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1542
-#, python-format
+#, fuzzy, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
 msgstr[0] ""
-msgstr[1] ""
+"단수형\n"
+"제품 %(제품)의 항목을 %(최대) 이상 선택할 수 없습니다.\n"
+"복수형\n"
+"제품 %(제품)의 항목을 %(최대) 이상 선택할 수 없습니다."
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1547
-#, python-format
+#, fuzzy, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
 msgstr[0] ""
-msgstr[1] ""
+"단수형\n"
+"제품 %(제품)의 항목을 최소 %(분) 이상 선택해야 합니다.\n"
+"복수형\n"
+"제품 %(제품)의 항목을 최소 %(분) 이상 선택해야 합니다."
 
 #: pretix/base/services/cart.py:140
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "item of it."
@@ -7604,13 +7621,16 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-msgstr[1] ""
+"단수형\n"
+"%(분) 이하의 품목을 구매할 수 없으므로 장바구니에서 %(제품)을 제거했습니다.\n"
+"복수형\n"
+"%(분) 이하의 품목을 구매할 수 없으므로 장바구니에서 %(제품)을 제거했습니다."
 
 #: pretix/base/services/cart.py:144 pretix/base/services/orders.py:154
 #: pretix/presale/templates/pretixpresale/event/index.html:167
 #: pretix/presale/views/waiting.py:145 pretix/presale/views/widget.py:763
 msgid "The booking period for this event has not yet started."
-msgstr ""
+msgstr "이 이벤트의 예약 기간은 아직 시작되지 않았습니다."
 
 #: pretix/base/services/cart.py:145
 msgid "The booking period for this event has ended."
