@@ -143,18 +143,31 @@ output {
 
 .label-required {
   color: $text-muted;
-  display: block;
+  display: inline;
   font-weight: normal;
   font-style: normal;
   font-size: 85%;
 }
-.checkbox .label-required {
-  display: inline;
+.has-error .label-required {
+  color: inherit;
+}
+.label-required {
   &:before {
     content: " (";
   }
   &:after {
     content: ")";
+  }
+}
+@media (min-width: $screen-md-min) {
+  .form-group:not(:has(.checkbox)) {
+    .label-required {
+      display: block;
+    }
+    .label-required:before,
+    .label-required:after {
+      content: "";
+    }
   }
 }
 
