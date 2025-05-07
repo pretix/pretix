@@ -7,14 +7,12 @@
 {% block title %}{% trans "Event overview" %}{% endblock %}
 {% block content %}
     {% if organizer_homepage_text %}
-        <div>
+        <div class="blank-after">
             {{ organizer_homepage_text | rich_text }}
         </div>
     {% endif %}
-    <div class="row blank-after">
-        <div class="col-xs-12 text-left flip">
-            {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
-        </div>
+    <div class="blank-after text-left flip">
+        {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">

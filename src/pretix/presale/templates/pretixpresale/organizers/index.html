@@ -19,15 +19,13 @@
     <meta property="og:url" content="{% abseventurl organizer "presale:organizer.index" %}"/>
 {% endblock %}
 {% block content %}
-    <div>
-        {% if organizer_homepage_text %}
+    {% if organizer_homepage_text %}
+        <div class="blank-after">
             {{ organizer_homepage_text | rich_text }}
-        {% endif %}
-    </div>
-    <div class="row blank-after">
-        <div class="col-md-12">
-            {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="list" %}
         </div>
+    {% endif %}
+    <div class="blank-after text-left flip">
+        {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="list" %}
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
