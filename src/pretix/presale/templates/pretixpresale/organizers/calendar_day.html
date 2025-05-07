@@ -11,23 +11,20 @@
             {{ organizer_homepage_text | rich_text }}
         </div>
     {% endif %}
-    <form class="form-inline" method="get" id="monthselform"
-          action="{% eventurl request.organizer "presale:organizer.index" %}">
-        {% for f, v in request.GET.items %}
-            {% if f != "date" %}
-                <input type="hidden" name="{{ f }}" value="{{ v }}">
-            {% endif %}
-        {% endfor %}
-        <div class="row">
-            <div class="col-md-5 col-sm-6 col-xs-12 text-left flip">
-                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
-            </div>
-
+    <div class="row blank-after">
+        <div class="col-xs-12 text-left flip">
+            {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
         </div>
-    </form>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h2 class="panel-title"><strong>{% trans "Choose date to book a ticket" %}</strong></h2>
+            <h2 class="panel-title">
+                <strong>
+                {% blocktrans trimmed with day=date|date:"DATE_FORMAT" %}
+                    Events on {{ day }}
+                {% endblocktrans %}
+                </strong>
+            </h2>
         </div>
         {% if filter_form.fields %}
             <div class="panel-subhead">
@@ -42,7 +39,7 @@
                             <a href="?{% url_replace request "date" before.date.isoformat %}"
                                class="btn btn-default" data-save-scrollpos aria-label="{{ before|date:"SHORT_DATE_FORMAT" }}">
                                 {% icon "arrow-left" %}
-                                {{ before|date:"SHORT_DATE_FORMAT" }}
+                                <span class="hidden-xs">{{ before|date:"SHORT_DATE_FORMAT" }}</span>
                             </a>
                         {% endif %}
                     </li>
@@ -73,7 +70,7 @@
                         {% if has_after %}
                             <a href="?{% url_replace request "date" after.date.isoformat %}"
                                class="btn btn-default" data-save-scrollpos aria-label="{{ after|date:"SHORT_DATE_FORMAT" }}">
-                                {{ after|date:"SHORT_DATE_FORMAT" }}
+                                <span class="hidden-xs">{{ after|date:"SHORT_DATE_FORMAT" }}</span>
                                 {% icon "arrow-right" %}
                             </a>
                         {% endif %}
@@ -87,7 +84,7 @@
                     <a href="?{% url_replace request "date" before.date.isoformat %}"
                        class="btn btn-default">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                        {{ before|date:"SHORT_DATE_FORMAT" }}
+                        <span class="hidden-xs">{{ before|date:"SHORT_DATE_FORMAT" }}</span>
                     </a>
                 </div>
                 {% endif %}
@@ -95,7 +92,7 @@
                 <div class="col-xs-6 text-right flip{% if not has_before %} col-xs-offset-6{% endif %}">
                     <a href="?{% url_replace request "date" after.date.isoformat %}"
                        class="btn btn-default">
-                        {{ after|date:"SHORT_DATE_FORMAT" }}
+                        <span class="hidden-xs">{{ after|date:"SHORT_DATE_FORMAT" }}</span>
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>
                 </div>

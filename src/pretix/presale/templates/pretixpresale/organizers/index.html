@@ -24,11 +24,9 @@
             {{ organizer_homepage_text | rich_text }}
         {% endif %}
     </div>
-    <div id="monthselform">
-        <div class="row">
-            <div class="col-md-12">
-                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="list" %}
-            </div>
+    <div class="row blank-after">
+        <div class="col-md-12">
+            {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="list" %}
         </div>
     </div>
     <div class="panel panel-default">
