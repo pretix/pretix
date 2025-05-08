@@ -734,6 +734,9 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
         format='json'
     )
     assert resp.status_code == 200
+    assert resp.data["meta_data"] == {
+        meta_prop.name: "Workshop"
+    }
     with scopes_disabled():
         assert organizer.events.get(slug=resp.data['slug']).meta_values.filter(
             property__name=meta_prop.name, value="Workshop"
