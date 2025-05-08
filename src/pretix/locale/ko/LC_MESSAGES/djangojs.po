@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:08+0000\n"
-"PO-Revision-Date: 2025-05-07 06:00+0000\n"
+"PO-Revision-Date: 2025-05-08 10:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ko/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -1084,19 +1084,19 @@ msgstr "일요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 msgid "Monday"
-msgstr ""
+msgstr "월요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "Tuesday"
-msgstr ""
+msgstr "화요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "Wednesday"
-msgstr ""
+msgstr "수요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
 msgid "Thursday"
-msgstr ""
+msgstr "목요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "Friday"
@@ -1104,11 +1104,11 @@ msgstr "금요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "Saturday"
-msgstr ""
+msgstr "토요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "Sunday"
-msgstr ""
+msgstr "일요일"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "January"
