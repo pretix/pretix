@@ -392,6 +392,7 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
   grid-column: calc(1 + var(--offset-hour, 0)*60/var(--raster-size, 5) + var(--offset-minute, 0)/var(--raster-size, 5)) / span calc(var(--duration-hour, 0)*60/var(--raster-size, 5) + var(--duration-minute, 0)/var(--raster-size, 5));
   grid-row: var(--concurrency, 1) / span 1;
   padding: 3px 8px 0;
+  /* add 11px of padding-bottom to the events with --concurrency being the same as --total-concurrency, otherwise 0px */
   padding-bottom: #{'round(down, calc(11px * var(--concurrency)/var(--total-concurrency)), 11px)'};
 }
 
