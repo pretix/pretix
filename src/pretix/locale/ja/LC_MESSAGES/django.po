@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-03-31 15:00+0000\n"
+"PO-Revision-Date: 2025-05-09 06:36+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -2971,21 +2971,17 @@ msgid "Repeat password"
 msgstr "パスワードを再入力してください"
 
 #: pretix/base/forms/questions.py:134 pretix/base/forms/questions.py:256
-#, fuzzy
-#| msgid "No country specified."
 msgctxt "name_salutation"
 msgid "not specified"
-msgstr "国が指定されていません。"
+msgstr "指定されていません"
 
 #: pretix/base/forms/questions.py:219
 msgid "Please do not use special characters in names."
-msgstr ""
-"Understood, I will avoid using special characters in names. Thank you for "
-"the reminder."
+msgstr "名前に特殊文字を使わないでください。"
 
 #: pretix/base/forms/questions.py:281
 msgid "Please enter a shorter name."
-msgstr "短い名前を入力してください。"
+msgstr "もっと短い名前を入力してください。"
 
 #: pretix/base/forms/questions.py:305
 msgctxt "phonenumber"
@@ -3001,11 +2997,12 @@ msgstr "電話番号（国際エリアコードなし）"
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
-msgstr "画像を縦向きでアップロードしてください。"
+msgstr "画像が横向きでアップロードされています。縦向きの画像をアップロードしてくださ"
+"い。"
 
 #: pretix/base/forms/questions.py:493
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr "幅が高さの3/4の画像をアップロードしてください。"
+msgstr "縦４ｘ幅３の比率の画像をアップロードしてください。"
 
 #: pretix/base/forms/questions.py:496
 msgid ""
@@ -3059,7 +3056,7 @@ msgstr "会社名を提供する必要があります。"
 
 #: pretix/base/forms/questions.py:1187
 msgid "You need to provide your name."
-msgstr "私はアシスタントです。"
+msgstr "あなたの名前を提供する必要があります。"
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
@@ -3631,12 +3628,12 @@ msgstr "有効な販売チャネルを入力してください。"
 #: pretix/base/modelimport_orders.py:585
 #: pretix/base/modelimport_vouchers.py:291
 msgid "Multiple matching seats were found."
-msgstr "複数のマッチングする席が見つかりました。"
+msgstr "該当する席が複数見つかりました。"
 
 #: pretix/base/modelimport_orders.py:587
 #: pretix/base/modelimport_vouchers.py:293
 msgid "No matching seat was found."
-msgstr "適合する席が見つかりませんでした。"
+msgstr "該当する席が見つかりませんでした。"
 
 #: pretix/base/modelimport_orders.py:590
 #: pretix/base/modelimport_vouchers.py:296 pretix/base/services/cart.py:212
@@ -3674,7 +3671,7 @@ msgstr "顧客"
 
 #: pretix/base/modelimport_orders.py:711
 msgid "No matching customer was found."
-msgstr "顧客が見つかりませんでした。"
+msgstr "該当する顧客が見つかりませんでした。"
 
 #: pretix/base/modelimport_vouchers.py:50 pretix/base/models/vouchers.py:488
 msgid "A voucher with this code already exists."
@@ -3815,7 +3812,7 @@ msgstr "電源を切ると、通知を受け取れません。"
 #: pretix/control/templates/pretixcontrol/users/form.html:6
 #: pretix/control/views/organizer.py:158 tests/base/test_mail.py:149
 msgid "User"
-msgstr "ユーザー"
+msgstr "ユーザ"
 
 #: pretix/base/models/auth.py:284 pretix/control/navigation.py:411
 #: pretix/control/templates/pretixcontrol/users/index.html:5
@@ -4234,20 +4231,14 @@ msgstr ""
 "れます。"
 
 #: pretix/base/models/discount.py:177
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr "すべての日付は、前に始まります"
+msgstr "この日から始まる日付で利用可能"
 
 #: pretix/base/models/discount.py:182
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "すべての日付は、前に始まります"
+msgstr "これより以前に開始する日付で利用可能"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -5513,18 +5504,12 @@ msgid "Unknown country code."
 msgstr "不明な国コード。"
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum date must not be before the minimum value."
-msgstr "最大数は最小数よりも大きくする必要があります。"
+msgstr "最大日付は、最小値より前でなければなりません。"
 
 #: pretix/base/models/items.py:1925
-#, fuzzy
-#| msgid ""
-#| "The maximum number of usages may not be lower than the minimum number of "
-#| "usages."
 msgid "The maximum value must not be lower than the minimum value."
-msgstr "使用回数の最大値は、最小回数よりも低くすることはできません。"
+msgstr "最大値は最小値より低くできません。"
 
 #: pretix/base/models/items.py:1942
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -11383,13 +11368,6 @@ msgid "Header image"
 msgstr "ヘッダー画像"
 
 #: pretix/base/settings.py:2885
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your event name "
-#| "and date in the page header. By default, we show your logo with a size of "
-#| "up to 1140x120 pixels. You can increase the size with the setting below. "
-#| "We recommend not using small details on the picture as it will be resized "
-#| "on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. If you use a white background, we show your logo "
@@ -11397,11 +11375,11 @@ msgid ""
 "pixels. You can increase the size with the setting below. We recommend not "
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
-"ロゴ画像を提供していただければ、デフォルトではイベント名と日付はページヘッ"
-"ダーに表示されません。デフォルトでは、1140x120ピクセルまでのサイズでロゴが表"
-"示されます。以下の設定でサイズを拡大することもできます。画像に細かいディテー"
-"ルを使用しないことをお勧めします。なぜなら、小さな画面ではリサイズされるため"
-"です。"
+"ロゴ画像を提供すると、デフォルトでページヘッダーにイベント名と日付が表示され"
+"ません。白い背景を使用する場合、最大1140x120ピクセルのサイズでロゴが表示され"
+"ます。それ以外の場合、最大サイズは1120x120ピクセルです。以下の設定でサイズを"
+"大きくすることができます。小さな画面ではサイズが変更されるため、写真に小さな"
+"ディテールを使用しないことをお勧めします。"
 
 #: pretix/base/settings.py:2906 pretix/base/settings.py:2949
 msgid "Use header image in its full size"
@@ -11427,13 +11405,6 @@ msgstr ""
 "れます。"
 
 #: pretix/base/settings.py:2929 pretix/control/forms/organizer.py:524
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your "
-#| "organization name in the page header. By default, we show your logo with "
-#| "a size of up to 1140x120 pixels. You can increase the size with the "
-#| "setting below. We recommend not using small details on the picture as it "
-#| "will be resized on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. If you use a white background, we show your logo "
@@ -23989,32 +23960,29 @@ msgstr "優先する言語"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:200
 #: pretix/control/templates/pretixcontrol/pdf/index.html:210
-#, fuzzy
-#| msgid "Upload custom background"
 msgid "Upload PDF as background"
-msgstr "カスタム背景をアップロード"
+msgstr "背景としてPDFをアップロードする"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:202
 msgid ""
 "You can upload a PDF to use as a custom background. The paper size will "
 "match the PDF."
-msgstr ""
+msgstr "PDF をアップロードして、カスタムの背景として使用できます。用紙のサイズは PDF "
+"と一致します。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:217
 msgid "Download current background"
 msgstr "現在の背景をダウンロード"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:224
-#, fuzzy
-#| msgid "Date chosen by customer"
 msgid "Or choose custom paper size"
-msgstr "お客様が選んだ日付"
+msgstr "または、カスタム用紙サイズを選択"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:226
 msgid ""
 "To manually change the paper size, you need to create a new, empty "
 "background."
-msgstr ""
+msgstr "用紙サイズを手動で変更するには、新しい空の背景を作成する必要があります。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:234
 #: pretix/control/templates/pretixcontrol/pdf/index.html:321
@@ -27322,10 +27290,9 @@ msgid "until"
 msgstr "まで"
 
 #: pretix/helpers/daterange.py:106
-#, fuzzy, python-brace-format
-#| msgid "{date_from} – {date_to}"
+#, python-brace-format
 msgid "{date_from}{until}{date_to}"
-msgstr "{date_from} – {date_to}"
+msgstr "{date_from}{until}{date_to}"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
@@ -31012,10 +30979,8 @@ msgid "Payer name"
 msgstr "支払い者の名前"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:91
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment receipt"
-msgstr "支払手数料"
+msgstr "領収書"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
 msgid "Do you really want to disconnect your Stripe account?"
