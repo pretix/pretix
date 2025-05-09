@@ -122,7 +122,7 @@ class LoginView(RedirectBackMixin, FormView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(
             **kwargs,
-            providers=self.request.organizer.sso_providers.all()
+            providers=self.request.organizer.sso_providers.filter(is_active=True)
         )
 
     def get_form_kwargs(self):
