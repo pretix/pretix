@@ -56,7 +56,11 @@ base_patterns = [
             name='metrics'),
     re_path(r'^csp_report/$', csp.csp_report, name='csp.report'),
     re_path(r'^agpl_source$', source.get_source, name='source'),
-    re_path(r'^js_helpers/states/$', js_helpers.states, name='js_helpers.states'),
+
+    re_path(r'^js_helpers/address_form/$', js_helpers.address_form, name='js_helpers.address_form'),
+    # deprecated name, keep for compatibility with old plugins
+    re_path(r'^js_helpers/states/$', js_helpers.address_form, name='js_helpers.states'),
+
     re_path(r'^api/v1/', include(('pretix.api.urls', 'pretixapi'), namespace='api-v1')),
     re_path(r'^api/$', RedirectView.as_view(url='/api/v1/'), name='redirect-api-version'),
     re_path(r'^.well-known/apple-developer-merchantid-domain-association$',
