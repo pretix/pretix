@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-05-09 06:36+0000\n"
+"PO-Revision-Date: 2025-05-12 13:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -19763,7 +19763,7 @@ msgstr "クォータごとの有料チケット"
 #: pretix/control/views/dashboards.py:519 pretix/control/views/typeahead.py:89
 msgctxt "subevent"
 msgid "No dates"
-msgstr "データなし"
+msgstr "日付なし"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:141
 #: pretix/control/templates/pretixcontrol/subevents/index.html:158
