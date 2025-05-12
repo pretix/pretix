@@ -848,7 +848,7 @@ var shared_iframe_fragment = (
 );
 
 var shared_alert_fragment = (
-    '<div :class="alertClasses" role="dialog" aria-modal="true" aria-live="polite">'
+    '<div :class="alertClasses" role="alert">'
     + '<transition name="bounce" @after-enter="focusButton">'
     + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
     + '<p>{{ $root.error_message }}</p>'
@@ -996,7 +996,7 @@ Vue.component('pretix-widget-event-form', {
 
         // Form start
         + '<div class="pretix-widget-event-description" v-if="display_event_info && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
-        + '<form method="post" :action="$root.formAction" ref="form" :target="$root.formTarget">'
+        + '<form method="post" :action="$root.formAction" ref="form" :target="$root.formTarget" @submit="$parent.buy">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
@@ -1040,7 +1040,7 @@ Vue.component('pretix-widget-event-form', {
 
         // Buy button
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button @click="$parent.buy" type="submit" :disabled="buy_disabled">{{ this.buy_label }}</button>'
+        + '<button type="submit">{{ this.buy_label }}</button>'
         + '</div>'
 
         + '</form>'
