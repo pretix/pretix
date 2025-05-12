@@ -80,4 +80,4 @@ def serve_metrics(request):
 
     content = "\n".join(output) + "\n"
 
-    return HttpResponse(content)
+    return HttpResponse(content, content_type="application/openmetrics-text;version=1.0.0")
