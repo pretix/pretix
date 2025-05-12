@@ -848,10 +848,10 @@ var shared_iframe_fragment = (
 );
 
 var shared_alert_fragment = (
-    '<div :class="alertClasses" role="alert">'
+    '<div :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'">'
     + '<transition name="bounce" @after-enter="focusButton">'
     + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
-    + '<p>{{ $root.error_message }}</p>'
+    + '<p :id="$root.parent.html_id + \'-error-message\'">{{ $root.error_message }}</p>'
     + '<p><button v-if="$root.error_url_after" @click.prevent.stop="errorContinue">' + strings.continue + '</button>'
     + '<button v-else @click.prevent.stop="errorClose">' + strings.close + '</button></p>'
     + '</div>'
