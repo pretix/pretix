@@ -359,12 +359,12 @@ Vue.component('pricebox', {
         + '<del class="pretix-widget-pricebox-original-price" v-bind:aria-label="original_price_aria_label" v-html="original_line"></del> '
         + '<ins class="pretix-widget-pricebox-new-price" v-bind:aria-label="new_price_aria_label" v-html="priceline"></ins></span>'
         + '<div v-if="free_price">'
-        + '<span class="pretix-widget-pricebox-currency">{{ $root.currency }}</span> '
+        + '<span class="pretix-widget-pricebox-currency" :id="price_box_id">{{ $root.currency }}</span> '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
         + '       :min="display_price_nonlocalized" :value="suggested_price_nonlocalized" :name="field_name"'
-        + '       step="any" v-bind:aria-label="free_price_label">'
+        + '       step="any" v-bind:aria-labelledby="aria_labelledby" v-bind:aria-describedby="price_desc_id">'
         + '</div>'
-        + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
+        + '<small class="pretix-widget-pricebox-tax" :id="price_desc_id" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
         + '{{ taxline }}'
         + '</small>'
         + '</div>'),
@@ -375,6 +375,7 @@ Vue.component('pricebox', {
         suggested_price: Object,
         original_price: String,
         mandatory_priced_addons: Boolean,
+        item_id: Number,
     },
     methods: {
         stripHTML: function (s) {
@@ -384,6 +385,18 @@ Vue.component('pricebox', {
         },
     },
     computed: {
+        aria_labelledby: function () {
+            return [
+                this.$root.html_id + '-item-label-' + this.item_id,
+                this.price_box_id
+            ].join(" ");
+        },
+        price_box_id: function () {
+            return this.$root.html_id + '-item-pricebox-' + this.item_id;
+        },
+        price_desc_id: function () {
+            return this.$root.html_id + '-item-pricedesc-' + this.item_id;
+        },
         display_price: function () {
             if (this.$root.display_net_prices) {
                 return floatformat(parseFloat(this.price.net), 2);
@@ -428,9 +441,6 @@ Vue.component('pricebox', {
                 return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + this.display_price;
             }
         },
-        free_price_label () {
-            return [strings.price, this.$root.currency].join(", ")
-        },
         taxline: function () {
             if (this.$root.display_net_prices) {
                 if (this.price.includes_mixed_tax_rate) {
@@ -474,7 +484,7 @@ Vue.component('variation', {
         + '<div :id="variation_price_id" class="pretix-widget-item-price-col">'
         + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="orig_price" '
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="variation.suggested_price"'
-        + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices">'
+        + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices" :item_id="item.id">'
         + '</pricebox>'
         + '<span v-if="!$root.showPrices">&nbsp;</span>'
         + '</div>'
