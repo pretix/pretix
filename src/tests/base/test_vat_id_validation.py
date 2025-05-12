@@ -195,4 +195,27 @@ def test_NO_id_valid():
 
     assert validate_vat_id('NO974760673 MVA', 'NO') == 'NO974760673MVA'
 
+
+@responses.activate
+def test_NO_id_valid_without_prefix():
+    responses.add(
+        responses.GET,
+        'https://data.brreg.no/enhetsregisteret/api/enheter/974760673',
+        body='{"organisasjonsnummer":"974760673","navn":"REGISTERENHETEN I BRØNNØYSUND","organisasjonsform":{"kode":'
+             '"ORGL","beskrivelse":"Organisasjonsledd","_links":{"self":{"href":"https://data.brreg.no/enhetsregisteret/api/'
+             'organisasjonsformer/ORGL"}}},"hjemmeside":"www.brreg.no","postadresse":{"land":"Norge","landkode":"NO","postn'
+             'ummer":"8910","poststed":"BRØNNØYSUND","adresse":["Postboks 900"],"kommune":"BRØNNØY","kommunenummer":"1813"}'
+             ',"registreringsdatoEnhetsregisteret":"1995-08-09","registrertIMvaregisteret":false,"naeringskode1":{"beskrivels'
+             'e":"Generell offentlig administrasjon","kode":"84.110"},"antallAnsatte":455,"overordnetEnhet":"912660680","for'
+             'retningsadresse":{"land":"Norge","landkode":"NO","postnummer":"8900","poststed":"BRØNNØYSUND","adresse":["Havn'
+             'egata 48"],"kommune":"BRØNNØY","kommunenummer":"1813"},"institusjonellSektorkode":{"kode":"6100","beskrivelse'
+             '":"Statsforvaltningen"},"registrertIForetaksregisteret":false,"registrertIStiftelsesregisteret":false,"registr'
+             'ertIFrivillighetsregisteret":false,"konkurs":false,"underAvvikling":false,"underTvangsavviklingEllerTvangsopp'
+             'losning":false,"maalform":"Bokmål","_links":{"self":{"href":"https://data.brreg.no/enhetsregisteret/api/enheter'
+             '/974760673"},"overordnetEnhet":{"href":"https://data.brreg.no/enhetsregisteret/api/enheter/912660680"}}}',
+        status=200
+    )
+
+    assert validate_vat_id('974 760 673 MVA', 'NO') == 'NO974760673MVA'
+
 # No tests for CH currently since it's harder to mock Zeep
