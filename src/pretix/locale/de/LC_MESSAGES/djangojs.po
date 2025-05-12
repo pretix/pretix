@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:08+0000\n"
-"PO-Revision-Date: 2025-04-28 11:32+0000\n"
+"PO-Revision-Date: 2025-05-12 14:33+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -742,7 +742,7 @@ msgstr "Bitte tragen Sie eine Menge für eines der Produkte ein."
 
 #: pretix/static/pretixpresale/js/ui/main.js:510
 msgid "required"
-msgstr "verpflichtend"
+msgstr "erforderlich"
 
 #: pretix/static/pretixpresale/js/ui/main.js:554
 #: pretix/static/pretixpresale/js/ui/main.js:574
