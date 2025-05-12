@@ -1068,10 +1068,10 @@ Vue.component('pretix-widget-event-form', {
         + '<form method="get" :action="$root.voucherFormTarget" target="_blank" '
         + '      v-if="$root.vouchers_exist && !$root.disable_vouchers && !$root.voucher_code">'
         + '<div class="pretix-widget-voucher">'
-        + '<h3 class="pretix-widget-voucher-headline">'+ strings['redeem_voucher'] +'</h3>'
+        + '<h3 class="pretix-widget-voucher-headline" :id="aria_labelledby">'+ strings['redeem_voucher'] +'</h3>'
         + '<div v-if="$root.voucher_explanation_text" class="pretix-widget-voucher-text" v-html="$root.voucher_explanation_text"></div>'
         + '<div class="pretix-widget-voucher-input-wrap">'
-        + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
+        + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'" v-bind:aria-labelledby="aria_labelledby">'
         + '</div>'
         + '<input type="hidden" v-for="p in hiddenParams" :name="p[0]" :value="p[1]" />'
         + '<div class="pretix-widget-voucher-button-wrap">'
@@ -1098,6 +1098,9 @@ Vue.component('pretix-widget-event-form', {
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
+        aria_labelledby: function() {
+            return this.$root.html_id + '-voucher-headline';
+        },
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && (this.$root.events || this.$root.weeks || this.$root.days));
         },
