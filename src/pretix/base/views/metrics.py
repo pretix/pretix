@@ -80,4 +80,4 @@ def serve_metrics(request):
 
     content = "\n".join(output) + "\n"
 
-    return HttpResponse(content)
+    return HttpResponse(content, content_type="text/plain;version=1.0.0;escaping=allow-utf-8")
