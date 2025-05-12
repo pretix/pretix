@@ -133,63 +133,108 @@ class OrganizerDeleteForm(forms.Form):
 class OrganizerUpdateForm(OrganizerForm):
 
     def __init__(self, *args, **kwargs):
-        self.domain = kwargs.pop('domain', False)
         self.change_slug = kwargs.pop('change_slug', False)
         kwargs.setdefault('initial', {})
         self.instance = kwargs['instance']
-        if self.domain and self.instance:
-            initial_domain = self.instance.domains.filter(event__isnull=True).first()
-            if initial_domain:
-                kwargs['initial'].setdefault('domain', initial_domain.domainname)
 
         super().__init__(*args, **kwargs)
         if not self.change_slug:
             self.fields['slug'].widget.attrs['readonly'] = 'readonly'
-        if self.domain:
-            self.fields['domain'] = forms.CharField(
-                max_length=255,
-                label=_('Custom domain'),
-                required=False,
-                help_text=_('You need to configure the custom domain in the webserver beforehand.')
-            )
-
-    def clean_domain(self):
-        d = self.cleaned_data['domain']
-        if d:
-            if d == urlparse(settings.SITE_URL).hostname:
-                raise ValidationError(
-                    _('You cannot choose the base domain of this installation.')
-                )
-            if KnownDomain.objects.filter(domainname=d).exclude(organizer=self.instance.pk,
-                                                                event__isnull=True).exists():
-                raise ValidationError(
-                    _('This domain is already in use for a different event or organizer.')
-                )
-        return d
 
     def clean_slug(self):
         if self.change_slug:
             return self.cleaned_data['slug']
         return self.instance.slug
 
-    def save(self, commit=True):
-        instance = super().save(commit)
 
-        if self.domain:
-            current_domain = instance.domains.filter(event__isnull=True).first()
-            if self.cleaned_data['domain']:
-                if current_domain and current_domain.domainname != self.cleaned_data['domain']:
-                    current_domain.delete()
-                    KnownDomain.objects.create(organizer=instance, domainname=self.cleaned_data['domain'])
-                elif not current_domain:
-                    KnownDomain.objects.create(organizer=instance, domainname=self.cleaned_data['domain'])
-            elif current_domain:
-                current_domain.delete()
-            instance.cache.clear()
-            for ev in instance.events.all():
-                ev.cache.clear()
+class KnownDomainForm(forms.ModelForm):
+    class Meta:
+        model = KnownDomain
+        fields = ["domainname", "mode", "event"]
+        field_classes = {
+            "event": SafeModelChoiceField,
+        }
 
-        return instance
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+        self.fields["event"].queryset = self.organizer.events.all()
+        if self.instance and self.instance.pk:
+            self.fields["domainname"].widget.attrs['readonly'] = 'readonly'
+
+    def clean_domainname(self):
+        if self.instance and self.instance.pk:
+            return self.instance.domainname
+        d = self.cleaned_data['domainname']
+        if d:
+            if d == urlparse(settings.SITE_URL).hostname:
+                raise ValidationError(
+                    _('You cannot choose the base domain of this installation.')
+                )
+            if KnownDomain.objects.filter(domainname=d).exclude(organizer=self.instance.organizer).exists():
+                raise ValidationError(
+                    _('This domain is already in use for a different event or organizer.')
+                )
+        return d
+
+    def clean(self):
+        d = super().clean()
+
+        if d["mode"] == KnownDomain.MODE_ORG_DOMAIN and d["event"]:
+            raise ValidationError(
+                _("Do not choose an event for this mode.")
+            )
+
+        if d["mode"] == KnownDomain.MODE_ORG_ALT_DOMAIN and d["event"]:
+            raise ValidationError(
+                _("Do not choose an event for this mode. You can assign events to this domain in event settings.")
+            )
+
+        if d["mode"] == KnownDomain.MODE_EVENT_DOMAIN and not d["event"]:
+            raise ValidationError(
+                _("You need to choose an event.")
+            )
+
+        return d
+
+
+class BaseKnownDomainFormSet(forms.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['organizer'] = self.organizer
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            organizer=self.organizer,
+        )
+        self.add_fields(form, None)
+        return form
+
+    def clean(self):
+        super().clean()
+        data = [f.cleaned_data for f in self.forms]
+
+        if len([d for d in data if d.get("mode") == KnownDomain.MODE_ORG_DOMAIN and not d.get("DELETE")]) > 1:
+            raise ValidationError(_("You may set only one organizer domain."))
+
+        return data
+
+
+KnownDomainFormset = inlineformset_factory(
+    Organizer, KnownDomain,
+    KnownDomainForm,
+    formset=BaseKnownDomainFormSet,
+    can_order=False, can_delete=True, extra=0
+)
 
 
 class SafeOrderPositionChoiceField(forms.ModelChoiceField):
@@ -477,7 +522,8 @@ class OrganizerSettingsForm(SettingsForm):
         max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         required=False,
         help_text=_('If you provide a logo image, we will by default not show your organization name '
-                    'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                    'in the page header. If you use a white background, we show your logo with a size of up '
+                    'to 1140x120 pixels. Otherwise the maximum size is 1120x120 pixels. You '
                     'can increase the size with the setting below. We recommend not using small details on the picture '
                     'as it will be resized on smaller screens.')
     )
@@ -998,6 +1044,15 @@ class SSOProviderForm(I18nModelForm):
         label=pgettext_lazy('sso_oidc', 'Phone field'),
         required=False,
     )
+    config_oidc_query_parameters = forms.CharField(
+        label=pgettext_lazy('sso_oidc', 'Query parameters'),
+        help_text=pgettext_lazy('sso_oidc', 'Optional query parameters, that will be added to calls to '
+                                            'the authorization endpoint. Enter as: {example}'.format(
+                                                example='<code>param1=value1&amp;param2=value2</code>'
+                                            ),
+                                ),
+        required=False,
+    )
 
     class Meta:
         model = CustomerSSOProvider
@@ -1059,7 +1114,7 @@ class SSOClientForm(I18nModelForm):
     class Meta:
         model = CustomerSSOClient
         fields = ['is_active', 'name', 'client_id', 'client_type', 'authorization_grant_type', 'redirect_uris',
-                  'allowed_scopes']
+                  'allowed_scopes', 'require_pkce']
         widgets = {
             'authorization_grant_type': forms.RadioSelect,
             'client_type': forms.RadioSelect,

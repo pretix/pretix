@@ -35,7 +35,7 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -43,6 +43,7 @@ from django.utils.translation import gettext as _
 from django_countries.serializers import CountryFieldMixin
 from pytz import common_timezones
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
@@ -377,6 +378,8 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                     if prop.name not in meta_data:
                         current_object.delete()
 
+            instance._prefetched_objects_cache.clear()
+
         # Item Meta properties
         if item_meta_properties is not None:
             current = list(event.item_meta_properties.all())
@@ -396,6 +399,8 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             for prop in current:
                 if prop.name not in list(item_meta_properties.keys()):
                     prop.delete()
+
+            instance._prefetched_objects_cache.clear()
 
         # Seats
         if seat_category_mapping is not None or ('seating_plan' in validated_data and validated_data['seating_plan'] is None):
@@ -436,7 +441,8 @@ class CloneEventSerializer(EventSerializer):
         testmode = validated_data.pop('testmode', None)
         has_subevents = validated_data.pop('has_subevents', None)
         tz = validated_data.pop('timezone', None)
-        sales_channels = validated_data.pop('sales_channels', None)
+        all_sales_channels = validated_data.pop('all_sales_channels', None)
+        limit_sales_channels = validated_data.pop('limit_sales_channels', None)
         date_admission = validated_data.pop('date_admission', None)
         new_event = super().create({**validated_data, 'plugins': None})
 
@@ -449,8 +455,9 @@ class CloneEventSerializer(EventSerializer):
             new_event.is_public = is_public
         if testmode is not None:
             new_event.testmode = testmode
-        if sales_channels is not None:
-            new_event.sales_channels = sales_channels
+        if all_sales_channels is not None or limit_sales_channels is not None:
+            new_event.all_sales_channels = all_sales_channels
+            new_event.limit_sales_channels.set(limit_sales_channels)
         if has_subevents is not None:
             new_event.has_subevents = has_subevents
         if has_subevents is not None:
@@ -678,8 +685,8 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
 
     class Meta:
         model = TaxRule
-        fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name',
-                  'keep_gross_if_rate_changes', 'custom_rules')
+        fields = ('id', 'name', 'rate', 'code', 'price_includes_tax', 'eu_reverse_charge', 'home_country',
+                  'internal_name', 'keep_gross_if_rate_changes', 'custom_rules')
 
 
 class EventSettingsSerializer(SettingsSerializer):
@@ -927,6 +934,8 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_from_country',
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
+        'order_phone_asked',
+        'order_phone_required',
         'name_scheme',
         'reusable_media_type_barcode',
         'reusable_media_type_nfc_uid',
@@ -987,6 +996,40 @@ def prefetch_by_id(items, qs, id_attr, target_attr):
         result = qs.in_bulk(id_list=ids)
         for item in items:
             setattr(item, target_attr, result.get(getattr(item, id_attr)))
+
+
+class SeatBulkBlockInputSerializer(serializers.Serializer):
+    ids = serializers.ListField(child=serializers.IntegerField(), required=False, allow_empty=True)
+    seat_guids = serializers.ListField(child=serializers.CharField(), required=False, allow_empty=True)
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+
+        if data.get("seat_guids") and data.get("ids"):
+            raise ValidationError("Please pass either seat_guids or ids.")
+
+        if data.get("seat_guids"):
+            seat_ids = data["seat_guids"]
+            if len(seat_ids) > 10000:
+                raise ValidationError({"seat_guids": ["Please do not pass over 10000 seats."]})
+
+            seats = {s.seat_guid: s for s in self.context["queryset"].filter(seat_guid__in=seat_ids)}
+            for s in seat_ids:
+                if s not in seats:
+                    raise ValidationError({"seat_guids": [f"The seat '{s}' does not exist."]})
+        elif data.get("ids"):
+            seat_ids = data["ids"]
+            if len(seat_ids) > 10000:
+                raise ValidationError({"ids": ["Please do not pass over 10000 seats."]})
+
+            seats = self.context["queryset"].in_bulk(seat_ids)
+            for s in seat_ids:
+                if s not in seats:
+                    raise ValidationError({"ids": [f"The seat '{s}' does not exist."]})
+        else:
+            raise ValidationError("Please pass either seat_guids or ids.")
+
+        return {"seats": seats.values()}
 
 
 class SeatSerializer(I18nAwareModelSerializer):

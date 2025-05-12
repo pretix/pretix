@@ -134,7 +134,8 @@ from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
 from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
-from pretix.helpers.format import format_map
+from pretix.helpers.format import SafeFormatter, format_map
+from pretix.helpers.hierarkey import clean_filename
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
 
@@ -170,6 +171,26 @@ class OrderSearch(OrderSearchMixin, EventPermissionRequiredMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['forms'] = self.get_forms()
         return ctx
+
+    def post(self, request, *args, **kwargs):
+        all_valid = True
+        for f in self.get_forms():
+            if not f.is_valid():
+                all_valid = False
+
+        if all_valid:
+            data = request.POST.copy()
+            data.pop('csrfmiddlewaretoken', None)
+            return redirect(reverse(
+                "control:event.orders",
+                kwargs={
+                    "event": request.event.slug,
+                    "organizer": request.event.organizer.slug,
+                }
+            ) + '?' + data.urlencode())
+        else:
+            messages.error(request, _("We could not process your input. See below for details."))
+            return self.get(request, *args, **kwargs)
 
 
 class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, AsyncFormView):
@@ -479,7 +500,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
-            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'True')
+            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'user_paid', 'True')
         ) and self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING) and (
             not self.order.invoices.exists()
             or self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
@@ -1584,7 +1605,7 @@ class OrderInvoiceCreate(OrderView):
                 order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
                 and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
             )
-            if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(order):
+            if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'user_paid', 'True') or not invoice_qualified(order):
                 messages.error(self.request, _('You cannot generate an invoice for this order.'))
             elif has_inv:
                 messages.error(self.request, _('An invoice for this order already exists.'))
@@ -2241,6 +2262,8 @@ class OrderContactChange(OrderView):
                 changed = True
                 self.order.secret = generate_secret()
                 for op in self.order.all_positions.all():
+                    op.web_secret = generate_secret()
+                    op.save(update_fields=["web_secret"])
                     assign_ticket_secret(
                         self.request.event, position=op, force_invalidate=True, save=True
                     )
@@ -2351,7 +2374,7 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                 'subject': mark_safe(_('Subject: {subject}').format(
                     subject=prefix_subject(order.event, escape(email_subject), highlight=True)
                 )),
-                'html': markdown_compile_email(email_content)
+                'html': format_map(markdown_compile_email(email_content), email_context, mode=SafeFormatter.MODE_RICH_TO_HTML)
             }
             return self.get(self.request, *self.args, **self.kwargs)
         else:
@@ -2362,6 +2385,9 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                     self.request.user, auto_email=False,
                     attach_tickets=form.cleaned_data.get('attach_tickets', False),
                     invoices=form.cleaned_data.get('attach_invoices', []),
+                    attach_other_files=[a for a in [
+                        self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+                    ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
                 )
                 messages.success(self.request,
                                  _('Your message has been queued and will be sent to {}.'.format(order.email)))
@@ -2430,6 +2456,9 @@ class OrderPositionSendMail(OrderSendMail):
                     'pretix.event.order.position.email.custom_sent',
                     self.request.user,
                     attach_tickets=form.cleaned_data.get('attach_tickets', False),
+                    attach_other_files=[a for a in [
+                        self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+                    ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
                 )
                 messages.success(self.request,
                                  _('Your message has been queued and will be sent to {}.'.format(position.attendee_email)))
@@ -2458,6 +2487,23 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
             Q(action_type__contains="order.position.email")
         )
         return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        for l in ctx["logs"]:
+            invoice_ids = l.parsed_data.get("invoices")
+            if invoice_ids:
+                if type(invoice_ids) is int:
+                    invoice_ids = [invoice_ids]
+                l.parsed_invoices = Invoice.objects.filter(
+                    event=self.request.event,
+                    pk__in=invoice_ids,
+                )
+            if l.parsed_data.get("attach_other_files"):
+                l.parsed_other_files = [
+                    clean_filename(os.path.basename(f)) for f in l.parsed_data["attach_other_files"]
+                ]
+        return ctx
 
 
 class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):

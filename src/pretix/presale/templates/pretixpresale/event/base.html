@@ -1,4 +1,5 @@
 {% extends "pretixpresale/base.html" %}
+{% load urlreplace %}
 {% load i18n %}
 {% load static %}
 {% load thumb %}
@@ -14,6 +15,8 @@
 {% block custom_header %}
     {% if event.settings.meta_noindex %}
         <meta name="robots" content="noindex, nofollow">
+    {% elif "date" in request.GET or "old" in request.GET %}
+        <meta name="robots" content="noindex, follow">
     {% endif %}
     <meta property="og:type" content="website" />
     {% if social_image %}
@@ -44,7 +47,7 @@
                         <nav class="locales" aria-label="{% trans "select language" %}">
                             <ul>
                             {% for l in languages %}
-                                <li><a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}"
+                                <li><a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{% url_replace request "locale" "" %}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}"
                                     aria-label="{% language l.code %}{% blocktrans trimmed with language=l.name_local %}
                                         Website in {{ language }}
                                         {% endblocktrans %}{% endlanguage %}">{{ l.name_local }}</a></li>
@@ -81,17 +84,17 @@
             {% endif %}
             {% if event_logo and event_logo_image_large %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
-                   aria-label="{% trans 'Homepage' %}" title="{% trans 'Homepage' %}">
+                   title="{% trans 'Homepage' %}">
                     <img src="{{ event_logo|thumb:'1170x5000' }}" alt="{{ event.name }}" class="event-logo" />
                 </a>
             {% elif event_logo %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
-                   aria-label="{% trans 'Homepage' %}" title="{% trans 'Homepage' %}">
+                   title="{% trans 'Homepage' %}">
                     <img src="{{ event_logo|thumb:'5000x120' }}" alt="{{ event.name }}" class="event-logo" />
                 </a>
             {% else %}
                 <h1>
-                    <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}" aria-label="{% trans 'Homepage' %}">{{ event.name }}</a>
+                    <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">{{ event.name }}</a>
                     {% if request.event.settings.show_dates_on_frontpage and not event.has_subevents %}
                         <small>{{ event.get_date_range_display_as_html }}</small>
                     {% endif %}

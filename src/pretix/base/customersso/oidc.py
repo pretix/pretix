@@ -24,7 +24,7 @@ import hashlib
 import logging
 import time
 from datetime import datetime
-from urllib.parse import urlencode, urljoin
+from urllib.parse import parse_qsl, urlencode, urljoin
 
 import jwt
 import requests
@@ -139,11 +139,16 @@ def oidc_validate_and_complete_config(config):
                 )
             )
 
+    if "query_parameters" in config and config["query_parameters"]:
+        config["query_parameters"] = urlencode(
+            parse_qsl(config["query_parameters"])
+        )
+
     config['provider_config'] = provider_config
     return config
 
 
-def oidc_authorize_url(provider, state, redirect_uri):
+def oidc_authorize_url(provider, state, redirect_uri, pkce_code_verifier):
     endpoint = provider.configuration['provider_config']['authorization_endpoint']
     params = {
         # https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
@@ -154,10 +159,18 @@ def oidc_authorize_url(provider, state, redirect_uri):
         'state': state,
         'redirect_uri': redirect_uri,
     }
+
+    if "query_parameters" in provider.configuration and provider.configuration["query_parameters"]:
+        params.update(parse_qsl(provider.configuration["query_parameters"]))
+
+    if pkce_code_verifier and "S256" in provider.configuration['provider_config'].get('code_challenge_methods_supported', []):
+        params["code_challenge"] = base64.urlsafe_b64encode(hashlib.sha256(pkce_code_verifier.encode()).digest()).decode().rstrip("=")
+        params["code_challenge_method"] = "S256"
+
     return endpoint + '?' + urlencode(params)
 
 
-def oidc_validate_authorization(provider, code, redirect_uri):
+def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier):
     endpoint = provider.configuration['provider_config']['token_endpoint']
 
     # Wall of shame and RFC ignorant IDPs
@@ -178,6 +191,9 @@ def oidc_validate_authorization(provider, code, redirect_uri):
         'code': code,
         'redirect_uri': redirect_uri,
     }
+
+    if pkce_code_verifier and "S256" in provider.configuration['provider_config'].get('code_challenge_methods_supported', []):
+        params["code_verifier"] = pkce_code_verifier
 
     if token_endpoint_auth_method == 'client_secret_post':
         params['client_id'] = provider.configuration['client_id']

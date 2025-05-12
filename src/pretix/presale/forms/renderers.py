@@ -33,6 +33,7 @@ def render_label(content, label_for=None, label_class=None, label_title='', labe
     """
     Render a label with content
     """
+    tag = 'label'
     attrs = attrs or {}
     if label_for:
         attrs['for'] = label_for
@@ -58,15 +59,16 @@ def render_label(content, label_for=None, label_class=None, label_title='', labe
         attrs['class'] += ' label-empty'
         # usually checkboxes have overall empty labels and special labels per checkbox
         # => remove for-attribute as well as "required"-text appended to label
+        tag = 'div'
         if 'for' in attrs:
             del attrs['for']
-    else:
-        opt += '<i class="sr-only label-required">, {}</i>'.format(pgettext('form', 'required')) if not optional else ''
+    elif not optional:
+        opt += '<i class="label-required">{}</i>'.format(pgettext('form', 'required'))
 
     builder = '<{tag}{attrs}>{content}{opt}</{tag}>'
     return format_html(
         builder,
-        tag='label',
+        tag=tag,
         attrs=mark_safe(flatatt(attrs)) if attrs else '',
         opt=mark_safe(opt),
         content=text_value(content),
@@ -155,17 +157,28 @@ class CheckoutFieldRenderer(FieldRenderer):
             label_class=self.get_label_class(),
             label_id=label_id,
             attrs=attrs,
-            optional=not required and not isinstance(self.widget, CheckboxInput),
+            optional=not required,
             is_valid=is_valid
         ) + html
         return html
 
     def put_inside_label(self, html):
         content = "{field} {label}".format(field=html, label=self.label)
+
+        if hasattr(self.field.field, '_show_required'):
+            # e.g. payment settings forms where a field is only required if the payment provider is active
+            required = self.field.field._show_required
+        elif hasattr(self.field.field, '_required'):
+            # e.g. payment settings forms where a field is only required if the payment provider is active
+            required = self.field.field._required
+        else:
+            required = self.field.field.required
+
         return render_label(
             content=mark_safe(content),
             label_for=self.field.id_for_label,
             label_title=escape(strip_tags(self.field_help)),
+            optional=not required,
         )
 
     def wrap_label_and_field(self, html):

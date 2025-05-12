@@ -22,6 +22,7 @@
 import logging
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.crypto import get_random_string
@@ -77,6 +78,7 @@ class CustomerSerializer(I18nAwareModelSerializer):
     last_login = serializers.DateTimeField(read_only=True)
     date_joined = serializers.DateTimeField(read_only=True)
     last_modified = serializers.DateTimeField(read_only=True)
+    locale = serializers.ChoiceField(choices=settings.LANGUAGES, default='en')
 
     class Meta:
         model = Customer

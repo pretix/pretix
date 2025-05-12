@@ -60,6 +60,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import ListView, TemplateView, View
 
+from pretix.base.auth import has_event_access_permission
 from pretix.base.models import (
     CachedTicket, Checkin, GiftCard, Invoice, Order, OrderPosition, Quota,
     TaxRule,
@@ -85,7 +86,6 @@ from pretix.base.signals import order_modified, register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
-from pretix.helpers import OF_SELF
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
@@ -205,10 +205,8 @@ class TicketPageMixin:
 
         ctx['download_buttons'] = self.download_buttons
 
-        ctx['backend_user'] = (
-            self.request.user.is_authenticated
-            and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
-        )
+        ctx['backend_user'] = has_event_access_permission(self.request, 'can_view_orders')
+
         return ctx
 
     @cached_property
@@ -446,22 +444,8 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
-            with transaction.atomic():
-                order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
-                i = order.invoices.filter(is_cancellation=False).last()
-                has_active_invoice = i and not i.canceled
-                if (not has_active_invoice or order.invoice_dirty) and invoice_qualified(order):
-                    if self.request.event.settings.get('invoice_generate') == 'True' or (
-                            self.request.event.settings.get('invoice_generate') == 'paid' and self.payment.payment_provider.requires_invoice_immediately):
-                        if has_active_invoice:
-                            generate_cancellation(i)
-                        i = generate_invoice(order)
-                        order.log_action('pretix.event.order.invoice.generated', data={
-                            'invoice': i.pk
-                        })
-                        messages.success(self.request, _('An invoice has been generated.'))
-                self.payment.process_initiated = True
-                self.payment.save(update_fields=['process_initiated'])
+            self.payment.process_initiated = True
+            self.payment.save(update_fields=['process_initiated'])
             resp = self.payment.payment_provider.execute_payment(request, self.payment)
         except PaymentException as e:
             messages.error(request, str(e))
@@ -675,7 +659,12 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 request.session['payment_change_{}'.format(self.order.pk)] = '1'
 
                 with transaction.atomic():
-                    old_fee, new_fee, fee, newpayment = change_payment_provider(self.order, p['provider'], None)
+                    old_fee, new_fee, fee, newpayment, new_invoice_created = change_payment_provider(
+                        self.order, p['provider'], None
+                    )
+
+                if new_invoice_created:
+                    messages.success(self.request, _('An invoice has been generated.'))
 
                 resp = p['provider'].payment_prepare(request, newpayment)
                 if isinstance(resp, str):
@@ -710,7 +699,7 @@ def can_generate_invoice(event, order, ignore_payments=False):
         and (
             event.settings.get('invoice_generate') in ('user', 'True')
             or (
-                event.settings.get('invoice_generate') == 'paid'
+                event.settings.get('invoice_generate') in ('paid', 'user_paid')
                 and order.status == Order.STATUS_PAID
             )
         ) and (
@@ -1410,6 +1399,7 @@ class OrderChangeMixin:
                                         gross=a.price,
                                         tax=a.tax_value,
                                         name=a.item.tax_rule.name if a.item.tax_rule else "",
+                                        code=a.item.tax_rule.code if a.item.tax_rule else None,
                                         rate=a.tax_rate,
                                     )
                                 else:
@@ -1424,6 +1414,7 @@ class OrderChangeMixin:
                                     gross=a.price,
                                     tax=a.tax_value,
                                     name=a.item.tax_rule.name if a.item.tax_rule else "",
+                                    code=a.item.tax_rule.name if a.item.tax_rule else None,
                                     rate=a.tax_rate,
                                 )
                             else:
@@ -1648,6 +1639,13 @@ class OrderChangeMixin:
             if self.order.expires < now():
                 raise OrderError(_('You may not change your order in a way that increases the total price since '
                                    'payments are no longer being accepted for this event.'))
+
+        if ocm._totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PENDING:
+            for p in self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_PENDING):
+                if not p.payment_provider.abort_pending_allowed:
+                    raise OrderError(_('You may not change your order in a way that requires additional payment while '
+                                       'we are processing your current payment. Please check back after your current '
+                                       'payment has been accepted.'))
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')

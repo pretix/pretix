@@ -35,7 +35,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from decimal import Decimal
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
 
 import pycountry
@@ -63,6 +63,7 @@ from pretix.base.forms import (
 )
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
+from pretix.base.models.tax import TAX_CODE_LISTS
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
@@ -76,8 +77,10 @@ from pretix.control.forms import (
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.countries import CachedCountries
-from pretix.multidomain.models import KnownDomain
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.models import AlternativeDomainAssignment, KnownDomain
+from pretix.multidomain.urlreverse import (
+    build_absolute_uri, get_organizer_domain,
+)
 from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.presale.style import get_fonts
 
@@ -228,7 +231,7 @@ class EventWizardBasicsForm(I18nModelForm):
             raise ValidationError({
                 'timezone': _('Your default locale must be specified.')
             })
-        if not data.get("no_taxes") and not data.get("tax_rate"):
+        if not data.get("no_taxes") and data.get("tax_rate") is None:
             raise ValidationError({
                 'tax_rate': _('You have not specified a tax rate. If you do not want us to compute sales taxes, please '
                               'check "{field}" above.').format(field=self.fields["no_taxes"].label)
@@ -363,14 +366,9 @@ class EventUpdateForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         self.change_slug = kwargs.pop('change_slug', False)
-        self.domain = kwargs.pop('domain', False)
 
         kwargs.setdefault('initial', {})
         self.instance = kwargs['instance']
-        if self.domain and self.instance:
-            initial_domain = self.instance.domains.first()
-            if initial_domain:
-                kwargs['initial'].setdefault('domain', initial_domain.domainname)
 
         super().__init__(*args, **kwargs)
         if not self.change_slug:
@@ -379,48 +377,54 @@ class EventUpdateForm(I18nModelForm):
         self.fields['location'].widget.attrs['placeholder'] = _(
             'Sample Conference Center\nHeidelberg, Germany'
         )
-        if self.domain:
+
+        try:
             self.fields['domain'] = forms.CharField(
                 max_length=255,
-                label=_('Custom domain'),
+                label=_('Domain'),
+                initial=self.instance.domain.domainname,
                 required=False,
-                help_text=_('You need to configure the custom domain in the webserver beforehand.')
+                disabled=True,
+                help_text=_('You can configure this in your organizer settings.')
+            )
+        except KnownDomain.DoesNotExist:
+            domain = get_organizer_domain(self.instance.organizer)
+            try:
+                current_domain_assignment = self.instance.alternative_domain_assignment
+            except AlternativeDomainAssignment.DoesNotExist:
+                current_domain_assignment = None
+            self.fields['domain'] = forms.ChoiceField(
+                label=_('Domain'),
+                help_text=_('You can add more domains in your organizer account.'),
+                choices=[('', _('Same as organizer account') + (f" ({domain})" if domain else ""))] + [
+                    (d.domainname, d.domainname) for d in self.instance.organizer.domains.filter(mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
+                ],
+                initial=current_domain_assignment.domain_id if current_domain_assignment else "",
+                required=False,
             )
         self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.all()
         self.fields['limit_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(self.event, attrs={
             'data-inverse-dependency': '<[name$=all_sales_channels]',
         }, choices=self.fields['limit_sales_channels'].widget.choices)
 
-    def clean_domain(self):
-        d = self.cleaned_data['domain']
-        if d:
-            if d == urlparse(settings.SITE_URL).hostname:
-                raise ValidationError(
-                    _('You cannot choose the base domain of this installation.')
-                )
-            if KnownDomain.objects.filter(domainname=d).exclude(event=self.instance.pk).exists():
-                raise ValidationError(
-                    _('This domain is already in use for a different event or organizer.')
-                )
-        return d
-
     def save(self, commit=True):
         instance = super().save(commit)
 
-        if self.domain:
-            current_domain = instance.domains.first()
-            if self.cleaned_data['domain']:
-                if current_domain and current_domain.domainname != self.cleaned_data['domain']:
-                    current_domain.delete()
-                    KnownDomain.objects.create(
-                        organizer=instance.organizer, event=instance, domainname=self.cleaned_data['domain']
-                    )
-                elif not current_domain:
-                    KnownDomain.objects.create(
-                        organizer=instance.organizer, event=instance, domainname=self.cleaned_data['domain']
-                    )
-            elif current_domain:
-                current_domain.delete()
+        try:
+            current_domain_assignment = instance.alternative_domain_assignment
+        except AlternativeDomainAssignment.DoesNotExist:
+            current_domain_assignment = None
+        if self.cleaned_data['domain'] and not hasattr(instance, 'domain'):
+            domain = self.instance.organizer.domains.get(mode=KnownDomain.MODE_ORG_ALT_DOMAIN, domainname=self.cleaned_data["domain"])
+            AlternativeDomainAssignment.objects.update_or_create(
+                event=instance,
+                defaults={
+                    "domain": domain,
+                }
+            )
+            instance.cache.clear()
+        elif current_domain_assignment:
+            current_domain_assignment.delete()
             instance.cache.clear()
 
         return instance
@@ -1382,7 +1386,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         self.event.meta_values_cached = self.event.meta_values.select_related('property').all()
 
         for k, v in self.base_context.items():
-            self._set_field_placeholders(k, v)
+            self._set_field_placeholders(k, v, rich=k.startswith('mail_text_'))
 
         for k, v in list(self.fields.items()):
             if k.endswith('_attendee') and not event.settings.attendee_emails_asked:
@@ -1471,7 +1475,9 @@ class CountriesAndEUAndStates(CountriesAndEU):
     def __iter__(self):
         for country_code, country_name in super().__iter__():
             yield country_code, country_name
-            if country_code in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            if country_code in COUNTRIES_WITH_STATE_IN_ADDRESS and country_code not in {"IT"}:
+                # Special case for Italy: Provinces are used in addresses, but are too low-level to
+                # have influence on taxes, so we avoid the bloat in the list of selectable countries.
                 types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[country_code]
                 yield from sorted(((state.code, country_name + " - " + state.name)
                                    for state in pycountry.subdivisions.get(country_code=country_code)
@@ -1501,6 +1507,11 @@ class TaxRuleLineForm(I18nForm):
             ('require_approval', _('Order requires approval')),
         ],
     )
+    code = forms.ChoiceField(
+        label=_("Tax code"),
+        choices=[("", _("Default tax code")), *TAX_CODE_LISTS],
+        required=False,
+    )
     rate = forms.DecimalField(
         label=_('Deviating tax rate'),
         max_digits=10, decimal_places=2,
@@ -1515,6 +1526,43 @@ class TaxRuleLineForm(I18nForm):
         })
     )
 
+    def __init__(self, *args, **kwargs):
+        self.parent_form = kwargs.pop("parent_form")
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        d = super().clean()
+
+        parent_code = self.parent_form.cleaned_data.get("code")
+        parent_rate = self.parent_form.cleaned_data.get("rate")
+
+        code = d.get("code") or parent_code
+        rate = d.get("rate")
+        if rate is None:
+            rate = parent_rate
+
+        if d.get("action") in ("reverse", "no", "block") and d.get("rate"):
+            raise ValidationError(_("A combination of this calculation mode with a non-zero tax rate does not make sense."))
+
+        if d.get("action") == "reverse" and d.get("code") and code != "AE":
+            # Reverse charge but code is not reverse charge -- this is the one case we ignore if the "default code"
+            # is used because it is the one scenario we can auto-fix
+            raise ValidationError(_("This combination of calculation mode and tax code does not make sense."))
+
+        if d.get("action") == "no" and code and code.split("/")[0] in ("S", "AE", "L", "M", "B"):
+            # No VAT but code indicates VAT
+            raise ValidationError(_("This combination of calculation mode and tax code does not make sense."))
+
+        if d.get("action") == "vat" and code and rate != Decimal("0.00") and code.split("/")[0] in ("O", "E", "Z", "G", "K", "AE"):
+            # VAT, but code indicates exempt
+            raise ValidationError(_("A combination of this tax code with a non-zero tax rate does not make sense."))
+
+        if d.get("action") == "vat" and code and rate == Decimal("0.00") and code.split("/")[0] in ("S", "L", "M", "B"):
+            # no VAT, but code indicates non-exempt
+            raise ValidationError(_("A combination of this tax code with a zero tax rate does not make sense."))
+
+        return d
+
 
 class I18nBaseFormSet(I18nFormSetMixin, forms.BaseFormSet):
     # compatibility shim for django-i18nfield library
@@ -1526,8 +1574,16 @@ class I18nBaseFormSet(I18nFormSetMixin, forms.BaseFormSet):
         super().__init__(*args, **kwargs)
 
 
+class BaseTaxRuleLineFormSet(I18nBaseFormSet):
+
+    def __init__(self, *args, **kwargs):
+        self.parent_form = kwargs.pop('parent_form')
+        super().__init__(*args, **kwargs)
+        self.form_kwargs['parent_form'] = self.parent_form
+
+
 TaxRuleLineFormSet = formset_factory(
-    TaxRuleLineForm, formset=I18nBaseFormSet,
+    TaxRuleLineForm, formset=BaseTaxRuleLineFormSet,
     can_order=True, can_delete=True, extra=0
 )
 
@@ -1535,7 +1591,16 @@ TaxRuleLineFormSet = formset_factory(
 class TaxRuleForm(I18nModelForm):
     class Meta:
         model = TaxRule
-        fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name', 'keep_gross_if_rate_changes']
+        fields = [
+            'name',
+            'rate',
+            'price_includes_tax',
+            'code',
+            'eu_reverse_charge',
+            'home_country',
+            'internal_name',
+            'keep_gross_if_rate_changes'
+        ]
 
 
 class WidgetCodeForm(forms.Form):

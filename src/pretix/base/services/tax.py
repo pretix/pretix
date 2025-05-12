@@ -62,6 +62,9 @@ class VATIDTemporaryError(VATIDError):
 
 def _validate_vat_id_NO(vat_id, country_code):
     # Inspired by vat_moss library
+    if not vat_id.startswith("NO"):
+        # prefix is not usually used in Norway, but expected by vat_moss library
+        vat_id = "NO" + vat_id
     try:
         vat_id = vat_moss.id.normalize(vat_id)
     except ValueError:
@@ -152,7 +155,7 @@ def _validate_vat_id_EU(vat_id, country_code):
         valid_elements = envelope.findall('./soap:Body/vat:checkVatResponse/vat:valid', namespaces)
         if not valid_elements:
             logger.error(
-                f'VAT ID checking failed for {country_code} due to missing <valid> tag'
+                f'VAT ID checking failed for {country_code} due to missing <valid> tag, response was: {return_xml}'
             )
             raise VATIDTemporaryError(error_messages['unavailable'])
 

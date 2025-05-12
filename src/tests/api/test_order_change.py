@@ -475,6 +475,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
                 'gross_value': '23.00',
                 'tax_value': '0.00',
                 'tax_rate': '0.00',
+                'tax_code': None,
                 'tax_name': ''
             },
             {
@@ -492,6 +493,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
                 'gross_value': '0.25',
                 'tax_value': '0.05',
                 'tax_rate': '19.00',
+                'tax_code': None,
                 'tax_name': ''
             }
         ],
@@ -524,6 +526,7 @@ def test_order_regenerate_secrets(token_client, organizer, event, order):
     s = order.secret
     with scopes_disabled():
         ps = order.positions.first().secret
+        psw = order.positions.first().web_secret
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/regenerate_secrets/'.format(
             organizer.slug, event.slug, order.code
@@ -534,6 +537,7 @@ def test_order_regenerate_secrets(token_client, organizer, event, order):
     assert s != order.secret
     with scopes_disabled():
         assert ps != order.positions.first().secret
+        assert psw != order.positions.first().web_secret
 
 
 @pytest.mark.django_db
@@ -541,6 +545,7 @@ def test_position_regenerate_secrets(token_client, organizer, event, order):
     with scopes_disabled():
         p = order.positions.first()
         ps = p.secret
+        psw = p.web_secret
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/regenerate_secrets/'.format(
             organizer.slug, event.slug, p.pk,
@@ -550,6 +555,7 @@ def test_position_regenerate_secrets(token_client, organizer, event, order):
     p.refresh_from_db()
     with scopes_disabled():
         assert ps != p.secret
+        assert psw != p.web_secret
 
 
 @pytest.mark.django_db
@@ -1463,6 +1469,31 @@ def test_position_update_change_price_and_tax_rule(token_client, organizer, even
 
 
 @pytest.mark.django_db
+def test_position_update_secret(token_client, organizer, event, order, item):
+    with scopes_disabled():
+        order.positions.create(item=item, price=Decimal('23.00'), secret='alreadyused')
+        p = order.positions.first()
+        psw = p.web_secret
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, p.pk,
+        ), format='json', data={'secret': 'nobodyknows'}
+    )
+    assert resp.status_code == 200
+    p.refresh_from_db()
+    with scopes_disabled():
+        assert 'nobodyknows' == p.secret
+        assert psw == p.web_secret
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, p.pk,
+        ), format='json', data={'secret': 'alreadyused'}
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
 def test_position_add_simple(token_client, organizer, event, order, quota, item):
     with scopes_disabled():
         assert order.positions.count() == 1
@@ -1791,6 +1822,13 @@ def test_order_change_cancel_and_create(token_client, organizer, event, order, q
                 'price': '99.99'
             },
         ],
+        'create_fees': [
+            {
+                'value': '5.99',
+                'fee_type': 'service',
+                'description': 'Service fee',
+            },
+        ],
         'cancel_fees': [
             {
                 'fee': f.pk,
@@ -1812,6 +1850,11 @@ def test_order_change_cancel_and_create(token_client, organizer, event, order, q
         assert p_new.price == Decimal('99.99')
         f.refresh_from_db()
         assert f.canceled
+        f_new = order.all_fees.get(fee_type=OrderFee.FEE_TYPE_SERVICE)
+        assert f_new.value == Decimal('5.99')
+        assert f_new.description == "Service fee"
+        assert f_new.internal_type == ""
+        assert f_new.tax_value == Decimal('0.00')
 
 
 @pytest.mark.django_db

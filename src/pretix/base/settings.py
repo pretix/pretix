@@ -56,6 +56,7 @@ from django.utils.translation import (
 from django_countries.fields import Country
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
+from i18nfield.rest_framework import I18nField
 from i18nfield.strings import LazyI18nString
 from phonenumbers import PhoneNumber, parse
 from rest_framework import serializers
@@ -63,7 +64,7 @@ from rest_framework import serializers
 from pretix.api.serializers.fields import (
     ListMultipleChoiceField, UploadedFileField,
 )
-from pretix.api.serializers.i18n import I18nField, I18nURLField
+from pretix.api.serializers.i18n import I18nURLField
 from pretix.base.forms import I18nMarkdownTextarea, I18nURLFormField
 from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
 from pretix.base.reldate import (
@@ -1039,6 +1040,7 @@ DEFAULTS = {
                 ('False', _('Do not generate invoices')),
                 ('admin', _('Only manually in admin panel')),
                 ('user', _('Automatically on user request')),
+                ('user_paid', _('Automatically on user request for paid orders')),
                 ('True', _('Automatically for all created orders')),
                 ('paid', _('Automatically on payment or when required by payment method')),
             ),
@@ -1051,6 +1053,7 @@ DEFAULTS = {
                 ('paid', _('Automatically after payment or when required by payment method')),
                 ('True', _('Automatically before payment for all created orders')),
                 ('user', _('Automatically on user request')),
+                ('user_paid', _('Automatically on user request for paid orders')),
                 ('admin', _('Only manually in admin panel')),
             ),
             help_text=_("Invoices will never be automatically generated for free orders.")
@@ -1305,10 +1308,13 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Show event times and dates on the ticket shop"),
-            help_text=_("If disabled, no date or time will be shown on the ticket shop's front page. This settings "
-                        "also affects a few other locations, however it should not be expected that the date of the "
-                        "event is shown nowhere to users."),
+            label=_("This shop represents an event"),
+            help_text=_(
+                "Uncheck this box if you are only selling something that has no specific date, such as gift cards or a "
+                "ticket that can be used any time. The system will then stop showing the event date in some places like "
+                "the event start page. Note that pretix still is a system built around events and the date may still "
+                "show up in other places."
+            ),
         )
     },
     'show_date_to': {
@@ -2102,7 +2108,7 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Event description"),
-            widget=I18nMarkdownTextarea,
+            widget=I18nTextarea,
             help_text=_(
                 "You can use this to share information with your attendees, such as travel information or the link to a digital event. "
                 "If you keep it empty, we will put a link to the event shop, the admission time, and your organizer name in there. "
@@ -2877,7 +2883,8 @@ Your {organizer} team"""))  # noqa: W291
             ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('If you provide a logo image, we will by default not show your event name and date '
-                        'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                        'in the page header. If you use a white background, we show your logo with a size of up '
+                        'to 1140x120 pixels. Otherwise the maximum size is 1120x120 pixels. You '
                         'can increase the size with the setting below. We recommend not using small details on the picture '
                         'as it will be resized on smaller screens.')
         ),
@@ -2920,7 +2927,8 @@ Your {organizer} team"""))  # noqa: W291
             ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('If you provide a logo image, we will by default not show your organization name '
-                        'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                        'in the page header. If you use a white background, we show your logo with a size of up '
+                        'to 1140x120 pixels. Otherwise the maximum size is 1120x120 pixels. You '
                         'can increase the size with the setting below. We recommend not using small details on the picture '
                         'as it will be resized on smaller screens.')
         ),
@@ -2981,7 +2989,7 @@ Your {organizer} team"""))  # noqa: W291
             help_text=_('This picture will be used as a preview if you post links to your ticket shop on social media. '
                         'Facebook advises to use a picture size of 1200 x 630 pixels, however some platforms like '
                         'WhatsApp and Reddit only show a square preview, so we recommend to make sure it still looks good '
-                        'only the center square is shown. If you do not fill this, we will use the logo given above.')
+                        'if only the center square is shown. If you do not fill this, we will use the logo given above.')
         ),
         'serializer_class': UploadedFileField,
         'serializer_kwargs': dict(
@@ -3285,6 +3293,8 @@ Your {organizer} team"""))  # noqa: W291
             label=_('Validity of gift card codes in years'),
             help_text=_('If you set a number here, gift cards will by default expire at the end of the year after this '
                         'many years. If you keep it empty, gift cards do not have an explicit expiry date.'),
+            min_value=0,
+            max_value=99,
         )
     },
     'cookie_consent': {
@@ -3556,8 +3566,8 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str(p) for p in [d.get('family_name', ''), d.get('given_name', '')] if p
         ),
         'sample': {
-            'given_name': '泽东',
-            'family_name': '毛',
+            'family_name': '孫',
+            'given_name': '文',
             '_scheme': 'family_nospace_given',
         },
     }),
@@ -3608,8 +3618,8 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'concatenation': lambda d: str(d.get('full_name', '')),
         'concatenation_all_components': lambda d: str(d.get('full_name', '')) + " (" + d.get('latin_transcription', '') + ")",
         'sample': {
-            'full_name': '庄司',
-            'latin_transcription': 'Shōji',
+            'full_name': '山田花子',
+            'latin_transcription': 'Yamada Hanako',
             '_scheme': 'full_transcription',
         },
     }),
@@ -3697,12 +3707,21 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     # are actually *used* in postal addresses. This is obviously not complete and opinionated.
     # Country: [(List of subdivision types as defined by pycountry), (short or long form to be used)]
     'AU': (['State', 'Territory'], 'short'),
-    'BR': (['State'], 'short'),
+    'BR': (['Federal district', 'State'], 'short'),
     'CA': (['Province', 'Territory'], 'short'),
     # 'CN': (['Province', 'Autonomous region', 'Munincipality'], 'long'),
+    'JP': (['Prefecture'], 'long'),
     'MY': (['State', 'Federal territory'], 'long'),
     'MX': (['State', 'Federal district'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
+    'IT': (['Province', 'Free municipal consortium', 'Metropolitan city', 'Autonomous province',
+            'Free municipal consortium', 'Decentralized regional entity'], 'short'),
+}
+COUNTRY_STATE_LABEL = {
+    # Countries in which the "State" field should not be called "State"
+    'CA': pgettext_lazy('address', 'Province'),
+    'JP': pgettext_lazy('address', 'Prefecture'),
+    'IT': pgettext_lazy('address', 'Province'),
 }
 
 settings_hierarkey = Hierarkey(attribute_name='settings')

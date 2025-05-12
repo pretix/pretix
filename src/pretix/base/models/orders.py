@@ -62,9 +62,10 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.crypto import get_random_string, salted_hmac
-from django.utils.encoding import escape_uri_path
+from django.utils.encoding import escape_uri_path, force_str
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
+from django.utils.hashable import make_hashable
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
@@ -354,7 +355,7 @@ class Order(LockModel, LoggedModel):
 
         if not self.testmode:
             raise TypeError("Only test mode orders can be deleted.")
-        self.event.log_action(
+        self.log_action(
             'pretix.event.order.deleted', user=user, auth=auth,
             data={
                 'code': self.code,
@@ -1086,7 +1087,7 @@ class Order(LockModel, LoggedModel):
 
             for i, op in enumerate(positions):
                 if op.seat:
-                    if not op.seat.is_available(ignore_orderpos=op):
+                    if not op.seat.is_available(ignore_orderpos=op, sales_channel=self.sales_channel.identifier):
                         raise Quota.QuotaExceededException(error_messages['seat_unavailable'].format(seat=op.seat))
                 if force:
                     continue
@@ -1198,6 +1199,8 @@ class Order(LockModel, LoggedModel):
                         'invoices': [i.pk for i in invoices] if invoices else [],
                         'attach_tickets': attach_tickets,
                         'attach_ical': attach_ical,
+                        'attach_other_files': attach_other_files,
+                        'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
                     }
                 )
 
@@ -1256,7 +1259,7 @@ class Order(LockModel, LoggedModel):
         keys = set(target_transaction_count.keys()) | set(current_transaction_count.keys())
         create = []
         for k in keys:
-            positionid, itemid, variationid, subeventid, price, taxrate, taxruleid, taxvalue, feetype, internaltype = k
+            positionid, itemid, variationid, subeventid, price, taxrate, taxruleid, taxvalue, feetype, internaltype, taxcode = k
             d = target_transaction_count[k] - current_transaction_count[k]
             if d:
                 create.append(Transaction(
@@ -1272,6 +1275,7 @@ class Order(LockModel, LoggedModel):
                     tax_rate=taxrate,
                     tax_rule_id=taxruleid,
                     tax_value=taxvalue,
+                    tax_code=taxcode,
                     fee_type=feetype,
                     internal_type=internaltype,
                 ))
@@ -2275,14 +2279,16 @@ class OrderFee(models.Model):
     FEE_TYPE_SERVICE = "service"
     FEE_TYPE_CANCELLATION = "cancellation"
     FEE_TYPE_INSURANCE = "insurance"
+    FEE_TYPE_LATE = "late"
     FEE_TYPE_OTHER = "other"
     FEE_TYPE_GIFTCARD = "giftcard"
     FEE_TYPES = (
+        (FEE_TYPE_SERVICE, _("Service fee")),
         (FEE_TYPE_PAYMENT, _("Payment fee")),
         (FEE_TYPE_SHIPPING, _("Shipping fee")),
-        (FEE_TYPE_SERVICE, _("Service fee")),
         (FEE_TYPE_CANCELLATION, _("Cancellation fee")),
         (FEE_TYPE_INSURANCE, _("Insurance fee")),
+        (FEE_TYPE_LATE, _("Late fee")),
         (FEE_TYPE_OTHER, _("Other fees")),
         (FEE_TYPE_GIFTCARD, _("Gift card")),
     )
@@ -2311,6 +2317,10 @@ class OrderFee(models.Model):
         on_delete=models.PROTECT,
         null=True, blank=True
     )
+    tax_code = models.CharField(
+        max_length=190,
+        null=True, blank=True,
+    )
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
         verbose_name=_('Tax value')
@@ -2337,6 +2347,16 @@ class OrderFee(models.Model):
         if not self.get_deferred_fields():
             self._transaction_key_reset()
         return super().refresh_from_db(using, fields)
+
+    def get_tax_code_display(self):
+        from pretix.base.models.tax import get_tax_code_labels
+
+        if self.tax_code:
+            choices_dict = get_tax_code_labels()
+            return force_str(
+                choices_dict.get(make_hashable(self.tax_code), self.tax_code), strings_only=True
+            )
+        return ""
 
     def _transaction_key_reset(self):
         self.__initial_transaction_key = Transaction.key(self)
@@ -2368,9 +2388,11 @@ class OrderFee(models.Model):
         if self.tax_rule:
             tax = self.tax_rule.tax(self.value, base_price_is='gross', invoice_address=ia, force_fixed_gross_price=True)
             self.tax_rate = tax.rate
+            self.tax_code = tax.code
             self.tax_value = tax.tax
         else:
             self.tax_value = Decimal('0.00')
+            self.tax_code = None
             self.tax_rate = Decimal('0.00')
 
     def save(self, *args, **kwargs):
@@ -2379,6 +2401,7 @@ class OrderFee(models.Model):
 
         if self.tax_rate is None:
             self._calculate_tax()
+
         self.order.touch()
 
         if not self.get_deferred_fields():
@@ -2466,6 +2489,10 @@ class OrderPosition(AbstractPosition):
         on_delete=models.PROTECT,
         null=True, blank=True
     )
+    tax_code = models.CharField(
+        max_length=190,
+        null=True, blank=True,
+    )
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
         verbose_name=_('Tax value')
@@ -2522,6 +2549,16 @@ class OrderPosition(AbstractPosition):
         constraints = [
             models.UniqueConstraint("organizer", "secret", name="orderposition_organizer_secret_uniq")
         ]
+
+    def get_tax_code_display(self):
+        from pretix.base.models.tax import get_tax_code_labels
+
+        if self.tax_code:
+            choices_dict = get_tax_code_labels()
+            return force_str(
+                choices_dict.get(make_hashable(self.tax_code), self.tax_code), strings_only=True
+            )
+        return ""
 
     @cached_property
     def sort_key(self):
@@ -2695,11 +2732,13 @@ class OrderPosition(AbstractPosition):
         if self.tax_rule:
             tax = self.tax_rule.tax(self.price, invoice_address=ia, base_price_is='gross', force_fixed_gross_price=True)
             self.tax_rate = tax.rate
+            self.tax_code = tax.code
             self.tax_value = tax.tax
             if tax.gross != self.price:
                 raise ValueError('Invalid tax calculation')
         else:
             self.tax_value = Decimal('0.00')
+            self.tax_code = None
             self.tax_rate = Decimal('0.00')
 
     def save(self, *args, **kwargs):
@@ -2820,6 +2859,8 @@ class OrderPosition(AbstractPosition):
                         'invoices': [i.pk for i in invoices] if invoices else [],
                         'attach_tickets': attach_tickets,
                         'attach_ical': attach_ical,
+                        'attach_other_files': attach_other_files,
+                        'attach_cached_files': [],
                     }
                 )
 
@@ -2970,6 +3011,10 @@ class Transaction(models.Model):
         on_delete=models.PROTECT,
         null=True, blank=True
     )
+    tax_code = models.CharField(
+        max_length=190,
+        null=True, blank=True,
+    )
     tax_value = models.DecimalField(
         max_digits=13, decimal_places=2,
         verbose_name=_('Tax value')
@@ -2990,17 +3035,27 @@ class Transaction(models.Model):
             raise ValidationError('Should set either item or fee type')
         return super().save(*args, **kwargs)
 
+    def get_tax_code_display(self):
+        from pretix.base.models.tax import get_tax_code_labels
+
+        if self.tax_code:
+            choices_dict = get_tax_code_labels()
+            return force_str(
+                choices_dict.get(make_hashable(self.tax_code), self.tax_code), strings_only=True
+            )
+        return ""
+
     @staticmethod
     def key(obj):
         if isinstance(obj, Transaction):
             return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
+                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type, obj.tax_code)
         elif isinstance(obj, OrderPosition):
             return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, None, None)
+                    obj.tax_rule_id, obj.tax_value, None, None, obj.tax_code)
         elif isinstance(obj, OrderFee):
             return (None, None, None, None, obj.value, obj.tax_rate,
-                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
+                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type, obj.tax_code)
         raise ValueError('invalid state')  # noqa
 
     @property
@@ -3164,7 +3219,14 @@ class CartPosition(AbstractPosition):
         if line_price.gross != self.line_price_gross or line_price.rate != self.tax_rate:
             self.line_price_gross = line_price.gross
             self.tax_rate = line_price.rate
+            self.tax_code = line_price.code
             self.save(update_fields=['line_price_gross', 'tax_rate'])
+
+    @property
+    def discount_percentage(self):
+        if not self.line_price_gross:
+            return 0
+        return (self.line_price_gross - self.price) / self.line_price_gross * 100
 
     @property
     def addons_without_bundled(self):
@@ -3204,9 +3266,9 @@ class InvoiceAddress(models.Model):
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
     name_parts = models.JSONField(default=dict)
-    street = models.TextField(verbose_name=_('Address'), blank=False)
-    zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
-    city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
+    street = models.TextField(verbose_name=_('Address'), blank=True)
+    zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=True)
+    city = models.CharField(max_length=255, verbose_name=_('City'), blank=True)
     country_old = models.CharField(max_length=255, verbose_name=_('Country'), blank=False)
     country = FastCountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'),
                                countries=CachedCountries)

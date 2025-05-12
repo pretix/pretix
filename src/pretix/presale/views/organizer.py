@@ -70,8 +70,9 @@ from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
 )
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.i18n import parse_date_localized
 from pretix.helpers.thumb import get_thumbnail
-from pretix.multidomain.urlreverse import eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.organizer import EventListFilterForm
 from pretix.presale.ical import get_public_ical
 from pretix.presale.views import OrganizerViewMixin
@@ -479,7 +480,8 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
             if event.has_subevents:
                 event.daterange = daterange(
                     event.min_from.astimezone(event.tzname),
-                    (event.max_fromto or event.max_to or event.max_from).astimezone(event.tzname)
+                    (event.max_fromto or event.max_to or event.max_from).astimezone(event.tzname),
+                    as_html=True,
                 )
 
         query_data = self.request.GET.copy()
@@ -926,10 +928,9 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _set_date(self):
         if 'date' in self.request.GET:
             self.tz = self.request.organizer.timezone
-            try:
-                self.date = dateutil.parser.parse(self.request.GET.get('date')).date()
-            except ValueError:
-                self.date = now().astimezone(self.tz).date()
+            self.date = (
+                parse_date_localized(self.request.GET.get('date')) or now().astimezone(self.tz)
+            ).date()
         else:
             self._set_date_to_next_event()
 
@@ -1305,3 +1306,8 @@ class OrganizerFavicon(View):
             return redirect_to_url(get_thumbnail(icon_file, '32x32^', formats=settings.PILLOW_FORMATS_QUESTIONS_FAVICON).thumb.url)
         else:
             return redirect_to_url(static("pretixbase/img/favicon.ico"))
+
+
+class RedirectToOrganizerIndex(View):
+    def get(self, *args, **kwargs):
+        return redirect_to_url(build_absolute_uri(self.request.organizer, "presale:organizer.index"))

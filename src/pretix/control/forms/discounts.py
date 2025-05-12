@@ -45,6 +45,8 @@ class DiscountForm(I18nModelForm):
             'limit_sales_channels',
             'available_from',
             'available_until',
+            'subevent_date_from',
+            'subevent_date_until',
             'subevent_mode',
             'condition_all_products',
             'condition_limit_products',
@@ -62,6 +64,8 @@ class DiscountForm(I18nModelForm):
         field_classes = {
             'available_from': SplitDateTimeField,
             'available_until': SplitDateTimeField,
+            'subevent_date_from': SplitDateTimeField,
+            'subevent_date_until': SplitDateTimeField,
             'condition_limit_products': ItemMultipleChoiceField,
             'benefit_limit_products': ItemMultipleChoiceField,
             'limit_sales_channels': SafeModelMultipleChoiceField,
@@ -70,6 +74,8 @@ class DiscountForm(I18nModelForm):
             'subevent_mode': forms.RadioSelect,
             'available_from': SplitDateTimePickerWidget(),
             'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
+            'subevent_date_from': SplitDateTimePickerWidget(),
+            'subevent_date_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_subevent_date_from_0'}),
             'condition_limit_products': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '<[name$=all_products]',
                 'class': 'scrolling-multiple-choice',

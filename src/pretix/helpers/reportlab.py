@@ -39,6 +39,12 @@ class ThumbnailingImageReader(ImageReader):
         self._data = None
         return width, height
 
+    def remove_transparency(self, background_color="WHITE"):
+        if "A" in self._image.mode:
+            new_image = Image.new("RGBA", self._image.size, background_color)
+            new_image.paste(self._image, mask=self._image)
+            self._image = new_image.convert("RGB")
+
     def _jpeg_fh(self):
         # Bypass a reportlab-internal optimization that falls back to the original
         # file handle if the file is a JPEG, and therefore does not respect the

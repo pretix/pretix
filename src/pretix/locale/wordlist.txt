@@ -27,6 +27,7 @@ BN
 Bokmål
 Boleto
 Bundles
+Ceuta
 chardet
 chargebacks
 checkboxes
@@ -46,6 +47,8 @@ dekodi
 deliverability
 DSS
 DNS
+EEA
+eInvoices
 EPC
 EPS
 eps
@@ -71,6 +74,7 @@ ics
 iDEAL
 Itaú
 integrations
+intra
 iOS
 ISU
 JSON
@@ -82,6 +86,7 @@ Leaflet
 LLC
 MapQuest
 MariaDB
+Melilla
 Mercado
 MerchantID
 Mifare
@@ -102,6 +107,7 @@ OXXO
 Pago
 PayU
 PCI
+PKCE
 PDFs
 percentual
 personalization
@@ -120,6 +126,7 @@ pretixSCAN
 Przelewy
 Pseudonymization
 px
+Query
 Reddit
 redemptions
 Referer
@@ -132,6 +139,7 @@ SAQ
 SCA
 selectable
 SEPA
+silvicultural
 smtp
 Sofort
 SOFORT
@@ -156,6 +164,7 @@ txt
 UID
 uncanceled
 uncategorized
+Uncheck
 undeletable
 unredeemed
 URIs

@@ -38,10 +38,12 @@ from decimal import Decimal
 
 import pytest
 from django.db import DatabaseError, transaction
+from django.utils.itercompat import is_iterable
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scope, scopes_disabled
 
+from pretix.base.invoice import addon_aware_groupby
 from pretix.base.models import (
     Event, ExchangeRate, Invoice, InvoiceAddress, Item, ItemVariation, Order,
     OrderPosition, Organizer,
@@ -234,6 +236,7 @@ def test_reverse_charge_note(env):
     assert inv.foreign_currency_rate == Decimal("4.2408")
     assert inv.foreign_currency_rate_date == date.today()
     assert inv.foreign_currency_source == 'eu:ecb:eurofxref-daily'
+    assert inv.lines.first().tax_code == "AE"
 
 
 @pytest.mark.django_db
@@ -249,6 +252,7 @@ def test_custom_tax_note(env):
             'address_type': '',
             'action': 'vat',
             'rate': '20',
+            'code': 'S/reduced',
             'invoice_text': {
                 'de': 'Polnische Steuer anwendbar',
                 'en': 'Polish tax applies'
@@ -268,6 +272,7 @@ def test_custom_tax_note(env):
 
     inv = generate_invoice(order)
     assert "Polish tax applies" in inv.additional_text
+    assert inv.lines.first().tax_code == "S/reduced"
 
 
 @pytest.mark.django_db
@@ -603,3 +608,55 @@ def test_sales_channels_qualify(env):
 
     event.settings.set('invoice_generate_sales_channels', [])
     assert invoice_qualified(order) is False
+
+
+def test_addon_aware_groupby():
+    def is_addon(item):
+        is_addon, id, price = item
+        return is_addon
+
+    def key(item):
+        return item
+
+    def listify(it):
+        return [listify(i) if is_iterable(i) else i for i in it]
+
+    assert listify(addon_aware_groupby([
+        (False, 1, 5.00),
+        (False, 1, 5.00),
+        (False, 1, 5.00),
+        (False, 2, 7.00),
+    ], key, is_addon)) == [
+        [[False, 1, 5.00], [
+            [False, 1, 5.00],
+            [False, 1, 5.00],
+            [False, 1, 5.00],
+        ]],
+        [[False, 2, 7.00], [
+            [False, 2, 7.00],
+        ]],
+    ]
+
+    assert listify(addon_aware_groupby([
+        (False, 1, 5.00),
+        (True, 101, 2.00),
+        (False, 1, 5.00),
+        (True, 101, 2.00),
+        (False, 1, 5.00),
+        (True, 102, 3.00),
+    ], key, is_addon)) == [
+        [[False, 1, 5.00], [
+            [False, 1, 5.00],
+            [False, 1, 5.00],
+        ]],
+        [[True, 101, 2.00], [
+            [True, 101, 2.00],
+            [True, 101, 2.00],
+        ]],
+        [[False, 1, 5.00], [
+            [False, 1, 5.00],
+        ]],
+        [[True, 102, 3.00], [
+            [True, 102, 3.00],
+        ]],
+    ]

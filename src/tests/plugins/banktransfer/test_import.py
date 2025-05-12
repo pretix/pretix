@@ -574,7 +574,7 @@ def test_pending_paypal_drop_fee(env, job):
         env[2].save()
         p = env[2].payments.create(
             provider='paypal',
-            state=OrderPayment.PAYMENT_STATE_PENDING,
+            state=OrderPayment.PAYMENT_STATE_CREATED,
             fee=fee,
             amount=env[2].total
         )
@@ -790,3 +790,33 @@ def test_ignore_by_external_id(env, job):
     }])
     with scopes_disabled():
         assert BankTransaction.objects.count() == 2
+
+
+@pytest.mark.django_db
+def test_ambigious_date_without_region(env, job):
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY1Z3AS',
+        'date': '03/05/2016',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+
+    with scopes_disabled():
+        assert env[2].payments.last().info_data["date"] == "2016-03-05"
+
+
+@pytest.mark.django_db
+def test_ambigious_date_with_region(env, job):
+    env[0].settings.region = "GB"
+
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY1Z3AS',
+        'date': '03/05/2016',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+
+    with scopes_disabled():
+        assert env[2].payments.last().info_data["date"] == "2016-05-03"

@@ -165,6 +165,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
 
         if not serializer.validated_data.get('position'):
             kwargs['position'] = OrderPosition.all.filter(
+                order__event=self.request.event,
                 secret=serializer.validated_data['raw_barcode']
             ).first()
 
@@ -419,7 +420,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None):
+                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -693,7 +694,11 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     pass
 
     # 6. Pass to our actual check-in logic
-    with language(op.order.event.settings.locale):
+    if use_order_locale:
+        locale = op.order.locale
+    else:
+        locale = op.order.event.settings.locale
+    with language(locale):
         try:
             perform_checkin(
                 op=op,
@@ -908,6 +913,7 @@ class CheckinRPCRedeemView(views.APIView):
             expand=self.request.query_params.getlist('expand'),
             pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
             questions_supported=s.validated_data['questions_supported'],
+            use_order_locale=s.validated_data['use_order_locale'],
             canceled_supported=True,
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,

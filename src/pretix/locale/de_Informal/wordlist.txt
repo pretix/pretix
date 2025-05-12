@@ -30,7 +30,8 @@ Auth
 Authentication
 Authenticator
 Authentifizierungsmechanismus
-Authorisierungscode
+Autorisierungs
+Autorisierungscode
 Backend
 Badge
 Badges
@@ -66,10 +67,12 @@ BSD
 bspw
 Bokmål
 Boleto
+Buchhaltungs
 Bundles
 Butterfly
 bzw
 ca
+Ceuta
 Cc
 chardet
 charge
@@ -158,9 +161,12 @@ Inc
 inkl
 innenname
 innennamen
+innergemeinschaftliche
+Innergemeinschaftlicher
 Input
 Installations
 integrationen
+intra
 INV
 invalidieren
 invalidiert
@@ -177,10 +183,12 @@ Kombitickets
 Kompatibilitätsmodus
 Konfigurations
 Kosovo
+land
 landesspezifische
 Lead
 Leaflet
 Linktext
+lit
 Logindaten
 Lösch
 loszulegen
@@ -188,6 +196,7 @@ Ltd
 max
 MariaDB
 MapQuest
+Melilla
 Mercado
 Merchandise
 Meta
@@ -227,6 +236,7 @@ PayPals
 PayU
 PCI
 Personalisierung
+PKCE
 Platzhalterzeichen
 Play
 Plugin
@@ -246,6 +256,7 @@ Professional
 Przelewy
 pt
 px
+Query
 QR
 rabattiert
 Rabattierung
@@ -269,6 +280,7 @@ rückabgewickelt
 Rundungsdifferenzen
 Sa
 Saalplan
+Sammlungsstücken
 SAQ
 SCA
 Scan
@@ -357,6 +369,7 @@ USt
 Überzahlten
 Validierung
 Venmo
+Veranstalterdomain
 Veranstaltereinstellungen
 Veranstalterkonten
 Veranstalterkonto
@@ -367,6 +380,7 @@ Veranstalterseite
 Veranstalterübersicht
 veranstalterweiten
 Veranstaltungs
+Veranstalterdomain
 veranstaltungsweiten
 Verfügbarkeitsberechnung
 Verfügbarkeitsstatus

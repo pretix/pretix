@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
+import logging
 import operator
 import re
 from collections import OrderedDict
@@ -62,8 +63,9 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.html import escape
+from django.utils.html import conditional_escape, format_html
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
 from django.views.generic import FormView, ListView
@@ -100,11 +102,16 @@ from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
 from ...base.services.mail import prefix_subject
+from ...base.services.placeholders import get_sample_context
 from ...base.settings import LazyI18nStringList
 from ...helpers.compat import CompatDeleteView
-from ...helpers.format import format_map
+from ...helpers.format import (
+    PlainHtmlAlternativeString, SafeFormatter, format_map,
+)
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
+
+logger = logging.getLogger(__name__)
 
 
 class EventSettingsViewMixin:
@@ -239,7 +246,6 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         kwargs = super().get_form_kwargs()
         if self.request.user.has_active_staff_session(self.request.session.session_key):
             kwargs['change_slug'] = True
-            kwargs['domain'] = True
         return kwargs
 
     def post(self, request, *args, **kwargs):
@@ -337,12 +343,29 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
     def get_object(self, queryset=None) -> Event:
         return self.request.event
 
-    def get_context_data(self, *args, **kwargs) -> dict:
+    def available_plugins(self, event):
         from pretix.base.plugins import get_all_plugins
 
+        return (p for p in get_all_plugins(event) if not p.name.startswith('.')
+                and getattr(p, 'visible', True))
+
+    def prepare_links(self, pluginmeta, key):
+        links = getattr(pluginmeta, key, [])
+        try:
+            return [
+                (
+                    reverse(urlname, kwargs={"organizer": self.request.organizer.slug, "event": self.request.event.slug, **kwargs}),
+                    " > ".join(map(str, linktext)) if isinstance(linktext, tuple) else linktext,
+                ) for linktext, urlname, kwargs in links
+            ]
+        except:
+            logger.exception('Failed to resolve settings links.')
+            return []
+
+    def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        plugins = [p for p in get_all_plugins(self.object) if not p.name.startswith('.')
-                   and getattr(p, 'visible', True)]
+        plugins = list(self.available_plugins(self.object))
+
         order = [
             'FEATURE',
             'PAYMENT',
@@ -373,12 +396,18 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         )
         plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
 
+        active_plugins = self.object.get_plugins()
+
+        def plugin_details(plugin):
+            is_active = plugin.module in active_plugins
+            settings_links = self.prepare_links(plugin, 'settings_links') if is_active else None
+            navigation_links = self.prepare_links(plugin, 'navigation_links') if is_active else None
+            return (plugin, is_active, settings_links, navigation_links)
         context['plugins'] = sorted([
-            (c, labels.get(c, c), plist, any(getattr(p, 'picture', None) for p in plist))
+            (c, labels.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
             for c, plist
             in plugins_grouped
         ], key=lambda c: (order.index(c[0]), c[1]) if c[0] in order else (999, str(c[1])))
-        context['plugins_active'] = self.object.get_plugins()
         context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
         return context
 
@@ -388,13 +417,10 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        from pretix.base.plugins import get_all_plugins
-
         self.object = self.get_object()
 
         plugins_available = {
-            p.module: p for p in get_all_plugins(self.object)
-            if not p.name.startswith('.') and getattr(p, 'visible', True)
+            p.module: p for p in self.available_plugins(self.object)
         }
 
         with transaction.atomic():
@@ -402,19 +428,38 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
-                        if getattr(plugins_available[module], 'restricted', False):
+                        pluginmeta = plugins_available[module]
+                        if getattr(pluginmeta, 'restricted', False):
                             if module not in request.event.settings.allowed_restricted_plugins:
                                 continue
 
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
                         self.object.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
+
+                        links = self.prepare_links(pluginmeta, 'settings_links')
+                        if links:
+                            info = [
+                                '<p>',
+                                format_html(_('The plugin {} is now active, you can configure it here:'),
+                                            format_html("<strong>{}</strong>", pluginmeta.name)),
+                                '</p><p>',
+                            ] + [
+                                format_html('<a href="{}" class="btn btn-default">{}</a> ', url, text)
+                                for url, text in links
+                            ] + ['</p>']
+                        else:
+                            info = [
+                                format_html(_('The plugin {} is now active.'),
+                                            format_html("<strong>{}</strong>", pluginmeta.name)),
+                            ]
+                        messages.success(self.request, mark_safe("".join(info)))
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
                                                       data={'plugin': module})
                         self.object.disable_plugin(module)
+                        messages.success(self.request, _('The plugin has been disabled.'))
             self.object.save()
-        messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
@@ -489,8 +534,11 @@ class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMix
         if self.form.is_valid():
             if self.form.has_changed():
                 self.request.event.log_action(
-                    'pretix.event.payment.provider.' + self.provider.identifier, user=self.request.user, data={
-                        k: self.form.cleaned_data.get(k) for k in self.form.changed_data
+                    'pretix.event.payment.provider', user=self.request.user, data={
+                        'provider': self.provider.identifier,
+                        'new_values': {
+                            k: self.form.cleaned_data.get(k) for k in self.form.changed_data
+                        }
                     }
                 )
                 self.form.save()
@@ -717,20 +765,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
 
     # get all supported placeholders with dummy values
     def placeholders(self, item):
-        ctx = {}
-        for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item]).values():
-            s = str(p.render_sample(self.request.event))
-            if s.strip().startswith('* '):
-                ctx[p.identifier] = '<div class="placeholder" title="{}">{}</div>'.format(
-                    _('This value will be replaced based on dynamic parameters.'),
-                    markdown_compile_email(s)
-                )
-            else:
-                ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
-                    _('This value will be replaced based on dynamic parameters.'),
-                    escape(s)
-                )
-        return ctx
+        return get_sample_context(self.request.event, MailSettingsForm.base_context[item])
 
     def post(self, request, *args, **kwargs):
         preview_item = request.POST.get('item', '')
@@ -752,9 +787,15 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                                     bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
                                 ), highlight=True)
                             else:
-                                msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                    format_map(v, self.placeholders(preview_item), raise_on_missing=True)
+                                placeholders = self.placeholders(preview_item)
+                                msgs[self.supported_locale[idx]] = format_map(
+                                    markdown_compile_email(
+                                        format_map(v, placeholders, raise_on_missing=True)
+                                    ),
+                                    placeholders,
+                                    mode=SafeFormatter.MODE_RICH_TO_HTML,
                                 )
+
                         except ValueError:
                             msgs[self.supported_locale[idx]] = '<div class="alert alert-danger">{}</div>'.format(
                                 PlaceholderValidator.error_message)
@@ -777,13 +818,18 @@ class MailSettingsRendererPreview(MailSettingsPreview):
     # get all supported placeholders with dummy values
     def placeholders(self, item):
         ctx = {}
-        for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item]).values():
-            ctx[p.identifier] = escape(str(p.render_sample(self.request.event)))
+        for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item], rich=True).values():
+            sample = p.render_sample(self.request.event)
+            if isinstance(sample, PlainHtmlAlternativeString):
+                ctx[p.identifier] = sample
+            else:
+                ctx[p.identifier] = conditional_escape(sample)
         return ctx
 
     def get(self, request, *args, **kwargs):
         v = str(request.event.settings.mail_text_order_placed)
-        v = format_map(v, self.placeholders('mail_text_order_placed'))
+        context = self.placeholders('mail_text_order_placed')
+        v = format_map(v, context)
         renderers = request.event.get_html_mail_renderers()
         if request.GET.get('renderer') in renderers:
             with rolledback_transaction():
@@ -801,7 +847,8 @@ class MailSettingsRendererPreview(MailSettingsPreview):
                     str(request.event.settings.mail_text_signature),
                     gettext('Your order: %(code)s') % {'code': order.code},
                     order,
-                    position=None
+                    position=None,
+                    context=context,
                 )
                 r = HttpResponse(v, content_type='text/html')
                 r._csp_ignore = True
@@ -887,11 +934,14 @@ class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
                 provider.form.save()
                 if provider.form.has_changed():
                     self.request.event.log_action(
-                        'pretix.event.tickets.provider.' + provider.identifier, user=self.request.user, data={
-                            k: (provider.form.cleaned_data.get(k).name
-                                if isinstance(provider.form.cleaned_data.get(k), File)
-                                else provider.form.cleaned_data.get(k))
-                            for k in provider.form.changed_data
+                        'pretix.event.tickets.provider', user=self.request.user, data={
+                            'provider': provider.identifier,
+                            'new_values': {
+                                k: (provider.form.cleaned_data.get(k).name
+                                    if isinstance(provider.form.cleaned_data.get(k), File)
+                                    else provider.form.cleaned_data.get(k))
+                                for k in provider.form.changed_data
+                            }
                         }
                     )
                     tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': provider.identifier})
@@ -1196,17 +1246,22 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form = self.get_form()
+        form = self.form
         if form.is_valid() and self.formset.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     @cached_property
+    def form(self):
+        return self.get_form()
+
+    @cached_property
     def formset(self):
         return TaxRuleLineFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
             event=self.request.event,
+            parent_form=self.form,
         )
 
     def get_context_data(self, **kwargs):
@@ -1247,17 +1302,22 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object(self.get_queryset())
-        form = self.get_form()
+        form = self.form
         if form.is_valid() and self.formset.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     @cached_property
+    def form(self):
+        return self.get_form()
+
+    @cached_property
     def formset(self):
         return TaxRuleLineFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
             event=self.request.event,
+            parent_form=self.form,
             initial=json.loads(self.object.custom_rules) if self.object.custom_rules else []
         )
 

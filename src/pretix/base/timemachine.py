@@ -25,13 +25,15 @@ from contextlib import contextmanager
 from dateutil.parser import parse
 from django.utils.timezone import now
 
+from pretix.base.auth import has_event_access_permission
+
 timemachine_now_var = contextvars.ContextVar('timemachine_now', default=None)
 
 
 @contextmanager
 def time_machine_now_assigned_from_request(request):
     if hasattr(request, 'event') and f'timemachine_now_dt:{request.event.pk}' in request.session and \
-            request.event.testmode and has_time_machine_permission(request, request.event):
+            request.event.testmode and has_event_access_permission(request):
         request.now_dt = parse(request.session[f'timemachine_now_dt:{request.event.pk}'])
         request.now_dt_is_fake = True
     else:
@@ -70,17 +72,3 @@ def time_machine_now_assigned(now_dt):
         yield
     finally:
         timemachine_now_var.set(None)
-
-
-def has_time_machine_permission(request, event):
-    permission = 'can_change_event_settings'
-
-    return (
-        request.user.is_authenticated and
-        request.user.has_event_permission(request.organizer, request.event, permission, request=request)
-    ) or (
-        getattr(request, 'event_access_user', None) and
-        request.event_access_user.is_authenticated and
-        request.event_access_user.has_event_permission(request.organizer, request.event, permission,
-                                                       session_key=request.event_access_parent_session_key)
-    )

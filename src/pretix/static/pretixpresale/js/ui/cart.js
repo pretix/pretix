@@ -69,8 +69,6 @@ var cart = {
 $(function () {
     "use strict";
 
-    moment.locale($("body").attr("data-locale").substr(0, 2));
-
     if ($("#cart-deadline").length) {
         cart.init();
     }

@@ -35,6 +35,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils import formats
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
@@ -62,11 +63,13 @@ from pretix.api.serializers.order import (
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
-    OrderFeeChangeSerializer, OrderPositionChangeSerializer,
+    OrderFeeChangeSerializer, OrderFeeCreateForExistingOrderSerializer,
+    OrderPositionChangeSerializer,
     OrderPositionCreateForExistingOrderSerializer,
     OrderPositionInfoPatchSerializer,
 )
 from pretix.api.views import RichOrderingFilter
+from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
@@ -97,7 +100,6 @@ from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     order_modified, order_paid, order_placed, register_ticket_outputs,
 )
-from pretix.base.templatetags.money import money_filter
 from pretix.control.signals import order_search_filter_q
 from pretix.helpers import OF_SELF
 
@@ -183,7 +185,7 @@ with scopes_disabled():
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
 
-            matching_positions = OrderPosition.objects.filter(
+            matching_positions = OrderPosition.all.filter(
                 Q(order=OuterRef('pk')) & Q(
                     Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
                     | Q(secret__istartswith=u)
@@ -450,10 +452,9 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         comment = request.data.get('comment', None)
         cancellation_fee = request.data.get('cancellation_fee', None)
         if cancellation_fee:
-            try:
-                cancellation_fee = float(Decimal(cancellation_fee))
-            except:
-                cancellation_fee = None
+            cancellation_fee = serializers.DecimalField(max_digits=13, decimal_places=2).to_internal_value(
+                cancellation_fee,
+            )
 
         order = self.get_object()
         if not order.cancel_allowed():
@@ -601,7 +602,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
             and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
         )
-        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(order):
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'user_paid', 'True') or not invoice_qualified(order):
             return Response(
                 {'detail': _('You cannot generate an invoice for this order.')},
                 status=status.HTTP_400_BAD_REQUEST
@@ -646,6 +647,8 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         order = self.get_object()
         order.secret = generate_secret()
         for op in order.all_positions.all():
+            op.web_secret = generate_secret()
+            op.save(update_fields=["web_secret"])
             assign_ticket_secret(
                 request.event, op, force_invalidate=True, save=True
             )
@@ -704,7 +707,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             )
 
     def create(self, request, *args, **kwargs):
-        if 'send_mail' in request.data and 'send_email' not in request.data:
+        if 'send_mail' in request.data and 'send_email' not in request.data and isinstance(request.data, dict):
             request.data['send_email'] = request.data['send_mail']
         serializer = OrderCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
@@ -985,6 +988,12 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 ocm.cancel_fee(r['fee'])
                 canceled_fees.add(r['fee'])
 
+            for r in serializer.validated_data.get('create_fees', []):
+                pos_serializer = OrderFeeCreateForExistingOrderSerializer(
+                    context={'ocm': ocm, 'commit': False, 'event': request.event, **self.get_serializer_context()},
+                )
+                pos_serializer.create(r)
+
             for r in serializer.validated_data.get('patch_fees', []):
                 if r['fee'] in canceled_fees:
                     continue
@@ -1228,9 +1237,10 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         price = get_price(**kwargs)
         tr = kwargs.get('tax_rule', kwargs.get('item').tax_rule)
         with language(data.get('locale') or self.request.event.settings.locale, self.request.event.settings.region):
+            gross_formatted = formats.localize_input(round_decimal(price.gross, self.request.event.currency))
             return Response({
                 'gross': price.gross,
-                'gross_formatted': money_filter(price.gross, self.request.event.currency, hide_currency=True),
+                'gross_formatted': gross_formatted,
                 'net': price.net,
                 'rate': price.rate,
                 'name': str(price.name),

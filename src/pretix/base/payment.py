@@ -330,16 +330,16 @@ class BasePaymentProvider:
                  label=_('Enable payment method'),
                  required=False,
              )),
-            ('_availability_date',
-             RelativeDateField(
-                 label=_('Available until'),
-                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
-                 required=False,
-             )),
             ('_availability_start',
              RelativeDateField(
                  label=_('Available from'),
                  help_text=_('Users will not be able to choose this payment provider before the given date.'),
+                 required=False,
+             )),
+            ('_availability_date',
+             RelativeDateField(
+                 label=_('Available until'),
+                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
                  required=False,
              )),
             ('_total_min',
@@ -957,12 +957,19 @@ class BasePaymentProvider:
 
     def cancel_payment(self, payment: OrderPayment):
         """
-        Will be called to cancel a payment. The default implementation just sets the payment state to canceled,
-        but in some cases you might want to notify an external provider.
+        Will be called to cancel a payment. The default implementation fails if the payment is
+        ``OrderPayment.PAYMENT_STATE_PENDING`` and ``abort_pending_allowed`` is false. Otherwise, it just sets the
+        payment state to canceled. In some cases you might want to modify this behaviour to notify the external provider
+        of the cancellation.
 
         On success, you should set ``payment.state = OrderPayment.PAYMENT_STATE_CANCELED`` (or call the super method).
         On failure, you should raise a PaymentException.
         """
+        if payment.state == OrderPayment.PAYMENT_STATE_PENDING and not self.abort_pending_allowed:
+            raise PaymentException(_(
+                "This payment is already being processed and can not be canceled any more."
+            ))
+
         payment.state = OrderPayment.PAYMENT_STATE_CANCELED
         payment.save(update_fields=['state'])
 
@@ -1301,6 +1308,9 @@ class OffsettingProvider(BasePaymentProvider):
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
         return _('Balanced against orders: %s' % ', '.join(payment.info_data['orders']))
 
+    def refund_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
+        return self.payment_control_render(request, payment)
+
 
 class GiftCardPayment(BasePaymentProvider):
     identifier = "giftcard"
@@ -1419,50 +1429,55 @@ class GiftCardPayment(BasePaymentProvider):
     def payment_refund_supported(self, payment: OrderPayment) -> bool:
         return True
 
-    def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
-        from pretix.base.services.cart import add_payment_to_cart
+    def _add_giftcard_to_cart(self, cs, gc):
+        from pretix.base.services.cart import add_payment_to_cart_session
 
+        if gc.currency != self.event.currency:
+            raise ValidationError(_("This gift card does not support this currency."))
+        if gc.testmode and not self.event.testmode:
+            raise ValidationError(_("This gift card can only be used in test mode."))
+        if not gc.testmode and self.event.testmode:
+            raise ValidationError(_("Only test gift cards can be used in test mode."))
+        if gc.expires and gc.expires < time_machine_now():
+            raise ValidationError(_("This gift card is no longer valid."))
+        if gc.value <= Decimal("0.00"):
+            raise ValidationError(_("All credit on this gift card has been used."))
+
+        for p in cs.get('payments', []):
+            if p['provider'] == self.identifier and p['info_data']['gift_card'] == gc.pk:
+                raise ValidationError(_("This gift card is already used for your payment."))
+
+        add_payment_to_cart_session(
+            cs,
+            self,
+            max_value=gc.value,
+            info_data={
+                'gift_card': gc.pk,
+                'gift_card_secret': gc.secret,
+            }
+        )
+
+    def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
         for p in get_cart(request):
             if p.item.issue_giftcard:
                 messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
                 return
 
-        cs = cart_session(request)
+        if not request.POST.get("giftcard"):
+            messages.error(request, _("Please enter the code of your gift card."))
+            return
+
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
                 secret=request.POST.get("giftcard").strip()
             )
-            if gc.currency != self.event.currency:
-                messages.error(request, _("This gift card does not support this currency."))
+            cs = cart_session(request)
+            try:
+                self._add_giftcard_to_cart(cs, gc)
+                return True
+            except ValidationError as e:
+                messages.error(request, str(e.message))
                 return
-            if gc.testmode and not self.event.testmode:
-                messages.error(request, _("This gift card can only be used in test mode."))
-                return
-            if not gc.testmode and self.event.testmode:
-                messages.error(request, _("Only test gift cards can be used in test mode."))
-                return
-            if gc.expires and gc.expires < time_machine_now():
-                messages.error(request, _("This gift card is no longer valid."))
-                return
-            if gc.value <= Decimal("0.00"):
-                messages.error(request, _("All credit on this gift card has been used."))
-                return
-
-            for p in cs.get('payments', []):
-                if p['provider'] == self.identifier and p['info_data']['gift_card'] == gc.pk:
-                    messages.error(request, _("This gift card is already used for your payment."))
-                    return
-
-            add_payment_to_cart(
-                request,
-                self,
-                max_value=gc.value,
-                info_data={
-                    'gift_card': gc.pk,
-                    'gift_card_secret': gc.secret,
-                }
-            )
-            return True
         except GiftCard.DoesNotExist:
             if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard")).exists():
                 messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "

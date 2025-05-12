@@ -60,6 +60,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
+from django.utils.html import format_html
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
@@ -171,7 +172,7 @@ class EventMixin:
             self.date_to.astimezone(tz), ("D" if short else "l")
         )
 
-    def get_date_range_display(self, tz=None, force_show_end=False, as_html=False) -> str:
+    def get_date_range_display(self, tz=None, force_show_end=False, as_html=False, try_to_show_times=False) -> str:
         """
         Returns a formatted string containing the start date and the end date
         of the event with respect to the current locale and to the ``show_date_to``
@@ -180,35 +181,47 @@ class EventMixin:
         tz = tz or self.timezone
         if (not self.settings.show_date_to and not force_show_end) or not self.date_to:
             df, dt = self.date_from, self.date_from
+            show_times = try_to_show_times
         else:
             df, dt = self.date_from, self.date_to
-        return daterange(df.astimezone(tz), dt.astimezone(tz), as_html)
+            show_times = try_to_show_times and self.settings.show_times and (
+                # Show times if start and end are on the same day ("08:00-10:00")
+                dt.astimezone(tz).date() == df.astimezone(tz).date() or
+                # Show times if start and end are on consecutive days and less than 24h ("23:00-03:00")
+                (dt.astimezone(tz).date() == df.astimezone(tz).date() + timedelta(days=1) and
+                 dt.astimezone(tz).time() < df.astimezone(tz).time())
+            )
+        d = daterange(df.astimezone(tz), dt.astimezone(tz), as_html)
+
+        if show_times:
+            if (not self.settings.show_date_to and not force_show_end) or not self.date_to:
+                time_str = _date(self.date_from.astimezone(tz), "TIME_FORMAT")
+            else:
+                time_str = '{}–{}'.format(
+                    _date(self.date_from.astimezone(tz), "TIME_FORMAT"),
+                    _date(self.date_to.astimezone(tz), "TIME_FORMAT"),
+                )
+
+            if as_html:
+                d = format_html(
+                    d + ' <time datetime="{}" data-timezone="{}" data-time-short>{}</time>',
+                    self.date_from.isoformat(),
+                    str(self.timezone),
+                    time_str,
+                )
+            else:
+                d = d + ' ' + time_str
+
+        return d
+
+    def get_date_range_display_with_times(self) -> str:  # Helper for usage from templates
+        return self.get_date_range_display(try_to_show_times=True)
+
+    def get_date_range_display_with_times_as_html(self) -> str:  # Helper for usage from templates
+        return self.get_date_range_display(try_to_show_times=True, as_html=True)
 
     def get_date_range_display_as_html(self, tz=None, force_show_end=False) -> str:
         return self.get_date_range_display(tz, force_show_end, as_html=True)
-
-    def get_time_range_display(self, tz=None, force_show_end=False) -> str:
-        """
-        Returns a formatted string containing the start time and sometimes the end time
-        of the event with respect to the current locale and to the ``show_date_to``
-        setting. Dates are not shown. This is usually used in combination with get_date_range_display
-        """
-        tz = tz or self.timezone
-
-        show_date_to = self.date_to and (self.settings.show_date_to or force_show_end) and (
-            # Show date to if start and end are on the same day ("08:00-10:00")
-            self.date_to.astimezone(tz).date() == self.date_from.astimezone(tz).date() or
-            # Show date to if start and end are on consecutive days and less than 24h ("23:00-03:00")
-            (self.date_to.astimezone(tz).date() == self.date_from.astimezone(tz).date() + timedelta(days=1) and
-             self.date_to.astimezone(tz).time() < self.date_from.astimezone(tz).time())
-            # Do not show end time if this is a 5-day event because there's no way to make it understandable
-        )
-        if show_date_to:
-            return '{} – {}'.format(
-                _date(self.date_from.astimezone(tz), "TIME_FORMAT"),
-                _date(self.date_to.astimezone(tz), "TIME_FORMAT"),
-            )
-        return _date(self.date_from.astimezone(tz), "TIME_FORMAT")
 
     @property
     def timezone(self):
@@ -822,6 +835,9 @@ class Event(EventMixin, LoggedModel):
         self.all_sales_channels = other.all_sales_channels
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
+
+        if hasattr(other, 'alternative_domain_assignment'):
+            other.alternative_domain_assignment.domain.event_assignments.create(event=self)
 
         if not self.all_sales_channels:
             self.limit_sales_channels.set(

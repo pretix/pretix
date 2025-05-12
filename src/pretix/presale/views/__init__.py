@@ -251,7 +251,8 @@ class CartMixin:
             'seconds_left': seconds_left,
             'first_expiry': first_expiry,
             'is_ordered': bool(order),
-            'itemcount': sum(c.count for c in positions if not c.addon_to)
+            'itemcount': sum(c.count for c in positions if not c.addon_to),
+            'current_selected_payments': [p for p in self.current_selected_payments(total) if p.get('multi_use_supported')]
         }
 
     def current_selected_payments(self, total, warn=False, total_includes_payment_fees=False):
@@ -465,6 +466,9 @@ def iframe_entry_view_wrapper(view_func):
     def wrapped_view(request, *args, **kwargs):
         if 'iframe' in request.GET:
             request.session['iframe_session'] = True
+
+        if request.GET.get("consent"):
+            request.session["requested_consent_from_widget"] = request.GET["consent"]
 
         locale = request.GET.get('locale')
         if locale and locale in [lc for lc, ll in settings.LANGUAGES]:

@@ -97,6 +97,7 @@ lines                                 list of objects            The actual invo
 ├ gross_value                         money (string)             Price including taxes
 ├ tax_value                           money (string)             Tax amount included
 ├ tax_name                            string                     Name of used tax rate (e.g. "VAT")
+├ tax_code                            string                     Codified reason for tax rate (or ``null``), see :ref:`rest-taxcodes`.
 └ tax_rate                            decimal (string)           Used tax rate
 foreign_currency_display              string                     If the invoice should also show the total and tax
                                                                  amount in a different currency, this contains the
@@ -125,6 +126,10 @@ internal_reference                    string                     Customer's refe
 .. versionchanged:: 2023.8
 
    The ``event`` attribute has been added. The organizer-level endpoint has been added.
+
+.. versionchanged:: 2024.8
+
+   The ``tax_code`` attribute has been added.
 
 
 List of all invoices
@@ -203,6 +208,7 @@ List of all invoices
                 "gross_value": "23.00",
                 "tax_value": "0.00",
                 "tax_name": "VAT",
+                "tax_code": "S/standard",
                 "tax_rate": "0.00"
               }
             ],
@@ -342,6 +348,7 @@ Fetching individual invoices
             "gross_value": "23.00",
             "tax_value": "0.00",
             "tax_name": "VAT",
+            "tax_code": "S/standard",
             "tax_rate": "0.00"
           }
         ],

@@ -12,6 +12,7 @@
 @import "_flags.scss";
 @import "_orders.scss";
 @import "_dashboard.scss";
+@import "_mail_preview.scss";
 @import "../../pretixbase/scss/webfont.scss";
 @import "../../fileupload/jquery.fileupload.scss";
 @import "../../leaflet/leaflet.scss";
@@ -768,6 +769,9 @@ h1 .label {
         flex-basis: 100%;
         flex-shrink: 0;
         padding-top: 15px;
+    }
+    .plugin-container:first-child {
+        padding-top: 0;
     }
     .plugin-container:not(.featured-plugin) + .plugin-container {
         border-top: 1px solid #ccc;

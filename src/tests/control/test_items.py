@@ -673,7 +673,12 @@ class ItemsTest(ItemFormTest):
         with scopes_disabled():
             q = Question.objects.create(event=self.event1, question="Size", type="N")
             q.items.add(self.item2)
-        self.item2.sales_channels = ["web", "bar"]
+            self.item2.limit_sales_channels.set(self.orga1.sales_channels.filter(identifier__in=["web", "bar"]))
+            self.item2.all_sales_channels = False
+            self.item2.save()
+            self.var2.limit_sales_channels.set(self.orga1.sales_channels.filter(identifier__in=["web"]))
+            self.var2.all_sales_channels = False
+            self.var2.save()
         prop = self.event1.item_meta_properties.create(name="Foo")
         self.item2.meta_values.create(property=prop, value="Bar")
 
@@ -690,6 +695,7 @@ class ItemsTest(ItemFormTest):
         with scopes_disabled():
             i_old = Item.objects.get(name__icontains='Business')
             i_new = Item.objects.get(name__icontains='Intermediate')
+            v2_new = i_new.variations.get(value__icontains='Gold')
             assert i_new.category == i_old.category
             assert i_new.description == i_old.description
             assert i_new.active == i_old.active
@@ -698,7 +704,8 @@ class ItemsTest(ItemFormTest):
             assert i_new.require_voucher == i_old.require_voucher
             assert i_new.hide_without_voucher == i_old.hide_without_voucher
             assert i_new.allow_cancel == i_old.allow_cancel
-            assert set(i_new.limit_sales_channels.all()) == set(i_old.limit_sales_channels.all())
+            assert set(i_new.limit_sales_channels.values_list("identifier", flat=True)) == {"web", "bar"}
+            assert set(v2_new.limit_sales_channels.values_list("identifier", flat=True)) == {"web"}
             assert i_new.meta_data == i_old.meta_data == {"Foo": "Bar"}
             assert set(i_new.questions.all()) == set(i_old.questions.all())
             assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])

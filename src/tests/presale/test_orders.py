@@ -874,6 +874,21 @@ class OrdersTest(BaseOrdersTest):
             {}, follow=True)
         assert 'alert-danger' in response.content.decode()
 
+    def test_invoice_create_onlypaid(self):
+        self.event.settings.set('invoice_generate', 'user_paid')
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {}, follow=True)
+        assert 'alert-danger' in response.content.decode()
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {}, follow=True)
+        assert 'alert-success' in response.content.decode()
+        with scopes_disabled():
+            assert self.order.invoices.exists()
+
     def test_invoice_create_duplicate(self):
         self.event.settings.set('invoice_generate', 'user')
         with scopes_disabled():

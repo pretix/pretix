@@ -136,9 +136,18 @@ article.item-with-variations .product-row:last-child:after {
     display: none;
 }
 
+.panel-body:not(:has(*)) {
+  padding: 0;
+}
+
 .panel-body > *:last-child,
 .panel-body address:last-child {
     margin-bottom: 0;
+}
+
+.panel > hr {
+    margin: 0;
+    border-top: 1px solid $table-border-color;
 }
 
 .product-row {
@@ -228,33 +237,6 @@ div.front-page {
     }
     .product-row.variation .price {
         padding-inline-start: calc(1.3em + 15px);
-    }
-}
-
-.subevent-list {
-    background-color: white;
-
-    .row {
-        margin: 0;
-    }
-    .label {
-        text-decoration: none;
-    }
-    .subevent-row a {
-        display: block;
-        color: $text-color;
-        padding: 3px 0;
-    }
-    .subevent-row:nth-child(2n) a {
-        background-color: $gray-lighter;
-    }
-    .subevent-row:hover a {
-        background-color: darken($gray-lighter, 10%);
-    }
-    .subevent-row .row > div {
-        padding: 5px;
-        min-height: 35px; /* label height */
-        vertical-align: middle;
     }
 }
 

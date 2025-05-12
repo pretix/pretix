@@ -40,7 +40,7 @@ from dateutil.rrule import rruleset
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
-from django.db import connections, transaction
+from django.db import transaction
 from django.db.models import Count, F, Prefetch, ProtectedError
 from django.db.models.functions import Coalesce, TruncDate, TruncTime
 from django.forms import inlineformset_factory
@@ -657,24 +657,30 @@ class SubEventBulkAction(SubEventQueryMixin, EventPermissionRequiredMixin, View)
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         if request.POST.get('action') == 'disable':
+            log_entries = []
             for obj in self.get_queryset():
-                obj.log_action(
+                log_entries.append(obj.log_action(
                     'pretix.subevent.changed', user=self.request.user, data={
                         'active': False
-                    }
-                )
+                    }, save=False
+                ))
                 obj.active = False
                 obj.save(update_fields=['active'])
+
+            LogEntry.bulk_create_and_postprocess(log_entries)
             messages.success(request, pgettext_lazy('subevent', 'The selected dates have been disabled.'))
         elif request.POST.get('action') == 'enable':
+            log_entries = []
             for obj in self.get_queryset():
-                obj.log_action(
+                log_entries.append(obj.log_action(
                     'pretix.subevent.changed', user=self.request.user, data={
                         'active': True
-                    }
-                )
+                    }, save=False
+                ))
                 obj.active = True
                 obj.save(update_fields=['active'])
+
+            LogEntry.bulk_create_and_postprocess(log_entries)
             messages.success(request, pgettext_lazy('subevent', 'The selected dates have been enabled.'))
         elif request.POST.get('action') == 'delete':
             return render(request, 'pretixcontrol/subevents/delete_bulk.html', {
@@ -682,22 +688,28 @@ class SubEventBulkAction(SubEventQueryMixin, EventPermissionRequiredMixin, View)
                 'forbidden': self.get_queryset().filter(orderposition__isnull=False).distinct(),
             })
         elif request.POST.get('action') == 'delete_confirm':
+            log_entries = []
+            to_delete = []
             for obj in self.get_queryset():
                 try:
                     if not obj.allow_delete():
                         raise ProtectedError('only deactivate', [obj])
-                    CartPosition.objects.filter(addon_to__subevent=obj).delete()
-                    obj.cartposition_set.all().delete()
-                    obj.log_action('pretix.subevent.deleted', user=self.request.user)
-                    obj.delete()
+                    log_entries.append(obj.log_action('pretix.subevent.deleted', user=self.request.user, save=False))
+                    to_delete.append(obj.pk)
                 except ProtectedError:
-                    obj.log_action(
+                    log_entries.append(obj.log_action(
                         'pretix.subevent.changed', user=self.request.user, data={
                             'active': False
-                        }
-                    )
+                        }, save=False,
+                    ))
                     obj.active = False
                     obj.save(update_fields=['active'])
+
+            if to_delete:
+                CartPosition.objects.filter(addon_to__subevent_id__in=to_delete).delete()
+                CartPosition.objects.filter(subevent_id__in=to_delete).delete()
+                SubEvent.objects.filter(pk__in=to_delete).delete()
+            LogEntry.bulk_create_and_postprocess(log_entries)
             messages.success(request, pgettext_lazy('subevent', 'The selected dates have been deleted or disabled.'))
         return redirect(self.get_success_url())
 
@@ -1009,13 +1021,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
                 f.save()
         set_progress(90)
 
-        if connections['default'].features.can_return_rows_from_bulk_insert:
-            LogEntry.objects.bulk_create(log_entries)
-            LogEntry.bulk_postprocess(log_entries)
-        else:
-            for le in log_entries:
-                le.save()
-            LogEntry.bulk_postprocess(log_entries)
+        LogEntry.bulk_create_and_postprocess(log_entries)
 
         self.request.event.cache.clear()
         return len(subevents)
@@ -1578,13 +1584,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         self.save_itemvars()
         self.save_meta()
 
-        if connections['default'].features.can_return_rows_from_bulk_insert:
-            LogEntry.objects.bulk_create(log_entries, batch_size=200)
-            LogEntry.bulk_postprocess(log_entries)
-        else:
-            for le in log_entries:
-                le.save()
-            LogEntry.bulk_postprocess(log_entries)
+        LogEntry.bulk_create_and_postprocess(log_entries)
 
         self.request.event.cache.clear()
         messages.success(self.request, _('Your changes have been saved.'))

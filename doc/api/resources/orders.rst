@@ -75,8 +75,9 @@ positions                             list of objects            List of order p
 fees                                  list of objects            List of fees included in the order total. By default, only
                                                                  non-canceled fees are included.
 ├ id                                  integer                    Internal ID of the fee record
-├ fee_type                            string                     Type of fee (currently ``payment``, ``passbook``,
-                                                                 ``other``)
+├ fee_type                            string                     Type of fee (currently ``payment``, ``shipping``,
+                                                                 ``service``, ``cancellation``, ``insurance``, ``late``,
+                                                                 ``other``, ``giftcard``)
 ├ value                               money (string)             Fee amount
 ├ description                         string                     Human-readable string with more details (can be empty)
 ├ internal_type                       string                     Internal string (i.e. ID of the payment provider),
@@ -84,6 +85,7 @@ fees                                  list of objects            List of fees in
 ├ tax_rate                            decimal (string)           VAT rate applied for this fee
 ├ tax_value                           money (string)             VAT included in this fee
 ├ tax_rule                            integer                    The ID of the used tax rule (or ``null``)
+├ tax_code                            string                     Codified reason for tax rate (or ``null``), see :ref:`rest-taxcodes`.
 └ canceled                            boolean                    Whether or not this fee has been canceled.
 downloads                             list of objects            List of ticket download options for order-wise ticket
                                                                  downloading. This might be a multi-page PDF or a ZIP
@@ -108,6 +110,7 @@ cancellation_date                     datetime                   Time of order c
                                                                  Will not be set for partial cancellations and is not
                                                                  reliable for orders that have been cancelled,
                                                                  reactivated and cancelled again.
+plugin_data                           object                     Additional data added by plugins.
 ===================================== ========================== =======================================================
 
 
@@ -159,6 +162,14 @@ cancellation_date                     datetime                   Time of order c
 
    The ``cancellation_date`` attribute has been added and can also be used as an ordering key.
 
+.. versionchanged:: 2025.1
+
+   The ``tax_code`` attribute has been added.
+
+.. versionchanged:: 2025.2
+
+   The ``plugin_data`` attribute has been added.
+
 .. _order-position-resource:
 
 Order position resource
@@ -195,6 +206,7 @@ voucher_budget_use                    money (string)             Amount of money
                                                                  are changed *after* the order was created. Can be ``null``.
 tax_rate                              decimal (string)           VAT rate applied for this position
 tax_value                             money (string)             VAT included in this position
+tax_code                              string                     Codified reason for tax rate (or ``null``), see :ref:`rest-taxcodes`.
 tax_rule                              integer                    The ID of the used tax rule (or ``null``)
 secret                                string                     Secret code printed on the tickets for validation
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
@@ -245,6 +257,7 @@ seat                                  objects                    The assigned se
 pdf_data                              object                     Data object required for ticket PDF generation. By default,
                                                                  this field is missing. It will be added only if you add the
                                                                  ``pdf_data=true`` query parameter to your request.
+plugin_data                           object                     Additional data added by plugins.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 4.16
@@ -254,6 +267,14 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 2024.9
 
    The attribute ``print_logs`` has been added.
+
+.. versionchanged:: 2025.1
+
+   The ``tax_code`` attribute has been added.
+
+.. versionchanged:: 2025.2
+
+   The ``plugin_data`` attribute has been added.
 
 .. _order-payment-resource:
 
@@ -406,6 +427,7 @@ List of all orders
                 "tax_rate": "0.00",
                 "tax_value": "0.00",
                 "tax_rule": null,
+                "tax_code": null,
                 "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
                 "addon_to": null,
                 "subevent": null,
@@ -450,7 +472,8 @@ List of all orders
                     "output": "pdf",
                     "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
                   }
-                ]
+                ],
+                "plugin_data": {}
               }
             ],
             "downloads": [
@@ -472,7 +495,8 @@ List of all orders
               }
             ],
             "refunds": [],
-            "cancellation_date": null
+            "cancellation_date": null,
+            "plugin_data": {}
           }
         ]
       }
@@ -645,6 +669,7 @@ Fetching individual orders
             "tax_rate": "0.00",
             "tax_rule": null,
             "tax_value": "0.00",
+            "tax_code": null,
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "addon_to": null,
             "subevent": null,
@@ -690,7 +715,8 @@ Fetching individual orders
                 "output": "pdf",
                 "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
               }
-            ]
+            ],
+            "plugin_data": {}
           }
         ],
         "downloads": [
@@ -712,7 +738,8 @@ Fetching individual orders
           }
         ],
         "refunds": [],
-        "cancellation_date": null
+        "cancellation_date": null,
+        "plugin_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -843,7 +870,7 @@ Generating new secrets
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/regenerate_secrets/
 
-   Triggers generation of new ``secret`` attributes for both the order and all order positions.
+   Triggers generation of new ``secret`` and ``web_secret`` attributes for both the order and all order positions.
 
    **Example request**:
 
@@ -874,7 +901,7 @@ Generating new secrets
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/regenerate_secrets/
 
-   Triggers generation of a new ``secret`` attribute for a single order position.
+   Triggers generation of a new ``secret`` and ``web_secret`` attribute for a single order position.
 
    **Example request**:
 
@@ -1613,6 +1640,7 @@ List of all order positions
             "tax_rate": "0.00",
             "tax_rule": null,
             "tax_value": "0.00",
+            "tax_code": null,
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "discount": null,
             "pseudonymization_id": "MQLJvANO3B",
@@ -1658,7 +1686,8 @@ List of all order positions
                 "output": "pdf",
                 "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
               }
-            ]
+            ],
+            "plugin_data": {}
           }
         ]
       }
@@ -1739,6 +1768,7 @@ Fetching individual positions
         "tax_rate": "0.00",
         "tax_rule": null,
         "tax_value": "0.00",
+        "tax_code": null,
         "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
         "addon_to": null,
         "subevent": null,
@@ -1784,7 +1814,8 @@ Fetching individual positions
             "output": "pdf",
             "url": "https://pretix.eu/api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/pdf/"
           }
-        ]
+        ],
+        "plugin_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -1912,8 +1943,13 @@ Manipulating individual positions
 
    * ``valid_until``
 
+   * ``secret``
+
    Changing parameters such as ``item`` or ``price`` will **not** automatically trigger creation of a new invoice,
    you need to take care of that yourself.
+
+   Changing ``secret`` does not cause a new PDF ticket to be sent to the customer, nor does it cause the old secret
+   to be added to the revocation list, even if your ticket generator uses one.
 
    **Example request**:
 
@@ -2214,6 +2250,9 @@ otherwise, such as splitting an order or changing fees.
 
    * ``cancel_fees``: A list of objects with the single key ``fee`` specifying an order fee ID.
 
+   * ``create_fees``: A list of objects describing new order fees with the fields ``fee_type``, ``value``, ``description``,
+     ``internal_type``, ``tax_rule``
+
    * ``recalculate_taxes``: If set to ``"keep_net"``, all taxes will be recalculated based on the tax rule and invoice
      address, the net price will be kept. If set to ``"keep_gross"``, the gross price will be kept. If set to ``null``
      (the default) the taxes are not recalculated.
@@ -2233,22 +2272,22 @@ otherwise, such as splitting an order or changing fees.
       Content-Type: application/json
 
       {
-        "cancel_positions": [
-          {
-            "position": 12373
-          }
-        ],
         "patch_positions": [
           {
             "position": 12374,
             "body": {
               "item": 12,
-              "variation": None,
+              "variation": null,
               "subevent": 562,
               "seat": "seat-guid-2",
               "price": "99.99",
               "tax_rule": 15
             }
+          }
+        ],
+        "cancel_positions": [
+          {
+            "position": 12373
           }
         ],
         "split_positions": [
@@ -2259,7 +2298,7 @@ otherwise, such as splitting an order or changing fees.
         "create_positions": [
           {
             "item": 12,
-            "variation": None,
+            "variation": null,
             "subevent": 562,
             "seat": "seat-guid-2",
             "price": "99.99",
@@ -2267,17 +2306,26 @@ otherwise, such as splitting an order or changing fees.
             "attendee_name": "Peter",
           }
         ],
-        "cancel_fees": [
-          {
-            "fee": 49
-          }
-        ],
-        "change_fees": [
+        "patch_fees": [
           {
             "fee": 51,
             "body": {
               "value": "12.00"
             }
+          }
+        ],
+        "cancel_fees": [
+          {
+            "fee": 49
+          }
+        ],
+        "create_fees": [
+          {
+            "fee_type": "other",
+            "value": "1.50",
+            "description": "Example Fee",
+            "internal_type": "",
+            "tax_rule": 15
           }
         ],
         "reissue_invoice": true,

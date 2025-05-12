@@ -63,19 +63,18 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
+from pretix.base.auth import has_event_access_permission
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
     ItemVariation, Quota, SalesChannel, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
-    ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
+    Item, ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.quotas import QuotaAvailability
-from pretix.base.timemachine import (
-    has_time_machine_permission, time_machine_now,
-)
+from pretix.base.timemachine import time_machine_now
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
@@ -303,14 +302,14 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
 
         if item.hidden_if_item_available:
             if item.hidden_if_item_available.has_variations:
-                dependency_available = any(
+                item._dependency_available = any(
                     var.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)[0] == Quota.AVAILABILITY_OK
                     for var in item.hidden_if_item_available.available_variations
                 )
             else:
                 q = item.hidden_if_item_available.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)
-                dependency_available = q[0] == Quota.AVAILABILITY_OK
-            if dependency_available:
+                item._dependency_available = q[0] == Quota.AVAILABILITY_OK
+            if item._dependency_available and item.hidden_if_item_available_mode == Item.UNAVAIL_MODE_HIDDEN:
                 item._remove = True
                 continue
 
@@ -501,33 +500,37 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         self.subevent = None
         utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_")}
+        pass_through_url_params = utm_params | \
+            {k: v for k, v in request.GET.items() if k in ("locale", "consent")} | \
+            ({"widget_data": request.GET.get('widget_data')} if len(self.request.GET.get('widget_data', '{}')) > 3 else {})
+
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
             get_or_create_cart_id(request)
             return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode(utm_params))
-        elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
-            # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
-            get_or_create_cart_id(request)
+        elif request.GET.get('iframe', '') == '1' and (
+                'take_cart_id' in request.GET or len(self.request.GET.get('widget_data', '{}')) > 3 or 'consent' in request.GET
+        ):
+            # Widget just opened, and a cart already exists or we have been passed widget_data.
+            # Let's do a stupid redirect to check if cookies are disabled.
             return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode({
                 'require_cookie': 'true',
-                'cart_id': request.GET.get('take_cart_id'),
-                **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
-                **utm_params,
+                'cart_id': get_or_create_cart_id(request),
+                **pass_through_url_params,
             }))
-        elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
-            # We've been passed data from a widget, we need to create a cart session to store it.
-            get_or_create_cart_id(request)
         elif 'require_cookie' in request.GET and settings.SESSION_COOKIE_NAME not in request.COOKIES and \
                 '__Host-' + settings.SESSION_COOKIE_NAME not in self.request.COOKIES:
             # Cookies are in fact not supported
             r = render(request, 'pretixpresale/event/cookies.html', {
                 'url': eventreverse(
-                    request.event, "presale:event.index", kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''}
+                    request.event, "presale:event.index", kwargs={
+                        'cart_namespace': kwargs.get('cart_namespace') or '',
+                        **({"subevent": kwargs['subevent']} if kwargs.get('subevent') else {}),
+                    }
                 ) + "?" + urlencode({
                     "src": "widget",
-                    **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
                     **({"take_cart_id": request.GET.get('cart_id')} if request.GET.get('cart_id') else {}),
-                    **utm_params,
+                    **pass_through_url_params,
                 })
             })
             r._csp_ignore = True
@@ -555,6 +558,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context['ev'] = self.subevent or self.request.event
         context['subevent'] = self.subevent
+        context['subevent_list_foldable'] = self.subevent and "date" not in self.request.GET and "filtered" not in self.request.GET
 
         # Show voucher option if an event is selected and vouchers exist
         vouchers_exist = self.request.event.cache.get('vouchers_exist')
@@ -632,7 +636,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['subevent_list_cache_key'] = self._subevent_list_cachekey()
 
         context['show_cart'] = (
-            context['cart']['positions'] and (
+            (context['cart']['positions'] or context['cart'].get('current_selected_payments')) and (
                 self.request.event.has_subevents or self.request.event.presale_is_running
             )
         )
@@ -811,6 +815,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     se for se in context['subevent_list']
                     if not se.presale_has_ended and (se.best_availability_state is None or se.best_availability_state >= Quota.AVAILABILITY_RESERVED)
                 ]
+            context['visible_events'] = len(context['subevent_list']) > 0
         return context
 
 
@@ -962,7 +967,7 @@ class EventTimeMachine(EventViewMixin, TemplateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        if not has_time_machine_permission(request, request.event):
+        if not has_event_access_permission(request):
             raise PermissionDenied(_('You are not allowed to access time machine mode.'))
         if not request.event.testmode:
             raise PermissionDenied(_('This feature is only available in test mode.'))

@@ -8,134 +8,109 @@
     <form method="post">
         {% csrf_token %}
         <div class="panel-group" id="customer">
-            <div class="panel panel-default">
-                <div class="accordion-radio">
-                    <div class="panel-heading">
-                        <p class="panel-title">
+            <fieldset class="panel panel-default accordion-panel">
+                <legend class="accordion-radio">
+                    <label class="panel-heading">
+                        <span class="panel-title">
                             <input type="radio" name="customer_mode" value="login"
-                                    data-parent="#customer"
                                     {% if selected == "login" or not signup_allowed %}checked="checked"{% endif %}
-                                    id="input_customer_login"
-                                    data-toggle="radiocollapse" data-target="#customer_login"/>
-                            <label for="input_customer_login"><strong>{% trans "Log in with a customer account" %}</strong></label>
+                                    aria-controls="customer_login" />
+                            {% trans "Log in with a customer account" %}
+                        </span>
+                    </label>
+                </legend>
+                <div id="customer_login" class="panel-body form-horizontal">
+                    {% if customer %}
+                        <p>
+                            {% blocktrans trimmed with org=request.organizer.name %}
+                                You are currently logged in with the following credentials.
+                            {% endblocktrans %}
+                        </p>
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "Email" %}</dt>
+                            <dd>
+                                {{ customer.email }}
+                            </dd>
+                            <dt>{% trans "Name" %}</dt>
+                            <dd>{{ customer.name }}</dd>
+                            <dt>{% trans "Customer ID" %}</dt>
+                            <dd>
+                                #{{ customer.identifier }}
+                            </dd>
+                        </dl>
+                    {% else %}
+                        <p>
+                            {% blocktrans trimmed with org=request.organizer.name %}
+                                If you created a customer account at {{ org }} before, you can log in now and connect
+                                your order to your account. This will allow you to see all your orders in one place
+                                and access them at any time.
+                            {% endblocktrans %}
+                        </p>
+                        {% if request.organizer.settings.customer_accounts_native %}
+                            {% bootstrap_form login_form layout="checkout" %}
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                {% for provider in request.organizer.sso_providers.all %}
+                                    {% if provider.is_active %}
+                                        <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?next={% if request.event_domain %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.get_full_path|urlencode }}"
+                                           class="btn btn-primary btn-lg btn-block" data-open-in-popup-window>
+                                            {{ provider.button_label }}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <input type="hidden" name="login-sso-data" id="login_sso_data">
+                    {% endif %}
+                </div>
+            </fieldset>
+            {% if signup_allowed %}
+                <fieldset class="panel panel-default accordion-panel">
+                    <legend class="accordion-radio">
+                        <label class="panel-heading">
+                            <span class="panel-title">
+                                <input type="radio" name="customer_mode" value="register"
+                                        {% if selected == "register" %}checked="checked"{% endif %}
+                                        aria-controls="customer_register" />
+                                {% trans "Create a new customer account" %}
+                            </span>
+                        </label>
+                    </legend>
+                    <div id="customer_register" class="panel-body form-horizontal">
+                        {% bootstrap_form register_form layout="checkout" %}
+                        <p>
+                            {% blocktrans trimmed with org=request.organizer.name %}
+                                We will send you an email with a link to activate your account and set a password, so
+                                you can use the account for future orders at {{ org }}. You can still go ahead with this
+                                purchase before you received the email.
+                            {% endblocktrans %}
                         </p>
                     </div>
-                </div>
-                <div id="customer_login"
-                        class="panel-collapse collapsed {% if selected == "login" or not signup_allowed %}in{% endif %}">
-                    <div class="panel-body form-horizontal">
-                        {% if customer %}
-                            <p>
-                                {% blocktrans trimmed with org=request.organizer.name %}
-                                    You are currently logged in with the following credentials.
-                                {% endblocktrans %}
-                            </p>
-                            <dl class="dl-horizontal">
-                                <dt>{% trans "Email" %}</dt>
-                                <dd>
-                                    {{ customer.email }}
-                                </dd>
-                                <dt>{% trans "Name" %}</dt>
-                                <dd>{{ customer.name }}</dd>
-                                <dt>{% trans "Customer ID" %}</dt>
-                                <dd>
-                                    #{{ customer.identifier }}
-                                </dd>
-                            </dl>
-                        {% else %}
-                            <p>
-                                {% blocktrans trimmed with org=request.organizer.name %}
-                                    If you created a customer account at {{ org }} before, you can log in now and connect
-                                    your order to your account. This will allow you to see all your orders in one place
-                                    and access them at any time.
-                                {% endblocktrans %}
-                            </p>
-                            {% if request.organizer.settings.customer_accounts_native %}
-                                {% bootstrap_form login_form layout="checkout" %}
-                                <div class="row">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        <a
-                                                href="{% abseventurl request.organizer "presale:organizer.customer.resetpw" %}"
-                                                target="_blank">
-                                            {% trans "Reset password" %}
-                                        </a>
-                                    </div>
-                                </div>
-                            {% endif %}
-                            <div class="row">
-                                <div class="col-md-6 col-md-offset-3">
-                                    {% for provider in request.organizer.sso_providers.all %}
-                                        {% if provider.is_active %}
-                                            <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?next={% if request.event_domain %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.get_full_path|urlencode }}"
-                                               class="btn btn-primary btn-lg btn-block" data-open-in-popup-window>
-                                                {{ provider.button_label }}
-                                            </a>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <input type="hidden" name="login-sso-data" id="login_sso_data">
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% if signup_allowed %}
-                <div class="panel panel-default">
-                    <div class="accordion-radio">
-                        <div class="panel-heading">
-                            <p class="panel-title">
-                                <input type="radio" name="customer_mode" value="register"
-                                        data-parent="#customer"
-                                        {% if selected == "register" %}checked="checked"{% endif %}
-                                        id="input_customer_register"
-                                        data-toggle="radiocollapse" data-target="#customer_register"/>
-                                <label for="input_customer_register"><strong>{% trans "Create a new customer account" %}</strong></label>
-                            </p>
-                        </div>
-                    </div>
-                    <div id="customer_register"
-                            class="panel-collapse collapsed {% if selected == "register" %}in{% endif %}">
-                        <div class="panel-body form-horizontal">
-                            {% bootstrap_form register_form layout="checkout" %}
-                            <p>
-                                {% blocktrans trimmed with org=request.organizer.name %}
-                                    We will send you an email with a link to activate your account and set a password, so
-                                    you can use the account for future orders at {{ org }}. You can still go ahead with this
-                                    purchase before you received the email.
-                                {% endblocktrans %}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                </fieldset>
             {% endif %}
             {% if guest_allowed %}
-                <div class="panel panel-default">
-                    <div class="accordion-radio">
-                        <div class="panel-heading">
-                            <p class="panel-title">
+                <fieldset class="panel panel-default accordion-panel">
+                    <legend class="accordion-radio">
+                        <label class="panel-heading">
+                            <span class="panel-title">
                                 <input type="radio" name="customer_mode" value="guest"
-                                        data-parent="#customer"
                                         {% if selected == "guest" %}checked="checked"{% endif %}
-                                        id="input_customer_guest"
-                                        aria-describedby="customer_guest"
-                                        data-toggle="radiocollapse" data-target="#customer_guest"/>
-                                <label for="input_customer_guest"><strong>{% trans "Continue as a guest" %}</strong></label>
-                            </p>
-                        </div>
+                                        aria-controls="customer_guest" />
+                                {% trans "Continue as a guest" %}
+                            </span>
+                        </label>
+                    </legend>
+                    <div id="customer_guest" class="panel-body form-horizontal">
+                        <p>
+                            {% blocktrans trimmed %}
+                                You are not required to create an account. If you proceed as a guest, you will be able
+                                to access the details and status of your order any time through the secret link we will
+                                send you via email once the order is complete.
+                            {% endblocktrans %}
+                        </p>
                     </div>
-                    <div id="customer_guest"
-                            class="panel-collapse collapsed {% if selected == "guest" %}in{% endif %}">
-                        <div class="panel-body form-horizontal">
-                            <p>
-                                {% blocktrans trimmed %}
-                                    You are not required to create an account. If you proceed as a guest, you will be able
-                                    to access the details and status of your order any time through the secret link we will
-                                    send you via email once the order is complete.
-                                {% endblocktrans %}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                </fieldset>
             {% endif %}
         </div>
         <div class="row checkout-button-row">

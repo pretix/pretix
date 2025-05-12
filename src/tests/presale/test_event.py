@@ -55,6 +55,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.testutils.sessions import get_cart_session_key
 
 
 class EventTestMixin:
@@ -1003,6 +1004,25 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert 'name="variation_%d_%d' % (self.item.pk, var1.pk) not in html.rendered_content
         assert 'name="variation_%d_%d' % (self.item.pk, var2.pk) not in html.rendered_content
 
+    def test_voucher_is_a_gift_card(self):
+        gc = self.orga.issued_gift_cards.create(secret="GIFTCARD", currency=self.event.currency)
+        gc.transactions.create(value=Decimal("12.00"), acceptor=self.orga)
+
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'GIFTCARD'), follow=True)
+        assert "alert-success" in html.rendered_content
+        assert "€12.00" in html.rendered_content
+
+        payments = self.client.session['carts'][get_cart_session_key(self.client, self.event)]["payments"]
+        assert payments[0]["info_data"]["gift_card_secret"] == "GIFTCARD"
+
+    def test_voucher_is_a_gift_card_but_invalid(self):
+        gc = self.orga.issued_gift_cards.create(secret="GIFTCARD", currency=self.event.currency, expires=now() - datetime.timedelta(days=1))
+        gc.transactions.create(value=Decimal("12.00"), acceptor=self.orga)
+
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'GIFTCARD'), follow=True)
+        assert "alert-danger" in html.rendered_content
+        assert "This gift card is no longer valid" in html.rendered_content
+
 
 class WaitingListTest(EventTestMixin, SoupTest):
     @scopes_disabled()
@@ -1584,6 +1604,8 @@ class EventLocaleTest(EventTestMixin, SoupTest):
         self.event.settings.locales = ['de', 'en']
         self.event.settings.locale = 'de'
         self.event.settings.timezone = 'UTC'
+        self.event.date_from = datetime.datetime(2024, 12, 26, 14, 0, tzinfo=datetime.timezone.utc)
+        self.event.save()
 
     def test_german_by_default(self):
         response = self.client.get(
@@ -1599,7 +1621,7 @@ class EventLocaleTest(EventTestMixin, SoupTest):
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Fri, Dec. 26th,', response.rendered_content)
+        self.assertIn('Thu, Dec. 26th,', response.rendered_content)
         self.assertIn('14:00', response.rendered_content)
 
     def test_english_region_US(self):
@@ -1609,7 +1631,7 @@ class EventLocaleTest(EventTestMixin, SoupTest):
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Fri, Dec. 26th,', response.rendered_content)
+        self.assertIn('Thu, Dec. 26th,', response.rendered_content)
         self.assertIn('2 p.m.', response.rendered_content)
 
     def test_german_region_US(self):
@@ -1619,5 +1641,5 @@ class EventLocaleTest(EventTestMixin, SoupTest):
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Fr, 26. Dezember', response.rendered_content)
+        self.assertIn('Do, 26. Dezember', response.rendered_content)
         self.assertIn('14:00', response.rendered_content)

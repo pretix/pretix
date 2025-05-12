@@ -20,7 +20,8 @@ To actually log an action, you can just call the ``log_action`` method on your o
 
 .. code-block:: python
 
-   order.log_action('pretix.event.order.canceled', user=user, data={})
+   order.log_action('pretix.event.order.comment', user=user,
+                    data={"new_comment": "Hello, world."})
 
 The positional ``action`` argument should represent the type of action and should be globally unique, we
 recommend to prefix it with your package name, e.g. ``paypal.payment.rejected``. The ``user`` argument is
@@ -72,24 +73,101 @@ following ready-to-include template::
    {% include "pretixcontrol/includes/logs.html" with obj=order %}
 
 We now need a way to translate the action codes like ``pretix.event.changed`` into human-readable
-strings. The :py:attr:`pretix.base.signals.logentry_display` signals allows you to do so. A simple
+strings. The :py:attr:`pretix.base.logentrytypes.log_entry_types` :ref:`registry <registries>` allows you to do so. A simple
 implementation could look like:
 
 .. code-block:: python
 
     from django.utils.translation import gettext as _
-    from pretix.base.signals import logentry_display
+    from pretix.base.logentrytypes import log_entry_types
 
-    @receiver(signal=logentry_display)
-    def pretixcontrol_logentry_display(sender, logentry, **kwargs):
-        plains = {
-            'pretix.event.order.paid': _('The order has been marked as paid.'),
-            'pretix.event.order.refunded': _('The order has been refunded.'),
-            'pretix.event.order.canceled': _('The order has been canceled.'),
-            ...
-        }
-        if logentry.action_type in plains:
-            return plains[logentry.action_type]
+
+    @log_entry_types.new_from_dict({
+        'pretix.event.order.comment': _('The order\'s internal comment has been updated to: {new_comment}'),
+        'pretix.event.order.paid': _('The order has been marked as paid.'),
+        # ...
+    })
+    class CoreOrderLogEntryType(OrderLogEntryType):
+        pass
+
+Please note that you always need to define your own inherited ``LogEntryType`` class in your plugin. If you would just
+register an instance of a ``LogEntryType`` class defined in pretix core, it cannot be automatically detected as belonging
+to your plugin, leading to confusing user interface situations.
+
+
+Customizing log entry display
+"""""""""""""""""""""""""""""
+
+The base ``LogEntryType`` classes allow for varying degree of customization in their descendants.
+
+If you want to add another log message for an existing core object (e.g. an :class:`Order <pretix.base.models.Order>`,
+:class:`Item <pretix.base.models.Item>`, or :class:`Voucher <pretix.base.models.Voucher>`), you can inherit
+from its predefined :class:`LogEntryType <pretix.base.logentrytypes.LogEntryType>`, e.g.
+:class:`OrderLogEntryType <pretix.base.logentrytypes.OrderLogEntryType>`, and just specify a new plaintext string.
+You can use format strings to insert information from the LogEntry's `data` object as shown in the section above.
+
+If you define a new model object in your plugin, you should make sure proper object links in the user interface are
+displayed for it. If your model object belongs logically to a pretix :class:`Event <pretix.base.models.Event>`, you can inherit from :class:`EventLogEntryType <pretix.base.logentrytypes.EventLogEntryType>`,
+and set the ``object_link_*`` fields accordingly. ``object_link_viewname`` refers to a django url name, which needs to
+accept the arguments `organizer` and `event`, containing the respective slugs, and additional arguments provided by
+``object_link_args``. The default implementation of ``object_link_args`` will return an argument named by
+````object_link_argname``, with a value of ``content_object.pk`` (the primary key of the model object).
+If you want to customize the name displayed for the object (instead of the result of calling ``str()`` on it),
+overwrite ``object_link_display_name``.
+
+
+.. code-block:: python
+
+    class ItemLogEntryType(EventLogEntryType):
+        object_link_wrapper = _('Product {val}')
+
+        # link will be generated as reverse('control:event.item', {'organizer': ..., 'event': ..., 'item': item.pk})
+        object_link_viewname = 'control:event.item'
+        object_link_argname = 'item'
+
+
+.. code-block:: python
+
+    class OrderLogEntryType(EventLogEntryType):
+        object_link_wrapper = _('Order {val}')
+
+        # link will be generated as reverse('control:event.order', {'organizer': ..., 'event': ..., 'code': order.code})
+        object_link_viewname = 'control:event.order'
+
+        def object_link_args(self, order):
+            return {'code': order.code}
+
+        def object_link_display_name(self, order):
+            return order.code
+
+To show more sophisticated message strings, e.g. varying the message depending on information from the :class:`LogEntry <pretix.base.models.log.LogEntry>`'s
+`data` object, override the `display` method:
+
+.. code-block:: python
+
+    @log_entry_types.new()
+    class PaypalEventLogEntryType(EventLogEntryType):
+        action_type = 'pretix.plugins.paypal.event'
+
+        def display(self, logentry):
+            event_type = logentry.parsed_data.get('event_type')
+            text = {
+                'PAYMENT.SALE.COMPLETED': _('Payment completed.'),
+                'PAYMENT.SALE.DENIED': _('Payment denied.'),
+                # ...
+            }.get(event_type, f"({event_type})")
+            return _('PayPal reported an event: {}').format(text)
+
+.. automethod:: pretix.base.logentrytypes.LogEntryType.display
+
+If your new model object does not belong to an :class:`Event <pretix.base.models.Event>`, you need to inherit directly from ``LogEntryType`` instead
+of ``EventLogEntryType``, providing your own implementation of ``get_object_link_info`` if object links should be
+displayed.
+
+.. autoclass:: pretix.base.logentrytypes.LogEntryType
+   :members: get_object_link_info
+
+
 
 Sending notifications
 ---------------------

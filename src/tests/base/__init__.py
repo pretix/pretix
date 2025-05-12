@@ -74,7 +74,7 @@ def extract_form_fields(soup):
             continue
 
     # textareas
-    for textarea in soup.findAll('textarea'):
+    for textarea in soup.find_all('textarea'):
         if textarea['name'] in data:
             if not isinstance(data[textarea['name']], list):
                 data[textarea['name']] = [data[textarea['name']]]

@@ -36,7 +36,9 @@ from django_scopes import ScopedManager
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
 
-PositionInfo = namedtuple('PositionInfo', ['item_id', 'subevent_id', 'line_price_gross', 'is_addon_to', 'voucher_discount'])
+PositionInfo = namedtuple('PositionInfo',
+                          ['item_id', 'subevent_id', 'subevent_date_from', 'line_price_gross', 'is_addon_to',
+                           'voucher_discount'])
 
 
 class Discount(LoggedModel):
@@ -169,6 +171,17 @@ class Discount(LoggedModel):
         help_text=_("If this option is checked, products that already received a discount through a voucher will not "
                     "be discounted. However, products that use a voucher only to e.g. unlock a hidden product or gain "
                     "access to sold-out quota will still receive the discount."),
+    )
+
+    subevent_date_from = models.DateTimeField(
+        verbose_name=pgettext_lazy("subevent", "Available for dates starting from"),
+        null=True,
+        blank=True,
+    )
+    subevent_date_until = models.DateTimeField(
+        verbose_name=pgettext_lazy("subevent", "Available for dates starting until"),
+        null=True,
+        blank=True,
     )
 
     # more feature ideas:
@@ -355,11 +368,15 @@ class Discount(LoggedModel):
         # First, filter out everything not even covered by our product scope
         condition_candidates = [
             idx
-            for idx, (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount) in positions.items()
+            for idx, (item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, voucher_discount) in
+            positions.items()
             if (
                 (self.condition_all_products or item_id in limit_products) and
                 (self.condition_apply_to_addons or not is_addon_to) and
                 (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
+                and (not subevent_id or (
+                    self.subevent_date_from is None or subevent_date_from >= self.subevent_date_from)) and (
+                        self.subevent_date_until is None or subevent_date_from <= self.subevent_date_until)
             )
         ]
 
@@ -369,7 +386,8 @@ class Discount(LoggedModel):
             benefit_products = {p.pk for p in self.benefit_limit_products.all()}
             benefit_candidates = [
                 idx
-                for idx, (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount) in positions.items()
+                for idx, (item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, voucher_discount) in
+                positions.items()
                 if (
                     item_id in benefit_products and
                     (self.benefit_apply_to_addons or not is_addon_to) and

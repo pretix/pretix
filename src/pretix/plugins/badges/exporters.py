@@ -289,7 +289,7 @@ def _render_nup(input_files: List[str], num_pages: int, output_file: BytesIO, op
             pass
 
     try:
-        badges_pdf = PdfReader(input_files.pop())
+        badges_pdf = PdfReader(input_files.pop(0))
         offset = 0
         for i, chunk_indices in enumerate(_chunks(range(num_pages), badges_per_page * max_nup_pages)):
             chunk = []
@@ -298,7 +298,7 @@ def _render_nup(input_files: List[str], num_pages: int, output_file: BytesIO, op
                 # file has beforehand
                 if j - offset >= len(badges_pdf.pages):
                     offset += len(badges_pdf.pages)
-                    badges_pdf = PdfReader(input_files.pop())
+                    badges_pdf = PdfReader(input_files.pop(0))
                 chunk.append(badges_pdf.pages[j - offset])
             # Reset some internal state from pypdf. This will make it a little slower, but will prevent us from
             # running out of memory if we process a really large file.

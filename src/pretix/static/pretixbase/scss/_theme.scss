@@ -41,19 +41,21 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .btn-default {
-  box-shadow: 0px 0px 0px 1px #cccccc inset;
+  box-shadow: 0px 0px 0px 1px $input-border inset;
   box-sizing: border-box;
 }
 
 .btn-default:hover, .btn-default:focus {
-  box-shadow: 0px 0px 0px 1px #cccccc inset, inset 0 1px 3px 0 #BFBFBF;
+  box-shadow: 0px 0px 0px 1px $input-border inset, inset 0 1px 3px 0 #BFBFBF;
   background: $btn-default-bg;
 }
 
 .btn-default:active, .btn-default:active:hover, .btn-default:active:focus {
-  box-shadow: 0px 0px 0px 1px #cccccc inset, inset 0 1px 8px 0 #BFBFBF;
   background: $btn-default-bg;
   outline: 0;
+}
+.btn-default.active, .btn-default.active:hover, .btn-default.active:focus {
+  box-shadow: 0px 0px 0px 1px $input-border inset, inset 0 1px 8px 0 #BFBFBF;  
 }
 
 .btn-primary:hover, .btn-primary:focus {
@@ -114,6 +116,10 @@ input[type=number]::-webkit-outer-spin-button {
   background: transparent;
   border: transparent;
 }
+
+.btn-group-flex { display: flex; }
+.btn-group-flex > .btn { flex: 1; }
+
 .panel-heading {
   border-radius: 0;
 }
@@ -219,6 +225,10 @@ input[type=number]::-webkit-outer-spin-button {
 svg.svg-icon {
   position: relative;
   top: 2px;
+}
+
+.text-muted path {
+  fill: $text-muted;
 }
 
 .link-muted a, a.link-muted {

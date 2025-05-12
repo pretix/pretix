@@ -13,7 +13,7 @@
         </p>
     {% elif incomplete %}
         <div class="alert alert-danger">
-            {% trans "A product in your cart is only sold in combination with add-on products that are no longer available. Please contact the event organizer." %}
+            {% trans "A product in your cart is only sold in combination with add-on products that are not available. Please contact the event organizer." %}
         </div>
     {% endif %}
     <form class="form-horizontal" method="post" data-asynctask
@@ -42,11 +42,7 @@
                             {% if form.pos.subevent %}
                                 <p>
                                     <span class="fa fa-calendar" aria-hidden="true"></span>
-                                    {{ form.pos.subevent.name }} &middot; {{ form.pos.subevent.get_date_range_display_as_html }}
-                                    {% if form.pos.event.settings.show_times %}
-                                        <span class="fa fa-clock-o" aria-hidden="true"></span>
-                                        {{ form.pos.subevent.date_from|date:"TIME_FORMAT" }}
-                                    {% endif %}
+                                    {{ form.pos.subevent.name }} &middot; {{ form.pos.subevent.get_date_range_display_with_times_as_html }}
                                 </p>
                             {% endif %}
                             {% include "pretixpresale/event/fragment_addon_choice.html" with form=form %}

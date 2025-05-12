@@ -65,7 +65,7 @@ from pretix.api.serializers.item import (
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemVariation, Order, Question,
-    QuestionAnswer, QuestionOption, Quota, Voucher,
+    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
@@ -101,10 +101,16 @@ class ItemList(ListView):
     template_name = 'pretixcontrol/items/index.html'
 
     def get_queryset(self):
+        requires_seat = Exists(
+            SeatCategoryMapping.objects.filter(
+                product_id=OuterRef('pk'),
+            )
+        )
         return Item.objects.filter(
             event=self.request.event
         ).select_related("tax_rule").annotate(
-            var_count=Count('variations')
+            var_count=Count('variations'),
+            requires_seat=requires_seat,
         ).prefetch_related("category", "limit_sales_channels").order_by(
             F('category__position').asc(nulls_first=True),
             'category', 'position'

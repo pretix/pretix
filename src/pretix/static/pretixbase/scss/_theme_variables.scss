@@ -53,7 +53,9 @@ $in-border-radius-small: 2px !default;
   --pretix-brand-primary-darken-17: #{darken($in-brand-primary, 17%)};
   --pretix-brand-primary-darken-20: #{darken($in-brand-primary, 20%)};
   --pretix-brand-primary-darken-30: #{darken($in-brand-primary, 30%)};
+  --pretix-brand-primary-tint-90: #{tint($in-brand-primary, 90%)};
   --pretix-brand-primary-shade-25: #{shade($in-brand-primary, 25%)};
+  --pretix-brand-primary-shade-42: #{shade($in-brand-primary, 42%)};
   --pretix-brand-primary-lighten-28-saturate-20: #{saturate(lighten($in-brand-primary, 28%), 20%)};
   --pretix-brand-primary-lighten-23-saturate-2: #{saturate(lighten($in-brand-primary, 23%), 2%)};
 

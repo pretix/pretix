@@ -62,7 +62,8 @@ class MetricsMiddleware(object):
         t0 = time.perf_counter()
         resp = self.get_response(request)
         tdiff = time.perf_counter() - t0
-        pretix_view_duration_seconds.observe(tdiff, status_code=resp.status_code, method=request.method,
-                                             url_name=url.namespace + ':' + url.url_name)
+        if url.url_name:
+            pretix_view_duration_seconds.observe(tdiff, status_code=resp.status_code, method=request.method,
+                                                 url_name=url.namespace + ':' + url.url_name)
 
         return resp

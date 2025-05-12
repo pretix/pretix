@@ -239,6 +239,7 @@ TEST_INVOICE_RES = {
             "gross_value": "23.00",
             "tax_value": "0.00",
             "tax_name": "",
+            "tax_code": None,
             "tax_rate": "0.00"
         },
         {
@@ -255,6 +256,7 @@ TEST_INVOICE_RES = {
             'variation': None,
             "gross_value": "0.25",
             "tax_value": "0.05",
+            "tax_code": None,
             "tax_name": "",
             "tax_rate": "19.00"
         }

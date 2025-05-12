@@ -1,3 +1,8 @@
+.. spelling:word-list::
+
+   EN16931
+   DSFinV-K
+
 .. _rest-taxrules:
 
 Tax rules
@@ -18,6 +23,7 @@ id                                    integer                    Internal ID of 
 name                                  multi-lingual string       The tax rules' name
 internal_name                         string                     An optional name that is only used in the backend
 rate                                  decimal (string)           Tax rate in percent
+code                                  string                     Codified reason for tax rate (or ``null``), see :ref:`rest-taxcodes`.
 price_includes_tax                    boolean                    If ``true`` (default), tax is assumed to be included in
                                                                  the specified product price
 eu_reverse_charge                     boolean                    **DEPRECATED**. If ``true``, EU reverse charge rules
@@ -41,6 +47,42 @@ custom_rules                          object                     Dynamic rules s
 .. versionchanged:: 2023.6
 
     The ``custom_rules`` attribute has been added.
+
+.. versionchanged:: 2023.8
+
+    The ``code`` attribute has been added.
+
+.. _rest-taxcodes:
+
+Tax codes
+---------
+
+For integration with external systems, such as electronic invoicing or bookkeeping systems, the tax rate itself is often
+not sufficient information. For example, there could be many different reasons why a sale has a tax rate of 0 %, but the
+external handling of the transaction depends on which reason applies. Therefore, pretix allows to supply a codified
+reason that allows us to understand what the specific legal situation is. These tax codes are modeled after a combination
+of the code lists from the European standard EN16931 and the German standard DSFinV-K.
+
+The following codes are supported:
+
+- ``S/standard`` -- Standard VAT rate in the merchant country
+- ``S/reduced`` -- Reduced VAT rate in the merchant country
+- ``S/averaged`` -- Averaged VAT rate in the merchant country (known use case: agricultural businesses in Germany)
+- ``AE`` -- Reverse charge
+- ``O`` -- Services outside of scope of tax
+- ``E`` -- Exempt from tax (no reason given)
+- ``E/<reason>`` -- Exempt from tax, where ``<reason>`` is one of the codes listed in the `VATEX code list`_ version 5.0.
+- ``Z`` -- Zero-rated goods
+- ``G`` -- Free export item, VAT not charged
+- ``K`` -- VAT exempt for EEA intra-community supply of goods and services
+- ``L`` -- Canary Islands general indirect tax
+- ``M`` -- Tax for production, services and importation in Ceuta and Melilla
+- ``B`` -- Transferred (VAT), only in Italy
+
+The code set in the ``code`` attribute of the tax rule is used by default. When ``eu_reverse_charge`` is active, the
+code is replaced by ``AE`` for reverse charge sales and by ``O`` for non-EU sales. When configuring custom rules, you
+should actively set a ``"code"`` key on each rule. Only for ``"action": "reverse"`` we automatically apply the code
+``AE``, in all other cases the default ``code`` of the tax rule is selected.
 
 Endpoints
 ---------
@@ -74,6 +116,7 @@ Endpoints
             "id": 1,
             "name": {"en": "VAT"},
             "internal_name": "VAT",
+            "code": "S/standard",
             "rate": "19.00",
             "price_includes_tax": true,
             "eu_reverse_charge": false,
@@ -115,6 +158,7 @@ Endpoints
         "id": 1,
         "name": {"en": "VAT"},
         "internal_name": "VAT",
+        "code": "S/standard",
         "rate": "19.00",
         "price_includes_tax": true,
         "eu_reverse_charge": false,
@@ -164,6 +208,7 @@ Endpoints
         "id": 1,
         "name": {"en": "VAT"},
         "internal_name": "VAT",
+        "code": "S/standard",
         "rate": "19.00",
         "price_includes_tax": true,
         "eu_reverse_charge": false,
@@ -212,6 +257,7 @@ Endpoints
         "id": 1,
         "name": {"en": "VAT"},
         "internal_name": "VAT",
+        "code": "S/standard",
         "rate": "20.00",
         "price_includes_tax": true,
         "eu_reverse_charge": false,
@@ -258,3 +304,4 @@ Endpoints
    :statuscode 403: The requested organizer/event/rule does not exist **or** you have no permission to change it **or** this tax rule cannot be deleted since it is currently in use.
 
 .. _here: https://github.com/pretix/pretix/blob/master/src/pretix/static/schema/tax-rules-custom.schema.json
+.. _VATEX code list: https://ec.europa.eu/digital-building-blocks/sites/display/DIGITAL/Registry+of+supporting+artefacts+to+implement+EN16931#RegistryofsupportingartefactstoimplementEN16931-Codelists

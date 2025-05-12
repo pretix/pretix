@@ -271,7 +271,9 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 event_date_from=p.subevent.date_from if invoice.event.has_subevents else invoice.event.date_from,
                 event_date_to=p.subevent.date_to if invoice.event.has_subevents else invoice.event.date_to,
                 event_location=location if invoice.event.settings.invoice_event_location else None,
-                tax_rate=p.tax_rate, tax_name=p.tax_rule.name if p.tax_rule else ''
+                tax_rate=p.tax_rate,
+                tax_code=p.tax_code,
+                tax_name=p.tax_rule.name if p.tax_rule else ''
             )
 
             if p.tax_rule and p.tax_rule.is_reverse_charge(ia) and p.price and not p.tax_value:
@@ -305,6 +307,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 ),
                 tax_value=fee.tax_value,
                 tax_rate=fee.tax_rate,
+                tax_code=fee.tax_code,
                 tax_name=fee.tax_rule.name if fee.tax_rule else '',
                 fee_type=fee.fee_type,
                 fee_internal_type=fee.internal_type or None,
@@ -491,13 +494,19 @@ def build_preview_invoice_pdf(event):
                     InvoiceLine.objects.create(
                         invoice=invoice, description=_("Sample product {}").format(i + 1),
                         gross_value=tax.gross, tax_value=tax.tax,
-                        tax_rate=tax.rate, tax_name=tax.name
+                        tax_rate=tax.rate, tax_name=tax.name, tax_code=tax.code,
+                        event_date_from=event.date_from,
+                        event_date_to=event.date_to,
+                        event_location=event.settings.invoice_event_location,
                     )
         else:
             for i in range(5):
                 InvoiceLine.objects.create(
                     invoice=invoice, description=_("Sample product A"),
-                    gross_value=100, tax_value=0, tax_rate=0
+                    gross_value=100, tax_value=0, tax_rate=0, tax_code=None,
+                    event_date_from=event.date_from,
+                    event_date_to=event.date_to,
+                    event_location=event.settings.invoice_event_location,
                 )
 
         return event.invoice_renderer.generate(invoice)

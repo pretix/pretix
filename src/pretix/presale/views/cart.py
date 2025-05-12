@@ -42,6 +42,7 @@ from urllib.parse import quote
 from django.conf import settings
 from django.contrib import messages
 from django.core.cache import caches
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
@@ -57,7 +58,7 @@ from django.views.generic import TemplateView, View
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    CartPosition, InvoiceAddress, QuestionAnswer, SubEvent, Voucher,
+    CartPosition, GiftCard, InvoiceAddress, QuestionAnswer, SubEvent, Voucher,
 )
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, apply_voucher, clear_cart, error_messages,
@@ -157,11 +158,13 @@ def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_r
         return
 
     subevent = None
+    prefix = ''
     if key.startswith('subevent_'):
         try:
             parts = key.split('_', 2)
             subevent = int(parts[1])
             key = parts[2]
+            prefix = f'subevent_{subevent}_'
         except ValueError:
             pass
     elif 'subevent' in request.POST:
@@ -174,7 +177,7 @@ def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_r
         return
 
     parts = key.split("_")
-    price = request.POST.get('price_' + "_".join(parts[1:]), "")
+    price = request.POST.get(prefix + 'price_' + "_".join(parts[1:]), "")
 
     if key.startswith('seat_'):
         try:
@@ -438,8 +441,48 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
         return _('We applied the voucher to as many products in your cart as we could.')
 
     def post(self, request, *args, **kwargs):
+        from pretix.base.payment import GiftCardPayment
+
         if 'voucher' in request.POST:
-            return self.do(self.request.event.id, request.POST.get('voucher'), get_or_create_cart_id(self.request),
+            code = request.POST.get('voucher').strip()
+
+            if not self.request.event.vouchers.filter(code__iexact=code):
+                try:
+                    gc = self.request.event.organizer.accepted_gift_cards.get(secret=code)
+                    gcp = GiftCardPayment(self.request.event)
+                    if not gcp.is_enabled or not gcp.is_allowed(self.request, Decimal("1.00")):
+                        raise ValidationError(error_messages['voucher_invalid'])
+                    else:
+                        cs = cart_session(request)
+                        gcp._add_giftcard_to_cart(cs, gc)
+                        messages.success(
+                            request,
+                            _("The gift card has been saved to your cart. Please continue your checkout.")
+                        )
+                        if "ajax" in self.request.POST or "ajax" in self.request.GET:
+                            return JsonResponse({
+                                'ready': True,
+                                'success': True,
+                                'redirect': self.get_success_url(),
+                                'message': str(
+                                    _("The gift card has been saved to your cart. Please continue your checkout.")
+                                )
+                            })
+                        return redirect_to_url(self.get_success_url())
+                except GiftCard.DoesNotExist:
+                    pass
+                except ValidationError as e:
+                    messages.error(self.request, str(e.message))
+                    if "ajax" in self.request.POST or "ajax" in self.request.GET:
+                        return JsonResponse({
+                            'ready': True,
+                            'success': False,
+                            'redirect': self.get_success_url(),
+                            'message': str(e.message)
+                        })
+                    return redirect_to_url(self.get_error_url())
+
+            return self.do(self.request.event.id, code, get_or_create_cart_id(self.request),
                            translation.get_language(), request.sales_channel.identifier,
                            time_machine_now(default=None))
         else:
@@ -631,6 +674,8 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         return context
 
     def dispatch(self, request, *args, **kwargs):
+        from pretix.base.payment import GiftCardPayment
+
         err = None
         v = request.GET.get('voucher')
 
@@ -653,10 +698,24 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
                 if v_avail < 1 and not err:
                     err = error_messages['voucher_redeemed_cart'] % self.request.event.settings.reservation_time
             except Voucher.DoesNotExist:
-                if self.request.event.organizer.accepted_gift_cards.filter(secret__iexact=request.GET.get("voucher")).exists():
-                    err = error_messages['gift_card']
-                else:
+                try:
+                    gc = self.request.event.organizer.accepted_gift_cards.get(secret=v.strip())
+                    gcp = GiftCardPayment(self.request.event)
+                    if not gcp.is_enabled or not gcp.is_allowed(self.request, Decimal("1.00")):
+                        err = error_messages['voucher_invalid']
+                    else:
+                        cs = cart_session(request)
+                        gcp._add_giftcard_to_cart(cs, gc)
+                        messages.success(
+                            request,
+                            _("The gift card has been saved to your cart. Please now select the products "
+                              "you want to purchase.")
+                        )
+                        return redirect_to_url(self.get_next_url())
+                except GiftCard.DoesNotExist:
                     err = error_messages['voucher_invalid']
+                except ValidationError as e:
+                    err = str(e.message)
         else:
             context = {}
             context['cart'] = self.get_cart()

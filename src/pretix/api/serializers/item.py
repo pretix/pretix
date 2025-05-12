@@ -272,7 +272,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'checkin_text', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
-                  'show_quota_left', 'hidden_if_available', 'hidden_if_item_available', 'allow_waitinglist',
+                  'show_quota_left', 'hidden_if_available', 'hidden_if_item_available', 'hidden_if_item_available_mode', 'allow_waitinglist',
                   'issue_giftcard', 'meta_data',
                   'require_membership', 'require_membership_types', 'require_membership_hidden', 'grant_membership_type',
                   'grant_membership_duration_like_event', 'grant_membership_duration_days',

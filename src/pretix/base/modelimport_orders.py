@@ -441,6 +441,7 @@ class Price(DecimalColumnMixin, ImportColumn):
         position.price = p.gross
         position.tax_rule = position.item.tax_rule
         position.tax_rate = p.rate
+        position.tax_code = p.code
         position.tax_value = p.tax
 
 
@@ -584,7 +585,7 @@ class SeatColumn(ImportColumn):
                 raise ValidationError(_('Multiple matching seats were found.'))
             except Seat.DoesNotExist:
                 raise ValidationError(_('No matching seat was found.'))
-            if not value.is_available() or value in self._cached:
+            if not value.is_available(sales_channel=previous_values.get('sales_channel')) or value in self._cached:
                 raise ValidationError(
                     _('The seat you selected has already been taken. Please select a different seat.'))
             self._cached.add(value)
@@ -753,11 +754,11 @@ def get_order_import_columns(event):
         AttendeeState(event),
         Price(event),
         Secret(event),
+        Saleschannel(event),
         SeatColumn(event),
         ValidFrom(event),
         ValidUntil(event),
         Locale(event),
-        Saleschannel(event),
         CheckinAttentionColumn(event),
         CheckinTextColumn(event),
         Expires(event),

@@ -84,6 +84,8 @@ A working example would be:
             restricted = False
             description = _("This plugin allows you to receive payments via PayPal")
             compatibility = "pretix>=2.7.0"
+            settings_links = []
+            navigation_links = []
 
 
     default_app_config = 'pretix_paypal.PaypalApp'
@@ -121,6 +123,7 @@ This will automatically make pretix discover this plugin as soon as it is instal
 through ``pip``. During development, you can just run ``python setup.py develop`` inside
 your plugin source directory to make it discoverable.
 
+.. _`signals`:
 Signals
 -------
 
@@ -153,6 +156,25 @@ in the ``installed`` method:
 Note that ``installed`` will *not* be called if the plugin is indirectly activated for an event
 because the event is created with settings copied from another event.
 
+.. _`registries`:
+Registries
+----------
+
+Many signals in pretix are used so that plugins can "register" a class, e.g. a payment provider or a
+ticket renderer.
+
+However, for some of them (types of :ref:`Log Entries <logging>`) we use a different method to keep track of them:
+In a ``Registry``, classes are collected at application startup, along with a unique key (in case
+of LogEntryType, the ``action_type``) as well as which plugin registered them.
+
+To register a class, you can use one of several decorators provided by the Registry object:
+
+.. autoclass:: pretix.base.logentrytypes.LogEntryTypeRegistry
+   :members: register, new, new_from_dict
+
+All files in which classes are registered need to be imported in the ``AppConfig.ready`` as explained
+in `Signals <signals>`_ above.
+
 Views
 -----
 
@@ -164,6 +186,28 @@ your Django app label.
 .. WARNING:: If you define custom URLs and views, you are currently on your own
    with checking that the calling user is logged in, has appropriate permissions,
    etc. We plan on providing native support for this in a later version.
+
+To make your plugin views easily discoverable, you can specify links for "Go to"
+and "Settings" buttons next to your entry on the plugin page. These links should be
+added to the ``navigation_links`` and ``settings_links``, respectively, in the
+``PretixPluginMeta`` class.
+
+Each array entry consists of a tuple ``(label, urlname, kwargs)``. For the label,
+either a string or a tuple of strings can be specified. In the latter case, the provided
+strings will be merged with a separator indicating they are successive navigation steps
+the user would need to take to reach the page via the regular menu
+(e.g. "Payment > Bank transfer" as below).
+
+.. code-block:: python
+
+        settings_links = [
+            ((_("Payment"), _("Bank transfer")), "control:event.settings.payment.provider", {"provider": "banktransfer"}),
+        ]
+        navigation_links = [
+            ((_("Bank transfer"), _("Import bank data")), "plugins:banktransfer:import", {}),
+            ((_("Bank transfer"), _("Export refunds")), "plugins:banktransfer:refunds.list", {}),
+        ]
+
 
 .. _Django app: https://docs.djangoproject.com/en/3.0/ref/applications/
 .. _signal dispatcher: https://docs.djangoproject.com/en/3.0/topics/signals/

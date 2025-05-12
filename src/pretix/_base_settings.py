@@ -75,6 +75,14 @@ FORMAT_MODULE_PATH = [
     'pretix.helpers.formats',
 ]
 
+CORE_MODULES = {
+    "pretix.base",
+    "pretix.presale",
+    "pretix.control",
+    "pretix.plugins.checkinlists",
+    "pretix.plugins.reports",
+}
+
 ALL_LANGUAGES = [
     ('en', _('English')),
     ('de', _('German')),
@@ -85,6 +93,7 @@ ALL_LANGUAGES = [
     ('zh-hans', _('Chinese (simplified)')),
     ('zh-hant', _('Chinese (traditional)')),
     ('cs', _('Czech')),
+    ('hr', _('Croatian')),
     ('da', _('Danish')),
     ('nl', _('Dutch')),
     ('nl-informal', _('Dutch (informal)')),
@@ -94,6 +103,7 @@ ALL_LANGUAGES = [
     ('el', _('Greek')),
     ('id', _('Indonesian')),
     ('it', _('Italian')),
+    ('ja', _('Japanese')),
     ('lv', _('Latvian')),
     ('nb-no', _('Norwegian Bokmål')),
     ('pl', _('Polish')),
@@ -111,10 +121,11 @@ LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_RTL = {
+    # When adding more right-to-left languages, also update pretix/static/pretixbase/scss/_rtl.scss
     'ar', 'hw'
 }
 LANGUAGES_INCUBATING = {
-    'fi', 'pt-br', 'gl',
+    'pt-br', 'gl',
 }
 LANGUAGES = ALL_LANGUAGES
 LOCALE_PATHS = [
@@ -153,6 +164,12 @@ EXTRA_LANG_INFO = {
         'code': 'pt-pt',
         'name': 'Portuguese',
         'name_local': 'Português',
+    },
+    'nb-no': {
+        'bidi': False,
+        'code': 'nb-no',
+        'name': 'Norwegian Bokmal',
+        'name_local': 'norsk (bokmål)',
     },
 }
 
@@ -243,7 +260,7 @@ COMPRESS_FILTERS = {
 CURRENCIES = [
     c for c in currencies
     if c.alpha_3 not in {
-        'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XPD', 'XPT', 'XSU', 'XTS', 'XUA',
+        'USN', 'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XPD', 'XPT', 'XSU', 'XTS', 'XUA',
     }
 ]
 CURRENCY_PLACES = {
@@ -287,7 +304,7 @@ PILLOW_FORMATS_QUESTIONS_IMAGE = ('PNG', 'GIF', 'JPEG', 'BMP', 'TIFF')
 FILE_UPLOAD_EXTENSIONS_EMAIL_ATTACHMENT = (
     ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
     ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
-    ".bmp", ".tif", ".tiff"
+    ".bmp", ".tif", ".tiff", ".ics",
 )
 FILE_UPLOAD_EXTENSIONS_OTHER = FILE_UPLOAD_EXTENSIONS_EMAIL_ATTACHMENT
 

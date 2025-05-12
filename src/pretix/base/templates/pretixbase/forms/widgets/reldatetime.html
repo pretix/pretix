@@ -9,19 +9,15 @@
                     {{ selopt.label }}
                 </label>
                 {% if selopt.value == "absolute" %}
-                    {% include widget.subwidgets.1.template_name with widget=widget.subwidgets.1 %}
+                    {{ rendered_subwidgets.absolute }}
                 {% elif selopt.value == "relative_minutes" %}
-                    {% include widget.subwidgets.5.template_name with widget=widget.subwidgets.5 %}
-                    {% trans "minutes" %}
-                    {% include widget.subwidgets.7.template_name with widget=widget.subwidgets.7 %}
-                    {% include widget.subwidgets.3.template_name with widget=widget.subwidgets.3 %}
+                    {% blocktrans trimmed with number=rendered_subwidgets.rel_mins_number relation=rendered_subwidgets.rel_mins_relation relation_to=rendered_subwidgets.rel_mins_relationto %}
+                        {{ number }} minutes {{ relation }} {{ relation_to }}
+                    {% endblocktrans %}
                 {% elif selopt.value == "relative" %}
-                    {% include widget.subwidgets.2.template_name with widget=widget.subwidgets.2 %}
-                    {% trans "days" %}
-                    {% include widget.subwidgets.8.template_name with widget=widget.subwidgets.8 %}
-                    {% include widget.subwidgets.6.template_name with widget=widget.subwidgets.6 %}
-                    {% trans "at" %}
-                    {% include widget.subwidgets.4.template_name with widget=widget.subwidgets.4 %}
+                    {% blocktrans trimmed with number=rendered_subwidgets.rel_days_number relation=rendered_subwidgets.rel_days_relation relation_to=rendered_subwidgets.rel_days_relationto time_of_day=rendered_subwidgets.rel_days_timeofday %}
+                        {{ number }} days {{ relation }} {{ relation_to }} at {{ time_of_day }}
+                    {% endblocktrans %}
                 {% endif %}
             </div>
         {% endfor %}

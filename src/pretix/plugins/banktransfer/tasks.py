@@ -267,8 +267,9 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
 
         if created:
             # We're perform a payment method switching on-demand here
-            old_fee, new_fee, fee, p = change_payment_provider(order, p.payment_provider, p.amount,
-                                                               new_payment=p, create_log=False)  # noqa
+            old_fee, new_fee, fee, p, new_invoice_created = change_payment_provider(
+                order, p.payment_provider, p.amount, new_payment=p, create_log=False
+            )  # noqa
             if fee:
                 p.fee = fee
                 p.save(update_fields=['fee'])
@@ -291,11 +292,11 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
     trans.save()
 
 
-def parse_date(date_str):
+def parse_date(date_str, region=None):
     try:
         return dateutil.parser.parse(
             date_str,
-            dayfirst="." in date_str,
+            dayfirst="." in date_str or region in ["GB"],
         ).date()
     except (ValueError, OverflowError):
         pass
@@ -338,7 +339,7 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = Non
                                 external_id=row.get('external_id'),
                                 currency=event.currency if event else job.currency)
 
-        trans.date_parsed = parse_date(trans.date)
+        trans.date_parsed = parse_date(trans.date, (event and event.settings.region) or (organizer and organizer.settings.region) or None)
 
         trans.checksum = trans.calculate_checksum()
         if trans.checksum not in known_checksums and (not trans.external_id or (trans.external_id, trans.date, trans.amount) not in known_by_external_id):
