@@ -551,7 +551,7 @@ $(function () {
                 }
                 dependent.closest('.form-group').toggleClass('required', enabled);
                 if (enabled) {
-                    dependentLabel.append('<i class="sr-only label-required">, ' + gettext('required') + '</i>');
+                    dependentLabel.append('<i class="label-required">' + gettext('required') + '</i>');
                 }
                 else {
                     dependentLabel.find(".label-required").remove();

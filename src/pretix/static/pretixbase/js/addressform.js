@@ -51,6 +51,13 @@ $(function () {
                         const required = 'required' in options && options.required && isRequired && visible;
                         dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
                         dependent.prop("required", required);
+                        const label = dependent.closest(".form-group").find("label");
+                        const labelRequired = label.find(".label-required");
+                        if (!required) {
+                            labelRequired.remove();
+                        } else if (!labelRequired.length) {
+                            label.append('<i class="label-required">' + gettext('required') + '</i>')
+                        }
                     }
                     for (var k in dependents) dependents[k].prop("disabled", false);
                 }).always(function() {
@@ -64,6 +71,7 @@ $(function () {
 
                         dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
                         dependent.prop("required", required);
+                        dependent.closest(".form-group").find("label .label-required").remove();
                     }
                 });
             };
