@@ -34,13 +34,13 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">
-                <b>
+                <strong>
                 {% if "old" in request.GET %}
                     {% trans "Past events" %}
                 {% else %}
                     {% trans "Upcoming events" %}
                 {% endif %}
-                </b>
+                </strong>
             </h2>
         </div>
     {% if filter_form.fields %}
