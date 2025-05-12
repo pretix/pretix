@@ -1064,18 +1064,10 @@ Vue.component('pretix-widget-event-form', {
 
         + '</div>'
     ),
-    data: function () {
-        return {
-            buy_disabled: true
-        }
-    },
     mounted: function() {
-        this.$root.$on('amounts_changed', this.calculate_buy_disabled)
         this.$root.$on('focus_voucher_field', this.focus_voucher_field)
-        this.calculate_buy_disabled()
     },
     beforeDestroy: function() {
-        this.$root.$off('amounts_changed', this.calculate_buy_disabled)
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
@@ -1151,28 +1143,6 @@ Vue.component('pretix-widget-event-form', {
                 $el.focus();
             });
         },
-        calculate_buy_disabled: function() {
-            var i, j, k;
-            for (i = 0; i < this.$root.categories.length; i++) {
-                var cat = this.$root.categories[i];
-                for (j = 0; j < cat.items.length; j++) {
-                    var item = cat.items[j];
-                    if (item.has_variations) {
-                        for (k = 0; k < item.variations.length; k++) {
-                            var v = item.variations[k];
-                            if (v.amount_selected) {
-                                this.buy_disabled = false;
-                                return;
-                            }
-                        }
-                    } else if (item.amount_selected) {
-                        this.buy_disabled = false;
-                        return;
-                    }
-                }
-            }
-            this.buy_disabled = true;
-        }
     }
 });
 
