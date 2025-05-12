@@ -69,6 +69,17 @@ html {
     }
 }
 
+.on-focus-visible:focus, .on-focus-visible:focus-within {
+    height: auto;
+    width: auto;
+    overflow: auto;
+    clip: auto;
+}
+#skip-to-main {
+    /* padding is needed to make focus-outline visible */
+    padding: 6px;
+}
+
 /* fixe for bootstrap using px-values for fontsize */
 .panel-title {
     font-size: ($font-size-base * 1.125);
