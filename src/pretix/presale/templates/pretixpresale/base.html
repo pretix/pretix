@@ -1,6 +1,7 @@
 {% load compress %}
 {% load static %}
 {% load i18n %}
+{% load icon %}
 {% load safelink %}
 {% load statici18n %}
 {% load thumb %}
@@ -47,6 +48,31 @@
 <nav id="skip-to-main" role="navigation" aria-label="{% trans "Skip link" context "skip-to-main-nav" %}" class="sr-only on-focus-visible">
   <p><a href="#content">{% trans "Skip to main content" %}</a></p>
 </nav>
+<dialog id="dialog-info" aria-labelledby="dialog-info-label" aria-describedby="dialog-info-description">
+    <div class="modal-card">
+        <div class="modal-card-icon">
+            {% icon "cog big-rotating-icon" %}
+        </div>
+        <div class="modal-card-content">
+            <h2 id="dialog-info-label">Hier die Überschrift</h2>
+            <p id="dialog-info-description">Hier kommt der Text. Danach der Status-Absatz.</p>
+        </div>
+    </div>
+</dialog>
+<dialog id="dialog-alert" role="alertdialog" aria-labelledby="dialog-alert-label" aria-describedby="dialog-alert-description">
+    <div class="modal-card">
+        <div class="modal-card-icon">
+            {% icon "cog big-rotating-icon" %}
+        </div>
+        <div class="modal-card-content">
+            <h2 id="dialog-alert-label">Hier die Überschrift</h2>
+            <p id="dialog-alert-description"></p>
+        </div>
+    </div>
+    <form method="dialog" class="text-right">
+        <button class="btn btn-primary">OK</button>
+    </form>
+</dialog>
 <header>
 {% if ie_deprecation_warning %}
     <div class="old-browser-warning">
