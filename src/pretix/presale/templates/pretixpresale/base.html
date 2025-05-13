@@ -44,7 +44,7 @@
 </head>
 <body class="nojs" data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}" data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-currency="{{ request.event.currency }}">
 {{ html_page_header|safe }}
-<nav id="skip-to-main" role="navigation" aria-label="{% trans "Skip-Link" %}" class="sr-only on-focus-visible">
+<nav id="skip-to-main" role="navigation" aria-label="{% trans "Skip link" context "skip-to-main-nav" %}" class="sr-only on-focus-visible">
   <p><a href="#content">{% trans "Skip to main content" %}</a></p>
 </nav>
 <header>
