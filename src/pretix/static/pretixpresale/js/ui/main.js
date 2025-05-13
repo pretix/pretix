@@ -264,8 +264,8 @@ function setup_basics(el) {
     el.find(".js-only").removeClass("js-only");
     el.find(".js-hidden").hide();
     // make sure to always have a #content for skip-link to work
-    if (!el.find("#content").length) {
-        el.find("main").first().attr("id", "content");
+    if (!document.querySelector("#content")) {
+        (document.querySelector('main') || document.querySelector('.page-header + *')).id = "content"
     }
 
     el.find("div.collapsed").removeClass("collapsed").addClass("collapse");
