@@ -77,9 +77,14 @@ html {
 }
 #skip-to-main {
     /* padding is needed to make focus-outline visible */
-    padding: 6px;
-
+    padding: 8px;
+    background-color: inherit;
+    p {
+        margin: 0;
+    }
     a {
+        padding: .125em .5em;
+        display: inline-block;
         color: var(--pretix-link-contrast-color);
         outline-color: inherit;
     }
