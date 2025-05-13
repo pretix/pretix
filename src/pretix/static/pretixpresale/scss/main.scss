@@ -374,6 +374,47 @@ body.loading .container {
     -webkit-transition: opacity .5s ease-in-out;
 }
 
+
+#dialog-info, #dialog-alert {
+    border: none;
+    background: white;
+    border-radius: $border-radius-large;
+    box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+    padding: 20px;
+
+
+    max-width: 32em;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+
+
+    &::backdrop {
+        background: rgba(255, 255, 255, .7);
+    }
+
+    .modal-card {
+        display: flex;
+        align-items: center;
+
+        .modal-card-icon {
+            width: 150px;
+            text-align: center;
+            color: $brand-primary;
+            font-size: 120px;
+        }
+        .modal-card-content {
+            text-align: left;
+            h2 {
+                margin-top: 0;
+                font-size: 1.25em;
+                font-weight: bold;
+                color: $brand-primary;
+            }
+        }
+    }
+}
+
+
 .typo-alert span[data-typosuggest] {
     text-decoration: underline;
     cursor: pointer;

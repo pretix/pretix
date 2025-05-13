@@ -386,6 +386,33 @@ $(function () {
     $("body").removeClass("nojs");
     moment.locale($("body").attr("data-datetimelocale"));
 
+    $(document).on("pretix:alert pretix:info", function (e, detail) {
+        var dialog = document.getElementById("dialog-" + e.type.substring(7));
+        $("#" + dialog.getAttribute("aria-labelledby")).text(detail.label);
+        $("#" + dialog.getAttribute("aria-describedby")).text(detail.description);
+        $(".modal-card-icon .fa", dialog).attr('class', 'fa fa-' + (detail.icon || "exclamation-triangle"));
+        dialog.showModal();
+    });
+
+    $("form:has(#btn-add-to-cart)").on("submit", function(e) {
+        if (
+            (this.classList.contains("has-seating") && this.querySelector("pretix-seating-checkout-button button")) ||
+            this.querySelector("input[type=checkbox]:checked") || 
+            [...this.querySelectorAll(".input-item-count[type=text]")].some(input => input.value && input.value !== "0") // TODO: seating hat noch einen seating-dummy-item-count, das ist Mist!
+        ) {
+            // okay, let the submit-event bubble to async-task
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+        $(document).trigger("pretix:alert", {
+            label: gettext("You have not selected any ticket"),
+            description: gettext("Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart."),
+            icon: 'exclamation',
+        });
+    });
+
     var scrollpos = sessionStorage ? sessionStorage.getItem('scrollpos') : 0;
     if (scrollpos) {
         window.scrollTo(0, scrollpos);
@@ -487,33 +514,6 @@ $(function () {
             this.form.submit();
         }
     });
-    var update_cart_form = function () {
-        var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
-        if (!is_enabled) {
-            $(".input-item-count").each(function () {
-                if ($(this).val() && $(this).val() !== "0") {
-                    is_enabled = true;
-                }
-            });
-            $(".input-seat-selection option").each(function() {
-                if ($(this).val() && $(this).val() !== "" && $(this).prop('selected')) {
-                    is_enabled = true;
-                }
-            });
-        }
-        if (!is_enabled && (!$(".has-seating").length || $("#seating-dummy-item-count").length)) {
-            $("#btn-add-to-cart").prop("disabled", !is_enabled).popover({
-                'content': function () { return gettext("Please enter a quantity for one of the ticket types.") },
-                'placement': 'top',
-                'trigger': 'hover focus'
-            });
-        } else {
-            $("#btn-add-to-cart").prop("disabled", false).popover("destroy")
-        }
-    };
-    update_cart_form();
-    $(".product-row input[type=checkbox], .variations input[type=checkbox], .product-row input[type=radio], .variations input[type=radio], .input-item-count, .input-seat-selection")
-        .on("change mouseup keyup", update_cart_form);
 
     $(".table-calendar td.has-events").click(function () {
         var $grid = $(this).closest("[role='grid']");
