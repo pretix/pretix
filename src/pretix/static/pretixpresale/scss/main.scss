@@ -69,6 +69,30 @@ html {
     }
 }
 
+.on-focus-visible:focus, .on-focus-visible:focus-within {
+    height: auto;
+    width: auto;
+    overflow: auto;
+    clip: auto;
+}
+#skip-to-main {
+    /* padding is needed to make focus-outline visible */
+    padding: 8px;
+    background-color: inherit;
+    p {
+        margin: 0;
+    }
+    a {
+        padding: .125em .5em;
+        display: inline-block;
+        color: var(--pretix-link-contrast-color);
+        outline-color: inherit;
+    }
+    a:active, a:hover, a:focus {
+        color: var(--pretix-link-hover-contrast-color);
+    }
+}
+
 /* fixe for bootstrap using px-values for fontsize */
 .panel-title {
     font-size: ($font-size-base * 1.125);
