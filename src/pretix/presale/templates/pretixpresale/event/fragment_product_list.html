@@ -7,7 +7,7 @@
 {% load rich_text %}
 {% for tup in items_by_category %}{% with category=tup.0 items=tup.1 form_prefix=tup.2 %}
     {% if category %}
-        <section aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
+        <section class="item-category" aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
             <h{{ headline_level|default:3 }} class="h3" id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}
                 {% if category.subevent_name %}
                     <small class="text-muted"><i class="fa fa-calendar" aria-hidden="true"></i> {{ category.subevent_name }}</small>
@@ -24,7 +24,7 @@
                 <div id="{{ form_prefix }}category-info-{{ category.id }}">{{ category.description|localize|rich_text }}</div>
             {% endif %}
     {% else %}
-        <section aria-labelledby="{{ form_prefix }}category-none">
+        <section class="item-category" aria-labelledby="{{ form_prefix }}category-none">
             <h{{ headline_level|default:"3" }} id="{{ form_prefix }}category-none" class="h3 sr-only">{% trans "Uncategorized items" %}</h{{ headline_level|default:3 }}>
     {% endif %}
         {% for item in items %}
