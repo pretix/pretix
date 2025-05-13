@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-05-07 06:00+0000\n"
+"PO-Revision-Date: 2025-05-14 02:00+0000\n"
 "Last-Translator: Zona Vip <contacto@zonavip.mx>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -2595,7 +2595,7 @@ msgstr "Vales de compra bloqueados"
 
 #: pretix/base/exporters/orderlist.py:1135 pretix/control/views/item.py:982
 msgid "Current user's carts"
-msgstr "Cesta actual del usuario"
+msgstr "Carrito actual del usuario"
 
 #: pretix/base/exporters/orderlist.py:1135
 msgid "Exited orders"
@@ -4244,12 +4244,13 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
-"Esta opción le permite crear descuentos del tipo \"compre X y obtenga Y "
-"reducido/gratis\". Por ejemplo, si establece \"Número mínimo de productos "
-"coincidentes\" en cuatro y este valor en dos, la cesta del cliente se "
-"dividirá en grupos de cuatro entradas y se descontarán las dos entradas más "
-"baratos dentro de cada grupo. Si desea otorgar el descuento en todos los "
-"productos coincidentes, mantenga este campo vacío."
+"Esta opción le permite crear descuentos del tipo "
+"\"compre X y obtenga Y reducido/gratis\". Por ejemplo, si establece "
+"\"Número mínimo de productos coincidentes\" en cuatro y este valor en dos,  "
+"el carrito del cliente se dividirá en grupos de cuatro entradas y se "
+"descontarán las dos entradas más baratos dentro de cada grupo. Si desea "
+"otorgar el descuento en todos los productos coincidentes, mantenga este "
+"campo vacío."
 
 #: pretix/base/models/discount.py:165
 msgid "Apply to add-on products"
@@ -4719,7 +4720,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:126
 msgid "Only show if the cart contains one of the following products"
-msgstr "Sólo se muestra si la cesta contiene uno de los siguientes productos"
+msgstr "Sólo se muestra el carrito contiene uno de los siguientes productos"
 
 #: pretix/base/models/items.py:129
 msgid "Cross-selling condition"
@@ -4989,7 +4990,7 @@ msgid ""
 "many times. If you keep the field empty or set it to 0, there is no special "
 "limit for this product."
 msgstr ""
-"Este producto sólo se puede comprar si se agrega a la cesta por lo menos "
+"Este producto sólo se puede comprar si se agrega al carrito por lo menos "
 "esta cantidad de veces. Si deja el campo vacío o lo fija en 0, no hay ningún "
 "límite especial para este producto."
 
@@ -6063,15 +6064,15 @@ msgstr "Posición del pedido"
 
 #: pretix/base/models/orders.py:3091
 msgid "Cart ID (e.g. session key)"
-msgstr "ID de cesta (p. ej. clave de sesión)"
+msgstr "ID de carrito (p. ej. clave de sesión)"
 
 #: pretix/base/models/orders.py:3128
 msgid "Cart position"
-msgstr "Posición de la cesta"
+msgstr "Posición del carrito"
 
 #: pretix/base/models/orders.py:3129
 msgid "Cart positions"
-msgstr "Posiciones de la cesta"
+msgstr "Posiciones del carrito"
 
 #: pretix/base/models/orders.py:3265
 msgid "Business customer"
@@ -6636,7 +6637,7 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
-"Este producto añadirá a la cesta del usuario si está usado el vale de "
+"Este producto añadirá al carrito del usuario si está usado el vale de "
 "compra. En vez de un producto específico, se puede seleccionar una cuota. En "
 "este caso, todos los productos que están asignados al esta cuota se pueden "
 "seleccionar."
@@ -7787,7 +7788,7 @@ msgstr "Usted no seleccionó ningún producto."
 
 #: pretix/base/services/cart.py:105
 msgid "Unknown cart position."
-msgstr "Posición de la cesta desconocida."
+msgstr "Posición del carrito desconocida."
 
 #: pretix/base/services/cart.py:106
 msgctxt "subevent"
@@ -7821,7 +7822,7 @@ msgid ""
 "products are affected and have not been added to your cart: %s"
 msgstr ""
 "Algunos de los productos que seleccionó ya no están disponibles. Los "
-"siguientes productos están afectados y no se han agregado a su cesta: %s"
+"siguientes productos están afectados y no se han agregado a su carrito: %s"
 
 #: pretix/base/services/cart.py:121
 #, python-format
@@ -7832,7 +7833,7 @@ msgid ""
 msgstr ""
 "Algunos de los productos que seleccionó ya no están disponibles en la "
 "cantidad que seleccionó. Los siguientes productos están afectados y no se "
-"han agregado a su cesta: %s"
+"han agregado a su carrito: %s"
 
 #: pretix/base/services/cart.py:126
 #, python-format
@@ -7870,11 +7871,11 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-"Eliminamos %(product)s de su cesta ya que no puede comprar menos de %(min)s "
-"artículo del mismo."
+"Eliminamos %(product)s de su carrito ya que no puede comprar menos de %(min)"
+"s artículo del mismo."
 msgstr[1] ""
-"Eliminamos %(product)s de su cesta ya que no puede comprar menos de %(min)s "
-"artículos del mismo."
+"Eliminamos %(product)s de su carrito ya que no puede comprar menos de %(min)"
+"s artículos del mismo."
 
 #: pretix/base/services/cart.py:144 pretix/base/services/orders.py:154
 #: pretix/presale/templates/pretixpresale/event/index.html:167
@@ -7900,7 +7901,7 @@ msgid ""
 "positions have been removed from your cart."
 msgstr ""
 "El período de preventa de este evento aún no ha comenzado. Las posiciones "
-"afectadas han sido eliminadas de su cesta."
+"afectadas han sido eliminadas de su carrito."
 
 #: pretix/base/services/cart.py:151 pretix/base/services/orders.py:182
 msgid ""
@@ -7908,7 +7909,7 @@ msgid ""
 "affected positions have been removed from your cart."
 msgstr ""
 "El período de preventa de uno de los eventos de su cesta ha finalizado. Las "
-"posiciones afectadas han sido eliminadas de su cesta."
+"posiciones afectadas han sido eliminadas de su carrito."
 
 #: pretix/base/services/cart.py:153
 msgid "The entered price is not a number."
@@ -7950,11 +7951,11 @@ msgid_plural ""
 msgstr[0] ""
 "El vale de compra \"%(voucher)s\" solo se puede utilizar si selecciona al "
 "menos %(number)s productos coincidentes. Por lo tanto, hemos eliminado "
-"algunas posiciones de su cesta que ya no se pueden comprar así."
+"algunas posiciones de su carrito que ya no se pueden comprar así."
 msgstr[1] ""
 "Los vale de compra \"%(voucher)s\" solo se pueden utilizar si selecciona al "
 "menos %(number)s productos coincidentes. Por lo tanto, hemos eliminado "
-"algunas posiciones de su cesta que ya no se pueden comprar así."
+"algunas posiciones de su carrito que ya no se pueden comprar así."
 
 #: pretix/base/services/cart.py:168
 msgid ""
@@ -7971,7 +7972,7 @@ msgid ""
 "process. You can try to use it again in %d minutes."
 msgstr ""
 "Este vale de compra está actualmente bloqueado ya que está contenido en un "
-"cesta de la compra. Esto puede significar que otra persona está canjeando "
+"carrito de la compra. Esto puede significar que otra persona está canjeando "
 "este vale de compra ahora mismo, o que usted intentó canjearlo antes pero no "
 "completó el proceso de pago. Puede intentar utilizarlo de nuevo en %d "
 "minutos."
@@ -7986,7 +7987,7 @@ msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
-"La aplicación de un vale de compra a todo la cesta no debe combinarse con "
+"La aplicación de un vale de compra a todo el carrito no debe combinarse con "
 "otras operaciones."
 
 #: pretix/base/services/cart.py:178
@@ -7994,7 +7995,7 @@ msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
-"Ya ha utilizado este vale de compra. Elimine la línea asociada de su cesta "
+"Ya ha utilizado este vale de compra. Elimine la línea asociada de su carrito "
 "si desea utilizarlo para un producto diferente."
 
 #: pretix/base/services/cart.py:181
@@ -8015,7 +8016,7 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
-"No encontramos ninguna posición en su cesta para la que podamos usar este "
+"No encontramos ninguna posición en su carrito para la que podamos usar este "
 "vale de compra. Si desea agregar algo nuevo a su cesta usando ese vale de "
 "compra, puede hacerlo con la opción de canje de vale de compra en la parte "
 "inferior de la página."
@@ -8616,8 +8617,8 @@ msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
-"El precio de algunos de los artículos en su cesta ha cambiado en el durante "
-"este tiempo. Por favor vea abajo para más detalles."
+"El precio de algunos de los artículos en su carrito ha cambiado en el "
+"durante este tiempo. Por favor vea abajo para más detalles."
 
 #: pretix/base/services/orders.py:141
 msgid "An internal error occurred, please try again."
@@ -8633,7 +8634,7 @@ msgstr ""
 
 #: pretix/base/services/orders.py:144
 msgid "Your cart is empty."
-msgstr "Su cesta está vacía."
+msgstr "Su carrito está vacío."
 
 #: pretix/base/services/orders.py:146
 #, python-format
@@ -8645,10 +8646,10 @@ msgid_plural ""
 "removed the surplus items from your cart."
 msgstr[0] ""
 "No puede seleccionar más de %(max)s artículos del producto %(product)s. "
-"Eliminamos el artículo sobrante de su cesta."
+"Eliminamos el artículo sobrante de su carrito."
 msgstr[1] ""
 "No puede seleccionar más de %(max)s artículos del producto %(product)s. "
-"Eliminamos los artículos sobrantes de su cesta."
+"Eliminamos los artículos sobrantes de su carrito."
 
 #: pretix/base/services/orders.py:155
 msgid "The booking period has ended."
@@ -8659,7 +8660,7 @@ msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
-"El vale de compra utilizado para uno de los artículos de su cesta no es "
+"El vale de compra utilizado para uno de los artículos de su carrito no es "
 "conocido en nuestra base de datos."
 
 #: pretix/base/services/orders.py:163
@@ -8668,16 +8669,16 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"El vale de compra utilizado para uno de los artículos de su cesta ya ha sido "
-"utilizado el máximo número de veces permitido. Hemos quitado este artículo "
-"de su cesta."
+"El vale de compra utilizado para uno de los artículos de su carrito ya ha "
+"sido utilizado el máximo número de veces permitido. Hemos quitado este "
+"artículo de su cesta."
 
 #: pretix/base/services/orders.py:167
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"El vale de compra utilizado para uno de los artículos de su cesta ya se ha "
+"El vale de compra utilizado para uno de los artículos de su carrito ya se ha "
 "utilizado con demasiada frecuencia. Ajustamos el precio del artículo en su "
 "cesta."
 
@@ -8686,16 +8687,16 @@ msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
-"El vale de compra utilizado para uno de los artículos de su cesta ha "
-"caducado. Hemos quitado este artículo de su cesta."
+"El vale de compra utilizado para uno de los artículos de su carrito ha "
+"caducado. Hemos quitado este artículo de su carrito."
 
 #: pretix/base/services/orders.py:174
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
-"El vale de compra utilizado para uno de los artículos de su cesta no es "
-"válido para este artículo. Hemos quitado este artículo de su cesta."
+"El vale de compra utilizado para uno de los artículos de su carrito no es "
+"válido para este artículo. Hemos quitado este artículo de su carrito."
 
 #: pretix/base/services/orders.py:176
 msgid "You need a valid voucher code to order one of the products."
@@ -8706,22 +8707,22 @@ msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
-"El período de preventa de uno de los eventos de su cesta aún no ha "
-"comenzado. Las posiciones afectadas han sido eliminadas de su cesta."
+"El período de preventa de uno de los eventos de su carrito aún no ha "
+"comenzado. Las posiciones afectadas han sido eliminadas de su carrito."
 
 #: pretix/base/services/orders.py:185
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
-"Uno de las butacas de su pedido no era válida, la eliminamos de su cesta."
+"Uno de las butacas de su pedido no era válida, la eliminamos de su carrito."
 
 #: pretix/base/services/orders.py:186
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
-"Una de las butaca de su pedido ha sido ocupada. La eliminamos de su cesta."
+"Una de las butaca de su pedido ha sido ocupada. La eliminamos de su carrito."
 
 #: pretix/base/services/orders.py:202
 #, python-format
@@ -9154,8 +9155,8 @@ msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
-"Independientemente de su elección, el cesta mostrará los precios brutos, ya "
-"que este es el precio que debe pagarse."
+"Independientemente de su elección, el carrito mostrará los precios brutos, "
+"ya que este es el precio que debe pagarse."
 
 #: pretix/base/settings.py:338
 msgid "Hide prices on attendee ticket page"
@@ -9521,15 +9522,15 @@ msgstr "Período de reserva"
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
 msgstr ""
-"El número de minutos que los artículos en la cesta de un usuario permanecen "
-"reservados para un usuario."
+"El número de minutos que los artículos en el carrito de un usuario "
+"permanecen reservados para un usuario."
 
 #: pretix/base/settings.py:807
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
 "Redirigir directamente a la compra después de que un producto se haya "
-"agregado a la cesta."
+"agregado a la carrito."
 
 #: pretix/base/settings.py:816
 msgid "End of presale text"
@@ -14675,8 +14676,8 @@ msgid ""
 "\"inactive\" instead."
 msgstr ""
 "La variación \"%s\" no se puede borrar porque ya ha sido pedida por un "
-"usuario o está actualmente en la cesta de un usuario. En su lugar, configure "
-"la variación como \"inactiva\"."
+"usuario o está actualmente en el carrito de un usuario. En su lugar, "
+"configure la variación como \"inactiva\"."
 
 #: pretix/control/forms/item.py:994
 msgid "Use value from product"
@@ -19854,7 +19855,7 @@ msgstr "Añadir enlace"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:345
 msgid "Cart"
-msgstr "Cesta"
+msgstr "Carrito"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:353
 msgid ""
@@ -20284,7 +20285,7 @@ msgid ""
 msgstr ""
 "Ejemplos: múltiples presentaciones del mismo espectáculo, el mismo concierto "
 "en múltiples ubicaciones, museos, bibliotecas o piscinas, eventos que deben "
-"reservarse juntos en una sola cesta."
+"reservarse juntos en un solo carrito."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:53
 msgid ""
@@ -20874,7 +20875,7 @@ msgid ""
 "as add-ons in the cart for this product."
 msgstr ""
 "Con los paquetes, puede especificar productos que siempre se agregan "
-"automáticamente a la cesta como complementos para este producto."
+"automáticamente al carrito como complementos para este producto."
 
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:68
 msgid "Add a new bundled product"
@@ -21060,7 +21061,7 @@ msgstr "Condición"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:34
 msgid "Minimum cart content"
-msgstr "Contenido mínimo de la cesta"
+msgstr "Contenido mínimo del carrito"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:43
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:53
@@ -21156,7 +21157,7 @@ msgid ""
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
 msgstr ""
-"Un sólo desuento puede aplicarse a los productos de la cesta. Si tiene "
+"Un sólo desuento puede aplicarse a los productos del carrito. Si tiene "
 "descuentos superpuestos, se aplicará el primero en el pedido de la lista "
 "siguiente."
 
@@ -25822,7 +25823,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:6
 msgid "Delete carts"
-msgstr "Eliminar cestas"
+msgstr "Eliminar carrito"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
 #, python-format
@@ -25830,7 +25831,7 @@ msgid ""
 "Are you sure you want to delete any cart positions with voucher "
 "<strong>%(voucher)s</strong>?"
 msgstr ""
-"¿Está seguro de que desea eliminar alguna entrada de la cesta con vale de "
+"¿Está seguro de que desea eliminar alguna entrada del carrito con vale de "
 "compra <strong>%(voucher)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
@@ -25839,7 +25840,7 @@ msgid ""
 "a purchase. This can be really confusing. Only use this if you know that the "
 "session is no longer in use."
 msgstr ""
-"Esto eliminará silenciosamente productos de la cesta de un usuario que "
+"Esto eliminará silenciosamente productos del carrito de un usuario que "
 "actualmente realiza una compra. Esto puede resultar realmente confuso. "
 "Utilice esto únicamente si sabe que la sesión ya no está en uso."
 
@@ -25859,13 +25860,13 @@ msgid ""
 "This voucher is currently used in %(number)s cart sessions and might not be "
 "free to use until the cart sessions expire."
 msgstr ""
-"Este vale de compra se utiliza actualmente en %(number)s sesiones de la "
-"cesta y es posible que no sea de uso gratuito hasta que caduque la sesión de "
-"la cesta."
+"Este vale de compra se utiliza actualmente en %(number)s sesiones del "
+"carrito y es posible que no sea de uso gratuito hasta que caduque la sesión "
+"de la cesta."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
 msgid "Remove cart positions"
-msgstr "Eliminar element de la cesta"
+msgstr "Eliminar elemento del carrito"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:43
 msgid "Voucher link"
@@ -32151,7 +32152,7 @@ msgid ""
 "Your cart includes a product that requires an active membership to be "
 "selected."
 msgstr ""
-"Su cesta incluye un producto que requiere una suscripción activa para ser "
+"Su carrito incluye un producto que requiere una suscripción activa para ser "
 "seleccionado."
 
 #: pretix/presale/checkoutflow.py:489
@@ -32187,8 +32188,8 @@ msgid ""
 "accordingly."
 msgstr ""
 "Debido a la dirección de factura que ingresó, necesitamos aplicar una tasa "
-"impositiva diferente a su compra y el precio de los productos en su cesta ha "
-"cambiado en consecuencia."
+"impositiva diferente a su compra y el precio de los productos en su carrito "
+"ha cambiado en consecuencia."
 
 #: pretix/presale/checkoutflow.py:1029
 msgid "Please enter your invoicing address."
@@ -32546,7 +32547,7 @@ msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
-"Para algunos de los productos en su cesta, usted puede elegir opciones "
+"Para algunos de los productos en su carrito, usted puede elegir opciones "
 "adicionales antes de continuar."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:16
@@ -32554,7 +32555,7 @@ msgid ""
 "A product in your cart is only sold in combination with add-on products that "
 "are not available. Please contact the event organizer."
 msgstr ""
-"Un producto de su cesta sólo se vende en combinación con productos "
+"Un producto de su carrito sólo se vende en combinación con productos "
 "complementarios que no están disponibles. Póngase en contacto con el "
 "organizador del evento."
 
@@ -32602,17 +32603,17 @@ msgstr "Compra"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:11
 msgid "Your cart"
-msgstr "Su cesta"
+msgstr "Su carrito"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr "La cesta de compra ha expirado"
+msgstr "El carrito de compra ha expirado"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
 msgid "Show full cart"
-msgstr "Mostrar cesta completa"
+msgstr "Mostrar carrito completo"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:84
@@ -32758,7 +32759,7 @@ msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
 msgstr ""
-"Algunos productos de la cesta sólo pueden comprarse si existe una "
+"Algunos productos del carrito sólo pueden comprarse si existe una "
 "suscripción activa en su cuenta."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:37
@@ -32891,7 +32892,7 @@ msgid ""
 "browser settings accordingly."
 msgstr ""
 "Su navegador no acepta cookies de nuestra parte. Sin embargo, necesitamos "
-"establecer una cookie para recordar quién es usted y qué hay en su cesta. "
+"establecer una cookie para recordar quién es usted y qué hay en su carrito. "
 "Por favor, cambie la configuración de su navegador en consecuencia."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:17
@@ -33053,7 +33054,7 @@ msgstr "incluido. %(rate)s%% %(name)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:252
 #, python-format
 msgid "Add %(item)s, %(var)s to cart"
-msgstr "Cantidad de %(item)s - %(var)s en la cesta"
+msgstr "Cantidad de %(item)s - %(var)s en el carrito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:203
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:349
@@ -33092,7 +33093,7 @@ msgstr "Aumentar cantidad"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:408
 #, python-format
 msgid "Add %(item)s to cart"
-msgstr "Añadir %(item)s a la cesta"
+msgstr "Añadir %(item)s al carrito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:379
 msgid "There are no add-ons available for this product."
@@ -33214,12 +33215,12 @@ msgstr "Entendido, estamos removiendo eso…"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:289
 #, python-format
 msgid "Remove %(item)s from your cart"
-msgstr "Eliminar %(item)s de su cesta"
+msgstr "Eliminar %(item)s de su carrito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
 #, python-format
 msgid "Remove one %(item)s from your cart"
-msgstr "Eliminar un %(item)s de tu cesta"
+msgstr "Eliminar un %(item)s de tu carrito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:294
 #, python-format
@@ -33227,7 +33228,7 @@ msgid ""
 "Remove one %(item)s from your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
-"Elimina un %(item)s de su cesta. Actualmente tiene %(count)s en su cesta."
+"Elimina un %(item)s de su carrito. Actualmente tiene %(count)s en su carrito."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:302
 msgid "We're trying to reserve another one for you!"
@@ -33242,13 +33243,13 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
-"Una vez los elementos están en su cesta, tendrá %(time)s minutos para "
+"Una vez los elementos están en su carrito, tendrá %(time)s minutos para "
 "completar la compra."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:322
 #, python-format
 msgid "Add one more %(item)s to your cart"
-msgstr "Añadir un %(item)s más a su cesta"
+msgstr "Añadir un %(item)s más a su carrito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:324
 #, python-format
@@ -33256,7 +33257,8 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
-"Agregar un %(item)s más a su cesta. Actualmente tiene %(count)s en su cesta."
+"Agregar un %(item)s más a su carrito. Actualmente tiene %(count)s en su "
+"carrito."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:384
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
@@ -33280,15 +33282,15 @@ msgstr "incl. %(tax_sum)s impuestos"
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
-"Los artículos de su cesta están reservados durante %(minutes)ss minutos."
+"Los artículos de su carrito están reservados durante %(minutes)ss minutos."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:493
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"Los elementos en su cesta de compras ya no se encuentran reservados. Puedes "
-"seguir añadiendo más productos mientras estén disponibles."
+"Los elementos en su carrito de compras ya no se encuentran reservados. "
+"Puedes seguir añadiendo más productos mientras estén disponibles."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:497
 msgid "Overview of your ordered products."
@@ -33306,7 +33308,7 @@ msgstr "Proceder con la compra"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:63
 msgid "Empty cart"
-msgstr "Vaciar cesta"
+msgstr "Vaciar carrito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:68
 #: pretix/presale/templates/pretixpresale/event/index.html:246
@@ -33316,7 +33318,7 @@ msgstr "Canjear vale de compra"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:71
 msgid "We're applying this voucher to your cart..."
-msgstr "Estamos aplicando este vale de compra a su cesta..."
+msgstr "Estamos aplicando este vale de compra a su carrito..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:79
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
@@ -33692,11 +33694,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "Your cart, general information, add products to your cart"
-msgstr "Su cesta, información general, añadir productos a su cesta"
+msgstr "Su carrito, información general, añadir productos a su carrito"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "General information, add products to your cart"
-msgstr "Información general, añadir productos a la cesta"
+msgstr "Información general, añadir productos al carrito"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:68
 msgid "Please select a date to redeem your voucher."
@@ -33750,7 +33752,7 @@ msgstr "Registrarse"
 #: pretix/presale/templates/pretixpresale/event/index.html:232
 #: pretix/presale/templates/pretixpresale/event/voucher.html:443
 msgid "Add to cart"
-msgstr "Agregar a la cesta"
+msgstr "Agregar al carrito"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
 msgid "If you already ordered a ticket"
@@ -34590,8 +34592,8 @@ msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
-"Cookies funcionales (por ejemplo, cesta de compras, inicio de sesión, pago, "
-"preferencia de idioma) y cookies técnicas (por ejemplo, con fines de "
+"Cookies funcionales (por ejemplo, carrito de compras, inicio de sesión, "
+"pago, preferencia de idioma) y cookies técnicas (por ejemplo, con fines de "
 "seguridad)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:89
@@ -34883,26 +34885,26 @@ msgstr "Por favor, introduzca sólo números positivos."
 #: pretix/presale/views/cart.py:441
 msgid "We applied the voucher to as many products in your cart as we could."
 msgstr ""
-"Aplicamos el vale de compra a tantos productos en su cesta como pudimos."
+"Aplicamos el vale de compra a tantos productos en su carrito como pudimos."
 
 #: pretix/presale/views/cart.py:460 pretix/presale/views/cart.py:468
 msgid ""
 "The gift card has been saved to your cart. Please continue your checkout."
 msgstr ""
-"La tarjeta regalo se ha guardado en su cesta. Continúe con el proceso de "
+"La tarjeta regalo se ha guardado en su carrito. Continúe con el proceso de "
 "compra."
 
 #: pretix/presale/views/cart.py:504
 msgid "Your cart has been updated."
-msgstr "Su cesta ha sido actualizada."
+msgstr "Su carrito ha sido actualizada."
 
 #: pretix/presale/views/cart.py:507 pretix/presale/views/cart.py:533
 msgid "Your cart is now empty."
-msgstr "Su cesta ha sido vaciada."
+msgstr "Su carrito ha sido vaciada."
 
 #: pretix/presale/views/cart.py:548
 msgid "The products have been successfully added to your cart."
-msgstr "Los productos se han añadido con éxito a su cesta."
+msgstr "Los productos se han añadido con éxito a su carrito."
 
 #: pretix/presale/views/cart.py:572 pretix/presale/views/event.py:540
 #: pretix/presale/views/widget.py:377
@@ -34915,8 +34917,8 @@ msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
 msgstr ""
-"La tarjeta regalo se ha guardado en su cesta. Seleccione ahora los productos "
-"que desea comprar."
+"La tarjeta regalo se ha guardado en su carrito. Seleccione ahora los "
+"productos que desea comprar."
 
 #: pretix/presale/views/cart.py:739
 msgctxt "subevent"
@@ -34925,7 +34927,7 @@ msgstr "No pudimos encontrar la fecha especificada."
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
-msgstr "Su cesta está vacía"
+msgstr "Su carito está vacío"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The booking period for this event is over or has not yet started."
