@@ -801,7 +801,13 @@ class CheckinLogList(ListExporter):
                     ia = ci.position.order.invoice_address
                 except InvoiceAddress.DoesNotExist:
                     ia = InvoiceAddress()
-
+                name = (
+                    ci.position.attendee_name or
+                    (ci.position.addon_to.attendee_name if ci.position.addon_to else '') or
+                    ia.name
+                )
+            else:
+                name = ""
             yield [
                 date_format(ci.datetime.astimezone(self.timezone), 'SHORT_DATE_FORMAT'),
                 date_format(ci.datetime.astimezone(self.timezone), 'TIME_FORMAT'),
@@ -811,7 +817,7 @@ class CheckinLogList(ListExporter):
                 ci.position.positionid if ci.position else '',
                 ci.raw_barcode or ci.position.secret,
                 str(ci.position.item) if ci.position else (str(ci.raw_item) if ci.raw_item else ''),
-                (ci.position.attendee_name or ia.name) if ci.position else '',
+                name,
                 str(ci.device) if ci.device else '',
                 _('Yes') if ci.force_sent is True else (_('No') if ci.force_sent is False else '?'),
                 _('Yes') if ci.forced else _('No'),
