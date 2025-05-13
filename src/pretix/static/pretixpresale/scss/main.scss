@@ -78,6 +78,14 @@ html {
 #skip-to-main {
     /* padding is needed to make focus-outline visible */
     padding: 6px;
+
+    a {
+        color: var(--pretix-link-contrast-color);
+        outline-color: inherit;
+    }
+    a:active, a:hover, a:focus {
+        color: var(--pretix-link-hover-contrast-color);
+    }
 }
 
 /* fixe for bootstrap using px-values for fontsize */
