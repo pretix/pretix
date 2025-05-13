@@ -108,7 +108,19 @@ pre {
     font-size: $font-size-base;
 }
 
+/* make all links in textflow underlined */
+h1, h2, h3, h4, h5, h6, p, li {
+    a:not(.btn) {
+        text-decoration: underline;
+    }    
+}
 
+.no-underline, nav li a:link {
+    text-decoration: none;
+}
+.no-underline:hover, nav li a:hover {
+    text-decoration: underline;
+}
 
 
 /* See https://github.com/pretix/pretix/pull/761 */
