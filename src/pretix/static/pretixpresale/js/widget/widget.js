@@ -269,7 +269,7 @@ Vue.component('availbox', {
             return '- ' + (this.item.has_variations ? this.variation.value : this.item.name) + ': ' + strings.quantity_dec;
         },
         inc_label: function () {
-            return '+ ' +( this.item.has_variations ? this.variation.value : this.item.name) + ': ' + strings.quantity_inc;
+            return '+ ' + (this.item.has_variations ? this.variation.value : this.item.name) + ': ' + strings.quantity_inc;
         },
         count_group_classes: function () {
             return {
