@@ -848,10 +848,10 @@ var shared_iframe_fragment = (
 );
 
 var shared_alert_fragment = (
-    '<div :class="alertClasses" role="dialog" aria-modal="true" aria-live="polite">'
+    '<div :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'">'
     + '<transition name="bounce" @after-enter="focusButton">'
     + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
-    + '<p>{{ $root.error_message }}</p>'
+    + '<p :id="$root.parent.html_id + \'-error-message\'">{{ $root.error_message }}</p>'
     + '<p><button v-if="$root.error_url_after" @click.prevent.stop="errorContinue">' + strings.continue + '</button>'
     + '<button v-else @click.prevent.stop="errorClose">' + strings.close + '</button></p>'
     + '</div>'
@@ -996,7 +996,7 @@ Vue.component('pretix-widget-event-form', {
 
         // Form start
         + '<div class="pretix-widget-event-description" v-if="display_event_info && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
-        + '<form method="post" :action="$root.formAction" ref="form" :target="$root.formTarget">'
+        + '<form method="post" :action="$root.formAction" ref="form" :target="$root.formTarget" @submit="$parent.buy">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
@@ -1040,7 +1040,7 @@ Vue.component('pretix-widget-event-form', {
 
         // Buy button
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button @click="$parent.buy" type="submit" :disabled="buy_disabled">{{ this.buy_label }}</button>'
+        + '<button type="submit">{{ this.buy_label }}</button>'
         + '</div>'
 
         + '</form>'
@@ -1064,18 +1064,10 @@ Vue.component('pretix-widget-event-form', {
 
         + '</div>'
     ),
-    data: function () {
-        return {
-            buy_disabled: true
-        }
-    },
     mounted: function() {
-        this.$root.$on('amounts_changed', this.calculate_buy_disabled)
         this.$root.$on('focus_voucher_field', this.focus_voucher_field)
-        this.calculate_buy_disabled()
     },
     beforeDestroy: function() {
-        this.$root.$off('amounts_changed', this.calculate_buy_disabled)
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
@@ -1151,28 +1143,6 @@ Vue.component('pretix-widget-event-form', {
                 $el.focus();
             });
         },
-        calculate_buy_disabled: function() {
-            var i, j, k;
-            for (i = 0; i < this.$root.categories.length; i++) {
-                var cat = this.$root.categories[i];
-                for (j = 0; j < cat.items.length; j++) {
-                    var item = cat.items[j];
-                    if (item.has_variations) {
-                        for (k = 0; k < item.variations.length; k++) {
-                            var v = item.variations[k];
-                            if (v.amount_selected) {
-                                this.buy_disabled = false;
-                                return;
-                            }
-                        }
-                    } else if (item.amount_selected) {
-                        this.buy_disabled = false;
-                        return;
-                    }
-                }
-            }
-            this.buy_disabled = true;
-        }
     }
 });
 
