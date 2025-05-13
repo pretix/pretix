@@ -208,7 +208,7 @@ Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
         + '<div class="pretix-widget-availability-unavailable"'
         + '     v-if="item.current_unavailability_reason === \'require_voucher\'">'
-        + '<small><a @click.prevent.stop="focus_voucher_field" role="button">{{unavailability_reason_message}}</a></small>'
+        + '<small><a @click.prevent.stop="focus_voucher_field" role="button" tabindex="0">{{unavailability_reason_message}}</a></small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
         + '     v-else-if="unavailability_reason_message">'
@@ -239,12 +239,12 @@ Vue.component('availbox', {
         + '>'
         + '</label>'
         + '<div :class="count_group_classes" v-else role="group" v-bind:aria-label="item.name">'
-        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
         + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
-        + '       aria-label="' + strings.quantity + '" ref="quantity"'
+        + '       v-bind:aria-labelledby="aria_labelledby" ref="quantity"'
         + '       >'
-        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" v-bind:aria-label="inc_label"><span>+</span></button>'
         + '</div>'
         + '</div>'
         + '</div>'),
@@ -262,6 +262,15 @@ Vue.component('availbox', {
         this.$root.$emit('amounts_changed')
     },
     computed: {
+        aria_labelledby: function () {
+            return this.$root.html_id + '-item-label-' + this.item.id;
+        },
+        dec_label: function () {
+            return '- ' + (this.item.has_variations ? this.variation.value : this.item.name) + ': ' + strings.quantity_dec;
+        },
+        inc_label: function () {
+            return '+ ' + (this.item.has_variations ? this.variation.value : this.item.name) + ': ' + strings.quantity_inc;
+        },
         count_group_classes: function () {
             return {
                 'pretix-widget-item-count-group': !this.$root.use_native_spinners
@@ -350,12 +359,12 @@ Vue.component('pricebox', {
         + '<del class="pretix-widget-pricebox-original-price" v-bind:aria-label="original_price_aria_label" v-html="original_line"></del> '
         + '<ins class="pretix-widget-pricebox-new-price" v-bind:aria-label="new_price_aria_label" v-html="priceline"></ins></span>'
         + '<div v-if="free_price">'
-        + '<span class="pretix-widget-pricebox-currency">{{ $root.currency }}</span> '
+        + '<span class="pretix-widget-pricebox-currency" :id="price_box_id">{{ $root.currency }}</span> '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
         + '       :min="display_price_nonlocalized" :value="suggested_price_nonlocalized" :name="field_name"'
-        + '       step="any" v-bind:aria-label="free_price_label">'
+        + '       step="any" v-bind:aria-labelledby="aria_labelledby" v-bind:aria-describedby="price_desc_id">'
         + '</div>'
-        + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
+        + '<small class="pretix-widget-pricebox-tax" :id="price_desc_id" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
         + '{{ taxline }}'
         + '</small>'
         + '</div>'),
@@ -366,6 +375,7 @@ Vue.component('pricebox', {
         suggested_price: Object,
         original_price: String,
         mandatory_priced_addons: Boolean,
+        item_id: Number,
     },
     methods: {
         stripHTML: function (s) {
@@ -375,6 +385,18 @@ Vue.component('pricebox', {
         },
     },
     computed: {
+        aria_labelledby: function () {
+            return [
+                this.$root.html_id + '-item-label-' + this.item_id,
+                this.price_box_id
+            ].join(" ");
+        },
+        price_box_id: function () {
+            return this.$root.html_id + '-item-pricebox-' + this.item_id;
+        },
+        price_desc_id: function () {
+            return this.$root.html_id + '-item-pricedesc-' + this.item_id;
+        },
         display_price: function () {
             if (this.$root.display_net_prices) {
                 return floatformat(parseFloat(this.price.net), 2);
@@ -419,9 +441,6 @@ Vue.component('pricebox', {
                 return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + this.display_price;
             }
         },
-        free_price_label () {
-            return [strings.price, this.$root.currency].join(", ")
-        },
         taxline: function () {
             if (this.$root.display_net_prices) {
                 if (this.price.includes_mixed_tax_rate) {
@@ -465,7 +484,7 @@ Vue.component('variation', {
         + '<div :id="variation_price_id" class="pretix-widget-item-price-col">'
         + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="orig_price" '
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="variation.suggested_price"'
-        + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices">'
+        + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices" :item_id="item.id">'
         + '</pricebox>'
         + '<span v-if="!$root.showPrices">&nbsp;</span>'
         + '</div>'
@@ -515,7 +534,7 @@ Vue.component('item', {
         + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture" :alt="picture_alt_text"></a>'
         + '<div class="pretix-widget-item-title-and-description">'
         + '<a v-if="item.has_variations && show_toggle" :id="item_label_id" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
-        + '   @click.prevent.stop="expand" tabindex="-1"'
+        + '   @click.prevent.stop="expand"'
         + '>'
         + '{{ item.name }}'
         + '</a>'
@@ -1049,10 +1068,10 @@ Vue.component('pretix-widget-event-form', {
         + '<form method="get" :action="$root.voucherFormTarget" target="_blank" '
         + '      v-if="$root.vouchers_exist && !$root.disable_vouchers && !$root.voucher_code">'
         + '<div class="pretix-widget-voucher">'
-        + '<h3 class="pretix-widget-voucher-headline">'+ strings['redeem_voucher'] +'</h3>'
+        + '<h3 class="pretix-widget-voucher-headline" :id="aria_labelledby">'+ strings['redeem_voucher'] +'</h3>'
         + '<div v-if="$root.voucher_explanation_text" class="pretix-widget-voucher-text" v-html="$root.voucher_explanation_text"></div>'
         + '<div class="pretix-widget-voucher-input-wrap">'
-        + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
+        + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'" v-bind:aria-labelledby="aria_labelledby">'
         + '</div>'
         + '<input type="hidden" v-for="p in hiddenParams" :name="p[0]" :value="p[1]" />'
         + '<div class="pretix-widget-voucher-button-wrap">'
@@ -1071,6 +1090,9 @@ Vue.component('pretix-widget-event-form', {
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
+        aria_labelledby: function() {
+            return this.$root.html_id + '-voucher-headline';
+        },
         display_event_info: function () {
             return this.$root.display_event_info || (this.$root.display_event_info === null && (this.$root.events || this.$root.weeks || this.$root.days));
         },
