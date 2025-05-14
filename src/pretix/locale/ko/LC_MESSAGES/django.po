@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-05-08 10:00+0000\n"
+"PO-Revision-Date: 2025-05-14 02:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -8164,6 +8164,9 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"주문 세부 정보는 다음 URL에서 확인할 수 있습니다:\n"
+"\n"
+"{orderurl}."
 
 #: pretix/base/services/mail.py:294
 #, fuzzy, python-brace-format
@@ -10425,10 +10428,10 @@ msgstr ""
 
 #: pretix/base/settings.py:2284
 msgid "Attachment for new orders"
-msgstr ""
+msgstr "신규 주문 첨부 파일"
 
 #: pretix/base/settings.py:2289
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
 "order. Therefore it will be combined with the \"Placed order\", \"Free "
@@ -10438,9 +10441,16 @@ msgid ""
 "sent before payment is confirmed or the order is approved. To avoid this "
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
+"이 파일은 새로 주문할 때마다 보내는 첫 번째 이메일에 첨부됩니다. 따라서 "
+"위에서 보낸 \"주문 완료\", \"무료 주문\" 또는 \"주문 접수\" 텍스트와 "
+"결합됩니다. 이 텍스트는 주문 담당자와 참석자 모두에게 전송됩니다. 예를 들어, "
+"이 파일을 사용하여 서비스 약관을 보낼 수 있습니다. 이 파일은 결제가 "
+"확인되거나 주문이 승인되기 전에 전송될 수 있으므로 비공개 정보를 전송하는 데 "
+"사용하지 마세요. 이 중요한 이메일이 스팸으로 이어지지 않도록 하려면 최대 "
+"{사이즈} 의 PDF 파일만 업로드할 수 있습니다."
 
 #: pretix/base/settings.py:2316
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -10452,14 +10462,31 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"안녕하세요 {참가자 이름},\n"
+"\n"
+"\n"
+"\n"
+"{이벤트} 티켓이 주문되었습니다.\n"
+"\n"
+"\n"
+"\n"
+"여기에서 티켓의 세부 정보와 상태를 확인할 수 있습니다:\n"
+"\n"
+"{url}\n"
+"\n"
+"\n"
+"\n"
+"감사해요.\n"
+"\n"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2328
 #, python-brace-format
 msgid "Your order has been changed: {code}"
-msgstr ""
+msgstr "주문이 변경되었습니다: {code}"
 
 #: pretix/base/settings.py:2332
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10471,14 +10498,31 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"안녕하세요.\n"
+"\n"
+"\n"
+"\n"
+"{이벤트} 주문이 변경되었습니다.\n"
+"\n"
+"\n"
+"\n"
+"주문 상태를 확인할 수 있습니다\n"
+"\n"
+"{url}\n"
+"\n"
+"\n"
+"\n"
+"감사해요.\n"
+"\n"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2344
 #, python-brace-format
 msgid "Payment received for your order: {code}"
-msgstr ""
+msgstr "주문에 대한 결제가 완료되었습니다: {code}"
 
 #: pretix/base/settings.py:2348
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10492,14 +10536,35 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"안녕하세요.\n"
+"\n"
+"\n"
+"\n"
+"{이벤트}에 대한 결제를 성공적으로 받았습니다. 감사합니다!\n"
+"\n"
+"\n"
+"\n"
+"{결제_정보}\n"
+"\n"
+"\n"
+"\n"
+"주문 세부 정보를 변경하고 주문 상태를 확인할 수 있습니다\n"
+"\n"
+"{url}\n"
+"\n"
+"\n"
+"\n"
+"감사해요.\n"
+"\n"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2366
 #, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr ""
+msgstr "이벤트 등록이 확인되었습니다: {code}"
 
 #: pretix/base/settings.py:2370
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -10511,25 +10576,43 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"안녕하세요 {참가자 이름},\n"
+"\n"
+"\n"
+"\n"
+"주문하신 {이벤트} 티켓이 이제 결제되었습니다.\n"
+"\n"
+"\n"
+"\n"
+"여기에서 티켓의 세부 정보와 상태를 확인할 수 있습니다:\n"
+"\n"
+"{url}\n"
+"\n"
+"\n"
+"\n"
+"감사해요.\n"
+"\n"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2387 pretix/control/forms/event.py:1134
 #: pretix/control/forms/event.py:1234 pretix/plugins/sendmail/models.py:275
 msgid "Number of days"
-msgstr ""
+msgstr "일 수"
 
 #: pretix/base/settings.py:2389 pretix/control/forms/event.py:1137
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
-msgstr ""
+msgstr "이 이메일은 주문이 만료되기 며칠 전에 발송됩니다. 값이 0이면 메일이 전송되지 "
+"않습니다."
 
 #: pretix/base/settings.py:2397
 #, python-brace-format
 msgid "Your order is about to expire: {code}"
-msgstr ""
+msgstr "주문이 곧 만료됩니다: {code}"
 
 #: pretix/base/settings.py:2401
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10543,6 +10626,27 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"안녕하세요.\n"
+"\n"
+"\n"
+"\n"
+"귀하의 {이벤트} 주문에 대한 전액 결제를 아직 받지 못했습니다.\n"
+"\n"
+"저희가 주문을 받은 경우에만 보증해 드립니다\n"
+"\n"
+"{만료일} 이전에 결제하셨습니다.\n"
+"\n"
+"\n"
+"\n"
+"결제 정보와 주문 상태는 다음에서 확인할 수 있습니다\n"
+"\n"
+"{url}\n"
+"\n"
+"\n"
+"\n"
+"감사해요.\n"
+"\n"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2415
 #, python-brace-format
@@ -10598,10 +10702,10 @@ msgid ""
 "Your {event} team"
 msgstr ""
 "안녕하세요.\n"
-"귀하의 {event} 주문에 대한 결제를 받았습니다.\n"
+"귀하의 {이벤트} 주문에 대한 결제를 받았습니다.\n"
 "안타깝게도 받은 금액이 전체 금액보다 적습니다\n"
 "필수입니다. 따라서 귀하의 주문은 여전히 미결제 상태로 간주됩니다\n"
-"**{pending_sum}**의 추가 결제가 누락되었습니다.\n"
+"**{미결재  금액}**의 추가 결제가 누락되었습니다.\n"
 "결제 정보와 주문 상태는 다음에서 확인할 수 있습니다\n"
 "{url}\n"
 "감사해요.\n"
@@ -10613,7 +10717,7 @@ msgid "Payment failed for your order: {code}"
 msgstr "주문에 대한 결제 실패: {code}"
 
 #: pretix/base/settings.py:2456
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10631,21 +10735,21 @@ msgid ""
 msgstr ""
 "안녕하세요.\n"
 "\n"
-"{event} 주문에 대한 결제 시도가 실패했습니다.\n"
+"{이벤트} 주문에 대한 결제 시도가 실패했습니다.\n"
 "\n"
 "주문이 여전히 유효하며 동일하거나 다른 결제 방법으로 다시 결제를 시도할 수 "
-"있습니다. {expire_date} 이전에 결제를 완료해 주세요.\n"
+"있습니다. {만료일} 이전에 결제를 완료해 주세요.\n"
 "\n"
 "결제를 다시 시도하고 주문 상태를 확인할 수 있습니다\n"
 "{url}\n"
 "\n"
 "감사해요.\n"
-"귀하의 {event} 팀"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2470
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr "{event} 대기자 명단에서 선택되었습니다"
+msgstr "{이벤트} 대기자 명단에서 선택되었습니다"
 
 #: pretix/base/settings.py:2474
 #, fuzzy, python-brace-format
@@ -10679,7 +10783,7 @@ msgid ""
 msgstr ""
 "안녕하세요.\n"
 "\n"
-"당신은 제품 {product}에 대해,{event} 대기자 명단에 자신을 제출했습니다\n"
+"당신은 제품 {제품}에 대해,{이벤트} 대기자 명단에 자신을 제출했습니다\n"
 "\n"
 "이제 티켓이 준비되었습니다! 티켓샵에서 교환하실 수 있습니다\n"
 "다음 바우처 코드를 입력하여 다음 {시간} 이내에:\n"
@@ -10699,10 +10803,10 @@ msgstr ""
 "있습니다\n"
 "대기자 명단에 있는 다음 사람에게 가능한 한:\n"
 "\n"
-"{url_remove}\n"
+"{url_삭제}\n"
 "\n"
 "감사해요.\n"
-"귀하의 {event} 팀"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2503
 #, python-brace-format
@@ -10726,7 +10830,7 @@ msgid ""
 msgstr ""
 "안녕하세요.\n"
 "\n"
-"{event}에 대한 주문 {code}가 취소되었습니다.\n"
+"{이벤트}에 대한 주문 {code}가 취소되었습니다.\n"
 "\n"
 "{댓글}\n"
 "\n"
@@ -10760,8 +10864,8 @@ msgid ""
 msgstr ""
 "안녕하세요.\n"
 "\n"
-"우리 행사에서 귀하의 {event} 주문을 승인했으며 기꺼이 환영합니다\n"
-"주문을 {expire_date} 이전에 결제하여 계속 진행해 주세요.\n"
+"우리 행사에서 귀하의 {이벤트} 주문을 승인했으며 기꺼이 환영합니다\n"
+"주문을 {만료일} 이전에 결제하여 계속 진행해 주세요.\n"
 "결제 방법을 선택하고 여기에서 결제를 수행할 수 있습니다:\n"
 "{url}\n"
 "\n"
@@ -10782,7 +10886,7 @@ msgid ""
 "Your {event} team"
 msgstr ""
 "안녕하세요.\n"
-"{event}를 위해 주문한 티켓을 승인했습니다.\n"
+"{이벤트}를 위해 주문한 티켓을 승인했습니다.\n"
 "여기에서 티켓의 세부 정보와 상태를 확인할 수 있습니다:\n"
 "{url}\n"
 "\n"
@@ -10810,7 +10914,7 @@ msgid ""
 msgstr ""
 "안녕하세요.\n"
 "\n"
-"귀하의 {event} 주문을 승인했으며 기꺼이 환영합니다\n"
+"귀하의 {이벤트} 주문을 승인했으며 기꺼이 환영합니다\n"
 "저희 행사에서. 무료 제품만 주문하셨기 때문에 결제가 필요하지 않습니다.\n"
 "\n"
 "주문 세부 정보를 변경하고 주문 상태를 확인할 수 있습니다\n"
@@ -10825,7 +10929,7 @@ msgid "Order denied: {code}"
 msgstr "주문거부: {code}"
 
 #: pretix/base/settings.py:2602
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10842,19 +10946,19 @@ msgid ""
 msgstr ""
 "안녕하세요.\n"
 "\n"
-"안타깝게도 {event}.에 대한 귀하의 주문 요청을 거부했습니다.\n"
+"안타깝게도 {이벤트}.에 대한 귀하의 주문 요청을 거부했습니다.\n"
 "\n"
-"{comment}\n"
+"{의견}\n"
 "\n"
 "여기에서 주문 세부 정보를 확인할 수 있습니다:\n"
 "\n"
 "{url}\n"
 "\n"
 "감사해요.\n"
-"귀하의{event}  팀"
+"귀하의{이벤트}  팀"
 
 #: pretix/base/settings.py:2617
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10870,7 +10974,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "감사해요.\n"
-"귀하의 {event} 팀"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2635 pretix/base/settings.py:2651
 #, python-brace-format
@@ -10890,9 +10994,9 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"안녕하세요 {attendee_name},\n"
+"안녕하세요 {참석자 이름},\n"
 "\n"
-"{event}에 등록되었습니다.\n"
+"{이벤트}에 등록되었습니다.\n"
 "\n"
 "아직 그렇게 하지 않았다면 여기에서 티켓을 다운로드할 수 있습니다:\n"
 "{url}\n"
@@ -10901,7 +11005,7 @@ msgstr ""
 "귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2655
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10915,21 +11019,21 @@ msgid ""
 msgstr ""
 "안녕하세요.\n"
 "\n"
-"{event} 티켓을 구매하셨습니다.\n"
+"{이벤트} 티켓을 구매하셨습니다.\n"
 "\n"
 "아직 그렇게 하지 않았다면 여기에서 티켓을 다운로드할 수 있습니다:\n"
 "{url}\n"
 "\n"
 "감사해요.\n"
-"귀하의 {event} 팀"
+"귀하의 {이벤트} 팀"
 
 #: pretix/base/settings.py:2667
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Activate your account at {organizer}"
-msgstr "{organizer}에서 계정 활성화"
+msgstr "{주최자}에서 계정 활성화"
 
 #: pretix/base/settings.py:2671
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -10947,9 +11051,9 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
-"안녕하세요 {name},\n"
+"안녕하세요 {이름},\n"
 "\n"
-"{organizer}에서 계정을 등록해 주셔서 감사합니다!\n"
+"{주최자}에서 계정을 등록해 주셔서 감사합니다!\n"
 "\n"
 "계정을 활성화하고 비밀번호를 설정하려면 여기를 클릭하세요:\n"
 "\n"
@@ -10961,12 +11065,12 @@ msgstr ""
 "\n"
 "감사해요.\n"
 "\n"
-"귀하의  {organizer} 팀"
+"귀하의  {주최자} 팀"
 
 #: pretix/base/settings.py:2689
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
-msgstr "{organizer}에서 계정의 이메일 주소 확인"
+msgstr "{주최자}에서 계정의 이메일 주소 확인"
 
 #: pretix/base/settings.py:2693
 #, fuzzy, python-brace-format
@@ -10989,7 +11093,7 @@ msgid ""
 msgstr ""
 "안녕하세요 {이름},\n"
 "\n"
-"{organizer}에서 계정의 이메일 주소 변경을 요청하셨습니다!\n"
+"{주최자}에서 계정의 이메일 주소 변경을 요청하셨습니다!\n"
 "\n"
 "변경 사항을 확인하려면 여기를 클릭하세요:\n"
 "\n"
@@ -11001,15 +11105,15 @@ msgstr ""
 "\n"
 "감사해요.\n"
 "\n"
-"귀하의 {organizer}  팀"
+"귀하의 {주최자}  팀"
 
 #: pretix/base/settings.py:2711
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Set a new password for your account at {organizer}"
-msgstr "{organizer}에서 계정의 새 비밀번호 설정"
+msgstr "{주최자}에서 계정의 새 비밀번호 설정"
 
 #: pretix/base/settings.py:2715
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -11027,9 +11131,9 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
-"안녕하세요 {name},\n"
+"안녕하세요 {이름},\n"
 "\n"
-"{organizer}에서 계정의 새 비밀번호를 요청하셨습니다!\n"
+"{주최자}에서 계정의 새 비밀번호를 요청하셨습니다!\n"
 "\n"
 "새 비밀번호를 설정하려면 여기를 클릭하세요:\n"
 "\n"
@@ -11041,7 +11145,7 @@ msgstr ""
 "\n"
 "감사해요.\n"
 "\n"
-"귀하의 {organizer}  팀"
+"귀하의 {주최자}  팀"
 
 #: pretix/base/settings.py:2767 pretix/base/settings.py:2774
 #: pretix/base/settings.py:2788 pretix/base/settings.py:2796
@@ -11150,7 +11254,8 @@ msgstr "개별적으로 업로드된 로고가 없는 이벤트에도 헤더 이
 
 #: pretix/base/settings.py:2967
 msgid "Favicon"
-msgstr "파비콘"
+msgstr "파비콘(웹사이트 아이콘-브라우저 탬 혹은 즐겨찾기 목록에 표시되는 작은 "
+"이미지파일)"
 
 #: pretix/base/settings.py:2970
 msgid ""
@@ -11199,7 +11304,8 @@ msgstr "기본적으로 어디에도 표시되지 않지만, 원한다면 티켓
 
 #: pretix/base/settings.py:3049
 msgid "Banner text (top)"
-msgstr "배너 텍스트(위)"
+msgstr "배너 텍스트(위) (웹사이트, 광고, 이메일이나 프로모션에서 배너에 표시되는 "
+"텍스트)"
 
 #: pretix/base/settings.py:3052
 msgid ""
@@ -20130,7 +20236,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/transactions.html:11
 #, python-format
 msgid "Back to order %(order)s"
-msgstr ""
+msgstr "주문 %(주문)로 돌아가기"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:24
 msgid ""
