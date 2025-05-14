@@ -66,6 +66,8 @@ class AuthenticationForm(forms.Form):
 
     error_messages = {
         'incomplete': _('You need to fill out all fields.'),
+        'empty_email': _('You need to enter an email address.'),
+        'empty_password': _('You need to enter a password.'),
         'invalid_login': _(
             "We have not found an account with this email address and password."
         ),
@@ -112,6 +114,10 @@ class AuthenticationForm(forms.Form):
             else:
                 self.confirm_login_allowed(self.customer_cache)
         else:
+            if not email:
+                self.add_error("email", self.error_messages['empty_email'])
+            if not password:
+                self.add_error("password", self.error_messages['empty_password'])
             raise forms.ValidationError(
                 self.error_messages['incomplete'],
                 code='incomplete'
