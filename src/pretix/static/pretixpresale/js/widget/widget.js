@@ -1171,15 +1171,27 @@ Vue.component('pretix-widget-event-form', {
 Vue.component('pretix-widget-event-list-filter-field', {
     template: ('<div class="pretix-widget-event-list-filter-field">'
         + '<label :for="id">{{ field.label }}</label>'
-        + '<select :id="id" :name="field.key" @change="onChange($event)" :value="currentValue">'
+        + '<select ref="select" :id="id" :name="field.key" @focus="onFocus" @keydown="onKeydown" @click="onChange" :value="currentValue">'
         + '<option v-for="choice in field.choices" :value="choice[0]">{{ choice[1] }}</option>'
         + '</select>'
         + '</div>'),
     props: {
         field: Object
     },
+    data: function() {
+        return {
+            valueOnFocus: ""
+        }
+    },
     methods: {
+        onFocus: function (event) {
+            this.valueOnFocus = this.$refs.select.value;
+        },
         onChange: function(event) {
+            if (this.valueOnFocus == this.$refs.select.value) {
+                // no change
+                return;
+            }
             var filterParams = new URLSearchParams(this.$root.filter);
             if (event.target.value) {
                 filterParams.set(this.field.key, event.target.value);
@@ -1189,6 +1201,14 @@ Vue.component('pretix-widget-event-list-filter-field', {
             this.$root.filter = filterParams.toString();
             this.$root.loading++;
             this.$root.reload();
+        },
+        onKeydown: function (e) {
+            const keyDown = e.key !== undefined ? e.key : e.keyCode;
+            if ( (keyDown === 'Enter' || keyDown === 13) || (['Spacebar', ' '].indexOf(keyDown) >= 0 || keyDown === 32)) {
+                // (prevent default so the page doesn't scroll when pressing space)
+                e.preventDefault();
+                this.onChange(e);
+            }
         },
     },
     computed: {
