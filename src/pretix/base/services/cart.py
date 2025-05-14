@@ -294,6 +294,7 @@ class CartManager:
         self.invoice_address = invoice_address
         self._widget_data = widget_data or {}
         self._sales_channel = sales_channel
+        self.num_extended_positions = 0
 
         if expiry and reservation_time:
             raise TypeError('Cannot specify both expiry and reservation_time')
@@ -347,7 +348,7 @@ class CartManager:
         # Extend this user's cart session to ensure all items in the cart expire at the same time
         # We can extend the reservation of items which are not yet expired without risk
         if self._expiry > self.real_now_dt:
-            self.positions.filter(expires__gt=self.real_now_dt).update(expires=self._expiry)
+            self.num_extended_positions += self.positions.filter(expires__gt=self.real_now_dt, expires__lt=self._expiry).update(expires=self._expiry)
 
     def _delete_out_of_timeframe(self):
         err = None
@@ -606,6 +607,7 @@ class CartManager:
                 self._voucher_use_diff[cp.voucher] += 2
 
             self._operations.append(op)
+            self.num_extended_positions += 1
         return err
 
     def apply_voucher(self, voucher_code: str):
@@ -1667,6 +1669,7 @@ def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', 
             try:
                 cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
                 cm.commit()
+                return cm.num_extended_positions
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):

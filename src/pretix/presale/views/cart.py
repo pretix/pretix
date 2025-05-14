@@ -543,7 +543,8 @@ class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
     known_errortypes = ['CartError']
 
     def get_success_message(self, value):
-        return _('Your cart timeout was extended.')
+        if value > 0:
+            return _('Your cart timeout was extended.')
 
     def post(self, request, *args, **kwargs):
         return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language(),
