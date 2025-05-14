@@ -46,6 +46,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
+from django.db.models.aggregates import Max
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import (
@@ -304,6 +305,7 @@ class CartManager:
         else:
             self._reservation_time = timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
         self._expiry = self.real_now_dt + self._reservation_time
+        self._max_expiry_extend = self.real_now_dt + (self._reservation_time * 11)
 
     @property
     def positions(self):
@@ -317,14 +319,6 @@ class CartManager:
         if (item, subevent) not in self._seated_cache:
             self._seated_cache[item, subevent] = item.seat_category_mappings.filter(subevent=subevent).exists()
         return self._seated_cache[item, subevent]
-
-    def _calculate_expiry(self):
-        if self._explicit_expiry:
-            self._expiry = self._explicit_expiry
-        else:
-            self._expiry = self.real_now_dt + timedelta(
-                minutes=self.event.settings.get('reservation_time', as_type=int)
-            )
 
     def _check_presale_dates(self):
         if self.event.presale_start and time_machine_now(self.real_now_dt) < self.event.presale_start:
@@ -342,9 +336,18 @@ class CartManager:
                     raise CartError(error_messages['payment_ended'])
 
     def _extend_expiry_of_valid_existing_positions(self):
+        # Make sure we do not extend past the max_extend timestamp, allowing users to extend their valid positions up
+        # to 11 times the reservation time. After that, positions will expire, but can still be re-validated using
+        # ExtendOperation.
+        max_extend_existing = self.positions.filter(expires__gt=self.real_now_dt).aggregate(m=Max('max_extend'))['m']
+        if max_extend_existing:
+            self._expiry = min(self._expiry, max_extend_existing)
+            self._max_expiry_extend = max_extend_existing
+
         # Extend this user's cart session to ensure all items in the cart expire at the same time
         # We can extend the reservation of items which are not yet expired without risk
-        self.positions.filter(expires__gt=self.real_now_dt).update(expires=self._expiry)
+        if self._expiry > self.real_now_dt:
+            self.positions.filter(expires__gt=self.real_now_dt).update(expires=self._expiry)
 
     def _delete_out_of_timeframe(self):
         err = None
@@ -1259,6 +1262,7 @@ class CartManager:
                             item=op.item,
                             variation=op.variation,
                             expires=self._expiry,
+                            max_extend=self._max_expiry_extend,
                             cart_id=self.cart_id,
                             voucher=op.voucher,
                             addon_to=op.addon_to if op.addon_to else None,
@@ -1307,7 +1311,9 @@ class CartManager:
                                         event=self.event,
                                         item=b.item,
                                         variation=b.variation,
-                                        expires=self._expiry, cart_id=self.cart_id,
+                                        expires=self._expiry,
+                                        max_extend=self._max_expiry_extend,
+                                        cart_id=self.cart_id,
                                         voucher=None,
                                         addon_to=cp,
                                         subevent=b.subevent,
@@ -1334,12 +1340,13 @@ class CartManager:
                         op.position.delete()
                     elif available_count == 1:
                         op.position.expires = self._expiry
+                        op.position.max_extend = self._max_expiry_extend
                         op.position.listed_price = op.listed_price
                         op.position.price_after_voucher = op.price_after_voucher
                         # op.position.price will be updated by recompute_final_prices_and_taxes()
                         if op.position.pk not in deleted_positions:
                             try:
-                                op.position.save(force_update=True, update_fields=['expires', 'listed_price', 'price_after_voucher'])
+                                op.position.save(force_update=True, update_fields=['expires', 'max_extend', 'listed_price', 'price_after_voucher'])
                             except DatabaseError:
                                 # Best effort... The position might have been deleted in the meantime!
                                 pass
@@ -1433,8 +1440,6 @@ class CartManager:
         err = self._delete_out_of_timeframe()
         err = self.extend_expired_positions() or err
         err = err or self._check_min_per_voucher()
-
-        self.real_now_dt = now()
 
         self._extend_expiry_of_valid_existing_positions()
         err = self._perform_operations() or err
