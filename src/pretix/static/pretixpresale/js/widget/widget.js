@@ -1400,7 +1400,7 @@ Vue.component('pretix-widget-event-week-cell', {
 });
 
 Vue.component('pretix-widget-event-calendar-cell', {
-    template: ('<td :class="classObject" @click.prevent.stop="selectDay">'
+    template: ('<td :class="classObject" :role="role">'
         + '<div class="pretix-widget-event-calendar-day" v-if="day" v-bind:aria-label="date">'
         + '{{ daynum }}'
         + '</div>'
@@ -1412,10 +1412,12 @@ Vue.component('pretix-widget-event-calendar-cell', {
         day: Object,
     },
     methods: {
-        selectDay: function () {
+        selectDay: function (e) {
             if (!this.day || !this.day.events.length || !this.$parent.$parent.$parent.mobile) {
                 return;
             }
+            e.preventDefault();
+            e.stopPropagation();
             if (this.day.events.length === 1) {
                 var ev = this.day.events[0];
                 this.$root.parent_stack.push(this.$root.target_url);
@@ -1430,7 +1432,26 @@ Vue.component('pretix-widget-event-calendar-cell', {
             }
         }
     },
+    mounted: function () {
+        if (this.role == 'button') {
+            this.$el.addEventListener("click", this.selectDay);
+        }
+    },
+    watch: {
+        role: function (newValue) {
+            if (newValue == 'button') {
+                this.$el.addEventListener("click", this.selectDay);
+                console.log("Bind click event");
+            } else {
+                this.$el.removeEventListener("click", this.selectDay);
+                console.log("Unbind click-event!");
+            }
+        }
+    },
     computed: {
+        role: function () {
+            return (!this.day || !this.day.events.length || !this.$parent.$parent.$parent.mobile) ? 'cell' : 'button';
+        },
         daynum: function () {
             if (!this.day) {
                 return;
