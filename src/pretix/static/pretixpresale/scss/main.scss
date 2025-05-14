@@ -593,22 +593,15 @@ h2 .label {
     display: none !important;
 }
 
-.event-list {
-    margin-bottom: 15px;
-    border-top: 1px solid $table-border-color;
-
-    .row {
-        margin-left: 0;
-        margin-right: 0;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        border-bottom: 1px solid $table-border-color;
-        border-left: 1px solid $table-border-color;
-        border-right: 1px solid $table-border-color;
+.event-list.full-width-list {
+    h3, p {
+        margin-top: 0;
+        margin-bottom: 0;
     }
-    .row > div {
-        padding-top: 5px;
-        padding-bottom: 5px;
+    h3 {
+        font-size: 1em;
+        line-height: 1.25rem;
+        font-weight: bold;
     }
 }
 
