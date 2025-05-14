@@ -1650,6 +1650,30 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
+    """
+    Resets the expiry time of a cart to the configured reservation time of this event.
+    Limited to 11x the reservation time.
+
+    :param event: The event ID in question
+    :param cart_id: The cart ID of the cart to modify
+    """
+    with language(locale), time_machine_now_assigned(override_now_dt):
+        try:
+            sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
+        except SalesChannel.DoesNotExist:
+            raise CartError("Invalid sales channel.")
+        try:
+            try:
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
+                cm.commit()
+            except LockTimeoutException:
+                self.retry()
+        except (MaxRetriesExceededError, LockTimeoutException):
+            raise CartError(error_messages['busy'])
+
+
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def set_cart_addons(self, event: Event, addons: List[dict], add_to_cart_items: List[dict], cart_id: str=None, locale='en',
                     invoice_address: int=None, sales_channel='web', override_now_dt: datetime=None) -> None:
     """
