@@ -556,7 +556,7 @@
 
   .pretix-widget-event-availability-orange .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-orange.pretix-widget-event-calendar-event {
-    background-color: $brand-warning;
+    background-color: $state-warning-text;
   }
   .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-none.pretix-widget-event-calendar-event {
@@ -564,11 +564,11 @@
   }
   .pretix-widget-event-availability-green .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-green.pretix-widget-event-calendar-event {
-    background-color: $brand-success;
+    background-color: $state-success-text;
   }
   .pretix-widget-event-availability-red .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-red.pretix-widget-event-calendar-event {
-    background-color: $brand-danger;
+    background-color: $state-danger-text;
   }
   .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span {
     border-left: 10px solid $brand-warning;
@@ -1020,16 +1020,16 @@
       color: white;
       cursor: pointer;
       &.pretix-widget-day-availability-red {
-        background: $brand-danger;
+        background: $state-danger-text;
       }
       &.pretix-widget-day-availability-green {
-        background: $brand-success;
+        background: $state-success-text;
       }
       &.pretix-widget-day-availability-low {
         border-right: 5px solid $brand-warning;
       }
       &.pretix-widget-day-availability-orange {
-        background: $brand-warning;
+        background: $state-warning-text;
       }
     }
 
