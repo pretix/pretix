@@ -7,7 +7,7 @@
         <thead>
         <tr>
             {% for d in weeks|iter_weekdays %}
-                <th><span aria-hidden="true">{{ d|date_fast:"D" }}</span><span class="sr-only">{{ d|date_fast:"l" }}</span></th>
+                <th><span aria-hidden="true" class="text-muted">{{ d|date_fast:"D" }}</span><span class="sr-only">{{ d|date_fast:"l" }}</span></th>
             {% endfor %}
         </tr>
         </thead>

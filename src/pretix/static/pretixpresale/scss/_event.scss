@@ -240,14 +240,26 @@ div.front-page {
     }
 }
 
-.calendar-nav, .calendar-nav li {
+.calendar-nav, .calendar-nav > li {
     list-style: none;
     margin: 0;
     padding: 0
 }
-.calendar-nav li {
-    padding: 10px 0;
+.calendar-nav > li {
+    padding: 0 0 10px;
 }
+.calendar-nav {
+    display: flex;
+    align-items: end;
+}
+.calendar-nav > li {
+    width: 60%;
+}
+.calendar-nav > li:first-child,
+.calendar-nav > li:last-child {
+    width: 20%;
+}
+
 
 .subevent-toggle {
     display: none;

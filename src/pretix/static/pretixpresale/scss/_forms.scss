@@ -23,6 +23,10 @@ a.btn, button.btn {
     }
 }
 
+.input-group:has(.input-group-btn:last-child) *:not(last-child) {
+  border-right: 0;
+}
+
 .panel-title .radio {
   margin-left: 20px;
 }
