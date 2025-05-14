@@ -117,7 +117,6 @@ function async_task_callback(data, jqXHR, status) {
     $("body").data('ajaxing', false);
     if (data.redirect) {
         if (async_task_is_download && data.success) {
-            waitingDialog.hide();
             if (location.href.indexOf("async_id") !== -1) {
                 history.replaceState({}, "pretix", async_task_old_url);
             }
@@ -131,22 +130,21 @@ function async_task_callback(data, jqXHR, status) {
 
     if (async_task_is_long) {
         if (data.started) {
-            $("#loadingmodal p.status").text(gettext(
-                'Your request is currently being processed. Depending on the size of your event, this might take up to ' +
-                'a few minutes.'
-            ));
+            window.pretix.dialog.open({
+                label: gettext("Your request is currently being processed."),
+                message: gettext("Depending on the size of the event, this might take up to a few minutes."),
+            });
         } else {
-            $("#loadingmodal p.status").text(gettext(
-                'Your request has been queued on the server and will soon be ' +
-                'processed.'
-            ));
+            window.pretix.dialog.open({
+                label: gettext("Your request has been queued on the server."),
+                message: gettext("It will soon be processed."),
+            });
         }
     } else {
-        $("#loadingmodal p.status").text(gettext(
-            'Your request arrived on the server but we still wait for it to be ' +
-            'processed. If this takes longer than two minutes, please contact us or go ' +
-            'back in your browser and try again.'
-        ));
+        window.pretix.dialog.open({
+            label: gettext("Your request arrived on the server but we still wait for it to be processed."),
+            message: gettext("If this takes longer than two minutes, please contact us or go back in your browser and try again."),
+        });
     }
     if (location.href.indexOf("async_id") === -1) {
         history.pushState({}, "Waiting", async_task_check_url.replace(/ajax=1/, ''));
@@ -157,14 +155,18 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     $("body").data('ajaxing', false);
     if (textStatus === "timeout") {
-        alert(gettext("The request took too long. Please try again."));
-        waitingDialog.hide();
+        window.pretix.dialog.open({
+            label: gettext("The request took too long …"),
+            message: gettext("Please try again."),
+            confirm: true,
+        });
     } else if (jqXHR.responseText.indexOf('<html') > 0) {
         var respdom = $(jqXHR.responseText);
         var c = respdom.filter('.container');
         if (respdom.filter('form') && (respdom.filter('.has-error') || respdom.filter('.alert-danger'))) {
             // This is a failed form validation, let's just use it
-            waitingDialog.hide();
+            window.pretix.dialog.close();
+            // TODO: we need to give feedback regarding the error; either focus an element with error or better output another dialog?
 
             if (respdom.filter('#page-wrapper') && $('#page-wrapper').length) {
                 $("#page-wrapper").html(respdom.find("#page-wrapper").html());
@@ -186,20 +188,32 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
             }
 
         } else if (c.length > 0) {
-            waitingDialog.hide();
-            ajaxErrDialog.show(c.first().html());
+            window.pretix.dialog.open({
+                label: gettext('An error occurred.'),
+                message: c.first().text(),
+                confirm: true,
+            });
+            //ajaxErrDialog.show(c.first().html());
         } else {
-            waitingDialog.hide();
-            alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
+            window.pretix.dialog.open({
+                label: gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status),
+                message: gettext("Please try again."),
+                confirm: true,
+            });
         }
     } else {
         if (jqXHR.status >= 400 && jqXHR.status < 500) {
-            waitingDialog.hide();
-            alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
+            window.pretix.dialog.open({
+                label: gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status),
+                message: gettext("Please try again."),
+                confirm: true,
+            });
         } else {
-            waitingDialog.hide();
-            alert(gettext('We currently cannot reach the server. Please try again. ' +
-                          'Error code: {code}').replace(/\{code\}/, jqXHR.status));
+            window.pretix.dialog.open({
+                label: gettext('We currently cannot reach the server.'),
+                message: gettext("Please try again. Error code: {code}").replace(/\{code\}/, jqXHR.status),
+                confirm: true,
+            });
         }
     }
 }
@@ -234,11 +248,6 @@ $(function () {
             ),
             icon: 'cog',
         });
-
-        window.setTimeout(function() {
-            window.pretix.dialog.close();
-        }, 2000);
-        return false;
 
         var action = this.action;
         var formData = new FormData(this);
