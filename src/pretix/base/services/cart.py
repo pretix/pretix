@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import re
 import uuid
+import warnings
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -275,7 +276,10 @@ class CartManager:
     }
 
     def __init__(self, event: Event, cart_id: str, sales_channel: SalesChannel,
-                 invoice_address: InvoiceAddress=None, widget_data=None, expiry=None):
+                 invoice_address: InvoiceAddress=None, widget_data=None, expiry=None, reservation_time: timedelta=None):
+        """
+        Creates a new CartManager for an event.
+        """
         self.event = event
         self.cart_id = cart_id
         self.real_now_dt = now()
@@ -286,11 +290,20 @@ class CartManager:
         self._subevents_cache = {}
         self._variations_cache = {}
         self._seated_cache = {}
-        self._expiry = None
-        self._explicit_expiry = expiry
         self.invoice_address = invoice_address
         self._widget_data = widget_data or {}
         self._sales_channel = sales_channel
+
+        if expiry and reservation_time:
+            raise TypeError('Cannot specify both expiry and reservation_time')
+        elif expiry:
+            warnings.warn('CartManager(expiry=...) is deprecated, use reservation_time=... instead')
+            self._reservation_time = expiry - now()
+        elif reservation_time:
+            self._reservation_time = reservation_time
+        else:
+            self._reservation_time = timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
+        self._expiry = self.real_now_dt + self._reservation_time
 
     @property
     def positions(self):
@@ -1416,7 +1429,6 @@ class CartManager:
     def commit(self):
         self._check_presale_dates()
         self._check_max_cart_size()
-        self._calculate_expiry()
 
         err = self._delete_out_of_timeframe()
         err = self.extend_expired_positions() or err
