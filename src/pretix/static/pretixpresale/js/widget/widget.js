@@ -1400,7 +1400,7 @@ Vue.component('pretix-widget-event-week-cell', {
 });
 
 Vue.component('pretix-widget-event-calendar-cell', {
-    template: ('<td :class="classObject" :role="role">'
+    template: ('<td :class="classObject" :role="role" :tabindex="tabindex" v-bind:aria-label="date">'
         + '<div class="pretix-widget-event-calendar-day" v-if="day" v-bind:aria-label="date">'
         + '{{ daynum }}'
         + '</div>'
@@ -1430,27 +1430,39 @@ Vue.component('pretix-widget-event-calendar-cell', {
                 this.$root.events = this.day.events;
                 this.$root.view = "events";
             }
-        }
+        },
+        onKeyDown: function (e) {
+            var keyDown = e.key !== undefined ? e.key : e.keyCode;
+            if ( (keyDown === 'Enter' || keyDown === 13) || (['Spacebar', ' '].indexOf(keyDown) >= 0 || keyDown === 32)) {
+                // (prevent default so the page doesn't scroll when pressing space)
+                e.preventDefault();
+                this.selectDay(e);
+            }
+        },
     },
     mounted: function () {
         if (this.role == 'button') {
             this.$el.addEventListener("click", this.selectDay);
+            this.$el.addEventListener("keydown", this.onKeyDown);
         }
     },
     watch: {
         role: function (newValue) {
             if (newValue == 'button') {
                 this.$el.addEventListener("click", this.selectDay);
-                console.log("Bind click event");
+                this.$el.addEventListener("keydown", this.onKeyDown);
             } else {
                 this.$el.removeEventListener("click", this.selectDay);
-                console.log("Unbind click-event!");
+                this.$el.removeEventListener("keydown", this.onKeyDown);
             }
         }
     },
     computed: {
         role: function () {
             return (!this.day || !this.day.events.length || !this.$parent.$parent.$parent.mobile) ? 'cell' : 'button';
+        },
+        tabindex: function () {
+            return this.role == 'button' ? '0' : '-1';
         },
         daynum: function () {
             if (!this.day) {
