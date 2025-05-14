@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-05-14 08:01+0000\n"
-"Last-Translator: 조정화 <junghwa.jo@om.org>\n"
+"PO-Revision-Date: 2025-05-14 08:13+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -3145,10 +3145,10 @@ msgid "Individual customer"
 msgstr "개별 고객"
 
 #: pretix/base/invoice.py:138
-#, fuzzy, python-format
+#, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "%d 페이지"
+msgstr ""
 
 #: pretix/base/invoice.py:375
 msgctxt "invoice"
@@ -6038,9 +6038,9 @@ msgid "Can change vouchers"
 msgstr "바우처를 변경할 수 있습니다"
 
 #: pretix/base/models/organizer.py:353
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s on %(object)s"
-msgstr "%(이름)의 %(객체)"
+msgstr ""
 
 #: pretix/base/models/organizer.py:385
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:64
@@ -6515,12 +6515,12 @@ msgid ""
 msgstr "이 바우처가 티켓을 예약하려면 특정 제품이나 할당량을 선택해야 합니다."
 
 #: pretix/base/models/vouchers.py:367
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
-msgstr "이 바우처는 이미 %(재사용) 횟수만큼 사용되었습니다. 최대 사용 횟수를 이 숫자 "
-"이하로 줄일 수 없습니다."
+msgstr "이 바우처는 이미 %(redeemed)s 횟수만큼 사용되었습니다. 최대 사용 횟수를 이 "
+"숫자 이하로 줄일 수 없습니다."
 
 #: pretix/base/models/vouchers.py:376
 msgid ""
@@ -7581,39 +7581,27 @@ msgstr "선택한 일부 제품은 더 이상 사용할 수 없습니다. 다음
 "장바구니에 추가되지 않았습니다: %s"
 
 #: pretix/base/services/cart.py:126
-#, fuzzy, python-format
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
 msgstr[0] ""
-"단수형\n"
-"주문당 %s개 이상의 품목을 선택할 수 없습니다.\n"
-"복수형\n"
-"주문당 %s개 이상의 품목을 선택할 수 없습니다."
 
 #: pretix/base/services/cart.py:130 pretix/base/services/orders.py:1542
-#, fuzzy, python-format
+#, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
 msgstr[0] ""
-"단수형\n"
-"제품 %(제품)의 항목을 %(최대) 이상 선택할 수 없습니다.\n"
-"복수형\n"
-"제품 %(제품)의 항목을 %(최대) 이상 선택할 수 없습니다."
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:1547
-#, fuzzy, python-format
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
 msgstr[0] ""
-"단수형\n"
-"제품 %(제품)의 항목을 최소 %(분) 이상 선택해야 합니다.\n"
-"복수형\n"
-"제품 %(제품)의 항목을 최소 %(분) 이상 선택해야 합니다."
 
 #: pretix/base/services/cart.py:140
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "item of it."
@@ -7621,10 +7609,6 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-"단수형\n"
-"%(분) 이하의 품목을 구매할 수 없으므로 장바구니에서 %(제품)을 제거했습니다.\n"
-"복수형\n"
-"%(분) 이하의 품목을 구매할 수 없으므로 장바구니에서 %(제품)을 제거했습니다."
 
 #: pretix/base/services/cart.py:144 pretix/base/services/orders.py:154
 #: pretix/presale/templates/pretixpresale/event/index.html:167
@@ -7669,7 +7653,7 @@ msgid "This voucher code is not known in our database."
 msgstr "이 바우처 코드는 데이터베이스에 알려져 있지 않습니다."
 
 #: pretix/base/services/cart.py:157 pretix/base/services/orders.py:157
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
@@ -7677,14 +7661,9 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-"단수형: \n"
-"이 바우처 코드는 데이터베이스에 알려져 있지 않습니다.\n"
-"복수형\n"
-"바우처 코드 \"%(바우처)\"는 일치하는 제품을 최소 %(숫자) 이상 선택한 "
-"경우에만 사용할 수 있습니다."
 
 #: pretix/base/services/cart.py:162
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products. We have therefore removed some positions from "
@@ -7694,14 +7673,6 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
-"단수형\n"
-"바우처 코드 \"%(바우처)\"는 일치하는 제품을 최소 %(숫자) 이상 선택한 "
-"경우에만 사용할 수 있습니다. 따라서 더 이상 이렇게 구매할 수 없는 일부 "
-"위치를 장바구니에서 삭제했습니다.\n"
-"복수형\n"
-"바우처 코드 \"%(바우처)\"는 일치하는 제품을 최소 %(숫자) 이상 선택한 "
-"경우에만 사용할 수 있습니다. 따라서 더 이상 이렇게 구매할 수 없는 일부 "
-"위치를 장바구니에서 삭제했습니다."
 
 #: pretix/base/services/cart.py:168
 msgid ""
@@ -7788,7 +7759,7 @@ msgid "You can not select two variations of the same add-on product."
 msgstr "동일한 애드온 제품의 두 가지 변형을 선택할 수 없습니다."
 
 #: pretix/base/services/cart.py:197 pretix/base/services/orders.py:192
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can select at most %(max)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -7796,15 +7767,9 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
-"단수형\n"
-"%(기본) 제품의 카테고리 %(카테고리)에서 최대 %(최대)의 추가 기능을 선택할 수 "
-"있습니다.\n"
-"복수형\n"
-"%(기본) 제품의 카테고리 %(카테고리)에서 최대 %(최대)의 추가 기능을 선택할 수 "
-"있습니다."
 
 #: pretix/base/services/cart.py:202 pretix/base/services/orders.py:197
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -7812,20 +7777,13 @@ msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr[0] ""
-"단수형\n"
-"제품 %(기본)에 대한 카테고리 %(카테고리)에서 최소한 %(최소)의 추가 기능을 "
-"선택해야 합니다\n"
-"복수형\n"
-"제품 %(기본)에 대한 카테고리 %(카테고리)에서 최소한 %(최소)의 추가 기능을 "
-"선택해야 합니다."
 
 #: pretix/base/services/cart.py:206 pretix/base/services/orders.py:201
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can select every add-on from the category %(cat)s for the product "
 "%(base)s at most once."
-msgstr "%(기본) 제품의 카테고리 %(카테고리)에서 모든 추가 기능을 최대 한 번만 선택할 "
-"수 있습니다."
+msgstr ""
 
 #: pretix/base/services/cart.py:207
 msgid ""
@@ -8289,9 +8247,9 @@ msgstr ""
 "발생했습니다: {message}"
 
 #: pretix/base/services/modelimport.py:89 pretix/base/services/orders.py:1551
-#, fuzzy, python-format
+#, python-format
 msgid "Orders cannot have more than %(max)s positions."
-msgstr "주문의 위치는 %(최대)를 초과할 수 없습니다."
+msgstr ""
 
 #: pretix/base/services/modelimport.py:124
 #: pretix/base/services/modelimport.py:236
@@ -8340,7 +8298,7 @@ msgid "Your cart is empty."
 msgstr "카트가 비어 있습니다."
 
 #: pretix/base/services/orders.py:146
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You cannot select more than %(max)s item of the product %(product)s. We "
 "removed the surplus items from your cart."
@@ -8348,12 +8306,6 @@ msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr[0] ""
-"단수형\n"
-"제품 %(제품)의 항목을 %(최대) 이상 선택할 수 없습니다. 카트에서 여분의 "
-"항목을 제거했습니다.\n"
-"복수형\n"
-"제품 %(제품)의 항목을 %(최대) 이상 선택할 수 없습니다. 카트에서 잉여 항목을 "
-"제거했습니다."
 
 #: pretix/base/services/orders.py:155
 msgid "The booking period has ended."
@@ -8420,11 +8372,11 @@ msgstr "주문하신 좌석 중 하나가 그 사이에 자리를 잡았습니�
 "카트에서 제거했습니다."
 
 #: pretix/base/services/orders.py:202
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr "%(추가) 위치는 이미 체크인되었으므로 제거할 수 없습니다."
+msgstr "%(addon)s 위치는 이미 체크인되었으므로 제거할 수 없습니다."
 
 #: pretix/base/services/orders.py:203
 msgid "Paid products not supported without a valid currency."
@@ -11790,12 +11742,12 @@ msgid "Unknown host"
 msgstr "알 수 없는 호스트"
 
 #: pretix/base/templates/400_hostname.html:10
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your browser told us that you want to access \"%(header_host)s\". "
 "Unfortunately, we don't have any content for this domain."
 msgstr ""
-"브라우저에서 \"%(header_host)\"에 액세스하고 싶다고 알려주었습니다. "
+"브라우저에서 \"%(header_host)s\"에 액세스하고 싶다고 알려주었습니다. "
 "안타깝게도 이 도메인에 대한 콘텐츠가 없습니다."
 
 #: pretix/base/templates/400_hostname.html:17
@@ -12381,9 +12333,9 @@ msgid "Payment provider \"{name}\" can no longer be selected"
 msgstr "결제 제공업체 \"{이름}\"을 더 이상 선택할 수 없습니다"
 
 #: pretix/base/validators.py:51
-#, fuzzy, python-format
+#, python-format
 msgid "This field has an invalid value: %(value)s."
-msgstr "이 필드에는 잘못된 값이 있습니다: %(값)s."
+msgstr "이 필드에는 잘못된 값이 있습니다: %(value)s."
 
 #: pretix/base/views/errors.py:48
 msgid ""
