@@ -121,6 +121,9 @@ a.no-underline:link, nav li a:link {
 a.no-underline:hover, nav li a:hover {
     text-decoration: underline;
 }
+.help-block a {
+    color: inherit;
+}
 
 
 /* See https://github.com/pretix/pretix/pull/761 */
