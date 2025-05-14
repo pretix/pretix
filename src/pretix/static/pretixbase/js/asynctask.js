@@ -225,8 +225,7 @@ $(function () {
         async_task_old_url = location.href;
         $("body").data('ajaxing', true);
 
-        const ac = new AbortController();
-        window.pretix.dialog({
+        window.pretix.dialog.open({
             label: this.getAttribute("data-asynctask-headline") || gettext("We are processing your request …"),
             message: (this.getAttribute("data-asynctask-text") || "") + gettext(
                 'We are currently sending your request to the server. If this takes longer ' +
@@ -234,10 +233,10 @@ $(function () {
                 'this page and try again.'
             ),
             icon: 'cog',
-        }, ac.signal);
+        });
 
         window.setTimeout(function() {
-            ac.abort();
+            window.pretix.dialog.close();
         }, 2000);
         return false;
 

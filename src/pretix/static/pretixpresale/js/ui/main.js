@@ -382,39 +382,32 @@ function get_label_text_for_id(id) {
 
 
 window.pretix = window.pretix || {};
-window.pretix.dialog = function(opt, signal) {
-    // always close any open dialogs
-    $("dialog[open]").each(function() {
-        this.close();
-    });
-    if (!opt) {
-        return;
-    }
-    const id = "dialog-" + (opt.confirm ? "alert" : "info");
-    const dialog = document.getElementById(id);
-    $("#" + id + "-label").text(opt.label);
-    $("#" + id + "-description").text(opt.message);
-    $(".modal-card-icon .fa", dialog).attr('class', 'fa fa-' + (opt.icon || "exclamation-triangle"));
-    if (opt.confirm) {
-        $("button", dialog).attr("value", opt.confirm.toString()).text(opt.confirm === true ? gettext("OK") : opt.confirm);
-    }
+window.pretix.dialog = {
+    close: function() {
+        $("#dialog-alert[open], #dialog-info[open]").each(function() {
+            this.close();
+        });
+    },
+    open: function(opt) {
+        window.pretix.dialog.close();
 
-    return new Promise((resolve, reject) => {
-        if (signal) {
-            function onAbort() {
-                dialog.close();
-            }
-            signal.addEventListener('abort', onAbort, { once: true });
+        const id = "dialog-" + (opt.confirm ? "alert" : "info");
+        const dialog = document.getElementById(id);
+        $("#" + id + "-label").text(opt.label);
+        $("#" + id + "-description").text(opt.message);
+        $(".modal-card-icon .fa", dialog).attr('class', 'fa fa-' + (opt.icon || "exclamation-triangle"));
+        if (opt.confirm) {
+            $("button", dialog).attr("value", opt.confirm.toString()).text(opt.confirm === true ? gettext("OK") : opt.confirm);
         }
-        dialog.addEventListener('close', function() {
-            if (signal) {
-                signal.removeEventListener('abort', onAbort);
-            }
-            resolve(dialog.returnValue);
-        }, { once: true });
 
-        dialog.showModal();
-    })
+        return new Promise((resolve, reject) => {
+            dialog.addEventListener('close', function() {
+                resolve(dialog.returnValue);
+            }, { once: true });
+
+            dialog.showModal();
+        })
+    }
 };
 
 
@@ -436,7 +429,7 @@ $(function () {
 
         e.preventDefault();
         e.stopPropagation();
-        window.pretix.dialog({
+        window.pretix.dialog.open({
             label: gettext("You have not selected any ticket."),
             message: gettext("Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart."),
             icon: 'exclamation',
