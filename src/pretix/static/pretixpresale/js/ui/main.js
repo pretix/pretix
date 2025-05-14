@@ -421,7 +421,6 @@ $(function () {
         e.preventDefault();
         e.stopPropagation();
         window.pretix.dialog({
-            type: "alert",
             label: gettext("You have not selected any ticket."),
             message: gettext("Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart."),
             icon: 'exclamation',
