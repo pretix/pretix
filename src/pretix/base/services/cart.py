@@ -46,7 +46,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
-from django.db.models.aggregates import Max
+from django.db.models.aggregates import Min
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import (
@@ -339,7 +339,7 @@ class CartManager:
         # Make sure we do not extend past the max_extend timestamp, allowing users to extend their valid positions up
         # to 11 times the reservation time. After that, positions will expire, but can still be re-validated using
         # ExtendOperation.
-        max_extend_existing = self.positions.filter(expires__gt=self.real_now_dt).aggregate(m=Max('max_extend'))['m']
+        max_extend_existing = self.positions.filter(expires__gt=self.real_now_dt).aggregate(m=Min('max_extend'))['m']
         if max_extend_existing:
             self._expiry = min(self._expiry, max_extend_existing)
             self._max_expiry_extend = max_extend_existing
