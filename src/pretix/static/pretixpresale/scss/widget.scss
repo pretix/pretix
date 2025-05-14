@@ -165,7 +165,7 @@
     margin: 10px 0;
     background-color: white;
     border: 2px solid $brand-info;
-    color: $brand-info;
+    color: $state-info-text;
     border-radius: $alert-border-radius;
   }
 
@@ -175,7 +175,7 @@
     margin: 10px 0;
     background-color: white;
     border: 2px solid $brand-danger;
-    color: $brand-danger;
+    color: $state-danger-text;
     border-radius: $alert-border-radius;
   }
 
