@@ -278,6 +278,7 @@ var form_handlers = function (el) {
     });
 
     function luminanace(r, g, b) {
+        // Algorithm defined as https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
         var a = [r, g, b].map(function (v) {
             v /= 255;
             return v <= 0.03928
@@ -287,6 +288,7 @@ var form_handlers = function (el) {
         return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
     }
     function contrast(rgb1, rgb2) {
+        // Algorithm defined at https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
         var l1 = luminanace(rgb1[0], rgb1[1], rgb1[2]) + 0.05,
              l2 = luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05,
              ratio = l1/l2
@@ -327,15 +329,15 @@ var form_handlers = function (el) {
         var icon, text, cls;
         if (c > 7) {
             icon = "fa-check-circle";
-            text = gettext('Your color has great contrast and is very easy to read!');
+            text = gettext('Your color has great contrast and will provide excellent accessibility.');
             cls = "text-success";
-        } else if (c > 2.5) {
+        } else if (c > 4.5) {
             icon = "fa-info-circle";
-            text = gettext('Your color has decent contrast and is probably good-enough to read!');
+            text = gettext('Your color has decent contrast and is sufficient for minimum accessibility requirements.');
             cls = "";
         } else {
             icon = "fa-warning";
-            text = gettext('Your color has bad contrast for text on white background, please choose a darker shade.');
+            text = gettext('Your color has insufficient contrast to white. Accessibility of your site will be impacted.');
             cls = "text-danger";
         }
         if ($icon.length === 0) {
