@@ -224,21 +224,22 @@ $(function () {
         async_task_is_long = $(this).is("[data-asynctask-long]");
         async_task_old_url = location.href;
         $("body").data('ajaxing', true);
-        if ($(this).is("[data-asynctask-headline]")) {
-            waitingDialog.show($(this).attr("data-asynctask-headline"));
-        } else {
-            waitingDialog.show(gettext('We are processing your request …'));
-        }
-        if ($(this).is("[data-asynctask-text]")) {
-            $("#loadingmodal p.text").text($(this).attr("data-asynctask-text")).show();
-        } else {
-            $("#loadingmodal p.text").hide();
-        }
-        $("#loadingmodal p.status").text(gettext(
-            'We are currently sending your request to the server. If this takes longer ' +
-            'than one minute, please check your internet connection and then reload ' +
-            'this page and try again.'
-        ));
+
+        const ac = new AbortController();
+        window.pretix.dialog({
+            label: this.getAttribute("data-asynctask-headline") || gettext("We are processing your request …"),
+            message: (this.getAttribute("data-asynctask-text") || "") + gettext(
+                'We are currently sending your request to the server. If this takes longer ' +
+                'than one minute, please check your internet connection and then reload ' +
+                'this page and try again.'
+            ),
+            icon: 'cog',
+        }, ac.signal);
+
+        window.setTimeout(function() {
+            ac.abort();
+        }, 2000);
+        return false;
 
         var action = this.action;
         var formData = new FormData(this);

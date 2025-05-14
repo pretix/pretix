@@ -382,7 +382,14 @@ function get_label_text_for_id(id) {
 
 
 window.pretix = window.pretix || {};
-window.pretix.dialog = function(opt = {}) {
+window.pretix.dialog = function(opt, signal) {
+    // always close any open dialogs
+    $("dialog[open]").each(function() {
+        this.close();
+    });
+    if (!opt) {
+        return;
+    }
     const id = "dialog-" + (opt.confirm ? "alert" : "info");
     const dialog = document.getElementById(id);
     $("#" + id + "-label").text(opt.label);
@@ -391,13 +398,22 @@ window.pretix.dialog = function(opt = {}) {
     if (opt.confirm) {
         $("button", dialog).attr("value", opt.confirm.toString()).text(opt.confirm === true ? gettext("OK") : opt.confirm);
     }
-    dialog.showModal();
 
     return new Promise((resolve, reject) => {
+        if (signal) {
+            function onAbort() {
+                dialog.close();
+            }
+            signal.addEventListener('abort', onAbort, { once: true });
+        }
         dialog.addEventListener('close', function() {
-            // TODO: dialog.returnValue prüfen und entsprechend resolve/reject ausführen? 
+            if (signal) {
+                signal.removeEventListener('abort', onAbort);
+            }
             resolve(dialog.returnValue);
         }, { once: true });
+
+        dialog.showModal();
     })
 };
 
