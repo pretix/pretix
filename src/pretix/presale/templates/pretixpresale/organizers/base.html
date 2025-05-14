@@ -62,7 +62,7 @@
                             class="organizer-logo" />
                 </a>
             {% else %}
-                <h1><a href="{% eventurl organizer "presale:organizer.index" %}">{{ organizer.name }}</a></h1>
+                <h1><a href="{% eventurl organizer "presale:organizer.index" %}" class="no-underline">{{ organizer.name }}</a></h1>
             {% endif %}
         </div>
         {% if organizer.settings.locales|length > 1 or request.organizer.settings.customer_accounts %}

@@ -115,10 +115,10 @@ h1, h2, h3, h4, h5, h6, p, li {
     }    
 }
 
-.no-underline, nav li a:link {
+a.no-underline:link, nav li a:link {
     text-decoration: none;
 }
-.no-underline:hover, nav li a:hover {
+a.no-underline:hover, nav li a:hover {
     text-decoration: underline;
 }
 
