@@ -338,8 +338,9 @@ class CartManager:
 
     def _extend_expiry_of_valid_existing_positions(self):
         # Make sure we do not extend past the max_extend timestamp, allowing users to extend their valid positions up
-        # to 11 times the reservation time. After that, positions will expire, but can still be re-validated using
-        # ExtendOperation.
+        # to 11 times the reservation time. If we add new positions to the cart while valid positions exist, the new
+        # positions' reservation will also be limited to max_extend of the oldest position.
+        # Only after all positions expire, an ExtendOperation may reset max_extend to another 11x reservation_time.
         max_extend_existing = self.positions.filter(expires__gt=self.real_now_dt).aggregate(m=Min('max_extend'))['m']
         if max_extend_existing:
             self._expiry = min(self._expiry, max_extend_existing)
@@ -348,7 +349,11 @@ class CartManager:
         # Extend this user's cart session to ensure all items in the cart expire at the same time
         # We can extend the reservation of items which are not yet expired without risk
         if self._expiry > self.real_now_dt:
-            self.num_extended_positions += self.positions.filter(expires__gt=self.real_now_dt, expires__lt=self._expiry).update(expires=self._expiry)
+            self.num_extended_positions += self.positions.filter(
+                expires__gt=self.real_now_dt, expires__lt=self._expiry,
+            ).update(
+                expires=self._expiry,
+            )
 
     def _delete_out_of_timeframe(self):
         err = None
