@@ -48,7 +48,14 @@
 <nav id="skip-to-main" role="navigation" aria-label="{% trans "Skip link" context "skip-to-main-nav" %}" class="sr-only on-focus-visible">
   <p><a href="#content">{% trans "Skip to main content" %}</a></p>
 </nav>
-<dialog id="dialog-info" aria-labelledby="dialog-info-label" aria-describedby="dialog-info-description">
+{% comment %}
+    <dialog> needs to be available onload and role-attribute cannot be changed dynamically.
+    Therefore we need two dialogs, one normal (e.g. for status info like "loading") and one
+    alertdialog with a confirm-button.
+    Note: dialog[aria-describedby] is not read out on VoiceOver, so we add both label and 
+    description to aria-labelledby.
+{% endcomment %}
+<dialog id="dialog-info" aria-labelledby="dialog-info-label dialog-info-description">
     <div class="modal-card">
         <div class="modal-card-icon">
             {% icon "cog big-rotating-icon" %}
@@ -59,7 +66,7 @@
         </div>
     </div>
 </dialog>
-<dialog id="dialog-alert" role="alertdialog" aria-labelledby="dialog-alert-label" aria-describedby="dialog-alert-description">
+<dialog id="dialog-alert" role="alertdialog" aria-labelledby="dialog-alert-label dialog-alert-description">
     <div class="modal-card">
         <div class="modal-card-icon">
             {% icon "cog big-rotating-icon" %}
