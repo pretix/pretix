@@ -380,19 +380,33 @@ function get_label_text_for_id(id) {
     }).text().trim();
 }
 
+
+window.pretix = window.pretix || {};
+window.pretix.dialog = function(opt = {}) {
+    const id = "dialog-" + (opt.confirm ? "alert" : "info");
+    const dialog = document.getElementById(id);
+    $("#" + id + "-label").text(opt.label);
+    $("#" + id + "-description").text(opt.message);
+    $(".modal-card-icon .fa", dialog).attr('class', 'fa fa-' + (opt.icon || "exclamation-triangle"));
+    if (opt.confirm) {
+        $("button", dialog).attr("value", opt.confirm.toString()).text(opt.confirm === true ? gettext("OK") : opt.confirm);
+    }
+    dialog.showModal();
+
+    return new Promise((resolve, reject) => {
+        dialog.addEventListener('close', function() {
+            // TODO: dialog.returnValue prüfen und entsprechend resolve/reject ausführen? 
+            resolve(dialog.returnValue);
+        }, { once: true });
+    })
+};
+
+
 $(function () {
     "use strict";
 
     $("body").removeClass("nojs");
     moment.locale($("body").attr("data-datetimelocale"));
-
-    $(document).on("pretix:alert pretix:info", function (e, detail) {
-        var dialog = document.getElementById("dialog-" + e.type.substring(7));
-        $("#" + dialog.getAttribute("aria-labelledby")).text(detail.label);
-        $("#" + dialog.getAttribute("aria-describedby")).text(detail.description);
-        $(".modal-card-icon .fa", dialog).attr('class', 'fa fa-' + (detail.icon || "exclamation-triangle"));
-        dialog.showModal();
-    });
 
     $("form:has(#btn-add-to-cart)").on("submit", function(e) {
         if (
@@ -406,10 +420,15 @@ $(function () {
 
         e.preventDefault();
         e.stopPropagation();
-        $(document).trigger("pretix:alert", {
-            label: gettext("You have not selected any ticket"),
-            description: gettext("Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart."),
+        window.pretix.dialog({
+            type: "alert",
+            label: gettext("You have not selected any ticket."),
+            message: gettext("Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart."),
             icon: 'exclamation',
+            confirm: true,
+        }).then((result) => {
+            //console.log("returnValue is", result);
+            // TODO: should we focus the first input/checkbox/variants-button?
         });
     });
 
