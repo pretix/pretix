@@ -15,13 +15,11 @@
         </div>
         <div class="panel-body">
             {% if orders %}
-                <ul class="full-width-list alternating-rows">
+                <div class="event-list full-width-list alternating-rows">
                     {% for o in orders %}
-                    <li class="row">
-                        <dl>
+                    <article class="row">
                             <div class="col-md-4 col-sm-5 col-xs-8">
-                                <dt class="sr-only">{% trans "Order" %}</dt>
-                                <dd><strong>
+                                <h4><strong>
                                         <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
                                             {% icon "shopping-cart" %}
                                             {{ o.code }}</a>
@@ -33,47 +31,44 @@
                                         </span>
                                     {% endif %}
                                     <small>{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</small>
-                                </dd>
-                                <dd><time datetime="{{ o.datetime|date:"Y-m-d H:i" }}" class="text-muted small">{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</time></dd>
+                                </h4>
+                                <p><time datetime="{{ o.datetime|date:"Y-m-d H:i" }}" class="text-muted small">{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</time></p>
                                 {% if o.testmode %}
-                                    <dd>
+                                    <p>
                                         <small>
                                         {% textbubble "warning" %}
                                             {% trans "TEST MODE" %}
                                         {% endtextbubble %}
                                         </small>
-                                    </dd>
+                                    </p>
                                 {% endif %}
                             </div>
                             <div class="col-md-2 col-sm-2 col-xs-4 text-right">
-                                <dt class="sr-only">{% trans "Order total" %}</dt>
-                                <dd>{{ o.total|money:o.event.currency }}</dd>
-                                <dt class="sr-only">{% trans "Positions" %}</dt>
-                                <dd class="text-muted"><small>{% blocktranslate count counter=o.count_positions|default_if_none:0 %}{{ counter }} item{% plural %}{{ counter }} items{% endblocktranslate %}</small>
-                                </dd>
+                                <p>
+                                    {{ o.total|money:o.event.currency }}
+                                    <br><span class="text-muted"><small>{% blocktranslate count counter=o.count_positions|default_if_none:0 %}{{ counter }} item{% plural %}{{ counter }} items{% endblocktranslate %}</small>
+                                    </span>
+                                </p>
                             </div>
                             <div class="col-md-4 col-sm-3 col-xs-8">
-                                <dt class="sr-only">{% trans "Event" %}</dt>
-                                <dd>
+                                <p>
                                     {{ o.event }}
                                     {% if not o.event.has_subevents and o.event.settings.show_dates_on_frontpage %}
                                         <br><small class="text-muted">{{ o.event.get_date_range_display }}</small>
                                     {% endif %}
-                                </dd>
+                                </p>
                             </div>
                             <div class="col-sm-2 col-xs-4">
-                                <dt class="sr-only">{% trans "Actions" %}</dt>
-                                <dd class="text-right">
+                                <p class="text-right">
                                     <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
                                    target="_blank">
                                     {% icon "list-ul" %}
                                     {% trans "Details" %}
-                                </a></dd>
+                                </a></p>
                             </div>
-                        </dl>
-                    </li>
+                    </article>
                     {% endfor %}
-                </ul>
+                </div>
             {% else %}
                 <p class="text-center">{% trans "You don’t have any orders in your account yet." %}</p>
             {% endif %}
