@@ -37,6 +37,7 @@ import json
 from datetime import timedelta
 from decimal import Decimal
 
+import freezegun
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.test import TestCase
@@ -96,6 +97,8 @@ class CartTestMixin:
 
         self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.session_key = get_cart_session_key(self.client, self.event)
+        self.event.settings.set('reservation_time', 30)
+        self.cart_reservation_time = timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
 
 
 class CartTest(CartTestMixin, TestCase):
@@ -1225,22 +1228,94 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].price, 23)
 
     def test_renew_in_time(self):
+        start_time = now() - timedelta(minutes=20)
+        expires = start_time + self.cart_reservation_time
+        max_extend = start_time + 11 * self.cart_reservation_time
         with scopes_disabled():
             cp = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=expires, max_extend=max_extend
             )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
         }, follow=True)
         cp.refresh_from_db()
         self.assertGreater(cp.expires, now() + timedelta(minutes=10))
+        self.assertEqual(cp.max_extend, max_extend)
+
+    def test_autorenew_with_max_extend(self):
+        start_time = datetime.datetime(2024, 1, 1, 10, 00, 00, tzinfo=datetime.timezone.utc)
+        with freezegun.freeze_time(start_time):
+            expires = start_time + self.cart_reservation_time
+            max_extend = start_time + 2 * self.cart_reservation_time
+            with scopes_disabled():
+                cp = CartPosition.objects.create(
+                    event=self.event, cart_id=self.session_key, item=self.ticket,
+                    price=23, expires=expires, max_extend=max_extend
+                )
+        with freezegun.freeze_time(start_time + timedelta(minutes=20)):
+            self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+                'item_%d' % (self.ticket.id,): '1'
+            }, follow=True)
+            cp.refresh_from_db()
+            self.assertEqual(cp.expires, start_time + timedelta(minutes=20) + self.cart_reservation_time)
+            self.assertEqual(cp.max_extend, max_extend)
+        with freezegun.freeze_time(start_time + timedelta(minutes=45)):
+            self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+                'item_%d' % (self.ticket.id,): '1'
+            }, follow=True)
+            cp.refresh_from_db()
+            self.assertEqual(cp.expires, max_extend)
+            self.assertEqual(cp.max_extend, max_extend)
+        with freezegun.freeze_time(start_time + timedelta(days=1)):
+            self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+                'item_%d' % (self.ticket.id,): '1'
+            }, follow=True)
+            cp.refresh_from_db()
+            with scopes_disabled():
+                positions = list(CartPosition.objects.filter(cart_id=cp.cart_id))
+            self.assertEqual(len(positions), 4)
+            for pos in positions:
+                self.assertEqual(pos.expires, start_time + timedelta(days=1) + self.cart_reservation_time)
+                self.assertEqual(pos.max_extend, start_time + timedelta(days=1) + 11 * self.cart_reservation_time)
+
+    def test_extend_with_max_extend(self):
+        start_time = datetime.datetime(2024, 1, 1, 10, 00, 00, tzinfo=datetime.timezone.utc)
+        with freezegun.freeze_time(start_time):
+            expires = start_time + self.cart_reservation_time
+            max_extend = start_time + 2 * self.cart_reservation_time
+            with scopes_disabled():
+                cp = CartPosition.objects.create(
+                    event=self.event, cart_id=self.session_key, item=self.ticket,
+                    price=23, expires=expires, max_extend=max_extend
+                )
+        with freezegun.freeze_time(start_time + timedelta(minutes=20)):
+            self.client.post('/%s/%s/cart/extend' % (self.orga.slug, self.event.slug), {
+            }, follow=True)
+            cp.refresh_from_db()
+            self.assertEqual(cp.expires, start_time + timedelta(minutes=20) + self.cart_reservation_time)
+            self.assertEqual(cp.max_extend, max_extend)
+        with freezegun.freeze_time(start_time + timedelta(minutes=45)):
+            self.client.post('/%s/%s/cart/extend' % (self.orga.slug, self.event.slug), {
+            }, follow=True)
+            cp.refresh_from_db()
+            self.assertEqual(cp.expires, max_extend)
+            self.assertEqual(cp.max_extend, max_extend)
+        with freezegun.freeze_time(start_time + timedelta(minutes=65)):
+            self.client.post('/%s/%s/cart/extend' % (self.orga.slug, self.event.slug), {
+            }, follow=True)
+            cp.refresh_from_db()
+            self.assertEqual(cp.expires, start_time + timedelta(minutes=65) + self.cart_reservation_time)
+            self.assertEqual(cp.max_extend, start_time + timedelta(minutes=65) + 11 * self.cart_reservation_time)
 
     def test_renew_expired_successfully(self):
+        start_time = now() - timedelta(minutes=40)
+        expires = start_time + self.cart_reservation_time
+        max_extend = start_time + 11 * self.cart_reservation_time
         with scopes_disabled():
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() - timedelta(minutes=10)
+                price=23, expires=expires, max_extend=max_extend
             )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
@@ -1250,7 +1325,8 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(obj.item, self.ticket)
         self.assertIsNone(obj.variation)
         self.assertEqual(obj.price, 23)
-        self.assertGreater(obj.expires, now())
+        self.assertGreater(obj.expires, now() + timedelta(minutes=10))
+        self.assertGreater(obj.max_extend, now() + 11 * self.cart_reservation_time - timedelta(minutes=10))
 
     def test_renew_questions(self):
         with scopes_disabled():
@@ -1279,7 +1355,7 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() - timedelta(minutes=10)
+                price=23, expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -1300,7 +1376,9 @@ class CartTest(CartTestMixin, TestCase):
             self.quota_shirts.save()
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() - timedelta(minutes=10), subevent=se
+                price=23,
+                expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time,
+                subevent=se
             )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
@@ -1324,7 +1402,9 @@ class CartTest(CartTestMixin, TestCase):
             self.quota_tickets.save()
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() - timedelta(minutes=10), subevent=se
+                price=23,
+                expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time,
+                subevent=se
             )
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -1355,15 +1435,15 @@ class CartTest(CartTestMixin, TestCase):
                                        redeemed=1, min_usages=3, max_usages=10)
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
             cp2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
             cp3 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
         self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
             'id': cp3.pk
@@ -1384,11 +1464,11 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
             cp = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
             'id': cp.pk
@@ -1402,7 +1482,7 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_red,
-                price=14, expires=now() + timedelta(minutes=10)
+                price=14, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
             'id': cp.pk
@@ -1416,7 +1496,7 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp = CartPosition.objects.create(
                 event=self.event, cart_id='invalid', item=self.shirt, variation=self.shirt_red,
-                price=14, expires=now() + timedelta(minutes=10)
+                price=14, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
             'id': cp.pk
@@ -1428,11 +1508,11 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
         response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
             'id': cp.pk
@@ -1446,15 +1526,15 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_red,
-                price=14, expires=now() + timedelta(minutes=10)
+                price=14, expires=now() + timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
         response = self.client.post('/%s/%s/cart/clear' % (self.orga.slug, self.event.slug), {}, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
@@ -1467,7 +1547,8 @@ class CartTest(CartTestMixin, TestCase):
             v = Voucher.objects.create(item=self.ticket, event=self.event, valid_until=now() - timedelta(days=1))
             cp = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() - timedelta(minutes=10), voucher=v
+                price=23, expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time,
+                voucher=v
             )
         self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
             'id': cp.pk
@@ -1495,7 +1576,8 @@ class CartTest(CartTestMixin, TestCase):
             v = Voucher.objects.create(item=self.ticket, event=self.event, block_quota=True)
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() - timedelta(minutes=10), voucher=v
+                price=23, expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time,
+                voucher=v
             )
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
