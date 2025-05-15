@@ -47,6 +47,7 @@ from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
 from django.db.models.aggregates import Min
+from django.db.models.functions import Now
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import (
@@ -345,7 +346,7 @@ class CartManager:
         # We can extend the reservation of items which are not yet expired without risk
         if self._expiry > self.real_now_dt:
             self.num_extended_positions += self.positions.filter(
-                expires__gt=self.real_now_dt, expires__lt=self._expiry,
+                expires__gt=Now(), expires__lt=self._expiry,
             ).update(
                 expires=self._expiry,
             )
