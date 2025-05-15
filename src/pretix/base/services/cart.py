@@ -607,7 +607,6 @@ class CartManager:
                 self._voucher_use_diff[cp.voucher] += 2
 
             self._operations.append(op)
-            self.num_extended_positions += 1
         return err
 
     def apply_voucher(self, voucher_code: str):
@@ -1349,6 +1348,7 @@ class CartManager:
                         if op.position.pk not in deleted_positions:
                             try:
                                 op.position.save(force_update=True, update_fields=['expires', 'max_extend', 'listed_price', 'price_after_voucher'])
+                                self.num_extended_positions += 1
                             except DatabaseError:
                                 # Best effort... The position might have been deleted in the meantime!
                                 pass
