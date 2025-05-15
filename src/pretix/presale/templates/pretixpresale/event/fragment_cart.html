@@ -261,7 +261,7 @@
                             {{ line.price|money:event.currency }}
                         {% endif %}
                         {% if line.discount and line.line_price_gross != line.price %}
-                            <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
+                            <span class="text-success discounted" data-toggle="tooltip" data-placement="bottom" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
                                 <br>
                                 <span class="fa fa-star fa-fw" aria-hidden="true"></span>
                                 {% if line.price < line.line_price_gross %}
@@ -334,7 +334,7 @@
                             {{ line.price|money:event.currency }}
                         {% endif %}
                         {% if line.discount and line.line_price_gross != line.price %}
-                            <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
+                            <span class="text-success discounted" data-toggle="tooltip" data-placement="bottom" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
                                 <br>
                                 <span class="fa fa-star fa-fw" aria-hidden="true"></span>
                                 {% if line.price < line.line_price_gross %}

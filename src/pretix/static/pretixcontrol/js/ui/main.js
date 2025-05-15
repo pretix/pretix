@@ -795,9 +795,10 @@ function setup_basics(el) {
             });
     });
 
-    el.find('[data-toggle="tooltip"]').tooltip();
+    el.find('[data-toggle="tooltip"]').tooltip({ delay: 1, trigger: 'focus hover tipfocus tiphover' })
+        .filter(':not([tabindex])').attr('tabindex', '0');
     el.find('[data-toggle="tooltip_html"]').tooltip({
-        'html': true,
+        'html': true, delay: 1, trigger: 'focus hover tipfocus tiphover',
         'whiteList': {
             // Global attributes allowed on any supplied element below.
             '*': ['class', 'dir', 'id', 'lang', 'role'],
@@ -812,7 +813,7 @@ function setup_basics(el) {
             strong: [],
             u: [],
         }
-    });
+    }).filter(':not([tabindex])').attr('tabindex', '0');
 
     el.find('a.pagination-selection').click(function (e) {
         e.preventDefault();

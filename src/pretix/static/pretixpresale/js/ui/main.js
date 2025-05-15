@@ -307,7 +307,8 @@ function setup_basics(el) {
         e.preventDefault();
     });
 
-    el.find('[data-toggle="tooltip"]').tooltip();
+    el.find('[data-toggle="tooltip"]').tooltip({ delay: 1, trigger: 'focus hover tipfocus tiphover' })
+        .filter(':not([tabindex])').attr('tabindex', '0');
 
     // AddOns
     el.find('.addon-variation-description').hide();

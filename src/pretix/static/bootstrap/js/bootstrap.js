@@ -1452,7 +1452,7 @@ if (typeof jQuery === 'undefined') {
     template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
     trigger: 'hover focus',
     title: '',
-    delay: 0,
+    delay: 1,
     html: false,
     container: false,
     viewport: {
@@ -1462,6 +1462,14 @@ if (typeof jQuery === 'undefined') {
     sanitize : true,
     sanitizeFn : null,
     whiteList : DefaultWhitelist
+  }
+
+  Tooltip.activeTooltip = null;
+
+  function hideOnEscapeListener(e) {
+    if (Tooltip.activeTooltip && e.key === 'Escape') {
+      Tooltip.activeTooltip.hide();
+    }
   }
 
   Tooltip.prototype.init = function (type, element, options) {
@@ -1476,6 +1484,8 @@ if (typeof jQuery === 'undefined') {
       throw new Error('`selector` option must be specified when initializing ' + this.type + ' on the window.document object!')
     }
 
+    document.body.addEventListener('keyup', hideOnEscapeListener);
+
     var triggers = this.options.trigger.split(' ')
 
     for (var i = triggers.length; i--;) {
@@ -1483,7 +1493,7 @@ if (typeof jQuery === 'undefined') {
 
       if (trigger == 'click') {
         this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
-      } else if (trigger != 'manual') {
+      } else if (trigger == 'hover' || trigger == 'focus') {
         var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focusin'
         var eventOut = trigger == 'hover' ? 'mouseleave' : 'focusout'
 
@@ -1547,7 +1557,8 @@ if (typeof jQuery === 'undefined') {
     }
 
     if (obj instanceof $.Event) {
-      self.inState[obj.type == 'focusin' ? 'focus' : 'hover'] = true
+      console.log("enter",obj.currentTarget.role, obj.type, obj.currentTarget)
+      self.inState[(obj.currentTarget.role == 'tooltip' ? 'tip' : '') + (obj.type == 'focusin' ? 'focus' : 'hover')] = true
     }
 
     if (self.tip().hasClass('in') || self.hoverState == 'in') {
@@ -1567,6 +1578,7 @@ if (typeof jQuery === 'undefined') {
   }
 
   Tooltip.prototype.isInStateTrue = function () {
+    console.log("state:",this.inState)
     for (var key in this.inState) {
       if (this.inState[key]) return true
     }
@@ -1584,7 +1596,8 @@ if (typeof jQuery === 'undefined') {
     }
 
     if (obj instanceof $.Event) {
-      self.inState[obj.type == 'focusout' ? 'focus' : 'hover'] = false
+      console.log("leave",obj.currentTarget.role, obj.type, obj.currentTarget)
+      self.inState[(obj.currentTarget.role == 'tooltip' ? 'tip' : '') + (obj.type == 'focusout' ? 'focus' : 'hover')] = false
     }
 
     if (self.isInStateTrue()) return
@@ -1609,6 +1622,12 @@ if (typeof jQuery === 'undefined') {
       var inDom = $.contains(this.$element[0].ownerDocument.documentElement, this.$element[0])
       if (e.isDefaultPrevented() || !inDom) return
       var that = this
+
+      if (Tooltip.activeTooltip) {
+        Tooltip.activeTooltip.hide();
+      }
+
+      Tooltip.activeTooltip = this;
 
       var $tip = this.tip()
 
@@ -1768,6 +1787,8 @@ if (typeof jQuery === 'undefined') {
 
     if (e.isDefaultPrevented()) return
 
+    Tooltip.activeTooltip = null;
+
     $tip.removeClass('in')
 
     $.support.transition && $tip.hasClass('fade') ?
@@ -1812,12 +1833,12 @@ if (typeof jQuery === 'undefined') {
 
     return $.extend({}, elRect, scroll, outerDims, elOffset)
   }
-
+  const OVERLAP = 3;
   Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
-    return placement == 'bottom' ? { top: pos.top + pos.height,   left: pos.left + pos.width / 2 - actualWidth / 2 } :
-           placement == 'top'    ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 } :
-           placement == 'left'   ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
-        /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width }
+    return placement == 'bottom' ? { top: pos.top + pos.height - OVERLAP,   left: pos.left + pos.width / 2 - actualWidth / 2 } :
+           placement == 'top'    ? { top: pos.top - actualHeight + OVERLAP, left: pos.left + pos.width / 2 - actualWidth / 2 } :
+           placement == 'left'   ? { top: pos.top + pos.height / 2 - actualHeight / 2 , left: pos.left - actualWidth + OVERLAP } :
+        /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width - OVERLAP }
 
   }
 
@@ -1871,6 +1892,20 @@ if (typeof jQuery === 'undefined') {
       this.$tip = $(this.options.template)
       if (this.$tip.length != 1) {
         throw new Error(this.type + ' `template` option must consist of exactly 1 top-level element!')
+      }
+
+      var triggers = this.options.trigger.split(' ')
+
+      for (var i = triggers.length; i--;) {
+        var trigger = triggers[i]
+
+        if (trigger == 'tiphover' || trigger == 'tipfocus') {
+          var eventIn  = trigger == 'tiphover' ? 'mouseenter' : 'focusin'
+          var eventOut = trigger == 'tiphover' ? 'mouseleave' : 'focusout'
+
+          this.$tip.on(eventIn  + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
+          this.$tip.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
+        }
       }
     }
     return this.$tip
