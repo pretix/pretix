@@ -55,7 +55,7 @@
                 <div class="modal-card-content">
                     <h3 id="cookie-consent-modal-label"></h3>
                     <div id="cookie-consent-modal-description">
-                        <form method="dialog" class="form-horizontal">
+                        <form class="form-horizontal">
                         {% with request.event|default:request.organizer as sh %}
                             <h3>{{ sh.settings.cookie_consent_dialog_title }}</h3>
                             {{ sh.settings.cookie_consent_dialog_text|rich_text }}
