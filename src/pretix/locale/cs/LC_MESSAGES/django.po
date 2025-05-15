@@ -32275,7 +32275,7 @@ msgid "Add to cart"
 msgstr "Přidat do košíku"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Pokud jste si již vstupenku objednali"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

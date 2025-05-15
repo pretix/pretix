@@ -36098,7 +36098,7 @@ msgid "Add to cart"
 msgstr "Προσθήκη στο καλάθι"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Αν έχετε ήδη αγοράσει κάποιο εισιτήριο"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

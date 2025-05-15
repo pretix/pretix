@@ -33865,7 +33865,7 @@ msgid "Add to cart"
 msgstr "Masukkan ke keranjang"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Jika kamu sudah memesan tiket"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

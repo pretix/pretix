@@ -32689,7 +32689,7 @@ msgid "Add to cart"
 msgstr "Læg i kurv"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Hvis du allerede har bestilt en billet"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

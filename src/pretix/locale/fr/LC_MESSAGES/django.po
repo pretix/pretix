@@ -34033,7 +34033,7 @@ msgid "Add to cart"
 msgstr "Ajouter au panier"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Si vous avez déjà commandé un billet"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

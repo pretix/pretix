@@ -31883,7 +31883,7 @@ msgid "Add to cart"
 msgstr "Aggiungi al carrello"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Se hai già prenotato un biglietto"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

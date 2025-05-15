@@ -34971,7 +34971,7 @@ msgid "Add to cart"
 msgstr "Voeg toe aan winkelwagen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Als je al een kaartje hebt besteld"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

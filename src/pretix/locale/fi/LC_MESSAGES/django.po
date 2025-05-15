@@ -31848,7 +31848,7 @@ msgid "Add to cart"
 msgstr "Lisää ostoskoriin"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Jos tilasit jo tuotteita"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

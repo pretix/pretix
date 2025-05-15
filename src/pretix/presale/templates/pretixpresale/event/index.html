@@ -252,7 +252,7 @@
     {% if not cart_namespace %}
         {% eventsignal event "pretix.presale.signals.front_page_bottom" subevent=subevent request=request %}
         <aside class="front-page" aria-labelledby="if-you-already-ordered-a-ticket">
-            <h3 id="if-you-already-ordered-a-ticket">{% trans "If you already ordered a ticket" %}</h3>
+            <h3 id="if-you-already-ordered-a-ticket">{% trans "If you have already ordered a ticket" %}</h3>
             <div class="row">
                 <div class="col-md-8 col-xs-12">
                     <p>

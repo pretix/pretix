@@ -32867,7 +32867,7 @@ msgid "Add to cart"
 msgstr "カートに追加"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "すでにチケットを注文済みの場合"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

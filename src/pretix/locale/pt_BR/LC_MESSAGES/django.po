@@ -32910,7 +32910,7 @@ msgid "Add to cart"
 msgstr "Adicionar ao carrinho"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Se você já solicitou um ingresso"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257

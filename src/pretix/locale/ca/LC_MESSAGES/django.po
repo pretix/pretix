@@ -33955,7 +33955,7 @@ msgid "Add to cart"
 msgstr "Afegir a la cistella"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
-msgid "If you already ordered a ticket"
+msgid "If you have already ordered a ticket"
 msgstr "Si ja teniu tiquets demanats"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257
