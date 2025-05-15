@@ -277,7 +277,7 @@ class CartManager:
     }
 
     def __init__(self, event: Event, cart_id: str, sales_channel: SalesChannel,
-                 invoice_address: InvoiceAddress=None, widget_data=None, expiry=None, reservation_time: timedelta=None):
+                 invoice_address: InvoiceAddress=None, widget_data=None, reservation_time: timedelta=None):
         """
         Creates a new CartManager for an event.
         """
@@ -296,12 +296,7 @@ class CartManager:
         self._sales_channel = sales_channel
         self.num_extended_positions = 0
 
-        if expiry and reservation_time:
-            raise TypeError('Cannot specify both expiry and reservation_time')
-        elif expiry:
-            warnings.warn('CartManager(expiry=...) is deprecated, use reservation_time=... instead')
-            self._reservation_time = expiry - now()
-        elif reservation_time:
+        if reservation_time:
             self._reservation_time = reservation_time
         else:
             self._reservation_time = timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
