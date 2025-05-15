@@ -556,19 +556,19 @@
 
   .pretix-widget-event-availability-orange .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-orange.pretix-widget-event-calendar-event {
-    background-color: $state-warning-text;
+    background: linear-gradient(to left, $brand-warning 1em, var(--pretix-brand-warning-darken-25) 1em);
   }
   .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-none.pretix-widget-event-calendar-event {
-    background-color: $brand-primary;
+    background: linear-gradient(to left, var(--pretix-brand-primary-lighten-20) 1em, $brand-primary 1em);
   }
   .pretix-widget-event-availability-green .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-green.pretix-widget-event-calendar-event {
-    background-color: $state-success-text;
+    background: linear-gradient(to left, $brand-success 1em, var(--pretix-brand-success-darken-10) 1em);
   }
   .pretix-widget-event-availability-red .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-red.pretix-widget-event-calendar-event {
-    background-color: $state-danger-text;
+    background: linear-gradient(to left, var(--pretix-brand-danger-lighten-15) 1em, $brand-danger 1em);
   }
   .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span {
     border-left: 10px solid $brand-warning;
@@ -618,7 +618,7 @@
     .pretix-widget-event-calendar-event {
       display: block;
       border-radius: 4px;
-      padding: 5px;
+      padding: 5px 1.25em 5px 5px;
       color: white;
       cursor: pointer;
       margin-bottom: 5px;
@@ -1016,20 +1016,20 @@
       }
     }
     td.pretix-widget-has-events {
-      background: $brand-primary;
+      background: linear-gradient(to right, $brand-primary 1.8em, var(--pretix-brand-primary-lighten-20) 1.8em);
       color: white;
       cursor: pointer;
       &.pretix-widget-day-availability-red {
-        background: $state-danger-text;
+        background: linear-gradient(to right, $brand-danger 1.8em, var(--pretix-brand-danger-lighten-15) 1.8em);
       }
       &.pretix-widget-day-availability-green {
-        background: $state-success-text;
+        background: linear-gradient(to right, var(--pretix-brand-success-darken-10) 1.8em, $brand-success 1.8em);
       }
       &.pretix-widget-day-availability-low {
         border-right: 5px solid $brand-warning;
       }
       &.pretix-widget-day-availability-orange {
-        background: $state-warning-text;
+        background: linear-gradient(to right, var(--pretix-brand-warning-darken-25) 1.8em, $brand-warning 1.8em);
       }
     }
 
