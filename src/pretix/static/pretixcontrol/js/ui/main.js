@@ -277,7 +277,7 @@ var form_handlers = function (el) {
         fill_field.on("dp.show", show);
     });
 
-    function luminanace(r, g, b) {
+    function luminance(r, g, b) {
         // Algorithm defined as https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
         var a = [r, g, b].map(function (v) {
             v /= 255;
@@ -289,8 +289,8 @@ var form_handlers = function (el) {
     }
     function contrast(rgb1, rgb2) {
         // Algorithm defined at https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
-        var l1 = luminanace(rgb1[0], rgb1[1], rgb1[2]) + 0.05,
-             l2 = luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05,
+        var l1 = luminance(rgb1[0], rgb1[1], rgb1[2]) + 0.05,
+             l2 = luminance(rgb2[0], rgb2[1], rgb2[2]) + 0.05,
              ratio = l1/l2
         if (l2 > l1) {ratio = 1/ratio}
         return ratio.toFixed(1)
