@@ -53,6 +53,15 @@ a.btn, button.btn {
     }
   }
 }
+.checkbox + .help-block {
+  padding-left: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  p {
+    margin-bottom: 0;
+  }
+}
+
 output {
   padding-top: $padding-base-vertical;
 }
