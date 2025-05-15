@@ -333,20 +333,24 @@ class CartManager:
                     raise CartError(error_messages['payment_ended'])
 
     def _extend_expiry_of_valid_existing_positions(self):
+        # real_now_dt is initialized at CartManager instantiation, so it's slightly in the past. Add a small
+        # delta to reduce risk of extending already expired CartPositions.
+        padded_now_dt = self.real_now_dt + timedelta(seconds=5)
+
         # Make sure we do not extend past the max_extend timestamp, allowing users to extend their valid positions up
         # to 11 times the reservation time. If we add new positions to the cart while valid positions exist, the new
         # positions' reservation will also be limited to max_extend of the oldest position.
         # Only after all positions expire, an ExtendOperation may reset max_extend to another 11x reservation_time.
-        max_extend_existing = self.positions.filter(expires__gt=self.real_now_dt).aggregate(m=Min('max_extend'))['m']
+        max_extend_existing = self.positions.filter(expires__gt=padded_now_dt).aggregate(m=Min('max_extend'))['m']
         if max_extend_existing:
             self._expiry = min(self._expiry, max_extend_existing)
             self._max_expiry_extend = max_extend_existing
 
         # Extend this user's cart session to ensure all items in the cart expire at the same time
         # We can extend the reservation of items which are not yet expired without risk
-        if self._expiry > self.real_now_dt:
+        if self._expiry > padded_now_dt:
             self.num_extended_positions += self.positions.filter(
-                expires__gt=Now(), expires__lt=self._expiry,
+                expires__gt=padded_now_dt, expires__lt=self._expiry,
             ).update(
                 expires=self._expiry,
             )
