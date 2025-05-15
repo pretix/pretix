@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 import re
 import uuid
-import warnings
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -47,7 +46,6 @@ from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
 from django.db.models.aggregates import Min
-from django.db.models.functions import Now
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import (
