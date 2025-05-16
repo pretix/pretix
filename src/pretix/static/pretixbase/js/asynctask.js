@@ -297,11 +297,11 @@ var waitingDialog = {
         $("#loadingmodal .progress").hide();
         $("#loadingmodal .steps").hide();
         $("body").addClass("loading");
-        $("#loadingmodal").removeAttr("hidden");
+        $("#loadingmodal").removeAttr("hidden has-modal-dialog");
     },
     hide: function () {
         "use strict";
-        $("body").removeClass("loading");
+        $("body").removeClass("loading has-modal-dialog");
         $("#loadingmodal").attr("hidden", true);
     }
 };
@@ -312,10 +312,10 @@ var ajaxErrDialog = {
         $("#ajaxerr").html(c);
         $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
                                   + gettext("Close message") + "</a>");
-        $("body").addClass("ajaxerr");
+        $("body").addClass("ajaxerr has-modal-dialog");
     },
     hide: function () {
         "use strict";
-        $("body").removeClass("ajaxerr");
+        $("body").removeClass("ajaxerr has-modal-dialog");
     }
 };

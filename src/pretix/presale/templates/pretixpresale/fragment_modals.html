@@ -2,9 +2,9 @@
 {% load rich_text %}
 {% load safelink %}
 {% load escapejson %}
-<div id="ajaxerr">
+<div id="ajaxerr" class="modal-wrapper" hidden>
 </div>
-<div id="popupmodal" hidden aria-live="polite">
+<div id="popupmodal" class="modal-wrapper" hidden aria-live="polite">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-window-restore big-icon" aria-hidden="true"></i>
@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<div id="loadingmodal" hidden aria-live="polite">
+<div id="loadingmodal" class="modal-wrapper" hidden aria-live="polite">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-cog big-rotating-icon" aria-hidden="true"></i>
@@ -50,7 +50,7 @@
         {{ cookie_consent_from_widget|json_script:"cookie-consent-from-widget" }}
     {% endif %}
     {% if cookie_providers %}
-        <div id="cookie-consent-modal" aria-live="polite">
+        <div id="cookie-consent-modal" class="modal-wrapper" hidden aria-live="polite">
             <div class="modal-card">
                 <div class="modal-card-content">
                     <h3 id="cookie-consent-modal-label"></h3>

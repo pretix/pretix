@@ -1,4 +1,3 @@
-
 body.has-modal-dialog .container, body.has-modal-dialog #wrapper {
     -webkit-filter: blur(2px);
     -moz-filter: blur(2px);
@@ -12,10 +11,6 @@ body.has-modal-dialog .container, body.has-modal-dialog #wrapper {
     animation: fa-spin 8s infinite linear;
     font-size: 120px;
     color: $brand-primary;
-}
-
-dialog.modal-card::backdrop {
-    background: rgba(255, 255, 255, .7);
 }
 
 .modal-wrapper {
