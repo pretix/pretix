@@ -1,0 +1,105 @@
+
+body.has-modal-dialog .container, body.has-modal-dialog #wrapper {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+}
+
+.big-rotating-icon {
+    -webkit-animation: fa-spin 8s infinite linear;
+    animation: fa-spin 8s infinite linear;
+    font-size: 120px;
+    color: $brand-primary;
+}
+
+dialog.modal-card::backdrop {
+    background: rgba(255, 255, 255, .7);
+}
+
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, .7);
+    z-index: 900000;
+    padding: 10px;
+}
+.modal-card {
+    margin: 50px auto 0;
+    width: 90%;
+    max-width: 600px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    background: white;
+    border-radius: $border-radius-large;
+    box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+    padding: 20px;
+    min-height: 160px;
+    border: 0;
+
+    .modal-card-icon {
+        float: left;
+        width: 150px;
+        text-align: center;
+        .big-icon {
+            margin-top: 10px;
+            font-size: 100px;
+            color: $brand-primary;
+        }
+    }
+    .modal-card-content {
+        margin-left: 160px;
+        text-align: left;
+        h3 {
+            margin-top: 0;
+        }
+    }
+}
+
+#cookie-consent-modal {
+    background: rgba(255, 255, 255, .5);
+    .modal-card-content {
+        margin-left: 0;
+    }
+    details {
+        & > summary {
+            list-style: none;
+        }
+        & > summary::-webkit-details-marker,
+        & > summary::marker {
+            display: none;
+        }
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 700px) {
+    .modal-card {
+        margin: 25px auto 0;
+        max-height: calc(100vh - 50px - 20px);
+        .modal-card-icon {
+            float: none;
+            width: 100%;
+        }
+        .modal-card-content {
+            text-align: center;
+            margin-left: 0;
+            margin-right: 0;
+            margin-top: 10px;
+        }
+    }
+}
+
+#ajaxerr {
+    background: rgba(236, 236, 236, .9);
+
+    .big-icon {
+        margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+}
