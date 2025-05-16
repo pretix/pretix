@@ -251,73 +251,73 @@ $(function () {
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 });
 
-var waitingDialog = {
-    show: function (title, text, status) {
-        "use strict";
-        this.setTitle(title);
-        this.setText(text);
-        this.setStatus(status || gettext('If this takes longer than a few minutes, please contact us.'));
-        this.setProgress(null);
-        this.setSteps(null);
-        $("body").addClass("loading");
-        $("#loadingmodal").removeAttr("hidden has-modal-dialog");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("loading has-modal-dialog");
-        $("#loadingmodal").attr("hidden", true);
-    },
-    setTitle: function(title) {
-        $("#loadingmodal h3").text(title);
-    },
-    setStatus: function(statusText) {
-        $("#loadingmodal p.status").text(statusText);
-    },
-    setText: function(text) {
-        if (text)
-            $("#loadingmodal p.text").text(text).show();
-        else
-            $("#loadingmodal p.text").hide();
-    },
-    setProgress: function(percentage) {
-        if (typeof percentage === 'number') {
-            $("#loadingmodal .progress").show();
-            $("#loadingmodal .progress .progress-bar").css("width", percentage + "%");
-        } else {
-            $("#loadingmodal .progress").hide();
+function AsyncStatusDialog(options) {
+    ModalDialog.call(this, Object.assign({
+        content: [
+            this.textEl = EL('p', {}),
+            this.statusEl = EL('p', {}),
+            this.progressEl = EL('div', {class: 'progress'}, EL('div', {class:'progress-bar progress-bar-success', hidden: ''})),
+            this.stepsEl = EL('div', {class: 'steps', hidden: ''}, ''),
+        ]
+    }, options));
+}
+AsyncStatusDialog.prototype = Object.create(ModalDialog.prototype);
+AsyncStatusDialog.prototype.show = function (title, text, status) {
+    ModalDialog.prototype.show.call(this);
+    this.setTitle(title);
+    this.setText(text);
+    this.setStatus(status || gettext('If this takes longer than a few minutes, please contact us.'));
+    this.setProgress(null);
+    this.setSteps(null);
+}
+AsyncStatusDialog.prototype.setText = function (text) {
+    $(this.textEl).toggle(!!text);
+    this.textEl.innerText = text;
+}
+AsyncStatusDialog.prototype.setStatus = function (text) {
+    this.statusEl.innerText = text;
+}
+AsyncStatusDialog.prototype.setProgress = function (percent) {
+    $(this.progressEl).toggle(typeof percent === 'number').find('.progress-bar').css('width', percent + '%');
+}
+AsyncStatusDialog.prototype.setSteps = function (steps) {
+    var $steps = $(this.stepsEl);
+    if (typeof steps === "object" && Array.isArray(steps)) {
+        $steps.html("").show();
+        for (var step of steps) {
+            $steps.append(
+                $("<span>").addClass("fa fa-fw")
+                    .toggleClass("fa-check text-success", step.done)
+                    .toggleClass("fa-cog fa-spin text-muted", !step.done)
+            ).append(
+                $("<span>").text(step.label)
+            ).append(
+                $("<br>")
+            )
         }
-    },
-    setSteps: function(steps) {
-        var $steps = $("#loadingmodal .steps");
-        if (steps) {
-            $steps.html("").show()
-            for (var step of data.steps) {
-                $steps.append(
-                    $("<span>").addClass("fa fa-fw")
-                        .toggleClass("fa-check text-success", step.done)
-                        .toggleClass("fa-cog fa-spin text-muted", !step.done)
-                ).append(
-                    $("<span>").text(step.label)
-                ).append(
-                    $("<br>")
-                )
-            }
-        } else {
-            $steps.hide();
-        }
+    } else {
+        $steps.html("").hide();
     }
-};
+}
+
+var waitingDialog;
+$(function() {
+    waitingDialog = new AsyncStatusDialog({
+        icon: 'cog', rotatingIcon: true,
+    });
+});
 
 var ajaxErrDialog = {
     show: function (c) {
         "use strict";
-        $("#ajaxerr").html(c);
+        $("#ajaxerr").html(c).show();
         $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
-                                  + gettext("Close message") + "</a>");
-        $("body").addClass("ajaxerr has-modal-dialog");
+            + gettext("Close message") + "</a>");
+        ModalDialog.updateBodyClass();
     },
     hide: function () {
         "use strict";
-        $("body").removeClass("ajaxerr has-modal-dialog");
-    },
+        $("#ajaxerr").hide();
+        ModalDialog.updateBodyClass();
+    }
 };
