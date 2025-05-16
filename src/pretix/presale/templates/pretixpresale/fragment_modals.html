@@ -6,14 +6,15 @@
 {% load dialog %}
 <div id="ajaxerr" class="modal-wrapper" hidden>
 </div>
-<div id="popupmodal" class="modal-wrapper" hidden aria-live="polite">
+<div id="popupmodal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
+        aria-labelledby="popupmodal-title">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-window-restore big-icon" aria-hidden="true"></i>
         </div>
         <div class="modal-card-content">
             <div>
-                <h3>
+                <h3 id="popupmodal-title">
                     {% trans "We've started the requested process in a new window." %}
                 </h3>
                 <p class="text">
@@ -32,7 +33,8 @@
         </div>
     </div>
 </div>
-<div id="loadingmodal" class="modal-wrapper" hidden aria-live="polite">
+<div id="loadingmodal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
+        aria-labelledby="loadingmodal-label" aria-describedby="loadingmodal-description">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-cog big-rotating-icon" aria-hidden="true"></i>
