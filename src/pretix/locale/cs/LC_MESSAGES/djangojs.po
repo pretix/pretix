@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:08+0000\n"
-"PO-Revision-Date: 2025-02-19 17:00+0000\n"
-"Last-Translator: Petr Čermák <pcermak@live.com>\n"
+"PO-Revision-Date: 2025-05-16 17:00+0000\n"
+"Last-Translator: David <davemachala@gmail.com>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "cs/>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -237,11 +237,11 @@ msgstr "Zrušeno"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Confirmed"
-msgstr ""
+msgstr "Potvrzeno"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Approval pending"
-msgstr ""
+msgstr "Čeká na schválení"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Redeemed"
@@ -440,7 +440,7 @@ msgstr "je po"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
 msgid "="
-msgstr ""
+msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
@@ -452,7 +452,7 @@ msgstr "Varianta produktu"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
-msgstr ""
+msgstr "Brána"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
@@ -557,12 +557,12 @@ msgstr "Duplikát"
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
 msgctxt "entry_status"
 msgid "present"
-msgstr ""
+msgstr "přítomen"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
 msgctxt "entry_status"
 msgid "absent"
-msgstr ""
+msgstr "nepřítomen"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -692,10 +692,8 @@ msgid "Calculating default price…"
 msgstr "Výpočet standardní ceny…"
 
 #: pretix/static/pretixcontrol/js/ui/plugins.js:69
-#, fuzzy
-#| msgid "Search results"
 msgid "No results"
-msgstr "Vyhledat výsledky"
+msgstr "Žádné výsledky"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -764,64 +762,57 @@ msgid "Your local time:"
 msgstr "Místní čas:"
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
-#, fuzzy
-#| msgid "Apple Pay"
 msgid "Google Pay"
-msgstr "Apple Pay"
+msgstr "Google Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "Počet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Snížit počet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "Zvýšit počet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Cena"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
-msgstr ""
+msgstr "Původní cena: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
-msgstr ""
+msgstr "Nová cena: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#, fuzzy
-#| msgid "Selected only"
 msgctxt "widget"
 msgid "Select"
-msgstr "Pouze vybrané"
+msgstr "Vybrat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
-#, fuzzy, javascript-format
-#| msgid "Selected only"
+#, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr "Pouze vybrané"
+msgstr "Vybrat %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
-#, fuzzy, javascript-format
-#| msgctxt "widget"
-#| msgid "See variations"
+#, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr "Zobrazit možnosti"
+msgstr "Vybrat variantu %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
@@ -857,7 +848,7 @@ msgstr "od %(currency)s %(price)s"
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
-msgstr ""
+msgstr "Obrázek%s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
@@ -892,24 +883,19 @@ msgstr "K dispozici pouze s poukazem"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #: pretix/static/pretixpresale/js/widget/widget.js:41
-#, fuzzy
-#| msgid "Payment method unavailable"
 msgctxt "widget"
 msgid "Not yet available"
-msgstr "Způsob platby není k dispozici"
+msgstr "Zatím není k dispozici"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "Již není k dispozici"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Currently not available"
-msgstr "aktuálně k dispozici: %s"
+msgstr "Momentálně není k dispozici."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 #, javascript-format
@@ -942,12 +928,9 @@ msgid "Open ticket shop"
 msgstr "Obchod vstupenek otevřit"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Checkout"
-msgstr "Obnovit checkout"
+msgstr "Checkout"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
@@ -1009,20 +992,14 @@ msgid "Continue"
 msgstr "Pokračovat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Show variants"
 msgstr "Zobrazit možnosti"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Hide variants"
-msgstr "Zobrazit možnosti"
+msgstr "Skrýt možnosti"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
@@ -1110,31 +1087,31 @@ msgstr "Ne"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 msgid "Monday"
-msgstr ""
+msgstr "Pondělí"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "Tuesday"
-msgstr ""
+msgstr "Úterý"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "Wednesday"
-msgstr ""
+msgstr "Středa"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
 msgid "Thursday"
-msgstr ""
+msgstr "Čtvrtek"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "Friday"
-msgstr ""
+msgstr "Pátek"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "Saturday"
-msgstr ""
+msgstr "Sobota"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "Sunday"
-msgstr ""
+msgstr "Neděle"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "January"
