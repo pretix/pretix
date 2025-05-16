@@ -543,7 +543,7 @@ class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
     known_errortypes = ['CartError']
 
     def _ajax_response_data(self, value):
-        return value
+        return value or {}
 
     def get_success_message(self, value):
         if value['success'] > 0:
