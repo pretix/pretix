@@ -38,6 +38,8 @@
             <script type="text/javascript" src="{% static "pretixcontrol/js/clipboard.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/menu.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/sb-admin-2.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/dialogs.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
 		    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/main.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/quota.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/rrule.js" %}"></script>
@@ -54,7 +56,6 @@
             <script type="text/javascript" src="{% static "leaflet/leaflet.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/geo.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixbase/js/details.js" %}"></script>
-            <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
             <script type="text/javascript" src="{% static "sortable/Sortable.js" %}"></script>
             <script type="text/javascript" src="{% static "colorpicker/bootstrap-colorpicker.js" %}"></script>
             <script type="text/javascript" src="{% static "fileupload/jquery.ui.widget.js" %}"></script>
@@ -464,24 +465,6 @@
             </div>
         </div>
         <div id="ajaxerr" class="modal-wrapper" hidden>
-        </div>
-        <div id="loadingmodal" class="modal-wrapper" hidden>
-            <div class="modal-card">
-                <div class="modal-card-icon">
-                    <i class="fa fa-cog big-rotating-icon"></i>
-                </div>
-                <div class="modal-card-content">
-                    <h3></h3>
-                    <p class="text"></p>
-                    <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success">
-                        </div>
-                    </div>
-                    <div class="steps">
-                    </div>
-                </div>
-            </div>
         </div>
 	</body>
 </html>
