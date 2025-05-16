@@ -68,7 +68,7 @@ class AsyncMixin:
     def get_check_url(self, task_id, ajax):
         return self.request.path + '?async_id=%s' % task_id + ('&ajax=1' if ajax else '')
 
-    def _ajax_response_data(self):
+    def _ajax_response_data(self, value):
         return {}
 
     def _return_ajax_result(self, res, timeout=.5):
@@ -85,7 +85,7 @@ class AsyncMixin:
                 logger.warning('Ignored ResponseError in AsyncResult.get()')
             except ConnectionError:
                 # Redis probably just restarted, let's just report not ready and retry next time
-                data = self._ajax_response_data()
+                data = self._ajax_response_data(None)
                 data.update({
                     'async_id': res.id,
                     'ready': False
@@ -93,7 +93,7 @@ class AsyncMixin:
                 return data
 
         state, info = res.state, res.info
-        data = self._ajax_response_data()
+        data = self._ajax_response_data(info)
         data.update({
             'async_id': res.id,
             'ready': ready,

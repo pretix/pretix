@@ -5,36 +5,58 @@ var async_task_check_url = null;
 var async_task_old_url = null;
 var async_task_is_download = false;
 var async_task_is_long = false;
+var async_task_dont_redirect = false;
 
-function async_task_check() {
+
+var async_task_status_messages = {
+    long_task_started: gettext(
+        'Your request is currently being processed. Depending on the size of your event, this might take up to ' +
+        'a few minutes.'
+    ),
+    long_task_pending: gettext(
+        'Your request has been queued on the server and will soon be ' +
+        'processed.'
+    ),
+    short_task: gettext(
+        'Your request arrived on the server but we still wait for it to be ' +
+        'processed. If this takes longer than two minutes, please contact us or go ' +
+        'back in your browser and try again.'
+    )
+};
+
+function async_task_schedule_check(context, timeout) {
     "use strict";
-    $.ajax(
-        {
-            'type': 'GET',
-            'url': async_task_check_url,
-            'success': async_task_check_callback,
-            'error': async_task_check_error,
-            'context': this,
-            'dataType': 'json'
-        }
-    );
+    async_task_timeout = window.setTimeout(function() {
+        $.ajax(
+            {
+                'type': 'GET',
+                'url': async_task_check_url,
+                'success': async_task_check_callback,
+                'error': async_task_check_error,
+                'context': context,
+                'dataType': 'json'
+            }
+        );
+    }, timeout);
 }
 
 function async_task_on_success(data) {
     "use strict";
-    if (async_task_is_download && data.success) {
+    if ((async_task_is_download || async_task_dont_redirect) && data.success) {
         waitingDialog.hide();
         if (location.href.indexOf("async_id") !== -1) {
             history.replaceState({}, "pretix", async_task_old_url);
         }
     }
-    location.href = data.redirect;
+    if (!async_task_dont_redirect)
+        location.href = data.redirect;
+    $(this).trigger('pretix:async-task-success', data);
 }
 
 function async_task_check_callback(data, textStatus, jqXHR) {
     "use strict";
     if (data.ready && data.redirect) {
-        async_task_on_success(data);
+        async_task_on_success.call(this, data);
         return;
     } else if (typeof data.percentage === "number") {
         $("#loadingmodal .progress").show();
@@ -55,7 +77,7 @@ function async_task_check_callback(data, textStatus, jqXHR) {
             }
         }
     }
-    async_task_timeout = window.setTimeout(async_task_check, 250);
+    async_task_schedule_check(this, 250);
 
     if (async_task_is_long) {
         if (data.started) {
@@ -117,7 +139,7 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
             // 500 can be an application error or overload in some cases :(
             $("#loadingmodal p.status").text(gettext('We currently cannot reach the server, but we keep trying.' +
                                               ' Last error code: {code}').replace(/\{code\}/, jqXHR.status));
-            async_task_timeout = window.setTimeout(async_task_check, 5000);
+            async_task_schedule_check(this, 5000);
         }
     }
 }
@@ -126,12 +148,12 @@ function async_task_callback(data, jqXHR, status) {
     "use strict";
     $("body").data('ajaxing', false);
     if (data.redirect) {
-        async_task_on_success(data);
+        async_task_on_success.call(this, data);
         return;
     }
     async_task_id = data.async_id;
     async_task_check_url = data.check_url;
-    async_task_timeout = window.setTimeout(async_task_check, 100);
+    async_task_schedule_check(this, 100);
 
     if (async_task_is_long) {
         if (data.started) {
@@ -160,9 +182,9 @@ function async_task_callback(data, jqXHR, status) {
 function async_task_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     $("body").data('ajaxing', false);
+    waitingDialog.hide();
     if (textStatus === "timeout") {
         alert(gettext("The request took too long. Please try again."));
-        waitingDialog.hide();
     } else if (jqXHR.responseText.indexOf('<html') > 0) {
         var respdom = $(jqXHR.responseText);
         var c = respdom.filter('.container');
@@ -180,18 +202,14 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
 
         } else if (c.length > 0) {
             // This is some kind of 500/404/403 page, show it in an overlay
-            waitingDialog.hide();
             ajaxErrDialog.show(c.first().html());
         } else {
-            waitingDialog.hide();
             alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
         }
     } else {
         if (jqXHR.status >= 400 && jqXHR.status < 500) {
-            waitingDialog.hide();
             alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
         } else {
-            waitingDialog.hide();
             alert(gettext('We currently cannot reach the server. Please try again. ' +
                           'Error code: {code}').replace(/\{code\}/, jqXHR.status));
         }
@@ -215,6 +233,7 @@ $(function () {
         }
         async_task_id = null;
         async_task_is_download = $(this).is("[data-asynctask-download]");
+        async_task_dont_redirect = $(this).is("[data-asynctask-no-redirect]");
         async_task_is_long = $(this).is("[data-asynctask-long]");
         async_task_old_url = location.href;
         $("body").data('ajaxing', true);
