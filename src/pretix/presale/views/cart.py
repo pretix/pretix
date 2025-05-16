@@ -62,7 +62,7 @@ from pretix.base.models import (
 )
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, apply_voucher, clear_cart, error_messages,
-    remove_cart_position,
+    extend_cart_reservation, remove_cart_position,
 )
 from pretix.base.timemachine import time_machine_now
 from pretix.base.views.tasks import AsyncAction
@@ -537,6 +537,26 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
                        request.sales_channel.identifier, time_machine_now(default=None))
 
 
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
+    task = extend_cart_reservation
+    known_errortypes = ['CartError']
+
+    def _ajax_response_data(self, value):
+        if isinstance(value, dict):
+            return value
+        else:
+            return {}
+
+    def get_success_message(self, value):
+        if value['success'] > 0:
+            return _('Your cart timeout was extended.')
+
+    def post(self, request, *args, **kwargs):
+        return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language(),
+                       request.sales_channel.identifier, time_machine_now(default=None))
+
+
 @method_decorator(allow_cors_if_namespaced, 'dispatch')
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')
@@ -547,7 +567,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     def get_success_message(self, value):
         return _('The products have been successfully added to your cart.')
 
-    def _ajax_response_data(self):
+    def _ajax_response_data(self, value):
         cart_id = get_or_create_cart_id(self.request)
         return {
             'cart_id': cart_id,

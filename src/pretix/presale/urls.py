@@ -56,6 +56,7 @@ frame_wrapped_urls = [
     re_path(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
     re_path(r'^cart/voucher$', pretix.presale.views.cart.CartApplyVoucher.as_view(), name='event.cart.voucher'),
     re_path(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
+    re_path(r'^cart/extend$', pretix.presale.views.cart.CartExtendReservation.as_view(), name='event.cart.extend'),
     re_path(r'^cart/answer/(?P<answer>[^/]+)/$',
             pretix.presale.views.cart.AnswerDownload.as_view(),
             name='event.cart.download.answer'),
