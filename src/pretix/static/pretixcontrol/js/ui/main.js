@@ -51,32 +51,6 @@ function formatPrice(price, currency, locale) {
     }
 }
 
-var waitingDialog = {
-    show: function (message) {
-        "use strict";
-        $("#loadingmodal").find("h1").html(message);
-        $("body").addClass("loading");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("loading");
-    }
-};
-
-var ajaxErrDialog = {
-    show: function (c) {
-        "use strict";
-        $("#ajaxerr").html(c);
-        $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
-            + gettext("Close message") + "</a>");
-        $("body").addClass("ajaxerr");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("ajaxerr");
-    }
-};
-
 var apiGET = function (url, callback) {
     $.getJSON(url, function (data) {
         callback(data);
