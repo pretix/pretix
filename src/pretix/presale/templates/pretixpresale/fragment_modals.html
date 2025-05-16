@@ -46,6 +46,23 @@
         </div>
     </div>
 </div>
+<div id="cart-extend-modal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
+        aria-labelledby="cart-extend-modal-title" aria-describedby="cart-extend-modal-desc">
+    <div class="modal-card" id="cart-extend-modal">
+        <div class="modal-card-icon">
+            <i class="fa fa-clock-o big-icon" aria-hidden="true"></i>
+        </div>
+        <div class="modal-card-content">
+            <h3 id="cart-extend-modal-title">{% trans "Please let us know you're still there" %}</h3>
+            <div>
+                <p id="cart-extend-modal-desc">
+                    {% trans "Your cart is about to expire. If you want to continue, please click here:" %}
+                </p>
+                <p><button class="btn btn-lg btn-primary">{% trans "Continue" %}</button></p>
+            </div>
+        </div>
+    </div>
+</div>
 {% if request.organizer and request.organizer.settings.cookie_consent %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
     {% if cookie_consent_from_widget %}

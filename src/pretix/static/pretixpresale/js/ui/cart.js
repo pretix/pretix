@@ -20,6 +20,18 @@ var cart = {
         cart._time_offset = server_time - client_time;
     },
 
+    show_expiry_notification: function () {
+        $("#cart-extend-modal").removeAttr("hidden");
+        $("#cart-extend-modal button").focus();
+        $("body").addClass("has-modal-dialog");
+        cart._expiry_notified = true;
+    },
+
+    hide_expiry_notification: function () {
+        $("#cart-extend-modal").attr("hidden", true);
+        $("body").removeClass("has-modal-dialog");
+    },
+
     draw_deadline: function () {
         function pad(n, width, z) {
             z = z || '0';
@@ -57,9 +69,9 @@ var cart = {
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
         }
-        $("#cart-extend-button").toggle(diff_minutes < 3);
         var can_extend_cart = diff_minutes < 3 && (diff_total_seconds < 0 || cart._deadline < cart._max_extend);
         $("#cart-extend-button").toggle(can_extend_cart);
+        if (can_extend_cart && diff_total_seconds < 45 && !cart._expiry_notified) cart.show_expiry_notification();
     },
 
     init: function () {
@@ -91,6 +103,11 @@ $(function () {
 
     $("#cart-extend-form").on("pretix:async-task-success", function(e, data, x, y, z) {
         cart.set_deadline(data.expiry, data.max_expiry_extend);
+    });
+
+    $("#cart-extend-modal button").click(function() {
+        cart.hide_expiry_notification();
+        $("#cart-extend-form").submit();
     });
 
     $(".toggle-container").each(function() {
