@@ -20,16 +20,21 @@ function async_task_check() {
     );
 }
 
+function async_task_on_success(data) {
+    "use strict";
+    if (async_task_is_download && data.success) {
+        waitingDialog.hide();
+        if (location.href.indexOf("async_id") !== -1) {
+            history.replaceState({}, "pretix", async_task_old_url);
+        }
+    }
+    location.href = data.redirect;
+}
+
 function async_task_check_callback(data, textStatus, jqXHR) {
     "use strict";
     if (data.ready && data.redirect) {
-        if (async_task_is_download && data.success) {
-            waitingDialog.hide();
-            if (location.href.indexOf("async_id") !== -1) {
-                history.replaceState({}, "pretix", async_task_old_url);
-            }
-        }
-        location.href = data.redirect;
+        async_task_on_success(data);
         return;
     } else if (typeof data.percentage === "number") {
         $("#loadingmodal .progress").show();
@@ -73,6 +78,17 @@ function async_task_check_callback(data, textStatus, jqXHR) {
     }
 }
 
+function async_task_replace_page(target, new_html) {
+    "use strict";
+    waitingDialog.hide();
+    $(target).html(new_html);
+    setup_basics($(target));
+    form_handlers($(target));
+    setup_collapsible_details($(target));
+    window.setTimeout(function () { $(window).scrollTop(0) }, 200)
+    $(document).trigger("pretix:bind-forms");
+}
+
 function async_task_check_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     var respdom = $(jqXHR.responseText);
@@ -80,16 +96,10 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
     if (respdom.filter('form') && (respdom.filter('.has-error') || respdom.filter('.alert-danger'))) {
         // This is a failed form validation, let's just use it
         $("body").data('ajaxing', false);
-        waitingDialog.hide();
-        $("body").html(jqXHR.responseText.substring(
+        async_task_replace_page("body", jqXHR.responseText.substring(
             jqXHR.responseText.indexOf("<body"),
             jqXHR.responseText.indexOf("</body")
         ));
-        setup_basics($("body"));
-        form_handlers($("body"));
-        setup_collapsible_details($("body"));
-        window.setTimeout(function () { $(window).scrollTop(0) }, 200)
-        $(document).trigger("pretix:bind-forms");
     } else if (c.length > 0) {
         // This is some kind of 500/404/403 page, show it in an overlay
         $("body").data('ajaxing', false);
@@ -116,13 +126,7 @@ function async_task_callback(data, jqXHR, status) {
     "use strict";
     $("body").data('ajaxing', false);
     if (data.redirect) {
-        if (async_task_is_download && data.success) {
-            waitingDialog.hide();
-            if (location.href.indexOf("async_id") !== -1) {
-                history.replaceState({}, "pretix", async_task_old_url);
-            }
-        }
-        location.href = data.redirect;
+        async_task_on_success(data);
         return;
     }
     async_task_id = data.async_id;
@@ -164,28 +168,18 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
         var c = respdom.filter('.container');
         if (respdom.filter('form') && (respdom.filter('.has-error') || respdom.filter('.alert-danger'))) {
             // This is a failed form validation, let's just use it
-            waitingDialog.hide();
 
             if (respdom.filter('#page-wrapper') && $('#page-wrapper').length) {
-                $("#page-wrapper").html(respdom.find("#page-wrapper").html());
-                setup_basics($("#page-wrapper"));
-                form_handlers($("#page-wrapper"));
-                setup_collapsible_details($("#page-wrapper"));
-                $(document).trigger("pretix:bind-forms");
-                window.setTimeout(function () { $(window).scrollTop(0) }, 200)
+                async_task_replace_page("#page-wrapper", respdom.find("#page-wrapper").html());
             } else {
-                $("body").html(jqXHR.responseText.substring(
+                async_task_replace_page("body", jqXHR.responseText.substring(
                     jqXHR.responseText.indexOf("<body"),
                     jqXHR.responseText.indexOf("</body")
                 ));
-                setup_basics($("body"));
-                form_handlers($("body"));
-                setup_collapsible_details($("body"));
-                $(document).trigger("pretix:bind-forms");
-                window.setTimeout(function () { $(window).scrollTop(0) }, 200)
             }
 
         } else if (c.length > 0) {
+            // This is some kind of 500/404/403 page, show it in an overlay
             waitingDialog.hide();
             ajaxErrDialog.show(c.first().html());
         } else {
