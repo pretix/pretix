@@ -101,8 +101,11 @@ $(function () {
         cart.init();
     }
 
-    $("#cart-extend-form").on("pretix:async-task-success", function(e, data, x, y, z) {
-        cart.set_deadline(data.expiry, data.max_expiry_extend);
+    $("#cart-extend-form").on("pretix:async-task-success", function(e, data) {
+        if (data.success)
+            cart.set_deadline(data.expiry, data.max_expiry_extend);
+        else
+            alert(data.message);
     });
 
     $("#cart-extend-modal button").click(function() {
