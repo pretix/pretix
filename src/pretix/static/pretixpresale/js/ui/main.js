@@ -307,8 +307,6 @@ function setup_basics(el) {
         e.preventDefault();
     });
 
-    el.find('[data-toggle="tooltip"]').tooltip();
-
     // AddOns
     el.find('.addon-variation-description').hide();
     el.find('.toggle-variation-description').click(function () {
