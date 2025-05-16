@@ -12,7 +12,9 @@ body.has-modal-dialog .container, body.has-modal-dialog #wrapper {
     font-size: 120px;
     color: $brand-primary;
 }
-
+dialog.modal-card::backdrop {
+    background: rgba(255, 255, 255, .7);
+}
 .modal-wrapper {
     position: fixed;
     top: 0;

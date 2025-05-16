@@ -25,21 +25,31 @@ function EL(tagName, attrs) {
     }
     return el;
 }
-var dialog_id = 1;
+
 function ModalDialog(options) {
-    this.id = 'modal-dlg-' + (++dialog_id);
-    this.dialogEl = EL('dialog', {class: 'modal-card', 'aria-live': 'polite',
-            'aria-labelledby': this.id + '-title', 'aria-describedby': this.id + '-desc',
+    this.id = 'modal-dlg-' + (++ModalDialog._next_dialog_id);
+    this.options = options;
+    this.dialogEl = EL('dialog', {class: 'modal-card', id: this.id,
+            'aria-live': 'polite', 'aria-labelledby': this.id + '-title', 'aria-describedby': this.id + '-desc',
             appendTo: document.body, onclose: this._onClose.bind(this)},
-        this.iconEl =
-            (options.icon)
+        (options.icon)
             ? EL('div', {class: 'modal-card-icon'},
                 EL('i', {'aria-hidden': 'true', class: 'fa fa-' + options.icon + ' ' + (options.rotatingIcon ? 'big-rotating-icon' : 'big-icon')}))
             : undefined,
         EL('div', {class: 'modal-card-content'},
             this.titleEl = EL('h3', {id: this.id + '-title'}, options.title || ''),
-            this.contentEl = EL('div', {id: this.id + '-desc'}, options.content || '')));
+            this.descEl = EL('p', {id: this.id + '-desc'}, options.description || ''),
+            this.contentEl = EL('div', {}, options.content || '')));
 }
+
+ModalDialog._next_dialog_id = 1;
+ModalDialog.updateBodyClass = function() {
+    if ($("dialog[open], .modal-wrapper:not([hidden])").length)
+        $(document.body).addClass('has-modal-dialog');
+    else
+        $(document.body).removeClass('has-modal-dialog');
+}
+
 ModalDialog.prototype.show = function() {
     this.dialogEl.showModal();
     ModalDialog.updateBodyClass();
@@ -51,50 +61,16 @@ ModalDialog.prototype.isOpen = function() {
     return this.dialogEl.open;
 }
 ModalDialog.prototype._onClose = function() {
+    if (this.options.removeOnClose) this.dialogEl.remove();
     ModalDialog.updateBodyClass();
 }
 ModalDialog.prototype.setTitle = function(text) {
     this.titleEl.innerText = text;
 }
+ModalDialog.prototype.setDescription = function(text) {
+    this.descEl.innerText = text;
+    this.descEl.style.display = text ? '' : 'none';
+}
 ModalDialog.prototype.setContent = function(text) {
     this.contentEl.innerText = text;
 }
-ModalDialog.updateBodyClass = function() {
-    if ($("dialog[open], .modal-wrapper:not([hidden])").length)
-        $(document.body).addClass('has-modal-dialog');
-    else
-        $(document.body).removeClass('has-modal-dialog');
-}
-
-
-
-
-
-    /*
-function ModalDialog(options) {
-    this.backdropEl = document.createElement('div');
-    this.backdropEl.className = 'modal-wrapper';
-    this.backdropEl.setAttribute('hidden', 'hidden');
-    this.dialogEl = document.createElement('div');
-    this.dialogEl.className = 'modal-card';
-    this.backdropEl.appendChild(this.dialogEl);
-    if (options.icon) {
-        this.iconEl = document.createElement('div');
-        this.iconEl.className = 'modal-card-icon';
-        this.dialogEl.appendChild(this.iconEl);
-        var icon = document.createElement('i');
-        icon.setAttribute('aria-hidden', 'true');
-        icon.className = 'fa fa-' + options.icon + ' ' + (options.rotatingIcon ? 'big-rotating-icon' : 'big-icon');
-    }
-    this.dialogContentEl = document.createElement('div');
-    this.dialogContentEl.className = 'modal-card-content';
-    this.titleEl = document.createElement('h3');
-    this.dialogContentEl.appendChild(this.titleEl);
-    this.descriptionEl = document.createElement('div');
-    this.dialogContentEl.appendChild(this.descriptionEl);
-    this.backdropEl.appendChild(this.contentEl);
-    document.body.appendChild(this.backdropEl);
-    this.setTitle(options.title || '');
-    this.setDescription(options.description || '');
-}
-    */

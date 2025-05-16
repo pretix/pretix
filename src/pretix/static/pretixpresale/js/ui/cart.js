@@ -21,15 +21,24 @@ var cart = {
     },
 
     show_expiry_notification: function () {
-        $("#cart-extend-modal").removeAttr("hidden");
-        $("#cart-extend-modal button").focus();
-        $("body").addClass("has-modal-dialog");
-        cart._expiry_notified = true;
-    },
+        if (cart._notify_dialog) return;
 
-    hide_expiry_notification: function () {
-        $("#cart-extend-modal").attr("hidden", true);
-        $("body").removeClass("has-modal-dialog");
+        const btn_clicked = function() {
+            cart._notify_dialog.hide();
+            cart._notify_dialog = null;
+            $("#cart-extend-form").submit();
+        };
+        cart._notify_dialog = new ModalDialog({
+            icon: 'clock-o',
+            title: gettext("Please let us know if you're still there"),
+            description: undefined,
+            content: EL('p', {},
+                EL('button', {class: 'btn btn-primary btn-lg', onclick: btn_clicked, autofocus: ''}, gettext('Continue'))
+            ),
+            removeOnClose: true,
+        });
+        cart._notify_dialog.show();
+        cart._expiry_notified = true;
     },
 
     draw_deadline: function () {
@@ -74,9 +83,9 @@ var cart = {
         $("#cart-extend-button").toggle(can_extend_cart);
         if (can_extend_cart && diff_total_seconds < 45) {
             if (!cart._expiry_notified) cart.show_expiry_notification();
-            $("#cart-extend-modal-desc").text(already_expired
-                ? gettext("Your cart has expired. If you want to continue, please click here:")
-                : gettext("Your cart is about to expire. If you want to continue, please click here:"));
+            if (cart._notify_dialog) cart._notify_dialog.setDescription(already_expired
+                    ? gettext("Your cart has expired. If you want to continue, please click here:")
+                    : gettext("Your cart is about to expire. If you want to continue, please click here:"));
         }
     },
 
@@ -112,11 +121,6 @@ $(function () {
             cart.set_deadline(data.expiry, data.max_expiry_extend);
         else
             alert(data.message);
-    });
-
-    $("#cart-extend-modal button").click(function() {
-        cart.hide_expiry_notification();
-        $("#cart-extend-form").submit();
     });
 
     $(".toggle-container").each(function() {

@@ -254,7 +254,6 @@ $(function () {
 function AsyncStatusDialog(options) {
     ModalDialog.call(this, Object.assign({
         content: [
-            this.textEl = EL('p', {}),
             this.statusEl = EL('p', {}),
             this.progressEl = EL('div', {class: 'progress'}, EL('div', {class:'progress-bar progress-bar-success', hidden: ''})),
             this.stepsEl = EL('div', {class: 'steps', hidden: ''}, ''),
@@ -265,14 +264,10 @@ AsyncStatusDialog.prototype = Object.create(ModalDialog.prototype);
 AsyncStatusDialog.prototype.show = function (title, text, status) {
     ModalDialog.prototype.show.call(this);
     this.setTitle(title);
-    this.setText(text);
+    this.setDescription(text);
     this.setStatus(status || gettext('If this takes longer than a few minutes, please contact us.'));
     this.setProgress(null);
     this.setSteps(null);
-}
-AsyncStatusDialog.prototype.setText = function (text) {
-    $(this.textEl).toggle(!!text);
-    this.textEl.innerText = text;
 }
 AsyncStatusDialog.prototype.setStatus = function (text) {
     this.statusEl.innerText = text;
