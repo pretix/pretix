@@ -4,9 +4,9 @@
 {% load escapejson %}
 {% load icon %}
 {% load dialog %}
-<div id="ajaxerr">
+<div id="ajaxerr" class="modal-wrapper" hidden>
 </div>
-<div id="popupmodal" hidden aria-live="polite">
+<div id="popupmodal" class="modal-wrapper" hidden aria-live="polite">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-window-restore big-icon" aria-hidden="true"></i>
@@ -32,7 +32,7 @@
         </div>
     </div>
 </div>
-<div id="loadingmodal" hidden aria-live="polite">
+<div id="loadingmodal" class="modal-wrapper" hidden aria-live="polite">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-cog big-rotating-icon" aria-hidden="true"></i>
