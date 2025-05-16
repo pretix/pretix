@@ -4,14 +4,15 @@
 {% load escapejson %}
 <div id="ajaxerr" class="modal-wrapper" hidden>
 </div>
-<div id="popupmodal" class="modal-wrapper" hidden aria-live="polite">
+<div id="popupmodal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
+        aria-labelledby="popupmodal-title">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-window-restore big-icon" aria-hidden="true"></i>
         </div>
         <div class="modal-card-content">
             <div>
-                <h3>
+                <h3 id="popupmodal-title">
                     {% trans "We've started the requested process in a new window." %}
                 </h3>
                 <p class="text">
@@ -30,7 +31,8 @@
         </div>
     </div>
 </div>
-<div id="loadingmodal" class="modal-wrapper" hidden aria-live="polite">
+<div id="loadingmodal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
+        aria-labelledby="loadingmodal-label" aria-describedby="loadingmodal-description">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-cog big-rotating-icon" aria-hidden="true"></i>
@@ -45,7 +47,7 @@
     </div>
 </div>
 <div id="cart-extend-modal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
-     aria-labelledby="cart-extend-modal-title" aria-describedby="cart-extend-modal-desc">
+        aria-labelledby="cart-extend-modal-title" aria-describedby="cart-extend-modal-desc">
     <dialog class="modal-card" id="cart-extend-modal">
         <div class="modal-card-icon">
             <i class="fa fa-clock-o big-icon" aria-hidden="true"></i>
@@ -67,7 +69,8 @@
         {{ cookie_consent_from_widget|json_script:"cookie-consent-from-widget" }}
     {% endif %}
     {% if cookie_providers %}
-        <div id="cookie-consent-modal" class="modal-wrapper" hidden aria-live="polite">
+        <div id="cookie-consent-modal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
+                aria-labelledby="cookie-consent-modal-label">
             <div class="modal-card">
                 <div class="modal-card-content">
                     <h3 id="cookie-consent-modal-label"></h3>
