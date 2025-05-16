@@ -48,7 +48,7 @@
 </div>
 <div id="cart-extend-modal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
         aria-labelledby="cart-extend-modal-title" aria-describedby="cart-extend-modal-desc">
-    <dialog class="modal-card" id="cart-extend-modal">
+    <div class="modal-card" id="cart-extend-modal">
         <div class="modal-card-icon">
             <i class="fa fa-clock-o big-icon" aria-hidden="true"></i>
         </div>
@@ -61,7 +61,7 @@
                 <p><button class="btn btn-lg btn-primary">{% trans "Continue" %}</button></p>
             </div>
         </div>
-    </dialog>
+    </div>
 </div>
 {% if request.organizer and request.organizer.settings.cookie_consent %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>

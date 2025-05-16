@@ -21,14 +21,14 @@ var cart = {
     },
 
     show_expiry_notification: function () {
-        $("#cart-extend-modal").show();
+        $("#cart-extend-modal").removeAttr("hidden");
         $("#cart-extend-modal button").focus();
         $("body").addClass("has-modal-dialog");
         cart._expiry_notified = true;
     },
 
     hide_expiry_notification: function () {
-        $("#cart-extend-modal").hide();
+        $("#cart-extend-modal").attr("hidden", true);
         $("body").removeClass("has-modal-dialog");
     },
 
@@ -71,7 +71,7 @@ var cart = {
         }
         var can_extend_cart = diff_minutes < 3 && (diff_total_seconds < 0 || cart._deadline < cart._max_extend);
         $("#cart-extend-button").toggle(can_extend_cart);
-        if (can_extend_cart && diff_minutes < 1 && !cart._expiry_notified) cart.show_expiry_notification();
+        if (can_extend_cart && diff_total_seconds < 45 && !cart._expiry_notified) cart.show_expiry_notification();
     },
 
     init: function () {
