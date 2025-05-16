@@ -69,9 +69,15 @@ var cart = {
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
         }
-        var can_extend_cart = diff_minutes < 3 && (diff_total_seconds < 0 || cart._deadline < cart._max_extend);
+        var already_expired = diff_total_seconds <= 0;
+        var can_extend_cart = diff_minutes < 3 && (already_expired || cart._deadline < cart._max_extend);
         $("#cart-extend-button").toggle(can_extend_cart);
-        if (can_extend_cart && diff_total_seconds < 45 && !cart._expiry_notified) cart.show_expiry_notification();
+        if (can_extend_cart && diff_total_seconds < 45) {
+            if (!cart._expiry_notified) cart.show_expiry_notification();
+            $("#cart-extend-modal-desc").text(already_expired
+                ? gettext("Your cart has expired. If you want to continue, please click here:")
+                : gettext("Your cart is about to expire. If you want to continue, please click here:"));
+        }
     },
 
     init: function () {
