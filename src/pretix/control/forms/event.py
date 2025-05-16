@@ -759,6 +759,7 @@ class CancelSettingsForm(SettingsForm):
         'change_allow_user_addons',
         'change_allow_user_if_checked_in',
         'change_allow_attendee',
+        'tax_rule_cancellation',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -781,14 +782,8 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'payment_term_accept_late',
         'payment_pending_hidden',
         'payment_explanation',
+        'tax_rule_payment',
     ]
-    tax_rate_default = forms.ModelChoiceField(
-        queryset=TaxRule.objects.none(),
-        label=_('Tax rule for payment fees'),
-        required=False,
-        help_text=_("The tax rule that applies for additional fees you configured for single payment methods. This "
-                    "will set the tax rate and reverse charge rules, other settings of the tax rule are ignored.")
-    )
 
     def clean_payment_term_days(self):
         value = self.cleaned_data.get('payment_term_days')
@@ -801,10 +796,6 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         if self.cleaned_data.get('payment_term_mode') == 'minutes' and value is None:
             raise ValidationError(_("This field is required."))
         return value
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['tax_rate_default'].queryset = self.obj.tax_rules.all()
 
 
 class ProviderForm(SettingsForm):

@@ -192,7 +192,7 @@ def subevent2(event2, meta_prop):
 @pytest.fixture
 @scopes_disabled()
 def taxrule(event):
-    return event.tax_rules.create(name="VAT", rate=19, code="S/standard")
+    return event.tax_rules.create(name="VAT", rate=19, code="S/standard", default=True)
 
 
 @pytest.fixture
