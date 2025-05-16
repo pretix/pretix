@@ -33,8 +33,9 @@ var cart = {
             return;
         }
         var now = cart._get_now();
-        var diff_minutes = Math.floor(cart._deadline.diff(now) / 1000 / 60);
-        var diff_seconds = Math.floor(cart._deadline.diff(now) / 1000 % 60);
+        var diff_total_seconds = cart._deadline.diff(now) / 1000;
+        var diff_minutes = Math.floor(diff_total_seconds / 60);
+        var diff_seconds = Math.floor(diff_total_seconds % 60);
 
         if (diff_minutes < 2 || diff_minutes == 5) $("#cart-deadline").get(0).setAttribute("aria-live", "polite");
         else $("#cart-deadline").get(0).removeAttribute("aria-live");
@@ -45,6 +46,7 @@ var cart = {
                 gettext("Cart expired")
             );
             window.clearInterval(cart._deadline_interval);
+            cart._deadline_interval = null;
         } else {
             $("#cart-deadline").text(ngettext(
                 "The items in your cart are reserved for you for one minute.",
@@ -56,13 +58,26 @@ var cart = {
             );
         }
         $("#cart-extend-button").toggle(diff_minutes < 3);
+        var can_extend_cart = diff_minutes < 3 && (diff_total_seconds < 0 || cart._deadline < cart._max_extend);
+        $("#cart-extend-button").toggle(can_extend_cart);
     },
 
     init: function () {
         "use strict";
-        cart._deadline = moment($("#cart-deadline").attr("data-expires"));
-        cart._deadline_interval = window.setInterval(cart.draw_deadline, 500);
         cart._calc_offset();
+        cart.set_deadline(
+            $("#cart-deadline").attr("data-expires"),
+            $("#cart-deadline").attr("data-max-expiry-extend")
+        );
+    },
+
+    set_deadline: function (expiry, max_extend) {
+        "use strict";
+        cart._expiry_notified = false;
+        cart._deadline = moment(expiry);
+        cart._max_extend = moment(max_extend);
+        if (!cart._deadline_interval)
+            cart._deadline_interval = window.setInterval(cart.draw_deadline, 500);
         cart.draw_deadline();
     }
 };
@@ -73,6 +88,10 @@ $(function () {
     if ($("#cart-deadline").length) {
         cart.init();
     }
+
+    $("#cart-extend-form").on("pretix:async-task-success", function(e, data, x, y, z) {
+        cart.set_deadline(data.expiry, data.max_expiry_extend);
+    });
 
     $(".toggle-container").each(function() {
         var summary = $(".toggle-summary", this);

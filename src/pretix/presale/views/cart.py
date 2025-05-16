@@ -542,8 +542,11 @@ class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = extend_cart_reservation
     known_errortypes = ['CartError']
 
+    def _ajax_response_data(self, value):
+        return value
+
     def get_success_message(self, value):
-        if value > 0:
+        if value['success'] > 0:
             return _('Your cart timeout was extended.')
 
     def post(self, request, *args, **kwargs):
@@ -561,7 +564,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     def get_success_message(self, value):
         return _('The products have been successfully added to your cart.')
 
-    def _ajax_response_data(self):
+    def _ajax_response_data(self, value):
         cart_id = get_or_create_cart_id(self.request)
         return {
             'cart_id': cart_id,
