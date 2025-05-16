@@ -55,6 +55,7 @@ var cart = {
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
         }
+        $("#cart-extend-button").toggle(diff_minutes < 3);
     },
 
     init: function () {

@@ -3098,7 +3098,10 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Expiration date"),
         db_index=True
     )
-
+    max_extend = models.DateTimeField(
+        verbose_name=_("Limit for extending expiration date"),
+        null=True
+    )
     tax_rate = models.DecimalField(
         max_digits=7, decimal_places=2, default=Decimal('0.00'),
         verbose_name=_('Tax rate')
