@@ -2227,6 +2227,10 @@ Your {event} team"""))  # noqa: W291
         'type': bool,
         'default': 'False'
     },
+    'mail_send_order_free_all_attendees': {
+        'type': bool,
+        'default': 'False'
+    },
     'mail_subject_order_free': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Your order: {code}")),
@@ -2312,6 +2316,10 @@ Your {event} team"""))  # noqa: W291
         'type': bool,
         'default': 'False'
     },
+    'mail_send_order_placed_all_attendees': {
+        'type': bool,
+        'default': 'False'
+    },
     'mail_subject_order_placed_attendee': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
@@ -2363,6 +2371,10 @@ Best regards,
 Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_paid_attendee': {
+        'type': bool,
+        'default': 'False'
+    },
+    'mail_send_order_paid_all_attendees': {
         'type': bool,
         'default': 'False'
     },
@@ -2545,6 +2557,10 @@ Your {event} team"""))  # noqa: W291
         'type': bool,
         'default': 'False'
     },
+    'mail_send_order_approved_all_attendees': {
+        'type': bool,
+        'default': 'False'
+    },
     'mail_subject_order_approved_attendee': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
@@ -2579,6 +2595,10 @@ Best regards,
 Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_approved_free_attendee': {
+        'type': bool,
+        'default': 'False'
+    },
+    'mail_send_order_approved_free_all_attendees': {
         'type': bool,
         'default': 'False'
     },
@@ -2632,6 +2652,10 @@ Your {event} team"""))  # noqa: W291
         'default': None
     },
     'mail_send_download_reminder_attendee': {
+        'type': bool,
+        'default': 'False'
+    },
+    'mail_send_download_reminder_all_attendees': {
         'type': bool,
         'default': 'False'
     },
