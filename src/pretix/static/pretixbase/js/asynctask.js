@@ -7,7 +7,6 @@ var async_task_is_download = false;
 var async_task_is_long = false;
 var async_task_dont_redirect = false;
 
-
 var async_task_status_messages = {
     long_task_started: gettext(
         'Your request is currently being processed. Depending on the size of your event, this might take up to ' +
@@ -58,45 +57,28 @@ function async_task_check_callback(data, textStatus, jqXHR) {
     if (data.ready && data.redirect) {
         async_task_on_success.call(this, data);
         return;
-    } else if (typeof data.percentage === "number") {
-        $("#loadingmodal .progress").show();
-        $("#loadingmodal .progress .progress-bar").css("width", data.percentage + "%");
-        if (typeof data.steps === "object" && Array.isArray(data.steps)) {
-            var $steps = $("#loadingmodal .steps");
-            $steps.html("").show()
-            for (var step of data.steps) {
-                $steps.append(
-                    $("<span>").addClass("fa fa-fw")
-                        .toggleClass("fa-check text-success", step.done)
-                        .toggleClass("fa-cog fa-spin text-muted", !step.done)
-                ).append(
-                    $("<span>").text(step.label)
-                ).append(
-                    $("<br>")
-                )
-            }
-        }
+    }
+
+    if (typeof data.percentage === "number") {
+        waitingDialog.setProgress(data.percentage);
+    }
+    if (typeof data.steps === "object" && Array.isArray(data.steps)) {
+        waitingDialog.setSteps(data.steps);
     }
     async_task_schedule_check(this, 250);
 
+    async_task_update_status(data);
+}
+
+function async_task_update_status(data) {
     if (async_task_is_long) {
         if (data.started) {
-            $("#loadingmodal p.status").text(gettext(
-                'Your request is currently being processed. Depending on the size of your event, this might take up to ' +
-                'a few minutes.'
-            ));
+            waitingDialog.setStatus(async_task_status_messages.long_task_started);
         } else {
-            $("#loadingmodal p.status").text(gettext(
-                'Your request has been queued on the server and will soon be ' +
-                'processed.'
-            ));
+            waitingDialog.setStatus(async_task_status_messages.long_task_pending);
         }
     } else {
-        $("#loadingmodal p.status").text(gettext(
-            'Your request arrived on the server but we still wait for it to be ' +
-            'processed. If this takes longer than two minutes, please contact us or go ' +
-            'back in your browser and try again.'
-        ));
+        waitingDialog.setStatus(async_task_status_messages.short_task);
     }
 }
 
@@ -137,8 +119,8 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
             alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
         } else {
             // 500 can be an application error or overload in some cases :(
-            $("#loadingmodal p.status").text(gettext('We currently cannot reach the server, but we keep trying.' +
-                                              ' Last error code: {code}').replace(/\{code\}/, jqXHR.status));
+            waitingDialog.setStatus(gettext('We currently cannot reach the server, but we keep trying.' +
+                                            ' Last error code: {code}').replace(/\{code\}/, jqXHR.status));
             async_task_schedule_check(this, 5000);
         }
     }
@@ -155,25 +137,8 @@ function async_task_callback(data, jqXHR, status) {
     async_task_check_url = data.check_url;
     async_task_schedule_check(this, 100);
 
-    if (async_task_is_long) {
-        if (data.started) {
-            $("#loadingmodal p.status").text(gettext(
-                'Your request is currently being processed. Depending on the size of your event, this might take up to ' +
-                'a few minutes.'
-            ));
-        } else {
-            $("#loadingmodal p.status").text(gettext(
-                'Your request has been queued on the server and will soon be ' +
-                'processed.'
-            ));
-        }
-    } else {
-        $("#loadingmodal p.status").text(gettext(
-            'Your request arrived on the server but we still wait for it to be ' +
-            'processed. If this takes longer than two minutes, please contact us or go ' +
-            'back in your browser and try again.'
-        ));
-    }
+    async_task_update_status(data);
+
     if (location.href.indexOf("async_id") === -1) {
         history.pushState({}, "Waiting", async_task_check_url.replace(/ajax=1/, ''));
     }
@@ -237,21 +202,15 @@ $(function () {
         async_task_is_long = $(this).is("[data-asynctask-long]");
         async_task_old_url = location.href;
         $("body").data('ajaxing', true);
-        if ($(this).is("[data-asynctask-headline]")) {
-            waitingDialog.show($(this).attr("data-asynctask-headline"));
-        } else {
-            waitingDialog.show(gettext('We are processing your request …'));
-        }
-        if ($(this).is("[data-asynctask-text]")) {
-            $("#loadingmodal p.text").text($(this).attr("data-asynctask-text")).show();
-        } else {
-            $("#loadingmodal p.text").hide();
-        }
-        $("#loadingmodal p.status").text(gettext(
-            'We are currently sending your request to the server. If this takes longer ' +
-            'than one minute, please check your internet connection and then reload ' +
-            'this page and try again.'
-        ));
+        waitingDialog.show(
+            $(this).attr("data-asynctask-headline") || gettext('We are processing your request …'),
+            $(this).attr("data-asynctask-text") || '',
+            gettext(
+                'We are currently sending your request to the server. If this takes longer ' +
+                'than one minute, please check your internet connection and then reload ' +
+                'this page and try again.'
+            )
+        );
 
         var action = this.action;
         var formData = new FormData(this);
@@ -288,14 +247,18 @@ $(function () {
             }, 10);
         }
     }, false);
+
+    $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 });
 
 var waitingDialog = {
-    show: function (message) {
+    show: function (title, text, status) {
         "use strict";
-        $("#loadingmodal h3").html(message);
-        $("#loadingmodal .progress").hide();
-        $("#loadingmodal .steps").hide();
+        this.setTitle(title);
+        this.setText(text);
+        this.setStatus(status || gettext('If this takes longer than a few minutes, please contact us.'));
+        this.setProgress(null);
+        this.setSteps(null);
         $("body").addClass("loading");
         $("#loadingmodal").removeAttr("hidden has-modal-dialog");
     },
@@ -303,6 +266,45 @@ var waitingDialog = {
         "use strict";
         $("body").removeClass("loading has-modal-dialog");
         $("#loadingmodal").attr("hidden", true);
+    },
+    setTitle: function(title) {
+        $("#loadingmodal h3").text(title);
+    },
+    setStatus: function(statusText) {
+        $("#loadingmodal p.status").text(statusText);
+    },
+    setText: function(text) {
+        if (text)
+            $("#loadingmodal p.text").text(text).show();
+        else
+            $("#loadingmodal p.text").hide();
+    },
+    setProgress: function(percentage) {
+        if (typeof percentage === 'number') {
+            $("#loadingmodal .progress").show();
+            $("#loadingmodal .progress .progress-bar").css("width", percentage + "%");
+        } else {
+            $("#loadingmodal .progress").hide();
+        }
+    },
+    setSteps: function(steps) {
+        var $steps = $("#loadingmodal .steps");
+        if (steps) {
+            $steps.html("").show()
+            for (var step of data.steps) {
+                $steps.append(
+                    $("<span>").addClass("fa fa-fw")
+                        .toggleClass("fa-check text-success", step.done)
+                        .toggleClass("fa-cog fa-spin text-muted", !step.done)
+                ).append(
+                    $("<span>").text(step.label)
+                ).append(
+                    $("<br>")
+                )
+            }
+        } else {
+            $steps.hide();
+        }
     }
 };
 
@@ -317,5 +319,5 @@ var ajaxErrDialog = {
     hide: function () {
         "use strict";
         $("body").removeClass("ajaxerr has-modal-dialog");
-    }
+    },
 };
