@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-28 11:06+0000\n"
-"PO-Revision-Date: 2025-04-14 23:00+0000\n"
+"PO-Revision-Date: 2025-05-17 18:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -14670,7 +14670,7 @@ msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
 #: pretix/control/logdisplay.py:406 pretix/control/views/orders.py:1573
 #: pretix/presale/views/order.py:1047
 msgid "The order has been canceled."
-msgstr ""
+msgstr "A megrendelés sztornózva lett."
 
 #: pretix/control/logdisplay.py:414
 #, python-brace-format
