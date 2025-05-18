@@ -19,17 +19,10 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import re
 
-from django import forms
-from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
-from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
-from localflavor.it.forms import ITSocialSecurityNumberField
 
-from pretix.base.models import InvoiceAddress, Invoice
+from pretix.base.models import Invoice, InvoiceAddress
 from pretix.base.signals import EventPluginRegistry, Registry
 
 
@@ -59,7 +52,7 @@ class TransmissionType:
         providers = transmission_providers.filter(type=self.identifier, active_in=event)
         return any(
             provider.is_available(event, country, is_business)
-            for provider in providers
+            for provider, _ in providers
         )
 
     def invoice_address_form_fields_required(self, country: Country, is_business: bool):
