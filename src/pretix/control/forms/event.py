@@ -1210,6 +1210,8 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nMarkdownTextarea,
+        help_text=_("This will only be used if the invoice is sent to a different email address or at a different time "
+                    "than the order confirmation."),
     )
     mail_subject_download_reminder = I18nFormField(
         label=_("Subject sent to order contact address"),

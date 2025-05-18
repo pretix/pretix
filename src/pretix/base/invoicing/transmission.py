@@ -176,6 +176,6 @@ transmission_types = TransmissionTypeRegistry()
 
 def get_transmission_types():
     return sorted(
-        transmission_types.registered_entries.values(),
+        transmission_types.registered_entries.keys(),
         key=lambda t: (0 if t.identifier == "email" else 1, str(t.public_name)),
     )
