@@ -600,6 +600,7 @@ class InvoiceShredder(BaseDataShredder):
                 i.additional_text = "█"
                 i.invoice_to = "█"
                 i.payment_provider_text = "█"
+                i.transmission_info = {"_shredded": True}
                 i.save()
                 i.lines.update(description="█")
 

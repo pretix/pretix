@@ -658,15 +658,42 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             raise SendMailException('Failed to send an email to {}.'.format(to))
         else:
             for i in invoices_sent:
-                if i.transmission_provider == "email" and i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
-                    i.transmission_date = now()
-                    i.transmission_provider = "email"
-                    i.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
-                    i.transmission_info = {"recipients": to}
-                    i.save(update_fields=[
-                        "transmission_date", "transmission_provider", "transmission_status",
-                        "transmission_info"
-                    ])
+                if i.transmission_provider == "email":
+                    if i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
+                        i.transmission_date = now()
+                        i.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
+                        i.transmission_provider = "email_pdf"
+                        i.transmission_info = {
+                            "sent": [
+                                {
+                                    "recipients": to,
+                                    "datetime": now().isoformat(),
+                                }
+                            ]
+                        }
+                        i.save(update_fields=[
+                            "transmission_date", "transmission_provider", "transmission_status",
+                            "transmission_info"
+                        ])
+                    elif i.transmission_provider == "email_pdf":
+                        i.transmission_info["sent"].append(
+                            {
+                                "recipients": to,
+                                "datetime": now().isoformat(),
+                            }
+                        )
+                        i.save(update_fields=[
+                            "transmission_info"
+                        ])
+                    invoice.order.log_action(
+                        "pretix.event.order.invoice.sent",
+                        data={
+                            "full_invoice_no": i.full_invoice_no,
+                            "transmission_provider": "email_pdf",
+                            "transmission_type": "email",
+                            "recipients": [to],
+                        }
+                    )
 
 
 def mail_send(*args, **kwargs):

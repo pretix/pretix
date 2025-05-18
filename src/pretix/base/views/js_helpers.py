@@ -29,7 +29,7 @@ from django_scopes import scope
 from pretix.base.addressvalidation import (
     COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED,
 )
-from pretix.base.invoicing.transmission import TRANSMISSION_TYPES
+from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import Organizer
 from pretix.base.models.tax import VAT_ID_COUNTRIES
 from pretix.base.settings import (
@@ -76,14 +76,17 @@ def address_form(request):
             is_business = request.GET.get("is_business") == "business"
             selected_transmission_type = request.GET.get("transmission_type")
 
-            info["transmission_types"] = [
-                {'name': str(t.public_name), 'code': t.identifier}
-                for t in TRANSMISSION_TYPES if t.is_available(
-                    event=event,
-                    country=country,
-                    is_business=is_business
-                )
-            ]
+            info["transmission_types"] = []
+
+            for t in get_transmission_types():
+                if t.is_available(event=event, country=country, is_business=is_business):
+                    result = {"name": str(t.public_name), "code": t.identifier}
+                    if t.exclusive:
+                        info["transmission_types"] = [result]
+                        break
+                    else:
+                        info["transmission_types"].append(result)
+
             info["transmission_type"] = {
                 # Hide transmission type if email is the only type since that's basically the backwards-compatible
                 # option
@@ -96,7 +99,7 @@ def address_form(request):
                 # side will now do).
                 selected_transmission_type = info["transmission_types"][0]["code"]
 
-            for transmission_type in TRANSMISSION_TYPES:
+            for transmission_type in get_transmission_types():
                 required = transmission_type.invoice_address_form_fields_required(
                     country=country,
                     is_business=is_business

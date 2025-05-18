@@ -77,7 +77,7 @@ from pretix.base.forms.widgets import (
 from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
-from pretix.base.invoicing.transmission import TRANSMISSION_TYPES
+from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
@@ -1262,11 +1262,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['transmission_type'] = forms.ChoiceField(
             label=_('Invoice transmission method'),
             choices=[
-                (t.identifier, t.public_name) for t in TRANSMISSION_TYPES
+                (t.identifier, t.public_name) for t in get_transmission_types()
             ]
         )
         self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
-        for transmission_type in TRANSMISSION_TYPES:
+        for transmission_type in get_transmission_types():
             for k, f in transmission_type.invoice_address_form_fields.items():
                 self.fields[k] = f
                 f._required = f.required
@@ -1328,25 +1328,30 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         else:
             self.instance.vat_id_validated = False
 
-        for transmission_type in TRANSMISSION_TYPES:
-            if transmission_type.identifier != data.get("transmission_type"):
-                continue
+        for transmission_type in get_transmission_types():
+            if transmission_type.identifier == data.get("transmission_type"):
+                if not transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
+                    raise ValidationError({
+                        "transmission_type": _("The selected transmission type is not available in your country or for "
+                                               "your type of address.")
+                    })
 
-            if not transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
-                raise ValidationError({
-                    "transmission_type": _("The selected transmission type is not available in your country or for "
-                                           "your type of address.")
-                })
+                required_fields = transmission_type.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
+                for r in required_fields:
+                    if not data.get(r):
+                        raise ValidationError({r: _("This field is required for the selected type of invoice transmission.")})
 
-            required_fields = transmission_type.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
-            for r in required_fields:
-                if not data.get(r):
-                    raise ValidationError({r: _("This field is required for the selected type of invoice transmission.")})
-
-            self.instance.transmission_type = transmission_type.identifier
-            self.instance.transmission_info = {
-                k: data.get(k) for k in transmission_type.invoice_address_form_fields
-            }
+                self.instance.transmission_type = transmission_type.identifier
+                self.instance.transmission_info = {
+                    k: data.get(k) for k in transmission_type.invoice_address_form_fields
+                }
+            elif transmission_type.exclusive:
+                if transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
+                    raise ValidationError({
+                        "transmission_type": "The transmission type '%s' must be used for this country or address type." % (
+                            transmission_type.identifier,
+                        )
+                    })
 
 
 class BaseInvoiceNameForm(BaseInvoiceAddressForm):
