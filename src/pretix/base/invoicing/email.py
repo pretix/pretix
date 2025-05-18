@@ -21,17 +21,18 @@
 #
 
 from django import forms
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import Country
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.invoicing.transmission import TransmissionProvider, transmission_providers, TransmissionType, \
-    transmission_types
+from pretix.base.invoicing.transmission import (
+    TransmissionProvider, TransmissionType, transmission_providers,
+    transmission_types,
+)
 from pretix.base.models import Invoice, InvoiceAddress
-from pretix.base.services.mail import render_mail, mail, SendMailException
+from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.format import format_map
 
 

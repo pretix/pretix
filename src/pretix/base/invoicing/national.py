@@ -26,7 +26,9 @@ from django.utils.translation import pgettext_lazy
 from django_countries.fields import Country
 from localflavor.it.forms import ITSocialSecurityNumberField
 
-from pretix.base.invoicing.transmission import TransmissionType, transmission_types
+from pretix.base.invoicing.transmission import (
+    TransmissionType, transmission_types,
+)
 
 
 @transmission_types.new()
