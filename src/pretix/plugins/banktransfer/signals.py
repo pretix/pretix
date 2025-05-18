@@ -122,23 +122,6 @@ def html_head_presale(sender, request=None, **kwargs):
 
 @log_entry_types.new()
 class BanktransferOrderEmailInvoiceLogEntryType(OrderLogEntryType, ClearDataShredderMixin):
+    # For backwards-compatibility only
     action_type = 'pretix.plugins.banktransfer.order.email.invoice'
     plain = _('The invoice was sent to the designated email address.')
-
-
-settings_hierarkey.add_default(
-    'payment_banktransfer_invoice_email_subject',
-    default_type=LazyI18nString,
-    value=LazyI18nString.from_gettext(gettext_noop("Invoice {invoice_number}"))
-)
-settings_hierarkey.add_default(
-    'payment_banktransfer_invoice_email_text',
-    default_type=LazyI18nString,
-    value=LazyI18nString.from_gettext(gettext_noop("""Hello,
-
-you receive this message because an order for {event} was placed by {order_email} and we have been asked to forward the invoice to you.
-
-Best regards,  
-
-Your {event} team"""))  # noqa: W291
-)

@@ -50,7 +50,7 @@ from pretix.api.serializers.item import (
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
-from pretix.base.invoicing.transmission import TRANSMISSION_TYPES
+from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Invoice, InvoiceAddress, InvoiceLine, Item,
     ItemVariation, Order, OrderPosition, Question, QuestionAnswer,
@@ -158,7 +158,7 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
                 )
 
         if data.get("transmission_type"):
-            for t in TRANSMISSION_TYPES:
+            for t in get_transmission_types():
                 if data.get("transmission_type") == t.identifier:
                     if not t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
                         raise ValidationError({
@@ -186,7 +186,13 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
                                 raise ValidationError(
                                     {"transmission_info": {r: "This field is required for the selected type of invoice transmission."}}
                                 )
-                    break
+                elif t.exclusive:
+                    if t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
+                        raise ValidationError({
+                            "transmission_type": "The transmission type '%s' must be used for this country or address type." % (
+                                t.identifier,
+                            )
+                        })
             else:
                 raise ValidationError(
                     {"transmission_type": "Unknown transmission type."}
