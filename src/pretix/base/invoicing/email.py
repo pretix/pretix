@@ -80,6 +80,11 @@ class EmailTransmissionProvider(TransmissionProvider):
 
     def transmit(self, invoice: Invoice):
         recipient = invoice.invoice_to_transmission_info.get("transmission_email_address") or invoice.order.email
+        if not recipient:
+            if invoice.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
+                invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+                invoice.save()
+                return
         with language(invoice.order.locale, invoice.order.event.settings.region):
             context = get_email_context(
                 event=invoice.order.event,
@@ -90,6 +95,10 @@ class EmailTransmissionProvider(TransmissionProvider):
             )
             template = invoice.order.event.settings.get('mail_text_order_invoice', as_type=LazyI18nString)
             subject = invoice.order.event.settings.get('mail_subject_order_invoice', as_type=LazyI18nString)
+
+            if invoice.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
+                invoice.transmission_status = Invoice.TRANSMISSION_STATUS_INFLIGHT
+                invoice.save()
 
             try:
                 subject = format_map(subject, context)
