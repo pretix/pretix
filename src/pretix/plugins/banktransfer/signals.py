@@ -22,17 +22,14 @@
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import resolve, reverse
-from django.utils.translation import gettext_lazy as _, gettext_noop
-from i18nfield.strings import LazyI18nString
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.signals import register_payment_providers
 from pretix.control.signals import html_head, nav_event, nav_organizer
-
+from .payment import BankTransfer
 from ...base.logentrytypes import (
     ClearDataShredderMixin, OrderLogEntryType, log_entry_types,
 )
-from ...base.settings import settings_hierarkey
-from .payment import BankTransfer
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_banktransfer")
