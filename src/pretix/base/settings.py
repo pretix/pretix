@@ -2697,6 +2697,20 @@ You can change your order details and view the status of your order at
 Best regards,  
 Your {event} team"""))  # noqa: W291
     },
+    'mail_subject_order_invoice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Invoice {invoice_number}")),
+    },
+    'mail_text_order_invoice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+you receive this message because an order for {event} was placed by {order_email} and we have been asked to forward the invoice to you.
+
+Best regards,  
+
+Your {event} team"""))  # noqa: W291
+    },
     'mail_days_download_reminder': {
         'type': int,
         'default': None
