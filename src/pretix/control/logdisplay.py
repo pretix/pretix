@@ -524,6 +524,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
     'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
     'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
+    'pretix.event.order.invoice.sent': _('The invoice {full_invoice_no} has been sent.'),
     'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
     'pretix.event.order.custom_followup_at': _('The order\'s follow-up date has been updated.'),
     'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
