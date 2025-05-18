@@ -5,7 +5,9 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import Country
 
-from pretix.base.invoicing.transmission import TransmissionType, transmission_types
+from pretix.base.invoicing.transmission import (
+    TransmissionType, transmission_types,
+)
 
 
 class PeppolIdValidator:

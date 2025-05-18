@@ -685,7 +685,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         i.save(update_fields=[
                             "transmission_info"
                         ])
-                    invoice.order.log_action(
+                    i.order.log_action(
                         "pretix.event.order.invoice.sent",
                         data={
                             "full_invoice_no": i.full_invoice_no,
