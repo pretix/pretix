@@ -471,7 +471,7 @@ Vue.component('variation', {
         // Variation description
         + '<div class="pretix-widget-item-info-col">'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<strong :id="variation_label_id" class="pretix-widget-item-title">{{ variation.value }}</strong>'
+        + '<strong :id="variation_label_id" class="pretix-widget-item-title" role="heading" v-bind:aria-level="headingLevel">{{ variation.value }}</strong>'
         + '<div :id="variation_desc_id" class="pretix-widget-item-description" v-if="variation.description" v-html="variation.description"></div>'
         + '<p class="pretix-widget-item-meta" '
         + '   v-if="!variation.has_variations && variation.avail[1] !== null && variation.avail[0] === 100">'
@@ -500,6 +500,7 @@ Vue.component('variation', {
     props: {
         variation: Object,
         item: Object,
+        category: Object,
     },
     computed: {
         orig_price: function () {
@@ -523,6 +524,9 @@ Vue.component('variation', {
         aria_labelledby: function () {
             return [this.variation_label_id, this.variation_price_id].join(" ");
         },
+        headingLevel: function () {
+            return this.category.name ? '5' : '4';
+        },
     }
 });
 Vue.component('item', {
@@ -533,12 +537,12 @@ Vue.component('item', {
         + '<div class="pretix-widget-item-info-col">'
         + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture" :alt="picture_alt_text"></a>'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<a v-if="item.has_variations && show_toggle" :id="item_label_id" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
+        + '<a v-if="item.has_variations && show_toggle" :id="item_label_id" role="heading" v-bind:aria-level="headingLevel" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
         + '   @click.prevent.stop="expand"'
         + '>'
         + '{{ item.name }}'
         + '</a>'
-        + '<strong v-else class="pretix-widget-item-title" :id="item_label_id">{{ item.name }}</strong>'
+        + '<strong v-else class="pretix-widget-item-title" :id="item_label_id" role="heading" v-bind:aria-level="headingLevel">{{ item.name }}</strong>'
         + '<div class="pretix-widget-item-description" :id="item_desc_id" v-if="item.description" v-html="item.description"></div>'
         + '<p class="pretix-widget-item-meta" v-if="item.order_min && item.order_min > 1">'
         + '<small>{{ min_order_str }}</small>'
@@ -572,13 +576,14 @@ Vue.component('item', {
 
         // Variations
         + '<div :class="varClasses" v-if="item.has_variations" :id="item.id + \'-variants\'" ref="variations">'
-        + '<variation v-for="variation in item.variations" :variation="variation" :item="item" :key="variation.id">'
+        + '<variation v-for="variation in item.variations" :variation="variation" :item="item" :category="category" :key="variation.id">'
         + '</variation>'
         + '</div>'
 
         + '</div>'),
     props: {
         item: Object,
+        category: Object,
     },
     data: function () {
         return {
@@ -636,6 +641,9 @@ Vue.component('item', {
         picture_alt_text: function () {
             return django.interpolate(strings["image_of"], [this.item.name]);
         },
+        headingLevel: function () {
+            return this.category.name ? '4' : '3';
+        },
         item_label_id: function () {
             return this.$root.html_id + '-item-label-' + this.item.id;
         },
@@ -687,7 +695,7 @@ Vue.component('category', {
         + '<div class="pretix-widget-category-description" v-if="category.description" v-html="category.description">'
         + '</div>'
         + '<div class="pretix-widget-category-items">'
-        + '<item v-for="item in category.items" :item="item" :key="item.id"></item>'
+        + '<item v-for="item in category.items" :category="category" :item="item" :key="item.id"></item>'
         + '</div>'
         + '</div>'),
     props: {
@@ -1002,7 +1010,7 @@ Vue.component('pretix-widget-event-form', {
 
         // Event name
         + '<div class="pretix-widget-event-header" v-if="display_event_info">'
-        + '<strong>{{ $root.name }}</strong>'
+        + '<strong role="heading" aria-level="2">{{ $root.name }}</strong>'
         + '</div>'
 
         // Date range
