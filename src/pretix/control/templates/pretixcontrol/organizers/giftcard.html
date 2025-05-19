@@ -54,6 +54,14 @@
                                     {{ card.owner_ticket.order.code }}</a>-{{ card.owner_ticket.positionid }}
                             </dd>
                         {% endif %}
+                        {% if card.customer %}
+                            <dt>{% trans "Customer account" %}</dt>
+                            <dd>
+                                <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=card.customer.identifier %}">
+                                    {{ card.customer.identifier }} – {{ card.customer.email }}
+                                </a>
+                            </dd>
+                        {% endif %}
                     </dl>
                 </div>
             </div>

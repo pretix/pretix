@@ -3089,6 +3089,9 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
                 currency=order.event.currency,
                 testmode=order.testmode
             )
+            if order.customer:
+                giftcard.customer = order.customer
+                giftcard.save()
             giftcard.log_action('pretix.giftcards.created', data={})
             r = order.refunds.create(
                 order=order,

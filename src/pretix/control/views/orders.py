@@ -1223,6 +1223,9 @@ class OrderRefundView(OrderView):
                     currency=self.request.event.currency,
                     testmode=order.testmode
                 )
+                if order.customer:
+                    giftcard.customer = order.customer
+                    giftcard.save()
                 giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
                 refunds.append(OrderRefund(
                     order=order,

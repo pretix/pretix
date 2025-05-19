@@ -107,6 +107,7 @@ class Customer(LoggedModel):
     last_modified = models.DateTimeField(auto_now=True)
     external_identifier = models.CharField(max_length=255, verbose_name=_('External identifier'), null=True, blank=True)
     notes = models.TextField(verbose_name=_('Notes'), null=True, blank=True)
+    has_gift_cards = models.BooleanField(default=False, verbose_name=_('Has gift cards'))
 
     objects = ScopedManager(organizer='organizer')
 
