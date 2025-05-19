@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load icon %}
 {% load l10n %}
 {% load eventurl %}
 {% load money %}
@@ -82,9 +83,9 @@
                             {% if not event.settings.show_variations_expanded %}
                                 {% if item.best_variation_availability <= 10 %}
                                     {% if not item.min_price %}
-                                        <strong class="gone">{% trans "FULLY BOOKED" %}</strong>
+                                        <strong class="gone">{% icon "ban" %} {% trans "FULLY BOOKED" %}</strong>
                                     {% else %}
-                                        <strong class="gone">{% trans "SOLD OUT" %}</strong>
+                                        <strong class="gone">{% icon "ban" %} {% trans "SOLD OUT" %}</strong>
                                     {% endif %}
                                     {% if allow_waitinglist and item.allow_waitinglist %}
                                         <br/>

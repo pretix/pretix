@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
 
 {% if item.current_unavailability_reason == 'require_voucher' %}
@@ -20,14 +21,15 @@
 {% elif avail <= 10 %}
     <div class="col-md-2 col-sm-3 col-xs-6 availability-box gone">
         {% if price or original_price %}
-            <strong>{% trans "SOLD OUT" %}</strong>
+            <strong>{% icon "ban" %} {% trans "SOLD OUT" %}</strong>
         {% else %}
-            <strong>{% trans "FULLY BOOKED" %}</strong>
+            <strong>{% icon "ban" %} {% trans "FULLY BOOKED" %}</strong>
         {% endif %}
+            </span>
         {% if allow_waitinglist and item.allow_waitinglist %}
             <br/>
-            <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
-                <span class="fa fa-plus-circle" aria-hidden="true"></span>
+            <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}" class="btn btn-default btn-xs">
+                {% icon "plus-circle" %}
                 {% trans "Waiting list" %}
             </a>
         {% endif %}
