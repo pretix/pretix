@@ -7,6 +7,7 @@
 {% load thumb %}
 {% load eventsignal %}
 {% load rich_text %}
+{% load icon %}
 
 {% block title %}
     {% if "year" in request.GET %}
@@ -240,6 +241,25 @@
                     </div>
                 {% endif %}
             </form>
+            {% if ev.presale_is_running and display_add_to_cart %}
+                <dialog role="alertdialog"
+                    id="dialog-add-to-cart-none" 
+                    aria-labelledby="dialog-add-to-cart-none-label"
+                    aria-describedby="dialog-add-to-cart-none-description">
+                    <form class="modal-card" method="dialog">
+                        <div class="modal-card-icon">
+                            {% icon "exclamation" %}
+                        </div>
+                        <div class="modal-card-content">
+                            <h2 id="dialog-add-to-cart-none-label">{% trans "You have not selected any ticket." %}</h2>
+                            <p id="dialog-add-to-cart-none-description">{% trans "Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart." %}</p>
+                        </div>
+                        <div class="modal-card-confirm">
+                            <button>{% trans "Okay, I will select a ticket." %}</button>
+                        </div>
+                    </form>
+                </dialog>
+            {% endif %}
         {% endif %}
     {% endif %}
     </main>
