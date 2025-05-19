@@ -76,6 +76,7 @@ html {
     clip: auto;
 }
 #skip-to-main {
+    z-index: 9999;
     /* padding is needed to make focus-outline visible */
     padding: 8px;
     background-color: inherit;
