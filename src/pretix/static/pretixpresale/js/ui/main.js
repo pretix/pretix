@@ -572,35 +572,17 @@ $(function () {
     form_handlers($("body"));
 
     var local_tz = moment.tz.guess()
-    $("span[data-timezone], small[data-timezone], time[data-timezone]").each(function() {
+    $(".event-is-remote span[data-timezone]").each(function() {
         var t = moment.tz($(this).attr("datetime") || $(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
-        var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
 
-        $(this).tooltip({
-            "title": gettext("Time zone:") + " " + tz.abbr(t),
-            "template": tpl
-        });
         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
-            var $add = $("<span>")
-            $add.append(" ")
-            $add.append($("<span>").addClass("fa fa-globe"))
-            if ($(this).is("[data-time-short]")) {
-                $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat"))))
-            } else {
-                $add.addClass("text-muted")
-                $add.append(" " + gettext("Your local time:") + " ")
-                if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")))
-                } else {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")))
-                }
-            }
+            var format = t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD") ? "datetimeformat" : "timeformat";
+            var time_str = t.tz(local_tz).format($("body").data(format));
+            var $add = $("<small>").addClass("text-muted").append(" (" + gettext("Your local time:") + " ")
+            $add.append($('<time>').attr("datetime", time_str).text(time_str))
+            $add.append(" " + moment.tz.zone(local_tz).abbr(t) + ")");
             $add.insertAfter($(this));
-            $add.tooltip({
-                "title": gettext("Time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
-                "template": tpl
-            });
         }
     });
 

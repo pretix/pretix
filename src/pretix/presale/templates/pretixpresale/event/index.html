@@ -175,7 +175,7 @@
             </div>
         {% endif %}
         {% if not cart_namespace or subevent %}
-            <div>
+            <div{% if request.event.is_remote%} class="event-is-remote"{% endif %}>
                 {% include "pretixpresale/event/fragment_event_info.html" with event=request.event subevent=subevent ev=ev show_location=True %}
             </div>
             {% eventsignal event "pretix.presale.signals.front_page_top" request=request subevent=subevent %}
