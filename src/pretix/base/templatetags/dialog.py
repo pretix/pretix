@@ -22,6 +22,7 @@
 from django import template
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+
 from django.utils.translation import gettext_lazy as _  # NOQA
 
 register = template.Library()
@@ -38,7 +39,7 @@ def dialog(html_id, label, description, *args, **kwargs):
     }
     result = """
     <dialog {alert}
-        id="{id}" 
+        id="{id}"
         aria-labelledby="{id}-label"
         aria-describedby="{id}-description">
         <form method="dialog" class="modal-card form-horizontal">
