@@ -75,10 +75,10 @@ def enddialog(*args, **kwargs):
         ) if confirm else "",
     }
     result = """
-            </div>
-            <div class="modal-card-confirm">
-                {cancel}
-                {confirm}
+                <div class="modal-card-confirm">
+                    {confirm}
+                    {cancel}
+                </div>
             </div>
         </form>
     </dialog>
