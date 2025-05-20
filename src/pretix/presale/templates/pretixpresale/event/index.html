@@ -247,6 +247,7 @@
                 {% trans "Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart." as description_nothing_to_add %}
                 {% begindialog "dialog-nothing-to-add" label_nothing_to_add description_nothing_to_add icon="exclamation" %}
                     <p class="text-muted">More optional content that is not part of the description, useful for e.g. loading modal steps, that is way to long for aria-describedby.</p>
+                    <p class="modal-card-confirm"><button class="btn btn-primary">{% trans "OK" %}</button></p>
                 {% enddialog %}
             {% endif %}
         {% endif %}

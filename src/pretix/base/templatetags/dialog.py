@@ -52,35 +52,8 @@ def begindialog(html_id, label, description, *args, **kwargs):
 
 @register.simple_tag
 def enddialog(*args, **kwargs):
-    cancel = kwargs.get("cancel", False)
-    confirm = kwargs.get("confirm", True)
-    if not cancel and not confirm:
-        raise template.TemplateSyntaxError(
-            "You cannot have confirm=False if there is no cancel=True"
-        )
-        confirm = True
-
-    format_kwargs = {
-        "cancel": format_html(
-            '<button value="0" class="btn btn-{}">{}{}</button>',
-            kwargs.get("cancel_class", "danger"),
-            format_html('<span class="fa fa-{}" aria-hidden="true"></span> ', kwargs["cancel_icon"]) if "cancel_icon" in kwargs else "",
-            _("Cancel") if cancel is True else cancel,
-        ) if cancel else "",
-        "confirm": format_html(
-            '<button value="1" class="btn btn-{}">{}{}</button>',
-            kwargs.get("confirm_class", "primary"),
-            format_html('<span class="fa fa-{}" aria-hidden="true"></span> ', kwargs["confirm_icon"]) if "confirm_icon" in kwargs else "",
-            _("OK") if confirm is True else confirm,
-        ) if confirm else "",
-    }
-    result = """
-                <div class="modal-card-confirm">
-                    {confirm}
-                    {cancel}
-                </div>
+    return mark_safe("""
             </div>
         </form>
     </dialog>
-    """
-    return format_html(result, **format_kwargs)
+    """)
