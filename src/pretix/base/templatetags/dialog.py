@@ -28,7 +28,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def begindialog(html_id, label, description, *args, **kwargs):
+def dialog(html_id, label, description, *args, **kwargs):
     format_kwargs = {
         "id": html_id,
         "label": label,
