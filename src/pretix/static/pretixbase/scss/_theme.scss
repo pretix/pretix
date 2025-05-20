@@ -262,3 +262,78 @@ svg.svg-icon {
 @include table-row-variant('info', var(--pretix-brand-info-success-lighten-30), var(--pretix-brand-info-success-lighten-25));
 @include table-row-variant('warning', var(--pretix-brand-warning-lighten-40), var(--pretix-brand-warning-lighten-35));
 @include table-row-variant('danger', var(--pretix-brand-danger-lighten-30), var(--pretix-brand-danger-lighten-25));
+
+
+
+
+dialog {
+  border: none;
+  width: 80%;
+  max-width: 43em;
+  padding: 0;
+  box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+  background: white;
+  border-radius: $border-radius-large;
+
+  opacity: 0;
+  transition: all 1s allow-discrete;
+
+  .modal-card {
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-card-icon {
+    width: 100%;
+    background: $brand-primary;
+    font-size: 2em;
+    color: white;
+    text-align: center;
+    padding: 3px;
+  }
+  .modal-card-content {
+    padding: 1.5em;
+  }
+  .modal-card-content *:last-child {
+    margin-bottom: 0;
+  }
+  .modal-card-content *:first-child {
+    margin-top: 0;
+  }
+
+  .modal-card-confirm {
+    margin-top: 2em;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+  }
+}
+dialog[open] {
+  opacity: 1;
+}
+@starting-style {
+  dialog[open] {
+    opacity: 0;
+  }
+}
+dialog::backdrop {
+  background-color: rgba(255, 255, 255, .5);
+  transition: all 8s allow-discrete;
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  dialog {
+    .modal-card {
+      flex-direction: row;
+    }
+    .modal-card-content {
+      padding: 2em;
+    }
+    .modal-card-icon {
+      max-width: 6em;
+      width: 25%;
+      font-size: 4em;
+      padding: 10px;
+    }
+  }
+}
+
