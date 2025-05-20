@@ -491,7 +491,7 @@ $(function () {
         e.preventDefault();
         e.stopPropagation();
 
-        document.querySelector("#dialog-add-to-cart-none").showModal();
+        document.querySelector("#dialog-nothing-to-add").showModal();
     });
 
     $(".table-calendar td.has-events").click(function () {
