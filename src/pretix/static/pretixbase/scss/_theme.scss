@@ -281,9 +281,9 @@ dialog {
   .modal-card {
     display: flex;
     flex-direction: column;
+    align-content: stretch;
   }
   .modal-card-icon {
-    width: 100%;
     background: $brand-primary;
     font-size: 2em;
     color: white;
@@ -293,10 +293,10 @@ dialog {
   .modal-card-content {
     padding: 1.5em;
   }
-  .modal-card-content *:last-child {
+  .modal-card-content>*:last-child {
     margin-bottom: 0;
   }
-  .modal-card-content *:first-child {
+  .modal-card-content>*:first-child {
     margin-top: 0;
   }
 
@@ -305,6 +305,10 @@ dialog {
     display: flex;
     justify-content: flex-end;
     gap: 1em;
+    align-items: center;
+  }
+  .modal-card-confirm-spread {
+    justify-content: space-between;
   }
 }
 dialog[open] {
@@ -329,10 +333,8 @@ dialog::backdrop {
       padding: 2em;
     }
     .modal-card-icon {
-      max-width: 6em;
-      width: 25%;
       font-size: 4em;
-      padding: 6px;
+      padding: 6px 16px;
     }
   }
 }

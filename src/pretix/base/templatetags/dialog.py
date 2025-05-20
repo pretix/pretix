@@ -41,7 +41,7 @@ def dialog(html_id, label, description, *args, **kwargs):
         id="{id}" 
         aria-labelledby="{id}-label"
         aria-describedby="{id}-description">
-        <form method="dialog" class="modal-card">
+        <form method="dialog" class="modal-card form-horizontal">
             {icon}
             <div class="modal-card-content">
                 <h2 id="{id}-label">{label}</h2>
