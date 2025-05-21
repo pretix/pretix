@@ -107,10 +107,20 @@ $(function () {
     }
 
     _set_button_text();
+    function disableCancel(e) {
+        consent_modal.classList.add("shake-once");
+        consent_modal.addEventListener("animationend", function () {
+            consent_modal.classList.remove("shake-once");
+        }, { once: true });
+        e.preventDefault();
+    }
     if (show_dialog) {
-        // We use .css() instead of .show() because of some weird issue that only occurs in Firefox
-        // and only within the widget.
-        consent_modal.css("display", "block");
+        // disable ESC if we show the dialog the first time/due to changes
+        // Could be a helper with: window.pretix.dialog.disableCancel(consent_modal, {once: true})
+        consent_modal.addEventListener("cancel", disableCancel);
+        consent_modal.addEventListener("close", function () {
+            consent_modal.removeEventListener("cancel", disableCancel);
+        }, { once: true })
         consent_modal.showModal();
     }
 

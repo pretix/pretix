@@ -339,3 +339,17 @@ dialog::backdrop {
   }
 }
 
+.shake-once {
+  animation: shake .2s;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+@keyframes shake {
+  0% { transform: skewX(0deg); }
+  20% { transform: skewX(-5deg); }
+  40% { transform: skewX(5deg); }
+  60% { transform: skewX(-5deg); }
+  80% { transform: skewX(5deg); }
+  100% { transform: skewX(0deg); }
+}
