@@ -618,7 +618,7 @@ class Event(EventMixin, LoggedModel):
     )
     is_remote = models.BooleanField(
         default=False,
-        verbose_name=_("This event is remote or at least partially remote."),
+        verbose_name=_("This event is remote or partially remote."),
         help_text=_("This will be used to let users know if the event is in a different timezone and let’s us calculate users’ local times."),
     )
     geo_lat = models.FloatField(
