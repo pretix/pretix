@@ -49,7 +49,7 @@ html.rtl {
 }
 
 input[lang=ar], textarea[lang=ar], div[lang=ar], pre[lang=ar],
-input[lang=hw], textarea[lang=hw], div[lang=hw], pre[lang=hw] {
+input[lang=he], textarea[lang=he], div[lang=he], pre[lang=he] {
   /* Keep list of languages in sync with pretix._base_settings.LANGUAGES_RTL */
   direction: rtl;
 }
