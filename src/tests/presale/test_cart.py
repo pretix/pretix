@@ -1258,15 +1258,23 @@ class CartTest(CartTestMixin, TestCase):
                 'item_%d' % (self.ticket.id,): '1'
             }, follow=True)
             cp.refresh_from_db()
-            self.assertEqual(cp.expires, start_time + timedelta(minutes=20) + self.cart_reservation_time)
-            self.assertEqual(cp.max_extend, max_extend)
+            with scopes_disabled():
+                positions = list(CartPosition.objects.filter(cart_id=cp.cart_id))
+            self.assertEqual(len(positions), 2)
+            for pos in positions:
+                self.assertEqual(pos.expires, start_time + timedelta(minutes=20) + self.cart_reservation_time)
+                self.assertEqual(pos.max_extend, max_extend)
         with freezegun.freeze_time(start_time + timedelta(minutes=45)):
             self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
                 'item_%d' % (self.ticket.id,): '1'
             }, follow=True)
             cp.refresh_from_db()
-            self.assertEqual(cp.expires, max_extend)
-            self.assertEqual(cp.max_extend, max_extend)
+            with scopes_disabled():
+                positions = list(CartPosition.objects.filter(cart_id=cp.cart_id))
+            self.assertEqual(len(positions), 3)
+            for pos in positions:
+                self.assertEqual(pos.expires, max_extend)
+                self.assertEqual(pos.max_extend, max_extend)
         with freezegun.freeze_time(start_time + timedelta(days=1)):
             self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
                 'item_%d' % (self.ticket.id,): '1'
@@ -1364,6 +1372,28 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
         with scopes_disabled():
             self.assertFalse(CartPosition.objects.filter(id=cp1.id).exists())
+
+    def test_expired_renew_fails_partially_and_add_succeeds(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=23, expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
+            )
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
+        with scopes_disabled():
+            self.assertFalse(CartPosition.objects.filter(id=cp1.id).exists())
+            self.assertTrue(CartPosition.objects.filter(id=cp2.id).exists())
+            self.assertTrue(CartPosition.objects.filter(variation_id=self.shirt_red.id).exists())
 
     def test_subevent_renew_expired_successfully(self):
         self.event.has_subevents = True
