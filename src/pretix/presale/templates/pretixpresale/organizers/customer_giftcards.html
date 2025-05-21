@@ -1,0 +1,75 @@
+{% extends "pretixpresale/organizers/customer_base.html" %}
+{% load money %}
+{% load i18n %}
+{% load icon %}
+{% load eventurl %}
+{% load textbubble %}
+{% block title %}{% trans "Gift cards" %}{% endblock %}
+{% block inner %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% icon "id-badge" %}
+                <strong>{% trans "Gift cards" %}</strong> ({{ page_obj.paginator.count }})
+            </h3>
+        </div>
+        <div class="panel-body">
+            {% if gift_cards %}
+                <div class="event-list full-width-list alternating-rows">
+                    {% for gc in gift_cards %}
+                    <article class="row">
+                        <div class="col-xs-6">
+                            <h4>
+                                {{ gc }}
+                            </h4>
+                            {% if gc.issuance %}
+                            <p class="text-muted">
+                                {% icon "calendar" %}
+                                <span>{% trans "Issued on" %}:</span>
+                                {{ gc.issuance }}
+                            </p>
+                            {% endif %}
+                            <p class="text-muted">
+                                <small>
+                                {% if gc.expired %}
+                                    {% icon "minus-square-o" %}
+                                    {% trans "Expired since" %}
+                                    <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
+                                        {{ gc.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                    </time>
+                                {% elif gc.expires %}
+                                    {% icon "check" %}
+                                    {% trans "Valid until" %}
+                                    <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
+                                        {{ gc.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                    </time>
+                                {% else %}
+                                    {% icon "check" %}
+                                    {% trans "Valid" %}
+                                {% endif %}
+                                </small>
+                            </p>
+                            {% if gc.testmode %}
+                            <p>
+                                <small>
+                                {% textbubble "warning" %}
+                                    {% trans "TEST MODE" %}
+                                {% endtextbubble %}
+                                </small>
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            {% trans "Remaining value" %}:
+                            <p class="text-right">{{ gc.value|money:gc.currency }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center">{% trans "You don’t have any gift cards in your account currently." %}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}
