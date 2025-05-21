@@ -1400,8 +1400,8 @@ class CartTest(CartTestMixin, TestCase):
                 self.assertEqual(cp2.expires, now() + self.cart_reservation_time)
                 self.assertEqual(cp2.max_extend, now() + 11 * self.cart_reservation_time)
                 cp3 = CartPosition.objects.get(variation_id=self.shirt_red.id)
-                self.assertEqual(cp2.expires, now() + self.cart_reservation_time)
-                self.assertEqual(cp2.max_extend, now() + 11 * self.cart_reservation_time)
+                self.assertEqual(cp3.expires, now() + self.cart_reservation_time)
+                self.assertEqual(cp3.max_extend, now() + 11 * self.cart_reservation_time)
 
     def test_expired_cart_extend_fails_partially(self):
         start_time = datetime.datetime(2024, 1, 1, 10, 00, 00, tzinfo=datetime.timezone.utc)
