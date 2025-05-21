@@ -53,7 +53,7 @@
     {% endif %}
     {% if cookie_providers %}
         {% with request.event|default:request.organizer as sh %}
-            {% dialog "cookie-consent-modal" sh.settings.cookie_consent_dialog_title sh.settings.cookie_consent_dialog_text|rich_text icon="user-secret" %}
+            {% dialog "cookie-consent-modal" sh.settings.cookie_consent_dialog_title sh.settings.cookie_consent_dialog_text|rich_text icon="shield" %}
                 {% if sh.settings.cookie_consent_dialog_text_secondary %}
                     <div class="text-muted">
                         {{ sh.settings.cookie_consent_dialog_text_secondary|rich_text }}
