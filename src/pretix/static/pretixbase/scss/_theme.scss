@@ -356,8 +356,9 @@ dialog[open], dialog[open]::backdrop {
 }
 
 #lightbox-dialog {
-  max-width: none;
-  min-width: 32em;
+  width: fit-content;
+  max-width: 80%;
+  min-width: 24em;
 
   img {
     max-width: 100%;
