@@ -6,7 +6,7 @@ $(function () {
     var storage_key = $("#cookie-consent-storage-key").text();
     var widget_consent = $("#cookie-consent-from-widget").text();
     var consent_checkboxes = $("#cookie-consent-details input[type=checkbox][name]");
-    var consent_modal = $("#cookie-consent-modal");
+    var consent_modal = document.getElementById("cookie-consent-modal");
 
     function update_consent(consent, sessionOnly) {
         if (storage_key && window.sessionStorage && sessionOnly) {
@@ -108,25 +108,32 @@ $(function () {
 
     _set_button_text();
     if (show_dialog) {
-        // We use .css() instead of .show() because of some weird issue that only occurs in Firefox
-        // and only within the widget.
-        consent_modal.css("display", "block");
+        consent_modal.showModal();
+        consent_modal.addEventListener("cancel", function() {
+            // Dialog was initially shown, interpret Escape as „do not consent to new providers“
+            var consent = {};
+            consent_checkboxes.each(function () {
+                consent[this.name] = storage_val[this.name] || false;
+            });
+            update_consent(consent, false);
+        }, {once : true});
     }
 
-    $("#cookie-consent-button-yes, #cookie-consent-button-no").on("click", function () {
-        consent_modal.hide();
+    consent_modal.addEventListener("close", function () {
+        if (!consent_modal.returnValue) {// ESC, do not save
+            return;
+        }
         var consent = {};
-        var consent_all = this.id == "cookie-consent-button-yes";
+        var consent_all = consent_modal.returnValue == "yes";
         consent_checkboxes.each(function () {
             consent[this.name] = this.checked = consent_all || this.checked;
         });
         if (consent_all) _set_button_text();
-        // Always save explicit consent to permanent storage
         update_consent(consent, false);
     });
     consent_checkboxes.on("change", _set_button_text);
     $("#cookie-consent-reopen").on("click", function (e) {
-        consent_modal.show()
+        consent_modal.showModal()
         e.preventDefault()
         return true
     })
