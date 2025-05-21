@@ -46,6 +46,19 @@
         </div>
     </div>
 </div>
+
+<dialog id="lightbox-dialog" role="alertdialog" aria-labelledby="lightbox-label">
+    <form method="dialog" class="modal-card">
+        <div class="modal-card-content">
+            <figure class="text-center text-muted">
+                <img />
+                <figcaption id="lightbox-label"></figcaption>
+            </figure>
+            <button id="lightbox-close" class="btn btn-default btn-xs">{% icon "close" %} {% trans "Close" %}</button>
+        </div>
+    </form>
+</dialog>
+
 {% if request.organizer and request.organizer.settings.cookie_consent %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
     {% if cookie_consent_from_widget %}

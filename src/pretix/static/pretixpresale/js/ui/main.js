@@ -714,7 +714,28 @@ $(function () {
     });
 
     // Lightbox
-    lightbox.init();
+    (function() {
+        var dialog = document.getElementById("lightbox-dialog");
+        var img = dialog.querySelector("img");
+        var caption = dialog.querySelector("figcaption");
+        var padding = parseInt(window.getComputedStyle(dialog.querySelector('.modal-card-content')).paddingLeft);
+        img.addEventListener("load", function (e) {
+            dialog.style.width = this.naturalWidth + 2*padding + "px";
+        });
+        dialog.addEventListener("close", function () {
+            this.style.width = 0;
+        })
+        $("a[data-lightbox]").on("click", function (e) {
+            e.preventDefault();
+            var label = this.querySelector("img").alt;
+            img.src = this.href;
+            img.alt = label;
+            caption.textContent = label;
+            dialog.showModal();
+        });
+    })();
+
+
 
     // free-range price input auto-check checkbox/set count-input to 1 if 0
     $("[data-checked-onchange]").each(function() {
