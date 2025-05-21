@@ -276,7 +276,7 @@ dialog {
   border-radius: $border-radius-large;
 
   opacity: 0;
-  transition: all 1s allow-discrete;
+  transition: all .5s allow-discrete;
 
   .modal-card {
     display: flex;
@@ -311,17 +311,18 @@ dialog {
     justify-content: space-between;
   }
 }
-dialog[open] {
+dialog::backdrop {
+  background-color: rgba(255, 255, 255, .5);
+  opacity: 0;
+  transition: all .5s allow-discrete;
+}
+dialog[open], dialog[open]::backdrop {
   opacity: 1;
 }
 @starting-style {
-  dialog[open] {
+  dialog[open], dialog[open]::backdrop  {
     opacity: 0;
   }
-}
-dialog::backdrop {
-  background-color: rgba(255, 255, 255, .5);
-  transition: all 8s allow-discrete;
 }
 
 @media screen and (min-width: $screen-sm-min) {
