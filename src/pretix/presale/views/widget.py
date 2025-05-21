@@ -117,11 +117,16 @@ def widget_js_etag(request, version, lang, **kwargs):
 @gzip_page
 @condition(etag_func=widget_css_etag)
 @cache_page(60)
-def widget_css(request, **kwargs):
+def widget_css(request, version, **kwargs):
     o = getattr(request, 'event', request.organizer)
 
+    # TODO: handle version deprecation
+    css_path = 'pretixpresale/scss/widget.v{}.scss'.format(version)
+    if not finders.find(css_path):
+        css_path = 'pretixpresale/scss/widget.scss'
+
     tpl = get_template('pretixpresale/widget_dummy.html')
-    et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
+    et = html.fromstring(tpl.render({"widget_css": css_path})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
     with open(finders.find(et), 'r') as f:
         widget_css = f.read()
 

@@ -1,0 +1,1092 @@
+body {
+  border: 10px solid red;
+}
+
+// not included, will be dynamically prepended @import "../../pretixbase/scss/_theme_variables.scss";
+@import "../../pretixbase/scss/_bootstrap_vars.scss";
+@import "../../bootstrap/scss/bootstrap/variables";
+@import "../../bootstrap/scss/bootstrap/mixins";
+
+.pretix-widget-hidden {
+  display: none;
+}
+.pretix-widget, .pretix-widget-alert-box {
+  a {
+    color: $link-color;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: $link-hover-color;
+      text-decoration: $link-hover-decoration;
+    }
+    &:focus {
+      outline: thin dotted;
+      outline: 5px auto -webkit-focus-ring-color;
+      outline-offset: -2px;
+    }
+  }
+  img {
+    border: 0;
+  }
+  b, strong {
+    font-weight: bold;
+  }
+  h3 {
+    font-size: $font-size-h3;
+    font-weight: bold;
+    padding: 0 15px;
+  }
+  button, input[type="button"], a.pretix-widget-button {
+    overflow: visible;
+    text-transform: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 0;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    text-decoration: none;
+    @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $btn-border-radius-base);
+    @include user-select(none);
+    @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border, $btn-primary-background-active, $btn-primary-border-active, $btn-primary-border-hover);
+
+    &,
+    &:active,
+    &.active {
+      &:focus,
+      &.focus {
+        text-decoration: none;
+        @include tab-focus;
+      }
+    }
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      cursor: $cursor-disabled;
+      @include opacity(.65);
+      @include box-shadow(none);
+    }
+    &.pretix-widget-btn-default {
+      @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border, darken($btn-default-bg, 10%), darken($btn-default-border, 25%), darken($btn-default-border, 12%));
+    }
+  }
+  label.pretix-widget-btn-checkbox {
+    @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border, darken($btn-default-bg, 10%), darken($btn-default-border, 25%), darken($btn-default-border, 12%));
+    border-width: 1px;
+    border-style: solid;
+    position: relative;
+    cursor: pointer;
+    padding: 6px 24px;
+    min-height: 32px;
+    box-sizing: border-box;
+    color: #333;
+    input {
+      position: absolute;
+      left: 10px;
+    }
+    &:has(input:checked) {
+      background-color: #e6e6e6;
+      border-color: #adadad;
+    }
+  }
+  .pretix-widget-icon-cart {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: text-bottom;
+    fill: #333;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.267 6.756c0-.312-.202-.563-.453-.563-.252 0-.454.251-.454.563 0 .312.202.563.454.563.251 0 .453-.251.453-.563Zm3.174 0c0-.312-.202-.563-.454-.563-.251 0-.453.251-.453.563 0 .312.202.563.453.563.252 0 .454-.251.454-.563Zm.453-4.785c0-.154-.103-.282-.227-.282H1.413c-.035-.211-.039-.563-.28-.563H.227c-.124 0-.227.128-.227.282 0 .153.103.281.227.281h.722l.627 3.62c-.049.127-.216.466-.216.603 0 .153.103.281.227.281h3.627c.124 0 .227-.128.227-.281 0-.154-.103-.282-.227-.282H1.955c.036-.088.085-.18.085-.281 0-.102-.032-.212-.046-.308l3.698-.537c.117-.018.202-.141.202-.281V1.971Z' transform='matrix(2.52069 0 0 2.02994 -.035 -.523)'/%3E%3C/svg%3E%0A");
+  }
+  input:checked + .pretix-widget-icon-cart {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.534 3.097a.317.317 0 0 1-.067.197L3.56 4.42a.207.207 0 0 1-.16.084.207.207 0 0 1-.159-.084l-.907-1.126a.317.317 0 0 1-.067-.197c0-.154.103-.282.227-.282.06 0 .117.031.159.084l.521.642V2.252c0-.154.102-.281.226-.281.124 0 .227.127.227.281v1.289l.521-.642a.205.205 0 0 1 .159-.084c.124 0 .227.128.227.282ZM2.267 6.756c0-.312-.202-.563-.453-.563-.252 0-.454.251-.454.563 0 .312.202.563.454.563.251 0 .453-.251.453-.563Zm3.174 0c0-.312-.202-.563-.454-.563-.251 0-.453.251-.453.563 0 .312.202.563.453.563.252 0 .454-.251.454-.563Zm.453-4.785c0-.154-.103-.282-.227-.282H1.413c-.035-.211-.039-.563-.28-.563H.227c-.124 0-.227.128-.227.282 0 .153.103.281.227.281h.722l.627 3.62c-.049.127-.216.466-.216.603 0 .153.103.281.227.281h3.627c.124 0 .227-.128.227-.281 0-.154-.103-.282-.227-.282H1.955c.036-.088.085-.18.085-.281 0-.102-.032-.212-.046-.308l3.698-.537c.117-.018.202-.141.202-.281V1.971Z' transform='matrix(2.52069 0 0 2.02994 -.035 -.523)'/%3E%3C/svg%3E%0A");
+  }
+  input[type="text"], input[type="number"], select {
+    line-height: normal;
+    border: 1px solid $input-border;
+    border-radius: $input-border-radius;
+    height: $input-height-base;
+    padding: $padding-base-vertical $padding-base-horizontal;
+    color: $input-color;
+    background-color: $input-bg;
+    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075));
+    @include transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s);
+    @include placeholder;
+    $color-rgba: rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6);
+
+    &:focus {
+      border-color: $input-border-focus;
+      outline: 0;
+      @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px $color-rgba);
+    }
+  }
+  input[type=number] {
+    padding-right: 0; // Setting the padding-right to zero, as some versions Firefox render the arrow-buttons on number inputs useless.
+  }
+  input[type="checkbox"],
+  input[type="radio"] {
+    box-sizing: border-box; // 1
+    padding: 0; // 2
+    &:focus {
+      outline: thin dotted;
+      outline: 5px auto -webkit-focus-ring-color;
+      outline-offset: -2px;
+    }
+  }
+}
+.pretix-widget-use-custom-spinners input[type=number] {
+  padding-right: $padding-base-horizontal;
+  -moz-appearance: textfield;
+}
+.pretix-widget-use-custom-spinners input[type=number]::-webkit-outer-spin-button,
+.pretix-widget-use-custom-spinners input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.pretix-widget {
+  margin: 10px 0;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  position: relative;
+  min-height: 208px;
+  border-radius: $input-border-radius;
+
+  .pretix-widget-resume-button {
+    float: right;
+    margin-left: 10px;
+  }
+
+  .pretix-widget-clickable {
+    cursor: pointer;
+  }
+
+  .pretix-widget-info-message {
+    padding: 10px;
+    text-align: left;
+    margin: 10px 0;
+    background-color: white;
+    border: 2px solid $brand-info;
+    color: $state-info-text;
+    border-radius: $alert-border-radius;
+  }
+
+  .pretix-widget-error-message {
+    padding: 10px;
+    text-align: center;
+    margin: 10px 0;
+    background-color: white;
+    border: 2px solid $brand-danger;
+    color: $state-danger-text;
+    border-radius: $alert-border-radius;
+  }
+
+  .pretix-widget-error-action {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .pretix-widget-loading {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, .8);
+    text-align: center;
+  }
+
+  @-moz-keyframes pretix-widget-spin {
+    100% {
+      -moz-transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes pretix-widget-spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pretix-widget-spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  .pretix-widget-loading svg {
+    margin: 40px;
+    /*Fallback*/
+    position: absolute;
+    top: 50%;
+    margin-top: -64px;
+    /*Sticky*/
+    position: -webkit-sticky;
+    position: sticky;
+    top: Min(50vh, 50%);/* use uppercase M to use CSS-min and not SASS-min*/
+
+    -webkit-animation: pretix-widget-spin 6s linear infinite;
+    -moz-animation: pretix-widget-spin 6s linear infinite;
+    animation: pretix-widget-spin 6s linear infinite;
+  }
+
+  .pretix-widget-item-row, .pretix-widget-category {
+    clear: both;
+  }
+
+  .pretix-widget-item-title {
+    font-weight: bold;
+  }
+
+  .pretix-widget-item-row {
+    padding: 10px 0;
+  }
+
+  .pretix-widget-category {
+    margin: 10px 0;
+  }
+
+  .pretix-widget-category-description {
+    padding: 0 15px;
+  }
+
+  .pretix-widget-category-name {
+    margin: 10px 0 0 0;
+  }
+
+  .pretix-widget-item-info-col {
+    width: 50%;
+    float: left;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+
+  .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
+    width: 25%;
+    float: left;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+
+  .pretix-widget-item-description p, .pretix-widget-item-meta {
+    margin: 0;
+  }
+
+  .pretix-widget-item-price-col {
+    text-align: right;
+  }
+
+  del.pretix-widget-pricebox-original-price {
+    color: $text-muted;
+  }
+
+  ins.pretix-widget-pricebox-new-price {
+    font-size: 120%;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .pretix-widget-clear {
+    clear: both;
+  }
+
+  .pretix-widget-category-description p {
+    margin: 0 0 10px;
+  }
+
+  .pretix-widget-pricebox-tax {
+    display: block;
+  }
+
+  .pretix-widget-item-count-group {
+    display: flex;
+  }
+
+  .pretix-widget-item-count-group input {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .pretix-widget-item-count-group button span {
+    vertical-align: 25%;
+    line-height: 0.5;
+  }
+
+  .pretix-widget-item-count-dec {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    width: 2.5em;
+    z-index: 2;
+  }
+
+  .pretix-widget-item-count-inc {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 2.5em;
+  }
+
+  .pretix-widget-item-count-multiple {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    text-align: center;
+  }
+
+  .pretix-widget-pricebox-price-input {
+    display: inline;
+    width: 100px;
+    box-sizing: border-box;
+    text-align: right;
+  }
+
+  .pretix-widget-item-count-single-label {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+
+  .pretix-widget-attribution {
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .pretix-widget-item-picture {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+    float: left;
+  }
+
+  .pretix-widget-action {
+    margin-left: 75%;
+    width: 25%;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+
+  .pretix-widget-action button {
+    width: 100%;
+  }
+
+  .pretix-widget-voucher-text {
+    margin: 10px 0;
+    padding: 0 15px;
+  }
+
+  .pretix-widget-voucher-headline {
+    margin: 10px 0 0 0;
+  }
+
+  .pretix-widget-voucher-input-wrap {
+    padding: 0 15px;
+    width: 75%;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .pretix-widget-voucher input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pretix-widget-voucher-button-wrap {
+    padding: 0 15px;
+    width: 25%;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .pretix-widget-voucher button {
+    width: 100%;
+  }
+
+  .pretix-widget-seating-waitinglist {
+    margin: 15px 0;
+  }
+
+  .pretix-widget-seating-waitinglist-text {
+    padding: 0 15px;
+    width: 75%;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .pretix-widget-seating-waitinglist-button-wrap {
+    padding: 0 15px;
+    width: 25%;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .pretix-widget-seating-waitinglist-button {
+    width: 100%;
+  }
+
+  .pretix-widget-item-with-picture .pretix-widget-main-item-row .pretix-widget-item-title-and-description {
+    margin-left: 70px;
+  }
+
+  .pretix-widget-item-availability-col {
+    text-align: center;
+
+    .pretix-widget-collapse-indicator::before {
+      content: "";
+      display: inline-block;
+      width: $font-size-base;
+      height: $font-size-base;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 14 14' xmlns='http://www.w3.org/2000/svg' xml:space='preserve'%3E%3Cpath fill='#{url-friendly-colour($link-color)}' d='M6.395 4.151a.268.268 0 0 0-.177.077l-.386.386a.259.259 0 0 0-.077.177c.002.067.029.13.077.179l3.033 3.031-3.033 3.032a.255.255 0 0 0-.077.177.253.253 0 0 0 .077.178l.386.385a.268.268 0 0 0 .177.077.27.27 0 0 0 .178-.077l3.595-3.595a.259.259 0 0 0 .077-.177.255.255 0 0 0-.077-.176L6.573 4.228a.257.257 0 0 0-.178-.077Z'/%3E%3C/svg%3E");
+      transition: transform .5s;
+    }
+
+    .pretix-widget-collapse-indicator[aria-expanded=true]::before {
+      transform: rotate(90deg);
+    }
+  }
+
+  .pretix-widget-availability-gone {
+    font-weight: bold;
+    color: $brand-danger;
+    text-transform: uppercase;
+  }
+
+  .pretix-widget-availability-unavailable {
+    color: $brand-danger;
+  }
+
+  .pretix-widget-item-variations {
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    -moz-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -moz-transition-timing-function: ease-in-out;
+    -webkit-transition-timing-function: ease-in-out;
+    -o-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+  }
+  .pretix-widget-event-header {
+    padding-top: 10px;
+    text-align: center;
+  }
+  .pretix-widget-event-details {
+    padding-top: 10px;
+    text-align: center;
+  }
+  .pretix-widget-event-location {
+    display: none;
+    padding-top: 10px;
+    text-align: center;
+  }
+  .pretix-widget-event-description {
+    padding: 0 15px;
+  }
+  .pretix-widget-event-list-back {
+    padding-top: 10px;
+    text-align: center;
+    display: block;
+    a {
+      display: block;
+    }
+  }
+  .pretix-widget-back {
+    padding-bottom: 10px;
+    text-align: center;
+    display: block;
+    a {
+      display: block;
+    }
+  }
+
+  .pretix-widget-event-list {
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  .pretix-widget-event-list-entry {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 0;
+    flex-wrap: wrap;
+    color: $text-color;
+
+    &:hover, &:active, &:focus {
+      background: $gray-lighter;
+      text-decoration: none;
+    }
+
+    .pretix-widget-event-list-entry-name {
+      width: 50%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    .pretix-widget-event-list-entry-location {
+      padding: 5px;
+      box-sizing: border-box;
+      display: none;
+    }
+    .pretix-widget-event-list-entry-date {
+      width: 25%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    .pretix-widget-event-list-entry-availability {
+      width: 25%;
+      text-align: right;
+      padding: 7px 5px 3px;
+      box-sizing: border-box;
+      span {
+        display: inline;
+        padding: 2px 6px 3px;
+        font-size: 75%;
+        font-weight: bold;
+        line-height: 1;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .pretix-widget-event-availability-orange .pretix-widget-event-list-entry-availability span,
+  .pretix-widget-event-availability-orange.pretix-widget-event-calendar-event {
+    background-color: $brand-warning;
+  }
+  .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span,
+  .pretix-widget-event-availability-none.pretix-widget-event-calendar-event {
+    background-color: $brand-primary;
+  }
+  .pretix-widget-event-availability-green .pretix-widget-event-list-entry-availability span,
+  .pretix-widget-event-availability-green.pretix-widget-event-calendar-event {
+    background-color: $brand-success;
+  }
+  .pretix-widget-event-availability-red .pretix-widget-event-list-entry-availability span,
+  .pretix-widget-event-availability-red.pretix-widget-event-calendar-event {
+    background-color: $brand-danger;
+  }
+  .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span {
+    border-left: 10px solid $brand-warning;
+  }
+  .pretix-widget-event-availability-low.pretix-widget-event-calendar-event {
+    border-right: 10px solid $brand-warning;
+  }
+
+  .pretix-widget-event-calendar {
+    padding-top: 10px;
+    word-break: break-word;
+
+    .pretix-widget-event-week-table {
+      display: flex;
+      flex-direction: row;
+
+      .pretix-widget-event-week-col {
+        flex: 1;
+        margin: 0 5px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .pretix-widget-event-calendar-head {
+      display: flex;
+      flex-direction: row;
+
+      strong {
+        width: 50%;
+        text-align: center;
+        display: block;
+      }
+      .pretix-widget-event-calendar-next-month, .pretix-widget-event-calendar-previous-month {
+        display: block;
+        width: 25%;
+      }
+      .pretix-widget-event-calendar-next-month {
+        text-align: right;
+      }
+    }
+    .pretix-widget-event-calendar-event {
+      display: block;
+      border-radius: 4px;
+      padding: 5px;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 5px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .pretix-widget-event-calendar-table {
+      width: 100%;
+
+      th, td {
+        width: 14.285714285714286%;
+        vertical-align: top;
+        padding: 10px 5px;
+      }
+    }
+    .pretix-widget-event-calendar-day {
+      font-weight: bold;
+    }
+  }
+
+  .pretix-widget-seating-link-wrapper {
+    padding: 0 15px;
+    margin: 15px 0 10px;
+  }
+  .pretix-widget-seating-link {
+    display: block;
+    width: 100%;
+  }
+}
+
+
+.pretix-widget-event-list-filter-form {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  margin-bottom: 15px;
+
+  .pretix-widget-event-list-filter-field {
+    display: block;
+    width: 100%;
+    margin: 0 15px 0 0;
+
+    label {
+      display: inline-block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    select {
+      display: block;
+      width: 100%;
+    }
+  }
+  .pretix-widget-event-list-filter-field:last-child {
+    margin: 0;
+  }
+}
+.pretix-widget.pretix-widget-mobile .pretix-widget-event-list-filter-form {
+  display: block;
+
+  .pretix-widget-event-list-filter-field {
+    display: block;
+    margin: 0 0 5px;
+  }
+}
+
+@keyframes pretix-widget-bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pretix-widget-alert-holder {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 16777271;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s;  /* do not animate visibility or we'll have a flashing thing on load */
+
+  &.pretix-widget-alert-shown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+
+  .bounce-enter-active {
+    animation: pretix-widget-bounce-in .5s;
+  }
+  .bounce-leave-active {
+    animation: pretix-widget-bounce-in .5s reverse;
+  }
+
+  .pretix-widget-alert-box {
+    position: fixed;
+    left: 50%;
+    width: 600px;
+    margin-left: -300px;
+    top: 100px;
+    background: white;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    box-sizing: border-box;
+    padding: 42px 20px 20px 20px;
+    text-align: center;
+    font-size: 20px;
+
+    p:first-child {
+      margin-top: 0;
+    }
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .pretix-widget-alert-icon {
+    position: fixed;
+    left: 50%;
+    width: 64px;
+    margin-left: -32px;
+    top: 68px;
+  }
+}
+.pretix-widget-frame-holder {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 16777271;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s, visibility 0.5s;
+
+  .pretix-widget-frame-loading {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+
+  .pretix-widget-frame-loading svg {
+    margin: 40px;
+    -webkit-animation: pretix-widget-spin 6s linear infinite;
+    -moz-animation: pretix-widget-spin 6s linear infinite;
+    animation: pretix-widget-spin 6s linear infinite;
+  }
+
+  &.pretix-widget-frame-shown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+
+  .pretix-widget-frame-inner {
+    position: fixed;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    background: white;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    box-sizing: border-box;
+    padding: 10px;
+  }
+
+  .pretix-widget-frame-close {
+    position: fixed;
+    right: 10%;
+    top: 10%;
+    width: 24px;
+    height: 24px;
+    background: $brand-primary;
+    margin: -12px -12px 0 0;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    text-align: center;
+  }
+
+  .pretix-widget-frame-close a {
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-decoration: none;
+    padding: 4px 0;
+    display: inline-block;
+    line-height: 16px;
+  }
+
+  .pretix-widget-frame-close svg {
+    display: inline-block;
+    border: none;
+  }
+
+  .pretix-widget-frame-inner iframe {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.pretix-widget-lightbox-holder {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 16777271;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s, visibility 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .pretix-widget-lightbox-loading svg {
+    margin: 40px;
+    -webkit-animation: pretix-widget-spin 6s linear infinite;
+    -moz-animation: pretix-widget-spin 6s linear infinite;
+    animation: pretix-widget-spin 6s linear infinite;
+  }
+
+  &.pretix-widget-lightbox-shown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+
+  .pretix-widget-lightbox-inner {
+    position: relative;
+    background: white;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    box-sizing: border-box;
+    padding: 10px;
+    max-width: 90%;
+    max-height: 90%;
+  }
+  &.pretix-widget-lightbox-isloading .pretix-widget-lightbox-inner {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+
+  .pretix-widget-lightbox-image {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  .pretix-widget-lightbox-image img {
+    max-width: 80vw;
+    max-height: 80vh;
+    object-fit: scale-down;
+  }
+  .pretix-widget-lightbox-image figcaption {
+    margin: 0.5em 0 0;
+  }
+
+  .pretix-widget-lightbox-close {
+    position: absolute;
+    right: -12px;
+    top: -12px;
+    width: 24px;
+    height: 24px;
+    background: $brand-primary;
+    margin: 0;
+    border: none;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-decoration: none;
+    padding: 4px 0;
+    display: inline-block;
+    line-height: 16px;
+    cursor: pointer;
+  }
+
+  .pretix-widget-lightbox-close svg {
+    display: inline-block;
+    border: none;
+  }
+}
+
+.pretix-widget-primary-color {
+  /* in SVG */
+  fill: $brand-primary;
+}
+
+.pretix-widget-event-list-load-more {
+  text-align: center;
+}
+
+.pretix-widget.pretix-widget-mobile {
+  .pretix-widget-event-week-table {
+    display: block;
+
+    .pretix-widget-event-week-col {
+      flex: 1;
+      margin: 10px 0;
+    }
+  }
+
+  .pretix-widget-item-info-col {
+    width: 100%;
+    float: none;
+    margin-bottom: 5px;
+  }
+  .pretix-widget-item-info-col:after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
+    width: 50%;
+    min-width: 140px;
+  }
+  .pretix-widget-action {
+    width: 100%;
+    margin-left: 0;
+  }
+  .pretix-widget-voucher-input-wrap {
+    width: 100%;
+    float: none;
+  }
+  .pretix-widget-voucher-button-wrap {
+    width: 100%;
+    float: none;
+    margin-top: 10px;
+  }
+
+  .pretix-widget-event-list-entry {
+    .pretix-widget-event-list-entry-name {
+      width: 100%;
+    }
+    .pretix-widget-event-list-entry-location {
+      width: 100%;
+    }
+    .pretix-widget-event-list-entry-date {
+      width: 50%;
+    }
+    .pretix-widget-event-list-entry-availability {
+      width: 50%;
+    }
+  }
+
+  .pretix-widget-event-calendar {
+    .pretix-widget-event-calendar-events {
+      display: none;
+    }
+    .pretix-widget-event-week-table {
+      .pretix-widget-event-calendar-events {
+        display: block;
+      }
+    }
+    td.pretix-widget-has-events {
+      background: $brand-primary;
+      color: white;
+      cursor: pointer;
+      &.pretix-widget-day-availability-red {
+        background: $brand-danger;
+      }
+      &.pretix-widget-day-availability-green {
+        background: $brand-success;
+      }
+      &.pretix-widget-day-availability-low {
+        border-right: 5px solid $brand-warning;
+      }
+      &.pretix-widget-day-availability-orange {
+        background: $brand-warning;
+      }
+    }
+
+    .pretix-widget-event-calendar-head {
+      display: block;
+      strong {
+        width: 100%;
+        display: block;
+      }
+      .pretix-widget-event-calendar-next-month, .pretix-widget-event-calendar-previous-month {
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .pretix-widget-frame-holder {
+    .pretix-widget-frame-inner {
+      left: 50%;
+      margin-left: -540px;
+      width: 1080px;
+    }
+    .pretix-widget-frame-close {
+      left: 50%;
+      margin-left: 528px;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .pretix-widget-frame-holder .pretix-widget-frame-inner {
+    left: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: $brand-primary;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    padding: 40px 0 0 0;
+  }
+  .pretix-widget-frame-holder .pretix-widget-frame-close {
+    right: 20px;
+    top: 20px;
+    background: white;
+    svg path {
+      fill: $brand-primary;
+    }
+  }
+}

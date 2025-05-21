@@ -172,7 +172,7 @@ event_patterns = [
 
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
-    re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='event.widget.css'),
+    re_path(r'^widget/v(?P<version>[1,2]+).css$', pretix.presale.views.widget.widget_css, name='event.widget.css'),
     re_path(r'^(?P<subevent>\d+)/widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
 
@@ -195,7 +195,7 @@ organizer_patterns = [
 
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='organizer.widget.productlist'),
-    re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
+    re_path(r'^widget/v(?P<version>[1,2]+).css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
 
     re_path(r'^theme.css$', pretix.presale.views.theme.theme_css, name='organizer.theme.css'),
 
