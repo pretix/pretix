@@ -109,9 +109,9 @@ def widget_css_etag(request, **kwargs):
         return f'{_get_source_cache_key()}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
 
 
-def widget_js_etag(request, lang, **kwargs):
+def widget_js_etag(request, version, lang, **kwargs):
     gs = GlobalSettingsObject()
-    return gs.settings.get('widget_checksum_{}'.format(lang))
+    return gs.settings.get('widget_checksum_{}_{}'.format(version, lang))
 
 
 @gzip_page
@@ -134,7 +134,7 @@ def widget_css(request, **kwargs):
     return resp
 
 
-def generate_widget_js(lang):
+def generate_widget_js(version, lang):
     code = []
     with language(lang):
         # Provide isolation
@@ -165,11 +165,17 @@ def generate_widget_js(lang):
         i18n_js = i18n_js.replace(r"value.includes(", r"-1 != value.indexOf(")  # remove if we really want to break IE11 for good
         code.append(i18n_js)
 
+        # if widget-version not available, then use latest
+        # should only happen here on latest version as widget_js() should handle redirection for deprecated versions
+        widget_path = 'pretixpresale/js/widget/widget.v{}.js'.format(version)
+        if not finders.find(widget_path):
+            widget_path = 'pretixpresale/js/widget/widget.js'
+
         files = [
             'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
             'pretixpresale/js/widget/docready.js',
             'pretixpresale/js/widget/floatformat.js',
-            'pretixpresale/js/widget/widget.js',
+            widget_path,
         ]
         for fname in files:
             f = finders.find(fname)
@@ -188,11 +194,11 @@ def generate_widget_js(lang):
 
 @gzip_page
 @condition(etag_func=widget_js_etag)
-def widget_js(request, lang, **kwargs):
+def widget_js(request, version, lang, **kwargs):
     if lang not in [lc for lc, ll in settings.LANGUAGES]:
         raise Http404()
 
-    cached_js = cache.get('widget_js_data_{}'.format(lang))
+    cached_js = cache.get('widget_js_data_{}_{}'.format(version, lang))
     if cached_js and not settings.DEBUG:
         resp = HttpResponse(cached_js, content_type='text/javascript')
         resp._csp_ignore = True
@@ -200,7 +206,7 @@ def widget_js(request, lang, **kwargs):
         return resp
 
     gs = GlobalSettingsObject()
-    fname = gs.settings.get('widget_file_{}'.format(lang))
+    fname = gs.settings.get('widget_file_{}_{}'.format(version, lang))
     resp = None
     if fname and not settings.DEBUG:
         if isinstance(fname, File):
@@ -208,21 +214,22 @@ def widget_js(request, lang, **kwargs):
         try:
             data = default_storage.open(fname).read()
             resp = HttpResponse(data, content_type='text/javascript')
-            cache.set('widget_js_data_{}'.format(lang), data, 3600 * 4)
+            cache.set('widget_js_data_{}_{}'.format(version, lang), data, 3600 * 4)
         except:
             logger.exception('Failed to open widget.js')
 
     if not resp:
-        data = generate_widget_js(lang).encode()
+        # TODO: handle redirect to current version
+        data = generate_widget_js(version, lang).encode()
         checksum = hashlib.sha1(data).hexdigest()
         if not settings.DEBUG:
             newname = default_storage.save(
-                'widget/widget.{}.{}.js'.format(lang, checksum),
+                'widget/widget.{}.{}.{}.js'.format(version, lang, checksum),
                 ContentFile(data)
             )
-            gs.settings.set('widget_file_{}'.format(lang), 'file://' + newname)
-            gs.settings.set('widget_checksum_{}'.format(lang), checksum)
-            cache.set('widget_js_data_{}'.format(lang), data, 3600 * 4)
+            gs.settings.set('widget_file_{}_{}'.format(version, lang), 'file://' + newname)
+            gs.settings.set('widget_checksum_{}_{}'.format(version, lang), checksum)
+            cache.set('widget_js_data_{}_{}'.format(version, lang), data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
     resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
