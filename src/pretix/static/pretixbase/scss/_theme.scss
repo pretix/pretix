@@ -267,6 +267,7 @@ svg.svg-icon {
 
 
 dialog {
+  position: relative;
   border: none;
   width: 80%;
   max-width: 43em;
@@ -276,7 +277,7 @@ dialog {
   border-radius: $border-radius-large;
 
   opacity: 0;
-  transition: all .5s allow-discrete;
+  transition: opacity .5s allow-discrete;
 
   .modal-card {
     display: flex;
@@ -314,7 +315,7 @@ dialog {
 dialog::backdrop {
   background-color: rgba(255, 255, 255, .5);
   opacity: 0;
-  transition: all .5s allow-discrete;
+  transition: opacity .5s allow-discrete;
 }
 dialog[open], dialog[open]::backdrop {
   opacity: 1;
@@ -327,7 +328,7 @@ dialog[open], dialog[open]::backdrop {
 
 @media screen and (min-width: $screen-sm-min) {
   dialog {
-    .modal-card {
+    .modal-card:has(.modal-card-icon) {
       flex-direction: row;
     }
     .modal-card-content {
