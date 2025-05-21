@@ -12,11 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='customer',
-            name='has_gift_cards',
-            field=models.BooleanField(default=False),
-        ),
-        migrations.AddField(
             model_name='giftcard',
             name='customer',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='customer_gift_cards', to='pretixbase.customer'),
