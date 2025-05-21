@@ -94,9 +94,10 @@ def _get_source_cache_key(version):
         with open(finders.find("pretixbase/scss/_theme_variables.scss"), "r") as f:
             checksum.update(f.read().encode())
 
-        css_path = 'pretixpresale/scss/widget.scss' if version == version_max else 'pretixpresale/scss/widget.v{}.scss'.format(version)
-        tpl = get_template('pretixpresale/widget_dummy.html')
-        et = html.fromstring(tpl.render({"widget_css": css_path})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
+        template_path = 'pretixpresale/widget_dummy.html' if version == version_max else 'pretixpresale/widget_dummy.v{}.html'.format(version)
+
+        tpl = get_template(template_path)
+        et = html.fromstring(tpl.render()).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
         checksum.update(et.encode())
         _source_cache_key = checksum.hexdigest()[:12]
     return _source_cache_key
@@ -135,10 +136,10 @@ def widget_css(request, version, **kwargs):
         }))
     o = getattr(request, 'event', request.organizer)
 
-    css_path = 'pretixpresale/scss/widget.scss' if version == version_max else 'pretixpresale/scss/widget.v{}.scss'.format(version)
+    template_path = 'pretixpresale/widget_dummy.html' if version == version_max else 'pretixpresale/widget_dummy.v{}.html'.format(version)
 
-    tpl = get_template('pretixpresale/widget_dummy.html')
-    et = html.fromstring(tpl.render({"widget_css": css_path})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
+    tpl = get_template(template_path)
+    et = html.fromstring(tpl.render()).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
     with open(finders.find(et), 'r') as f:
         widget_css = f.read()
 
