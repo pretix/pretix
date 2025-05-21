@@ -1759,11 +1759,19 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_cancel_all_in_order(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.addons.create(addon_category=self.shirt.category)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+
+        assert self.order.positions.count() == 3
         self.ocm.cancel(self.op1)
         self.ocm.cancel(self.op2)
         with self.assertRaises(OrderError):
             self.ocm.commit()
-        assert self.order.positions.count() == 2
+        assert self.order.positions.count() == 3
 
     @classscope(attr='o')
     def test_empty(self):

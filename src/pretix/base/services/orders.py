@@ -2768,7 +2768,11 @@ class OrderChangeManager:
 
     def _check_complete_cancel(self):
         current = self.order.positions.count()
-        cancels = len([o for o in self._operations if isinstance(o, (self.CancelOperation, self.SplitOperation))])
+        cancels = sum([
+            1 + o.position.addons.count() for o in self._operations if isinstance(o, self.CancelOperation)
+        ]) + len([
+            o for o in self._operations if isinstance(o, self.SplitOperation)
+        ])
         adds = len([o for o in self._operations if isinstance(o, self.AddOperation)])
         if current > 0 and current - cancels + adds < 1:
             raise OrderError(self.error_messages['complete_cancel'])
