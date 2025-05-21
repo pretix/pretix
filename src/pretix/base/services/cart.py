@@ -45,6 +45,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
+from django.db.models.aggregates import Min
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import (
@@ -275,7 +276,10 @@ class CartManager:
     }
 
     def __init__(self, event: Event, cart_id: str, sales_channel: SalesChannel,
-                 invoice_address: InvoiceAddress=None, widget_data=None, expiry=None):
+                 invoice_address: InvoiceAddress=None, widget_data=None, reservation_time: timedelta=None):
+        """
+        Creates a new CartManager for an event.
+        """
         self.event = event
         self.cart_id = cart_id
         self.real_now_dt = now()
@@ -286,11 +290,17 @@ class CartManager:
         self._subevents_cache = {}
         self._variations_cache = {}
         self._seated_cache = {}
-        self._expiry = None
-        self._explicit_expiry = expiry
         self.invoice_address = invoice_address
         self._widget_data = widget_data or {}
         self._sales_channel = sales_channel
+        self.num_extended_positions = 0
+
+        if reservation_time:
+            self._reservation_time = reservation_time
+        else:
+            self._reservation_time = timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
+        self._expiry = self.real_now_dt + self._reservation_time
+        self._max_expiry_extend = self.real_now_dt + (self._reservation_time * 11)
 
     @property
     def positions(self):
@@ -304,14 +314,6 @@ class CartManager:
         if (item, subevent) not in self._seated_cache:
             self._seated_cache[item, subevent] = item.seat_category_mappings.filter(subevent=subevent).exists()
         return self._seated_cache[item, subevent]
-
-    def _calculate_expiry(self):
-        if self._explicit_expiry:
-            self._expiry = self._explicit_expiry
-        else:
-            self._expiry = self.real_now_dt + timedelta(
-                minutes=self.event.settings.get('reservation_time', as_type=int)
-            )
 
     def _check_presale_dates(self):
         if self.event.presale_start and time_machine_now(self.real_now_dt) < self.event.presale_start:
@@ -329,9 +331,27 @@ class CartManager:
                     raise CartError(error_messages['payment_ended'])
 
     def _extend_expiry_of_valid_existing_positions(self):
+        # real_now_dt is initialized at CartManager instantiation, so it's slightly in the past. Add a small
+        # delta to reduce risk of extending already expired CartPositions.
+        padded_now_dt = self.real_now_dt + timedelta(seconds=5)
+
+        # Make sure we do not extend past the max_extend timestamp, allowing users to extend their valid positions up
+        # to 11 times the reservation time. If we add new positions to the cart while valid positions exist, the new
+        # positions' reservation will also be limited to max_extend of the oldest position.
+        # Only after all positions expire, an ExtendOperation may reset max_extend to another 11x reservation_time.
+        max_extend_existing = self.positions.filter(expires__gt=padded_now_dt).aggregate(m=Min('max_extend'))['m']
+        if max_extend_existing:
+            self._expiry = min(self._expiry, max_extend_existing)
+            self._max_expiry_extend = max_extend_existing
+
         # Extend this user's cart session to ensure all items in the cart expire at the same time
         # We can extend the reservation of items which are not yet expired without risk
-        self.positions.filter(expires__gt=self.real_now_dt).update(expires=self._expiry)
+        if self._expiry > padded_now_dt:
+            self.num_extended_positions += self.positions.filter(
+                expires__gt=padded_now_dt, expires__lt=self._expiry,
+            ).update(
+                expires=self._expiry,
+            )
 
     def _delete_out_of_timeframe(self):
         err = None
@@ -1246,6 +1266,7 @@ class CartManager:
                             item=op.item,
                             variation=op.variation,
                             expires=self._expiry,
+                            max_extend=self._max_expiry_extend,
                             cart_id=self.cart_id,
                             voucher=op.voucher,
                             addon_to=op.addon_to if op.addon_to else None,
@@ -1294,7 +1315,9 @@ class CartManager:
                                         event=self.event,
                                         item=b.item,
                                         variation=b.variation,
-                                        expires=self._expiry, cart_id=self.cart_id,
+                                        expires=self._expiry,
+                                        max_extend=self._max_expiry_extend,
+                                        cart_id=self.cart_id,
                                         voucher=None,
                                         addon_to=cp,
                                         subevent=b.subevent,
@@ -1321,12 +1344,14 @@ class CartManager:
                         op.position.delete()
                     elif available_count == 1:
                         op.position.expires = self._expiry
+                        op.position.max_extend = self._max_expiry_extend
                         op.position.listed_price = op.listed_price
                         op.position.price_after_voucher = op.price_after_voucher
                         # op.position.price will be updated by recompute_final_prices_and_taxes()
                         if op.position.pk not in deleted_positions:
                             try:
-                                op.position.save(force_update=True, update_fields=['expires', 'listed_price', 'price_after_voucher'])
+                                op.position.save(force_update=True, update_fields=['expires', 'max_extend', 'listed_price', 'price_after_voucher'])
+                                self.num_extended_positions += 1
                             except DatabaseError:
                                 # Best effort... The position might have been deleted in the meantime!
                                 pass
@@ -1416,13 +1441,10 @@ class CartManager:
     def commit(self):
         self._check_presale_dates()
         self._check_max_cart_size()
-        self._calculate_expiry()
 
         err = self._delete_out_of_timeframe()
         err = self.extend_expired_positions() or err
         err = err or self._check_min_per_voucher()
-
-        self.real_now_dt = now()
 
         self._extend_expiry_of_valid_existing_positions()
         err = self._perform_operations() or err
@@ -1626,6 +1648,31 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
                 cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
                 cm.clear()
                 cm.commit()
+            except LockTimeoutException:
+                self.retry()
+        except (MaxRetriesExceededError, LockTimeoutException):
+            raise CartError(error_messages['busy'])
+
+
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
+    """
+    Resets the expiry time of a cart to the configured reservation time of this event.
+    Limited to 11x the reservation time.
+
+    :param event: The event ID in question
+    :param cart_id: The cart ID of the cart to modify
+    """
+    with language(locale), time_machine_now_assigned(override_now_dt):
+        try:
+            sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
+        except SalesChannel.DoesNotExist:
+            raise CartError("Invalid sales channel.")
+        try:
+            try:
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
+                cm.commit()
+                return cm.num_extended_positions
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
