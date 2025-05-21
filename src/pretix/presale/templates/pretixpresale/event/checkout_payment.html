@@ -9,6 +9,17 @@
 {% endblock %}
 {% block inner %}
     <h3 class="sr-only">{% trans "Payment" %}</h3>
+    {% if customer_gift_cards %}
+        <div class="alert alert-info">
+            <p><strong>
+                <span class="sr-only">Info:</span>
+                {% trans "Your available Giftcards:" %}
+            </strong></p>
+            {% for c in customer_gift_cards %}
+                <p>{{ c }}: Value {{ c.value|money:request.event.currency }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
     {% if current_payments %}
         <p>{% trans "You already selected the following payment methods:" %}</p>
         <form method="post">
