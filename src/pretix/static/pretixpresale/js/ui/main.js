@@ -390,6 +390,13 @@ $(function () {
         sessionStorage.removeItem('scrollpos');
     }
 
+    $("dialog").on("mousedown", function (e) {
+        if (e.target == this) {
+            // dialog has no padding, so this triggers only onclick on backdrop
+            this.close();
+        }
+    });
+
     $(".accordion-radio").click(function() {
         var $input = $("input", this);
         if (!$input.prop("checked")) $input.prop('checked', true).trigger("change");
