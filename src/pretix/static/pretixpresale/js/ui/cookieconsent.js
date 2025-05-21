@@ -107,21 +107,16 @@ $(function () {
     }
 
     _set_button_text();
-    function disableCancel(e) {
-        consent_modal.classList.add("shake-once");
-        consent_modal.addEventListener("animationend", function () {
-            consent_modal.classList.remove("shake-once");
-        }, { once: true });
-        e.preventDefault();
-    }
     if (show_dialog) {
-        // disable ESC if we show the dialog the first time/due to changes
-        // Could be a helper with: window.pretix.dialog.disableCancel(consent_modal, {once: true})
-        consent_modal.addEventListener("cancel", disableCancel);
-        consent_modal.addEventListener("close", function () {
-            consent_modal.removeEventListener("cancel", disableCancel);
-        }, { once: true })
         consent_modal.showModal();
+        consent_modal.addEventListener("cancel", function() {
+            // Dialog was initially shown, interpret Escape as „do not consent to new providers“
+            var consent = {};
+            consent_checkboxes.each(function () {
+                consent[this.name] = storage_val[this.name] || false;
+            });
+            update_consent(consent, false);
+        }, {once : true});
     }
 
     consent_modal.addEventListener("close", function () {
