@@ -711,6 +711,7 @@ BOOTSTRAP3 = {
         'bulkedit_inline': 'pretix.control.forms.renderers.InlineBulkEditFieldRenderer',
         'checkout': 'pretix.presale.forms.renderers.CheckoutFieldRenderer',
     },
+    'set_placeholder': False,
 }
 
 PASSWORD_HASHERS = [
