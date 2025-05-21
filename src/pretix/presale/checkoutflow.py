@@ -1403,6 +1403,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         ctx['remaining'] = self._total_order_value - sum(p['payment_amount'] for p in ctx['current_payments']) + sum(p['fee'] for p in ctx['current_payments'])
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
+        ctx['customer_gift_cards'] = self.cart_customer.usable_gift_cards
 
         if len(self.provider_forms) == 1:
             ctx['selected'] = self.provider_forms[0]['provider'].identifier
