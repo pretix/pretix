@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.urls import include, re_path
+from django.urls import include, path, re_path
 from django.views.decorators.csrf import csrf_exempt
 
 import pretix.presale.views.cart
@@ -172,7 +172,7 @@ event_patterns = [
 
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
-    re_path(r'^widget/v(?P<version>[1,2]+).css$', pretix.presale.views.widget.widget_css, name='event.widget.css'),
+    path('widget/v<int:version>.css', pretix.presale.views.widget.widget_css, name='event.widget.css'),
     re_path(r'^(?P<subevent>\d+)/widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
 
@@ -195,7 +195,7 @@ organizer_patterns = [
 
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='organizer.widget.productlist'),
-    re_path(r'^widget/v(?P<version>[1,2]+).css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
+    path('widget/v<int:version>.css', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
 
     re_path(r'^theme.css$', pretix.presale.views.theme.theme_css, name='organizer.theme.css'),
 
@@ -235,5 +235,5 @@ locale_patterns = [
     re_path(r'^robots.txt$', pretix.presale.views.robots.robots_txt, name='robots.txt'),
     re_path(r'^browserconfig.xml$', pretix.presale.views.theme.browserconfig_xml, name='browserconfig.xml'),
     re_path(r'^site.webmanifest$', pretix.presale.views.theme.webmanifest, name='site.webmanifest'),
-    re_path(r'^widget/v(?P<version>[1,2]+)\.(?P<lang>[a-zA-Z0-9_\-]+)\.js$', pretix.presale.views.widget.widget_js, name='widget.js'),
+    path('widget/v<int:version>.<slug:lang>.js', pretix.presale.views.widget.widget_js, name='widget.js'),
 ]

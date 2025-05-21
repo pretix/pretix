@@ -40,10 +40,12 @@ from django.db.models import Q
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.template import Context, Engine
 from django.template.loader import get_template
+from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import get_language, gettext, pgettext
 from django.utils.translation.trans_real import DjangoTranslation
+from django.shortcuts import redirect
 from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
@@ -81,15 +83,20 @@ logger = logging.getLogger(__name__)
 # we never change static source without restart, so we can cache this thread-wise
 _source_cache_key = None
 
+version_min = 1
+version_max = 2
+version_default = 1 # used for output in widget-embed-code
 
-def _get_source_cache_key():
+def _get_source_cache_key(version):
     global _source_cache_key
     checksum = hashlib.sha256()
     if not _source_cache_key:
         with open(finders.find("pretixbase/scss/_theme_variables.scss"), "r") as f:
             checksum.update(f.read().encode())
+
+        css_path = 'pretixpresale/scss/widget.scss' if version == version_max else 'pretixpresale/scss/widget.v{}.scss'.format(version)
         tpl = get_template('pretixpresale/widget_dummy.html')
-        et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
+        et = html.fromstring(tpl.render({"widget_css": css_path})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
         checksum.update(et.encode())
         _source_cache_key = checksum.hexdigest()[:12]
     return _source_cache_key
@@ -99,14 +106,14 @@ def indent(s):
     return s.replace('\n', '\n  ')
 
 
-def widget_css_etag(request, **kwargs):
+def widget_css_etag(request, version, **kwargs):
     # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
     if hasattr(request, 'event'):
-        return (f'{_get_source_cache_key()}-'
+        return (f'{_get_source_cache_key(version)}-'
                 f'{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}-'
                 f'{request.event.cache.get_or_set("css_version", default=lambda: int(time.time()))}')
     else:
-        return f'{_get_source_cache_key()}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
+        return f'{_get_source_cache_key(version)}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
 
 
 def widget_js_etag(request, version, lang, **kwargs):
@@ -118,12 +125,17 @@ def widget_js_etag(request, version, lang, **kwargs):
 @condition(etag_func=widget_css_etag)
 @cache_page(60)
 def widget_css(request, version, **kwargs):
+    if version > version_max:
+        raise Http404()
+    if version < version_min:
+        return redirect(reverse('presale:event.widget.css' if hasattr(request, 'event') else 'organizer.widget.css', kwargs={
+            'version': version_min,
+            'organizer': request.organizer.slug,
+            'event': request.event.slug if hasattr(request, 'event') else None,
+        }))
     o = getattr(request, 'event', request.organizer)
 
-    # TODO: handle version deprecation
-    css_path = 'pretixpresale/scss/widget.v{}.scss'.format(version)
-    if not finders.find(css_path):
-        css_path = 'pretixpresale/scss/widget.scss'
+    css_path = 'pretixpresale/scss/widget.scss' if version == version_max else 'pretixpresale/scss/widget.v{}.scss'.format(version)
 
     tpl = get_template('pretixpresale/widget_dummy.html')
     et = html.fromstring(tpl.render({"widget_css": css_path})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
@@ -170,17 +182,11 @@ def generate_widget_js(version, lang):
         i18n_js = i18n_js.replace(r"value.includes(", r"-1 != value.indexOf(")  # remove if we really want to break IE11 for good
         code.append(i18n_js)
 
-        # if widget-version not available, then use latest
-        # should only happen here on latest version as widget_js() should handle redirection for deprecated versions
-        widget_path = 'pretixpresale/js/widget/widget.v{}.js'.format(version)
-        if not finders.find(widget_path):
-            widget_path = 'pretixpresale/js/widget/widget.js'
-
         files = [
             'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
             'pretixpresale/js/widget/docready.js',
             'pretixpresale/js/widget/floatformat.js',
-            widget_path,
+            'pretixpresale/js/widget/widget.js' if version == version_max else 'pretixpresale/js/widget/widget.v{}.js'.format(version),
         ]
         for fname in files:
             f = finders.find(fname)
@@ -200,8 +206,14 @@ def generate_widget_js(version, lang):
 @gzip_page
 @condition(etag_func=widget_js_etag)
 def widget_js(request, version, lang, **kwargs):
-    if lang not in [lc for lc, ll in settings.LANGUAGES]:
+    if version > version_max or lang not in [lc for lc, ll in settings.LANGUAGES]:
         raise Http404()
+
+    if version < version_min:
+        return redirect(reverse('presale:widget.js', kwargs={
+            'version': version_min,
+            'lang': lang,
+        }))
 
     cached_js = cache.get('widget_js_data_{}_{}'.format(version, lang))
     if cached_js and not settings.DEBUG:
@@ -224,7 +236,6 @@ def widget_js(request, version, lang, **kwargs):
             logger.exception('Failed to open widget.js')
 
     if not resp:
-        # TODO: handle redirect to current version
         data = generate_widget_js(version, lang).encode()
         checksum = hashlib.sha1(data).hexdigest()
         if not settings.DEBUG:
