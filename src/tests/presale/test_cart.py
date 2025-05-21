@@ -1395,6 +1395,26 @@ class CartTest(CartTestMixin, TestCase):
             self.assertTrue(CartPosition.objects.filter(id=cp2.id).exists())
             self.assertTrue(CartPosition.objects.filter(variation_id=self.shirt_red.id).exists())
 
+    def test_expired_cart_extend_fails_partially(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10), max_extend=now() - timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=23, expires=now() - timedelta(minutes=10), max_extend=now() - timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/cart/extend' % (self.orga.slug, self.event.slug), {
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
+        with scopes_disabled():
+            self.assertFalse(CartPosition.objects.filter(id=cp1.id).exists())
+            self.assertTrue(CartPosition.objects.filter(id=cp2.id).exists())
+
     def test_subevent_renew_expired_successfully(self):
         self.event.has_subevents = True
         self.event.save()
