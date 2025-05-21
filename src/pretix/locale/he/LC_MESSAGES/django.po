@@ -1,12 +1,16 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: HE PRETIX\n"
+"PO-Revision-Date: 2025-05-21 10:46+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Language-Team: Hebrew <https://translate.pretix.eu/projects/pretix/pretix/he/"
+">\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: POEditor.com\n"
-"Project-Id-Version: HE PRETIX\n"
-"Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -27519,7 +27523,10 @@ msgstr "תפוס לחלוטין"
 msgid "\n"
 "                                                        from %(start_date)s\n"
 "                                                    "
-msgstr "מ־%(start_date)s"
+msgstr ""
+"\n"
+"                                                        מ־%(start_date)s\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
@@ -27539,7 +27546,10 @@ msgstr "עד"
 msgid "\n"
 "                                    from %(start_date)s\n"
 "                                "
-msgstr "מ־%(start_date)s"
+msgstr ""
+"\n"
+"                                    מ־%(start_date)s\n"
+"                                "
 
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:51
 msgid "Not yet on sale"
@@ -28136,4 +28146,3 @@ msgstr "גישה לכתיבה"
 #: pretix/settings.py:802
 msgid "Kosovo"
 msgstr "קוסובו"
-
