@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 11:08+0000\n"
+"POT-Creation-Date: 2025-05-21 19:50+0000\n"
 "PO-Revision-Date: 2021-08-09 13:10+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -363,6 +363,13 @@ msgstr "Нет"
 msgid "close"
 msgstr "Закрыть"
 
+#: pretix/static/pretixbase/js/addressform.js:59
+#: pretix/static/pretixpresale/js/ui/main.js:537
+#, fuzzy
+#| msgid "Cart expired"
+msgid "required"
+msgstr "Срок действия корзины истёк"
+
 #: pretix/static/pretixbase/js/asynctask.js:58
 #: pretix/static/pretixbase/js/asynctask.js:135
 #, fuzzy
@@ -660,58 +667,62 @@ msgstr "Создаются сообщения…"
 msgid "Unknown error."
 msgstr "Неизвестная ошибка."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:330
-msgid "Your color has great contrast and is very easy to read!"
+#: pretix/static/pretixcontrol/js/ui/main.js:332
+#, fuzzy
+#| msgid "Your color has great contrast and is very easy to read!"
+msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Ваш цвет обладает высокой контрастностью и очень упрощает чтение."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:334
-msgid "Your color has decent contrast and is probably good-enough to read!"
+#: pretix/static/pretixcontrol/js/ui/main.js:336
+#, fuzzy
+#| msgid "Your color has decent contrast and is probably good-enough to read!"
+msgid ""
+"Your color has decent contrast and is sufficient for minimum accessibility "
+"requirements."
 msgstr ""
 "Ваш цвет обладает достаточной контрастностью и, вероятно, вполне подходит "
 "для чтения."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:338
+#: pretix/static/pretixcontrol/js/ui/main.js:340
 msgid ""
-"Your color has bad contrast for text on white background, please choose a "
-"darker shade."
+"Your color has insufficient contrast to white. Accessibility of your site "
+"will be impacted."
 msgstr ""
-"Ваш цвет обладает низкой контрастностью для текста на белом фоне, "
-"пожалуйста, выберите более тёмный оттенок."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:454
-#: pretix/static/pretixcontrol/js/ui/main.js:474
+#: pretix/static/pretixcontrol/js/ui/main.js:456
+#: pretix/static/pretixcontrol/js/ui/main.js:476
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:472
+#: pretix/static/pretixcontrol/js/ui/main.js:474
 msgid "All"
 msgstr "Все"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:473
+#: pretix/static/pretixcontrol/js/ui/main.js:475
 msgid "None"
 msgstr "Ни одного"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:477
+#: pretix/static/pretixcontrol/js/ui/main.js:479
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:820
+#: pretix/static/pretixcontrol/js/ui/main.js:822
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:823
+#: pretix/static/pretixcontrol/js/ui/main.js:825
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:981
+#: pretix/static/pretixcontrol/js/ui/main.js:983
 msgid "Use a different name internally"
 msgstr "Используйте другое внутреннее имя"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1021
+#: pretix/static/pretixcontrol/js/ui/main.js:1023
 msgid "Click to close"
 msgstr "Нажмите, чтобы закрыть"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1102
+#: pretix/static/pretixcontrol/js/ui/main.js:1104
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -759,40 +770,30 @@ msgstr[0] "Резервирование позиций в вашей корзи�
 msgstr[1] "Резервирование позиций в вашей корзине прекращено."
 msgstr[2] "Резервирование позиций в вашей корзине прекращено."
 
-#: pretix/static/pretixpresale/js/ui/main.js:215
+#: pretix/static/pretixpresale/js/ui/main.js:216
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "от %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:223
+#: pretix/static/pretixpresale/js/ui/main.js:224
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "от %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:239
+#: pretix/static/pretixpresale/js/ui/main.js:240
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:458
-msgid "Please enter a quantity for one of the ticket types."
-msgstr "Пожалуйста, введите количество для одного из типов билетов."
-
-#: pretix/static/pretixpresale/js/ui/main.js:510
-#, fuzzy
-#| msgid "Cart expired"
-msgid "required"
-msgstr "Срок действия корзины истёк"
-
-#: pretix/static/pretixpresale/js/ui/main.js:554
-#: pretix/static/pretixpresale/js/ui/main.js:574
+#: pretix/static/pretixpresale/js/ui/main.js:581
+#: pretix/static/pretixpresale/js/ui/main.js:601
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:565
+#: pretix/static/pretixpresale/js/ui/main.js:592
 msgid "Your local time:"
 msgstr ""
 
@@ -1207,6 +1208,16 @@ msgstr "ноябрь"
 #: pretix/static/pretixpresale/js/widget/widget.js:101
 msgid "December"
 msgstr "декабрь"
+
+#~ msgid ""
+#~ "Your color has bad contrast for text on white background, please choose a "
+#~ "darker shade."
+#~ msgstr ""
+#~ "Ваш цвет обладает низкой контрастностью для текста на белом фоне, "
+#~ "пожалуйста, выберите более тёмный оттенок."
+
+#~ msgid "Please enter a quantity for one of the ticket types."
+#~ msgstr "Пожалуйста, введите количество для одного из типов билетов."
 
 #~ msgctxt "widget"
 #~ msgid "See variations"

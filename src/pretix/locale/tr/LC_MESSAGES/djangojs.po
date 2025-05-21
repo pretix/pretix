@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 11:08+0000\n"
+"POT-Creation-Date: 2025-05-21 19:50+0000\n"
 "PO-Revision-Date: 2023-11-16 04:00+0000\n"
 "Last-Translator: Ramazan Sancar <ramazansancar4545@gmail.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -364,6 +364,13 @@ msgstr "Hiçbiri"
 msgid "close"
 msgstr "Kapalı"
 
+#: pretix/static/pretixbase/js/addressform.js:59
+#: pretix/static/pretixpresale/js/ui/main.js:537
+#, fuzzy
+#| msgid "Cart expired"
+msgid "required"
+msgstr "Sepetinizin süresi doldu"
+
 #: pretix/static/pretixbase/js/asynctask.js:58
 #: pretix/static/pretixbase/js/asynctask.js:135
 #, fuzzy
@@ -667,54 +674,56 @@ msgstr "Mesaj oluşturuluyor…"
 msgid "Unknown error."
 msgstr "Bilinmeyen hata."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:330
-msgid "Your color has great contrast and is very easy to read!"
+#: pretix/static/pretixcontrol/js/ui/main.js:332
+msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:334
-msgid "Your color has decent contrast and is probably good-enough to read!"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/main.js:338
+#: pretix/static/pretixcontrol/js/ui/main.js:336
 msgid ""
-"Your color has bad contrast for text on white background, please choose a "
-"darker shade."
+"Your color has decent contrast and is sufficient for minimum accessibility "
+"requirements."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:454
-#: pretix/static/pretixcontrol/js/ui/main.js:474
+#: pretix/static/pretixcontrol/js/ui/main.js:340
+msgid ""
+"Your color has insufficient contrast to white. Accessibility of your site "
+"will be impacted."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:456
+#: pretix/static/pretixcontrol/js/ui/main.js:476
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:472
+#: pretix/static/pretixcontrol/js/ui/main.js:474
 msgid "All"
 msgstr "Herşey"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:473
+#: pretix/static/pretixcontrol/js/ui/main.js:475
 msgid "None"
 msgstr "Hiçbiri"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:477
+#: pretix/static/pretixcontrol/js/ui/main.js:479
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:820
+#: pretix/static/pretixcontrol/js/ui/main.js:822
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:823
+#: pretix/static/pretixcontrol/js/ui/main.js:825
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:981
+#: pretix/static/pretixcontrol/js/ui/main.js:983
 msgid "Use a different name internally"
 msgstr "Dahili olarak farklı bir ad kullan"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1021
+#: pretix/static/pretixcontrol/js/ui/main.js:1023
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1102
+#: pretix/static/pretixcontrol/js/ui/main.js:1104
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -772,40 +781,30 @@ msgstr[1] ""
 "Diğer\n"
 "Sepetinizdeki ürünler {num} dakikalığına ayrılmıştır."
 
-#: pretix/static/pretixpresale/js/ui/main.js:215
+#: pretix/static/pretixpresale/js/ui/main.js:216
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "% (para birimi) s% (fiyat) s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:223
+#: pretix/static/pretixpresale/js/ui/main.js:224
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "% (para birimi) s% (fiyat) s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:239
+#: pretix/static/pretixpresale/js/ui/main.js:240
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:458
-msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
-
-#: pretix/static/pretixpresale/js/ui/main.js:510
-#, fuzzy
-#| msgid "Cart expired"
-msgid "required"
-msgstr "Sepetinizin süresi doldu"
-
-#: pretix/static/pretixpresale/js/ui/main.js:554
-#: pretix/static/pretixpresale/js/ui/main.js:574
+#: pretix/static/pretixpresale/js/ui/main.js:581
+#: pretix/static/pretixpresale/js/ui/main.js:601
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:565
+#: pretix/static/pretixpresale/js/ui/main.js:592
 msgid "Your local time:"
 msgstr ""
 
