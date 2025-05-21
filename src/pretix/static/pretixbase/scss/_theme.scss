@@ -359,6 +359,9 @@ dialog[open], dialog[open]::backdrop {
   width: fit-content;
   max-width: 80%;
   min-width: 24em;
+  .modal-card-content {
+    padding: 2.5em;
+  }
 
   img {
     max-width: 100%;
