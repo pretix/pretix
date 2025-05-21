@@ -198,6 +198,7 @@ organizer_patterns = [
     re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
 
     re_path(r'^theme.css$', pretix.presale.views.theme.theme_css, name='organizer.theme.css'),
+    re_path(r'^accessibility$', pretix.presale.views.organizer.AccessibilityView.as_view(), name='organizer.accessibility'),
 
     re_path(r'^account/login/(?P<provider>[0-9]+)/$', pretix.presale.views.customer.SSOLoginView.as_view(), name='organizer.customer.login'),
     re_path(r'^account/login/(?P<provider>[0-9]+)/return$', pretix.presale.views.customer.SSOLoginReturnView.as_view(), name='organizer.customer.login.return'),
