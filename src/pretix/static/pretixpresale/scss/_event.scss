@@ -23,7 +23,7 @@
         text-align: center;
 
         &.gone, .gone {
-            color: $alert-danger-text;
+            color: $brand-danger;
         }
         &.unavailable, .unavailable {
             color: $alert-warning-text;
