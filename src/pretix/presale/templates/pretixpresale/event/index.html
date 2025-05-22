@@ -243,7 +243,7 @@
                 {% endif %}
             </form>
             {% if ev.presale_is_running and display_add_to_cart %}
-                {% trans "You didn’t select any ticket." as label_nothing_to_add %}
+                {% trans "You didn't select any ticket." as label_nothing_to_add %}
                 {% trans "Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart." as description_nothing_to_add %}
                 {% dialog "dialog-nothing-to-add" label_nothing_to_add description_nothing_to_add icon="exclamation-circle" %}
                     <p class="modal-card-confirm"><button class="btn btn-primary">{% trans "OK" %}</button></p>

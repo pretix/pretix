@@ -71,7 +71,7 @@ class AuthenticationForm(forms.Form):
         'invalid_login': _(
             "We have not found an account with this email address and password."
         ),
-        'invalid_login_email': _('Please verify that you entered the correct email addess.'),
+        'invalid_login_email': _('Please verify that you entered the correct email address.'),
         'invalid_login_password': _('Please enter the correct password.'),
         'inactive': _("This account is disabled."),
         'unverified': _("You have not yet activated your account and set a password. Please click the link in the "
