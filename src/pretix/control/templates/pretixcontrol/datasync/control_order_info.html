@@ -55,8 +55,8 @@
                                 {{ obj.external_link_html }}
                             {% else %}
                                 {{ obj.external_object_type }}
-                                {% trans "identified by" %} {{ obj.external_pk_name }}
-                                <em>{{ obj.external_pk_value }}</em>
+                                {% trans "identified by" %} {{ obj.external_id_field }}
+                                <em>{{ obj.id_value }}</em>
                             {% endif %}
                             &nbsp; <time class="text-muted" datetime="{{ obj.transmitted.isoformat }}">{{ obj.transmitted|date:"SHORT_DATETIME_FORMAT" }}</time>
                         </li>
