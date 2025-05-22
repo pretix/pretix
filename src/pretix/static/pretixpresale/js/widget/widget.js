@@ -889,20 +889,20 @@ var shared_alert_fragment = (
 );
 
 var shared_lightbox_fragment = (
-    '<div :class="lightboxClasses" role="dialog" aria-modal="true" v-if="$root.lightbox" @click="lightboxClose">'
+    '<dialog :class="lightboxClasses" role="alertdialog" @close="lightboxClose">'
         + '<div class="pretix-widget-lightbox-loading" v-if="$root.lightbox?.loading">'
             + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
         + '</div>'
-        + '<div class="pretix-widget-lightbox-inner" @click.stop="">'
+        + '<form class="pretix-widget-lightbox-close" method="dialog"><button aria-label="'+strings.close+'" autofocus="autofocus">'
+            + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+        + '</button></form>'
+        + '<div class="pretix-widget-lightbox-inner" v-if="$root.lightbox">'
             + '<figure class="pretix-widget-lightbox-image">'
-                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage" crossorigin>'
+                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage">'
                 + '<figcaption v-if="$root.lightbox.description">{{$root.lightbox.description}}</figcaption>'
             + '</figure>'
-            + '<button type="button" class="pretix-widget-lightbox-close" @click="lightboxClose" aria-label="'+strings.close+'">'
-                + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
-            + '</button>'
         + '</div>'
-    + '</div>'
+    + '</dialog>'
 );
 
 Vue.component('pretix-overlay', {
@@ -919,10 +919,8 @@ Vue.component('pretix-overlay', {
                     this.$set(newValue, "loading", true);
                 }
                 if (!oldValue) {
-                    window.addEventListener('keyup', this.lightboxCloseOnKeyup);
+                    this.$el?.querySelector(".pretix-widget-lightbox-holder").showModal();
                 }
-            } else {
-                window.removeEventListener('keyup', this.lightboxCloseOnKeyup);
             }
         }
     },
@@ -948,12 +946,6 @@ Vue.component('pretix-overlay', {
         },
     },
     methods: {
-        lightboxCloseOnKeyup: function (event) {
-            if (event.keyCode === 27) {
-                // abort on ESC-key
-                this.lightboxClose();
-            }
-        },
         lightboxClose: function () {
             this.$root.lightbox = null;
         },
