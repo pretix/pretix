@@ -29,6 +29,7 @@ from pretix.base.services.tasks import EventTask
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import get_event_domain
 from pretix.plugins.stripe.models import RegisteredApplePayDomain
+from pretix.plugins.stripe.utils import get_stripe_client
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +52,7 @@ def get_stripe_account_key(prov):
 @app.task(base=EventTask, max_retries=5, default_retry_delay=1)
 def stripe_verify_domain(event, domain):
     from pretix.plugins.stripe.payment import StripeCC
+
     prov = StripeCC(event)
     account = get_stripe_account_key(prov)
 
@@ -59,29 +61,22 @@ def stripe_verify_domain(event, domain):
     # we're building our api_kwargs here by hand.
     # Only if no live connect secret key is set, we'll fall back to the testmode keys.
     # But this should never happen except in scenarios where pretix runs in devmode.
-    if prov.settings.connect_client_id and prov.settings.connect_user_id:
-        api_kwargs = {
-            'api_key': prov.settings.connect_secret_key or prov.settings.connect_test_secret_key,
-            'stripe_account': prov.settings.connect_user_id
-        }
-    else:
-        api_kwargs = {
-            'api_key': prov.settings.secret_key,
-        }
+    stripe_client = get_stripe_client(
+        prov.settings.connect_secret_key or prov.settings.connect_test_secret_key
+    )
 
     if RegisteredApplePayDomain.objects.filter(account=account, domain=domain).exists():
         return
 
     try:
-        resp = stripe.ApplePayDomain.create(
-            domain_name=domain,
-            **api_kwargs
+        resp = stripe_client.apple_pay_domains.create(
+            params={
+                "domain_name": domain,
+            },
+            options=prov.api_options,
         )
     except stripe.error.StripeError:
-        logger.exception('Could not verify domain with Stripe')
+        logger.exception("Could not verify domain with Stripe")
     else:
         if resp.livemode:
-            RegisteredApplePayDomain.objects.create(
-                domain=domain,
-                account=account
-            )
+            RegisteredApplePayDomain.objects.create(domain=domain, account=account)
