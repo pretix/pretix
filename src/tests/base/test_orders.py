@@ -1761,7 +1761,7 @@ class OrderChangeManagerTests(TestCase):
     def test_cancel_all_in_order(self):
         self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
         self.ticket.addons.create(addon_category=self.shirt.category)
-        self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op1)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), addon_to=self.op1)
         self.ocm.commit()
         self.order.refresh_from_db()
         self.ocm = OrderChangeManager(self.order, None)
