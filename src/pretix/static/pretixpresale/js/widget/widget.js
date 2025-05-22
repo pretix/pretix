@@ -566,8 +566,8 @@ Vue.component('item', {
 
         // Availability
         + '<div class="pretix-widget-item-availability-col">'
-        + '<a class="pretix-widget-collapse-indicator" v-if="show_toggle" :href="\'#\' + item.id + \'-variants\'" @click.prevent.stop="expand" role="button" tabindex="0"'
-        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">{{ variationsToggleLabel }}</a>'
+        + '<button class="pretix-widget-collapse-indicator" v-if="show_toggle" @click.prevent.stop="expand"'
+        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">{{ variationsToggleLabel }}</button>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 

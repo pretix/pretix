@@ -431,6 +431,17 @@
   .pretix-widget-item-availability-col {
     text-align: center;
 
+    .pretix-widget-collapse-indicator {
+      width: 100%;
+
+      border: 1px solid $input-border;
+      border-radius: $input-border-radius;
+      height: $input-height-base;
+      padding: $padding-base-vertical $padding-base-horizontal;
+      color: $input-color;
+      background-color: $input-bg;
+    }
+
     .pretix-widget-collapse-indicator::before {
       content: "";
       display: inline-block;
