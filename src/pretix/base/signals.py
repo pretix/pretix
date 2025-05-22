@@ -257,8 +257,14 @@ class Registry:
                      When a new entry is registered, all accessor functions are called with the new entry as parameter.
                      Their return value is stored as the metadata value for that key.
         """
-        self.registered_entries = dict()
         self.keys = keys
+        self.clear()
+
+    def clear(self):
+        """
+        Removes all entries from the registry.
+        """
+        self.registered_entries = dict()
         self.by_key = {key: {} for key in self.keys.keys()}
 
     def register(self, *objs):
@@ -332,6 +338,23 @@ class EventPluginRegistry(Registry):
 
     def __init__(self, keys):
         super().__init__({"plugin": lambda o: get_defining_app(o), **keys})
+
+    def filter(self, active_in=None, **kwargs):
+        result = super().filter(**kwargs)
+        if active_in is not None:
+            result = (
+                (entry, meta)
+                for entry, meta in result
+                if is_app_active(active_in, meta['plugin'])
+            )
+        return result
+
+    def get(self, active_in=None, **kwargs):
+        item, meta = super().get(**kwargs)
+        if meta and active_in is not None:
+            if not is_app_active(active_in, meta['plugin']):
+                return None, None
+        return item, meta
 
 
 event_live_issues = EventPluginSignal()
