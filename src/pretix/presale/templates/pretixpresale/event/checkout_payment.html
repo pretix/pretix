@@ -8,6 +8,17 @@
     {% include "pretixpresale/event/fragment_walletdetection_head.html" %}
 {% endblock %}
 {% block inner %}
+    {% if customer_gift_cards %}
+        <div class="alert alert-info">
+            <p><strong>
+                <span class="sr-only">Info:</span>
+                {% trans "Your available Giftcards:" %}
+            </strong></p>
+            {% for c in customer_gift_cards %}
+                <p>{{ c }}: Value {{ c.value|money:c.currency }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
     {% if current_payments %}
         <p>{% trans "You already selected the following payment methods:" %}</p>
         <form method="post">

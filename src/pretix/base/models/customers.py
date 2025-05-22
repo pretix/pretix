@@ -28,6 +28,7 @@ from django.core.validators import RegexValidator, URLValidator
 from django.db import models
 from django.db.models import F, Q
 from django.utils.crypto import get_random_string, salted_hmac
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField
@@ -286,6 +287,11 @@ class Customer(LoggedModel):
             locale=self.locale,
             customer=self,
             organizer=self.organizer,
+        )
+
+    def usable_gift_cards(self):
+        return self.customer_gift_cards.filter(
+            Q(expires__isnull=True) | Q(expires__gte=now()),
         )
 
 
