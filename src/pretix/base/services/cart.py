@@ -1655,7 +1655,7 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
+def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> dict:
     """
     Resets the expiry time of a cart to the configured reservation time of this event.
     Limited to 11x the reservation time.
@@ -1672,7 +1672,7 @@ def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', 
             try:
                 cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
                 cm.commit()
-                return cm.num_extended_positions
+                return {"success": cm.num_extended_positions, "expiry": cm._expiry, "max_expiry_extend": cm._max_expiry_extend}
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):

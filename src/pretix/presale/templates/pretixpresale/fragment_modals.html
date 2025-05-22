@@ -4,16 +4,17 @@
 {% load escapejson %}
 {% load icon %}
 {% load dialog %}
-<div id="ajaxerr">
+<div id="ajaxerr" class="modal-wrapper" hidden>
 </div>
-<div id="popupmodal" hidden aria-live="polite">
+<div id="popupmodal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
+        aria-labelledby="popupmodal-title">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-window-restore big-icon" aria-hidden="true"></i>
         </div>
         <div class="modal-card-content">
             <div>
-                <h3>
+                <h3 id="popupmodal-title">
                     {% trans "We've started the requested process in a new window." %}
                 </h3>
                 <p class="text">
@@ -32,20 +33,19 @@
         </div>
     </div>
 </div>
-<div id="loadingmodal" hidden aria-live="polite">
-    <div class="modal-card">
-        <div class="modal-card-icon">
-            <i class="fa fa-cog big-rotating-icon" aria-hidden="true"></i>
-        </div>
-        <div class="modal-card-content">
-            <h3 id="loadingmodal-label"></h3>
-            <div id="loadingmodal-description">
-                <p class="text"></p>
-                <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
-            </div>
+{% dialog "loadingmodal" "" "" icon="cog rotating" %}
+    <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
+    <div class="progress">
+        <div class="progress-bar progress-bar-success">
         </div>
     </div>
-</div>
+    <div class="steps">
+    </div>
+{% enddialog %}
+{% trans "Please let us know you're still there." as label_cart_extend_dialog %}
+{% dialog "dialog-cart-extend" label_cart_extend_dialog "" icon="clock-o" alert=true %}
+    <p><button class="btn btn-lg btn-primary">{% trans "Continue" %}</button></p>
+{% enddialog %}
 {% if request.organizer and request.organizer.settings.cookie_consent %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
     {% if cookie_consent_from_widget %}

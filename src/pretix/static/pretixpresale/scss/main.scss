@@ -44,6 +44,7 @@ $headings-small-color: $text-muted;
 
 @import "../../bootstrap/scss/_bootstrap_reduced.scss";
 @import "../../pretixbase/scss/_theme.scss";
+@import "../../pretixbase/scss/_dialogs.scss";
 @import "../../lightbox/css/lightbox.scss";
 @import "../../cropper/cropper.scss";
 @import "../../datetimepicker/_bootstrap-datetimepicker.scss";
@@ -113,7 +114,7 @@ pre {
 h1, h2, h3, h4, h5, h6, p, li {
     a:not(.btn) {
         text-decoration: underline;
-    }    
+    }
 }
 
 a.no-underline:link, nav li a:link {
@@ -277,118 +278,11 @@ a:hover .panel-primary > .panel-heading {
   margin-right: auto;
 }
 
-body.loading .container {
-    -webkit-filter: blur(2px);
-    -moz-filter: blur(2px);
-    -ms-filter: blur(2px);
-    -o-filter: blur(2px);
-    filter: blur(2px);
-}
-
 .big-rotating-icon {
     -webkit-animation: fa-spin 8s infinite linear;
     animation: fa-spin 8s infinite linear;
     font-size: 120px;
     color: $brand-primary;
-}
-#loadingmodal, #ajaxerr, #popupmodal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, .7);
-    opacity: 0;
-    z-index: 900000;
-    visibility: hidden;
-    padding: 10px;
-
-    .big-icon {
-        margin-top: 50px;
-        font-size: 200px;
-        color: $brand-primary;
-    }
-    &#popupmodal .big-icon {
-        margin-top: 10px;
-        font-size: 100px;
-        color: $brand-primary;
-    }
-
-    .modal-card {
-        margin: 50px auto 0;
-        width: 90%;
-        max-width: 600px;
-        max-height: calc(100vh - 100px);
-        overflow-y: auto;
-        background: white;
-        border-radius: $border-radius-large;
-        box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
-        padding: 20px;
-        min-height: 160px;
-
-        .modal-card-icon {
-            float: left;
-            width: 150px;
-            text-align: center;
-        }
-        .modal-card-content {
-            margin-left: 160px;
-            text-align: left;
-            h3 {
-                margin-top: 0;
-            }
-        }
-    }
-
-    &#cookie-consent-modal {
-        background: rgba(255, 255, 255, .5);
-        opacity: 1;
-        visibility: visible;
-        display: none;
-        .modal-card-content {
-            margin-left: 0;
-        }
-        details {
-            & > summary {
-                list-style: none;
-            }
-            & > summary::-webkit-details-marker,
-            & > summary::marker {
-                display: none;
-            }
-            margin-bottom: 10px;
-        }
-    }
-}
-@media (max-width: 700px) {
-    #loadingmodal, #ajaxerr, #popupmodal {
-        .modal-card {
-            margin: 25px auto 0;
-            max-height: calc(100vh - 50px - 20px);
-            .modal-card-icon {
-                float: none;
-                width: 100%;
-            }
-            .modal-card-content {
-                text-align: center;
-                margin-left: 0;
-                margin-right: 0;
-                margin-top: 10px;
-            }
-        }
-    }
-}
-
-#ajaxerr {
-    background: rgba(236, 236, 236, .9);
-}
-
-.loading #loadingmodal, .ajaxerr #ajaxerr, .has-popup #popupmodal {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity .5s ease-in-out;
-    -moz-transition: opacity .5s ease-in-out;
-    -webkit-transition: opacity .5s ease-in-out;
 }
 
 .typo-alert span[data-typosuggest] {

@@ -20,6 +20,12 @@ var cart = {
         cart._time_offset = server_time - client_time;
     },
 
+    show_expiry_notification: function () {
+        document.getElementById("dialog-cart-extend").showModal();
+        $("#dialog-cart-extend button").focus();
+        cart._expiry_notified = true;
+    },
+
     draw_deadline: function () {
         function pad(n, width, z) {
             z = z || '0';
@@ -33,8 +39,9 @@ var cart = {
             return;
         }
         var now = cart._get_now();
-        var diff_minutes = Math.floor(cart._deadline.diff(now) / 1000 / 60);
-        var diff_seconds = Math.floor(cart._deadline.diff(now) / 1000 % 60);
+        var diff_total_seconds = cart._deadline.diff(now) / 1000;
+        var diff_minutes = Math.floor(diff_total_seconds / 60);
+        var diff_seconds = Math.floor(diff_total_seconds % 60);
 
         if (diff_minutes < 2 || diff_minutes == 5) $("#cart-deadline").get(0).setAttribute("aria-live", "polite");
         else $("#cart-deadline").get(0).removeAttribute("aria-live");
@@ -45,6 +52,7 @@ var cart = {
                 gettext("Cart expired")
             );
             window.clearInterval(cart._deadline_interval);
+            cart._deadline_interval = null;
         } else {
             $("#cart-deadline").text(ngettext(
                 "The items in your cart are reserved for you for one minute.",
@@ -55,14 +63,33 @@ var cart = {
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
         }
-        $("#cart-extend-button").toggle(diff_minutes < 3);
+        var already_expired = diff_total_seconds <= 0;
+        var can_extend_cart = diff_minutes < 3 && (already_expired || cart._deadline < cart._max_extend);
+        $("#cart-extend-button").toggle(can_extend_cart);
+        if (can_extend_cart && diff_total_seconds < 45) {
+            if (!cart._expiry_notified) cart.show_expiry_notification();
+            $("#dialog-cart-extend-description").text(already_expired
+                ? gettext("Your cart has expired. If you want to continue, please click here:")
+                : gettext("Your cart is about to expire. If you want to continue, please click here:"));
+        }
     },
 
     init: function () {
         "use strict";
-        cart._deadline = moment($("#cart-deadline").attr("data-expires"));
-        cart._deadline_interval = window.setInterval(cart.draw_deadline, 500);
         cart._calc_offset();
+        cart.set_deadline(
+            $("#cart-deadline").attr("data-expires"),
+            $("#cart-deadline").attr("data-max-expiry-extend")
+        );
+    },
+
+    set_deadline: function (expiry, max_extend) {
+        "use strict";
+        cart._expiry_notified = false;
+        cart._deadline = moment(expiry);
+        cart._max_extend = moment(max_extend);
+        if (!cart._deadline_interval)
+            cart._deadline_interval = window.setInterval(cart.draw_deadline, 500);
         cart.draw_deadline();
     }
 };
@@ -73,6 +100,17 @@ $(function () {
     if ($("#cart-deadline").length) {
         cart.init();
     }
+
+    $("#cart-extend-form").on("pretix:async-task-success", function(e, data) {
+        if (data.success)
+            cart.set_deadline(data.expiry, data.max_expiry_extend);
+        else
+            alert(data.message);
+    });
+
+    $("#dialog-cart-extend form").submit(function() {
+        $("#cart-extend-form").submit();
+    });
 
     $(".toggle-container").each(function() {
         var summary = $(".toggle-summary", this);

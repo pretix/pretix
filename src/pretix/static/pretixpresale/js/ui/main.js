@@ -407,8 +407,6 @@ $(function () {
         $("#voucher-toggle").slideUp();
     });
 
-    $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
-
     // Handlers for "Copy answers from above" buttons
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();

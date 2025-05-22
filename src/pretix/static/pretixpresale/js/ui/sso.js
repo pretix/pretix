@@ -4,8 +4,6 @@ $(function () {
     var popup_window = null
     var popup_check_interval = null
 
-    $("#popupmodal").removeAttr("hidden");
-
     $("a[data-open-in-popup-window]").on("click", function (e) {
         e.preventDefault()
 
@@ -22,11 +20,13 @@ $(function () {
             "presale-popup",
             "scrollbars=yes,resizable=yes,status=yes,location=yes,toolbar=no,menubar=no,width=940,height=620,left=50,top=50"
         )
-        $("body").addClass("has-popup")
+        $("body").addClass("has-popup has-modal-dialog")
+        $("#popupmodal").removeAttr("hidden");
 
         popup_check_interval = window.setInterval(function () {
             if (popup_window.closed) {
-                $("body").removeClass("has-popup")
+                $("body").removeClass("has-popup has-modal-dialog")
+                $("#popupmodal").attr("hidden", true);
                 window.clearInterval(popup_check_interval)
             }
         }, 250)
