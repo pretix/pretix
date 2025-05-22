@@ -2783,7 +2783,7 @@ Your {organizer} team"""))  # noqa: W291
         ),
     },
     'theme_color_success': {
-        'default': '#50a167',
+        'default': '#408252',
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
