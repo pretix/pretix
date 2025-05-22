@@ -21,15 +21,9 @@ var cart = {
     },
 
     show_expiry_notification: function () {
-        $("#cart-extend-modal").removeAttr("hidden");
-        $("#cart-extend-modal button").focus();
-        $("body").addClass("has-modal-dialog");
+        document.getElementById("dialog-cart-extend").showModal();
+        $("#dialog-cart-extend button").focus();
         cart._expiry_notified = true;
-    },
-
-    hide_expiry_notification: function () {
-        $("#cart-extend-modal").attr("hidden", true);
-        $("body").removeClass("has-modal-dialog");
     },
 
     draw_deadline: function () {
@@ -74,7 +68,7 @@ var cart = {
         $("#cart-extend-button").toggle(can_extend_cart);
         if (can_extend_cart && diff_total_seconds < 45) {
             if (!cart._expiry_notified) cart.show_expiry_notification();
-            $("#cart-extend-modal-desc").text(already_expired
+            $("#dialog-cart-extend-description").text(already_expired
                 ? gettext("Your cart has expired. If you want to continue, please click here:")
                 : gettext("Your cart is about to expire. If you want to continue, please click here:"));
         }
@@ -114,8 +108,7 @@ $(function () {
             alert(data.message);
     });
 
-    $("#cart-extend-modal button").click(function() {
-        cart.hide_expiry_notification();
+    $("#dialog-cart-extend form").submit(function() {
         $("#cart-extend-form").submit();
     });
 

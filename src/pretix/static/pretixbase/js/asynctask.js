@@ -249,6 +249,9 @@ $(function () {
     }, false);
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
+    $("#loadingmodal").on("cancel", function() {
+        return false;
+    });
 });
 
 var waitingDialog = {
@@ -259,25 +262,23 @@ var waitingDialog = {
         this.setStatus(status || gettext('If this takes longer than a few minutes, please contact us.'));
         this.setProgress(null);
         this.setSteps(null);
-        $("body").addClass("loading");
-        $("#loadingmodal").removeAttr("hidden has-modal-dialog");
+        document.getElementById("loadingmodal").showModal();
     },
     hide: function () {
         "use strict";
-        $("body").removeClass("loading has-modal-dialog");
-        $("#loadingmodal").attr("hidden", true);
+        document.getElementById("loadingmodal").close();
     },
     setTitle: function(title) {
-        $("#loadingmodal h3").text(title);
+        $("#loadingmodal .modal-card-title").text(title);
     },
     setStatus: function(statusText) {
         $("#loadingmodal p.status").text(statusText);
     },
     setText: function(text) {
         if (text)
-            $("#loadingmodal p.text").text(text).show();
+            $("#loadingmodal .modal-card-description").text(text).show();
         else
-            $("#loadingmodal p.text").hide();
+            $("#loadingmodal .modal-card-description").hide();
     },
     setProgress: function(percentage) {
         if (typeof percentage === 'number') {
@@ -291,7 +292,7 @@ var waitingDialog = {
         var $steps = $("#loadingmodal .steps");
         if (steps) {
             $steps.html("").show()
-            for (var step of data.steps) {
+            for (var step of steps) {
                 $steps.append(
                     $("<span>").addClass("fa fa-fw")
                         .toggleClass("fa-check text-success", step.done)

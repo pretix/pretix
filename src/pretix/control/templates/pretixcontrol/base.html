@@ -4,6 +4,8 @@
 {% load statici18n %}
 {% load eventsignal %}
 {% load eventurl %}
+{% load dialog %}
+{% load icon %}
 <!DOCTYPE html>
 <html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 	<head>
@@ -465,23 +467,14 @@
         </div>
         <div id="ajaxerr" class="modal-wrapper" hidden>
         </div>
-        <div id="loadingmodal" class="modal-wrapper" hidden>
-            <div class="modal-card">
-                <div class="modal-card-icon">
-                    <i class="fa fa-cog big-rotating-icon"></i>
-                </div>
-                <div class="modal-card-content">
-                    <h3></h3>
-                    <p class="text"></p>
-                    <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success">
-                        </div>
-                    </div>
-                    <div class="steps">
-                    </div>
+        {% dialog "loadingmodal" "" "" icon="cog rotating" %}
+            <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success">
                 </div>
             </div>
-        </div>
+            <div class="steps">
+            </div>
+        {% enddialog %}
 	</body>
 </html>
