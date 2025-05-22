@@ -28,7 +28,7 @@ $(function () {
         document.dispatchEvent(e)
     }
 
-    if (!storage_key) {
+    if (!storage_key || !consent_modal) {
         // We are not on a page where the consent should run, fire the change event with empty consent but don't
         // actually store anything.
         update_consent(null, false);
