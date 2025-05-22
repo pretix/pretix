@@ -481,7 +481,7 @@ $(function () {
     $("form:has(#btn-add-to-cart)").on("submit", function(e) {
         if (
             (this.classList.contains("has-seating") && this.querySelector("pretix-seating-checkout-button button")) ||
-            this.querySelector("input[type=checkbox]:checked") || 
+            this.querySelector("input[type=checkbox]:checked, input[type=radio]:checked") ||
             [...this.querySelectorAll(".input-item-count:not([type=hidden])")].some(input => input.value && input.value !== "0") // TODO: seating adds a hidden seating-dummy-item-count, which is not useful and should at some point be removed
         ) {
             // okay, let the submit-event bubble to async-task
