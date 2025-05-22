@@ -898,7 +898,7 @@ var shared_lightbox_fragment = (
         + '</button></form>'
         + '<div class="pretix-widget-lightbox-inner" v-if="$root.lightbox">'
             + '<figure class="pretix-widget-lightbox-image">'
-                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage">'
+                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage" crossorigin>'
                 + '<figcaption v-if="$root.lightbox.description">{{$root.lightbox.description}}</figcaption>'
             + '</figure>'
         + '</div>'
