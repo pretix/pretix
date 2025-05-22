@@ -151,7 +151,6 @@
   border-radius: $input-border-radius;
 
   .pretix-widget-resume-button {
-    float: right;
     margin-left: 10px;
   }
 
@@ -160,6 +159,8 @@
   }
 
   .pretix-widget-info-message {
+    display: flex;
+    justify-content: space-between;
     padding: 10px;
     text-align: left;
     margin: 10px 0;
