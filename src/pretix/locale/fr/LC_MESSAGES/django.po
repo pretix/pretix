@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -85,7 +85,7 @@ msgstr "Grec"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "Hébreu"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -701,16 +701,15 @@ msgstr ""
 "mais peuvent être utilisés pour des intégrations sur mesure."
 
 #: pretix/base/context.py:38
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "géré par {name} basé sur <a {a_attr}>pretix</a>"
+msgstr ""
+"<a {a_name_attr}>propulsé par {name}</a> <a {a_attr}>basé sur pretix</a>"
 
 #: pretix/base/context.py:48
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "géré par {name} basé sur <a {a_attr}>pretix</a>"
+msgstr "<a {a_attr}> propulsé par {name} basé sur pretix</a>"
 
 #: pretix/base/context.py:55
 #, python-format
@@ -6112,10 +6111,8 @@ msgid "Cart ID (e.g. session key)"
 msgstr "ID du panier (par ex. clé de session)"
 
 #: pretix/base/models/orders.py:3102
-#, fuzzy
-#| msgid "Gift card: Expiration date"
 msgid "Limit for extending expiration date"
-msgstr "Carte cadeau : Date d’expiration"
+msgstr "Limite pour le report de la date d'expiration"
 
 #: pretix/base/models/orders.py:3131
 msgid "Cart position"
@@ -7330,10 +7327,8 @@ msgstr ""
 "cadeau."
 
 #: pretix/base/payment.py:1467
-#, fuzzy
-#| msgid "Please enter the correct result."
 msgid "Please enter the code of your gift card."
-msgstr "Veuillez saisir le résultat correct."
+msgstr "Veuillez saisir le code de votre carte cadeau."
 
 #: pretix/base/payment.py:1483 pretix/base/payment.py:1526
 msgid ""
@@ -21438,13 +21433,11 @@ msgstr "Produit avec des variantes"
 #: pretix/control/templates/pretixcontrol/items/index.html:118
 msgctxt "subevent"
 msgid "Product assigned to seating plan for one or more dates"
-msgstr ""
+msgstr "Produit affecté au plan de salle pour une ou plusieurs dates"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:118
-#, fuzzy
-#| msgid "Product settings"
 msgid "Product assigned to seating plan"
-msgstr "Paramètres du produit"
+msgstr "Produit assigné au plan de salle"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:126
 msgid "Only available as an add-on product"
@@ -29358,10 +29351,8 @@ msgstr ""
 "de paiement."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:129
-#, fuzzy
-#| msgid "Scan the qr-code with your banking app"
 msgid "Scan the QR code with your banking app"
-msgstr "Scannez le qr-code avec votre application bancaire"
+msgstr "Scannez le code QR avec votre application bancaire"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:141
 #, python-format
@@ -32588,17 +32579,12 @@ msgid "You need to fill out all fields."
 msgstr "Vous devez remplir tous les champs."
 
 #: pretix/presale/forms/customer.py:69
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "You need to enter an email address."
-msgstr "Veuillez entrer une adresse email valide."
+msgstr "Vous devez saisir une adresse e-mail."
 
 #: pretix/presale/forms/customer.py:70
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to enter a password."
-msgstr "Vous devez sélectionner une date."
+msgstr "Vous devez saisir un mot de passe."
 
 #: pretix/presale/forms/customer.py:72
 msgid "We have not found an account with this email address and password."
@@ -32607,42 +32593,31 @@ msgstr ""
 "passe."
 
 #: pretix/presale/forms/customer.py:74
-#, fuzzy
-#| msgid "Please enter the same email address twice."
-msgid "Please verify that you entered the correct email address."
-msgstr "Veuillez entrer la même adresse e-mail une deuxième fois."
+msgid "Please verify that you entered the correct email addess."
+msgstr "Veuillez vérifier que vous avez saisi une adresse e-mail conforme."
 
 #: pretix/presale/forms/customer.py:75
-#, fuzzy
-#| msgid "Please enter the correct result."
 msgid "Please enter the correct password."
-msgstr "Veuillez saisir le résultat correct."
+msgstr "Veuillez saisir le mot de passe correct."
 
 #: pretix/presale/forms/customer.py:76
 msgid "This account is disabled."
 msgstr "Ce compte est désactivé."
 
 #: pretix/presale/forms/customer.py:77
-#, fuzzy
-#| msgid ""
-#| "You have not yet activated your account and set a password. Please click "
-#| "the link in the email we sent you. Click \"Reset password\" to receive a "
-#| "new email in case you cannot find it again."
 msgid ""
 "You have not yet activated your account and set a password. Please click the "
 "link in the email we sent you. In case you cannot find it, click \"Forgot "
 "your password?\" to receive a new email."
 msgstr ""
-"Vous n’avez pas encore activé votre compte et défini un mot de passe. "
-"Veuillez cliquer sur le lien dans l’e-mail que nous vous avons envoyé. "
-"Cliquez sur « Réinitialiser le mot de passe » pour recevoir un nouvel e-mail "
-"au cas où vous ne le retrouveriez pas."
+"Vous n'avez pas encore activé votre compte et défini un mot de passe. "
+"Veuillez cliquer sur le lien figurant dans l'e-mail que nous vous avons "
+"envoyé. Si vous ne le trouvez pas, cliquez sur « Mot de passe oublié » pour "
+"recevoir un nouvel e-mail."
 
 #: pretix/presale/forms/customer.py:90
-#, fuzzy
-#| msgid "Your password"
 msgid "Forgot your password?"
-msgstr "Votre mot de passe"
+msgstr "Mot de passe oublié ?"
 
 #: pretix/presale/forms/customer.py:146
 msgid ""
@@ -32749,17 +32724,13 @@ msgid "Organizer: {organizer}"
 msgstr "Organisateur : {organizer}"
 
 #: pretix/presale/templates/pretixpresale/base.html:47
-#, fuzzy
-#| msgid "Send links"
 msgctxt "skip-to-main-nav"
 msgid "Skip link"
-msgstr "Envoyer le lien"
+msgstr "Passer le lien"
 
 #: pretix/presale/templates/pretixpresale/base.html:48
-#, fuzzy
-#| msgid "Email content"
 msgid "Skip to main content"
-msgstr "Contenu de l' e-mail"
+msgstr "Aller sur la page principale"
 
 #: pretix/presale/templates/pretixpresale/base.html:76
 msgid "Footer Navigation"
@@ -33635,11 +33606,8 @@ msgstr ""
 "toujours compléter votre commande tant qu'ils sont disponibles."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:508
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "External"
 msgid "Extend"
-msgstr "Externe"
+msgstr "Prolonger"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:511
 msgid "Overview of your ordered products."
@@ -33992,8 +33960,6 @@ msgstr "Afficher le mois précédent, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:24
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
-#, fuzzy
-#| msgid "Select month to show"
 msgid "Select a month to display"
 msgstr "Sélectionnez le mois à afficher"
 
@@ -34005,11 +33971,8 @@ msgstr "Mois"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:39
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:67
-#, fuzzy
-#| msgctxt "reporting_timeframe"
-#| msgid "by month"
 msgid "Show month"
-msgstr "par mois"
+msgstr "Afficher le mois"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:50
 #, python-format
@@ -34024,10 +33987,8 @@ msgstr "Afficher la semaine précédente, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:24
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:52
-#, fuzzy
-#| msgid "Select week to show"
 msgid "Select a week to display"
-msgstr "Sélectionnez la semaine à afficher"
+msgstr "Sélectionner la semaine à afficher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:26
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
@@ -34041,11 +34002,8 @@ msgstr "Sélectionnez la semaine à afficher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:43
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:71
-#, fuzzy
-#| msgctxt "reporting_timeframe"
-#| msgid "by week"
 msgid "Show week"
-msgstr "par semaine"
+msgstr "Afficher la semaine"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:54
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:73
@@ -34141,16 +34099,16 @@ msgid "Add to cart"
 msgstr "Ajouter au panier"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:246
-#, fuzzy
-#| msgid "You did not select any products."
-msgid "You didn't select any ticket."
-msgstr "Vous n'avez sélectionné aucun produit."
+msgid "You didn’t select any ticket."
+msgstr "Vous n'avez sélectionné aucun billet."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 msgid ""
 "Please tick a checkbox or enter a quantity for one of the ticket types to "
 "add to the cart."
 msgstr ""
+"Veuillez cocher une case ou saisir une quantité pour l'un des types de "
+"billets à ajouter au panier."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:264
 msgid "If you have already ordered a ticket"
@@ -35093,10 +35051,9 @@ msgid "Event overview"
 msgstr "Aperçu de l'événement"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:21
-#, fuzzy, python-format
-#| msgid "Show next month, %(month)s"
+#, python-format
 msgid "Events in %(month)s"
-msgstr "Afficher le mois suivant, %(month)s"
+msgstr "Événements dans %(month)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:91
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:104
@@ -35107,28 +35064,22 @@ msgstr ""
 "horaires différents."
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:21
-#, fuzzy, python-format
-#| msgid "Entry scan: %(date)s"
+#, python-format
 msgid "Events on %(day)s"
-msgstr "Scan d’entrée : %(date)s"
+msgstr "Événements le %(day)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:52
-#, fuzzy
-#| msgctxt "subevents"
-#| msgid "Select date"
 msgid "Select a date to display"
-msgstr "Sélectionner une date"
+msgstr "Sélectionner une date à afficher"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:59
-#, fuzzy
-#| msgid "Show start date"
 msgid "Show date"
-msgstr "Afficher la date de début"
+msgstr "Afficher la date"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:21
 #, python-format
 msgid "Events in %(week)s (%(week_day_from)s – %(week_day_to)s)"
-msgstr ""
+msgstr "Événements à venir %(week)s (%(week_day_from)s – %(week_day_to)s)"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:5
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:10
@@ -35361,10 +35312,8 @@ msgid "Your cart is now empty."
 msgstr "Votre panier à été vidé."
 
 #: pretix/presale/views/cart.py:547
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your cart timeout was extended."
-msgstr "Votre panier a été mis à jour."
+msgstr "Le délai d'attente de votre panier a été prolongé."
 
 #: pretix/presale/views/cart.py:562
 msgid "The products have been successfully added to your cart."
