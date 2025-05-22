@@ -29,24 +29,24 @@ register = template.Library()
 
 
 @register.simple_tag
-def dialog(html_id, label, description, *args, **kwargs):
+def dialog(html_id, title, description, *args, **kwargs):
     format_kwargs = {
         "id": html_id,
-        "label": label,
+        "title": title,
         "description": description,
         "icon": format_html('<div class="modal-card-icon"><span class="fa fa-{}" aria-hidden="true"></span></div>', kwargs["icon"]) if "icon" in kwargs else "",
         "alert": mark_safe('role="alertdialog"') if kwargs.get("alert", "False") != "False" else "",
     }
     result = """
     <dialog {alert}
-        id="{id}"
-        aria-labelledby="{id}-label"
+        id="{id}" class="modal-card"
+        aria-labelledby="{id}-title"
         aria-describedby="{id}-description">
-        <form method="dialog" class="modal-card form-horizontal">
+        <form method="dialog" class="modal-card-inner form-horizontal">
             {icon}
             <div class="modal-card-content">
-                <h2 id="{id}-label">{label}</h2>
-                <p id="{id}-description">{description}</p>
+                <h2 id="{id}-title" class="modal-card-title">{title}</h2>
+                <p id="{id}-description" class="modal-card-description">{description}</p>
     """
     return format_html(result, **format_kwargs)
 
