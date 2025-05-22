@@ -50,7 +50,7 @@
                 {% for e in events %}{% eventurl e "presale:event.index" as url %}
                     <article class="row" aria-labelledby="event-{{ e.pk }}-label" aria-describedby="event-{{ e.pk }}-desc">
                         <h3 class="col-md-4 col-xs-12"><a href="{{ url }}" id="event-{{ e.pk }}-label" class="no-underline">{{ e.name }}</a></h3>
-                        <p class="col-md-3 col-xs-12" id="event-{{ e.pk }}-desc">
+                        <p class="col-md-3 col-xs-12{% if e.is_remote%} event-is-remote{% endif %}" id="event-{{ e.pk }}-desc">
                         {% if e.settings.show_dates_on_frontpage %}
                             {% if e.has_subevents %}
                                 {% icon "calendar" %} {% trans "Multiple dates" context "subevent" %}
