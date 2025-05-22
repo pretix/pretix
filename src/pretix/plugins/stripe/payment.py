@@ -61,21 +61,13 @@ from text_unidecode import unidecode
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import (
-    guess_country,
-    guess_country_from_request,
+    guess_country, guess_country_from_request,
 )
 from pretix.base.models import (
-    Event,
-    InvoiceAddress,
-    Order,
-    OrderPayment,
-    OrderRefund,
-    Quota,
+    Event, InvoiceAddress, Order, OrderPayment, OrderRefund, Quota,
 )
 from pretix.base.payment import (
-    BasePaymentProvider,
-    PaymentException,
-    WalletQueries,
+    BasePaymentProvider, PaymentException, WalletQueries,
 )
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
@@ -87,12 +79,10 @@ from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.plugins.stripe.models import (
-    ReferencedStripeObject,
-    RegisteredApplePayDomain,
+    ReferencedStripeObject, RegisteredApplePayDomain,
 )
 from pretix.plugins.stripe.tasks import (
-    get_stripe_account_key,
-    stripe_verify_domain,
+    get_stripe_account_key, stripe_verify_domain,
 )
 from pretix.plugins.stripe.utils import get_stripe_client
 from pretix.presale.views.cart import cart_session

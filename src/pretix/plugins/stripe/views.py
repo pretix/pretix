@@ -59,8 +59,7 @@ from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import (
-    AdministratorPermissionRequiredMixin,
-    event_permission_required,
+    AdministratorPermissionRequiredMixin, event_permission_required,
 )
 from pretix.control.views.event import DecoupleMixin
 from pretix.control.views.organizer import OrganizerDetailViewMixin
@@ -71,8 +70,7 @@ from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC, StripeSettingsHolder
 from pretix.plugins.stripe.tasks import (
-    get_domain_for_event,
-    stripe_verify_domain,
+    get_domain_for_event, stripe_verify_domain,
 )
 from pretix.plugins.stripe.utils import get_stripe_client
 
