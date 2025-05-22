@@ -23,19 +23,25 @@ from django import template
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
+from pretix.helpers.templatetags.simple_block_tag import (
+    register_simple_block_tag,
+)
+
 from django.utils.translation import gettext_lazy as _  # NOQA
+
 
 register = template.Library()
 
 
-@register.simple_tag
-def dialog(html_id, title, description, *args, **kwargs):
+@register_simple_block_tag(register)
+def dialog(content, html_id, title, description, *args, **kwargs):
     format_kwargs = {
         "id": html_id,
         "title": title,
         "description": description,
         "icon": format_html('<div class="modal-card-icon"><span class="fa fa-{}" aria-hidden="true"></span></div>', kwargs["icon"]) if "icon" in kwargs else "",
         "alert": mark_safe('role="alertdialog"') if kwargs.get("alert", "False") != "False" else "",
+        "content": content,
     }
     result = """
     <dialog {alert}
@@ -47,14 +53,9 @@ def dialog(html_id, title, description, *args, **kwargs):
             <div class="modal-card-content">
                 <h2 id="{id}-title" class="modal-card-title">{title}</h2>
                 <p id="{id}-description" class="modal-card-description">{description}</p>
-    """
-    return format_html(result, **format_kwargs)
-
-
-@register.simple_tag
-def enddialog(*args, **kwargs):
-    return mark_safe("""
+                {content}
             </div>
         </form>
     </dialog>
-    """)
+    """
+    return format_html(result, **format_kwargs)
