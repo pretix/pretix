@@ -145,7 +145,7 @@ const startRegister = async (e) => {
             publicKey: publicKeyCredentialCreateOptions
         });
     } catch (err) {
-        $("#webauthn-error").removeClass("sr-only");
+        $("#webauthn-error").removeClass("hidden");
         return console.error("Error creating credential:", err);
     }
 
@@ -170,7 +170,7 @@ const startLogin = async (e) => {
             publicKey: transformedCredentialRequestOptions,
         });
     } catch (err) {
-        $("#webauthn-error").removeClass("sr-only");
+        $("#webauthn-error").removeClass("hidden");
         return console.error("Error when creating credential:", err);
     }
 
