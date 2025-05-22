@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 19:50+0000\n"
+"POT-Creation-Date: 2025-05-22 12:48+0000\n"
 "PO-Revision-Date: 2025-04-22 15:36+0000\n"
 "Last-Translator: Paul Berschick <paul@plainschwarz.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -32462,7 +32462,7 @@ msgstr ""
 #: pretix/presale/forms/customer.py:74
 #, fuzzy
 #| msgid "Please enter the same email address twice."
-msgid "Please verify that you entered the correct email addess."
+msgid "Please verify that you entered the correct email address."
 msgstr ""
 "Si us plau, introduïu la mateixa adreça de correu electrònic dues vegades."
 
@@ -32800,14 +32800,14 @@ msgstr "Pagament"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:15
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:21
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:18
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:11
 msgid "Your cart"
 msgstr "La vostra cistella"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
 msgstr "Cistella expirada"
@@ -32834,13 +32834,13 @@ msgid "Please review the details below and confirm your order."
 msgstr ""
 "Si us plau, reviseu els detalls de la vostra comanda abans de confirmar-la."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:15
-msgid "Please hang tight, we're finalizing your order!"
-msgstr "Si us plau, espereu mentre acabem el procés!"
-
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:23
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:20
 msgid "Add or remove tickets"
 msgstr "Afegir o suprimir entrades"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:37
+msgid "Please hang tight, we're finalizing your order!"
+msgstr "Si us plau, espereu mentre acabem el procés!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #, fuzzy
@@ -34052,7 +34052,7 @@ msgstr "Afegir a la cistella"
 #: pretix/presale/templates/pretixpresale/event/index.html:246
 #, fuzzy
 #| msgid "You did not select any products."
-msgid "You didn’t select any ticket."
+msgid "You didn't select any ticket."
 msgstr "No heu seleccionat cap producte."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247

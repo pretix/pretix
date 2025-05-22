@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 19:50+0000\n"
+"POT-Creation-Date: 2025-05-22 12:48+0000\n"
 "PO-Revision-Date: 2024-02-13 16:00+0000\n"
 "Last-Translator: Wessel Stam <info@wesselstam.nl>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -33403,7 +33403,7 @@ msgstr "Voer een correct e-mailadres en wachtwoord in."
 #: pretix/presale/forms/customer.py:74
 #, fuzzy
 #| msgid "Please enter the same email address twice."
-msgid "Please verify that you entered the correct email addess."
+msgid "Please verify that you entered the correct email address."
 msgstr "Voer twee keer hetzelfde e-mailadres in."
 
 #: pretix/presale/forms/customer.py:75
@@ -33758,14 +33758,14 @@ msgstr "Afrekenen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:15
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:21
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:18
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:11
 msgid "Your cart"
 msgstr "Je winkelwagen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
 msgstr "Winkelwagen is verlopen"
@@ -33791,13 +33791,13 @@ msgstr "Controleer je bestelling"
 msgid "Please review the details below and confirm your order."
 msgstr "Controleer de onderstaande gegevens en bevestig je bestelling."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:15
-msgid "Please hang tight, we're finalizing your order!"
-msgstr "Een moment, je bestelling is bijna klaar!"
-
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:23
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:20
 msgid "Add or remove tickets"
 msgstr "Kaartjes toevoegen of verwijderen"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:37
+msgid "Please hang tight, we're finalizing your order!"
+msgstr "Een moment, je bestelling is bijna klaar!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #, fuzzy
@@ -35069,7 +35069,7 @@ msgstr "Voeg toe aan winkelwagen"
 #: pretix/presale/templates/pretixpresale/event/index.html:246
 #, fuzzy
 #| msgid "You did not select any products."
-msgid "You didn’t select any ticket."
+msgid "You didn't select any ticket."
 msgstr "Je hebt geen producten geselecteerd."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247

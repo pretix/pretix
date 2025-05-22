@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 19:50+0000\n"
+"POT-Creation-Date: 2025-05-22 12:48+0000\n"
 "PO-Revision-Date: 2025-05-17 18:00+0000\n"
 "Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -29639,8 +29639,10 @@ msgid "We have not found an account with this email address and password."
 msgstr ""
 
 #: pretix/presale/forms/customer.py:74
-msgid "Please verify that you entered the correct email addess."
-msgstr ""
+#, fuzzy
+#| msgid "Please enter a shorter name."
+msgid "Please verify that you entered the correct email address."
+msgstr "Kérjük adj meg egy rövidebb nevet."
 
 #: pretix/presale/forms/customer.py:75
 #, fuzzy
@@ -29953,14 +29955,14 @@ msgstr "Megrendelés"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:15
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:21
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:18
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:11
 msgid "Your cart"
 msgstr "Kosár"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
 msgstr "A kosár lejárt"
@@ -29984,13 +29986,13 @@ msgstr "Rendelés ellenőrzése"
 msgid "Please review the details below and confirm your order."
 msgstr "Ellenőrízd az alábbi adatokat és erősítsd meg a rendelésed."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:15
-msgid "Please hang tight, we're finalizing your order!"
-msgstr "Kérjük várj, véglegesítjük a rendelésed!"
-
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:23
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:20
 msgid "Add or remove tickets"
 msgstr "Jegyek hozzáadása vagy eltávolítása"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:37
+msgid "Please hang tight, we're finalizing your order!"
+msgstr "Kérjük várj, véglegesítjük a rendelésed!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 msgid "Modify payment"
@@ -31112,7 +31114,7 @@ msgstr "Hozzáadás a kosárhoz"
 #, fuzzy
 #| msgctxt "subevent"
 #| msgid "You need to select a date."
-msgid "You didn’t select any ticket."
+msgid "You didn't select any ticket."
 msgstr "Válassz egy dátumot."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247

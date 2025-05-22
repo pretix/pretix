@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 19:50+0000\n"
+"POT-Creation-Date: 2025-05-22 12:48+0000\n"
 "PO-Revision-Date: 2025-03-15 20:49+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
@@ -31409,7 +31409,7 @@ msgstr "Nenašli sme konto s touto e-mailovou adresou a heslom."
 #: pretix/presale/forms/customer.py:74
 #, fuzzy
 #| msgid "Please enter the same email address twice."
-msgid "Please verify that you entered the correct email addess."
+msgid "Please verify that you entered the correct email address."
 msgstr "Zadajte dvakrát tú istú e-mailovú adresu."
 
 #: pretix/presale/forms/customer.py:75
@@ -31740,14 +31740,14 @@ msgstr "Pokladňa"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:15
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:21
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:18
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:11
 msgid "Your cart"
 msgstr "Váš košík"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
 msgstr "Košík vypršal"
@@ -31772,13 +31772,13 @@ msgid "Please review the details below and confirm your order."
 msgstr ""
 "Skontrolujte si prosím údaje uvedené nižšie a potvrďte svoju objednávku."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:15
-msgid "Please hang tight, we're finalizing your order!"
-msgstr "Prosím, vydržte, dokončujeme vašu objednávku!"
-
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:23
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:20
 msgid "Add or remove tickets"
 msgstr "Pridanie alebo odstránenie vstupeniek"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:37
+msgid "Please hang tight, we're finalizing your order!"
+msgstr "Prosím, vydržte, dokončujeme vašu objednávku!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 msgid "Modify payment"
@@ -32921,7 +32921,7 @@ msgstr "Pridať do košíka"
 #: pretix/presale/templates/pretixpresale/event/index.html:246
 #, fuzzy
 #| msgid "You did not select any products."
-msgid "You didn’t select any ticket."
+msgid "You didn't select any ticket."
 msgstr "Nevybrali ste žiadne produkty."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 19:50+0000\n"
+"POT-Creation-Date: 2025-05-22 12:48+0000\n"
 "PO-Revision-Date: 2025-05-06 16:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
@@ -32347,7 +32347,7 @@ msgstr ""
 #: pretix/presale/forms/customer.py:74
 #, fuzzy
 #| msgid "Please enter the same email address twice."
-msgid "Please verify that you entered the correct email addess."
+msgid "Please verify that you entered the correct email address."
 msgstr "Bitte geben Sie zweimal dieselbe E-Mail-Adresse ein."
 
 #: pretix/presale/forms/customer.py:75
@@ -32676,14 +32676,14 @@ msgstr "Bestellung fortsetzen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:15
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:21
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:21
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:18
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:11
 msgid "Your cart"
 msgstr "Ihr Warenkorb"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
 msgstr "Warenkorb abgelaufen"
@@ -32709,13 +32709,13 @@ msgstr ""
 "Bitte überprüfen Sie die untenstehenden Details und bestätigen Sie Ihre "
 "Bestellung."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:15
-msgid "Please hang tight, we're finalizing your order!"
-msgstr "Einen Moment, Ihre Bestellung ist fast fertig!"
-
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:23
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:20
 msgid "Add or remove tickets"
 msgstr "Tickets hinzufügen oder entfernen"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:37
+msgid "Please hang tight, we're finalizing your order!"
+msgstr "Einen Moment, Ihre Bestellung ist fast fertig!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 msgid "Modify payment"
@@ -33883,7 +33883,7 @@ msgstr "Zum Warenkorb hinzufügen"
 #: pretix/presale/templates/pretixpresale/event/index.html:246
 #, fuzzy
 #| msgid "You did not select any products."
-msgid "You didn’t select any ticket."
+msgid "You didn't select any ticket."
 msgstr "Sie haben keine Produkte ausgewählt."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247
