@@ -2063,6 +2063,40 @@ DEFAULTS = {
         ),
         'serializer_class': I18nURLField,
     },
+    'accessibility_url': {
+        'default': None,
+        'type': LazyI18nString,
+        'form_class': I18nURLFormField,
+        'form_kwargs': dict(
+            label=_("Accessibility information URL"),
+            help_text=_("This should point e.g. to a part of your website that explains how your ticket shop complies "
+                        "with accessibility regulation."),
+            widget=I18nTextInput,
+        ),
+        'serializer_class': I18nURLField,
+    },
+    'accessibility_title': {
+        'default': LazyI18nString.from_gettext(gettext_noop("Accessibility information")),
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Title for accessibility information"),
+            widget=I18nTextInput,
+        ),
+        'serializer_class': I18nURLField,
+    },
+    'accessibility_text': {
+        'default': None,
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Accessibility information text"),
+            help_text=_("Instead of an URL, you can also configure a text that will be shown within pretix. "
+                        "This will be ignored if a URL is configured."),
+            widget=I18nMarkdownTextarea,
+        ),
+        'serializer_class': I18nURLField,
+    },
     'confirm_texts': {
         'default': LazyI18nStringList(),
         'type': LazyI18nStringList,

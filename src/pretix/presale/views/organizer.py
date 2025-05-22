@@ -1311,3 +1311,14 @@ class OrganizerFavicon(View):
 class RedirectToOrganizerIndex(View):
     def get(self, *args, **kwargs):
         return redirect_to_url(build_absolute_uri(self.request.organizer, "presale:organizer.index"))
+
+
+class AccessibilityView(OrganizerViewMixin, EventListMixin, TemplateView):
+    template_name = 'pretixpresale/organizers/accessibility.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.organizer.settings.accessibility_url:
+            raise Http404()
+        if not self.request.organizer.settings.accessibility_text:
+            raise Http404()
+        return super().dispatch(request, *args, **kwargs)
