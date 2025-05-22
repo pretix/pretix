@@ -876,16 +876,16 @@ var shared_iframe_fragment = (
 );
 
 var shared_alert_fragment = (
-    '<div :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'">'
+    '<dialog :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'" @close="errorClose">'
     + '<transition name="bounce" @after-enter="focusButton">'
-    + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
+    + '<form class="pretix-widget-alert-box" v-if="$root.error_message" method="dialog">'
     + '<p :id="$root.parent.html_id + \'-error-message\'">{{ $root.error_message }}</p>'
-    + '<p><button v-if="$root.error_url_after" @click.prevent.stop="errorContinue">' + strings.continue + '</button>'
-    + '<button v-else @click.prevent.stop="errorClose">' + strings.close + '</button></p>'
-    + '</div>'
+    + '<p><button v-if="$root.error_url_after">' + strings.continue + '</button>'
+    + '<button>' + strings.close + '</button></p>'
+    + '</form>'
     + '</transition>'
     + '<svg width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
-    + '</div>'
+    + '</dialog>'
 );
 
 var shared_lightbox_fragment = (
@@ -922,7 +922,14 @@ Vue.component('pretix-overlay', {
                     this.$el?.querySelector(".pretix-widget-lightbox-holder").showModal();
                 }
             }
-        }
+        },
+        '$root.error_message': function (newValue, oldValue) {
+            if (newValue) {
+                if (!oldValue) {
+                    this.$el?.querySelector(".pretix-widget-alert-holder").showModal();
+                }
+            }
+        },
     },
     computed: {
         frameClasses: function () {
@@ -953,9 +960,13 @@ Vue.component('pretix-overlay', {
             this.$root.lightbox.loading = false;
         },
         errorClose: function () {
-            this.$root.error_message = null;
-            this.$root.error_url_after = null;
-            this.$root.error_url_after_new_tab = false;
+            if (this.$root.error_url_after) {
+                this.errorContinue();
+            } else {
+                this.$root.error_message = null;
+                this.$root.error_url_after = null;
+                this.$root.error_url_after_new_tab = false;
+            }
         },
         errorContinue: function () {
             if (this.$root.error_url_after_new_tab) {
@@ -985,7 +996,6 @@ Vue.component('pretix-overlay', {
         focusButton: function () {
             this.$el.querySelector(".pretix-widget-alert-box button").focus();
         },
-
     }
 });
 
