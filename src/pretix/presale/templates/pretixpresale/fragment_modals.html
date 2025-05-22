@@ -43,7 +43,7 @@
     </div>
 {% enddialog %}
 {% trans "Please let us know you're still there." as label_cart_extend_dialog %}
-{% dialog "dialog-cart-extend" label_cart_extend_dialog "" icon="clock-o" %}
+{% dialog "dialog-cart-extend" label_cart_extend_dialog "" icon="clock-o" alert=true %}
     <p><button class="btn btn-lg btn-primary">{% trans "Continue" %}</button></p>
 {% enddialog %}
 {% if request.organizer and request.organizer.settings.cookie_consent %}
