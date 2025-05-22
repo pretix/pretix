@@ -356,7 +356,9 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.payment_provider_stamp = ''
     cancellation.file = None
     cancellation.sent_to_organizer = None
-    cancellation.sent_to_customer = None
+    cancellation.transmission_provider = None
+    cancellation.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
+    cancellation.transmission_date = None
     with language(invoice.locale, invoice.event.settings.region):
         cancellation.invoice_from = invoice.event.settings.get('invoice_address_from')
         cancellation.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
