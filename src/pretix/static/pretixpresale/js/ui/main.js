@@ -482,7 +482,7 @@ $(function () {
         if (
             (this.classList.contains("has-seating") && this.querySelector("pretix-seating-checkout-button button")) ||
             this.querySelector("input[type=checkbox]:checked") || 
-            [...this.querySelectorAll(".input-item-count[type=text]")].some(input => input.value && input.value !== "0") // TODO: seating hat noch einen seating-dummy-item-count, das ist Mist!
+            [...this.querySelectorAll(".input-item-count:not([type=hidden])")].some(input => input.value && input.value !== "0") // TODO: seating adds a hidden seating-dummy-item-count, which is not useful and should at some point be removed
         ) {
             // okay, let the submit-event bubble to async-task
             return;
