@@ -16,7 +16,7 @@
                 {% trans "Your available Giftcards:" %}
             </strong></p>
             {% for c in customer_gift_cards %}
-                <p>{{ c }}: Value {{ c.value|money:request.event.currency }}</p>
+                <p>{{ c }}: Value {{ c.value|money:c.currency }}</p>
             {% endfor %}
         </div>
     {% endif %}
