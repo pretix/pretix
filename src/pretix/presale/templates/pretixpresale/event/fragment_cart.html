@@ -492,10 +492,10 @@
 <div class="row">
     <div class="col-md-12">
     {% if not cart.is_ordered %}
-        <form class="text-muted"
-                method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.extend" cart_namespace=cart_namespace %}">
+        <form class="text-muted" id="cart-extend-form" data-asynctask data-asynctask-no-redirect
+                method="post" action="{% eventurl request.event "presale:event.cart.extend" cart_namespace=cart_namespace %}">
             {% csrf_token %}
-            <span id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+            <span id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" data-max-expiry-extend="{{ cart.max_expiry_extend|date:"Y-m-d H:i:sO" }}">
                 {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
                     {% blocktrans trimmed with minutes=cart.minutes_left %}
                         The items in your cart are reserved for you for {{ minutes }} minutes.
