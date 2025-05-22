@@ -17,9 +17,9 @@
       text-decoration: $link-hover-decoration;
     }
     &:focus {
-      outline: thin dotted;
-      outline: 5px auto -webkit-focus-ring-color;
-      outline-offset: -2px;
+      outline: 2px solid $brand-primary;
+      outline-offset: 2px;
+      z-index: 999;
     }
   }
   img {
@@ -57,6 +57,9 @@
       &.focus {
         text-decoration: none;
         @include tab-focus;
+        outline: 2px solid $brand-primary;
+        outline-offset: 2px;
+        z-index: 999;
       }
     }
     &.disabled,
@@ -88,6 +91,11 @@
       background-color: #e6e6e6;
       border-color: #adadad;
     }
+    &:focus-within {
+      outline: 2px solid $brand-primary;
+      outline-offset: 2px;
+      z-index: 999;
+    }
   }
   .pretix-widget-icon-cart {
     display: inline-block;
@@ -114,9 +122,9 @@
     $color-rgba: rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6);
 
     &:focus {
-      border-color: $input-border-focus;
-      outline: 0;
-      @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px $color-rgba);
+      outline: 2px solid $brand-primary;
+      outline-offset: 2px;
+      z-index: 999;
     }
   }
   input[type=number] {
@@ -352,11 +360,14 @@
     font-size: 12px;
   }
 
-  .pretix-widget-item-picture {
+  .pretix-widget-item-picture-link {
     width: 60px;
     height: 60px;
     margin-right: 10px;
     float: left;
+  }
+  .pretix-widget-item-picture {
+    max-width: 100%;
   }
 
   .pretix-widget-action {
