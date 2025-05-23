@@ -28,7 +28,7 @@ $(function () {
         document.dispatchEvent(e)
     }
 
-    if (!storage_key || !consent_modal) {
+    if (!storage_key) {
         // We are not on a page where the consent should run, fire the change event with empty consent but don't
         // actually store anything.
         update_consent(null, false);
@@ -92,6 +92,11 @@ $(function () {
     })
 
     update_consent(storage_val, save_for_session_only);
+
+    if (!consent_modal) {
+        // Cookie consent is active, but no provider defined
+        return;
+    }
 
     function _set_button_text () {
         var btn = $("#cookie-consent-button-no");
