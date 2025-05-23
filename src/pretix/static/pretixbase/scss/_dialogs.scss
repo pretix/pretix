@@ -10,44 +10,44 @@ dialog.modal-card {
 
   opacity: 0;
   transition: opacity .5s allow-discrete;
-
-  .modal-card-inner {
-    display: flex;
-    flex-direction: column;
-    align-content: stretch;
-  }
-  .modal-card-icon {
-    background: $brand-primary;
-    font-size: 2em;
-    color: white;
-    text-align: center;
-    padding: 3px;
-    .rotating {
-        -webkit-animation: fa-spin 8s infinite linear;
-        animation: fa-spin 8s infinite linear;
-    }
-  }
-  .modal-card-content {
-    padding: 1.5em;
-  }
-  .modal-card-content>*:last-child {
-    margin-bottom: 0;
-  }
-  .modal-card-content>*:first-child {
-    margin-top: 0;
-  }
-
-  .modal-card-confirm {
-    margin-top: 2em;
-    display: flex;
-    justify-content: flex-end;
-    gap: 1em;
-    align-items: center;
-  }
-  .modal-card-confirm-spread {
-    justify-content: space-between;
+}
+.modal-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+}
+.modal-card-icon {
+  background: $brand-primary;
+  font-size: 2em;
+  color: white;
+  text-align: center;
+  padding: 3px;
+  .rotating {
+      -webkit-animation: fa-spin 8s infinite linear;
+      animation: fa-spin 8s infinite linear;
   }
 }
+.modal-card-content {
+  padding: 1.5em;
+}
+.modal-card-content>*:last-child {
+  margin-bottom: 0;
+}
+.modal-card-content>*:first-child {
+  margin-top: 0;
+}
+
+.modal-card-confirm {
+  margin-top: 2em;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+  align-items: center;
+}
+.modal-card-confirm-spread {
+  justify-content: space-between;
+}
+
 dialog::backdrop {
   background-color: rgba(255, 255, 255, .5);
   opacity: 0;
