@@ -14,6 +14,7 @@ $input-color-placeholder: lighten(#000, 70%) !default;
 $border-radius-base: var(--pretix-border-radius-base);
 $border-radius-large: var(--pretix-border-radius-large);
 $border-radius-small: var(--pretix-border-radius-small);
+$input-border: #949494 !default;
 
 $navbar-inverse-bg: #3b1c4a !default;
 $navbar-inverse-link-color: white;
@@ -72,7 +73,7 @@ $panel-default-heading-bg: #e5e5e5 !default;
 
 $link-hover-color: var(--pretix-brand-primary-darken-15);
 
-$btn-default-border: #CCCCCC;
+$btn-default-border: #949494;
 
 $btn-primary-border: var(--pretix-brand-primary-darken-5);
 $btn-primary-border-active: var(--pretix-brand-primary-darken-30);
