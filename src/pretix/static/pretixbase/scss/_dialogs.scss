@@ -66,13 +66,13 @@ dialog[open], dialog[open]::backdrop {
 @media screen and (min-width: $screen-sm-min) {
   dialog.modal-card:has(.modal-card-icon) .modal-card-inner {
     flex-direction: row;
-    .modal-card-content {
-      padding: 2em;
-    }
-    .modal-card-icon {
-      font-size: 4em;
-      padding: 6px 16px;
-    }
+  }
+  .modal-card-content {
+    padding: 2em;
+  }
+  .modal-card-icon {
+    font-size: 4em;
+    padding: 6px 16px;
   }
 }
 
