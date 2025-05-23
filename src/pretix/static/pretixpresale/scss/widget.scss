@@ -725,6 +725,24 @@
   }
 }
 
+.pretix-widget-visibility-hidden {
+  visibility: hidden;
+}
+.pretix-widget-shake-once {
+  animation: pretix-widget-shake .2s;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+@keyframes pretix-widget-shake {
+  0% { transform: skewX(0deg); }
+  20% { transform: skewX(-5deg); }
+  40% { transform: skewX(5deg); }
+  60% { transform: skewX(-5deg); }
+  80% { transform: skewX(5deg); }
+  100% { transform: skewX(0deg); }
+}
+
 
 .pretix-widget-alert-holder,
 .pretix-widget-frame-holder,
@@ -735,6 +753,13 @@
   &::backdrop {
     background: rgba(255, 255, 255, 0.8);
   }
+}
+.pretix-widget-frame-loading p,
+.pretix-widget-lightbox-loading p {
+  text-align: center;
+  width: 256px;
+  margin: 0 auto;
+  color: $brand-danger;
 }
 .pretix-widget-frame-loading svg,
 .pretix-widget-lightbox-loading svg {
@@ -747,8 +772,8 @@
 .pretix-widget-frame-close,
 .pretix-widget-lightbox-close {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -12px;
+  right: -12px;
   z-index: 2;
 }
 
