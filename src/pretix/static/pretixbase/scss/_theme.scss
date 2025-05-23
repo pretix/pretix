@@ -354,3 +354,26 @@ dialog[open], dialog[open]::backdrop {
   80% { transform: skewX(5deg); }
   100% { transform: skewX(0deg); }
 }
+
+#lightbox-dialog {
+  width: fit-content;
+  max-width: 80%;
+  min-width: 24em;
+  .modal-card-content {
+    padding: 2.5em;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+  }
+  figcaption {
+    margin-top: 1em;
+  }
+}
+
