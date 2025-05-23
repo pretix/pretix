@@ -621,7 +621,11 @@ Vue.component('item', {
             }
         },
         titleOnClick: function () {
+            // focus associated input and open variations, if any
             this.$el.querySelector(".pretix-widget-item-availability-col input, .pretix-widget-item-availability-col .pretix-widget-collapse-indicator")?.focus();
+            if (this.item.has_variations) {
+                this.expanded = true;
+            }
         }
     },
     computed: {
