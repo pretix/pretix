@@ -943,6 +943,7 @@ Vue.component('pretix-overlay', {
             return {
                 'pretix-widget-frame-holder': true,
                 'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
+                'pretix-widget-frame-isloading': this.$root.frame_loading,
             };
         },
         alertClasses: function () {

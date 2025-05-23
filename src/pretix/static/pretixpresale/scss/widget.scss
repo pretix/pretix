@@ -753,6 +753,17 @@
   &::backdrop {
     background: rgba(255, 255, 255, 0.8);
   }
+  &:focus {
+    outline: 2px solid $brand-primary;
+    outline-offset: 2px;
+  }
+}
+.pretix-widget-frame-isloading:focus {
+  outline: none;
+  svg {
+    outline: 2px solid $brand-primary;
+    border-radius: 100%;
+  }
 }
 .pretix-widget-frame-loading p,
 .pretix-widget-lightbox-loading p {
@@ -796,6 +807,11 @@
   -moz-border-radius: 12px;
   -webkit-border-radius: 12px;
   text-align: center;
+
+  &:focus {
+    outline: 2px solid $brand-primary;
+    outline-offset: 2px;
+  }
 }
 
 .pretix-widget-frame-close svg,
