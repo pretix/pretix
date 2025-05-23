@@ -985,7 +985,14 @@ Vue.component('pretix-overlay', {
             this.$root.error_url_after = null;
             this.$root.error_url_after_new_tab = false;
         },
-        close: function () {
+        close: function (e) {
+            if (this.$root.frame_loading) {
+                // Chrome does not allow blocking dialog.cancel event more than once
+                // => wiggle the loading-element and re-open the modal
+                this.cancel(e);
+                e.target.showModal();
+                return;
+            }
             this.$root.frame_shown = false;
             this.$root.parent.frame_dismissed = true;
             this.$root.frame_src = "";
