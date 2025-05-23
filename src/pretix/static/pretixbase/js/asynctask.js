@@ -252,6 +252,7 @@ $(function () {
     $("#loadingmodal").on("cancel", function() {
         return false;
     });
+    $("#loadingmodal").prop("closedBy", "none");
 });
 
 var waitingDialog = {
