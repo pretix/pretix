@@ -1035,11 +1035,10 @@ Vue.component('pretix-widget-event-form', {
         // Resume cart
         + '<div class="pretix-widget-info-message pretix-widget-clickable"'
         + '     v-if="$root.cart_exists">'
+        + '<span :id="id_cart_exists_msg">' + strings['cart_exists'] + '</span>'
         + '<button @click.prevent.stop="$parent.resume" class="pretix-widget-resume-button" type="button" v-bind:aria-describedby="id_cart_exists_msg">'
         + strings['resume_checkout']
         + '</button>'
-        + '<span :id="id_cart_exists_msg">' + strings['cart_exists'] + '</span>'
-        + '<div class="pretix-widget-clear"></div>'
         + '</div>'
 
         // Seating plan
