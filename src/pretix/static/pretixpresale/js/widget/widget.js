@@ -877,14 +877,14 @@ var shared_iframe_fragment = (
 
 var shared_alert_fragment = (
     '<dialog :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'" @close="errorClose">'
-    + '<transition name="bounce" @after-enter="focusButton">'
-    + '<form class="pretix-widget-alert-box" v-if="$root.error_message" method="dialog">'
+    + '<form class="pretix-widget-alert-box" method="dialog">'
     + '<p :id="$root.parent.html_id + \'-error-message\'">{{ $root.error_message }}</p>'
-    + '<p><button v-if="$root.error_url_after">' + strings.continue + '</button>'
-    + '<button>' + strings.close + '</button></p>'
+    + '<p><button v-if="$root.error_url_after" value="continue" autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.continue + '</button>'
+    + '<button v-else autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.close + '</button></p>'
     + '</form>'
+    + '<transition name="bounce">'
+    + '<svg v-if="$root.error_message" width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
     + '</transition>'
-    + '<svg width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
     + '</dialog>'
 );
 
@@ -959,24 +959,19 @@ Vue.component('pretix-overlay', {
         lightboxLoaded: function () {
             this.$root.lightbox.loading = false;
         },
-        errorClose: function () {
-            if (this.$root.error_url_after) {
-                this.errorContinue();
-            } else {
-                this.$root.error_message = null;
-                this.$root.error_url_after = null;
-                this.$root.error_url_after_new_tab = false;
+        errorClose: function (e) {
+            var dialog = e.target;
+            if (dialog.returnValue == "continue" && this.$root.error_url_after) {
+                if (this.$root.error_url_after_new_tab) {
+                    window.open(this.$root.error_url_after);
+                    return;
+                }
+                this.$root.overlay.frame_src = this.$root.error_url_after;
+                this.$root.frame_loading = true;
             }
-        },
-        errorContinue: function () {
-            if (this.$root.error_url_after_new_tab) {
-                window.open(this.$root.error_url_after);
-                return;
-            }
-            this.$root.overlay.frame_src = this.$root.error_url_after;
-            this.$root.frame_loading = true;
             this.$root.error_message = null;
             this.$root.error_url_after = null;
+            this.$root.error_url_after_new_tab = false;
         },
         close: function () {
             this.$root.frame_shown = false;
@@ -992,9 +987,6 @@ Vue.component('pretix-overlay', {
                     this.$root.frame_shown = true;
                 }
             }
-        },
-        focusButton: function () {
-            this.$el.querySelector(".pretix-widget-alert-box button").focus();
         },
     }
 });
@@ -2167,13 +2159,6 @@ var create_overlay = function (app) {
                 }
                 // to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
                 this.$el.querySelector("iframe").src = newValue || "about:blank";
-            },
-            error_message: function (newValue) {
-                if (newValue) {
-                    this.prevActiveElement = document.activeElement;
-                } else {
-                    this.prevActiveElement?.focus();
-                }
             },
         }
     });
