@@ -75,6 +75,7 @@
   }
   label.pretix-widget-btn-checkbox {
     @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border, darken($btn-default-bg, 10%), darken($btn-default-border, 25%), darken($btn-default-border, 12%));
+    border-radius: $input-border-radius;
     border-width: 1px;
     border-style: solid;
     position: relative;
