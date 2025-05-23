@@ -38,6 +38,7 @@ from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.db.models import Q
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.template import Context, Engine
 from django.template.loader import get_template
 from django.urls import reverse
@@ -45,7 +46,6 @@ from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import get_language, gettext, pgettext
 from django.utils.translation.trans_real import DjangoTranslation
-from django.shortcuts import redirect
 from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
@@ -85,7 +85,8 @@ _source_cache_key = None
 
 version_min = 1
 version_max = 2
-version_default = 1 # used for output in widget-embed-code
+version_default = 1  # used for output in widget-embed-code
+
 
 def _get_source_cache_key(version):
     global _source_cache_key
