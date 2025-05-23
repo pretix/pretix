@@ -57,6 +57,8 @@ var strings = {
     'redeem': django.pgettext('widget', 'Redeem'),
     'voucher_code': django.pgettext('widget', 'Voucher code'),
     'close': django.pgettext('widget', 'Close'),
+    'close_checkout': django.pgettext('widget', 'Close checkout'),
+    'cancel_blocked': django.pgettext('widget', 'You cannot cancel this operation. Please wait for loading to finish.'),
     'continue': django.pgettext('widget', 'Continue'),
     'variations': django.pgettext('widget', 'Show variants'),
     'hide_variations': django.pgettext('widget', 'Hide variants'),
@@ -855,53 +857,54 @@ var shared_loading_fragment = (
 );
 
 var shared_iframe_fragment = (
-    '<div :class="frameClasses" role="dialog" aria-modal="true" aria-label="'+strings.checkout+'">'
+    '<dialog :class="frameClasses" role="alertdialog" aria-label="'+strings.checkout+'" @close="close" @cancel="cancel">'
     + '<div class="pretix-widget-frame-loading" v-show="$root.frame_loading">'
-    + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+        + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+        + '<p :class="cancelBlockedClasses"><strong>'+strings.cancel_blocked+'</strong></p>'
     + '</div>'
     + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
-    + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent.stop="close" role="button" aria-label="'+strings.close+'">'
-    + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
-    + '</a></div>'
-    + '<iframe frameborder="0" width="650" height="650" @load="iframeLoaded" '
-    + '        :name="$root.parent.widget_id" src="about:blank" v-once'
-    + '        allow="autoplay *; camera *; fullscreen *; payment *"'
-    + '        title="'+strings.checkout+'"'
-    + '        referrerpolicy="origin">'
-    + 'Please enable frames in your browser!'
-    + '</iframe>'
+        + '<form class="pretix-widget-frame-close" method="dialog"><button aria-label="'+strings.close_checkout+'" autofocus="autofocus">'
+            + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+        + '</button></form>'
+        + '<iframe frameborder="0" width="650" height="650" @load="iframeLoaded" '
+        + '        :name="$root.parent.widget_id" src="about:blank" v-once'
+        + '        allow="autoplay *; camera *; fullscreen *; payment *"'
+        + '        title="'+strings.checkout+'"'
+        + '        referrerpolicy="origin">'
+        + 'Please enable frames in your browser!'
+        + '</iframe>'
     + '</div>'
-    + '</div>'
+    + '</dialog>'
 );
 
 var shared_alert_fragment = (
-    '<div :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'">'
-    + '<transition name="bounce" @after-enter="focusButton">'
-    + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
+    '<dialog :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'" @close="errorClose">'
+    + '<form class="pretix-widget-alert-box" method="dialog">'
     + '<p :id="$root.parent.html_id + \'-error-message\'">{{ $root.error_message }}</p>'
-    + '<p><button v-if="$root.error_url_after" @click.prevent.stop="errorContinue">' + strings.continue + '</button>'
-    + '<button v-else @click.prevent.stop="errorClose">' + strings.close + '</button></p>'
-    + '</div>'
+    + '<p><button v-if="$root.error_url_after" value="continue" autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.continue + '</button>'
+    + '<button v-else autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.close + '</button></p>'
+    + '</form>'
+    + '<transition name="bounce">'
+    + '<svg v-if="$root.error_message" width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
     + '</transition>'
-    + '<svg width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
-    + '</div>'
+    + '</dialog>'
 );
 
 var shared_lightbox_fragment = (
-    '<div :class="lightboxClasses" role="dialog" aria-modal="true" v-if="$root.lightbox" @click="lightboxClose">'
+    '<dialog :class="lightboxClasses" role="alertdialog" @close="lightboxClose">'
         + '<div class="pretix-widget-lightbox-loading" v-if="$root.lightbox?.loading">'
             + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
         + '</div>'
-        + '<div class="pretix-widget-lightbox-inner" @click.stop="">'
+        + '<div class="pretix-widget-lightbox-inner" v-if="$root.lightbox">'
+            + '<form class="pretix-widget-lightbox-close" method="dialog"><button aria-label="'+strings.close+'" autofocus="autofocus">'
+                + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+            + '</button></form>'
             + '<figure class="pretix-widget-lightbox-image">'
                 + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage" crossorigin>'
                 + '<figcaption v-if="$root.lightbox.description">{{$root.lightbox.description}}</figcaption>'
             + '</figure>'
-            + '<button type="button" class="pretix-widget-lightbox-close" @click="lightboxClose" aria-label="'+strings.close+'">'
-                + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
-            + '</button>'
         + '</div>'
-    + '</div>'
+    + '</dialog>'
 );
 
 Vue.component('pretix-overlay', {
@@ -911,6 +914,11 @@ Vue.component('pretix-overlay', {
         + shared_lightbox_fragment
         + '</div>'
     ),
+    data: function () {
+        return {
+            cancelBlocked: false,
+        }
+    },
     watch: {
         '$root.lightbox': function (newValue, oldValue) {
             if (newValue) {
@@ -918,18 +926,24 @@ Vue.component('pretix-overlay', {
                     this.$set(newValue, "loading", true);
                 }
                 if (!oldValue) {
-                    window.addEventListener('keyup', this.lightboxCloseOnKeyup);
+                    this.$el?.querySelector(".pretix-widget-lightbox-holder").showModal();
                 }
-            } else {
-                window.removeEventListener('keyup', this.lightboxCloseOnKeyup);
             }
-        }
+        },
+        '$root.error_message': function (newValue, oldValue) {
+            if (newValue) {
+                if (!oldValue) {
+                    this.$el?.querySelector(".pretix-widget-alert-holder").showModal();
+                }
+            }
+        },
     },
     computed: {
         frameClasses: function () {
             return {
                 'pretix-widget-frame-holder': true,
                 'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
+                'pretix-widget-frame-isloading': this.$root.frame_loading,
             };
         },
         alertClasses: function () {
@@ -945,54 +959,67 @@ Vue.component('pretix-overlay', {
                 'pretix-widget-lightbox-isloading': this.$root.lightbox?.loading,
             };
         },
+        cancelBlockedClasses: function () {
+            return {
+                'pretix-widget-visibility-hidden': !this.cancelBlocked,
+            }  
+        },
     },
     methods: {
-        lightboxCloseOnKeyup: function (event) {
-            if (event.keyCode === 27) {
-                // abort on ESC-key
-                this.lightboxClose();
-            }
-        },
         lightboxClose: function () {
             this.$root.lightbox = null;
         },
         lightboxLoaded: function () {
             this.$root.lightbox.loading = false;
         },
-        errorClose: function () {
+        errorClose: function (e) {
+            var dialog = e.target;
+            if (dialog.returnValue == "continue" && this.$root.error_url_after) {
+                if (this.$root.error_url_after_new_tab) {
+                    window.open(this.$root.error_url_after);
+                    return;
+                }
+                this.$root.overlay.frame_src = this.$root.error_url_after;
+                this.$root.frame_loading = true;
+            }
             this.$root.error_message = null;
             this.$root.error_url_after = null;
             this.$root.error_url_after_new_tab = false;
         },
-        errorContinue: function () {
-            if (this.$root.error_url_after_new_tab) {
-                window.open(this.$root.error_url_after);
+        close: function (e) {
+            if (this.$root.frame_loading) {
+                // Chrome does not allow blocking dialog.cancel event more than once
+                // => wiggle the loading-element and re-open the modal
+                this.cancel(e);
+                e.target.showModal();
                 return;
             }
-            this.$root.overlay.frame_src = this.$root.error_url_after;
-            this.$root.frame_loading = true;
-            this.$root.error_message = null;
-            this.$root.error_url_after = null;
-        },
-        close: function () {
             this.$root.frame_shown = false;
             this.$root.parent.frame_dismissed = true;
             this.$root.frame_src = "";
             this.$root.parent.reload();
             this.$root.parent.trigger_close_callback();
         },
+        cancel: function (e) {
+            // do not allow to cancel while frame is loading as we cannot abort the operation
+            if (this.$root.frame_loading) {
+                e.preventDefault();
+                e.target.addEventListener("animationend", function () {
+                    e.target.classList.remove("pretix-widget-shake-once");
+                }, {once: true});
+                e.target.classList.add("pretix-widget-shake-once");
+                this.cancelBlocked = true;
+            }
+        },
         iframeLoaded: function () {
             if (this.$root.frame_loading) {
                 this.$root.frame_loading = false;
+                this.cancelBlocked = false;
                 if (this.$root.frame_src) {
                     this.$root.frame_shown = true;
                 }
             }
         },
-        focusButton: function () {
-            this.$el.querySelector(".pretix-widget-alert-box button").focus();
-        },
-
     }
 });
 
@@ -2160,27 +2187,10 @@ var create_overlay = function (app) {
                 // show loading spinner only when previously no frame_src was set
                 if (newValue && !oldValue) {
                     this.frame_loading = true;
+                    this.$el?.querySelector('dialog.pretix-widget-frame-holder').showModal();
                 }
                 // to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
                 this.$el.querySelector("iframe").src = newValue || "about:blank";
-            },
-            frame_shown: function (newValue) {
-                if (newValue) {
-                    this.prevActiveElement = document.activeElement;
-                    var btn = this.$el?.querySelector(".pretix-widget-frame-close a");
-                    this.$nextTick(function () {
-                        btn?.focus();
-                    });
-                } else {
-                    this.prevActiveElement?.focus();
-                }
-            },
-            error_message: function (newValue) {
-                if (newValue) {
-                    this.prevActiveElement = document.activeElement;
-                } else {
-                    this.prevActiveElement?.focus();
-                }
             },
         }
     });

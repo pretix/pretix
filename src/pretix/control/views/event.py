@@ -96,7 +96,9 @@ from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
-from pretix.presale.views.widget import version_default as widget_version_default
+from pretix.presale.views.widget import (
+    version_default as widget_version_default,
+)
 
 from ...base.i18n import language
 from ...base.models.items import (
