@@ -539,7 +539,7 @@ Vue.component('item', {
         + '<div class="pretix-widget-item-info-col">'
         + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture" :alt="picture_alt_text"></a>'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<strong class="pretix-widget-item-title" :id="item_label_id" role="heading" v-bind:aria-level="headingLevel" @click="titleOnClick">{{ item.name }}</strong>'
+        + '<strong class="pretix-widget-item-title" :id="item_label_id" role="heading" v-bind:aria-level="headingLevel">{{ item.name }}</strong>'
         + '<div class="pretix-widget-item-description" :id="item_desc_id" v-if="item.description" v-html="item.description"></div>'
         + '<p class="pretix-widget-item-meta" v-if="item.order_min && item.order_min > 1">'
         + '<small>{{ min_order_str }}</small>'
@@ -620,13 +620,6 @@ Vue.component('item', {
                 description: this.item.name,
             }
         },
-        titleOnClick: function () {
-            // focus associated input and open variations, if any
-            this.$el.querySelector(".pretix-widget-item-availability-col input, .pretix-widget-item-availability-col .pretix-widget-collapse-indicator")?.focus();
-            if (this.item.has_variations) {
-                this.expanded = true;
-            }
-        }
     },
     computed: {
         classObject: function () {
