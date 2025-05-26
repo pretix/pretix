@@ -210,7 +210,7 @@ Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
         + '<div class="pretix-widget-availability-unavailable"'
         + '     v-if="item.current_unavailability_reason === \'require_voucher\'">'
-        + '<small><a @click.prevent.stop="focus_voucher_field" role="button" tabindex="0">{{unavailability_reason_message}}</a></small>'
+        + '<small><a :href="voucher_jump_link" v-bind:aria-describedby="aria_labelledby">{{unavailability_reason_message}}</a></small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
         + '     v-else-if="unavailability_reason_message">'
@@ -264,6 +264,9 @@ Vue.component('availbox', {
         this.$root.$emit('amounts_changed')
     },
     computed: {
+        voucher_jump_link: function () {
+            return '#' + this.$root.html_id + '-voucher-input';
+        },
         aria_labelledby: function () {
             return this.$root.html_id + '-item-label-' + this.item.id;
         },
@@ -343,9 +346,6 @@ Vue.component('availbox', {
         }
     },
     methods: {
-        focus_voucher_field: function () {
-            this.$root.$emit('focus_voucher_field')
-        },
         on_step: function (e) {
             var t = e.target.tagName == 'BUTTON' ? e.target : e.target.closest('button');
             var step = parseFloat(t.getAttribute("data-step"));
@@ -1105,7 +1105,7 @@ Vue.component('pretix-widget-event-form', {
         + '<h3 class="pretix-widget-voucher-headline" :id="aria_labelledby">'+ strings['redeem_voucher'] +'</h3>'
         + '<div v-if="$root.voucher_explanation_text" class="pretix-widget-voucher-text" v-html="$root.voucher_explanation_text"></div>'
         + '<div class="pretix-widget-voucher-input-wrap">'
-        + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'" v-bind:aria-labelledby="aria_labelledby">'
+        + '<input :id="id_voucher_input" class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'" v-bind:aria-labelledby="aria_labelledby">'
         + '</div>'
         + '<input type="hidden" v-for="p in hiddenParams" :name="p[0]" :value="p[1]" />'
         + '<div class="pretix-widget-voucher-button-wrap">'
@@ -1117,14 +1117,11 @@ Vue.component('pretix-widget-event-form', {
 
         + '</div>'
     ),
-    mounted: function() {
-        this.$root.$on('focus_voucher_field', this.focus_voucher_field)
-    },
-    beforeDestroy: function() {
-        this.$root.$off('focus_voucher_field', this.focus_voucher_field)
-    },
     computed: {
-        aria_labelledby: function() {
+        id_voucher_input: function () {
+            return this.$root.html_id + '-voucher-input';
+        },
+        aria_labelledby: function () {
             return this.$root.html_id + '-voucher-headline';
         },
         display_event_info: function () {
@@ -1169,10 +1166,6 @@ Vue.component('pretix-widget-event-form', {
         },
     },
     methods: {
-        focus_voucher_field: function() {
-            this.$refs.voucherinput.scrollIntoView(false)
-            this.$refs.voucherinput.focus()
-        },
         back_to_list: function() {
             this.$root.target_url = this.$root.parent_stack.pop();
             this.$root.error = null;
