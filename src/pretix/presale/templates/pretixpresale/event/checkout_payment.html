@@ -10,15 +10,33 @@
 {% block inner %}
     <h3 class="sr-only">{% trans "Payment" %}</h3>
     {% if customer_gift_cards %}
-        <div class="alert alert-info">
-            <p><strong>
-                <span class="sr-only">Info:</span>
-                {% trans "Your available Giftcards:" %}
-            </strong></p>
-            {% for c in customer_gift_cards %}
-                <p>{{ c }}: Value {{ c.value|money:c.currency }}</p>
-            {% endfor %}
-        </div>
+        <p><strong>
+            <span class="sr-only">Info:</span>
+            {% trans "Your have gift cards available:" %}
+        </strong></p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="list-group">
+                {% for c in customer_gift_cards %}
+                    <div class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                {{ c }}
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                {{ c.value|money:c.currency }}
+                            </div>
+                            <div class="col-xs-1 text-right">
+                                <button name="use_giftcard" value="{{ p.id }}" title="{% trans "Use gift card" %}"
+                                    class="btn btn-primary btn-xs">
+                                    {% trans "Apply" %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
     {% endif %}
     {% if current_payments %}
         <p>{% trans "You already selected the following payment methods:" %}</p>
