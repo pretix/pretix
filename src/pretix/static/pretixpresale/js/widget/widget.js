@@ -1060,7 +1060,7 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
 
         // Resume cart
-        + '<div ref="resumeCartAlert" class="pretix-widget-info-message pretix-widget-clickable" aria-live="polite" hidden>'
+        + '<div class="pretix-widget-info-message pretix-widget-clickable" v-if="$root.cart_exists">'
         + '<span :id="id_cart_exists_msg">' + strings['cart_exists'] + '</span>'
         + '<button @click.prevent.stop="$parent.resume" class="pretix-widget-resume-button" type="button" v-bind:aria-describedby="id_cart_exists_msg">'
         + strings['resume_checkout']
@@ -1092,7 +1092,10 @@ Vue.component('pretix-widget-event-form', {
 
         // Buy button
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button type="submit">{{ this.buy_label }}</button>'
+        + '<button v-if="!this.$root.cart_exists || this.is_items_selected" type="submit" v-bind:aria-describedby="id_cart_exists_msg">{{ buy_label }}</button>'
+        + '<button v-else @click.prevent.stop="$parent.resume" type="button" v-bind:aria-describedby="id_cart_exists_msg">'
+        + strings['resume_checkout']
+        + '</button>'
         + '</div>'
 
         + '</form>'
@@ -1116,20 +1119,19 @@ Vue.component('pretix-widget-event-form', {
 
         + '</div>'
     ),
+    data: function () {
+        return {
+            is_items_selected: false,
+        }
+    },
     mounted: function() {
         this.$root.$on('focus_voucher_field', this.focus_voucher_field)
+        this.$root.$on('amounts_changed', this.calculate_items_selected)
+        this.calculate_items_selected()
     },
     beforeDestroy: function() {
+        this.$root.$off('amounts_changed', this.calculate_items_selected)
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
-    },
-    watch: {
-        '$root.cart_exists': function(newValue) {
-            if (newValue) {
-                this.$refs.resumeCartAlert.removeAttribute("hidden");
-            } else {
-                this.$refs.resumeCartAlert.setAttribute("hidden", "hidden");
-            }
-        },
     },
     computed: {
         id_voucher_input: function () {
@@ -1205,6 +1207,28 @@ Vue.component('pretix-widget-event-form', {
                 // wait for redraw, then focus content element for better a11y
                 $el.focus();
             });
+        },
+        calculate_items_selected: function() {
+            var i, j, k;
+            for (i = 0; i < this.$root.categories.length; i++) {
+                var cat = this.$root.categories[i];
+                for (j = 0; j < cat.items.length; j++) {
+                    var item = cat.items[j];
+                    if (item.has_variations) {
+                        for (k = 0; k < item.variations.length; k++) {
+                            var v = item.variations[k];
+                            if (v.amount_selected) {
+                                this.is_items_selected = true;
+                                return;
+                            }
+                        }
+                    } else if (item.amount_selected) {
+                        this.is_items_selected = true;
+                        return;
+                    }
+                }
+            }
+            this.is_items_selected = false;
         },
     }
 });
