@@ -2237,7 +2237,7 @@ var create_widget = function (element, html_id=null) {
     var items = element.attributes.items ? element.attributes.items.value : null;
     var variations = element.attributes.variations ? element.attributes.variations.value : null;
     var categories = element.attributes.categories ? element.attributes.categories.value : null;
-    var single_item_select = element.getAttribute("single-item-select") || "checkbox";
+    var single_item_select = element.getAttribute("single-item-select") || "button";
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
