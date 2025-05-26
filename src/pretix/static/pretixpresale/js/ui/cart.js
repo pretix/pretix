@@ -1,7 +1,7 @@
 /*global $,gettext,ngettext */
 var cart = {
     _deadline: null,
-    _deadline_interval: null,
+    _deadline_timeout: null,
     _deadline_call: 0,
     _time_offset: 0,
 
@@ -47,8 +47,10 @@ var cart = {
             $("#cart-deadline-short").text(
                 gettext("Cart expired")
             );
-            window.clearInterval(cart._deadline_interval);
-            cart._deadline_interval = null;
+            if (!cart._deadline_timeout) {
+                // no timeout => first time draw_deadline is invoked, but cart already expired => do not show dialog
+                cart._expiry_notified = true;
+            }
         } else {
             $("#cart-deadline").text(ngettext(
                 "The items in your cart are reserved for you for one minute.",
@@ -68,6 +70,8 @@ var cart = {
                 ? gettext("Your cart has expired. If you want to continue, please click here:")
                 : gettext("Your cart is about to expire. If you want to continue, please click here:"));
         }
+
+        cart._deadline_timeout = window.setTimeout(cart.draw_deadline, 500);
     },
 
     init: function () {
@@ -83,9 +87,11 @@ var cart = {
         "use strict";
         cart._expiry_notified = false;
         cart._deadline = moment(expiry);
+        if (cart._deadline_timeout) {
+            window.clearTimeout(cart._deadline_timeout);
+        }
+        cart._deadline_timeout = null;
         cart._max_extend = moment(max_extend);
-        if (!cart._deadline_interval)
-            cart._deadline_interval = window.setInterval(cart.draw_deadline, 500);
         cart.draw_deadline();
     }
 };
