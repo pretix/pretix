@@ -537,6 +537,10 @@
     flex-wrap: wrap;
     color: $text-color;
 
+    &:has(.pretix-widget-event-list-entry-availability) {
+      text-decoration: none;
+    }
+
     &:hover, &:active, &:focus {
       background: $gray-lighter;
       text-decoration: none;
@@ -648,9 +652,7 @@
       &:last-child {
         margin-bottom: 0;
       }
-      &:hover {
-        text-decoration: none;
-      }
+      text-decoration: none;
     }
 
     .pretix-widget-event-calendar-table {
