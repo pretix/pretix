@@ -16,7 +16,7 @@ dialog.modal-card {
   flex-direction: column;
   align-content: stretch;
 }
-.modal-card-icon {
+dialog.modal-card .modal-card-icon {
   background: $brand-primary;
   font-size: 2em;
   color: white;
@@ -27,7 +27,7 @@ dialog.modal-card {
       animation: fa-spin 8s infinite linear;
   }
 }
-.modal-card-content {
+dialog.modal-card .modal-card-content {
   padding: 1.5em;
 }
 .modal-card-content>*:last-child {
@@ -67,10 +67,10 @@ dialog[open], dialog[open]::backdrop {
   dialog.modal-card:has(.modal-card-icon) .modal-card-inner {
     flex-direction: row;
   }
-  .modal-card-content {
+  dialog.modal-card .modal-card-content {
     padding: 2em;
   }
-  .modal-card-icon {
+  dialog.modal-card .modal-card-icon {
     font-size: 4em;
     padding: 6px 16px;
   }
