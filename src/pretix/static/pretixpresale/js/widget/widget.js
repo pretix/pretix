@@ -16,6 +16,8 @@ var strings = {
     'quantity': django.pgettext('widget', 'Quantity'),
     'quantity_dec': django.pgettext('widget', 'Decrease quantity'),
     'quantity_inc': django.pgettext('widget', 'Increase quantity'),
+    'filter_events_by': django.pgettext('widget', 'Filter events by'),
+    'filter': django.pgettext('widget', 'Filter'),
     'price': django.pgettext('widget', 'Price'),
     'original_price': django.pgettext('widget', 'Original price: %s'),
     'new_price': django.pgettext('widget', 'New price: %s'),
@@ -1205,25 +1207,12 @@ Vue.component('pretix-widget-event-form', {
 Vue.component('pretix-widget-event-list-filter-field', {
     template: ('<div class="pretix-widget-event-list-filter-field">'
         + '<label :for="id">{{ field.label }}</label>'
-        + '<select :id="id" :name="field.key" @change="onChange($event)" :value="currentValue">'
+        + '<select :id="id" :name="field.key" :value="currentValue">'
         + '<option v-for="choice in field.choices" :value="choice[0]">{{ choice[1] }}</option>'
         + '</select>'
         + '</div>'),
     props: {
         field: Object
-    },
-    methods: {
-        onChange: function(event) {
-            var filterParams = new URLSearchParams(this.$root.filter);
-            if (event.target.value) {
-                filterParams.set(this.field.key, event.target.value);
-            } else {
-                filterParams.delete(this.field.key);
-            }
-            this.$root.filter = filterParams.toString();
-            this.$root.loading++;
-            this.$root.reload();
-        },
     },
     computed: {
         id: function () {
@@ -1237,9 +1226,29 @@ Vue.component('pretix-widget-event-list-filter-field', {
 });
 
 Vue.component('pretix-widget-event-list-filter-form', {
-    template: ('<div class="pretix-widget-event-list-filter-form">'
-        + '<pretix-widget-event-list-filter-field v-for="field in $root.meta_filter_fields" :field="field" :key="field.key"></pretix-widget-event-list-filter-field>'
-        + '</div>'),
+    template: ('<form ref="filterform" class="pretix-widget-event-list-filter-form" @submit="onSubmit">'
+            + '<fieldset class="pretix-widget-event-list-filter-fieldset">'
+                + '<legend>' + strings.filter_events_by + '</legend>'
+                + '<pretix-widget-event-list-filter-field v-for="field in $root.meta_filter_fields" :field="field" :key="field.key"></pretix-widget-event-list-filter-field>'
+                + '<button>' + strings.filter + '</button>'
+            + '</fieldset>'
+        + '</form>'),
+    methods: {
+        onSubmit: function(e) {
+            e.preventDefault();
+            var formData = new FormData(this.$refs.filterform);
+            var filterParams = new URLSearchParams(formData);
+            formData.forEach(function (value, key) {
+                if (value == "") {
+                    filterParams.delete(key);
+                }
+            });
+
+            this.$root.filter = filterParams.toString();
+            this.$root.loading++;
+            this.$root.reload();
+        },
+    },
 });
 
 Vue.component('pretix-widget-event-list-entry', {
