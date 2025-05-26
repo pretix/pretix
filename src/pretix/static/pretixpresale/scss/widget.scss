@@ -563,16 +563,28 @@
       padding: 7px 5px 3px;
       box-sizing: border-box;
       span {
+        position: relative;
         display: inline;
-        padding: 2px 6px 3px;
+        padding: 6px 6px 4px 17px;
         font-size: 75%;
         font-weight: bold;
         line-height: 1;
-        color: #fff;
+        color: var(--status-text-color, #000);
+        background-color: var(--status-bg-color, #fff);
+        border: 1px solid var(--status-border-color, #000);
         text-align: center;
         white-space: nowrap;
         vertical-align: baseline;
         border-radius: 4px;
+      }
+      span:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 11px;
+        height: 100%;
+        background: var(--status-border-color, #000);
       }
     }
   }
@@ -601,9 +613,7 @@
     --status-text-color: #{$alert-danger-text};
     --status-border-color: #{$alert-danger-border};
   }
-  .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span {
-    border-left: 10px solid $brand-warning;
-  }
+  .pretix-widget-event-list .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span:before,
   .pretix-widget-event-calendar .pretix-widget-event-availability-low.pretix-widget-event-calendar-event:before {
     background: linear-gradient(to bottom, var(--pretix-brand-warning) 1em, var(--status-border-color) 2.5em);
   }
