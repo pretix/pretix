@@ -977,10 +977,10 @@ Vue.component('pretix-overlay', {
             if (dialog.returnValue == "continue" && this.$root.error_url_after) {
                 if (this.$root.error_url_after_new_tab) {
                     window.open(this.$root.error_url_after);
-                    return;
+                } else if (this.$root.overlay) {
+                    this.$root.overlay.frame_src = this.$root.error_url_after;
+                    this.$root.frame_loading = true;
                 }
-                this.$root.overlay.frame_src = this.$root.error_url_after;
-                this.$root.frame_loading = true;
             }
             this.$root.error_message = null;
             this.$root.error_url_after = null;
