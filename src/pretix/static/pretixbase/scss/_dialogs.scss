@@ -30,6 +30,7 @@ dialog.modal-card .modal-card-icon {
 }
 dialog.modal-card .modal-card-content {
   padding: 1.5em;
+  flex-grow: 1;
 }
 .modal-card-content>*:last-child {
   margin-bottom: 0;
