@@ -505,8 +505,9 @@
                 {% endif %}
             </p>
             <p>
-            <button class="btn btn-default" type="submit" id="cart-extend-button">
-                <i class="fa fa-refresh" aria-hidden="true"></i> {% trans "Extend reservation" %}</button>
+                <button class="btn btn-default" type="submit" id="cart-extend-button" aria-describedby="cart-deadline">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> {% trans "Extend reservation" %}
+                </button>
             </p>
         </form>
     {% else %}

@@ -5,6 +5,7 @@ var cart = {
     _deadline_call: 0,
     _time_offset: 0,
     _prev_diff_minutes: 0,
+    _renewed_message: "",
 
     _get_now: function () {
         return moment().add(cart._time_offset, 'ms');
@@ -26,7 +27,7 @@ var cart = {
         cart._expiry_notified = true;
     },
 
-    draw_deadline: function () {
+    draw_deadline: function (renewed="") {
         function pad(n, width, z) {
             z = z || '0';
             n = n + '';
@@ -57,11 +58,14 @@ var cart = {
                 if (diff_minutes == 0) {
                     $("#cart-deadline").text(gettext("Your cart is about to expire. If you want to continue, please click here:"))
                 } else {
-                    $("#cart-deadline").text(ngettext(
-                        "The items in your cart are reserved for you for one minute.",
-                        "The items in your cart are reserved for you for {num} minutes.",
-                        diff_minutes
-                    ).replace(/\{num\}/g, diff_minutes));
+                    $("#cart-deadline").text(
+                        cart._renewed_message + " " +
+                        ngettext(
+                            "The items in your cart are reserved for you for one minute.",
+                            "The items in your cart are reserved for you for {num} minutes.",
+                            diff_minutes
+                        ).replace(/\{num\}/g, diff_minutes)
+                    );
                 }
                 cart._prev_diff_minutes = diff_minutes;
             }
@@ -70,6 +74,7 @@ var cart = {
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
 
+            cart._renewed_message = "";
             cart._deadline_timeout = window.setTimeout(cart.draw_deadline, 500);
         }
         var already_expired = diff_total_seconds <= 0;
@@ -92,7 +97,7 @@ var cart = {
         );
     },
 
-    set_deadline: function (expiry, max_extend) {
+    set_deadline: function (expiry, max_extend, renewed_message) {
         "use strict";
         cart._expiry_notified = false;
         cart._deadline = moment(expiry);
@@ -101,6 +106,7 @@ var cart = {
         }
         cart._deadline_timeout = null;
         cart._max_extend = moment(max_extend);
+        cart._renewed_message = renewed_message || "";
         cart.draw_deadline();
     }
 };
@@ -113,10 +119,15 @@ $(function () {
     }
 
     $("#cart-extend-form").on("pretix:async-task-success", function(e, data) {
-        if (data.success)
-            cart.set_deadline(data.expiry, data.max_expiry_extend);
-        else
+        if (data.success) {
+            cart.set_deadline(data.expiry, data.max_expiry_extend, data.message);
+            var cart_panel_heading = $(this).closest(".panel").find(".panel-heading").get(0);
+            if (cart_panel_heading) {
+                cart_panel_heading.focus();
+            }
+        } else {
             alert(data.message);
+        }
     });
 
     $("#dialog-cart-extend form").submit(function() {
