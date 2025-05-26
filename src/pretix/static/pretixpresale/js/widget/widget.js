@@ -229,24 +229,19 @@ Vue.component('availbox', {
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!unavailability_reason_message && avail[0] === 100">'
-        + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1 && $root.single_item_select == \'button\'">'
+        + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1">'
         + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '<span class="pretix-widget-icon-cart" aria-hidden="true"></span> ' + strings.select
         + '</label>'
-        + '<label class="pretix-widget-item-count-single-label" v-else-if="order_max === 1">'
-        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
-        + '       v-bind:aria-label="label_select_item"'
-        + '>'
-        + '</label>'
-        + '<div :class="count_group_classes" v-else role="group" v-bind:aria-label="item.name">'
-        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
+        + '<div v-else class="pretix-widget-item-count-group" role="group" v-bind:aria-label="item.name">'
+        + '<button type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
         + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
         + '       v-bind:aria-labelledby="aria_labelledby" ref="quantity"'
         + '       >'
-        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" v-bind:aria-label="inc_label"><span>+</span></button>'
+        + '<button type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" v-bind:aria-label="inc_label"><span>+</span></button>'
         + '</div>'
         + '</div>'
         + '</div>'),
@@ -272,11 +267,6 @@ Vue.component('availbox', {
         },
         inc_label: function () {
             return '+ ' + (this.item.has_variations ? this.variation.value : this.item.name) + ': ' + strings.quantity_inc;
-        },
-        count_group_classes: function () {
-            return {
-                'pretix-widget-item-count-group': !this.$root.use_native_spinners
-            }
         },
         unavailability_reason_message: function () {
             var reason = this.item.current_unavailability_reason || this.variation?.current_unavailability_reason;
@@ -1766,7 +1756,7 @@ Vue.component('pretix-widget', {
             return {
                 'pretix-widget': true,
                 'pretix-widget-mobile': this.mobile,
-                'pretix-widget-use-custom-spinners': !this.$root.use_native_spinners
+                'pretix-widget-use-custom-spinners': true,
             };
         }
     }
@@ -1928,7 +1918,6 @@ var shared_root_methods = {
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
-                root.use_native_spinners = data.use_native_spinners;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
@@ -2237,7 +2226,6 @@ var create_widget = function (element, html_id=null) {
     var items = element.attributes.items ? element.attributes.items.value : null;
     var variations = element.attributes.variations ? element.attributes.variations.value : null;
     var categories = element.attributes.categories ? element.attributes.categories.value : null;
-    var single_item_select = element.getAttribute("single-item-select") || "button";
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
@@ -2284,8 +2272,6 @@ var create_widget = function (element, html_id=null) {
                 variation_filter: variations,
                 voucher_code: voucher,
                 display_net_prices: false,
-                use_native_spinners: false,
-                single_item_select: single_item_select,
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,
