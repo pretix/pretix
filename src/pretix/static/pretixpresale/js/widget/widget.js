@@ -230,21 +230,21 @@ Vue.component('availbox', {
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!unavailability_reason_message && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1 && $root.single_item_select == \'button\'">'
-        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
+        + '<input ref="quantity" type="checkbox" value="1" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '<span class="pretix-widget-icon-cart" aria-hidden="true"></span> ' + strings.select
         + '</label>'
         + '<label class="pretix-widget-item-count-single-label" v-else-if="order_max === 1">'
-        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
+        + '<input ref="quantity" type="checkbox" value="1" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '</label>'
         + '<div :class="count_group_classes" v-else role="group" v-bind:aria-label="item.name">'
         + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
-        + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
-        + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
-        + '       v-bind:aria-labelledby="aria_labelledby" ref="quantity"'
+        + '<input ref="quantity" type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
+        + '       :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
+        + '       v-bind:aria-labelledby="aria_labelledby"'
         + '       >'
         + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" v-bind:aria-label="inc_label"><span>+</span></button>'
         + '</div>'
@@ -254,19 +254,13 @@ Vue.component('availbox', {
         item: Object,
         variation: Object
     },
-    watch: {
-        amount_selected: function () {
-            this.$root.$emit("amounts_changed");
-        }
-    },
     mounted: function() {
-        if (this.item.has_variations) {
-            this.$set(this.variation, 'amount_selected', 0);
-        } else {
-            // Automatically set the only available item to be selected.
-            this.$set(this.item, 'amount_selected', this.$root.itemnum === 1 && !this.$root.has_seating_plan ? 1 : 0);
+        if (this.$root.itemnum === 1 && !this.$root.has_seating_plan ? 1 : 0) {
+            this.$refs.quantity.value = 1;    
+            if (this.order_max === 1) {
+                this.$refs.quantity.checked = true;
+            }
         }
-        this.$root.$emit('amounts_changed')
     },
     computed: {
         voucher_jump_link: function () {
@@ -292,28 +286,6 @@ Vue.component('availbox', {
                 return strings["unavailable_" + reason] || reason;
             }
             return "";
-        },
-        amount_selected: {
-            cache: false,
-            get: function () {
-                var selected = this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
-                if (selected === 0) return undefined;
-                return selected
-            },
-            set: function (value) {
-                // Unary operator to force boolean to integer conversion, as the HTML form submission
-                // needs the value to be integer for all products.
-                value = (+value);
-                if (this.item.has_variations) {
-                    this.variation.amount_selected = value;
-                } else {
-                    this.item.amount_selected = value;
-                }
-                if (this.$refs.quantity) {
-                    // manually set value on quantity as on reload somehow v-model binding breaks
-                    this.$refs.quantity.value = value;
-                }
-            }
         },
         label_select_item: function () {
             return this.item.has_variations
@@ -354,7 +326,10 @@ Vue.component('availbox', {
             var t = e.target.tagName == 'BUTTON' ? e.target : e.target.closest('button');
             var step = parseFloat(t.getAttribute("data-step"));
             var controls = document.getElementById(t.getAttribute("data-controls"));
-            this.amount_selected = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (this.amount_selected || 0) + step));
+            this.$refs.quantity.value = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (parseInt(this.$refs.quantity.value || "0")) + step));
+            this.$refs.quantity.dispatchEvent(new CustomEvent("change", {
+                bubbles: true,
+            }));
         }
     }
 });
@@ -1128,14 +1103,21 @@ Vue.component('pretix-widget-event-form', {
             is_items_selected: false,
         }
     },
+    watch: {
+        '$root.overlay.frame_shown': function (newValue) {
+            if (!newValue) {
+                this.$refs.form.reset();
+                this.calc_items_selected();
+            }
+        }
+    },
     mounted: function() {
-        this.$root.$on('focus_voucher_field', this.focus_voucher_field)
-        this.$root.$on('amounts_changed', this.calculate_items_selected)
-        this.calculate_items_selected()
+        this.$root.$on('focus_voucher_field', this.focus_voucher_field);
+        this.$refs.form.addEventListener("change", this.calc_items_selected);
     },
     beforeDestroy: function() {
-        this.$root.$off('amounts_changed', this.calculate_items_selected)
-        this.$root.$off('focus_voucher_field', this.focus_voucher_field)
+        this.$root.$off('focus_voucher_field', this.focus_voucher_field);
+        this.$refs.form.removeEventListener("change", this.calc_items_selected);
     },
     computed: {
         id_voucher_input: function () {
@@ -1212,27 +1194,12 @@ Vue.component('pretix-widget-event-form', {
                 $el.focus();
             });
         },
-        calculate_items_selected: function() {
-            var i, j, k;
-            for (i = 0; i < this.$root.categories.length; i++) {
-                var cat = this.$root.categories[i];
-                for (j = 0; j < cat.items.length; j++) {
-                    var item = cat.items[j];
-                    if (item.has_variations) {
-                        for (k = 0; k < item.variations.length; k++) {
-                            var v = item.variations[k];
-                            if (v.amount_selected) {
-                                this.is_items_selected = true;
-                                return;
-                            }
-                        }
-                    } else if (item.amount_selected) {
-                        this.is_items_selected = true;
-                        return;
-                    }
-                }
-            }
-            this.is_items_selected = false;
+        calc_items_selected: function () {
+            this.is_items_selected = [...this.$refs.form.querySelectorAll("input[type=checkbox], input[type=radio]")].some(function(element) {
+                return element.checked;
+            }) || [...this.$refs.form.querySelectorAll(".pretix-widget-item-count-group input")].some(function(element) {
+                return parseInt(element.value || "0") > 0;
+            });
         },
     }
 });
