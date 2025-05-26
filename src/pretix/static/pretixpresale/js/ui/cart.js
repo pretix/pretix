@@ -22,7 +22,6 @@ var cart = {
 
     show_expiry_notification: function () {
         document.getElementById("dialog-cart-extend").showModal();
-        $("#dialog-cart-extend button").focus();
         cart._expiry_notified = true;
     },
 
