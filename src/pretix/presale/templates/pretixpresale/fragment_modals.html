@@ -33,6 +33,7 @@
         </div>
     </div>
 </div>
+
 {% dialog "loadingmodal" "" "" icon="cog rotating" %}
     <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
     <div class="progress">
@@ -47,8 +48,6 @@
 {% dialog "dialog-cart-extend" label_cart_extend_dialog "" icon="clock-o" alert=true %}
     <p class="modal-card-confirm"><button class="btn btn-lg btn-primary">{% trans "Continue" %}</button></p>
 {% enddialog %}
-
-</div>
 
 <dialog id="lightbox-dialog" role="alertdialog" aria-labelledby="lightbox-label">
     <form method="dialog" class="modal-card">
