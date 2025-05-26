@@ -52,11 +52,16 @@ var cart = {
                 cart._expiry_notified = true;
             }
         } else {
-            $("#cart-deadline").text(ngettext(
-                "The items in your cart are reserved for you for one minute.",
-                "The items in your cart are reserved for you for {num} minutes.",
-                diff_minutes
-            ).replace(/\{num\}/g, diff_minutes));
+            if (diff_minutes == 0) {
+                $("#cart-deadline").text(gettext("Your cart is about to expire. If you want to continue, please click here:"))
+            } else {
+                $("#cart-deadline").text(ngettext(
+                    "The items in your cart are reserved for you for one minute.",
+                    "The items in your cart are reserved for you for {num} minutes.",
+                    diff_minutes
+                ).replace(/\{num\}/g, diff_minutes));
+            }
+
             $("#cart-deadline-short").text(
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
