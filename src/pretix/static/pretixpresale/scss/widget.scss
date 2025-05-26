@@ -679,9 +679,17 @@
 
 
 .pretix-widget-event-list-filter-form {
-  display: flex;
-  flex-direction: row;
-  align-items: end;
+  .pretix-widget-event-list-filter-fieldset {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    border: none;
+    padding: 0;
+    margin: 0;
+    > legend {
+      display: none;
+    }
+  }
   margin-bottom: 15px;
 
   .pretix-widget-event-list-filter-field {
@@ -690,7 +698,7 @@
     margin: 0 15px 0 0;
 
     label {
-      display: inline-block;
+      display: block;
       font-weight: bold;
       margin-bottom: 5px;
     }
@@ -705,7 +713,9 @@
   }
 }
 .pretix-widget.pretix-widget-mobile .pretix-widget-event-list-filter-form {
-  display: block;
+  .pretix-widget-event-list-filter-fieldset {
+    display: block;
+  }
 
   .pretix-widget-event-list-filter-field {
     display: block;
