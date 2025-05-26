@@ -51,7 +51,7 @@ def dialog(content, html_id, title, description, *args, **kwargs):
         <form method="dialog" class="modal-card-inner form-horizontal">
             {icon}
             <div class="modal-card-content">
-                <h2 id="{id}-title" class="modal-card-title">{title}</h2>
+                <h2 id="{id}-title" class="modal-card-title h3">{title}</h2>
                 <p id="{id}-description" class="modal-card-description">{description}</p>
                 {content}
             </div>
