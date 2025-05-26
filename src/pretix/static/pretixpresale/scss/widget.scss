@@ -579,25 +579,33 @@
 
   .pretix-widget-event-availability-orange .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-orange.pretix-widget-event-calendar-event {
-    background-color: $brand-warning;
+    --status-bg-color: #{$alert-warning-bg};
+    --status-text-color: #{$alert-warning-text};
+    --status-border-color: #{$alert-warning-border};
   }
   .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-none.pretix-widget-event-calendar-event {
-    background-color: $brand-primary;
+    --status-bg-color: #{$alert-primary-bg};
+    --status-text-color: #{$alert-primary-text};
+    --status-border-color: #{$alert-primary-border};
   }
   .pretix-widget-event-availability-green .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-green.pretix-widget-event-calendar-event {
-    background-color: $brand-success;
+    --status-bg-color: #{$alert-success-bg};
+    --status-text-color: #{$alert-success-text};
+    --status-border-color: #{$alert-success-border};
   }
   .pretix-widget-event-availability-red .pretix-widget-event-list-entry-availability span,
   .pretix-widget-event-availability-red.pretix-widget-event-calendar-event {
-    background-color: $brand-danger;
+    --status-bg-color: #{$alert-danger-bg};
+    --status-text-color: #{$alert-danger-text};
+    --status-border-color: #{$alert-danger-border};
   }
   .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span {
     border-left: 10px solid $brand-warning;
   }
-  .pretix-widget-event-availability-low.pretix-widget-event-calendar-event {
-    border-right: 10px solid $brand-warning;
+  .pretix-widget-event-calendar .pretix-widget-event-availability-low.pretix-widget-event-calendar-event:before {
+    background: linear-gradient(to bottom, var(--pretix-brand-warning) 1em, var(--status-border-color) 2.5em);
   }
 
   .pretix-widget-event-calendar {
@@ -639,12 +647,27 @@
       }
     }
     .pretix-widget-event-calendar-event {
+      position: relative;
       display: block;
       border-radius: 4px;
+      border: 1px solid var(--status-border-color, #000);
+      background-color: var(--status-bg-color, #fff);
+      color: var(--status-text-color, #000);
       padding: 5px;
-      color: white;
+      padding-left: 17px;
       cursor: pointer;
       margin-bottom: 5px;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 11px;
+        height: 100%;
+        background: var(--status-border-color, #000);
+      }
+
       &:last-child {
         margin-bottom: 0;
       }

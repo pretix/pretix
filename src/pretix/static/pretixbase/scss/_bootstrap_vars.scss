@@ -123,6 +123,12 @@ $label-warning-bg-hover: var(--pretix-brand-warning-darken-10);
 $label-danger-bg: var(--pretix-brand-danger);
 $label-danger-bg-hover: var(--pretix-brand-danger-darken-10);
 
+$alert-primary-bg: var(--pretix-brand-primary-tint-90);
+$alert-primary-text: var(--pretix-brand-primary-shade-42);
+$alert-primary-border: var(--pretix-brand-primary);
+$alert-primary-hr: var(--pretix-brand-primary-darken-5);
+$alert-primary-link: var(--pretix-brand-primary-shade-42);
+
 $alert-success-bg: var(--pretix-brand-success-tint-85);
 $alert-success-text: var(--pretix-brand-success-shade-42);
 $alert-success-border: var(--pretix-brand-success);
