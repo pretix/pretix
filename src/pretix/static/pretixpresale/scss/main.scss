@@ -274,31 +274,25 @@ body.loading .container {
 }
 
 .info-row {
-    & > .fa, 
-    & > .info-row-icon {
+    position: relative;
+    min-height: 30px;
+    margin-bottom: 10px;
+
+    .info-row-icon {
+        position: absolute;
+        top: -5px;
+        left: 0;
         font-size: 26px;
         color: $brand-primary;
-        float: left;
         margin-top: 3px;
-        width: 26px;
-    }
-    & > img {
         width: 26px;
         height: auto;
-        float: left;
-        margin-top: 3px;
-        position: relative;
-        left: 3.71423px;  /* Position analog to what fa-fw does */
-    }
-    .info-row-icon .fa {
-        vertical-align: top;
+        .fa {
+            vertical-align: top;
+        }
     }
     p {
-        min-height: 30px;
         margin-left: 40px;
-    }
-    p:first-child {
-        margin-top: 0;
     }
 }
 
