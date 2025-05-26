@@ -254,6 +254,11 @@ Vue.component('availbox', {
         item: Object,
         variation: Object
     },
+    watch: {
+        amount_selected: function () {
+            this.$root.$emit("amounts_changed");
+        }
+    },
     mounted: function() {
         if (this.item.has_variations) {
             this.$set(this.variation, 'amount_selected', 0);
@@ -308,7 +313,6 @@ Vue.component('availbox', {
                     // manually set value on quantity as on reload somehow v-model binding breaks
                     this.$refs.quantity.value = value;
                 }
-                this.$root.$emit("amounts_changed")
             }
         },
         label_select_item: function () {
