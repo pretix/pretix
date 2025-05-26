@@ -215,6 +215,9 @@ $(function () {
         var action = this.action;
         var formData = new FormData(this);
         formData.append('ajax', '1');
+        if (async_task_dont_redirect) {
+            formData.append('ajax_dont_redirect', '1');
+        }
         if (submitter && submitter.name) {
             formData.append(submitter.name, submitter.value);
         }
