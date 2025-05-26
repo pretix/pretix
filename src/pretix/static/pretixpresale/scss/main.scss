@@ -274,11 +274,13 @@ body.loading .container {
 }
 
 .info-row {
-    & > .fa {
+    & > .fa, 
+    & > .info-row-icon {
         font-size: 26px;
         color: $brand-primary;
         float: left;
         margin-top: 3px;
+        width: 26px;
     }
     & > img {
         width: 26px;
@@ -287,6 +289,9 @@ body.loading .container {
         margin-top: 3px;
         position: relative;
         left: 3.71423px;  /* Position analog to what fa-fw does */
+    }
+    .info-row-icon .fa {
+        vertical-align: top;
     }
     p {
         min-height: 30px;
