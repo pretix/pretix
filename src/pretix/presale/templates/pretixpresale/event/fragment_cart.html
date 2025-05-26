@@ -495,7 +495,7 @@
         <form class="text-muted" id="cart-extend-form" data-asynctask data-asynctask-no-redirect
                 method="post" action="{% eventurl request.event "presale:event.cart.extend" cart_namespace=cart_namespace %}">
             {% csrf_token %}
-            <span id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" data-max-expiry-extend="{{ cart.max_expiry_extend|date:"Y-m-d H:i:sO" }}">
+            <p id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" data-max-expiry-extend="{{ cart.max_expiry_extend|date:"Y-m-d H:i:sO" }}">
                 {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
                     {% blocktrans trimmed with minutes=cart.minutes_left %}
                         The items in your cart are reserved for you for {{ minutes }} minutes.
@@ -503,9 +503,11 @@
                 {% else %}
                     {% trans "The items in your cart are no longer reserved for you. You can still complete your order as long as they’re available." %}
                 {% endif %}
-            </span>
-            <button class="btn btn-link" type="submit" id="cart-extend-button">
-                <i class="fa fa-refresh" aria-hidden="true"></i> {% trans "Extend" %}</button>
+            </p>
+            <p>
+            <button class="btn btn-default" type="submit" id="cart-extend-button">
+                <i class="fa fa-refresh" aria-hidden="true"></i> {% trans "Extend reservation" %}</button>
+            </p>
         </form>
     {% else %}
         <p class="sr-only" id="cart-description">{% trans "Overview of your ordered products." %}</p>
