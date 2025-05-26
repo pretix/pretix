@@ -1060,8 +1060,7 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
 
         // Resume cart
-        + '<div class="pretix-widget-info-message pretix-widget-clickable"'
-        + '     v-if="$root.cart_exists">'
+        + '<div ref="resumeCartAlert" class="pretix-widget-info-message pretix-widget-clickable" aria-live="polite" hidden>'
         + '<span :id="id_cart_exists_msg">' + strings['cart_exists'] + '</span>'
         + '<button @click.prevent.stop="$parent.resume" class="pretix-widget-resume-button" type="button" v-bind:aria-describedby="id_cart_exists_msg">'
         + strings['resume_checkout']
@@ -1117,6 +1116,21 @@ Vue.component('pretix-widget-event-form', {
 
         + '</div>'
     ),
+    mounted: function() {
+        this.$root.$on('focus_voucher_field', this.focus_voucher_field)
+    },
+    beforeDestroy: function() {
+        this.$root.$off('focus_voucher_field', this.focus_voucher_field)
+    },
+    watch: {
+        '$root.cart_exists': function(newValue) {
+            if (newValue) {
+                this.$refs.resumeCartAlert.removeAttribute("hidden");
+            } else {
+                this.$refs.resumeCartAlert.setAttribute("hidden", "hidden");
+            }
+        },
+    },
     computed: {
         id_voucher_input: function () {
             return this.$root.html_id + '-voucher-input';
