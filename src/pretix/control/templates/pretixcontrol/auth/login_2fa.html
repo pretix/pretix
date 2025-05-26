@@ -14,7 +14,7 @@
             <input class="form-control" name="token" placeholder="{% trans "Token" %}" autocomplete="one-time-code"
                     type="text" required="required" autofocus="autofocus" id="webauthn-response">
         </div>
-        <div class="sr-only alert alert-danger" id="webauthn-error">
+        <div class="alert alert-danger hidden" id="webauthn-error">
             {% trans "WebAuthn failed. Check that the correct authentication device is correctly plugged in." %}
         </div>
         {% if jsondata %}

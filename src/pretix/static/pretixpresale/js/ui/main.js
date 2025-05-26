@@ -479,7 +479,7 @@ $(function () {
     $("form:has(#btn-add-to-cart)").on("submit", function(e) {
         if (
             (this.classList.contains("has-seating") && this.querySelector("pretix-seating-checkout-button button")) ||
-            this.querySelector("input[type=checkbox]:checked") || 
+            this.querySelector("input[type=checkbox]:checked, input[type=radio]:checked") ||
             [...this.querySelectorAll(".input-item-count:not([type=hidden])")].some(input => input.value && input.value !== "0") // TODO: seating adds a hidden seating-dummy-item-count, which is not useful and should at some point be removed
         ) {
             // okay, let the submit-event bubble to async-task
@@ -570,35 +570,17 @@ $(function () {
     form_handlers($("body"));
 
     var local_tz = moment.tz.guess()
-    $("span[data-timezone], small[data-timezone], time[data-timezone]").each(function() {
+    $(".event-is-remote span[data-timezone]").each(function() {
         var t = moment.tz($(this).attr("datetime") || $(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
-        var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
 
-        $(this).tooltip({
-            "title": gettext("Time zone:") + " " + tz.abbr(t),
-            "template": tpl
-        });
         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
-            var $add = $("<span>")
-            $add.append(" ")
-            $add.append($("<span>").addClass("fa fa-globe"))
-            if ($(this).is("[data-time-short]")) {
-                $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat"))))
-            } else {
-                $add.addClass("text-muted")
-                $add.append(" " + gettext("Your local time:") + " ")
-                if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")))
-                } else {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")))
-                }
-            }
+            var format = t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD") ? "datetimeformat" : "timeformat";
+            var time_str = t.tz(local_tz).format($("body").data(format));
+            var $add = $("<small>").addClass("text-muted").append(" (" + gettext("Your local time:") + " ")
+            $add.append($('<time>').attr("datetime", time_str).text(time_str))
+            $add.append(" " + moment.tz.zone(local_tz).abbr(t) + ")");
             $add.insertAfter($(this));
-            $add.tooltip({
-                "title": gettext("Time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
-                "template": tpl
-            });
         }
     });
 
@@ -712,7 +694,27 @@ $(function () {
     });
 
     // Lightbox
-    lightbox.init();
+    (function() {
+        var dialog = document.getElementById("lightbox-dialog");
+        var img = dialog.querySelector("img");
+        var caption = dialog.querySelector("figcaption");
+        $(dialog).on("mousedown", function (e) {
+            if (e.target == this) {
+                // dialog has no padding, so click triggers only on backdrop
+                this.close();
+            }
+        });
+        $("a[data-lightbox]").on("click", function (e) {
+            e.preventDefault();
+            var label = this.querySelector("img").alt;
+            img.src = this.href;
+            img.alt = label;
+            caption.textContent = label;
+            dialog.showModal();
+        });
+    })();
+
+
 
     // free-range price input auto-check checkbox/set count-input to 1 if 0
     $("[data-checked-onchange]").each(function() {

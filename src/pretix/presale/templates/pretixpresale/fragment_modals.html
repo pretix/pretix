@@ -42,10 +42,26 @@
     <div class="steps">
     </div>
 {% enddialog %}
+
 {% trans "Please let us know you're still there." as label_cart_extend_dialog %}
 {% dialog "dialog-cart-extend" label_cart_extend_dialog "" icon="clock-o" alert=true %}
     <p class="modal-card-confirm"><button class="btn btn-lg btn-primary">{% trans "Continue" %}</button></p>
 {% enddialog %}
+
+</div>
+
+<dialog id="lightbox-dialog" role="alertdialog" aria-labelledby="lightbox-label">
+    <form method="dialog" class="modal-card">
+        <div class="modal-card-content">
+            <figure class="text-center text-muted">
+                <img />
+                <figcaption id="lightbox-label"></figcaption>
+            </figure>
+            <button id="lightbox-close" class="btn btn-default btn-xs" aria-label="{% trans "Close" %}">{% icon "close" %}</button>
+        </div>
+    </form>
+</dialog>
+
 {% if request.organizer and request.organizer.settings.cookie_consent %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
     {% if cookie_consent_from_widget %}
@@ -123,3 +139,9 @@
         {% endwith %}
     {% endif %}
 {% endif %}
+
+{% trans "You didn't select any ticket." as label_nothing_to_add %}
+{% trans "Please tick a checkbox or enter a quantity for one of the ticket types to add to the cart." as description_nothing_to_add %}
+{% dialog "dialog-nothing-to-add" label_nothing_to_add description_nothing_to_add icon="exclamation-circle" %}
+    <p class="modal-card-confirm"><button class="btn btn-primary">{% trans "OK" %}</button></p>
+{% enddialog %}

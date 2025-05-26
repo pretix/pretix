@@ -93,6 +93,11 @@ $(function () {
 
     update_consent(storage_val, save_for_session_only);
 
+    if (!consent_modal) {
+        // Cookie consent is active, but no provider defined
+        return;
+    }
+
     function _set_button_text () {
         var btn = $("#cookie-consent-button-no");
         btn.text(

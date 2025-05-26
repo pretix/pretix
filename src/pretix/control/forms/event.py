@@ -175,6 +175,7 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_start',
             'presale_end',
             'location',
+            'is_remote',
             'geo_lat',
             'geo_lon',
         ]
@@ -448,6 +449,7 @@ class EventUpdateForm(I18nModelForm):
             'presale_start',
             'presale_end',
             'location',
+            'is_remote',
             'geo_lat',
             'geo_lon',
             'all_sales_channels',
