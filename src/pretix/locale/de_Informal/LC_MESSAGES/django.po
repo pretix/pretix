@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-27 10:14+0000\n"
-"PO-Revision-Date: 2025-05-27 09:29+0000\n"
+"PO-Revision-Date: 2025-05-27 10:38+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -4377,13 +4377,15 @@ msgstr "Optional. Es werden vor diesem Termin keine Produkte verkauft."
 
 #: pretix/base/models/event.py:621
 msgid "This event is remote or partially remote."
-msgstr ""
+msgstr "Diese Veranstaltung findet ganz oder teilweise remote statt."
 
 #: pretix/base/models/event.py:622
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
 msgstr ""
+"Dies wird verwendet um Nutzer darauf hinzuweisen, ob sich die Veranstaltung "
+"in einer anderen Zeitzone befindet und die lokale Zeit mit anzuzeigen."
 
 #: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
@@ -32289,8 +32291,6 @@ msgstr ""
 "finden."
 
 #: pretix/presale/forms/customer.py:74
-#, fuzzy
-#| msgid "Please verify that you entered the correct email addess."
 msgid "Please verify that you entered the correct email address."
 msgstr "Bitte prüfe, dass du die korrekte E-Mail-Adresse eingegeben hast."
 
@@ -33279,10 +33279,8 @@ msgstr ""
 "verfügbar sind."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
-#, fuzzy
-#| msgid "Event description"
 msgid "Extend reservation"
-msgstr "Veranstaltungsbeschreibung"
+msgstr "Reservierung verlängern"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
@@ -34600,16 +34598,12 @@ msgstr ""
 "fortfahren."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:47
-#, fuzzy
-#| msgid "Please select how you want to pay."
 msgid "Please let us know you're still there."
-msgstr "Bitte wähle die gewünschte Zahlungsmethode aus."
+msgstr "Bist du noch hier?"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:59
-#, fuzzy
-#| msgid "Closed"
 msgid "Close"
-msgstr "geschlossen"
+msgstr "Schließen"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:80
 msgid "Adjust settings in detail"
@@ -34652,10 +34646,8 @@ msgid "Save selection"
 msgstr "Auswahl speichern"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:142
-#, fuzzy
-#| msgid "You didn’t select any ticket."
 msgid "You didn't select any ticket."
-msgstr "Du hast keine Tickets ausgewählt."
+msgstr "Du hast kein Ticket ausgewählt."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:143
 msgid ""
