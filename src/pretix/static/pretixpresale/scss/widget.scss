@@ -75,6 +75,7 @@
   }
   label.pretix-widget-btn-checkbox {
     @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border, darken($btn-default-bg, 10%), darken($btn-default-border, 25%), darken($btn-default-border, 12%));
+    border-radius: $input-border-radius;
     border-width: 1px;
     border-style: solid;
     position: relative;
@@ -169,6 +170,7 @@
   .pretix-widget-info-message {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
     padding: 10px;
     text-align: left;
     margin: 10px 0;
@@ -176,6 +178,15 @@
     border: 2px solid $brand-info;
     color: $state-info-text;
     border-radius: $alert-border-radius;
+  }
+  &.pretix-widget-mobile {
+    .pretix-widget-info-message {
+      flex-direction: column;
+    }
+    .pretix-widget-resume-button {
+      margin-top: 10px;
+      margin-left: 0;
+    }
   }
 
   .pretix-widget-error-message {
@@ -537,6 +548,10 @@
     flex-wrap: wrap;
     color: $text-color;
 
+    &:has(.pretix-widget-event-list-entry-availability) {
+      text-decoration: none;
+    }
+
     &:hover, &:active, &:focus {
       background: $gray-lighter;
       text-decoration: none;
@@ -648,9 +663,7 @@
       &:last-child {
         margin-bottom: 0;
       }
-      &:hover {
-        text-decoration: none;
-      }
+      text-decoration: none;
     }
 
     .pretix-widget-event-calendar-table {
@@ -679,9 +692,17 @@
 
 
 .pretix-widget-event-list-filter-form {
-  display: flex;
-  flex-direction: row;
-  align-items: end;
+  .pretix-widget-event-list-filter-fieldset {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    border: none;
+    padding: 0;
+    margin: 0;
+    > legend {
+      display: none;
+    }
+  }
   margin-bottom: 15px;
 
   .pretix-widget-event-list-filter-field {
@@ -690,7 +711,7 @@
     margin: 0 15px 0 0;
 
     label {
-      display: inline-block;
+      display: block;
       font-weight: bold;
       margin-bottom: 5px;
     }
@@ -705,7 +726,9 @@
   }
 }
 .pretix-widget.pretix-widget-mobile .pretix-widget-event-list-filter-form {
-  display: block;
+  .pretix-widget-event-list-filter-fieldset {
+    display: block;
+  }
 
   .pretix-widget-event-list-filter-field {
     display: block;
