@@ -74,7 +74,7 @@ def contextprocessor(request):
     try:
         ctx['poweredby'] = get_powered_by(request, safelink=True)
     except Exception:
-        ctx['poweredby'] = 'powered by <a href="https://pretix.eu/" target="_blank" rel="noopener">pretix</a>'
+        ctx['poweredby'] = '<a href="https://pretix.eu/" target="_blank" rel="noopener">powered by pretix</a>'
     if settings.DEBUG and 'runserver' not in sys.argv:
         ctx['debug_warning'] = True
     elif 'runserver' in sys.argv:
