@@ -133,7 +133,7 @@ function async_task_callback(data, jqXHR, status) {
         async_task_on_success.call(this, data);
         return;
     }
-    var check_url = new URL(data.check_url);
+    var check_url = new URL(data.check_url, window.location);
     if (async_task_dont_redirect) {
         check_url.searchParams.set('ajax_dont_redirect', '1');
     }
