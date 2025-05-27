@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-27 10:14+0000\n"
-"PO-Revision-Date: 2025-04-17 04:00+0000\n"
+"PO-Revision-Date: 2025-05-28 08:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -89,7 +89,7 @@ msgstr "Grego"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebraico"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -695,16 +695,15 @@ msgstr ""
 "usados para integrações personalizadas."
 
 #: pretix/base/context.py:38
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "mantido por {name} baseado no <a {a_attr}>pretix</a>"
+msgstr ""
+"<a {a_name_attr}>mantido por {name}</a> <a {a_attr}>baseado no pretix</a>"
 
 #: pretix/base/context.py:48
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "mantido por {name} baseado no <a {a_attr}>pretix</a>"
+msgstr "<a {a_attr}>mantido por {name} baseado no pretix</a>"
 
 #: pretix/base/context.py:55
 #, python-format
@@ -2987,11 +2986,9 @@ msgid "Repeat password"
 msgstr "Repita a senha"
 
 #: pretix/base/forms/questions.py:135 pretix/base/forms/questions.py:257
-#, fuzzy
-#| msgid "No country specified."
 msgctxt "name_salutation"
 msgid "not specified"
-msgstr "Nenhum país especificado."
+msgstr "não especificado"
 
 #: pretix/base/forms/questions.py:220
 msgid "Please do not use special characters in names."
@@ -4261,20 +4258,14 @@ msgstr ""
 "acesso à cota esgotada ainda receberão o desconto."
 
 #: pretix/base/models/discount.py:177
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr "Todas as datas com início antes"
+msgstr "Datas disponíveis a partir de"
 
 #: pretix/base/models/discount.py:182
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "Todas as datas com início antes"
+msgstr "Datas disponíveis começando até"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -4370,13 +4361,15 @@ msgstr "Opcional. Nenhum produto será vendido antes desta data."
 
 #: pretix/base/models/event.py:621
 msgid "This event is remote or partially remote."
-msgstr ""
+msgstr "Este evento é remoto ou parcialmente remoto."
 
 #: pretix/base/models/event.py:622
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
 msgstr ""
+"Isto será usado para informar as pessoas se o evento ocorrerá em um fuso "
+"horário diferente e nos permitirá calcular o fuso horário local da pessoa."
 
 #: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
@@ -5574,20 +5567,12 @@ msgid "Unknown country code."
 msgstr "Código de país desconhecido."
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum date must not be before the minimum value."
-msgstr "A contagem máxima precisa ser maior que a contagem mínima."
+msgstr "A data máxima deve ser antes do valor mínimo."
 
 #: pretix/base/models/items.py:1925
-#, fuzzy
-#| msgid ""
-#| "The maximum number of usages may not be lower than the minimum number of "
-#| "usages."
 msgid "The maximum value must not be lower than the minimum value."
-msgstr ""
-"O número máximo de utilizações não pode ser inferior ao número mínimo de "
-"utilizações."
+msgstr "O valor máximo não pode ser menor que o valor mínimo."
 
 #: pretix/base/models/items.py:1942
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -6056,10 +6041,8 @@ msgid "Cart ID (e.g. session key)"
 msgstr "ID do carrinho (por exemplo, chave de sessão)"
 
 #: pretix/base/models/orders.py:3102
-#, fuzzy
-#| msgid "Gift card: Expiration date"
 msgid "Limit for extending expiration date"
-msgstr "Cartão-presente: Data de expiração"
+msgstr "Limitar para extender a data de expiração"
 
 #: pretix/base/models/orders.py:3131
 msgid "Cart position"
@@ -7246,11 +7229,8 @@ msgstr ""
 "Você não pode pagar com cartões-presente ao comprar um cartão-presente."
 
 #: pretix/base/payment.py:1467
-#, fuzzy
-#| msgid "Please enter the correct result."
 msgid "Please enter the code of your gift card."
-msgstr ""
-"Você precisa selecionar uma data.Por favor, informe os resultados corretos."
+msgstr "Por favor, informe o código do seu cartão presente."
 
 #: pretix/base/payment.py:1483 pretix/base/payment.py:1526
 msgid ""
@@ -19891,6 +19871,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:53
 msgid "All of these rules will only apply if an invoice address is set."
 msgstr ""
+"Todas estas regras só serão aplicadas se um endereço de fatura é definido."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:58
 msgid "Condition"
@@ -20448,7 +20429,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/includes/logs.html:51
 msgid "View full log"
-msgstr ""
+msgstr "Ver log completo"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:6
 msgid "Modify product:"
@@ -20467,6 +20448,8 @@ msgid ""
 "Please note that your product will <strong>not</strong> be available for "
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
+"Seu produto <strong>não estará</strong> disponível para venda até que você "
+"adicione seu item para uma quota nova ou uma existente."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:24
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:79
@@ -20821,7 +20804,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:14
 msgid "You haven't created any categories yet."
-msgstr ""
+msgstr "Você ainda não criou nenhuma categoria."
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:20
 #: pretix/control/templates/pretixcontrol/items/categories.html:24
@@ -23314,17 +23297,19 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:20
 msgid "Scan the following configuration code:"
-msgstr ""
+msgstr "Escaneie o seguinte código de configuração:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:22
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
+"Se seu app/dispositivo não suporta escanear QR code, você pode fornecer a "
+"seguinte informação:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:24
 msgid "System URL:"
-msgstr ""
+msgstr "URL do sistema:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:25
 msgid "Token:"
@@ -23353,7 +23338,7 @@ msgstr "Logs de dispositivo"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
 msgid "Revoke device access:"
-msgstr ""
+msgstr "Revogar acesso de dispositivo:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:9
 msgid "Are you sure you want remove access for this device?"
