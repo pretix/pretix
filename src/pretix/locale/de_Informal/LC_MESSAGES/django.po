@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 19:50+0000\n"
-"PO-Revision-Date: 2025-05-27 09:27+0000\n"
+"PO-Revision-Date: 2025-05-27 09:29+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6071,10 +6071,8 @@ msgid "Cart ID (e.g. session key)"
 msgstr "Warenkorb-ID (z.B. Session-ID)"
 
 #: pretix/base/models/orders.py:3102
-#, fuzzy
-#| msgid "Gift card: Expiration date"
 msgid "Limit for extending expiration date"
-msgstr "Wertgutschein: Ablaufdatum"
+msgstr "Limit für Verlängerung des Ablaufdatums"
 
 #: pretix/base/models/orders.py:3131
 msgid "Cart position"
@@ -32300,10 +32298,8 @@ msgstr ""
 "anzufordern."
 
 #: pretix/presale/forms/customer.py:90
-#, fuzzy
-#| msgid "Your password"
 msgid "Forgot your password?"
-msgstr "Ihr Passwort"
+msgstr "Passwort vergessen?"
 
 #: pretix/presale/forms/customer.py:146
 msgid ""
@@ -32413,10 +32409,8 @@ msgid "Skip link"
 msgstr "Link überspringen"
 
 #: pretix/presale/templates/pretixpresale/base.html:48
-#, fuzzy
-#| msgid "Email content"
 msgid "Skip to main content"
-msgstr "E-Mail-Inhalt"
+msgstr "Zum Haupt-Inhalt springen"
 
 #: pretix/presale/templates/pretixpresale/base.html:76
 msgid "Footer Navigation"
@@ -34715,8 +34709,7 @@ msgid "Event overview"
 msgstr "Überblick"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:21
-#, fuzzy, python-format
-#| msgid "Show next month, %(month)s"
+#, python-format
 msgid "Events in %(month)s"
 msgstr "Veranstaltungen im %(month)s"
 
@@ -34729,17 +34722,13 @@ msgstr ""
 "Zeitzonen."
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:21
-#, fuzzy, python-format
-#| msgid "Entry scan: %(date)s"
+#, python-format
 msgid "Events on %(day)s"
-msgstr "Veranstaltungen am %(date)s"
+msgstr "Veranstaltungen am %(day)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:52
-#, fuzzy
-#| msgctxt "subevents"
-#| msgid "Select date"
 msgid "Select a date to display"
-msgstr "Termin auswählen"
+msgstr "Datum zur Anzeige auswählen"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:59
 msgid "Show date"
@@ -34748,7 +34737,7 @@ msgstr "Datum anzeigen"
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:21
 #, python-format
 msgid "Events in %(week)s (%(week_day_from)s – %(week_day_to)s)"
-msgstr ""
+msgstr "Veranstaltungen in %(week)s (%(week_day_from)s – %(week_day_to)s)"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:5
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:10
