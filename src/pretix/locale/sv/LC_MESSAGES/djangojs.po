@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 19:50+0000\n"
+"POT-Creation-Date: 2025-05-27 08:31+0000\n"
 "PO-Revision-Date: 2024-09-12 03:00+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -354,12 +354,11 @@ msgid "close"
 msgstr "stäng"
 
 #: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:537
+#: pretix/static/pretixpresale/js/ui/main.js:535
 msgid "required"
 msgstr "obligatorisk"
 
-#: pretix/static/pretixbase/js/asynctask.js:58
-#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:12
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
@@ -367,13 +366,11 @@ msgstr ""
 "Din begäran behandlas för närvarande. Beroende på storleken på ditt event "
 "kan det ta upp till några minuter."
 
-#: pretix/static/pretixbase/js/asynctask.js:63
-#: pretix/static/pretixbase/js/asynctask.js:140
+#: pretix/static/pretixbase/js/asynctask.js:16
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr "Din begäran har köats på servern och kommer snart att behandlas."
 
-#: pretix/static/pretixbase/js/asynctask.js:69
-#: pretix/static/pretixbase/js/asynctask.js:146
+#: pretix/static/pretixbase/js/asynctask.js:20
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -383,14 +380,14 @@ msgstr ""
 "behandlas. Om det tar mer än två minuter, vänligen kontakta oss eller gå "
 "tillbaka i din webbläsare och försök igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:105
-#: pretix/static/pretixbase/js/asynctask.js:193
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:119
+#: pretix/static/pretixbase/js/asynctask.js:176
+#: pretix/static/pretixbase/js/asynctask.js:180
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Ett fel av typ {code} har hänt."
 
-#: pretix/static/pretixbase/js/asynctask.js:108
+#: pretix/static/pretixbase/js/asynctask.js:122
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -398,22 +395,22 @@ msgstr ""
 "Just nu kan vi inte nå servern, men vi fortsätter att försöka. Senaste "
 "felkoden var: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:160
+#: pretix/static/pretixbase/js/asynctask.js:156
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "Förfrågan tog för lång tid. Vänligen försök igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:201
+#: pretix/static/pretixbase/js/asynctask.js:182
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "Just nu kan vi inte nå servern. Vänligen försök igen. Felkod: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:230
+#: pretix/static/pretixbase/js/asynctask.js:210
 msgid "We are processing your request …"
 msgstr "Vi behandlar din förfrågan …"
 
-#: pretix/static/pretixbase/js/asynctask.js:238
+#: pretix/static/pretixbase/js/asynctask.js:213
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -423,8 +420,11 @@ msgstr ""
 "kontrollera din internetanslutning och ladda sedan den här sidan och försök "
 "igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:301
-#: pretix/static/pretixcontrol/js/ui/main.js:71
+#: pretix/static/pretixbase/js/asynctask.js:270
+msgid "If this takes longer than a few minutes, please contact us."
+msgstr ""
+
+#: pretix/static/pretixbase/js/asynctask.js:325
 msgid "Close message"
 msgstr "Stäng meddelande"
 
@@ -642,17 +642,17 @@ msgstr "Ett fel har uppstått."
 msgid "Generating messages …"
 msgstr "Skapar meddelanden …"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:109
+#: pretix/static/pretixcontrol/js/ui/main.js:83
 msgid "Unknown error."
 msgstr "Okänt fel."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:332
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 #, fuzzy
 #| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Din färg har hög kontrast och är väldigt lätt att läsa!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:336
+#: pretix/static/pretixcontrol/js/ui/main.js:310
 #, fuzzy
 #| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
@@ -660,46 +660,46 @@ msgid ""
 "requirements."
 msgstr "Din färg har tillräcklig kontrast och är troligtvis läsbar!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:340
+#: pretix/static/pretixcontrol/js/ui/main.js:314
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:456
-#: pretix/static/pretixcontrol/js/ui/main.js:476
+#: pretix/static/pretixcontrol/js/ui/main.js:430
+#: pretix/static/pretixcontrol/js/ui/main.js:450
 msgid "Search query"
 msgstr "Sökterm"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:474
+#: pretix/static/pretixcontrol/js/ui/main.js:448
 msgid "All"
 msgstr "Alla"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:475
+#: pretix/static/pretixcontrol/js/ui/main.js:449
 msgid "None"
 msgstr "Ingen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:479
+#: pretix/static/pretixcontrol/js/ui/main.js:453
 msgid "Selected only"
 msgstr "Endast valda"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:822
+#: pretix/static/pretixcontrol/js/ui/main.js:796
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Ange sidnummer mellan 1 och %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:825
+#: pretix/static/pretixcontrol/js/ui/main.js:799
 msgid "Invalid page number."
 msgstr "Ogiltigt sidnummer."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:983
+#: pretix/static/pretixcontrol/js/ui/main.js:957
 msgid "Use a different name internally"
 msgstr "Använd ett annat namn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1023
+#: pretix/static/pretixcontrol/js/ui/main.js:997
 msgid "Click to close"
 msgstr "Klicka för att stänga"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1104
+#: pretix/static/pretixcontrol/js/ui/main.js:1078
 msgid "You have unsaved changes!"
 msgstr "Du har osparade ändringar!"
 
@@ -727,7 +727,7 @@ msgid_plural "({num} more dates)"
 msgstr[0] "(ytterligare ett datum)"
 msgstr[1] "({num} fler datum)"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:43
+#: pretix/static/pretixpresale/js/ui/cart.js:48
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
@@ -735,15 +735,25 @@ msgstr ""
 "Varorna i din varukorg är inte längre reserverade för dig. Du kan dock "
 "genomföra din order så länge varorna fortfarande är tillgängliga."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:45
+#: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "Cart expired"
 msgstr "Varukorgen har gått ut"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:50
+#: pretix/static/pretixpresale/js/ui/cart.js:59
+#: pretix/static/pretixpresale/js/ui/cart.js:87
+msgid ""
+"Your cart is about to expire. If you want to continue, please click here:"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/cart.js:64
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Produkterna i din bokning är reserverade för dig i en minut."
 msgstr[1] "Produkterna i din bokning är reserverade för dig i {num} minuter."
+
+#: pretix/static/pretixpresale/js/ui/cart.js:86
+msgid "Your cart has expired. If you want to continue, please click here:"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:216
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -757,12 +767,7 @@ msgstr "Du får %(amount)s %(currency)s tillbaka"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Vänligen ange det belopp som arrangören kan behålla."
 
-#: pretix/static/pretixpresale/js/ui/main.js:581
-#: pretix/static/pretixpresale/js/ui/main.js:601
-msgid "Time zone:"
-msgstr "Tidszon:"
-
-#: pretix/static/pretixpresale/js/ui/main.js:592
+#: pretix/static/pretixpresale/js/ui/main.js:580
 msgid "Your local time:"
 msgstr "Din lokala tid:"
 
@@ -1185,6 +1190,9 @@ msgstr "November"
 #: pretix/static/pretixpresale/js/widget/widget.js:101
 msgid "December"
 msgstr "December"
+
+#~ msgid "Time zone:"
+#~ msgstr "Tidszon:"
 
 #~ msgid ""
 #~ "Your color has bad contrast for text on white background, please choose a "

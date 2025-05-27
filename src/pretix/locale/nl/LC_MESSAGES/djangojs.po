@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-21 19:50+0000\n"
+"POT-Creation-Date: 2025-05-27 08:31+0000\n"
 "PO-Revision-Date: 2025-05-01 02:00+0000\n"
 "Last-Translator: Foxy Hunter <matthias.vancoillie@outlook.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -344,12 +344,11 @@ msgid "close"
 msgstr "sluiten"
 
 #: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:537
+#: pretix/static/pretixpresale/js/ui/main.js:535
 msgid "required"
 msgstr "verplicht"
 
-#: pretix/static/pretixbase/js/asynctask.js:58
-#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:12
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
@@ -357,13 +356,11 @@ msgstr ""
 "Uw aanvraag wordt momenteel verwerkt. Afhankelijk van de grootte van het "
 "evenement kan dit enkele minuten duren."
 
-#: pretix/static/pretixbase/js/asynctask.js:63
-#: pretix/static/pretixbase/js/asynctask.js:140
+#: pretix/static/pretixbase/js/asynctask.js:16
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr "Uw aanvraag zal binnenkort op de server in behandeling worden genomen."
 
-#: pretix/static/pretixbase/js/asynctask.js:69
-#: pretix/static/pretixbase/js/asynctask.js:146
+#: pretix/static/pretixbase/js/asynctask.js:20
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -373,14 +370,14 @@ msgstr ""
 "contact met ons op als dit langer dan twee minuten duurt, of ga terug in uw "
 "browser en probeer het opnieuw."
 
-#: pretix/static/pretixbase/js/asynctask.js:105
-#: pretix/static/pretixbase/js/asynctask.js:193
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:119
+#: pretix/static/pretixbase/js/asynctask.js:176
+#: pretix/static/pretixbase/js/asynctask.js:180
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Er is een fout opgetreden met code {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:108
+#: pretix/static/pretixbase/js/asynctask.js:122
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -388,12 +385,12 @@ msgstr ""
 "De server is op dit moment niet bereikbaar, we proberen het automatisch "
 "opnieuw. Laatste foutcode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:160
+#: pretix/static/pretixbase/js/asynctask.js:156
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "De aanvraag duurde te lang, probeer het alstublieft opnieuw."
 
-#: pretix/static/pretixbase/js/asynctask.js:201
+#: pretix/static/pretixbase/js/asynctask.js:182
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -401,11 +398,11 @@ msgstr ""
 "De server is op dit moment niet bereikbaar, probeer het alstublieft opnieuw. "
 "Foutcode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:230
+#: pretix/static/pretixbase/js/asynctask.js:210
 msgid "We are processing your request …"
 msgstr "Uw aanvraag is in behandeling …"
 
-#: pretix/static/pretixbase/js/asynctask.js:238
+#: pretix/static/pretixbase/js/asynctask.js:213
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -414,8 +411,11 @@ msgstr ""
 "Uw aanvraag wordt naar de server verstuurd. Controleer uw internetverbinding "
 "en probeer het opnieuw als dit langer dan een minuut duurt."
 
-#: pretix/static/pretixbase/js/asynctask.js:301
-#: pretix/static/pretixcontrol/js/ui/main.js:71
+#: pretix/static/pretixbase/js/asynctask.js:270
+msgid "If this takes longer than a few minutes, please contact us."
+msgstr ""
+
+#: pretix/static/pretixbase/js/asynctask.js:325
 msgid "Close message"
 msgstr "Sluit bericht"
 
@@ -620,17 +620,17 @@ msgstr "Er is een fout opgetreden."
 msgid "Generating messages …"
 msgstr "Bezig met het genereren van berichten …"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:109
+#: pretix/static/pretixcontrol/js/ui/main.js:83
 msgid "Unknown error."
 msgstr "Onbekende fout."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:332
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 #, fuzzy
 #| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Uw kleur heeft een goed contrast, en is gemakkelijk te lezen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:336
+#: pretix/static/pretixcontrol/js/ui/main.js:310
 #, fuzzy
 #| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
@@ -639,46 +639,46 @@ msgid ""
 msgstr ""
 "Uw kleur heeft een redelijk contrast, en is waarschijnlijk goed te lezen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:340
+#: pretix/static/pretixcontrol/js/ui/main.js:314
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:456
-#: pretix/static/pretixcontrol/js/ui/main.js:476
+#: pretix/static/pretixcontrol/js/ui/main.js:430
+#: pretix/static/pretixcontrol/js/ui/main.js:450
 msgid "Search query"
 msgstr "Zoekopdracht"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:474
+#: pretix/static/pretixcontrol/js/ui/main.js:448
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:475
+#: pretix/static/pretixcontrol/js/ui/main.js:449
 msgid "None"
 msgstr "Geen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:479
+#: pretix/static/pretixcontrol/js/ui/main.js:453
 msgid "Selected only"
 msgstr "Alleen geselecteerde"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:822
+#: pretix/static/pretixcontrol/js/ui/main.js:796
 msgid "Enter page number between 1 and %(max)s."
 msgstr "voer een pagina nummer tussen 1 en %(max)s in."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:825
+#: pretix/static/pretixcontrol/js/ui/main.js:799
 msgid "Invalid page number."
 msgstr "Ongeldig pagina nummer."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:983
+#: pretix/static/pretixcontrol/js/ui/main.js:957
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1023
+#: pretix/static/pretixcontrol/js/ui/main.js:997
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1104
+#: pretix/static/pretixcontrol/js/ui/main.js:1078
 msgid "You have unsaved changes!"
 msgstr "U heeft nog niet opgeslagen wijzigingen!"
 
@@ -704,7 +704,7 @@ msgid_plural "({num} more dates)"
 msgstr[0] "(één andere datum)"
 msgstr[1] "({num} andere datums)"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:43
+#: pretix/static/pretixpresale/js/ui/cart.js:48
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
@@ -712,16 +712,26 @@ msgstr ""
 "De items in uw winkelwagen zijn niet meer voor u gereserveerd. U kunt uw "
 "bestelling nog afronden, zolang de producten nog beschikbaar zijn."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:45
+#: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "Cart expired"
 msgstr "Winkelwagen is verlopen"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:50
+#: pretix/static/pretixpresale/js/ui/cart.js:59
+#: pretix/static/pretixpresale/js/ui/cart.js:87
+msgid ""
+"Your cart is about to expire. If you want to continue, please click here:"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/cart.js:64
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "De items in uw winkelwagen zijn nog één minuut voor u gereserveerd."
 msgstr[1] ""
 "De items in uw winkelwagen zijn nog {num} minuten voor u gereserveerd."
+
+#: pretix/static/pretixpresale/js/ui/cart.js:86
+msgid "Your cart has expired. If you want to continue, please click here:"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:216
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -735,12 +745,7 @@ msgstr "U krijgt %(currency)s %(amount)s terug"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Voer het bedrag in dat de organisator mag houden."
 
-#: pretix/static/pretixpresale/js/ui/main.js:581
-#: pretix/static/pretixpresale/js/ui/main.js:601
-msgid "Time zone:"
-msgstr "Tijdzone:"
-
-#: pretix/static/pretixpresale/js/ui/main.js:592
+#: pretix/static/pretixpresale/js/ui/main.js:580
 msgid "Your local time:"
 msgstr "Uw lokale tijd:"
 
@@ -1145,6 +1150,9 @@ msgstr "November"
 #: pretix/static/pretixpresale/js/widget/widget.js:101
 msgid "December"
 msgstr "December"
+
+#~ msgid "Time zone:"
+#~ msgstr "Tijdzone:"
 
 #~ msgid ""
 #~ "Your color has bad contrast for text on white background, please choose a "

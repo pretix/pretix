@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-22 12:48+0000\n"
+"POT-Creation-Date: 2025-05-27 08:30+0000\n"
 "PO-Revision-Date: 2025-05-21 10:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
@@ -231,7 +231,7 @@ msgstr "의견"
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "제품\"{}\" 은 할당량에 할당되지 않습니다."
 
-#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1680
+#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1685
 #: pretix/base/models/items.py:1917 pretix/base/models/items.py:2184
 msgid "One or more items do not belong to this event."
 msgstr "하나 이상의 항목이 이 이벤트에 속하지 않습니다."
@@ -600,9 +600,9 @@ msgstr "고객 계정 익명화되었습니다"
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1004
 #: pretix/base/forms/questions.py:1035 pretix/base/forms/questions.py:1224
-#: pretix/base/payment.py:97 pretix/control/forms/event.py:796
-#: pretix/control/forms/event.py:802 pretix/control/forms/event.py:846
-#: pretix/control/forms/event.py:1443 pretix/control/forms/mailsetup.py:87
+#: pretix/base/payment.py:97 pretix/control/forms/event.py:798
+#: pretix/control/forms/event.py:804 pretix/control/forms/event.py:848
+#: pretix/control/forms/event.py:1445 pretix/control/forms/mailsetup.py:87
 #: pretix/control/forms/mailsetup.py:129
 #: pretix/plugins/banktransfer/payment.py:673
 #: pretix/plugins/banktransfer/payment.py:679
@@ -633,7 +633,7 @@ msgstr "{system} 사용자"
 #: pretix/base/pdf.py:325 pretix/control/navigation.py:81
 #: pretix/control/navigation.py:501
 #: pretix/control/templates/pretixcontrol/checkin/index.html:107
-#: pretix/control/templates/pretixcontrol/event/settings.html:70
+#: pretix/control/templates/pretixcontrol/event/settings.html:71
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:49
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:59
@@ -836,7 +836,7 @@ msgstr "질문들"
 #: pretix/base/exporters/orderlist.py:1138 pretix/base/models/checkin.py:58
 #: pretix/base/models/items.py:2048 pretix/base/models/orders.py:1485
 #: pretix/base/models/orders.py:2999 pretix/base/models/vouchers.py:187
-#: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1608
+#: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1610
 #: pretix/control/forms/filter.py:425 pretix/control/forms/filter.py:1901
 #: pretix/control/forms/filter.py:2123 pretix/control/forms/filter.py:2238
 #: pretix/control/forms/filter.py:2320 pretix/control/forms/filter.py:2537
@@ -866,7 +866,7 @@ msgid "Date"
 msgstr "날짜"
 
 #: pretix/base/exporters/answers.py:79 pretix/base/exporters/answers.py:88
-#: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1609
+#: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1611
 #: pretix/control/forms/filter.py:428 pretix/control/forms/filter.py:455
 #: pretix/control/forms/filter.py:1904 pretix/control/forms/filter.py:1937
 #: pretix/control/forms/filter.py:2126 pretix/control/forms/filter.py:2146
@@ -947,7 +947,7 @@ msgstr "전체 이름"
 #: pretix/base/exporters/invoices.py:340 pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/waitinglist.py:108 pretix/base/forms/questions.py:1185
 #: pretix/base/models/devices.py:65 pretix/base/models/devices.py:127
-#: pretix/base/models/event.py:1482 pretix/base/models/event.py:1724
+#: pretix/base/models/event.py:1487 pretix/base/models/event.py:1729
 #: pretix/base/models/items.py:2052 pretix/base/models/items.py:2225
 #: pretix/base/models/memberships.py:41 pretix/base/models/organizer.py:75
 #: pretix/base/models/organizer.py:535 pretix/base/models/seating.py:85
@@ -1005,9 +1005,9 @@ msgid "Registration date"
 msgstr "등록 날짜"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
-#: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
+#: pretix/base/exporters/waitinglist.py:120 pretix/base/models/auth.py:258
 #: pretix/base/models/customers.py:106 pretix/base/models/exports.py:54
-#: pretix/control/forms/event.py:1614 pretix/control/forms/exports.py:49
+#: pretix/control/forms/event.py:1616 pretix/control/forms/exports.py:49
 #: pretix/control/forms/exports.py:88 pretix/control/views/waitinglist.py:315
 msgid "Language"
 msgstr "언어"
@@ -1140,7 +1140,7 @@ msgstr ""
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:441
 #: pretix/base/exporters/orderlist.py:573
-#: pretix/base/exporters/waitinglist.py:114 pretix/base/models/event.py:572
+#: pretix/base/exporters/waitinglist.py:116 pretix/base/models/event.py:572
 #: pretix/base/pdf.py:224 pretix/control/forms/filter.py:1248
 #: pretix/control/forms/filter.py:1250 pretix/control/forms/filter.py:1695
 #: pretix/control/forms/filter.py:1697
@@ -1169,52 +1169,52 @@ msgid "Timezone"
 msgstr "시간대"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:595
-#: pretix/base/models/event.py:1484 pretix/base/settings.py:3231
+#: pretix/base/models/event.py:1489 pretix/base/settings.py:3231
 #: pretix/base/settings.py:3241 pretix/control/forms/subevents.py:480
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr "이벤트 시작시간"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:597
-#: pretix/base/models/event.py:1486 pretix/base/pdf.py:286
+#: pretix/base/models/event.py:1491 pretix/base/pdf.py:286
 #: pretix/control/forms/subevents.py:485
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
 msgstr "이벤트 마감시간"
 
 #: pretix/base/exporters/events.py:64 pretix/base/models/event.py:599
-#: pretix/base/models/event.py:1488 pretix/control/forms/subevents.py:490
+#: pretix/base/models/event.py:1493 pretix/control/forms/subevents.py:490
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
 msgstr "입장 시간"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:611
-#: pretix/base/models/event.py:1497 pretix/control/forms/subevents.py:93
+#: pretix/base/models/event.py:1502 pretix/control/forms/subevents.py:93
 msgid "Start of presale"
 msgstr "사전 판매 시작"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:605
-#: pretix/base/models/event.py:1491 pretix/control/forms/subevents.py:99
+#: pretix/base/models/event.py:1496 pretix/control/forms/subevents.py:99
 msgid "End of presale"
 msgstr "사전 판매 마감"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:351
-#: pretix/base/models/event.py:617 pretix/base/models/event.py:1503
+#: pretix/base/models/event.py:617 pretix/base/models/event.py:1508
 msgid "Location"
 msgstr "장소"
 
-#: pretix/base/exporters/events.py:68 pretix/base/models/event.py:620
-#: pretix/base/models/event.py:1506
+#: pretix/base/exporters/events.py:68 pretix/base/models/event.py:625
+#: pretix/base/models/event.py:1511
 msgid "Latitude"
 msgstr "위도"
 
-#: pretix/base/exporters/events.py:69 pretix/base/models/event.py:628
-#: pretix/base/models/event.py:1514
+#: pretix/base/exporters/events.py:69 pretix/base/models/event.py:633
+#: pretix/base/models/event.py:1519
 msgid "Longitude"
 msgstr "경도"
 
-#: pretix/base/exporters/events.py:70 pretix/base/models/event.py:640
-#: pretix/base/models/event.py:1529
+#: pretix/base/exporters/events.py:70 pretix/base/models/event.py:645
+#: pretix/base/models/event.py:1534
 #: pretix/control/templates/pretixcontrol/event/index.html:128
 #: pretix/control/templates/pretixcontrol/order/index.html:991
 msgid "Internal comment"
@@ -1510,7 +1510,7 @@ msgid "Internal reference"
 msgstr "내부 참조"
 
 #: pretix/base/exporters/invoices.py:223 pretix/base/models/tax.py:162
-#: pretix/control/forms/event.py:1504
+#: pretix/control/forms/event.py:1506
 msgid "Reverse charge"
 msgstr "역방향 부가가치세(역부과)"
 
@@ -1619,11 +1619,13 @@ msgstr ""
 
 #: pretix/base/exporters/items.py:57 pretix/base/exporters/orderlist.py:588
 #: pretix/base/exporters/orderlist.py:890
+#: pretix/base/exporters/waitinglist.py:112
 msgid "Product ID"
 msgstr "상품 식별 아이디"
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:590
 #: pretix/base/exporters/orderlist.py:892
+#: pretix/base/exporters/waitinglist.py:114
 msgid "Variation ID"
 msgstr "상품 변형 아이디"
 
@@ -1647,7 +1649,7 @@ msgstr "항목 이름"
 
 #: pretix/base/exporters/items.py:68 pretix/base/exporters/orderlist.py:589
 #: pretix/base/exporters/orderlist.py:893
-#: pretix/base/exporters/waitinglist.py:112 pretix/base/models/items.py:1148
+#: pretix/base/exporters/waitinglist.py:113 pretix/base/models/items.py:1148
 #: pretix/base/models/orders.py:1495 pretix/base/models/orders.py:2992
 #: pretix/plugins/checkinlists/exporters.py:695
 msgid "Variation"
@@ -1655,7 +1657,7 @@ msgstr "변동"
 
 #: pretix/base/exporters/items.py:71 pretix/base/exporters/reusablemedia.py:48
 #: pretix/base/models/customers.py:57 pretix/base/models/customers.py:403
-#: pretix/base/models/discount.py:60 pretix/base/models/event.py:1473
+#: pretix/base/models/discount.py:60 pretix/base/models/event.py:1478
 #: pretix/base/models/items.py:489 pretix/base/models/items.py:1152
 #: pretix/base/models/media.py:77 pretix/base/settings.py:204
 #: pretix/base/settings.py:239 pretix/base/settings.py:270
@@ -1667,7 +1669,7 @@ msgid "Active"
 msgstr "활동"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:77
-#: pretix/control/forms/event.py:984 pretix/control/navigation.py:508
+#: pretix/control/forms/event.py:986 pretix/control/navigation.py:508
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:6
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
@@ -1705,8 +1707,8 @@ msgstr "티켓 생성"
 
 #: pretix/base/exporters/items.py:79 pretix/base/exporters/orderlist.py:1135
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:367
-#: pretix/control/forms/event.py:1684 pretix/control/navigation.py:237
-#: pretix/control/templates/pretixcontrol/event/settings.html:351
+#: pretix/control/forms/event.py:1686 pretix/control/navigation.py:237
+#: pretix/control/templates/pretixcontrol/event/settings.html:352
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:6
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:9
@@ -1913,7 +1915,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:876
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1259
-#: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1660
+#: pretix/base/exporters/waitinglist.py:115 pretix/control/forms/event.py:1662
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
 msgstr "이벤트 슬러그(짧고 간결한 문자열)"
@@ -1931,8 +1933,8 @@ msgstr "주문 합계"
 #: pretix/base/exporters/orderlist.py:576
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1312
-#: pretix/base/exporters/waitinglist.py:120
-#: pretix/base/exporters/waitinglist.py:168 pretix/base/models/orders.py:216
+#: pretix/base/exporters/waitinglist.py:122
+#: pretix/base/exporters/waitinglist.py:172 pretix/base/models/orders.py:216
 #: pretix/control/forms/filter.py:1019 pretix/control/forms/filter.py:1198
 #: pretix/control/forms/filter.py:1426 pretix/control/forms/filter.py:1495
 #: pretix/control/forms/filter.py:1567 pretix/control/forms/filter.py:1667
@@ -2121,7 +2123,7 @@ msgstr "직책 아이디"
 
 #: pretix/base/exporters/orderlist.py:584
 #: pretix/base/exporters/orderlist.py:1139
-#: pretix/base/exporters/waitinglist.py:116 pretix/base/forms/questions.py:642
+#: pretix/base/exporters/waitinglist.py:118 pretix/base/forms/questions.py:642
 #: pretix/base/forms/questions.py:651 pretix/base/models/memberships.py:145
 #: pretix/control/forms/rrule.py:49
 #: pretix/control/templates/pretixcontrol/events/index.html:78
@@ -2139,7 +2141,7 @@ msgstr "시작 날짜"
 
 #: pretix/base/exporters/orderlist.py:585
 #: pretix/base/exporters/orderlist.py:1140
-#: pretix/base/exporters/waitinglist.py:117
+#: pretix/base/exporters/waitinglist.py:119
 #: pretix/base/models/memberships.py:148
 #: pretix/control/templates/pretixcontrol/events/index.html:82
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:68
@@ -2151,7 +2153,9 @@ msgid "End date"
 msgstr "끝 날짜"
 
 #: pretix/base/exporters/orderlist.py:587
-#: pretix/base/exporters/orderlist.py:891 pretix/base/modelimport_orders.py:109
+#: pretix/base/exporters/orderlist.py:891
+#: pretix/base/exporters/waitinglist.py:111
+#: pretix/base/modelimport_orders.py:109
 #: pretix/base/modelimport_vouchers.py:174 pretix/base/models/items.py:794
 #: pretix/base/models/vouchers.py:250 pretix/base/models/waitinglist.py:91
 #: pretix/control/forms/filter.py:2129 pretix/control/forms/filter.py:2384
@@ -2338,7 +2342,7 @@ msgstr ""
 msgid "Only include transactions created within this date range."
 msgstr "이 날짜 범위 내에서 생성된 트랜잭션만 포함합니다."
 
-#: pretix/base/exporters/orderlist.py:875 pretix/base/models/event.py:667
+#: pretix/base/exporters/orderlist.py:875 pretix/base/models/event.py:672
 #: pretix/base/models/items.py:468 pretix/base/models/items.py:2041
 #: pretix/base/models/orders.py:233 pretix/base/models/orders.py:3086
 #: pretix/base/models/vouchers.py:181 pretix/base/models/waitinglist.py:55
@@ -2382,13 +2386,13 @@ msgstr "이전 데이터"
 
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/items.py:1555
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:217
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:363
+#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:207
+#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:353
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:15
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:234
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:387
-#: pretix/presale/templates/pretixpresale/event/voucher.html:242
-#: pretix/presale/templates/pretixpresale/event/voucher.html:398
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:223
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:375
+#: pretix/presale/templates/pretixpresale/event/voucher.html:235
+#: pretix/presale/templates/pretixpresale/event/voucher.html:390
 msgid "Quantity"
 msgstr "양"
 
@@ -2638,7 +2642,7 @@ msgid "Organizer"
 msgstr "기관"
 
 #: pretix/base/exporters/orderlist.py:1225 pretix/base/invoice.py:573
-#: pretix/control/templates/pretixcontrol/base.html:280
+#: pretix/control/templates/pretixcontrol/base.html:282
 #: pretix/control/templates/pretixcontrol/checkin/index.html:145
 #: pretix/control/templates/pretixcontrol/order/index.html:25
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:38
@@ -2880,25 +2884,19 @@ msgstr "바우처 상환"
 msgid "Voucher expired"
 msgstr "바우처 만료"
 
-#: pretix/base/exporters/waitinglist.py:111 pretix/base/pdf.py:121
-#: pretix/control/forms/event.py:1766
-#: pretix/control/templates/pretixcontrol/items/index.html:38
-msgid "Product name"
-msgstr "제품명"
-
-#: pretix/base/exporters/waitinglist.py:115
+#: pretix/base/exporters/waitinglist.py:117
 #: pretix/base/modelimport_orders.py:95 pretix/base/modelimport_vouchers.py:60
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
 msgctxt "subevents"
 msgid "Date"
 msgstr "날짜"
 
-#: pretix/base/exporters/waitinglist.py:119
+#: pretix/base/exporters/waitinglist.py:121
 #: pretix/control/views/waitinglist.py:315
 msgid "Priority"
 msgstr "우선 순위"
 
-#: pretix/base/exporters/waitinglist.py:121
+#: pretix/base/exporters/waitinglist.py:123
 #: pretix/base/modelimport_vouchers.py:39 pretix/base/models/vouchers.py:190
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:114
@@ -4278,7 +4276,7 @@ msgstr ""
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr "슬러그에는 문자, 숫자, 점, 대시만 포함될 수 있습니다."
 
-#: pretix/base/models/event.py:601 pretix/base/models/event.py:1477
+#: pretix/base/models/event.py:601 pretix/base/models/event.py:1482
 msgid "Show in lists"
 msgstr "목록을 보여주십시오"
 
@@ -4289,7 +4287,7 @@ msgid ""
 msgstr ""
 "이 이벤트가 선택되면 주최자 계정의 이벤트 목록에 공개적으로 표시됩니다."
 
-#: pretix/base/models/event.py:606 pretix/base/models/event.py:1492
+#: pretix/base/models/event.py:606 pretix/base/models/event.py:1497
 #: pretix/control/forms/subevents.py:100
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
@@ -4298,17 +4296,27 @@ msgstr ""
 "선택 사항입니다. 이 날짜 이후에는 제품이 판매되지 않습니다. 이 값을 설정하지 "
 "않으면 이벤트 종료일 이후에 사전 판매가 종료됩니다."
 
-#: pretix/base/models/event.py:612 pretix/base/models/event.py:1498
+#: pretix/base/models/event.py:612 pretix/base/models/event.py:1503
 #: pretix/control/forms/subevents.py:94
 msgid "Optional. No products will be sold before this date."
 msgstr "선택 사항입니다. 이 날짜 이전에는 어떤 제품도 판매되지 않습니다."
 
-#: pretix/base/models/event.py:637 pretix/control/navigation.py:65
+#: pretix/base/models/event.py:621
+msgid "This event is remote or partially remote."
+msgstr ""
+
+#: pretix/base/models/event.py:622
+msgid ""
+"This will be used to let users know if the event is in a different timezone "
+"and let’s us calculate users’ local times."
+msgstr ""
+
+#: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
 msgstr "플로그인"
 
-#: pretix/base/models/event.py:644 pretix/base/pdf.py:229
-#: pretix/control/forms/event.py:273 pretix/control/forms/filter.py:1677
+#: pretix/base/models/event.py:649 pretix/base/pdf.py:229
+#: pretix/control/forms/event.py:274 pretix/control/forms/filter.py:1677
 #: pretix/control/templates/pretixcontrol/event/index.html:13
 #: pretix/control/templates/pretixcontrol/events/index.html:114
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:90
@@ -4319,20 +4327,20 @@ msgstr "플로그인"
 msgid "Event series"
 msgstr "행사 시리즈"
 
-#: pretix/base/models/event.py:648 pretix/base/models/event.py:1526
+#: pretix/base/models/event.py:653 pretix/base/models/event.py:1531
 msgid "Seating plan"
 msgstr "좌석 계획"
 
-#: pretix/base/models/event.py:655 pretix/base/models/items.py:675
+#: pretix/base/models/event.py:660 pretix/base/models/items.py:675
 msgid "Sell on all sales channels"
 msgstr "모든 판매 채널에서 판매합니다"
 
-#: pretix/base/models/event.py:660 pretix/base/models/items.py:680
+#: pretix/base/models/event.py:665 pretix/base/models/items.py:680
 #: pretix/base/models/items.py:1230 pretix/base/payment.py:417
 msgid "Restrict to specific sales channels"
 msgstr "특정 판매 채널로 제한합니다"
 
-#: pretix/base/models/event.py:668 pretix/control/navigation.py:344
+#: pretix/base/models/event.py:673 pretix/control/navigation.py:344
 #: pretix/control/navigation.py:470
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 #: pretix/control/templates/pretixcontrol/events/index.html:7
@@ -4345,99 +4353,99 @@ msgstr "특정 판매 채널로 제한합니다"
 msgid "Events"
 msgstr "행사"
 
-#: pretix/base/models/event.py:1305
+#: pretix/base/models/event.py:1310
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr "하나 이상의 유료 상품을 구성했지만 결제 수단을 활성화하지 않았습니다."
 
-#: pretix/base/models/event.py:1308
+#: pretix/base/models/event.py:1313
 msgid ""
 "You have configured at least one paid product but have not configured a "
 "currency."
 msgstr "하나 이상의 유료 상품을 구성했지만 통화를 구성하지 않았습니다."
 
-#: pretix/base/models/event.py:1311
+#: pretix/base/models/event.py:1316
 msgid "You need to configure at least one quota to sell anything."
 msgstr "무언가를 판매하려면 최소한 하나의 할당량을 설정해야 합니다."
 
-#: pretix/base/models/event.py:1316
+#: pretix/base/models/event.py:1321
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
 msgstr "메타 매개변수 \"{property}\"를 입력해야 합니다."
 
-#: pretix/base/models/event.py:1423
+#: pretix/base/models/event.py:1428
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr "이벤트를 생성한 후에는 시리즈와 단일 이벤트를 변경할 수 없습니다."
 
-#: pretix/base/models/event.py:1429
+#: pretix/base/models/event.py:1434
 msgid "The event slug cannot be changed."
 msgstr "이벤트 슬러그는 변경할 수 없습니다."
 
-#: pretix/base/models/event.py:1432
+#: pretix/base/models/event.py:1437
 msgid "This slug has already been used for a different event."
 msgstr "이 슬러그는 이미 다른 이벤트에 사용되었습니다."
 
-#: pretix/base/models/event.py:1438
+#: pretix/base/models/event.py:1443
 msgid "The event cannot end before it starts."
 msgstr "이벤트는 시작하기 전에 종료될 수 없습니다."
 
-#: pretix/base/models/event.py:1444
+#: pretix/base/models/event.py:1449
 msgid "The event's presale cannot end before it starts."
 msgstr "이벤트의 사전 판매는 시작 전에 종료될 수 없습니다."
 
-#: pretix/base/models/event.py:1474
+#: pretix/base/models/event.py:1479
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
 msgstr ""
 "이 체크박스가 활성화된 경우에만 이 날짜가 사용자의 프런트엔드에 표시됩니다."
 
-#: pretix/base/models/event.py:1478
+#: pretix/base/models/event.py:1483
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr "이 이벤트가 선택되면 이벤트 날짜 목록에 공개적으로 표시됩니다."
 
-#: pretix/base/models/event.py:1523 pretix/base/settings.py:3032
+#: pretix/base/models/event.py:1528 pretix/base/settings.py:3032
 msgid "Frontpage text"
 msgstr "첫 페이지 텍스트"
 
-#: pretix/base/models/event.py:1540
+#: pretix/base/models/event.py:1545
 msgid "Date in event series"
 msgstr "이벤트 시리즈의 날짜"
 
-#: pretix/base/models/event.py:1541
+#: pretix/base/models/event.py:1546
 msgid "Dates in event series"
 msgstr "이벤트 시리즈의 날짜들"
 
-#: pretix/base/models/event.py:1686
+#: pretix/base/models/event.py:1691
 msgid "One or more variations do not belong to this event."
 msgstr "하나 이상의 변형은 이 이벤트에 속하지 않습니다."
 
-#: pretix/base/models/event.py:1716 pretix/base/models/items.py:2217
+#: pretix/base/models/event.py:1721 pretix/base/models/items.py:2217
 msgid "Can not contain spaces or special characters except underscores"
 msgstr "밑줄을 제외한 공백이나 특수 문자를 포함할 수 없습니다"
 
-#: pretix/base/models/event.py:1721 pretix/base/models/items.py:2222
+#: pretix/base/models/event.py:1726 pretix/base/models/items.py:2222
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr "속성 이름에는 문자, 숫자 및 밑줄만 포함될 수 있습니다."
 
-#: pretix/base/models/event.py:1726
+#: pretix/base/models/event.py:1731
 msgid "Default value"
 msgstr "기본값"
 
-#: pretix/base/models/event.py:1728
+#: pretix/base/models/event.py:1733
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:50
 msgid "Can only be changed by organizer-level administrators"
 msgstr "주최자 수준의 관리자만 변경할 수 있습니다"
 
-#: pretix/base/models/event.py:1730
+#: pretix/base/models/event.py:1735
 msgid "Required for events"
 msgstr "행사 요구사항"
 
-#: pretix/base/models/event.py:1731
+#: pretix/base/models/event.py:1736
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
@@ -4446,33 +4454,33 @@ msgstr ""
 "니다. 이벤트 시리즈의 경우 개별 날짜에 대한 값을 설정하는 것이 항상 선택 사항"
 "입니다"
 
-#: pretix/base/models/event.py:1737 pretix/base/models/items.py:2234
+#: pretix/base/models/event.py:1742 pretix/base/models/items.py:2234
 msgid "Valid values"
 msgstr "유효값"
 
-#: pretix/base/models/event.py:1740
+#: pretix/base/models/event.py:1745
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
 msgid "Show filter option to customers"
 msgstr "고객에게 필터 옵션  표시함"
 
-#: pretix/base/models/event.py:1741
+#: pretix/base/models/event.py:1746
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
 msgstr ""
 "이 필드는 공개 이벤트 목록과 캘린더에서 이벤트를 필터링하도록 표시됩니다."
 
-#: pretix/base/models/event.py:1744 pretix/control/forms/organizer.py:269
+#: pretix/base/models/event.py:1749 pretix/control/forms/organizer.py:269
 #: pretix/control/forms/organizer.py:273
 msgid "Public name"
 msgstr "공식적인 이름"
 
-#: pretix/base/models/event.py:1748
+#: pretix/base/models/event.py:1753
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
 msgid "Can be used for filtering"
 msgstr "필터링에 사용할수 있습니다"
 
-#: pretix/base/models/event.py:1749
+#: pretix/base/models/event.py:1754
 msgid ""
 "This field will be shown to filter events or reports in the backend, and it "
 "can also be used for hidden filter parameters in the frontend (e.g. using "
@@ -4481,16 +4489,16 @@ msgstr ""
 "이 필드는 백엔드에서 이벤트나 보고서를 필터링하는 데 표시되며, 프론트엔드에"
 "서 숨겨진 필터 매개변수(예: 위젯 사용)에도 사용할 수 있습니다."
 
-#: pretix/base/models/event.py:1759
+#: pretix/base/models/event.py:1764
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
 "속성은 필수일 수도 있고 기본값일 수도 있지만 둘 다 필요하지는 않습니다."
 
-#: pretix/base/models/event.py:1839 pretix/base/models/organizer.py:516
+#: pretix/base/models/event.py:1844 pretix/base/models/organizer.py:516
 msgid "Link text"
 msgstr "링크 문자"
 
-#: pretix/base/models/event.py:1842 pretix/base/models/organizer.py:519
+#: pretix/base/models/event.py:1847 pretix/base/models/organizer.py:519
 msgid "Link URL"
 msgstr "링크 URL"
 
@@ -4516,9 +4524,9 @@ msgstr "추가적인 수신자들(Cc)"
 msgid "Additional recipients (Bcc)"
 msgstr "추가적인 수신자들 (BCC)"
 
-#: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1099
-#: pretix/control/forms/event.py:1173 pretix/control/forms/event.py:1183
-#: pretix/control/forms/event.py:1193 pretix/control/forms/orders.py:720
+#: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1101
+#: pretix/control/forms/event.py:1175 pretix/control/forms/event.py:1185
+#: pretix/control/forms/event.py:1195 pretix/control/forms/orders.py:720
 #: pretix/control/forms/orders.py:942 pretix/control/forms/orders.py:969
 #: pretix/control/forms/organizer.py:601 pretix/control/forms/organizer.py:611
 #: pretix/control/forms/organizer.py:621 pretix/control/forms/vouchers.py:273
@@ -4780,7 +4788,7 @@ msgid "This will only work if waiting lists are enabled for this event."
 msgstr "이 이벤트에 대기자 명단이 활성화된 경우에만 작동합니다."
 
 #: pretix/base/models/items.py:548 pretix/base/settings.py:1360
-#: pretix/control/forms/event.py:1679
+#: pretix/control/forms/event.py:1681
 msgid "Show number of tickets left"
 msgstr "남은 티켓 수 표시입니다"
 
@@ -5299,7 +5307,7 @@ msgid "File upload"
 msgstr "파일 업로드"
 
 #: pretix/base/models/items.py:1657
-#: pretix/control/templates/pretixcontrol/event/settings.html:239
+#: pretix/control/templates/pretixcontrol/event/settings.html:240
 msgid "Date and time"
 msgstr "날짜 및 시간"
 
@@ -5466,7 +5474,7 @@ msgstr "질문 옵션"
 msgid "Question options"
 msgstr "질문 옵션들"
 
-#: pretix/base/models/items.py:2055 pretix/control/forms/event.py:1713
+#: pretix/base/models/items.py:2055 pretix/control/forms/event.py:1715
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
 msgstr "총 용량"
@@ -6282,7 +6290,7 @@ msgstr "공식 명칭"
 msgid "Should be short, e.g. \"VAT\""
 msgstr "짧아야 합니다(예: \"VAT\")"
 
-#: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1511
+#: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1513
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Tax code"
 msgstr "세금코드"
@@ -6357,12 +6365,12 @@ msgstr ""
 "EU 내 VAT 처리 방식중 하나로 국경거래에서 VAT 납부책임을 구매자에게 전가하는 "
 "과세 규칙을 사용하려면 본국을 설정해야 합니다."
 
-#: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1558
+#: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1560
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
 msgstr "이 세법을 0이 아닌 세율과 결합하는 것은 의미가 없습니다."
 
-#: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1562
+#: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1564
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
 msgstr "이 세법을 제로 세율과 결합하는 것은 의미가 없습니다."
@@ -7099,6 +7107,11 @@ msgstr "주문 위치 번호"
 #: pretix/base/pdf.py:116
 msgid "Order code and position number"
 msgstr "주문 코드 및 위치 번호"
+
+#: pretix/base/pdf.py:121 pretix/control/forms/event.py:1768
+#: pretix/control/templates/pretixcontrol/items/index.html:38
+msgid "Product name"
+msgstr "제품명"
 
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:841 pretix/control/views/pdf.py:94
@@ -8615,7 +8628,7 @@ msgstr ""
 "이 주문에서 구매한 기프트 카드 {card}가 이미 상환되었으므로 포지션을 취소할 "
 "수 없습니다."
 
-#: pretix/base/services/orders.py:3054
+#: pretix/base/services/orders.py:3058
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
@@ -9634,7 +9647,7 @@ msgstr "비활성화되면 이벤트의 시작일과 종료일이 시간 없이 
 msgid "Hide all products that are sold out"
 msgstr "매진된 모든 제품 숨기기"
 
-#: pretix/base/settings.py:1361 pretix/control/forms/event.py:1680
+#: pretix/base/settings.py:1361 pretix/control/forms/event.py:1682
 msgid "Publicly show how many tickets of a certain type are still available."
 msgstr "특정 유형의 티켓이 아직 얼마나 남아 있는지 공개적으로 보여줍니다."
 
@@ -9650,7 +9663,7 @@ msgstr "기본적으로 확장된 제품의 변형 표시"
 msgid "Enable waiting list"
 msgstr "대기 목록 사용"
 
-#: pretix/base/settings.py:1389 pretix/control/forms/event.py:1685
+#: pretix/base/settings.py:1389 pretix/control/forms/event.py:1687
 msgid ""
 "Once a ticket is sold out, people can add themselves to a waiting list. As "
 "soon as a ticket becomes available again, it will be reserved for the first "
@@ -10222,19 +10235,19 @@ msgstr ""
 "이 텍스트는 미지급 또는 무료 주문에 대해 취소가 허용될 때 표시됩니다. 설정에 "
 "따라 자동으로 취소 조건을 생성하려면 프리픽스를 비워 두세요."
 
-#: pretix/base/settings.py:2039 pretix/control/forms/event.py:1708
+#: pretix/base/settings.py:2039 pretix/control/forms/event.py:1710
 msgid "Contact address"
 msgstr "연락처 주소"
 
-#: pretix/base/settings.py:2040 pretix/control/forms/event.py:1710
+#: pretix/base/settings.py:2040 pretix/control/forms/event.py:1712
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "참석자들이 연락할 수 있도록 공개적으로 보여드리겠습니다."
 
-#: pretix/base/settings.py:2048 pretix/control/forms/event.py:1702
+#: pretix/base/settings.py:2048 pretix/control/forms/event.py:1704
 msgid "Imprint URL"
 msgstr "URL 각인"
 
-#: pretix/base/settings.py:2049 pretix/control/forms/event.py:1703
+#: pretix/base/settings.py:2049 pretix/control/forms/event.py:1705
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
@@ -10617,12 +10630,12 @@ msgstr ""
 "감사해요.\n"
 "귀하의 {이벤트} 팀"
 
-#: pretix/base/settings.py:2392 pretix/control/forms/event.py:1134
-#: pretix/control/forms/event.py:1234 pretix/plugins/sendmail/models.py:275
+#: pretix/base/settings.py:2392 pretix/control/forms/event.py:1136
+#: pretix/control/forms/event.py:1236 pretix/plugins/sendmail/models.py:275
 msgid "Number of days"
 msgstr "일 수"
 
-#: pretix/base/settings.py:2394 pretix/control/forms/event.py:1137
+#: pretix/base/settings.py:2394 pretix/control/forms/event.py:1139
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
@@ -11601,7 +11614,7 @@ msgctxt "address"
 msgid "Prefecture"
 msgstr "관직"
 
-#: pretix/base/settings.py:3817 pretix/control/forms/event.py:228
+#: pretix/base/settings.py:3817 pretix/control/forms/event.py:229
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr "이벤트에 기본 장소도 활성화되어 있어야 합니다(위 상자 참조)."
@@ -11810,7 +11823,7 @@ msgid "You do not have access to this page."
 msgstr "이 페이지에 액세스할 수 없습니다."
 
 #: pretix/base/templates/403.html:20 pretix/base/templates/404.html:19
-#: pretix/control/templates/pretixcontrol/base.html:194
+#: pretix/control/templates/pretixcontrol/base.html:196
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
 #: pretix/presale/templates/pretixpresale/event/offline.html:21
@@ -12399,11 +12412,11 @@ msgstr ""
 "브라우저에서 쿠키를 비활성화하도록 설정한 경우, 최소한 이 사이트나 '같은 출"
 "처' 요청에 대해서는 쿠키를 다시 활성화하세요."
 
-#: pretix/base/views/tasks.py:187
+#: pretix/base/views/tasks.py:185
 msgid "An unexpected error has occurred, please try again later."
 msgstr "예기치 않은 오류가 발생했습니다. 나중에 다시 시도해 주세요."
 
-#: pretix/base/views/tasks.py:190
+#: pretix/base/views/tasks.py:188
 msgid "The task has been completed."
 msgstr "작업이 완료되었습니다."
 
@@ -12500,7 +12513,7 @@ msgstr ""
 "과 사용자에게 친숙한 짧고 간단한 문자열) 를 사용하셨습니다. 새 슬러그를 선택"
 "해 주세요"
 
-#: pretix/control/forms/event.py:136 pretix/control/forms/event.py:518
+#: pretix/control/forms/event.py:136 pretix/control/forms/event.py:520
 msgid "Event timezone"
 msgstr "이벤트 시간대"
 
@@ -12543,7 +12556,7 @@ msgstr ""
 msgid "Create a new team for this event with me as the only member"
 msgstr "저와 함께 이 행사를 위한 새로운 팀을 만들어 보세요"
 
-#: pretix/control/forms/event.py:207 pretix/control/forms/event.py:378
+#: pretix/control/forms/event.py:208 pretix/control/forms/event.py:379
 msgid ""
 "Sample Conference Center\n"
 "Heidelberg, Germany"
@@ -12552,11 +12565,11 @@ msgstr ""
 "\n"
 "하이델베르크, 독일"
 
-#: pretix/control/forms/event.py:232
+#: pretix/control/forms/event.py:233
 msgid "Your default locale must be specified."
 msgstr "기본 로케일을 지정해야 합니다."
 
-#: pretix/control/forms/event.py:236
+#: pretix/control/forms/event.py:237
 #, fuzzy, python-brace-format
 msgid ""
 "You have not specified a tax rate. If you do not want us to compute sales "
@@ -12565,49 +12578,49 @@ msgstr ""
 "세율을 지정하지 않았습니다. 판매세를 계산하지 않으시려면 위의 \"{필드}\"를 확"
 "인하세요."
 
-#: pretix/control/forms/event.py:311
+#: pretix/control/forms/event.py:312
 msgid "Copy configuration from"
 msgstr "구성 복사 위치"
 
-#: pretix/control/forms/event.py:317 pretix/control/forms/event.py:320
+#: pretix/control/forms/event.py:318 pretix/control/forms/event.py:321
 #: pretix/control/forms/item.py:408
 msgid "Do not copy"
 msgstr "복사하지 않습니다"
 
-#: pretix/control/forms/event.py:336 pretix/control/forms/item.py:1294
+#: pretix/control/forms/event.py:337 pretix/control/forms/item.py:1294
 #: pretix/control/forms/subevents.py:407
 #, fuzzy, python-brace-format
 msgid "Default ({value})"
 msgstr "기본값({값})"
 
-#: pretix/control/forms/event.py:384 pretix/control/forms/event.py:397
+#: pretix/control/forms/event.py:385 pretix/control/forms/event.py:398
 msgid "Domain"
 msgstr "도메인"
 
-#: pretix/control/forms/event.py:388
+#: pretix/control/forms/event.py:389
 msgid "You can configure this in your organizer settings."
 msgstr "이것을 정리함 설정에서 구성할 수 있습니다."
 
-#: pretix/control/forms/event.py:398
+#: pretix/control/forms/event.py:399
 msgid "You can add more domains in your organizer account."
 msgstr "주최자 계정에 더 많은 도메인을 추가할 수 있습니다."
 
-#: pretix/control/forms/event.py:399
+#: pretix/control/forms/event.py:400
 msgid "Same as organizer account"
 msgstr "주최자 계정과 동일합니다"
 
-#: pretix/control/forms/event.py:503
+#: pretix/control/forms/event.py:505
 #, python-brace-format
 msgid ""
 "A validation error has occurred on a setting that is not part of this form: "
 "{error}"
 msgstr "이 양식에 포함되지 않은 설정에서 검증 오류가 발생했습니다: {error}"
 
-#: pretix/control/forms/event.py:521 pretix/control/forms/organizer.py:461
+#: pretix/control/forms/event.py:523 pretix/control/forms/organizer.py:461
 msgid "Name format"
 msgstr "이름 형식"
 
-#: pretix/control/forms/event.py:522 pretix/control/forms/organizer.py:462
+#: pretix/control/forms/event.py:524 pretix/control/forms/organizer.py:462
 msgid ""
 "This defines how pretix will ask for human names. Changing this after you "
 "already received orders might lead to unexpected behavior when sorting or "
@@ -12616,11 +12629,11 @@ msgstr ""
 "이는 프리틱스가 사람 이름을 묻는 방식을 정의합니다. 이미 주문을 받은 후 이를 "
 "변경하면 이름을 정렬하거나 변경할 때 예상치 못한 동작이 발생할 수 있습니다."
 
-#: pretix/control/forms/event.py:527 pretix/control/forms/organizer.py:467
+#: pretix/control/forms/event.py:529 pretix/control/forms/organizer.py:467
 msgid "Allowed titles"
 msgstr "허용된 제목"
 
-#: pretix/control/forms/event.py:528 pretix/control/forms/organizer.py:468
+#: pretix/control/forms/event.py:530 pretix/control/forms/organizer.py:468
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
@@ -12628,29 +12641,29 @@ msgstr ""
 "위에서 정의한 명명 방식을 사용하여 사용자가 제목을 입력할 수 있다면, 이를 사"
 "용하여 선택 가능한 제목 집합을 제한할 수 있습니다."
 
-#: pretix/control/forms/event.py:647 pretix/control/forms/organizer.py:539
+#: pretix/control/forms/event.py:649 pretix/control/forms/organizer.py:539
 #, fuzzy, python-brace-format
 msgid "Ask for {fields}, display like {example}"
 msgstr "{fields}를 요청하고 {예시}와 같이 표시합니다"
 
-#: pretix/control/forms/event.py:653 pretix/control/forms/organizer.py:545
+#: pretix/control/forms/event.py:655 pretix/control/forms/organizer.py:545
 msgid "Free text input"
 msgstr "무료 텍스트 입력하세요"
 
-#: pretix/control/forms/event.py:689
+#: pretix/control/forms/event.py:691
 msgid "Do not ask"
 msgstr "물어보지 마세요."
 
-#: pretix/control/forms/event.py:690
+#: pretix/control/forms/event.py:692
 msgid "Ask, but do not require input"
 msgstr "질문하지만 입력이 필요하지 않습니다"
 
-#: pretix/control/forms/event.py:691
-#: pretix/control/templates/pretixcontrol/event/settings.html:75
+#: pretix/control/forms/event.py:693
+#: pretix/control/templates/pretixcontrol/event/settings.html:76
 msgid "Ask and require input"
 msgstr "질문하고 입력 필요"
 
-#: pretix/control/forms/event.py:768
+#: pretix/control/forms/event.py:770
 msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
@@ -12658,11 +12671,11 @@ msgstr ""
 "기프트 카드는 유효 기간 {}년에 기프트 카드가 발급된 연도를 더한 값으로 설정되"
 "었습니다."
 
-#: pretix/control/forms/event.py:787
+#: pretix/control/forms/event.py:789
 msgid "Tax rule for payment fees"
 msgstr "납부 수수료에 대한 세금 규정"
 
-#: pretix/control/forms/event.py:789
+#: pretix/control/forms/event.py:791
 msgid ""
 "The tax rule that applies for additional fees you configured for single "
 "payment methods. This will set the tax rate and reverse charge rules, other "
@@ -12671,11 +12684,11 @@ msgstr ""
 "단일 결제 수단에 대해 설정한 추가 수수료에 적용되는 세금 규칙입니다. 이렇게 "
 "하면 세율과 역청구 규칙이 설정되며, 세금 규칙의 다른 설정은 무시됩니다."
 
-#: pretix/control/forms/event.py:895
+#: pretix/control/forms/event.py:897
 msgid "Generate invoices for Sales channels"
 msgstr "판매 채널에 대한 송장 생성"
 
-#: pretix/control/forms/event.py:898
+#: pretix/control/forms/event.py:900
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
@@ -12683,19 +12696,19 @@ msgstr ""
 "이전 설정에서 송장 생성을 활성화한 경우, 여기에서 특정 판매 채널로 제한할 수 "
 "있습니다."
 
-#: pretix/control/forms/event.py:902
+#: pretix/control/forms/event.py:904
 msgid "Invoice style"
 msgstr "송장 스타일"
 
-#: pretix/control/forms/event.py:908
+#: pretix/control/forms/event.py:910
 msgid "Invoice language"
 msgstr "송장 언어"
 
-#: pretix/control/forms/event.py:909 pretix/control/forms/event.py:924
+#: pretix/control/forms/event.py:911 pretix/control/forms/event.py:926
 msgid "The user's language"
 msgstr "사용자 언어"
 
-#: pretix/control/forms/event.py:932
+#: pretix/control/forms/event.py:934
 #, python-brace-format
 msgid ""
 "An invoice will be issued before payment if the customer selects one of the "
@@ -12703,25 +12716,25 @@ msgid ""
 msgstr ""
 "고객이 다음 결제 방법 중 하나를 선택하면 결제 전에 송장이 발행됩니다: {list}"
 
-#: pretix/control/forms/event.py:936
+#: pretix/control/forms/event.py:938
 msgid ""
 "None of the currently configured payment methods will cause an invoice to be "
 "issued before payment."
 msgstr "현재 구성된 결제 방법 중 어느 것도 결제 전에 송장을 발행하지 않습니다."
 
-#: pretix/control/forms/event.py:945
+#: pretix/control/forms/event.py:947
 msgid "Recommended"
 msgstr "추천된"
 
-#: pretix/control/forms/event.py:957
+#: pretix/control/forms/event.py:959
 msgid "The online shop must be selected to receive these emails."
 msgstr "이 이메일을 받으려면 온라인 상점을 선택해야 합니다."
 
-#: pretix/control/forms/event.py:973
+#: pretix/control/forms/event.py:975
 msgid "Sales channels for checkout emails"
 msgstr "결제 이메일의 판매 채널"
 
-#: pretix/control/forms/event.py:974
+#: pretix/control/forms/event.py:976
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
@@ -12729,7 +12742,7 @@ msgstr ""
 "주문 및 유료 이메일은 이러한 판매 채널의 주문에만 발송됩니다. 온라인 상점을 "
 "활성화해야 합니다."
 
-#: pretix/control/forms/event.py:985
+#: pretix/control/forms/event.py:987
 msgid ""
 "This email will only be send to orders from these sales channels. The online "
 "shop must be enabled."
@@ -12737,51 +12750,51 @@ msgstr ""
 "이 이메일은 이러한 판매 채널의 주문에만 발송됩니다. 온라인 상점을 활성화해야 "
 "합니다."
 
-#: pretix/control/forms/event.py:993 pretix/control/forms/organizer.py:580
+#: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:580
 msgid "Bcc address"
 msgstr "BCC 주소"
 
-#: pretix/control/forms/event.py:994 pretix/control/forms/organizer.py:581
+#: pretix/control/forms/event.py:996 pretix/control/forms/organizer.py:581
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "모든 이메일은 이 주소로 Bcc 사본으로 전송됩니다"
 
-#: pretix/control/forms/event.py:1000 pretix/control/forms/organizer.py:587
+#: pretix/control/forms/event.py:1002 pretix/control/forms/organizer.py:587
 msgid "Signature"
 msgstr "사인"
 
-#: pretix/control/forms/event.py:1003
+#: pretix/control/forms/event.py:1005
 #, fuzzy, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr ""
 "이것은 모든 이메일에 첨부될 것입니다. 사용 가능한 자리 표시자: {이벤트}"
 
-#: pretix/control/forms/event.py:1008 pretix/control/forms/organizer.py:595
+#: pretix/control/forms/event.py:1010 pretix/control/forms/organizer.py:595
 msgid "e.g. your contact details"
 msgstr "예: 연락처 정보"
 
-#: pretix/control/forms/event.py:1013
+#: pretix/control/forms/event.py:1015
 msgid "HTML mail renderer"
 msgstr "HTML형식의 이메일 콘텐츠를 화면에 표시하는 도구(랜더링)"
 
-#: pretix/control/forms/event.py:1018 pretix/control/forms/event.py:1045
-#: pretix/control/forms/event.py:1072 pretix/control/forms/event.py:1208
+#: pretix/control/forms/event.py:1020 pretix/control/forms/event.py:1047
+#: pretix/control/forms/event.py:1074 pretix/control/forms/event.py:1210
 msgid "Subject sent to order contact address"
 msgstr "주문 연락처로 전송된 대상"
 
-#: pretix/control/forms/event.py:1023 pretix/control/forms/event.py:1050
-#: pretix/control/forms/event.py:1077 pretix/control/forms/event.py:1213
+#: pretix/control/forms/event.py:1025 pretix/control/forms/event.py:1052
+#: pretix/control/forms/event.py:1079 pretix/control/forms/event.py:1215
 msgid "Text sent to order contact address"
 msgstr "주문 연락처 주소로 전송된 텍스트"
 
-#: pretix/control/forms/event.py:1028 pretix/control/forms/event.py:1055
-#: pretix/control/forms/event.py:1082 pretix/control/forms/event.py:1218
-#: pretix/control/forms/event.py:1263 pretix/control/forms/event.py:1293
+#: pretix/control/forms/event.py:1030 pretix/control/forms/event.py:1057
+#: pretix/control/forms/event.py:1084 pretix/control/forms/event.py:1220
+#: pretix/control/forms/event.py:1265 pretix/control/forms/event.py:1295
 msgid "Send an email to attendees"
 msgstr "참석자에게 이메일 보내기"
 
-#: pretix/control/forms/event.py:1029 pretix/control/forms/event.py:1056
-#: pretix/control/forms/event.py:1083 pretix/control/forms/event.py:1219
-#: pretix/control/forms/event.py:1264 pretix/control/forms/event.py:1294
+#: pretix/control/forms/event.py:1031 pretix/control/forms/event.py:1058
+#: pretix/control/forms/event.py:1085 pretix/control/forms/event.py:1221
+#: pretix/control/forms/event.py:1266 pretix/control/forms/event.py:1296
 msgid ""
 "If the order contains attendees with email addresses different from the "
 "person who orders the tickets, the following email will be sent out to the "
@@ -12790,72 +12803,72 @@ msgstr ""
 "주문에 티켓을 주문하는 사람과 다른 이메일 주소를 가진 참석자가 포함된 경우, "
 "다음 이메일이 참석자에게 발송됩니다."
 
-#: pretix/control/forms/event.py:1034 pretix/control/forms/event.py:1061
-#: pretix/control/forms/event.py:1088 pretix/control/forms/event.py:1224
-#: pretix/control/forms/event.py:1269 pretix/control/forms/event.py:1299
+#: pretix/control/forms/event.py:1036 pretix/control/forms/event.py:1063
+#: pretix/control/forms/event.py:1090 pretix/control/forms/event.py:1226
+#: pretix/control/forms/event.py:1271 pretix/control/forms/event.py:1301
 msgid "Subject sent to attendees"
 msgstr "참석자에게 보낸 제목"
 
-#: pretix/control/forms/event.py:1039 pretix/control/forms/event.py:1066
-#: pretix/control/forms/event.py:1093 pretix/control/forms/event.py:1229
-#: pretix/control/forms/event.py:1274 pretix/control/forms/event.py:1304
+#: pretix/control/forms/event.py:1041 pretix/control/forms/event.py:1068
+#: pretix/control/forms/event.py:1095 pretix/control/forms/event.py:1231
+#: pretix/control/forms/event.py:1276 pretix/control/forms/event.py:1306
 msgid "Text sent to attendees"
 msgstr "참석자에게 보낸 텍스트"
 
-#: pretix/control/forms/event.py:1104 pretix/control/forms/event.py:1178
-#: pretix/control/forms/event.py:1188 pretix/control/forms/event.py:1198
-#: pretix/control/forms/event.py:1203 pretix/control/forms/organizer.py:606
+#: pretix/control/forms/event.py:1106 pretix/control/forms/event.py:1180
+#: pretix/control/forms/event.py:1190 pretix/control/forms/event.py:1200
+#: pretix/control/forms/event.py:1205 pretix/control/forms/organizer.py:606
 #: pretix/control/forms/organizer.py:616 pretix/control/forms/organizer.py:626
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:111
 msgid "Text"
 msgstr "텍스트"
 
-#: pretix/control/forms/event.py:1109
+#: pretix/control/forms/event.py:1111
 msgid "Subject (sent by admin)"
 msgstr "제목(관리자가 보낸)"
 
-#: pretix/control/forms/event.py:1114
+#: pretix/control/forms/event.py:1116
 msgid "Subject (sent by admin to attendee)"
 msgstr "제목(관리자가 참석자에게 보낸)"
 
-#: pretix/control/forms/event.py:1119
+#: pretix/control/forms/event.py:1121
 msgid "Text (sent by admin)"
 msgstr "텍스트(관리자가 보낸 텍스트)"
 
-#: pretix/control/forms/event.py:1124
+#: pretix/control/forms/event.py:1126
 msgid "Subject (requested by user)"
 msgstr "주제(사용자 요청)"
 
-#: pretix/control/forms/event.py:1129
+#: pretix/control/forms/event.py:1131
 msgid "Text (requested by user)"
 msgstr "텍스트(사용자 요청)"
 
-#: pretix/control/forms/event.py:1141
+#: pretix/control/forms/event.py:1143
 msgid "Text (if order will expire automatically)"
 msgstr "텍스트(주문이 자동으로 만료되는 경우)"
 
-#: pretix/control/forms/event.py:1146
+#: pretix/control/forms/event.py:1148
 msgid "Subject (if order will expire automatically)"
 msgstr "제목(주문이 자동으로 만료되는 경우)"
 
-#: pretix/control/forms/event.py:1151
+#: pretix/control/forms/event.py:1153
 msgid "Text (if order will not expire automatically)"
 msgstr "텍스트(주문이 자동으로 만료되지 않는 경우)"
 
-#: pretix/control/forms/event.py:1156
+#: pretix/control/forms/event.py:1158
 msgid "Subject (if order will not expire automatically)"
 msgstr "제목(주문이 자동으로 만료되지 않는 경우)"
 
-#: pretix/control/forms/event.py:1161
+#: pretix/control/forms/event.py:1163
 msgid "Subject (if an incomplete payment was received)"
 msgstr "주제(불완전한 결제가 접수된 경우)"
 
-#: pretix/control/forms/event.py:1166
+#: pretix/control/forms/event.py:1168
 msgid "Text (if an incomplete payment was received)"
 msgstr "텍스트(불완전한 결제가 접수된 경우)"
 
-#: pretix/control/forms/event.py:1169
+#: pretix/control/forms/event.py:1171
 msgid ""
 "This email only applies to payment methods that can receive incomplete "
 "payments, such as bank transfer."
@@ -12863,7 +12876,7 @@ msgstr ""
 "이 이메일은 은행 송금과 같이 불완전한 결제를 받을 수 있는 결제 수단에만 적용"
 "됩니다."
 
-#: pretix/control/forms/event.py:1237
+#: pretix/control/forms/event.py:1239
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
@@ -12871,23 +12884,23 @@ msgstr ""
 "이 이메일은 주문 이벤트가 시작되기 며칠 전에 발송됩니다. 필드가 비어 있으면 "
 "메일이 전송되지 않습니다."
 
-#: pretix/control/forms/event.py:1241
+#: pretix/control/forms/event.py:1243
 msgid "Subject for received order"
 msgstr "접수된 주문의 이메일 제목"
 
-#: pretix/control/forms/event.py:1246
+#: pretix/control/forms/event.py:1248
 msgid "Text for received order"
 msgstr "받은 주문의 이메일 내용"
 
-#: pretix/control/forms/event.py:1251
+#: pretix/control/forms/event.py:1253
 msgid "Subject for approved order"
 msgstr "승인된 주문의  이메일 제목"
 
-#: pretix/control/forms/event.py:1256
+#: pretix/control/forms/event.py:1258
 msgid "Text for approved order"
 msgstr "승인된 주문의 이메일 내용"
 
-#: pretix/control/forms/event.py:1259 pretix/control/forms/event.py:1277
+#: pretix/control/forms/event.py:1261 pretix/control/forms/event.py:1279
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
@@ -12895,15 +12908,15 @@ msgstr ""
 "이것은 무료가 아닌 주문에 대해서만 발송됩니다. 무료 주문은 아래에서 무료 주"
 "문 템플릿을 받을 수 있습니다."
 
-#: pretix/control/forms/event.py:1281
+#: pretix/control/forms/event.py:1283
 msgid "Subject for approved free order"
 msgstr "승인된 무료주문의 이메일 제목"
 
-#: pretix/control/forms/event.py:1286
+#: pretix/control/forms/event.py:1288
 msgid "Text for approved free order"
 msgstr "승인된 무료주문의 이메일 내용"
 
-#: pretix/control/forms/event.py:1289 pretix/control/forms/event.py:1307
+#: pretix/control/forms/event.py:1291 pretix/control/forms/event.py:1309
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
@@ -12911,89 +12924,89 @@ msgstr ""
 "무료 주문에 대해서만 발송됩니다. 무료가 아닌 주문은 위에서 무료가 아닌 주문 "
 "템플릿을 받게 됩니다."
 
-#: pretix/control/forms/event.py:1311
+#: pretix/control/forms/event.py:1313
 msgid "Subject for denied order"
 msgstr "거절된 주문의 이메일 제목"
 
-#: pretix/control/forms/event.py:1316
+#: pretix/control/forms/event.py:1318
 msgid "Text for denied order"
 msgstr "거절된 주문의 이메일 내용"
 
-#: pretix/control/forms/event.py:1409
+#: pretix/control/forms/event.py:1411
 msgid "Ticket code generator"
 msgstr "티켓 코드 생성기"
 
-#: pretix/control/forms/event.py:1410
+#: pretix/control/forms/event.py:1412
 msgid "For advanced users, usually does not need to be changed."
 msgstr "고급 사용자의 경우 일반적으로 변경할 필요가 없습니다."
 
-#: pretix/control/forms/event.py:1467
+#: pretix/control/forms/event.py:1469
 msgid "Any country"
 msgstr "어느 나라든지"
 
-#: pretix/control/forms/event.py:1468
+#: pretix/control/forms/event.py:1470
 msgid "European Union"
 msgstr "유럽연합"
 
-#: pretix/control/forms/event.py:1494
+#: pretix/control/forms/event.py:1496
 msgid "Any customer"
 msgstr "모든 고객"
 
-#: pretix/control/forms/event.py:1495
+#: pretix/control/forms/event.py:1497
 msgid "Individual"
 msgstr "개별적인"
 
-#: pretix/control/forms/event.py:1496
+#: pretix/control/forms/event.py:1498
 msgid "Business"
 msgstr "비지니스"
 
-#: pretix/control/forms/event.py:1497
+#: pretix/control/forms/event.py:1499
 msgid "Business with valid VAT ID"
 msgstr "유효한 부가가치세 ID를 가진 사업체"
 
-#: pretix/control/forms/event.py:1503
+#: pretix/control/forms/event.py:1505
 msgid "Charge VAT"
 msgstr "부가가치세 부과"
 
-#: pretix/control/forms/event.py:1505
+#: pretix/control/forms/event.py:1507
 msgid "No VAT"
 msgstr "부가가치세 없음"
 
-#: pretix/control/forms/event.py:1506
+#: pretix/control/forms/event.py:1508
 msgid "Sale not allowed"
 msgstr "판매 금지"
 
-#: pretix/control/forms/event.py:1507
+#: pretix/control/forms/event.py:1509
 msgid "Order requires approval"
 msgstr "주문은 승인이 필요합니다"
 
-#: pretix/control/forms/event.py:1512
+#: pretix/control/forms/event.py:1514
 msgid "Default tax code"
 msgstr "기본 세법"
 
-#: pretix/control/forms/event.py:1516
+#: pretix/control/forms/event.py:1518
 msgid "Deviating tax rate"
 msgstr "세율 편차"
 
-#: pretix/control/forms/event.py:1521 pretix/control/forms/event.py:1525
+#: pretix/control/forms/event.py:1523 pretix/control/forms/event.py:1527
 msgid "Text on invoice"
 msgstr "송장에 대한 내용"
 
-#: pretix/control/forms/event.py:1545
+#: pretix/control/forms/event.py:1547
 msgid ""
 "A combination of this calculation mode with a non-zero tax rate does not "
 "make sense."
 msgstr "이 계산 방식과 0이 아닌 세율의 조합은 의미가 없습니다."
 
-#: pretix/control/forms/event.py:1550 pretix/control/forms/event.py:1554
+#: pretix/control/forms/event.py:1552 pretix/control/forms/event.py:1556
 msgid "This combination of calculation mode and tax code does not make sense."
 msgstr "계산 방식과 세법의 조합은 이해가 되지 않습니다."
 
-#: pretix/control/forms/event.py:1619
+#: pretix/control/forms/event.py:1621
 msgid "Pre-selected voucher"
 msgstr "사전 선택된 바우처"
 
-#: pretix/control/forms/event.py:1621
+#: pretix/control/forms/event.py:1623
 msgid ""
 "If set, the widget will show products as if this voucher has been entered "
 "and when a product is bought via the widget, this voucher will be used. This "
@@ -13004,11 +13017,11 @@ msgstr ""
 "구매하면 이 바우처가 사용됩니다. 예를 들어, 이 바우처는 할인을 제공하거나 비"
 "밀 제품을 잠금 해제하는 위젯을 제공하는 데 사용할 수 있습니다."
 
-#: pretix/control/forms/event.py:1626
+#: pretix/control/forms/event.py:1628
 msgid "Compatibility mode"
 msgstr "호환성 모드"
 
-#: pretix/control/forms/event.py:1628
+#: pretix/control/forms/event.py:1630
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
@@ -13016,28 +13029,28 @@ msgstr ""
 "일반 위젯은 모든 웹사이트 구축업체에서 작동하지 않습니다. 문제가 발생하면 이 "
 "호환성 모드를 사용해 보세요."
 
-#: pretix/control/forms/event.py:1649
+#: pretix/control/forms/event.py:1651
 msgid "The given voucher code does not exist."
 msgstr "지정된 바우처 코드가 존재하지 않습니다."
 
-#: pretix/control/forms/event.py:1656 pretix/control/forms/organizer.py:112
+#: pretix/control/forms/event.py:1658 pretix/control/forms/organizer.py:112
 #: pretix/control/views/shredder.py:179
 msgid "The slug you entered was not correct."
 msgstr "입력한 슬러그가 잘못되었습니다."
 
-#: pretix/control/forms/event.py:1691
+#: pretix/control/forms/event.py:1693
 msgid "Ticket downloads"
 msgstr "티켓 다운로드"
 
-#: pretix/control/forms/event.py:1692
+#: pretix/control/forms/event.py:1694
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr "고객님께서는 PDF 형식으로 티켓을 다운로드하실 수 있습니다."
 
-#: pretix/control/forms/event.py:1696
+#: pretix/control/forms/event.py:1698
 msgid "Require all attendees to fill in their names"
 msgstr "모든 참석자에게 이름을 입력하도록 요구"
 
-#: pretix/control/forms/event.py:1697
+#: pretix/control/forms/event.py:1699
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
@@ -13045,11 +13058,11 @@ msgstr ""
 "기본적으로 이름은 요청하지만 필요하지 않습니다. 설정에서 이 기능을 완전히 끌 "
 "수 있습니다."
 
-#: pretix/control/forms/event.py:1723
+#: pretix/control/forms/event.py:1725
 msgid "Payment via Stripe"
 msgstr "스트라이프(글로벌 전자 결제 시스템)을 통한 결제"
 
-#: pretix/control/forms/event.py:1724
+#: pretix/control/forms/event.py:1726
 msgid ""
 "Stripe is an online payments processor supporting credit cards and lots of "
 "other payment options. To accept payments via Stripe, you will need to set "
@@ -13060,11 +13073,11 @@ msgstr ""
 "니다. Stripe를 통해 결제를 받으려면 간단한 인터페이스를 사용하여 5분 이내에 "
 "계정을 설정해야 합니다."
 
-#: pretix/control/forms/event.py:1730
+#: pretix/control/forms/event.py:1732
 msgid "Payment by bank transfer"
 msgstr "은행 송금을 통한 결제"
 
-#: pretix/control/forms/event.py:1731
+#: pretix/control/forms/event.py:1733
 msgid ""
 "Your customers will be instructed to wire the money to your account. You can "
 "then import your bank statements to process the payments within pretix, or "
@@ -13073,16 +13086,16 @@ msgstr ""
 "고객에게 계좌로 송금하라는 지시가 내려집니다. 그런 다음 은행 명세서를 가져와 "
 "프리픽스 내에서 결제를 처리하거나 수동으로 결제한 것으로 표시할 수 있습니다."
 
-#: pretix/control/forms/event.py:1770
+#: pretix/control/forms/event.py:1772
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
 msgstr "가격(선택사항)"
 
-#: pretix/control/forms/event.py:1775
+#: pretix/control/forms/event.py:1777
 msgid "Free"
 msgstr "무료"
 
-#: pretix/control/forms/event.py:1780
+#: pretix/control/forms/event.py:1782
 msgid "Quantity available"
 msgstr "사용 가능한 수량"
 
@@ -16475,13 +16488,13 @@ msgid "You do not have permission to view this content."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:44
-#: pretix/control/templates/pretixcontrol/base.html:357
+#: pretix/control/templates/pretixcontrol/base.html:359
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:49
-#: pretix/control/templates/pretixcontrol/base.html:362
+#: pretix/control/templates/pretixcontrol/base.html:364
 msgid "Stop impersonating"
 msgstr ""
 
@@ -16575,6 +16588,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:28
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:66
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:49
 msgid "Continue"
 msgstr "계속하기"
 
@@ -16627,7 +16641,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/payment.html:88
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:36
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:201
-#: pretix/control/templates/pretixcontrol/event/settings.html:472
+#: pretix/control/templates/pretixcontrol/event/settings.html:473
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:145
 #: pretix/control/templates/pretixcontrol/event/tickets.html:73
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
@@ -16693,76 +16707,76 @@ msgstr "저장하기"
 msgid "Create a new account"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:100
+#: pretix/control/templates/pretixcontrol/base.html:102
 msgid "Toggle navigation"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:115
-#: pretix/control/templates/pretixcontrol/base.html:138
-#: pretix/control/templates/pretixcontrol/base.html:142
-#: pretix/control/templates/pretixcontrol/base.html:143
+#: pretix/control/templates/pretixcontrol/base.html:117
+#: pretix/control/templates/pretixcontrol/base.html:140
+#: pretix/control/templates/pretixcontrol/base.html:144
+#: pretix/control/templates/pretixcontrol/base.html:145
 msgid "Go to shop"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:121
-#: pretix/control/templates/pretixcontrol/base.html:149
-#: pretix/control/templates/pretixcontrol/base.html:150
+#: pretix/control/templates/pretixcontrol/base.html:123
+#: pretix/control/templates/pretixcontrol/base.html:151
+#: pretix/control/templates/pretixcontrol/base.html:152
 msgid "Public profile"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:201
+#: pretix/control/templates/pretixcontrol/base.html:203
 msgid "End admin session"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:213
+#: pretix/control/templates/pretixcontrol/base.html:215
 msgid "Account Settings"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:218
 #: pretix/control/templates/pretixcontrol/base.html:220
+#: pretix/control/templates/pretixcontrol/base.html:222
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:14
 msgid "Log out"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:246
+#: pretix/control/templates/pretixcontrol/base.html:248
 msgid "Organizer account"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:269
+#: pretix/control/templates/pretixcontrol/base.html:271
 msgid "Search for events"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:326
+#: pretix/control/templates/pretixcontrol/base.html:328
 #: pretix/presale/templates/pretixpresale/base.html:54
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:329
+#: pretix/control/templates/pretixcontrol/base.html:331
 #: pretix/presale/templates/pretixpresale/base.html:57
 msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
 "based technologies and is no longer supported by this website."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:333
+#: pretix/control/templates/pretixcontrol/base.html:335
 #: pretix/presale/templates/pretixpresale/base.html:61
 msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:342
+#: pretix/control/templates/pretixcontrol/base.html:344
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:373
+#: pretix/control/templates/pretixcontrol/base.html:375
 msgid "Read more"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:390
+#: pretix/control/templates/pretixcontrol/base.html:392
 msgid ""
 "Your event contains <strong>test mode orders</strong> even though "
 "<strong>test mode has been disabled</strong>. You should delete those orders "
@@ -16770,11 +16784,11 @@ msgid ""
 "people from actually buying tickets."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:397
+#: pretix/control/templates/pretixcontrol/base.html:399
 msgid "Show all test mode orders"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:405
+#: pretix/control/templates/pretixcontrol/base.html:407
 msgid ""
 "Starting with version 1.2.0, pretix automatically checks for updates in the "
 "background. During this check, anonymous data is transmitted to servers "
@@ -16783,42 +16797,42 @@ msgid ""
 "if a new update arrives. This message will disappear once you clicked it."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:418
+#: pretix/control/templates/pretixcontrol/base.html:420
 msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:427
+#: pretix/control/templates/pretixcontrol/base.html:429
 msgid ""
 "The cronjob component of pretix was not executed in the last hours. Please "
 "check that you have completed all installation steps and your cronjob is "
 "executed correctly."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:436
+#: pretix/control/templates/pretixcontrol/base.html:438
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:442
+#: pretix/control/templates/pretixcontrol/base.html:444
 msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:454
+#: pretix/control/templates/pretixcontrol/base.html:456
 #, python-format
 msgid "Times displayed in %(tz)s"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:460
+#: pretix/control/templates/pretixcontrol/base.html:462
 msgid "running in development mode"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:476
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:44
+#: pretix/control/templates/pretixcontrol/base.html:471
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:38
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
@@ -17784,7 +17798,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
-#: pretix/control/templates/pretixcontrol/event/settings.html:478
+#: pretix/control/templates/pretixcontrol/event/settings.html:479
 msgid "Cancel or delete event"
 msgstr ""
 
@@ -17888,8 +17902,8 @@ msgid "Geo coordinates"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:15
-#: pretix/control/templates/pretixcontrol/event/settings.html:138
-#: pretix/control/templates/pretixcontrol/event/settings.html:280
+#: pretix/control/templates/pretixcontrol/event/settings.html:139
+#: pretix/control/templates/pretixcontrol/event/settings.html:281
 #: pretix/control/templates/pretixcontrol/items/discount.html:35
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:56
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:32
@@ -18545,51 +18559,51 @@ msgstr ""
 msgid "Localization"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:66
+#: pretix/control/templates/pretixcontrol/event/settings.html:67
 msgid "Customer and attendee data"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:67
+#: pretix/control/templates/pretixcontrol/event/settings.html:68
 msgid "Customer data (once per order)"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:83
+#: pretix/control/templates/pretixcontrol/event/settings.html:84
 msgid "Name and address"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:89
+#: pretix/control/templates/pretixcontrol/event/settings.html:90
 msgid "See invoice settings"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:95
+#: pretix/control/templates/pretixcontrol/event/settings.html:96
 msgid "Attendee data (once per personalized ticket)"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:104
+#: pretix/control/templates/pretixcontrol/event/settings.html:105
 msgid "Custom fields"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:110
+#: pretix/control/templates/pretixcontrol/event/settings.html:111
 msgid "Manage questions"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:117
+#: pretix/control/templates/pretixcontrol/event/settings.html:118
 msgid "Form settings"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:122
+#: pretix/control/templates/pretixcontrol/event/settings.html:123
 msgid "Changes to existing orders"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:130
+#: pretix/control/templates/pretixcontrol/event/settings.html:131
 msgid "Texts"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:137
+#: pretix/control/templates/pretixcontrol/event/settings.html:138
 msgid "Confirmation text"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:142
+#: pretix/control/templates/pretixcontrol/event/settings.html:143
 msgid ""
 "These texts need to be confirmed by the user before a purchase is possible. "
 "You could for example link your terms of service here. If you use the Pages "
@@ -18597,16 +18611,16 @@ msgid ""
 "you can configure it there."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:199
+#: pretix/control/templates/pretixcontrol/event/settings.html:200
 msgid "Add confirmation text"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:213
+#: pretix/control/templates/pretixcontrol/event/settings.html:214
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:140
 msgid "Shop design"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:231
+#: pretix/control/templates/pretixcontrol/event/settings.html:232
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:56
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:411
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:95
@@ -18614,35 +18628,35 @@ msgstr ""
 msgid "Timeline"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:238
+#: pretix/control/templates/pretixcontrol/event/settings.html:239
 msgid "Display"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:243
+#: pretix/control/templates/pretixcontrol/event/settings.html:244
 msgid "Product list"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:249
+#: pretix/control/templates/pretixcontrol/event/settings.html:250
 msgctxt "subevents"
 msgid "Calendar and list views"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:268
+#: pretix/control/templates/pretixcontrol/event/settings.html:269
 #: pretix/control/templates/pretixcontrol/order/index.html:176
 #: pretix/presale/templates/pretixpresale/event/order.html:22
 msgid "Order details"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:272
+#: pretix/control/templates/pretixcontrol/event/settings.html:273
 msgid "Other settings"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:279
+#: pretix/control/templates/pretixcontrol/event/settings.html:280
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:55
 msgid "Footer links"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:284
+#: pretix/control/templates/pretixcontrol/event/settings.html:285
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:60
 msgid ""
 "These links will be shown in the footer of your ticket shop. You could for "
@@ -18651,22 +18665,22 @@ msgid ""
 "do not need to add them here."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:338
+#: pretix/control/templates/pretixcontrol/event/settings.html:339
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:119
 msgid "Add link"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:345
+#: pretix/control/templates/pretixcontrol/event/settings.html:346
 msgid "Cart"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:353
+#: pretix/control/templates/pretixcontrol/event/settings.html:354
 msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as hidden products, add-on products or product bundles."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:359
+#: pretix/control/templates/pretixcontrol/event/settings.html:360
 msgid ""
 "The waiting list determines availability mainly based on quotas. If you use "
 "a seating plan and your number of available seats is less than the available "
@@ -18674,42 +18688,42 @@ msgid ""
 "waiting list but still are unable to book a seat."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:366
+#: pretix/control/templates/pretixcontrol/event/settings.html:367
 msgid ""
 "Specifically, this means the waiting list is not safe to use together with "
 "the minimum distance feature of our seating plan module."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:377
+#: pretix/control/templates/pretixcontrol/event/settings.html:378
 msgid "Waiting customers"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:383
+#: pretix/control/templates/pretixcontrol/event/settings.html:384
 msgid "Manage waiting list"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:396
+#: pretix/control/templates/pretixcontrol/event/settings.html:397
 msgid "Item metadata"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:398
+#: pretix/control/templates/pretixcontrol/event/settings.html:399
 msgid ""
 "You can here define a set of metadata properties (i.e. variables) that you "
 "can later set for your items and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of items."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:418
-#: pretix/control/templates/pretixcontrol/event/settings.html:446
+#: pretix/control/templates/pretixcontrol/event/settings.html:419
+#: pretix/control/templates/pretixcontrol/event/settings.html:447
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:22
 msgid "Property"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:465
+#: pretix/control/templates/pretixcontrol/event/settings.html:466
 msgid "Add property"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:483
+#: pretix/control/templates/pretixcontrol/event/settings.html:484
 #: pretix/control/templates/pretixcontrol/events/index.html:165
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:130
 msgid "Clone event"
@@ -27209,7 +27223,7 @@ msgid "Upload time"
 msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:826
-#: pretix/presale/templates/pretixpresale/event/index.html:249
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:145
 msgid "OK"
 msgstr ""
 
@@ -29911,8 +29925,8 @@ msgid "Contact event organizer"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:225
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:100
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:119
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:115
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:134
 #: pretix/presale/templates/pretixpresale/organizers/base.html:103
 msgid "Privacy policy"
 msgstr ""
@@ -30379,17 +30393,6 @@ msgstr ""
 msgid "incl. %(rate)s%% %(name)s"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:200
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:207
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:216
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:223
-#: pretix/presale/templates/pretixpresale/event/voucher.html:228
-#: pretix/presale/templates/pretixpresale/event/voucher.html:235
-#: pretix/presale/templates/pretixpresale/event/voucher.html:252
-#, python-format
-msgid "Add %(item)s, %(var)s to cart"
-msgstr ""
-
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:203
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:349
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:219
@@ -30416,17 +30419,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:243
 #: pretix/presale/templates/pretixpresale/event/voucher.html:399
 msgid "Increase quantity"
-msgstr ""
-
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:346
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:353
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:368
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:375
-#: pretix/presale/templates/pretixpresale/event/voucher.html:383
-#: pretix/presale/templates/pretixpresale/event/voucher.html:390
-#: pretix/presale/templates/pretixpresale/event/voucher.html:408
-#, python-format
-msgid "Add %(item)s to cart"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:379
@@ -30617,14 +30609,13 @@ msgstr ""
 "카트에 있는 상품은 더 이상 예약되지 않습니다. 주문이 가능한 한 주문을 완료할 "
 "수 있습니다."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:508
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #, fuzzy
-#| msgctxt "refund_source"
-#| msgid "External"
-msgid "Extend"
-msgstr "외부"
+#| msgid "Event description"
+msgid "Extend reservation"
+msgstr "이벤트 설명"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:511
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
 msgstr ""
 
@@ -30643,7 +30634,7 @@ msgid "Empty cart"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:68
-#: pretix/presale/templates/pretixpresale/event/index.html:257
+#: pretix/presale/templates/pretixpresale/event/index.html:250
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
 msgstr ""
@@ -30839,37 +30830,35 @@ msgstr ""
 msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:6
 msgid "Where does the event happen?"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:13
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:14
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:16
 msgid "When does the event happen?"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:20
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:25
 #, python-format
 msgid "Begin: %(time)s"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:29
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:34
 #, python-format
 msgid "End: %(time)s"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:41
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:46
 #, python-format
 msgid "Admission: %(time)s"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:49
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:54
 #, python-format
 msgid "Admission: %(datetime)s"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:62
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:67
 msgid "Add to Calendar"
 msgstr ""
 
@@ -31086,23 +31075,11 @@ msgstr ""
 msgid "Add to cart"
 msgstr "목록에 추가하기"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:246
-#, fuzzy
-#| msgid "You did not select any products."
-msgid "You didn't select any ticket."
-msgstr "당신은 어떤 제품도 선택하지 않았습니다."
-
-#: pretix/presale/templates/pretixpresale/event/index.html:247
-msgid ""
-"Please tick a checkbox or enter a quantity for one of the ticket types to "
-"add to the cart."
-msgstr ""
-
-#: pretix/presale/templates/pretixpresale/event/index.html:264
+#: pretix/presale/templates/pretixpresale/event/index.html:257
 msgid "If you have already ordered a ticket"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:268
+#: pretix/presale/templates/pretixpresale/event/index.html:261
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -31110,7 +31087,7 @@ msgid ""
 "your order to be sent to you again."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/index.html:277
+#: pretix/presale/templates/pretixpresale/event/index.html:270
 msgid "Resend order link"
 msgstr ""
 
@@ -31791,59 +31768,79 @@ msgstr ""
 msgid "View customer account"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:17
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "We've started the requested process in a new window."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:20
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:21
 msgid "If you do not see the new window, we can help you launch it again."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:25
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:26
 msgid "Open window again"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:29
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:30
 msgid ""
 "Once the process in the new window has been completed, you can continue here."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:65
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:47
+msgid "Please let us know you're still there."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:59
+msgid "Close"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:80
 msgid "Adjust settings in detail"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:70
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:85
 msgid "Required cookies"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:74
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:89
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:88
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:103
 msgctxt "cookie_usage"
 msgid "Functionality"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:90
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:105
 msgctxt "cookie_usage"
 msgid "Analytics"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:92
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:107
 msgctxt "cookie_usage"
 msgid "Marketing"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:94
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:109
 msgctxt "cookie_usage"
 msgid "Social features"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:110
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:125
 msgid "Save selection"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:142
+#, fuzzy
+#| msgid "You did not select any products."
+msgid "You didn't select any ticket."
+msgstr "당신은 어떤 제품도 선택하지 않았습니다."
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:143
+msgid ""
+"Please tick a checkbox or enter a quantity for one of the ticket types to "
+"add to the cart."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
@@ -32117,7 +32114,7 @@ msgstr ""
 msgid "The selected organizer was not found."
 msgstr ""
 
-#: pretix/presale/views/__init__.py:272
+#: pretix/presale/views/__init__.py:275
 #, python-brace-format
 msgid ""
 "Your selected payment method can only be used for a payment of at least "
@@ -32145,28 +32142,28 @@ msgstr ""
 msgid "Your cart is now empty."
 msgstr ""
 
-#: pretix/presale/views/cart.py:547
+#: pretix/presale/views/cart.py:553
 #, fuzzy
 #| msgid "Your cart is empty."
 msgid "Your cart timeout was extended."
 msgstr "카트가 비어 있습니다."
 
-#: pretix/presale/views/cart.py:562
+#: pretix/presale/views/cart.py:568
 msgid "The products have been successfully added to your cart."
 msgstr "제품이 장바구니에 성공적으로 추가되었습니다."
 
-#: pretix/presale/views/cart.py:586 pretix/presale/views/event.py:540
+#: pretix/presale/views/cart.py:592 pretix/presale/views/event.py:540
 #: pretix/presale/views/widget.py:377
 msgid "Tickets for this event cannot be purchased on this sales channel."
 msgstr ""
 
-#: pretix/presale/views/cart.py:725
+#: pretix/presale/views/cart.py:731
 msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
 msgstr ""
 
-#: pretix/presale/views/cart.py:753
+#: pretix/presale/views/cart.py:759
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
 msgstr ""
@@ -32439,6 +32436,12 @@ msgstr ""
 #: pretix/settings.py:802
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgctxt "refund_source"
+#~| msgid "External"
+#~ msgid "Extend"
+#~ msgstr "외부"
 
 #~ msgctxt "address"
 #~ msgid "Select state"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-22 12:48+0000\n"
+"POT-Creation-Date: 2025-05-27 08:30+0000\n"
 "PO-Revision-Date: 2025-05-12 13:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -233,7 +233,7 @@ msgstr "コメント"
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "この商品（\"{}\"）は割り当てられていません。"
 
-#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1680
+#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1685
 #: pretix/base/models/items.py:1917 pretix/base/models/items.py:2184
 msgid "One or more items do not belong to this event."
 msgstr "本イベントにおける一つ又は複数の製品のお取り扱いはございません。"
@@ -599,9 +599,9 @@ msgstr "顧客アカウントが匿名化されました"
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1004
 #: pretix/base/forms/questions.py:1035 pretix/base/forms/questions.py:1224
-#: pretix/base/payment.py:97 pretix/control/forms/event.py:796
-#: pretix/control/forms/event.py:802 pretix/control/forms/event.py:846
-#: pretix/control/forms/event.py:1443 pretix/control/forms/mailsetup.py:87
+#: pretix/base/payment.py:97 pretix/control/forms/event.py:798
+#: pretix/control/forms/event.py:804 pretix/control/forms/event.py:848
+#: pretix/control/forms/event.py:1445 pretix/control/forms/mailsetup.py:87
 #: pretix/control/forms/mailsetup.py:129
 #: pretix/plugins/banktransfer/payment.py:673
 #: pretix/plugins/banktransfer/payment.py:679
@@ -632,7 +632,7 @@ msgstr "{system} のユーザー"
 #: pretix/base/pdf.py:325 pretix/control/navigation.py:81
 #: pretix/control/navigation.py:501
 #: pretix/control/templates/pretixcontrol/checkin/index.html:107
-#: pretix/control/templates/pretixcontrol/event/settings.html:70
+#: pretix/control/templates/pretixcontrol/event/settings.html:71
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:49
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:59
@@ -838,7 +838,7 @@ msgstr "質問"
 #: pretix/base/exporters/orderlist.py:1138 pretix/base/models/checkin.py:58
 #: pretix/base/models/items.py:2048 pretix/base/models/orders.py:1485
 #: pretix/base/models/orders.py:2999 pretix/base/models/vouchers.py:187
-#: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1608
+#: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1610
 #: pretix/control/forms/filter.py:425 pretix/control/forms/filter.py:1901
 #: pretix/control/forms/filter.py:2123 pretix/control/forms/filter.py:2238
 #: pretix/control/forms/filter.py:2320 pretix/control/forms/filter.py:2537
@@ -868,7 +868,7 @@ msgid "Date"
 msgstr "日付"
 
 #: pretix/base/exporters/answers.py:79 pretix/base/exporters/answers.py:88
-#: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1609
+#: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1611
 #: pretix/control/forms/filter.py:428 pretix/control/forms/filter.py:455
 #: pretix/control/forms/filter.py:1904 pretix/control/forms/filter.py:1937
 #: pretix/control/forms/filter.py:2126 pretix/control/forms/filter.py:2146
@@ -951,7 +951,7 @@ msgstr "フルネーム"
 #: pretix/base/exporters/invoices.py:340 pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/waitinglist.py:108 pretix/base/forms/questions.py:1185
 #: pretix/base/models/devices.py:65 pretix/base/models/devices.py:127
-#: pretix/base/models/event.py:1482 pretix/base/models/event.py:1724
+#: pretix/base/models/event.py:1487 pretix/base/models/event.py:1729
 #: pretix/base/models/items.py:2052 pretix/base/models/items.py:2225
 #: pretix/base/models/memberships.py:41 pretix/base/models/organizer.py:75
 #: pretix/base/models/organizer.py:535 pretix/base/models/seating.py:85
@@ -1009,9 +1009,9 @@ msgid "Registration date"
 msgstr "登録日"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
-#: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
+#: pretix/base/exporters/waitinglist.py:120 pretix/base/models/auth.py:258
 #: pretix/base/models/customers.py:106 pretix/base/models/exports.py:54
-#: pretix/control/forms/event.py:1614 pretix/control/forms/exports.py:49
+#: pretix/control/forms/event.py:1616 pretix/control/forms/exports.py:49
 #: pretix/control/forms/exports.py:88 pretix/control/views/waitinglist.py:315
 msgid "Language"
 msgstr "言語"
@@ -1146,7 +1146,7 @@ msgstr ""
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:441
 #: pretix/base/exporters/orderlist.py:573
-#: pretix/base/exporters/waitinglist.py:114 pretix/base/models/event.py:572
+#: pretix/base/exporters/waitinglist.py:116 pretix/base/models/event.py:572
 #: pretix/base/pdf.py:224 pretix/control/forms/filter.py:1248
 #: pretix/control/forms/filter.py:1250 pretix/control/forms/filter.py:1695
 #: pretix/control/forms/filter.py:1697
@@ -1175,52 +1175,52 @@ msgid "Timezone"
 msgstr "標準時間帯"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:595
-#: pretix/base/models/event.py:1484 pretix/base/settings.py:3231
+#: pretix/base/models/event.py:1489 pretix/base/settings.py:3231
 #: pretix/base/settings.py:3241 pretix/control/forms/subevents.py:480
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr "イベント開始時間"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:597
-#: pretix/base/models/event.py:1486 pretix/base/pdf.py:286
+#: pretix/base/models/event.py:1491 pretix/base/pdf.py:286
 #: pretix/control/forms/subevents.py:485
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
 msgstr "イベント終了時間"
 
 #: pretix/base/exporters/events.py:64 pretix/base/models/event.py:599
-#: pretix/base/models/event.py:1488 pretix/control/forms/subevents.py:490
+#: pretix/base/models/event.py:1493 pretix/control/forms/subevents.py:490
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
 msgstr "入場時間"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:611
-#: pretix/base/models/event.py:1497 pretix/control/forms/subevents.py:93
+#: pretix/base/models/event.py:1502 pretix/control/forms/subevents.py:93
 msgid "Start of presale"
 msgstr "先行販売開始"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:605
-#: pretix/base/models/event.py:1491 pretix/control/forms/subevents.py:99
+#: pretix/base/models/event.py:1496 pretix/control/forms/subevents.py:99
 msgid "End of presale"
 msgstr "先行販売終了"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:351
-#: pretix/base/models/event.py:617 pretix/base/models/event.py:1503
+#: pretix/base/models/event.py:617 pretix/base/models/event.py:1508
 msgid "Location"
 msgstr "場所"
 
-#: pretix/base/exporters/events.py:68 pretix/base/models/event.py:620
-#: pretix/base/models/event.py:1506
+#: pretix/base/exporters/events.py:68 pretix/base/models/event.py:625
+#: pretix/base/models/event.py:1511
 msgid "Latitude"
 msgstr "緯度"
 
-#: pretix/base/exporters/events.py:69 pretix/base/models/event.py:628
-#: pretix/base/models/event.py:1514
+#: pretix/base/exporters/events.py:69 pretix/base/models/event.py:633
+#: pretix/base/models/event.py:1519
 msgid "Longitude"
 msgstr "経度"
 
-#: pretix/base/exporters/events.py:70 pretix/base/models/event.py:640
-#: pretix/base/models/event.py:1529
+#: pretix/base/exporters/events.py:70 pretix/base/models/event.py:645
+#: pretix/base/models/event.py:1534
 #: pretix/control/templates/pretixcontrol/event/index.html:128
 #: pretix/control/templates/pretixcontrol/order/index.html:991
 msgid "Internal comment"
@@ -1519,7 +1519,7 @@ msgid "Internal reference"
 msgstr "内部参考情報"
 
 #: pretix/base/exporters/invoices.py:223 pretix/base/models/tax.py:162
-#: pretix/control/forms/event.py:1504
+#: pretix/control/forms/event.py:1506
 msgid "Reverse charge"
 msgstr "リバースチャージ"
 
@@ -1629,11 +1629,13 @@ msgstr ""
 
 #: pretix/base/exporters/items.py:57 pretix/base/exporters/orderlist.py:588
 #: pretix/base/exporters/orderlist.py:890
+#: pretix/base/exporters/waitinglist.py:112
 msgid "Product ID"
 msgstr "商品ID"
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:590
 #: pretix/base/exporters/orderlist.py:892
+#: pretix/base/exporters/waitinglist.py:114
 msgid "Variation ID"
 msgstr "バリエーションID"
 
@@ -1657,7 +1659,7 @@ msgstr "アイテム名"
 
 #: pretix/base/exporters/items.py:68 pretix/base/exporters/orderlist.py:589
 #: pretix/base/exporters/orderlist.py:893
-#: pretix/base/exporters/waitinglist.py:112 pretix/base/models/items.py:1148
+#: pretix/base/exporters/waitinglist.py:113 pretix/base/models/items.py:1148
 #: pretix/base/models/orders.py:1495 pretix/base/models/orders.py:2992
 #: pretix/plugins/checkinlists/exporters.py:695
 msgid "Variation"
@@ -1665,7 +1667,7 @@ msgstr "バリエーション"
 
 #: pretix/base/exporters/items.py:71 pretix/base/exporters/reusablemedia.py:48
 #: pretix/base/models/customers.py:57 pretix/base/models/customers.py:403
-#: pretix/base/models/discount.py:60 pretix/base/models/event.py:1473
+#: pretix/base/models/discount.py:60 pretix/base/models/event.py:1478
 #: pretix/base/models/items.py:489 pretix/base/models/items.py:1152
 #: pretix/base/models/media.py:77 pretix/base/settings.py:204
 #: pretix/base/settings.py:239 pretix/base/settings.py:270
@@ -1677,7 +1679,7 @@ msgid "Active"
 msgstr "アクティブ"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:77
-#: pretix/control/forms/event.py:984 pretix/control/navigation.py:508
+#: pretix/control/forms/event.py:986 pretix/control/navigation.py:508
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:6
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
@@ -1715,8 +1717,8 @@ msgstr "チケットを生成"
 
 #: pretix/base/exporters/items.py:79 pretix/base/exporters/orderlist.py:1135
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:367
-#: pretix/control/forms/event.py:1684 pretix/control/navigation.py:237
-#: pretix/control/templates/pretixcontrol/event/settings.html:351
+#: pretix/control/forms/event.py:1686 pretix/control/navigation.py:237
+#: pretix/control/templates/pretixcontrol/event/settings.html:352
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:6
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:9
@@ -1924,7 +1926,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:876
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1259
-#: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1660
+#: pretix/base/exporters/waitinglist.py:115 pretix/control/forms/event.py:1662
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
 msgstr "イベントのスラッグ"
@@ -1942,8 +1944,8 @@ msgstr "注文合計"
 #: pretix/base/exporters/orderlist.py:576
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1312
-#: pretix/base/exporters/waitinglist.py:120
-#: pretix/base/exporters/waitinglist.py:168 pretix/base/models/orders.py:216
+#: pretix/base/exporters/waitinglist.py:122
+#: pretix/base/exporters/waitinglist.py:172 pretix/base/models/orders.py:216
 #: pretix/control/forms/filter.py:1019 pretix/control/forms/filter.py:1198
 #: pretix/control/forms/filter.py:1426 pretix/control/forms/filter.py:1495
 #: pretix/control/forms/filter.py:1567 pretix/control/forms/filter.py:1667
@@ -2132,7 +2134,7 @@ msgstr "ポジションID"
 
 #: pretix/base/exporters/orderlist.py:584
 #: pretix/base/exporters/orderlist.py:1139
-#: pretix/base/exporters/waitinglist.py:116 pretix/base/forms/questions.py:642
+#: pretix/base/exporters/waitinglist.py:118 pretix/base/forms/questions.py:642
 #: pretix/base/forms/questions.py:651 pretix/base/models/memberships.py:145
 #: pretix/control/forms/rrule.py:49
 #: pretix/control/templates/pretixcontrol/events/index.html:78
@@ -2150,7 +2152,7 @@ msgstr "開始日"
 
 #: pretix/base/exporters/orderlist.py:585
 #: pretix/base/exporters/orderlist.py:1140
-#: pretix/base/exporters/waitinglist.py:117
+#: pretix/base/exporters/waitinglist.py:119
 #: pretix/base/models/memberships.py:148
 #: pretix/control/templates/pretixcontrol/events/index.html:82
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:68
@@ -2162,7 +2164,9 @@ msgid "End date"
 msgstr "終了日"
 
 #: pretix/base/exporters/orderlist.py:587
-#: pretix/base/exporters/orderlist.py:891 pretix/base/modelimport_orders.py:109
+#: pretix/base/exporters/orderlist.py:891
+#: pretix/base/exporters/waitinglist.py:111
+#: pretix/base/modelimport_orders.py:109
 #: pretix/base/modelimport_vouchers.py:174 pretix/base/models/items.py:794
 #: pretix/base/models/vouchers.py:250 pretix/base/models/waitinglist.py:91
 #: pretix/control/forms/filter.py:2129 pretix/control/forms/filter.py:2384
@@ -2349,7 +2353,7 @@ msgstr ""
 msgid "Only include transactions created within this date range."
 msgstr "この日以降に作成された注文に限る。"
 
-#: pretix/base/exporters/orderlist.py:875 pretix/base/models/event.py:667
+#: pretix/base/exporters/orderlist.py:875 pretix/base/models/event.py:672
 #: pretix/base/models/items.py:468 pretix/base/models/items.py:2041
 #: pretix/base/models/orders.py:233 pretix/base/models/orders.py:3086
 #: pretix/base/models/vouchers.py:181 pretix/base/models/waitinglist.py:55
@@ -2393,13 +2397,13 @@ msgstr "古いデータ"
 
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/items.py:1555
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:217
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:363
+#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:207
+#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:353
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:15
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:234
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:387
-#: pretix/presale/templates/pretixpresale/event/voucher.html:242
-#: pretix/presale/templates/pretixpresale/event/voucher.html:398
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:223
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:375
+#: pretix/presale/templates/pretixpresale/event/voucher.html:235
+#: pretix/presale/templates/pretixpresale/event/voucher.html:390
 msgid "Quantity"
 msgstr "数量"
 
@@ -2651,7 +2655,7 @@ msgid "Organizer"
 msgstr "主催者"
 
 #: pretix/base/exporters/orderlist.py:1225 pretix/base/invoice.py:573
-#: pretix/control/templates/pretixcontrol/base.html:280
+#: pretix/control/templates/pretixcontrol/base.html:282
 #: pretix/control/templates/pretixcontrol/checkin/index.html:145
 #: pretix/control/templates/pretixcontrol/order/index.html:25
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:38
@@ -2898,25 +2902,19 @@ msgstr "クーポンを利用しました"
 msgid "Voucher expired"
 msgstr "クーポンの有効期限が切れています"
 
-#: pretix/base/exporters/waitinglist.py:111 pretix/base/pdf.py:121
-#: pretix/control/forms/event.py:1766
-#: pretix/control/templates/pretixcontrol/items/index.html:38
-msgid "Product name"
-msgstr "製品名"
-
-#: pretix/base/exporters/waitinglist.py:115
+#: pretix/base/exporters/waitinglist.py:117
 #: pretix/base/modelimport_orders.py:95 pretix/base/modelimport_vouchers.py:60
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
 msgctxt "subevents"
 msgid "Date"
 msgstr "日付"
 
-#: pretix/base/exporters/waitinglist.py:119
+#: pretix/base/exporters/waitinglist.py:121
 #: pretix/control/views/waitinglist.py:315
 msgid "Priority"
 msgstr "優先順位"
 
-#: pretix/base/exporters/waitinglist.py:121
+#: pretix/base/exporters/waitinglist.py:123
 #: pretix/base/modelimport_vouchers.py:39 pretix/base/models/vouchers.py:190
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:114
@@ -4314,7 +4312,7 @@ msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr ""
 "スラッグには、文字、数字、ドットまたはダッシュのみ含めることができます。"
 
-#: pretix/base/models/event.py:601 pretix/base/models/event.py:1477
+#: pretix/base/models/event.py:601 pretix/base/models/event.py:1482
 msgid "Show in lists"
 msgstr "リストに表示"
 
@@ -4326,7 +4324,7 @@ msgstr ""
 "選択された場合、このイベントはあなたの主催者アカウントのイベントリストに公開"
 "されます。"
 
-#: pretix/base/models/event.py:606 pretix/base/models/event.py:1492
+#: pretix/base/models/event.py:606 pretix/base/models/event.py:1497
 #: pretix/control/forms/subevents.py:100
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
@@ -4335,17 +4333,27 @@ msgstr ""
 "任意です。この日付以降に商品は販売されません。この値を設定しない場合、プリ"
 "セールはイベントの終了日後に終了します。"
 
-#: pretix/base/models/event.py:612 pretix/base/models/event.py:1498
+#: pretix/base/models/event.py:612 pretix/base/models/event.py:1503
 #: pretix/control/forms/subevents.py:94
 msgid "Optional. No products will be sold before this date."
 msgstr "オプションです。この日付以前に製品は販売されません。"
 
-#: pretix/base/models/event.py:637 pretix/control/navigation.py:65
+#: pretix/base/models/event.py:621
+msgid "This event is remote or partially remote."
+msgstr ""
+
+#: pretix/base/models/event.py:622
+msgid ""
+"This will be used to let users know if the event is in a different timezone "
+"and let’s us calculate users’ local times."
+msgstr ""
+
+#: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
 msgstr "プラグイン"
 
-#: pretix/base/models/event.py:644 pretix/base/pdf.py:229
-#: pretix/control/forms/event.py:273 pretix/control/forms/filter.py:1677
+#: pretix/base/models/event.py:649 pretix/base/pdf.py:229
+#: pretix/control/forms/event.py:274 pretix/control/forms/filter.py:1677
 #: pretix/control/templates/pretixcontrol/event/index.html:13
 #: pretix/control/templates/pretixcontrol/events/index.html:114
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:90
@@ -4356,20 +4364,20 @@ msgstr "プラグイン"
 msgid "Event series"
 msgstr "イベントシリーズ"
 
-#: pretix/base/models/event.py:648 pretix/base/models/event.py:1526
+#: pretix/base/models/event.py:653 pretix/base/models/event.py:1531
 msgid "Seating plan"
 msgstr "座席表"
 
-#: pretix/base/models/event.py:655 pretix/base/models/items.py:675
+#: pretix/base/models/event.py:660 pretix/base/models/items.py:675
 msgid "Sell on all sales channels"
 msgstr "全ての販売チャンネルで販売"
 
-#: pretix/base/models/event.py:660 pretix/base/models/items.py:680
+#: pretix/base/models/event.py:665 pretix/base/models/items.py:680
 #: pretix/base/models/items.py:1230 pretix/base/payment.py:417
 msgid "Restrict to specific sales channels"
 msgstr "特定の販売チャネルに制限します"
 
-#: pretix/base/models/event.py:668 pretix/control/navigation.py:344
+#: pretix/base/models/event.py:673 pretix/control/navigation.py:344
 #: pretix/control/navigation.py:470
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 #: pretix/control/templates/pretixcontrol/events/index.html:7
@@ -4382,7 +4390,7 @@ msgstr "特定の販売チャネルに制限します"
 msgid "Events"
 msgstr "イベント"
 
-#: pretix/base/models/event.py:1305
+#: pretix/base/models/event.py:1310
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
@@ -4390,45 +4398,45 @@ msgstr ""
 "少なくとも1つの有料製品を設定していますが、支払い方法はまだ有効にしていませ"
 "ん。"
 
-#: pretix/base/models/event.py:1308
+#: pretix/base/models/event.py:1313
 msgid ""
 "You have configured at least one paid product but have not configured a "
 "currency."
 msgstr "少なくとも1つの有料製品を設定していますが、通貨を設定していません。"
 
-#: pretix/base/models/event.py:1311
+#: pretix/base/models/event.py:1316
 msgid "You need to configure at least one quota to sell anything."
 msgstr "何かを販売するには、少なくとも1つの割り当てを設定する必要があります。"
 
-#: pretix/base/models/event.py:1316
+#: pretix/base/models/event.py:1321
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
 msgstr "メタパラメーター「{property}」を埋める必要があります。"
 
-#: pretix/base/models/event.py:1423
+#: pretix/base/models/event.py:1428
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
 "一度イベントが作成されると、シリーズと単一のイベントの間で変更することはでき"
 "ません。"
 
-#: pretix/base/models/event.py:1429
+#: pretix/base/models/event.py:1434
 msgid "The event slug cannot be changed."
 msgstr "イベントのスラッグは変更できません。"
 
-#: pretix/base/models/event.py:1432
+#: pretix/base/models/event.py:1437
 msgid "This slug has already been used for a different event."
 msgstr "このスラッグはすでに別のイベントで使用されています。"
 
-#: pretix/base/models/event.py:1438
+#: pretix/base/models/event.py:1443
 msgid "The event cannot end before it starts."
 msgstr "イベントは始まる前に終了することはできません。"
 
-#: pretix/base/models/event.py:1444
+#: pretix/base/models/event.py:1449
 msgid "The event's presale cannot end before it starts."
 msgstr "イベントの先行販売は開始前に終了することはできません。"
 
-#: pretix/base/models/event.py:1474
+#: pretix/base/models/event.py:1479
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
@@ -4436,53 +4444,53 @@ msgstr ""
 "このチェックボックスが有効になっている場合のみ、この日付はフロントエンドで"
 "ユーザーに表示されます。"
 
-#: pretix/base/models/event.py:1478
+#: pretix/base/models/event.py:1483
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr ""
 "選択された場合、このイベントはあなたのイベントの日程リストに公開されます。"
 
-#: pretix/base/models/event.py:1523 pretix/base/settings.py:3032
+#: pretix/base/models/event.py:1528 pretix/base/settings.py:3032
 msgid "Frontpage text"
 msgstr "フロントページのテキスト"
 
-#: pretix/base/models/event.py:1540
+#: pretix/base/models/event.py:1545
 msgid "Date in event series"
 msgstr "イベントシリーズの日付"
 
-#: pretix/base/models/event.py:1541
+#: pretix/base/models/event.py:1546
 msgid "Dates in event series"
 msgstr "イベントシリーズの日程"
 
-#: pretix/base/models/event.py:1686
+#: pretix/base/models/event.py:1691
 msgid "One or more variations do not belong to this event."
 msgstr ""
 "1つ以上のバリエーションがこのイベントには適していない可能性があります。"
 
-#: pretix/base/models/event.py:1716 pretix/base/models/items.py:2217
+#: pretix/base/models/event.py:1721 pretix/base/models/items.py:2217
 msgid "Can not contain spaces or special characters except underscores"
 msgstr "スペースや特殊文字（アンダースコアを除く）を含めることはできません"
 
-#: pretix/base/models/event.py:1721 pretix/base/models/items.py:2222
+#: pretix/base/models/event.py:1726 pretix/base/models/items.py:2222
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
 "プロパティ名には、文字、数字、アンダースコアのみを含めることができます。"
 
-#: pretix/base/models/event.py:1726
+#: pretix/base/models/event.py:1731
 msgid "Default value"
 msgstr "デフォルト値"
 
-#: pretix/base/models/event.py:1728
+#: pretix/base/models/event.py:1733
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:50
 msgid "Can only be changed by organizer-level administrators"
 msgstr "主催者レベルの管理者のみが変更できます"
 
-#: pretix/base/models/event.py:1730
+#: pretix/base/models/event.py:1735
 msgid "Required for events"
 msgstr "イベントに必要なもの"
 
-#: pretix/base/models/event.py:1731
+#: pretix/base/models/event.py:1736
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
@@ -4491,16 +4499,16 @@ msgstr ""
 "中にすることができます。イベントシリーズでは、個々の日付に値を設定することは"
 "常にオプションです"
 
-#: pretix/base/models/event.py:1737 pretix/base/models/items.py:2234
+#: pretix/base/models/event.py:1742 pretix/base/models/items.py:2234
 msgid "Valid values"
 msgstr "有効な値"
 
-#: pretix/base/models/event.py:1740
+#: pretix/base/models/event.py:1745
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
 msgid "Show filter option to customers"
 msgstr "お客様にフィルターオプションを表示してください"
 
-#: pretix/base/models/event.py:1741
+#: pretix/base/models/event.py:1746
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
@@ -4508,17 +4516,17 @@ msgstr ""
 "このフィールドは、公開イベントリストやカレンダーでイベントをフィルタリングす"
 "るために表示されます。"
 
-#: pretix/base/models/event.py:1744 pretix/control/forms/organizer.py:269
+#: pretix/base/models/event.py:1749 pretix/control/forms/organizer.py:269
 #: pretix/control/forms/organizer.py:273
 msgid "Public name"
 msgstr "公共の名前"
 
-#: pretix/base/models/event.py:1748
+#: pretix/base/models/event.py:1753
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
 msgid "Can be used for filtering"
 msgstr "フィルタリングに使用できます"
 
-#: pretix/base/models/event.py:1749
+#: pretix/base/models/event.py:1754
 msgid ""
 "This field will be shown to filter events or reports in the backend, and it "
 "can also be used for hidden filter parameters in the frontend (e.g. using "
@@ -4528,17 +4536,17 @@ msgstr ""
 "表示され、フロントエンドで非表示のフィルターパラメーターとしても使用すること"
 "ができます（たとえば、ウィジェットを使用して）。"
 
-#: pretix/base/models/event.py:1759
+#: pretix/base/models/event.py:1764
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
 "プロパティは、必須であるかデフォルト値を持つかのどちらかであり、両方ではあり"
 "ません。"
 
-#: pretix/base/models/event.py:1839 pretix/base/models/organizer.py:516
+#: pretix/base/models/event.py:1844 pretix/base/models/organizer.py:516
 msgid "Link text"
 msgstr "リンクテキスト"
 
-#: pretix/base/models/event.py:1842 pretix/base/models/organizer.py:519
+#: pretix/base/models/event.py:1847 pretix/base/models/organizer.py:519
 msgid "Link URL"
 msgstr "リンクURL"
 
@@ -4564,9 +4572,9 @@ msgstr "追加の受信者（Cc）"
 msgid "Additional recipients (Bcc)"
 msgstr "追加の受信者（Bcc）"
 
-#: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1099
-#: pretix/control/forms/event.py:1173 pretix/control/forms/event.py:1183
-#: pretix/control/forms/event.py:1193 pretix/control/forms/orders.py:720
+#: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1101
+#: pretix/control/forms/event.py:1175 pretix/control/forms/event.py:1185
+#: pretix/control/forms/event.py:1195 pretix/control/forms/orders.py:720
 #: pretix/control/forms/orders.py:942 pretix/control/forms/orders.py:969
 #: pretix/control/forms/organizer.py:601 pretix/control/forms/organizer.py:611
 #: pretix/control/forms/organizer.py:621 pretix/control/forms/vouchers.py:273
@@ -4834,7 +4842,7 @@ msgid "This will only work if waiting lists are enabled for this event."
 msgstr "このイベントで待ちリストが有効になっている場合のみ機能します。"
 
 #: pretix/base/models/items.py:548 pretix/base/settings.py:1360
-#: pretix/control/forms/event.py:1679
+#: pretix/control/forms/event.py:1681
 msgid "Show number of tickets left"
 msgstr "チケットの残り枚数を表示する"
 
@@ -5371,7 +5379,7 @@ msgid "File upload"
 msgstr "ファイルのアップロード"
 
 #: pretix/base/models/items.py:1657
-#: pretix/control/templates/pretixcontrol/event/settings.html:239
+#: pretix/control/templates/pretixcontrol/event/settings.html:240
 msgid "Date and time"
 msgstr "日時"
 
@@ -5538,7 +5546,7 @@ msgstr "質問オプション"
 msgid "Question options"
 msgstr "質問の選択肢"
 
-#: pretix/base/models/items.py:2055 pretix/control/forms/event.py:1713
+#: pretix/base/models/items.py:2055 pretix/control/forms/event.py:1715
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
 msgstr "総容量"
@@ -6352,7 +6360,7 @@ msgstr "公式の名前"
 msgid "Should be short, e.g. \"VAT\""
 msgstr "略称にすること、例えば \"VAT\""
 
-#: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1511
+#: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1513
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Tax code"
 msgstr "税コード"
@@ -6424,12 +6432,12 @@ msgstr ""
 msgid "You need to set your home country to use the reverse charge feature."
 msgstr "あなたは逆請求機能を使用するために、自国を設定する必要があります。"
 
-#: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1558
+#: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1560
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
 msgstr "この税法コードと非ゼロの税率の組み合わせは意味をなしません。"
 
-#: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1562
+#: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1564
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
 msgstr "この税法とゼロ税率の組み合わせは意味がありません。"
@@ -7181,6 +7189,11 @@ msgstr "注文の位置番号"
 #: pretix/base/pdf.py:116
 msgid "Order code and position number"
 msgstr "注文コードとポジション番号"
+
+#: pretix/base/pdf.py:121 pretix/control/forms/event.py:1768
+#: pretix/control/templates/pretixcontrol/items/index.html:38
+msgid "Product name"
+msgstr "製品名"
 
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:841 pretix/control/views/pdf.py:94
@@ -8696,7 +8709,7 @@ msgstr ""
 "この注文で購入されたギフトカード{card}はすでに利用されているため、ポジション"
 "をキャンセルすることはできません。"
 
-#: pretix/base/services/orders.py:3054
+#: pretix/base/services/orders.py:3058
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
@@ -9736,7 +9749,7 @@ msgstr "無効にすると、イベントの開始日と終了日が日中の時
 msgid "Hide all products that are sold out"
 msgstr "全ての売り切れ商品を非表示にしてください"
 
-#: pretix/base/settings.py:1361 pretix/control/forms/event.py:1680
+#: pretix/base/settings.py:1361 pretix/control/forms/event.py:1682
 msgid "Publicly show how many tickets of a certain type are still available."
 msgstr "特定の種類のチケットの残り枚数を公開する。"
 
@@ -9752,7 +9765,7 @@ msgstr "製品のデフォルトで展開されたバリエーションを表示
 msgid "Enable waiting list"
 msgstr "待ちリストを有効にする"
 
-#: pretix/base/settings.py:1389 pretix/control/forms/event.py:1685
+#: pretix/base/settings.py:1389 pretix/control/forms/event.py:1687
 msgid ""
 "Once a ticket is sold out, people can add themselves to a waiting list. As "
 "soon as a ticket becomes available again, it will be reserved for the first "
@@ -10343,19 +10356,19 @@ msgstr ""
 "設定に基づいてpretixが自動的にキャンセル条件を生成する場合は空白のままにして"
 "ください。"
 
-#: pretix/base/settings.py:2039 pretix/control/forms/event.py:1708
+#: pretix/base/settings.py:2039 pretix/control/forms/event.py:1710
 msgid "Contact address"
 msgstr "連絡先のアドレス"
 
-#: pretix/base/settings.py:2040 pretix/control/forms/event.py:1710
+#: pretix/base/settings.py:2040 pretix/control/forms/event.py:1712
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "参加者があなたに連絡できるように、これを公に表示します。"
 
-#: pretix/base/settings.py:2048 pretix/control/forms/event.py:1702
+#: pretix/base/settings.py:2048 pretix/control/forms/event.py:1704
 msgid "Imprint URL"
 msgstr "インプリントURL"
 
-#: pretix/base/settings.py:2049 pretix/control/forms/event.py:1703
+#: pretix/base/settings.py:2049 pretix/control/forms/event.py:1705
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
@@ -10775,12 +10788,12 @@ msgstr ""
 "よろしくお願いします、\n"
 "あなたの {event} チーム"
 
-#: pretix/base/settings.py:2392 pretix/control/forms/event.py:1134
-#: pretix/control/forms/event.py:1234 pretix/plugins/sendmail/models.py:275
+#: pretix/base/settings.py:2392 pretix/control/forms/event.py:1136
+#: pretix/control/forms/event.py:1236 pretix/plugins/sendmail/models.py:275
 msgid "Number of days"
 msgstr "日数"
 
-#: pretix/base/settings.py:2394 pretix/control/forms/event.py:1137
+#: pretix/base/settings.py:2394 pretix/control/forms/event.py:1139
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
@@ -11837,7 +11850,7 @@ msgctxt "address"
 msgid "Prefecture"
 msgstr "県"
 
-#: pretix/base/settings.py:3817 pretix/control/forms/event.py:228
+#: pretix/base/settings.py:3817 pretix/control/forms/event.py:229
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
@@ -12056,7 +12069,7 @@ msgid "You do not have access to this page."
 msgstr "このページにアクセス権がありません。"
 
 #: pretix/base/templates/403.html:20 pretix/base/templates/404.html:19
-#: pretix/control/templates/pretixcontrol/base.html:194
+#: pretix/control/templates/pretixcontrol/base.html:196
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
 #: pretix/presale/templates/pretixpresale/event/offline.html:21
@@ -12647,11 +12660,11 @@ msgstr ""
 "ブラウザのCookieを無効にしている場合は、少なくともこのサイトや同一オリジンの"
 "リクエストのために再度有効にしてください。"
 
-#: pretix/base/views/tasks.py:187
+#: pretix/base/views/tasks.py:185
 msgid "An unexpected error has occurred, please try again later."
 msgstr "予期せぬエラーが発生しました。後で再試行してください。"
 
-#: pretix/base/views/tasks.py:190
+#: pretix/base/views/tasks.py:188
 msgid "The task has been completed."
 msgstr "そのタスクは完了しました。"
 
@@ -12749,7 +12762,7 @@ msgstr ""
 "あなたはすでにこのスラッグを別のイベントで使用しています。新しいものを選んで"
 "ください。"
 
-#: pretix/control/forms/event.py:136 pretix/control/forms/event.py:518
+#: pretix/control/forms/event.py:136 pretix/control/forms/event.py:520
 msgid "Event timezone"
 msgstr "イベントのタイムゾーン"
 
@@ -12793,7 +12806,7 @@ msgstr ""
 msgid "Create a new team for this event with me as the only member"
 msgstr "このイベントのために私を唯一のメンバーとする新しいチームを作成"
 
-#: pretix/control/forms/event.py:207 pretix/control/forms/event.py:378
+#: pretix/control/forms/event.py:208 pretix/control/forms/event.py:379
 msgid ""
 "Sample Conference Center\n"
 "Heidelberg, Germany"
@@ -12801,11 +12814,11 @@ msgstr ""
 "サンプル・カンファレンスセンター\n"
 "ドイツ、ハイデルベルク"
 
-#: pretix/control/forms/event.py:232
+#: pretix/control/forms/event.py:233
 msgid "Your default locale must be specified."
 msgstr "デフォルトのロケールを指定する必要があります。"
 
-#: pretix/control/forms/event.py:236
+#: pretix/control/forms/event.py:237
 #, python-brace-format
 msgid ""
 "You have not specified a tax rate. If you do not want us to compute sales "
@@ -12814,49 +12827,49 @@ msgstr ""
 "税率を指定していません。売上税を計算しない場合は、上記の”{field}” をチェック"
 "してください。"
 
-#: pretix/control/forms/event.py:311
+#: pretix/control/forms/event.py:312
 msgid "Copy configuration from"
 msgstr "設定フォームをコピー"
 
-#: pretix/control/forms/event.py:317 pretix/control/forms/event.py:320
+#: pretix/control/forms/event.py:318 pretix/control/forms/event.py:321
 #: pretix/control/forms/item.py:408
 msgid "Do not copy"
 msgstr "コピーしない"
 
-#: pretix/control/forms/event.py:336 pretix/control/forms/item.py:1294
+#: pretix/control/forms/event.py:337 pretix/control/forms/item.py:1294
 #: pretix/control/forms/subevents.py:407
 #, python-brace-format
 msgid "Default ({value})"
 msgstr "デフォルト（{value}）"
 
-#: pretix/control/forms/event.py:384 pretix/control/forms/event.py:397
+#: pretix/control/forms/event.py:385 pretix/control/forms/event.py:398
 msgid "Domain"
 msgstr "ドメイン"
 
-#: pretix/control/forms/event.py:388
+#: pretix/control/forms/event.py:389
 msgid "You can configure this in your organizer settings."
 msgstr "あなたはこれを主催者の設定で構成することができます。"
 
-#: pretix/control/forms/event.py:398
+#: pretix/control/forms/event.py:399
 msgid "You can add more domains in your organizer account."
 msgstr "あなたの主催者アカウントには、さらにドメインを追加することができます。"
 
-#: pretix/control/forms/event.py:399
+#: pretix/control/forms/event.py:400
 msgid "Same as organizer account"
 msgstr "主催者アカウントと同じ"
 
-#: pretix/control/forms/event.py:503
+#: pretix/control/forms/event.py:505
 #, python-brace-format
 msgid ""
 "A validation error has occurred on a setting that is not part of this form: "
 "{error}"
 msgstr "このフォームには含まれていない設定で検証エラーが発生しました: {error}"
 
-#: pretix/control/forms/event.py:521 pretix/control/forms/organizer.py:461
+#: pretix/control/forms/event.py:523 pretix/control/forms/organizer.py:461
 msgid "Name format"
 msgstr "名前の形式"
 
-#: pretix/control/forms/event.py:522 pretix/control/forms/organizer.py:462
+#: pretix/control/forms/event.py:524 pretix/control/forms/organizer.py:462
 msgid ""
 "This defines how pretix will ask for human names. Changing this after you "
 "already received orders might lead to unexpected behavior when sorting or "
@@ -12866,11 +12879,11 @@ msgstr ""
 "これを変更すると、名前の並べ替えや変更時に予期しない動作が発生する可能性があ"
 "ります。"
 
-#: pretix/control/forms/event.py:527 pretix/control/forms/organizer.py:467
+#: pretix/control/forms/event.py:529 pretix/control/forms/organizer.py:467
 msgid "Allowed titles"
 msgstr "許可されたタイトル"
 
-#: pretix/control/forms/event.py:528 pretix/control/forms/organizer.py:468
+#: pretix/control/forms/event.py:530 pretix/control/forms/organizer.py:468
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
@@ -12878,39 +12891,39 @@ msgstr ""
 "もし上記で定義した命名スキームがユーザーがタイトルを入力することを許可する場"
 "合、これを使用して選択可能なタイトルのセットを制限することができます。"
 
-#: pretix/control/forms/event.py:647 pretix/control/forms/organizer.py:539
+#: pretix/control/forms/event.py:649 pretix/control/forms/organizer.py:539
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
 msgstr "{fields}を要求して、{example}のように表示"
 
-#: pretix/control/forms/event.py:653 pretix/control/forms/organizer.py:545
+#: pretix/control/forms/event.py:655 pretix/control/forms/organizer.py:545
 msgid "Free text input"
 msgstr "自由入力"
 
-#: pretix/control/forms/event.py:689
+#: pretix/control/forms/event.py:691
 msgid "Do not ask"
 msgstr "質問しない"
 
-#: pretix/control/forms/event.py:690
+#: pretix/control/forms/event.py:692
 msgid "Ask, but do not require input"
 msgstr "求めるが、必須ではない入力"
 
-#: pretix/control/forms/event.py:691
-#: pretix/control/templates/pretixcontrol/event/settings.html:75
+#: pretix/control/forms/event.py:693
+#: pretix/control/templates/pretixcontrol/event/settings.html:76
 msgid "Ask and require input"
 msgstr "質問して、入力を求めます"
 
-#: pretix/control/forms/event.py:768
+#: pretix/control/forms/event.py:770
 msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
 msgstr "ギフトカードの有効期限を発行年を含めた{}年に設定しました。"
 
-#: pretix/control/forms/event.py:787
+#: pretix/control/forms/event.py:789
 msgid "Tax rule for payment fees"
 msgstr "支払手数料に関する税則"
 
-#: pretix/control/forms/event.py:789
+#: pretix/control/forms/event.py:791
 msgid ""
 "The tax rule that applies for additional fees you configured for single "
 "payment methods. This will set the tax rate and reverse charge rules, other "
@@ -12919,11 +12932,11 @@ msgstr ""
 "追加料金に適用される税則は、単一の支払い方法に設定されます。これにより税率と"
 "逆転請求規則が設定され、税則のその他の設定は無視されます。"
 
-#: pretix/control/forms/event.py:895
+#: pretix/control/forms/event.py:897
 msgid "Generate invoices for Sales channels"
 msgstr "販売チャネルの請求書を作成"
 
-#: pretix/control/forms/event.py:898
+#: pretix/control/forms/event.py:900
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
@@ -12931,19 +12944,19 @@ msgstr ""
 "前の設定で請求書の生成を有効にしている場合、ここで特定の販売チャネルに制限す"
 "ることができます。"
 
-#: pretix/control/forms/event.py:902
+#: pretix/control/forms/event.py:904
 msgid "Invoice style"
 msgstr "請求書のスタイル"
 
-#: pretix/control/forms/event.py:908
+#: pretix/control/forms/event.py:910
 msgid "Invoice language"
 msgstr "請求書の言語"
 
-#: pretix/control/forms/event.py:909 pretix/control/forms/event.py:924
+#: pretix/control/forms/event.py:911 pretix/control/forms/event.py:926
 msgid "The user's language"
 msgstr "ユーザーの言語"
 
-#: pretix/control/forms/event.py:932
+#: pretix/control/forms/event.py:934
 #, python-brace-format
 msgid ""
 "An invoice will be issued before payment if the customer selects one of the "
@@ -12952,7 +12965,7 @@ msgstr ""
 "お支払い方法として以下のいずれかを選択した場合、支払い前に請求書が発行されま"
 "す：{list}"
 
-#: pretix/control/forms/event.py:936
+#: pretix/control/forms/event.py:938
 msgid ""
 "None of the currently configured payment methods will cause an invoice to be "
 "issued before payment."
@@ -12960,19 +12973,19 @@ msgstr ""
 "現在設定されている支払い方法では、支払い前に請求書が発行されることはありませ"
 "ん。"
 
-#: pretix/control/forms/event.py:945
+#: pretix/control/forms/event.py:947
 msgid "Recommended"
 msgstr "おすすめ"
 
-#: pretix/control/forms/event.py:957
+#: pretix/control/forms/event.py:959
 msgid "The online shop must be selected to receive these emails."
 msgstr "オンラインショップを選択して、これらのメールを受け取る必要があります。"
 
-#: pretix/control/forms/event.py:973
+#: pretix/control/forms/event.py:975
 msgid "Sales channels for checkout emails"
 msgstr "チェックアウトメールの販売チャネル"
 
-#: pretix/control/forms/event.py:974
+#: pretix/control/forms/event.py:976
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
@@ -12980,7 +12993,7 @@ msgstr ""
 "注文が確定し支払いが完了したメールは、これらの販売チャネルからの注文にのみ送"
 "信されます。オンラインショップは有効にする必要があります。"
 
-#: pretix/control/forms/event.py:985
+#: pretix/control/forms/event.py:987
 msgid ""
 "This email will only be send to orders from these sales channels. The online "
 "shop must be enabled."
@@ -12988,50 +13001,50 @@ msgstr ""
 "このメールは、これらの販売チャンネルからの注文にのみ送信されます。オンライン"
 "ショップは有効にする必要があります。"
 
-#: pretix/control/forms/event.py:993 pretix/control/forms/organizer.py:580
+#: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:580
 msgid "Bcc address"
 msgstr "Bccアドレス"
 
-#: pretix/control/forms/event.py:994 pretix/control/forms/organizer.py:581
+#: pretix/control/forms/event.py:996 pretix/control/forms/organizer.py:581
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "すべてのメールは、このアドレスに Bcc コピーとして送信される"
 
-#: pretix/control/forms/event.py:1000 pretix/control/forms/organizer.py:587
+#: pretix/control/forms/event.py:1002 pretix/control/forms/organizer.py:587
 msgid "Signature"
 msgstr "署名"
 
-#: pretix/control/forms/event.py:1003
+#: pretix/control/forms/event.py:1005
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr "このメールには常に添付されます。利用可能なプレースホルダー：{event}"
 
-#: pretix/control/forms/event.py:1008 pretix/control/forms/organizer.py:595
+#: pretix/control/forms/event.py:1010 pretix/control/forms/organizer.py:595
 msgid "e.g. your contact details"
 msgstr "例えば、あなたの連絡先詳細"
 
-#: pretix/control/forms/event.py:1013
+#: pretix/control/forms/event.py:1015
 msgid "HTML mail renderer"
 msgstr "HTMLメールレンダラー"
 
-#: pretix/control/forms/event.py:1018 pretix/control/forms/event.py:1045
-#: pretix/control/forms/event.py:1072 pretix/control/forms/event.py:1208
+#: pretix/control/forms/event.py:1020 pretix/control/forms/event.py:1047
+#: pretix/control/forms/event.py:1074 pretix/control/forms/event.py:1210
 msgid "Subject sent to order contact address"
 msgstr "注文のEメールアドレスが変更されました"
 
-#: pretix/control/forms/event.py:1023 pretix/control/forms/event.py:1050
-#: pretix/control/forms/event.py:1077 pretix/control/forms/event.py:1213
+#: pretix/control/forms/event.py:1025 pretix/control/forms/event.py:1052
+#: pretix/control/forms/event.py:1079 pretix/control/forms/event.py:1215
 msgid "Text sent to order contact address"
 msgstr "注文者の連絡先アドレスに送られるテキスト"
 
-#: pretix/control/forms/event.py:1028 pretix/control/forms/event.py:1055
-#: pretix/control/forms/event.py:1082 pretix/control/forms/event.py:1218
-#: pretix/control/forms/event.py:1263 pretix/control/forms/event.py:1293
+#: pretix/control/forms/event.py:1030 pretix/control/forms/event.py:1057
+#: pretix/control/forms/event.py:1084 pretix/control/forms/event.py:1220
+#: pretix/control/forms/event.py:1265 pretix/control/forms/event.py:1295
 msgid "Send an email to attendees"
 msgstr "参加者に電子メールを送る"
 
-#: pretix/control/forms/event.py:1029 pretix/control/forms/event.py:1056
-#: pretix/control/forms/event.py:1083 pretix/control/forms/event.py:1219
-#: pretix/control/forms/event.py:1264 pretix/control/forms/event.py:1294
+#: pretix/control/forms/event.py:1031 pretix/control/forms/event.py:1058
+#: pretix/control/forms/event.py:1085 pretix/control/forms/event.py:1221
+#: pretix/control/forms/event.py:1266 pretix/control/forms/event.py:1296
 msgid ""
 "If the order contains attendees with email addresses different from the "
 "person who orders the tickets, the following email will be sent out to the "
@@ -13040,72 +13053,72 @@ msgstr ""
 "注文には、チケットを注文する人と異なるメールアドレスを持つ参加者が含まれてい"
 "る場合、参加者に以下のメールが送信されます。"
 
-#: pretix/control/forms/event.py:1034 pretix/control/forms/event.py:1061
-#: pretix/control/forms/event.py:1088 pretix/control/forms/event.py:1224
-#: pretix/control/forms/event.py:1269 pretix/control/forms/event.py:1299
+#: pretix/control/forms/event.py:1036 pretix/control/forms/event.py:1063
+#: pretix/control/forms/event.py:1090 pretix/control/forms/event.py:1226
+#: pretix/control/forms/event.py:1271 pretix/control/forms/event.py:1301
 msgid "Subject sent to attendees"
 msgstr "出席者への送信事項"
 
-#: pretix/control/forms/event.py:1039 pretix/control/forms/event.py:1066
-#: pretix/control/forms/event.py:1093 pretix/control/forms/event.py:1229
-#: pretix/control/forms/event.py:1274 pretix/control/forms/event.py:1304
+#: pretix/control/forms/event.py:1041 pretix/control/forms/event.py:1068
+#: pretix/control/forms/event.py:1095 pretix/control/forms/event.py:1231
+#: pretix/control/forms/event.py:1276 pretix/control/forms/event.py:1306
 msgid "Text sent to attendees"
 msgstr "出席者へのテキスト"
 
-#: pretix/control/forms/event.py:1104 pretix/control/forms/event.py:1178
-#: pretix/control/forms/event.py:1188 pretix/control/forms/event.py:1198
-#: pretix/control/forms/event.py:1203 pretix/control/forms/organizer.py:606
+#: pretix/control/forms/event.py:1106 pretix/control/forms/event.py:1180
+#: pretix/control/forms/event.py:1190 pretix/control/forms/event.py:1200
+#: pretix/control/forms/event.py:1205 pretix/control/forms/organizer.py:606
 #: pretix/control/forms/organizer.py:616 pretix/control/forms/organizer.py:626
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:111
 msgid "Text"
 msgstr "テキスト"
 
-#: pretix/control/forms/event.py:1109
+#: pretix/control/forms/event.py:1111
 msgid "Subject (sent by admin)"
 msgstr "件名（管理者から送信）"
 
-#: pretix/control/forms/event.py:1114
+#: pretix/control/forms/event.py:1116
 msgid "Subject (sent by admin to attendee)"
 msgstr "件名（管理者からイベント参加者あて）"
 
-#: pretix/control/forms/event.py:1119
+#: pretix/control/forms/event.py:1121
 msgid "Text (sent by admin)"
 msgstr "テキスト（管理者が送信）"
 
-#: pretix/control/forms/event.py:1124
+#: pretix/control/forms/event.py:1126
 msgid "Subject (requested by user)"
 msgstr "件名（ユーザーからリクエストされたもの）"
 
-#: pretix/control/forms/event.py:1129
+#: pretix/control/forms/event.py:1131
 msgid "Text (requested by user)"
 msgstr "テキスト（ユーザーのリクエストによる）"
 
-#: pretix/control/forms/event.py:1141
+#: pretix/control/forms/event.py:1143
 msgid "Text (if order will expire automatically)"
 msgstr "テキスト（注文が自動的に期限切れになる場合）"
 
-#: pretix/control/forms/event.py:1146
+#: pretix/control/forms/event.py:1148
 msgid "Subject (if order will expire automatically)"
 msgstr "件名（注文が自動的に期限切れになる場合）"
 
-#: pretix/control/forms/event.py:1151
+#: pretix/control/forms/event.py:1153
 msgid "Text (if order will not expire automatically)"
 msgstr "テキスト（注文が自動的に期限切れにならない場合）"
 
-#: pretix/control/forms/event.py:1156
+#: pretix/control/forms/event.py:1158
 msgid "Subject (if order will not expire automatically)"
 msgstr "件名（注文が自動的に期限切れにならない場合）"
 
-#: pretix/control/forms/event.py:1161
+#: pretix/control/forms/event.py:1163
 msgid "Subject (if an incomplete payment was received)"
 msgstr "件名（不完全な支払いが受領された場合）"
 
-#: pretix/control/forms/event.py:1166
+#: pretix/control/forms/event.py:1168
 msgid "Text (if an incomplete payment was received)"
 msgstr "（支払いが不完全な場合）"
 
-#: pretix/control/forms/event.py:1169
+#: pretix/control/forms/event.py:1171
 msgid ""
 "This email only applies to payment methods that can receive incomplete "
 "payments, such as bank transfer."
@@ -13113,7 +13126,7 @@ msgstr ""
 "このメールは、銀行振込などの不完全な支払いを受け取ることができる支払方法にの"
 "み適用されます。"
 
-#: pretix/control/forms/event.py:1237
+#: pretix/control/forms/event.py:1239
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
@@ -13121,23 +13134,23 @@ msgstr ""
 "このメールは、注文イベントが開始される何日前に送信されます。フィールドが空の"
 "場合、メールは送信されません。"
 
-#: pretix/control/forms/event.py:1241
+#: pretix/control/forms/event.py:1243
 msgid "Subject for received order"
 msgstr "受注した注文に関する件"
 
-#: pretix/control/forms/event.py:1246
+#: pretix/control/forms/event.py:1248
 msgid "Text for received order"
 msgstr "受け取った注文のテキスト"
 
-#: pretix/control/forms/event.py:1251
+#: pretix/control/forms/event.py:1253
 msgid "Subject for approved order"
 msgstr "承認された注文の件"
 
-#: pretix/control/forms/event.py:1256
+#: pretix/control/forms/event.py:1258
 msgid "Text for approved order"
 msgstr "承認された注文のテキスト"
 
-#: pretix/control/forms/event.py:1259 pretix/control/forms/event.py:1277
+#: pretix/control/forms/event.py:1261 pretix/control/forms/event.py:1279
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
@@ -13145,15 +13158,15 @@ msgstr ""
 "これは非無料の注文にのみ送信されます。無料の注文は、以下の無料の注文テンプ"
 "レートを受け取ります。"
 
-#: pretix/control/forms/event.py:1281
+#: pretix/control/forms/event.py:1283
 msgid "Subject for approved free order"
 msgstr "承認された自由注文の件"
 
-#: pretix/control/forms/event.py:1286
+#: pretix/control/forms/event.py:1288
 msgid "Text for approved free order"
 msgstr "承認された無料注文のテキスト"
 
-#: pretix/control/forms/event.py:1289 pretix/control/forms/event.py:1307
+#: pretix/control/forms/event.py:1291 pretix/control/forms/event.py:1309
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
@@ -13161,89 +13174,89 @@ msgstr ""
 "これは無料の注文のみに送信されます。有料の注文には、代わりに上記の有料注文テ"
 "ンプレートが送信されます。"
 
-#: pretix/control/forms/event.py:1311
+#: pretix/control/forms/event.py:1313
 msgid "Subject for denied order"
 msgstr "拒否された注文について"
 
-#: pretix/control/forms/event.py:1316
+#: pretix/control/forms/event.py:1318
 msgid "Text for denied order"
 msgstr "注文拒否のテキスト"
 
-#: pretix/control/forms/event.py:1409
+#: pretix/control/forms/event.py:1411
 msgid "Ticket code generator"
 msgstr "チケットコードジェネレータ"
 
-#: pretix/control/forms/event.py:1410
+#: pretix/control/forms/event.py:1412
 msgid "For advanced users, usually does not need to be changed."
 msgstr "上級ユーザーの場合、通常変更する必要はありません。"
 
-#: pretix/control/forms/event.py:1467
+#: pretix/control/forms/event.py:1469
 msgid "Any country"
 msgstr "どの国でも構いません"
 
-#: pretix/control/forms/event.py:1468
+#: pretix/control/forms/event.py:1470
 msgid "European Union"
 msgstr "ヨーロッパ連合"
 
-#: pretix/control/forms/event.py:1494
+#: pretix/control/forms/event.py:1496
 msgid "Any customer"
 msgstr "どんなお客様でも"
 
-#: pretix/control/forms/event.py:1495
+#: pretix/control/forms/event.py:1497
 msgid "Individual"
 msgstr "個人"
 
-#: pretix/control/forms/event.py:1496
+#: pretix/control/forms/event.py:1498
 msgid "Business"
 msgstr "ビジネス"
 
-#: pretix/control/forms/event.py:1497
+#: pretix/control/forms/event.py:1499
 msgid "Business with valid VAT ID"
 msgstr "有効なVAT番号を持つビジネス"
 
-#: pretix/control/forms/event.py:1503
+#: pretix/control/forms/event.py:1505
 msgid "Charge VAT"
 msgstr "VATを請求します"
 
-#: pretix/control/forms/event.py:1505
+#: pretix/control/forms/event.py:1507
 msgid "No VAT"
 msgstr "消費税なし"
 
-#: pretix/control/forms/event.py:1506
+#: pretix/control/forms/event.py:1508
 msgid "Sale not allowed"
 msgstr "販売は許可されていません"
 
-#: pretix/control/forms/event.py:1507
+#: pretix/control/forms/event.py:1509
 msgid "Order requires approval"
 msgstr "注文には承認が必要です"
 
-#: pretix/control/forms/event.py:1512
+#: pretix/control/forms/event.py:1514
 msgid "Default tax code"
 msgstr "デフォルト"
 
-#: pretix/control/forms/event.py:1516
+#: pretix/control/forms/event.py:1518
 msgid "Deviating tax rate"
 msgstr "逸脱した税率"
 
-#: pretix/control/forms/event.py:1521 pretix/control/forms/event.py:1525
+#: pretix/control/forms/event.py:1523 pretix/control/forms/event.py:1527
 msgid "Text on invoice"
 msgstr "請求書のテキスト"
 
-#: pretix/control/forms/event.py:1545
+#: pretix/control/forms/event.py:1547
 msgid ""
 "A combination of this calculation mode with a non-zero tax rate does not "
 "make sense."
 msgstr "この計算モードと非ゼロの税率の組み合わせは意味をなしません。"
 
-#: pretix/control/forms/event.py:1550 pretix/control/forms/event.py:1554
+#: pretix/control/forms/event.py:1552 pretix/control/forms/event.py:1556
 msgid "This combination of calculation mode and tax code does not make sense."
 msgstr "この計算モードと税コードの組み合わせは意味をなしません。"
 
-#: pretix/control/forms/event.py:1619
+#: pretix/control/forms/event.py:1621
 msgid "Pre-selected voucher"
 msgstr "事前に選択されたバウチャー"
 
-#: pretix/control/forms/event.py:1621
+#: pretix/control/forms/event.py:1623
 msgid ""
 "If set, the widget will show products as if this voucher has been entered "
 "and when a product is bought via the widget, this voucher will be used. This "
@@ -13255,11 +13268,11 @@ msgstr ""
 "れは、例えば割引を提供したり、秘密の製品を解除したりするために使用することが"
 "できます。"
 
-#: pretix/control/forms/event.py:1626
+#: pretix/control/forms/event.py:1628
 msgid "Compatibility mode"
 msgstr "互換モード"
 
-#: pretix/control/forms/event.py:1628
+#: pretix/control/forms/event.py:1630
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
@@ -13267,28 +13280,28 @@ msgstr ""
 "当社の通常のウィジェットはすべてのウェブサイトビルダーで動作しません。問題が"
 "発生した場合は、この互換モードを使用してみてください。"
 
-#: pretix/control/forms/event.py:1649
+#: pretix/control/forms/event.py:1651
 msgid "The given voucher code does not exist."
 msgstr "指定されたバウチャーコードは存在しません。"
 
-#: pretix/control/forms/event.py:1656 pretix/control/forms/organizer.py:112
+#: pretix/control/forms/event.py:1658 pretix/control/forms/organizer.py:112
 #: pretix/control/views/shredder.py:179
 msgid "The slug you entered was not correct."
 msgstr "入力したスラッグは正しくありませんでした。"
 
-#: pretix/control/forms/event.py:1691
+#: pretix/control/forms/event.py:1693
 msgid "Ticket downloads"
 msgstr "チケットのダウンロード"
 
-#: pretix/control/forms/event.py:1692
+#: pretix/control/forms/event.py:1694
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr "お客様はPDF形式でチケットをダウンロードすることができます。"
 
-#: pretix/control/forms/event.py:1696
+#: pretix/control/forms/event.py:1698
 msgid "Require all attendees to fill in their names"
 msgstr "全ての参加者に、名前を記入するように求める"
 
-#: pretix/control/forms/event.py:1697
+#: pretix/control/forms/event.py:1699
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
@@ -13296,11 +13309,11 @@ msgstr ""
 "デフォルトでは、名前を求めることはありますが、必須ではありません。設定で完全"
 "に無効にすることもできます。"
 
-#: pretix/control/forms/event.py:1723
+#: pretix/control/forms/event.py:1725
 msgid "Payment via Stripe"
 msgstr "Stripeを利用した支払い"
 
-#: pretix/control/forms/event.py:1724
+#: pretix/control/forms/event.py:1726
 msgid ""
 "Stripe is an online payments processor supporting credit cards and lots of "
 "other payment options. To accept payments via Stripe, you will need to set "
@@ -13312,11 +13325,11 @@ msgstr ""
 "ントを設定する必要があります。そのためには、彼らのシンプルなインターフェース"
 "を使用して5分未満でアカウントを設定することができます。"
 
-#: pretix/control/forms/event.py:1730
+#: pretix/control/forms/event.py:1732
 msgid "Payment by bank transfer"
 msgstr "銀行振込による支払い"
 
-#: pretix/control/forms/event.py:1731
+#: pretix/control/forms/event.py:1733
 msgid ""
 "Your customers will be instructed to wire the money to your account. You can "
 "then import your bank statements to process the payments within pretix, or "
@@ -13326,16 +13339,16 @@ msgstr ""
 "引明細をインポートして支払いを処理するか、手動で支払い済みとしてマークするこ"
 "とができます。"
 
-#: pretix/control/forms/event.py:1770
+#: pretix/control/forms/event.py:1772
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
 msgstr "価格（任意）"
 
-#: pretix/control/forms/event.py:1775
+#: pretix/control/forms/event.py:1777
 msgid "Free"
 msgstr "無料"
 
-#: pretix/control/forms/event.py:1780
+#: pretix/control/forms/event.py:1782
 msgid "Quantity available"
 msgstr "利用可能な数量"
 
@@ -16906,13 +16919,13 @@ msgid "You do not have permission to view this content."
 msgstr "この情報を見る権限がありません。"
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:44
-#: pretix/control/templates/pretixcontrol/base.html:357
+#: pretix/control/templates/pretixcontrol/base.html:359
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
 msgstr "現在、%(user)s 様の代理で作業しています。"
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:49
-#: pretix/control/templates/pretixcontrol/base.html:362
+#: pretix/control/templates/pretixcontrol/base.html:364
 msgid "Stop impersonating"
 msgstr "なりすまし防止"
 
@@ -17015,6 +17028,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:28
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:66
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:49
 msgid "Continue"
 msgstr "続ける"
 
@@ -17073,7 +17087,7 @@ msgstr "新しいパスワードを設定"
 #: pretix/control/templates/pretixcontrol/event/payment.html:88
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:36
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:201
-#: pretix/control/templates/pretixcontrol/event/settings.html:472
+#: pretix/control/templates/pretixcontrol/event/settings.html:473
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:145
 #: pretix/control/templates/pretixcontrol/event/tickets.html:73
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
@@ -17139,46 +17153,46 @@ msgstr "保存"
 msgid "Create a new account"
 msgstr "新しいアカウントを作成してください"
 
-#: pretix/control/templates/pretixcontrol/base.html:100
+#: pretix/control/templates/pretixcontrol/base.html:102
 msgid "Toggle navigation"
 msgstr "ナビゲーションを切り替える"
 
-#: pretix/control/templates/pretixcontrol/base.html:115
-#: pretix/control/templates/pretixcontrol/base.html:138
-#: pretix/control/templates/pretixcontrol/base.html:142
-#: pretix/control/templates/pretixcontrol/base.html:143
+#: pretix/control/templates/pretixcontrol/base.html:117
+#: pretix/control/templates/pretixcontrol/base.html:140
+#: pretix/control/templates/pretixcontrol/base.html:144
+#: pretix/control/templates/pretixcontrol/base.html:145
 msgid "Go to shop"
 msgstr "ショップに行く"
 
-#: pretix/control/templates/pretixcontrol/base.html:121
-#: pretix/control/templates/pretixcontrol/base.html:149
-#: pretix/control/templates/pretixcontrol/base.html:150
+#: pretix/control/templates/pretixcontrol/base.html:123
+#: pretix/control/templates/pretixcontrol/base.html:151
+#: pretix/control/templates/pretixcontrol/base.html:152
 msgid "Public profile"
 msgstr "公開プロフィール"
 
-#: pretix/control/templates/pretixcontrol/base.html:201
+#: pretix/control/templates/pretixcontrol/base.html:203
 msgid "End admin session"
 msgstr "管理者セッションを終了します"
 
-#: pretix/control/templates/pretixcontrol/base.html:213
+#: pretix/control/templates/pretixcontrol/base.html:215
 msgid "Account Settings"
 msgstr "アカウント設定"
 
-#: pretix/control/templates/pretixcontrol/base.html:218
 #: pretix/control/templates/pretixcontrol/base.html:220
+#: pretix/control/templates/pretixcontrol/base.html:222
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:14
 msgid "Log out"
 msgstr "ログアウトします"
 
-#: pretix/control/templates/pretixcontrol/base.html:246
+#: pretix/control/templates/pretixcontrol/base.html:248
 msgid "Organizer account"
 msgstr "主催者アカウント"
 
-#: pretix/control/templates/pretixcontrol/base.html:269
+#: pretix/control/templates/pretixcontrol/base.html:271
 msgid "Search for events"
 msgstr "イベントを検索"
 
-#: pretix/control/templates/pretixcontrol/base.html:326
+#: pretix/control/templates/pretixcontrol/base.html:328
 #: pretix/presale/templates/pretixpresale/base.html:54
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
@@ -17187,7 +17201,7 @@ msgstr ""
 "私たちは、あなたが<strong>Microsoft Internet Explorer</strong>を使用している"
 "ことを検出しました。"
 
-#: pretix/control/templates/pretixcontrol/base.html:329
+#: pretix/control/templates/pretixcontrol/base.html:331
 #: pretix/presale/templates/pretixpresale/base.html:57
 msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
@@ -17196,7 +17210,7 @@ msgstr ""
 "Internet Explorerは古いブラウザであり、最近の多くのWebベースの技術をサポート"
 "しておらず、このウェブサイトではもはやサポートされていません。"
 
-#: pretix/control/templates/pretixcontrol/base.html:333
+#: pretix/control/templates/pretixcontrol/base.html:335
 #: pretix/presale/templates/pretixpresale/base.html:61
 msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
@@ -17206,16 +17220,16 @@ msgstr ""
 "当社がサポートするブラウザのいずれかに移動していただくようお願い申し上げま"
 "す。"
 
-#: pretix/control/templates/pretixcontrol/base.html:342
+#: pretix/control/templates/pretixcontrol/base.html:344
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr "下記の管理者セッションで何を行ったか、短いコメントを残してください:"
 
-#: pretix/control/templates/pretixcontrol/base.html:373
+#: pretix/control/templates/pretixcontrol/base.html:375
 msgid "Read more"
 msgstr "もっと読む"
 
-#: pretix/control/templates/pretixcontrol/base.html:390
+#: pretix/control/templates/pretixcontrol/base.html:392
 msgid ""
 "Your event contains <strong>test mode orders</strong> even though "
 "<strong>test mode has been disabled</strong>. You should delete those orders "
@@ -17227,11 +17241,11 @@ msgstr ""
 "レポートや統計に表示されないようにし、実際にチケットを購入することを防ぎま"
 "しょう。"
 
-#: pretix/control/templates/pretixcontrol/base.html:397
+#: pretix/control/templates/pretixcontrol/base.html:399
 msgid "Show all test mode orders"
 msgstr "すべてのテストモードの注文を表示します"
 
-#: pretix/control/templates/pretixcontrol/base.html:405
+#: pretix/control/templates/pretixcontrol/base.html:407
 msgid ""
 "Starting with version 1.2.0, pretix automatically checks for updates in the "
 "background. During this check, anonymous data is transmitted to servers "
@@ -17245,7 +17259,7 @@ msgstr ""
 "しいアップデートが到着した場合にメールで通知を受け取るためにメールアドレスを"
 "入力してください。このメッセージはクリックすると消えます。"
 
-#: pretix/control/templates/pretixcontrol/base.html:418
+#: pretix/control/templates/pretixcontrol/base.html:420
 msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
@@ -17253,7 +17267,7 @@ msgstr ""
 "ここをクリックして、pretixのライセンスを遵守しているかどうかを確認するための"
 "ライセンスコンプライアンスチェックを行ってください。"
 
-#: pretix/control/templates/pretixcontrol/base.html:427
+#: pretix/control/templates/pretixcontrol/base.html:429
 msgid ""
 "The cronjob component of pretix was not executed in the last hours. Please "
 "check that you have completed all installation steps and your cronjob is "
@@ -17262,7 +17276,7 @@ msgstr ""
 "Pretixのcronjobコンポーネントが過去数時間実行されていませんでした。すべてのイ"
 "ンストール手順を完了し、cronjobが正しく実行されていることを確認してください。"
 
-#: pretix/control/templates/pretixcontrol/base.html:436
+#: pretix/control/templates/pretixcontrol/base.html:438
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
@@ -17270,7 +17284,7 @@ msgstr ""
 "pretixはデバッグモードで実行されています。セキュリティ上の理由から、本番イン"
 "スタンスでデバッグモードを実行しないでください。"
 
-#: pretix/control/templates/pretixcontrol/base.html:442
+#: pretix/control/templates/pretixcontrol/base.html:444
 msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
@@ -17278,17 +17292,17 @@ msgstr ""
 "セキュリティ上の理由から、続行する前にパスワードを変更してください。その後、"
 "元の目的地にリダイレクトされます。"
 
-#: pretix/control/templates/pretixcontrol/base.html:454
+#: pretix/control/templates/pretixcontrol/base.html:456
 #, python-format
 msgid "Times displayed in %(tz)s"
 msgstr "表示される時間帯 %(tz)s"
 
-#: pretix/control/templates/pretixcontrol/base.html:460
+#: pretix/control/templates/pretixcontrol/base.html:462
 msgid "running in development mode"
 msgstr "開発モードで実行しています"
 
-#: pretix/control/templates/pretixcontrol/base.html:476
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:44
+#: pretix/control/templates/pretixcontrol/base.html:471
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:38
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
@@ -18390,7 +18404,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
-#: pretix/control/templates/pretixcontrol/event/settings.html:478
+#: pretix/control/templates/pretixcontrol/event/settings.html:479
 msgid "Cancel or delete event"
 msgstr "イベントをキャンセルまたは削除"
 
@@ -18510,8 +18524,8 @@ msgid "Geo coordinates"
 msgstr "地理座標"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:15
-#: pretix/control/templates/pretixcontrol/event/settings.html:138
-#: pretix/control/templates/pretixcontrol/event/settings.html:280
+#: pretix/control/templates/pretixcontrol/event/settings.html:139
+#: pretix/control/templates/pretixcontrol/event/settings.html:281
 #: pretix/control/templates/pretixcontrol/items/discount.html:35
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:56
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:32
@@ -19229,51 +19243,51 @@ msgstr "メタデータ"
 msgid "Localization"
 msgstr "ローカライゼーション"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:66
+#: pretix/control/templates/pretixcontrol/event/settings.html:67
 msgid "Customer and attendee data"
 msgstr "顧客と参加者のデータ"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:67
+#: pretix/control/templates/pretixcontrol/event/settings.html:68
 msgid "Customer data (once per order)"
 msgstr "顧客データ（1注文ごとに1回）"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:83
+#: pretix/control/templates/pretixcontrol/event/settings.html:84
 msgid "Name and address"
 msgstr "名前と住所"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:89
+#: pretix/control/templates/pretixcontrol/event/settings.html:90
 msgid "See invoice settings"
 msgstr "請求書の設定を見る"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:95
+#: pretix/control/templates/pretixcontrol/event/settings.html:96
 msgid "Attendee data (once per personalized ticket)"
 msgstr "参加者データ（個別のチケットごとに1回）"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:104
+#: pretix/control/templates/pretixcontrol/event/settings.html:105
 msgid "Custom fields"
 msgstr "カスタムフィールド"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:110
+#: pretix/control/templates/pretixcontrol/event/settings.html:111
 msgid "Manage questions"
 msgstr "質問を管理します"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:117
+#: pretix/control/templates/pretixcontrol/event/settings.html:118
 msgid "Form settings"
 msgstr "フォームの設定"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:122
+#: pretix/control/templates/pretixcontrol/event/settings.html:123
 msgid "Changes to existing orders"
 msgstr "既存の注文の変更"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:130
+#: pretix/control/templates/pretixcontrol/event/settings.html:131
 msgid "Texts"
 msgstr "テキスト"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:137
+#: pretix/control/templates/pretixcontrol/event/settings.html:138
 msgid "Confirmation text"
 msgstr "確認のテキスト"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:142
+#: pretix/control/templates/pretixcontrol/event/settings.html:143
 msgid ""
 "These texts need to be confirmed by the user before a purchase is possible. "
 "You could for example link your terms of service here. If you use the Pages "
@@ -19284,16 +19298,16 @@ msgstr ""
 "ば、ここに利用規約へのリンクを貼ることができます。利用規約を公開するために"
 "ページ機能を使用している場合は、この設定は必要ありません。"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:199
+#: pretix/control/templates/pretixcontrol/event/settings.html:200
 msgid "Add confirmation text"
 msgstr "確認テキストを追加"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:213
+#: pretix/control/templates/pretixcontrol/event/settings.html:214
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:140
 msgid "Shop design"
 msgstr "ショップのデザイン"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:231
+#: pretix/control/templates/pretixcontrol/event/settings.html:232
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:56
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:411
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:95
@@ -19301,35 +19315,35 @@ msgstr "ショップのデザイン"
 msgid "Timeline"
 msgstr "タイムライン"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:238
+#: pretix/control/templates/pretixcontrol/event/settings.html:239
 msgid "Display"
 msgstr "表示"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:243
+#: pretix/control/templates/pretixcontrol/event/settings.html:244
 msgid "Product list"
 msgstr "商品リスト"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:249
+#: pretix/control/templates/pretixcontrol/event/settings.html:250
 msgctxt "subevents"
 msgid "Calendar and list views"
 msgstr "カレンダーとリストビュー"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:268
+#: pretix/control/templates/pretixcontrol/event/settings.html:269
 #: pretix/control/templates/pretixcontrol/order/index.html:176
 #: pretix/presale/templates/pretixpresale/event/order.html:22
 msgid "Order details"
 msgstr "注文の詳細"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:272
+#: pretix/control/templates/pretixcontrol/event/settings.html:273
 msgid "Other settings"
 msgstr "他の設定"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:279
+#: pretix/control/templates/pretixcontrol/event/settings.html:280
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:55
 msgid "Footer links"
 msgstr "フッターリンク"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:284
+#: pretix/control/templates/pretixcontrol/event/settings.html:285
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:60
 msgid ""
 "These links will be shown in the footer of your ticket shop. You could for "
@@ -19342,16 +19356,16 @@ msgstr ""
 "シーポリシーは自動的にリンクされます（設定済みの場合）、そのためここに追加す"
 "る必要はありません。"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:338
+#: pretix/control/templates/pretixcontrol/event/settings.html:339
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:119
 msgid "Add link"
 msgstr "リンクを追加"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:345
+#: pretix/control/templates/pretixcontrol/event/settings.html:346
 msgid "Cart"
 msgstr "カート"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:353
+#: pretix/control/templates/pretixcontrol/event/settings.html:354
 msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as hidden products, add-on products or product bundles."
@@ -19359,7 +19373,7 @@ msgstr ""
 "現在の待ちリストは、隠し商品、アドオン商品、または商品のバンドルなど、pretix"
 "の一部の高度な機能と互換性がありません。"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:359
+#: pretix/control/templates/pretixcontrol/event/settings.html:360
 msgid ""
 "The waiting list determines availability mainly based on quotas. If you use "
 "a seating plan and your number of available seats is less than the available "
@@ -19370,7 +19384,7 @@ msgstr ""
 "可能な座席数が利用可能なクォータよりも少ない場合、待ちリストからメールが送ら"
 "れても席を予約できない状況に遭遇することがあります。"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:366
+#: pretix/control/templates/pretixcontrol/event/settings.html:367
 msgid ""
 "Specifically, this means the waiting list is not safe to use together with "
 "the minimum distance feature of our seating plan module."
@@ -19378,19 +19392,19 @@ msgstr ""
 "具体的には、これは空席待ちリストが座席計画モジュールの最短距離機能と一緒に使"
 "用するのは安全ではないことを意味します。"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:377
+#: pretix/control/templates/pretixcontrol/event/settings.html:378
 msgid "Waiting customers"
 msgstr "待っているお客様"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:383
+#: pretix/control/templates/pretixcontrol/event/settings.html:384
 msgid "Manage waiting list"
 msgstr "待ちリストを管理します"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:396
+#: pretix/control/templates/pretixcontrol/event/settings.html:397
 msgid "Item metadata"
 msgstr "アイテムのメタデータ"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:398
+#: pretix/control/templates/pretixcontrol/event/settings.html:399
 msgid ""
 "You can here define a set of metadata properties (i.e. variables) that you "
 "can later set for your items and re-use in places like ticket layouts. This "
@@ -19400,17 +19414,17 @@ msgstr ""
 "タプロパティ（つまり変数）のセットを定義できます。これは、たくさんのアイテム"
 "を作成する場合に便利な時間短縮ツールです。"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:418
-#: pretix/control/templates/pretixcontrol/event/settings.html:446
+#: pretix/control/templates/pretixcontrol/event/settings.html:419
+#: pretix/control/templates/pretixcontrol/event/settings.html:447
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:22
 msgid "Property"
 msgstr "プロパティ"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:465
+#: pretix/control/templates/pretixcontrol/event/settings.html:466
 msgid "Add property"
 msgstr "プロパティを追加"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:483
+#: pretix/control/templates/pretixcontrol/event/settings.html:484
 #: pretix/control/templates/pretixcontrol/events/index.html:165
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:130
 msgid "Clone event"
@@ -28782,7 +28796,7 @@ msgid "Upload time"
 msgstr "アップロード時間"
 
 #: pretix/plugins/checkinlists/exporters.py:826
-#: pretix/presale/templates/pretixpresale/event/index.html:249
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:145
 msgid "OK"
 msgstr "OK"
 
@@ -31745,8 +31759,8 @@ msgid "Contact event organizer"
 msgstr "イベント主催者に連絡する"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:225
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:100
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:119
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:115
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:134
 #: pretix/presale/templates/pretixpresale/organizers/base.html:103
 msgid "Privacy policy"
 msgstr "プライバシー・ポリシー"
@@ -32242,17 +32256,6 @@ msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 msgid "incl. %(rate)s%% %(name)s"
 msgstr "%(name)s %(rate)sパーセントを含む"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:200
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:207
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:216
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:223
-#: pretix/presale/templates/pretixpresale/event/voucher.html:228
-#: pretix/presale/templates/pretixpresale/event/voucher.html:235
-#: pretix/presale/templates/pretixpresale/event/voucher.html:252
-#, python-format
-msgid "Add %(item)s, %(var)s to cart"
-msgstr "カートに%(item)s、%(var)sを追加します"
-
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:203
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:349
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:219
@@ -32280,17 +32283,6 @@ msgstr "数量を減らす"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:399
 msgid "Increase quantity"
 msgstr "数量を増やしてください"
-
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:346
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:353
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:368
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:375
-#: pretix/presale/templates/pretixpresale/event/voucher.html:383
-#: pretix/presale/templates/pretixpresale/event/voucher.html:390
-#: pretix/presale/templates/pretixpresale/event/voucher.html:408
-#, python-format
-msgid "Add %(item)s to cart"
-msgstr "カートに%(item)sを追加します"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:379
 msgid "There are no add-ons available for this product."
@@ -32486,14 +32478,13 @@ msgstr ""
 "カート内の商品はもはやあなたのために予約されていません。利用可能な限り、注文"
 "を完了することができます。"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:508
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #, fuzzy
-#| msgctxt "refund_source"
-#| msgid "External"
-msgid "Extend"
-msgstr "外部"
+#| msgid "Event description"
+msgid "Extend reservation"
+msgstr "イベントの説明"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:511
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
 msgstr "あなたの注文された製品の概要について教えてください。"
 
@@ -32512,7 +32503,7 @@ msgid "Empty cart"
 msgstr "カートを空にする"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:68
-#: pretix/presale/templates/pretixpresale/event/index.html:257
+#: pretix/presale/templates/pretixpresale/event/index.html:250
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
 msgstr "バウチャーを利用する"
@@ -32723,37 +32714,35 @@ msgstr "以下のボタンを使用してチケットをダウンロードして
 msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr "%(date)sからこちらでチケットをダウンロードできます。"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:6
 msgid "Where does the event happen?"
 msgstr "イベントはどこで起こりますか？"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:13
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:14
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:16
 msgid "When does the event happen?"
 msgstr "イベントはいつ開催されますか？"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:20
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:25
 #, python-format
 msgid "Begin: %(time)s"
 msgstr "開始: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:29
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:34
 #, python-format
 msgid "End: %(time)s"
 msgstr "終了: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:41
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:46
 #, python-format
 msgid "Admission: %(time)s"
 msgstr "入場: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:49
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:54
 #, python-format
 msgid "Admission: %(datetime)s"
 msgstr "入場: %(datetime)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:62
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:67
 msgid "Add to Calendar"
 msgstr "カレンダーに追加"
 
@@ -32977,23 +32966,11 @@ msgstr "登録"
 msgid "Add to cart"
 msgstr "カートに追加"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:246
-#, fuzzy
-#| msgid "You did not select any products."
-msgid "You didn't select any ticket."
-msgstr "選択した商品がありません。"
-
-#: pretix/presale/templates/pretixpresale/event/index.html:247
-msgid ""
-"Please tick a checkbox or enter a quantity for one of the ticket types to "
-"add to the cart."
-msgstr ""
-
-#: pretix/presale/templates/pretixpresale/event/index.html:264
+#: pretix/presale/templates/pretixpresale/event/index.html:257
 msgid "If you have already ordered a ticket"
 msgstr "すでにチケットを注文済みの場合"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:268
+#: pretix/presale/templates/pretixpresale/event/index.html:261
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -33004,7 +32981,7 @@ msgstr ""
 "メールのリンクをクリックしてください。リンクが見つからない場合は、つぎのボタ"
 "ンをクリックして、注文のリンクを再度送付してもらうこともできます。"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:277
+#: pretix/presale/templates/pretixpresale/event/index.html:270
 msgid "Resend order link"
 msgstr "注文リンクを再送する"
 
@@ -33762,34 +33739,46 @@ msgstr "顧客アカウント"
 msgid "View customer account"
 msgstr "顧客アカウントを表示します"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:17
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "We've started the requested process in a new window."
 msgstr "要求されたプロセスを新しいウィンドウで開始しました。"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:20
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:21
 msgid "If you do not see the new window, we can help you launch it again."
 msgstr ""
 "新しいウィンドウが表示されない場合は、もう一度起動するのをお手伝いします。"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:25
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:26
 msgid "Open window again"
 msgstr "ウィンドウを再度開く"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:29
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:30
 msgid ""
 "Once the process in the new window has been completed, you can continue here."
 msgstr ""
 "新しいウィンドウでのプロセスが完了したら、こちらで続けることができます。"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:65
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:47
+#, fuzzy
+#| msgid "Please select how you want to pay."
+msgid "Please let us know you're still there."
+msgstr "支払い方法を選択してください。"
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:59
+#, fuzzy
+#| msgid "Closed"
+msgid "Close"
+msgstr "閉まっています"
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:80
 msgid "Adjust settings in detail"
 msgstr "詳細な設定を調整します"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:70
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:85
 msgid "Required cookies"
 msgstr "必須のクッキー"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:74
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:89
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
@@ -33797,29 +33786,41 @@ msgstr ""
 "機能的なクッキー（例：ショッピングカート、ログイン、支払い、言語設定）および"
 "技術的なクッキー（例：セキュリティ目的）"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:88
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:103
 msgctxt "cookie_usage"
 msgid "Functionality"
 msgstr "機能"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:90
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:105
 msgctxt "cookie_usage"
 msgid "Analytics"
 msgstr "アナリティクス"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:92
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:107
 msgctxt "cookie_usage"
 msgid "Marketing"
 msgstr "マーケティング"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:94
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:109
 msgctxt "cookie_usage"
 msgid "Social features"
 msgstr "ソーシャル機能"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:110
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:125
 msgid "Save selection"
 msgstr "選択を保存"
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:142
+#, fuzzy
+#| msgid "You did not select any products."
+msgid "You didn't select any ticket."
+msgstr "選択した商品がありません。"
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:143
+msgid ""
+"Please tick a checkbox or enter a quantity for one of the ticket types to "
+"add to the cart."
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -34104,7 +34105,7 @@ msgstr "この機能は無効です。"
 msgid "The selected organizer was not found."
 msgstr "選択された主催者が見つかりません。"
 
-#: pretix/presale/views/__init__.py:272
+#: pretix/presale/views/__init__.py:275
 #, python-brace-format
 msgid ""
 "Your selected payment method can only be used for a payment of at least "
@@ -34133,29 +34134,29 @@ msgstr "カートが更新されました。"
 msgid "Your cart is now empty."
 msgstr "カートが空です。"
 
-#: pretix/presale/views/cart.py:547
+#: pretix/presale/views/cart.py:553
 #, fuzzy
 #| msgid "Your cart has been updated."
 msgid "Your cart timeout was extended."
 msgstr "カートが更新されました。"
 
-#: pretix/presale/views/cart.py:562
+#: pretix/presale/views/cart.py:568
 msgid "The products have been successfully added to your cart."
 msgstr "商品が正常にカートに追加されました。"
 
-#: pretix/presale/views/cart.py:586 pretix/presale/views/event.py:540
+#: pretix/presale/views/cart.py:592 pretix/presale/views/event.py:540
 #: pretix/presale/views/widget.py:377
 msgid "Tickets for this event cannot be purchased on this sales channel."
 msgstr "このイベントのチケットは、この販売チャンネルでは購入できません。"
 
-#: pretix/presale/views/cart.py:725
+#: pretix/presale/views/cart.py:731
 msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
 msgstr ""
 "ギフトカードがカートに追加されました。購入したい商品を選択してください。"
 
-#: pretix/presale/views/cart.py:753
+#: pretix/presale/views/cart.py:759
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
 msgstr "指定された日付を見つけることができません。"
@@ -34459,6 +34460,20 @@ msgstr "書き込みアクセス"
 #: pretix/settings.py:802
 msgid "Kosovo"
 msgstr "コソボ"
+
+#, python-format
+#~ msgid "Add %(item)s, %(var)s to cart"
+#~ msgstr "カートに%(item)s、%(var)sを追加します"
+
+#, python-format
+#~ msgid "Add %(item)s to cart"
+#~ msgstr "カートに%(item)sを追加します"
+
+#, fuzzy
+#~| msgctxt "refund_source"
+#~| msgid "External"
+#~ msgid "Extend"
+#~ msgstr "外部"
 
 #~ msgid "Reset password"
 #~ msgstr "パスワードをリセットします"
