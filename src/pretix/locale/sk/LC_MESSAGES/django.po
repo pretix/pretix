@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-22 12:48+0000\n"
+"POT-Creation-Date: 2025-05-27 10:14+0000\n"
 "PO-Revision-Date: 2025-03-15 20:49+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
@@ -234,7 +234,7 @@ msgstr "Komentár"
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "Produkt \"{}\" nie je priradený ku kvóte."
 
-#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1680
+#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1685
 #: pretix/base/models/items.py:1917 pretix/base/models/items.py:2184
 msgid "One or more items do not belong to this event."
 msgstr "Jedna alebo viac položiek nepatrí do tohoto podujatia."
@@ -608,9 +608,9 @@ msgstr "Anonymizovaný účet zákazníka"
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1004
 #: pretix/base/forms/questions.py:1035 pretix/base/forms/questions.py:1224
-#: pretix/base/payment.py:97 pretix/control/forms/event.py:796
-#: pretix/control/forms/event.py:802 pretix/control/forms/event.py:846
-#: pretix/control/forms/event.py:1443 pretix/control/forms/mailsetup.py:87
+#: pretix/base/payment.py:97 pretix/control/forms/event.py:798
+#: pretix/control/forms/event.py:804 pretix/control/forms/event.py:848
+#: pretix/control/forms/event.py:1445 pretix/control/forms/mailsetup.py:87
 #: pretix/control/forms/mailsetup.py:129
 #: pretix/plugins/banktransfer/payment.py:673
 #: pretix/plugins/banktransfer/payment.py:679
@@ -641,7 +641,7 @@ msgstr "{system} Používateľ"
 #: pretix/base/pdf.py:325 pretix/control/navigation.py:81
 #: pretix/control/navigation.py:501
 #: pretix/control/templates/pretixcontrol/checkin/index.html:107
-#: pretix/control/templates/pretixcontrol/event/settings.html:70
+#: pretix/control/templates/pretixcontrol/event/settings.html:71
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:49
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:59
@@ -845,7 +845,7 @@ msgstr "Otázky"
 #: pretix/base/exporters/orderlist.py:1138 pretix/base/models/checkin.py:58
 #: pretix/base/models/items.py:2048 pretix/base/models/orders.py:1485
 #: pretix/base/models/orders.py:2999 pretix/base/models/vouchers.py:187
-#: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1608
+#: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1610
 #: pretix/control/forms/filter.py:425 pretix/control/forms/filter.py:1901
 #: pretix/control/forms/filter.py:2123 pretix/control/forms/filter.py:2238
 #: pretix/control/forms/filter.py:2320 pretix/control/forms/filter.py:2537
@@ -875,7 +875,7 @@ msgid "Date"
 msgstr "Dátum"
 
 #: pretix/base/exporters/answers.py:79 pretix/base/exporters/answers.py:88
-#: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1609
+#: pretix/control/forms/checkin.py:83 pretix/control/forms/event.py:1611
 #: pretix/control/forms/filter.py:428 pretix/control/forms/filter.py:455
 #: pretix/control/forms/filter.py:1904 pretix/control/forms/filter.py:1937
 #: pretix/control/forms/filter.py:2126 pretix/control/forms/filter.py:2146
@@ -957,7 +957,7 @@ msgstr "Celé meno"
 #: pretix/base/exporters/invoices.py:340 pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/waitinglist.py:108 pretix/base/forms/questions.py:1185
 #: pretix/base/models/devices.py:65 pretix/base/models/devices.py:127
-#: pretix/base/models/event.py:1482 pretix/base/models/event.py:1724
+#: pretix/base/models/event.py:1487 pretix/base/models/event.py:1729
 #: pretix/base/models/items.py:2052 pretix/base/models/items.py:2225
 #: pretix/base/models/memberships.py:41 pretix/base/models/organizer.py:75
 #: pretix/base/models/organizer.py:535 pretix/base/models/seating.py:85
@@ -1015,9 +1015,9 @@ msgid "Registration date"
 msgstr "Dátum registrácie"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:205
-#: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:258
+#: pretix/base/exporters/waitinglist.py:120 pretix/base/models/auth.py:258
 #: pretix/base/models/customers.py:106 pretix/base/models/exports.py:54
-#: pretix/control/forms/event.py:1614 pretix/control/forms/exports.py:49
+#: pretix/control/forms/event.py:1616 pretix/control/forms/exports.py:49
 #: pretix/control/forms/exports.py:88 pretix/control/views/waitinglist.py:315
 msgid "Language"
 msgstr "Jazyk"
@@ -1152,7 +1152,7 @@ msgstr ""
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:441
 #: pretix/base/exporters/orderlist.py:573
-#: pretix/base/exporters/waitinglist.py:114 pretix/base/models/event.py:572
+#: pretix/base/exporters/waitinglist.py:116 pretix/base/models/event.py:572
 #: pretix/base/pdf.py:224 pretix/control/forms/filter.py:1248
 #: pretix/control/forms/filter.py:1250 pretix/control/forms/filter.py:1695
 #: pretix/control/forms/filter.py:1697
@@ -1181,52 +1181,52 @@ msgid "Timezone"
 msgstr "Časové pásmo"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:595
-#: pretix/base/models/event.py:1484 pretix/base/settings.py:3231
+#: pretix/base/models/event.py:1489 pretix/base/settings.py:3231
 #: pretix/base/settings.py:3241 pretix/control/forms/subevents.py:480
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr "Čas začiatku podujatia"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:597
-#: pretix/base/models/event.py:1486 pretix/base/pdf.py:286
+#: pretix/base/models/event.py:1491 pretix/base/pdf.py:286
 #: pretix/control/forms/subevents.py:485
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
 msgstr "Čas ukončenia podujatia"
 
 #: pretix/base/exporters/events.py:64 pretix/base/models/event.py:599
-#: pretix/base/models/event.py:1488 pretix/control/forms/subevents.py:490
+#: pretix/base/models/event.py:1493 pretix/control/forms/subevents.py:490
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
 msgstr "Čas vstupu"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:611
-#: pretix/base/models/event.py:1497 pretix/control/forms/subevents.py:93
+#: pretix/base/models/event.py:1502 pretix/control/forms/subevents.py:93
 msgid "Start of presale"
 msgstr "Začiatok predpredaja"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:605
-#: pretix/base/models/event.py:1491 pretix/control/forms/subevents.py:99
+#: pretix/base/models/event.py:1496 pretix/control/forms/subevents.py:99
 msgid "End of presale"
 msgstr "Koniec predpredaja"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:351
-#: pretix/base/models/event.py:617 pretix/base/models/event.py:1503
+#: pretix/base/models/event.py:617 pretix/base/models/event.py:1508
 msgid "Location"
 msgstr "Umiestnenie"
 
-#: pretix/base/exporters/events.py:68 pretix/base/models/event.py:620
-#: pretix/base/models/event.py:1506
+#: pretix/base/exporters/events.py:68 pretix/base/models/event.py:625
+#: pretix/base/models/event.py:1511
 msgid "Latitude"
 msgstr "Zemepisná šírka"
 
-#: pretix/base/exporters/events.py:69 pretix/base/models/event.py:628
-#: pretix/base/models/event.py:1514
+#: pretix/base/exporters/events.py:69 pretix/base/models/event.py:633
+#: pretix/base/models/event.py:1519
 msgid "Longitude"
 msgstr "Zemepisná dĺžka"
 
-#: pretix/base/exporters/events.py:70 pretix/base/models/event.py:640
-#: pretix/base/models/event.py:1529
+#: pretix/base/exporters/events.py:70 pretix/base/models/event.py:645
+#: pretix/base/models/event.py:1534
 #: pretix/control/templates/pretixcontrol/event/index.html:128
 #: pretix/control/templates/pretixcontrol/order/index.html:991
 msgid "Internal comment"
@@ -1524,7 +1524,7 @@ msgid "Internal reference"
 msgstr "Interný odkaz"
 
 #: pretix/base/exporters/invoices.py:223 pretix/base/models/tax.py:162
-#: pretix/control/forms/event.py:1504
+#: pretix/control/forms/event.py:1506
 msgid "Reverse charge"
 msgstr "Reverzný náboj"
 
@@ -1634,11 +1634,13 @@ msgstr ""
 
 #: pretix/base/exporters/items.py:57 pretix/base/exporters/orderlist.py:588
 #: pretix/base/exporters/orderlist.py:890
+#: pretix/base/exporters/waitinglist.py:112
 msgid "Product ID"
 msgstr "ID produktu"
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:590
 #: pretix/base/exporters/orderlist.py:892
+#: pretix/base/exporters/waitinglist.py:114
 msgid "Variation ID"
 msgstr "ID variantu"
 
@@ -1662,7 +1664,7 @@ msgstr "Názov položky"
 
 #: pretix/base/exporters/items.py:68 pretix/base/exporters/orderlist.py:589
 #: pretix/base/exporters/orderlist.py:893
-#: pretix/base/exporters/waitinglist.py:112 pretix/base/models/items.py:1148
+#: pretix/base/exporters/waitinglist.py:113 pretix/base/models/items.py:1148
 #: pretix/base/models/orders.py:1495 pretix/base/models/orders.py:2992
 #: pretix/plugins/checkinlists/exporters.py:695
 msgid "Variation"
@@ -1670,7 +1672,7 @@ msgstr "Variácia"
 
 #: pretix/base/exporters/items.py:71 pretix/base/exporters/reusablemedia.py:48
 #: pretix/base/models/customers.py:57 pretix/base/models/customers.py:403
-#: pretix/base/models/discount.py:60 pretix/base/models/event.py:1473
+#: pretix/base/models/discount.py:60 pretix/base/models/event.py:1478
 #: pretix/base/models/items.py:489 pretix/base/models/items.py:1152
 #: pretix/base/models/media.py:77 pretix/base/settings.py:204
 #: pretix/base/settings.py:239 pretix/base/settings.py:270
@@ -1682,7 +1684,7 @@ msgid "Active"
 msgstr "Aktívne"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:77
-#: pretix/control/forms/event.py:984 pretix/control/navigation.py:508
+#: pretix/control/forms/event.py:986 pretix/control/navigation.py:508
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:6
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
@@ -1720,8 +1722,8 @@ msgstr "Generovanie vstupeniek"
 
 #: pretix/base/exporters/items.py:79 pretix/base/exporters/orderlist.py:1135
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:367
-#: pretix/control/forms/event.py:1684 pretix/control/navigation.py:237
-#: pretix/control/templates/pretixcontrol/event/settings.html:351
+#: pretix/control/forms/event.py:1686 pretix/control/navigation.py:237
+#: pretix/control/templates/pretixcontrol/event/settings.html:352
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:6
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:9
@@ -1930,7 +1932,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:876
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1259
-#: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1660
+#: pretix/base/exporters/waitinglist.py:115 pretix/control/forms/event.py:1662
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
 msgstr "URL identifikátor podujatia"
@@ -1948,8 +1950,8 @@ msgstr "Celkový počet objednávok"
 #: pretix/base/exporters/orderlist.py:576
 #: pretix/base/exporters/orderlist.py:1076
 #: pretix/base/exporters/orderlist.py:1312
-#: pretix/base/exporters/waitinglist.py:120
-#: pretix/base/exporters/waitinglist.py:168 pretix/base/models/orders.py:216
+#: pretix/base/exporters/waitinglist.py:122
+#: pretix/base/exporters/waitinglist.py:172 pretix/base/models/orders.py:216
 #: pretix/control/forms/filter.py:1019 pretix/control/forms/filter.py:1198
 #: pretix/control/forms/filter.py:1426 pretix/control/forms/filter.py:1495
 #: pretix/control/forms/filter.py:1567 pretix/control/forms/filter.py:1667
@@ -2138,7 +2140,7 @@ msgstr "ID pozície"
 
 #: pretix/base/exporters/orderlist.py:584
 #: pretix/base/exporters/orderlist.py:1139
-#: pretix/base/exporters/waitinglist.py:116 pretix/base/forms/questions.py:642
+#: pretix/base/exporters/waitinglist.py:118 pretix/base/forms/questions.py:642
 #: pretix/base/forms/questions.py:651 pretix/base/models/memberships.py:145
 #: pretix/control/forms/rrule.py:49
 #: pretix/control/templates/pretixcontrol/events/index.html:78
@@ -2156,7 +2158,7 @@ msgstr "Dátum začiatku"
 
 #: pretix/base/exporters/orderlist.py:585
 #: pretix/base/exporters/orderlist.py:1140
-#: pretix/base/exporters/waitinglist.py:117
+#: pretix/base/exporters/waitinglist.py:119
 #: pretix/base/models/memberships.py:148
 #: pretix/control/templates/pretixcontrol/events/index.html:82
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:68
@@ -2168,7 +2170,9 @@ msgid "End date"
 msgstr "Dátum ukončenia"
 
 #: pretix/base/exporters/orderlist.py:587
-#: pretix/base/exporters/orderlist.py:891 pretix/base/modelimport_orders.py:109
+#: pretix/base/exporters/orderlist.py:891
+#: pretix/base/exporters/waitinglist.py:111
+#: pretix/base/modelimport_orders.py:109
 #: pretix/base/modelimport_vouchers.py:174 pretix/base/models/items.py:794
 #: pretix/base/models/vouchers.py:250 pretix/base/models/waitinglist.py:91
 #: pretix/control/forms/filter.py:2129 pretix/control/forms/filter.py:2384
@@ -2357,7 +2361,7 @@ msgstr ""
 msgid "Only include transactions created within this date range."
 msgstr "Zahrňte len transakcie vytvorené v tomto rozsahu dátumov."
 
-#: pretix/base/exporters/orderlist.py:875 pretix/base/models/event.py:667
+#: pretix/base/exporters/orderlist.py:875 pretix/base/models/event.py:672
 #: pretix/base/models/items.py:468 pretix/base/models/items.py:2041
 #: pretix/base/models/orders.py:233 pretix/base/models/orders.py:3086
 #: pretix/base/models/vouchers.py:181 pretix/base/models/waitinglist.py:55
@@ -2401,13 +2405,13 @@ msgstr "Staré údaje"
 
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/items.py:1555
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:217
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:363
+#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:207
+#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:353
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:15
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:234
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:387
-#: pretix/presale/templates/pretixpresale/event/voucher.html:242
-#: pretix/presale/templates/pretixpresale/event/voucher.html:398
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:223
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:375
+#: pretix/presale/templates/pretixpresale/event/voucher.html:235
+#: pretix/presale/templates/pretixpresale/event/voucher.html:390
 msgid "Quantity"
 msgstr "Množstvo"
 
@@ -2659,7 +2663,7 @@ msgid "Organizer"
 msgstr "Organizátor"
 
 #: pretix/base/exporters/orderlist.py:1225 pretix/base/invoice.py:573
-#: pretix/control/templates/pretixcontrol/base.html:280
+#: pretix/control/templates/pretixcontrol/base.html:282
 #: pretix/control/templates/pretixcontrol/checkin/index.html:145
 #: pretix/control/templates/pretixcontrol/order/index.html:25
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:38
@@ -2905,25 +2909,19 @@ msgstr "Uplatnený poukaz"
 msgid "Voucher expired"
 msgstr "Platnosť kupónu vypršala"
 
-#: pretix/base/exporters/waitinglist.py:111 pretix/base/pdf.py:121
-#: pretix/control/forms/event.py:1766
-#: pretix/control/templates/pretixcontrol/items/index.html:38
-msgid "Product name"
-msgstr "Názov produktu"
-
-#: pretix/base/exporters/waitinglist.py:115
+#: pretix/base/exporters/waitinglist.py:117
 #: pretix/base/modelimport_orders.py:95 pretix/base/modelimport_vouchers.py:60
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
 msgctxt "subevents"
 msgid "Date"
 msgstr "Dátum"
 
-#: pretix/base/exporters/waitinglist.py:119
+#: pretix/base/exporters/waitinglist.py:121
 #: pretix/control/views/waitinglist.py:315
 msgid "Priority"
 msgstr "Priorita"
 
-#: pretix/base/exporters/waitinglist.py:121
+#: pretix/base/exporters/waitinglist.py:123
 #: pretix/base/modelimport_vouchers.py:39 pretix/base/models/vouchers.py:190
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:114
@@ -4343,7 +4341,7 @@ msgstr ""
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr "Slug môže obsahovať len písmená, číslice, bodky a pomlčky."
 
-#: pretix/base/models/event.py:601 pretix/base/models/event.py:1477
+#: pretix/base/models/event.py:601 pretix/base/models/event.py:1482
 msgid "Show in lists"
 msgstr "Zobraziť v zoznamoch"
 
@@ -4355,7 +4353,7 @@ msgstr ""
 "Ak je táto možnosť vybratá, toto podujatie sa zobrazí verejne v zozname "
 "podujatí vášho konta organizátora."
 
-#: pretix/base/models/event.py:606 pretix/base/models/event.py:1492
+#: pretix/base/models/event.py:606 pretix/base/models/event.py:1497
 #: pretix/control/forms/subevents.py:100
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
@@ -4365,17 +4363,27 @@ msgstr ""
 "hodnotu nenastavíte, predpredaj sa skončí po dátume ukončenia vášho "
 "podujatia."
 
-#: pretix/base/models/event.py:612 pretix/base/models/event.py:1498
+#: pretix/base/models/event.py:612 pretix/base/models/event.py:1503
 #: pretix/control/forms/subevents.py:94
 msgid "Optional. No products will be sold before this date."
 msgstr "Voliteľné. Pred týmto dátumom sa nebudú predávať žiadne výrobky."
 
-#: pretix/base/models/event.py:637 pretix/control/navigation.py:65
+#: pretix/base/models/event.py:621
+msgid "This event is remote or partially remote."
+msgstr ""
+
+#: pretix/base/models/event.py:622
+msgid ""
+"This will be used to let users know if the event is in a different timezone "
+"and let’s us calculate users’ local times."
+msgstr ""
+
+#: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
 msgstr "Pluginy"
 
-#: pretix/base/models/event.py:644 pretix/base/pdf.py:229
-#: pretix/control/forms/event.py:273 pretix/control/forms/filter.py:1677
+#: pretix/base/models/event.py:649 pretix/base/pdf.py:229
+#: pretix/control/forms/event.py:274 pretix/control/forms/filter.py:1677
 #: pretix/control/templates/pretixcontrol/event/index.html:13
 #: pretix/control/templates/pretixcontrol/events/index.html:114
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:90
@@ -4386,22 +4394,22 @@ msgstr "Pluginy"
 msgid "Event series"
 msgstr "Séria podujatí"
 
-#: pretix/base/models/event.py:648 pretix/base/models/event.py:1526
+#: pretix/base/models/event.py:653 pretix/base/models/event.py:1531
 msgid "Seating plan"
 msgstr "Plán sedenia"
 
-#: pretix/base/models/event.py:655 pretix/base/models/items.py:675
+#: pretix/base/models/event.py:660 pretix/base/models/items.py:675
 #, fuzzy
 #| msgid "Sales channels"
 msgid "Sell on all sales channels"
 msgstr "Predajné kanály"
 
-#: pretix/base/models/event.py:660 pretix/base/models/items.py:680
+#: pretix/base/models/event.py:665 pretix/base/models/items.py:680
 #: pretix/base/models/items.py:1230 pretix/base/payment.py:417
 msgid "Restrict to specific sales channels"
 msgstr "Obmedzenie na konkrétne predajné kanály"
 
-#: pretix/base/models/event.py:668 pretix/control/navigation.py:344
+#: pretix/base/models/event.py:673 pretix/control/navigation.py:344
 #: pretix/control/navigation.py:470
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 #: pretix/control/templates/pretixcontrol/events/index.html:7
@@ -4414,7 +4422,7 @@ msgstr "Obmedzenie na konkrétne predajné kanály"
 msgid "Events"
 msgstr "Podujatia"
 
-#: pretix/base/models/event.py:1305
+#: pretix/base/models/event.py:1310
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
@@ -4422,7 +4430,7 @@ msgstr ""
 "Nakonfigurovali ste aspoň jeden platený produkt, ale nepovolili ste žiadne "
 "spôsoby platby."
 
-#: pretix/base/models/event.py:1308
+#: pretix/base/models/event.py:1313
 msgid ""
 "You have configured at least one paid product but have not configured a "
 "currency."
@@ -4430,38 +4438,38 @@ msgstr ""
 "Nakonfigurovali ste aspoň jeden platený produkt, ale nenakonfigurovali ste "
 "menu."
 
-#: pretix/base/models/event.py:1311
+#: pretix/base/models/event.py:1316
 msgid "You need to configure at least one quota to sell anything."
 msgstr "Ak chcete niečo predať, musíte nakonfigurovať aspoň jednu kvótu."
 
-#: pretix/base/models/event.py:1316
+#: pretix/base/models/event.py:1321
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
 msgstr "Musíte vyplniť meta parameter \"{property}\"."
 
-#: pretix/base/models/event.py:1423
+#: pretix/base/models/event.py:1428
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
 "Po vytvorení podujatia nie je možné meniť medzi sériou a jedným podujatím."
 
-#: pretix/base/models/event.py:1429
+#: pretix/base/models/event.py:1434
 msgid "The event slug cannot be changed."
 msgstr "URL identifikátor podujatia nie je možné zmeniť."
 
-#: pretix/base/models/event.py:1432
+#: pretix/base/models/event.py:1437
 msgid "This slug has already been used for a different event."
 msgstr "Tento slug už bol použitý pre iné podujatie."
 
-#: pretix/base/models/event.py:1438
+#: pretix/base/models/event.py:1443
 msgid "The event cannot end before it starts."
 msgstr "Podujatie sa nemôže skončiť skôr, ako sa začne."
 
-#: pretix/base/models/event.py:1444
+#: pretix/base/models/event.py:1449
 msgid "The event's presale cannot end before it starts."
 msgstr "Predpredaj sa nemôže skončiť pred začiatkom podujatia."
 
-#: pretix/base/models/event.py:1474
+#: pretix/base/models/event.py:1479
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
@@ -4469,7 +4477,7 @@ msgstr ""
 "Iba ak je toto políčko začiarkavacie, tento dátum je viditeľný vo frontende "
 "pre používateľov."
 
-#: pretix/base/models/event.py:1478
+#: pretix/base/models/event.py:1483
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
@@ -4477,44 +4485,44 @@ msgstr ""
 "Ak je táto možnosť vybraná, toto podujatie sa zobrazí verejne v zozname "
 "dátumov pre vaše podujatie."
 
-#: pretix/base/models/event.py:1523 pretix/base/settings.py:3032
+#: pretix/base/models/event.py:1528 pretix/base/settings.py:3032
 msgid "Frontpage text"
 msgstr "Text na titulnej stránke"
 
-#: pretix/base/models/event.py:1540
+#: pretix/base/models/event.py:1545
 msgid "Date in event series"
 msgstr "Dátum v sérii podujatí"
 
-#: pretix/base/models/event.py:1541
+#: pretix/base/models/event.py:1546
 msgid "Dates in event series"
 msgstr "Dátumy v sérii podujatí"
 
-#: pretix/base/models/event.py:1686
+#: pretix/base/models/event.py:1691
 msgid "One or more variations do not belong to this event."
 msgstr "Jeden alebo viac variantov nepatrí do tohto podujatia."
 
-#: pretix/base/models/event.py:1716 pretix/base/models/items.py:2217
+#: pretix/base/models/event.py:1721 pretix/base/models/items.py:2217
 msgid "Can not contain spaces or special characters except underscores"
 msgstr "Nemôže obsahovať medzery ani špeciálne znaky okrem podčiarkovníka"
 
-#: pretix/base/models/event.py:1721 pretix/base/models/items.py:2222
+#: pretix/base/models/event.py:1726 pretix/base/models/items.py:2222
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr "Názov vlastnosti môže obsahovať len písmená, čísla a podčiarkovníky."
 
-#: pretix/base/models/event.py:1726
+#: pretix/base/models/event.py:1731
 msgid "Default value"
 msgstr "Predvolená hodnota"
 
-#: pretix/base/models/event.py:1728
+#: pretix/base/models/event.py:1733
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:50
 msgid "Can only be changed by organizer-level administrators"
 msgstr "Môžu ich zmeniť len správcovia na úrovni organizátora"
 
-#: pretix/base/models/event.py:1730
+#: pretix/base/models/event.py:1735
 msgid "Required for events"
 msgstr "Potrebné pre podujatia"
 
-#: pretix/base/models/event.py:1731
+#: pretix/base/models/event.py:1736
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
@@ -4523,16 +4531,16 @@ msgstr ""
 "ak je táto vlastnosť nastavená. V sériách podujatí je nastavenie hodnoty pre "
 "jednotlivé dátumy vždy voliteľné"
 
-#: pretix/base/models/event.py:1737 pretix/base/models/items.py:2234
+#: pretix/base/models/event.py:1742 pretix/base/models/items.py:2234
 msgid "Valid values"
 msgstr "Platné hodnoty"
 
-#: pretix/base/models/event.py:1740
+#: pretix/base/models/event.py:1745
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
 msgid "Show filter option to customers"
 msgstr "Zobrazenie možnosti filtrovania zákazníkom"
 
-#: pretix/base/models/event.py:1741
+#: pretix/base/models/event.py:1746
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
@@ -4540,17 +4548,17 @@ msgstr ""
 "Toto pole sa zobrazí na filtrovanie podujatí vo verejnom zozname podujatí a "
 "kalendári."
 
-#: pretix/base/models/event.py:1744 pretix/control/forms/organizer.py:269
+#: pretix/base/models/event.py:1749 pretix/control/forms/organizer.py:269
 #: pretix/control/forms/organizer.py:273
 msgid "Public name"
 msgstr "Verejný názov"
 
-#: pretix/base/models/event.py:1748
+#: pretix/base/models/event.py:1753
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
 msgid "Can be used for filtering"
 msgstr "Môže sa použiť na filtrovanie"
 
-#: pretix/base/models/event.py:1749
+#: pretix/base/models/event.py:1754
 msgid ""
 "This field will be shown to filter events or reports in the backend, and it "
 "can also be used for hidden filter parameters in the frontend (e.g. using "
@@ -4560,16 +4568,16 @@ msgstr ""
 "možno ho použiť aj na skryté parametre filtrov vo frontende (napr. pomocou "
 "widgetu)."
 
-#: pretix/base/models/event.py:1759
+#: pretix/base/models/event.py:1764
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
 "Vlastnosť môže byť buď povinná, alebo mať predvolenú hodnotu, nie však oboje."
 
-#: pretix/base/models/event.py:1839 pretix/base/models/organizer.py:516
+#: pretix/base/models/event.py:1844 pretix/base/models/organizer.py:516
 msgid "Link text"
 msgstr "Text prepojenia"
 
-#: pretix/base/models/event.py:1842 pretix/base/models/organizer.py:519
+#: pretix/base/models/event.py:1847 pretix/base/models/organizer.py:519
 msgid "Link URL"
 msgstr "Adresa URL prepojenia"
 
@@ -4595,9 +4603,9 @@ msgstr "Ďalší príjemcovia (Cc)"
 msgid "Additional recipients (Bcc)"
 msgstr "Ďalší príjemcovia (Bcc)"
 
-#: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1099
-#: pretix/control/forms/event.py:1173 pretix/control/forms/event.py:1183
-#: pretix/control/forms/event.py:1193 pretix/control/forms/orders.py:720
+#: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1101
+#: pretix/control/forms/event.py:1175 pretix/control/forms/event.py:1185
+#: pretix/control/forms/event.py:1195 pretix/control/forms/orders.py:720
 #: pretix/control/forms/orders.py:942 pretix/control/forms/orders.py:969
 #: pretix/control/forms/organizer.py:601 pretix/control/forms/organizer.py:611
 #: pretix/control/forms/organizer.py:621 pretix/control/forms/vouchers.py:273
@@ -4876,7 +4884,7 @@ msgstr ""
 "zoznamy."
 
 #: pretix/base/models/items.py:548 pretix/base/settings.py:1360
-#: pretix/control/forms/event.py:1679
+#: pretix/control/forms/event.py:1681
 msgid "Show number of tickets left"
 msgstr "Zobraziť počet zostávajúcich vstupeniek"
 
@@ -5403,7 +5411,7 @@ msgid "File upload"
 msgstr "Nahrávanie súborov"
 
 #: pretix/base/models/items.py:1657
-#: pretix/control/templates/pretixcontrol/event/settings.html:239
+#: pretix/control/templates/pretixcontrol/event/settings.html:240
 msgid "Date and time"
 msgstr "Dátum a čas"
 
@@ -5574,7 +5582,7 @@ msgstr "Možnosť otázky"
 msgid "Question options"
 msgstr "Možnosti otázok"
 
-#: pretix/base/models/items.py:2055 pretix/control/forms/event.py:1713
+#: pretix/base/models/items.py:2055 pretix/control/forms/event.py:1715
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
 msgstr "Celková kapacita"
@@ -6402,7 +6410,7 @@ msgstr "Oficiálny názov"
 msgid "Should be short, e.g. \"VAT\""
 msgstr "Mala by byť krátka, napr. \"DPH\""
 
-#: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1511
+#: pretix/base/models/tax.py:330 pretix/control/forms/event.py:1513
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 #, fuzzy
 #| msgid "Barcode"
@@ -6476,12 +6484,12 @@ msgstr ""
 "Ak chcete používať funkciu reverzného nabíjania, musíte nastaviť svoju "
 "domovskú krajinu."
 
-#: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1558
+#: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1560
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
 msgstr ""
 
-#: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1562
+#: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1564
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
 msgstr ""
@@ -7240,6 +7248,11 @@ msgstr "Číslo pozície objednávky"
 #: pretix/base/pdf.py:116
 msgid "Order code and position number"
 msgstr "Objednávkový kód a číslo pozície"
+
+#: pretix/base/pdf.py:121 pretix/control/forms/event.py:1768
+#: pretix/control/templates/pretixcontrol/items/index.html:38
+msgid "Product name"
+msgstr "Názov produktu"
 
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:841 pretix/control/views/pdf.py:94
@@ -8758,7 +8771,7 @@ msgstr ""
 "Pozíciu nie je možné zrušiť, pretože darčeková karta {card} zakúpená v tejto "
 "objednávke už bola uplatnená."
 
-#: pretix/base/services/orders.py:3054
+#: pretix/base/services/orders.py:3058
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
@@ -9822,7 +9835,7 @@ msgstr ""
 msgid "Hide all products that are sold out"
 msgstr "Skryť všetky vypredané produkty"
 
-#: pretix/base/settings.py:1361 pretix/control/forms/event.py:1680
+#: pretix/base/settings.py:1361 pretix/control/forms/event.py:1682
 msgid "Publicly show how many tickets of a certain type are still available."
 msgstr "Verejne ukázať, koľko vstupeniek určitého typu je ešte k dispozícii."
 
@@ -9838,7 +9851,7 @@ msgstr "Zobrazenie predvolene rozšírených variantov produktu"
 msgid "Enable waiting list"
 msgstr "Povolenie čakacieho zoznamu"
 
-#: pretix/base/settings.py:1389 pretix/control/forms/event.py:1685
+#: pretix/base/settings.py:1389 pretix/control/forms/event.py:1687
 msgid ""
 "Once a ticket is sold out, people can add themselves to a waiting list. As "
 "soon as a ticket becomes available again, it will be reserved for the first "
@@ -10436,20 +10449,20 @@ msgid ""
 "cancellation based on your settings."
 msgstr ""
 
-#: pretix/base/settings.py:2039 pretix/control/forms/event.py:1708
+#: pretix/base/settings.py:2039 pretix/control/forms/event.py:1710
 msgid "Contact address"
 msgstr "Kontaktná adresa"
 
-#: pretix/base/settings.py:2040 pretix/control/forms/event.py:1710
+#: pretix/base/settings.py:2040 pretix/control/forms/event.py:1712
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr ""
 "Túto informáciu zobrazíme verejne, aby vás účastníci mohli kontaktovať."
 
-#: pretix/base/settings.py:2048 pretix/control/forms/event.py:1702
+#: pretix/base/settings.py:2048 pretix/control/forms/event.py:1704
 msgid "Imprint URL"
 msgstr "Právne informácie"
 
-#: pretix/base/settings.py:2049 pretix/control/forms/event.py:1703
+#: pretix/base/settings.py:2049 pretix/control/forms/event.py:1705
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
@@ -10879,12 +10892,12 @@ msgstr ""
 "S pozdravom,  \n"
 "Váš tím {event}"
 
-#: pretix/base/settings.py:2392 pretix/control/forms/event.py:1134
-#: pretix/control/forms/event.py:1234 pretix/plugins/sendmail/models.py:275
+#: pretix/base/settings.py:2392 pretix/control/forms/event.py:1136
+#: pretix/control/forms/event.py:1236 pretix/plugins/sendmail/models.py:275
 msgid "Number of days"
 msgstr "Počet dní"
 
-#: pretix/base/settings.py:2394 pretix/control/forms/event.py:1137
+#: pretix/base/settings.py:2394 pretix/control/forms/event.py:1139
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
@@ -11965,7 +11978,7 @@ msgctxt "address"
 msgid "Prefecture"
 msgstr "Vplyv ceny"
 
-#: pretix/base/settings.py:3817 pretix/control/forms/event.py:228
+#: pretix/base/settings.py:3817 pretix/control/forms/event.py:229
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
@@ -12194,7 +12207,7 @@ msgid "You do not have access to this page."
 msgstr "K tejto stránke nemáte prístup."
 
 #: pretix/base/templates/403.html:20 pretix/base/templates/404.html:19
-#: pretix/control/templates/pretixcontrol/base.html:194
+#: pretix/control/templates/pretixcontrol/base.html:196
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
 #: pretix/presale/templates/pretixpresale/event/offline.html:21
@@ -12783,11 +12796,11 @@ msgstr ""
 "Ak ste vo svojom prehliadači nastavili deaktiváciu súborov cookie, znovu ich "
 "zapnite, aspoň pre túto stránku alebo pre požiadavky rovnakého pôvodu."
 
-#: pretix/base/views/tasks.py:187
+#: pretix/base/views/tasks.py:185
 msgid "An unexpected error has occurred, please try again later."
 msgstr "Vyskytla sa neočakávaná chyba, skúste to prosím neskôr."
 
-#: pretix/base/views/tasks.py:190
+#: pretix/base/views/tasks.py:188
 msgid "The task has been completed."
 msgstr "Úloha bola splnená."
 
@@ -12883,7 +12896,7 @@ msgid ""
 "You already used this slug for a different event. Please choose a new one."
 msgstr "Tento slimák ste už použili pre inú udalosť. Vyberte si novú."
 
-#: pretix/control/forms/event.py:136 pretix/control/forms/event.py:518
+#: pretix/control/forms/event.py:136 pretix/control/forms/event.py:520
 msgid "Event timezone"
 msgstr "Časové pásmo podujatia"
 
@@ -12928,7 +12941,7 @@ msgid "Create a new team for this event with me as the only member"
 msgstr ""
 "Vytvorenie nového tímu pre túto udalosť, ktorého jediným členom budem ja"
 
-#: pretix/control/forms/event.py:207 pretix/control/forms/event.py:378
+#: pretix/control/forms/event.py:208 pretix/control/forms/event.py:379
 msgid ""
 "Sample Conference Center\n"
 "Heidelberg, Germany"
@@ -12936,37 +12949,37 @@ msgstr ""
 "Ukážka konferenčného centra\n"
 "Heidelberg, Nemecko"
 
-#: pretix/control/forms/event.py:232
+#: pretix/control/forms/event.py:233
 msgid "Your default locale must be specified."
 msgstr "Musí byť zadané vaše predvolené lokálne prostredie."
 
-#: pretix/control/forms/event.py:236
+#: pretix/control/forms/event.py:237
 #, python-brace-format
 msgid ""
 "You have not specified a tax rate. If you do not want us to compute sales "
 "taxes, please check \"{field}\" above."
 msgstr ""
 
-#: pretix/control/forms/event.py:311
+#: pretix/control/forms/event.py:312
 msgid "Copy configuration from"
 msgstr "Kopírovanie konfigurácie z"
 
-#: pretix/control/forms/event.py:317 pretix/control/forms/event.py:320
+#: pretix/control/forms/event.py:318 pretix/control/forms/event.py:321
 #: pretix/control/forms/item.py:408
 msgid "Do not copy"
 msgstr "Nekopírujte"
 
-#: pretix/control/forms/event.py:336 pretix/control/forms/item.py:1294
+#: pretix/control/forms/event.py:337 pretix/control/forms/item.py:1294
 #: pretix/control/forms/subevents.py:407
 #, python-brace-format
 msgid "Default ({value})"
 msgstr "Predvolené nastavenie ({value})"
 
-#: pretix/control/forms/event.py:384 pretix/control/forms/event.py:397
+#: pretix/control/forms/event.py:385 pretix/control/forms/event.py:398
 msgid "Domain"
 msgstr ""
 
-#: pretix/control/forms/event.py:388
+#: pretix/control/forms/event.py:389
 #, fuzzy
 #| msgid ""
 #| "You can set up possible filters as meta properties in your organizer "
@@ -12975,30 +12988,30 @@ msgid "You can configure this in your organizer settings."
 msgstr ""
 "Možné filtre môžete nastaviť ako meta vlastnosti v nastaveniach organizátora."
 
-#: pretix/control/forms/event.py:398
+#: pretix/control/forms/event.py:399
 #, fuzzy
 #| msgid "You can now login using your new password."
 msgid "You can add more domains in your organizer account."
 msgstr "Teraz sa môžete prihlásiť pomocou nového hesla."
 
-#: pretix/control/forms/event.py:399
+#: pretix/control/forms/event.py:400
 #, fuzzy
 #| msgid "Organizer account"
 msgid "Same as organizer account"
 msgstr "Účet organizátora"
 
-#: pretix/control/forms/event.py:503
+#: pretix/control/forms/event.py:505
 #, python-brace-format
 msgid ""
 "A validation error has occurred on a setting that is not part of this form: "
 "{error}"
 msgstr ""
 
-#: pretix/control/forms/event.py:521 pretix/control/forms/organizer.py:461
+#: pretix/control/forms/event.py:523 pretix/control/forms/organizer.py:461
 msgid "Name format"
 msgstr "Formát názvu"
 
-#: pretix/control/forms/event.py:522 pretix/control/forms/organizer.py:462
+#: pretix/control/forms/event.py:524 pretix/control/forms/organizer.py:462
 msgid ""
 "This defines how pretix will ask for human names. Changing this after you "
 "already received orders might lead to unexpected behavior when sorting or "
@@ -13008,11 +13021,11 @@ msgstr ""
 "parametra po tom, čo ste už prijali objednávky, môže viesť k neočakávanému "
 "správaniu pri triedení alebo zmene mien."
 
-#: pretix/control/forms/event.py:527 pretix/control/forms/organizer.py:467
+#: pretix/control/forms/event.py:529 pretix/control/forms/organizer.py:467
 msgid "Allowed titles"
 msgstr "Povolené názvy"
 
-#: pretix/control/forms/event.py:528 pretix/control/forms/organizer.py:468
+#: pretix/control/forms/event.py:530 pretix/control/forms/organizer.py:468
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
@@ -13020,29 +13033,29 @@ msgstr ""
 "Ak schéma názvov, ktorú ste definovali vyššie, umožňuje používateľom zadávať "
 "názov, môžete ju použiť na obmedzenie množiny vyberateľných názvov."
 
-#: pretix/control/forms/event.py:647 pretix/control/forms/organizer.py:539
+#: pretix/control/forms/event.py:649 pretix/control/forms/organizer.py:539
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
 msgstr "Požiadajte o {fields}, zobrazte ako {example}"
 
-#: pretix/control/forms/event.py:653 pretix/control/forms/organizer.py:545
+#: pretix/control/forms/event.py:655 pretix/control/forms/organizer.py:545
 msgid "Free text input"
 msgstr "Zadávanie voľného textu"
 
-#: pretix/control/forms/event.py:689
+#: pretix/control/forms/event.py:691
 msgid "Do not ask"
 msgstr "Nepýtajte sa"
 
-#: pretix/control/forms/event.py:690
+#: pretix/control/forms/event.py:692
 msgid "Ask, but do not require input"
 msgstr "Pýtajte sa, ale nevyžadujte vstupy"
 
-#: pretix/control/forms/event.py:691
-#: pretix/control/templates/pretixcontrol/event/settings.html:75
+#: pretix/control/forms/event.py:693
+#: pretix/control/templates/pretixcontrol/event/settings.html:76
 msgid "Ask and require input"
 msgstr "Pýtajte sa a vyžadujte vstupy"
 
-#: pretix/control/forms/event.py:768
+#: pretix/control/forms/event.py:770
 msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
@@ -13050,11 +13063,11 @@ msgstr ""
 "Nastavili ste platnosť darčekových kariet na {} rokov plus rok, v ktorom "
 "bola darčeková karta vydaná."
 
-#: pretix/control/forms/event.py:787
+#: pretix/control/forms/event.py:789
 msgid "Tax rule for payment fees"
 msgstr "Daňové pravidlo pre platobné poplatky"
 
-#: pretix/control/forms/event.py:789
+#: pretix/control/forms/event.py:791
 msgid ""
 "The tax rule that applies for additional fees you configured for single "
 "payment methods. This will set the tax rate and reverse charge rules, other "
@@ -13064,11 +13077,11 @@ msgstr ""
 "nakonfigurovali pre jednotlivé spôsoby platby. Týmto sa nastaví sadzba dane "
 "a pravidlá reverse charge, ostatné nastavenia daňového pravidla sa ignorujú."
 
-#: pretix/control/forms/event.py:895
+#: pretix/control/forms/event.py:897
 msgid "Generate invoices for Sales channels"
 msgstr "Generovanie faktúr pre predajné kanály"
 
-#: pretix/control/forms/event.py:898
+#: pretix/control/forms/event.py:900
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
@@ -13076,26 +13089,26 @@ msgstr ""
 "Ak ste v predchádzajúcom nastavení povolili generovanie faktúr, môžete ho tu "
 "obmedziť na konkrétne predajné kanály."
 
-#: pretix/control/forms/event.py:902
+#: pretix/control/forms/event.py:904
 msgid "Invoice style"
 msgstr "Štýl faktúry"
 
-#: pretix/control/forms/event.py:908
+#: pretix/control/forms/event.py:910
 msgid "Invoice language"
 msgstr "Jazyk faktúry"
 
-#: pretix/control/forms/event.py:909 pretix/control/forms/event.py:924
+#: pretix/control/forms/event.py:911 pretix/control/forms/event.py:926
 msgid "The user's language"
 msgstr "Jazyk používateľa"
 
-#: pretix/control/forms/event.py:932
+#: pretix/control/forms/event.py:934
 #, python-brace-format
 msgid ""
 "An invoice will be issued before payment if the customer selects one of the "
 "following payment methods: {list}"
 msgstr ""
 
-#: pretix/control/forms/event.py:936
+#: pretix/control/forms/event.py:938
 msgid ""
 "None of the currently configured payment methods will cause an invoice to be "
 "issued before payment."
@@ -13103,19 +13116,19 @@ msgstr ""
 "Žiadny z aktuálne nakonfigurovaných spôsobov platby nespôsobí vystavenie "
 "faktúry pred platbou."
 
-#: pretix/control/forms/event.py:945
+#: pretix/control/forms/event.py:947
 msgid "Recommended"
 msgstr "Odporúčané stránky"
 
-#: pretix/control/forms/event.py:957
+#: pretix/control/forms/event.py:959
 msgid "The online shop must be selected to receive these emails."
 msgstr "Ak chcete dostávať tieto e-maily, musíte vybrať online obchod."
 
-#: pretix/control/forms/event.py:973
+#: pretix/control/forms/event.py:975
 msgid "Sales channels for checkout emails"
 msgstr "Predajné kanály pre e-maily pri pokladni"
 
-#: pretix/control/forms/event.py:974
+#: pretix/control/forms/event.py:976
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
@@ -13123,7 +13136,7 @@ msgstr ""
 "E-maily o zadaných a zaplatených objednávkach sa budú odosielať len na "
 "objednávky z týchto predajných kanálov. Internetový obchod musí byť povolený."
 
-#: pretix/control/forms/event.py:985
+#: pretix/control/forms/event.py:987
 msgid ""
 "This email will only be send to orders from these sales channels. The online "
 "shop must be enabled."
@@ -13131,52 +13144,52 @@ msgstr ""
 "Tento e-mail bude odoslaný len na objednávky z týchto predajných kanálov. "
 "Internetový obchod musí byť povolený."
 
-#: pretix/control/forms/event.py:993 pretix/control/forms/organizer.py:580
+#: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:580
 msgid "Bcc address"
 msgstr "Adresa Bcc"
 
-#: pretix/control/forms/event.py:994 pretix/control/forms/organizer.py:581
+#: pretix/control/forms/event.py:996 pretix/control/forms/organizer.py:581
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "Všetky e-maily budú odosielané na túto adresu ako kópia Bcc"
 
-#: pretix/control/forms/event.py:1000 pretix/control/forms/organizer.py:587
+#: pretix/control/forms/event.py:1002 pretix/control/forms/organizer.py:587
 msgid "Signature"
 msgstr "Podpis"
 
-#: pretix/control/forms/event.py:1003
+#: pretix/control/forms/event.py:1005
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr ""
 "Táto informácia bude pripojená ku každému e-mailu. Dostupné zástupné znaky: "
 "{event}"
 
-#: pretix/control/forms/event.py:1008 pretix/control/forms/organizer.py:595
+#: pretix/control/forms/event.py:1010 pretix/control/forms/organizer.py:595
 msgid "e.g. your contact details"
 msgstr "napr. vaše kontaktné údaje"
 
-#: pretix/control/forms/event.py:1013
+#: pretix/control/forms/event.py:1015
 msgid "HTML mail renderer"
 msgstr "Vykresľovač pošty HTML"
 
-#: pretix/control/forms/event.py:1018 pretix/control/forms/event.py:1045
-#: pretix/control/forms/event.py:1072 pretix/control/forms/event.py:1208
+#: pretix/control/forms/event.py:1020 pretix/control/forms/event.py:1047
+#: pretix/control/forms/event.py:1074 pretix/control/forms/event.py:1210
 msgid "Subject sent to order contact address"
 msgstr "Predmet odoslaný na kontaktnú adresu objednávky"
 
-#: pretix/control/forms/event.py:1023 pretix/control/forms/event.py:1050
-#: pretix/control/forms/event.py:1077 pretix/control/forms/event.py:1213
+#: pretix/control/forms/event.py:1025 pretix/control/forms/event.py:1052
+#: pretix/control/forms/event.py:1079 pretix/control/forms/event.py:1215
 msgid "Text sent to order contact address"
 msgstr "Text odoslaný na kontaktnú adresu objednávky"
 
-#: pretix/control/forms/event.py:1028 pretix/control/forms/event.py:1055
-#: pretix/control/forms/event.py:1082 pretix/control/forms/event.py:1218
-#: pretix/control/forms/event.py:1263 pretix/control/forms/event.py:1293
+#: pretix/control/forms/event.py:1030 pretix/control/forms/event.py:1057
+#: pretix/control/forms/event.py:1084 pretix/control/forms/event.py:1220
+#: pretix/control/forms/event.py:1265 pretix/control/forms/event.py:1295
 msgid "Send an email to attendees"
 msgstr "Odoslanie e-mailu účastníkom"
 
-#: pretix/control/forms/event.py:1029 pretix/control/forms/event.py:1056
-#: pretix/control/forms/event.py:1083 pretix/control/forms/event.py:1219
-#: pretix/control/forms/event.py:1264 pretix/control/forms/event.py:1294
+#: pretix/control/forms/event.py:1031 pretix/control/forms/event.py:1058
+#: pretix/control/forms/event.py:1085 pretix/control/forms/event.py:1221
+#: pretix/control/forms/event.py:1266 pretix/control/forms/event.py:1296
 msgid ""
 "If the order contains attendees with email addresses different from the "
 "person who orders the tickets, the following email will be sent out to the "
@@ -13185,76 +13198,76 @@ msgstr ""
 "Ak objednávka obsahuje účastníkov s e-mailovou adresou odlišnou od osoby, "
 "ktorá si objednala vstupenky, účastníkom bude zaslaný nasledujúci e-mail."
 
-#: pretix/control/forms/event.py:1034 pretix/control/forms/event.py:1061
-#: pretix/control/forms/event.py:1088 pretix/control/forms/event.py:1224
-#: pretix/control/forms/event.py:1269 pretix/control/forms/event.py:1299
+#: pretix/control/forms/event.py:1036 pretix/control/forms/event.py:1063
+#: pretix/control/forms/event.py:1090 pretix/control/forms/event.py:1226
+#: pretix/control/forms/event.py:1271 pretix/control/forms/event.py:1301
 msgid "Subject sent to attendees"
 msgstr "Predmet zaslaný účastníkom"
 
-#: pretix/control/forms/event.py:1039 pretix/control/forms/event.py:1066
-#: pretix/control/forms/event.py:1093 pretix/control/forms/event.py:1229
-#: pretix/control/forms/event.py:1274 pretix/control/forms/event.py:1304
+#: pretix/control/forms/event.py:1041 pretix/control/forms/event.py:1068
+#: pretix/control/forms/event.py:1095 pretix/control/forms/event.py:1231
+#: pretix/control/forms/event.py:1276 pretix/control/forms/event.py:1306
 msgid "Text sent to attendees"
 msgstr "Text zaslaný účastníkom"
 
-#: pretix/control/forms/event.py:1104 pretix/control/forms/event.py:1178
-#: pretix/control/forms/event.py:1188 pretix/control/forms/event.py:1198
-#: pretix/control/forms/event.py:1203 pretix/control/forms/organizer.py:606
+#: pretix/control/forms/event.py:1106 pretix/control/forms/event.py:1180
+#: pretix/control/forms/event.py:1190 pretix/control/forms/event.py:1200
+#: pretix/control/forms/event.py:1205 pretix/control/forms/organizer.py:606
 #: pretix/control/forms/organizer.py:616 pretix/control/forms/organizer.py:626
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:111
 msgid "Text"
 msgstr "Text"
 
-#: pretix/control/forms/event.py:1109
+#: pretix/control/forms/event.py:1111
 msgid "Subject (sent by admin)"
 msgstr "Predmet (odoslaný administrátorom)"
 
-#: pretix/control/forms/event.py:1114
+#: pretix/control/forms/event.py:1116
 msgid "Subject (sent by admin to attendee)"
 msgstr "Predmet (odoslaný administrátorom účastníkovi)"
 
-#: pretix/control/forms/event.py:1119
+#: pretix/control/forms/event.py:1121
 msgid "Text (sent by admin)"
 msgstr "Text (odoslaný správcom)"
 
-#: pretix/control/forms/event.py:1124
+#: pretix/control/forms/event.py:1126
 msgid "Subject (requested by user)"
 msgstr "Predmet (požadovaný používateľom)"
 
-#: pretix/control/forms/event.py:1129
+#: pretix/control/forms/event.py:1131
 msgid "Text (requested by user)"
 msgstr "Text (vyžiadaný používateľom)"
 
-#: pretix/control/forms/event.py:1141
+#: pretix/control/forms/event.py:1143
 msgid "Text (if order will expire automatically)"
 msgstr "Text (ak objednávka vyprší automaticky)"
 
-#: pretix/control/forms/event.py:1146
+#: pretix/control/forms/event.py:1148
 msgid "Subject (if order will expire automatically)"
 msgstr "Predmet (ak objednávka automaticky vyprší)"
 
-#: pretix/control/forms/event.py:1151
+#: pretix/control/forms/event.py:1153
 msgid "Text (if order will not expire automatically)"
 msgstr "Text (ak objednávka nevyprší automaticky)"
 
-#: pretix/control/forms/event.py:1156
+#: pretix/control/forms/event.py:1158
 msgid "Subject (if order will not expire automatically)"
 msgstr "Predmet (ak objednávka nevyprší automaticky)"
 
-#: pretix/control/forms/event.py:1161
+#: pretix/control/forms/event.py:1163
 #, fuzzy
 #| msgid "Incomplete payment received: {code}"
 msgid "Subject (if an incomplete payment was received)"
 msgstr "Prijatá neúplná platba: {code}"
 
-#: pretix/control/forms/event.py:1166
+#: pretix/control/forms/event.py:1168
 #, fuzzy
 #| msgid "Incomplete payment received: {code}"
 msgid "Text (if an incomplete payment was received)"
 msgstr "Prijatá neúplná platba: {code}"
 
-#: pretix/control/forms/event.py:1169
+#: pretix/control/forms/event.py:1171
 msgid ""
 "This email only applies to payment methods that can receive incomplete "
 "payments, such as bank transfer."
@@ -13262,7 +13275,7 @@ msgstr ""
 "Tento e-mail sa vzťahuje len na platobné metódy, ktoré môžu prijímať neúplné "
 "platby, napríklad bankový prevod."
 
-#: pretix/control/forms/event.py:1237
+#: pretix/control/forms/event.py:1239
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
@@ -13270,23 +13283,23 @@ msgstr ""
 "Tento e-mail bude odoslaný toľko dní pred začiatkom akcie objednávky. Ak je "
 "pole prázdne, e-mail sa nikdy neodošle."
 
-#: pretix/control/forms/event.py:1241
+#: pretix/control/forms/event.py:1243
 msgid "Subject for received order"
 msgstr "Predmet prijatej objednávky"
 
-#: pretix/control/forms/event.py:1246
+#: pretix/control/forms/event.py:1248
 msgid "Text for received order"
 msgstr "Text prijatej objednávky"
 
-#: pretix/control/forms/event.py:1251
+#: pretix/control/forms/event.py:1253
 msgid "Subject for approved order"
 msgstr "Predmet schválenej objednávky"
 
-#: pretix/control/forms/event.py:1256
+#: pretix/control/forms/event.py:1258
 msgid "Text for approved order"
 msgstr "Text schválenej objednávky"
 
-#: pretix/control/forms/event.py:1259 pretix/control/forms/event.py:1277
+#: pretix/control/forms/event.py:1261 pretix/control/forms/event.py:1279
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
@@ -13295,15 +13308,15 @@ msgstr ""
 "Bezplatné objednávky dostanú namiesto toho šablónu bezplatnej objednávky "
 "uvedenú nižšie."
 
-#: pretix/control/forms/event.py:1281
+#: pretix/control/forms/event.py:1283
 msgid "Subject for approved free order"
 msgstr "Predmet schválenej bezplatnej objednávky"
 
-#: pretix/control/forms/event.py:1286
+#: pretix/control/forms/event.py:1288
 msgid "Text for approved free order"
 msgstr "Text pre schválenú bezplatnú objednávku"
 
-#: pretix/control/forms/event.py:1289 pretix/control/forms/event.py:1307
+#: pretix/control/forms/event.py:1291 pretix/control/forms/event.py:1309
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
@@ -13312,93 +13325,93 @@ msgstr ""
 "nie sú bezplatné, dostanú namiesto toho šablónu objednávky, ktorá nie je "
 "bezplatná, uvedenú vyššie."
 
-#: pretix/control/forms/event.py:1311
+#: pretix/control/forms/event.py:1313
 msgid "Subject for denied order"
 msgstr "Predmet zamietnutej objednávky"
 
-#: pretix/control/forms/event.py:1316
+#: pretix/control/forms/event.py:1318
 msgid "Text for denied order"
 msgstr "Text zamietnutej objednávky"
 
-#: pretix/control/forms/event.py:1409
+#: pretix/control/forms/event.py:1411
 msgid "Ticket code generator"
 msgstr "Generátor kódov vstupeniek"
 
-#: pretix/control/forms/event.py:1410
+#: pretix/control/forms/event.py:1412
 msgid "For advanced users, usually does not need to be changed."
 msgstr "Pre pokročilých používateľov sa zvyčajne nemusí meniť."
 
-#: pretix/control/forms/event.py:1467
+#: pretix/control/forms/event.py:1469
 msgid "Any country"
 msgstr "Ktorákoľvek krajina"
 
-#: pretix/control/forms/event.py:1468
+#: pretix/control/forms/event.py:1470
 msgid "European Union"
 msgstr "Európska únia"
 
-#: pretix/control/forms/event.py:1494
+#: pretix/control/forms/event.py:1496
 msgid "Any customer"
 msgstr "Každý zákazník"
 
-#: pretix/control/forms/event.py:1495
+#: pretix/control/forms/event.py:1497
 msgid "Individual"
 msgstr "Individuálne"
 
-#: pretix/control/forms/event.py:1496
+#: pretix/control/forms/event.py:1498
 msgid "Business"
 msgstr "Obchod"
 
-#: pretix/control/forms/event.py:1497
+#: pretix/control/forms/event.py:1499
 msgid "Business with valid VAT ID"
 msgstr "Podnik s platným IČ DPH"
 
-#: pretix/control/forms/event.py:1503
+#: pretix/control/forms/event.py:1505
 msgid "Charge VAT"
 msgstr "Účtovanie DPH"
 
-#: pretix/control/forms/event.py:1505
+#: pretix/control/forms/event.py:1507
 msgid "No VAT"
 msgstr "Bez DPH"
 
-#: pretix/control/forms/event.py:1506
+#: pretix/control/forms/event.py:1508
 msgid "Sale not allowed"
 msgstr "Predaj nie je povolený"
 
-#: pretix/control/forms/event.py:1507
+#: pretix/control/forms/event.py:1509
 msgid "Order requires approval"
 msgstr "Objednávka vyžaduje schválenie"
 
-#: pretix/control/forms/event.py:1512
+#: pretix/control/forms/event.py:1514
 #, fuzzy
 #| msgid "Default price"
 msgid "Default tax code"
 msgstr "Predvolená cena"
 
-#: pretix/control/forms/event.py:1516
+#: pretix/control/forms/event.py:1518
 msgid "Deviating tax rate"
 msgstr "Odchýlna sadzba dane"
 
-#: pretix/control/forms/event.py:1521 pretix/control/forms/event.py:1525
+#: pretix/control/forms/event.py:1523 pretix/control/forms/event.py:1527
 msgid "Text on invoice"
 msgstr "Text na faktúre"
 
-#: pretix/control/forms/event.py:1545
+#: pretix/control/forms/event.py:1547
 msgid ""
 "A combination of this calculation mode with a non-zero tax rate does not "
 "make sense."
 msgstr ""
 
-#: pretix/control/forms/event.py:1550 pretix/control/forms/event.py:1554
+#: pretix/control/forms/event.py:1552 pretix/control/forms/event.py:1556
 #, fuzzy
 #| msgid "This combination of credentials is not known to our system."
 msgid "This combination of calculation mode and tax code does not make sense."
 msgstr "Táto kombinácia poverení nie je nášmu systému známa."
 
-#: pretix/control/forms/event.py:1619
+#: pretix/control/forms/event.py:1621
 msgid "Pre-selected voucher"
 msgstr "Vopred vybraný poukaz"
 
-#: pretix/control/forms/event.py:1621
+#: pretix/control/forms/event.py:1623
 msgid ""
 "If set, the widget will show products as if this voucher has been entered "
 "and when a product is bought via the widget, this voucher will be used. This "
@@ -13410,11 +13423,11 @@ msgstr ""
 "použitý. To možno použiť napríklad na poskytovanie widgetov, ktoré poskytujú "
 "zľavy alebo odomykajú tajné produkty."
 
-#: pretix/control/forms/event.py:1626
+#: pretix/control/forms/event.py:1628
 msgid "Compatibility mode"
 msgstr "Režim kompatibility"
 
-#: pretix/control/forms/event.py:1628
+#: pretix/control/forms/event.py:1630
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
@@ -13422,28 +13435,28 @@ msgstr ""
 "Náš bežný widget nefunguje vo všetkých nástrojoch na tvorbu webových "
 "stránok. Ak narazíte na problémy, skúste použiť tento režim kompatibility."
 
-#: pretix/control/forms/event.py:1649
+#: pretix/control/forms/event.py:1651
 msgid "The given voucher code does not exist."
 msgstr "Uvedený kód kupónu neexistuje."
 
-#: pretix/control/forms/event.py:1656 pretix/control/forms/organizer.py:112
+#: pretix/control/forms/event.py:1658 pretix/control/forms/organizer.py:112
 #: pretix/control/views/shredder.py:179
 msgid "The slug you entered was not correct."
 msgstr "Zadaný slimák nebol správny."
 
-#: pretix/control/forms/event.py:1691
+#: pretix/control/forms/event.py:1693
 msgid "Ticket downloads"
 msgstr "Stiahnutie vstupeniek"
 
-#: pretix/control/forms/event.py:1692
+#: pretix/control/forms/event.py:1694
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr "Vaši zákazníci si budú môcť stiahnuť svoje vstupenky vo formáte PDF."
 
-#: pretix/control/forms/event.py:1696
+#: pretix/control/forms/event.py:1698
 msgid "Require all attendees to fill in their names"
 msgstr "Požiadajte všetkých účastníkov, aby vyplnili svoje mená"
 
-#: pretix/control/forms/event.py:1697
+#: pretix/control/forms/event.py:1699
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
@@ -13451,11 +13464,11 @@ msgstr ""
 "V predvolenom nastavení sa budeme pýtať na mená, ale nebudeme ich vyžadovať. "
 "V nastaveniach to môžete úplne vypnúť."
 
-#: pretix/control/forms/event.py:1723
+#: pretix/control/forms/event.py:1725
 msgid "Payment via Stripe"
 msgstr "Platba cez Stripe"
 
-#: pretix/control/forms/event.py:1724
+#: pretix/control/forms/event.py:1726
 msgid ""
 "Stripe is an online payments processor supporting credit cards and lots of "
 "other payment options. To accept payments via Stripe, you will need to set "
@@ -13467,11 +13480,11 @@ msgstr ""
 "Stripe, musíte si u nich zriadiť účet, čo pomocou ich jednoduchého rozhrania "
 "trvá menej ako päť minút."
 
-#: pretix/control/forms/event.py:1730
+#: pretix/control/forms/event.py:1732
 msgid "Payment by bank transfer"
 msgstr "Platba bankovým prevodom"
 
-#: pretix/control/forms/event.py:1731
+#: pretix/control/forms/event.py:1733
 msgid ""
 "Your customers will be instructed to wire the money to your account. You can "
 "then import your bank statements to process the payments within pretix, or "
@@ -13481,16 +13494,16 @@ msgstr ""
 "importovať bankové výpisy a spracovať platby v aplikácii pretix alebo ich "
 "manuálne označiť ako zaplatené."
 
-#: pretix/control/forms/event.py:1770
+#: pretix/control/forms/event.py:1772
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
 msgstr "Cena (voliteľné)"
 
-#: pretix/control/forms/event.py:1775
+#: pretix/control/forms/event.py:1777
 msgid "Free"
 msgstr "Bezplatne"
 
-#: pretix/control/forms/event.py:1780
+#: pretix/control/forms/event.py:1782
 msgid "Quantity available"
 msgstr "Dostupné množstvo"
 
@@ -17101,13 +17114,13 @@ msgid "You do not have permission to view this content."
 msgstr "Nemáte povolenie na zobrazenie tohto obsahu."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:44
-#: pretix/control/templates/pretixcontrol/base.html:357
+#: pretix/control/templates/pretixcontrol/base.html:359
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
 msgstr "Momentálne pracujete v mene %(user)s."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:49
-#: pretix/control/templates/pretixcontrol/base.html:362
+#: pretix/control/templates/pretixcontrol/base.html:364
 msgid "Stop impersonating"
 msgstr "Prestaňte sa vydávať za"
 
@@ -17203,6 +17216,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:28
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:66
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:49
 msgid "Continue"
 msgstr "Pokračovať"
 
@@ -17255,7 +17269,7 @@ msgstr "Nastavenie nového hesla"
 #: pretix/control/templates/pretixcontrol/event/payment.html:88
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:36
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:201
-#: pretix/control/templates/pretixcontrol/event/settings.html:472
+#: pretix/control/templates/pretixcontrol/event/settings.html:473
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:145
 #: pretix/control/templates/pretixcontrol/event/tickets.html:73
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
@@ -17321,53 +17335,53 @@ msgstr "Uložiť"
 msgid "Create a new account"
 msgstr "Vytvorenie nového účtu"
 
-#: pretix/control/templates/pretixcontrol/base.html:100
+#: pretix/control/templates/pretixcontrol/base.html:102
 msgid "Toggle navigation"
 msgstr "Prepínanie navigácie"
 
-#: pretix/control/templates/pretixcontrol/base.html:115
-#: pretix/control/templates/pretixcontrol/base.html:138
-#: pretix/control/templates/pretixcontrol/base.html:142
-#: pretix/control/templates/pretixcontrol/base.html:143
+#: pretix/control/templates/pretixcontrol/base.html:117
+#: pretix/control/templates/pretixcontrol/base.html:140
+#: pretix/control/templates/pretixcontrol/base.html:144
+#: pretix/control/templates/pretixcontrol/base.html:145
 msgid "Go to shop"
 msgstr "Prejsť do obchodu"
 
-#: pretix/control/templates/pretixcontrol/base.html:121
-#: pretix/control/templates/pretixcontrol/base.html:149
-#: pretix/control/templates/pretixcontrol/base.html:150
+#: pretix/control/templates/pretixcontrol/base.html:123
+#: pretix/control/templates/pretixcontrol/base.html:151
+#: pretix/control/templates/pretixcontrol/base.html:152
 msgid "Public profile"
 msgstr "Verejný profil"
 
-#: pretix/control/templates/pretixcontrol/base.html:201
+#: pretix/control/templates/pretixcontrol/base.html:203
 msgid "End admin session"
 msgstr "Ukončenie relácie administrátora"
 
-#: pretix/control/templates/pretixcontrol/base.html:213
+#: pretix/control/templates/pretixcontrol/base.html:215
 msgid "Account Settings"
 msgstr "Nastavenia účtu"
 
-#: pretix/control/templates/pretixcontrol/base.html:218
 #: pretix/control/templates/pretixcontrol/base.html:220
+#: pretix/control/templates/pretixcontrol/base.html:222
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:14
 msgid "Log out"
 msgstr "Odhlásenie"
 
-#: pretix/control/templates/pretixcontrol/base.html:246
+#: pretix/control/templates/pretixcontrol/base.html:248
 msgid "Organizer account"
 msgstr "Účet organizátora"
 
-#: pretix/control/templates/pretixcontrol/base.html:269
+#: pretix/control/templates/pretixcontrol/base.html:271
 msgid "Search for events"
 msgstr "Vyhľadávanie podujatí"
 
-#: pretix/control/templates/pretixcontrol/base.html:326
+#: pretix/control/templates/pretixcontrol/base.html:328
 #: pretix/presale/templates/pretixpresale/base.html:54
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:329
+#: pretix/control/templates/pretixcontrol/base.html:331
 #: pretix/presale/templates/pretixpresale/base.html:57
 msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
@@ -17376,7 +17390,7 @@ msgstr ""
 "Internet Explorer je starý prehliadač, ktorý nepodporuje množstvo najnovších "
 "webových technológií a táto webová lokalita ho už nepodporuje."
 
-#: pretix/control/templates/pretixcontrol/base.html:333
+#: pretix/control/templates/pretixcontrol/base.html:335
 #: pretix/presale/templates/pretixpresale/base.html:61
 msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
@@ -17385,18 +17399,18 @@ msgstr ""
 "Prosíme vás, aby ste prešli na niektorý z našich podporovaných prehliadačov, "
 "napríklad Microsoft Edge, Mozilla Firefox, Google Chrome alebo Safari."
 
-#: pretix/control/templates/pretixcontrol/base.html:342
+#: pretix/control/templates/pretixcontrol/base.html:344
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
 "Zanechajte krátky komentár o tom, čo ste robili v nasledujúcich reláciách "
 "administrácie:"
 
-#: pretix/control/templates/pretixcontrol/base.html:373
+#: pretix/control/templates/pretixcontrol/base.html:375
 msgid "Read more"
 msgstr "Prečítajte si viac"
 
-#: pretix/control/templates/pretixcontrol/base.html:390
+#: pretix/control/templates/pretixcontrol/base.html:392
 msgid ""
 "Your event contains <strong>test mode orders</strong> even though "
 "<strong>test mode has been disabled</strong>. You should delete those orders "
@@ -17404,11 +17418,11 @@ msgid ""
 "people from actually buying tickets."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:397
+#: pretix/control/templates/pretixcontrol/base.html:399
 msgid "Show all test mode orders"
 msgstr "Zobraziť všetky objednávky v testovacom režime"
 
-#: pretix/control/templates/pretixcontrol/base.html:405
+#: pretix/control/templates/pretixcontrol/base.html:407
 msgid ""
 "Starting with version 1.2.0, pretix automatically checks for updates in the "
 "background. During this check, anonymous data is transmitted to servers "
@@ -17423,7 +17437,7 @@ msgstr ""
 "v prípade príchodu novej aktualizácie upozornení e-mailom. Táto správa po "
 "kliknutí na ňu zmizne."
 
-#: pretix/control/templates/pretixcontrol/base.html:418
+#: pretix/control/templates/pretixcontrol/base.html:420
 msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
@@ -17431,14 +17445,14 @@ msgstr ""
 "Kliknutím sem vykonáte kontrolu dodržiavania licencie, aby ste sa uistili, "
 "že vaše používanie aplikácie pretix je v súlade s licenciou aplikácie pretix."
 
-#: pretix/control/templates/pretixcontrol/base.html:427
+#: pretix/control/templates/pretixcontrol/base.html:429
 msgid ""
 "The cronjob component of pretix was not executed in the last hours. Please "
 "check that you have completed all installation steps and your cronjob is "
 "executed correctly."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/base.html:436
+#: pretix/control/templates/pretixcontrol/base.html:438
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
@@ -17446,7 +17460,7 @@ msgstr ""
 "pretix je spustený v režime ladenia. Z bezpečnostných dôvodov nikdy "
 "nespúšťajte ladiaci režim na produkčnej inštancii."
 
-#: pretix/control/templates/pretixcontrol/base.html:442
+#: pretix/control/templates/pretixcontrol/base.html:444
 msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
@@ -17454,17 +17468,17 @@ msgstr ""
 "Z bezpečnostných dôvodov si pred pokračovaním zmeňte heslo. Potom budete "
 "presmerovaní na pôvodný cieľ."
 
-#: pretix/control/templates/pretixcontrol/base.html:454
+#: pretix/control/templates/pretixcontrol/base.html:456
 #, python-format
 msgid "Times displayed in %(tz)s"
 msgstr "Časy zobrazené v %(tz)s"
 
-#: pretix/control/templates/pretixcontrol/base.html:460
+#: pretix/control/templates/pretixcontrol/base.html:462
 msgid "running in development mode"
 msgstr "beží v režime vývoja"
 
-#: pretix/control/templates/pretixcontrol/base.html:476
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:44
+#: pretix/control/templates/pretixcontrol/base.html:471
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:38
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
@@ -18571,7 +18585,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
-#: pretix/control/templates/pretixcontrol/event/settings.html:478
+#: pretix/control/templates/pretixcontrol/event/settings.html:479
 msgid "Cancel or delete event"
 msgstr "Zrušenie alebo odstránenie podujatia"
 
@@ -18695,8 +18709,8 @@ msgid "Geo coordinates"
 msgstr "Zemepisné súradnice"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:15
-#: pretix/control/templates/pretixcontrol/event/settings.html:138
-#: pretix/control/templates/pretixcontrol/event/settings.html:280
+#: pretix/control/templates/pretixcontrol/event/settings.html:139
+#: pretix/control/templates/pretixcontrol/event/settings.html:281
 #: pretix/control/templates/pretixcontrol/items/discount.html:35
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:56
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:32
@@ -19383,51 +19397,51 @@ msgstr "Metaúdaje"
 msgid "Localization"
 msgstr "Lokalizácia"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:66
+#: pretix/control/templates/pretixcontrol/event/settings.html:67
 msgid "Customer and attendee data"
 msgstr "Údaje o zákazníkoch a účastníkoch"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:67
+#: pretix/control/templates/pretixcontrol/event/settings.html:68
 msgid "Customer data (once per order)"
 msgstr "Údaje o zákazníkovi (raz za objednávku)"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:83
+#: pretix/control/templates/pretixcontrol/event/settings.html:84
 msgid "Name and address"
 msgstr "Názov a adresa"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:89
+#: pretix/control/templates/pretixcontrol/event/settings.html:90
 msgid "See invoice settings"
 msgstr "Pozrite si nastavenia faktúry"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:95
+#: pretix/control/templates/pretixcontrol/event/settings.html:96
 msgid "Attendee data (once per personalized ticket)"
 msgstr "Údaje o účastníkoch (raz za personalizovanú vstupenku)"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:104
+#: pretix/control/templates/pretixcontrol/event/settings.html:105
 msgid "Custom fields"
 msgstr "Vlastné polia"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:110
+#: pretix/control/templates/pretixcontrol/event/settings.html:111
 msgid "Manage questions"
 msgstr "Správa otázok"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:117
+#: pretix/control/templates/pretixcontrol/event/settings.html:118
 msgid "Form settings"
 msgstr "Nastavenia formulára"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:122
+#: pretix/control/templates/pretixcontrol/event/settings.html:123
 msgid "Changes to existing orders"
 msgstr "Zmeny existujúcich objednávok"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:130
+#: pretix/control/templates/pretixcontrol/event/settings.html:131
 msgid "Texts"
 msgstr "Texty"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:137
+#: pretix/control/templates/pretixcontrol/event/settings.html:138
 msgid "Confirmation text"
 msgstr "Text potvrdenia"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:142
+#: pretix/control/templates/pretixcontrol/event/settings.html:143
 msgid ""
 "These texts need to be confirmed by the user before a purchase is possible. "
 "You could for example link your terms of service here. If you use the Pages "
@@ -19439,16 +19453,16 @@ msgstr ""
 "používania používate funkciu Stránky, toto nastavenie nepotrebujete, pretože "
 "ho môžete nakonfigurovať tam."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:199
+#: pretix/control/templates/pretixcontrol/event/settings.html:200
 msgid "Add confirmation text"
 msgstr "Pridanie potvrdzujúceho textu"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:213
+#: pretix/control/templates/pretixcontrol/event/settings.html:214
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:140
 msgid "Shop design"
 msgstr "Dizajn obchodu"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:231
+#: pretix/control/templates/pretixcontrol/event/settings.html:232
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:56
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:411
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:95
@@ -19456,35 +19470,35 @@ msgstr "Dizajn obchodu"
 msgid "Timeline"
 msgstr "Časová os"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:238
+#: pretix/control/templates/pretixcontrol/event/settings.html:239
 msgid "Display"
 msgstr "Zobrazenie"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:243
+#: pretix/control/templates/pretixcontrol/event/settings.html:244
 msgid "Product list"
 msgstr "Zoznam produktov"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:249
+#: pretix/control/templates/pretixcontrol/event/settings.html:250
 msgctxt "subevents"
 msgid "Calendar and list views"
 msgstr "Zobrazenie kalendára a zoznamu"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:268
+#: pretix/control/templates/pretixcontrol/event/settings.html:269
 #: pretix/control/templates/pretixcontrol/order/index.html:176
 #: pretix/presale/templates/pretixpresale/event/order.html:22
 msgid "Order details"
 msgstr "Podrobnosti o objednávke"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:272
+#: pretix/control/templates/pretixcontrol/event/settings.html:273
 msgid "Other settings"
 msgstr "Iné nastavenia"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:279
+#: pretix/control/templates/pretixcontrol/event/settings.html:280
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:55
 msgid "Footer links"
 msgstr "Odkazy v päte"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:284
+#: pretix/control/templates/pretixcontrol/event/settings.html:285
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:60
 msgid ""
 "These links will be shown in the footer of your ticket shop. You could for "
@@ -19498,16 +19512,16 @@ msgstr ""
 "prepojené automaticky (ak ste ich nakonfigurovali), takže ich sem nemusíte "
 "pridávať."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:338
+#: pretix/control/templates/pretixcontrol/event/settings.html:339
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:119
 msgid "Add link"
 msgstr "Pridať odkaz"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:345
+#: pretix/control/templates/pretixcontrol/event/settings.html:346
 msgid "Cart"
 msgstr "Košík"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:353
+#: pretix/control/templates/pretixcontrol/event/settings.html:354
 msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as hidden products, add-on products or product bundles."
@@ -19516,7 +19530,7 @@ msgstr ""
 "funkciami aplikácie pretix, ako sú skryté produkty, doplnkové produkty alebo "
 "balíky produktov."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:359
+#: pretix/control/templates/pretixcontrol/event/settings.html:360
 msgid ""
 "The waiting list determines availability mainly based on quotas. If you use "
 "a seating plan and your number of available seats is less than the available "
@@ -19528,7 +19542,7 @@ msgstr ""
 "môže nastať situácia, že ľuďom z čakacej listiny bude zaslaný e-mail, ale "
 "napriek tomu si nebudú môcť rezervovať miesto."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:366
+#: pretix/control/templates/pretixcontrol/event/settings.html:367
 msgid ""
 "Specifically, this means the waiting list is not safe to use together with "
 "the minimum distance feature of our seating plan module."
@@ -19536,24 +19550,24 @@ msgstr ""
 "Konkrétne to znamená, že čakací zoznam nie je bezpečné používať spolu s "
 "funkciou minimálnej vzdialenosti modulu plánu sedenia."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:377
+#: pretix/control/templates/pretixcontrol/event/settings.html:378
 #, fuzzy
 #| msgctxt "sendmail_form"
 #| msgid "Waiting for"
 msgid "Waiting customers"
 msgstr "Čakanie na"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:383
+#: pretix/control/templates/pretixcontrol/event/settings.html:384
 #, fuzzy
 #| msgid "Enable waiting list"
 msgid "Manage waiting list"
 msgstr "Povolenie čakacieho zoznamu"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:396
+#: pretix/control/templates/pretixcontrol/event/settings.html:397
 msgid "Item metadata"
 msgstr "Metadáta položky"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:398
+#: pretix/control/templates/pretixcontrol/event/settings.html:399
 msgid ""
 "You can here define a set of metadata properties (i.e. variables) that you "
 "can later set for your items and re-use in places like ticket layouts. This "
@@ -19564,17 +19578,17 @@ msgstr ""
 "napríklad rozloženia vstupeniek. Toto je užitočná úspora času, ak vytvárate "
 "veľmi veľa položiek."
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:418
-#: pretix/control/templates/pretixcontrol/event/settings.html:446
+#: pretix/control/templates/pretixcontrol/event/settings.html:419
+#: pretix/control/templates/pretixcontrol/event/settings.html:447
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:22
 msgid "Property"
 msgstr "Vlastníctvo"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:465
+#: pretix/control/templates/pretixcontrol/event/settings.html:466
 msgid "Add property"
 msgstr "Pridať vlastnosť"
 
-#: pretix/control/templates/pretixcontrol/event/settings.html:483
+#: pretix/control/templates/pretixcontrol/event/settings.html:484
 #: pretix/control/templates/pretixcontrol/events/index.html:165
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:130
 msgid "Clone event"
@@ -28750,7 +28764,7 @@ msgid "Upload time"
 msgstr "Čas nahrávania"
 
 #: pretix/plugins/checkinlists/exporters.py:826
-#: pretix/presale/templates/pretixpresale/event/index.html:249
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:145
 msgid "OK"
 msgstr "OK"
 
@@ -31664,8 +31678,8 @@ msgid "Contact event organizer"
 msgstr "Kontakt na organizátora podujatia"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:225
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:100
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:119
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:115
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:134
 #: pretix/presale/templates/pretixpresale/organizers/base.html:103
 msgid "Privacy policy"
 msgstr "Zásady ochrany osobných údajov"
@@ -32178,17 +32192,6 @@ msgstr ""
 msgid "incl. %(rate)s%% %(name)s"
 msgstr "vrátane %(rate)s%% %(name)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:200
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:207
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:216
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:223
-#: pretix/presale/templates/pretixpresale/event/voucher.html:228
-#: pretix/presale/templates/pretixpresale/event/voucher.html:235
-#: pretix/presale/templates/pretixpresale/event/voucher.html:252
-#, python-format
-msgid "Add %(item)s, %(var)s to cart"
-msgstr "Pridať %(item)s, %(var)s do košíka"
-
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:203
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:349
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:219
@@ -32216,17 +32219,6 @@ msgstr "Zníženie množstva"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:399
 msgid "Increase quantity"
 msgstr "Zvýšenie množstva"
-
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:346
-#: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:353
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:368
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:375
-#: pretix/presale/templates/pretixpresale/event/voucher.html:383
-#: pretix/presale/templates/pretixpresale/event/voucher.html:390
-#: pretix/presale/templates/pretixpresale/event/voucher.html:408
-#, python-format
-msgid "Add %(item)s to cart"
-msgstr "Pridať %(item)s do košíka"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:379
 msgid "There are no add-ons available for this product."
@@ -32421,14 +32413,13 @@ msgstr ""
 "Vstupenky v košíku už nie sú pre Vás rezervované. Objednávku môžete "
 "dokončiť, ak sú stále k dispozícii."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:508
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #, fuzzy
-#| msgctxt "refund_source"
-#| msgid "External"
-msgid "Extend"
-msgstr "Externá stránka"
+#| msgid "Event description"
+msgid "Extend reservation"
+msgstr "Popis podujatia"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:511
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
 msgstr "Prehľad objednaných produktov."
 
@@ -32447,7 +32438,7 @@ msgid "Empty cart"
 msgstr "Vyprázdniť nákupný košík"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:68
-#: pretix/presale/templates/pretixpresale/event/index.html:257
+#: pretix/presale/templates/pretixpresale/event/index.html:250
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
 msgstr "Uplatnenie poukazu"
@@ -32662,37 +32653,35 @@ msgstr "Stiahnite si vstupenky pomocou tlačidiel nižšie."
 msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr "Vstupenky si budete môcť stiahnuť tu od %(date)s."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:6
 msgid "Where does the event happen?"
 msgstr "Kde sa podujatie koná?"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:13
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:14
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:16
 msgid "When does the event happen?"
 msgstr "Kedy sa podujatie uskutoční?"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:20
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:25
 #, python-format
 msgid "Begin: %(time)s"
 msgstr "Začiatok: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:29
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:34
 #, python-format
 msgid "End: %(time)s"
 msgstr "Koniec: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:41
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:46
 #, python-format
 msgid "Admission: %(time)s"
 msgstr "Vstup: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:49
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:54
 #, python-format
 msgid "Admission: %(datetime)s"
 msgstr "Vstup :%(datetime)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:62
+#: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:67
 msgid "Add to Calendar"
 msgstr "Pridať do kalendára"
 
@@ -32918,23 +32907,11 @@ msgstr ""
 msgid "Add to cart"
 msgstr "Pridať do košíka"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:246
-#, fuzzy
-#| msgid "You did not select any products."
-msgid "You didn't select any ticket."
-msgstr "Nevybrali ste žiadne produkty."
-
-#: pretix/presale/templates/pretixpresale/event/index.html:247
-msgid ""
-"Please tick a checkbox or enter a quantity for one of the ticket types to "
-"add to the cart."
-msgstr ""
-
-#: pretix/presale/templates/pretixpresale/event/index.html:264
+#: pretix/presale/templates/pretixpresale/event/index.html:257
 msgid "If you have already ordered a ticket"
 msgstr "Ak ste si už objednali vstupenku"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:268
+#: pretix/presale/templates/pretixpresale/event/index.html:261
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -32946,7 +32923,7 @@ msgstr ""
 "objednávky. Ak odkaz nemôžete nájsť, kliknite na nasledujúce tlačidlo a "
 "požiadajte o opätovné zaslanie odkazu na vašu objednávku."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:277
+#: pretix/presale/templates/pretixpresale/event/index.html:270
 msgid "Resend order link"
 msgstr "Opätovné odoslanie odkazu na objednávku"
 
@@ -33715,33 +33692,45 @@ msgstr "účet zákazníka"
 msgid "View customer account"
 msgstr "Zobrazenie zákazníckeho účtu"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:17
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "We've started the requested process in a new window."
 msgstr "Spustili sme požadovaný proces v novom okne."
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:20
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:21
 msgid "If you do not see the new window, we can help you launch it again."
 msgstr ""
 "Ak sa vám nové okno nezobrazí, môžeme vám pomôcť s jeho opätovným spustením."
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:25
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:26
 msgid "Open window again"
 msgstr "Opätovné otvorenie okna"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:29
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:30
 msgid ""
 "Once the process in the new window has been completed, you can continue here."
 msgstr "Po dokončení procesu v novom okne môžete pokračovať tu."
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:65
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:47
+#, fuzzy
+#| msgid "Please select how you want to pay."
+msgid "Please let us know you're still there."
+msgstr "Vyberte spôsob platby."
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:59
+#, fuzzy
+#| msgid "Closed"
+msgid "Close"
+msgstr "Uzavreté"
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:80
 msgid "Adjust settings in detail"
 msgstr "Podrobná úprava nastavení"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:70
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:85
 msgid "Required cookies"
 msgstr "Požadované súbory cookie"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:74
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:89
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
@@ -33749,29 +33738,41 @@ msgstr ""
 "funkčné súbory cookie (napr. nákupný košík, prihlásenie, platba, jazykové "
 "preferencie) a technické súbory cookie (napr. bezpečnostné účely)"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:88
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:103
 msgctxt "cookie_usage"
 msgid "Functionality"
 msgstr "Funkčnosť"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:90
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:105
 msgctxt "cookie_usage"
 msgid "Analytics"
 msgstr "Analytika"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:92
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:107
 msgctxt "cookie_usage"
 msgid "Marketing"
 msgstr "Marketing"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:94
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:109
 msgctxt "cookie_usage"
 msgid "Social features"
 msgstr "Sociálne funkcie"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:110
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:125
 msgid "Save selection"
 msgstr "Uložiť výber"
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:142
+#, fuzzy
+#| msgid "You did not select any products."
+msgid "You didn't select any ticket."
+msgstr "Nevybrali ste žiadne produkty."
+
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:143
+msgid ""
+"Please tick a checkbox or enter a quantity for one of the ticket types to "
+"add to the cart."
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -34074,7 +34075,7 @@ msgstr "Táto funkcia nie je povolená."
 msgid "The selected organizer was not found."
 msgstr "Vybraný organizátor nebol nájdený."
 
-#: pretix/presale/views/__init__.py:272
+#: pretix/presale/views/__init__.py:275
 #, python-brace-format
 msgid ""
 "Your selected payment method can only be used for a payment of at least "
@@ -34104,29 +34105,29 @@ msgstr "Váš košík bol aktualizovaný."
 msgid "Your cart is now empty."
 msgstr "Váš košík je teraz prázdny."
 
-#: pretix/presale/views/cart.py:547
+#: pretix/presale/views/cart.py:553
 #, fuzzy
 #| msgid "Your cart has been updated."
 msgid "Your cart timeout was extended."
 msgstr "Váš košík bol aktualizovaný."
 
-#: pretix/presale/views/cart.py:562
+#: pretix/presale/views/cart.py:568
 msgid "The products have been successfully added to your cart."
 msgstr "Produkty boli úspešne pridané do vášho košíka."
 
-#: pretix/presale/views/cart.py:586 pretix/presale/views/event.py:540
+#: pretix/presale/views/cart.py:592 pretix/presale/views/event.py:540
 #: pretix/presale/views/widget.py:377
 msgid "Tickets for this event cannot be purchased on this sales channel."
 msgstr ""
 "Vstupenky na toto podujatie nie je možné zakúpiť v tomto predajnom kanáli."
 
-#: pretix/presale/views/cart.py:725
+#: pretix/presale/views/cart.py:731
 msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
 msgstr ""
 
-#: pretix/presale/views/cart.py:753
+#: pretix/presale/views/cart.py:759
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
 msgstr "Uvedený dátum sa nám nepodarilo nájsť."
@@ -34438,6 +34439,20 @@ msgstr "Prístup na zápis"
 #: pretix/settings.py:802
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, python-format
+#~ msgid "Add %(item)s, %(var)s to cart"
+#~ msgstr "Pridať %(item)s, %(var)s do košíka"
+
+#, python-format
+#~ msgid "Add %(item)s to cart"
+#~ msgstr "Pridať %(item)s do košíka"
+
+#, fuzzy
+#~| msgctxt "refund_source"
+#~| msgid "External"
+#~ msgid "Extend"
+#~ msgstr "Externá stránka"
 
 #~ msgid "Reset password"
 #~ msgstr "Obnovenie hesla"
