@@ -28,7 +28,7 @@ from functools import cached_property
 from itertools import groupby
 
 import sentry_sdk
-from django.db import transaction, DatabaseError
+from django.db import DatabaseError, transaction
 from django.db.models import F, Window
 from django.db.models.functions import RowNumber
 from django.dispatch import receiver
