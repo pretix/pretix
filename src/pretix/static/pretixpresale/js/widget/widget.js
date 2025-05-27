@@ -16,6 +16,8 @@ var strings = {
     'quantity': django.pgettext('widget', 'Quantity'),
     'quantity_dec': django.pgettext('widget', 'Decrease quantity'),
     'quantity_inc': django.pgettext('widget', 'Increase quantity'),
+    'filter_events_by': django.pgettext('widget', 'Filter events by'),
+    'filter': django.pgettext('widget', 'Filter'),
     'price': django.pgettext('widget', 'Price'),
     'original_price': django.pgettext('widget', 'Original price: %s'),
     'new_price': django.pgettext('widget', 'New price: %s'),
@@ -229,24 +231,19 @@ Vue.component('availbox', {
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!unavailability_reason_message && avail[0] === 100">'
-        + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1 && $root.single_item_select == \'button\'">'
+        + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1">'
         + '<input ref="quantity" type="checkbox" value="1" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '<span class="pretix-widget-icon-cart" aria-hidden="true"></span> ' + strings.select
         + '</label>'
-        + '<label class="pretix-widget-item-count-single-label" v-else-if="order_max === 1">'
-        + '<input ref="quantity" type="checkbox" value="1" :name="input_name"'
-        + '       v-bind:aria-label="label_select_item"'
-        + '>'
-        + '</label>'
         + '<div :class="count_group_classes" v-else role="group" v-bind:aria-label="item.name">'
-        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
+        + '<button type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
         + '<input ref="quantity" type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
         + '       v-bind:aria-labelledby="aria_labelledby"'
         + '       >'
-        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" v-bind:aria-label="inc_label"><span>+</span></button>'
+        + '<button type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" v-bind:aria-label="inc_label"><span>+</span></button>'
         + '</div>'
         + '</div>'
         + '</div>'),
@@ -274,11 +271,6 @@ Vue.component('availbox', {
         },
         inc_label: function () {
             return '+ ' + (this.item.has_variations ? this.variation.value : this.item.name) + ': ' + strings.quantity_inc;
-        },
-        count_group_classes: function () {
-            return {
-                'pretix-widget-item-count-group': !this.$root.use_native_spinners
-            }
         },
         unavailability_reason_message: function () {
             var reason = this.item.current_unavailability_reason || this.variation?.current_unavailability_reason;
@@ -1207,25 +1199,12 @@ Vue.component('pretix-widget-event-form', {
 Vue.component('pretix-widget-event-list-filter-field', {
     template: ('<div class="pretix-widget-event-list-filter-field">'
         + '<label :for="id">{{ field.label }}</label>'
-        + '<select :id="id" :name="field.key" @change="onChange($event)" :value="currentValue">'
+        + '<select :id="id" :name="field.key" :value="currentValue">'
         + '<option v-for="choice in field.choices" :value="choice[0]">{{ choice[1] }}</option>'
         + '</select>'
         + '</div>'),
     props: {
         field: Object
-    },
-    methods: {
-        onChange: function(event) {
-            var filterParams = new URLSearchParams(this.$root.filter);
-            if (event.target.value) {
-                filterParams.set(this.field.key, event.target.value);
-            } else {
-                filterParams.delete(this.field.key);
-            }
-            this.$root.filter = filterParams.toString();
-            this.$root.loading++;
-            this.$root.reload();
-        },
     },
     computed: {
         id: function () {
@@ -1239,9 +1218,29 @@ Vue.component('pretix-widget-event-list-filter-field', {
 });
 
 Vue.component('pretix-widget-event-list-filter-form', {
-    template: ('<div class="pretix-widget-event-list-filter-form">'
-        + '<pretix-widget-event-list-filter-field v-for="field in $root.meta_filter_fields" :field="field" :key="field.key"></pretix-widget-event-list-filter-field>'
-        + '</div>'),
+    template: ('<form ref="filterform" class="pretix-widget-event-list-filter-form" @submit="onSubmit">'
+            + '<fieldset class="pretix-widget-event-list-filter-fieldset">'
+                + '<legend>' + strings.filter_events_by + '</legend>'
+                + '<pretix-widget-event-list-filter-field v-for="field in $root.meta_filter_fields" :field="field" :key="field.key"></pretix-widget-event-list-filter-field>'
+                + '<button>' + strings.filter + '</button>'
+            + '</fieldset>'
+        + '</form>'),
+    methods: {
+        onSubmit: function(e) {
+            e.preventDefault();
+            var formData = new FormData(this.$refs.filterform);
+            var filterParams = new URLSearchParams(formData);
+            formData.forEach(function (value, key) {
+                if (value == "") {
+                    filterParams.delete(key);
+                }
+            });
+
+            this.$root.filter = filterParams.toString();
+            this.$root.loading++;
+            this.$root.reload();
+        },
+    },
 });
 
 Vue.component('pretix-widget-event-list-entry', {
@@ -1768,7 +1767,7 @@ Vue.component('pretix-widget', {
             return {
                 'pretix-widget': true,
                 'pretix-widget-mobile': this.mobile,
-                'pretix-widget-use-custom-spinners': !this.$root.use_native_spinners
+                'pretix-widget-use-custom-spinners': true,
             };
         }
     }
@@ -1930,7 +1929,6 @@ var shared_root_methods = {
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
-                root.use_native_spinners = data.use_native_spinners;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
@@ -2239,7 +2237,6 @@ var create_widget = function (element, html_id=null) {
     var items = element.attributes.items ? element.attributes.items.value : null;
     var variations = element.attributes.variations ? element.attributes.variations.value : null;
     var categories = element.attributes.categories ? element.attributes.categories.value : null;
-    var single_item_select = element.getAttribute("single-item-select") || "checkbox";
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
@@ -2286,8 +2283,6 @@ var create_widget = function (element, html_id=null) {
                 variation_filter: variations,
                 voucher_code: voucher,
                 display_net_prices: false,
-                use_native_spinners: false,
-                single_item_select: single_item_select,
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,
