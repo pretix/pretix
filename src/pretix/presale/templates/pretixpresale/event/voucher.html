@@ -98,11 +98,11 @@
                                             </a>
                                         {% endif %}
                                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                            <h4>
+                                            <h4 id="item-{{ item.pk }}-legend">
                                                 {{ item.name }}
                                             </h4>
                                             {% if item.description %}
-                                                <div class="product-description">
+                                                <div id="item-{{ item.pk }}-description" class="product-description">
                                                     {{ item.description|localize|rich_text }}
                                                 </div>
                                             {% endif %}
