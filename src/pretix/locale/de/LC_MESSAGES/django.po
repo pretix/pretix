@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-27 10:14+0000\n"
-"PO-Revision-Date: 2025-05-27 10:39+0000\n"
+"PO-Revision-Date: 2025-05-27 10:40+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -17797,8 +17797,7 @@ msgstr "im Entwicklermodus"
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
-"Wenn dies länger als ein paar Minuten dauert, kontaktieren Sie uns bitte."
+msgstr "Wenn dies länger als einige Minuten dauert, kontaktiere uns bitte."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
