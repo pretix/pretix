@@ -170,6 +170,7 @@
   .pretix-widget-info-message {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
     padding: 10px;
     text-align: left;
     margin: 10px 0;
@@ -177,6 +178,15 @@
     border: 2px solid $brand-info;
     color: $state-info-text;
     border-radius: $alert-border-radius;
+  }
+  &.pretix-widget-mobile {
+    .pretix-widget-info-message {
+      flex-direction: column;
+    }
+    .pretix-widget-resume-button {
+      margin-top: 10px;
+      margin-left: 0;
+    }
   }
 
   .pretix-widget-error-message {
