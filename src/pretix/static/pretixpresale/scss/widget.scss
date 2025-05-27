@@ -628,13 +628,19 @@
 
       .pretix-widget-event-week-col {
         flex: 1;
-        margin: 0 5px;
+        margin: 0;
 
         &:first-child {
           margin-left: 0;
         }
         &:last-child {
           margin-right: 0;
+        }
+        &:nth-child(even) {
+          background-color: $table-bg-accent;
+        }
+        .pretix-widget-event-calendar-events {
+          margin: 4px;
         }
       }
     }
@@ -688,15 +694,33 @@
 
     .pretix-widget-event-calendar-table {
       width: 100%;
+      border-spacing: 0;
 
       th, td {
         width: 14.285714285714286%;
         vertical-align: top;
-        padding: 10px 5px;
+        padding: 4px;
+        border-bottom: 1px solid $table-border-color;
+      }
+      th {
+        border-bottom-width: 2px;
+        color: $text-muted;
+      }
+      td:has(.pretix-widget-event-calendar-day):nth-child(even) {
+        background: $table-bg-accent;
       }
     }
     .pretix-widget-event-calendar-day {
       font-weight: bold;
+      font-size: 86%;
+      padding: 5px 5px 1em;
+    }
+    .pretix-widget-event-week-table .pretix-widget-event-calendar-day {
+      padding-bottom: 5px;
+      background-color: #fff;
+      border-bottom: 2px solid $table-border-color;
+      color: $text-muted;
+      font-size: 100%;
     }
   }
 
@@ -1004,7 +1028,7 @@
         display: block;
       }
     }
-    td.pretix-widget-has-events {
+    td.pretix-widget-has-events .pretix-widget-event-calendar-day {
       background: var(--status-bg-color, #fff);
       color: var(--status-text-color, #000);
       border: 1px solid var(--status-border-color, inherit);
