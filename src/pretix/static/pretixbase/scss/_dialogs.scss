@@ -172,3 +172,25 @@ body.has-modal-dialog .container, body.has-modal-dialog #wrapper {
         color: $brand-primary;
     }
 }
+
+#lightbox-dialog {
+  width: fit-content;
+  max-width: 80%;
+  min-width: 24em;
+  .modal-card-content {
+    padding: 2.5em;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+  }
+  figcaption {
+    margin-top: 1em;
+  }
+}
