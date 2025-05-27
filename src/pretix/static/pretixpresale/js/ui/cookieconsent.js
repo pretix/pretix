@@ -67,7 +67,7 @@ $(function () {
         save_for_session_only = !!window.localStorage[storage_key];
     } else if (window.localStorage[storage_key]) {
         // The user made a specific selection, let's use that.
-        storage_val = JSON.parse(window.localStorage[storage_key]);
+        storage_val = JSON.parse(window.localStorage[storage_key]) || {};
         consent_source = 'localStorage';
         save_for_session_only = false;
     } else {
