@@ -229,11 +229,13 @@ class CartMixin:
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()
+            max_expiry_extend = min((p.max_extend for p in positions if p.max_extend), default=None)
             total_seconds_left = max(first_expiry - now(), timedelta()).total_seconds()
             minutes_left = int(total_seconds_left // 60)
             seconds_left = int(total_seconds_left % 60)
         except AttributeError:
             first_expiry = None
+            max_expiry_extend = None
             minutes_left = None
             seconds_left = None
 
@@ -250,6 +252,7 @@ class CartMixin:
             'minutes_left': minutes_left,
             'seconds_left': seconds_left,
             'first_expiry': first_expiry,
+            'max_expiry_extend': max_expiry_extend,
             'is_ordered': bool(order),
             'itemcount': sum(c.count for c in positions if not c.addon_to),
             'current_selected_payments': [p for p in self.current_selected_payments(total) if p.get('multi_use_supported')]

@@ -4,18 +4,19 @@
 {% load escapejson %}
 {% load icon %}
 {% load dialog %}
-<div id="ajaxerr">
+<div id="ajaxerr" class="modal-wrapper" hidden>
 </div>
-<div id="popupmodal" hidden aria-live="polite">
+<div id="popupmodal" class="modal-wrapper" hidden aria-live="polite" role="dialog"
+        aria-labelledby="popupmodal-title">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-window-restore big-icon" aria-hidden="true"></i>
         </div>
         <div class="modal-card-content">
             <div>
-                <h3>
+                <h2 id="popupmodal-title" class="h3">
                     {% trans "We've started the requested process in a new window." %}
-                </h3>
+                </h2>
                 <p class="text">
                     {% trans "If you do not see the new window, we can help you launch it again." %}
                 </p>
@@ -32,20 +33,21 @@
         </div>
     </div>
 </div>
-<div id="loadingmodal" hidden aria-live="polite">
-    <div class="modal-card">
-        <div class="modal-card-icon">
-            <i class="fa fa-cog big-rotating-icon" aria-hidden="true"></i>
-        </div>
-        <div class="modal-card-content">
-            <h3 id="loadingmodal-label"></h3>
-            <div id="loadingmodal-description">
-                <p class="text"></p>
-                <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
-            </div>
+
+{% dialog "loadingmodal" "" "" icon="cog rotating" %}
+    <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
+    <div class="progress">
+        <div class="progress-bar progress-bar-success">
         </div>
     </div>
-</div>
+    <div class="steps">
+    </div>
+{% enddialog %}
+
+{% trans "Please let us know you're still there." as label_cart_extend_dialog %}
+{% dialog "dialog-cart-extend" label_cart_extend_dialog "" icon="clock-o" alert=true %}
+    <p class="modal-card-confirm"><button class="btn btn-lg btn-primary">{% trans "Continue" %}</button></p>
+{% enddialog %}
 
 <dialog id="lightbox-dialog" role="alertdialog" aria-labelledby="lightbox-label">
     <form method="dialog" class="modal-card">
