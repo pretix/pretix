@@ -197,7 +197,7 @@
                                                         {% endif %}
                                                         id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
-                                                        aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend"
+                                                        aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend"
                                                         aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
@@ -214,7 +214,7 @@
                                                     max="{{ c.max_count }}"
                                                     id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
-                                                    aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend">
+                                                    aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend">
                                                 <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}">+</button>
                                             </fieldset>
                                         {% endif %}

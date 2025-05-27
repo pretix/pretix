@@ -213,7 +213,7 @@
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend"
+                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend"
                                                        {% if var.description %} aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
@@ -231,7 +231,7 @@
                                                        max="{{ var.order_max }}"
                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend">
+                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend">
                                                 <button type="button" data-step="1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
                                             </fieldset>

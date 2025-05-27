@@ -225,7 +225,7 @@
                                                                         id="variation_{{ item.id }}_{{ var.id }}"
                                                                         name="variation_{{ item.id }}_{{ var.id }}"
                                                                         {% if options == 1 %}checked{% endif %}
-                                                                        aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend"
+                                                                        aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend item-{{ item.pk }}-legend"
                                                                         {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                                 {% trans "Select" context "checkbox" %}
@@ -239,7 +239,7 @@
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
                                                                     name="variation_{{ item.id }}_{{ var.id }}"
                                                                     {% if options == 1 %}value="1"{% endif %}
-                                                                    aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend">
+                                                                    aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend item-{{ item.pk }}-legend">
                                                                 <button type="button" data-step="1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}">+</button>
                                                             </fieldset>
                                                         {% endif %}
