@@ -1,4 +1,4 @@
-/*global $, waitingDialog, gettext */
+/*global $, gettext */
 var async_task_id = null;
 var async_task_timeout = null;
 var async_task_check_url = null;
