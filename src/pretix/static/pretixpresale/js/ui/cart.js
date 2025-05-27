@@ -27,7 +27,7 @@ var cart = {
         cart._expiry_notified = true;
     },
 
-    draw_deadline: function (renewed="") {
+    draw_deadline: function () {
         function pad(n, width, z) {
             z = z || '0';
             n = n + '';
