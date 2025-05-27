@@ -237,7 +237,7 @@ Vue.component('availbox', {
         + '>'
         + '<span class="pretix-widget-icon-cart" aria-hidden="true"></span> ' + strings.select
         + '</label>'
-        + '<div :class="count_group_classes" v-else role="group" v-bind:aria-label="item.name">'
+        + '<div class="pretix-widget-item-count-group" v-else role="group" v-bind:aria-label="item.name">'
         + '<button type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
         + '<input ref="quantity" type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
