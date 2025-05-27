@@ -578,41 +578,59 @@
       padding: 7px 5px 3px;
       box-sizing: border-box;
       span {
+        position: relative;
         display: inline;
-        padding: 2px 6px 3px;
+        padding: 6px 6px 4px 17px;
         font-size: 75%;
         font-weight: bold;
         line-height: 1;
-        color: #fff;
+        color: var(--status-text-color, #000);
+        background-color: var(--status-bg-color, #fff);
+        border: 1px solid var(--status-border-color, #000);
         text-align: center;
         white-space: nowrap;
         vertical-align: baseline;
         border-radius: 4px;
       }
+      span:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 11px;
+        height: 100%;
+        background: var(--status-border-color, #000);
+      }
     }
   }
 
-  .pretix-widget-event-availability-orange .pretix-widget-event-list-entry-availability span,
-  .pretix-widget-event-availability-orange.pretix-widget-event-calendar-event {
-    background-color: $brand-warning;
+  .pretix-widget-event-availability-orange,
+  .pretix-widget-day-availability-orange {
+    --status-bg-color: #{$alert-warning-bg};
+    --status-text-color: #{$alert-warning-text};
+    --status-border-color: #{$alert-warning-border};
   }
-  .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span,
-  .pretix-widget-event-availability-none.pretix-widget-event-calendar-event {
-    background-color: $brand-primary;
+  .pretix-widget-event-availability-none,
+  .pretix-widget-day-availability-none {
+    --status-bg-color: #{$alert-primary-bg};
+    --status-text-color: #{$alert-primary-text};
+    --status-border-color: #{$alert-primary-border};
   }
-  .pretix-widget-event-availability-green .pretix-widget-event-list-entry-availability span,
-  .pretix-widget-event-availability-green.pretix-widget-event-calendar-event {
-    background-color: $brand-success;
+  .pretix-widget-event-availability-green,
+  .pretix-widget-day-availability-green {
+    --status-bg-color: #{$alert-success-bg};
+    --status-text-color: #{$alert-success-text};
+    --status-border-color: #{$alert-success-border};
   }
-  .pretix-widget-event-availability-red .pretix-widget-event-list-entry-availability span,
-  .pretix-widget-event-availability-red.pretix-widget-event-calendar-event {
-    background-color: $brand-danger;
+  .pretix-widget-event-availability-red,
+  .pretix-widget-day-availability-red {
+    --status-bg-color: #{$alert-danger-bg};
+    --status-text-color: #{$alert-danger-text};
+    --status-border-color: #{$alert-danger-border};
   }
-  .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span {
-    border-left: 10px solid $brand-warning;
-  }
-  .pretix-widget-event-availability-low.pretix-widget-event-calendar-event {
-    border-right: 10px solid $brand-warning;
+  .pretix-widget-event-list .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span:before,
+  .pretix-widget-event-calendar .pretix-widget-event-availability-low.pretix-widget-event-calendar-event:before {
+    background: linear-gradient(to bottom, var(--pretix-brand-warning) 1em, var(--status-border-color) 2.5em);
   }
 
   .pretix-widget-event-calendar {
@@ -625,13 +643,19 @@
 
       .pretix-widget-event-week-col {
         flex: 1;
-        margin: 0 5px;
+        margin: 0;
 
         &:first-child {
           margin-left: 0;
         }
         &:last-child {
           margin-right: 0;
+        }
+        &:nth-child(even) {
+          background-color: $table-bg-accent;
+        }
+        .pretix-widget-event-calendar-events {
+          margin: 4px;
         }
       }
     }
@@ -654,12 +678,27 @@
       }
     }
     .pretix-widget-event-calendar-event {
+      position: relative;
       display: block;
       border-radius: 4px;
+      border: 1px solid var(--status-border-color, #000);
+      background-color: var(--status-bg-color, #fff);
+      color: var(--status-text-color, #000);
       padding: 5px;
-      color: white;
+      padding-left: 17px;
       cursor: pointer;
       margin-bottom: 5px;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 11px;
+        height: 100%;
+        background: var(--status-border-color, #000);
+      }
+
       &:last-child {
         margin-bottom: 0;
       }
@@ -668,15 +707,33 @@
 
     .pretix-widget-event-calendar-table {
       width: 100%;
+      border-spacing: 0;
 
       th, td {
         width: 14.285714285714286%;
         vertical-align: top;
-        padding: 10px 5px;
+        padding: 4px;
+        border-bottom: 1px solid $table-border-color;
+      }
+      th {
+        border-bottom-width: 2px;
+        color: $text-muted;
+      }
+      td:has(.pretix-widget-event-calendar-day):nth-child(even) {
+        background: $table-bg-accent;
       }
     }
     .pretix-widget-event-calendar-day {
       font-weight: bold;
+      font-size: 86%;
+      padding: 5px 5px 1em;
+    }
+    .pretix-widget-event-week-table .pretix-widget-event-calendar-day {
+      padding-bottom: 5px;
+      background-color: #fff;
+      border-bottom: 2px solid $table-border-color;
+      color: $text-muted;
+      font-size: 100%;
     }
   }
 
@@ -994,22 +1051,14 @@
         display: block;
       }
     }
-    td.pretix-widget-has-events {
-      background: $brand-primary;
-      color: white;
+    td.pretix-widget-has-events .pretix-widget-event-calendar-day {
+      background: var(--status-bg-color, #fff);
+      color: var(--status-text-color, #000);
+      border: 1px solid var(--status-border-color, inherit);
+      border-top-width: 11px;
+      padding-bottom: 5px;
+      border-radius: $input-border-radius;
       cursor: pointer;
-      &.pretix-widget-day-availability-red {
-        background: $brand-danger;
-      }
-      &.pretix-widget-day-availability-green {
-        background: $brand-success;
-      }
-      &.pretix-widget-day-availability-low {
-        border-right: 5px solid $brand-warning;
-      }
-      &.pretix-widget-day-availability-orange {
-        background: $brand-warning;
-      }
     }
 
     .pretix-widget-event-calendar-head {
