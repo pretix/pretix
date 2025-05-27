@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-21 19:50+0000\n"
 "PO-Revision-Date: 2025-05-27 09:27+0000\n"
-"Last-Translator: Phin Wolkwitz <wolkwitz@rami.io>\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -6075,10 +6075,8 @@ msgid "Cart ID (e.g. session key)"
 msgstr "Warenkorb-ID (z.B. Session-ID)"
 
 #: pretix/base/models/orders.py:3102
-#, fuzzy
-#| msgid "Gift card: Expiration date"
 msgid "Limit for extending expiration date"
-msgstr "Wertgutschein: Ablaufdatum"
+msgstr "Limit für Verlängerung des Ablaufdatums"
 
 #: pretix/base/models/orders.py:3131
 msgid "Cart position"
