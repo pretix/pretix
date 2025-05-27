@@ -1032,7 +1032,8 @@
       background: var(--status-bg-color, #fff);
       color: var(--status-text-color, #000);
       border: 1px solid var(--status-border-color, inherit);
-      border-right-width: 11px;
+      border-top-width: 11px;
+      padding-bottom: 5px;
       border-radius: $input-border-radius;
       cursor: pointer;
     }
