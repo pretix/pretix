@@ -7274,10 +7274,8 @@ msgstr ""
 "Wertgutscheine können nicht benutzt werden um Wertgutscheine zu erwerben."
 
 #: pretix/base/payment.py:1467
-#, fuzzy
-#| msgid "Please enter the correct result."
 msgid "Please enter the code of your gift card."
-msgstr "Bitte den Code ihres Wertgutscheins eingeben."
+msgstr "Bitte geben Sie den Code Ihres Wertgutscheins ein."
 
 #: pretix/base/payment.py:1483 pretix/base/payment.py:1526
 msgid ""
