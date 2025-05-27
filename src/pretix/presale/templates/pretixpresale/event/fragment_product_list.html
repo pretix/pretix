@@ -213,14 +213,14 @@
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
+                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend"
                                                        {% if var.description %} aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
                                             <fieldset class="input-item-count-group">
-                                                <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}</legend>
+                                                <legend class="sr-only">{% trans "Quantity" %}</legend>
                                                 <button type="button" data-step="-1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}, {{ var }}: {% trans "Decrease quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -231,7 +231,7 @@
                                                        max="{{ var.order_max }}"
                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-label="{% trans "Quantity" %}">
+                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend">
                                                 <button type="button" data-step="1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
                                             </fieldset>
@@ -365,14 +365,14 @@
                                         {% endif %}
                                            {% if not ev.presale_is_running %}disabled{% endif %}
                                            name="{{ form_prefix }}item_{{ item.id }}" id="{{ form_prefix }}item_{{ item.id }}"
-                                           aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
+                                           aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"
                                            {% if item.description %} aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}>
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                         {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
                                 <fieldset class="input-item-count-group">
-                                    <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}</legend>
+                                    <legend class="sr-only">{% trans "Quantity" %}</legend>
                                     <button type="button" data-step="-1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}: {% trans "Decrease quantity" %}"
                                         {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -384,7 +384,7 @@
                                            max="{{ item.order_max }}"
                                            name="{{ form_prefix }}item_{{ item.id }}"
                                            id="{{ form_prefix }}item_{{ item.id }}"
-                                           aria-label="{% trans "Quantity" %}">
+                                           aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend">
                                     <button type="button" data-step="1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}: {% trans "Increase quantity" %}"
                                         {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
                                 </fieldset>
