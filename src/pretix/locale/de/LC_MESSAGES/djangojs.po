@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-27 10:15+0000\n"
-"PO-Revision-Date: 2025-05-22 05:00+0000\n"
+"PO-Revision-Date: 2025-05-27 10:40+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -418,7 +418,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:270
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "Wenn dies länger als einige Minuten dauert, kontaktiere uns bitte."
 
 #: pretix/static/pretixbase/js/asynctask.js:325
 msgid "Close message"
@@ -729,6 +729,8 @@ msgstr "Warenkorb abgelaufen"
 msgid ""
 "Your cart is about to expire. If you want to continue, please click here:"
 msgstr ""
+"Dein Warenkorb läuft gleich ab. Wenn du weitermachen willst, klick bitte "
+"hier:"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:64
 msgid "The items in your cart are reserved for you for one minute."
@@ -741,6 +743,7 @@ msgstr[1] ""
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 msgid "Your cart has expired. If you want to continue, please click here:"
 msgstr ""
+"Dein Warenkorb ist abgelaufen. Wenn du weitermachen willst, klick bitte hier:"
 
 #: pretix/static/pretixpresale/js/ui/main.js:216
 msgid "The organizer keeps %(currency)s %(amount)s"
