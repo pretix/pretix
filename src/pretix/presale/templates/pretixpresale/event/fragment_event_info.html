@@ -4,7 +4,7 @@
 {% if ev.location and show_location %}
     <div class="info-row">
         <div class="info-row-icon" role="img" aria-label="{% trans "Where does the event happen?" %}">
-            {% icon "map-marker fa-fw" %}
+            {% icon "map-marker" %}
         </div>
         <p>
             {{ ev.location|linebreaksbr }}
@@ -14,7 +14,7 @@
 {% if ev.settings.show_dates_on_frontpage %}
     <div class="info-row">
         <div class="info-row-icon" role="img" aria-label="{% trans "When does the event happen?" %}">
-            {% icon "clock-o fa-fw" %}
+            {% icon "clock-o" %}
         </div>
         <p>
             {{ ev.get_date_range_display_as_html }}

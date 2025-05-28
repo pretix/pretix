@@ -298,16 +298,18 @@ a:hover .panel-primary > .panel-heading {
     .info-row-icon,
     & > img {
         position: absolute;
-        top: -5px;
-        left: 0;
+        top: -6px;
+        left: 3px;
         font-size: 26px;
+        text-align: center;
         color: $brand-primary;
         margin-top: 3px;
         width: 26px;
         height: auto;
-        .fa {
-            vertical-align: top;
-        }
+    }
+    .info-row-icon .fa {
+        vertical-align: top;
+        width: auto;
     }
     p {
         margin-left: 40px;
