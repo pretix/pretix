@@ -217,7 +217,7 @@ def widget_js(request, version, lang, **kwargs):
             'lang': lang,
         }))
 
-    cached_js = cache.get('widget_js_data_{}_{}'.format(version, lang))
+    cached_js = cache.get('widget_js_data_v{}_{}'.format(version, lang))
     if cached_js and not settings.DEBUG:
         resp = HttpResponse(cached_js, content_type='text/javascript')
         resp._csp_ignore = True
@@ -233,7 +233,7 @@ def widget_js(request, version, lang, **kwargs):
         try:
             data = default_storage.open(fname).read()
             resp = HttpResponse(data, content_type='text/javascript')
-            cache.set('widget_js_data_{}_{}'.format(version, lang), data, 3600 * 4)
+            cache.set('widget_js_data_v{}_{}'.format(version, lang), data, 3600 * 4)
         except:
             logger.exception('Failed to open widget.js')
 
@@ -247,7 +247,7 @@ def widget_js(request, version, lang, **kwargs):
             )
             gs.settings.set('widget_file_{}_{}'.format(version, lang), 'file://' + newname)
             gs.settings.set('widget_checksum_{}_{}'.format(version, lang), checksum)
-            cache.set('widget_js_data_{}_{}'.format(version, lang), data, 3600 * 4)
+            cache.set('widget_js_data_v{}_{}'.format(version, lang), data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
     resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
