@@ -59,7 +59,7 @@
                 action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}{% if "iframe" in request.GET and not new_tab %}&iframe={{ request.GET.iframe }}{% endif %}{% if "take_cart_id" in request.GET and new_tab %}&take_cart_id={{ request.GET.take_cart_id }}{% endif %}" {% if new_tab %}target="_blank"{% else %}
                 data-asynctask
                 data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
-                class="{% if voucher.seating_available %}has-seating{% endif %}"
+                class="{% if seating_available %}has-seating{% endif %}"
                 data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
             {% endif %}>
             {% csrf_token %}
