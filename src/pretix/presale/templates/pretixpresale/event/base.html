@@ -225,12 +225,14 @@
         <li><a href="{% safelink request.event.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a></li>
     {% endif %}
     {% if request.event.settings.accessibility_url %}
+        {% trans "Accessibility information" as accessibility_title %}
         <li><a href="{% safelink request.event.settings.accessibility_url %}" target="_blank" rel="noopener">
-            {{ request.event.settings.accessibility_title }}
+            {{ request.event.settings.accessibility_title|default:accessibility_title }}
         </a></li>
     {% elif request.event.settings.accessibility_text %}
+        {% trans "Accessibility information" as accessibility_title %}
         <li><a href="{% abseventurl request.organizer "presale:organizer.accessibility" %}" target="_blank" rel="noopener">
-            {{ request.event.settings.accessibility_title }}
+            {{ request.event.settings.accessibility_title|default:accessibility_title }}
         </a></li>
     {% endif %}
     {% if request.event.settings.cookie_consent and cookie_providers %}
