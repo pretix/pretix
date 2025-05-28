@@ -133,6 +133,13 @@ class GiftCardPaymentForm(PaymentProviderForm):
 
             if msg:
                 self.add_error('code', msg)
+                return cleaned_data
+
+            cs = cart_session(self.request)
+            for p in cs.get('payments', []):
+                if p.get('info_data', {}).get('gift_card') == gc.pk:
+                    self.add_error('code', _("This gift card is already used for your payment."))
+                    return cleaned_data
         except GiftCard.DoesNotExist:
             if event.vouchers.filter(code__iexact=code).exists():
                 msg = _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
@@ -1522,10 +1529,6 @@ class GiftCardPayment(BasePaymentProvider):
 
     def _add_giftcard_to_cart(self, cs, gc):
         from pretix.base.services.cart import add_payment_to_cart_session
-        for p in cs.get('payments', []):
-            if p['provider'] == self.identifier and p['info_data']['gift_card'] == gc.pk:
-                messages.error(request, _("This gift card is already used for your payment."))
-                return False
 
         add_payment_to_cart_session(
             cs,
