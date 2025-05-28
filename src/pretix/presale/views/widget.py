@@ -85,7 +85,7 @@ _source_cache_key = None
 
 version_min = 1
 version_max = 2
-version_default = 1  # used for output in widget-embed-code
+version_default = 2  # used for output in widget-embed-code
 
 
 def _get_source_cache_key(version):
