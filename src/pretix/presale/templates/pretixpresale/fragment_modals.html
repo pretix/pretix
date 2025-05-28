@@ -44,9 +44,10 @@
     </div>
 {% enddialog %}
 
-{% trans "Please let us know you're still there." as label_cart_extend_dialog %}
-{% dialog "dialog-cart-extend" label_cart_extend_dialog "" icon="clock-o" alert=true %}
-    <p class="modal-card-confirm"><button class="btn btn-lg btn-primary">{% trans "Continue" %}</button></p>
+{% trans "Your cart is about to expire." as label_cart_extend_dialog %}
+{% trans "You can renew the reservation period up to ten times." as description_cart_extend_dialog %}
+{% dialog "dialog-cart-extend" label_cart_extend_dialog description_cart_extend_dialog icon="clock-o" alert=true %}
+    <p class="modal-card-confirm"><button class="btn btn-lg btn-primary">{% trans "Renew reservation" %}</button></p>
 {% enddialog %}
 
 <dialog id="lightbox-dialog" class="modal-card" role="alertdialog" aria-labelledby="lightbox-label">
