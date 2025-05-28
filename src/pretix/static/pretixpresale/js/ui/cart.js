@@ -56,7 +56,7 @@ var cart = {
         } else {
             if (diff_minutes !== cart._prev_diff_minutes) {
                 if (diff_minutes == 0) {
-                    $("#cart-deadline").text(gettext("Your cart is about to expire. If you want to continue, please click here:"))
+                    $("#cart-deadline").text(gettext("Your cart is about to expire."))
                 } else {
                     $("#cart-deadline").text(
                         cart._renewed_message + " " +
@@ -82,9 +82,15 @@ var cart = {
         $("#cart-extend-button").toggle(can_extend_cart);
         if (can_extend_cart && diff_total_seconds < 45) {
             if (!cart._expiry_notified) cart.show_expiry_notification();
+            $("#dialog-cart-extend-title").text(already_expired
+                ? gettext("Your cart has expired.")
+                : gettext("Your cart is about to expire."));
             $("#dialog-cart-extend-description").text(already_expired
-                ? gettext("Your cart has expired. If you want to continue, please click here:")
-                : gettext("Your cart is about to expire. If you want to continue, please click here:"));
+                ? gettext("The items in your cart are no longer reserved for you. You can still complete your order as long as they're available.")
+                : gettext("Do you want to renew the reservation period?"));
+            $("#dialog-cart-extend .modal-card-confirm button").text(already_expired
+                ? gettext("Continue")
+                : gettext("Renew reservation"));
         }
     },
 
