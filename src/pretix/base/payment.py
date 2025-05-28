@@ -98,10 +98,19 @@ class PaymentProviderForm(Form):
         return cleaned_data
 
 
+class GiftCardPaymentForm(PaymentProviderForm):
+    def clean(self):
+        cleaned_data = super().clean()
+        # TODO: 
+        #self.add_error("code", "Please enter the code of your gift card. ")
+        return cleaned_data
+
+
 class BasePaymentProvider:
     """
     This is the base class for all payment providers.
     """
+    payment_form_template_name = 'pretixpresale/event/checkout_payment_form_default.html'
 
     def __init__(self, event: Event):
         self.event = event
@@ -694,7 +703,7 @@ class BasePaymentProvider:
         :param order: Only set when this is a change to a new payment method for an existing order.
         """
         form = self.payment_form(request)
-        template = get_template('pretixpresale/event/checkout_payment_form_default.html')
+        template = get_template(self.payment_form_template_name)
         ctx = {'request': request, 'form': form}
         return template.render(ctx)
 
@@ -1318,6 +1327,8 @@ class GiftCardPayment(BasePaymentProvider):
     multi_use_supported = True
     execute_payment_needs_user = False
     verbose_name = _("Gift card")
+    payment_form_class = GiftCardPaymentForm
+    payment_form_template_name = 'pretixcontrol/giftcards/checkout.html'
 
     @property
     def public_name(self) -> str:
@@ -1351,6 +1362,19 @@ class GiftCardPayment(BasePaymentProvider):
         return f
 
     @property
+    def payment_form_fields(self):
+        fields = [
+            (
+                "code",
+                forms.CharField(
+                    label=_("Gift card code"),
+                    required=True,
+                ),
+            ),
+        ]
+        return OrderedDict(fields)
+
+    @property
     def test_mode_message(self) -> str:
         return _("In test mode, only test cards will work.")
 
@@ -1359,11 +1383,6 @@ class GiftCardPayment(BasePaymentProvider):
 
     def order_change_allowed(self, order: Order) -> bool:
         return super().order_change_allowed(order) and self.event.organizer.has_gift_cards
-
-    def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
-        return get_template('pretixcontrol/giftcards/checkout.html').render({
-            'request': request,
-        })
 
     def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
         return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
@@ -1458,14 +1477,15 @@ class GiftCardPayment(BasePaymentProvider):
         )
 
     def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
+        form = self.payment_form(request)
+        if not form.is_valid():
+            return False
+
         for p in get_cart(request):
             if p.item.issue_giftcard:
+                form.add_error('code', _("You cannot pay with gift cards when buying a gift card."))
                 messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
                 return
-
-        if not request.POST.get("giftcard"):
-            messages.error(request, _("Please enter the code of your gift card."))
-            return
 
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
