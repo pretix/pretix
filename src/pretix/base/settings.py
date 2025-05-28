@@ -2091,8 +2091,6 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Accessibility information text"),
-            help_text=_("Instead of an URL, you can also configure a text that will be shown within pretix. "
-                        "This will be ignored if a URL is configured."),
             widget=I18nMarkdownTextarea,
         ),
         'serializer_class': I18nURLField,
