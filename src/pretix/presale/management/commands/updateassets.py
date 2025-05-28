@@ -29,7 +29,9 @@ from django.core.management.base import BaseCommand
 from django_scopes import scopes_disabled
 
 from pretix.base.settings import GlobalSettingsObject
-from pretix.presale.views.widget import generate_widget_js, version_min, version_max
+from pretix.presale.views.widget import (
+    generate_widget_js, version_max, version_min,
+)
 
 
 class Command(BaseCommand):
@@ -43,7 +45,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         gs = GlobalSettingsObject()
         for lc, ll in settings.LANGUAGES:
-            for version in range(version_min, version_max+1):
+            for version in range(version_min, version_max + 1):
                 data = generate_widget_js(version, lc).encode()
                 checksum = hashlib.sha1(data).hexdigest()
                 settings_file_key = 'widget_file_v{}_{}'.format(version, lc)
