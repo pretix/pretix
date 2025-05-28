@@ -295,7 +295,8 @@ a:hover .panel-primary > .panel-heading {
     min-height: 30px;
     margin-bottom: 10px;
 
-    .info-row-icon {
+    .info-row-icon,
+    & > img {
         position: absolute;
         top: -5px;
         left: 0;
