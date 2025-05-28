@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-27 10:15+0000\n"
-"PO-Revision-Date: 2025-05-08 10:00+0000\n"
+"PO-Revision-Date: 2025-05-28 08:00+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ko/>\n"
@@ -424,7 +424,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:270
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "몇 분 이상 걸리시면 저희에게 연락해 주시기 바랍니다."
 
 #: pretix/static/pretixbase/js/asynctask.js:325
 msgid "Close message"
@@ -653,7 +653,7 @@ msgstr "당신의 색깔은 대비가 적당하고 읽기에 충분할 것입니
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
-msgstr ""
+msgstr "색상 대비가 흰색이 부족합니다. 사이트 접근성에 영향을 미칩니다."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:430
 #: pretix/static/pretixcontrol/js/ui/main.js:450
@@ -734,6 +734,8 @@ msgstr "카트가 만료되었습니다"
 msgid ""
 "Your cart is about to expire. If you want to continue, please click here:"
 msgstr ""
+"카트가 곧 만료됩니다. 계속하려면 여기를 클릭하세요:(웹사이트에서 사용자의 "
+"활동이 없으면 일정 시간 후에 종료 하는 것을 의미합니다)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:64
 msgid "The items in your cart are reserved for you for one minute."
@@ -747,6 +749,8 @@ msgstr[0] ""
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 msgid "Your cart has expired. If you want to continue, please click here:"
 msgstr ""
+"카트가 만료되었습니다. 계속하려면 여기를 클릭하세요:(웹사이트에서 사용자의 "
+"활동이 없었으므로 일정 시간 후에 종료되었음을 의미합니다)"
 
 #: pretix/static/pretixpresale/js/ui/main.js:216
 msgid "The organizer keeps %(currency)s %(amount)s"
