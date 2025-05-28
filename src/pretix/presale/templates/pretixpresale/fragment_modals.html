@@ -44,9 +44,7 @@
     </div>
 {% enddialog %}
 
-{% trans "Your cart is about to expire." as label_cart_extend_dialog %}
-{% trans "You can renew the reservation period up to ten times." as description_cart_extend_dialog %}
-{% dialog "dialog-cart-extend" label_cart_extend_dialog description_cart_extend_dialog icon="clock-o" alert=true %}
+{% dialog "dialog-cart-extend" "" "" icon="clock-o" alert=true %}
     <p class="modal-card-confirm"><button class="btn btn-lg btn-primary">{% trans "Renew reservation" %}</button></p>
 {% enddialog %}
 
