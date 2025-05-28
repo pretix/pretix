@@ -293,6 +293,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
             max_per_order = sys.maxsize
         else:
             max_per_order = item.max_per_order or int(event.settings.max_items_per_order)
+        if voucher:
+            max_per_order = min(max_per_order, voucher.max_usages - voucher.redeemed)
 
         if item.hidden_if_available:
             q = item.hidden_if_available.availability(_cache=quota_cache)
