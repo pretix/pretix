@@ -16,8 +16,6 @@ var strings = {
     'quantity': django.pgettext('widget', 'Quantity'),
     'quantity_dec': django.pgettext('widget', 'Decrease quantity'),
     'quantity_inc': django.pgettext('widget', 'Increase quantity'),
-    'filter_events_by': django.pgettext('widget', 'Filter events by'),
-    'filter': django.pgettext('widget', 'Filter'),
     'price': django.pgettext('widget', 'Price'),
     'original_price': django.pgettext('widget', 'Original price: %s'),
     'new_price': django.pgettext('widget', 'New price: %s'),
@@ -59,8 +57,6 @@ var strings = {
     'redeem': django.pgettext('widget', 'Redeem'),
     'voucher_code': django.pgettext('widget', 'Voucher code'),
     'close': django.pgettext('widget', 'Close'),
-    'close_checkout': django.pgettext('widget', 'Close checkout'),
-    'cancel_blocked': django.pgettext('widget', 'You cannot cancel this operation. Please wait for loading to finish.'),
     'continue': django.pgettext('widget', 'Continue'),
     'variations': django.pgettext('widget', 'Show variants'),
     'hide_variations': django.pgettext('widget', 'Hide variants'),
@@ -212,7 +208,7 @@ Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
         + '<div class="pretix-widget-availability-unavailable"'
         + '     v-if="item.current_unavailability_reason === \'require_voucher\'">'
-        + '<small><a :href="voucher_jump_link" v-bind:aria-describedby="aria_labelledby">{{unavailability_reason_message}}</a></small>'
+        + '<small><a @click.prevent.stop="focus_voucher_field" role="button" tabindex="0">{{unavailability_reason_message}}</a></small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
         + '     v-else-if="unavailability_reason_message">'
@@ -231,19 +227,24 @@ Vue.component('availbox', {
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!unavailability_reason_message && avail[0] === 100">'
-        + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1">'
-        + '<input ref="quantity" type="checkbox" value="1" :name="input_name"'
+        + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1 && $root.single_item_select == \'button\'">'
+        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '<span class="pretix-widget-icon-cart" aria-hidden="true"></span> ' + strings.select
         + '</label>'
-        + '<div class="pretix-widget-item-count-group" v-else role="group" v-bind:aria-label="item.name">'
-        + '<button type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
-        + '<input ref="quantity" type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
-        + '       :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
-        + '       v-bind:aria-labelledby="aria_labelledby"'
+        + '<label class="pretix-widget-item-count-single-label" v-else-if="order_max === 1">'
+        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
+        + '       v-bind:aria-label="label_select_item"'
+        + '>'
+        + '</label>'
+        + '<div :class="count_group_classes" v-else role="group" v-bind:aria-label="item.name">'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" v-bind:aria-label="dec_label"><span>-</span></button>'
+        + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
+        + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
+        + '       v-bind:aria-labelledby="aria_labelledby" ref="quantity"'
         + '       >'
-        + '<button type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" v-bind:aria-label="inc_label"><span>+</span></button>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" v-bind:aria-label="inc_label"><span>+</span></button>'
         + '</div>'
         + '</div>'
         + '</div>'),
@@ -252,17 +253,15 @@ Vue.component('availbox', {
         variation: Object
     },
     mounted: function() {
-        if (this.$root.itemnum === 1 && !this.$root.has_seating_plan ? 1 : 0) {
-            this.$refs.quantity.value = 1;    
-            if (this.order_max === 1) {
-                this.$refs.quantity.checked = true;
-            }
+        if (this.item.has_variations) {
+            this.$set(this.variation, 'amount_selected', 0);
+        } else {
+            // Automatically set the only available item to be selected.
+            this.$set(this.item, 'amount_selected', this.$root.itemnum === 1 && !this.$root.has_seating_plan ? 1 : 0);
         }
+        this.$root.$emit('amounts_changed')
     },
     computed: {
-        voucher_jump_link: function () {
-            return '#' + this.$root.html_id + '-voucher-input';
-        },
         aria_labelledby: function () {
             return this.$root.html_id + '-item-label-' + this.item.id;
         },
@@ -272,12 +271,40 @@ Vue.component('availbox', {
         inc_label: function () {
             return '+ ' + (this.item.has_variations ? this.variation.value : this.item.name) + ': ' + strings.quantity_inc;
         },
+        count_group_classes: function () {
+            return {
+                'pretix-widget-item-count-group': !this.$root.use_native_spinners
+            }
+        },
         unavailability_reason_message: function () {
             var reason = this.item.current_unavailability_reason || this.variation?.current_unavailability_reason;
             if (reason) {
                 return strings["unavailable_" + reason] || reason;
             }
             return "";
+        },
+        amount_selected: {
+            cache: false,
+            get: function () {
+                var selected = this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
+                if (selected === 0) return undefined;
+                return selected
+            },
+            set: function (value) {
+                // Unary operator to force boolean to integer conversion, as the HTML form submission
+                // needs the value to be integer for all products.
+                value = (+value);
+                if (this.item.has_variations) {
+                    this.variation.amount_selected = value;
+                } else {
+                    this.item.amount_selected = value;
+                }
+                if (this.$refs.quantity) {
+                    // manually set value on quantity as on reload somehow v-model binding breaks
+                    this.$refs.quantity.value = value;
+                }
+                this.$root.$emit("amounts_changed")
+            }
         },
         label_select_item: function () {
             return this.item.has_variations
@@ -314,14 +341,14 @@ Vue.component('availbox', {
         }
     },
     methods: {
+        focus_voucher_field: function () {
+            this.$root.$emit('focus_voucher_field')
+        },
         on_step: function (e) {
             var t = e.target.tagName == 'BUTTON' ? e.target : e.target.closest('button');
             var step = parseFloat(t.getAttribute("data-step"));
             var controls = document.getElementById(t.getAttribute("data-controls"));
-            this.$refs.quantity.value = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (parseInt(this.$refs.quantity.value || "0")) + step));
-            this.$refs.quantity.dispatchEvent(new CustomEvent("change", {
-                bubbles: true,
-            }));
+            this.amount_selected = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (this.amount_selected || 0) + step));
         }
     }
 });
@@ -510,7 +537,12 @@ Vue.component('item', {
         + '<div class="pretix-widget-item-info-col">'
         + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture" :alt="picture_alt_text"></a>'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<strong class="pretix-widget-item-title" :id="item_label_id" role="heading" v-bind:aria-level="headingLevel">{{ item.name }}</strong>'
+        + '<a v-if="item.has_variations && show_toggle" :id="item_label_id" role="heading" v-bind:aria-level="headingLevel" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
+        + '   @click.prevent.stop="expand"'
+        + '>'
+        + '{{ item.name }}'
+        + '</a>'
+        + '<strong v-else class="pretix-widget-item-title" :id="item_label_id" role="heading" v-bind:aria-level="headingLevel">{{ item.name }}</strong>'
         + '<div class="pretix-widget-item-description" :id="item_desc_id" v-if="item.description" v-html="item.description"></div>'
         + '<p class="pretix-widget-item-meta" v-if="item.order_min && item.order_min > 1">'
         + '<small>{{ min_order_str }}</small>'
@@ -534,8 +566,8 @@ Vue.component('item', {
 
         // Availability
         + '<div class="pretix-widget-item-availability-col">'
-        + '<button type="button" class="pretix-widget-collapse-indicator" v-if="show_toggle" @click.prevent.stop="expand"'
-        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'" v-bind:aria-describedby="item_desc_id">{{ variationsToggleLabel }}</button>'
+        + '<a class="pretix-widget-collapse-indicator" v-if="show_toggle" :href="\'#\' + item.id + \'-variants\'" @click.prevent.stop="expand" role="button" tabindex="0"'
+        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">{{ variationsToggleLabel }}</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 
@@ -590,7 +622,7 @@ Vue.component('item', {
                 image: this.item.picture_fullsize,
                 description: this.item.name,
             }
-        },
+        }
     },
     computed: {
         classObject: function () {
@@ -823,54 +855,53 @@ var shared_loading_fragment = (
 );
 
 var shared_iframe_fragment = (
-    '<dialog :class="frameClasses" role="alertdialog" aria-label="'+strings.checkout+'" @close="close" @cancel="cancel">'
+    '<div :class="frameClasses" role="dialog" aria-modal="true" aria-label="'+strings.checkout+'">'
     + '<div class="pretix-widget-frame-loading" v-show="$root.frame_loading">'
-        + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
-        + '<p :class="cancelBlockedClasses"><strong>'+strings.cancel_blocked+'</strong></p>'
+    + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
     + '</div>'
     + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
-        + '<form class="pretix-widget-frame-close" method="dialog"><button aria-label="'+strings.close_checkout+'" autofocus="autofocus">'
-            + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
-        + '</button></form>'
-        + '<iframe frameborder="0" width="650" height="650" @load="iframeLoaded" '
-        + '        :name="$root.parent.widget_id" src="about:blank" v-once'
-        + '        allow="autoplay *; camera *; fullscreen *; payment *"'
-        + '        title="'+strings.checkout+'"'
-        + '        referrerpolicy="origin">'
-        + 'Please enable frames in your browser!'
-        + '</iframe>'
+    + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent.stop="close" role="button" aria-label="'+strings.close+'">'
+    + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+    + '</a></div>'
+    + '<iframe frameborder="0" width="650" height="650" @load="iframeLoaded" '
+    + '        :name="$root.parent.widget_id" src="about:blank" v-once'
+    + '        allow="autoplay *; camera *; fullscreen *; payment *"'
+    + '        title="'+strings.checkout+'"'
+    + '        referrerpolicy="origin">'
+    + 'Please enable frames in your browser!'
+    + '</iframe>'
     + '</div>'
-    + '</dialog>'
+    + '</div>'
 );
 
 var shared_alert_fragment = (
-    '<dialog :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'" @close="errorClose">'
-    + '<form class="pretix-widget-alert-box" method="dialog">'
+    '<div :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'">'
+    + '<transition name="bounce" @after-enter="focusButton">'
+    + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
     + '<p :id="$root.parent.html_id + \'-error-message\'">{{ $root.error_message }}</p>'
-    + '<p><button v-if="$root.error_url_after" value="continue" autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.continue + '</button>'
-    + '<button v-else autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.close + '</button></p>'
-    + '</form>'
-    + '<transition name="bounce">'
-    + '<svg v-if="$root.error_message" width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
+    + '<p><button v-if="$root.error_url_after" @click.prevent.stop="errorContinue">' + strings.continue + '</button>'
+    + '<button v-else @click.prevent.stop="errorClose">' + strings.close + '</button></p>'
+    + '</div>'
     + '</transition>'
-    + '</dialog>'
+    + '<svg width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
+    + '</div>'
 );
 
 var shared_lightbox_fragment = (
-    '<dialog :class="lightboxClasses" role="alertdialog" @close="lightboxClose">'
+    '<div :class="lightboxClasses" role="dialog" aria-modal="true" v-if="$root.lightbox" @click="lightboxClose">'
         + '<div class="pretix-widget-lightbox-loading" v-if="$root.lightbox?.loading">'
             + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
         + '</div>'
-        + '<div class="pretix-widget-lightbox-inner" v-if="$root.lightbox">'
-            + '<form class="pretix-widget-lightbox-close" method="dialog"><button aria-label="'+strings.close+'" autofocus="autofocus">'
-                + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
-            + '</button></form>'
+        + '<div class="pretix-widget-lightbox-inner" @click.stop="">'
             + '<figure class="pretix-widget-lightbox-image">'
                 + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage" crossorigin>'
                 + '<figcaption v-if="$root.lightbox.description">{{$root.lightbox.description}}</figcaption>'
             + '</figure>'
+            + '<button type="button" class="pretix-widget-lightbox-close" @click="lightboxClose" aria-label="'+strings.close+'">'
+                + '<svg alt="'+strings.close+'" height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+            + '</button>'
         + '</div>'
-    + '</dialog>'
+    + '</div>'
 );
 
 Vue.component('pretix-overlay', {
@@ -880,11 +911,6 @@ Vue.component('pretix-overlay', {
         + shared_lightbox_fragment
         + '</div>'
     ),
-    data: function () {
-        return {
-            cancelBlocked: false,
-        }
-    },
     watch: {
         '$root.lightbox': function (newValue, oldValue) {
             if (newValue) {
@@ -892,24 +918,18 @@ Vue.component('pretix-overlay', {
                     this.$set(newValue, "loading", true);
                 }
                 if (!oldValue) {
-                    this.$el?.querySelector(".pretix-widget-lightbox-holder").showModal();
+                    window.addEventListener('keyup', this.lightboxCloseOnKeyup);
                 }
+            } else {
+                window.removeEventListener('keyup', this.lightboxCloseOnKeyup);
             }
-        },
-        '$root.error_message': function (newValue, oldValue) {
-            if (newValue) {
-                if (!oldValue) {
-                    this.$el?.querySelector(".pretix-widget-alert-holder").showModal();
-                }
-            }
-        },
+        }
     },
     computed: {
         frameClasses: function () {
             return {
                 'pretix-widget-frame-holder': true,
                 'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
-                'pretix-widget-frame-isloading': this.$root.frame_loading,
             };
         },
         alertClasses: function () {
@@ -925,67 +945,54 @@ Vue.component('pretix-overlay', {
                 'pretix-widget-lightbox-isloading': this.$root.lightbox?.loading,
             };
         },
-        cancelBlockedClasses: function () {
-            return {
-                'pretix-widget-visibility-hidden': !this.cancelBlocked,
-            }  
-        },
     },
     methods: {
+        lightboxCloseOnKeyup: function (event) {
+            if (event.keyCode === 27) {
+                // abort on ESC-key
+                this.lightboxClose();
+            }
+        },
         lightboxClose: function () {
             this.$root.lightbox = null;
         },
         lightboxLoaded: function () {
             this.$root.lightbox.loading = false;
         },
-        errorClose: function (e) {
-            var dialog = e.target;
-            if (dialog.returnValue == "continue" && this.$root.error_url_after) {
-                if (this.$root.error_url_after_new_tab) {
-                    window.open(this.$root.error_url_after);
-                } else if (this.$root.overlay) {
-                    this.$root.overlay.frame_src = this.$root.error_url_after;
-                    this.$root.frame_loading = true;
-                }
-            }
+        errorClose: function () {
             this.$root.error_message = null;
             this.$root.error_url_after = null;
             this.$root.error_url_after_new_tab = false;
         },
-        close: function (e) {
-            if (this.$root.frame_loading) {
-                // Chrome does not allow blocking dialog.cancel event more than once
-                // => wiggle the loading-element and re-open the modal
-                this.cancel(e);
-                e.target.showModal();
+        errorContinue: function () {
+            if (this.$root.error_url_after_new_tab) {
+                window.open(this.$root.error_url_after);
                 return;
             }
+            this.$root.overlay.frame_src = this.$root.error_url_after;
+            this.$root.frame_loading = true;
+            this.$root.error_message = null;
+            this.$root.error_url_after = null;
+        },
+        close: function () {
             this.$root.frame_shown = false;
             this.$root.parent.frame_dismissed = true;
             this.$root.frame_src = "";
             this.$root.parent.reload();
             this.$root.parent.trigger_close_callback();
         },
-        cancel: function (e) {
-            // do not allow to cancel while frame is loading as we cannot abort the operation
-            if (this.$root.frame_loading) {
-                e.preventDefault();
-                e.target.addEventListener("animationend", function () {
-                    e.target.classList.remove("pretix-widget-shake-once");
-                }, {once: true});
-                e.target.classList.add("pretix-widget-shake-once");
-                this.cancelBlocked = true;
-            }
-        },
         iframeLoaded: function () {
             if (this.$root.frame_loading) {
                 this.$root.frame_loading = false;
-                this.cancelBlocked = false;
                 if (this.$root.frame_src) {
                     this.$root.frame_shown = true;
                 }
             }
         },
+        focusButton: function () {
+            this.$el.querySelector(".pretix-widget-alert-box button").focus();
+        },
+
     }
 });
 
@@ -1026,11 +1033,13 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
 
         // Resume cart
-        + '<div class="pretix-widget-info-message pretix-widget-clickable" v-if="$root.cart_exists">'
-        + '<span :id="id_cart_exists_msg">' + strings['cart_exists'] + '</span>'
+        + '<div class="pretix-widget-info-message pretix-widget-clickable"'
+        + '     v-if="$root.cart_exists">'
         + '<button @click.prevent.stop="$parent.resume" class="pretix-widget-resume-button" type="button" v-bind:aria-describedby="id_cart_exists_msg">'
         + strings['resume_checkout']
         + '</button>'
+        + '<span :id="id_cart_exists_msg">' + strings['cart_exists'] + '</span>'
+        + '<div class="pretix-widget-clear"></div>'
         + '</div>'
 
         // Seating plan
@@ -1058,10 +1067,7 @@ Vue.component('pretix-widget-event-form', {
 
         // Buy button
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button v-if="!this.$root.cart_exists || this.is_items_selected" type="submit" v-bind:aria-describedby="id_cart_exists_msg">{{ buy_label }}</button>'
-        + '<button v-else @click.prevent.stop="$parent.resume" type="button" v-bind:aria-describedby="id_cart_exists_msg">'
-        + strings['resume_checkout']
-        + '</button>'
+        + '<button type="submit">{{ this.buy_label }}</button>'
         + '</div>'
 
         + '</form>'
@@ -1073,7 +1079,7 @@ Vue.component('pretix-widget-event-form', {
         + '<h3 class="pretix-widget-voucher-headline" :id="aria_labelledby">'+ strings['redeem_voucher'] +'</h3>'
         + '<div v-if="$root.voucher_explanation_text" class="pretix-widget-voucher-text" v-html="$root.voucher_explanation_text"></div>'
         + '<div class="pretix-widget-voucher-input-wrap">'
-        + '<input :id="id_voucher_input" class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'" v-bind:aria-labelledby="aria_labelledby">'
+        + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'" v-bind:aria-labelledby="aria_labelledby">'
         + '</div>'
         + '<input type="hidden" v-for="p in hiddenParams" :name="p[0]" :value="p[1]" />'
         + '<div class="pretix-widget-voucher-button-wrap">'
@@ -1085,32 +1091,14 @@ Vue.component('pretix-widget-event-form', {
 
         + '</div>'
     ),
-    data: function () {
-        return {
-            is_items_selected: false,
-        }
-    },
-    watch: {
-        '$root.overlay.frame_shown': function (newValue) {
-            if (!newValue) {
-                this.$refs.form.reset();
-                this.calc_items_selected();
-            }
-        }
-    },
     mounted: function() {
-        this.$root.$on('focus_voucher_field', this.focus_voucher_field);
-        this.$refs.form.addEventListener("change", this.calc_items_selected);
+        this.$root.$on('focus_voucher_field', this.focus_voucher_field)
     },
     beforeDestroy: function() {
-        this.$root.$off('focus_voucher_field', this.focus_voucher_field);
-        this.$refs.form.removeEventListener("change", this.calc_items_selected);
+        this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
-        id_voucher_input: function () {
-            return this.$root.html_id + '-voucher-input';
-        },
-        aria_labelledby: function () {
+        aria_labelledby: function() {
             return this.$root.html_id + '-voucher-headline';
         },
         display_event_info: function () {
@@ -1155,6 +1143,10 @@ Vue.component('pretix-widget-event-form', {
         },
     },
     methods: {
+        focus_voucher_field: function() {
+            this.$refs.voucherinput.scrollIntoView(false)
+            this.$refs.voucherinput.focus()
+        },
         back_to_list: function() {
             this.$root.target_url = this.$root.parent_stack.pop();
             this.$root.error = null;
@@ -1181,25 +1173,31 @@ Vue.component('pretix-widget-event-form', {
                 $el.focus();
             });
         },
-        calc_items_selected: function () {
-            this.is_items_selected = [...this.$refs.form.querySelectorAll("input[type=checkbox], input[type=radio]")].some(function(element) {
-                return element.checked;
-            }) || [...this.$refs.form.querySelectorAll(".pretix-widget-item-count-group input")].some(function(element) {
-                return parseInt(element.value || "0") > 0;
-            });
-        },
     }
 });
 
 Vue.component('pretix-widget-event-list-filter-field', {
     template: ('<div class="pretix-widget-event-list-filter-field">'
         + '<label :for="id">{{ field.label }}</label>'
-        + '<select :id="id" :name="field.key" :value="currentValue">'
+        + '<select :id="id" :name="field.key" @change="onChange($event)" :value="currentValue">'
         + '<option v-for="choice in field.choices" :value="choice[0]">{{ choice[1] }}</option>'
         + '</select>'
         + '</div>'),
     props: {
         field: Object
+    },
+    methods: {
+        onChange: function(event) {
+            var filterParams = new URLSearchParams(this.$root.filter);
+            if (event.target.value) {
+                filterParams.set(this.field.key, event.target.value);
+            } else {
+                filterParams.delete(this.field.key);
+            }
+            this.$root.filter = filterParams.toString();
+            this.$root.loading++;
+            this.$root.reload();
+        },
     },
     computed: {
         id: function () {
@@ -1213,29 +1211,9 @@ Vue.component('pretix-widget-event-list-filter-field', {
 });
 
 Vue.component('pretix-widget-event-list-filter-form', {
-    template: ('<form ref="filterform" class="pretix-widget-event-list-filter-form" @submit="onSubmit">'
-            + '<fieldset class="pretix-widget-event-list-filter-fieldset">'
-                + '<legend>' + strings.filter_events_by + '</legend>'
-                + '<pretix-widget-event-list-filter-field v-for="field in $root.meta_filter_fields" :field="field" :key="field.key"></pretix-widget-event-list-filter-field>'
-                + '<button>' + strings.filter + '</button>'
-            + '</fieldset>'
-        + '</form>'),
-    methods: {
-        onSubmit: function(e) {
-            e.preventDefault();
-            var formData = new FormData(this.$refs.filterform);
-            var filterParams = new URLSearchParams(formData);
-            formData.forEach(function (value, key) {
-                if (value == "") {
-                    filterParams.delete(key);
-                }
-            });
-
-            this.$root.filter = filterParams.toString();
-            this.$root.loading++;
-            this.$root.reload();
-        },
-    },
+    template: ('<div class="pretix-widget-event-list-filter-form">'
+        + '<pretix-widget-event-list-filter-field v-for="field in $root.meta_filter_fields" :field="field" :key="field.key"></pretix-widget-event-list-filter-field>'
+        + '</div>'),
 });
 
 Vue.component('pretix-widget-event-list-entry', {
@@ -1762,7 +1740,7 @@ Vue.component('pretix-widget', {
             return {
                 'pretix-widget': true,
                 'pretix-widget-mobile': this.mobile,
-                'pretix-widget-use-custom-spinners': true,
+                'pretix-widget-use-custom-spinners': !this.$root.use_native_spinners
             };
         }
     }
@@ -1924,6 +1902,7 @@ var shared_root_methods = {
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
+                root.use_native_spinners = data.use_native_spinners;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
@@ -2182,10 +2161,27 @@ var create_overlay = function (app) {
                 // show loading spinner only when previously no frame_src was set
                 if (newValue && !oldValue) {
                     this.frame_loading = true;
-                    this.$el?.querySelector('dialog.pretix-widget-frame-holder').showModal();
                 }
                 // to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
                 this.$el.querySelector("iframe").src = newValue || "about:blank";
+            },
+            frame_shown: function (newValue) {
+                if (newValue) {
+                    this.prevActiveElement = document.activeElement;
+                    var btn = this.$el?.querySelector(".pretix-widget-frame-close a");
+                    this.$nextTick(function () {
+                        btn?.focus();
+                    });
+                } else {
+                    this.prevActiveElement?.focus();
+                }
+            },
+            error_message: function (newValue) {
+                if (newValue) {
+                    this.prevActiveElement = document.activeElement;
+                } else {
+                    this.prevActiveElement?.focus();
+                }
             },
         }
     });
@@ -2232,6 +2228,7 @@ var create_widget = function (element, html_id=null) {
     var items = element.attributes.items ? element.attributes.items.value : null;
     var variations = element.attributes.variations ? element.attributes.variations.value : null;
     var categories = element.attributes.categories ? element.attributes.categories.value : null;
+    var single_item_select = element.getAttribute("single-item-select") || "checkbox";
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
@@ -2278,6 +2275,8 @@ var create_widget = function (element, html_id=null) {
                 variation_filter: variations,
                 voucher_code: voucher,
                 display_net_prices: false,
+                use_native_spinners: false,
+                single_item_select: single_item_select,
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,

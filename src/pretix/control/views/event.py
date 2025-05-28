@@ -96,6 +96,9 @@ from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
+from pretix.presale.views.widget import (
+    version_default as widget_version_default,
+)
 
 from ...base.i18n import language
 from ...base.models.items import (
@@ -1408,6 +1411,7 @@ class WidgetSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['urlprefix'] = settings.SITE_URL
+        ctx['widget_version_default'] = widget_version_default
         domain = get_event_domain(self.request.event, fallback=True)
         if domain:
             siteurlsplit = urlsplit(settings.SITE_URL)
