@@ -143,7 +143,7 @@ class GiftCardPaymentForm(PaymentProviderForm):
         except GiftCard.DoesNotExist:
             if event.vouchers.filter(code__iexact=code).exists():
                 msg = _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
-                                            "the product selection.")
+                        "the product selection.")
                 self.add_error('code', msg)
             else:
                 msg = _("This gift card is not known.")
