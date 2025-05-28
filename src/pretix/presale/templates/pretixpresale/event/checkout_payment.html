@@ -16,16 +16,17 @@
                 {% for p in current_payments %}
                     <div class="list-group-item">
                         <div class="row">
-                            <div class="col-xs-9">
-                                {{ p.provider_name }}
+                            <div class="col-xs-6">
+                                <strong id="payment-label-{{ forloop.counter }}">{{ p.provider_name }}</strong>
                             </div>
                             <div class="col-xs-2 text-right">
                                 {{ p.payment_amount|money:request.event.currency }}
                             </div>
-                            <div class="col-xs-1 text-right">
-                                <button name="remove_payment" value="{{ p.id }}" title="{% trans "Remove payment" %}"
-                                    class="btn btn-link btn-xs">
-                                    <span class="fa fa-trash text-danger"></span>
+                            <div class="col-xs-4 text-right">
+                                <button name="remove_payment" value="{{ p.id }}" aria-describedby="payment-label-{{ forloop.counter }}"
+                                    class="btn btn-danger">
+                                    <span class="fa fa-trash"></span>
+                                    {% trans "Remove payment" %}
                                 </button>
                             </div>
                         </div>
