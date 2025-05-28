@@ -86,7 +86,7 @@ var cart = {
                 ? gettext("Your cart has expired.")
                 : gettext("Your cart is about to expire."));
             $("#dialog-cart-extend-description").text(already_expired
-                ? gettext("The items in your cart are no longer reserved for you. You can still complete your order as long as they’re available.")
+                ? gettext("The items in your cart are no longer reserved for you. You can still complete your order as long as they're available.")
                 : gettext("You can renew the reservation period up to ten times."));
             $("#dialog-cart-extend .modal-card-confirm button").text(already_expired
                 ? gettext("Continue")
