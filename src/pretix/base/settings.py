@@ -2080,7 +2080,7 @@ DEFAULTS = {
         'type': LazyI18nString,
         'form_class': I18nFormField,
         'form_kwargs': dict(
-            label=_("Title for accessibility information"),
+            label=_("Accessibility information title"),
             widget=I18nTextInput,
         ),
         'serializer_class': I18nURLField,
