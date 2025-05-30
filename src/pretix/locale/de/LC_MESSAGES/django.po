@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-30 11:06+0000\n"
+"PO-Revision-Date: 2025-05-30 11:15+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -10699,23 +10699,17 @@ msgstr ""
 "sammeln."
 
 #: pretix/base/settings.py:2071
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information URL"
-msgstr "Konto-Informationen"
+msgstr "URL zu Informationen zur Barrierefreiheit"
 
 #: pretix/base/settings.py:2072
-#, fuzzy
-#| msgid ""
-#| "This should point e.g. to a part of your website that explains how you "
-#| "use data gathered in your ticket shop."
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
 "Dies sollte bspw. ein Link zu einem Teil Ihrer Website sein, auf dem Sie "
-"beschreiben, wie Sie persönliche Daten nutzen, die Sie in Ihrem Ticketshop "
-"sammeln."
+"beschreiben, wie Ihr Ticketshop im Einklang mit Richtlinien zur "
+"Barrierefreiheit steht."
 
 #: pretix/base/settings.py:2079
 #: pretix/presale/templates/pretixpresale/event/base.html:228
@@ -10723,22 +10717,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/accessibility.html:6
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
 #: pretix/presale/templates/pretixpresale/organizers/base.html:111
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information"
-msgstr "Konto-Informationen"
+msgstr "Informationen zur Barrierefreiheit"
 
 #: pretix/base/settings.py:2083
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information title"
-msgstr "Konto-Informationen"
+msgstr "Titel für Informationen zur Barrierefreiheit"
 
 #: pretix/base/settings.py:2093
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information text"
-msgstr "Konto-Informationen"
+msgstr "Text für Informationen zur Barrierefreiheit"
 
 #: pretix/base/settings.py:2114
 msgid "Attach ticket files"
@@ -23870,10 +23858,8 @@ msgstr ""
 "Drittanbietern nicht kennen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:204
-#, fuzzy
-#| msgid "Availability"
 msgid "Accessibility"
-msgstr "Verfügbarkeit"
+msgstr "Barrierefreiheit"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:206
 msgid ""
@@ -23882,12 +23868,19 @@ msgid ""
 "template in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
 "target=\"_blank\">our documentation</a>."
 msgstr ""
+"In einigen Regionen, einschließlich der Europäischen Union, sind Sie "
+"verpflichtet, Informationen über die Barrierefreiheit Ihres Ticketshops zu "
+"veröffentlichen. Sie finden eine Vorlage in <a href="
+"\"https://docs.pretix.eu/de/trust/accessibility/\" target=\"_blank\">unserer "
+"Dokumentation</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:216
 msgid ""
 "Instead of an URL, you can also configure a text that will be shown within "
 "pretix. This will be ignored if a URL is configured."
 msgstr ""
+"Statt einer URL kannst du auch einen Text eingeben, der von pretix angezeigt "
+"wird. Dies wird ignoriert, wenn eine URL konfiguriert wurde."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:228
 msgid "Barcode media"
