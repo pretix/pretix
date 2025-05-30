@@ -1591,7 +1591,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(len(doc.select('input[name="payment"]')), 3)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1636,7 +1636,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(len(doc.select('input[name="payment"]')), 3)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1646,7 +1646,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc2.secret
+            'payment_giftcard-code': gc2.secret
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1677,7 +1677,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(len(doc.select('input[name="payment"]')), 3)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1706,7 +1706,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(len(doc.select('input[name="payment"]')), 3)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1748,7 +1748,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'This gift card is no longer valid.' in response.content.decode()
 
@@ -1763,7 +1763,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'This gift card does not support this currency.' in response.content.decode()
 
@@ -1780,7 +1780,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'This gift card is not known.' in response.content.decode()
 
@@ -1798,7 +1798,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1828,7 +1828,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'This gift card is not known.' in response.content.decode()
 
@@ -1845,7 +1845,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'Only test gift cards can be used in test mode.' in response.content.decode()
 
@@ -1860,7 +1860,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'This gift card can only be used in test mode.' in response.content.decode()
 
@@ -1874,7 +1874,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'All credit on this gift card has been used.' in response.content.decode()
 
@@ -1889,11 +1889,11 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'This gift card is already used for your payment.' in response.content.decode()
 
@@ -1910,7 +1910,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         assert 'You cannot pay with gift cards when buying a gift card.' in response.content.decode()
 
@@ -1964,7 +1964,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -2006,7 +2006,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'giftcard',
-            'giftcard': gc.secret
+            'payment_giftcard-code': gc.secret
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)

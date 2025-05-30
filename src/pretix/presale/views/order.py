@@ -683,6 +683,8 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx['show_fees'] = any(p['fee_diff'] for p in self.provider_forms)
         if len(self.provider_forms) == 1:
             ctx['selected'] = self.provider_forms[0]['provider'].identifier
+        elif "payment" in self.request.POST:
+            ctx['selected'] = self.request.POST.get("payment")
         return ctx
 
     def get_confirm_url(self, payment):
