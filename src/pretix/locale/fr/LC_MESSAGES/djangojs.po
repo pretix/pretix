@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:36+0000\n"
-"PO-Revision-Date: 2025-05-22 08:37+0000\n"
+"PO-Revision-Date: 2025-05-30 11:06+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -417,7 +417,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:270
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "Si cela prend plus de quelques minutes, veuillez nous contacter."
 
 #: pretix/static/pretixbase/js/asynctask.js:325
 msgid "Close message"
@@ -634,8 +634,7 @@ msgstr "Erreur inconnue."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:292
 msgid "Your color has great contrast and will provide excellent accessibility."
-msgstr ""
-"Votre choix de couleur a un bon contraste et il est très facile à lire !"
+msgstr "Votre choix de couleur a un bon contraste et il est très facile à lire."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:296
 msgid ""
@@ -643,7 +642,7 @@ msgid ""
 "requirements."
 msgstr ""
 "Votre choix de couleur est assez bon pour la lecture et offre un bon "
-"contraste !"
+"contraste."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:300
 msgid ""
@@ -727,7 +726,7 @@ msgstr "Panier expiré"
 #: pretix/static/pretixpresale/js/ui/cart.js:59
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Your cart is about to expire."
-msgstr ""
+msgstr "Votre panier est sur le point d'expirer."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:64
 msgid "The items in your cart are reserved for you for one minute."
@@ -736,30 +735,24 @@ msgstr[0] "Les articles de votre panier sont réservés pour une minute."
 msgstr[1] "Les articles de votre panier sont réservés pendant {num} minutes."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Your cart has expired."
-msgstr "Panier expiré"
+msgstr "Votre panier a expiré."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:89
-#, fuzzy
-#| msgid ""
-#| "The items in your cart are no longer reserved for you. You can still "
-#| "complete your order as long as they’re available."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
 msgstr ""
-"Les articles de votre panier ne vous sont plus réservés. Vous pouvez "
-"toujours compléter votre commande tant qu'ils sont disponibles."
+"Les articles de votre panier ne vous sont plus réservés. Vous pouvez encore "
+"compléter votre commande tant qu'ils sont disponibles."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "Souhaitez-vous renouveler la période de réservation ?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:93
 msgid "Renew reservation"
-msgstr ""
+msgstr "Renouveler la réservation"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -803,12 +796,12 @@ msgstr "Augmenter la quantité"
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Filter events by"
-msgstr ""
+msgstr "Filtrer les événements par"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Filter"
-msgstr ""
+msgstr "Filtrer"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:19
@@ -1056,17 +1049,16 @@ msgid "Close"
 msgstr "Fermer"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Close checkout"
-msgstr "Finaliser ma commande"
+msgstr "Fermer la caisse"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
 msgstr ""
+"Vous ne pouvez pas annuler cette opération. Veuillez attendre la fin du "
+"chargement."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:60
