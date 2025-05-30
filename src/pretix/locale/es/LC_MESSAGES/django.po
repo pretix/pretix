@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-30 11:07+0000\n"
+"PO-Revision-Date: 2025-05-30 11:08+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -10691,16 +10691,15 @@ msgstr ""
 
 #: pretix/base/settings.py:2071
 msgid "Accessibility information URL"
-msgstr "Informations sur l'accessibilité URL"
+msgstr "Información sobre accesibilidad URL"
 
 #: pretix/base/settings.py:2072
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
-"Elle doit renvoyer, par exemple, à une partie de votre site web qui explique "
-"comment votre billetterie est conforme à la réglementation en matière "
-"d'accessibilité."
+"Debe remitir, por ejemplo, a una parte de su sitio web que explique cómo su "
+"tienda de entradas cumple la normativa sobre accesibilidad."
 
 #: pretix/base/settings.py:2079
 #: pretix/presale/templates/pretixpresale/event/base.html:228
@@ -10708,22 +10707,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/accessibility.html:6
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
 #: pretix/presale/templates/pretixpresale/organizers/base.html:111
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information"
-msgstr "Información de la cuenta"
+msgstr "Información sobre accesibilidad"
 
 #: pretix/base/settings.py:2083
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information title"
-msgstr "Información de la cuenta"
+msgstr "Título de la información sobre accesibilidad"
 
 #: pretix/base/settings.py:2093
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information text"
-msgstr "Información de la cuenta"
+msgstr "Texto informativo sobre accesibilidad"
 
 #: pretix/base/settings.py:2114
 msgid "Attach ticket files"
@@ -23855,10 +23848,8 @@ msgstr ""
 "proveedores de pago o de seguimiento."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:204
-#, fuzzy
-#| msgid "Availability"
 msgid "Accessibility"
-msgstr "Disponibilidad"
+msgstr "Accesibilidad"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:206
 msgid ""
