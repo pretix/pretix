@@ -43,7 +43,6 @@ from zoneinfo import ZoneInfo
 
 from django import forms
 from django.conf import settings
-from django.contrib import messages
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import transaction
 from django.dispatch import receiver
@@ -100,7 +99,10 @@ class PaymentProviderForm(Form):
 
 class GiftCardPaymentForm(PaymentProviderForm):
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request')
+        self.event = kwargs.pop('event')
+        self.testmode = kwargs.pop('testmode')
+        self.positions = kwargs.pop('positions')
+        self.used_cards = kwargs.pop('used_cards')
         super().__init__(*args, **kwargs)
 
     def clean(self):
@@ -110,21 +112,21 @@ class GiftCardPaymentForm(PaymentProviderForm):
 
         code = cleaned_data["code"].strip()
         msg = ""
-        for p in get_cart(self.request):
+        for p in self.positions:
             if p.item.issue_giftcard:
                 msg = _("You cannot pay with gift cards when buying a gift card.")
                 self.add_error('code', msg)
                 return cleaned_data
         try:
-            event = self.request.event
+            event = self.event
             gc = event.organizer.accepted_gift_cards.get(
                 secret=code
             )
             if gc.currency != event.currency:
                 msg = _("This gift card does not support this currency.")
-            elif gc.testmode and not event.testmode:
+            elif gc.testmode and not self.testmode:
                 msg = _("This gift card can only be used in test mode.")
-            elif not gc.testmode and event.testmode:
+            elif not gc.testmode and self.testmode:
                 msg = _("Only test gift cards can be used in test mode.")
             elif gc.expires and gc.expires < time_machine_now():
                 msg = _("This gift card is no longer valid.")
@@ -135,11 +137,9 @@ class GiftCardPaymentForm(PaymentProviderForm):
                 self.add_error('code', msg)
                 return cleaned_data
 
-            cs = cart_session(self.request)
-            for p in cs.get('payments', []):
-                if p.get('info_data', {}).get('gift_card') == gc.pk:
-                    self.add_error('code', _("This gift card is already used for your payment."))
-                    return cleaned_data
+            if gc.pk in self.used_cards:
+                self.add_error('code', _("This gift card is already used for your payment."))
+                return cleaned_data
         except GiftCard.DoesNotExist:
             if event.vouchers.filter(code__iexact=code).exists():
                 msg = _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
@@ -1379,19 +1379,29 @@ class GiftCardPayment(BasePaymentProvider):
     payment_form_template_name = 'pretixcontrol/giftcards/checkout.html'
 
     def payment_form(self, request: HttpRequest) -> Form:
-        """
-        This is called by the default implementation of :py:meth:`payment_form_render`
-        to obtain the form that is displayed to the user during the checkout
-        process. The default implementation constructs the form using
-        :py:attr:`payment_form_fields` and sets appropriate prefixes for the form
-        and all fields and fills the form with data form the user's session.
+        # Unfortunately, in payment_form we do not know if we're in checkout
+        # or in an existing order. But we need to do the validation logic in the
+        # form to get the error messages in the right places for accessbility :-(
+        if 'checkout' in request.resolver_match.url_name:
+            cs = cart_session(request)
+            used_cards = [
+                p.get('info_data', {}).get('gift_card')
+                for p in cs.get('payments', [])
+                if p.get('info_data', {}).get('gift_card')
+            ]
+            positions = get_cart(request)
+            testmode = self.event.testmode
+        else:
+            used_cards = []
+            order = self.event.orders.get(code=request.resolver_match.kwargs["order"])
+            positions = order.positions.all()
+            testmode = order.testmode
 
-        If you overwrite this, we strongly suggest that you inherit from
-        ``PaymentProviderForm`` (from this module) that handles some nasty issues about
-        required fields for you.
-        """
         form = self.payment_form_class(
-            request=request,
+            event=self.event,
+            used_cards=used_cards,
+            positions=positions,
+            testmode=testmode,
             data=(request.POST if request.method == 'POST' and request.POST.get("payment") == self.identifier else None),
             prefix='payment_%s' % self.identifier,
             initial={
@@ -1553,47 +1563,20 @@ class GiftCardPayment(BasePaymentProvider):
         return True
 
     def payment_prepare(self, request: HttpRequest, payment: OrderPayment) -> Union[bool, str, None]:
-        for p in payment.order.positions.all():
-            if p.item.issue_giftcard:
-                messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
-                return
-
-        try:
-            gc = self.event.organizer.accepted_gift_cards.get(
-                secret=request.POST.get("giftcard").strip()
-            )
-            if gc.currency != self.event.currency:
-                messages.error(request, _("This gift card does not support this currency."))
-                return
-            if gc.testmode and not payment.order.testmode:
-                messages.error(request, _("This gift card can only be used in test mode."))
-                return
-            if not gc.testmode and payment.order.testmode:
-                messages.error(request, _("Only test gift cards can be used in test mode."))
-                return
-            if gc.expires and gc.expires < time_machine_now():
-                messages.error(request, _("This gift card is no longer valid."))
-                return
-            if gc.value <= Decimal("0.00"):
-                messages.error(request, _("All credit on this gift card has been used."))
-                return
-            payment.info_data = {
-                'gift_card': gc.pk,
-                'gift_card_secret': gc.secret,
-                'retry': True
-            }
-            payment.amount = min(payment.amount, gc.value)
-            payment.save()
-
-            return True
-        except GiftCard.DoesNotExist:
-            if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard").strip()).exists():
-                messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
-                                            "the product selection."))
-            else:
-                messages.error(request, _("This gift card is not known."))
-        except GiftCard.MultipleObjectsReturned:
-            messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
+        form = self.payment_form(request)
+        if not form.is_valid():
+            return False
+        gc = self.event.organizer.accepted_gift_cards.get(
+            secret=form.cleaned_data["code"]
+        )
+        payment.info_data = {
+            'gift_card': gc.pk,
+            'gift_card_secret': gc.secret,
+            'retry': True
+        }
+        payment.amount = min(payment.amount, gc.value)
+        payment.save()
+        return True
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment, is_early_special_case=False) -> str:
         for p in payment.order.positions.all():
