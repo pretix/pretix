@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-30 11:08+0000\n"
+"PO-Revision-Date: 2025-05-30 11:15+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17811,7 +17811,7 @@ msgstr "Funcionamiento en modo de desarrollo"
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr "Si esto tarda más de unos minutos, póngase en contacto con nosotros."
+msgstr "Si tarda más de unos minutos, póngase en contacto con nosotros."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
@@ -23858,12 +23858,19 @@ msgid ""
 "template in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
 "target=\"_blank\">our documentation</a>."
 msgstr ""
+"Algunas jurisdicciones, incluida la Unión Europea, exigen que publique "
+"información sobre la accesibilidad de su taquilla/tienda de entradas. Puede "
+"encontrar una plantilla en <a href="
+"\"https://docs.pretix.eu/trust/accessibility/\" target=\"_blank\">nuestra "
+"documentación</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:216
 msgid ""
 "Instead of an URL, you can also configure a text that will be shown within "
 "pretix. This will be ignored if a URL is configured."
 msgstr ""
+"En lugar de una URL, también puede configurar un texto que se mostrará "
+"dentro de pretix. Esto se ignorará si se configura una URL."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:228
 msgid "Barcode media"
@@ -32396,8 +32403,6 @@ msgstr ""
 "y contraseña."
 
 #: pretix/presale/forms/customer.py:74
-#, fuzzy
-#| msgid "Please verify that you entered the correct email addess."
 msgid "Please verify that you entered the correct email address."
 msgstr ""
 "Compruebe que ha introducido la dirección de correo electrónico correcta."
@@ -33378,10 +33383,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
-#, fuzzy
-#| msgid "Event description"
 msgid "Renew reservation"
-msgstr "Descripción del evento"
+msgstr "Renovar reserva"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
@@ -34681,10 +34684,8 @@ msgstr ""
 "Una vez completado el proceso en la nueva ventana, podrás continuar aquí."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:58
-#, fuzzy
-#| msgid "Closed"
 msgid "Close"
-msgstr "Cerrado"
+msgstr "Cerrar"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:79
 msgid "Adjust settings in detail"
@@ -34728,8 +34729,6 @@ msgid "Save selection"
 msgstr "Guarda selección"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:141
-#, fuzzy
-#| msgid "You didn’t select any ticket."
 msgid "You didn't select any ticket."
 msgstr "No ha seleccionado ninguna entrada."
 
