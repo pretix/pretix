@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-04-29 18:00+0000\n"
+"PO-Revision-Date: 2025-05-30 11:06+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -4396,13 +4396,16 @@ msgstr "Facultatif. Aucun produit ne sera vendu avant cette date."
 
 #: pretix/base/models/event.py:621
 msgid "This event is remote or partially remote."
-msgstr ""
+msgstr "Cet événement est éloigné ou partiellement éloigné."
 
 #: pretix/base/models/event.py:622
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
 msgstr ""
+"Elle sera utilisée pour indiquer aux utilisateurs si l'événement se déroule "
+"dans un autre fuseau horaire et nous permettra de calculer l'heure locale "
+"des utilisateurs."
 
 #: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
@@ -10785,22 +10788,17 @@ msgstr ""
 "explique comment vous utilisez les données collectées dans votre billetterie."
 
 #: pretix/base/settings.py:2071
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information URL"
-msgstr "Informations sur le compte"
+msgstr "Informations d'accessibilité URL"
 
 #: pretix/base/settings.py:2072
-#, fuzzy
-#| msgid ""
-#| "This should point e.g. to a part of your website that explains how you "
-#| "use data gathered in your ticket shop."
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
-"Cela devrait pointer par exemple vers une partie de votre site Web qui "
-"explique comment vous utilisez les données collectées dans votre billetterie."
+"Elle doit renvoyer, par exemple, à une partie de votre site web qui explique "
+"comment votre billetterie est conforme à la réglementation en matière "
+"d'accessibilité."
 
 #: pretix/base/settings.py:2079
 #: pretix/presale/templates/pretixpresale/event/base.html:228
@@ -10808,22 +10806,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/accessibility.html:6
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
 #: pretix/presale/templates/pretixpresale/organizers/base.html:111
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information"
-msgstr "Informations sur le compte"
+msgstr "Informations sur l'accessibilité"
 
 #: pretix/base/settings.py:2083
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information title"
-msgstr "Informations sur le compte"
+msgstr "Titre de l'information sur l'accessibilité"
 
 #: pretix/base/settings.py:2093
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information text"
-msgstr "Informations sur le compte"
+msgstr "Texte d'information sur l'accessibilité"
 
 #: pretix/base/settings.py:2114
 msgid "Attach ticket files"
@@ -24041,10 +24033,8 @@ msgstr ""
 "tiers tels que les fournisseurs de paiement ou de suivi."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:204
-#, fuzzy
-#| msgid "Availability"
 msgid "Accessibility"
-msgstr "Disponibilité"
+msgstr "Accessibilité"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:206
 msgid ""
@@ -24053,12 +24043,19 @@ msgid ""
 "template in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
 "target=\"_blank\">our documentation</a>."
 msgstr ""
+"Certaines juridictions, y compris l'Union européenne, vous obligent à "
+"publier des informations sur l'accessibilité de votre billetterie. Vous "
+"pouvez trouver un modèle dans <a href="
+"\"https://docs.pretix.eu/trust/accessibility/\" target=\"_blank\">notre "
+"documentation</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:216
 msgid ""
 "Instead of an URL, you can also configure a text that will be shown within "
 "pretix. This will be ignored if a URL is configured."
 msgstr ""
+"Au lieu d'une URL, vous pouvez également configurer un texte qui sera "
+"affiché dans pretix. Ce texte sera ignoré si une URL est configurée."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:228
 msgid "Barcode media"
@@ -32667,10 +32664,8 @@ msgstr ""
 "passe."
 
 #: pretix/presale/forms/customer.py:74
-#, fuzzy
-#| msgid "Please verify that you entered the correct email addess."
 msgid "Please verify that you entered the correct email address."
-msgstr "Veuillez vérifier que vous avez saisi une adresse e-mail conforme."
+msgstr "Veuillez vérifier que vous avez saisi l'adresse électronique correcte."
 
 #: pretix/presale/forms/customer.py:75
 msgid "Please enter the correct password."
@@ -33661,10 +33656,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
-#, fuzzy
-#| msgid "Event description"
 msgid "Renew reservation"
-msgstr "Description de l’événement"
+msgstr "Renouveler la réservation"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
@@ -35002,10 +34995,8 @@ msgstr ""
 "continuer ici."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:58
-#, fuzzy
-#| msgid "Closed"
 msgid "Close"
-msgstr "Fermé"
+msgstr "Fermer"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:79
 msgid "Adjust settings in detail"
@@ -35049,8 +35040,6 @@ msgid "Save selection"
 msgstr "Enregistrer la sélection"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:141
-#, fuzzy
-#| msgid "You didn’t select any ticket."
 msgid "You didn't select any ticket."
 msgstr "Vous n'avez sélectionné aucun billet."
 
