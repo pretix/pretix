@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-27 10:14+0000\n"
+"POT-Creation-Date: 2025-05-30 10:35+0000\n"
 "PO-Revision-Date: 2025-05-06 16:20+0000\n"
 "Last-Translator: KC Tseng <tkc0204@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
@@ -354,12 +354,12 @@ msgid ""
 msgstr "配額“{}”上沒有足夠的可用配額來執行該操作。"
 
 #: pretix/api/serializers/organizer.py:105
-#: pretix/control/forms/organizer.py:889 pretix/presale/forms/customer.py:456
+#: pretix/control/forms/organizer.py:892 pretix/presale/forms/customer.py:456
 msgid "An account with this email address is already registered."
 msgstr "已註冊具有此電子郵件地址的帳戶。"
 
 #: pretix/api/serializers/organizer.py:238
-#: pretix/control/forms/organizer.py:738
+#: pretix/control/forms/organizer.py:741
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
@@ -916,7 +916,7 @@ msgstr "電話號碼"
 
 #: pretix/base/exporters/customers.py:69 pretix/base/models/auth.py:246
 #: pretix/base/models/customers.py:97 pretix/base/models/orders.py:3270
-#: pretix/base/settings.py:3608 pretix/base/settings.py:3620
+#: pretix/base/settings.py:3640 pretix/base/settings.py:3652
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Full name"
 msgstr "全名"
@@ -930,10 +930,10 @@ msgstr "全名"
 #: pretix/base/models/items.py:2052 pretix/base/models/items.py:2225
 #: pretix/base/models/memberships.py:41 pretix/base/models/organizer.py:75
 #: pretix/base/models/organizer.py:535 pretix/base/models/seating.py:85
-#: pretix/base/models/waitinglist.py:69 pretix/base/settings.py:3233
-#: pretix/base/settings.py:3243 pretix/base/settings.py:3597
+#: pretix/base/models/waitinglist.py:69 pretix/base/settings.py:3265
+#: pretix/base/settings.py:3275 pretix/base/settings.py:3629
 #: pretix/control/forms/filter.py:625 pretix/control/forms/item.py:439
-#: pretix/control/forms/organizer.py:914
+#: pretix/control/forms/organizer.py:917
 #: pretix/control/templates/pretixcontrol/checkin/index.html:109
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:92
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:26
@@ -1146,8 +1146,8 @@ msgid "Timezone"
 msgstr "時區"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:595
-#: pretix/base/models/event.py:1489 pretix/base/settings.py:3231
-#: pretix/base/settings.py:3241 pretix/control/forms/subevents.py:480
+#: pretix/base/models/event.py:1489 pretix/base/settings.py:3263
+#: pretix/base/settings.py:3273 pretix/control/forms/subevents.py:480
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr "活動起始時間"
@@ -1251,7 +1251,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:191 pretix/base/shredder.py:576
 #: pretix/control/templates/pretixcontrol/order/index.html:268
 #: pretix/control/templates/pretixcontrol/order/index.html:341
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:294
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:312
 #: pretix/presale/templates/pretixpresale/event/order.html:236
 #: pretix/presale/templates/pretixpresale/event/order.html:257
 msgid "Invoices"
@@ -1514,7 +1514,7 @@ msgstr "支付款符合IDs"
 #: pretix/base/exporters/orderlist.py:466
 #: pretix/base/exporters/orderlist.py:661
 #: pretix/control/templates/pretixcontrol/event/payment.html:11
-#: pretix/control/views/event.py:379
+#: pretix/control/views/event.py:382
 msgid "Payment providers"
 msgstr "支付提供者"
 
@@ -1691,14 +1691,14 @@ msgstr "產生門票"
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:44
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:91
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:98
-#: pretix/presale/templates/pretixpresale/event/index.html:202
+#: pretix/presale/templates/pretixpresale/event/index.html:201
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:3
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:3
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:97
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:102
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:26
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:66
-#: pretix/presale/views/widget.py:422
+#: pretix/presale/views/widget.py:447
 msgid "Waiting list"
 msgstr "候補名單"
 
@@ -2153,7 +2153,7 @@ msgstr "產品"
 #: pretix/base/exporters/orderlist.py:600 pretix/base/forms/questions.py:671
 #: pretix/base/modelimport_orders.py:313 pretix/base/models/customers.py:300
 #: pretix/base/models/orders.py:1504 pretix/base/pdf.py:172
-#: pretix/control/forms/filter.py:648 pretix/control/forms/organizer.py:983
+#: pretix/control/forms/filter.py:648 pretix/control/forms/organizer.py:986
 #: pretix/control/templates/pretixcontrol/order/index.html:514
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:120
 #: pretix/control/views/item.py:441 pretix/plugins/badges/exporters.py:495
@@ -2357,8 +2357,8 @@ msgstr "舊數據"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:15
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:223
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:375
-#: pretix/presale/templates/pretixpresale/event/voucher.html:235
-#: pretix/presale/templates/pretixpresale/event/voucher.html:390
+#: pretix/presale/templates/pretixpresale/event/voucher.html:234
+#: pretix/presale/templates/pretixpresale/event/voucher.html:389
 msgid "Quantity"
 msgstr "數量"
 
@@ -2605,7 +2605,7 @@ msgid "Organizer"
 msgstr "組織者"
 
 #: pretix/base/exporters/orderlist.py:1225 pretix/base/invoice.py:573
-#: pretix/control/templates/pretixcontrol/base.html:282
+#: pretix/control/templates/pretixcontrol/base.html:283
 #: pretix/control/templates/pretixcontrol/checkin/index.html:145
 #: pretix/control/templates/pretixcontrol/order/index.html:25
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:38
@@ -2752,7 +2752,7 @@ msgid "Last invoice date of order"
 msgstr "最後的訂單發票日期"
 
 #: pretix/base/exporters/reusablemedia.py:34 pretix/control/navigation.py:616
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:204
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:222
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:35
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:114
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
@@ -3073,7 +3073,7 @@ msgstr ""
 "您的佔位符語法有誤。 請檢查佔位符上的開頭“{”和結尾“}”花括號是否匹配。 請注"
 "意：要使用字面“{”或“}”，您需要將它們加倍為“{{”和“}}”。"
 
-#: pretix/base/forms/validators.py:72 pretix/control/views/event.py:804
+#: pretix/base/forms/validators.py:72 pretix/control/views/event.py:807
 #, python-format
 msgid "Invalid placeholder: {%(value)s}"
 msgstr "無效的佔位元: {%(value)s}"
@@ -3403,7 +3403,7 @@ msgid "Barcode / QR-Code"
 msgstr "條碼/二維碼"
 
 #: pretix/base/media.py:88
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:237
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:255
 msgid "NFC UID-based"
 msgstr "基於 NFC -UID介面"
 
@@ -3597,7 +3597,7 @@ msgid "Ambiguous option selected."
 msgstr "選擇不明確的選項。"
 
 #: pretix/base/modelimport_orders.py:698 pretix/base/models/orders.py:239
-#: pretix/control/forms/orders.py:696 pretix/control/forms/organizer.py:841
+#: pretix/control/forms/orders.py:696 pretix/control/forms/organizer.py:844
 msgid "Customer"
 msgstr "客戶"
 
@@ -4254,7 +4254,7 @@ msgstr "插件程式"
 #: pretix/control/views/dashboards.py:543
 #: pretix/presale/templates/pretixpresale/event/index.html:33
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:7
-#: pretix/presale/views/widget.py:682
+#: pretix/presale/views/widget.py:707
 msgid "Event series"
 msgstr "活動系列"
 
@@ -4338,7 +4338,7 @@ msgid ""
 "event."
 msgstr "如果選取此活動，這將公開顯示在活動的日期清單中。"
 
-#: pretix/base/models/event.py:1528 pretix/base/settings.py:3032
+#: pretix/base/models/event.py:1528 pretix/base/settings.py:3064
 msgid "Frontpage text"
 msgstr "首頁文字"
 
@@ -4455,8 +4455,8 @@ msgstr "其他收件者（密件副本）"
 #: pretix/control/forms/event.py:1175 pretix/control/forms/event.py:1185
 #: pretix/control/forms/event.py:1195 pretix/control/forms/orders.py:720
 #: pretix/control/forms/orders.py:942 pretix/control/forms/orders.py:969
-#: pretix/control/forms/organizer.py:601 pretix/control/forms/organizer.py:611
-#: pretix/control/forms/organizer.py:621 pretix/control/forms/vouchers.py:273
+#: pretix/control/forms/organizer.py:604 pretix/control/forms/organizer.py:614
+#: pretix/control/forms/organizer.py:624 pretix/control/forms/vouchers.py:273
 #: pretix/plugins/sendmail/forms.py:57 pretix/plugins/sendmail/forms.py:73
 #: pretix/plugins/sendmail/models.py:248
 msgid "Subject"
@@ -5766,7 +5766,7 @@ msgstr "其他費用"
 
 #: pretix/base/models/orders.py:2293 pretix/base/payment.py:1320
 #: pretix/base/payment.py:1324 pretix/base/settings.py:992
-#: pretix/control/forms/organizer.py:827
+#: pretix/control/forms/organizer.py:830
 #: pretix/control/templates/pretixcontrol/items/index.html:107
 #: pretix/control/templates/pretixcontrol/order/index.html:152
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:382
@@ -5819,7 +5819,7 @@ msgid "Badge"
 msgstr "徽章標誌圖片"
 
 #: pretix/base/models/orders.py:3469 pretix/base/pdf.py:1113
-#: pretix/control/forms/organizer.py:778 pretix/control/forms/organizer.py:814
+#: pretix/control/forms/organizer.py:781 pretix/control/forms/organizer.py:817
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
@@ -5829,8 +5829,8 @@ msgstr "票"
 msgid "Certificate"
 msgstr "驗證"
 
-#: pretix/base/models/orders.py:3471 pretix/control/views/event.py:390
-#: pretix/control/views/event.py:395
+#: pretix/base/models/orders.py:3471 pretix/control/views/event.py:393
+#: pretix/control/views/event.py:398
 msgid "Other"
 msgstr "其他"
 
@@ -6941,7 +6941,7 @@ msgid "Product name"
 msgstr "商品名稱"
 
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:101
-#: pretix/control/views/event.py:841 pretix/control/views/pdf.py:94
+#: pretix/control/views/event.py:844 pretix/control/views/pdf.py:94
 msgid "Sample product"
 msgstr "商品樣品"
 
@@ -6958,7 +6958,7 @@ msgid "Product description"
 msgstr "商品描述"
 
 #: pretix/base/pdf.py:132 pretix/base/services/tickets.py:102
-#: pretix/control/views/event.py:842 pretix/control/views/pdf.py:95
+#: pretix/control/views/event.py:845 pretix/control/views/pdf.py:95
 msgid "Sample product description"
 msgstr "商品樣品描述"
 
@@ -6995,7 +6995,7 @@ msgstr "費用包括附加費"
 #: pretix/base/services/placeholders.py:571
 #: pretix/base/services/placeholders.py:653
 #: pretix/base/services/placeholders.py:669
-#: pretix/base/services/placeholders.py:678 pretix/control/views/event.py:843
+#: pretix/base/services/placeholders.py:678 pretix/control/views/event.py:846
 msgid "John Doe"
 msgstr "無名氏"
 
@@ -7323,7 +7323,7 @@ msgstr "參與者的稱呼"
 
 #: pretix/base/pdf.py:649 pretix/base/pdf.py:672
 #: pretix/base/services/placeholders.py:696
-#: pretix/control/forms/organizer.py:658
+#: pretix/control/forms/organizer.py:661
 msgid "Mr Doe"
 msgstr "無名氏"
 
@@ -7496,7 +7496,7 @@ msgstr[0] ""
 
 #: pretix/base/services/cart.py:145 pretix/base/services/orders.py:154
 #: pretix/presale/templates/pretixpresale/event/index.html:171
-#: pretix/presale/views/waiting.py:145 pretix/presale/views/widget.py:763
+#: pretix/presale/views/waiting.py:145 pretix/presale/views/widget.py:788
 msgid "The booking period for this event has not yet started."
 msgstr "此活動的預訂期已結束或尚未開始。"
 
@@ -8936,7 +8936,7 @@ msgstr "強調顯示訂單代碼，使其明顯可見"
 msgid "Only respected by some invoice renderers."
 msgstr "只受到部分發票渲染者的遵守。"
 
-#: pretix/base/settings.py:744 pretix/base/settings.py:2875
+#: pretix/base/settings.py:744 pretix/base/settings.py:2907
 #: pretix/control/templates/pretixcontrol/pdf/index.html:376
 msgid "Font"
 msgstr "字體"
@@ -9951,34 +9951,74 @@ msgid ""
 msgstr ""
 "例如，這應該導向你網站的一部分，該部分解釋了你如何使用在售票處收集的數據。"
 
-#: pretix/base/settings.py:2082
+#: pretix/base/settings.py:2071
+#, fuzzy
+#| msgid "Account information"
+msgid "Accessibility information URL"
+msgstr "帳戶資訊"
+
+#: pretix/base/settings.py:2072
+#, fuzzy
+#| msgid ""
+#| "This should point e.g. to a part of your website that explains how you "
+#| "use data gathered in your ticket shop."
+msgid ""
+"This should point e.g. to a part of your website that explains how your "
+"ticket shop complies with accessibility regulation."
+msgstr ""
+"例如，這應該導向你網站的一部分，該部分解釋了你如何使用在售票處收集的數據。"
+
+#: pretix/base/settings.py:2079
+#: pretix/presale/templates/pretixpresale/event/base.html:228
+#: pretix/presale/templates/pretixpresale/event/base.html:233
+#: pretix/presale/templates/pretixpresale/organizers/accessibility.html:6
+#: pretix/presale/templates/pretixpresale/organizers/base.html:106
+#: pretix/presale/templates/pretixpresale/organizers/base.html:111
+#, fuzzy
+#| msgid "Account information"
+msgid "Accessibility information"
+msgstr "帳戶資訊"
+
+#: pretix/base/settings.py:2083
+#, fuzzy
+#| msgid "Account information"
+msgid "Accessibility information title"
+msgstr "帳戶資訊"
+
+#: pretix/base/settings.py:2093
+#, fuzzy
+#| msgid "Account information"
+msgid "Accessibility information text"
+msgstr "帳戶資訊"
+
+#: pretix/base/settings.py:2114
 msgid "Attach ticket files"
 msgstr "附加票證檔"
 
-#: pretix/base/settings.py:2084
+#: pretix/base/settings.py:2116
 #, python-brace-format
 msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
 msgstr "如果票證大於 {size}，則永遠不會附加票證，以避免電子郵件傳送問題。"
 
-#: pretix/base/settings.py:2095 pretix/plugins/sendmail/forms.py:201
+#: pretix/base/settings.py:2127 pretix/plugins/sendmail/forms.py:201
 #: pretix/plugins/sendmail/models.py:270
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:66
 msgid "Attach calendar files"
 msgstr "附加日曆檔"
 
-#: pretix/base/settings.py:2096
+#: pretix/base/settings.py:2128
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr "如果啟用，我們將在訂單中確認電子郵件附加的一項.ics日曆檔。"
 
-#: pretix/base/settings.py:2105
+#: pretix/base/settings.py:2137
 msgid "Attach calendar files only after order has been paid"
 msgstr "只有在訂單付款後附加日曆檔"
 
-#: pretix/base/settings.py:2106
+#: pretix/base/settings.py:2138
 msgid ""
 "Use this if you e.g. put a private access link into the calendar file to "
 "make sure people only receive it after their payment was confirmed."
@@ -9986,11 +10026,11 @@ msgstr ""
 "例如，如果你將私人訪問連結放入日曆檔中，以確保人們僅在確認付款后才能收到連"
 "結，請使用此選項。"
 
-#: pretix/base/settings.py:2115
+#: pretix/base/settings.py:2147
 msgid "Event description"
 msgstr "活動描述"
 
-#: pretix/base/settings.py:2118
+#: pretix/base/settings.py:2150
 msgid ""
 "You can use this to share information with your attendees, such as travel "
 "information or the link to a digital event. If you keep it empty, we will "
@@ -10003,11 +10043,11 @@ msgstr ""
 "我們將在其中放置活動商店，入場時間和召集人名稱的連結。我們不允許使用包含敏感"
 "人員特定數據的佔位元，因為日曆條目通常與未指定數量的人員共用。"
 
-#: pretix/base/settings.py:2131
+#: pretix/base/settings.py:2163
 msgid "Subject prefix"
 msgstr "主題前綴"
 
-#: pretix/base/settings.py:2132
+#: pretix/base/settings.py:2164
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
@@ -10015,42 +10055,42 @@ msgstr ""
 "這將附加到所有傳出電子郵件的主題前面，格式為 [前綴]。例如，選擇事件名稱的縮寫"
 "形式。"
 
-#: pretix/base/settings.py:2146 pretix/control/forms/mailsetup.py:37
+#: pretix/base/settings.py:2178 pretix/control/forms/mailsetup.py:37
 #: pretix/control/forms/mailsetup.py:119
 #: pretix/control/templates/pretixcontrol/event/mail.html:39
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:40
 msgid "Sender address"
 msgstr "寄件者位址"
 
-#: pretix/base/settings.py:2147 pretix/control/forms/mailsetup.py:38
+#: pretix/base/settings.py:2179 pretix/control/forms/mailsetup.py:38
 #: pretix/control/forms/mailsetup.py:120
 msgid "Sender address for outgoing emails"
 msgstr "傳出電子郵件的寄件者位址"
 
-#: pretix/base/settings.py:2156
+#: pretix/base/settings.py:2188
 msgid "Sender name"
 msgstr "寄件者姓名"
 
-#: pretix/base/settings.py:2157
+#: pretix/base/settings.py:2189
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr "與傳出電子郵件的寄件者位址一起使用的寄件者姓名。預設值為事件名稱。"
 
-#: pretix/base/settings.py:2175 pretix/base/settings.py:2232
-#: pretix/base/settings.py:2249 pretix/base/settings.py:2267
+#: pretix/base/settings.py:2207 pretix/base/settings.py:2264
+#: pretix/base/settings.py:2281 pretix/base/settings.py:2299
 #, python-brace-format
 msgid "Your order: {code}"
 msgstr "你的訂單： {code}"
 
-#: pretix/base/settings.py:2179 pretix/base/settings.py:2212
-#: pretix/base/settings.py:2317 pretix/base/settings.py:2550
-#: pretix/base/settings.py:2587
+#: pretix/base/settings.py:2211 pretix/base/settings.py:2244
+#: pretix/base/settings.py:2349 pretix/base/settings.py:2582
+#: pretix/base/settings.py:2619
 #, python-brace-format
 msgid "Your event registration: {code}"
 msgstr "你的活動註冊：{code}"
 
-#: pretix/base/settings.py:2183
+#: pretix/base/settings.py:2215
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10075,12 +10115,12 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2196
+#: pretix/base/settings.py:2228
 #, python-brace-format
 msgid "Your orders for {event}"
 msgstr "你的{event}訂單"
 
-#: pretix/base/settings.py:2200
+#: pretix/base/settings.py:2232
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10103,7 +10143,7 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2216
+#: pretix/base/settings.py:2248
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -10126,7 +10166,7 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2236
+#: pretix/base/settings.py:2268
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10151,7 +10191,7 @@ msgstr ""
 "此致敬意\n"
 "你的{event}團隊"
 
-#: pretix/base/settings.py:2253
+#: pretix/base/settings.py:2285
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10178,7 +10218,7 @@ msgstr ""
 "敬此\n"
 "你的 {event}團隊"
 
-#: pretix/base/settings.py:2271
+#: pretix/base/settings.py:2303
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10208,11 +10248,11 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2289
+#: pretix/base/settings.py:2321
 msgid "Attachment for new orders"
 msgstr "新訂單附件"
 
-#: pretix/base/settings.py:2294
+#: pretix/base/settings.py:2326
 #, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
@@ -10229,7 +10269,7 @@ msgstr ""
 "開資訊，因為此檔可能會在確認付款或訂單批准之前發送。為避免此重要電子郵件成為"
 "垃圾郵件，你只能上傳最大 {size} MB 的 PDF 檔。"
 
-#: pretix/base/settings.py:2321
+#: pretix/base/settings.py:2353
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -10252,12 +10292,12 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2333
+#: pretix/base/settings.py:2365
 #, python-brace-format
 msgid "Your order has been changed: {code}"
 msgstr "你的訂單已更改：{code}"
 
-#: pretix/base/settings.py:2337
+#: pretix/base/settings.py:2369
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10280,12 +10320,12 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2349
+#: pretix/base/settings.py:2381
 #, python-brace-format
 msgid "Payment received for your order: {code}"
 msgstr "收到的訂單付款：{code}"
 
-#: pretix/base/settings.py:2353
+#: pretix/base/settings.py:2385
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10312,12 +10352,12 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2371
+#: pretix/base/settings.py:2403
 #, python-brace-format
 msgid "Event registration confirmed: {code}"
 msgstr "活動註冊已確認：{code}"
 
-#: pretix/base/settings.py:2375
+#: pretix/base/settings.py:2407
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -10340,23 +10380,23 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2392 pretix/control/forms/event.py:1136
+#: pretix/base/settings.py:2424 pretix/control/forms/event.py:1136
 #: pretix/control/forms/event.py:1236 pretix/plugins/sendmail/models.py:275
 msgid "Number of days"
 msgstr "天數"
 
-#: pretix/base/settings.py:2394 pretix/control/forms/event.py:1139
+#: pretix/base/settings.py:2426 pretix/control/forms/event.py:1139
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
 msgstr "此電子郵件將在訂單到期前很多天發出。如果值為 0，則永遠不會發送郵件。"
 
-#: pretix/base/settings.py:2402
+#: pretix/base/settings.py:2434
 #, python-brace-format
 msgid "Your order is about to expire: {code}"
 msgstr "你的訂單即將到期：{code}"
 
-#: pretix/base/settings.py:2406
+#: pretix/base/settings.py:2438
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10383,12 +10423,12 @@ msgstr ""
 "敬此\n"
 "你的{event}團隊"
 
-#: pretix/base/settings.py:2420
+#: pretix/base/settings.py:2452
 #, python-brace-format
 msgid "Your order is pending payment: {code}"
 msgstr "你的訂單正在等待付款：{code}"
 
-#: pretix/base/settings.py:2424
+#: pretix/base/settings.py:2456
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10413,12 +10453,12 @@ msgstr ""
 "此致敬意\n"
 "你的{event}團隊"
 
-#: pretix/base/settings.py:2437
+#: pretix/base/settings.py:2469
 #, python-brace-format
 msgid "Incomplete payment received: {code}"
 msgstr "收到的付款不完整：{code}"
 
-#: pretix/base/settings.py:2441
+#: pretix/base/settings.py:2473
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10449,12 +10489,12 @@ msgstr ""
 "敬此\n"
 "你的{event} 團隊"
 
-#: pretix/base/settings.py:2457
+#: pretix/base/settings.py:2489
 #, python-brace-format
 msgid "Payment failed for your order: {code}"
 msgstr "訂單付款失敗：{code}"
 
-#: pretix/base/settings.py:2461
+#: pretix/base/settings.py:2493
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10484,12 +10524,12 @@ msgstr ""
 "敬此\n"
 "你的{event}團隊"
 
-#: pretix/base/settings.py:2475
+#: pretix/base/settings.py:2507
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
 msgstr "你已從 {event} 的候補名單中被挑出"
 
-#: pretix/base/settings.py:2479
+#: pretix/base/settings.py:2511
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10546,12 +10586,12 @@ msgstr ""
 "在此致意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2508
+#: pretix/base/settings.py:2540
 #, python-brace-format
 msgid "Order canceled: {code}"
 msgstr "訂單已取消：{code}"
 
-#: pretix/base/settings.py:2512
+#: pretix/base/settings.py:2544
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10578,12 +10618,12 @@ msgstr ""
 "此致敬意\n"
 "你的 {event}團隊"
 
-#: pretix/base/settings.py:2526
+#: pretix/base/settings.py:2558
 #, python-brace-format
 msgid "Order approved and awaiting payment: {code}"
 msgstr "訂單已批准並等待付款：{code}"
 
-#: pretix/base/settings.py:2530
+#: pretix/base/settings.py:2562
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10614,7 +10654,7 @@ msgstr ""
 "此致敬意\n"
 "你的 {event}團隊"
 
-#: pretix/base/settings.py:2554 pretix/base/settings.py:2591
+#: pretix/base/settings.py:2586 pretix/base/settings.py:2623
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10637,12 +10677,12 @@ msgstr ""
 "此致敬意\n"
 "你的 {event}團隊"
 
-#: pretix/base/settings.py:2566
+#: pretix/base/settings.py:2598
 #, python-brace-format
 msgid "Order approved and confirmed: {code}"
 msgstr "訂單已批准並確認：{code}"
 
-#: pretix/base/settings.py:2570
+#: pretix/base/settings.py:2602
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10667,12 +10707,12 @@ msgstr ""
 "敬此\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2603
+#: pretix/base/settings.py:2635
 #, python-brace-format
 msgid "Order denied: {code}"
 msgstr "訂單被拒絕：{code}"
 
-#: pretix/base/settings.py:2607
+#: pretix/base/settings.py:2639
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10701,7 +10741,7 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2622
+#: pretix/base/settings.py:2654
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10720,12 +10760,12 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2640 pretix/base/settings.py:2656
+#: pretix/base/settings.py:2672 pretix/base/settings.py:2688
 #, python-brace-format
 msgid "Your ticket is ready for download: {code}"
 msgstr "你的門票已準備好下載：{code}"
 
-#: pretix/base/settings.py:2644
+#: pretix/base/settings.py:2676
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -10748,7 +10788,7 @@ msgstr ""
 "此致敬意\n"
 "    你的 {event} 團隊"
 
-#: pretix/base/settings.py:2660
+#: pretix/base/settings.py:2692
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -10771,12 +10811,12 @@ msgstr ""
 "此致敬意\n"
 "你的 {event} 團隊"
 
-#: pretix/base/settings.py:2672
+#: pretix/base/settings.py:2704
 #, python-brace-format
 msgid "Activate your account at {organizer}"
 msgstr "在{organizer}啟動你的帳戶"
 
-#: pretix/base/settings.py:2676
+#: pretix/base/settings.py:2708
 #, python-brace-format
 msgid ""
 "Hello {name},\n"
@@ -10811,12 +10851,12 @@ msgstr ""
 "\n"
 "你的 {organizer}團隊"
 
-#: pretix/base/settings.py:2694
+#: pretix/base/settings.py:2726
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
 msgstr "在{organizer}確認你帳戶的電子郵件位址"
 
-#: pretix/base/settings.py:2698
+#: pretix/base/settings.py:2730
 #, python-brace-format
 msgid ""
 "Hello {name},\n"
@@ -10851,12 +10891,12 @@ msgstr ""
 "\n"
 "你的{organizer}團隊"
 
-#: pretix/base/settings.py:2716
+#: pretix/base/settings.py:2748
 #, python-brace-format
 msgid "Set a new password for your account at {organizer}"
 msgstr "在{organizer}為你的帳戶設定新密碼"
 
-#: pretix/base/settings.py:2720
+#: pretix/base/settings.py:2752
 #, python-brace-format
 msgid ""
 "Hello {name},\n"
@@ -10891,57 +10931,57 @@ msgstr ""
 "\n"
 "你的{organizer}團隊"
 
-#: pretix/base/settings.py:2772 pretix/base/settings.py:2779
-#: pretix/base/settings.py:2793 pretix/base/settings.py:2801
-#: pretix/base/settings.py:2815 pretix/base/settings.py:2823
-#: pretix/base/settings.py:2837 pretix/base/settings.py:2844
+#: pretix/base/settings.py:2804 pretix/base/settings.py:2811
+#: pretix/base/settings.py:2825 pretix/base/settings.py:2833
+#: pretix/base/settings.py:2847 pretix/base/settings.py:2855
+#: pretix/base/settings.py:2869 pretix/base/settings.py:2876
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
 msgstr "請輸入顏色的十六進位代碼，例如#990000。"
 
-#: pretix/base/settings.py:2776
+#: pretix/base/settings.py:2808
 msgid "Primary color"
 msgstr "三原色"
 
-#: pretix/base/settings.py:2797
+#: pretix/base/settings.py:2829
 msgid "Accent color for success"
 msgstr "成功的強調色"
 
-#: pretix/base/settings.py:2798
+#: pretix/base/settings.py:2830
 msgid "We strongly suggest to use a shade of green."
 msgstr "我們強烈建議使用綠色陰影。"
 
-#: pretix/base/settings.py:2819
+#: pretix/base/settings.py:2851
 msgid "Accent color for errors"
 msgstr "錯誤的主題強調色"
 
-#: pretix/base/settings.py:2820
+#: pretix/base/settings.py:2852
 msgid "We strongly suggest to use a shade of red."
 msgstr "我們強烈建議使用紅色陰影。"
 
-#: pretix/base/settings.py:2841
+#: pretix/base/settings.py:2873
 msgid "Page background color"
 msgstr "頁面背景色"
 
-#: pretix/base/settings.py:2856
+#: pretix/base/settings.py:2888
 msgid "Use round edges"
 msgstr "使用圓邊"
 
-#: pretix/base/settings.py:2865
+#: pretix/base/settings.py:2897
 msgid ""
 "Use native spinners in the widget instead of custom ones for numeric inputs "
 "such as quantity."
 msgstr "在小組件中使用本機微調器，而不是自定義微調器進行數字輸入，例如：數量。"
 
-#: pretix/base/settings.py:2876
+#: pretix/base/settings.py:2908
 msgid "Only respected by modern browsers."
 msgstr "只遵循當代瀏覽器。"
 
-#: pretix/base/settings.py:2887 pretix/base/settings.py:2931
-#: pretix/control/forms/organizer.py:520
+#: pretix/base/settings.py:2919 pretix/base/settings.py:2963
+#: pretix/control/forms/organizer.py:523
 msgid "Header image"
 msgstr "標題圖像"
 
-#: pretix/base/settings.py:2890
+#: pretix/base/settings.py:2922
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. If you use a white background, we show your logo "
@@ -10954,19 +10994,19 @@ msgstr ""
 "為您1120x120像素。您可以使用下列設定擴大尺寸。我們建議不要在圖片上使用小細"
 "節，因為它的尺寸將在較小的螢幕被調整。"
 
-#: pretix/base/settings.py:2911 pretix/base/settings.py:2954
+#: pretix/base/settings.py:2943 pretix/base/settings.py:2986
 msgid "Use header image in its full size"
 msgstr "使用完整尺寸的標題圖像"
 
-#: pretix/base/settings.py:2912 pretix/base/settings.py:2955
+#: pretix/base/settings.py:2944 pretix/base/settings.py:2987
 msgid "We recommend to upload a picture at least 1170 pixels wide."
 msgstr "我們建議上傳至少 1170 像素寬的圖片。"
 
-#: pretix/base/settings.py:2921
+#: pretix/base/settings.py:2953
 msgid "Show event title even if a header image is present"
 msgstr "即使存在標題圖像，也顯示事件標題"
 
-#: pretix/base/settings.py:2922
+#: pretix/base/settings.py:2954
 msgid ""
 "The title will only be shown on the event front page. If no header image is "
 "uploaded for the event, but the header image from the organizer profile is "
@@ -10975,7 +11015,7 @@ msgstr ""
 "標題只會顯示在活動首頁上。如果沒有為活動上傳標題圖像，但使用了召集人配置檔中"
 "的標題圖像，則將忽略此選項，並始終顯示活動標題。"
 
-#: pretix/base/settings.py:2934 pretix/control/forms/organizer.py:524
+#: pretix/base/settings.py:2966 pretix/control/forms/organizer.py:527
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. If you use a white background, we show your logo "
@@ -10988,15 +11028,15 @@ msgstr ""
 "1120x120 像素。你可以使用下列設定增加大小。我們建議不要在圖片上使用小細節，因"
 "為圖片將在較小的螢幕上調整尺寸。"
 
-#: pretix/base/settings.py:2964
+#: pretix/base/settings.py:2996
 msgid "Use header image also for events without an individually uploaded logo"
 msgstr "對於沒有單獨上傳標題圖像的活動，也可以使用標題圖片"
 
-#: pretix/base/settings.py:2972
+#: pretix/base/settings.py:3004
 msgid "Favicon"
 msgstr "網站圖示"
 
-#: pretix/base/settings.py:2975
+#: pretix/base/settings.py:3007
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accommodate most devices."
@@ -11004,11 +11044,11 @@ msgstr ""
 "如果你提供網站圖示，我們將顯示它而不是預設的 pretix 圖示。我們建議大小至少為 "
 "200x200 像素，以容納大多數設備。"
 
-#: pretix/base/settings.py:2991
+#: pretix/base/settings.py:3023
 msgid "Social media image"
 msgstr "社交媒體圖片"
 
-#: pretix/base/settings.py:2994
+#: pretix/base/settings.py:3026
 msgid ""
 "This picture will be used as a preview if you post links to your ticket shop "
 "on social media. Facebook advises to use a picture size of 1200 x 630 "
@@ -11021,50 +11061,50 @@ msgstr ""
 "我們建議：確保只顯示中心正方形仍然有好看的圖片。如果你不填寫此內容，我們將使"
 "用上面給出的徽章標誌。"
 
-#: pretix/base/settings.py:3012
+#: pretix/base/settings.py:3044
 msgid "Logo image"
 msgstr "徽章標誌圖片"
 
-#: pretix/base/settings.py:3016
+#: pretix/base/settings.py:3048
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
 msgstr "我們將以最大高度和寬度顯示你的照片徽章，最大高度和寬度為2.5釐米。"
 
-#: pretix/base/settings.py:3042 pretix/base/settings.py:3148
+#: pretix/base/settings.py:3074 pretix/base/settings.py:3180
 msgid "Info text"
 msgstr "資訊文件"
 
-#: pretix/base/settings.py:3045 pretix/base/settings.py:3150
+#: pretix/base/settings.py:3077 pretix/base/settings.py:3182
 msgid ""
 "Not displayed anywhere by default, but if you want to, you can use this e.g. "
 "in ticket templates."
 msgstr ""
 "預設值情況下不會顯示在任何地方，但如果你願意，你可以在票證範本中使用預設值。"
 
-#: pretix/base/settings.py:3054
+#: pretix/base/settings.py:3086
 msgid "Banner text (top)"
 msgstr "橫幅文字（頂部）"
 
-#: pretix/base/settings.py:3057
+#: pretix/base/settings.py:3089
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
 msgstr "此文字將顯示在你商店的每個頁面上方。請只將其用於非常重要的消息。"
 
-#: pretix/base/settings.py:3067
+#: pretix/base/settings.py:3099
 msgid "Banner text (bottom)"
 msgstr "橫幅文字（底部）"
 
-#: pretix/base/settings.py:3070
+#: pretix/base/settings.py:3102
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
 msgstr "此文字將顯示在你商店的每個頁面下方。請只將其用於非常重要的消息。"
 
-#: pretix/base/settings.py:3080
+#: pretix/base/settings.py:3112
 msgid "Voucher explanation"
 msgstr "優惠券說明"
 
-#: pretix/base/settings.py:3083
+#: pretix/base/settings.py:3115
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
@@ -11072,31 +11112,31 @@ msgstr ""
 "此文字將顯示在優惠券代碼的輸入旁邊。例如，你可以使用它來解釋如何獲取優惠券代"
 "碼。"
 
-#: pretix/base/settings.py:3093
+#: pretix/base/settings.py:3125
 msgid "Attendee data explanation"
 msgstr "與會者數據說明"
 
-#: pretix/base/settings.py:3096
+#: pretix/base/settings.py:3128
 msgid ""
 "This text will be shown above the questions asked for every personalized "
 "product. You can use it e.g. to explain why you need information from them."
 msgstr "你的顏色對比度很高，非常易於閱讀。"
 
-#: pretix/base/settings.py:3106
+#: pretix/base/settings.py:3138
 msgid "Additional success message"
 msgstr "另外的成功消息"
 
-#: pretix/base/settings.py:3107
+#: pretix/base/settings.py:3139
 msgid ""
 "This message will be shown after an order has been created successfully. It "
 "will be shown in additional to the default text."
 msgstr "成功建立訂單後，將顯示此消息。該消息將在預設文字之外顯示。"
 
-#: pretix/base/settings.py:3119
+#: pretix/base/settings.py:3151
 msgid "Help text of the phone number field"
 msgstr "電話號碼欄位的説明文字"
 
-#: pretix/base/settings.py:3126
+#: pretix/base/settings.py:3158
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
@@ -11104,15 +11144,15 @@ msgstr ""
 "確保輸入有效的電子郵件位址。我們將向你發送訂單確認，其中包含你稍後訪問訂單所"
 "需的連結。"
 
-#: pretix/base/settings.py:3133
+#: pretix/base/settings.py:3165
 msgid "Help text of the email field"
 msgstr "電子郵件欄位的説明文字"
 
-#: pretix/base/settings.py:3159
+#: pretix/base/settings.py:3191
 msgid "Allow creating a new team during event creation"
 msgstr "允許在活動期間建立新團隊"
 
-#: pretix/base/settings.py:3160
+#: pretix/base/settings.py:3192
 msgid ""
 "Users that do not have access to all events under this organizer, must "
 "select one of their teams to have access to the created event. This setting "
@@ -11123,36 +11163,36 @@ msgstr ""
 "動。此設置允許使用者即時建立事件指定的團隊，即使他們沒有“可以更改團隊和許可"
 "權”許可權也是如此。"
 
-#: pretix/base/settings.py:3232 pretix/base/settings.py:3242
+#: pretix/base/settings.py:3264 pretix/base/settings.py:3274
 msgid "Event start time (descending)"
 msgstr "事件開始時間（降序）"
 
-#: pretix/base/settings.py:3234 pretix/base/settings.py:3244
+#: pretix/base/settings.py:3266 pretix/base/settings.py:3276
 msgid "Name (descending)"
 msgstr "名稱（降序）"
 
-#: pretix/base/settings.py:3239
+#: pretix/base/settings.py:3271
 msgctxt "subevent"
 msgid "Date ordering"
 msgstr "訂購日期"
 
-#: pretix/base/settings.py:3255
+#: pretix/base/settings.py:3287
 msgid "Link back to organizer overview on all event pages"
 msgstr "連結回所有活動頁面上的組織者概述"
 
-#: pretix/base/settings.py:3264
+#: pretix/base/settings.py:3296
 msgid "Homepage text"
 msgstr "主頁文件"
 
-#: pretix/base/settings.py:3266
+#: pretix/base/settings.py:3298
 msgid "This will be displayed on the organizer homepage."
 msgstr "這將顯示在召集人主頁上。"
 
-#: pretix/base/settings.py:3281
+#: pretix/base/settings.py:3313
 msgid "Length of gift card codes"
 msgstr "禮品卡代碼的長度"
 
-#: pretix/base/settings.py:3282
+#: pretix/base/settings.py:3314
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
@@ -11160,11 +11200,11 @@ msgstr ""
 "預設值情況下，系統會生成 {} 個字元的長禮品卡代碼。但是，如果需要不同的長度，"
 "可以在此處設定。"
 
-#: pretix/base/settings.py:3298
+#: pretix/base/settings.py:3330
 msgid "Validity of gift card codes in years"
 msgstr "禮品卡代碼的有效期（以年為單位）"
 
-#: pretix/base/settings.py:3299
+#: pretix/base/settings.py:3331
 msgid ""
 "If you set a number here, gift cards will by default expire at the end of "
 "the year after this many years. If you keep it empty, gift cards do not have "
@@ -11173,22 +11213,22 @@ msgstr ""
 "如果你在此處設定一項數目，禮品卡將預設在這麼後來年份的年底到期。如果你將其保"
 "留為空，禮品卡將沒有明確的到期日期。"
 
-#: pretix/base/settings.py:3310
+#: pretix/base/settings.py:3342
 msgid "Enable cookie consent management features"
 msgstr "啟用 Cookie 同意管理功能"
 
-#: pretix/base/settings.py:3316
+#: pretix/base/settings.py:3348
 msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
 msgstr ""
 "點擊“接受所有 Cookie”，即表示你同意在你的設備上儲存 Cookie 和使用類似技術。"
 
-#: pretix/base/settings.py:3323
+#: pretix/base/settings.py:3355
 msgid "Dialog text"
 msgstr "對話文件"
 
-#: pretix/base/settings.py:3330
+#: pretix/base/settings.py:3362
 msgid ""
 "We use cookies and similar technologies to gather data that allows us to "
 "improve this website and our offerings. If you do not agree, we will only "
@@ -11198,39 +11238,39 @@ msgstr ""
 "我們使用 Cookie 和類似技術來收集數據，以便我們改進本網站和我們的產品。如果你"
 "不同意，我們只會在 Cookie 對提供本網站提供的服務至關重要的情況下使用。"
 
-#: pretix/base/settings.py:3338
+#: pretix/base/settings.py:3370
 msgid "Secondary dialog text"
 msgstr "輔助對話框文字"
 
-#: pretix/base/settings.py:3344
+#: pretix/base/settings.py:3376
 msgid "Privacy settings"
 msgstr "隱私設定"
 
-#: pretix/base/settings.py:3349
+#: pretix/base/settings.py:3381
 msgid "Dialog title"
 msgstr "對話標題"
 
-#: pretix/base/settings.py:3355
+#: pretix/base/settings.py:3387
 msgid "Accept all cookies"
 msgstr "接受所有cookies"
 
-#: pretix/base/settings.py:3360
+#: pretix/base/settings.py:3392
 msgid "\"Accept\" button description"
 msgstr "“接受”按鈕說明"
 
-#: pretix/base/settings.py:3366
+#: pretix/base/settings.py:3398
 msgid "Required cookies only"
 msgstr "僅必需的cookies"
 
-#: pretix/base/settings.py:3371
+#: pretix/base/settings.py:3403
 msgid "\"Reject\" button description"
 msgstr "“拒絕”按鈕說明"
 
-#: pretix/base/settings.py:3381
+#: pretix/base/settings.py:3413
 msgid "Customers can choose their own seats"
 msgstr "客戶可以選擇自己的座位"
 
-#: pretix/base/settings.py:3382
+#: pretix/base/settings.py:3414
 msgid ""
 "If disabled, you will need to manually assign seats in the backend. Note "
 "that this can mean people will not know their seat after their purchase and "
@@ -11239,170 +11279,170 @@ msgstr ""
 "如果禁用，則需要在後端手動分配席位。請留意，這可能意味著人們在購買后不會知道"
 "他們的座位，並且可能不會寫在他們的票上。"
 
-#: pretix/base/settings.py:3408
+#: pretix/base/settings.py:3440
 msgid "Show button to copy user input from other products"
 msgstr "以從其他產品複製使用者輸入的顯示按鈕"
 
-#: pretix/base/settings.py:3418
+#: pretix/base/settings.py:3450
 msgid "Most common English titles"
 msgstr "最常見的英文標題"
 
-#: pretix/base/settings.py:3428
+#: pretix/base/settings.py:3460
 msgid "Most common German titles"
 msgstr "最常見的德語標題"
 
-#: pretix/base/settings.py:3441
+#: pretix/base/settings.py:3473
 msgctxt "person_name_salutation"
 msgid "Ms"
 msgstr "小姐"
 
-#: pretix/base/settings.py:3442
+#: pretix/base/settings.py:3474
 msgctxt "person_name_salutation"
 msgid "Mr"
 msgstr "先生"
 
-#: pretix/base/settings.py:3443
+#: pretix/base/settings.py:3475
 msgctxt "person_name_salutation"
 msgid "Mx"
 msgstr "Mx (非二元中性性別)"
 
-#: pretix/base/settings.py:3475 pretix/base/settings.py:3488
-#: pretix/base/settings.py:3504 pretix/base/settings.py:3554
-#: pretix/base/settings.py:3567 pretix/base/settings.py:3581
-#: pretix/base/settings.py:3634 pretix/base/settings.py:3655
-#: pretix/base/settings.py:3677
+#: pretix/base/settings.py:3507 pretix/base/settings.py:3520
+#: pretix/base/settings.py:3536 pretix/base/settings.py:3586
+#: pretix/base/settings.py:3599 pretix/base/settings.py:3613
+#: pretix/base/settings.py:3666 pretix/base/settings.py:3687
+#: pretix/base/settings.py:3709
 msgid "Given name"
 msgstr "給定名字"
 
-#: pretix/base/settings.py:3476 pretix/base/settings.py:3489
-#: pretix/base/settings.py:3505 pretix/base/settings.py:3521
-#: pretix/base/settings.py:3538 pretix/base/settings.py:3553
-#: pretix/base/settings.py:3568 pretix/base/settings.py:3582
-#: pretix/base/settings.py:3635 pretix/base/settings.py:3656
-#: pretix/base/settings.py:3678
+#: pretix/base/settings.py:3508 pretix/base/settings.py:3521
+#: pretix/base/settings.py:3537 pretix/base/settings.py:3553
+#: pretix/base/settings.py:3570 pretix/base/settings.py:3585
+#: pretix/base/settings.py:3600 pretix/base/settings.py:3614
+#: pretix/base/settings.py:3667 pretix/base/settings.py:3688
+#: pretix/base/settings.py:3710
 msgid "Family name"
 msgstr "家族姓氏"
 
-#: pretix/base/settings.py:3480 pretix/base/settings.py:3496
-#: pretix/base/settings.py:3512 pretix/base/settings.py:3527
-#: pretix/base/settings.py:3545 pretix/base/settings.py:3560
-#: pretix/base/settings.py:3590 pretix/base/settings.py:3614
-#: pretix/base/settings.py:3646 pretix/base/settings.py:3668
-#: pretix/base/settings.py:3699
+#: pretix/base/settings.py:3512 pretix/base/settings.py:3528
+#: pretix/base/settings.py:3544 pretix/base/settings.py:3559
+#: pretix/base/settings.py:3577 pretix/base/settings.py:3592
+#: pretix/base/settings.py:3622 pretix/base/settings.py:3646
+#: pretix/base/settings.py:3678 pretix/base/settings.py:3700
+#: pretix/base/settings.py:3731
 msgctxt "person_name_sample"
 msgid "John"
 msgstr "約翰"
 
-#: pretix/base/settings.py:3481 pretix/base/settings.py:3497
 #: pretix/base/settings.py:3513 pretix/base/settings.py:3529
-#: pretix/base/settings.py:3547 pretix/base/settings.py:3561
-#: pretix/base/settings.py:3591 pretix/base/settings.py:3647
-#: pretix/base/settings.py:3669 pretix/base/settings.py:3700
+#: pretix/base/settings.py:3545 pretix/base/settings.py:3561
+#: pretix/base/settings.py:3579 pretix/base/settings.py:3593
+#: pretix/base/settings.py:3623 pretix/base/settings.py:3679
+#: pretix/base/settings.py:3701 pretix/base/settings.py:3732
 msgctxt "person_name_sample"
 msgid "Doe"
 msgstr "無名氏"
 
-#: pretix/base/settings.py:3487 pretix/base/settings.py:3503
-#: pretix/base/settings.py:3535 pretix/base/settings.py:3654
-#: pretix/base/settings.py:3676
+#: pretix/base/settings.py:3519 pretix/base/settings.py:3535
+#: pretix/base/settings.py:3567 pretix/base/settings.py:3686
+#: pretix/base/settings.py:3708
 msgctxt "person_name"
 msgid "Title"
 msgstr "頭銜"
 
-#: pretix/base/settings.py:3495 pretix/base/settings.py:3511
-#: pretix/base/settings.py:3544 pretix/base/settings.py:3667
-#: pretix/base/settings.py:3698
+#: pretix/base/settings.py:3527 pretix/base/settings.py:3543
+#: pretix/base/settings.py:3576 pretix/base/settings.py:3699
+#: pretix/base/settings.py:3730
 msgctxt "person_name_sample"
 msgid "Dr"
 msgstr "博士"
 
-#: pretix/base/settings.py:3519 pretix/base/settings.py:3536
+#: pretix/base/settings.py:3551 pretix/base/settings.py:3568
 msgid "First name"
 msgstr "名字"
 
-#: pretix/base/settings.py:3520 pretix/base/settings.py:3537
+#: pretix/base/settings.py:3552 pretix/base/settings.py:3569
 msgid "Middle name"
 msgstr "中間姓名"
 
-#: pretix/base/settings.py:3601 pretix/base/settings.py:3613
-#: pretix/control/forms/organizer.py:652
+#: pretix/base/settings.py:3633 pretix/base/settings.py:3645
+#: pretix/control/forms/organizer.py:655
 msgctxt "person_name_sample"
 msgid "John Doe"
 msgstr "無名氏"
 
-#: pretix/base/settings.py:3607
+#: pretix/base/settings.py:3639
 msgid "Calling name"
 msgstr "被稱呼名字"
 
-#: pretix/base/settings.py:3621
+#: pretix/base/settings.py:3653
 msgid "Latin transcription"
 msgstr "拉定轉錄"
 
-#: pretix/base/settings.py:3633 pretix/base/settings.py:3653
-#: pretix/base/settings.py:3675
+#: pretix/base/settings.py:3665 pretix/base/settings.py:3685
+#: pretix/base/settings.py:3707
 msgctxt "person_name"
 msgid "Salutation"
 msgstr "稱呼"
 
-#: pretix/base/settings.py:3645 pretix/base/settings.py:3666
-#: pretix/base/settings.py:3697
+#: pretix/base/settings.py:3677 pretix/base/settings.py:3698
+#: pretix/base/settings.py:3729
 msgctxt "person_name_sample"
 msgid "Mr"
 msgstr "先生"
 
-#: pretix/base/settings.py:3679
+#: pretix/base/settings.py:3711
 msgctxt "person_name"
 msgid "Degree (after name)"
 msgstr "學位（姓名後方）"
 
-#: pretix/base/settings.py:3701
+#: pretix/base/settings.py:3733
 msgctxt "person_name_sample"
 msgid "MA"
 msgstr "MA"
 
-#: pretix/base/settings.py:3727 pretix/base/settings.py:3729
+#: pretix/base/settings.py:3759 pretix/base/settings.py:3761
 msgctxt "address"
 msgid "Province"
 msgstr "省"
 
-#: pretix/base/settings.py:3728
+#: pretix/base/settings.py:3760
 msgctxt "address"
 msgid "Prefecture"
 msgstr "縣/州/區"
 
-#: pretix/base/settings.py:3817 pretix/control/forms/event.py:229
+#: pretix/base/settings.py:3849 pretix/control/forms/event.py:229
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr "還必須為事件啟用預設區域設定（請參閱上面的框）。"
 
-#: pretix/base/settings.py:3821
+#: pretix/base/settings.py:3853
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr "如果不要求指定出席者姓名，則不能要求指定出席者姓名。"
 
-#: pretix/base/settings.py:3825
+#: pretix/base/settings.py:3857
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr "如果要將其設定為必要，則必須要求提供出席者電子郵件。"
 
-#: pretix/base/settings.py:3829
+#: pretix/base/settings.py:3861
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
 msgstr "如果要將其設定為必要，則必須要求提供發票位址。"
 
-#: pretix/base/settings.py:3833
+#: pretix/base/settings.py:3865
 msgid "You have to require invoice addresses to require for company names."
 msgstr "你必須要求發票位址才能要求公司名稱。"
 
-#: pretix/base/settings.py:3840
+#: pretix/base/settings.py:3872
 msgid "The last payment date cannot be before the end of presale."
 msgstr "最後付款日期不能在預售結束之前。"
 
-#: pretix/base/settings.py:3848
+#: pretix/base/settings.py:3880
 #, python-brace-format
 msgid "The value \"{identifier}\" is not a valid sales channel."
 msgstr "值「{identifier}」不是有效的銷售管道。"
 
-#: pretix/base/settings.py:3863
+#: pretix/base/settings.py:3895
 msgid "This needs to be disabled if other NFC-based types are active."
 msgstr "如果啟動了其他基於 NFC 的類型，則需要停用此功能。"
 
@@ -11574,7 +11614,7 @@ msgid "You do not have access to this page."
 msgstr "你無權訪問此頁面。"
 
 #: pretix/base/templates/403.html:20 pretix/base/templates/404.html:19
-#: pretix/control/templates/pretixcontrol/base.html:196
+#: pretix/control/templates/pretixcontrol/base.html:197
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
 #: pretix/presale/templates/pretixpresale/event/offline.html:21
@@ -12373,12 +12413,12 @@ msgid ""
 msgstr ""
 "如果上面定義的命名方案允許使用者輸入標題，則可以使用該定義來限制可選標題集。"
 
-#: pretix/control/forms/event.py:649 pretix/control/forms/organizer.py:539
+#: pretix/control/forms/event.py:649 pretix/control/forms/organizer.py:542
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
 msgstr "請求 {fields}顯示類似{example}"
 
-#: pretix/control/forms/event.py:655 pretix/control/forms/organizer.py:545
+#: pretix/control/forms/event.py:655 pretix/control/forms/organizer.py:548
 msgid "Free text input"
 msgstr "自由輸入文本"
 
@@ -12475,15 +12515,15 @@ msgid ""
 "shop must be enabled."
 msgstr "此電子郵件只會發送給來自這些銷售管道的訂單。必須在線商店啟用。"
 
-#: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:580
+#: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:583
 msgid "Bcc address"
 msgstr "密件抄送位址"
 
-#: pretix/control/forms/event.py:996 pretix/control/forms/organizer.py:581
+#: pretix/control/forms/event.py:996 pretix/control/forms/organizer.py:584
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "所有電子郵件將作為密件抄送副本發送到此位址"
 
-#: pretix/control/forms/event.py:1002 pretix/control/forms/organizer.py:587
+#: pretix/control/forms/event.py:1002 pretix/control/forms/organizer.py:590
 msgid "Signature"
 msgstr "簽名"
 
@@ -12492,7 +12532,7 @@ msgstr "簽名"
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr "這將附加到每封電子郵件中。可用占位符：{event}"
 
-#: pretix/control/forms/event.py:1010 pretix/control/forms/organizer.py:595
+#: pretix/control/forms/event.py:1010 pretix/control/forms/organizer.py:598
 msgid "e.g. your contact details"
 msgstr "例如你的聯繫方式"
 
@@ -12539,8 +12579,8 @@ msgstr "發送給出席者的文本"
 
 #: pretix/control/forms/event.py:1106 pretix/control/forms/event.py:1180
 #: pretix/control/forms/event.py:1190 pretix/control/forms/event.py:1200
-#: pretix/control/forms/event.py:1205 pretix/control/forms/organizer.py:606
-#: pretix/control/forms/organizer.py:616 pretix/control/forms/organizer.py:626
+#: pretix/control/forms/event.py:1205 pretix/control/forms/organizer.py:609
+#: pretix/control/forms/organizer.py:619 pretix/control/forms/organizer.py:629
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:111
 msgid "Text"
@@ -14358,86 +14398,86 @@ msgid ""
 "Your device will not have access to anything, please select some events."
 msgstr "你的設備將無法存取任何內容，請選擇一些事件。"
 
-#: pretix/control/forms/organizer.py:555 pretix/plugins/stripe/payment.py:311
+#: pretix/control/forms/organizer.py:558 pretix/plugins/stripe/payment.py:311
 msgid "experimental"
 msgstr "實驗性"
 
-#: pretix/control/forms/organizer.py:561
+#: pretix/control/forms/organizer.py:564
 msgid ""
 "This feature is currently in an experimental stage. It only supports very "
 "limited use cases and might change at any point."
 msgstr "此功能目前處於試驗階段。這僅支援非常有限的範例，並且可能隨時更改。"
 
-#: pretix/control/forms/organizer.py:590
+#: pretix/control/forms/organizer.py:593
 msgid "This will be attached to every email."
 msgstr "這將會附件到每封電子郵件。"
 
-#: pretix/control/forms/organizer.py:682
+#: pretix/control/forms/organizer.py:685
 msgctxt "webhooks"
 msgid "Event types"
 msgstr "活動類型"
 
-#: pretix/control/forms/organizer.py:714
+#: pretix/control/forms/organizer.py:717
 msgid "Gift card value"
 msgstr "禮品卡價值"
 
-#: pretix/control/forms/organizer.py:787
+#: pretix/control/forms/organizer.py:790
 msgid "An medium with this type and identifier is already registered."
 msgstr "已註冊具有此類型和標識碼的媒體。"
 
-#: pretix/control/forms/organizer.py:888
+#: pretix/control/forms/organizer.py:891
 msgid "An account with this customer ID is already registered."
 msgstr "已註冊具有此客戶 ID 的帳戶。"
 
-#: pretix/control/forms/organizer.py:905
+#: pretix/control/forms/organizer.py:908
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:61
 #: pretix/presale/forms/customer.py:168 pretix/presale/forms/customer.py:489
 msgid "Phone"
 msgstr "電話"
 
-#: pretix/control/forms/organizer.py:1012
+#: pretix/control/forms/organizer.py:1015
 msgctxt "sso_oidc"
 msgid "Base URL"
 msgstr "基本ＵＲＬ"
 
-#: pretix/control/forms/organizer.py:1016
+#: pretix/control/forms/organizer.py:1019
 msgctxt "sso_oidc"
 msgid "Client ID"
 msgstr "客戶端ID"
 
-#: pretix/control/forms/organizer.py:1020
+#: pretix/control/forms/organizer.py:1023
 msgctxt "sso_oidc"
 msgid "Client secret"
 msgstr "客戶端密碼"
 
-#: pretix/control/forms/organizer.py:1024
+#: pretix/control/forms/organizer.py:1027
 msgctxt "sso_oidc"
 msgid "Scope"
 msgstr "範圍"
 
-#: pretix/control/forms/organizer.py:1025
+#: pretix/control/forms/organizer.py:1028
 msgctxt "sso_oidc"
 msgid "Multiple scopes separated with spaces."
 msgstr "用空格分隔的多項範圍。"
 
-#: pretix/control/forms/organizer.py:1029
+#: pretix/control/forms/organizer.py:1032
 msgctxt "sso_oidc"
 msgid "User ID field"
 msgstr "使用者ID欄位"
 
-#: pretix/control/forms/organizer.py:1030
+#: pretix/control/forms/organizer.py:1033
 msgctxt "sso_oidc"
 msgid ""
 "We will assume that the contents of the user ID fields are unique and can "
 "never change for a user."
 msgstr "我們將假設使用者ID欄位的內容是唯一的，並且永遠不會為使用者更改。"
 
-#: pretix/control/forms/organizer.py:1036
+#: pretix/control/forms/organizer.py:1039
 msgctxt "sso_oidc"
 msgid "Email field"
 msgstr "電子郵件欄位"
 
-#: pretix/control/forms/organizer.py:1037
+#: pretix/control/forms/organizer.py:1040
 msgctxt "sso_oidc"
 msgid ""
 "We will assume that all email addresses received from the SSO provider are "
@@ -14447,17 +14487,17 @@ msgstr ""
 "我們假設從 SSO 供應商收到的所有電子郵件地址都經過驗證，是否確實屬於使用者。如"
 "果無法保證這一點，則可能會出現安全問題。"
 
-#: pretix/control/forms/organizer.py:1044
+#: pretix/control/forms/organizer.py:1047
 msgctxt "sso_oidc"
 msgid "Phone field"
 msgstr "電話欄位"
 
-#: pretix/control/forms/organizer.py:1048
+#: pretix/control/forms/organizer.py:1051
 msgctxt "sso_oidc"
 msgid "Query parameters"
 msgstr "查詢參數"
 
-#: pretix/control/forms/organizer.py:1049
+#: pretix/control/forms/organizer.py:1052
 #, python-brace-format
 msgctxt "sso_oidc"
 msgid ""
@@ -14465,19 +14505,19 @@ msgid ""
 "endpoint. Enter as: {example}"
 msgstr "可選查詢參數，將被加入到對授權端的呼叫。輸入為：{example}"
 
-#: pretix/control/forms/organizer.py:1110
+#: pretix/control/forms/organizer.py:1113
 msgid "Invalidate old client secret and generate a new one"
 msgstr "使舊的客戶端密碼失效並產生新的客戶端密碼"
 
-#: pretix/control/forms/organizer.py:1143
+#: pretix/control/forms/organizer.py:1146
 msgid "Organizer short name"
 msgstr "組織者簡稱"
 
-#: pretix/control/forms/organizer.py:1147
+#: pretix/control/forms/organizer.py:1150
 msgid "Allow access to reusable media"
 msgstr "允許訪問可重複使用的媒體"
 
-#: pretix/control/forms/organizer.py:1148
+#: pretix/control/forms/organizer.py:1151
 msgid ""
 "This is required if you want the other organizer to participate in a shared "
 "system with e.g. NFC payment chips. You should only use this option for "
@@ -14489,15 +14529,15 @@ msgstr ""
 "選項用於你信任的召集人，因為（取決於啟動的媒體類型）這將授予其他召集人訪問與"
 "媒體類型交互所需的加密密鑰材料的訪問使用權。"
 
-#: pretix/control/forms/organizer.py:1164
+#: pretix/control/forms/organizer.py:1167
 msgid "The selected organizer does not exist or cannot be invited."
 msgstr "所選召集人不存在或無法邀請。"
 
-#: pretix/control/forms/organizer.py:1166
+#: pretix/control/forms/organizer.py:1169
 msgid "The selected organizer has already been invited."
 msgstr "選定的召集人已被邀請。"
 
-#: pretix/control/forms/organizer.py:1201
+#: pretix/control/forms/organizer.py:1204
 msgid "A sales channel with the same identifier already exists."
 msgstr "具有相同識別符的銷售管道已存在。"
 
@@ -15830,7 +15870,7 @@ msgstr "簽到清單 {val}"
 msgid "The plugin has been enabled."
 msgstr "已啟用插件程式。"
 
-#: pretix/control/logdisplay.py:776 pretix/control/views/event.py:461
+#: pretix/control/logdisplay.py:776 pretix/control/views/event.py:464
 msgid "The plugin has been disabled."
 msgstr "插件程式已被禁用。"
 
@@ -16063,9 +16103,9 @@ msgstr "普遍"
 msgid "Payment"
 msgstr "支付"
 
-#: pretix/control/navigation.py:73 pretix/control/views/event.py:1516
-#: pretix/control/views/event.py:1518 pretix/control/views/event.py:1550
-#: pretix/control/views/event.py:1555 pretix/control/views/subevents.py:293
+#: pretix/control/navigation.py:73 pretix/control/views/event.py:1520
+#: pretix/control/views/event.py:1522 pretix/control/views/event.py:1554
+#: pretix/control/views/event.py:1559 pretix/control/views/subevents.py:293
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:60
 #: pretix/plugins/ticketoutputpdf/apps.py:55
 #: pretix/plugins/ticketoutputpdf/exporters.py:68
@@ -16259,13 +16299,13 @@ msgid "You do not have permission to view this content."
 msgstr "你無權查看此內容。"
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:44
-#: pretix/control/templates/pretixcontrol/base.html:359
+#: pretix/control/templates/pretixcontrol/base.html:360
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
 msgstr "你目前代表 （%(user)s） 工作。"
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:49
-#: pretix/control/templates/pretixcontrol/base.html:364
+#: pretix/control/templates/pretixcontrol/base.html:365
 msgid "Stop impersonating"
 msgstr "停止冒充"
 
@@ -16365,7 +16405,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:28
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:66
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:49
 msgid "Continue"
 msgstr "繼續"
 
@@ -16446,7 +16485,7 @@ msgstr "設定新密碼"
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:25
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:42
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:30
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:365
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:383
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:46
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:15
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_invite.html:15
@@ -16488,53 +16527,53 @@ msgstr "保存"
 msgid "Create a new account"
 msgstr "建立新帳戶"
 
-#: pretix/control/templates/pretixcontrol/base.html:102
+#: pretix/control/templates/pretixcontrol/base.html:103
 msgid "Toggle navigation"
 msgstr "切換導航"
 
-#: pretix/control/templates/pretixcontrol/base.html:117
-#: pretix/control/templates/pretixcontrol/base.html:140
-#: pretix/control/templates/pretixcontrol/base.html:144
+#: pretix/control/templates/pretixcontrol/base.html:118
+#: pretix/control/templates/pretixcontrol/base.html:141
 #: pretix/control/templates/pretixcontrol/base.html:145
+#: pretix/control/templates/pretixcontrol/base.html:146
 msgid "Go to shop"
 msgstr "到商店"
 
-#: pretix/control/templates/pretixcontrol/base.html:123
-#: pretix/control/templates/pretixcontrol/base.html:151
+#: pretix/control/templates/pretixcontrol/base.html:124
 #: pretix/control/templates/pretixcontrol/base.html:152
+#: pretix/control/templates/pretixcontrol/base.html:153
 msgid "Public profile"
 msgstr "公開帳戶"
 
-#: pretix/control/templates/pretixcontrol/base.html:203
+#: pretix/control/templates/pretixcontrol/base.html:204
 msgid "End admin session"
 msgstr "結束管理員會議"
 
-#: pretix/control/templates/pretixcontrol/base.html:215
+#: pretix/control/templates/pretixcontrol/base.html:216
 msgid "Account Settings"
 msgstr "帳戶設定"
 
-#: pretix/control/templates/pretixcontrol/base.html:220
-#: pretix/control/templates/pretixcontrol/base.html:222
+#: pretix/control/templates/pretixcontrol/base.html:221
+#: pretix/control/templates/pretixcontrol/base.html:223
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:14
 msgid "Log out"
 msgstr "登出"
 
-#: pretix/control/templates/pretixcontrol/base.html:248
+#: pretix/control/templates/pretixcontrol/base.html:249
 msgid "Organizer account"
 msgstr "組織者帳戶"
 
-#: pretix/control/templates/pretixcontrol/base.html:271
+#: pretix/control/templates/pretixcontrol/base.html:272
 msgid "Search for events"
 msgstr "搜索活動事件"
 
-#: pretix/control/templates/pretixcontrol/base.html:328
+#: pretix/control/templates/pretixcontrol/base.html:329
 #: pretix/presale/templates/pretixpresale/base.html:54
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
 msgstr "我們檢測到你正在使用 <strong>Microsoft Internet Explorer</strong>。"
 
-#: pretix/control/templates/pretixcontrol/base.html:331
+#: pretix/control/templates/pretixcontrol/base.html:332
 #: pretix/presale/templates/pretixpresale/base.html:57
 msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
@@ -16543,7 +16582,7 @@ msgstr ""
 "Internet Explorer 是一款舊版瀏覽器，不支援許多最新的網路為基礎的技術，且本網"
 "站不再支援該瀏覽器。"
 
-#: pretix/control/templates/pretixcontrol/base.html:335
+#: pretix/control/templates/pretixcontrol/base.html:336
 #: pretix/presale/templates/pretixpresale/base.html:61
 msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
@@ -16552,16 +16591,16 @@ msgstr ""
 "我們懇請你遷移到我們支援的瀏覽器之一，例如Microsoft Edge，Mozilla Firefox，"
 "Google Chrome或Safari。"
 
-#: pretix/control/templates/pretixcontrol/base.html:344
+#: pretix/control/templates/pretixcontrol/base.html:345
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr "請簡短評論你在以下管理工作階段中所做過的工作："
 
-#: pretix/control/templates/pretixcontrol/base.html:375
+#: pretix/control/templates/pretixcontrol/base.html:376
 msgid "Read more"
 msgstr "閱讀更多"
 
-#: pretix/control/templates/pretixcontrol/base.html:392
+#: pretix/control/templates/pretixcontrol/base.html:393
 msgid ""
 "Your event contains <strong>test mode orders</strong> even though "
 "<strong>test mode has been disabled</strong>. You should delete those orders "
@@ -16572,11 +16611,11 @@ msgstr ""
 "strong>。你應該刪除這些訂單，以確保它們不會顯示在你的報告和統計資訊中，並阻止"
 "人群購買實體門票。"
 
-#: pretix/control/templates/pretixcontrol/base.html:399
+#: pretix/control/templates/pretixcontrol/base.html:400
 msgid "Show all test mode orders"
 msgstr "顯示所有測試模式訂單"
 
-#: pretix/control/templates/pretixcontrol/base.html:407
+#: pretix/control/templates/pretixcontrol/base.html:408
 msgid ""
 "Starting with version 1.2.0, pretix automatically checks for updates in the "
 "background. During this check, anonymous data is transmitted to servers "
@@ -16589,14 +16628,14 @@ msgstr ""
 "你的電子郵件位址，以便在有新更新到達時通過電子郵件收到通知。按兩下此消息後，"
 "此消息將消失。"
 
-#: pretix/control/templates/pretixcontrol/base.html:420
+#: pretix/control/templates/pretixcontrol/base.html:421
 msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
 msgstr ""
 "按兩下此處進行許可執照規定檢查，以確保你對 pretix 的使用符合 pretix 的許可。"
 
-#: pretix/control/templates/pretixcontrol/base.html:429
+#: pretix/control/templates/pretixcontrol/base.html:430
 msgid ""
 "The cronjob component of pretix was not executed in the last hours. Please "
 "check that you have completed all installation steps and your cronjob is "
@@ -16605,30 +16644,30 @@ msgstr ""
 "pretix 的 cronjob 組件在過去幾個小時內未執行。請檢查您是否已完成所有安裝步驟"
 "並且您的 cronjob 已正確執行。"
 
-#: pretix/control/templates/pretixcontrol/base.html:438
+#: pretix/control/templates/pretixcontrol/base.html:439
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
 msgstr ""
 "Pretix 正在調試模式下運行。出於安全原因，請不要在生產模式上運行debug 模式。"
 
-#: pretix/control/templates/pretixcontrol/base.html:444
+#: pretix/control/templates/pretixcontrol/base.html:445
 msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
 msgstr ""
 "出於安全原因，請先更改密碼，然後再繼續。然後，你將被重導回到原始目的連結。"
 
-#: pretix/control/templates/pretixcontrol/base.html:456
+#: pretix/control/templates/pretixcontrol/base.html:457
 #, python-format
 msgid "Times displayed in %(tz)s"
 msgstr "以 %(tz)s 顯示的時間"
 
-#: pretix/control/templates/pretixcontrol/base.html:462
+#: pretix/control/templates/pretixcontrol/base.html:463
 msgid "running in development mode"
 msgstr "在開發者模式下運行"
 
-#: pretix/control/templates/pretixcontrol/base.html:471
+#: pretix/control/templates/pretixcontrol/base.html:472
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:38
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
@@ -18284,9 +18323,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:15
 #: pretix/control/views/checkin.py:423 pretix/control/views/discounts.py:113
-#: pretix/control/views/event.py:236 pretix/control/views/event.py:545
-#: pretix/control/views/event.py:584 pretix/control/views/event.py:731
-#: pretix/control/views/event.py:960 pretix/control/views/event.py:1331
+#: pretix/control/views/event.py:239 pretix/control/views/event.py:548
+#: pretix/control/views/event.py:587 pretix/control/views/event.py:734
+#: pretix/control/views/event.py:963 pretix/control/views/event.py:1334
 #: pretix/control/views/global_settings.py:65
 #: pretix/control/views/global_settings.py:88 pretix/control/views/item.py:263
 #: pretix/control/views/item.py:789 pretix/control/views/item.py:1115
@@ -18424,7 +18463,7 @@ msgstr ""
 "別擔心，您可以在此處更改輸入的所有內容。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
-#: pretix/control/views/event.py:378
+#: pretix/control/views/event.py:381
 msgid "Features"
 msgstr "功能"
 
@@ -18761,7 +18800,7 @@ msgid "Add a new rule"
 msgstr "添加新規則"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:153
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:373
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:391
 msgid "Change history"
 msgstr "更新歷史"
 
@@ -19860,7 +19899,7 @@ msgstr "完全保留"
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:107
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:35
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:71
-#: pretix/presale/views/widget.py:431
+#: pretix/presale/views/widget.py:456
 msgid "Sold out"
 msgstr "售罄"
 
@@ -22302,11 +22341,31 @@ msgstr ""
 "我們不能承擔責任，因為我們不知道你的pretix使用的確切設定，你所在司法管轄區的"
 "法律細節，或你與第三方（如付款或跟蹤供應商）的協定。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:210
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:204
+#, fuzzy
+#| msgid "Availability"
+msgid "Accessibility"
+msgstr "可用性"
+
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:206
+msgid ""
+"Some jurisdictions, including the European Union, require you to publish "
+"information about the accessibility of your ticket shop. You can find a "
+"template in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
+"target=\"_blank\">our documentation</a>."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:216
+msgid ""
+"Instead of an URL, you can also configure a text that will be shown within "
+"pretix. This will be ignored if a URL is configured."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:228
 msgid "Barcode media"
 msgstr "條碼媒體"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:214
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:232
 msgid ""
 "A \"barcode medium\" can be any printed or digital representation of a "
 "barcode. The medium will initially be created through the sale of a product "
@@ -22318,17 +22377,17 @@ msgstr ""
 "要求此類媒體的產品，以及包含「可重複使用媒體 ID」作為二維碼的票證或徽章設置建"
 "立。以後在銷售其他產品時，可以重複使用相同的條碼。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:221
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:239
 msgid "Barcode media can currently only be connected to tickets."
 msgstr "條碼介質目前只能連接到門票。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:224
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:242
 msgid ""
 "This subsequent reuse of the barcode is currently only supported during POS "
 "sales."
 msgstr "條碼的後續重用目前僅在 POS 銷售期間受支援。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:241
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:259
 msgid ""
 "This medium type can work with almost any type of NFC chip. With this "
 "option, only the UID of the NFC chip is used for identification."
@@ -22336,12 +22395,12 @@ msgstr ""
 "這種中等類型幾乎可以與任何類型的NFC晶元一起使用。使用此選項時，只使用NFC晶元"
 "的UID進行識別。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:245
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:277
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:263
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:295
 msgid "NFC media can currently only be connected to gift cards."
 msgstr "NFC 媒體目前只能連接到禮品卡。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:251
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:269
 msgid ""
 "This method does not provide a high level of protection against abuse since "
 "it is possible for malicious users to clone someone's chip with the same UID."
@@ -22349,32 +22408,32 @@ msgstr ""
 "此方法不能提供進階的保護避免濫用，因為惡意使用者可能會使用相同的 UID 複製某人"
 "的晶片。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:272
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:290
 msgid ""
 "This medium type works only with NFC chips of the type Mifare Ultralight AES "
 "made by NXP. This provides a higher level of security than other approaches, "
 "but requires all chips to be encoded prior to use."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:299
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:317
 #, fuzzy
 #| msgid "Known domains"
 msgid "Domains"
 msgstr "已知網域"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:301
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:319
 #, fuzzy
 #| msgid "This action is only allowed for canceled orders."
 msgid "This dialog is intended for advanced users."
 msgstr "此操作僅適用於已取消的訂單。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:302
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:320
 msgid ""
 "The domain needs to be configured on your webserver before it can be used "
 "here."
 msgstr "你需要先在你的網頁伺服器上設定域名，然後才能在此處使用。"
 
-#: pretix/control/templates/pretixcontrol/organizers/edit.html:358
+#: pretix/control/templates/pretixcontrol/organizers/edit.html:376
 #, fuzzy
 #| msgid "Add link"
 msgid "Add domain"
@@ -24709,10 +24768,10 @@ msgstr "新的簽入清單已建立。"
 
 #: pretix/control/views/checkin.py:380 pretix/control/views/checkin.py:440
 #: pretix/control/views/discounts.py:134 pretix/control/views/discounts.py:182
-#: pretix/control/views/event.py:265 pretix/control/views/event.py:548
-#: pretix/control/views/event.py:587 pretix/control/views/event.py:734
-#: pretix/control/views/event.py:926 pretix/control/views/event.py:1284
-#: pretix/control/views/event.py:1350 pretix/control/views/event.py:1457
+#: pretix/control/views/event.py:268 pretix/control/views/event.py:551
+#: pretix/control/views/event.py:590 pretix/control/views/event.py:737
+#: pretix/control/views/event.py:929 pretix/control/views/event.py:1287
+#: pretix/control/views/event.py:1353 pretix/control/views/event.py:1461
 #: pretix/control/views/item.py:279 pretix/control/views/item.py:326
 #: pretix/control/views/item.py:799 pretix/control/views/item.py:825
 #: pretix/control/views/item.py:945 pretix/control/views/item.py:1149
@@ -24823,7 +24882,7 @@ msgstr "設定事件"
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:116
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:47
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:79
-#: pretix/presale/views/widget.py:445
+#: pretix/presale/views/widget.py:470
 msgid "Sale over"
 msgstr "銷售結束"
 
@@ -24831,7 +24890,7 @@ msgstr "銷售結束"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:119
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:123
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:86
-#: pretix/presale/views/widget.py:455
+#: pretix/presale/views/widget.py:480
 msgid "Soon"
 msgstr "很快地"
 
@@ -24875,145 +24934,145 @@ msgstr "提供的某些物件ID無效。"
 msgid "Not all discounts have been selected."
 msgstr "並非所有折扣都已選擇。"
 
-#: pretix/control/views/event.py:380
+#: pretix/control/views/event.py:383
 msgid "Integrations"
 msgstr "集成"
 
-#: pretix/control/views/event.py:381
+#: pretix/control/views/event.py:384
 msgid "Customizations"
 msgstr "訂製專屬"
 
-#: pretix/control/views/event.py:382
+#: pretix/control/views/event.py:385
 msgid "Output and export formats"
 msgstr "輸出和匯出格式"
 
-#: pretix/control/views/event.py:383
+#: pretix/control/views/event.py:386
 msgid "API features"
 msgstr "API 功能"
 
-#: pretix/control/views/event.py:444
+#: pretix/control/views/event.py:447
 msgid "The plugin {} is now active, you can configure it here:"
 msgstr ""
 
-#: pretix/control/views/event.py:453
+#: pretix/control/views/event.py:456
 #, fuzzy
 #| msgid "The relevant plugin is currently not active."
 msgid "The plugin {} is now active."
 msgstr "相關插件當前未啟用。"
 
-#: pretix/control/views/event.py:516
+#: pretix/control/views/event.py:519
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
 msgstr "此支付供應商不存在或相應的外掛程式被禁用。"
 
-#: pretix/control/views/event.py:773 pretix/control/views/organizer.py:344
+#: pretix/control/views/event.py:776 pretix/control/views/organizer.py:344
 #: pretix/control/views/vouchers.py:561
 msgid "invalid item"
 msgstr "無效項目"
 
-#: pretix/control/views/event.py:848
+#: pretix/control/views/event.py:851
 #, python-format
 msgid "Your order: %(code)s"
 msgstr "你的訂單：%(code)s"
 
-#: pretix/control/views/event.py:857
+#: pretix/control/views/event.py:860
 msgid "Unknown email renderer."
 msgstr "未知的電子郵件渲染器。"
 
-#: pretix/control/views/event.py:873 pretix/control/views/orders.py:692
+#: pretix/control/views/event.py:876 pretix/control/views/orders.py:692
 #: pretix/presale/views/order.py:1086 pretix/presale/views/order.py:1093
 msgid "You requested an invalid ticket output type."
 msgstr "你請求的票證輸出類型無效。"
 
-#: pretix/control/views/event.py:1021
+#: pretix/control/views/event.py:1024
 msgid "Your shop is live now!"
 msgstr "你的商店現已上線！"
 
-#: pretix/control/views/event.py:1029
+#: pretix/control/views/event.py:1032
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
 msgstr "我們已經撤下了你的商店。你可以隨時重新啟用它！"
 
-#: pretix/control/views/event.py:1037
+#: pretix/control/views/event.py:1040
 msgid "Your shop is now in test mode!"
 msgstr "你的商店現在處於測試模式！"
 
-#: pretix/control/views/event.py:1054
+#: pretix/control/views/event.py:1057
 msgid ""
 "An order could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
 "由於某些限制（例如外掛程式建立的數據）不允許刪除訂單，因此無法刪除訂單。"
 
-#: pretix/control/views/event.py:1060
+#: pretix/control/views/event.py:1063
 msgid "We've disabled test mode for you. Let's sell some real tickets!"
 msgstr "我們已為你禁用測試模式。讓我們賣一些真正的門票！"
 
-#: pretix/control/views/event.py:1082
+#: pretix/control/views/event.py:1085
 msgid "This event can not be deleted."
 msgstr "無法刪除此事件。"
 
-#: pretix/control/views/event.py:1105
+#: pretix/control/views/event.py:1108
 msgid "The event has been deleted."
 msgstr "該事件已被刪除。"
 
-#: pretix/control/views/event.py:1108
+#: pretix/control/views/event.py:1111
 msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
 "無法刪除該事件，因為某些限制（例如外掛程式建立的數據）不允許刪除該事件。"
 
-#: pretix/control/views/event.py:1124
+#: pretix/control/views/event.py:1127
 #, python-brace-format
 msgid ""
 "Specifically, the following plugins still contain data depends on this "
 "event: {plugin_names}"
 msgstr "具體來說，以下外掛程式仍然包含依賴於此事件的數據：{plugin_names}"
 
-#: pretix/control/views/event.py:1204 pretix/control/views/orders.py:781
+#: pretix/control/views/event.py:1207 pretix/control/views/orders.py:781
 msgid "The comment has been updated."
 msgstr "評論已更新。"
 
-#: pretix/control/views/event.py:1206 pretix/control/views/orders.py:783
+#: pretix/control/views/event.py:1209 pretix/control/views/orders.py:783
 msgid "Could not update the comment."
 msgstr "無法更新評論。"
 
-#: pretix/control/views/event.py:1244 pretix/control/views/main.py:330
+#: pretix/control/views/event.py:1247 pretix/control/views/main.py:330
 msgid "VAT"
 msgstr "增值稅"
 
-#: pretix/control/views/event.py:1278
+#: pretix/control/views/event.py:1281
 msgid "The new tax rule has been created."
 msgstr "已建立新的稅收規則。"
 
-#: pretix/control/views/event.py:1301 pretix/control/views/event.py:1366
+#: pretix/control/views/event.py:1304 pretix/control/views/event.py:1369
 msgid "The requested tax rule does not exist."
 msgstr "請求的稅收規則不存在。"
 
-#: pretix/control/views/event.py:1375
+#: pretix/control/views/event.py:1378
 msgid "The selected tax rule has been deleted."
 msgstr "選取稅收規則已刪除。"
 
-#: pretix/control/views/event.py:1377
+#: pretix/control/views/event.py:1380
 msgid "The selected tax rule can not be deleted."
 msgstr "無法刪除所選稅規則。"
 
-#: pretix/control/views/event.py:1427
+#: pretix/control/views/event.py:1431
 msgid "Your event is not empty, you need to set it up manually."
 msgstr "你的事件不是空的，你需要手動設定它。"
 
-#: pretix/control/views/event.py:1562
+#: pretix/control/views/event.py:1566
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
 msgstr ""
 "你的更改已儲存。你現在可以繼續查看詳細資訊，或將你的活動直播，以開始銷售！"
 
-#: pretix/control/views/event.py:1581
+#: pretix/control/views/event.py:1585
 msgid "Regular ticket"
 msgstr "普通票"
 
-#: pretix/control/views/event.py:1586
+#: pretix/control/views/event.py:1590
 msgid "Reduced ticket"
 msgstr "減價票"
 
@@ -26321,7 +26380,7 @@ msgstr "請求的條目不存在。"
 msgid "The selected entry has been deleted."
 msgstr "選取項目已被刪除。"
 
-#: pretix/control/views/waitinglist.py:402 pretix/presale/views/widget.py:393
+#: pretix/control/views/waitinglist.py:402 pretix/presale/views/widget.py:418
 msgid "This is not an event series."
 msgstr "這不是一個事件系列。"
 
@@ -27820,7 +27879,7 @@ msgid "Upload time"
 msgstr "上傳時間"
 
 #: pretix/plugins/checkinlists/exporters.py:826
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:145
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:144
 msgid "OK"
 msgstr "ＯＫ"
 
@@ -30535,8 +30594,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:311
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:186
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:339
-#: pretix/presale/templates/pretixpresale/event/voucher.html:199
-#: pretix/presale/templates/pretixpresale/event/voucher.html:354
+#: pretix/presale/templates/pretixpresale/event/voucher.html:198
+#: pretix/presale/templates/pretixpresale/event/voucher.html:353
 msgid "plus taxes"
 msgstr "附加稅"
 
@@ -30706,19 +30765,19 @@ msgid "Contact event organizer"
 msgstr "聯絡活動召集人"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:225
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:115
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:134
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:114
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:133
 #: pretix/presale/templates/pretixpresale/organizers/base.html:103
 msgid "Privacy policy"
 msgstr "隱私政策"
 
-#: pretix/presale/templates/pretixpresale/event/base.html:228
-#: pretix/presale/templates/pretixpresale/organizers/base.html:106
+#: pretix/presale/templates/pretixpresale/event/base.html:239
+#: pretix/presale/templates/pretixpresale/organizers/base.html:117
 msgid "Cookie settings"
 msgstr "Cookie設定"
 
-#: pretix/presale/templates/pretixpresale/event/base.html:231
-#: pretix/presale/templates/pretixpresale/organizers/base.html:109
+#: pretix/presale/templates/pretixpresale/event/base.html:242
+#: pretix/presale/templates/pretixpresale/organizers/base.html:120
 msgid "Imprint"
 msgstr "版本說明"
 
@@ -31072,7 +31131,7 @@ msgstr "你可以從此類別中選擇 %(min_count)s和 %(max_count)s選項。"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:258
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:55
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:277
-#: pretix/presale/templates/pretixpresale/event/voucher.html:294
+#: pretix/presale/templates/pretixpresale/event/voucher.html:293
 #, python-format
 msgid "minimum amount to order: %(num)s"
 msgstr "最低訂購量：%(num)s"
@@ -31085,9 +31144,9 @@ msgstr "最低訂購量：%(num)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:174
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:327
-#: pretix/presale/templates/pretixpresale/event/voucher.html:118
-#: pretix/presale/templates/pretixpresale/event/voucher.html:187
-#: pretix/presale/templates/pretixpresale/event/voucher.html:342
+#: pretix/presale/templates/pretixpresale/event/voucher.html:117
+#: pretix/presale/templates/pretixpresale/event/voucher.html:186
+#: pretix/presale/templates/pretixpresale/event/voucher.html:341
 msgctxt "price"
 msgid "free"
 msgstr "免費"
@@ -31124,8 +31183,8 @@ msgstr "顯示選項"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:271
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:133
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#: pretix/presale/templates/pretixpresale/event/voucher.html:148
-#: pretix/presale/templates/pretixpresale/event/voucher.html:305
+#: pretix/presale/templates/pretixpresale/event/voucher.html:147
+#: pretix/presale/templates/pretixpresale/event/voucher.html:304
 msgid "Original price:"
 msgstr "原始的價格："
 
@@ -31133,8 +31192,8 @@ msgstr "原始的價格："
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:278
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:143
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:298
-#: pretix/presale/templates/pretixpresale/event/voucher.html:158
-#: pretix/presale/templates/pretixpresale/event/voucher.html:315
+#: pretix/presale/templates/pretixpresale/event/voucher.html:157
+#: pretix/presale/templates/pretixpresale/event/voucher.html:314
 msgid "New price:"
 msgstr "新價格："
 
@@ -31146,10 +31205,10 @@ msgstr "新價格："
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:162
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:314
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:316
-#: pretix/presale/templates/pretixpresale/event/voucher.html:174
-#: pretix/presale/templates/pretixpresale/event/voucher.html:176
-#: pretix/presale/templates/pretixpresale/event/voucher.html:329
-#: pretix/presale/templates/pretixpresale/event/voucher.html:331
+#: pretix/presale/templates/pretixpresale/event/voucher.html:173
+#: pretix/presale/templates/pretixpresale/event/voucher.html:175
+#: pretix/presale/templates/pretixpresale/event/voucher.html:328
+#: pretix/presale/templates/pretixpresale/event/voucher.html:330
 #, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
 msgstr "修改%(item)s的價格，至少 %(price)s"
@@ -31159,9 +31218,9 @@ msgstr "修改%(item)s的價格，至少 %(price)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:149
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:165
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:319
-#: pretix/presale/templates/pretixpresale/event/voucher.html:164
-#: pretix/presale/templates/pretixpresale/event/voucher.html:179
-#: pretix/presale/templates/pretixpresale/event/voucher.html:334
+#: pretix/presale/templates/pretixpresale/event/voucher.html:163
+#: pretix/presale/templates/pretixpresale/event/voucher.html:178
+#: pretix/presale/templates/pretixpresale/event/voucher.html:333
 #, python-format
 msgid "Modify price for %(item)s"
 msgstr "修改%(item)s 的價格"
@@ -31170,8 +31229,8 @@ msgstr "修改%(item)s 的價格"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:313
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:188
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:341
-#: pretix/presale/templates/pretixpresale/event/voucher.html:201
-#: pretix/presale/templates/pretixpresale/event/voucher.html:356
+#: pretix/presale/templates/pretixpresale/event/voucher.html:200
+#: pretix/presale/templates/pretixpresale/event/voucher.html:355
 msgid "incl. taxes"
 msgstr "含稅"
 
@@ -31179,8 +31238,8 @@ msgstr "含稅"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:316
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:192
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:345
-#: pretix/presale/templates/pretixpresale/event/voucher.html:205
-#: pretix/presale/templates/pretixpresale/event/voucher.html:360
+#: pretix/presale/templates/pretixpresale/event/voucher.html:204
+#: pretix/presale/templates/pretixpresale/event/voucher.html:359
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
 msgstr "<strong>加上</strong>%(rate)s%% %(name)s"
@@ -31189,8 +31248,8 @@ msgstr "<strong>加上</strong>%(rate)s%% %(name)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:320
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:198
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:351
-#: pretix/presale/templates/pretixpresale/event/voucher.html:211
-#: pretix/presale/templates/pretixpresale/event/voucher.html:366
+#: pretix/presale/templates/pretixpresale/event/voucher.html:210
+#: pretix/presale/templates/pretixpresale/event/voucher.html:365
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
 msgstr "包含 %(rate)s%% %(name)s"
@@ -31199,8 +31258,8 @@ msgstr "包含 %(rate)s%% %(name)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:349
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:219
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:371
-#: pretix/presale/templates/pretixpresale/event/voucher.html:231
-#: pretix/presale/templates/pretixpresale/event/voucher.html:386
+#: pretix/presale/templates/pretixpresale/event/voucher.html:230
+#: pretix/presale/templates/pretixpresale/event/voucher.html:385
 msgctxt "checkbox"
 msgid "Select"
 msgstr "選擇"
@@ -31209,8 +31268,8 @@ msgstr "選擇"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:354
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:224
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:376
-#: pretix/presale/templates/pretixpresale/event/voucher.html:236
-#: pretix/presale/templates/pretixpresale/event/voucher.html:391
+#: pretix/presale/templates/pretixpresale/event/voucher.html:235
+#: pretix/presale/templates/pretixpresale/event/voucher.html:390
 msgid "Decrease quantity"
 msgstr "減少數量"
 
@@ -31218,8 +31277,8 @@ msgstr "減少數量"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:364
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:235
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:388
-#: pretix/presale/templates/pretixpresale/event/voucher.html:243
-#: pretix/presale/templates/pretixpresale/event/voucher.html:399
+#: pretix/presale/templates/pretixpresale/event/voucher.html:242
+#: pretix/presale/templates/pretixpresale/event/voucher.html:398
 msgid "Increase quantity"
 msgstr "增加數量"
 
@@ -31258,7 +31317,7 @@ msgstr "客滿"
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:104
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:30
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:68
-#: pretix/presale/views/widget.py:426
+#: pretix/presale/views/widget.py:451
 msgid "Reserved"
 msgstr "保留"
 
@@ -31363,7 +31422,7 @@ msgstr "我們正在嘗試為你保留另一項！"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:303
 #: pretix/presale/templates/pretixpresale/event/index.html:187
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:24
-#: pretix/presale/templates/pretixpresale/event/voucher.html:63
+#: pretix/presale/templates/pretixpresale/event/voucher.html:62
 #, python-format
 msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
@@ -31411,9 +31470,10 @@ msgid ""
 msgstr "你購物車中的物品不再為你保留。只要可用，你仍然可以完成訂單。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:48
 #, fuzzy
 #| msgid "Event description"
-msgid "Extend reservation"
+msgid "Renew reservation"
 msgstr "活動描述"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
@@ -31425,8 +31485,8 @@ msgid "Continue with order process"
 msgstr "繼續訂單流程"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:55
-#: pretix/presale/templates/pretixpresale/event/index.html:233
-#: pretix/presale/templates/pretixpresale/event/voucher.html:440
+#: pretix/presale/templates/pretixpresale/event/index.html:232
+#: pretix/presale/templates/pretixpresale/event/voucher.html:439
 msgid "Proceed with checkout"
 msgstr "繼續結帳"
 
@@ -31435,7 +31495,7 @@ msgid "Empty cart"
 msgstr "空的購物車"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:68
-#: pretix/presale/templates/pretixpresale/event/index.html:250
+#: pretix/presale/templates/pretixpresale/event/index.html:249
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
 msgstr "兌換優惠券"
@@ -31697,36 +31757,36 @@ msgid "Your order qualifies for a discount"
 msgstr "你的{event}訂單"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:28
-#: pretix/presale/templates/pretixpresale/event/voucher.html:78
+#: pretix/presale/templates/pretixpresale/event/voucher.html:77
 msgid "Uncategorized items"
 msgstr "未分類物品"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:40
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:259
-#: pretix/presale/templates/pretixpresale/event/voucher.html:95
-#: pretix/presale/templates/pretixpresale/event/voucher.html:276
+#: pretix/presale/templates/pretixpresale/event/voucher.html:94
+#: pretix/presale/templates/pretixpresale/event/voucher.html:275
 #, python-format
 msgid "Show full-size image of %(item)s"
 msgstr "顯示%(item)s的全尺寸圖片"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:191
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:344
-#: pretix/presale/templates/pretixpresale/event/voucher.html:204
-#: pretix/presale/templates/pretixpresale/event/voucher.html:359
+#: pretix/presale/templates/pretixpresale/event/voucher.html:203
+#: pretix/presale/templates/pretixpresale/event/voucher.html:358
 #, python-format
 msgid "%(value)s incl. taxes"
 msgstr "%(value)s含稅"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:197
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:350
-#: pretix/presale/templates/pretixpresale/event/voucher.html:210
-#: pretix/presale/templates/pretixpresale/event/voucher.html:365
+#: pretix/presale/templates/pretixpresale/event/voucher.html:209
+#: pretix/presale/templates/pretixpresale/event/voucher.html:364
 #, python-format
 msgid "%(value)s without taxes"
 msgstr "%(value)s不含稅"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:304
-#: pretix/presale/templates/pretixpresale/event/voucher.html:321
+#: pretix/presale/templates/pretixpresale/event/voucher.html:320
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "為 %(item)s設定價格 %(currency)s 為單位）"
@@ -31814,7 +31874,7 @@ msgstr "顯示幾週後的票,%(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:34
 #: pretix/presale/templates/pretixpresale/organizers/index.html:93
-#: pretix/presale/views/widget.py:437
+#: pretix/presale/views/widget.py:462
 msgid "More info"
 msgstr "更多資訊"
 
@@ -31856,12 +31916,12 @@ msgid "Choose date to book a ticket"
 msgstr "選擇訂票日期"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:156
-#: pretix/presale/views/waiting.py:141 pretix/presale/views/widget.py:756
+#: pretix/presale/views/waiting.py:141 pretix/presale/views/widget.py:781
 msgid "The booking period for this event is over."
 msgstr "此活動的預訂期已結束。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:164
-#: pretix/presale/views/widget.py:758
+#: pretix/presale/views/widget.py:783
 #, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
 msgstr "此活動的預訂期將從%(date)ss 的 %(time)s.開始。"
@@ -31872,7 +31932,7 @@ msgstr "此活動的預訂期將從%(date)ss 的 %(time)s.開始。"
 msgid "We're now trying to reserve this for you!"
 msgstr "我們現在正在嘗試為你保留！"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:206
+#: pretix/presale/templates/pretixpresale/event/index.html:205
 msgid ""
 "Some of the categories in the seating plan above are currently sold out. If "
 "you want, you can add yourself to the waiting list. We will then notify if "
@@ -31881,26 +31941,26 @@ msgstr ""
 "上述座位圖的某些類別目前已售罄。如果需要，你可以將自己添加到等候名單中。然"
 "後，我們將通知是否有空位。"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:215
+#: pretix/presale/templates/pretixpresale/event/index.html:214
 msgid "Join waiting list"
 msgstr "參加候補名單"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:231
-#: pretix/presale/templates/pretixpresale/event/voucher.html:438
+#: pretix/presale/templates/pretixpresale/event/index.html:230
+#: pretix/presale/templates/pretixpresale/event/voucher.html:437
 msgctxt "free_tickets"
 msgid "Register"
 msgstr "註冊"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:236
-#: pretix/presale/templates/pretixpresale/event/voucher.html:443
+#: pretix/presale/templates/pretixpresale/event/index.html:235
+#: pretix/presale/templates/pretixpresale/event/voucher.html:442
 msgid "Add to cart"
 msgstr "加入購物車"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:257
+#: pretix/presale/templates/pretixpresale/event/index.html:256
 msgid "If you have already ordered a ticket"
 msgstr "如果你已訂購票"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:261
+#: pretix/presale/templates/pretixpresale/event/index.html:260
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -31911,7 +31971,7 @@ msgstr ""
 "封電子郵件中的連結。如果你找不到連結，請按下以下按鈕，以請求再次將訂單連結發"
 "送給你。"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:270
+#: pretix/presale/templates/pretixpresale/event/index.html:269
 msgid "Resend order link"
 msgstr "重新傳送訂單連結"
 
@@ -32468,12 +32528,12 @@ msgid ""
 "products at the specified price:"
 msgstr "你輸入的優惠券代碼允許您以指定價格購買以下產品之一："
 
-#: pretix/presale/templates/pretixpresale/event/voucher.html:113
+#: pretix/presale/templates/pretixpresale/event/voucher.html:112
 #, python-format
 msgid "from %(minprice)s"
 msgstr "從 %(minprice)s"
 
-#: pretix/presale/templates/pretixpresale/event/voucher.html:429
+#: pretix/presale/templates/pretixpresale/event/voucher.html:428
 #, python-format
 msgid "You need to select at least %(number)s products."
 msgstr "你需要選擇至少 %(number)s 的商品。"
@@ -32563,7 +32623,7 @@ msgstr "（繼續）"
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:93
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:13
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:57
-#: pretix/presale/views/widget.py:411
+#: pretix/presale/views/widget.py:436
 msgid "Few tickets left"
 msgstr "還有剩票"
 
@@ -32571,7 +32631,7 @@ msgstr "還有剩票"
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:96
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:18
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:60
-#: pretix/presale/views/widget.py:416
+#: pretix/presale/views/widget.py:441
 msgctxt "available_event_in_list"
 msgid "Buy now"
 msgstr "現在購買"
@@ -32584,7 +32644,7 @@ msgstr "現在購買"
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:43
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:62
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:77
-#: pretix/presale/views/widget.py:418 pretix/presale/views/widget.py:441
+#: pretix/presale/views/widget.py:443 pretix/presale/views/widget.py:466
 msgid "Book now"
 msgstr "馬上預定"
 
@@ -32592,7 +32652,7 @@ msgstr "馬上預定"
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:110
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:37
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:73
-#: pretix/presale/views/widget.py:433
+#: pretix/presale/views/widget.py:458
 msgid "Fully booked"
 msgstr "客滿"
 
@@ -32667,27 +32727,21 @@ msgid ""
 "Once the process in the new window has been completed, you can continue here."
 msgstr "完成新視窗中的流程后，你可以在此處繼續。"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:47
-#, fuzzy
-#| msgid "Please select how you want to pay."
-msgid "Please let us know you're still there."
-msgstr "請選擇你要的付款方式。"
-
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:59
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:58
 #, fuzzy
 #| msgid "Closed"
 msgid "Close"
 msgstr "關閉"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:80
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:79
 msgid "Adjust settings in detail"
 msgstr "調整詳細設定"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:85
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:84
 msgid "Required cookies"
 msgstr "必需的 cookie"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:89
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:88
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
@@ -32695,37 +32749,37 @@ msgstr ""
 "功能性 Cookie（例如購物車、登錄、付款、語言偏好）和技術 Cookie（例如安全目"
 "的）"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:103
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:102
 msgctxt "cookie_usage"
 msgid "Functionality"
 msgstr "功能性"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:105
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:104
 msgctxt "cookie_usage"
 msgid "Analytics"
 msgstr "數據分析"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:107
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:106
 msgctxt "cookie_usage"
 msgid "Marketing"
 msgstr "行銷"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:109
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:108
 msgctxt "cookie_usage"
 msgid "Social features"
 msgstr "社交功能"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:125
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:124
 msgid "Save selection"
 msgstr "保存所選內容"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:142
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:141
 #, fuzzy
 #| msgid "You did not select any products."
 msgid "You didn't select any ticket."
 msgstr "你沒有選擇任何產品。"
 
-#: pretix/presale/templates/pretixpresale/fragment_modals.html:143
+#: pretix/presale/templates/pretixpresale/fragment_modals.html:142
 msgid ""
 "Please tick a checkbox or enter a quantity for one of the ticket types to "
 "add to the cart."
@@ -33067,8 +33121,8 @@ msgstr "你的購物車已更新。"
 msgid "The products have been successfully added to your cart."
 msgstr "產品已成功添加到您的購物車。"
 
-#: pretix/presale/views/cart.py:592 pretix/presale/views/event.py:540
-#: pretix/presale/views/widget.py:377
+#: pretix/presale/views/cart.py:592 pretix/presale/views/event.py:542
+#: pretix/presale/views/widget.py:402
 msgid "Tickets for this event cannot be purchased on this sales channel."
 msgstr "此活動的門票不能在此銷售管道上購買。"
 
@@ -33140,42 +33194,42 @@ msgid ""
 msgstr ""
 "我們無法使用你的登錄名稱，因為電子郵件地址{email}已用於此系統中的其他帳戶。"
 
-#: pretix/presale/views/event.py:900
+#: pretix/presale/views/event.py:902
 msgid "Unknown event code or not authorized to access this event."
 msgstr "活動代碼未知或無權訪問此事件。"
 
-#: pretix/presale/views/event.py:907
+#: pretix/presale/views/event.py:909
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "未選擇日期。"
 
-#: pretix/presale/views/event.py:910
+#: pretix/presale/views/event.py:912
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "選擇的日期未知。"
 
-#: pretix/presale/views/event.py:935 pretix/presale/views/event.py:943
-#: pretix/presale/views/event.py:946
+#: pretix/presale/views/event.py:937 pretix/presale/views/event.py:945
+#: pretix/presale/views/event.py:948
 msgid "Please go back and try again."
 msgstr "請返回並重試。"
 
-#: pretix/presale/views/event.py:959
+#: pretix/presale/views/event.py:961
 #, fuzzy
 #| msgid "Purchased"
 msgid "Fake date time"
 msgstr "已購買"
 
-#: pretix/presale/views/event.py:971
+#: pretix/presale/views/event.py:973
 #, fuzzy
 #| msgid "You do not have access to this page."
 msgid "You are not allowed to access time machine mode."
 msgstr "你無權訪問此頁面。"
 
-#: pretix/presale/views/event.py:973
+#: pretix/presale/views/event.py:975
 msgid "This feature is only available in test mode."
 msgstr "此功能僅在測試模式下可用。"
 
-#: pretix/presale/views/event.py:990
+#: pretix/presale/views/event.py:992
 msgid "Time machine disabled!"
 msgstr "時間機器被禁用！"
 
@@ -33341,15 +33395,15 @@ msgid ""
 "else."
 msgstr "非常感謝你！我們會將你在候補名單上的位置分配給其他人。"
 
-#: pretix/presale/views/widget.py:372
+#: pretix/presale/views/widget.py:397
 msgid "This ticket shop is currently disabled."
 msgstr "該售票商店目前停用。"
 
-#: pretix/presale/views/widget.py:386
+#: pretix/presale/views/widget.py:411
 msgid "The selected date does not exist in this event series."
 msgstr "該活動系列中不存在所選日期。"
 
-#: pretix/presale/views/widget.py:449
+#: pretix/presale/views/widget.py:474
 #, python-format
 msgid "from %(start_date)s"
 msgstr "從 %(start_date)s"
@@ -33369,6 +33423,11 @@ msgstr "寫入權限"
 #: pretix/settings.py:802
 msgid "Kosovo"
 msgstr "柯索沃"
+
+#, fuzzy
+#~| msgid "Please select how you want to pay."
+#~ msgid "Please let us know you're still there."
+#~ msgstr "請選擇你要的付款方式。"
 
 #, python-format
 #~ msgid "Add %(item)s, %(var)s to cart"
