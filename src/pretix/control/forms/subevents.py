@@ -178,6 +178,13 @@ class SubEventBulkEditForm(I18nModelForm):
         widgets = {
         }
 
+    def clean(self):
+        data = super().clean()
+        if self.prefix + "name" in self.data.getlist('_bulk'):
+            if not data.get("name"):
+                self.add_error("name", _("This field is required."))
+        return data
+
     def save(self, commit=True):
         objs = list(self.queryset)
         fields = set()
