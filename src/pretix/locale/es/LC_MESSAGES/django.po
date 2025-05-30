@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-14 02:00+0000\n"
-"Last-Translator: Zona Vip <contacto@zonavip.mx>\n"
+"PO-Revision-Date: 2025-05-30 11:06+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -4379,13 +4379,16 @@ msgstr "Opcional. Ningún producto será vendido antes de esta fecha."
 
 #: pretix/base/models/event.py:621
 msgid "This event is remote or partially remote."
-msgstr ""
+msgstr "Cet événement est éloigné ou partiellement éloigné."
 
 #: pretix/base/models/event.py:622
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
 msgstr ""
+"Elle sera utilisée pour indiquer aux utilisateurs si l'événement se déroule "
+"dans un autre fuseau horaire et nous permettra de calculer l'heure locale "
+"des utilisateurs."
 
 #: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
