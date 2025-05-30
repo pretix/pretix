@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-30 11:06+0000\n"
+"PO-Revision-Date: 2025-05-30 11:07+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -4379,16 +4379,15 @@ msgstr "Opcional. Ningún producto será vendido antes de esta fecha."
 
 #: pretix/base/models/event.py:621
 msgid "This event is remote or partially remote."
-msgstr "Cet événement est éloigné ou partiellement éloigné."
+msgstr "Este evento es remoto o parcialmente remoto."
 
 #: pretix/base/models/event.py:622
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
 msgstr ""
-"Elle sera utilisée pour indiquer aux utilisateurs si l'événement se déroule "
-"dans un autre fuseau horaire et nous permettra de calculer l'heure locale "
-"des utilisateurs."
+"Esto se utilizará para que los usuarios sepan si el evento se celebra en una "
+"zona horaria diferente y nos permite calcular la hora local de los usuarios."
 
 #: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
@@ -10691,22 +10690,17 @@ msgstr ""
 "cómo utiliza los datos recopilados en su taquilla virtual."
 
 #: pretix/base/settings.py:2071
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information URL"
-msgstr "Información de la cuenta"
+msgstr "Informations sur l'accessibilité URL"
 
 #: pretix/base/settings.py:2072
-#, fuzzy
-#| msgid ""
-#| "This should point e.g. to a part of your website that explains how you "
-#| "use data gathered in your ticket shop."
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
-"Esto debería señalar, por ejemplo, a una parte de su sitio web que explica "
-"cómo utiliza los datos recopilados en su taquilla virtual."
+"Elle doit renvoyer, par exemple, à une partie de votre site web qui explique "
+"comment votre billetterie est conforme à la réglementation en matière "
+"d'accessibilité."
 
 #: pretix/base/settings.py:2079
 #: pretix/presale/templates/pretixpresale/event/base.html:228
