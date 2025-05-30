@@ -93,7 +93,7 @@ class PaymentProviderForm(Form):
         cleaned_data = super().clean()
         for k, v in self.fields.items():
             val = cleaned_data.get(k)
-            if v._required and not val:
+            if hasattr(v, '_required') and v._required and not val:
                 self.add_error(k, _('This field is required.'))
         return cleaned_data
 
