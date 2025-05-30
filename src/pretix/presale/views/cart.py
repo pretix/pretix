@@ -70,7 +70,7 @@ from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import (
     CartMixin, EventViewMixin, allow_cors_if_namespaced,
-    allow_frame_if_namespaced, iframe_entry_view_wrapper,
+    allow_frame_if_namespaced, get_cart, iframe_entry_view_wrapper,
 )
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
@@ -454,8 +454,16 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
                         raise ValidationError(error_messages['voucher_invalid'])
                     else:
                         cs = cart_session(request)
+                        used_cards = [
+                            p.get('info_data', {}).get('gift_card')
+                            for p in cs.get('payments', [])
+                            if p.get('info_data', {}).get('gift_card')
+                        ]
                         form = GiftCardPaymentForm(
-                            request=request,
+                            event=request.event,
+                            used_cards=used_cards,
+                            positions=get_cart(request),
+                            testmode=request.event.testmode,
                             data={'code': code},
                         )
                         form.fields = gcp.payment_form_fields
@@ -727,14 +735,22 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
                     err = error_messages['voucher_redeemed_cart'] % self.request.event.settings.reservation_time
             except Voucher.DoesNotExist:
                 try:
-                    gc = self.request.event.organizer.accepted_gift_cards.get(secret=v)
-                    gcp = GiftCardPayment(self.request.event)
-                    if not gcp.is_enabled or not gcp.is_allowed(self.request, Decimal("1.00")):
+                    gc = request.event.organizer.accepted_gift_cards.get(secret=v)
+                    gcp = GiftCardPayment(request.event)
+                    if not gcp.is_enabled or not gcp.is_allowed(request, Decimal("1.00")):
                         err = error_messages['voucher_invalid']
                     else:
                         cs = cart_session(request)
+                        used_cards = [
+                            p.get('info_data', {}).get('gift_card')
+                            for p in cs.get('payments', [])
+                            if p.get('info_data', {}).get('gift_card')
+                        ]
                         form = GiftCardPaymentForm(
-                            request=request,
+                            event=request.event,
+                            used_cards=used_cards,
+                            positions=get_cart(request),
+                            testmode=request.event.testmode,
                             data={'code': v},
                         )
                         form.fields = gcp.payment_form_fields
