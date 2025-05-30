@@ -288,6 +288,7 @@ urlpatterns = [
         re_path(r'^settings/tax/(?P<rule>\d+)/$', event.TaxUpdate.as_view(), name='event.settings.tax.edit'),
         re_path(r'^settings/tax/add$', event.TaxCreate.as_view(), name='event.settings.tax.add'),
         re_path(r'^settings/tax/(?P<rule>\d+)/delete$', event.TaxDelete.as_view(), name='event.settings.tax.delete'),
+        re_path(r'^settings/tax/(?P<rule>\d+)/default$', event.TaxDefault.as_view(), name='event.settings.tax.default'),
         re_path(r'^settings/widget$', event.WidgetSettings.as_view(), name='event.settings.widget'),
         re_path(r'^pdf/editor/webfonts.css', pdf.FontsCSSView.as_view(), name='pdf.css'),
         re_path(r'^pdf/editor/(?P<filename>[^/]+).pdf$', pdf.PdfView.as_view(), name='pdf.background'),
