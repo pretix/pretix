@@ -1,0 +1,174 @@
+#
+# This file is part of pretix (Community Edition).
+#
+# Copyright (C) 2014-2020 Raphael Michel and contributors
+# Copyright (C) 2020-2021 rami.io GmbH and contributors
+#
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+# Public License as published by the Free Software Foundation in version 3 of the License.
+#
+# ADDITIONAL TERMS APPLY: Pursuant to Section 7 of the GNU Affero General Public License, additional terms are
+# applicable granting you additional permissions and placing additional restrictions on your usage of this software.
+# Please refer to the pretix LICENSE file to obtain the full terms applicable to this work. If you did not receive
+# this file, see <https://pretix.eu/about/en/license>.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
+# <https://www.gnu.org/licenses/>.
+#
+
+from django_countries.fields import Country
+
+from pretix.base.models import Invoice, InvoiceAddress
+from pretix.base.signals import EventPluginRegistry, Registry
+
+
+class TransmissionType:
+    @property
+    def identifier(self) -> str:
+        raise NotImplementedError
+
+    @property
+    def verbose_name(self) -> str:
+        raise NotImplementedError
+
+    @property
+    def public_name(self) -> str:
+        return self.verbose_name
+
+    @property
+    def exclusive(self) -> bool:
+        """
+        If a transmission type is exclusive, no other type can be chosen if this type is
+        available. Use e.g. if a certain transmission type is legally required in a certain
+        jurisdiction.
+        """
+        return False
+
+    def is_available(self, event, country: Country, is_business: bool) -> bool:
+        providers = transmission_providers.filter(type=self.identifier, event=event)
+        return any(
+            provider.is_available(event, country, is_business)
+            for provider, _ in providers
+        )
+
+    def invoice_address_form_fields_required(self, country: Country, is_business: bool):
+        return set()
+
+    def invoice_address_form_fields_visible(self, country: Country, is_business: bool) -> set:
+        return set(self.invoice_address_form_fields.keys())
+
+    def validate_address(self, ia: InvoiceAddress):
+        pass
+
+    @property
+    def invoice_address_form_fields(self) -> dict:
+        """
+        Return a set of form fields that **must** be prefixed with ``transmission_<identifier>_``.
+        """
+        return {}
+
+
+class TransmissionProvider:
+    """
+    Base class for a transmission provider. Should NOT hold internal state as the class is only
+    instantiated once and then shared between events and organizers.
+    """
+
+    @property
+    def identifier(self):
+        """
+        A short and unique identifier for this transmission provider.
+        This should only contain lowercase letters and underscores.
+        """
+        raise NotImplementedError
+
+    @property
+    def type(self):
+        """
+        Identifier of the transmission type this provider provides.
+        """
+        raise NotImplementedError
+
+    @property
+    def verbose_name(self):
+        """
+        A human-readable name for this transmission provider (can be localized).
+        """
+        raise NotImplementedError
+
+    def is_available(self, event, country: Country, is_business: bool) -> bool:
+        """
+        Return whether this provider may be used for an invoice for the given recipient country and address type.
+        """
+        raise NotImplementedError
+
+    def transmit(self, invoice: Invoice):
+        """
+        Transmit the invoice. The function is also responsible for updating the status and information
+        on the Invoice model.
+        """
+        raise NotImplementedError
+
+
+class TransmissionProviderRegistry(EventPluginRegistry):
+    def __init__(self):
+        super().__init__({
+            'identifier': lambda o: getattr(o, 'identifier'),
+            'type': lambda o: getattr(o, 'type'),
+        })
+
+    def register(self, *objs):
+        for obj in objs:
+            if not isinstance(obj, TransmissionProvider):
+                raise TypeError('Entries must be derived from TransmissionProvider')
+
+            if obj.type == "email" and not obj.__module__.startswith('pretix.base.'):
+                raise TypeError('No custom providers for email allowed')
+
+        return super().register(*objs)
+
+
+class TransmissionTypeRegistry(Registry):
+    def __init__(self):
+        super().__init__({
+            'identifier': lambda o: getattr(o, 'identifier'),
+        })
+
+    def register(self, *objs):
+        for obj in objs:
+            if not isinstance(obj, TransmissionType):
+                raise TypeError('Entries must be derived from TransmissionType')
+
+            if not obj.__module__.startswith('pretix.base.'):
+                raise TypeError('Plugins are currently not allowed to add transmission types')
+
+        return super().register(*objs)
+
+
+"""
+Registry for transmission providers.
+
+Each entry in this registry should be an instance of a subclass of ``TransmissionProvider``.
+They are annotated with their ``identifier``, ``type``, and the defining ``plugin``.
+"""
+transmission_providers = TransmissionProviderRegistry()
+
+
+"""
+Registry for transmission types.
+
+Each entry in this registry should be an instance of a subclass of ``TransmissionType``.
+They are annotated with their ``identifier``.
+"""
+transmission_types = TransmissionTypeRegistry()
+
+
+def get_transmission_types():
+    return sorted(
+        transmission_types.registered_entries.keys(),
+        key=lambda t: (0 if t.identifier == "email" else 1, str(t.public_name)),
+    )

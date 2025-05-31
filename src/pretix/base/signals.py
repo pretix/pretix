@@ -333,6 +333,20 @@ class EventPluginRegistry(Registry):
     def __init__(self, keys):
         super().__init__({"plugin": lambda o: get_defining_app(o), **keys})
 
+    def filter(self, **kwargs):
+        entries = self.registered_entries
+        if event := kwargs.pop("event", None):
+            entries = {
+                entry: meta
+                for entry, meta in entries.items()
+                if is_app_active(event, meta["plugin"])
+            }
+        return (
+            (entry, meta)
+            for entry, meta in entries.items()
+            if all(value == meta[key] for key, value in kwargs.items())
+        )
+
 
 event_live_issues = EventPluginSignal()
 """
