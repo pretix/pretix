@@ -5,7 +5,6 @@ var cart = {
     _deadline_call: 0,
     _time_offset: 0,
     _prev_diff_minutes: 0,
-    _renewed_message: "",
 
     _get_now: function () {
         return moment().add(cart._time_offset, 'ms');
@@ -66,11 +65,6 @@ var cart = {
                         ).replace(/\{num\}/g, diff_minutes)
                     );
                 }
-                $("#cart-extend-feedback").text(cart._renewed_message);
-                var dialog = $("#cart-extend-feedback-dialog").get(0);
-                if (cart._renewed_message) {
-                    dialog.show();
-                }
 
                 cart._prev_diff_minutes = diff_minutes;
             }
@@ -106,15 +100,9 @@ var cart = {
             $("#cart-deadline").attr("data-expires"),
             $("#cart-deadline").attr("data-max-expiry-extend")
         );
-        $("#cart-extend-feedback-dialog").on("keydown", function (e) {
-            // prevent enter or space-bar from bubbling up and closing the cart-panel
-            e.stopPropagation();
-        }).find("button").on("blur", function() {
-            this.closest("dialog").close();
-        });
     },
 
-    set_deadline: function (expiry, max_extend, renewed_message) {
+    set_deadline: function (expiry, max_extend) {
         "use strict";
         cart._expiry_notified = false;
         cart._deadline = moment(expiry);
@@ -123,7 +111,6 @@ var cart = {
         }
         cart._deadline_timeout = null;
         cart._max_extend = moment(max_extend);
-        cart._renewed_message = renewed_message || "";
         cart.draw_deadline();
     }
 };
@@ -135,9 +122,17 @@ $(function () {
         cart.init();
     }
 
+    $("#cart-extend-feedback-dialog").on("keydown", function (e) {
+        // prevent enter or space-bar from bubbling up and closing the cart-panel
+        e.stopPropagation();
+    }).find("button").on("blur", function() {
+        this.closest("dialog").close();
+    });
+
     $("#cart-extend-form").on("pretix:async-task-success", function(e, data) {
         if (data.success) {
-            cart.set_deadline(data.expiry, data.max_expiry_extend, data.message);
+            cart.set_deadline(data.expiry, data.max_expiry_extend);
+            $("#cart-extend-feedback-dialog").get(0).show();
         } else {
             alert(data.message);
         }
