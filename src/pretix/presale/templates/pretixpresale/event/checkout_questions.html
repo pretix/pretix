@@ -57,9 +57,9 @@
                                 </div>
                             {% endif %}
                             {% if event.settings.invoice_address_explanation_text %}
-                                <div>
+                                <div class="row"><div class="col-md-9 col-md-offset-3 text-muted">
                                     {{ event.settings.invoice_address_explanation_text|rich_text }}
-                                </div>
+                                </div></div>
                             {% endif %}
                             {% bootstrap_form invoice_form layout="checkout" %}
                         </div>
@@ -91,7 +91,9 @@
                                 </div>
                             {% endif %}
                             {% if event.settings.attendee_data_explanation_text and pos.item.ask_attendee_data %}
+                                <div class="row"><div class="col-md-9 col-md-offset-3 text-muted">
                                 {{ event.settings.attendee_data_explanation_text|rich_text }}
+                                </div></div>
                             {% endif %}
                             {% if pos.seat %}
                                 <div class="form-group">
