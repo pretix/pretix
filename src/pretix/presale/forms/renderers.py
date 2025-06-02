@@ -79,7 +79,7 @@ class CheckoutFieldRenderer(FieldRenderer):
     def __init__(self, *args, **kwargs):
         kwargs['layout'] = 'horizontal'
         super().__init__(*args, **kwargs)
-        self.is_group_widget = isinstance(self.widget, (CheckboxSelectMultiple, RadioSelect, )) or (self.is_multi_widget and len(self.widget.widgets) > 1)
+        self.is_group_widget = isinstance(self.widget, (CheckboxSelectMultiple, RadioSelect, )) or self.is_multi_widget
 
     def get_form_group_class(self):
         form_group_class = self.form_group_class
