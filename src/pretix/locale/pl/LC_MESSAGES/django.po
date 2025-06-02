@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-04-28 01:00+0000\n"
+"PO-Revision-Date: 2025-06-02 23:00+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -11070,7 +11070,7 @@ msgstr ""
 #: pretix/base/settings.py:2434
 #, python-brace-format
 msgid "Your order is about to expire: {code}"
-msgstr "Twoje zamówienie ma wygasa: {code}"
+msgstr "Twoje zamówienie wkrótce wygaśnie: {code}"
 
 #: pretix/base/settings.py:2438
 #, python-brace-format
@@ -11090,7 +11090,7 @@ msgstr ""
 "Witaj,\n"
 "\n"
 "Nie otrzymaliśmy jeszcze pełnej płatności za zamówienie na {event}.\n"
-"Pamiętaj, że Twoje zamówienie będzi pewne tylko wtedy, jeżeli otrzymamy\n"
+"Pamiętaj, że Twoje zamówienie będzie pewne tylko wtedy, jeżeli otrzymamy\n"
 "Twoją płatność przed {expire_date}.\n"
 "\n"
 "Możesz wyświetlić informacje o płatności i status Twojego zamówienia pod "
