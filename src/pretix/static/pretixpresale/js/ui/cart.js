@@ -65,7 +65,6 @@ var cart = {
                         ).replace(/\{num\}/g, diff_minutes)
                     );
                 }
-
                 cart._prev_diff_minutes = diff_minutes;
             }
 
@@ -73,7 +72,6 @@ var cart = {
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
 
-            cart._renewed_message = "";
             cart._deadline_timeout = window.setTimeout(cart.draw_deadline, 500);
         }
         var already_expired = diff_total_seconds <= 0;
