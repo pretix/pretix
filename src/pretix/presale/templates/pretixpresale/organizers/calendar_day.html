@@ -4,7 +4,11 @@
 {% load rich_text %}
 {% load eventurl %}
 {% load urlreplace %}
-{% block title %}{% trans "Event overview" %}{% endblock %}
+{% block title %}
+    {% blocktrans trimmed with day=date|date:"DATE_FORMAT" %}
+        Events on {{ day }}
+    {% endblocktrans %}
+{% endblock %}
 {% block content %}
     {% if organizer_homepage_text %}
         <div class="blank-after">
