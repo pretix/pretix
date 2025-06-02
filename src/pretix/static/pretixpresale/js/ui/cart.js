@@ -107,6 +107,7 @@ var cart = {
             $("#cart-deadline").attr("data-max-expiry-extend")
         );
         $("#cart-extend-feedback-dialog").on("close", function () {
+            if (this.returnValue) { // OK-Button has been pressed, nothing else has received focus
                 var cart_panel_heading = $(this).closest(".panel").find(".panel-heading").get(0);
                 if (cart_panel_heading) {
                     window.setTimeout(function () {
@@ -117,6 +118,7 @@ var cart = {
         }).find("button").on("blur", function() {
             var dialog = this.closest("dialog");
             if (dialog.open) {
+                dialog.close();
             }
         });
     },
