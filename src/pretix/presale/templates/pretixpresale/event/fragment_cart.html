@@ -516,7 +516,10 @@
                 <p>
                     <span id="cart-extend-feedback" class="text-muted sr-only"></span>
                     <button class="btn btn-default" autofocus value="OK">
-                        {% icon "check" %} {% trans "Reservation renewed" %}
+                        <span role="img" aria-label="{% trans "OK" %}">
+                            {% icon "check" %}
+                        </span>
+                        {% trans "Reservation renewed" %}
                     </button>
                 </p>
             </form>
