@@ -4,7 +4,11 @@
 {% load rich_text %}
 {% load eventurl %}
 {% load urlreplace %}
-{% block title %}{% trans "Event overview by week" %}{% endblock %}
+{% block title %}
+    {% blocktrans trimmed with week=date|date:week_format week_day_from=date|date:short_month_day_format week_day_to=date_to|date:short_month_day_format %}
+        Events in {{ week }} ({{ week_day_from }} – {{ week_day_to }})
+    {% endblocktrans %}
+{% endblock %}
 {% block content %}
     {% if organizer_homepage_text %}
         <div class="blank-after">
@@ -18,7 +22,7 @@
         <div class="panel-heading">
             <h2 class="panel-title">
                 <strong>
-                {% blocktrans trimmed with week=date|date:week_format week_day_from=date|date:short_month_day_format week_day_to=date|date:short_month_day_format %}
+                {% blocktrans trimmed with week=date|date:week_format week_day_from=date|date:short_month_day_format week_day_to=date_to|date:short_month_day_format %}
                     Events in {{ week }} ({{ week_day_from }} – {{ week_day_to }})
                 {% endblocktrans %}
                 </strong>

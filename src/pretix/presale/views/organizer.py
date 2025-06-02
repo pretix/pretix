@@ -811,6 +811,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ) + timedelta(days=1)
 
         ctx['date'] = week.monday()
+        ctx['date_to'] = week.sunday()
         ctx['before'] = before
         ctx['after'] = after
 
