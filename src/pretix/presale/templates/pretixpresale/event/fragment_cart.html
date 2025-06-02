@@ -513,10 +513,12 @@
         </form>
         <dialog role="alertdialog" id="cart-extend-feedback-dialog" aria-labelledby="cart-extend-feedback">
             <form method="dialog">
-                <span id="cart-extend-feedback" class="text-muted"></span>
-                <button class="btn btn-default" autofocus value="OK">
-                    {% icon "check" %} {% trans "OK" %}
-                </button>
+                <p>
+                    <span id="cart-extend-feedback" class="text-muted sr-only"></span>
+                    <button class="btn btn-default" autofocus value="OK">
+                        {% icon "check" %} {% trans "Reservation renewed" %}
+                    </button>
+                </p>
             </form>
         </dialog>
     {% else %}

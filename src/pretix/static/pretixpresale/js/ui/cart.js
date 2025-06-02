@@ -106,20 +106,11 @@ var cart = {
             $("#cart-deadline").attr("data-expires"),
             $("#cart-deadline").attr("data-max-expiry-extend")
         );
-        $("#cart-extend-feedback-dialog").on("close", function () {
-            if (this.returnValue) { // OK-Button has been pressed, nothing else has received focus
-                var cart_panel_heading = $(this).closest(".panel").find(".panel-heading").get(0);
-                if (cart_panel_heading) {
-                    window.setTimeout(function () {
-                        cart_panel_heading.focus();
-                    }, 50);
-                }
-            }
+        $("#cart-extend-feedback-dialog").on("keydown", function (e) {
+            // prevent enter or space-bar from bubbling up and closing the cart-panel
+            e.stopPropagation();
         }).find("button").on("blur", function() {
-            var dialog = this.closest("dialog");
-            if (dialog.open) {
-                dialog.close();
-            }
+            this.closest("dialog").close();
         });
     },
 
