@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:36+0000\n"
-"PO-Revision-Date: 2025-05-12 13:00+0000\n"
+"PO-Revision-Date: 2025-06-02 09:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/ja/>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -727,34 +727,27 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "カート内の商品の予約は {num} 分以内に完了します。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Your cart has expired."
-msgstr "カートの有効期限が切れています"
+msgstr "カートの保存期限が切れています。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:89
-#, fuzzy
-#| msgid ""
-#| "The items in your cart are no longer reserved for you. You can still "
-#| "complete your order as long as they’re available."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
-msgstr ""
-"カートに入っている商品は現在売り切れです。在庫があれば、このまま注文を完了す"
-"ることができます。"
+msgstr "カートに入っている商品はお取り置きできません。在庫があれば、このまま注文を進"
+"めることができます。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "予約の期間を更新しますか？"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:93
 msgid "Renew reservation"
-msgstr ""
+msgstr "予約を更新"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr "主催者には%(currency)s %(amount)sが与えられます"
+msgstr "主催者は%(currency)s %(amount)sを留保します"
 
 #: pretix/static/pretixpresale/js/ui/main.js:202
 msgid "You get %(currency)s %(amount)s back"
@@ -762,7 +755,7 @@ msgstr "%(currency)s %(amount)s が払い戻されます"
 
 #: pretix/static/pretixpresale/js/ui/main.js:218
 msgid "Please enter the amount the organizer can keep."
-msgstr "イベント開催者が受け取る料金を入力してください。"
+msgstr "主催者が留保する料金を入力してください。"
 
 #: pretix/static/pretixpresale/js/ui/main.js:558
 msgid "Your local time:"
