@@ -2,7 +2,7 @@
 {% load eventurl %}
 {% load urlreplace %}
 
-<div class="btn-group" role="navigation" aria-label="{% trans "Event overview" %}">
+<div class="btn-group" role="navigation" aria-label="{% trans "Event overview by month, week, etc." %}">
     <a href="?{% url_replace request "style" "list" "date" "" %}" 
             class="btn btn-default{% if style == "list" %} active"  aria-current="page{% endif %}">
         {% trans "List" %}
