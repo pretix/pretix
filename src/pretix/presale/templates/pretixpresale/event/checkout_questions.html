@@ -1,5 +1,6 @@
 {% extends "pretixpresale/event/checkout_base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load bootstrap3 %}
 {% load rich_text %}
 {% load lists %}
@@ -74,18 +75,21 @@
                             {% if pos.variation %}
                                 – {{ pos.variation }}
                             {% endif %}</strong>
-                            {% if forloop.counter > 1 %}
-                                <span class="text-right flip">
-                                    {% if event.settings.checkout_show_copy_answers_button %}
-                                        <button type="button" data-id="{{ forloop.counter0 }}" name="copy"
-                                                class="js-copy-answers btn btn-default btn-xs">{% trans "Copy answers from above" %}</button>
-                                    {% endif %}
-                                </span>
-                            {% endif %}
                         </h3>
                     </summary>
                     <div>
                         <div class="panel-body questions-form">
+                            {% if forloop.counter > 1 and event.settings.checkout_show_copy_answers_button %}
+                                <div class="form-group">
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <button type="button" data-id="{{ forloop.counter0 }}" name="copy"
+                                            class="js-copy-answers btn btn-default btn-sm">
+                                                {% icon "files-o" %}
+                                                {% trans "Copy answers from above" %}
+                                            </button>
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% if event.settings.attendee_data_explanation_text and pos.item.ask_attendee_data %}
                                 {{ event.settings.attendee_data_explanation_text|rich_text }}
                             {% endif %}
@@ -131,11 +135,6 @@
                                 {% if form.pos.item != pos.item %}
                                     {# Add-Ons #}
                                     <legend{% if profiles_data %} class="profile-add-on-legend"{% endif %}>
-                                        {% if form.show_copy_answers_to_addon_button and event.settings.checkout_show_copy_answers_button %}
-                                            <span class="pull-right flip">
-                                                <button type="button" data-id="{{ forloop.parentloop.counter0 }}" data-addonid="{{ forloop.counter0 }}" name="copy" class="js-copy-answers-addon btn btn-default btn-xs">{% trans "Copy answers" %}</button>
-                                            </span>
-                                        {% endif %}
                                         + {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}
                                     </legend>
                                 {% endif %}
@@ -153,6 +152,17 @@
                                                     aria-describedby="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
                                                 ><i class="fa fa-address-card-o fa-lg" aria-hidden="true"></i>&nbsp; {% trans "Fill form" %}</button>
                                             </p>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if form.show_copy_answers_to_addon_button and event.settings.checkout_show_copy_answers_button %}
+                                    <div class="form-group">
+                                        <div class="col-md-9 col-md-offset-3">
+                                            <button type="button" data-id="{{ forloop.parentloop.counter0 }}" data-addonid="{{ forloop.counter0 }}" name="copy" class="js-copy-answers-addon btn btn-default btn-sm">
+                                                {% icon "files-o" %}
+                                                {% trans "Copy answers from above" %}
+                                            </button>
                                         </div>
                                     </div>
                                     {% endif %}
