@@ -1,3 +1,10 @@
+dialog.inline-dialog {
+  position: static;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
 /* Modal dialogs using HTML5 dialog tags for accessibility */
 dialog.modal-card {
   border: none;
