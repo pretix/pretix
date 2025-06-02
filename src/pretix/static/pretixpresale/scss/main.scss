@@ -170,6 +170,10 @@ input:focus, .form-control:focus {
 .btn-checkbox input:focus, .input-item-count-group input:focus, .input-group-price input:focus {
     outline: none;
 }
+/* bootstrap sets dark background for active elements with hover/focus, we need to match specifity of selector */
+.btn-default:active:hover, .btn-default:active:focus, .btn-default:active.focus, .btn-default.active:hover, .btn-default.active:focus, .btn-default.active.focus, .open > .btn-default.dropdown-toggle:hover, .open > .btn-default.dropdown-toggle:focus, .open > .btn-default.dropdown-toggle.focus {
+    background-color: inherit;
+}
 /* border-radius on these containers is needed for correctly rounded focus-outlines */
 .input-item-count-group, .input-group-price {
     border-radius: var(--pretix-border-radius-base);
