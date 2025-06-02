@@ -59,7 +59,6 @@ var cart = {
                     $("#cart-deadline").text(gettext("Your cart is about to expire."))
                 } else {
                     $("#cart-deadline").text(
-                        cart._renewed_message + " " +
                         ngettext(
                             "The items in your cart are reserved for you for one minute.",
                             "The items in your cart are reserved for you for {num} minutes.",
@@ -67,6 +66,12 @@ var cart = {
                         ).replace(/\{num\}/g, diff_minutes)
                     );
                 }
+                $("#cart-extend-feedback").text(cart._renewed_message);
+                var dialog = $("#cart-extend-feedback-dialog").get(0);
+                if (cart._renewed_message) {
+                    dialog.show();
+                }
+
                 cart._prev_diff_minutes = diff_minutes;
             }
 
@@ -101,6 +106,19 @@ var cart = {
             $("#cart-deadline").attr("data-expires"),
             $("#cart-deadline").attr("data-max-expiry-extend")
         );
+        $("#cart-extend-feedback-dialog").on("close", function () {
+                var cart_panel_heading = $(this).closest(".panel").find(".panel-heading").get(0);
+                if (cart_panel_heading) {
+                    window.setTimeout(function () {
+                        cart_panel_heading.focus();
+                    }, 50);
+                }
+            }
+        }).find("button").on("blur", function() {
+            var dialog = this.closest("dialog");
+            if (dialog.open) {
+            }
+        });
     },
 
     set_deadline: function (expiry, max_extend, renewed_message) {
@@ -127,10 +145,6 @@ $(function () {
     $("#cart-extend-form").on("pretix:async-task-success", function(e, data) {
         if (data.success) {
             cart.set_deadline(data.expiry, data.max_expiry_extend, data.message);
-            var cart_panel_heading = $(this).closest(".panel").find(".panel-heading").get(0);
-            if (cart_panel_heading) {
-                cart_panel_heading.focus();
-            }
         } else {
             alert(data.message);
         }

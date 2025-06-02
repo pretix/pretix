@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
 {% load daterange %}
 {% load safelink %}
@@ -510,6 +511,14 @@
                 </button>
             </p>
         </form>
+        <dialog role="alertdialog" id="cart-extend-feedback-dialog" aria-labelledby="cart-extend-feedback">
+            <form method="dialog">
+                <span id="cart-extend-feedback" class="text-muted"></span>
+                <button class="btn btn-default" autofocus value="OK">
+                    {% icon "check" %} {% trans "OK" %}
+                </button>
+            </form>
+        </dialog>
     {% else %}
         <p class="sr-only" id="cart-description">{% trans "Overview of your ordered products." %}</p>
     {% endif %}
