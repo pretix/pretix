@@ -12,10 +12,12 @@ setup_collapsible_details = function (el) {
             return;
         }
         content.setAttribute('aria-hidden', 'true');
+        content.setAttribute('inert', true);
         button.setAttribute('aria-expanded', 'false');
         button.addEventListener('click', function (e) {
             button.setAttribute('aria-expanded', 'true');
             content.setAttribute('aria-hidden', 'false');
+            content.removeAttribute('inert');
 
             content.addEventListener('transitionend', function() {
                 content.classList.remove('sneak-peek-content');
@@ -47,6 +49,7 @@ setup_collapsible_details = function (el) {
                     container.removeEventListener("toggle", removeSneekPeakWhenClosed);
                     trigger.remove();
                     content.removeAttribute('aria-hidden');
+                    content.removeAttribute('inert');
                     content.classList.remove('sneak-peek-content');
                 }
             }
