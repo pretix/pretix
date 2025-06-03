@@ -58,7 +58,7 @@
                             {% endif %}
                             {% if event.settings.invoice_address_explanation_text %}
                                 <div>
-                                {{ event.settings.invoice_address_explanation_text|rich_text }}
+                                    {{ event.settings.invoice_address_explanation_text|rich_text }}
                                 </div>
                             {% endif %}
                             {% bootstrap_form invoice_form layout="checkout" %}
@@ -81,7 +81,7 @@
                         <div class="panel-body questions-form">
                             {% if event.settings.attendee_data_explanation_text and pos.item.ask_attendee_data %}
                                 <div>
-                                {{ event.settings.attendee_data_explanation_text|rich_text }}
+                                    {{ event.settings.attendee_data_explanation_text|rich_text }}
                                 </div>
                             {% endif %}
                             {% if forloop.counter > 1 and event.settings.checkout_show_copy_answers_button %}
