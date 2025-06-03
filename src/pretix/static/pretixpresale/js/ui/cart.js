@@ -130,14 +130,21 @@ $(function () {
             alert(data.message);
         }
     });
+    // renew-button in cart-panel is clicked, show inline dialog
     $("#cart-extend-button").on("click", function() {
         $("#cart-extend-form").one("pretix:async-task-success", function(e, data) {
             if (data.success) {
-                $("#cart-extend-confirmation-button").show().get(0).focus();
+                document.getElementById("cart-extend-confirmation-dialog").show();
             }
         });
     });
+    $("#cart-extend-confirmation-dialog").on("keydown", function (e) {
+        if(e.key === "Escape") {
+            this.close();
+        }
+    });
 
+    // renew-button in modal dialog is clicked, show modal dialog
     $("#dialog-cart-extend form").submit(function() {
         $("#cart-extend-form").one("pretix:async-task-success", function(e, data) {
             if (data.success) {
