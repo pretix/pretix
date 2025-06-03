@@ -5,7 +5,6 @@ var cart = {
     _deadline_call: 0,
     _time_offset: 0,
     _prev_diff_minutes: 0,
-    _renewed_message: "",
 
     _get_now: function () {
         return moment().add(cart._time_offset, 'ms');
@@ -59,7 +58,6 @@ var cart = {
                     $("#cart-deadline").text(gettext("Your cart is about to expire."))
                 } else {
                     $("#cart-deadline").text(
-                        cart._renewed_message + " " +
                         ngettext(
                             "The items in your cart are reserved for you for one minute.",
                             "The items in your cart are reserved for you for {num} minutes.",
@@ -74,13 +72,12 @@ var cart = {
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
 
-            cart._renewed_message = "";
             cart._deadline_timeout = window.setTimeout(cart.draw_deadline, 500);
         }
         var already_expired = diff_total_seconds <= 0;
         var can_extend_cart = diff_minutes < 3 && (already_expired || cart._deadline < cart._max_extend);
         $("#cart-extend-button").toggle(can_extend_cart);
-        if (can_extend_cart && diff_total_seconds < 45) {
+        if (can_extend_cart && diff_total_seconds < 245) {
             if (!cart._expiry_notified) cart.show_expiry_notification();
             $("#dialog-cart-extend-title").text(already_expired
                 ? gettext("Your cart has expired.")
@@ -112,7 +109,6 @@ var cart = {
         }
         cart._deadline_timeout = null;
         cart._max_extend = moment(max_extend);
-        cart._renewed_message = renewed_message || "";
         cart.draw_deadline();
     }
 };
@@ -122,22 +118,34 @@ $(function () {
 
     if ($("#cart-deadline").length) {
         cart.init();
+        $("#cart-extend-confirmation-button").hide().on("blur", function() {
+            $(this).hide();
+        });
     }
 
     $("#cart-extend-form").on("pretix:async-task-success", function(e, data) {
         if (data.success) {
-            cart.set_deadline(data.expiry, data.max_expiry_extend, data.message);
-            var cart_panel_heading = $(this).closest(".panel").find(".panel-heading").get(0);
-            if (cart_panel_heading) {
-                cart_panel_heading.focus();
-            }
+            cart.set_deadline(data.expiry, data.max_expiry_extend);
         } else {
             alert(data.message);
         }
     });
+    $("#cart-extend-button").on("click", function() {
+        $("#cart-extend-form").one("pretix:async-task-success", function(e, data) {
+            if (data.success) {
+                $("#cart-extend-confirmation-button").show().get(0).focus();
+            }
+        });
+    });
 
     $("#dialog-cart-extend form").submit(function() {
-        $("#cart-extend-form").submit();
+        $("#cart-extend-form").one("pretix:async-task-success", function(e, data) {
+            if (data.success) {
+                $("#dialog-cart-extended-title").text(data.message);
+                $("#dialog-cart-extended-description").text($("#cart-deadline").text());
+                document.getElementById("dialog-cart-extended").showModal();
+            }
+        }).submit();
     });
 
     $(".toggle-container").each(function() {

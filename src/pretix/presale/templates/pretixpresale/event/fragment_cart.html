@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
 {% load daterange %}
 {% load safelink %}
@@ -495,7 +496,8 @@
         <form class="text-muted" id="cart-extend-form" data-asynctask data-asynctask-no-redirect
                 method="post" action="{% eventurl request.event "presale:event.cart.extend" cart_namespace=cart_namespace %}">
             {% csrf_token %}
-            <p id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" data-max-expiry-extend="{{ cart.max_expiry_extend|date:"Y-m-d H:i:sO" }}">
+            <p>
+                <span id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" data-max-expiry-extend="{{ cart.max_expiry_extend|date:"Y-m-d H:i:sO" }}">
                 {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
                     {% blocktrans trimmed with minutes=cart.minutes_left %}
                         The items in your cart are reserved for you for {{ minutes }} minutes.
@@ -503,10 +505,14 @@
                 {% else %}
                     {% trans "The items in your cart are no longer reserved for you. You can still complete your order as long as they’re available." %}
                 {% endif %}
-            </p>
-            <p>
-                <button class="btn btn-default" type="submit" id="cart-extend-button" aria-describedby="cart-deadline">
-                    <i class="fa fa-refresh" aria-hidden="true"></i> {% trans "Renew reservation" %}
+                </span>
+                <button class="btn btn-default btn-xs" type="submit" id="cart-extend-button" aria-describedby="cart-deadline">
+                    {% icon "refresh" %} {% trans "Renew reservation" %}
+                </button>
+                <button class="btn btn-success btn-xs" type="button" id="cart-extend-confirmation-button" aria-describedby="cart-deadline">
+                    <span role="img" aria-label="{% trans "OK" %}">
+                        {% icon "check" %}
+                    </span> {% trans "Reservation renewed" %}
                 </button>
             </p>
         </form>
