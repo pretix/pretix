@@ -182,7 +182,13 @@ class NamePartsWidget(forms.MultiWidget):
                     if self.field.required:
                         these_attrs['required'] = 'required'
                     these_attrs.pop('data-no-required-attr', None)
-                these_attrs['autocomplete'] = (self.attrs.get('autocomplete', '') + ' ' + self.autofill_map.get(self.scheme['fields'][i][0], 'off')).strip()
+
+                autofill_section = self.attrs.get('autocomplete', '')
+                autofill_by_name_scheme = self.autofill_map.get(self.scheme['fields'][i][0], 'off')
+                if autofill_by_name_scheme == "off" or autofill_section.strip() == "off":
+                    these_attrs['autocomplete'] = "off"
+                else:
+                    these_attrs['autocomplete'] = (autofill_section + ' ' + autofill_by_name_scheme).strip()
                 these_attrs['data-size'] = self.scheme['fields'][i][2]
                 these_attrs['aria-label'] = self.scheme['fields'][i][1]
             else:
@@ -987,7 +993,11 @@ class BaseQuestionsForm(forms.Form):
 
         for k, v in self.fields.items():
             if v.widget.attrs.get('autocomplete') or k == 'attendee_name_parts':
-                v.widget.attrs['autocomplete'] = 'section-{} '.format(self.prefix) + v.widget.attrs.get('autocomplete', '')
+                autocomplete = v.widget.attrs.get('autocomplete', '')
+                if autocomplete.strip() == "off":
+                    v.widget.attrs['autocomplete'] = 'off'
+                else:
+                    v.widget.attrs['autocomplete'] = 'section-{} '.format(self.prefix) + autocomplete
 
     def clean(self):
         from pretix.base.addressvalidation import \
@@ -1201,7 +1211,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         for k, v in self.fields.items():
             if v.widget.attrs.get('autocomplete') or k == 'name_parts':
-                v.widget.attrs['autocomplete'] = 'section-invoice billing ' + v.widget.attrs.get('autocomplete', '')
+                autocomplete = v.widget.attrs.get('autocomplete', '')
+                if autocomplete.strip() == "off":
+                    v.widget.attrs['autocomplete'] = 'off'
+                else:
+                    v.widget.attrs['autocomplete'] = 'section-invoice billing ' + autocomplete
 
     def clean(self):
         from pretix.base.addressvalidation import \
