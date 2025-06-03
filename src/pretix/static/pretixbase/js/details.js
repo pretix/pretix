@@ -11,11 +11,18 @@ setup_collapsible_details = function (el) {
             content.classList.remove('sneak-peek-content');
             return;
         }
+        function openSneekPeakOnSubmit() {
+            $(button).trigger("click");
+        }
+        var $buttons = $("button:enabled", content).prop("disabled", true);
+        var $forms = $("form", content).on("submit", openSneekPeakOnSubmit);
         content.setAttribute('aria-hidden', 'true');
         button.setAttribute('aria-expanded', 'false');
         button.addEventListener('click', function (e) {
             button.setAttribute('aria-expanded', 'true');
             content.setAttribute('aria-hidden', 'false');
+            $buttons.prop("disabled", false);
+            $forms.off("submit", openSneekPeakOnSubmit);
 
             content.addEventListener('transitionend', function() {
                 content.classList.remove('sneak-peek-content');
@@ -29,8 +36,14 @@ setup_collapsible_details = function (el) {
                 // this will be called by screenreader users if they kept focus on the button after expanding
                 // we need to keep the trigger/button in the DOM to not irritate screenreaders toggling visibility
                 var expanded = button.getAttribute('aria-expanded') == 'true';
-                button.setAttribute('aria-expanded', !expanded);
-                content.setAttribute('aria-hidden', expanded);
+                button.setAttribute('aria-expanded', !expanded ? 'true' : 'false');
+                content.setAttribute('aria-hidden', expanded ? 'true' : 'false');
+                $buttons.prop("disabled", expanded);
+                if (expanded) {
+                    $forms.on("submit", openSneekPeakOnSubmit);
+                } else {
+                    $forms.off("submit", openSneekPeakOnSubmit);
+                }
             });
             button.addEventListener('blur', function (e) {
                 // if content is visible and the user leaves the button, we can safely remove the trigger/button
@@ -48,6 +61,8 @@ setup_collapsible_details = function (el) {
                     trigger.remove();
                     content.removeAttribute('aria-hidden');
                     content.classList.remove('sneak-peek-content');
+                    $buttons.prop("disabled", false);
+                    $forms.off("submit", openSneekPeakOnSubmit);
                 }
             }
             container.addEventListener("toggle", removeSneekPeakWhenClosed);

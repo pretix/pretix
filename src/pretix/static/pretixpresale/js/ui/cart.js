@@ -137,6 +137,7 @@ $(function () {
     });
 
     $("#dialog-cart-extend form").submit(function() {
+        $("#cart-extend-form").closest("details:not([open])").find("summary").trigger("click");
         $("#cart-extend-form").submit();
     });
 
