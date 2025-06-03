@@ -5,7 +5,6 @@ var cart = {
     _deadline_call: 0,
     _time_offset: 0,
     _prev_diff_minutes: 0,
-    _renewed_message: "",
 
     _get_now: function () {
         return moment().add(cart._time_offset, 'ms');
@@ -59,7 +58,6 @@ var cart = {
                     $("#cart-deadline").text(gettext("Your cart is about to expire."))
                 } else {
                     $("#cart-deadline").text(
-                        cart._renewed_message + " " +
                         ngettext(
                             "The items in your cart are reserved for you for one minute.",
                             "The items in your cart are reserved for you for {num} minutes.",
@@ -74,7 +72,6 @@ var cart = {
                 pad(diff_minutes.toString(), 2) + ':' + pad(diff_seconds.toString(), 2)
             );
 
-            cart._renewed_message = "";
             cart._deadline_timeout = window.setTimeout(cart.draw_deadline, 500);
         }
         var already_expired = diff_total_seconds <= 0;
@@ -112,7 +109,6 @@ var cart = {
         }
         cart._deadline_timeout = null;
         cart._max_extend = moment(max_extend);
-        cart._renewed_message = renewed_message || "";
         cart.draw_deadline();
     }
 };
@@ -122,22 +118,41 @@ $(function () {
 
     if ($("#cart-deadline").length) {
         cart.init();
+        $("#cart-extend-confirmation-button").hide().on("blur", function() {
+            $(this).hide();
+        });
     }
 
     $("#cart-extend-form").on("pretix:async-task-success", function(e, data) {
         if (data.success) {
-            cart.set_deadline(data.expiry, data.max_expiry_extend, data.message);
-            var cart_panel_heading = $(this).closest(".panel").find(".panel-heading").get(0);
-            if (cart_panel_heading) {
-                cart_panel_heading.focus();
-            }
+            cart.set_deadline(data.expiry, data.max_expiry_extend);
         } else {
             alert(data.message);
         }
     });
+    // renew-button in cart-panel is clicked, show inline dialog
+    $("#cart-extend-button").on("click", function() {
+        $("#cart-extend-form").one("pretix:async-task-success", function(e, data) {
+            if (data.success) {
+                document.getElementById("cart-extend-confirmation-dialog").show();
+            }
+        });
+    });
+    $("#cart-extend-confirmation-dialog").on("keydown", function (e) {
+        if(e.key === "Escape") {
+            this.close();
+        }
+    });
 
+    // renew-button in modal dialog is clicked, show modal dialog
     $("#dialog-cart-extend form").submit(function() {
-        $("#cart-extend-form").submit();
+        $("#cart-extend-form").one("pretix:async-task-success", function(e, data) {
+            if (data.success) {
+                $("#dialog-cart-extended-title").text(data.message);
+                $("#dialog-cart-extended-description").text($("#cart-deadline").text());
+                document.getElementById("dialog-cart-extended").showModal();
+            }
+        }).submit();
     });
 
     $(".toggle-container").each(function() {
