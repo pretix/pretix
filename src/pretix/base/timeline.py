@@ -339,6 +339,24 @@ def timeline_for_event(event, subevent=None):
                 continue
         except:
             pass
+        availability_start = pprov.settings.get('_availability_start', as_type=RelativeDateWrapper)
+        if availability_start:
+            d = make_aware(datetime.combine(
+                availability_start.date(ev),
+                time(hour=0, minute=0, second=0)
+            ), event.timezone)
+            tl.append(TimelineEvent(
+                event=event, subevent=subevent,
+                datetime=d,
+                description=pgettext_lazy('timeline', 'Payment provider "{name}" becomes active').format(
+                    name=str(pprov.verbose_name)
+                ),
+                edit_url=reverse('control:event.settings.payment.provider', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                    'provider': pprov.identifier,
+                })
+            ))
         availability_date = pprov.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:
             d = make_aware(datetime.combine(
