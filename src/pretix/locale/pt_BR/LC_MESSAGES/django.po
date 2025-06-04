@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-28 08:00+0000\n"
+"PO-Revision-Date: 2025-06-04 06:32+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -10604,10 +10604,8 @@ msgstr ""
 "você usa os dados coletados em sua loja de ingressos."
 
 #: pretix/base/settings.py:2071
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information URL"
-msgstr "Informações da conta"
+msgstr "URL de informação de acessibilidade"
 
 #: pretix/base/settings.py:2072
 #, fuzzy
