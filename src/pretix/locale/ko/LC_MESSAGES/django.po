@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-28 08:41+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"PO-Revision-Date: 2025-06-04 06:32+0000\n"
+"Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -15531,1077 +15531,1092 @@ msgstr ""
 msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
-msgstr ""
+msgstr "위치 #{posid}는 이미 목록 \"{list}\"에서 스캔된 이력이 있어, 이번에는 "
+"거부되었습니다."
 
 #: pretix/control/logdisplay.py:392
 msgid "The user confirmed the following message: \"{}\""
-msgstr ""
+msgstr "사용자가 다음 메시지를 승인했습니다: \"{}\""
 
 #: pretix/control/logdisplay.py:404
 #, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr ""
+msgstr "주문이 취소되었습니다. (사유: \"{comment}\")"
 
 #: pretix/control/logdisplay.py:406 pretix/control/views/orders.py:1573
 #: pretix/presale/views/order.py:1047
 msgid "The order has been canceled."
-msgstr ""
+msgstr "주문이 정상적으로 취소 처리되었습니다."
 
 #: pretix/control/logdisplay.py:414
 #, python-brace-format
 msgid "Position #{posid} has been printed at {datetime} with type \"{type}\"."
-msgstr ""
+msgstr "위치 #{posid}가 {datetime}에 \"{type}\" 유형으로 출력되었습니다."
 
 #: pretix/control/logdisplay.py:428 pretix/control/logdisplay.py:741
 msgid "The settings of a payment provider have been changed."
-msgstr ""
+msgstr "결제 서비스 제공업체의 설정이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:431 pretix/control/logdisplay.py:740
 msgid "The settings of a ticket output provider have been changed."
-msgstr ""
+msgstr "티켓 출력 공급자의 설정이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:437
 msgid "Blocked manually"
-msgstr ""
+msgstr "수동으로 차단되었습니다"
 
 #: pretix/control/logdisplay.py:439
 msgid "Blocked because of an API integration"
 msgstr ""
+"API 인터페이스 때문에 연결이 차단되었습니다. (어떤 시스템이나 서비스가 외부 "
+"애플리케이션 프로그래밍 인터페이스(API)를 통해 데이터를 주고받으려 했지만, "
+"보안이나 정책 상의 이유로 접근이 막혔다는 뜻)"
 
 #: pretix/control/logdisplay.py:443
 #, python-brace-format
 msgid "The test mode order {code} has been deleted."
-msgstr ""
+msgstr "테스트 모드 순서 {code}가 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:444
 msgid "The order details have been changed."
-msgstr ""
+msgstr "주문 세부 사항이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:445
 msgid "The order has been marked as unpaid."
-msgstr ""
+msgstr "주문이 미결제로 표시되었습니다."
 
 #: pretix/control/logdisplay.py:446
 msgid "The order's secret has been changed."
-msgstr ""
+msgstr "주문의 비밀이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:447
 msgid "The order's expiry date has been changed."
-msgstr ""
+msgstr "주문의 만료일이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:448
 msgid "The order has been set to be usable before it is paid."
-msgstr ""
+msgstr "주문이 결제되기 전에 사용할 수 있도록 설정되었습니다."
 
 #: pretix/control/logdisplay.py:449
 msgid "The order has been set to require payment before use."
-msgstr ""
+msgstr "주문은 사용 전에 결제가 필요하도록 설정되었습니다."
 
 #: pretix/control/logdisplay.py:450 pretix/control/views/orders.py:1578
 msgid "The order has been marked as expired."
-msgstr ""
+msgstr "주문이 만료된 것으로 표시되었습니다."
 
 #: pretix/control/logdisplay.py:451 pretix/control/views/orders.py:1476
 msgid "The order has been marked as paid."
-msgstr ""
+msgstr "주문이 결제된 것으로 표시되었습니다."
 
 #: pretix/control/logdisplay.py:452
 msgid "The cancellation request has been deleted."
-msgstr ""
+msgstr "취소 요청이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:453
 msgid "The order has been refunded."
-msgstr ""
+msgstr "주문이 환불되었습니다."
 
 #: pretix/control/logdisplay.py:454 pretix/control/views/orders.py:1861
 msgid "The order has been reactivated."
-msgstr ""
+msgstr "주문이 다시 활성화되었습니다."
 
 #: pretix/control/logdisplay.py:455
 msgid "The order has been created."
-msgstr ""
+msgstr "주문이 생성되었습니다."
 
 #: pretix/control/logdisplay.py:457
 msgid "The order requires approval before it can continue to be processed."
-msgstr ""
+msgstr "주문이 계속 처리되기 전에 승인이 필요합니다."
 
 #: pretix/control/logdisplay.py:458 pretix/control/views/orders.py:800
 msgid "The order has been approved."
-msgstr ""
+msgstr "주문이 승인되었습니다."
 
 #: pretix/control/logdisplay.py:459
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
-msgstr ""
+msgstr "주문이 거부되었습니다(댓글: \"{댓글}\")."
 
 #: pretix/control/logdisplay.py:460
 #, python-brace-format
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
-msgstr ""
+msgstr "이메일 주소가 \"{old_email}\"에서 \"{new_email}\"로 변경되었습니다."
 
 #: pretix/control/logdisplay.py:463
 msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
-msgstr ""
+msgstr "이메일 주소가 작동 중인 것으로 확인되었습니다(사용자가 이메일의 링크를 처음 "
+"클릭했습니다)."
 
 #: pretix/control/logdisplay.py:465
 #, python-brace-format
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
-msgstr ""
+msgstr "전화번호가 \"{old_phone}\"에서 \"{new_phone}\"으로 변경되었습니다."
 
 #: pretix/control/logdisplay.py:467
 msgid "The customer account has been changed."
-msgstr ""
+msgstr "고객 계정이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:468
 msgid "The order locale has been changed."
-msgstr ""
+msgstr "주문 로케일이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:469 pretix/control/views/orders.py:1617
 #: pretix/presale/views/order.py:739 pretix/presale/views/order.py:812
 msgid "The invoice has been generated."
-msgstr ""
+msgstr "송장이 생성되었습니다."
 
 #: pretix/control/logdisplay.py:470 pretix/control/views/orders.py:1688
 msgid "The invoice has been regenerated."
-msgstr ""
+msgstr "송장이 재생성되었습니다."
 
 #: pretix/control/logdisplay.py:471 pretix/control/views/orders.py:1719
 #: pretix/presale/views/order.py:825
 msgid "The invoice has been reissued."
-msgstr ""
+msgstr "송장이 재발행되었습니다"
 
 #: pretix/control/logdisplay.py:472
 msgid "The order's internal comment has been updated."
-msgstr ""
+msgstr "주문의 내부 의견이 업데이트되었습니다."
 
 #: pretix/control/logdisplay.py:473
 msgid "The order's follow-up date has been updated."
-msgstr ""
+msgstr "주문의 후속 조치 날짜가 업데이트되었습니다."
 
 #: pretix/control/logdisplay.py:474
 msgid "The order's flag to require attention at check-in has been toggled."
-msgstr ""
+msgstr "해당 주문에 대해 체크인 시 주의가 필요하다는 표시가 켜졌거나 꺼졌습니다"
 
 #: pretix/control/logdisplay.py:476
 msgid "The order's check-in text has been changed."
-msgstr ""
+msgstr "주문의 체크인 텍스트가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:477
 msgid ""
 "The order's flag to be considered valid even if unpaid has been toggled."
-msgstr ""
+msgstr "미지급 상태에서도 유효한 것으로 간주되는 주문의 표시가 켜졌거나 꺼졌습니다."
 
 #: pretix/control/logdisplay.py:479
 #, python-brace-format
 msgid "A new payment {local_id} has been started instead of the previous one."
-msgstr ""
+msgstr "이전 결제 대신 새로운 결제 {local_id}가 시작되었습니다(local_ID; 결제를 "
+"식별하는 고유 ID)"
 
 #: pretix/control/logdisplay.py:480
 msgid "An unidentified type email has been sent."
-msgstr ""
+msgstr "미확인 유형의 이메일이 전송되었습니다."
 
 #: pretix/control/logdisplay.py:481 pretix/control/logdisplay.py:666
 msgid "Sending of an email has failed."
-msgstr ""
+msgstr "이메일 전송이 실패했습니다."
 
 #: pretix/control/logdisplay.py:482
 msgid ""
 "The email has been sent without attached tickets since they would have been "
 "too large to be likely to arrive."
-msgstr ""
+msgstr "이메일은 너무 커서 도착할 가능성이 높았기 때문에 첨부된 티켓 없이 "
+"발송되었습니다."
 
 #: pretix/control/logdisplay.py:484
 msgid "A custom email has been sent."
-msgstr ""
+msgstr "맞춤형 이메일이 전송되었습니다."
 
 #: pretix/control/logdisplay.py:485
 msgid "A custom email has been sent to an attendee."
-msgstr ""
+msgstr "참석자에게 맞춤형 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:486
 msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
-msgstr ""
+msgstr "티켓을 다운로드할 수 있다는 알림과 함께 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:488
 msgid ""
 "An email has been sent with a warning that the order is about to expire."
-msgstr ""
+msgstr "주문이 곧 만료될 것이라는 경고와 함께 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:491
 msgid ""
 "An email has been sent to notify the user that the order has been canceled."
-msgstr ""
+msgstr "사용자에게 주문이 취소되었음을 알리는 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:492
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
-msgstr ""
+msgstr "사용자에게 이벤트가 취소되었음을 알리는 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:495
 msgid ""
 "An email has been sent to notify the user that the order has been changed."
-msgstr ""
+msgstr "사용자에게 주문이 변경되었음을 알리는 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:497
 msgid ""
 "An email has been sent to notify the user that the order has been received."
-msgstr ""
+msgstr "주문이 접수되었음을 사용자에게 알리기 위한 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:499
 msgid ""
 "An email has been sent to notify the user that payment has been received."
-msgstr ""
+msgstr "사용자에게 결제가 완료되었음을 알리는 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:501
 msgid ""
 "An email has been sent to notify the user that the order has been denied."
-msgstr ""
+msgstr "주문이 거부되었음을 사용자에게 알리기 위한 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:502
 msgid ""
 "An email has been sent to notify the user that the order has been approved."
-msgstr ""
+msgstr "주문이 승인되었음을 사용자에게 알리기 위한 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:505
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires payment."
-msgstr ""
+msgstr "주문이 접수되었으며 결제가 필요하다는 것을 사용자에게 알리기 위해 이메일이 "
+"발송되었습니다."
 
 #: pretix/control/logdisplay.py:506
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
-msgstr ""
+msgstr "주문이 접수되었으며 승인이 필요함을 사용자에게 알리기 위해 이메일이 "
+"발송되었습니다."
 
 #: pretix/control/logdisplay.py:509
 msgid ""
 "An email with a link to the order detail page has been resent to the user."
-msgstr ""
+msgstr "주문 세부 정보 페이지 링크가 포함된 이메일이 사용자에게 발송되었습니다"
 
 #: pretix/control/logdisplay.py:510
 msgid "An email has been sent to notify the user that the payment failed."
-msgstr ""
+msgstr "사용자에게 결제가 실패했음을 알리는 이메일이 발송되었습니다."
 
 #: pretix/control/logdisplay.py:517
 msgid "The voucher has been created."
-msgstr ""
+msgstr "바우처가 생성되었습니다"
 
 #: pretix/control/logdisplay.py:519
 msgid "The voucher has been created and sent to a person on the waiting list."
-msgstr ""
+msgstr "바우처가 생성되어 대기자 명단에 있는 사람에게 전송되었습니다."
 
 #: pretix/control/logdisplay.py:521
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
-msgstr ""
+msgstr "수신자가 대기자 명단에서 삭제했기 때문에 바우처가 만료될 예정입니다."
 
 #: pretix/control/logdisplay.py:522
 msgid "The voucher has been changed."
-msgstr ""
+msgstr "바우처가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:523
 msgid "The voucher has been deleted."
-msgstr ""
+msgstr "바우처가 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:532
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr ""
+msgstr "바우처가 {order_code} 순서로 사용되었습니다."
 
 #: pretix/control/logdisplay.py:547
 msgid "The category has been added."
-msgstr ""
+msgstr "카테고리가 추가되었습니다."
 
 #: pretix/control/logdisplay.py:548
 msgid "The category has been deleted."
-msgstr ""
+msgstr "카테고리가 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:549
 msgid "The category has been changed."
-msgstr ""
+msgstr "카테고리가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:550
 msgid "The category has been reordered."
-msgstr ""
+msgstr "카테고리가 재주문되었습니다."
 
 #: pretix/control/logdisplay.py:557
 msgid "The tax rule has been added."
-msgstr ""
+msgstr "세금 규정이 추가되었습니다."
 
 #: pretix/control/logdisplay.py:558
 msgid "The tax rule has been deleted."
-msgstr ""
+msgstr "세금 규정이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:559
 msgid "The tax rule has been changed."
-msgstr ""
+msgstr "세금 규정이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:571
 #, python-brace-format
 msgid "{user} has been added to the team."
-msgstr ""
+msgstr "{user}가 팀에 추가되었습니다."
 
 #: pretix/control/logdisplay.py:572
 #, python-brace-format
 msgid "{user} has been removed from the team."
-msgstr ""
+msgstr "{user}가 팀에 제거되었습니다."
 
 #: pretix/control/logdisplay.py:573
 #, python-brace-format
 msgid "{user} has been invited to the team."
-msgstr ""
+msgstr "{user}가 팀에 초대되었습니다."
 
 #: pretix/control/logdisplay.py:574
 #, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr ""
+msgstr "{user} 초대장이 다시 발송되었습니다."
 
 #: pretix/control/logdisplay.py:585
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
-msgstr ""
+msgstr "{user}가 {email}에게 보낸 초대를 사용하여 팀에 합류했습니다."
 
 #: pretix/control/logdisplay.py:595
 msgid "Your account settings have been changed."
-msgstr ""
+msgstr "계정 설정이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:598 pretix/control/views/user.py:253
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
-msgstr ""
+msgstr "귀하의 이메일 주소가 {email}로 변경되었습니다."
 
 #: pretix/control/logdisplay.py:600 pretix/control/views/user.py:250
 msgid "Your password has been changed."
-msgstr ""
+msgstr "비밀번호가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:602
 msgid "Your account has been enabled."
-msgstr ""
+msgstr "계정이 활성화되었습니다."
 
 #: pretix/control/logdisplay.py:604
 msgid "Your account has been disabled."
-msgstr ""
+msgstr "계정이 비활성화되었습니다."
 
 #: pretix/control/logdisplay.py:614
 msgid "You impersonated {}."
-msgstr ""
+msgstr "{}을 사칭했습니다."
 
 #: pretix/control/logdisplay.py:615
 msgid "You stopped impersonating {}."
-msgstr ""
+msgstr "{}을 사칭하는 것을 멈췄습니다."
 
 #: pretix/control/logdisplay.py:622
 msgid "This object has been created by cloning."
-msgstr ""
+msgstr "이 객체는 복제를 통해 만들어졌습니다."
 
 #: pretix/control/logdisplay.py:623
 msgid "The organizer has been changed."
-msgstr ""
+msgstr "주최자가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:624
 msgid "The organizer settings have been changed."
-msgstr ""
+msgstr "정리함 설정이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:625 pretix/control/logdisplay.py:748
 msgid "The footer links have been changed."
-msgstr ""
+msgstr "바닥글 링크가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:626 pretix/control/logdisplay.py:672
 msgid "A scheduled export has been added."
-msgstr ""
+msgstr "예약된 내보내기가 추가되었습니다."
 
 #: pretix/control/logdisplay.py:627 pretix/control/logdisplay.py:673
 msgid "A scheduled export has been changed."
-msgstr ""
+msgstr "예약된 내보내기가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:628 pretix/control/logdisplay.py:674
 msgid "A scheduled export has been deleted."
-msgstr ""
+msgstr "예약된 내보내기가 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:629 pretix/control/logdisplay.py:675
 msgid "A scheduled export has been executed."
-msgstr ""
+msgstr "예약된 내보내기가 실행되었습니다."
 
 #: pretix/control/logdisplay.py:630 pretix/control/logdisplay.py:676
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A scheduled export has failed: {reason}."
-msgstr ""
+msgstr "예약된 내보내기가 실패했습니다: {이유}."
 
 #: pretix/control/logdisplay.py:631
 msgid "Gift card acceptance for another organizer has been added."
-msgstr ""
+msgstr "다른 주최자의 기프트 카드 수락이 추가되었습니다."
 
 #: pretix/control/logdisplay.py:632
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr ""
+msgstr "다른 주최자의 기프트 카드 수락이 취소되었습니다."
 
 #: pretix/control/logdisplay.py:633
 msgid "A new gift card acceptor has been invited."
-msgstr ""
+msgstr "새로운 기프트 카드 수령인이 초대되었습니다."
 
 #: pretix/control/logdisplay.py:634
 msgid "A gift card acceptor has been removed."
-msgstr ""
+msgstr "기프트 카드 수락자가 제거되었습니다."
 
 #: pretix/control/logdisplay.py:635
 msgid "A gift card issuer has been removed or declined."
-msgstr ""
+msgstr "기프트 카드 발급자가 삭제되었거나 거부되었습니다."
 
 #: pretix/control/logdisplay.py:636
 msgid "A new gift card issuer has been accepted."
-msgstr ""
+msgstr "새로운 기프트 카드 발급자가 수락되었습니다."
 
 #: pretix/control/logdisplay.py:637
 msgid "The webhook has been created."
 msgstr ""
+"이제 특정 이벤트 발생 시 자동으로 지정한 URL로 알림(데이터)을 보내도록 "
+"설정이 완료되었습니다.(웹훅: 특정 이벤트가 발생했을 때, 정해진 URL로 "
+"자동으로 알림이나 데이터를 전송하는 기능)"
 
 #: pretix/control/logdisplay.py:638
 msgid "The webhook has been changed."
-msgstr ""
+msgstr "웹훅이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:639
 msgid "The webhook call retry jobs have been manually expedited."
 msgstr ""
+"웹훅 호출 재시도 작업이 수동으로 신속 처리되었습니다 (실패한 웹훅 호출들을 "
+"다시 시도하는 작업을, 자동이 아닌 사람이 직접 개입해 더 빨리 실행되도록 "
+"처리했다는 의미)"
 
 #: pretix/control/logdisplay.py:640
 msgid "The webhook call retry jobs have been dropped."
-msgstr ""
+msgstr "웹훅 호출 재시도 작업이 중단되었습니다"
 
 #: pretix/control/logdisplay.py:641
 msgid "The SSO provider has been created."
 msgstr ""
+"이제 특정 로그인 서비스(예: Google, Microsoft)를 사용해 로그인할 수 있도록 "
+"설정이 완료되었습니다. (SSO; 한 번 로그인으로 여러 서비스에 자동 로그인할 수 "
+"있게 해주는 시스템으로서  구글, 마이크로소프트, 카카오, 네이버 로그인을 "
+"이용한 서비스 접근입니다)"
 
 #: pretix/control/logdisplay.py:642
 msgid "The SSO provider has been changed."
-msgstr ""
+msgstr "SSO 제공자가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:643
 msgid "The SSO provider has been deleted."
-msgstr ""
+msgstr "SSO 제공자가 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:644
 msgid "The SSO client has been created."
-msgstr ""
+msgstr "SSO 클라이언트가 생성되었습니다."
 
 #: pretix/control/logdisplay.py:645
 msgid "The SSO client has been changed."
-msgstr ""
+msgstr "SSO 클라이언트가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:646
 msgid "The SSO client has been deleted."
-msgstr ""
+msgstr "SSO 클라이언트가 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:647 pretix/control/views/organizer.py:2346
 msgid "The membership type has been created."
-msgstr ""
+msgstr "멤버십 유형이 생성되었습니다."
 
 #: pretix/control/logdisplay.py:648
 msgid "The membership type has been changed."
-msgstr ""
+msgstr "멤버십 유형이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:649
 msgid "The membership type has been deleted."
-msgstr ""
+msgstr "멤버십 유형이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:650 pretix/control/views/organizer.py:3184
 msgid "The sales channel has been created."
-msgstr ""
+msgstr "판매 채널이 생성되었습니다"
 
 #: pretix/control/logdisplay.py:651
 msgid "The sales channel has been changed."
-msgstr ""
+msgstr "판매 채널이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:652
 msgid "The sales channel has been deleted."
-msgstr ""
+msgstr "판매 채널이 삭제되었습니다"
 
 #: pretix/control/logdisplay.py:653
 msgid "The account has been created."
-msgstr ""
+msgstr "계정이 생성되었습니다"
 
 #: pretix/control/logdisplay.py:654
 msgid "The account has been changed."
-msgstr ""
+msgstr "계정이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:655
 msgid "A membership for this account has been added."
-msgstr ""
+msgstr "이 계정의 멤버십이 추가되었습니다"
 
 #: pretix/control/logdisplay.py:656
 msgid "A membership of this account has been changed."
-msgstr ""
+msgstr "이 계정의 멤버십이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:657
 msgid "A membership of this account has been deleted."
-msgstr ""
+msgstr "이 계정의 멤버십이 삭제되었습니다"
 
 #: pretix/control/logdisplay.py:658
 msgid "The account has been disabled and anonymized."
-msgstr ""
+msgstr "계정이 비활성화되고 익명화되었습니다."
 
 #: pretix/control/logdisplay.py:659
 msgid "A new password has been requested."
-msgstr ""
+msgstr "새 비밀번호가 요청되었습니다."
 
 #: pretix/control/logdisplay.py:660
 msgid "A new password has been set."
-msgstr ""
+msgstr "새 비밀번호가 설정되었습니다."
 
 #: pretix/control/logdisplay.py:661
 msgid "The reusable medium has been created."
-msgstr ""
+msgstr "재사용 가능한 매체가 만들어졌습니다."
 
 #: pretix/control/logdisplay.py:662
 msgid "The reusable medium has been created automatically."
-msgstr ""
+msgstr "재사용 가능한 매체가 자동으로 생성되었습니다."
 
 #: pretix/control/logdisplay.py:663
 msgid "The reusable medium has been changed."
-msgstr ""
+msgstr "재사용 가능한 매체가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:664
 msgid "The medium has been connected to a new ticket."
-msgstr ""
+msgstr "매체가 새 티켓에 연결되었습니다."
 
 #: pretix/control/logdisplay.py:665
 msgid "The medium has been connected to a new gift card."
-msgstr ""
+msgstr "매체가 새 기프트 카드에 연결되었습니다."
 
 #: pretix/control/logdisplay.py:667
 msgid "The event's internal comment has been updated."
-msgstr ""
+msgstr "이벤트의 내부 의견이 업데이트되었습니다."
 
 #: pretix/control/logdisplay.py:668
 msgid "The event has been canceled."
-msgstr ""
+msgstr "행사가 취소되었습니다."
 
 #: pretix/control/logdisplay.py:669
 msgid "An event has been deleted."
-msgstr ""
+msgstr "행사가 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:670
 msgid "A removal process for personal data has been started."
-msgstr ""
+msgstr "개인 데이터 제거 프로세스가 시작되었습니다."
 
 #: pretix/control/logdisplay.py:671
 msgid "A removal process for personal data has been completed."
-msgstr ""
+msgstr "개인 데이터 제거 프로세스가  완성되었습니다."
 
 #: pretix/control/logdisplay.py:677
 msgid "The user has been created."
-msgstr ""
+msgstr "사용자가 생성되었습니다."
 
 #: pretix/control/logdisplay.py:678
 #, python-brace-format
 msgid ""
 "A first login using {agent_type} on {os_type} from {country} has been "
 "detected."
-msgstr ""
+msgstr "{country}에서 {os_type}을(를) 사용하는 {agent_type}을 통해 첫 로그인이 "
+"감지되었습니다"
 
 #: pretix/control/logdisplay.py:680 pretix/control/views/user.py:490
 #: pretix/control/views/user.py:550 pretix/control/views/user.py:609
 msgid "Two-factor authentication has been enabled."
-msgstr ""
+msgstr "2단계 인증이 활성화되었습니다."
 
 #: pretix/control/logdisplay.py:681 pretix/control/views/user.py:393
 #: pretix/control/views/user.py:625
 msgid "Two-factor authentication has been disabled."
-msgstr ""
+msgstr "2단계 인증이 비활성화되었습니다."
 
 #: pretix/control/logdisplay.py:682 pretix/control/views/user.py:642
 msgid "Your two-factor emergency codes have been regenerated."
-msgstr ""
+msgstr "당신의 2단계 인증 비상 코드가 재생성되었습니다"
 
 #: pretix/control/logdisplay.py:683
 msgid "A two-factor emergency code has been generated."
-msgstr ""
+msgstr "당신의 2단계 인증 비상 코드가 생성되었습니다"
 
 #: pretix/control/logdisplay.py:684
 #, python-brace-format
 msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
-msgstr ""
+msgstr "새로운 2단계 인증 장치 \"{name}\"이(가) 귀하의 계정에 추가되었습니다"
 
 #: pretix/control/logdisplay.py:686
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
-msgstr ""
+msgstr "이중 인증 장치 \"이름\"이 계정에서 제거되었습니다."
 
 #: pretix/control/logdisplay.py:688
 msgid "Notifications have been enabled."
-msgstr ""
+msgstr "알림이 활성화되었습니다"
 
 #: pretix/control/logdisplay.py:689
 msgid "Notifications have been disabled."
-msgstr ""
+msgstr "알림이 비활성화되었습니다."
 
 #: pretix/control/logdisplay.py:690
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "알림 설정이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:691
 msgid "This user has been anonymized."
-msgstr ""
+msgstr "이 사용자는 익명화되었습니다"
 
 #: pretix/control/logdisplay.py:694
 msgid "Password reset mail sent."
-msgstr ""
+msgstr "비밀번호 재설정 메일이 전송되었습니다"
 
 #: pretix/control/logdisplay.py:695
 msgid "The password has been reset."
-msgstr ""
+msgstr "비밀번호가 재설정되었습니다"
 
 #: pretix/control/logdisplay.py:696
 msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
-msgstr ""
+msgstr "마지막 요청이 24시간도 채 되지 않아 반복적인 비밀번호 재설정이 거부되었습니다"
 
 #: pretix/control/logdisplay.py:698
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr ""
+msgstr "주최자 \"이름\"이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:699 pretix/control/logdisplay.py:700
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr ""
+msgstr "대기자 명단에 있는 사람에게 바우처가 발송되었습니다."
 
 #: pretix/control/logdisplay.py:701
 msgid "An entry has been removed from the waiting list."
-msgstr ""
+msgstr "대기자 명단에서 항목이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:702
 msgid "An entry has been transferred to another waiting list."
-msgstr ""
+msgstr "항목이 다른 대기자 명단으로 전송되었습니다."
 
 #: pretix/control/logdisplay.py:703
 msgid "An entry has been changed on the waiting list."
-msgstr ""
+msgstr "대기자 명단에 항목이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:704
 msgid "An entry has been added to the waiting list."
-msgstr ""
+msgstr "대기자 명단에 항목이 추가되었습니다"
 
 #: pretix/control/logdisplay.py:705
 msgid "The team has been created."
-msgstr ""
+msgstr "팀이 생성되었습니다"
 
 #: pretix/control/logdisplay.py:706
 msgid "The team settings have been changed."
-msgstr ""
+msgstr "팀 설정이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:707
 msgid "The team has been deleted."
-msgstr ""
+msgstr "팀이 삭제되었습니다"
 
 #: pretix/control/logdisplay.py:708 pretix/control/views/organizer.py:2012
 msgid "The gate has been created."
-msgstr ""
+msgstr "게이트가 생성되었습니다"
 
 #: pretix/control/logdisplay.py:709
 msgid "The gate has been changed."
-msgstr ""
+msgstr "게이트가 변경되었습니다"
 
 #: pretix/control/logdisplay.py:710
 msgid "The gate has been deleted."
-msgstr ""
+msgstr "게이트가 삭제되었습니다"
 
 #: pretix/control/logdisplay.py:711
 msgctxt "subevent"
 msgid "The event date has been deleted."
-msgstr ""
+msgstr "이벤트 날짜가 삭제되었습니다"
 
 #: pretix/control/logdisplay.py:712
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr ""
+msgstr "이벤트 날짜가 취소되었습니다"
 
 #: pretix/control/logdisplay.py:713
 msgctxt "subevent"
 msgid "The event date has been changed."
-msgstr ""
+msgstr "이벤트 날짜가 변경되었습니다"
 
 #: pretix/control/logdisplay.py:714
 msgctxt "subevent"
 msgid "The event date has been created."
-msgstr ""
+msgstr "이벤트 날짜가 생성되었습니다"
 
 #: pretix/control/logdisplay.py:715
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
-msgstr ""
+msgstr "행사 날짜에 할당량이 추가되었습니다."
 
 #: pretix/control/logdisplay.py:716
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
-msgstr ""
+msgstr "행사 날짜에 할당량이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:717
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
-msgstr ""
+msgstr "행사 날짜에 할당량이 제거되었습니다."
 
 #: pretix/control/logdisplay.py:718
 msgid "The device has been created."
-msgstr ""
+msgstr "장치가 생성되었습니다"
 
 #: pretix/control/logdisplay.py:719
 msgid "The device has been changed."
-msgstr ""
+msgstr "장치가 변경되었습니다"
 
 #: pretix/control/logdisplay.py:720
 msgid "Access of the device has been revoked."
-msgstr ""
+msgstr "기기 접근이 취소되었습니다."
 
 #: pretix/control/logdisplay.py:721
 msgid "The device has been initialized."
-msgstr ""
+msgstr "장치가 초기화되었습니다."
 
 #: pretix/control/logdisplay.py:722
 msgid "The access token of the device has been regenerated."
-msgstr ""
+msgstr "장치의 액세스 토큰이 재생성되었습니다."
 
 #: pretix/control/logdisplay.py:723
 msgid "The device has notified the server of an hardware or software update."
-msgstr ""
+msgstr "장치가 하드웨어 또는 소프트웨어 업데이트를 서버에 알렸습니다."
 
 #: pretix/control/logdisplay.py:724
 msgid "The gift card has been created."
-msgstr ""
+msgstr "기프트 카드가 생성되었습니다."
 
 #: pretix/control/logdisplay.py:725 pretix/control/views/organizer.py:1656
 msgid "The gift card has been changed."
-msgstr ""
+msgstr "기프트 카드가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:726
 msgid "A manual transaction has been performed."
-msgstr ""
+msgstr "A manual transaction has been performed."
 
 #: pretix/control/logdisplay.py:727
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
-msgstr ""
+msgstr "토큰 \"{name}\"이 생성되었습니다."
 
 #: pretix/control/logdisplay.py:728
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr ""
+msgstr "토큰 \"{name}\"이 취소되었습니다."
 
 #: pretix/control/logdisplay.py:735
 msgid "A meta property has been added to this event."
-msgstr ""
+msgstr "이 이벤트에 메타 속성이 추가되었습니다."
 
 #: pretix/control/logdisplay.py:736
 msgid "A meta property has been removed from this event."
-msgstr ""
+msgstr "이 이벤트에서 메타 속성이 제거되었습니다"
 
 #: pretix/control/logdisplay.py:737
 msgid "A meta property has been changed on this event."
-msgstr ""
+msgstr "이 이벤트에서 메타 속성이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:738
 msgid "The event settings have been changed."
-msgstr ""
+msgstr "이벤트 설정이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:739
 msgid "The ticket download settings have been changed."
-msgstr ""
+msgstr "티켓 다운로드 설정이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:742
 msgid "The shop has been taken live."
-msgstr ""
+msgstr "가게가 운영되고 있습니다"
 
 #: pretix/control/logdisplay.py:743
 msgid "The shop has been taken offline."
-msgstr ""
+msgstr "가게가 오프라인 상태입니다"
 
 #: pretix/control/logdisplay.py:744
 msgid "The shop has been taken into test mode."
-msgstr ""
+msgstr "상점이 테스트 모드로 전환되었습니다."
 
 #: pretix/control/logdisplay.py:745
 msgid "The test mode has been disabled."
-msgstr ""
+msgstr "테스트 모드가 비활성화되었습니다."
 
 #: pretix/control/logdisplay.py:746
 msgid "The event has been created."
-msgstr ""
+msgstr "이벤트가 생성되었습니다"
 
 #: pretix/control/logdisplay.py:747
 msgid "The event details have been changed."
-msgstr ""
+msgstr "이벤트 세부 정보가 변경되었습니다."
 
 #: pretix/control/logdisplay.py:749
 msgid "An answer option has been added to the question."
-msgstr ""
+msgstr "질문에 답변 옵션이 추가되었습니다."
 
 #: pretix/control/logdisplay.py:750
 msgid "An answer option has been removed from the question."
-msgstr ""
+msgstr "질문에 답변 옵션이 제거되었습니다."
 
 #: pretix/control/logdisplay.py:751
 msgid "An answer option has been changed."
-msgstr ""
+msgstr "답변 옵션이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:752
 msgid "A user has been added to the event team."
-msgstr ""
+msgstr "이벤트 팀에 사용자가 추가되었습니다."
 
 #: pretix/control/logdisplay.py:753
 msgid "A user has been invited to the event team."
-msgstr ""
+msgstr "사용자가 이벤트 팀에 초대되었습니다."
 
 #: pretix/control/logdisplay.py:754
 msgid "A user's permissions have been changed."
-msgstr ""
+msgstr "사용자 권한이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:755
 msgid "A user has been removed from the event team."
-msgstr ""
+msgstr "사용자가 이벤트 팀에서 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:762
 msgid "The check-in list has been added."
-msgstr ""
+msgstr "체크인 목록이 추가되었습니다."
 
 #: pretix/control/logdisplay.py:763 pretix/control/logdisplay.py:764
 msgid "The check-in list has been deleted."
-msgstr ""
+msgstr "체크인 목록이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:765
 msgid "The check-in list has been changed."
-msgstr ""
+msgstr "체크인 목록이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:768
 #, python-brace-format
 msgid "Check-in list {val}"
-msgstr ""
+msgstr "체크인 목록 {val}"
 
 #: pretix/control/logdisplay.py:775
-#, fuzzy
-#| msgid "This ticket has been used once."
-#| msgid_plural "This ticket has been used %(count)s times."
 msgid "The plugin has been enabled."
-msgstr "티켓이 %(count)s회 사용되었습니다."
+msgstr "플러그인이 활성화되었습니다"
 
 #: pretix/control/logdisplay.py:776 pretix/control/views/event.py:464
-#, fuzzy
-#| msgid "This ticket has been used once."
-#| msgid_plural "This ticket has been used %(count)s times."
 msgid "The plugin has been disabled."
-msgstr "티켓이 %(count)s회 사용되었습니다."
+msgstr "플러그인이 비활성화되었습니다"
 
 #: pretix/control/logdisplay.py:779
 #, python-brace-format
 msgid "Plugin {val}"
-msgstr ""
+msgstr "플러그인 {val}"
 
 #: pretix/control/logdisplay.py:795
 msgid "The product has been created."
-msgstr ""
+msgstr "제품이 생성되었습니다."
 
 #: pretix/control/logdisplay.py:796
 msgid "The product has been changed."
-msgstr ""
+msgstr "제품이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:797
 msgid "The product has been reordered."
-msgstr ""
+msgstr "제품이 재주문되었습니다."
 
 #: pretix/control/logdisplay.py:798
 msgid "The product has been deleted."
-msgstr ""
+msgstr "제품이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:799
 msgid "An add-on has been added to this product."
-msgstr ""
+msgstr "이 상품에 추가 기능이 추가되었습니다"
 
 #: pretix/control/logdisplay.py:800
 msgid "An add-on has been removed from this product."
-msgstr ""
+msgstr "이 상품에 추가 기능이 제거되었습니다"
 
 #: pretix/control/logdisplay.py:801
 msgid "An add-on has been changed on this product."
-msgstr ""
+msgstr "이 상품에 추가 기능이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:802
 msgid "A bundled item has been added to this product."
-msgstr ""
+msgstr "이 제품에 함께 제공되는 구성품이 추가되었습니다"
 
 #: pretix/control/logdisplay.py:803
 msgid "A bundled item has been removed from this product."
-msgstr ""
+msgstr "이 제품에 함께 제공되는 구성품이 제거되었습니다"
 
 #: pretix/control/logdisplay.py:804
 msgid "A bundled item has been changed on this product."
-msgstr ""
+msgstr "이 제품에 함께 제공되는 구성품이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:811
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
-msgstr ""
+msgstr "\"{value}\" 변형이 생성되었습니다."
 
 #: pretix/control/logdisplay.py:812
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr ""
+msgstr "\"{value}\" 변형이  삭제되었습니다."
 
 #: pretix/control/logdisplay.py:813
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr ""
+msgstr "\"{value}\" 변형이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:830
 #, python-brace-format
 msgid "Payment {local_id} has been confirmed."
-msgstr ""
+msgstr "{local_id} 결제가 확인되었습니다."
 
 #: pretix/control/logdisplay.py:831
 #, python-brace-format
 msgid "Payment {local_id} has been canceled."
-msgstr ""
+msgstr "{local_id} 결제가 취소되었습니다."
 
 #: pretix/control/logdisplay.py:832
 #, python-brace-format
 msgid "Canceling payment {local_id} has failed."
-msgstr ""
+msgstr "결제 {local_id} 취소에 실패했습니다"
 
 #: pretix/control/logdisplay.py:833
 #, python-brace-format
 msgid "Payment {local_id} has been started."
-msgstr ""
+msgstr "{local_id} 결제가 시작되었습니다"
 
 #: pretix/control/logdisplay.py:834
 #, python-brace-format
 msgid "Payment {local_id} has failed."
-msgstr ""
+msgstr "{local_id} 결제에 실패했습니다."
 
 #: pretix/control/logdisplay.py:835
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr ""
+msgstr "주문을 결제된 것으로 표시할 수 없습니다: {메시지}"
 
 #: pretix/control/logdisplay.py:836
 msgid "The order has been overpaid."
-msgstr ""
+msgstr "주문이 초과 결제되었습니다."
 
 #: pretix/control/logdisplay.py:837
 #, python-brace-format
 msgid "Refund {local_id} has been created."
-msgstr ""
+msgstr "환불 {local_id}이(가) 생성되었습니다."
 
 #: pretix/control/logdisplay.py:838
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
-msgstr ""
+msgstr "환불 {local_id}이(가) 외부 기관에 의해 생성되었습니다"
 
 #: pretix/control/logdisplay.py:839
 msgid "The customer requested you to issue a refund."
-msgstr ""
+msgstr "고객이 환불을 요청했습니다."
 
 #: pretix/control/logdisplay.py:840
 #, python-brace-format
 msgid "Refund {local_id} has been completed."
-msgstr ""
+msgstr "{local_id} 환불이 완료되었습니다."
 
 #: pretix/control/logdisplay.py:841
 #, python-brace-format
 msgid "Refund {local_id} has been canceled."
-msgstr ""
+msgstr "{local_id} 환불이 취소되었습니다."
 
 #: pretix/control/logdisplay.py:842
 #, python-brace-format
 msgid "Refund {local_id} has failed."
-msgstr ""
+msgstr "{local_id} 환불이 실패했습니다."
 
 #: pretix/control/logdisplay.py:849
 msgid "The quota has been added."
-msgstr ""
+msgstr "할당량이 추가되었습니다"
 
 #: pretix/control/logdisplay.py:850
 msgid "The quota has been deleted."
-msgstr ""
+msgstr "할당량이 삭제되었습니다"
 
 #: pretix/control/logdisplay.py:851
 msgid "The quota has been changed."
-msgstr ""
+msgstr "할당량이 변경되었습니다"
 
 #: pretix/control/logdisplay.py:852
 msgid "The quota has closed."
-msgstr ""
+msgstr "할당량이 마감되었습니다"
 
 #: pretix/control/logdisplay.py:853 pretix/control/views/item.py:1075
 msgid "The quota has been re-opened."
-msgstr ""
+msgstr "할당량이 다시 열렸습니다."
 
 #: pretix/control/logdisplay.py:860
 msgid "The question has been added."
-msgstr ""
+msgstr "질문이 추가되었습니다."
 
 #: pretix/control/logdisplay.py:861
 msgid "The question has been deleted."
-msgstr ""
+msgstr "질문이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:862
 msgid "The question has been changed."
-msgstr ""
+msgstr "질문이 변겅되었습니다."
 
 #: pretix/control/logdisplay.py:863
 msgid "The question has been reordered."
-msgstr ""
+msgstr "질문이 재주문되었습니다."
 
 #: pretix/control/logdisplay.py:870
 msgid "The discount has been added."
-msgstr ""
+msgstr "할인이 추가되었습니다."
 
 #: pretix/control/logdisplay.py:871
 msgid "The discount has been deleted."
-msgstr ""
+msgstr "할인이 삭제되었습니다."
 
 #: pretix/control/logdisplay.py:872
 msgid "The discount has been changed."
-msgstr ""
+msgstr "할인이 변경되었습니다."
 
 #: pretix/control/logdisplay.py:896
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list \"{list}"
 "\"."
-msgstr ""
+msgstr "위치 #{posid}가 목록 \"{list}\"에서 {datetime}에 수동으로 체크인되었습니다."
 
 #: pretix/control/logdisplay.py:901
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
-msgstr ""
+msgstr "위치 #{posid}가 목록 \"{list}\"에서 {datetime}에 다시 체크인되었습니다."
 
 #: pretix/control/middleware.py:153 pretix/control/middleware.py:167
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
-msgstr ""
+msgstr "선택한 이벤트를 찾을 수 없거나 관리 권한이 없습니다."
 
 #: pretix/control/middleware.py:180 pretix/control/middleware.py:190
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
-msgstr ""
+msgstr "선택한 주최자를 찾을 수 없거나 관리 권한이 없습니다."
 
 #: pretix/control/navigation.py:37 pretix/control/navigation.py:338
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr ""
+msgstr "대시보드 (시스템 또는 애플리케이션의 정보를 시각적으로 요약해 보여주는 "
+"화면이나 인터페이스를 의미)"
 
 #: pretix/control/navigation.py:49 pretix/control/navigation.py:382
 #: pretix/control/navigation.py:487
@@ -16616,7 +16631,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:19
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:15
 msgid "General"
-msgstr ""
+msgstr "일반적인"
 
 #: pretix/control/navigation.py:57
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:151
@@ -16628,7 +16643,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:43
 #: pretix/presale/templates/pretixpresale/event/order.html:86
 msgid "Payment"
-msgstr ""
+msgstr "지불"
 
 #: pretix/control/navigation.py:73 pretix/control/views/event.py:1520
 #: pretix/control/views/event.py:1522 pretix/control/views/event.py:1554
@@ -16640,27 +16655,27 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:89
 #: pretix/presale/templates/pretixpresale/organizers/index.html:91
 msgid "Tickets"
-msgstr ""
+msgstr "티켓"
 
 #: pretix/control/navigation.py:89
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:5
 msgid "Tax rules"
-msgstr ""
+msgstr "세금 규정"
 
 #: pretix/control/navigation.py:97
 msgid "Invoicing"
-msgstr ""
+msgstr "송장 처리"
 
 #: pretix/control/navigation.py:105
 msgctxt "action"
 msgid "Cancellation"
-msgstr ""
+msgstr "취소"
 
 #: pretix/control/navigation.py:113
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
 msgid "Widget"
-msgstr ""
+msgstr "위젯 (웹사이트나 앱에 추가하는 작고 유용한 도구나 정보 표시 창)"
 
 #: pretix/control/navigation.py:126 pretix/control/navigation.py:435
 #: pretix/control/navigation.py:480
@@ -16670,19 +16685,19 @@ msgstr ""
 #: pretix/plugins/returnurl/apps.py:40
 #: pretix/plugins/ticketoutputpdf/apps.py:55
 msgid "Settings"
-msgstr ""
+msgstr "설정"
 
 #: pretix/control/navigation.py:164
 msgid "Categories"
-msgstr ""
+msgstr "카테고리"
 
 #: pretix/control/navigation.py:180
 msgid "Discounts"
-msgstr ""
+msgstr "할인"
 
 #: pretix/control/navigation.py:213
 msgid "Overview"
-msgstr ""
+msgstr "개요"
 
 #: pretix/control/navigation.py:221
 #: pretix/control/templates/pretixcontrol/order/index.html:825
@@ -16692,36 +16707,36 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:684
 #: pretix/presale/templates/pretixpresale/event/order.html:137
 msgid "Refunds"
-msgstr ""
+msgstr "환불"
 
 #: pretix/control/navigation.py:247
 msgid "Import"
-msgstr ""
+msgstr "수입품"
 
 #: pretix/control/navigation.py:276
 msgid "All vouchers"
-msgstr ""
+msgstr "모든 바우처"
 
 #: pretix/control/navigation.py:284
 msgid "Tags"
-msgstr ""
+msgstr "태그"
 
 #: pretix/control/navigation.py:296
 msgctxt "navigation"
 msgid "Check-in"
-msgstr ""
+msgstr "체크인"
 
 #: pretix/control/navigation.py:313
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:6
 msgid "Check-in history"
-msgstr ""
+msgstr "체크인 역사"
 
 #: pretix/control/navigation.py:356
 #: pretix/control/templates/pretixcontrol/event/plugins.html:20
 #: pretix/control/templates/pretixcontrol/orders/search.html:20
 msgid "Search"
-msgstr ""
+msgstr "조사"
 
 #: pretix/control/navigation.py:368
 #: pretix/control/templates/pretixcontrol/order/index.html:731
@@ -16729,24 +16744,24 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:677
 #: pretix/plugins/reports/accountingreport.py:871
 msgid "Payments"
-msgstr ""
+msgstr "지불"
 
 #: pretix/control/navigation.py:376
 msgid "User settings"
-msgstr ""
+msgstr "사용자 설정"
 
 #: pretix/control/navigation.py:387
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
 msgid "Notifications"
-msgstr ""
+msgstr "알림"
 
 #: pretix/control/navigation.py:392
 msgid "2FA"
-msgstr ""
+msgstr "2단계 인증"
 
 #: pretix/control/navigation.py:397
 msgid "Authorized apps"
-msgstr ""
+msgstr "허가된 앱"
 
 #: pretix/control/navigation.py:402
 #: pretix/control/templates/pretixcontrol/user/history.html:4
@@ -16754,95 +16769,98 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/history.html:10
 #: pretix/control/templates/pretixcontrol/user/settings.html:70
 msgid "Account history"
-msgstr ""
+msgstr "계정 기록"
 
 #: pretix/control/navigation.py:417
 msgid "All users"
-msgstr ""
+msgstr "모든 사용자"
 
 #: pretix/control/navigation.py:422
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:7
 msgid "Admin sessions"
-msgstr ""
+msgstr "관리자 세션"
 
 #: pretix/control/navigation.py:429
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:7
 msgid "Global settings"
-msgstr ""
+msgstr "전체 설정"
 
 #: pretix/control/navigation.py:440
 msgid "Update check"
-msgstr ""
+msgstr "업데이트 확인"
 
 #: pretix/control/navigation.py:445
 msgid "License check"
-msgstr ""
+msgstr "사용 권한 검증"
 
 #: pretix/control/navigation.py:450
 msgid "System report"
-msgstr ""
+msgstr "시스템 보고서"
 
 #: pretix/control/navigation.py:494
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
 msgid "Event metadata"
-msgstr ""
+msgstr "이벤트 메타데이터"
 
 #: pretix/control/navigation.py:515
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
 msgid "Webhooks"
-msgstr ""
+msgstr "웹훅 (어떤 일이 생기면 자동으로 그 사실을 다른 서비스에 알려주는 ‘콜백’ 기능)"
 
 #: pretix/control/navigation.py:548
 msgid "Acceptance"
-msgstr ""
+msgstr "승인"
 
 #: pretix/control/navigation.py:569
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
 msgid "Customers"
-msgstr ""
+msgstr "고객"
 
 #: pretix/control/navigation.py:588
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:6
 msgid "SSO clients"
-msgstr ""
+msgstr "SSO 클라이언트 (하나의 로그인으로 접근할 수 있도록 SSO 시스템에 등록된 "
+"애플리케이션들을 의미함)"
 
 #: pretix/control/navigation.py:597
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:6
 msgid "SSO providers"
 msgstr ""
+"SSO 제공자 (사용자 로그인 정보를 관리하고, 여러 앱이나 서비스가 그 로그인 "
+"정보를 믿고 사용할 수 있도록 인증을 제공하는 주체를 의미함)"
 
 #: pretix/control/navigation.py:626 pretix/control/navigation.py:633
 msgid "Devices"
-msgstr ""
+msgstr "장치"
 
 #: pretix/control/permissions.py:72 pretix/control/permissions.py:109
 #: pretix/control/permissions.py:140 pretix/control/permissions.py:157
 msgid "You do not have permission to view this content."
-msgstr ""
+msgstr "이 콘텐츠를 볼 권한이 없습니다"
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:44
 #: pretix/control/templates/pretixcontrol/base.html:360
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
-msgstr ""
+msgstr "현재 %(user)s 님을 대신하여 작업 중입니다."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:49
 #: pretix/control/templates/pretixcontrol/base.html:365
 msgid "Stop impersonating"
-msgstr ""
+msgstr "대리 로그인 종료 (다른 사람 계정으로 대신 작업하는 것을 멈추세요)"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
-msgstr ""
+msgstr "복구 정보를 전송하다"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:7
 msgid "Accept an invitation"
-msgstr ""
+msgstr "초대장을 수락하다"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:10
 #, python-format
@@ -16851,17 +16869,20 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"이 사이트에 이미 다른 이메일 주소를 가진 계정이 있는 경우, 먼저 "
+"<%(login_href)s>로그인한 다음 이 링크를 다시 클릭하여 기존 계정과의 초대를 "
+"수락할 수 있습니다."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
 msgid "Login"
-msgstr ""
+msgstr "로그인"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr ""
+msgstr "가입하다"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -16870,26 +16891,27 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:28
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:44
 msgid "Log in"
-msgstr ""
+msgstr "로그인"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:38
 msgid "Lost password?"
-msgstr ""
+msgstr "비밀번호를 잊으셨나요?"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:9
 #: pretix/control/templates/pretixcontrol/user/reauth.html:9
 msgid "Welcome back!"
-msgstr ""
+msgstr "다시 오신 것을 환영합니다!"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:11
 msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
-msgstr ""
+msgstr "두 번째 매체(예: 휴대폰)로 인증이 필요하도록 계정을 구성했습니다. 여기에 "
+"인증 코드를 입력하세요:"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:14
 msgid "Token"
-msgstr ""
+msgstr "토큰"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:18
 #: pretix/control/templates/pretixcontrol/user/reauth.html:22
@@ -16897,12 +16919,17 @@ msgid ""
 "WebAuthn failed. Check that the correct authentication device is correctly "
 "plugged in."
 msgstr ""
+"WebAuthn 인증에 실패했습니다. 올바른 인증 장치가 제대로 연결되어 있는지 "
+"확인하세요 (WebAuthn은 웹에서 사용하는 강력한 생체인증 또는 하드웨어 인증 "
+"장치(FIDO 보안 키 등) 기반 인증 표준입니다)"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:22
 msgid ""
 "Alternatively, connect your WebAuthn device. If it has a button, touch it "
 "now. You might have to unplug the device and plug it back in again."
 msgstr ""
+"또는 WebAuthn 장치에 연결합니다. 버튼이 있는 경우 지금 터치하세요. 장치의 "
+"플러그를 뽑았다가 다시 꽂아야 할 수도 있습니다."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:27
 #: pretix/control/templates/pretixcontrol/email_setup.html:123
@@ -16931,42 +16958,47 @@ msgstr "계속하기"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
-msgstr ""
+msgstr "애플리케이션 승인"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:18
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
 "access to your pretix account?"
-msgstr ""
+msgstr "애플리케이션에 프리픽스 계정에 <strong>%(애플리케이션)</strong> 접근 권한을 "
+"부여하시겠습니까?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:24
-#, python-format
+#, fuzzy, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr ""
+msgstr "현재 <strong>%(사용자)</strong>으로 로그인되어 있습니다."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:28
 msgid "The application requires the following permissions:"
-msgstr ""
+msgstr "애플리케이션에는 다음 권한이 필요합니다:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:35
 msgid ""
 "Please select the organizer accounts this application should get access to:"
-msgstr ""
+msgstr "이 애플리케이션이 액세스할 수 있는 주최자 계정을 선택해 주세요:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:41
+#, fuzzy
 msgid ""
 "This application has <strong>not</strong> been reviewed by the pretix team. "
 "Granting access to your pretix account happens at your own risk."
 msgstr ""
+"이 애플리케이션은 프리픽스 팀에 의해 <강함></강함>으로 검토되었습니다. "
+"프리픽스 계정에 대한 액세스 권한을 부여하는 것은 본인의 위험 부담으로 "
+"이루어집니다."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:54
 msgid "Error:"
-msgstr ""
+msgstr "에러:"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:7
 msgid "Set new password"
-msgstr ""
+msgstr "새 비밀번호를 설정하세요"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:15
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:124
@@ -17042,53 +17074,54 @@ msgstr "저장하기"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
-msgstr ""
+msgstr "새 계정을 생성하세요"
 
 #: pretix/control/templates/pretixcontrol/base.html:103
 msgid "Toggle navigation"
-msgstr ""
+msgstr "탐색 전환"
 
 #: pretix/control/templates/pretixcontrol/base.html:118
 #: pretix/control/templates/pretixcontrol/base.html:141
 #: pretix/control/templates/pretixcontrol/base.html:145
 #: pretix/control/templates/pretixcontrol/base.html:146
 msgid "Go to shop"
-msgstr ""
+msgstr "쇼핑하러 가기"
 
 #: pretix/control/templates/pretixcontrol/base.html:124
 #: pretix/control/templates/pretixcontrol/base.html:152
 #: pretix/control/templates/pretixcontrol/base.html:153
 msgid "Public profile"
-msgstr ""
+msgstr "공개 프로필"
 
 #: pretix/control/templates/pretixcontrol/base.html:204
 msgid "End admin session"
-msgstr ""
+msgstr "관리 세션 종료"
 
 #: pretix/control/templates/pretixcontrol/base.html:216
 msgid "Account Settings"
-msgstr ""
+msgstr "계정 설정"
 
 #: pretix/control/templates/pretixcontrol/base.html:221
 #: pretix/control/templates/pretixcontrol/base.html:223
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:14
 msgid "Log out"
-msgstr ""
+msgstr "로그 아웃"
 
 #: pretix/control/templates/pretixcontrol/base.html:249
 msgid "Organizer account"
-msgstr ""
+msgstr "주최자 계정"
 
 #: pretix/control/templates/pretixcontrol/base.html:272
 msgid "Search for events"
-msgstr ""
+msgstr "이벤트 검색"
 
 #: pretix/control/templates/pretixcontrol/base.html:329
 #: pretix/presale/templates/pretixpresale/base.html:54
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
-msgstr ""
+msgstr "귀하께서 <strong>Microsoft Internet Explorer</strong>을 사용하고 계신 것을 "
+"감지했습니다."
 
 #: pretix/control/templates/pretixcontrol/base.html:332
 #: pretix/presale/templates/pretixpresale/base.html:57
@@ -17096,6 +17129,8 @@ msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
 "based technologies and is no longer supported by this website."
 msgstr ""
+"Internet Explorer는 오래된 브라우저로, 많은 최신 웹 기반 기술을 지원하지 "
+"않으며 더 이상 이 웹사이트에서 지원하지 않습니다."
 
 #: pretix/control/templates/pretixcontrol/base.html:336
 #: pretix/presale/templates/pretixpresale/base.html:61
@@ -17103,27 +17138,34 @@ msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
 msgstr ""
+"Microsoft Edge, Mozilla Firefox, Google Chrome 또는 Safari와 같은 지원 "
+"브라우저 중 하나로 이동해 주시기 바랍니다."
 
 #: pretix/control/templates/pretixcontrol/base.html:345
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
-msgstr ""
+msgstr "다음 관리 세션에서 수행한 작업에 대해 짧은 댓글을 남겨주세요:"
 
 #: pretix/control/templates/pretixcontrol/base.html:376
 msgid "Read more"
-msgstr ""
+msgstr "더 읽기"
 
 #: pretix/control/templates/pretixcontrol/base.html:393
+#, fuzzy
 msgid ""
 "Your event contains <strong>test mode orders</strong> even though "
 "<strong>test mode has been disabled</strong>. You should delete those orders "
 "to make sure they do not show up in your reports and statistics and block "
 "people from actually buying tickets."
 msgstr ""
+"이벤트에는 <strong>테스트 모드가 비활성화되었음에도 불구하고 <strong>테스트 "
+"모드 주문</strong>이 포함되어 있습니다. 이러한 주문이 보고서와 통계에 "
+"나타나지 않도록 삭제하고 사람들이 실제로 티켓을 구매하지 못하도록 차단해야 "
+"합니다."
 
 #: pretix/control/templates/pretixcontrol/base.html:400
 msgid "Show all test mode orders"
-msgstr ""
+msgstr "모든 테스트 모드 순서 표시하시오"
 
 #: pretix/control/templates/pretixcontrol/base.html:408
 msgid ""
@@ -17133,12 +17175,18 @@ msgid ""
 "disable this feature or enter your email address to get notified via email "
 "if a new update arrives. This message will disappear once you clicked it."
 msgstr ""
+"버전 1.2.0부터 프리틱스는 백그라운드에서 업데이트를 자동으로 확인합니다. 이 "
+"확인 중에 익명의 데이터가 프리틱스 개발자가 운영하는 서버로 전송됩니다. "
+"자세한 내용을 확인하려면 이 메시지를 클릭하고, 이 기능을 비활성화하거나, "
+"이메일 주소를 입력하여 새 업데이트가 도착하면 이메일을 통해 알림을 받으세요. "
+"이 메시지를 클릭하면 사라집니다."
 
 #: pretix/control/templates/pretixcontrol/base.html:421
 msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
-msgstr ""
+msgstr "여기를 클릭하여 라이선스 준수 여부를 확인하여 프리틱스의 라이선스 사용이 "
+"프리틱스의 라이선스와 일치하는지 확인하세요."
 
 #: pretix/control/templates/pretixcontrol/base.html:430
 msgid ""
@@ -17146,12 +17194,16 @@ msgid ""
 "check that you have completed all installation steps and your cronjob is "
 "executed correctly."
 msgstr ""
+"pretix의 cronjob 구성 요소가 지난 몇 시간 동안 실행되지 않았습니다. 모든 "
+"설치 단계를 완료했는지, cronjob이 올바르게 실행되었는지 확인해 주세요."
 
 #: pretix/control/templates/pretixcontrol/base.html:439
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
 msgstr ""
+"pretix가 디버그 모드로 실행 중입니다. 보안상의 이유로, 운영 환경(프로덕션 "
+"인스턴스)에서는 절대 디버그 모드를 사용하지 마십시오"
 
 #: pretix/control/templates/pretixcontrol/base.html:445
 msgid ""
@@ -30966,10 +31018,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
-#, fuzzy
-#| msgid "Event description"
 msgid "Renew reservation"
-msgstr "이벤트 설명"
+msgstr "예약 갱신"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
