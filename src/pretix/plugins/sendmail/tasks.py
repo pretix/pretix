@@ -201,4 +201,5 @@ def send_mails_to_waitinglist(event: Event, user: int, subject: dict, message: d
             ),
             user=user,
             attach_cached_files=attachments,
+            log_entry_type='pretix.plugins.sendmail.waitinglist.email.sent',
         )

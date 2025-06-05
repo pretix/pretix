@@ -47,7 +47,8 @@ from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.logentrytypes import (
-    EventLogEntryType, OrderLogEntryType, log_entry_types,
+    EventLogEntryType, OrderLogEntryType, WaitingListEntryLogEntryType,
+    log_entry_types,
 )
 from pretix.base.models import SubEvent
 from pretix.base.signals import (
@@ -127,6 +128,11 @@ class SendmailPluginLogEntryType(EventLogEntryType):
 @log_entry_types.new('pretix.plugins.sendmail.order.email.sent', _('The order received a mass email.'))
 @log_entry_types.new('pretix.plugins.sendmail.order.email.sent.attendee', _('A ticket holder of this order received a mass email.'))
 class SendmailPluginOrderLogEntryType(OrderLogEntryType):
+    pass
+
+
+@log_entry_types.new('pretix.plugins.sendmail.waitinglist.email.sent', _('The person on the waiting list received a mass email.'))
+class SendmailPluginWaitingListLogEntryType(WaitingListEntryLogEntryType):
     pass
 
 
