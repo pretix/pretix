@@ -931,7 +931,18 @@ Vue.component('pretix-overlay', {
             }  
         },
     },
+    mounted () {
+        window.addEventListener('message', this.onMessage, false);
+    },
+    unmounted () {
+        window.removeEventListener('message', this.onMessage, false);
+    },
     methods: {
+        onMessage: function(e) {
+            if (e.data.type && e.data.type == "pretix:widget:title") {
+                this.$el.querySelector("iframe").title = e.data.title;
+            }
+        },
         lightboxClose: function () {
             this.$root.lightbox = null;
         },
