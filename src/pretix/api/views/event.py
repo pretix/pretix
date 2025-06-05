@@ -580,6 +580,11 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
         )
         super().perform_destroy(instance)
 
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx["event"] = self.request.event
+        return ctx
+
 
 class ItemMetaPropertiesViewSet(viewsets.ModelViewSet):
     serializer_class = ItemMetaPropertiesSerializer
