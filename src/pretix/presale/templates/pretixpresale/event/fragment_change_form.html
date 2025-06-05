@@ -16,13 +16,13 @@
                 <div class="form-order-change-main">
                     {% if position.subevent %}
                         <div class="form-group">
-                            <label class="col-md-3 control-label">
-                                {% trans "Date" context "subevent" %}
-                            </label>
+                            <div class="col-md-3 control-label">
+                                <strong role="heading" aria-level="4">{% trans "Date" context "subevent" %}</strong>
+                            </div>
                             <div class="col-md-9 form-control-text">
-                                <ul class="addon-list">
+                                <p class="addon-list">
                                     {{ position.subevent.name }} &middot; {{ position.subevent.get_date_range_display_with_times_as_html }}
-                                </ul>
+                                </p>
                             </div>
                         </div>
                     {% endif %}

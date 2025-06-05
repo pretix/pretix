@@ -19,9 +19,9 @@
                     <div class="panel-body questions-form">
                         {% if form.position.seat %}
                             <div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    {% trans "Seat" %}
-                                </label>
+                                <div class="col-md-3 control-label">
+                                    <strong role="heading" aria-level="5">{% trans "Seat" %}</strong>
+                                </div>
                                 <div class="col-md-9 form-control-text">
                                     {% include "icons/seat.svg" with cls="svg-icon" %}
                                     {{ form.position.seat }}
@@ -30,9 +30,9 @@
                         {% endif %}
                         {% if form.position.addons.all %}
                             <div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    {% trans "Selected add-ons" %}
-                                </label>
+                                <div class="col-md-3 control-label">
+                                    <strong role="heading" aria-level="5">{% trans "Selected add-ons" %}</strong>
+                                </div>
                                 <div class="col-md-9 form-control-text">
                                     <ul class="addon-list">
                                         {% for a in form.position.addons.all %}
@@ -44,13 +44,13 @@
                         {% endif %}
                         {% if form.position.subevent %}
                             <div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    {% trans "Date" context "subevent" %}
-                                </label>
+                                <div class="col-md-3 control-label">
+                                    <strong role="heading" aria-level="5">{% trans "Date" context "subevent" %}</strong>
+                                </div>
                                 <div class="col-md-9 form-control-text">
-                                    <ul class="addon-list">
+                                    <p class="addon-list">
                                         {{ form.position.subevent.name }} &middot; {{ form.position.subevent.get_date_range_display_with_times_as_html }}
-                                    </ul>
+                                    </p>
                                 </div>
                             </div>
                         {% endif %}
