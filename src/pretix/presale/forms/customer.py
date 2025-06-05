@@ -55,7 +55,7 @@ class AuthenticationForm(forms.Form):
     required_css_class = 'required'
     email = forms.EmailField(
         label=_("Email"),
-        widget=forms.EmailInput()
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'})
     )
     password = forms.CharField(
         label=_("Password"),
@@ -140,6 +140,7 @@ class RegistrationForm(forms.Form):
     name_parts = forms.CharField()
     email = forms.EmailField(
         label=_("Email"),
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'})
     )
 
     error_messages = {
