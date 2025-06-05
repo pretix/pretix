@@ -225,8 +225,11 @@ def test_full_clone_cross_organizer_differences():
     organizer2 = Organizer.objects.create(name='Dummy2', slug='dummy2')
     membership_type = organizer.membership_types.create(name="Membership")
     plan = SeatingPlan.objects.create(name="Plan", organizer=organizer, layout="{}")
-    sc = organizer.sales_channels.get(identifier="web")
-    sc2 = organizer2.sales_channels.get(identifier="web")
+    sc1_a = organizer.sales_channels.get(identifier="web")
+    sc1_b = organizer.sales_channels.create(identifier="b")
+    sc1_c = organizer.sales_channels.create(identifier="c")
+    sc2_a = organizer2.sales_channels.get(identifier="web")
+    sc2_c = organizer2.sales_channels.create(identifier="c")
 
     event = Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
@@ -237,14 +240,19 @@ def test_full_clone_cross_organizer_differences():
         seating_plan=plan,
         all_sales_channels=False,
     )
-    event.limit_sales_channels.add(sc)
+    event.limit_sales_channels.add(sc1_a)
+    event.limit_sales_channels.add(sc1_b)
+    event.limit_sales_channels.add(sc1_c)
 
     item1 = event.items.create(name="Ticket", default_price=23,
                                grant_membership_type=membership_type,
                                all_sales_channels=False)
-    item1.limit_sales_channels.add(sc)
+    item1.limit_sales_channels.add(sc1_a)
     item2 = event.items.create(name="T-shirt", default_price=15)
     item2.require_membership_types.add(membership_type)
+
+    event.settings.payment_giftcard__enabled = True
+    event.settings.payment_giftcard__restrict_to_sales_channels = ['web', 'b', 'c']
 
     copied_event = Event.objects.create(
         organizer=organizer2, name='Dummy2', slug='dummy2',
@@ -257,11 +265,14 @@ def test_full_clone_cross_organizer_differences():
     assert organizer2.seating_plans.count() == 1
     assert organizer2.seating_plans.get().layout == plan.layout
     assert copied_event.seating_plan.organizer == organizer2
-    assert copied_event.limit_sales_channels.get() == sc2
+    assert set(copied_event.limit_sales_channels.all()) == {sc2_a, sc2_c}
     assert event.seating_plan.organizer == organizer
 
     copied_item1 = copied_event.items.get(name=item1.name)
     copied_item2 = copied_event.items.get(name=item2.name)
     assert copied_item1.grant_membership_type is None
     assert copied_item2.require_membership_types.count() == 0
-    assert copied_item1.limit_sales_channels.get() == sc2
+    assert copied_item1.limit_sales_channels.get() == sc2_a
+
+    assert event.settings.get('payment_giftcard__restrict_to_sales_channels', as_type=list) == ['web', 'b', 'c']
+    assert copied_event.settings.get('payment_giftcard__restrict_to_sales_channels', as_type=list) == ['web', 'c']
