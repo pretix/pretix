@@ -50,7 +50,7 @@ from pretix.base.logentrytypes import (
     DiscountLogEntryType, EventLogEntryType, ItemCategoryLogEntryType,
     ItemLogEntryType, LogEntryType, OrderLogEntryType, QuestionLogEntryType,
     QuotaLogEntryType, TaxRuleLogEntryType, VoucherLogEntryType,
-    log_entry_types,
+    WaitingListEntryLogEntryType, log_entry_types,
 )
 from pretix.base.models import (
     Checkin, CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
@@ -697,11 +697,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
                                                                   'the last request was less than 24 hours ago.'),
     'pretix.organizer.deleted': _('The organizer "{name}" has been deleted.'),
     'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.'),  # legacy
-    'pretix.event.orders.waitinglist.voucher_assigned': _('A voucher has been sent to a person on the waiting list.'),
-    'pretix.event.orders.waitinglist.deleted': _('An entry has been removed from the waiting list.'),
     'pretix.event.order.waitinglist.transferred': _('An entry has been transferred to another waiting list.'),  # legacy
-    'pretix.event.orders.waitinglist.changed': _('An entry has been changed on the waiting list.'),
-    'pretix.event.orders.waitinglist.added': _('An entry has been added to the waiting list.'),
     'pretix.team.created': _('The team has been created.'),
     'pretix.team.changed': _('The team settings have been changed.'),
     'pretix.team.deleted': _('The team has been deleted.'),
@@ -903,3 +899,13 @@ class LegacyCheckinLogEntryType(OrderLogEntryType):
             datetime=dt_formatted,
             list=checkin_list
         )
+
+
+@log_entry_types.new_from_dict({
+    'pretix.event.orders.waitinglist.voucher_assigned': _('A voucher has been sent to a person on the waiting list.'),
+    'pretix.event.orders.waitinglist.deleted': _('An entry has been removed from the waiting list.'),
+    'pretix.event.orders.waitinglist.changed': _('An entry has been changed on the waiting list.'),
+    'pretix.event.orders.waitinglist.added': _('An entry has been added to the waiting list.'),
+})
+class CoreWaitingListEntryLogEntryType(WaitingListEntryLogEntryType):
+    pass
