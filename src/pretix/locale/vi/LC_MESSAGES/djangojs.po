@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:36+0000\n"
-"PO-Revision-Date: 2025-06-06 05:51+0000\n"
+"PO-Revision-Date: 2025-06-06 06:09+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/vi/>\n"
@@ -687,231 +687,231 @@ msgid "Calculating default price…"
 msgstr "Đang tính giá mặc định…"
 
 #: pretix/static/pretixcontrol/js/ui/plugins.js:69
-#, fuzzy
-#| msgid "Search results"
 msgid "No results"
-msgstr "Kết quả tìm kiếm"
+msgstr "Không có kết quả"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "Khác"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr ""
+msgstr "Số lượng"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num} ngày còn lại"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:48
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Các mặt hàng trong giỏ của bạn không còn được giữ chỗ nữa. Bạn vẫn có thể "
+"hoàn tất đơn hàng miễn là chúng còn hàng."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "Cart expired"
-msgstr ""
+msgstr "Giỏ hàng đã hết hạn"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:59
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Your cart is about to expire."
-msgstr ""
+msgstr "Giỏ hàng của bạn sắp hết hạn."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:64
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Các mặt hàng trong giỏ của bạn được giữ trong vòng {num} phút."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 msgid "Your cart has expired."
-msgstr ""
+msgstr "Giỏ hàng của bạn đã hết hạn."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
 msgstr ""
+"Các mặt hàng trong giỏ của bạn không còn được giữ chỗ nữa. Bạn vẫn có thể "
+"hoàn tất đơn hàng miễn là chúng còn hàng."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "Bạn có muốn gia hạn thời gian giữ chỗ không?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:93
 msgid "Renew reservation"
-msgstr ""
+msgstr "Gia hạn giữ chỗ"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr ""
+msgstr "Người tổ chức giữ lại %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:202
 msgid "You get %(currency)s %(amount)s back"
-msgstr ""
+msgstr "Bạn nhận lại %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:218
 msgid "Please enter the amount the organizer can keep."
-msgstr ""
+msgstr "Vui lòng nhập số tiền người tổ chức được giữ lại."
 
 #: pretix/static/pretixpresale/js/ui/main.js:558
 msgid "Your local time:"
-msgstr ""
+msgstr "Thời gian địa phương của bạn:"
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
 msgid "Google Pay"
-msgstr ""
+msgstr "Nền tảng Google Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "Số lượng"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Giảm số lượng"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "Tăng số lượng"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Filter events by"
-msgstr ""
+msgstr "Lọc sự kiện bởi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Filter"
-msgstr ""
+msgstr "Lọc"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:19
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Giá"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:20
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
-msgstr ""
+msgstr "Giá gốc: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
-msgstr ""
+msgstr "Giá mới: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:22
 msgctxt "widget"
 msgid "Select"
-msgstr ""
+msgstr "Chọn"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:23
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr ""
+msgstr "Chọn %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:24
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr ""
+msgstr "Chọn biến thể %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:25
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Bán hết"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:26
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Mua"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:27
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Đăng ký"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:28
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Đã đặt"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:29
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "MIỄN PHÍ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:30
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "từ %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:31
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
-msgstr ""
+msgstr "Hình của %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:32
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "đã bao gồm %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:33
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "cộng thêm %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:34
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "đã bao gồm thuế"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:35
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "cộng thêm thuế"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:36
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "hiện có sẵn: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:37
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Chỉ áp dụng với phiếu giảm giá"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 #: pretix/static/pretixpresale/js/widget/widget.js:43
@@ -919,38 +919,38 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:41
 msgctxt "widget"
 msgid "Not yet available"
-msgstr ""
+msgstr "Chưa có sẵn"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:39
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "Không có nữa"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:40
 msgctxt "widget"
 msgid "Currently not available"
-msgstr ""
+msgstr "Hiện tại không có sẵn"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:42
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "Số lượng đặt hàng tối thiểu: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:43
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Đóng cửa hàng vé"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:44
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Không thể tải cửa hàng vé."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:45
@@ -959,24 +959,26 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
+"Hiện có rất nhiều người dùng trong cửa hàng vé này. Vui lòng mở cửa hàng ở "
+"tab mới để tiếp tục."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:47
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr ""
+msgstr "Mở cửa hàng vé"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:48
 msgctxt "widget"
 msgid "Checkout"
-msgstr ""
+msgstr "Thanh toán"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:49
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Không thể tạo giỏ hàng. Vui lòng thử lại sau"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:50
@@ -985,12 +987,14 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
+"Chúng tôi không thể tạo giỏ hàng của bạn do hiện có quá nhiều người dùng "
+"trong cửa hàng vé này. Vui lòng nhấn \"Tiếp tục\" để thử lại trong tab mới."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:52
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Danh sách chờ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:53
@@ -999,112 +1003,114 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
+"Hiện bạn đang có một giỏ hàng còn hiệu lực cho sự kiện này. Nếu bạn chọn "
+"thêm sản phẩm, chúng sẽ được thêm vào giỏ hàng hiện tại của bạn."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:55
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Tiếp tục thanh toán"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:56
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Sử dụng phiếu giảm giá"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:57
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Đổi mã"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:58
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Mã giảm giá"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:59
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "Đóng"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Close checkout"
-msgstr ""
+msgstr "Đóng trang thanh toán"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
-msgstr ""
+msgstr "Bạn không thể hủy thao tác này. Vui lòng chờ quá trình tải hoàn tất."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:60
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Tiếp tục"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:61
 msgctxt "widget"
 msgid "Show variants"
-msgstr ""
+msgstr "Hiển thị các biến thể"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:62
 msgctxt "widget"
 msgid "Hide variants"
-msgstr ""
+msgstr "Ẩn các biến thể"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:63
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr ""
+msgstr "Chọn sự kiện khác"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:64
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "Chọn ngày khác"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:65
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Quay về"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:66
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Tháng sau"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:67
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Tháng trước"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:68
 msgctxt "widget"
 msgid "Next week"
-msgstr ""
+msgstr "Tuần sau"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:73
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:69
 msgctxt "widget"
 msgid "Previous week"
-msgstr ""
+msgstr "Tuần trước"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:74
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:70
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Mở chọn chỗ ngồi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:75
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:71
@@ -1114,142 +1120,144 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"Một số hoặc tất cả các loại vé hiện đã bán hết. Nếu bạn muốn, bạn có thể "
+"thêm tên vào danh sách chờ. Chúng tôi sẽ thông báo khi có chỗ ngồi lại."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:76
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:72
 msgctxt "widget"
 msgid "Load more"
-msgstr ""
+msgstr "Tải thêm"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:74
 msgid "Mo"
-msgstr ""
+msgstr "T2"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:79
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:75
 msgid "Tu"
-msgstr ""
+msgstr "T3"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:80
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:76
 msgid "We"
-msgstr ""
+msgstr "T4"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:77
 msgid "Th"
-msgstr ""
+msgstr "T5"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:78
 msgid "Fr"
-msgstr ""
+msgstr "T6"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:79
 msgid "Sa"
-msgstr ""
+msgstr "T7"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:80
 msgid "Su"
-msgstr ""
+msgstr "CN"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:81
 msgid "Monday"
-msgstr ""
+msgstr "Thứ Hai"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:82
 msgid "Tuesday"
-msgstr ""
+msgstr "Thứ Ba"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:83
 msgid "Wednesday"
-msgstr ""
+msgstr "Thứ Tư"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:88
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:84
 msgid "Thursday"
-msgstr ""
+msgstr "Thứ Năm"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:89
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:85
 msgid "Friday"
-msgstr ""
+msgstr "Thứ Sáu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:86
 msgid "Saturday"
-msgstr ""
+msgstr "Thứ Bảy"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:91
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:87
 msgid "Sunday"
-msgstr ""
+msgstr "Chủ Nhật"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:94
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:90
 msgid "January"
-msgstr ""
+msgstr "Tháng 1"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:95
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:91
 msgid "February"
-msgstr ""
+msgstr "Tháng 2"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:96
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:92
 msgid "March"
-msgstr ""
+msgstr "Tháng 3"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:97
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:93
 msgid "April"
-msgstr ""
+msgstr "Tháng 4"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:98
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:94
 msgid "May"
-msgstr ""
+msgstr "Tháng 5"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:99
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:95
 msgid "June"
-msgstr ""
+msgstr "Tháng 6"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:100
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:96
 msgid "July"
-msgstr ""
+msgstr "Tháng 7"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:101
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:97
 msgid "August"
-msgstr ""
+msgstr "Tháng 8"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:102
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:98
 msgid "September"
-msgstr ""
+msgstr "Tháng 9"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:103
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:99
 msgid "October"
-msgstr ""
+msgstr "Tháng 10"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:104
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:100
 msgid "November"
-msgstr ""
+msgstr "Tháng 11"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:101
 msgid "December"
-msgstr ""
+msgstr "Tháng 12"
 
 #~ msgid ""
 #~ "Your color has bad contrast for text on white background, please choose a "
