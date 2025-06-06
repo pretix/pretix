@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-06-06 06:35+0000\n"
+"PO-Revision-Date: 2025-06-06 18:00+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
 "pretix/vi/>\n"
@@ -406,14 +406,13 @@ msgid "Medium connected to other event"
 msgstr "Phương tiện kết nối với sự kiện khác"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:692
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
-"Ứng dụng  \"{application_name} \" đã được ủy quyền truy cập vào tài khoản "
-"của bạn.Ứng dụng \"{application_name}\" đã được phép truy cập vào tài khoản "
-"của bạn."
+"Ứng dụng \"{application_name} \" đã được ủy quyền truy cập vào tài khoản của "
+"bạn."
 
 #: pretix/api/views/order.py:607 pretix/control/views/orders.py:1609
 #: pretix/presale/views/order.py:731 pretix/presale/views/order.py:804
@@ -628,9 +627,9 @@ msgid "Enter a postal code in the format XXXX."
 msgstr "Nhập mã bưu chính trong định dạng xxxx."
 
 #: pretix/base/auth.py:146
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{system} User"
-msgstr "{System} Người dùng"
+msgstr "{system} Người dùng"
 
 #: pretix/base/auth.py:155 pretix/base/exporters/customers.py:67
 #: pretix/base/exporters/orderlist.py:261
@@ -655,7 +654,7 @@ msgstr "{System} Người dùng"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:30
 #: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
-msgstr ""
+msgstr "Hộp thư điện tử"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:675
@@ -675,6 +674,8 @@ msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
 msgstr[0] ""
+"Mật khẩu của bạn không được giống với một trong số %(history_length)s mật "
+"khẩu trước."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -695,7 +696,7 @@ msgstr ""
 #: pretix/base/context.py:38
 #, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr ""
+msgstr "<a {a_name_attr}>xây dựng bởi {name}</a><a {a_attr}>dựa trên pretix</a>"
 
 #: pretix/base/context.py:48
 #, python-brace-format
@@ -703,9 +704,9 @@ msgid "<a {a_attr}>powered by {name} based on pretix</a>"
 msgstr "<a {a_attr}> Được cung cấp bởi {name} dựa trên Pretix </a>"
 
 #: pretix/base/context.py:55
-#, fuzzy, python-format
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "<a %(a_attr) s> vé được cung cấp bởi Pretix </a>"
+msgstr "<a %(a_attr)s> vé được cung cấp bởi Pretix </a>"
 
 #: pretix/base/context.py:64
 msgid "source code"
@@ -717,10 +718,10 @@ msgid "Configuration option \"{name}\" is missing."
 msgstr "Tùy chọn cấu hình  \"{name} \" bị thiếu."
 
 #: pretix/base/customersso/oidc.py:69 pretix/base/customersso/oidc.py:74
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
-msgstr "Không thể truy xuất cấu hình từ  \"{url} \"."
+msgstr "Không thể truy xuất cấu hình từ \"{url} \". Lỗi: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:80 pretix/base/customersso/oidc.py:85
 #: pretix/base/customersso/oidc.py:90 pretix/base/customersso/oidc.py:95
@@ -730,9 +731,9 @@ msgid "Incompatible SSO provider: \"{error}\"."
 msgstr "Nhà cung cấp SSO không tương thích:  \"{error} \"."
 
 #: pretix/base/customersso/oidc.py:111
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Bạn không yêu cầu  \"{phạm vi} \"."
+msgstr "Bạn không yêu cầu \"{scope} \"."
 
 #: pretix/base/customersso/oidc.py:117
 #, fuzzy, python-brace-format
@@ -740,8 +741,8 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
-"Bạn đang yêu cầu phạm vi  \"{phạm vi} \" nhưng nhà cung cấp chỉ hỗ trợ những "
-"điều này: {phạm vi}."
+"Bạn đang yêu cầu phạm vi quyền \"{scope} \" nhưng nhà cung cấp chỉ hỗ trợ "
+"những phạm vi quyền này: {scope}."
 
 #: pretix/base/customersso/oidc.py:127
 #, fuzzy, python-brace-format
@@ -749,17 +750,17 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
-"Bạn đang yêu cầu trường  \"{field} \" nhưng nhà cung cấp chỉ hỗ trợ sau: "
-"{trường}."
+"Bạn đang yêu cầu trường \"{field} \" nhưng nhà cung cấp chỉ hỗ trợ sau: "
+"{field}."
 
 #: pretix/base/customersso/oidc.py:219 pretix/base/customersso/oidc.py:226
 #: pretix/base/customersso/oidc.py:245 pretix/base/customersso/oidc.py:262
 #: pretix/base/customersso/oidc.py:269 pretix/presale/views/customer.py:743
 #: pretix/presale/views/customer.py:753 pretix/presale/views/customer.py:792
 #: pretix/presale/views/customer.py:866
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr "Đăng nhập không thành công."
+msgstr "Đăng nhập không thành công. Lỗi: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:252
 msgid ""
@@ -788,7 +789,7 @@ msgstr "Định dạng xuất"
 
 #: pretix/base/exporter.py:189
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Bảng Excel (.xlsx)"
 
 #: pretix/base/exporter.py:190 pretix/base/exporter.py:312
 msgid "CSV (with commas)"
@@ -1103,9 +1104,9 @@ msgstr ""
 "Dekodi NREI."
 
 #: pretix/base/exporters/dekodi.py:105
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr "Ticket Event {Event}-{Code}"
+msgstr "Ticket Event {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:74
 #: pretix/base/exporters/orderlist.py:128
@@ -1172,7 +1173,7 @@ msgstr "Tiền tệ sự kiện"
 #: pretix/base/exporters/events.py:61 pretix/base/models/auth.py:261
 #: pretix/base/models/exports.py:133 pretix/control/forms/exports.py:93
 msgid "Timezone"
-msgstr ""
+msgstr "Múi giờ"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:595
 #: pretix/base/models/event.py:1489 pretix/base/settings.py:3263
@@ -1797,10 +1798,8 @@ msgstr "đòi hỏi sự chú ý đặc biệt"
 #: pretix/base/modelimport_orders.py:618 pretix/base/models/items.py:663
 #: pretix/base/models/items.py:1249 pretix/base/models/orders.py:289
 #: pretix/plugins/checkinlists/exporters.py:524
-#, fuzzy
-#| msgid "Client ID"
 msgid "Check-in text"
-msgstr "ID người dùng"
+msgstr "Văn bản Check-in"
 
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:668
 #: pretix/base/models/items.py:1169
@@ -2021,19 +2020,19 @@ msgid "Order locale"
 msgstr "Đặt hàng địa phương"
 
 #: pretix/base/exporters/orderlist.py:275
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr "Tổng tại {tỷ lệ} % thuế"
+msgstr "Tổng tại {rate} % thuế"
 
 #: pretix/base/exporters/orderlist.py:276
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr "Net ở {tỷ lệ} % thuế"
+msgstr "Net ở {rate} % thuế"
 
 #: pretix/base/exporters/orderlist.py:277
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr "Giá trị thuế ở {tỷ lệ} % thuế"
+msgstr "Giá trị thuế ở {rate} % thuế"
 
 #: pretix/base/exporters/orderlist.py:280
 msgid "Invoice numbers"
@@ -2071,9 +2070,9 @@ msgid "External customer ID"
 msgstr "ID khách hàng bên ngoài"
 
 #: pretix/base/exporters/orderlist.py:293
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paid by {method}"
-msgstr "được trả bởi {Phương thức}"
+msgstr "được trả bởi {method}"
 
 #: pretix/base/exporters/orderlist.py:448
 #: pretix/base/exporters/orderlist.py:894
@@ -2927,13 +2926,13 @@ msgid "You can use {markup_name} in this field."
 msgstr "Bạn có thể sử dụng {markup_name} trong trường này."
 
 #: pretix/base/forms/__init__.py:178
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
 "Vì lý do kỹ thuật, bạn không thể đặt đầu vào, cần được che dấu (ví dụ: mật "
-"khẩu), thành %(giá trị) s."
+"khẩu), thành %(value)s."
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/auth.py:179
 msgid "Keep me logged in"
@@ -3129,9 +3128,9 @@ msgid ""
 msgstr "Có một lỗi với cú pháp giữ chỗ của bạn."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:807
-#, fuzzy, python-format
+#, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr "Người giữ chỗ không hợp lệ: {%(giá trị) S}"
+msgstr "Người giữ chỗ không hợp lệ: {%(value)s}"
 
 #: pretix/base/forms/widgets.py:68
 #, python-format
@@ -3139,9 +3138,9 @@ msgid "Sample: %s"
 msgstr "Mẫu: %s"
 
 #: pretix/base/forms/widgets.py:71
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Người giữ chỗ có sẵn: {Danh sách}"
+msgstr "Người giữ chỗ có sẵn: {list}"
 
 #: pretix/base/forms/widgets.py:214 pretix/base/models/items.py:1656
 #: pretix/base/reldate.py:216 pretix/plugins/checkinlists/exporters.py:753
@@ -3159,10 +3158,10 @@ msgid "Individual customer"
 msgstr "Khách hàng cá nhân"
 
 #: pretix/base/invoice.py:138
-#, fuzzy, python-format
+#, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "Trang %D của %d"
+msgstr "Trang %d của %d"
 
 #: pretix/base/invoice.py:375
 msgctxt "invoice"
@@ -3234,10 +3233,10 @@ msgid "Invoice {num}"
 msgstr "Hóa đơn {num}"
 
 #: pretix/base/invoice.py:621
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "Tài liệu tham khảo khách hàng: {Tham khảo}"
+msgstr "Mã khách hàng: {reference}"
 
 #: pretix/base/invoice.py:629
 msgctxt "invoice"
@@ -3275,7 +3274,7 @@ msgstr "Mô tả"
 #: pretix/base/invoice.py:682 pretix/base/invoice.py:690
 msgctxt "invoice"
 msgid "Qty"
-msgstr ""
+msgstr "Số lượng"
 
 #: pretix/base/invoice.py:683 pretix/base/invoice.py:833
 msgctxt "invoice"
@@ -3290,7 +3289,7 @@ msgstr "net"
 #: pretix/base/invoice.py:685
 msgctxt "invoice"
 msgid "Gross"
-msgstr ""
+msgstr "Tổng"
 
 #: pretix/base/invoice.py:691
 msgctxt "invoice"
@@ -3304,10 +3303,10 @@ msgid "Single price: {net_price} net / {gross_price} gross"
 msgstr "Giá đơn: {net_price} net / {gross_price} gross"
 
 #: pretix/base/invoice.py:724
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Giá đơn: {Giá}"
+msgstr "Đơn giá: {price}"
 
 #: pretix/base/invoice.py:742 pretix/base/invoice.py:748
 msgctxt "invoice"
@@ -3355,24 +3354,24 @@ msgid "Included taxes"
 msgstr "Bao gồm thuế"
 
 #: pretix/base/invoice.py:894
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"Sử dụng tỷ lệ chuyển đổi là 1: {Rate} như được xuất bản bởi {Author} trên "
-"{ngày}, điều này tương ứng với:"
+"Sử dụng tỷ lệ chuyển đổi là 1: {rate} như được xuất bản bởi {authority} vào "
+"ngày {date}, điều này tương ứng với:"
 
 #: pretix/base/invoice.py:909
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"Sử dụng tỷ lệ chuyển đổi là 1: {Rate} như được xuất bản bởi {thẩm quyền} "
-"trên {ngày}, tổng hóa đơn tương ứng với {Total}."
+"Sử dụng tỷ lệ chuyển đổi là 1: {rate} như được xuất bản bởi {authority} vào "
+"ngày {date}, tổng hóa đơn tương ứng với {total}."
 
 #: pretix/base/invoice.py:923
 msgid "Default invoice renderer (European-style letter)"
@@ -3388,10 +3387,10 @@ msgid "Simplified invoice renderer"
 msgstr "Kết xuất hóa đơn đơn giản hóa"
 
 #: pretix/base/invoice.py:1078
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "Sự kiện Ngày: {Date_Range}"
+msgstr "Sự kiện Ngày: {date_range}"
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
@@ -3404,31 +3403,29 @@ msgid "The relevant plugin is currently not active."
 msgstr "Plugin có liên quan hiện không hoạt động."
 
 #: pretix/base/logentrytypes.py:49
-#, fuzzy
-#| msgid "Order canceled"
 msgid "(deleted)"
-msgstr "Đã huỷ đơn hàng"
+msgstr "(đã xóa)"
 
 #: pretix/base/logentrytypes.py:78
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order {val}"
-msgstr "Đặt hàng {Val}"
+msgstr "Đơn hàng {val}"
 
 #: pretix/base/logentrytypes.py:90
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Voucher {val}…"
-msgstr "Voucher {Val}"
+msgstr "Voucher {val}"
 
 #: pretix/base/logentrytypes.py:102
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Product {val}"
-msgstr "Sản phẩm {Val}"
+msgstr "Sản phẩm {val}"
 
 #: pretix/base/logentrytypes.py:109
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "subevent"
 msgid "Date {val}"
-msgstr "Ngày {Val}"
+msgstr "Ngày {val}"
 
 #: pretix/base/logentrytypes.py:116
 #, python-brace-format
@@ -3436,14 +3433,14 @@ msgid "Quota {val}"
 msgstr "hạn ngạch {val}"
 
 #: pretix/base/logentrytypes.py:123
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Discount {val}"
-msgstr "Giảm giá {Val}"
+msgstr "Giảm giá {val}"
 
 #: pretix/base/logentrytypes.py:130
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Category {val}"
-msgstr "Thể loại {Val}"
+msgstr "Thể loại {val}"
 
 #: pretix/base/logentrytypes.py:137
 #, python-brace-format
@@ -3451,9 +3448,9 @@ msgid "Question {val}"
 msgstr "câu hỏi {val}"
 
 #: pretix/base/logentrytypes.py:144
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax rule {val}"
-msgstr "Quy tắc thuế {Val}"
+msgstr "Quy tắc thuế {val}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
@@ -3474,9 +3471,9 @@ msgid "Keep empty"
 msgstr "Giữ trống"
 
 #: pretix/base/modelimport.py:139
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr "Cài đặt không hợp lệ cho cột  \"{tiêu đề} \"."
+msgstr "Cài đặt không hợp lệ cho cột \"{header} \"."
 
 #: pretix/base/modelimport.py:199
 #, python-brace-format
@@ -3698,10 +3695,10 @@ msgid "Price mode"
 msgstr "Chế độ giá"
 
 #: pretix/base/modelimport_vouchers.py:150
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not parse {value} as a price mode, use one of {options}."
 msgstr ""
-"Không thể phân tích {value} làm chế độ giá, hãy sử dụng một trong {Tùy chọn}."
+"Không thể phân tích {value} làm chế độ giá, hãy sử dụng một trong {options}."
 
 #: pretix/base/modelimport_vouchers.py:160 pretix/base/models/vouchers.py:245
 msgid "Voucher value"
@@ -3744,7 +3741,7 @@ msgstr "Bạn cần chọn sản phẩm  \"{prod} \" cho ghế này."
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:42
 #: pretix/control/views/vouchers.py:120
 msgid "Tag"
-msgstr ""
+msgstr "Đánh dấu"
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:297
 msgid "Shows hidden products that match this voucher"
@@ -3880,7 +3877,7 @@ msgstr ""
 #: pretix/base/models/checkin.py:85 pretix/control/navigation.py:640
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
 msgid "Gates"
-msgstr ""
+msgstr "Cổng"
 
 #: pretix/base/models/checkin.py:86
 msgid ""
@@ -4041,10 +4038,8 @@ msgid "Profile data (name, addresses)"
 msgstr "Dữ liệu hồ sơ (tên, địa chỉ)"
 
 #: pretix/base/models/customers.py:414
-#, fuzzy
-#| msgid "Client ID"
 msgid "Client type"
-msgstr "ID người dùng"
+msgstr "Loại người dùng"
 
 #: pretix/base/models/customers.py:417
 msgid "Grant type"
@@ -4118,10 +4113,8 @@ msgid "Event series handling"
 msgstr "Xử lý chuỗi sự kiện"
 
 #: pretix/base/models/discount.py:101
-#, fuzzy
-#| msgid "All events (including newly created ones)"
 msgid "Apply to all products (including newly created ones)"
-msgstr "Tất cả các sự kiện (bao gồm cả sự kiện mới tạo)"
+msgstr "Áp dụng cho tất cả sản phẩm(bao gồm cả sản phẩm mới tạo)"
 
 #: pretix/base/models/discount.py:105
 msgid "Apply to specific products"
@@ -4600,7 +4593,7 @@ msgstr "ID thuế: %s"
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr ""
+msgstr "Mã VAT: %s"
 
 #: pretix/base/models/items.py:93
 msgid "Category name"
@@ -4670,9 +4663,9 @@ msgid "Product categories"
 msgstr "Danh mục sản phẩm"
 
 #: pretix/base/models/items.py:149
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{category} ({category_type})"
-msgstr "{thể loại} ({cated_type})"
+msgstr "{category} ({category_type})"
 
 #: pretix/base/models/items.py:155
 msgid "Add-on category"
