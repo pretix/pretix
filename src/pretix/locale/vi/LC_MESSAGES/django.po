@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-06-06 05:51+0000\n"
+"PO-Revision-Date: 2025-06-06 06:09+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
 "pretix/vi/>\n"
@@ -533,7 +533,7 @@ msgstr "Đã xóa sự kiện"
 #: pretix/api/webhooks.py:337
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr ""
+msgstr "Ngày của chuỗi sự kiện đã được thêm"
 
 #: pretix/api/webhooks.py:341
 msgctxt "subevent"
@@ -6938,7 +6938,7 @@ msgstr ""
 #: pretix/base/pdf.py:266 pretix/base/pdf.py:295
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1240
 msgid "Friday"
-msgstr ""
+msgstr "Thứ Sáu"
 
 #: pretix/base/pdf.py:270
 msgid "Event end date and time"
@@ -7595,27 +7595,27 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:358 pretix/control/forms/filter.py:1236
 msgid "Monday"
-msgstr ""
+msgstr "Thứ Hai"
 
 #: pretix/base/services/checkin.py:359 pretix/control/forms/filter.py:1237
 msgid "Tuesday"
-msgstr ""
+msgstr "Thứ Ba"
 
 #: pretix/base/services/checkin.py:360 pretix/control/forms/filter.py:1238
 msgid "Wednesday"
-msgstr ""
+msgstr "Thứ Tư"
 
 #: pretix/base/services/checkin.py:361 pretix/control/forms/filter.py:1239
 msgid "Thursday"
-msgstr ""
+msgstr "Thứ Năm"
 
 #: pretix/base/services/checkin.py:363 pretix/control/forms/filter.py:1241
 msgid "Saturday"
-msgstr ""
+msgstr "Thứ Bảy"
 
 #: pretix/base/services/checkin.py:364 pretix/control/forms/filter.py:1242
 msgid "Sunday"
-msgstr ""
+msgstr "Chủ Nhật"
 
 #: pretix/base/services/checkin.py:368
 #, python-brace-format
@@ -17120,7 +17120,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:50
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:80
 msgid "No results"
-msgstr ""
+msgstr "Không có kết quả"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:7
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:11
@@ -18103,51 +18103,51 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:16
 msgid "January"
-msgstr ""
+msgstr "Tháng 1"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:17
 msgid "February"
-msgstr ""
+msgstr "Tháng 2"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:18
 msgid "March"
-msgstr ""
+msgstr "Tháng 3"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:19
 msgid "April"
-msgstr ""
+msgstr "Tháng 4"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:20
 msgid "May"
-msgstr ""
+msgstr "Tháng 5"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:21
 msgid "June"
-msgstr ""
+msgstr "Tháng 6"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:22
 msgid "July"
-msgstr ""
+msgstr "Tháng 7"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:23
 msgid "August"
-msgstr ""
+msgstr "Tháng 8"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:24
 msgid "September"
-msgstr ""
+msgstr "Tháng 9"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:25
 msgid "October"
-msgstr ""
+msgstr "Tháng 10"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:26
 msgid "November"
-msgstr ""
+msgstr "Tháng 11"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:27
 msgid "December"
-msgstr ""
+msgstr "Tháng 12"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:32
 msgid "Generate report"
@@ -18864,7 +18864,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Count"
-msgstr ""
+msgstr "Số lượng"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:92
 msgid "Percentage"
@@ -28947,7 +28947,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:28
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr ""
+msgstr "Giỏ hàng đã hết hạn"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
 msgid "Show full cart"
@@ -29553,11 +29553,13 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Các mặt hàng trong giỏ của bạn không còn được giữ chỗ nữa. Bạn vẫn có thể "
+"hoàn tất đơn hàng miễn là chúng còn hàng."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
 msgid "Renew reservation"
-msgstr ""
+msgstr "Gia hạn giữ chỗ"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
