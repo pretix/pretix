@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-06-05 17:48+0000\n"
+"PO-Revision-Date: 2025-06-06 05:51+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
 "pretix/vi/>\n"
@@ -258,7 +258,7 @@ msgstr "Thuộc tính '{name}' không tồn tại."
 #: pretix/api/serializers/event.py:249 pretix/api/serializers/event.py:558
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "Thuộc tính '{name}' không chấp nhận giá trị '{value}'"
+msgstr "Thuộc tính '{name}' không chấp nhận giá trị '{value}'."
 
 #: pretix/api/serializers/event.py:293
 #, python-brace-format
@@ -266,10 +266,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Không có plugin: '{name}'."
 
 #: pretix/api/serializers/event.py:296
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Không có plugin: '{name}'."
+msgstr "Plugin bị hạn chế: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
@@ -444,7 +443,7 @@ msgstr "Đơn hàng được đánh dấu là đã thanh toán"
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1570
 msgid "Order canceled"
-msgstr "Đơn hàng bị hủy"
+msgstr "Đơn hàng đã bị hủy"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:257
 msgid "Order reactivated"
@@ -12182,7 +12181,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:380
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Approval pending"
-msgstr ""
+msgstr "Đang chờ phê duyệt"
 
 #: pretix/control/forms/filter.py:241
 msgid "Follow-up configured"
@@ -15757,6 +15756,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
+"Yêu cầu của bạn hiện đang được xử lý. Tùy theo quy mô sự kiện, quá trình này "
+"có thể mất đến vài phút."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
@@ -21961,7 +21962,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:498
 msgid "Text box"
-msgstr ""
+msgstr "Văn bản chữ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:502
 msgid "Text (deprecated)"
@@ -27657,7 +27658,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1527
 msgid "iDEAL"
-msgstr "iDEAL"
+msgstr "Nền tảng iDEAL"
 
 #: pretix/plugins/stripe/payment.py:344 pretix/plugins/stripe/payment.py:352
 #: pretix/plugins/stripe/payment.py:360 pretix/plugins/stripe/payment.py:395
@@ -27677,7 +27678,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1564
 msgid "Bancontact"
-msgstr "Bancontact"
+msgstr "Nền tảng Bancontact"
 
 #: pretix/plugins/stripe/payment.py:366
 msgid "SEPA Direct Debit"
@@ -27717,11 +27718,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:409 pretix/plugins/stripe/payment.py:1730
 msgid "Przelewy24"
-msgstr ""
+msgstr "Nền tảng Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:417 pretix/plugins/stripe/payment.py:1769
 msgid "WeChat Pay"
-msgstr ""
+msgstr "Nền tảng WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:433 pretix/plugins/stripe/payment.py:1824
 msgid "Swish"
@@ -27866,7 +27867,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1480
 msgid "giropay"
-msgstr "giropay"
+msgstr "Nền tảng giropay"
 
 #: pretix/plugins/stripe/payment.py:1483
 msgid ""
