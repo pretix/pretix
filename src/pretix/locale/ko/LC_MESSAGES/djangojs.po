@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:36+0000\n"
-"PO-Revision-Date: 2025-05-28 08:00+0000\n"
+"PO-Revision-Date: 2025-06-04 06:32+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ko/>\n"
@@ -733,7 +733,7 @@ msgstr "카트가 만료되었습니다"
 #: pretix/static/pretixpresale/js/ui/cart.js:59
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Your cart is about to expire."
-msgstr ""
+msgstr "카트가 곧 만료됩니다."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:64
 msgid "The items in your cart are reserved for you for one minute."
@@ -764,11 +764,11 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "예약 기간을 갱신하시겠습니까?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:93
 msgid "Renew reservation"
-msgstr ""
+msgstr "예약 갱신"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -811,12 +811,13 @@ msgstr "수량 증가"
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Filter events by"
-msgstr ""
+msgstr "이벤트를 걸러내다(이벤트 중에서 특정 조건에 맞는 것만 골라서 보여주거나, "
+"나머지를 숨기는 것을 의미)"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Filter"
-msgstr ""
+msgstr "걸러내다(데이터나 목록, 정보에서 조건에 맞는 것만 보여주기라는 의미)"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:19
@@ -1075,7 +1076,7 @@ msgstr "체크아웃 재개"
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
-msgstr ""
+msgstr "이 작업은 취소할 수 없습니다. 로딩이 끝날 때까지 기다려 주세요"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 #: pretix/static/pretixpresale/js/widget/widget.v1.js:60
