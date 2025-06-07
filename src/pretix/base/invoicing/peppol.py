@@ -122,6 +122,7 @@ class PeppolIdValidator:
 class PeppolTransmissionType(TransmissionType):
     identifier = "peppol"
     verbose_name = "PEPPOL"
+    priority = 250
 
     def is_available(self, event, country: Country, is_business: bool):
         return is_business and super().is_available(event, country, is_business)

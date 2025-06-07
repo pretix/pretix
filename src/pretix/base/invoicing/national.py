@@ -34,7 +34,8 @@ from pretix.base.invoicing.transmission import (
 @transmission_types.new()
 class ItalianSdITransmissionType(TransmissionType):
     identifier = "it_sdi"
-    verbose_name = pgettext_lazy("italian_invoice", "Exchange System (SdI)")
+    verbose_name = pgettext_lazy("italian_invoice", "Italian Exchange System (SdI)")
+    public_name = pgettext_lazy("italian_invoice", "Exchange System (SdI)")
     exclusive = True
 
     def is_available(self, event, country: Country, is_business: bool):

@@ -37,7 +37,7 @@ import json
 import logging
 import operator
 import re
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
@@ -76,6 +76,9 @@ from i18nfield.utils import I18nJSONEncoder
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
+from pretix.base.invoicing.transmission import (
+    get_transmission_types, transmission_providers,
+)
 from pretix.base.models import Event, LogEntry, Order, TaxRule, Voucher
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
@@ -650,6 +653,22 @@ class InvoiceSettings(EventSettingsViewMixin, EventSettingsFormView):
     form_class = InvoiceSettingsForm
     template_name = 'pretixcontrol/event/invoicing.html'
     permission = 'can_change_event_settings'
+
+    def get_context_data(self, **kwargs):
+        types = get_transmission_types()
+        providers = defaultdict(list)
+        ready = defaultdict(lambda: False)
+        for p, __ in transmission_providers.filter(event=self.request.event):
+            is_ready_result = p.is_ready(self.request.event)
+            providers[p.type].append((p, is_ready_result, p.settings_url(self.request.event)))
+            ready[p.type] = ready[p.type] or is_ready_result
+        for k, v in providers.items():
+            v.sort(key=lambda p: (-p[0].priority, p[0].identifier))
+        return super().get_context_data(
+            transmission_providers=providers,
+            transmission_types=types,
+            ready=ready,
+        )
 
     def get_success_url(self) -> str:
         if 'preview' in self.request.POST:
