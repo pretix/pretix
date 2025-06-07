@@ -40,6 +40,7 @@ from pretix.helpers.format import format_map
 class EmailTransmissionType(TransmissionType):
     identifier = "email"
     verbose_name = _("Email")
+    priority = 1000
 
     @property
     def invoice_address_form_fields(self) -> dict:
@@ -74,6 +75,10 @@ class EmailTransmissionProvider(TransmissionProvider):
     identifier = "email_pdf"
     type = "email"
     verbose_name = _("PDF via email")
+    priority = 1000
+
+    def is_ready(self, event) -> bool:
+        return True
 
     def is_available(self, event, country: Country, is_business: bool) -> bool:
         return True
