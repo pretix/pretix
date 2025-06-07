@@ -40,7 +40,9 @@
                     {% if addresses_data %}
                         {{ addresses_data|json_script:"addresses_json" }}
                     {% endif %}
-                    <div id="invoice" class="profile-scope" data-profiles-id="addresses_json">
+                    <div id="invoice" class="profile-scope"
+                         data-profiles-id="addresses_json"
+                         data-address-information-url="{% url "js_helpers.address_form" %}?invoice=true&organizer={{ event.organizer.slug|urlencode }}&event={{ event.slug|urlencode }}">
                         <div class="panel-body">
                             {% if addresses_data %}
                                 <div class="form-group profile-select-container js-do-not-copy-answers">
@@ -78,7 +80,7 @@
                         </h3>
                     </summary>
                     <div>
-                        <div class="panel-body questions-form">
+                        <div class="panel-body questions-form" data-address-information-url="{% url "js_helpers.address_form" %}">
                             {% if event.settings.attendee_data_explanation_text and pos.item.ask_attendee_data %}
                                 {{ event.settings.attendee_data_explanation_text|rich_text }}
                             {% endif %}
