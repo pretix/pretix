@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from typing import Optional
 
 from django_countries.fields import Country
 
@@ -29,15 +30,33 @@ from pretix.base.signals import EventPluginRegistry, Registry
 class TransmissionType:
     @property
     def identifier(self) -> str:
+        """
+        A short and unique identifier for this transmission type.
+        """
         raise NotImplementedError
 
     @property
     def verbose_name(self) -> str:
+        """
+        A human-readable name for this transmission type to be shown internally in the backend.
+        """
         raise NotImplementedError
 
     @property
     def public_name(self) -> str:
+        """
+        A human-readable name for this transmission type to be shown to the public.
+        By default, this is the same as ``verbose_name``
+        """
         return self.verbose_name
+
+    @property
+    def priority(self) -> int:
+        """
+        Returns a priority that is used for sorting transmission type. Higher priority means higher up in the list.
+        Default to 100. Providers with same priority are sorted alphabetically.
+        """
+        return 100
 
     @property
     def exclusive(self) -> bool:
@@ -100,6 +119,12 @@ class TransmissionProvider:
         """
         raise NotImplementedError
 
+    def is_ready(self, event) -> bool:
+        """
+        Return whether this provider has all required configuration to be used in this event.
+        """
+        raise NotImplementedError
+
     def is_available(self, event, country: Country, is_business: bool) -> bool:
         """
         Return whether this provider may be used for an invoice for the given recipient country and address type.
@@ -112,6 +137,20 @@ class TransmissionProvider:
         on the Invoice model.
         """
         raise NotImplementedError
+
+    @property
+    def priority(self) -> int:
+        """
+        Returns a priority that is used for sorting transmission providers. Higher priority will be chosen over
+        lower priority for transmission. Default to 100.
+        """
+        return 100
+
+    def settings_url(self, event) -> Optional[str]:
+        """
+        Return a URL to the settings page of this provider (if any).
+        """
+        return None
 
 
 class TransmissionProviderRegistry(EventPluginRegistry):
@@ -170,5 +209,5 @@ transmission_types = TransmissionTypeRegistry()
 def get_transmission_types():
     return sorted(
         transmission_types.registered_entries.keys(),
-        key=lambda t: (0 if t.identifier == "email" else 1, str(t.public_name)),
+        key=lambda t: (-t.priority, str(t.public_name)),
     )
