@@ -35,6 +35,16 @@ class Migration(migrations.Migration):
             name="transmission_status",
             field=models.CharField(default="unknown", max_length=255),
         ),
+        migrations.AddField(
+            model_name="invoice",
+            name="created",
+            field=models.DateTimeField(auto_now_add=True, null=True),
+        ),
+        migrations.AddField(
+            model_name="invoice",
+            name="invoice_to_is_business",
+            field=models.BooleanField(null=True),
+        ),
         migrations.RunSQL(
             "UPDATE pretixbase_invoice SET transmission_status = 'completed' WHERE transmission_date IS NOT NULL",
         ),

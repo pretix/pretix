@@ -1684,6 +1684,8 @@ class OrderInvoiceRegenerate(OrderView):
         else:
             if not inv.event.settings.invoice_regenerate_allowed:
                 messages.error(self.request, _('Invoices may not be changed after they are created.'))
+            elif not inv.regenerate_allowed:
+                messages.error(self.request, _('Invoices may not be changed after they are transmitted.'))
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
             elif inv.sent_to_organizer:

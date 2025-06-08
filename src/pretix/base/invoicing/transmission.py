@@ -133,8 +133,18 @@ class TransmissionProvider:
 
     def transmit(self, invoice: Invoice):
         """
-        Transmit the invoice. The function is also responsible for updating the status and information
-        on the Invoice model.
+        Transmit the invoice. The invoice passed as a parameter will be in status ``TRANSMISSION_STATUS_INFLIGHT``.
+        Invoices that stay in this state for more than 24h will be retried automatically. Implementations are expected to:
+
+        - Send the invoice.
+
+        - Update the ``transmission_status`` to `TRANSMISSION_STATUS_COMPLETED` or `TRANSMISSION_STATUS_FAILED`
+          after sending, as well as ``transmission_info`` with provider-specific data, and ``transmission_date`` to
+          the date and time of completion.
+
+        - Create a log entry of action type ``pretix.event.order.invoice.sent`` or
+          ``pretix.event.order.invoice.sending_failed`` with the fields ``full_invoice_no``, ``transmission_provider``,
+          ``transmission_type`` and a provider-specific ``data`` field.
         """
         raise NotImplementedError
 
