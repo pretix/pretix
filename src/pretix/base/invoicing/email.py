@@ -21,6 +21,7 @@
 #
 
 from django import forms
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import Country
 from i18nfield.strings import LazyI18nString
@@ -85,11 +86,24 @@ class EmailTransmissionProvider(TransmissionProvider):
 
     def transmit(self, invoice: Invoice):
         recipient = invoice.invoice_to_transmission_info.get("transmission_email_address") or invoice.order.email
+
         if not recipient:
-            if invoice.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
-                invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
-                invoice.save()
-                return
+            invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+            invoice.transmission_date = now()
+            invoice.save(update_fields=["transmission_status", "transmission_date"])
+            invoice.order.log_action(
+                "pretix.event.order.invoice.sending_failed",
+                data={
+                    "full_invoice_no": invoice.full_invoice_no,
+                    "transmission_provider": "email_pdf",
+                    "transmission_type": "email",
+                    "data": {
+                        "reason": "no_recipient",
+                    },
+                }
+            )
+            return
+
         with language(invoice.order.locale, invoice.order.event.settings.region):
             context = get_email_context(
                 event=invoice.order.event,
@@ -101,11 +115,8 @@ class EmailTransmissionProvider(TransmissionProvider):
             template = invoice.order.event.settings.get('mail_text_order_invoice', as_type=LazyI18nString)
             subject = invoice.order.event.settings.get('mail_subject_order_invoice', as_type=LazyI18nString)
 
-            if invoice.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
-                invoice.transmission_status = Invoice.TRANSMISSION_STATUS_INFLIGHT
-                invoice.save()
-
             try:
+                # Do not set to completed because that is done by the email sending task
                 subject = format_map(subject, context)
                 mail(
                     [recipient],
