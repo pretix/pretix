@@ -1939,6 +1939,7 @@ class OrderPayment(models.Model):
                          ignore_date=False, lock=True, payment_refund_sum=0, allow_generate_invoice=True):
         from pretix.base.services.invoices import (
             generate_cancellation, generate_invoice, invoice_qualified,
+            invoice_transmission_separately, transmit_invoice,
         )
         from pretix.base.services.locking import LOCK_TRUST_WINDOW
 
@@ -1969,12 +1970,18 @@ class OrderPayment(models.Model):
                     trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
                 )
 
+        transmit_invoice_task = invoice_transmission_separately(self.order)
+        transmit_invoice_mail = not transmit_invoice_task and self.order.event.settings.invoice_email_attachment and self.order.email
+
         if send_mail and self.order.sales_channel.identifier in self.order.event.settings.mail_sales_channel_placed_paid:
-            self._send_paid_mail(invoice, user, mail_text)
+            self._send_paid_mail(invoice if transmit_invoice_mail else None, user, mail_text)
             if self.order.event.settings.mail_send_order_paid_attendee:
                 for p in self.order.positions.all():
                     if p.addon_to_id is None and p.attendee_email and p.attendee_email != self.order.email:
                         self._send_paid_mail_attendee(p, user)
+
+        if invoice and not transmit_invoice_mail:
+            transmit_invoice.apply_async(args=(self.order.event_id, invoice.pk))
 
     def _send_paid_mail_attendee(self, position, user):
         from pretix.base.services.mail import SendMailException
@@ -2005,7 +2012,7 @@ class OrderPayment(models.Model):
                 self.order.send_mail(
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_paid', user,
-                    invoices=[invoice] if invoice and self.order.event.settings.invoice_email_attachment else [],
+                    invoices=[invoice] if invoice else [],
                     attach_tickets=True,
                     attach_ical=self.order.event.settings.mail_attach_ical
                 )
@@ -3411,10 +3418,10 @@ class InvoiceAddress(models.Model):
         from pretix.base.invoicing.transmission import transmission_types
         data = []
 
-        t = transmission_types.get(self.transmission_type)
+        t, __ = transmission_types.get(identifier=self.transmission_type)
         data.append((_("Transmission type"), t.public_name))
         for k, f in t.invoice_address_form_fields.items():
-            v = self.transmission_info.get(k)
+            v = (self.transmission_info or {}).get(k)
             if v is True:
                 v = _("Yes")
             elif v is False:

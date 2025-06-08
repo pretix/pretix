@@ -144,6 +144,7 @@ class Invoice(models.Model):
 
     invoice_to = models.TextField()
     invoice_to_company = models.TextField(null=True)
+    invoice_to_is_business = models.BooleanField(null=True)
     invoice_to_name = models.TextField(null=True)
     invoice_to_street = models.TextField(null=True)
     invoice_to_zipcode = models.CharField(max_length=190, null=True)
@@ -156,6 +157,7 @@ class Invoice(models.Model):
     internal_reference = models.TextField(blank=True)
     custom_field = models.CharField(max_length=255, null=True)
 
+    created = models.DateTimeField(auto_now_add=True, null=True)  # null for backwards compatibility
     date = models.DateField(default=today)
     locale = models.CharField(max_length=50, default='en')
     introductory_text = models.TextField(blank=True)
@@ -350,6 +352,14 @@ class Invoice(models.Model):
 
     def __str__(self):
         return self.full_invoice_no
+
+    @property
+    def regenerate_allowed(self):
+        return self.transmission_status in (
+            Invoice.TRANSMISSION_STATUS_UNKNOWN,
+            Invoice.TRANSMISSION_STATUS_PENDING,
+            Invoice.TRANSMISSION_STATUS_FAILED,
+        ) and self.event.settings.invoice_regenerate_allowed
 
 
 class InvoiceLine(models.Model):

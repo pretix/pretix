@@ -691,7 +691,9 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                             "full_invoice_no": i.full_invoice_no,
                             "transmission_provider": "email_pdf",
                             "transmission_type": "email",
-                            "recipients": [to],
+                            "data": {
+                                "recipients": [to],
+                            },
                         }
                     )
 
