@@ -582,6 +582,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         "invoice_from_vat_id": "",
         "invoice_to": "Sample company\nNew Zealand\nVAT-ID: DE123",
         "invoice_to_company": "Sample company",
+        "invoice_to_is_business": False,
         "invoice_to_name": "",
         "invoice_to_street": "",
         "invoice_to_zipcode": "",
@@ -590,6 +591,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         "invoice_to_country": "NZ",
         "invoice_to_vat_id": "DE123",
         "invoice_to_beneficiary": "",
+        "invoice_to_transmission_info": {},
         "custom_field": None,
         'date': now().astimezone(event.timezone).date().isoformat(),
         'refers': None,
@@ -640,7 +642,11 @@ def test_order_create_invoice(token_client, organizer, event, order):
         'foreign_currency_display': None,
         'foreign_currency_rate': None,
         'foreign_currency_rate_date': None,
-        'internal_reference': ''
+        'internal_reference': '',
+        'transmission_date': None,
+        'transmission_provider': None,
+        'transmission_status': 'pending',
+        'transmission_type': 'email',
     }
 
     resp = token_client.post(
