@@ -14,6 +14,7 @@ Contents:
    email
    placeholder
    invoice
+   invoicetransmission
    shredder
    import
    customview
