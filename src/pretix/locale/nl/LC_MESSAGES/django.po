@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-01 02:00+0000\n"
-"Last-Translator: Foxy Hunter <matthias.vancoillie@outlook.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2025-06-10 04:00+0000\n"
+"Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -88,7 +88,7 @@ msgstr "Grieks"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreeuws"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -694,16 +694,16 @@ msgstr ""
 "gebruikt worden door integraties."
 
 #: pretix/base/context.py:38
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "mogelijk gemaakt door {name}, gebaseerd op <a {a_attr}>pretix</a>"
+msgstr ""
+"<a {a_name_attr}>mogelijk gemaakt door {name}</a> <a {a_attr}> gebaseerd op "
+"pretix</a>"
 
 #: pretix/base/context.py:48
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "mogelijk gemaakt door {name}, gebaseerd op <a {a_attr}>pretix</a>"
+msgstr "<a {a_attr}>medemogelijk gemaakt door {name} gebasseerd op pretix</a>"
 
 #: pretix/base/context.py:55
 #, python-format
@@ -4362,13 +4362,15 @@ msgstr "Optioneel. Er worden geen producten verkocht vóór deze datum."
 
 #: pretix/base/models/event.py:621
 msgid "This event is remote or partially remote."
-msgstr ""
+msgstr "Dit evenement is afgelegen of gedeeltelijk afgelegen."
 
 #: pretix/base/models/event.py:622
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
 msgstr ""
+"Dit wordt gebruikt om gebruikers te laten weten of het evenement in een "
+"andere tijdzone is en laat het ons de gebruikers lokale tijdzone berekenen."
 
 #: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
@@ -6064,10 +6066,8 @@ msgid "Cart ID (e.g. session key)"
 msgstr "Winkelwagen-ID (bijv. sessiesleutel)"
 
 #: pretix/base/models/orders.py:3102
-#, fuzzy
-#| msgid "Gift card: Expiration date"
 msgid "Limit for extending expiration date"
-msgstr "Cadeaubon: Verloopdatum"
+msgstr "Limiet voor het uitstellen van de vervaldatum"
 
 #: pretix/base/models/orders.py:3131
 msgid "Cart position"
@@ -7262,10 +7262,8 @@ msgid "You cannot pay with gift cards when buying a gift card."
 msgstr "U kunt niet met cadeaubonnen betalen wanneer u een cadeaubon koopt."
 
 #: pretix/base/payment.py:1467
-#, fuzzy
-#| msgid "Please enter the correct result."
 msgid "Please enter the code of your gift card."
-msgstr "Vul alstublieft het correcte resultaat in."
+msgstr "Vul alstublieft de code van jouw cadeaukaart in."
 
 #: pretix/base/payment.py:1483 pretix/base/payment.py:1526
 msgid ""
@@ -10658,22 +10656,16 @@ msgstr ""
 "hoe uw de in uw ticketwinkel verzamelde gegevens gebruikt."
 
 #: pretix/base/settings.py:2071
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information URL"
-msgstr "Accountinformatie"
+msgstr "Toegankelijkheids informatie URL"
 
 #: pretix/base/settings.py:2072
-#, fuzzy
-#| msgid ""
-#| "This should point e.g. to a part of your website that explains how you "
-#| "use data gathered in your ticket shop."
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
 "Dit zou bijvoorbeeld naar een deel van uw website moeten wijzen dat uitlegt "
-"hoe uw de in uw ticketwinkel verzamelde gegevens gebruikt."
+"hoe uw ticketwinkel omgaat met de toegankelijkheids wetgevingen."
 
 #: pretix/base/settings.py:2079
 #: pretix/presale/templates/pretixpresale/event/base.html:228
@@ -10681,22 +10673,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/accessibility.html:6
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
 #: pretix/presale/templates/pretixpresale/organizers/base.html:111
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information"
-msgstr "Accountinformatie"
+msgstr "Toegankelijkheids informatie"
 
 #: pretix/base/settings.py:2083
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information title"
-msgstr "Accountinformatie"
+msgstr "Toegankelijkheids informatie titel"
 
 #: pretix/base/settings.py:2093
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information text"
-msgstr "Accountinformatie"
+msgstr "Toegankelijkheids informatie tekst"
 
 #: pretix/base/settings.py:2114
 msgid "Attach ticket files"
@@ -17767,7 +17753,9 @@ msgstr "draaiend in ontwikkelmodus"
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr "Neem contact met ons op als dit langer dan een aantal minuten duurt."
+msgstr ""
+"Als dit langer dan een paar minuten duurt, neem dan alstublieft contact met "
+"ons op."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
@@ -21253,13 +21241,11 @@ msgstr "Product met varianten"
 #: pretix/control/templates/pretixcontrol/items/index.html:118
 msgctxt "subevent"
 msgid "Product assigned to seating plan for one or more dates"
-msgstr ""
+msgstr "Product toegewezen tot een zittingsschema voor een of meerdere data"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:118
-#, fuzzy
-#| msgid "Product settings"
 msgid "Product assigned to seating plan"
-msgstr "Productinstellingen"
+msgstr "Product toegewezen tot een zittingsplan"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:126
 msgid "Only available as an add-on product"
@@ -23786,10 +23772,8 @@ msgstr ""
 "trackingaanbieders niet kennen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:204
-#, fuzzy
-#| msgid "Availability"
 msgid "Accessibility"
-msgstr "Beschikbaarheid"
+msgstr "Toegankelijkheid"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:206
 msgid ""
@@ -23798,12 +23782,19 @@ msgid ""
 "template in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
 "target=\"_blank\">our documentation</a>."
 msgstr ""
+"Sommige rechtsgebieden, waaronder de Europeese Unie, vereist jou om "
+"informatie te publiceren over de toegankelijkheid van je ticket winkel. Je "
+"kan een template vinden in <a href="
+"\"https://docs.pretix.eu/trust/accessibility/\" target=\"_blank\">onze "
+"documentatie</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:216
 msgid ""
 "Instead of an URL, you can also configure a text that will be shown within "
 "pretix. This will be ignored if a URL is configured."
 msgstr ""
+"In plaats van een URL, kan je ook een tekst instellen, dat wordt laten zien "
+"binnen pretix. Dit wordt genegeerd als een URL is ingesteld."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:228
 msgid "Barcode media"
@@ -29091,10 +29082,8 @@ msgid "Open BezahlCode in your banking app to start the payment process."
 msgstr "Open BezahlCode in uw bank-app om het betalingsproces te starten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:129
-#, fuzzy
-#| msgid "Scan the qr-code with your banking app"
 msgid "Scan the QR code with your banking app"
-msgstr "Scan de qr-code met uw bankapplicatie"
+msgstr "Scan de QR-code met uw bankapplicatie"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:141
 #, python-format
@@ -32272,17 +32261,12 @@ msgid "You need to fill out all fields."
 msgstr "Vul alle velden in."
 
 #: pretix/presale/forms/customer.py:69
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "You need to enter an email address."
-msgstr "Vul alstublieft een geldig e-mailadres in."
+msgstr "U moet een e-mailadres invullen."
 
 #: pretix/presale/forms/customer.py:70
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to enter a password."
-msgstr "U moet een datum selecteren."
+msgstr "U moet een wachtwoord invullen."
 
 #: pretix/presale/forms/customer.py:72
 msgid "We have not found an account with this email address and password."
@@ -32291,27 +32275,18 @@ msgstr ""
 "wachtwoord vinden."
 
 #: pretix/presale/forms/customer.py:74
-#, fuzzy
-#| msgid "Please enter the same email address twice."
 msgid "Please verify that you entered the correct email address."
-msgstr "Voer twee keer hetzelfde e-mailadres in."
+msgstr "Alstublieft controleer of u het juiste emailadress heeft ingevuld."
 
 #: pretix/presale/forms/customer.py:75
-#, fuzzy
-#| msgid "Please enter the correct result."
 msgid "Please enter the correct password."
-msgstr "Vul alstublieft het correcte resultaat in."
+msgstr "Vul alstublieft het correcte wachtwoord in."
 
 #: pretix/presale/forms/customer.py:76
 msgid "This account is disabled."
 msgstr "Dit account is uitgeschakeld."
 
 #: pretix/presale/forms/customer.py:77
-#, fuzzy
-#| msgid ""
-#| "You have not yet activated your account and set a password. Please click "
-#| "the link in the email we sent you. Click \"Reset password\" to receive a "
-#| "new email in case you cannot find it again."
 msgid ""
 "You have not yet activated your account and set a password. Please click the "
 "link in the email we sent you. In case you cannot find it, click \"Forgot "
@@ -32323,10 +32298,8 @@ msgstr ""
 "te klikken."
 
 #: pretix/presale/forms/customer.py:90
-#, fuzzy
-#| msgid "Your password"
 msgid "Forgot your password?"
-msgstr "Uw wachtwoord"
+msgstr "Wachtwoord vergeten?"
 
 #: pretix/presale/forms/customer.py:146
 msgid ""
@@ -32431,17 +32404,13 @@ msgid "Organizer: {organizer}"
 msgstr "Organisator: {organizer}"
 
 #: pretix/presale/templates/pretixpresale/base.html:47
-#, fuzzy
-#| msgid "Send links"
 msgctxt "skip-to-main-nav"
 msgid "Skip link"
-msgstr "Verstuur links"
+msgstr "Sla over link"
 
 #: pretix/presale/templates/pretixpresale/base.html:48
-#, fuzzy
-#| msgid "Email content"
 msgid "Skip to main content"
-msgstr "E-mailinhoud"
+msgstr "Overslaan naar de hoofd-inhoud"
 
 #: pretix/presale/templates/pretixpresale/base.html:76
 msgid "Footer Navigation"
@@ -33286,10 +33255,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
-#, fuzzy
-#| msgid "Event description"
 msgid "Renew reservation"
-msgstr "Evenementomschrijving"
+msgstr "Vernieuw reservering"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 msgid "Overview of your ordered products."
@@ -33643,8 +33610,6 @@ msgstr "Toon vorige maand, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:24
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
-#, fuzzy
-#| msgid "Select month to show"
 msgid "Select a month to display"
 msgstr "Kies maand om te tonen"
 
@@ -33656,11 +33621,8 @@ msgstr "Maand"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:39
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:67
-#, fuzzy
-#| msgctxt "reporting_timeframe"
-#| msgid "by month"
 msgid "Show month"
-msgstr "per maand"
+msgstr "Weergeven per maand"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:50
 #, python-format
@@ -33675,10 +33637,8 @@ msgstr "Toon vorige week, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:24
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:52
-#, fuzzy
-#| msgid "Select week to show"
 msgid "Select a week to display"
-msgstr "Kies week om te tonen"
+msgstr "Kies een week om te weer te geven"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:26
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
@@ -33692,11 +33652,8 @@ msgstr "Kies week om te tonen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:43
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:71
-#, fuzzy
-#| msgctxt "reporting_timeframe"
-#| msgid "by week"
 msgid "Show week"
-msgstr "per week"
+msgstr "Weergeef per week"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:54
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:73
@@ -34622,8 +34579,6 @@ msgstr ""
 "gaan."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:58
-#, fuzzy
-#| msgid "Closed"
 msgid "Close"
 msgstr "Gesloten"
 
@@ -34668,8 +34623,6 @@ msgid "Save selection"
 msgstr "Selectie opslaan"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:141
-#, fuzzy
-#| msgid "You did not select any products."
 msgid "You didn't select any ticket."
 msgstr "U heeft geen producten geselecteerd."
 
@@ -34678,6 +34631,8 @@ msgid ""
 "Please tick a checkbox or enter a quantity for one of the ticket types to "
 "add to the cart."
 msgstr ""
+"Alstublieft klik op een selectievak of voeg een quantiteit toe voor een van "
+"de ticket types in de winkelwagen."
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -34729,10 +34684,9 @@ msgid "Event overview"
 msgstr "Evenementenoverzicht"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:21
-#, fuzzy, python-format
-#| msgid "Show next month, %(month)s"
+#, python-format
 msgid "Events in %(month)s"
-msgstr "Toon volgende maand, %(month)s"
+msgstr "Evenementen in %(month)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:91
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:104
@@ -34742,28 +34696,22 @@ msgstr ""
 "Merk op dat de evenementen in dit overzicht in verschillende tijdzones zijn."
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:21
-#, fuzzy, python-format
-#| msgid "Entry scan: %(date)s"
+#, python-format
 msgid "Events on %(day)s"
-msgstr "Ingangsscan: %(date)s"
+msgstr "Evenementen op %(day)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:52
-#, fuzzy
-#| msgctxt "subevents"
-#| msgid "Select date"
 msgid "Select a date to display"
-msgstr "Kies een datum"
+msgstr "Kies een datum om weer te geven"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:59
-#, fuzzy
-#| msgid "Show start date"
 msgid "Show date"
-msgstr "Toon startdatum"
+msgstr "Weergeef startdatum"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:21
 #, python-format
 msgid "Events in %(week)s (%(week_day_from)s – %(week_day_to)s)"
-msgstr ""
+msgstr "Evenementen in %(week)s (%(week_day_from)s – %(week_day_to)s)"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:5
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:10
@@ -34997,10 +34945,8 @@ msgid "Your cart is now empty."
 msgstr "Uw winkelwagen is nu leeg."
 
 #: pretix/presale/views/cart.py:553
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your cart timeout was extended."
-msgstr "Uw winkelwagen is bijgewerkt."
+msgstr "Uw winkelwagens tijdslimiet is verlengt."
 
 #: pretix/presale/views/cart.py:568
 msgid "The products have been successfully added to your cart."
