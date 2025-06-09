@@ -1981,7 +1981,7 @@ class OrderPayment(models.Model):
                         self._send_paid_mail_attendee(p, user)
 
         if invoice and not transmit_invoice_mail:
-            transmit_invoice.apply_async(args=(self.order.event_id, invoice.pk))
+            transmit_invoice.apply_async(args=(self.order.event_id, invoice.pk, False))
 
     def _send_paid_mail_attendee(self, position, user):
         from pretix.base.services.mail import SendMailException

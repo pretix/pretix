@@ -402,7 +402,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 trigger_pdf=not transmit_invoice_mail
             )
             if transmit_invoice_task:
-                transmit_invoice.apply_async(args=(order.event_id, invoice.pk))
+                transmit_invoice.apply_async(args=(order.event_id, invoice.pk, False))
 
     if send_mail:
         with language(order.locale, order.event.settings.region):
@@ -629,7 +629,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         transmit_invoice_task = invoice_transmission_separately(order)
         transmit_invoice_mail = not transmit_invoice_task and order.event.settings.invoice_email_attachment
         for i in invoices:
-            transmit_invoice.apply_async(args=(order.event_id, i.pk))
+            transmit_invoice.apply_async(args=(order.event_id, i.pk, False))
 
         if send_mail:
             with language(order.locale, order.event.settings.region):
@@ -1311,7 +1311,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 trigger_pdf=not transmit_invoice_mail
             )
             if transmit_invoice_task:
-                transmit_invoice.apply_async(args=(event.pk, invoice.pk))
+                transmit_invoice.apply_async(args=(event.pk, invoice.pk, False))
 
     if order.email:
         if order.require_approval:
@@ -2966,7 +2966,7 @@ class OrderChangeManager:
 
         if transmit_invoice_task:
             for i in self._invoices:
-                transmit_invoice.apply_async(args=(self.event.pk, i.pk))
+                transmit_invoice.apply_async(args=(self.event.pk, i.pk, False))
 
         order_changed.send(self.order.event, order=self.order)
 
