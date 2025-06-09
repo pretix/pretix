@@ -383,6 +383,8 @@ urlpatterns = [
                 name='event.order.geninvoice'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/regenerate$', orders.OrderInvoiceRegenerate.as_view(),
                 name='event.order.regeninvoice'),
+        re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/retransmit$', orders.OrderInvoiceRetransmit.as_view(),
+                name='event.order.retransmitinvoice'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/reissue$', orders.OrderInvoiceReissue.as_view(),
                 name='event.order.reissueinvoice'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/download/(?P<position>\d+)/(?P<output>[^/]+)/$',

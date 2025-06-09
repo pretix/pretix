@@ -361,6 +361,11 @@ class Invoice(models.Model):
             Invoice.TRANSMISSION_STATUS_FAILED,
         ) and self.event.settings.invoice_regenerate_allowed
 
+    @property
+    def transmission_type_instance(self):
+        from pretix.base.invoicing.transmission import transmission_types
+        return transmission_types.get(identifier=self.transmission_type)[0]
+
 
 class InvoiceLine(models.Model):
     """

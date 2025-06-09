@@ -93,7 +93,7 @@ from pretix.base.services.cancelevent import cancel_event
 from pretix.base.services.export import export, scheduled_event_export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
-    invoice_qualified, regenerate_invoice,
+    invoice_qualified, regenerate_invoice, transmit_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import (
@@ -1700,6 +1700,36 @@ class OrderInvoiceRegenerate(OrderView):
                     'invoice': inv.pk
                 })
                 messages.success(self.request, _('The invoice has been regenerated.'))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):  # NOQA
+        return HttpResponseNotAllowed(['POST'])
+
+
+class OrderInvoiceRetransmit(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        with transaction.atomic(durable=True):
+            try:
+                invoice = self.order.invoices.select_for_update(of=OF_SELF).get(pk=kwargs.get("id"))
+            except Invoice.DoesNotExist:
+                messages.error(self.request, _('Unknown invoice.'))
+                return redirect(self.get_order_url())
+
+            if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
+                messages.error(self.request, _('The invoice is currently being transmitted. You can start a new attempt after '
+                                               'the current one has been completed.'))
+                return redirect(self.get_order_url())
+
+            invoice.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
+            invoice.transmission_date = now()
+            invoice.save(update_fields=["transmission_status", "transmission_date"])
+            self.order.log_action('pretix.event.order.invoice.retransmitted', user=self.request.user, data={
+                'invoice': invoice.pk,
+                'full_invoice_no': invoice.full_invoice_no,
+            })
+        transmit_invoice.apply_async(args=(self.request.event.pk, invoice.pk))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):  # NOQA

@@ -1268,6 +1268,34 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
         for transmission_type in get_transmission_types():
             for k, f in transmission_type.invoice_address_form_fields.items():
+                if (
+                    transmission_type.identifier == "email" and
+                    k in ("transmission_email_other", "transmission_email_address") and
+                    (
+                        event.settings.invoice_generate == "False" or
+                        not event.settings.invoice_email_attachment
+                    )
+                ):
+                    # This looks like a very unclean hack (and probably really is one), but hear me out:
+                    # With pretix 2025.6, we introduced invoice transmission types and added the "send to another email"
+                    # feature for the email provider. This feature was previously part of the bank transfer payment
+                    # provider and opt-in. With this change, this feature becomes available for all pretix shops, which
+                    # we think is a good thing in the long run as it is an useful feature for every business customer.
+                    # However, there's two scenarios where it might be bad that we add it without opt-in:
+                    # - When the organizer has turned off invoice generation in pretix and is collecting invoice information
+                    #   only for other reasons or to later create invoices with a separate software. In this case it
+                    #   would be very bad for the user to be able to ask for the invoice to be sent somewhere else, and
+                    #   that information then be ignored because the organizer has not updated their process.
+                    # - When the organizer has intentionally turned off invoices being attached to emails, because that
+                    #   would somehow be a contradiction.
+                    # Now, the obvious solution would be to make the TransmissionType.invoice_address_form_fields property
+                    # a function that depends on the event as an input. However, I believe this is the wrong approach
+                    # over the long term. As a generalized concept, we DO want invoice address collection to be
+                    # *independent* of event settings, in order to (later) e.g. implement invoice address editing within
+                    # customer accounts. Hence, this hack directly in the form to provide (some) backwards compatibility
+                    # only for the default transmission type "email".
+                    continue
+
                 self.fields[k] = f
                 f._required = f.required
                 f.required = False
