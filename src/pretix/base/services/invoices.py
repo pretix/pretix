@@ -523,12 +523,13 @@ def build_preview_invoice_pdf(event):
 
 def invoice_transmission_separately(order):
     try:
+        info = order.invoice_address.transmission_info or {}
         return (
             order.invoice_address.transmission_type != "email" or
             (
-                order.invoice_address.transmission_info.get("transmission_email_other") and
-                order.invoice_address.transmission_info.get("transmission_email_address") and
-                order.email != order.invoice_address.transmission_info.get("transmission_email_address")
+                info.get("transmission_email_other") and
+                info.get("transmission_email_address") and
+                order.email != info["transmission_email_address"]
             )
         )
     except InvoiceAddress.DoesNotExist:

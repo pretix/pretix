@@ -208,14 +208,20 @@ def test_invoice_address_shredder(event, order):
         'pretix.event.order.modified',
         data={
             "data": [{"attendee_name": "Hans", "question_1": "Test"}],
-            "invoice_data": {"name": "Peter", "country": "DE", "is_business": False, "internal_reference": "",
-                             "state": "",
-                             "company": "ACME", "street": "Sesam Street", "city": "Sample City", "zipcode": "12345"}
+            "invoice_data": {
+                "name": "Peter", "country": "DE", "is_business": False, "internal_reference": "",
+                "state": "", "company": "ACME", "street": "Sesam Street", "city": "Sample City", "zipcode": "12345",
+                "transmission_type": "email", "transmission_info": {"transmission_email_other": "other@example.org"}
+            }
         }
     )
-    ia = InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
-                                       zipcode='12345', city='London', country='UK',
-                                       order=order)
+    ia = InvoiceAddress.objects.create(
+        company='Acme Company', street='221B Baker Street',
+        zipcode='12345', city='London', country='UK',
+        order=order, transmission_type="email", transmission_info={
+            "transmission_email_other": "other@example.org"
+        }
+    )
     s = InvoiceAddressShredder(event)
     f = list(s.generate_files())
     assert json.loads(f[0][2]) == {
@@ -233,7 +239,9 @@ def test_invoice_address_shredder(event, order):
             'street': '221B Baker Street',
             'vat_id': '',
             'vat_id_validated': False,
-            'zipcode': '12345'
+            'zipcode': '12345',
+            "transmission_type": "email",
+            "transmission_info": {"transmission_email_other": "other@example.org"}
         }
     }
     s.shred_data()
@@ -243,7 +251,9 @@ def test_invoice_address_shredder(event, order):
     assert l1.parsed_data == {
         "data": [{"attendee_name": "Hans", "question_1": "Test"}],
         "invoice_data": {"name": "█", "country": "█", "is_business": False, "internal_reference": "", "company": "█",
-                         "street": "█", "city": "█", "zipcode": "█", "state": ""}
+                         "street": "█", "city": "█", "zipcode": "█", "state": "",
+                         "transmission_type": "email",
+                         "transmission_info": {"_shredded": True}}
     }
 
 

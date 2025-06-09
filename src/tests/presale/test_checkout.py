@@ -169,7 +169,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'zipcode': '1234',
             'city': 'Here',
             'country': 'AT',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         assert b'TRACKING SCRIPT' not in payment_r.content
 
@@ -201,7 +202,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -224,7 +226,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': '',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         with scopes_disabled():
@@ -260,7 +263,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
             assert 'alert-danger' in resp.content.decode()
 
@@ -291,7 +295,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'country': 'AU',
                 'state': 'QLD',
                 'vat_id': 'AU123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -324,7 +329,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -355,7 +361,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'city': 'Here',
             'country': 'FR',
             'vat_id': 'AT123456',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         assert 'alert-danger' in resp.content.decode()
 
@@ -388,7 +395,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -422,7 +430,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -459,7 +468,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -476,7 +486,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'DE',
                 'vat_id': 'DE123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -508,7 +519,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'zipcode': '12345',
             'city': 'Here',
             'country': 'DE',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
 
         with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
@@ -522,7 +534,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
@@ -556,7 +569,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'zipcode': '12345',
             'city': 'Here',
             'country': 'DE',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(r.content.decode(), "lxml")
         assert doc.select(".alert-danger")
@@ -575,7 +589,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
         doc = BeautifulSoup(r.content.decode(), "lxml")
         assert not doc.select(".alert-danger")
@@ -605,7 +620,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'zipcode': '12345',
             'city': 'Here',
             'country': 'DE',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -633,7 +649,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -685,7 +702,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -714,7 +732,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'US',
                 'state': 'CA',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         with scopes_disabled():
@@ -767,7 +786,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -831,7 +851,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
-                'email': 'admin@localhost'
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
             }, follow=True)
 
         cr1.refresh_from_db()
@@ -868,7 +889,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         f = SimpleUploadedFile("testfile.txt", b"file_content")
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-question_%s' % (cr1.id, q1.id): f,
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -883,7 +905,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Delete
         self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-question_%s-clear' % (cr1.id, q1.id): 'on',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         with scopes_disabled():
             assert not cr1.answers.exists()
@@ -904,6 +927,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -913,6 +937,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'email': 'admin@localhost',
             'phone_0': '+49',
             'phone_1': '0622199999',  # yeah the 0 is wrong but users don't know that so it should work fine
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -942,7 +967,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_email' % cr1.id: '',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -950,7 +976,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_email' % cr1.id: 'foo@localhost',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -974,7 +1001,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-company' % cr1.id: '',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -982,7 +1010,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-company' % cr1.id: 'foobar',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1022,7 +1051,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             '%s-city' % cr1.id: 'Musterstadt',
             '%s-country' % cr1.id: 'DE',
             '%s-state' % cr1.id: '',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1049,7 +1079,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_name_parts_0' % cr1.id: '',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -1057,7 +1088,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_name_parts_0' % cr1.id: 'Peter',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1082,7 +1114,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
         # Accepted request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1112,7 +1145,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             '%s-attendee_name_parts_1' % cr1.id: '',
             '%s-attendee_name_parts_2' % cr1.id: 'John',
             '%s-attendee_name_parts_3' % cr1.id: 'Doe',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         })
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1143,7 +1177,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Not all fields filled out, expect success
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-attendee_name_parts_0' % cr1.id: '',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1173,7 +1208,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'city': 'Here',
             'country': 'DE',
             'vat_id': 'DE123456',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -1191,7 +1227,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'city': 'Here',
             'country': 'DE',
             'vat_id': 'DE123456',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1233,7 +1270,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'zipcode': '',
             'city': '',
             'country': 'BI',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -1250,7 +1288,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'zipcode': '',
             'city': 'Bujumbura',
             'country': 'BI',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1293,7 +1332,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'city': 'Here',
             'country': 'DE',
             'vat_id': 'DE123456',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -1311,7 +1351,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'city': 'Here',
             'country': 'DE',
             'vat_id': 'DE123456',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1332,7 +1373,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(len(doc.select('input[name="city"]')), 0)
 
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1406,7 +1448,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'is_business': 'business',
             'country': 'DE',
             'city': 'Musterstadt',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -1416,7 +1459,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'is_business': 'business',
             'country': 'DE',
             'vat_id': 'DE123456',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -1437,7 +1481,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -1445,7 +1490,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             'name_parts_0': 'Raphael',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -2603,7 +2649,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Date too far in the future, expected to fail
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-requested_valid_from' % cr1.id: '2024-01-20',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -2611,7 +2658,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-requested_valid_from' % cr1.id: '2023-01-20',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -2649,7 +2697,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-requested_valid_from_0' % cr1.id: '2024-01-20',
             '%s-requested_valid_from_1' % cr1.id: '11:00:00',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -2658,7 +2707,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-requested_valid_from_0' % cr1.id: '2023-01-20',
             '%s-requested_valid_from_1' % cr1.id: '11:00:00',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -2701,7 +2751,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Date too far in the future, expected to fail
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-requested_valid_from' % cr1.id: '2024-01-17',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -2709,7 +2760,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-requested_valid_from' % cr1.id: '2023-01-10',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -2748,7 +2800,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             )
 
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -3882,6 +3935,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             '%s-question_%s_0' % (cr.id, q3.id): '2018-01-01',
             '%s-question_%s_1' % (cr.id, q3.id): '5:23',
             'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), target_status_code=200)
         self.event.settings.set('timezone', 'US/Central')
@@ -3966,7 +4020,8 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             '%s-question_%s' % (cr2.id, q1.id): '',
             '%s-question_%s' % (cr1.id, q2.id): 'Internet',
             '%s-question_%s' % (cr2.id, q2.id): '',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -3977,7 +4032,8 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             '%s-question_%s' % (cr2.id, q1.id): '0',
             '%s-question_%s' % (cr1.id, q2.id): 'Internet',
             '%s-question_%s' % (cr2.id, q2.id): '',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -4000,6 +4056,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             ('%s-question_%s' % (cr1.id, k.id)): v for k, v in data.items() if v != 'False'
         }
         pl['email'] = 'admin@localhost'
+        pl['transmission_type'] = 'email'
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), pl, follow=True)
         if should_fail:
             doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -4919,7 +4976,8 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            'email': 'will-be-ignored'
+            'email': 'will-be-ignored',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -5003,7 +5061,8 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
                              target_status_code=200)
 
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            'email': 'will-be-ignored'
+            'email': 'will-be-ignored',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
@@ -5140,6 +5199,7 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert b'Mark Fisher' not in response.content
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             'email': 'will-be-ignored',
+            'transmission_type': 'email',
             f'{cp.pk}-attendee_name_parts_0': 'will-be-ignored'
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),

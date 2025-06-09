@@ -201,6 +201,7 @@ TEST_INVOICE_RES = {
     "invoice_from_tax_id": "",
     "invoice_from_vat_id": "",
     "invoice_to": "Sample company\nNew Zealand\nVAT-ID: DE123",
+    "invoice_to_is_business": False,
     "invoice_to_company": "Sample company",
     "invoice_to_name": "",
     "invoice_to_street": "",
@@ -210,6 +211,7 @@ TEST_INVOICE_RES = {
     "invoice_to_country": "NZ",
     "invoice_to_vat_id": "DE123",
     "invoice_to_beneficiary": "",
+    "invoice_to_transmission_info": {},
     "custom_field": None,
     "date": "2017-12-10",
     "refers": None,
@@ -260,7 +262,11 @@ TEST_INVOICE_RES = {
             "tax_name": "",
             "tax_rate": "19.00"
         }
-    ]
+    ],
+    "transmission_type": "email",
+    "transmission_provider": None,
+    "transmission_status": "pending",
+    "transmission_date": None
 }
 
 
