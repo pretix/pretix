@@ -85,7 +85,11 @@ class EmailTransmissionProvider(TransmissionProvider):
         return True
 
     def transmit(self, invoice: Invoice):
-        recipient = (invoice.invoice_to_transmission_info or {}).get("transmission_email_address") or invoice.order.email
+        info = (invoice.invoice_to_transmission_info or {})
+        if info.get("transmission_email_other"):
+            recipient = info.get("transmission_email_address") or invoice.order.email
+        else:
+            recipient = invoice.order.email
 
         if not recipient:
             invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
