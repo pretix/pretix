@@ -526,6 +526,7 @@ def invoice_transmission_separately(order):
         return (
             order.invoice_address.transmission_type != "email" or
             (
+                order.invoice_address.transmission_info.get("transmission_email_other") and
                 order.invoice_address.transmission_info.get("transmission_email_address") and
                 order.email != order.invoice_address.transmission_info.get("transmission_email_address")
             )
