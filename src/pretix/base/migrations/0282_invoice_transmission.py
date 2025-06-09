@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0279_discount_event_date_from_discount_event_date_until"),
+        ("pretixbase", "0281_event_is_remote"),
     ]
 
     operations = [
@@ -62,5 +62,11 @@ class Migration(migrations.Migration):
             model_name="invoiceaddress",
             name="transmission_type",
             field=models.CharField(default="email", max_length=255),
+        ),
+        migrations.RunSQL(
+            "UPDATE pretixbase_eventsettingsstore SET key = 'mail_text_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_text'"
+        ),
+        migrations.RunSQL(
+            "UPDATE pretixbase_eventsettingsstore SET key = 'mail_subject_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_subject'"
         ),
     ]
