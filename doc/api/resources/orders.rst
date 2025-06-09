@@ -73,8 +73,8 @@ invoice_address                       object                     Invoice address
                                                                  happens in rare cases.
 ├ transmission_type                   string                     Transmission channel for invoice (see also :ref:`rest-transmission-types`).
                                                                  Defaults to ``email``.
-└ transmission_info                   object                     Transmission-channel specific information. See also
-                                                                 :ref:`rest-transmission-types`.
+└ transmission_info                   object                     Transmission-channel specific information (or ``null``).
+                                                                 See also :ref:`rest-transmission-types`.
 positions                             list of objects            List of order positions (see below). By default, only
                                                                  non-canceled positions are included.
 fees                                  list of objects            List of fees included in the order total. By default, only
