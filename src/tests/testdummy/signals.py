@@ -22,7 +22,9 @@
 from django.dispatch import receiver
 
 from pretix.base.channels import SalesChannelType
-from pretix.base.invoicing.transmission import transmission_providers, TransmissionProvider
+from pretix.base.invoicing.transmission import (
+    TransmissionProvider, transmission_providers,
+)
 from pretix.base.models import Invoice
 from pretix.base.signals import (
     register_payment_providers, register_sales_channel_types,
