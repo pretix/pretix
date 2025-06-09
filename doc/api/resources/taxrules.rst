@@ -40,10 +40,6 @@ custom_rules                          object                     Dynamic rules s
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 4.6
-
-    The ``internal_name`` and ``keep_gross_if_rate_changes`` attributes have been added.
-
 .. versionchanged:: 2023.6
 
     The ``custom_rules`` attribute has been added.

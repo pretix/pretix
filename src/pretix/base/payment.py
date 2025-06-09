@@ -689,11 +689,6 @@ class BasePaymentProvider:
         the ``_restrict_countries`` and ``_restrict_to_sales_channels`` setting.
 
         :param total: The total value without the payment method fee, after taxes.
-
-        .. versionchanged:: 1.17.0
-
-           The ``total`` parameter has been added. For backwards compatibility, this method is called again
-           without this parameter if it raises a ``TypeError`` on first try.
         """
         timing = self._is_available_by_time(cart_id=get_or_create_cart_id(request))
         pricing = True

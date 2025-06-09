@@ -40,10 +40,6 @@ ignore_in_statistics                  boolean                    If ``true``, ch
 consider_tickets_used                 boolean                    If ``true`` (default), tickets checked in on this list will be considered "used" by other functionality, i.e. when checking if they can still be canceled.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 4.12
-
-    The ``addon_match`` attribute has been added.
-
 .. versionchanged:: 2023.9
 
     The ``ignore_in_statistics`` and ``consider_tickets_used`` attributes have been added.

@@ -25,10 +25,6 @@ public_url                            string                     The public, cus
 Endpoints
 ---------
 
-.. versionchanged:: 4.17
-
-    The ``public_url`` field has been added.
-
 .. http:get:: /api/v1/organizers/
 
    Returns a list of all organizers the authenticated user/token has access to.
