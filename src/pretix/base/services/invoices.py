@@ -590,7 +590,7 @@ def retry_stuck_invoices(sender, **kwargs):
             invoice.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
             invoice.transmission_date = now()
             invoice.save(update_fields=["transmission_status", "transmission_date"])
-            transmit_invoice.apply_async(args=(invoice.event_id, invoice.pk))
+            transmit_invoice.apply_async(args=(invoice.event_id, invoice.pk, True))
 
 
 @receiver(signal=periodic_task)
@@ -607,16 +607,20 @@ def send_pending_invoices(sender, **kwargs):
         )
         batch_size = 5000
         for invoice in qs[:batch_size]:
-            transmit_invoice.apply_async(args=(invoice.event_id, invoice.pk))
+            transmit_invoice.apply_async(args=(invoice.event_id, invoice.pk, False))
 
 
 @app.task(base=TransactionAwareProfiledEventTask)
-def transmit_invoice(sender, invoice_id, **kwargs):
+def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
     with transaction.atomic(durable=True):
         invoice = Invoice.objects.select_for_update(of=OF_SELF).get(pk=invoice_id)
 
         if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
             logger.info(f"Did not transmit invoice {invoice.pk} due to being in inflight state.")
+            return
+
+        if invoice.transmission_status != Invoice.TRANSMISSION_STATUS_PENDING and not allow_retransmission:
+            logger.info(f"Did not transmit invoice {invoice.pk} due to status being {invoice.transmission_status}.")
             return
 
         invoice.transmission_status = Invoice.TRANSMISSION_STATUS_INFLIGHT

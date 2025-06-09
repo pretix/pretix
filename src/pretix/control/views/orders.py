@@ -1729,7 +1729,7 @@ class OrderInvoiceRetransmit(OrderView):
                 'invoice': invoice.pk,
                 'full_invoice_no': invoice.full_invoice_no,
             })
-        transmit_invoice.apply_async(args=(self.request.event.pk, invoice.pk))
+        transmit_invoice.apply_async(args=(self.request.event.pk, invoice.pk, True))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):  # NOQA
