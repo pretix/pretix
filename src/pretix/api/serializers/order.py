@@ -1781,7 +1781,8 @@ class InvoiceSerializer(I18nAwareModelSerializer):
                   'custom_field', 'date', 'refers', 'locale',
                   'introductory_text', 'additional_text', 'payment_provider_text', 'payment_provider_stamp',
                   'footer_text', 'lines', 'foreign_currency_display', 'foreign_currency_rate',
-                  'foreign_currency_rate_date', 'internal_reference')
+                  'foreign_currency_rate_date', 'internal_reference', 'transmission_type', 'transmission_provider',
+                  'transmission_status', 'transmission_date')
 
 
 class OrderPaymentCreateSerializer(I18nAwareModelSerializer):
