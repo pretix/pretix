@@ -308,7 +308,10 @@ class WrappedPhonePrefixSelect(Select):
                     self.initial = "+%d" % prefix
                     break
         choices += get_phone_prefixes_sorted_and_localized()
-        super().__init__(choices=choices, attrs={'aria-label': pgettext_lazy('phonenumber', 'International area code')})
+        super().__init__(choices=choices, attrs={
+            'aria-label': pgettext_lazy('phonenumber', 'International area code'),
+            'autocomplete': 'tel-country-code',
+        })
 
     def render(self, name, value, *args, **kwargs):
         return super().render(name, value or self.initial, *args, **kwargs)
@@ -331,11 +334,11 @@ class WrappedPhonePrefixSelect(Select):
 class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 
     def __init__(self, attrs=None, initial=None):
-        attrs = {
-            'aria-label': pgettext_lazy('phonenumber', 'Phone number (without international area code)')
-        }
-        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput(attrs=attrs))
-        super(PhoneNumberPrefixWidget, self).__init__(widgets, attrs)
+        widgets = (WrappedPhonePrefixSelect(initial), forms.TextInput(attrs={
+            'aria-label': pgettext_lazy('phonenumber', 'Phone number (without international area code)'),
+            'autocomplete': 'tel-national',
+        }))
+        super(PhoneNumberPrefixWidget, self).__init__(widgets)
 
     def render(self, name, value, attrs=None, renderer=None):
         output = super().render(name, value, attrs, renderer)
@@ -992,6 +995,13 @@ class BaseQuestionsForm(forms.Form):
                 value.initial = data.get('question_form_data', {}).get(key)
 
         for k, v in self.fields.items():
+            if isinstance(v.widget, forms.MultiWidget):
+                for w in v.widget.widgets:
+                    autocomplete = w.attrs.get('autocomplete', '')
+                    if autocomplete.strip() == "off":
+                        w.attrs['autocomplete'] = 'off'
+                    else:
+                        w.attrs['autocomplete'] = 'section-{} '.format(self.prefix) + autocomplete
             if v.widget.attrs.get('autocomplete') or k == 'attendee_name_parts':
                 autocomplete = v.widget.attrs.get('autocomplete', '')
                 if autocomplete.strip() == "off":
