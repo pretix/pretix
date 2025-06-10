@@ -903,6 +903,14 @@ Vue.component('pretix-overlay', {
                 }
             }
         },
+        '$root.frame_shown': function (newValue) {
+            if (newValue) {
+                var btn = this.$el?.querySelector('.pretix-widget-frame-close button');
+                this.$nextTick(function() {
+                    btn.focus();
+                });
+            }
+        },
     },
     computed: {
         frameClasses: function () {
