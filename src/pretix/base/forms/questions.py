@@ -995,6 +995,13 @@ class BaseQuestionsForm(forms.Form):
                 value.initial = data.get('question_form_data', {}).get(key)
 
         for k, v in self.fields.items():
+            if isinstance(v.widget, forms.MultiWidget):
+                for w in v.widget.widgets:
+                    autocomplete = w.attrs.get('autocomplete', '')
+                    if autocomplete.strip() == "off":
+                        w.attrs['autocomplete'] = 'off'
+                    else:
+                        w.attrs['autocomplete'] = 'section-{} '.format(self.prefix) + autocomplete
             if v.widget.attrs.get('autocomplete') or k == 'attendee_name_parts':
                 autocomplete = v.widget.attrs.get('autocomplete', '')
                 if autocomplete.strip() == "off":
