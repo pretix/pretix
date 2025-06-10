@@ -82,6 +82,7 @@ Endpoints
                            Default: ``position``
    :query integer subevent: Only return quotas of the sub-event with the given ID.
    :query integer subevent__in: Only return quotas of sub-events with one the given IDs (comma-separated).
+   :query integer items__in: Only return quotas that include a product with one the given IDs (comma-separated).
    :query string with_availability: Set to ``true`` to get availability information. Can lead to increased answer times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
