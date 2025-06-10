@@ -2193,7 +2193,7 @@ var create_overlay = function (app) {
                         dialog.showModal();
                     }
                 } else {
-                    if (!this.frame_src) {// finished loading, but no iframe to display => close
+                    if (!this.frame_src && dialog.open) {// finished loading, but no iframe to display => close
                         dialog.close();
                     }
                 }
