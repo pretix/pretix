@@ -1571,14 +1571,14 @@ Vue.component('pretix-widget-event-calendar', {
         + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth">&laquo; '
         + strings['previous_month']
         + '</a> '
-        + '<strong>{{ monthname }}</strong> '
+        + '<strong :id="aria_labelledby">{{ monthname }}</strong> '
         + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth">'
         + strings['next_month']
         + ' &raquo;</a>'
         + '</div>'
 
         // Calendar
-        + '<table class="pretix-widget-event-calendar-table" :id="id" tabindex="0" v-bind:aria-label="monthname">'
+        + '<table class="pretix-widget-event-calendar-table" :id="id" tabindex="0" v-bind:aria-labelledby="aria_labelledby">'
         + '<thead>'
         + '<tr>'
         + '<th aria-label="' + strings['days']['MONDAY'] + '">' + strings['days']['MO'] + '</th>'
@@ -1604,6 +1604,9 @@ Vue.component('pretix-widget-event-calendar', {
         },
         id: function () {
             return this.$root.html_id + "-event-calendar-table";
+        },
+        aria_labelledby: function () {
+            return this.$root.html_id + "-event-calendar-table-label";
         },
     },
     methods: {
