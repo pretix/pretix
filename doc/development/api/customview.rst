@@ -178,13 +178,6 @@ You can then implement a view as you would normally do. It will be automatically
 * Your plugin is enabled
 * The locale is set correctly
 
-.. versionchanged:: 1.7
-
-   The ``event_url()`` wrapper has been added in 1.7 to replace the former ``@event_view`` decorator. The
-   ``event_url()`` wrapper is optional and using ``url()`` still works, but you will not be able to set the
-   ``require_live`` setting any more via the decorator. The ``@event_view`` decorator is now deprecated and
-   does nothing.
-
 REST API viewsets
 -----------------
 

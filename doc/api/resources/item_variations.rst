@@ -64,10 +64,6 @@ hide_without_voucher                  boolean                    If ``true``, th
 meta_data                             object                     Values set for event-specific meta data parameters.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 4.16
-
-   The ``meta_data`` and ``checkin_attention`` attributes have been added.
-
 .. versionchanged:: 2023.10
 
    The ``free_price_suggestion`` attribute has been added.
