@@ -377,9 +377,20 @@ class TaxRule(LoggedModel):
                     'if configured above.'),
     )
     custom_rules = models.TextField(blank=True, null=True)
+    default = models.BooleanField(
+        verbose_name=_('Default'),
+        default=False,
+    )
 
     class Meta:
         ordering = ('event', 'rate', 'id')
+        constraints = [
+            models.UniqueConstraint(
+                fields=["event"],
+                condition=models.Q(default=True),
+                name="one_default_per_event",
+            ),
+        ]
 
     class SaleNotAllowed(Exception):
         pass
@@ -394,7 +405,7 @@ class TaxRule(LoggedModel):
             and not OrderFee.objects.filter(tax_rule=self, order__event=self.event).exists()
             and not OrderPosition.all.filter(tax_rule=self, order__event=self.event).exists()
             and not self.event.items.filter(tax_rule=self).exists()
-            and self.event.settings.tax_rate_default != self
+            and not self.default
         )
 
     @classmethod
