@@ -2182,10 +2182,21 @@ var create_overlay = function (app) {
                 // show loading spinner only when previously no frame_src was set
                 if (newValue && !oldValue) {
                     this.frame_loading = true;
-                    this.$el?.querySelector('dialog.pretix-widget-frame-holder').showModal();
                 }
                 // to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
                 this.$el.querySelector("iframe").src = newValue || "about:blank";
+            },
+            frame_loading: function (newValue) {
+                var dialog = this.$el?.querySelector('dialog.pretix-widget-frame-holder');
+                if (newValue) {
+                    if (!dialog.open) {
+                        dialog.showModal();
+                    }
+                } else {
+                    if (!this.frame_src && dialog.open) {// finished loading, but no iframe to display => close
+                        dialog.close();
+                    }
+                }
             },
         }
     });
