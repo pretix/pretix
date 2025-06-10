@@ -962,6 +962,42 @@ def test_order_create_fee_as_percentage(token_client, organizer, event, item, qu
 
 
 @pytest.mark.django_db
+def test_order_create_fee_as_percentage_with_zero(token_client, organizer, event, item, quota, question):
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=Decimal("0.00"))
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['_treat_value_as_percentage'] = True
+    res['fees'][0]['_split_taxes_like_products'] = True
+    res['fees'][0]['value'] = '10.00'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['voucher'] = voucher.code
+    del res['positions'][0]['price']
+
+    res['simulate'] = True
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data["total"] == "0.00"
+
+    res['simulate'] = False
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fee = o.fees.first()
+        assert fee.value == Decimal('0.00')
+        assert o.total == Decimal('0.00')
+
+
+@pytest.mark.django_db
 def test_order_create_fee_with_auto_tax(token_client, organizer, event, item, quota, question, taxrule):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['fees'][0]['_split_taxes_like_products'] = True
