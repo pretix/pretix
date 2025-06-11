@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-06-11 02:00+0000\n"
+"PO-Revision-Date: 2025-06-11 06:58+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -17890,19 +17890,19 @@ msgstr "추가 정보가 필요합니다"
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
 "The following questions must be answered before check-in can be completed:"
-msgstr ""
+msgstr "체크인을 완료하기 전에 다음 질문에 답변해야 합니다:"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:92
 msgid "Special attention required"
-msgstr ""
+msgstr "특별한 주의가 필요합니다"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
-msgstr ""
+msgstr "이벤트에 가기"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "다가오는 이벤트"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:20
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -17912,34 +17912,34 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:13
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:57
 msgid "Create a new event"
-msgstr ""
+msgstr "새 이벤트 만들기"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:39
 msgid "View all upcoming events"
-msgstr ""
+msgstr "다가오는 모든 이벤트 보기"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
-msgstr ""
+msgstr "당신의 가장 최근 사건들"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:60
 msgid "View all recent events"
-msgstr ""
+msgstr "모든 최근 이벤트 보기"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:65
 msgid "Your event series"
-msgstr ""
+msgstr "당신의 이벤트 시리즈"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:81
 msgid "View all event series"
-msgstr ""
+msgstr "모든 이벤트 시리즈 보기"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:86
 msgid "Other features"
-msgstr ""
+msgstr "기타 기능"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt:1
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -17956,6 +17956,22 @@ msgid ""
 "\n"
 "Your %(instance)s team\n"
 msgstr ""
+"안녕하세요.\n"
+"\n"
+"누군가 %(주소)를 %(instance)의 발신자 주소로 사용해 달라고 요청했습니다.\n"
+"\n"
+"이렇게 하면 이 이메일 주소에서 발신된 것으로 표시된 이메일을 보낼 수 "
+"있습니다.\n"
+"\n"
+"만약 당신이라면, 다음 확인 코드를 입력해 주세요:\n"
+"\n"
+"%(코드)\n"
+"\n"
+"이것이 당신의 요청이 아니라면, 이 이메일을 무시해도 괜찮습니다.\n"
+"\n"
+"감사해요.\n"
+"\n"
+"%(인스턴스) 팀\n"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
 #, python-format
@@ -17970,9 +17986,19 @@ msgid ""
 "Best regards,  \n"
 "Your pretix team\n"
 msgstr ""
+"안녕하세요.\n"
+"\n"
+"새 비밀번호를 요청하셨습니다. 다음 페이지로 이동하여 비밀번호를 재설정하세요:"
+"\n"
+"\n"
+"%(url)s\n"
+"\n"
+"감사해요.\n"
+"\n"
+"프리픽스 팀\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -17991,9 +18017,28 @@ msgid ""
 "\n"
 "Your pretix team\n"
 msgstr ""
+"안녕하세요.\n"
+"\n"
+"이벤트를 수행할 플랫폼인 프리틱스의 팀에 초대되었습니다\n"
+"\n"
+"티켓 판매.\n"
+"\n"
+"주최자: %(주최자)\n"
+"\n"
+"팀: %(팀)\n"
+"\n"
+"해당 팀에 합류하려면 다음 링크를 클릭하세요:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"가입을 원하지 않으시면 이 이메일을 무시하거나 삭제하셔도 됩니다.\n"
+"\n"
+"감사해요.\n"
+"\n"
+"프리픽스 팀\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt:1
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -18011,6 +18056,21 @@ msgid ""
 "Best regards,  \n"
 "Your %(instance)s team\n"
 msgstr ""
+"안녕하세요.\n"
+"\n"
+"비정상적이거나 새로운 위치에서 %(인스턴스) 계정에 로그인한 것이 "
+"감지되었습니다. 로그인은 %(국가)의 %(os)에서 %(에이전트)를 사용하여 "
+"수행되었습니다.\n"
+"\n"
+"만약 이 이메일이 당신이라면, 이 이메일을 무시해도 됩니다.\n"
+"\n"
+"본인이 아닌 경우 계정 설정에서 비밀번호를 변경하는 것이 좋습니다:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"감사해요.\n"
+"\n"
+"%(인스턴스) 팀\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
 #, python-format
@@ -18032,37 +18092,55 @@ msgid ""
 "Best regards,  \n"
 "Your pretix team\n"
 msgstr ""
+"안녕하세요.\n"
+"\n"
+"귀하의 프리픽스 계정의 계정 정보가 다음과 같음을 알려드립니다\n"
+"\n"
+"변경되었습니다. 특히 다음과 같은 변경 사항이 수행되었습니다:\n"
+"\n"
+"%(messages)s\n"
+"\n"
+"이 변경 사항이 수행되지 않은 경우 즉시 저희에게 연락해 주시기 바랍니다.\n"
+"\n"
+"여기에서 계정 설정을 검토하고 변경할 수 있습니다:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"감사해요.\n"
+"\n"
+"프리픽스 팀\n"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:8
 msgid "Email sending"
-msgstr ""
+msgstr "이메일 전송"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:21
 msgid "Use system default"
-msgstr ""
+msgstr "시스템 기본값 사용"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:29
 msgid ""
 "Emails will be sent through the system's default server. They will show the "
 "following sender information:"
-msgstr ""
+msgstr "이메일은 시스템의 기본 서버를 통해 전송됩니다. 이메일에는 다음 발신자 정보가 "
+"표시됩니다:"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:35
 msgctxt "mail_header"
 msgid "From"
-msgstr ""
+msgstr "부터"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:40
 msgctxt "mail_header"
 msgid "Reply-To"
-msgstr ""
+msgstr "답장"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:56
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:18
 msgid "Use system email server with a custom sender address"
-msgstr ""
+msgstr "사용자 지정 발신자 주소로 시스템 이메일 서버 사용"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:64
 msgid ""
@@ -18071,72 +18149,80 @@ msgid ""
 "directly from you, but it also might require some extra steps to ensure good "
 "deliverability."
 msgstr ""
+"이메일은 시스템의 기본 서버를 통해 보내지며, 자신의 발신자 주소와 함께 "
+"전송됩니다. 이렇게 하면 이메일이 더 개인화된 것처럼 보일 뿐만 아니라, 좋은 "
+"전달력을 보장하기 위해 몇 가지 추가 단계가 필요할 수도 있습니다."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:84
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:18
 msgid "Use a custom SMTP server"
-msgstr ""
+msgstr "따로 지정한 SMTP 서버(이메일 보내는 표준 프로토콜)를 사용한다"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:92
 msgid ""
 "For full customization, you can configure your own SMTP server that will be "
 "used for email sending."
-msgstr ""
+msgstr "전체 사용자 지정을 위해 이메일 전송에 사용할 SMTP 서버를 직접 구성할 수 "
+"있습니다."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:110
 msgid "Reset to organizer settings"
-msgstr ""
+msgstr "정리함 설정으로 재설정"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr ""
+msgstr "다음은 귀하의 도메인에서 확인한 SPF 레코드(이메일 도용방지를 위한 DNS "
+"레코드)입니다:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
-msgstr ""
+msgstr "이 문제를 해결하려면 마지막 단어 앞에 다음 부분을 포함하세요:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr ""
+msgstr "새 SPF 레코드는 다음과 같이 표시될 수 있습니다:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
 "Please keep in mind that updates to DNS might require multiple hours to take "
 "effect."
-msgstr ""
+msgstr "DNS 업데이트가 적용되기까지 몇 시간이 걸릴 수 있다는 점을 유의하세요"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:48
 msgid "We found an SPF record on your domain that includes this system. Great!"
-msgstr ""
+msgstr "귀하의 도메인에서 이 시스템이 포함된 SPF 레코드를 발견했습니다. 좋아요!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:54
 msgid "Verification"
-msgstr ""
+msgstr "검증"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:56
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "We've sent an email to %(recp)s with a confirmation code to verify that this "
 "email address is owned by you. Please enter the verification code below:"
 msgstr ""
+"이 이메일 주소가 귀하의 소유인지 확인하기 위해 %(recp)에게 확인 코드와 함께 "
+"이메일을 보냈습니다. 아래에 확인 코드를 입력해 주세요:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:63
 msgid "Verification code"
-msgstr ""
+msgstr "검증 코드"
 
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:23
 msgid ""
 "A test connection to your SMTP server was successful. You can now save your "
 "new settings to put them in use."
-msgstr ""
+msgstr "SMTP 서버에 대한 테스트 연결이 성공했습니다. 이제 새 설정을 저장하여 사용할 "
+"수 있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:5
 msgid "Cancellation settings"
-msgstr ""
+msgstr "취소 설정"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:11
 msgid "Unpaid or free orders"
-msgstr ""
+msgstr "미지급 또는 무료 주문"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:39
 msgid ""
@@ -18145,15 +18231,18 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
+"사용자가 유료 주문을 취소하고 선택한 결제 방법으로 인해 자동으로 환불되지 "
+"않는 경우 수동 조치를 취해야 합니다. 그러나 현재 이 이벤트에 대한 알림은 "
+"꺼져 있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:45
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
 msgid "Change notification settings"
-msgstr ""
+msgstr "알림 설정 변경"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:51
 msgid "Order changes"
-msgstr ""
+msgstr "주문변경"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:54
 msgid ""
@@ -18161,95 +18250,108 @@ msgid ""
 "the many different options pretix provides. Therefore, this feature "
 "currently has the following limitations:"
 msgstr ""
+"고객이 직접 주문을 변경할 수 있도록 허용하는 것은 프리틱스가 제공하는 다양한 "
+"옵션으로 인해 복잡한 프로세스입니다. 따라서 현재 이 기능에는 다음과 같은 "
+"제한 사항이 있습니다:"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:60
 msgid ""
 "It is possible to switch to a different variation of the same product, but "
 "not to an entirely different product (except for add-on products)."
-msgstr ""
+msgstr "동일한 제품의 다른 변형으로 전환할 수 있지만, 완전히 다른 제품으로 전환할 "
+"수는 없습니다(추가 기능 제품 제외)."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:61
 msgid ""
 "Changing the seat or the event date in an event series will become available "
 "in the future, but is not possible now."
-msgstr ""
+msgstr "이벤트 시리즈에서 좌석이나 행사 날짜를 변경하는 것은 앞으로 가능해지겠지만, "
+"지금은 불가능합니다."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:62
 msgid ""
 "If a change leads to a price change, there will not be a change to fees such "
 "as payment, service, or shipping fees, even though an additional payment "
 "might be required."
-msgstr ""
+msgstr "가격 변동이 발생하면 추가 결제가 필요하더라도 결제, 서비스 또는 배송비와 "
+"같은 수수료는 변경되지 않습니다."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:63
 msgid ""
 "If an add-on product is newly added, the system currently does not validate "
 "if there are required questions or fields that need to be filled out."
-msgstr ""
+msgstr "묶음 제품이 새로 추가된 경우, 시스템은 현재 필수 질문이나 작성해야 할 필드가 "
+"있는지 확인하지 않습니다."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:64
 msgid ""
 "Customers currently cannot switch to a product variation or add an add-on "
 "product that requires them to use a voucher or membership."
-msgstr ""
+msgstr "고객은 현재 상품 변형으로 전환하거나 바우처 또는 멤버십을 사용해야 하는 추가 "
+"상품을 추가할 수 없습니다."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:65
 msgid ""
 "Additional constraints and validation steps added by plugins are not "
 "enforced."
-msgstr ""
+msgstr "플러그인에 의해 추가된 추가 제약 및 검증 단계는 적용되지 않습니다."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:76
 msgid ""
 "If the change leads to a price reduction and automatic refunds are enabled "
 "for self-service cancellations, the system will try to refund the money "
 "automatically."
-msgstr ""
+msgstr "변경으로 인해 가격이 인하되고 셀프 서비스 취소 시 자동 환불이 활성화되면 "
+"시스템이 자동으로 환불을 시도합니다."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:80
 msgid ""
 "Refunds can be issued as a gift card if the respective option is set, but "
 "there is no customer choice between gift card and direct refund."
 msgstr ""
+"환불은 각각의 옵션이 설정된 경우 기프트 카드로 발급될 수 있지만, 기프트 "
+"카드와 직접 환불 사이에는 고객 선택의 여지가 없습니다."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
 #: pretix/control/templates/pretixcontrol/event/settings.html:479
 msgid "Cancel or delete event"
-msgstr ""
+msgstr "이벤트 취소 또는 삭제"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
 #: pretix/control/templates/pretixcontrol/event/delete.html:60
 #: pretix/control/templates/pretixcontrol/event/live.html:31
 msgid "Go offline"
-msgstr ""
+msgstr "오프라인으로 가기"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:13
 msgid ""
 "You can take your event offline. Nobody except your team will be able to see "
 "or access it any more."
-msgstr ""
+msgstr "이벤트를 오프라인으로 전환할 수 있습니다. 팀원을 제외한 누구도 더 이상 "
+"이벤트를 보거나 액세스할 수 없습니다."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:34
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
 msgid "Cancel event"
-msgstr ""
+msgstr "이벤트 취소"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
 msgid ""
 "If you need to call off your event you want to cancel and refund all "
 "tickets, you can do so through this option."
-msgstr ""
+msgstr "이벤트를 취소하고 모든 티켓을 취소하고 환불해야 하는 경우 이 옵션을 통해 "
+"취소할 수 있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:55
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:68
 #: pretix/control/templates/pretixcontrol/event/delete.html:56
 #: pretix/control/templates/pretixcontrol/event/delete.html:70
 msgid "Delete personal data"
-msgstr ""
+msgstr "개인 데이터 삭제"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 msgid ""
@@ -18257,65 +18359,74 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
+"이벤트에서 이름과 이메일 주소와 같은 개인 데이터는 삭제할 수 있으며, 판매된 "
+"티켓의 수와 종류와 같은 재정 정보만 유지할 수 있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
 #: pretix/control/templates/pretixcontrol/event/delete.html:5
 msgid "Delete event"
-msgstr ""
+msgstr "이벤트 삭제"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:80
 msgid ""
 "You can delete your event completely only as long as it does not contain any "
 "undeletable data, such as orders not performed in test mode."
-msgstr ""
+msgstr "테스트 모드에서 수행되지 않은 주문과 같이 삭제할 수 없는 데이터가 포함되지 "
+"않은 경우에만 이벤트를 완전히 삭제할 수 있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:9
 msgid ""
 "This operation will destroy your event including all configuration, "
 "products, quotas, questions, vouchers, lists, etc."
-msgstr ""
+msgstr "이 작업은 모든 구성, 제품, 할당량, 질문, 바우처, 목록 등을 포함한 이벤트를 "
+"파괴할 것입니다."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:15
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:15
 msgid ""
 "This operation is irreversible and there is no way to bring your data back."
-msgstr ""
+msgstr "이 작업은 되돌릴 수 없으며 데이터를 되돌릴 방법이 없습니다."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:22
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
-msgstr ""
+msgstr "이것을 정말로 원하시는지 확인하려면, 여기에 이벤트의 짧은 이름(\"%(slug))을 "
+"입력해 주세요:"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
 msgid "Your event can not be deleted as it already contains orders."
-msgstr ""
+msgstr "귀하의 이벤트는 이미 주문이 포함되어 있으므로 삭제할 수 없습니다."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:39
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:39
 msgid ""
 "pretix does not allow deleting orders once they have been placed in order to "
 "be audit-proof and trustable by financial authorities."
-msgstr ""
+msgstr "Pretix는 금융 당국의 감사를 받고 신뢰할 수 있도록 주문이 접수된 후에는 "
+"삭제할 수 없습니다."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:46
 msgid ""
 "You can instead take your shop offline. This will hide it from everyone "
 "except from the organizer teams you configured to have access to the event."
 msgstr ""
+"대신 오프라인으로 상점을 이동할 수 있습니다. 이렇게 하면 이벤트에 "
+"액세스하도록 구성한 주최자 팀을 제외한 모든 사람에게 상점을 숨길 수 있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:66
 msgid ""
 "However, since your shop is offline, it is only visible to the organizing "
 "team according to the permissions you configured."
-msgstr ""
+msgstr "그러나 귀하의 상점이 오프라인 상태이므로 구성된 권한에 따라 조직 팀에게만 "
+"표시됩니다."
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:14
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:42
 msgid "Geo coordinates"
-msgstr ""
+msgstr "지리 좌표"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:15
 #: pretix/control/templates/pretixcontrol/event/settings.html:139
@@ -18326,191 +18437,205 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:271
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
 msgid "Optional"
-msgstr ""
+msgstr "선택적"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:22
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:57
 msgid "Geocoding data © OpenStreetMap"
-msgstr ""
+msgstr "이 위치 정보(지오코딩 데이터)는 OpenStreetMap에서 제공한 것입니다"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:4
 msgid "Failed to retrieve geo coordinates"
-msgstr ""
+msgstr "지리 좌표(위도/경도) 정보를 가져오지 못했습니다"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
 msgid "Retrieving geo coordinates …"
-msgstr ""
+msgstr "지오 좌표를 검색하는 중"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:6
 msgid "Geo coordinates updated"
-msgstr ""
+msgstr "지오 좌표 업데이트"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
 msgid "Update map?"
-msgstr ""
+msgstr "지도 업데이트?"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:5
-#, python-format
+#, fuzzy, python-format
 msgid "by <em>%(a)s</em>"
-msgstr ""
+msgstr "문자열 안에 값을 동적으로 삽입할 때 사용하는 문법"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:14
 msgid ""
 "This plugin needs to be enabled by a system administrator for your account."
-msgstr ""
+msgstr "이 플러그인은 시스템 관리자가 계정을 활성화해야 합니다."
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:19
 msgid "This plugin cannot be enabled for the following reasons:"
-msgstr ""
+msgstr "이 플러그인은 다음과 같은 이유로 활성화할 수 없습니다:"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:29
 msgid "This plugin reports the following problems:"
-msgstr ""
+msgstr "이 플러그인은 다음과 같은 문제를 보고합니다:"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:6
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:12
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:18
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:24
-#, python-format
+#, fuzzy, python-format
 msgid "Download QR code as %(filetype)s image"
-msgstr ""
+msgstr "QR 코드를 %(파일 형식)s 이미지로 다운로드합니다"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
-msgstr ""
+msgstr "타임라인"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:20
 msgid "Shop URL:"
-msgstr ""
+msgstr "온라인 쇼핑몰이나 상점의 웹사이트 주소"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:27
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:57
 msgid "Create QR code"
-msgstr ""
+msgstr "큐알코드를 생성합니다"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:36
+#, fuzzy
 msgid ""
 "This event contains <strong>overpaid orders</strong>, for example due to "
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
+"이 이벤트에는 중복 결제 시도로 인해 초과 결제된 주문이 포함되어 있습니다. "
+"사례를 검토하고 초과 결제된 금액을 사용자에게 환불하는 것을 고려해야 합니다."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:41
 msgid "Show overpaid orders"
-msgstr ""
+msgstr "초과 지불된 주문 표시입니다"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:46
+#, fuzzy
 msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
-msgstr ""
+msgstr "이 이벤트에는 귀하가 처리해야 할 <강한> 환불이 포함되어 있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:50
 msgid "Show pending refunds"
-msgstr ""
+msgstr "보류 중인 환불 표시입니다"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:55
+#, fuzzy
 msgid ""
 "This event contains <strong>requested cancellations</strong> that you should "
 "take care of."
-msgstr ""
+msgstr "이 이벤트에는 요청하신 취소가 포함되어 있으며, 이를 처리해야 합니다."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:59
 msgid "Show orders requesting cancellation"
-msgstr ""
+msgstr "취소를 요청하는 주문 표시합니다"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:64
+#, fuzzy
 msgid ""
 "This event contains <strong>pending approvals</strong> that you should take "
 "care of."
-msgstr ""
+msgstr "이 이벤트에는 여러분이 처리해야 할 <강한> 승인이 보류 중입니다."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:68
 msgid "Show orders pending approval"
-msgstr ""
+msgstr "승인 대기 중인 주문 표시입니다"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:73
+#, fuzzy
 msgid ""
 "This event contains <strong>fully paid orders</strong> that are not marked "
 "as paid, probably because no quota was left at the time their payment "
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
+"이 이벤트에는 결제가 완료된 상태로 표시되지 않은 <강력> 완납 주문</강력>이 "
+"포함되어 있습니다. 아마도 결제가 완료될 당시 할당량이 남아 있지 않았기 "
+"때문일 것입니다. 사례를 검토하고 고객에게 환불하거나 더 많은 공간을 제공하는 "
+"것을 고려해야 합니다."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:79
 msgid "Show affected orders"
-msgstr ""
+msgstr "영향을 받은 주문 표시입니다"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:142
 #: pretix/control/templates/pretixcontrol/order/index.html:1004
 msgid "Update comment"
-msgstr ""
+msgstr "댓글 업데이트"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:152
 #: pretix/control/templates/pretixcontrol/event/logs.html:4
 #: pretix/control/templates/pretixcontrol/event/logs.html:6
 msgid "Event logs"
-msgstr ""
+msgstr "이벤트 로그"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:162
 msgid "Show more logs"
-msgstr ""
+msgstr "더 많은 로그 보기입니다"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:5
 msgid "Invoice settings"
-msgstr ""
+msgstr "송장 설정"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:11
 msgid "Invoice generation"
-msgstr ""
+msgstr "송장 생성"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:26
 msgid "Address form"
-msgstr ""
+msgstr "주소 형식"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:39
 msgid "Issuer details"
-msgstr ""
+msgstr "발행자 세부정보"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:49
 msgid "Invoice customization"
-msgstr ""
+msgstr "송장 맞춤 설정"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:65
 msgid "Save and show preview"
-msgstr ""
+msgstr "미리보기 저장 및 표시"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:5
 msgid "Shop status"
-msgstr ""
+msgstr "상점 상태"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:8
 msgid "Shop visibility"
-msgstr ""
+msgstr "상점 가시성"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:13
 msgid ""
 "Your shop is currently live. If you take it down, it will only be visible to "
 "you and your team."
-msgstr ""
+msgstr "귀하의 상점은 현재 운영 중입니다. 상점을 철거하면 귀하와 귀하의 팀만 볼 수 "
+"있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:18
 msgid ""
 "Your shop is already live, however the following issues would normally "
 "prevent your shop to go live:"
-msgstr ""
+msgstr "상점이 이미 운영 중이지만 다음 문제로 인해 일반적으로 상점이 운영되지 "
+"않습니다:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:37
 #: pretix/control/templates/pretixcontrol/event/live.html:56
 msgid ""
 "Your ticket shop is currently not live. It is thus only visible to you and "
 "your team, not to any visitors."
-msgstr ""
+msgstr "귀하의 티켓샵은 현재 운영되지 않습니다. 따라서 귀하와 귀하의 팀에게만 "
+"표시되며, 방문객에게는 표시되지 않습니다."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:41
 msgid ""
 "To publish your ticket shop, you first need to resolve the following issues:"
-msgstr ""
+msgstr "티켓샵을 게시하려면 먼저 다음 문제를 해결해야 합니다:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:51
 #: pretix/control/templates/pretixcontrol/event/live.html:65
