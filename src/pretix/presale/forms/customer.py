@@ -342,6 +342,7 @@ class ResetPasswordForm(forms.Form):
     }
     email = forms.EmailField(
         label=_('Email'),
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'}),
     )
 
     def __init__(self, request=None, *args, **kwargs):
@@ -389,12 +390,12 @@ class ChangePasswordForm(forms.Form):
     )
     password_current = forms.CharField(
         label=_('Your current password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}),
         required=True
     )
     password = forms.CharField(
         label=_('New password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
         max_length=4096,
         required=True
     )
@@ -458,7 +459,7 @@ class ChangeInfoForm(forms.ModelForm):
     }
     password_current = forms.CharField(
         label=_('Your current password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}),
         help_text=_('Only required if you change your email address'),
         max_length=4096,
         required=False
@@ -471,6 +472,8 @@ class ChangeInfoForm(forms.ModelForm):
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
         super().__init__(*args, **kwargs)
+
+        self.fields['email'].widget.attrs['autocomplete'] = 'email'
 
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,

@@ -15,8 +15,9 @@
             <div class="input-group{% if "voucher_invalid" in request.GET %} has-error{% endif %}">
                 <span class="input-group-addon"><i class="fa fa-ticket fa-fw" aria-hidden="true"></i></span>
                 <input type="text" class="form-control{% if "voucher_invalid" in request.GET %} has-error{% endif %}" name="voucher" id="voucher"
-                        {% if "voucher_invalid" in request.GET %} aria-describedby="error-message"{% endif %}
-                       placeholder="{% trans "Voucher code" %}" required="required">
+                    {% if "voucher_invalid" in request.GET %} aria-describedby="error-message"{% endif %}
+                    autocomplete="off"
+                    placeholder="{% trans "Voucher code" %}" required="required">
             </div>
         </div>
         <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />

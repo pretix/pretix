@@ -57,6 +57,8 @@ class WaitingListForm(forms.ModelForm):
 
         event = self.event
 
+        self.fields['email'].widget.attrs['autocomplete'] = 'email'
+
         if event.settings.waiting_list_names_asked:
             self.fields['name_parts'] = NamePartsFormField(
                 max_length=255,
