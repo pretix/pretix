@@ -1084,6 +1084,7 @@ class Event(EventMixin, LoggedModel):
                 s.product = item_map[s.product_id]
             s.save(force_insert=True)
 
+        valid_sales_channel_identifers = set(self.organizer.sales_channels.values_list("identifier", flat=True))
         skip_settings = (
             'ticket_secrets_pretix_sig1_pubkey',
             'ticket_secrets_pretix_sig1_privkey',
@@ -1119,6 +1120,11 @@ class Event(EventMixin, LoggedModel):
                         settings_to_save.append(s)
                 except ValueError:
                     pass
+            elif s.key.startswith('payment_') and s.key.endswith('__restrict_to_sales_channels'):
+                data = other.settings._unserialize(s.value, as_type=list)
+                data = [ident for ident in data if ident in valid_sales_channel_identifers]
+                s.value = other.settings._serialize(data)
+                settings_to_save.append(s)
             else:
                 settings_to_save.append(s)
         other.settings._objects.bulk_create(settings_to_save)
