@@ -117,7 +117,7 @@ setup_collapsible_details = function (el) {
     el.find("article button[data-toggle=variations]").click(function (e) {
         var $button = $(this);
         var $details = $button.closest("article");
-        var $detailsNotSummary = $(".variations", $details);
+        var $detailsNotSummary = $button.attr("aria-controls") ? $('#' + $button.attr("aria-controls")) : $(".variations", $details);
         var isOpen = !$detailsNotSummary.prop("hidden");
         if ($detailsNotSummary.is(':animated')) {
             e.preventDefault();
@@ -125,7 +125,7 @@ setup_collapsible_details = function (el) {
         }
 
         var altLabel = $button.attr("data-label-alt");
-        $button.attr("data-label-alt", $button.text());
+        $button.attr("data-label-alt", $button.text().trim());
         $button.find("span").text(altLabel);
         $button.attr("aria-expanded", !isOpen);
 

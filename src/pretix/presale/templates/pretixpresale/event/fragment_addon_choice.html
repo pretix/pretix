@@ -96,8 +96,8 @@
                             {% if not event.settings.show_variations_expanded %}
                                 <button type="button" data-toggle="variations" class="btn btn-default btn-block js-only"
                                         data-label-alt="{% trans "Hide variants" %}"
-                                        aria-expanded="false"
-                                        aria-label="{% blocktrans trimmed with item=item.name count=item.available_variations|length %}Show {{count}} variants of {{item}}{% endblocktrans %}">
+                                        aria-expanded="false" aria-controls="cp-{{ form.pos.pk }}-item-{{ item.pk }}-variations"
+                                        aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend">
                                     <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                                     <span>{% trans "Show variants" %}</span>
                                 </button>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
+                    <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}" id="cp-{{ form.pos.pk }}-item-{{ item.pk }}-variations">
                         {% for var in item.available_variations %}
                             <article aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row-fluid product-row variation"
                             {% if not item.free_price %}
