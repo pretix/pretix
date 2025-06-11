@@ -1,3 +1,5 @@
+local_install.sh
+static.dist/
 env/
 build/
 dist/
