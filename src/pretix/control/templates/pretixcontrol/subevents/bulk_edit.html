@@ -5,6 +5,7 @@
 {% load captureas %}
 {% load static %}
 {% load eventsignal %}
+{% load dialog %}
 {% block title %}{% trans "Change multiple dates" context "subevent" %}{% endblock %}
 {% block content %}
     <h1>
@@ -191,7 +192,7 @@
                     {% endblocktrans %}
                 </div>
             {% endif %}
-            <div class="bulk-edit-field-group">
+            <div class="bulk-edit-field-group" data-confirm-dialog="#confirm-override-quotas">
                 <label class="field-toggle">
                     <input type="checkbox" name="_bulk" value="__quotas" {% if "__quotas" in bulk_selected %}checked{% endif %}>
                     {% trans "change" context "form_bulk" %}
@@ -367,4 +368,16 @@
             </button>
         </div>
     </form>
+    {% trans "Delete existing quotas" as dialog_title %}
+    {% trans "Using this option will <strong>delete all current quotas</strong> from <strong>all selected dates</strong>. This cannot be reverted. Are you sure to proceed?" as dialog_text %}
+    {% dialog "confirm-override-quotas" dialog_title dialog_text icon="trash" %}
+        <p class="modal-card-confirm modal-card-confirm-spread">
+            <button class="btn btn-lg btn-default" value="no">
+                {% trans "Cancel" %}
+            </button>
+            <button class="btn btn-lg btn-danger" value="yes">
+                {% trans "Proceed" %}
+            </button>
+        </p>
+    {% enddialog %}
 {% endblock %}
