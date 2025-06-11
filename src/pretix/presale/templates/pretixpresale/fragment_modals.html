@@ -48,6 +48,10 @@
     <p class="modal-card-confirm"><button class="btn btn-lg btn-primary">{% trans "Renew reservation" %}</button></p>
 {% enddialog %}
 
+{% dialog "dialog-cart-extended" "" "" icon="clock-o" alert=true %}
+    <p class="modal-card-confirm"><button class="btn btn-lg btn-primary">{% trans "OK" %}</button></p>
+{% enddialog %}
+
 <dialog id="lightbox-dialog" class="modal-card" role="alertdialog" aria-labelledby="lightbox-label">
     <form method="dialog" class="modal-card-inner form-horizontal">
         <div class="modal-card-content">
