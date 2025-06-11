@@ -239,7 +239,7 @@ def test_org_login_not_verified(env, client, mocker):
         'password': 'foo',
     })
     assert r.status_code == 200
-    assert b'alert-danger' in r.content
+    assert b'form-group has-error' in r.content
     customer_signed_in.send.assert_not_called()
 
 
@@ -258,7 +258,7 @@ def test_org_login_not_active(env, client, mocker):
         'password': 'foo',
     })
     assert r.status_code == 200
-    assert b'alert-danger' in r.content
+    assert b'form-group has-error' in r.content
     customer_signed_in.send.assert_not_called()
 
 

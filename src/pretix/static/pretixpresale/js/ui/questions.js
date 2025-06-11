@@ -121,7 +121,7 @@ function questions_init_profiles(el) {
 
     There are two types of profiles:
     1. profiles for answers and 
-    2. profiles for invoice addesses
+    2. profiles for invoice addresses
 
     Both are handled the same way.
 

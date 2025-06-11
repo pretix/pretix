@@ -1,18 +1,4 @@
-/*global $,gettext*/
-
-function gettext(msgid) {
-    if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
-        return django.gettext(msgid);
-    }
-    return msgid;
-}
-
-function ngettext(singular, plural, count) {
-    if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
-        return django.ngettext(singular, plural, count);
-    }
-    return plural;
-}
+/*global $, gettext, ngettext, interpolate */
 
 function formatPrice(price, currency, locale) {
     if (!window.Intl || !Intl.NumberFormat) return price;
@@ -50,32 +36,6 @@ function formatPrice(price, currency, locale) {
         return price
     }
 }
-
-var waitingDialog = {
-    show: function (message) {
-        "use strict";
-        $("#loadingmodal").find("h1").html(message);
-        $("body").addClass("loading");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("loading");
-    }
-};
-
-var ajaxErrDialog = {
-    show: function (c) {
-        "use strict";
-        $("#ajaxerr").html(c);
-        $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
-            + gettext("Close message") + "</a>");
-        $("body").addClass("ajaxerr");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("ajaxerr");
-    }
-};
 
 var apiGET = function (url, callback) {
     $.getJSON(url, function (data) {
@@ -196,7 +156,15 @@ var form_handlers = function (el) {
         }
         if ($(this).is('[data-is-payment-date]'))
             opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
-        $(this).datetimepicker(opts);
+        $(this).datetimepicker(opts).on("dp.hide", function() {
+            // when min/max is used in datetimepicker, closing and re-opening the picker opens at the wrong date
+            // therefore keep the current viewDate and re-set it after datetimepicker is done hiding
+            var $dtp = $(this).data("DateTimePicker");
+            var currentViewDate = $dtp.viewDate();
+            window.setTimeout(function () {
+                $dtp.viewDate(currentViewDate);
+            }, 50);
+        });
         if ($(this).parent().is('.splitdatetimerow')) {
             $(this).on("dp.change", function (ev) {
                 var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
@@ -269,7 +237,8 @@ var form_handlers = function (el) {
         fill_field.on("dp.show", show);
     });
 
-    function luminanace(r, g, b) {
+    function luminance(r, g, b) {
+        // Algorithm defined as https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
         var a = [r, g, b].map(function (v) {
             v /= 255;
             return v <= 0.03928
@@ -279,8 +248,9 @@ var form_handlers = function (el) {
         return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
     }
     function contrast(rgb1, rgb2) {
-        var l1 = luminanace(rgb1[0], rgb1[1], rgb1[2]) + 0.05,
-             l2 = luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05,
+        // Algorithm defined at https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+        var l1 = luminance(rgb1[0], rgb1[1], rgb1[2]) + 0.05,
+             l2 = luminance(rgb2[0], rgb2[1], rgb2[2]) + 0.05,
              ratio = l1/l2
         if (l2 > l1) {ratio = 1/ratio}
         return ratio.toFixed(1)
@@ -319,15 +289,15 @@ var form_handlers = function (el) {
         var icon, text, cls;
         if (c > 7) {
             icon = "fa-check-circle";
-            text = gettext('Your color has great contrast and is very easy to read!');
+            text = gettext('Your color has great contrast and will provide excellent accessibility.');
             cls = "text-success";
-        } else if (c > 2.5) {
+        } else if (c > 4.5) {
             icon = "fa-info-circle";
-            text = gettext('Your color has decent contrast and is probably good-enough to read!');
+            text = gettext('Your color has decent contrast and is sufficient for minimum accessibility requirements.');
             cls = "";
         } else {
             icon = "fa-warning";
-            text = gettext('Your color has bad contrast for text on white background, please choose a darker shade.');
+            text = gettext('Your color has insufficient contrast to white. Accessibility of your site will be impacted.');
             cls = "text-danger";
         }
         if ($icon.length === 0) {

@@ -712,7 +712,7 @@ class OrderListExporter(MultiSheetListExporter):
                 if name_scheme and len(name_scheme['fields']) > 1:
                     for k, label, w in name_scheme['fields']:
                         row.append(
-                            get_name_parts_localized(op.attendee_name_parts, k)
+                            get_name_parts_localized(op.attendee_name_parts, k) if op.attendee_name_parts else ''
                         )
                 row += [
                     op.attendee_email,

@@ -6,10 +6,6 @@ Data shredders
 pretix and it's plugins include a number of data shredders that allow you to clear personal information from the system.
 This page shows you how to use these shredders through the API.
 
-.. versionchanged:: 4.12
-
-   This feature has been added to the API.
-
 .. warning::
 
    Unlike the user interface, the API will not force you to download tax-relevant data before you delete it.

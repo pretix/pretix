@@ -10,15 +10,13 @@
     <h2>
         {% trans "Resend order links" %}
     </h2>
-    <div class="row">
-        <div class="panel-body">
+    <p>
         {% blocktrans trimmed %}
             If you lost the link to your order or orders, please enter the email address you
             used for your order. We will send you an email with links to all orders you placed
             using this email address.
         {% endblocktrans %}
-    </div>
-    </div>
+    </p>
     <div class="row">
     <form class="form" method="post">
         {% csrf_token %}

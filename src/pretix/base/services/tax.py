@@ -62,6 +62,9 @@ class VATIDTemporaryError(VATIDError):
 
 def _validate_vat_id_NO(vat_id, country_code):
     # Inspired by vat_moss library
+    if not vat_id.startswith("NO"):
+        # prefix is not usually used in Norway, but expected by vat_moss library
+        vat_id = "NO" + vat_id
     try:
         vat_id = vat_moss.id.normalize(vat_id)
     except ValueError:

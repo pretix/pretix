@@ -73,6 +73,7 @@ class EventSlugBanlistValidator(BanlistValidator):
         'customer',
         'account',
         'lead',
+        'accessibility',
     ]
 
 

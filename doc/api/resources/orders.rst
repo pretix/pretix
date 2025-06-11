@@ -114,34 +114,6 @@ plugin_data                           object                     Additional data
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 4.0
-
-   The ``customer`` attribute has been added.
-
-.. versionchanged:: 4.1
-
-   The ``custom_followup_at`` attribute has been added.
-
-.. versionchanged:: 4.4
-
-   The ``item`` and ``variation`` query parameters have been added.
-
-.. versionchanged:: 4.6
-
-   The ``subevent`` query parameters has been added.
-
-.. versionchanged:: 4.8
-
-   The ``order.fees.id`` attribute has been added.
-
-.. versionchanged:: 4.15
-
-   The ``include`` query parameter has been added.
-
-.. versionchanged:: 4.16
-
-   The ``valid_if_pending`` attribute has been added.
-
 .. versionchanged:: 2023.8
 
    The ``event`` attribute has been added. The organizer-level endpoint has been added.
@@ -259,10 +231,6 @@ pdf_data                              object                     Data object req
                                                                  ``pdf_data=true`` query parameter to your request.
 plugin_data                           object                     Additional data added by plugins.
 ===================================== ========================== =======================================================
-
-.. versionchanged:: 4.16
-
-   The attributes ``blocked``, ``valid_from`` and ``valid_until`` have been added.
 
 .. versionchanged:: 2024.9
 
@@ -755,10 +723,6 @@ Fetching individual orders
 
 Order ticket download
 ---------------------
-
-.. versionchanged:: 4.10
-
-   The API now supports ticket downloads for pending orders if allowed by the event settings.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/download/(output)/
 
@@ -1832,10 +1796,6 @@ Fetching individual positions
 Order position ticket download
 ------------------------------
 
-.. versionchanged:: 4.10
-
-   The API now supports ticket downloads for pending orders if allowed by the event settings.
-
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/download/(output)/
 
    Download tickets for one order position, identified by its internal ID.
@@ -1888,15 +1848,6 @@ Order position ticket download
 Manipulating individual positions
 ---------------------------------
 
-.. versionchanged:: 4.8
-
-   The ``PATCH`` method now supports changing items, variations, subevents, seats, prices, and tax rules.
-   The ``POST`` endpoint to add individual positions has been added.
-
-.. versionadded:: 4.16
-
-   The endpoints to manage blocks have been added.
-
 .. versionchanged:: 2024.9
 
    The API now supports logging ticket and badge prints.
@@ -1943,8 +1894,13 @@ Manipulating individual positions
 
    * ``valid_until``
 
+   * ``secret``
+
    Changing parameters such as ``item`` or ``price`` will **not** automatically trigger creation of a new invoice,
    you need to take care of that yourself.
+
+   Changing ``secret`` does not cause a new PDF ticket to be sent to the customer, nor does it cause the old secret
+   to be added to the revocation list, even if your ticket generator uses one.
 
    **Example request**:
 
@@ -2220,10 +2176,6 @@ While you can :ref:`change positions individually <rest-orderpositions-manipulat
 multiple changes to an order at once within one transaction. This makes it possible to e.g. swap the seats of two
 attendees in an order without running into conflicts. This interface also offers some possibilities not available
 otherwise, such as splitting an order or changing fees.
-
-.. versionchanged:: 4.8
-
-   This endpoint has been added to the system.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/change/
 

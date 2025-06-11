@@ -1582,6 +1582,27 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == self.op1.price + self.op2.price
 
     @classscope(attr='o')
+    def test_change_price_reverse_charge_success(self):
+        self._enable_reverse_charge()
+        self.op1.tax_rate = Decimal("0.00")
+        self.op1.tax_value = Decimal("0.00")
+        self.op1.tax_code = "AE"
+        self.op1.save()
+        self.op2.tax_rate = Decimal("0.00")
+        self.op2.tax_value = Decimal("0.00")
+        self.op2.tax_code = "AE"
+        self.op2.save()
+        self.ocm.change_price(self.op1, Decimal('1000.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.ticket
+        assert self.op1.price == Decimal('1000.00')
+        assert self.op1.tax_value == Decimal('0.00')
+        assert self.op1.tax_rate == Decimal('0.00')
+        assert self.order.total == self.op1.price + self.op2.price
+
+    @classscope(attr='o')
     def test_cancel_success(self):
         s = self.op1.secret
         self.ocm.cancel(self.op1)
@@ -1714,12 +1735,43 @@ class OrderChangeManagerTests(TestCase):
             self.ocm.change_price(self.op1, 25)
 
     @classscope(attr='o')
+    def test_cancel_and_change_addon(self):
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se1
+        self.op2.save()
+        self.quota.subevent = se2
+        self.quota.save()
+        op3 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None, addon_to=self.op1,
+            price=Decimal("0.00"), positionid=3, subevent=se1,
+        )
+
+        self.ocm.cancel(self.op1)
+        self.ocm.change_subevent(op3, se2)
+        self.ocm.commit()
+        # Expected: the addon is also canceled
+        # Bug we had: the addon is not canceled
+        op3.refresh_from_db()
+        assert op3.canceled
+
+    @classscope(attr='o')
     def test_cancel_all_in_order(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.addons.create(addon_category=self.shirt.category)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), addon_to=self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+
+        assert self.order.positions.count() == 3
         self.ocm.cancel(self.op1)
         self.ocm.cancel(self.op2)
         with self.assertRaises(OrderError):
             self.ocm.commit()
-        assert self.order.positions.count() == 2
+        assert self.order.positions.count() == 3
 
     @classscope(attr='o')
     def test_empty(self):
@@ -1988,6 +2040,22 @@ class OrderChangeManagerTests(TestCase):
         nop = self.order.positions.last()
         assert nop.item == self.shirt
         assert nop.price == Decimal('10.08')
+        assert nop.tax_rate == Decimal('0.00')
+        assert nop.tax_value == Decimal('0.00')
+        assert self.order.total == self.op1.price + self.op2.price + nop.price
+        assert nop.positionid == 3
+        assert self.order.transactions.filter(item=self.shirt).last().tax_code == "AE"
+
+    @classscope(attr='o')
+    def test_add_item_with_price_reverse_charge(self):
+        self._enable_reverse_charge()
+        self.ocm.add_position(self.shirt, None, Decimal("1.00"), None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('1.00')
         assert nop.tax_rate == Decimal('0.00')
         assert nop.tax_value == Decimal('0.00')
         assert self.order.total == self.op1.price + self.op2.price + nop.price

@@ -40,6 +40,7 @@
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
+                    <th class="iconcol"></th>
                     <th class="text-right flip">{% trans "Default price" %}</th>
                     <th class="action-col-2"><span class="sr-only">Edit</span></th>
                 </tr>
@@ -109,6 +110,14 @@
                             <td>
                                 {% if i.var_count %}
                                     <span class="fa fa-bars fa-fw text-muted" data-toggle="tooltip" title="{% trans "Product with variations" %}"></span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if i.requires_seat %}
+                                    <span data-toggle="tooltip"
+                                          title="{% if request.event.has_subevents %}{% trans "Product assigned to seating plan for one or more dates" context "subevent" %}{% else %}{% trans "Product assigned to seating plan" %}{% endif %}">
+                                        {% include "icons/seat.svg" with cls="svg-icon text-muted" %}
+                                    </span>
                                 {% endif %}
                             </td>
                             <td>

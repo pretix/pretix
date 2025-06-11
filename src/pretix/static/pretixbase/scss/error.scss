@@ -10,6 +10,12 @@ body {
     padding: 50px 0;
 }
 
+*:focus, .btn:focus {
+    outline: 2px solid $link-hover-color;
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
 .big-icon {
     font-size: 200px;
     color: $navbar-inverse-bg;

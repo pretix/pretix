@@ -7,6 +7,8 @@
 {% load thumb %}
 {% load eventsignal %}
 {% load rich_text %}
+{% load icon %}
+{% load dialog %}
 
 {% block title %}
     {% if "year" in request.GET %}
@@ -71,14 +73,15 @@
         {% endif %}
 
 
-    {% if subevent_list_foldable %}
-        <details class="panel panel-{% if show_cart %}primary{% else %}default{% endif %}">
-            <summary class="panel-heading">
-    {% else %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-    {% endif %}
-                <h3 class="panel-title"><b>
+        {% if subevent_list.list_type != "list" or subevent_list.visible_events %}
+            {% if subevent_list_foldable %}
+                <details class="panel panel-{% if show_cart %}primary{% else %}default{% endif %}">
+                <summary class="panel-heading">
+            {% else %}
+                <div class="panel panel-default">
+                <div class="panel-heading">
+            {% endif %}
+            <h3 class="panel-title"><strong>
                 {% if subevent_list_foldable %}
                     {% if show_cart %}
                         {% trans "Add tickets for a different date" %}
@@ -87,36 +90,37 @@
                     {% endif %}
                 {% else %}
                     {% trans "Choose date to book a ticket" %}
-                {% endif %}</b>
-                </h3>
-    {% if subevent_list_foldable %}
-            </summary>
-            <div>
-    {% else %}
-            </div>
-    {% endif %}
+                {% endif %}</strong>
+            </h3>
+            {% if subevent_list_foldable %}
+                </summary>
+                <div>
+            {% else %}
+                </div>
+            {% endif %}
             {% if filter_form.fields %}
                 <div class="panel-subhead">
                     {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
                 </div>
             {% endif %}
-                <div class="panel-body">
-                    {% cache_large 15 subevent_list subevent_list_cache_key %}
-                        {% if subevent_list.list_type == "calendar" %}
-                            {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
-                        {% elif subevent_list.list_type == "week" %}
-                            {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
-                        {% else %}
-                            {% include "pretixpresale/event/fragment_subevent_list.html" %}
-                        {% endif %}
-                    {% endcache_large %}
-                </div>
-    {% if subevent_list_foldable %}
+            <div class="panel-body">
+                {% cache_large 15 subevent_list subevent_list_cache_key %}
+                    {% if subevent_list.list_type == "calendar" %}
+                        {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
+                    {% elif subevent_list.list_type == "week" %}
+                        {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
+                    {% else %}
+                        {% include "pretixpresale/event/fragment_subevent_list.html" %}
+                    {% endif %}
+                {% endcache_large %}
             </div>
-        </details>
-    {% else %}
-        </div>
-    {% endif %}
+            {% if subevent_list_foldable %}
+                </div>
+                </details>
+            {% else %}
+                </div>
+            {% endif %}
+        {% endif %}
 
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
@@ -171,7 +175,7 @@
             </div>
         {% endif %}
         {% if not cart_namespace or subevent %}
-            <div>
+            <div{% if request.event.is_remote%} class="event-is-remote"{% endif %}>
                 {% include "pretixpresale/event/fragment_event_info.html" with event=request.event subevent=subevent ev=ev show_location=True %}
             </div>
             {% eventsignal event "pretix.presale.signals.front_page_top" request=request subevent=subevent %}
@@ -181,7 +185,6 @@
             <form method="post" data-asynctask
                     data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
                     data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
-                    class="{% if event.seating_plan_id %}has-seating{% endif %}"
                     action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}&next_error={{ request.path|urlencode }}">
                 {% csrf_token %}
                 <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
@@ -250,7 +253,7 @@
     {% if not cart_namespace %}
         {% eventsignal event "pretix.presale.signals.front_page_bottom" subevent=subevent request=request %}
         <aside class="front-page" aria-labelledby="if-you-already-ordered-a-ticket">
-            <h3 id="if-you-already-ordered-a-ticket">{% trans "If you already ordered a ticket" %}</h3>
+            <h3 id="if-you-already-ordered-a-ticket">{% trans "If you have already ordered a ticket" %}</h3>
             <div class="row">
                 <div class="col-md-8 col-xs-12">
                     <p>

@@ -378,6 +378,8 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                     if prop.name not in meta_data:
                         current_object.delete()
 
+            instance._prefetched_objects_cache.clear()
+
         # Item Meta properties
         if item_meta_properties is not None:
             current = list(event.item_meta_properties.all())
@@ -397,6 +399,8 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             for prop in current:
                 if prop.name not in list(item_meta_properties.keys()):
                     prop.delete()
+
+            instance._prefetched_objects_cache.clear()
 
         # Seats
         if seat_category_mapping is not None or ('seating_plan' in validated_data and validated_data['seating_plan'] is None):

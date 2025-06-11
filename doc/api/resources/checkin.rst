@@ -9,14 +9,6 @@ This page describes special APIs built for ticket scanning apps. For managing ch
 please also see :ref:`rest-checkinlists`. The check-in list API also contains endpoints to obtain statistics or log
 failed scans.
 
-.. versionchanged:: 4.12
-
-    The endpoints listed on this page have been added.
-
-.. versionchanged:: 4.18
-
-    The ``source_type`` parameter has been added.
-
 .. _`rest-checkin-redeem`:
 
 Checking a ticket in

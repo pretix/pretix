@@ -70,6 +70,7 @@ from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
 )
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.i18n import parse_date_localized
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.organizer import EventListFilterForm
@@ -810,6 +811,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ) + timedelta(days=1)
 
         ctx['date'] = week.monday()
+        ctx['date_to'] = week.sunday()
         ctx['before'] = before
         ctx['after'] = after
 
@@ -927,10 +929,9 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _set_date(self):
         if 'date' in self.request.GET:
             self.tz = self.request.organizer.timezone
-            try:
-                self.date = dateutil.parser.parse(self.request.GET.get('date')).date()
-            except ValueError:
-                self.date = now().astimezone(self.tz).date()
+            self.date = (
+                parse_date_localized(self.request.GET.get('date')) or now().astimezone(self.tz)
+            ).date()
         else:
             self._set_date_to_next_event()
 
@@ -1311,3 +1312,14 @@ class OrganizerFavicon(View):
 class RedirectToOrganizerIndex(View):
     def get(self, *args, **kwargs):
         return redirect_to_url(build_absolute_uri(self.request.organizer, "presale:organizer.index"))
+
+
+class AccessibilityView(OrganizerViewMixin, EventListMixin, TemplateView):
+    template_name = 'pretixpresale/organizers/accessibility.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.organizer.settings.accessibility_url:
+            raise Http404()
+        if not self.request.organizer.settings.accessibility_text:
+            raise Http404()
+        return super().dispatch(request, *args, **kwargs)

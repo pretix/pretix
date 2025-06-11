@@ -211,28 +211,6 @@ bundles                                 list of objects            Definition of
 meta_data                               object                     Values set for event-specific meta data parameters.
 ======================================= ========================== =======================================================
 
-.. versionchanged:: 4.0
-
-   The attributes ``require_membership``, ``require_membership_types``, ``grant_membership_type``, ``grant_membership_duration_like_event``,
-    ``grant_membership_duration_days`` and ``grant_membership_duration_months`` have been added.
-
-.. versionchanged:: 4.4
-
-   The attributes ``require_membership_hidden`` attribute has been added.
-
-.. versionchanged:: 4.16
-
-   The ``variations[x].meta_data`` and ``variations[x].checkin_attention`` attributes have been added.
-   The ``personalized`` attribute has been added.
-
-.. versionchanged:: 4.17
-
-   The ``validity_*`` attributes have been added.
-
-.. versionchanged:: 4.18
-
-   The ``media_policy`` and ``media_type`` attributes have been added.
-
 .. versionchanged:: 2023.10
 
    The ``checkin_text`` and ``variations[x].checkin_text`` attributes have been added.

@@ -111,18 +111,6 @@ internal_reference                    string                     Customer's refe
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 4.1
-
-   The attributes ``fee_type`` and ``fee_internal_type`` have been added.
-
-.. versionchanged:: 4.1
-
-   The attribute ``lines.event_location`` has been added.
-
-.. versionchanged:: 4.6
-
-   The attribute ``lines.subevent`` has been added.
-
 .. versionchanged:: 2023.8
 
    The ``event`` attribute has been added. The organizer-level endpoint has been added.

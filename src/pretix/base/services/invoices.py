@@ -531,7 +531,7 @@ def send_invoices_to_organizer(sender, **kwargs):
                 if i.event.settings.invoice_email_organizer:
                     with language(i.event.settings.locale):
                         mail(
-                            email=i.event.settings.invoice_email_organizer,
+                            email=[e.strip() for e in i.event.settings.invoice_email_organizer.split(",")],
                             subject=_('New invoice: {number}').format(number=i.number),
                             template=LazyI18nString.from_gettext(_(
                                 'Hello,\n\n'

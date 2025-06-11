@@ -673,7 +673,7 @@ class OrdersTest(BaseOrdersTest):
         assert "gift card" in response.content.decode()
         response = self.client.post(
             '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                'giftcard': 'false'
+                'payment_giftcard-code': 'false'
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -1421,7 +1421,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'giftcard',
-                'giftcard': gc.secret
+                'payment_giftcard-code': gc.secret
             }
         )
         with scopes_disabled():
@@ -1458,7 +1458,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'giftcard',
-                'giftcard': gc.secret
+                'payment_giftcard-code': gc.secret
             }
         )
         assert "You cannot pay with gift cards when buying a gift card." in response.content.decode()
@@ -1471,7 +1471,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'giftcard',
-                'giftcard': gc.secret
+                'payment_giftcard-code': gc.secret
             }
         )
         assert "This gift card does not support this currency." in response.content.decode()
@@ -1486,7 +1486,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'giftcard',
-                'giftcard': gc.secret
+                'payment_giftcard-code': gc.secret
             }
         )
         assert "Only test gift cards can be used in test mode." in response.content.decode()
@@ -1499,7 +1499,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'giftcard',
-                'giftcard': gc.secret
+                'payment_giftcard-code': gc.secret
             }
         )
         assert "This gift card can only be used in test mode." in response.content.decode()
@@ -1511,7 +1511,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'giftcard',
-                'giftcard': gc.secret
+                'payment_giftcard-code': gc.secret
             }
         )
         assert "All credit on this gift card has been used." in response.content.decode()
@@ -1526,7 +1526,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'giftcard',
-                'giftcard': gc.secret
+                'payment_giftcard-code': gc.secret
             }
         )
         assert "This gift card is not known." in response.content.decode()
@@ -1548,7 +1548,7 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 'payment': 'giftcard',
-                'giftcard': gc.secret
+                'payment_giftcard-code': gc.secret
             }
         )
         with scopes_disabled():

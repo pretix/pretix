@@ -7,7 +7,7 @@
 {% load rich_text %}
 {% for tup in items_by_category %}{% with category=tup.0 items=tup.1 form_prefix=tup.2 %}
     {% if category %}
-        <section aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
+        <section class="item-category" aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
             <h{{ headline_level|default:3 }} class="h3" id="{{ form_prefix }}category-{{ category.id }}">{{ category.name }}
                 {% if category.subevent_name %}
                     <small class="text-muted"><i class="fa fa-calendar" aria-hidden="true"></i> {{ category.subevent_name }}</small>
@@ -24,7 +24,7 @@
                 <div id="{{ form_prefix }}category-info-{{ category.id }}">{{ category.description|localize|rich_text }}</div>
             {% endif %}
     {% else %}
-        <section aria-labelledby="{{ form_prefix }}category-none">
+        <section class="item-category" aria-labelledby="{{ form_prefix }}category-none">
             <h{{ headline_level|default:"3" }} id="{{ form_prefix }}category-none" class="h3 sr-only">{% trans "Uncategorized items" %}</h{{ headline_level|default:3 }}>
     {% endif %}
         {% for item in items %}
@@ -205,7 +205,7 @@
                                 {% if var.cached_availability.0 == 100 and not item.current_unavailability_reason and not var.current_unavailability_reason %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 										{% if var.order_max == 1 %}
-                                            <label class="btn btn-default btn-checkbox">
+                                            <label class="btn btn-default btn-checkbox{% if not ev.presale_is_running %} disabled{% endif %}">
                                                 <input type="checkbox" value="1"
                                                     {% if item.free_price %}
                                                        data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
@@ -213,15 +213,15 @@
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
+                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend"
                                                        {% if var.description %} aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
                                             <fieldset class="input-item-count-group">
-                                                <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}</legend>
-                                                <button type="button" data-step="-1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
+                                                <legend class="sr-only">{% trans "Quantity" %}</legend>
+                                                <button type="button" data-step="-1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}, {{ var }}: {% trans "Decrease quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
@@ -231,14 +231,14 @@
                                                        max="{{ var.order_max }}"
                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-label="{% trans "Quantity" %}">
-                                                <button type="button" data-step="1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
+                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend">
+                                                <button type="button" data-step="1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
                                             </fieldset>
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    {% include "pretixpresale/event/fragment_availability.html" with price=var.display_price.gross avail=var.cached_availability.0 event=event item=item var=var %}
+                                    {% include "pretixpresale/event/fragment_availability.html" with price=var.display_price.gross original_price=var.original_price.gross avail=var.cached_availability.0 event=event item=item var=var %}
                                 {% endif %}
                                 <div class="clearfix"></div>
                             </article>
@@ -262,7 +262,7 @@
                             </a>
                         {% endif %}
                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                            <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h{{ headline_level|default:3 }}>
+                            <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h{{ headline_level|default:3|add:1 }}>
                             {% if item.description %}
                                 <div id="{{ form_prefix }}item-{{ item.pk }}-description" class="product-description">
                                     {{ item.description|localize|rich_text }}
@@ -301,8 +301,8 @@
                             <p>
                         {% endif %}
                         {% if item.free_price %}
+                            <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name currency=event.currency %}Set price in {{ currency }} for {{ item }}{% endblocktrans %}</label>
                             <div class="input-group input-group-price">
-                                <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name currency=event.currency %}Set price in {{ currency }} for {{ item }}{% endblocktrans %}</label>
                                 <span class="input-group-addon" aria-hidden="true">{{ event.currency }}</span>
                                 <input type="number" class="form-control input-item-price" placeholder="0"
                                        id="{{ form_prefix }}price-item-{{ item.pk }}"
@@ -358,22 +358,22 @@
                     {% if item.cached_availability.0 == 100 and not item.current_unavailability_reason %}
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 							{% if item.order_max == 1 %}
-                                <label class="btn btn-default btn-checkbox">
+                                <label class="btn btn-default btn-checkbox{% if not ev.presale_is_running %} disabled{% endif %}">
                                     <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
                                         {% if item.free_price %}
                                            data-checked-onchange="price-item-{{ item.pk }}"
                                         {% endif %}
                                            {% if not ev.presale_is_running %}disabled{% endif %}
                                            name="{{ form_prefix }}item_{{ item.id }}" id="{{ form_prefix }}item_{{ item.id }}"
-                                           aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
+                                           aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"
                                            {% if item.description %} aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}>
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                         {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
                                 <fieldset class="input-item-count-group">
-                                    <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}</legend>
-                                    <button type="button" data-step="-1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
+                                    <legend class="sr-only">{% trans "Quantity" %}</legend>
+                                    <button type="button" data-step="-1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}: {% trans "Decrease quantity" %}"
                                         {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                            {% if not ev.presale_is_running %}disabled{% endif %}
@@ -384,14 +384,14 @@
                                            max="{{ item.order_max }}"
                                            name="{{ form_prefix }}item_{{ item.id }}"
                                            id="{{ form_prefix }}item_{{ item.id }}"
-                                           aria-label="{% trans "Quantity" %}">
-                                    <button type="button" data-step="1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
+                                           aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend">
+                                    <button type="button" data-step="1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}: {% trans "Increase quantity" %}"
                                         {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
                                 </fieldset>
                             {% endif %}
                         </div>
                     {% else %}
-                        {% include "pretixpresale/event/fragment_availability.html" with price=item.display_price.gross avail=item.cached_availability.0 event=event item=item var=0 %}
+                        {% include "pretixpresale/event/fragment_availability.html" with price=item.display_price.gross original_price=item.original_price.gross avail=item.cached_availability.0 event=event item=item var=0 %}
                     {% endif %}
                     <div class="clearfix"></div>
                 </article>

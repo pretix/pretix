@@ -110,23 +110,26 @@
                     {% if not hide_orga %}<td>{{ e.organizer }}</td>{% endif %}
                     <td class="event-date-col">
                         {% if e.has_subevents %}
-                            {{ e.min_from|default_if_none:""|date:"SHORT_DATETIME_FORMAT" }}
+                            <span class="fa fa-fw- fa-calendar"></span>
+                            {% trans "Event series" %}
+                            <br>
+                            <span class="text-muted">
+                                {% if e.min_from %}
+                                    {{ e.min_from|date:"SHORT_DATETIME_FORMAT" }} –<br>
+                                    {{ e.max_fromto|default_if_none:e.max_to|default_if_none:e.max_from|date:"SHORT_DATETIME_FORMAT" }}
+                                {% else %}
+                                    {% trans "No dates" context "subevent" %}
+                                {% endif %}
+                            </span>
                         {% else %}
                             {{ e.get_short_date_from_display }}
-                        {% endif %}
-                        {% if e.has_subevents %}
-                            <span class="label label-default">{% trans "Series" %}</span>
-                        {% endif %}
-                        {% if e.settings.show_date_to and e.date_to %}
-                             –<br>
-                            {% if e.has_subevents %}
-                                {{ e.max_fromto|default_if_none:e.max_from|default_if_none:e.max_to|default_if_none:""|date:"SHORT_DATETIME_FORMAT" }}
-                            {% else %}
+                            {% if e.settings.show_date_to and e.date_to %}
+                                –<br>
                                 {{ e.get_short_date_to_display }}
                             {% endif %}
                         {% endif %}
                         {% if e.settings.timezone != request.timezone %}
-                            <span class="fa fa-globe text-muted" data-toggle="tooltip" title="{{ e.timezone }}"></span>
+                            <span class="fa fa-globe text-muted" data-toggle="tooltip" title="{{ e.tzname }}"></span>
                         {% endif %}
                     </td>
                     <td>

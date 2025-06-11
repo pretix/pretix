@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.urls import include, re_path
+from django.urls import include, path, re_path
 from django.views.decorators.csrf import csrf_exempt
 
 import pretix.presale.views.cart
@@ -56,6 +56,7 @@ frame_wrapped_urls = [
     re_path(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
     re_path(r'^cart/voucher$', pretix.presale.views.cart.CartApplyVoucher.as_view(), name='event.cart.voucher'),
     re_path(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
+    re_path(r'^cart/extend$', pretix.presale.views.cart.CartExtendReservation.as_view(), name='event.cart.extend'),
     re_path(r'^cart/answer/(?P<answer>[^/]+)/$',
             pretix.presale.views.cart.AnswerDownload.as_view(),
             name='event.cart.download.answer'),
@@ -172,7 +173,7 @@ event_patterns = [
 
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
-    re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='event.widget.css'),
+    path('widget/v<int:version>.css', pretix.presale.views.widget.widget_css, name='event.widget.css'),
     re_path(r'^(?P<subevent>\d+)/widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
 
@@ -195,9 +196,10 @@ organizer_patterns = [
 
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='organizer.widget.productlist'),
-    re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
+    path('widget/v<int:version>.css', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
 
     re_path(r'^theme.css$', pretix.presale.views.theme.theme_css, name='organizer.theme.css'),
+    re_path(r'^accessibility$', pretix.presale.views.organizer.AccessibilityView.as_view(), name='organizer.accessibility'),
 
     re_path(r'^account/login/(?P<provider>[0-9]+)/$', pretix.presale.views.customer.SSOLoginView.as_view(), name='organizer.customer.login'),
     re_path(r'^account/login/(?P<provider>[0-9]+)/return$', pretix.presale.views.customer.SSOLoginReturnView.as_view(), name='organizer.customer.login.return'),
@@ -235,5 +237,5 @@ locale_patterns = [
     re_path(r'^robots.txt$', pretix.presale.views.robots.robots_txt, name='robots.txt'),
     re_path(r'^browserconfig.xml$', pretix.presale.views.theme.browserconfig_xml, name='browserconfig.xml'),
     re_path(r'^site.webmanifest$', pretix.presale.views.theme.webmanifest, name='site.webmanifest'),
-    re_path(r'^widget/v1\.(?P<lang>[a-zA-Z0-9_\-]+)\.js$', pretix.presale.views.widget.widget_js, name='widget.js'),
+    path('widget/v<int:version>.<slug:lang>.js', pretix.presale.views.widget.widget_js, name='widget.js'),
 ]

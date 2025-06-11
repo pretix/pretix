@@ -1815,6 +1815,7 @@ class StripePayPal(StripeRedirectMethod):
     verbose_name = _('PayPal via Stripe')
     public_name = _('PayPal')
     method = 'paypal'
+    redirect_in_widget_allowed = False
 
 
 class StripeSwish(StripeRedirectMethod):

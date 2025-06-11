@@ -1,28 +1,54 @@
 {% extends "pretixpresale/organizers/base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load eventurl %}
 {% load urlreplace %}
 {% load bootstrap3 %}
 {% block title %}{% trans "Registration" %}{% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <h2>
-                {% blocktrans trimmed with org=request.organizer.name %}
-                    Create a new account at {{ org }}
-                {% endblocktrans %}
-            </h2>
-            <form action="" method="post">
+        <div class="col-xs-12">
+            <form action="" method="post" class="form-horizontal">
                 {% csrf_token %}
-                {% bootstrap_form form %}
-                <div class="form-group buttons">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">
-                        {% trans "Create account" %}
-                    </button>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                        {% blocktrans trimmed with org=request.organizer.name %}
+                            Create a new account at {{ org }}
+                        {% endblocktrans %}
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        {% bootstrap_form form layout="checkout" %}
+                    </div>
                 </div>
-                <a class="btn btn-link btn-block" href="{% eventurl request.organizer "presale:organizer.customer.login" %}">
-                    {% trans "Log in to an existing account" %}
-                </a>
+                <div class="row checkout-button-row blank-after">
+                    <div class="col-md-8 col-sm-6 hidden-xs">
+                        <a class="btn btn-link btn-lg"
+                           href="{% eventurl request.organizer "presale:organizer.customer.login" %}">
+                            <small>
+                                {% icon "sign-in" %}
+                                {% trans "Log in to an existing account" %}
+                            </small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <button class="btn btn-block btn-primary btn-lg" type="submit">
+                            {% icon "address-book-o" %}
+                            {% trans "Create account" %}
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="row visible-xs">
+                    <div class="col-xs-12 text-center">
+                        <a
+                           href="{% eventurl request.organizer "presale:organizer.customer.login" %}">
+                                {% icon "sign-in" %}
+                                {% trans "Log in to an existing account" %}
+                        </a>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

@@ -1,26 +1,4 @@
-/*global $ */
-
-function gettext(msgid) {
-    if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
-        return django.gettext(msgid);
-    }
-    return msgid;
-}
-
-function ngettext(singular, plural, count) {
-    if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
-        return django.ngettext(singular, plural, count);
-    }
-    return plural;
-}
-
-function interpolate(fmt, object, named) {
-    if (named) {
-        return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
-    } else {
-        return fmt.replace(/%s/g, function(match){return String(obj.shift())});
-    }
-}
+/*global $, gettext, ngettext, interpolate */
 
 var form_handlers = function (el) {
     el.find('input, select, textarea').on('invalid', function (e) {
@@ -60,6 +38,7 @@ var form_handlers = function (el) {
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
             showClear: !$(this).prop("required"),
+            keepInvalid: true,
             icons: {
                 time: 'fa fa-clock-o',
                 date: 'fa fa-calendar',
@@ -82,7 +61,15 @@ var form_handlers = function (el) {
                     Math.abs(+new Date(opts.minDate) - new Date()) < Math.abs(+new Date(opts.maxDate) - new Date())
             ) ? opts.minDate : opts.maxDate;
         }
-        $(this).datetimepicker(opts);
+        $(this).datetimepicker(opts).on("dp.hide", function() {
+            // when min/max is used in datetimepicker, closing and re-opening the picker opens at the wrong date
+            // therefore keep the current viewDate and re-set it after datetimepicker is done hiding
+            var $dtp = $(this).data("DateTimePicker");
+            var currentViewDate = $dtp.viewDate();
+            window.setTimeout(function () {
+                $dtp.viewDate(currentViewDate);
+            }, 50);
+        });
         if ($(this).parent().is('.splitdatetimerow')) {
             $(this).on("dp.change", function (ev) {
                 var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
@@ -254,6 +241,10 @@ function setup_basics(el) {
 
     el.find(".js-only").removeClass("js-only");
     el.find(".js-hidden").hide();
+    // make sure to always have a #content for skip-link to work
+    if (!document.querySelector("#content")) {
+        (document.querySelector('main') || document.querySelector('.page-header + *')).id = "content"
+    }
 
     el.find("div.collapsed").removeClass("collapsed").addClass("collapse");
     el.find(".has-error, .alert-danger").each(function () {
@@ -294,8 +285,6 @@ function setup_basics(el) {
         e.preventDefault();
     });
 
-    el.find('[data-toggle="tooltip"]').tooltip();
-
     // AddOns
     el.find('.addon-variation-description').hide();
     el.find('.toggle-variation-description').click(function () {
@@ -305,6 +294,49 @@ function setup_basics(el) {
         if ($(this).prop("checked")) {
             $(this).parent().parent().find('.addon-variation-description').stop().slideDown();
         }
+    });
+
+    // tabs - see https://www.w3.org/WAI/ARIA/apg/patterns/tabs/examples/tabs-automatic/ for reference
+    el.find('.tabcontainer').each(function() {
+        var currentTab;
+        function setCurrentTab(tab) {
+            if (tab == currentTab) return;
+            if (currentTab) {
+                currentTab.setAttribute('aria-selected', 'false');
+                currentTab.tabIndex = -1;
+                currentTab.classList.remove('active');
+                document.getElementById(currentTab.getAttribute('aria-controls')).setAttribute('hidden', 'hidden');
+            }
+            tab.setAttribute('aria-selected', 'true');
+            tab.removeAttribute('tabindex');
+            tab.classList.add('active');
+            document.getElementById(tab.getAttribute('aria-controls')).removeAttribute('hidden');
+            currentTab = tab;
+        }
+        var tabs = $('button[role=tab]').on('keydown', function(event) {
+            if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].indexOf(event.key) == -1) {
+                return;
+            }
+            event.stopPropagation();
+            event.preventDefault();
+
+            if (event.key == 'ArrowLeft') {
+                setCurrentTab(currentTab.previousElementSibling || lastTab);
+            } else if (event.key == 'ArrowRight') {
+                setCurrentTab(currentTab.nextElementSibling || firstTab);
+            } else if (event.key == 'Home') {
+                setCurrentTab(firstTab);
+            } else if (event.key == 'End') {
+                setCurrentTab(lastTab);
+            }
+            currentTab.focus();
+        }).on('click', function (event) {
+            setCurrentTab(this);
+        });
+        
+        var firstTab = tabs.first().get(0);
+        var lastTab = tabs.last().get(0);
+        setCurrentTab(tabs.filter('[aria-selected=true]').get(0));
     });
 }
 
@@ -328,6 +360,7 @@ $(function () {
     "use strict";
 
     $("body").removeClass("nojs");
+    moment.locale($("body").attr("data-datetimelocale"));
 
     var scrollpos = sessionStorage ? sessionStorage.getItem('scrollpos') : 0;
     if (scrollpos) {
@@ -351,8 +384,6 @@ $(function () {
         $("#voucher-box").slideDown();
         $("#voucher-toggle").slideUp();
     });
-
-    $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 
     // Handlers for "Copy answers from above" buttons
     $(".js-copy-answers").click(function (e) {
@@ -419,44 +450,25 @@ $(function () {
         $("[data-save-scrollpos]").on("click submit", function () {
             sessionStorage.setItem('scrollpos', window.scrollY);
         });
+        $("#monthselform").on("submit", function () {
+            sessionStorage.setItem('scrollpos', window.scrollY);
+        });
     }
-    $("#monthselform select").change(function () {
-        if (sessionStorage) sessionStorage.setItem('scrollpos', window.scrollY);
-        this.form.submit();
+    $("form:has(#btn-add-to-cart)").on("submit", function(e) {
+        if (
+            this.querySelector("pretix-seating-checkout-button button") ||
+            this.querySelector("input[type=checkbox]:checked, input[type=radio]:checked") ||
+            [...this.querySelectorAll(".input-item-count:not([type=hidden])")].some(input => input.value && input.value !== "0") // TODO: seating adds a hidden seating-dummy-item-count, which is not useful and should at some point be removed
+        ) {
+            // okay, let the submit-event bubble to async-task
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        document.querySelector("#dialog-nothing-to-add").showModal();
     });
-    $("#monthselform input").on("dp.change", function () {
-        if ($(this).data("DateTimePicker")) {  // prevent submit after dp init
-            if (sessionStorage) sessionStorage.setItem('scrollpos', window.scrollY);
-            this.form.submit();
-        }
-    });
-    var update_cart_form = function () {
-        var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
-        if (!is_enabled) {
-            $(".input-item-count").each(function () {
-                if ($(this).val() && $(this).val() !== "0") {
-                    is_enabled = true;
-                }
-            });
-            $(".input-seat-selection option").each(function() {
-                if ($(this).val() && $(this).val() !== "" && $(this).prop('selected')) {
-                    is_enabled = true;
-                }
-            });
-        }
-        if (!is_enabled && (!$(".has-seating").length || $("#seating-dummy-item-count").length)) {
-            $("#btn-add-to-cart").prop("disabled", !is_enabled).popover({
-                'content': function () { return gettext("Please enter a quantity for one of the ticket types.") },
-                'placement': 'top',
-                'trigger': 'hover focus'
-            });
-        } else {
-            $("#btn-add-to-cart").prop("disabled", false).popover("destroy")
-        }
-    };
-    update_cart_form();
-    $(".product-row input[type=checkbox], .variations input[type=checkbox], .product-row input[type=radio], .variations input[type=radio], .input-item-count, .input-seat-selection")
-        .on("change mouseup keyup", update_cart_form);
 
     $(".table-calendar td.has-events").click(function () {
         var $grid = $(this).closest("[role='grid']");
@@ -498,7 +510,7 @@ $(function () {
                 }
                 dependent.closest('.form-group').toggleClass('required', enabled);
                 if (enabled) {
-                    dependentLabel.append('<i class="sr-only label-required">, ' + gettext('required') + '</i>');
+                    dependentLabel.append('<i class="label-required">' + gettext('required') + '</i>');
                 }
                 else {
                     dependentLabel.find(".label-required").remove();
@@ -536,35 +548,17 @@ $(function () {
     form_handlers($("body"));
 
     var local_tz = moment.tz.guess()
-    $("span[data-timezone], small[data-timezone], time[data-timezone]").each(function() {
+    $(".event-is-remote span[data-timezone]").each(function() {
         var t = moment.tz($(this).attr("datetime") || $(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
-        var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
 
-        $(this).tooltip({
-            "title": gettext("Time zone:") + " " + tz.abbr(t),
-            "template": tpl
-        });
         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
-            var $add = $("<span>")
-            $add.append(" ")
-            $add.append($("<span>").addClass("fa fa-globe"))
-            if ($(this).is("[data-time-short]")) {
-                $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat"))))
-            } else {
-                $add.addClass("text-muted")
-                $add.append(" " + gettext("Your local time:") + " ")
-                if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")))
-                } else {
-                    $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")))
-                }
-            }
+            var format = t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD") ? "datetimeformat" : "timeformat";
+            var time_str = t.tz(local_tz).format($("body").data(format));
+            var $add = $("<small>").addClass("text-muted").append(" (" + gettext("Your local time:") + " ")
+            $add.append($('<time>').attr("datetime", time_str).text(time_str))
+            $add.append(" " + moment.tz.zone(local_tz).abbr(t) + ")");
             $add.insertAfter($(this));
-            $add.tooltip({
-                "title": gettext("Time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
-                "template": tpl
-            });
         }
     });
 
@@ -678,7 +672,27 @@ $(function () {
     });
 
     // Lightbox
-    lightbox.init();
+    (function() {
+        var dialog = document.getElementById("lightbox-dialog");
+        var img = dialog.querySelector("img");
+        var caption = dialog.querySelector("figcaption");
+        $(dialog).on("mousedown", function (e) {
+            if (e.target == this) {
+                // dialog has no padding, so click triggers only on backdrop
+                this.close();
+            }
+        });
+        $("a[data-lightbox]").on("click", function (e) {
+            e.preventDefault();
+            var label = this.querySelector("img").alt;
+            img.src = this.href;
+            img.alt = label;
+            caption.textContent = label;
+            dialog.showModal();
+        });
+    })();
+
+
 
     // free-range price input auto-check checkbox/set count-input to 1 if 0
     $("[data-checked-onchange]").each(function() {

@@ -71,6 +71,7 @@ from pretix.base.reldate import (
     RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
     SerializerRelativeDateField, SerializerRelativeDateTimeField,
 )
+from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
 )
@@ -1233,14 +1234,18 @@ DEFAULTS = {
     'invoice_email_organizer': {
         'default': '',
         'type': str,
-        'form_class': forms.EmailField,
-        'serializer_class': serializers.EmailField,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("Email address to receive a copy of each invoice"),
             help_text=_("Each newly created invoice will be sent to this email address shortly after creation. You can "
                         "use this for an automated import of invoices to your accounting system. The invoice will be "
                         "the only attachment of the email."),
-        )
+            validators=[multimail_validate],
+        ),
+        'serializer_kwargs': dict(
+            validators=[multimail_validate],
+        ),
     },
     'show_items_outside_presale_period': {
         'default': 'True',
@@ -2058,6 +2063,38 @@ DEFAULTS = {
         ),
         'serializer_class': I18nURLField,
     },
+    'accessibility_url': {
+        'default': None,
+        'type': LazyI18nString,
+        'form_class': I18nURLFormField,
+        'form_kwargs': dict(
+            label=_("Accessibility information URL"),
+            help_text=_("This should point e.g. to a part of your website that explains how your ticket shop complies "
+                        "with accessibility regulation."),
+            widget=I18nTextInput,
+        ),
+        'serializer_class': I18nURLField,
+    },
+    'accessibility_title': {
+        'default': LazyI18nString.from_gettext(gettext_noop("Accessibility information")),
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Accessibility information title"),
+            widget=I18nTextInput,
+        ),
+        'serializer_class': I18nURLField,
+    },
+    'accessibility_text': {
+        'default': None,
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Accessibility information text"),
+            widget=I18nMarkdownTextarea,
+        ),
+        'serializer_class': I18nURLField,
+    },
     'confirm_texts': {
         'default': LazyI18nStringList(),
         'type': LazyI18nStringList,
@@ -2778,7 +2815,7 @@ Your {organizer} team"""))  # noqa: W291
         ),
     },
     'theme_color_success': {
-        'default': '#50a167',
+        'default': '#408252',
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
@@ -2883,7 +2920,8 @@ Your {organizer} team"""))  # noqa: W291
             ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('If you provide a logo image, we will by default not show your event name and date '
-                        'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                        'in the page header. If you use a white background, we show your logo with a size of up '
+                        'to 1140x120 pixels. Otherwise the maximum size is 1120x120 pixels. You '
                         'can increase the size with the setting below. We recommend not using small details on the picture '
                         'as it will be resized on smaller screens.')
         ),
@@ -2926,7 +2964,8 @@ Your {organizer} team"""))  # noqa: W291
             ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_IMAGE,
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('If you provide a logo image, we will by default not show your organization name '
-                        'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                        'in the page header. If you use a white background, we show your logo with a size of up '
+                        'to 1140x120 pixels. Otherwise the maximum size is 1120x120 pixels. You '
                         'can increase the size with the setting below. We recommend not using small details on the picture '
                         'as it will be resized on smaller screens.')
         ),

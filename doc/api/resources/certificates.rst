@@ -23,7 +23,7 @@ Certificate download
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/certificate/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/certificate/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -38,7 +38,7 @@ Certificate download
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/download/certificate/?result=1f550651-ae7b-4911-a76c-2be8f348aaa5 HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/certificate/?result=1f550651-ae7b-4911-a76c-2be8f348aaa5 HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 

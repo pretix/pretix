@@ -498,6 +498,9 @@ class OrganizerSettingsForm(SettingsForm):
         'theme_round_borders',
         'primary_font',
         'privacy_url',
+        'accessibility_url',
+        'accessibility_title',
+        'accessibility_text',
         'cookie_consent',
         'cookie_consent_dialog_title',
         'cookie_consent_dialog_text',
@@ -522,7 +525,8 @@ class OrganizerSettingsForm(SettingsForm):
         max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         required=False,
         help_text=_('If you provide a logo image, we will by default not show your organization name '
-                    'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
+                    'in the page header. If you use a white background, we show your logo with a size of up '
+                    'to 1140x120 pixels. Otherwise the maximum size is 1120x120 pixels. You '
                     'can increase the size with the setting below. We recommend not using small details on the picture '
                     'as it will be resized on smaller screens.')
     )

@@ -367,7 +367,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     def test_product_list_view_with_voucher(self):
         with scopes_disabled():
-            self.event.vouchers.create(item=self.ticket, code="ABCDE")
+            self.event.vouchers.create(item=self.ticket, code="ABCDE", max_usages=1)
         response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
@@ -410,7 +410,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "free_price": False,
                             "original_price": None,
                             "name": "Early-bird ticket",
-                            "order_max": 4
+                            "order_max": 1
                         },
                     ],
                     "description": None,
@@ -426,7 +426,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     def test_product_list_view_with_voucher_variation_through_quota(self):
         with scopes_disabled():
-            self.event.vouchers.create(quota=self.quota_shirts, code="ABCDE")
+            self.event.vouchers.create(quota=self.quota_shirts, code="ABCDE", max_usages=1)
             self.quota_shirts.variations.remove(self.shirt_blue)
         response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
@@ -474,7 +474,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                 {
                                     'id': self.shirt_red.pk,
                                     'value': 'Red',
-                                    'order_max': 2,
+                                    'order_max': 1,
                                     'description': None,
                                     'original_price': None,
                                     'price': {

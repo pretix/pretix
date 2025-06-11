@@ -9,13 +9,13 @@
                title="{% trans "View customer account" %}" data-toggle="tooltip">
                 <span class="fa fa-user" aria-hidden="true"></span>
                 {{ request.customer.name|default:request.customer.email }}</a>
-            <a href="{% if request.event_domain %}{% abseventurl request.event "presale:organizer.customer.logout" %}{% else %}{% abseventurl request.organizer "presale:organizer.customer.logout" %}{% endif %}?next={{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}"
-               aria-label="{% trans "Log out" %}" data-toggle="tooltip" data-placement="left"
-               title="{% trans "Log out" %}">
+            <a href="{% if request.event_domain %}{% abseventurl request.event "presale:organizer.customer.logout" %}{% else %}{% abseventurl request.organizer "presale:organizer.customer.logout" %}{% endif %}?next={{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}">
                 <span class="fa fa-sign-out" aria-hidden="true"></span>
+                {% trans "Log out" %}
             </a>
         {% else %}
             <a href="{% abseventurl request.organizer "presale:organizer.customer.login" %}{% if request.resolver_match.url_name != "organizer.customer.login" %}?next={% if request.event_domain %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}{% if request.event_domain %}&request_cross_domain_customer_auth=true{% endif %}">
+                <span class="fa fa-sign-in" aria-hidden="true"></span>
                 {% trans "Log in" %}</a>
 
         {% endif %}

@@ -40,6 +40,10 @@
                     <tr data-dnd-id="{{ c.id }}">
                         <td>
                             <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.internal_name|default:c.name }}</a></strong>
+                            <br>
+                            <small class="text-muted">
+                                #{{ c.pk }}
+                            </small>
                         </td>
                         <td>
                             {{ c.get_category_type_display }}

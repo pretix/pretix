@@ -1,5 +1,7 @@
 {% load i18n %}
+{% load bootstrap3 %}
 {% load rich_text %}
 
 {{ request.event.settings.payment_giftcard_public_description|rich_text }}
-<input name="giftcard" class="form-control" placeholder="{% trans "Gift card code" %}">
+
+{% bootstrap_form form layout='checkout' %}

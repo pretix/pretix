@@ -625,8 +625,22 @@ class PaypalMethod(BasePaymentProvider):
         }
         return template.render(ctx)
 
-    @transaction.atomic
+    # We are wrapping the actual _execute_payment() here, since PaymentExceptions
+    # within the atomic transaction would rollback any changes to the payment-object,
+    # this throwing away any logentries and payment.fail()
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        ex = None
+        with transaction.atomic():
+            try:
+                return self._execute_payment(request, payment)
+            except PaymentException as e:
+                ex = e
+        if ex:
+            raise ex
+
+        return False
+
+    def _execute_payment(self, request: HttpRequest, payment: OrderPayment):
         payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
         if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
             logger.warning('payment is already confirmed; possible return-view/webhook race-condition')
