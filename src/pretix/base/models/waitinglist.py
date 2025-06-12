@@ -218,7 +218,6 @@ class WaitingListEntry(LoggedModel):
                 'waitinglistentry': self.pk,
                 'subevent': self.subevent.pk if self.subevent else None,
             }, user=user, auth=auth)
-            self.log_action('pretix.event.orders.waitinglist.voucher_assigned', user=user, auth=auth)
             self.voucher = v
             self.save()
 
@@ -234,6 +233,7 @@ class WaitingListEntry(LoggedModel):
                 ),
                 user=user,
                 auth=auth,
+                log_entry_type='pretix.event.orders.waitinglist.voucher_assigned',
             )
 
     def send_mail(self, subject: Union[str, LazyI18nString], template: Union[str, LazyI18nString],

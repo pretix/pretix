@@ -26,7 +26,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import (
     Discount, Item, ItemCategory, Order, Question, Quota, SubEvent, TaxRule,
-    Voucher,
+    Voucher, WaitingListEntry,
 )
 
 from .logentrytype_registry import (  # noqa
@@ -145,3 +145,15 @@ class TaxRuleLogEntryType(EventLogEntryType):
     object_link_viewname = 'control:event.settings.tax.edit'
     object_link_argname = 'rule'
     content_type = TaxRule
+
+
+class WaitingListEntryLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('{val}')
+    object_link_viewname = 'control:event.orders.waitinglist'
+    content_type = WaitingListEntry
+
+    def get_object_link_info(self, logentry) -> Optional[dict]:
+        info = super().get_object_link_info(logentry)
+        if info and 'href' in info:
+            info['href'] += '?status=a&entry=' + str(logentry.content_object.pk)
+        return info
