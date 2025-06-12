@@ -64,6 +64,7 @@ from pretix.base.models import (
     Event, EventMetaValue, Organizer, Quota, SubEvent, SubEventMetaValue,
 )
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.base.timemachine import time_machine_now
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.daterange import daterange
 from pretix.helpers.formats.en.formats import (
@@ -228,7 +229,7 @@ class EventListMixin:
 
     def _set_month_to_next_subevent(self):
         tz = self.request.event.timezone
-        now_dt = now()
+        now_dt = time_machine_now()
         next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
                 When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
@@ -245,8 +246,8 @@ class EventListMixin:
             self.year = datetime_from.astimezone(tz).year
             self.month = datetime_from.astimezone(tz).month
         else:
-            self.year = now().year
-            self.month = now().month
+            self.year = now_dt.year
+            self.month = now_dt.month
 
     def _set_month_to_next_event(self):
         now_dt = now()
@@ -296,7 +297,7 @@ class EventListMixin:
             try:
                 date = dateutil.parser.isoparse(self.request.GET.get('date')).date()
             except ValueError:
-                date = now().date()
+                date = time_machine_now().date()
             self.year = date.year
             self.month = date.month
         else:
@@ -306,7 +307,7 @@ class EventListMixin:
                 self._set_month_to_next_event()
 
     def _set_week_to_next_subevent(self):
-        now_dt = now()
+        now_dt = time_machine_now()
         tz = self.request.event.timezone
         next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
@@ -324,8 +325,8 @@ class EventListMixin:
             self.year = datetime_from.astimezone(tz).isocalendar()[0]
             self.week = datetime_from.astimezone(tz).isocalendar()[1]
         else:
-            self.year = now().isocalendar()[0]
-            self.week = now().isocalendar()[1]
+            self.year = now_dt.isocalendar()[0]
+            self.week = now_dt.isocalendar()[1]
 
     def _set_week_to_next_event(self):
         now_dt = now()
@@ -375,7 +376,7 @@ class EventListMixin:
             try:
                 iso = dateutil.parser.isoparse(self.request.GET.get('date')).isocalendar()
             except ValueError:
-                iso = now().isocalendar()
+                iso = time_machine_now().isocalendar()
             self.year = iso[0]
             self.week = iso[1]
         else:
