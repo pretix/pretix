@@ -1600,7 +1600,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                                                   self.context['event'].currency)
             is_split_taxes = fee_data.pop('_split_taxes_like_products', False)
 
-            if is_split_taxes:
+            if is_split_taxes and order.total:
                 d = defaultdict(lambda: Decimal('0.00'))
                 trz = TaxRule.zero()
                 for p in pos_map.values():
