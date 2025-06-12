@@ -89,7 +89,8 @@
                     <tr>
                         <th>{% trans "Answer" %}</th>
                         <th class="text-right">{% trans "Count" %}</th>
-                        <th class="text-right">{% trans "Percentage" %}</th>
+                        <th class="text-right">{% trans "% of answers" %}</th>
+                        <th class="text-right">{% trans "% of tickets" %}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -102,6 +103,7 @@
                             </td>
                             <td class="text-right">{{ stat.count }}</td>
                             <td class="text-right">{{ stat.percentage|floatformat:1 }} %</td>
+                            <td class="text-right">{{ stat.percentage_attendees|floatformat:1 }} %</td>
                         </tr>
                     {% endfor %}
                     </tbody>
