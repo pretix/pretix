@@ -192,7 +192,10 @@
                     {% endblocktrans %}
                 </div>
             {% endif %}
-            <div class="bulk-edit-field-group" data-confirm-dialog="#confirm-override-quotas">
+            <div class="bulk-edit-field-group"
+                 {% if sampled_quotas|default_if_none:"NONE" == "NONE" %}
+                 data-confirm-dialog="#confirm-override-quotas"
+                 {% endif %}>
                 <label class="field-toggle">
                     <input type="checkbox" name="_bulk" value="__quotas" {% if "__quotas" in bulk_selected %}checked{% endif %}>
                     {% trans "change" context "form_bulk" %}
