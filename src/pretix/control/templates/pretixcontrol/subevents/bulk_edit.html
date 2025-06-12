@@ -183,15 +183,6 @@
         </fieldset>
         <fieldset>
             <legend>{% trans "Quotas" %}</legend>
-            {% if sampled_quotas|default_if_none:"NONE" == "NONE" %}
-                <div class="alert alert-warning">
-                    {% blocktrans trimmed %}
-                        You selected a set of dates that currently have different quota setups. You can therefore
-                        not change their quotas in bulk. If you want, you can set up a new set of quotas to
-                        <strong>replace</strong> the quota setup of all selected dates.
-                    {% endblocktrans %}
-                </div>
-            {% endif %}
             <div class="bulk-edit-field-group"
                  {% if sampled_quotas|default_if_none:"NONE" == "NONE" %}
                  data-confirm-dialog="#confirm-override-quotas"
@@ -201,6 +192,13 @@
                     {% trans "change" context "form_bulk" %}
                 </label>
                 <div class="field-content">
+                    {% if sampled_quotas|default_if_none:"NONE" == "NONE" %}
+                        <div class="alert alert-warning">
+                            {% trans "You selected a set of dates that currently have different quota setups." %}
+                            {% trans "Using this option will <strong>delete all current quotas</strong> from <strong>all selected dates</strong>." %}
+                        </div>
+                    {% endif %}
+
                     <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
                         {% bootstrap_formset_errors formset %}
@@ -275,7 +273,7 @@
         <fieldset>
             <legend>{% trans "Check-in lists" %}</legend>
             {% if sampled_lists|default_if_none:"NONE" == "NONE" %}
-                <div class="alert alert-warning">
+                <div class="alert alert-info">
                     {% blocktrans trimmed %}
                         You selected a set of dates that currently have different check-in list setups. You can
                         therefore not change their check-in lists in bulk.
@@ -372,8 +370,9 @@
         </div>
     </form>
     {% trans "Delete existing quotas" as dialog_title %}
-    {% trans "Using this option will <strong>delete all current quotas</strong> from <strong>all selected dates</strong>. This cannot be reverted. Are you sure to proceed?" as dialog_text %}
-    {% dialog "confirm-override-quotas" dialog_title dialog_text icon="trash" %}
+    {% trans "Using this option will <strong>delete all current quotas</strong> from <strong>all selected dates</strong>." as dialog_text %}
+    {% trans "This cannot be reverted. Are you sure to proceed?" as dialog_text2 %}
+    {% dialog "confirm-override-quotas" dialog_title dialog_text|add:" "|add:dialog_text2 icon="trash" %}
         <p class="modal-card-confirm modal-card-confirm-spread">
             <button class="btn btn-lg btn-default" value="no">
                 {% trans "Cancel" %}
