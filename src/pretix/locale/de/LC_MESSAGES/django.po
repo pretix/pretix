@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-30 11:15+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2025-06-12 17:00+0000\n"
+"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -33401,7 +33401,7 @@ msgstr "Übersicht über die bestellten Produkte"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:50
 msgid "Continue with order process"
-msgstr "Mit dem Bestellprozess fortfahren"
+msgstr "Fortfahren mit dem Bestellprozess"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:55
 #: pretix/presale/templates/pretixpresale/event/index.html:232
