@@ -1901,10 +1901,11 @@ TEST_QUOTA_RES = {
 
 
 @pytest.mark.django_db
-def test_quota_list(token_client, organizer, event, quota, item, subevent):
+def test_quota_list(token_client, organizer, event, quota, item, item3, subevent):
+    quota.items.add(item3)
     res = dict(TEST_QUOTA_RES)
     res["id"] = quota.pk
-    res["items"] = [item.pk]
+    res["items"] = [item.pk, item3.pk]
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/quotas/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -1920,6 +1921,13 @@ def test_quota_list(token_client, organizer, event, quota, item, subevent):
         se2 = event.subevents.create(name="Foobar", date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/quotas/?subevent={}'.format(organizer.slug, event.slug, se2.pk))
+    assert [] == resp.data['results']
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/quotas/?items__in={},{},0'.format(organizer.slug, event.slug, item.pk, item3.pk))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/quotas/?items__in=0'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
 

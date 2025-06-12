@@ -485,8 +485,17 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
         super().perform_destroy(instance)
 
 
+class NumberInFilter(django_filters.BaseInFilter, django_filters.NumberFilter):
+    pass
+
+
 with scopes_disabled():
     class QuotaFilter(FilterSet):
+        items__in = NumberInFilter(
+            field_name='items__id',
+            lookup_expr='in',
+        )
+
         class Meta:
             model = Quota
             fields = {
@@ -508,7 +517,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
         return self.request.event.quotas.all()
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.filter_queryset(self.get_queryset()).distinct()
 
         page = self.paginate_queryset(queryset)
 
