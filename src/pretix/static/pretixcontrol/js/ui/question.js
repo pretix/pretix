@@ -7,17 +7,16 @@ $(function () {
 
     $(".chart").css("height", "250px");
     var data_type = $("#question_chart").attr("data-type"),
-        data = JSON.parse($("#question-chart-data").html()),
+        data = JSON.parse($("#question-chart-data").text() || "[]"),
         others_sum = 0,
         max_num = 8;
 
-    for (var i in data) {
-        data[i].value = data[i].count;
-        data[i].label = data[i].answer;
-        if (data[i].label.length > 20) {
-            data[i].label = data[i].label.substring(0, 20) + '…';
+    data = data[0].map(function (d) {
+        return {
+            'value': d.count,
+            'label': d.answer.length > 20 ? d.answer.substring(0, 20) + '…' : d.answer,
         }
-    }
+    });
 
     if (data_type == 'N') {
         // Sort
@@ -36,7 +35,7 @@ $(function () {
     // Limit shown options
     if (data.length > max_num) {
         for (var i = max_num; i < data.length; i++) {
-            others_sum += data[i].count;
+            others_sum += data[i].value;
         }
         data = data.slice(0, max_num);
         data.push({'value': others_sum, 'label': gettext('Others')});
@@ -78,7 +77,7 @@ $(function () {
             data: data,
             resize: true,
             xkey: 'label',
-            ykeys: ['count'],
+            ykeys: ['value'],
             labels: [gettext('Count')]
         });
     }
