@@ -1,7 +1,7 @@
 /*global $, Morris, gettext*/
 $(function () {
     // Question view
-    if (!$("#question-stats").length) {
+    if (!$("#question_chart").length) {
         return;
     }
 
@@ -11,12 +11,12 @@ $(function () {
         others_sum = 0,
         max_num = 8;
 
-    data = data[0]?.map(function (d) {
+    data = data.map(function (d) {
         return {
             'value': d.count,
             'label': d.answer.length > 20 ? d.answer.substring(0, 20) + '…' : d.answer,
         }
-    }) || [];
+    });
 
     if (data_type == 'N') {
         // Sort

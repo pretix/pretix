@@ -748,7 +748,6 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
         ctx['items'] = self.object.items.all()
         stats = self.get_answer_statistics()
         ctx['stats'], ctx['total'] = stats
-        ctx['stats_json'] = json.dumps(stats)
         return ctx
 
     def get_object(self, queryset=None) -> Question:
