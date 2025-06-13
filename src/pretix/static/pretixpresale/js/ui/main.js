@@ -548,7 +548,7 @@ $(function () {
     var local_tz = moment.tz.guess()
     var $add = $("<div>")
 
-    $("span[data-timezone], small[data-timezone], time[data-timezone]").each(function() {
+    $("div.frag-event-info span[data-timezone], small[data-timezone], time[data-timezone]").each(function() {
         var t = moment.tz($(this).attr("datetime") || $(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
         var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
