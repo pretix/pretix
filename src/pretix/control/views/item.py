@@ -64,8 +64,9 @@ from pretix.api.serializers.item import (
 )
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemVariation, Order, Question,
-    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher,
+    CartPosition, Item, ItemCategory, ItemVariation, Order, OrderPosition,
+    Question, QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping,
+    Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
@@ -665,36 +666,41 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
     template_name_field = 'question'
 
     def get_answer_statistics(self):
+        opqs = OrderPosition.objects.filter(
+            order__event=self.request.event,
+        )
         qs = QuestionAnswer.objects.filter(
             question=self.object, orderposition__isnull=False,
-            orderposition__order__event=self.request.event
         )
 
         if self.request.GET.get("subevent", "") != "":
-            qs = qs.filter(orderposition__subevent=self.request.GET["subevent"])
+            opqs = opqs.filter(subevent=self.request.GET["subevent"])
 
         s = self.request.GET.get("status", "np")
         if s != "":
             if s == 'o':
-                qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING,
-                               orderposition__order__expires__lt=now().replace(hour=0, minute=0, second=0))
+                opqs = opqs.filter(order__status=Order.STATUS_PENDING,
+                                   order__expires__lt=now().replace(hour=0, minute=0, second=0))
             elif s == 'np':
-                qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
+                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
             elif s == 'pv':
-                qs = qs.filter(
-                    Q(orderposition__order__status=Order.STATUS_PAID) |
-                    Q(orderposition__order__status=Order.STATUS_PENDING, orderposition__order__valid_if_pending=True)
+                opqs = opqs.filter(
+                    Q(order__status=Order.STATUS_PAID) |
+                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
                 )
             elif s == 'ne':
-                qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
+                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:
-                qs = qs.filter(orderposition__order__status=s)
+                opqs = opqs.filter(order__status=s)
 
         if s not in (Order.STATUS_CANCELED, ""):
-            qs = qs.filter(orderposition__canceled=False)
+            opqs = opqs.filter(canceled=False)
         if self.request.GET.get("item", "") != "":
             i = self.request.GET.get("item", "")
-            qs = qs.filter(orderposition__item_id__in=(i,))
+            opqs = opqs.filter(item_id__in=(i,))
+
+        qs = qs.filter(orderposition__in=opqs)
+        op_cnt = opqs.filter(item__in=self.object.items.all()).count()
 
         if self.object.type == Question.TYPE_FILE:
             qs = [
@@ -734,6 +740,7 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
         total = sum(a['count'] for a in r)
         for a in r:
             a['percentage'] = (a['count'] / total * 100.) if total else 0
+            a['percentage_attendees'] = (a['count'] / op_cnt * 100.) if op_cnt else 0
         return r, total
 
     def get_context_data(self, **kwargs):
