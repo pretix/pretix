@@ -648,18 +648,47 @@ var form_handlers = function (el) {
         var $checkbox = $(this).find("input[type=checkbox][name=_bulk]");
         var $content = $(this).find(".field-content");
         var $fields = $content.find("input, select, textarea, button");
+        var $dialog = $(this).attr("data-confirm-dialog") ? $($(this).attr("data-confirm-dialog")) : null;
+        var warningShown = false;
+
+        if ($dialog) {
+            $dialog.on("close", function () {
+                if ($dialog.get(0).returnValue === "yes") {
+                    $checkbox.prop("checked", true);
+                } else {
+                    $checkbox.prop("checked", false);
+                    warningShown = false;
+                }
+                update();
+            });
+        }
 
         var update = function () {
             var isChecked = $checkbox.prop("checked");
+
             $content.toggleClass("enabled", isChecked);
             $fields.attr("tabIndex", isChecked ? 0 : -1);
         }
         $content.on("focusin change click", function () {
             if ($checkbox.prop("checked")) return;
-            $checkbox.prop("checked", true);
-            update();
+            if ($dialog && !warningShown) {
+                warningShown = true;
+                $dialog.get(0).showModal();
+            } else {
+                $checkbox.prop("checked", true);
+                update();
+            }
         });
-        $checkbox.on('change', update)
+        $checkbox.on('change', function () {
+            var isChecked = $checkbox.prop("checked");
+            if (isChecked && $dialog && !warningShown) {
+                warningShown = true;
+                $dialog.get(0).showModal();
+            } else if (!isChecked) {
+                warningShown = false;
+            }
+            update();
+        })
         update();
     });
 
