@@ -27,7 +27,7 @@
                                 {{ c.value|money:c.currency }}
                             </div>
                             <div class="col-xs-1 text-right">
-                                <button name="use_giftcard" value="{{ p.id }}" title="{% trans "Use gift card" %}"
+                                <button name="use_giftcard" value="{{ c.secret }}" title="{% trans "Use gift card" %}"
                                     class="btn btn-primary btn-xs">
                                     {% trans "Apply" %}
                                 </button>
