@@ -96,12 +96,19 @@ class SendMailException(Exception):
 
 
 def clean_sender_name(sender_name: str) -> str:
+    # Even though we try to properly escape sender names, some characters seem to cause problems when the escaping
+    # fails due to some forwardings, etc.
+
     # Emails with @ in their sender name are rejected by some mailservers (e.g. Microsoft) because it looks like
     # a phishing attempt.
     sender_name = sender_name.replace("@", " ")
     # Emails with : in their sender name are treated by Microsoft like emails with no From header at all, leading
     # to a higher spam likelihood.
     sender_name = sender_name.replace(":", " ")
+    # Emails with , in their sender name look like multiple senders
+    sender_name = sender_name.replace(",", "")
+    # Emails with " in their sender name could be escaped, but somehow create issues in reailty
+    sender_name = sender_name.replace("\"", "")
 
     # Emails with excessively long sender names are rejected by some mailservers
     if len(sender_name) > 75:
