@@ -546,7 +546,22 @@ $(function () {
     form_handlers($("body"));
 
     var local_tz = moment.tz.guess()
-    var $add = $("<div>")
+    var $add = $("<div style='width: fit-content;'>")
+
+    // if either the .event-time-start or .event-time-end are on a different date
+    // then we use t.tz() to format local_tz with "ddd, MMMM Do, YYYY HH:mm"
+    var start_t = moment.tz($(".event-time-start").attr("datetime") || $(".event-time-start").attr("data-time"), $(".event-time-start").attr("data-timezone"))
+    var start_tz = moment.tz.zone($(".event-time-start").attr("data-timezone"))
+    var end_t = moment.tz($(".event-time-end").attr("datetime") || $(".event-time-end").attr("data-time"), $(".event-time-end").attr("data-timezone"))
+    var end_tz = moment.tz.zone($(".event-time-end").attr("data-timezone"))
+    var start_date_mismatch = (start_t.tz(start_tz.name).format("YYYY-MM-DD") != start_t.tz(local_tz).format("YYYY-MM-DD"));
+
+    // if end_tz is not defined, we assume the end time is in the same timezone as the start time
+    var end_date_mismatch = false;
+    if (end_tz) {
+        end_date_mismatch = (end_t.tz(end_tz.name).format("YYYY-MM-DD") != end_t.tz(local_tz).format("YYYY-MM-DD"));
+    }
+    var force_longform_date = (start_date_mismatch || end_date_mismatch);
 
     $("div.frag-event-info span[data-timezone], small[data-timezone], time[data-timezone]").each(function() {
         var t = moment.tz($(this).attr("datetime") || $(this).attr("data-time"), $(this).attr("data-timezone"))
@@ -564,21 +579,16 @@ $(function () {
             if ($(this).is("[data-time-short]")) {
                 if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
                     $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
-                    // $add.append(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
                 } else {
                     $add.append($("<em>").text(" " + t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
-                    // $add.append(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t))
                 }
             } else {
-                // $add.addClass("text-muted")
                 var t_prefix = $(this).is(".event-time-start") ? " Begin " : " End ";
                 $add.append(t_prefix + "in your local time: ")
-                if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
-                    // $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+                if (force_longform_date) {
                     $add.append($("<strong>").text(t.tz(local_tz).format("ddd, MMMM Do, YYYY HH:mm") + " " + moment.tz.zone(local_tz).abbr(t)))
                 } else {
                     $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
-                    // $add.append($("<strong>").text(t.tz(local_tz).format("ddd, MMMM Do, YYYY HH:mm") + " " + moment.tz.zone(local_tz).abbr(t)))
                 }
             }
 
