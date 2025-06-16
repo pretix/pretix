@@ -1326,6 +1326,26 @@ class PaymentStep(CartMixin, TemplateFlowStep):
             self._remove_payment(request.POST["remove_payment"])
             return redirect_to_url(self.get_step_url(request))
 
+        if "use_giftcard" in request.POST:
+            from pretix.base.payment import GiftCardPayment
+            # giftcard_id = request.POST["use_giftcard"]
+            # GiftCardPayment._add_giftcard_to_cart(self, self.get_cart(), GiftCard.get(giftcard_id))
+            try:
+                gc = self.event.organizer.accepted_gift_cards.get(
+                    secret=request.POST["use_giftcard"]
+                )
+                gcp = GiftCardPayment(self.request.event)
+                cs = cart_session(request)
+                gcp._add_giftcard_to_cart(cs, gc)
+                messages.success(
+                    request,
+                    _("The gift card has been applied to your cart.")
+                )
+                return redirect_to_url(self.get_next_url(request))
+            except ValidationError as e:
+                messages.error(request, str(e.message))
+                return redirect_to_url(self.get_step_url(request))
+
         for p in self.provider_forms:
             pprov = p['provider']
             if pprov.identifier == request.POST.get('payment', ''):
