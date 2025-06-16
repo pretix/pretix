@@ -107,7 +107,7 @@ def clean_sender_name(sender_name: str) -> str:
     sender_name = sender_name.replace(":", " ")
     # Emails with , in their sender name look like multiple senders
     sender_name = sender_name.replace(",", "")
-    # Emails with " in their sender name could be escaped, but somehow create issues in reailty
+    # Emails with " in their sender name could be escaped, but somehow create issues in reality
     sender_name = sender_name.replace("\"", "")
 
     # Emails with excessively long sender names are rejected by some mailservers
