@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load icon %}
 {% load money %}
 {% load static %}
 {% block title %}
@@ -278,6 +279,70 @@
                 </table>
                 {% include "pretixcontrol/pagination.html" %}
             </div>
+            <div class="panel panel-default items">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "Gift cards" %}
+                        </h3>
+                    </div>
+                    <table class="panel-body table">
+                        <thead>
+                        <tr>
+                            <th>{% trans "Gift card code" %}</th>
+                            <th>{% trans "Validity" %}</th>
+                            <th>{% trans "Issued on" %}</th>
+                            <th class="text-right">{% trans "Remaining value" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for gc in gift_cards %}
+                            <tr>
+                                <td>
+                                    <strong>
+                                        {{ gc }}
+                                    </strong>
+                                    {% if gc.testmode %}
+                                        <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if gc.expired %}
+                                        {% icon "minus-square-o" %}
+                                        {% trans "Expired" %}
+                                        <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
+                                            {% if gc.date_end %}
+                                            {% trans " since" %}
+                                            {{ gc.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                            {% endif %}
+                                        </time>
+                                    {% elif gc.expires %}
+                                        {% icon "check" %}
+                                        {% trans "Valid until" %}
+                                        <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
+                                            {{ gc.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                        </time>
+                                    {% else %}
+                                        {% icon "check" %}
+                                        {% trans "Valid" %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if gc.issuance %}
+                                    <p class="text-muted">
+                                        {% icon "calendar" %}
+                                        <span>{% trans "Issued on" %}:</span>
+                                        {{ gc.issuance }}
+                                    </p>
+                                    {% endif %}
+                                </td>
+                                <td class="text-right flip">
+                                    <p class="text-right">{{ gc.value|money:gc.currency }}</p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
         </div>
         <div class="col-md-2 col-xs-12">
             <div class="panel panel-default">
