@@ -33,9 +33,12 @@
                                 <small>
                                 {% if gc.expired %}
                                     {% icon "minus-square-o" %}
-                                    {% trans "Expired since" %}
+                                    {% trans "Expired" %}
                                     <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
-                                        {{ gc.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                        {% if gc.expires %}
+                                        {% trans " since" %}
+                                        {{ gc.expires|date:"SHORT_DATETIME_FORMAT" }}
+                                        {% endif %}
                                     </time>
                                 {% elif gc.expires %}
                                     {% icon "check" %}
