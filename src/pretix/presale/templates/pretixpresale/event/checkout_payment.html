@@ -19,14 +19,15 @@
             <ul class="list-group">
                 {% for c in customer_gift_cards %}
                     <li class="list-group-item row">
-                        <div class="col-xs-9">
+                        <div class="col-xs-9" id="gc-code-{{ forloop.counter }}">
                             {{ c }}
                         </div>
-                        <div class="col-xs-2 text-right">
+                        <div class="col-xs-2 text-right" id="gc-value-{{ forloop.counter }}">
                             {{ c.value|money:c.currency }}
                         </div>
                         <div class="col-xs-1 text-right">
                             <button name="use_giftcard" value="{{ c.secret }}" title="{% trans "Use gift card" %}"
+                                    aria-describedby="gc-code-{{ forloop.counter }} gc-value-{{ forloop.counter }}"
                                 class="btn btn-primary btn-xs">
                                 {% trans "Apply" %}
                             </button>
