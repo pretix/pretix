@@ -12,30 +12,28 @@
     {% if customer_gift_cards %}
         <p><strong>
             <span class="sr-only">Info:</span>
-            {% trans "Your have gift cards available:" %}
+            {% trans "You have gift cards available:" %}
         </strong></p>
         <form method="post">
             {% csrf_token %}
-            <div class="list-group">
+            <ul class="list-group">
                 {% for c in customer_gift_cards %}
-                    <div class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-9">
-                                {{ c }}
-                            </div>
-                            <div class="col-xs-2 text-right">
-                                {{ c.value|money:c.currency }}
-                            </div>
-                            <div class="col-xs-1 text-right">
-                                <button name="use_giftcard" value="{{ c.secret }}" title="{% trans "Use gift card" %}"
-                                    class="btn btn-primary btn-xs">
-                                    {% trans "Apply" %}
-                                </button>
-                            </div>
+                    <li class="list-group-item row">
+                        <div class="col-xs-9">
+                            {{ c }}
                         </div>
-                    </div>
+                        <div class="col-xs-2 text-right">
+                            {{ c.value|money:c.currency }}
+                        </div>
+                        <div class="col-xs-1 text-right">
+                            <button name="use_giftcard" value="{{ c.secret }}" title="{% trans "Use gift card" %}"
+                                class="btn btn-primary btn-xs">
+                                {% trans "Apply" %}
+                            </button>
+                        </div>
+                    </li>
                 {% endfor %}
-            </div>
+            </ul>
         </form>
     {% endif %}
     {% if current_payments %}
