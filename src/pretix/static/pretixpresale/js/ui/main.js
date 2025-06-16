@@ -574,9 +574,11 @@ $(function () {
                 var t_prefix = $(this).is(".event-time-start") ? " Begin " : " End ";
                 $add.append(t_prefix + "in your local time: ")
                 if (t.tz(tz.name).format("YYYY-MM-DD") != t.tz(local_tz).format("YYYY-MM-DD")) {
-                    $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+                    // $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-datetimeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+                    $add.append($("<strong>").text(t.tz(local_tz).format("ddd, MMMM Do, YYYY HH:mm") + " " + moment.tz.zone(local_tz).abbr(t)))
                 } else {
                     $add.append($("<strong>").text(t.tz(local_tz).format($("body").attr("data-timeformat")) + " " + moment.tz.zone(local_tz).abbr(t)))
+                    // $add.append($("<strong>").text(t.tz(local_tz).format("ddd, MMMM Do, YYYY HH:mm") + " " + moment.tz.zone(local_tz).abbr(t)))
                 }
             }
 
@@ -591,8 +593,8 @@ $(function () {
 
     //select the div with the .info-row class and append $add to it
     var $infodiv = $(".frag-event-info").find(".info-row").last();
-    var $infolast = $infodiv.find(".event-time").last();
-    $add.insertAfter($infolast);
+    var $infofirst = $infodiv.find(".event-time").first();
+    $add.insertBefore($infofirst);
 
     // For a very weird reason, window width is 0 on an initial load of the widget
     if ($(window).width() > 0) {
