@@ -57,8 +57,8 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.forms import I18nMarkdownTextarea, PlaceholderValidator
 from pretix.base.models import (
-    CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
-    OrderRefund, Quota, TaxRule,
+    CartPosition, Customer, Event, GiftCard, InvoiceAddress, Order,
+    OrderPayment, OrderRefund, Quota, TaxRule,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
@@ -1467,6 +1467,16 @@ class GiftCardPayment(BasePaymentProvider):
 
     def order_change_allowed(self, order: Order) -> bool:
         return super().order_change_allowed(order) and self.event.organizer.has_gift_cards
+
+    # def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
+    #     ctx = {
+    #         'request': request,
+    #     }
+    #     if "giftcard" in request.event.get_payment_providers():
+    #         cs = cart_session(request)
+    #         customer = Customer.objects.filter(pk=cs["customer"]).first()
+    #         ctx['customer_gift_cards'] = customer.usable_gift_cards
+    #     return get_template('pretixcontrol/giftcards/checkout.html').render(ctx)
 
     def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
         return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
