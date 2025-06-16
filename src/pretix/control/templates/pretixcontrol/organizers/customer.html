@@ -288,55 +288,38 @@
                     <table class="panel-body table">
                         <thead>
                         <tr>
-                            <th>{% trans "Gift card code" %}</th>
-                            <th>{% trans "Validity" %}</th>
-                            <th>{% trans "Issued on" %}</th>
-                            <th class="text-right">{% trans "Remaining value" %}</th>
+                            <th>{% trans "Gift card code" %}
+                            <th>{% trans "Creation date" %}
+                            <th>{% trans "Expiry date" %}
+                            <th>{% trans "Last transaction" %}
+                            <th class="text-right">{% trans "Current value" %}
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for gc in gift_cards %}
                             <tr>
                                 <td>
-                                    <strong>
-                                        {{ gc }}
-                                    </strong>
-                                    {% if gc.testmode %}
-                                        <span class="label label-warning">{% trans "TEST MODE" %}</span>
-                                    {% endif %}
+                                    <a href="{% url "control:organizer.giftcard" organizer=organizer.slug giftcard=gc.id %}">
+                                <strong>{{ gc.secret }}</strong></a>
+                                {% if gc.testmode %}
+                                    <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                {% endif %}
+                                {% if gc.expired %}
+                                    <span class="label label-danger">{% trans "Expired" %}</span>
+                                {% endif %}
                                 </td>
-                                <td>
-                                    {% if gc.expired %}
-                                        {% icon "minus-square-o" %}
-                                        {% trans "Expired" %}
-                                        <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
-                                            {% if gc.expires %}
-                                            {% trans " since" %}
-                                            {{ gc.expires|date:"SHORT_DATETIME_FORMAT" }}
-                                            {% endif %}
-                                        </time>
-                                    {% elif gc.expires %}
-                                        {% icon "check" %}
-                                        {% trans "Valid until" %}
-                                        <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
-                                            {{ gc.date_end|date:"SHORT_DATETIME_FORMAT" }}
-                                        </time>
-                                    {% else %}
-                                        {% icon "check" %}
-                                        {% trans "Valid" %}
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if gc.issuance %}
-                                    <p class="text-muted">
-                                        {% icon "calendar" %}
-                                        <span>{% trans "Issued on" %}:</span>
-                                        {{ gc.issuance }}
-                                    </p>
-                                    {% endif %}
-                                </td>
+                                <td>{{ gc.issuance|date:"SHORT_DATETIME_FORMAT" }}</td>
+                                <td>{% if gc.expires %}{{ gc.expires|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</td>
+                                <td>{% if gc.last_tx %}{{ gc.last_tx|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</td>
                                 <td class="text-right flip">
                                     <p class="text-right">{{ gc.value|money:gc.currency }}</p>
+                                </td>
+                                <td class="text-right">
+                                    <a href="{% url "control:organizer.giftcard" organizer=organizer.slug giftcard=gc.id %}"
+                                            class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Details" %}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
                         {% endfor %}
