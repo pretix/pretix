@@ -3068,6 +3068,8 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             .annotate(spending=Sum("total"))
         )
 
+        ctx["gift_cards"] = self.customer.customer_gift_cards.all()
+
         return ctx
 
 
