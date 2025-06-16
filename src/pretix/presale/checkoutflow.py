@@ -1328,8 +1328,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
         if "use_giftcard" in request.POST:
             from pretix.base.payment import GiftCardPayment
-            # giftcard_id = request.POST["use_giftcard"]
-            # GiftCardPayment._add_giftcard_to_cart(self, self.get_cart(), GiftCard.get(giftcard_id))
+
             try:
                 gc = self.event.organizer.accepted_gift_cards.get(
                     secret=request.POST["use_giftcard"]
