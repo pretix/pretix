@@ -157,7 +157,7 @@ class WebHookCallRetry(models.Model):
     id = models.BigAutoField(primary_key=True)
     webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='retries')
     logentry = models.ForeignKey('pretixbase.LogEntry', on_delete=models.CASCADE, related_name='webhook_retries')
-    retry_not_before = models.DateTimeField(auto_now_add=True)
+    retry_not_before = models.DateTimeField()
     retry_count = models.PositiveIntegerField(default=0)
     action_type = models.CharField(max_length=255)
 
