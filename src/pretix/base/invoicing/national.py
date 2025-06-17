@@ -55,7 +55,7 @@ class ItalianSdITransmissionType(TransmissionType):
             "transmission_it_sdi_recipient_code": forms.CharField(
                 label=pgettext_lazy("italian_invoice", "Recipient code"),
                 validators=[
-                    RegexValidator("^[A-Z0-9]{7}$")
+                    RegexValidator("^[A-Z0-9]{6,7}$")
                 ]
             ),
         }
