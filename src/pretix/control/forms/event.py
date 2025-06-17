@@ -665,9 +665,9 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             del self.fields['event_list_available_only']
             del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
-        self.fields['primary_font'].choices += [
+        self.fields['primary_font'].choices = [('Open Sans', 'Open Sans')] + sorted([
             (a, {"title": a, "data": v}) for a, v in get_fonts(self.event, pdf_support_required=False).items()
-        ]
+        ], key=lambda a: a[0])
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields
         self.virtual_keys = []
