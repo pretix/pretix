@@ -44,7 +44,7 @@
                                     {% icon "check" %}
                                     {% trans "Valid until" %}
                                     <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
-                                        {{ gc.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                                        {{ gc.expires|date:"SHORT_DATETIME_FORMAT" }}
                                     </time>
                                 {% else %}
                                     {% icon "check" %}
