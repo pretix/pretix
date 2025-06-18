@@ -3,6 +3,7 @@
 {% load money %}
 {% load rich_text %}
 
+{{ request.event.settings.payment_giftcard_public_description|rich_text }}
 {% if customer_gift_cards %}
     <div class="panel-body">
         <p><strong>
@@ -33,6 +34,4 @@
         </form>
     </div>
 {% endif %}
-{{ request.event.settings.payment_giftcard_public_description|rich_text }}
-
 {% bootstrap_form form layout='checkout' %}

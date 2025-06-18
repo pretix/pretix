@@ -103,6 +103,7 @@ class GiftCardPaymentForm(PaymentProviderForm):
         self.testmode = kwargs.pop('testmode')
         self.positions = kwargs.pop('positions')
         self.used_cards = kwargs.pop('used_cards')
+        self.customer_gift_cards = kwargs.pop('customer_gift_cards')
         super().__init__(*args, **kwargs)
 
     def clean(self):
@@ -1373,6 +1374,12 @@ class GiftCardPayment(BasePaymentProvider):
     payment_form_class = GiftCardPaymentForm
     payment_form_template_name = 'pretixcontrol/giftcards/checkout.html'
 
+    def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order = None) -> str:
+        form = self.payment_form(request)
+        template = get_template(self.payment_form_template_name)
+        ctx = {'request': request, 'form': form, 'customer_gift_cards': form.customer_gift_cards, }
+        return template.render(ctx)
+
     def payment_form(self, request: HttpRequest) -> Form:
         # Unfortunately, in payment_form we do not know if we're in checkout
         # or in an existing order. But we need to do the validation logic in the
@@ -1386,6 +1393,13 @@ class GiftCardPayment(BasePaymentProvider):
             ]
             positions = get_cart(request)
             testmode = self.event.testmode
+            if cs.get('customer_mode', 'guest') == 'login':
+                try:
+                    customer = Customer.objects.filter(pk=cs["customer"]).first()
+                    # TODO look at this again:
+                    # customer = request.organizer.customers.get(cs.get('customer', -1))
+                except Customer.DoesNotExist:
+                    customer = None
         else:
             used_cards = []
             order = self.event.orders.get(code=request.resolver_match.kwargs["order"])
@@ -1394,6 +1408,7 @@ class GiftCardPayment(BasePaymentProvider):
 
         form = self.payment_form_class(
             event=self.event,
+            customer_gift_cards=customer.usable_gift_cards if customer else None,
             used_cards=used_cards,
             positions=positions,
             testmode=testmode,
@@ -1467,16 +1482,6 @@ class GiftCardPayment(BasePaymentProvider):
 
     def order_change_allowed(self, order: Order) -> bool:
         return super().order_change_allowed(order) and self.event.organizer.has_gift_cards
-
-    # def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
-    #     ctx = {
-    #         'request': request,
-    #     }
-    #     if "giftcard" in request.event.get_payment_providers():
-    #         cs = cart_session(request)
-    #         customer = Customer.objects.filter(pk=cs["customer"]).first()
-    #         ctx['customer_gift_cards'] = customer.usable_gift_cards
-    #     return get_template('pretixcontrol/giftcards/checkout.html').render(ctx)
 
     def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
         return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
