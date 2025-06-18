@@ -1377,6 +1377,8 @@ class GiftCardPayment(BasePaymentProvider):
 
     @cached_property
     def customer_gift_cards(self):
+        if not self.request:
+            return None
         cs = cart_session(self.request)
         if cs.get('customer_mode', 'guest') == 'login':
             try:
@@ -1404,12 +1406,13 @@ class GiftCardPayment(BasePaymentProvider):
             ]
             positions = get_cart(request)
             testmode = self.event.testmode
-            self.request = request
         else:
             used_cards = []
             order = self.event.orders.get(code=request.resolver_match.kwargs["order"])
             positions = order.positions.all()
             testmode = order.testmode
+
+        self.request = request
 
         form = self.payment_form_class(
             event=self.event,
