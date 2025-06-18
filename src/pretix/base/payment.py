@@ -38,6 +38,7 @@ import json
 import logging
 from collections import OrderedDict
 from decimal import ROUND_HALF_UP, Decimal
+from functools import cached_property
 from typing import Any, Dict, Union
 from zoneinfo import ZoneInfo
 
@@ -99,11 +100,11 @@ class PaymentProviderForm(Form):
 
 class GiftCardPaymentForm(PaymentProviderForm):
     def __init__(self, *args, **kwargs):
+        self.customer_gift_cards = kwargs.pop('customer_gift_cards')
         self.event = kwargs.pop('event')
         self.testmode = kwargs.pop('testmode')
         self.positions = kwargs.pop('positions')
         self.used_cards = kwargs.pop('used_cards')
-        self.customer_gift_cards = kwargs.pop('customer_gift_cards')
         super().__init__(*args, **kwargs)
 
     def clean(self):
@@ -1374,6 +1375,16 @@ class GiftCardPayment(BasePaymentProvider):
     payment_form_class = GiftCardPaymentForm
     payment_form_template_name = 'pretixcontrol/giftcards/checkout.html'
 
+    @cached_property
+    def customer_gift_cards(self):
+        cs = cart_session(self.request)
+        if cs.get('customer_mode', 'guest') == 'login':
+            try:
+                customer = self.request.organizer.customers.get(pk=cs["customer"])
+                return customer.usable_gift_cards
+            except Customer.DoesNotExist:
+                return None
+
     def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order = None) -> str:
         form = self.payment_form(request)
         template = get_template(self.payment_form_template_name)
@@ -1393,13 +1404,7 @@ class GiftCardPayment(BasePaymentProvider):
             ]
             positions = get_cart(request)
             testmode = self.event.testmode
-            if cs.get('customer_mode', 'guest') == 'login':
-                try:
-                    customer = Customer.objects.filter(pk=cs["customer"]).first()
-                    # TODO look at this again:
-                    # customer = request.organizer.customers.get(cs.get('customer', -1))
-                except Customer.DoesNotExist:
-                    customer = None
+            self.request = request
         else:
             used_cards = []
             order = self.event.orders.get(code=request.resolver_match.kwargs["order"])
@@ -1408,7 +1413,7 @@ class GiftCardPayment(BasePaymentProvider):
 
         form = self.payment_form_class(
             event=self.event,
-            customer_gift_cards=customer.usable_gift_cards if customer else None,
+            customer_gift_cards=self.customer_gift_cards,
             used_cards=used_cards,
             positions=positions,
             testmode=testmode,

@@ -1423,20 +1423,14 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
 
-        try:
-            available_giftcards = self.cart_customer.usable_gift_cards
-        except Exception:
-            available_giftcards = None
-
         if len(self.provider_forms) == 1:
             ctx['selected'] = self.provider_forms[0]['provider'].identifier
         elif 'payment' in self.request.POST:
             ctx['selected'] = self.request.POST['payment']
         elif self.single_use_payment:
             ctx['selected'] = self.single_use_payment['provider']
-        elif "giftcard" in self.request.event.get_payment_providers() and available_giftcards:
+        elif "giftcard" in self.request.event.get_payment_providers():
             ctx['selected'] = "giftcard"
-            ctx['available_giftcards'] = available_giftcards
         else:
             ctx['selected'] = ''
         ctx['cart'] = self.get_cart()

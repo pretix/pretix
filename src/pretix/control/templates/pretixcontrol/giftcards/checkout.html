@@ -5,33 +5,31 @@
 
 {{ request.event.settings.payment_giftcard_public_description|rich_text }}
 {% if customer_gift_cards %}
-    <div class="panel-body">
-        <p><strong>
-            <span class="sr-only">Info:</span>
-            {% trans "You have gift cards available:" %}
-        </strong></p>
-        <form method="post">
-            {% csrf_token %}
-            <ul class="list-group">
-                {% for c in customer_gift_cards %}
-                    <li class="list-group-item row">
-                        <div class="col-xs-9" id="gc-code-{{ forloop.counter }}">
-                            {{ c }}
-                        </div>
-                        <div class="col-xs-2 text-right" id="gc-value-{{ forloop.counter }}">
-                            {{ c.value|money:c.currency }}
-                        </div>
-                        <div class="col-xs-1 text-right">
-                            <button name="use_giftcard" value="{{ c.secret }}" title="{% trans "Use gift card" %}"
-                                    aria-describedby="gc-code-{{ forloop.counter }} gc-value-{{ forloop.counter }}"
-                                class="btn btn-primary btn-xs">
-                                {% trans "Apply" %}
-                            </button>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </form>
-    </div>
+    <p><strong>
+        <span class="sr-only">Info:</span>
+        {% trans "You have gift cards available:" %}
+    </strong></p>
+    <form method="post">
+        {% csrf_token %}
+        <ul class="list-group">
+            {% for c in customer_gift_cards %}
+                <li class="list-group-item row row-no-gutters">
+                    <div class="col-sm-8 col-md-9" id="gc-code-{{ forloop.counter }}">
+                        {{ c }}
+                    </div>
+                    <div class="col-sm-2 text-right" id="gc-value-{{ forloop.counter }}">
+                        {{ c.value|money:c.currency }}
+                    </div>
+                    <div class="col-sm-2 col-md-1 text-right">
+                        <button name="use_giftcard" value="{{ c.secret }}" title="{% trans "Use gift card" %}"
+                                aria-describedby="gc-code-{{ forloop.counter }} gc-value-{{ forloop.counter }}"
+                            class="btn btn-primary btn-xs">
+                            {% trans "Apply" %}
+                        </button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </form>
 {% endif %}
 {% bootstrap_form form layout='checkout' %}

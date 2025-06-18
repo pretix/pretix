@@ -105,7 +105,11 @@
                                            aria-controls="payment_{{ p.provider.identifier }}"
                                            data-wallets="{{ p.provider.walletqueries|join:"|" }}" />
                                     <strong class="accordion-label-text">{{ p.provider.public_name }}</strong>
-                                    {% if p.provider.identifier == 'giftcard' and available_giftcards %}<small>({{ available_giftcards|length }}{% trans " available" %})</small>{% endif %}
+                                    {% if p.provider.identifier == 'giftcard' and p.provider.customer_gift_cards %}
+                                        <small>
+                                            ({{p.provider.customer_gift_cards|length }}{% trans " available" %})
+                                        </small>
+                                    {% endif %}
                                 </span>
                             </label>
                         </legend>
