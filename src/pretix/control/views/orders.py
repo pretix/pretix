@@ -548,23 +548,24 @@ class OrderDetail(OrderView):
 
         unsent_invoices = [ii.pk for ii in ctx['invoices'] if not ii.sent_to_customer]
         if unsent_invoices:
-            ctx['invoices_send_link'] = reverse('control:event.order.sendmail', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug,
-                'code': self.order.code
-            }) + '?' + urlencode({
-                'subject': ngettext('Your invoice', 'Your invoices', len(unsent_invoices)),
-                'message': ngettext(
-                    'Hello,\n\nplease find your invoice attached to this email.\n\n'
-                    'Your {event} team',
-                    'Hello,\n\nplease find your invoices attached to this email.\n\n'
-                    'Your {event} team',
-                    len(unsent_invoices)
-                ).format(
-                    event="{event}",
-                ),
-                'attach_invoices': unsent_invoices
-            }, doseq=True)
+            with language(self.order.locale):
+                ctx['invoices_send_link'] = reverse('control:event.order.sendmail', kwargs={
+                    'event': self.request.event.slug,
+                    'organizer': self.request.event.organizer.slug,
+                    'code': self.order.code
+                }) + '?' + urlencode({
+                    'subject': ngettext('Your invoice', 'Your invoices', len(unsent_invoices)),
+                    'message': ngettext(
+                        'Hello,\n\nplease find your invoice attached to this email.\n\n'
+                        'Your {event} team',
+                        'Hello,\n\nplease find your invoices attached to this email.\n\n'
+                        'Your {event} team',
+                        len(unsent_invoices)
+                    ).format(
+                        event="{event}",
+                    ),
+                    'attach_invoices': unsent_invoices
+                }, doseq=True)
 
         return ctx
 
