@@ -23,6 +23,7 @@ import inspect
 import os
 
 import pytest
+from django.core.cache import cache
 from django.test import override_settings
 from django.utils import translation
 from django_scopes import scopes_disabled
@@ -115,6 +116,7 @@ def fakeredis_client(monkeypatch):
             },
         }
     ):
+        cache.clear()
         redis = get_redis_connection("default", True)
         redis.flushall()
         monkeypatch.setattr('django_redis.get_redis_connection', get_redis_connection, raising=False)
