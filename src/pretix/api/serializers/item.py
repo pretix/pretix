@@ -505,6 +505,11 @@ class QuestionSerializer(I18nAwareModelSerializer):
         Question._clean_identifier(self.context['event'], value, self.instance)
         return value
 
+    def validate_type(self, value):
+        if self.instance:
+            self.instance.clean_type_change(self.instance.type, value)
+        return value
+
     def validate_dependency_question(self, value):
         if value:
             if value.type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):

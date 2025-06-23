@@ -2429,6 +2429,45 @@ def test_question_update(token_client, organizer, event, question):
 
 
 @pytest.mark.django_db
+def test_question_update_type_changes(token_client, organizer, event, question):
+    # Allowed because no answers exist
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "type": "B",
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    with scopes_disabled():
+        question.answers.create(answer="12")
+
+    # Allowed change
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "type": "S",
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    # Forbidden change
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "type": "B",
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == ('{"type":["The system already contains answers to this question that are not '
+                                     'compatible with changing the type of question without data loss. Consider hiding '
+                                     'this question and creating a new one instead."]}')
+
+
+@pytest.mark.django_db
 def test_question_update_circular_dependency(token_client, organizer, event, question):
     with scopes_disabled():
         q2 = event.questions.create(question="T-Shirt size", type="B", identifier="FOO", dependency_question=question)

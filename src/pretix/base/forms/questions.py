@@ -896,10 +896,17 @@ class BaseQuestionsForm(forms.Form):
                             'Please enter a date no later than {max}.',
                             max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
                         )
+                if initial and initial.anser:
+                    try:
+                        _initial = dateutil.parser.parse(initial.answer).date()
+                    except dateutil.parser.ParserError:
+                        _initial = None
+                else:
+                    _initial = None
                 field = forms.DateField(
                     label=label, required=required,
                     help_text=help_text,
-                    initial=dateutil.parser.parse(initial.answer).date() if initial and initial.answer else None,
+                    initial=_initial,
                     widget=DatePickerWidget(attrs),
                 )
                 if q.valid_date_min:
@@ -907,10 +914,17 @@ class BaseQuestionsForm(forms.Form):
                 if q.valid_date_max:
                     field.validators.append(MaxDateValidator(q.valid_date_max))
             elif q.type == Question.TYPE_TIME:
+                if initial and initial.anser:
+                    try:
+                        _initial = dateutil.parser.parse(initial.answer).time()
+                    except dateutil.parser.ParserError:
+                        _initial = None
+                else:
+                    _initial = None
                 field = forms.TimeField(
                     label=label, required=required,
                     help_text=help_text,
-                    initial=dateutil.parser.parse(initial.answer).time() if initial and initial.answer else None,
+                    initial=_initial,
                     widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             elif q.type == Question.TYPE_DATETIME:
@@ -931,10 +945,19 @@ class BaseQuestionsForm(forms.Form):
                             'Please enter a date and time no later than {max}.',
                             max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
                         )
+
+                if initial and initial.anser:
+                    try:
+                        _initial = dateutil.parser.parse(initial.answer).astimezone(tz)
+                    except dateutil.parser.ParserError:
+                        _initial = None
+                else:
+                    _initial = None
+
                 field = SplitDateTimeField(
                     label=label, required=required,
                     help_text=help_text,
-                    initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
+                    initial=_initial,
                     widget=SplitDateTimePickerWidget(
                         time_format=get_format_without_seconds('TIME_INPUT_FORMATS'),
                         min_date=q.valid_datetime_min,

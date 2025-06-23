@@ -1925,6 +1925,25 @@ class Question(LoggedModel):
             raise ValidationError(_("The maximum value must not be lower than the minimum value."))
         super().clean()
 
+    def clean_type_change(self, old_type, new_type):
+        if old_type == new_type:
+            return True
+        if not self.answers.exists():
+            return True
+        if new_type == self.TYPE_TEXT and old_type != self.TYPE_FILE:
+            # All types can be converted to text except file
+            return True
+        if new_type == self.TYPE_STRING and old_type not in (self.TYPE_TEXT, self.TYPE_FILE):
+            # All types can be converted to string except for text except file
+            return True
+        if new_type == self.TYPE_CHOICE_MULTIPLE and old_type == self.TYPE_CHOICE:
+            # Single-choice can be converted to multiple choice without loss
+            return True
+        raise ValidationError(
+            _("The system already contains answers to this question that are not compatible with changing the "
+              "type of question without data loss. Consider hiding this question and creating a new one instead.")
+        )
+
 
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options', on_delete=models.CASCADE)

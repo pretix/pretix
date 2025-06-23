@@ -201,6 +201,12 @@ class QuestionForm(I18nModelForm):
 
         return val
 
+    def clean_type(self):
+        val = self.cleaned_data.get('type')
+        if self.instance:
+            self.instance.clean_type_change(self.instance.type, val)
+        return val
+
     def clean_identifier(self):
         val = self.cleaned_data.get('identifier')
         Question._clean_identifier(self.instance.event, val, self.instance)
