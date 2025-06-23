@@ -793,7 +793,7 @@ class Item(LoggedModel):
     class Meta:
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
-        ordering = ("category__position", "category", "position")
+        ordering = ("category__position", "category", "position", "pk")
 
     def __str__(self):
         return str(self.internal_name or self.name)
