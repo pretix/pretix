@@ -3749,7 +3749,7 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     # 'CN': (['Province', 'Autonomous region', 'Munincipality'], 'long'),
     'JP': (['Prefecture'], 'long'),
     'MY': (['State', 'Federal territory'], 'long'),
-    'MX': (['State', 'Federal district'], 'short'),
+    'MX': (['State', 'Federal district', 'Federal entity'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
     'IT': (['Province', 'Free municipal consortium', 'Metropolitan city', 'Autonomous province',
             'Free municipal consortium', 'Decentralized regional entity'], 'short'),
