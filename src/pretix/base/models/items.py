@@ -1928,7 +1928,7 @@ class Question(LoggedModel):
     def clean_type_change(self, old_type, new_type):
         if old_type == new_type:
             return True
-        if not self.answers.exists():
+        if not self.pk or not self.answers.exists():
             return True
         if new_type == self.TYPE_TEXT and old_type != self.TYPE_FILE:
             # All types can be converted to text except file
