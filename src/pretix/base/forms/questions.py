@@ -896,7 +896,7 @@ class BaseQuestionsForm(forms.Form):
                             'Please enter a date no later than {max}.',
                             max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
                         )
-                if initial and initial.anser:
+                if initial and initial.answer:
                     try:
                         _initial = dateutil.parser.parse(initial.answer).date()
                     except dateutil.parser.ParserError:
