@@ -132,7 +132,7 @@ class SalesChannelMigrationMixin:
                 s.identifier for s in
                 self.organizer.sales_channels.all()
             ])
-        else:
+        elif "limit_sales_channels" in value:
             value["sales_channels"] = value["limit_sales_channels"]
         return value
 
@@ -145,6 +145,9 @@ class ConfigurableSerializerMixin:
             # Do not support include requests when the serializer is used for writing
             # TODO: think about this
             return set()
+        if getattr(self, "parent", None):
+            # Field selection is always handled by top-level serializer
+            return set()
         if 'exclude' in self.context:
             return self.context['exclude']
         elif 'request' in self.context:
@@ -156,6 +159,9 @@ class ConfigurableSerializerMixin:
             # Do not support include requests when the serializer is used for writing
             # TODO: think about this
             return set()
+        if getattr(self, "parent", None):
+            # Field selection is always handled by top-level serializer
+            return set()
         if 'include' in self.context:
             return self.context['include']
         elif 'request' in self.context:
@@ -166,6 +172,9 @@ class ConfigurableSerializerMixin:
         if hasattr(self, "initial_data"):
             # Do not support expand requests when the serializer is used for writing
             # TODO: think about this
+            return set()
+        if getattr(self, "parent", None):
+            # Field selection is always handled by top-level serializer
             return set()
         if 'expand' in self.context:
             return self.context['expand']
@@ -231,6 +240,13 @@ class ConfigurableSerializerMixin:
             if not perm_holder.has_event_permission(request.organizer, request.event, ef["permission"], request=request):
                 raise PermissionDenied(f"No permission to expand field {field}")
 
+        if hasattr(self, "instance") and "prefetch" in ef:
+            for prefetch in ef["prefetch"]:
+                prefetch_related_objects(
+                    self.instance if hasattr(self.instance, '__iter__') else [self.instance],
+                    prefetch
+                )
+
         return ef["serializer"](
             read_only=True,
             context=self.context,
@@ -241,7 +257,7 @@ class ConfigurableSerializerMixin:
 
         expanded = False
         for expand in sorted(list(self.get_expand_requests())):
-            expanded = expanded or self._expand_field(self, expand.split('.'), expand)
+            expanded = self._expand_field(self, expand.split('.'), expand) or expanded
 
         includes = set(self.get_include_requests())
         if includes:

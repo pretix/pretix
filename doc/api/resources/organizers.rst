@@ -93,6 +93,8 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
+   :query string include: Limit the output to the given field. Can be passed multiple times.
+   :query string exclude: Exclude a field from the output. Can be passed multiple times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.

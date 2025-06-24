@@ -19,7 +19,7 @@ name                                    multi-lingual string       The item's vi
 internal_name                           string                     An optional name that is only used in the backend
 default_price                           money (string)             The item price that is applied if the price is not
                                                                    overwritten by variations or other options.
-category                                integer                    The ID of the category this item belongs to
+category                                integer (expandable)       The ID of the category this item belongs to
                                                                    (or ``null``).
 active                                  boolean                    If ``false``, the item is hidden from all public lists
                                                                    and will not be sold.
@@ -33,7 +33,7 @@ free_price_suggestion                   money (string)             A suggested p
                                                                    ``free_price`` is set (or ``null``).
 tax_rate                                decimal (string)           The VAT rate to be applied for this item (read-only,
                                                                    set through ``tax_rule``).
-tax_rule                                integer                    The internal ID of the applied tax rule (or ``null``).
+tax_rule                                integer (expandable)       The internal ID of the applied tax rule (or ``null``).
 admission                               boolean                    ``true`` for items that grant admission to the event
                                                                    (such as primary tickets) and ``false`` for others
                                                                    (such as add-ons or merchandise).
@@ -390,6 +390,9 @@ Endpoints
                               will be returned.
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id`` and ``position``.
                            Default: ``position``
+   :query string include: Limit the output to the given field. Can be passed multiple times.
+   :query string exclude: Exclude a field from the output. Can be passed multiple times.
+   :query string expand: Expand an object reference with the referenced object. Can be passed multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
@@ -531,6 +534,9 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :param id: The ``id`` field of the item to fetch
+   :query string include: Limit the output to the given field. Can be passed multiple times.
+   :query string exclude: Exclude a field from the output. Can be passed multiple times.
+   :query string expand: Expand an object reference with the referenced object. Can be passed multiple times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.

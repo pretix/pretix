@@ -44,6 +44,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scope, scopes_disabled
 from tests import assert_num_queries
+from tests.api.utils import _test_configurable_serializer
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
@@ -214,6 +215,15 @@ def test_event_list_filter(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/events/?date_from_after=2017-12-27T10:00:01Z'.format(organizer.slug))
     assert resp.status_code == 200
     assert resp.data['count'] == 0
+
+    _test_configurable_serializer(
+        token_client,
+        "/api/v1/organizers/{}/events/".format(organizer.slug),
+        [
+            "slug", "live", "meta_data", "seating_plan", "item_meta_properties"
+        ],
+        expands=[]
+    )
 
 
 @pytest.mark.django_db

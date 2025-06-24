@@ -533,8 +533,8 @@ def test_order_list(token_client, organizer, event, order, item, team, taxrule, 
     team.can_view_vouchers = False
     team.save()
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?expand=positions.voucher'.format(organizer.slug, event.slug))
-    assert resp.status_code == 200
-    assert resp.data == "No permission to expand field positions.voucher"
+    assert resp.status_code == 403
+    assert resp.data["detail"] == "No permission to expand field positions.voucher"
 
 
 @pytest.mark.django_db
@@ -543,6 +543,7 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
         res["positions"][0]["print_logs"][0]["id"] = order.positions.first().print_logs.first().pk
+        res["positions"][0]["print_logs"][0]["device_id"] = order.positions.first().print_logs.first().device_id
         res["fees"][0]["id"] = order.fees.first().pk
     res["positions"][0]["item"] = item.pk
     res["fees"][0]["tax_rule"] = taxrule.pk

@@ -33,12 +33,11 @@ def _add_params(url, params):
 def _find_field_names(d: dict, path):
     names = set()
     for k, v in d.items():
+        names.add(".".join([*path, k]))
         if isinstance(v, dict):
             names |= _find_field_names(v, path=(*path, k))
-        elif isinstance(v, list) and len(v) > 0:
+        elif isinstance(v, list) and len(v) > 0 and isinstance(v[0], dict):
             names |= _find_field_names(v[0], path=(*path, k))
-        else:
-            names.add(".".join([*path, k]))
     return names
 
 
@@ -54,10 +53,12 @@ def _test_configurable_serializer(client, url, field_name_samples, expands):
     # Assert no unexpected fields
     for f in found_field_names:
         depth = f.count(".")
-        assert f in field_name_samples or any(f.rsplit(".", c)[0] in field_name_samples for c in range(depth))
+        assert (f in field_name_samples or
+                any(f.rsplit(".", c)[0] in field_name_samples for c in range(depth + 1)) or
+                any(fn.startswith(f + ".") for fn in field_name_samples))
     # Assert all fields are there
     for f in field_name_samples:
-        assert f in found_field_names
+        assert f in found_field_names, f"{f} not in {found_field_names}"
 
     # Test exclude
     resp = client.get(_add_params(url, [("exclude", f) for f in field_name_samples]))
@@ -85,4 +86,4 @@ def _test_configurable_serializer(client, url, field_name_samples, expands):
                 if isinstance(obj, list):
                     obj = obj[0]
                 path = path[1:]
-            assert isinstance(obj[path[0]], dict)
+            assert isinstance(obj[path[0]], dict), f"{e} is not a dictionary, but {type(obj[path[0]])}"

@@ -42,8 +42,10 @@ from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from pretix.api.serializers import SalesChannelMigrationMixin
-from pretix.api.serializers.event import MetaDataField
+from pretix.api.serializers import (
+    ConfigurableSerializerMixin, SalesChannelMigrationMixin,
+)
+from pretix.api.serializers.event import MetaDataField, TaxRuleSerializer
 from pretix.api.serializers.fields import UploadedFileField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
@@ -246,7 +248,29 @@ class ItemTaxRateField(serializers.Field):
             return str(Decimal('0.00'))
 
 
-class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
+class ItemCategorySerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = ItemCategory
+        fields = (
+            'id', 'name', 'internal_name', 'description', 'position',
+            'is_addon', 'cross_selling_mode',
+            'cross_selling_condition', 'cross_selling_match_products'
+        )
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        if full_data.get('is_addon') and full_data.get('cross_selling_mode'):
+            raise ValidationError('is_addon and cross_selling_mode are mutually exclusive')
+
+        return data
+
+
+class ItemSerializer(SalesChannelMigrationMixin, ConfigurableSerializerMixin, I18nAwareModelSerializer):
     addons = InlineItemAddOnSerializer(many=True, required=False)
     bundles = InlineItemBundleSerializer(many=True, required=False)
     variations = InlineItemVariationSerializer(many=True, required=False)
@@ -262,6 +286,16 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         allow_empty=True,
         many=True,
     )
+    expand_fields = {
+        "category": {
+            "serializer": ItemCategorySerializer,
+            "prefetch": ["category"],
+        },
+        "tax_rule": {
+            "serializer": TaxRuleSerializer,
+            "prefetch": ["tax_rule"],
+        },
+    }
 
     class Meta:
         model = Item
@@ -284,13 +318,18 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['default_price'].allow_null = False
-        self.fields['default_price'].required = True
+        if 'default_price' in self.fields:
+            self.fields['default_price'].allow_null = False
+            self.fields['default_price'].required = True
         if not self.read_only:
-            self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
-            self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
-            self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
-            self.fields['variations'].child.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
+            if 'require_membership_types' in self.fields:
+                self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
+            if 'grant_membership_type' in self.fields:
+                self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
+            if 'limit_sales_channels' in self.fields:
+                self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
+            if 'variations' in self.fields and 'limit_sales_channels' in self.fields['variations'].child.fields:
+                self.fields['variations'].child.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
     def validate(self, data):
         data = super().validate(data)
@@ -435,28 +474,6 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                     current_object.delete()
 
         return item
-
-
-class ItemCategorySerializer(I18nAwareModelSerializer):
-
-    class Meta:
-        model = ItemCategory
-        fields = (
-            'id', 'name', 'internal_name', 'description', 'position',
-            'is_addon', 'cross_selling_mode',
-            'cross_selling_condition', 'cross_selling_match_products'
-        )
-
-    def validate(self, data):
-        data = super().validate(data)
-
-        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
-        full_data.update(data)
-
-        if full_data.get('is_addon') and full_data.get('cross_selling_mode'):
-            raise ValidationError('is_addon and cross_selling_mode are mutually exclusive')
-
-        return data
 
 
 class QuestionOptionSerializer(I18nAwareModelSerializer):

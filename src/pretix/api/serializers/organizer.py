@@ -31,7 +31,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.auth.devicesecurity import get_all_security_profiles
-from pretix.api.serializers import AsymmetricField, ConfigurableSerializer
+from pretix.api.serializers import AsymmetricField, ConfigurableSerializerMixin
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 from pretix.api.serializers.settings import SettingsSerializer
@@ -51,7 +51,7 @@ from pretix.multidomain.urlreverse import build_absolute_uri
 logger = logging.getLogger(__name__)
 
 
-class OrganizerSerializer(ConfigurableSerializer, I18nAwareModelSerializer):
+class OrganizerSerializer(ConfigurableSerializerMixin, I18nAwareModelSerializer):
     public_url = serializers.SerializerMethodField('get_organizer_url', read_only=True)
 
     def get_organizer_url(self, organizer):

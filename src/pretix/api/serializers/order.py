@@ -782,6 +782,33 @@ class OrderSerializer(ConfigurableSerializerMixin, I18nAwareModelSerializer):
         "positions.voucher": {
             "serializer": VoucherSerializer,
             "permission": "can_view_vouchers",
+            "prefetch": ["positions__voucher"],
+        },
+        "positions.item": {
+            "serializer": ItemSerializer,
+            "prefetch": [
+                "positions__item",
+                "positions__item__addons",
+                "positions__item__bundles",
+                "positions__item__meta_values",
+                "positions__item__variations",
+                "positions__item__tax_rule",
+            ],
+        },
+        "positions.variation": {
+            "serializer": ItemSerializer,
+            "prefetch": ["positions__variation", "positions__variation__meta_values"],
+        },
+        "positions.subevent": {
+            "serializer": SubEventSerializer,
+            "prefetch": [
+                "positions__subevent",
+                "positions__subevent__event",
+                "positions__subevent__subeventitem_set",
+                "positions__subevent__subeventitemvariation_set",
+                "positions__subevent__seat_category_mappings",
+                "positions__subevent__meta_values",
+            ],
         },
     }
 

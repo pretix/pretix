@@ -157,8 +157,8 @@ order                                 string                     Order code of t
 positionid                            integer                    Number of the position within the order
 canceled                              boolean                    Whether or not this position has been canceled. Note that
                                                                  by default, only non-canceled positions are shown.
-item                                  integer                    ID of the purchased item
-variation                             integer                    ID of the purchased variation (or ``null``)
+item                                  integer (expandable)       ID of the purchased item
+variation                             integer (expandable)       ID of the purchased variation (or ``null``)
 price                                 money (string)             Price of this position
 attendee_name                         string                     Specified attendee name for this position (or ``null``)
 attendee_name_parts                   object of strings          Decomposition of attendee name (i.e. given name, family name)
@@ -170,7 +170,7 @@ city                                  string                     Attendee city (
 country                               string                     Attendee country code (or ``null``)
 state                                 string                     Attendee state (ISO 3166-2 code). Only supported in
                                                                  AU, BR, CA, CN, MY, MX, and US, otherwise ``null``.
-voucher                               integer                    Internal ID of the voucher used for this position (or ``null``)
+voucher                               integer (expandable)       Internal ID of the voucher used for this position (or ``null``)
 voucher_budget_use                    money (string)             Amount of money discounted by the voucher, corresponding
                                                                  to how much of the ``budget`` of the voucher is consumed.
                                                                  **Important:** Do not rely on this amount to be a useful
@@ -182,7 +182,7 @@ tax_code                              string                     Codified reason
 tax_rule                              integer                    The ID of the used tax rule (or ``null``)
 secret                                string                     Secret code printed on the tickets for validation
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
-subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
+subevent                              integer (expandable)       ID of the date inside an event series this position belongs to (or ``null``).
 discount                              integer                    ID of a discount that has been used during the creation of this position in some way (or ``null``).
 blocked                               list of strings            A list of strings, or ``null``. Whenever not ``null``, the ticket may not be used (e.g. for check-in).
 valid_from                            datetime                   The ticket will not be valid before this time. Can be ``null``.
