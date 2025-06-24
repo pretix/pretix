@@ -15,7 +15,7 @@
             <span class="optional">{% trans "Optional" %}</span>
         </label>
         <div class="col-md-4">
-            {% bootstrap_field form.geo_lat layout="inline" %}
+            {% bootstrap_field form.geo_lat layout="inline" placeholder=_("Latitude") %}
             {% if global_settings.opencagedata_apikey %}
                 <p class="attrib">
                     <a href="https://openstreetmap.org/" target="_blank">
@@ -25,7 +25,7 @@
             {% endif %}
         </div>
         <div class="col-md-4">
-            {% bootstrap_field form.geo_lon layout="inline" %}
+            {% bootstrap_field form.geo_lon layout="inline" placeholder=_("Longitude") %}
         </div>
         <div class="col-md-1">
         </div>
