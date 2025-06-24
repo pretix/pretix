@@ -946,7 +946,7 @@ class BaseQuestionsForm(forms.Form):
                             max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
                         )
 
-                if initial and initial.anser:
+                if initial and initial.answer:
                     try:
                         _initial = dateutil.parser.parse(initial.answer).astimezone(tz)
                     except dateutil.parser.ParserError:
