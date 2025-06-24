@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-05-30 11:15+0000\n"
+"PO-Revision-Date: 2025-06-24 23:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1425,7 +1425,7 @@ msgstr "Postleitzahl"
 #: pretix/plugins/checkinlists/exporters.py:536
 #: pretix/plugins/reports/exporters.py:842
 msgid "City"
-msgstr "Ort"
+msgstr "Stadt"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
