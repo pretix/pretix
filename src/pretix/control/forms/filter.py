@@ -1693,9 +1693,7 @@ class EventFilterForm(FilterForm):
     )
     query = forms.CharField(
         label=_('Event name'),
-        widget=forms.TextInput(attrs={
-            'placeholder': _('Event name'),
-        }),
+        widget=forms.TextInput(),
         required=False
     )
     date_from = forms.DateField(
