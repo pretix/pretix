@@ -1934,7 +1934,7 @@ class Question(LoggedModel):
             # All types can be converted to text except file
             return True
         if new_type == self.TYPE_STRING and old_type not in (self.TYPE_TEXT, self.TYPE_FILE):
-            # All types can be converted to string except for text except file
+            # All types can be converted to string except text or file
             return True
         if new_type == self.TYPE_CHOICE_MULTIPLE and old_type == self.TYPE_CHOICE:
             # Single-choice can be converted to multiple choice without loss
