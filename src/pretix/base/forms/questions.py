@@ -914,7 +914,7 @@ class BaseQuestionsForm(forms.Form):
                 if q.valid_date_max:
                     field.validators.append(MaxDateValidator(q.valid_date_max))
             elif q.type == Question.TYPE_TIME:
-                if initial and initial.anser:
+                if initial and initial.answer:
                     try:
                         _initial = dateutil.parser.parse(initial.answer).time()
                     except dateutil.parser.ParserError:
