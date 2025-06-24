@@ -40,12 +40,15 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
-from pretix.api.serializers import CompatibleJSONField
+from pretix.api.serializers import (
+    CompatibleJSONField, ConfigurableSerializerMixin,
+)
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
     InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
 )
+from pretix.api.serializers.voucher import VoucherSerializer
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
@@ -175,7 +178,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
-        if r['answer'].startswith('file://') and instance.orderposition:
+        if r.get('answer') and r.get('answer').startswith('file://') and instance.orderposition:
             r['answer'] = reverse('api-v1:orderposition-answer', kwargs={
                 'organizer': instance.orderposition.order.event.organizer.slug,
                 'event': instance.orderposition.order.event.slug,
@@ -757,7 +760,7 @@ class OrderPluginDataField(serializers.Field):
         return d
 
 
-class OrderSerializer(I18nAwareModelSerializer):
+class OrderSerializer(ConfigurableSerializerMixin, I18nAwareModelSerializer):
     event = SlugRelatedField(slug_field='slug', read_only=True)
     invoice_address = InvoiceAddressSerializer(allow_null=True)
     positions = OrderPositionSerializer(many=True, read_only=True)
@@ -775,6 +778,12 @@ class OrderSerializer(I18nAwareModelSerializer):
         required=False,
     )
     plugin_data = OrderPluginDataField(source='*', allow_null=True, read_only=True)
+    expand_fields = {
+        "positions.voucher": {
+            "serializer": VoucherSerializer,
+            "permission": "can_view_vouchers",
+        },
+    }
 
     class Meta:
         model = Order
@@ -793,46 +802,13 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if "organizer" in self.context:
-            self.fields["sales_channel"].queryset = self.context["organizer"].sales_channels.all()
-        else:
-            self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
-        if not self.context['pdf_data']:
+        if "sales_channel" in self.fields:
+            if "organizer" in self.context:
+                self.fields["sales_channel"].queryset = self.context["organizer"].sales_channels.all()
+            else:
+                self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
+        if not self.context['pdf_data'] and "positions" in self.fields:
             self.fields['positions'].child.fields.pop('pdf_data', None)
-
-        includes = set(self.context['include'])
-        if includes:
-            for fname, field in list(self.fields.items()):
-                if fname in includes:
-                    continue
-                elif hasattr(field, 'child'):  # Nested list serializers
-                    found_any = False
-                    for childfname, childfield in list(field.child.fields.items()):
-                        if f'{fname}.{childfname}' not in includes:
-                            field.child.fields.pop(childfname)
-                        else:
-                            found_any = True
-                    if not found_any:
-                        self.fields.pop(fname)
-                elif isinstance(field, serializers.Serializer):  # Nested serializers
-                    found_any = False
-                    for childfname, childfield in list(field.fields.items()):
-                        if f'{fname}.{childfname}' not in includes:
-                            field.fields.pop(childfname)
-                        else:
-                            found_any = True
-                    if not found_any:
-                        self.fields.pop(fname)
-                else:
-                    self.fields.pop(fname)
-
-        for exclude_field in self.context['exclude']:
-            p = exclude_field.split('.')
-            if p[0] in self.fields:
-                if len(p) == 1:
-                    del self.fields[p[0]]
-                elif len(p) == 2:
-                    self.fields[p[0]].child.fields.pop(p[1])
 
     def validate_locale(self, l):
         if l not in set(k for k in self.instance.event.settings.locales):

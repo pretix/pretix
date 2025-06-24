@@ -61,6 +61,8 @@ Endpoints
    :query page: The page number in case of a multi-page result set, default is 1
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``slug`` and
                            ``name``. Default: ``slug``.
+   :query string include: Limit the output to the given field. Can be passed multiple times.
+   :query string exclude: Exclude a field from the output. Can be passed multiple times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
 

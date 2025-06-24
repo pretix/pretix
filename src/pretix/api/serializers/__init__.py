@@ -23,7 +23,7 @@ import json
 
 from django.db.models import prefetch_related_objects
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 
 class AsymmetricField(serializers.Field):
@@ -135,3 +135,117 @@ class SalesChannelMigrationMixin:
         else:
             value["sales_channels"] = value["limit_sales_channels"]
         return value
+
+
+class ConfigurableSerializerMixin:
+    expand_fields = {}
+
+    def get_exclude_requests(self):
+        if hasattr(self, "initial_data"):
+            # Do not support include requests when the serializer is used for writing
+            # TODO: think about this
+            return set()
+        if 'exclude' in self.context:
+            return self.context['exclude']
+        elif 'request' in self.context:
+            return self.context['request'].query_params.getlist('exclude')
+        raise TypeError("Could not discover list of fields to exclude")
+
+    def get_include_requests(self):
+        if hasattr(self, "initial_data"):
+            # Do not support include requests when the serializer is used for writing
+            # TODO: think about this
+            return set()
+        if 'include' in self.context:
+            return self.context['include']
+        elif 'request' in self.context:
+            return self.context['request'].query_params.getlist('include')
+        raise TypeError("Could not discover list of fields to include")
+
+    def get_expand_requests(self):
+        if hasattr(self, "initial_data"):
+            # Do not support expand requests when the serializer is used for writing
+            # TODO: think about this
+            return set()
+        if 'expand' in self.context:
+            return self.context['expand']
+        elif 'request' in self.context:
+            return self.context['request'].query_params.getlist('expand')
+        raise TypeError("Could not discover list of fields to expand")
+
+    def _exclude_field(self, serializer, path):
+        if path[0] not in serializer.fields:
+            return  # field does not exist, nothing to do
+
+        if len(path) == 1:
+            del serializer.fields[path[0]]
+        elif len(path) >= 2 and hasattr(serializer.fields[path[0]], "child"):
+            self._exclude_field(serializer.fields[path[0]].child, path[1:])
+        elif len(path) >= 2 and isinstance(serializer.fields[path[0]], serializers.Serializer):
+            self._exclude_field(serializer.fields[path[0]], path[1:])
+
+    def _filter_fields_to_included(self, serializer, includes):
+        any_field_remaining = False
+        for fname, field in list(serializer.fields.items()):
+            if fname in includes:
+                any_field_remaining = True
+                continue
+            elif hasattr(field, 'child'):  # Nested list serializers
+                child_includes = {i.removeprefix(f'{fname}.') for i in includes if i.startswith(f'{fname}.')}
+                if child_includes and self._filter_fields_to_included(field.child, child_includes):
+                    any_field_remaining = True
+                    continue
+                serializer.fields.pop(fname)
+            elif isinstance(field, serializers.Serializer):  # Nested serializers
+                child_includes = {i.removeprefix(f'{fname}.') for i in includes if i.startswith(f'{fname}.')}
+                if child_includes and self._filter_fields_to_included(field, child_includes):
+                    any_field_remaining = True
+                    continue
+                serializer.fields.pop(fname)
+            else:
+                serializer.fields.pop(fname)
+        return any_field_remaining
+
+    def _expand_field(self, serializer, path, original_field):
+        if path[0] not in serializer.fields or not self.is_field_expandable(original_field):
+            return False  # field does not exist, nothing to do
+
+        if len(path) == 1:
+            serializer.fields[path[0]] = self.get_expand_serializer(original_field)
+            return True
+        elif len(path) >= 2 and hasattr(serializer.fields[path[0]], "child"):
+            return self._expand_field(serializer.fields[path[0]].child, path[1:], original_field)
+        elif len(path) >= 2 and isinstance(serializer.fields[path[0]], serializers.Serializer):
+            return self._expand_field(serializer.fields[path[0]], path[1:], original_field)
+
+    def is_field_expandable(self, field):
+        return field in self.expand_fields
+
+    def get_expand_serializer(self, field):
+        from pretix.base.models import Device, TeamAPIToken
+
+        ef = self.expand_fields[field]
+        if "permission" in ef:
+            request = self.context["request"]
+            perm_holder = request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user
+            if not perm_holder.has_event_permission(request.organizer, request.event, ef["permission"], request=request):
+                raise PermissionDenied(f"No permission to expand field {field}")
+
+        return ef["serializer"](
+            read_only=True,
+            context=self.context,
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        expanded = False
+        for expand in sorted(list(self.get_expand_requests())):
+            expanded = expanded or self._expand_field(self, expand.split('.'), expand)
+
+        includes = set(self.get_include_requests())
+        if includes:
+            self._filter_fields_to_included(self, includes)
+
+        for exclude_field in self.get_exclude_requests():
+            self._exclude_field(self, exclude_field.split('.'))

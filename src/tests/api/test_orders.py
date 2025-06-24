@@ -31,6 +31,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from stripe import error
+from tests.api.utils import _test_configurable_serializer
 from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
@@ -400,13 +401,18 @@ def test_order_list_filter_subevent_date(token_client, device, organizer, event,
 
 
 @pytest.mark.django_db
-def test_order_list(token_client, organizer, event, order, item, taxrule, question, device):
+def test_order_list(token_client, organizer, event, order, item, team, taxrule, question, device):
     res = dict(TEST_ORDER_RES)
     with scopes_disabled():
+        voucher = event.vouchers.create(code="FOO")
+        opos = order.positions.first()
+        opos.voucher = voucher
+        opos.save()
         res["positions"][0]["id"] = order.positions.first().pk
         res["fees"][0]["id"] = order.fees.first().pk
         res["positions"][0]["print_logs"][0]["id"] = order.positions.first().print_logs.first().pk
         res["positions"][0]["print_logs"][0]["device_id"] = device.device_id
+        res["positions"][0]["voucher"] = voucher.pk
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
@@ -513,6 +519,22 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?include_canceled_fees=true'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert len(resp.data['results'][0]['fees']) == 2
+
+    _test_configurable_serializer(
+        token_client,
+        "/api/v1/organizers/{}/events/{}/orders/".format(organizer.slug, event.slug),
+        [
+            "status", "invoice_address.company", "fees.value", "payments.state",
+            "positions.print_logs.type", "positions.answers.answer"
+        ],
+        expands=["positions.voucher"],
+    )
+
+    team.can_view_vouchers = False
+    team.save()
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?expand=positions.voucher'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert resp.data == "No permission to expand field positions.voucher"
 
 
 @pytest.mark.django_db
