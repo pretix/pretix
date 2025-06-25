@@ -693,9 +693,17 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
             validated_data["default"] = True
         return super().create(validated_data)
 
+    def save(self, **kwargs):
+        if self.validated_data.get("default"):
+            if self.instance and self.instance.pk:
+                self.context["event"].tax_rules.exclude(pk=self.instance.pk).update(default=False)
+            else:
+                self.context["event"].tax_rules.update(default=False)
+        return super().save(**kwargs)
+
     def validate_default(self, value):
-        if value and self.context["event"].tax_rules.filter(default=True).exists():
-            raise ValidationError("There already is a default tax rule in this event.")
+        if not value and self.instance.default:
+            raise ValidationError("You can't remove the default property, instead set it on another tax rule.")
         return value
 
 

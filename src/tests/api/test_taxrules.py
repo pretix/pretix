@@ -101,6 +101,7 @@ def test_rule_create_auto_default(token_client, organizer, event):
 
 @pytest.mark.django_db
 def test_rule_create_only_one_default(token_client, taxrule, organizer, event):
+    assert taxrule.default
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/taxrules/'.format(organizer.slug, event.slug),
         {
@@ -113,7 +114,10 @@ def test_rule_create_only_one_default(token_client, taxrule, organizer, event):
         },
         format='json'
     )
-    assert resp.status_code == 400
+    assert resp.status_code == 201
+
+    taxrule.refresh_from_db()
+    assert not taxrule.default
 
 
 @pytest.mark.django_db
