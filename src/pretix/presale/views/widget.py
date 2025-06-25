@@ -134,7 +134,7 @@ def widget_css(request, version, **kwargs):
             'version': version_min,
             'organizer': request.organizer.slug,
             'event': request.event.slug if hasattr(request, 'event') else None,
-        }))
+        }), permanent=True)
     o = getattr(request, 'event', request.organizer)
 
     template_path = 'pretixpresale/widget_dummy.html' if version == version_max else 'pretixpresale/widget_dummy.v{}.html'.format(version)
@@ -215,7 +215,7 @@ def widget_js(request, version, lang, **kwargs):
         return redirect(reverse('presale:widget.js', kwargs={
             'version': version_min,
             'lang': lang,
-        }))
+        }), permanent=True)
 
     cached_js = cache.get('widget_js_data_v{}_{}'.format(version, lang))
     if cached_js and not settings.DEBUG:
