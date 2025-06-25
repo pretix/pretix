@@ -143,7 +143,7 @@ def widget_css(request, version, **kwargs):
         widget_css = f.read()
 
     theme_css = get_theme_vars_css(o, widget=True)
-    css = theme_css + widget_css
+    css = f"/* v{version} */\n" + theme_css + widget_css
 
     resp = FileResponse(css, content_type='text/css')
     resp._csp_ignore = True
@@ -200,7 +200,7 @@ def generate_widget_js(version, lang):
             code.append('})({});\n')
     code = ''.join(code)
     code = rJSMinFilter(content=code).output()
-    return code
+    return f"/* v{version} */\n" + code
 
 
 @gzip_page
