@@ -38,10 +38,8 @@ from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.db.models import Q
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
-from django.shortcuts import redirect
 from django.template import Context, Engine
 from django.template.loader import get_template
-from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import get_language, gettext, pgettext
