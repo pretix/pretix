@@ -1079,6 +1079,7 @@ var editor = {
         } else {
             editor.clipboard = editor.dump([thing]);
         }
+        return true;
     },
 
     _paste: function () {
@@ -1100,6 +1101,14 @@ var editor = {
         }
         editor._history_modification_in_progress = false;
         editor._create_savepoint();
+    },
+
+    _duplicate: function () {
+        var prevClipboad = editor.clipboard;
+        if (editor._copy()) {
+            editor._paste();
+            editor.clipboard = prevClipboad;
+        }
     },
 
     _delete: function () {
@@ -1444,6 +1453,7 @@ var editor = {
         $("#toolbox .colorpickerfield").bind('changeColor', editor._update_values_from_toolbox);
         $("#toolbox-copy").bind('click', editor._copy);
         $("#toolbox-cut").bind('click', editor._cut);
+        $("#toolbox-duplicate").bind('click', editor._duplicate);
         $("#toolbox-delete").bind('click', editor._delete);
         $("#toolbox-paste").bind('click', editor._paste);
         $("#toolbox-undo").bind('click', editor._undo);
