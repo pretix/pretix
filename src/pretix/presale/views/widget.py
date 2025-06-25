@@ -109,6 +109,8 @@ def indent(s):
 
 
 def widget_css_etag(request, version, **kwargs):
+    if version < version_min:
+        version = version_min
     # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
     if hasattr(request, 'event'):
         return (f'{_get_source_cache_key(version)}-'
@@ -130,11 +132,7 @@ def widget_css(request, version, **kwargs):
     if version > version_max:
         raise Http404()
     if version < version_min:
-        return redirect(reverse('presale:event.widget.css' if hasattr(request, 'event') else 'organizer.widget.css', kwargs={
-            'version': version_min,
-            'organizer': request.organizer.slug,
-            'event': request.event.slug if hasattr(request, 'event') else None,
-        }), permanent=True)
+        version = version_min
     o = getattr(request, 'event', request.organizer)
 
     template_path = 'pretixpresale/widget_dummy.html' if version == version_max else 'pretixpresale/widget_dummy.v{}.html'.format(version)
@@ -212,10 +210,7 @@ def widget_js(request, version, lang, **kwargs):
         raise Http404()
 
     if version < version_min:
-        return redirect(reverse('presale:widget.js', kwargs={
-            'version': version_min,
-            'lang': lang,
-        }), permanent=True)
+        version = version_min
 
     cached_js = cache.get('widget_js_data_v{}_{}'.format(version, lang))
     if cached_js and not settings.DEBUG:
