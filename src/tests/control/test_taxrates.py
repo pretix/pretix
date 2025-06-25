@@ -112,6 +112,7 @@ class TaxRateFormTest(SoupTest):
     def test_delete_default_rule(self):
         with scopes_disabled():
             tr = self.event1.tax_rules.create(rate=19, name="VAT", default=True)
+            self.event1.tax_rules.create(rate=7, name="V2")
         doc = self.get_doc('/control/event/%s/%s/settings/tax/%s/delete' % (self.orga1.slug, self.event1.slug, tr.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         doc = self.post_doc('/control/event/%s/%s/settings/tax/%s/delete' % (self.orga1.slug, self.event1.slug, tr.id),
