@@ -83,7 +83,7 @@ logger = logging.getLogger(__name__)
 # we never change static source without restart, so we can cache this thread-wise
 _source_cache_key = None
 
-version_min = 1
+version_min = 2
 version_max = 2
 version_default = 2  # used for output in widget-embed-code
 
