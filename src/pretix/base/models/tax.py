@@ -405,7 +405,7 @@ class TaxRule(LoggedModel):
             and not OrderFee.objects.filter(tax_rule=self, order__event=self.event).exists()
             and not OrderPosition.all.filter(tax_rule=self, order__event=self.event).exists()
             and not self.event.items.filter(tax_rule=self).exists()
-            and not self.default
+            and not (self.default and self.event.tax_rules.filter(~Q(pk=self.pk)).exists())
         )
 
     @classmethod
