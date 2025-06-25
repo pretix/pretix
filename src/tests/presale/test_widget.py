@@ -542,7 +542,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     @override_settings(COMPRESS_PRECOMPILERS=settings.COMPRESS_PRECOMPILERS_ORIGINAL)
     def test_css_customized(self):
-        response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
+        response = self.client.get('/%s/%s/widget/v2.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
         assert '#8E44B3' in c
         assert '#33c33c' not in c
@@ -550,7 +550,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
         self.orga.settings.primary_color = "#33c33c"
         self.orga.cache.clear()
-        response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
+        response = self.client.get('/%s/%s/widget/v2.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
         assert '#8E44B3' not in c
         assert '#33c33c' in c
@@ -558,18 +558,18 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
         self.event.settings.primary_color = "#34c34c"
         self.event.cache.clear()
-        response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
+        response = self.client.get('/%s/%s/widget/v2.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
         assert '#8E44B3' not in c
         assert '#33c33c' not in c
         assert '#34c34c' in c
 
     def test_js_localized(self):
-        response = self.client.get('/widget/v1.en.js')
+        response = self.client.get('/widget/v2.en.js')
         c = response.content.decode()
         assert '%m/%d/%Y' in c
         assert '%d.%m.%Y' not in c
-        response = self.client.get('/widget/v1.de.js')
+        response = self.client.get('/widget/v2.de.js')
         c = response.content.decode()
         assert '%m/%d/%Y' not in c
         assert '%d.%m.%Y' in c
