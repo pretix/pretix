@@ -137,8 +137,6 @@ def test_rule_update(token_client, organizer, event, taxrule):
 
 @pytest.mark.django_db
 def test_rule_delete(token_client, organizer, event, taxrule):
-    taxrule.default = False
-    taxrule.save()
     resp = token_client.delete(
         '/api/v1/organizers/{}/events/{}/taxrules/{}/'.format(organizer.slug, event.slug, taxrule.pk),
     )
