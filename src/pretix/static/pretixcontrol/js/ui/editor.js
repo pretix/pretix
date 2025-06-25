@@ -1251,6 +1251,7 @@ var editor = {
             if (data.status === 'ok') {
                 $("#editor-save").prop('disabled', false);
                 editor.dirty = false;
+                $("#preview-form").removeClass("dirty");
                 editor.uploaded_file_id = null;
                 editor._ever_saved = true;
                 editor._update_save_button();
