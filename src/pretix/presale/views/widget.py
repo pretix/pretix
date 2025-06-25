@@ -83,7 +83,7 @@ logger = logging.getLogger(__name__)
 # we never change static source without restart, so we can cache this thread-wise
 _source_cache_key = None
 
-version_min = 1
+version_min = 2
 version_max = 2
 version_default = 2  # used for output in widget-embed-code
 
@@ -109,6 +109,8 @@ def indent(s):
 
 
 def widget_css_etag(request, version, **kwargs):
+    if version < version_min:
+        version = version_min
     # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
     if hasattr(request, 'event'):
         return (f'{_get_source_cache_key(version)}-'
@@ -130,11 +132,7 @@ def widget_css(request, version, **kwargs):
     if version > version_max:
         raise Http404()
     if version < version_min:
-        return redirect(reverse('presale:event.widget.css' if hasattr(request, 'event') else 'organizer.widget.css', kwargs={
-            'version': version_min,
-            'organizer': request.organizer.slug,
-            'event': request.event.slug if hasattr(request, 'event') else None,
-        }))
+        version = version_min
     o = getattr(request, 'event', request.organizer)
 
     template_path = 'pretixpresale/widget_dummy.html' if version == version_max else 'pretixpresale/widget_dummy.v{}.html'.format(version)
@@ -145,7 +143,7 @@ def widget_css(request, version, **kwargs):
         widget_css = f.read()
 
     theme_css = get_theme_vars_css(o, widget=True)
-    css = theme_css + widget_css
+    css = f"/* v{version} */\n" + theme_css + widget_css
 
     resp = FileResponse(css, content_type='text/css')
     resp._csp_ignore = True
@@ -202,7 +200,7 @@ def generate_widget_js(version, lang):
             code.append('})({});\n')
     code = ''.join(code)
     code = rJSMinFilter(content=code).output()
-    return code
+    return f"/* v{version} */\n" + code
 
 
 @gzip_page
@@ -212,10 +210,7 @@ def widget_js(request, version, lang, **kwargs):
         raise Http404()
 
     if version < version_min:
-        return redirect(reverse('presale:widget.js', kwargs={
-            'version': version_min,
-            'lang': lang,
-        }))
+        version = version_min
 
     cached_js = cache.get('widget_js_data_v{}_{}'.format(version, lang))
     if cached_js and not settings.DEBUG:
