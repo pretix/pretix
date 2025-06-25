@@ -1074,14 +1074,11 @@ var editor = {
         if (!thing) {
             return false;
         }
-        editor._history_modification_in_progress = true;
         if (thing.type === "activeSelection") {
             editor.clipboard = editor.dump(thing._objects);
         } else {
             editor.clipboard = editor.dump([thing]);
         }
-        editor._history_modification_in_progress = false;
-        editor._create_savepoint();
     },
 
     _paste: function () {
