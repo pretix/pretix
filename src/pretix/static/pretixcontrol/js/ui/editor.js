@@ -1451,11 +1451,8 @@ var editor = {
             editor._create_savepoint();
         });
         $("#toolbox .colorpickerfield").bind('changeColor', editor._update_values_from_toolbox);
-        $("#toolbox-copy").bind('click', editor._copy);
-        $("#toolbox-cut").bind('click', editor._cut);
         $("#toolbox-duplicate").bind('click', editor._duplicate);
         $("#toolbox-delete").bind('click', editor._delete);
-        $("#toolbox-paste").bind('click', editor._paste);
         $("#toolbox-undo").bind('click', editor._undo);
         $("#toolbox-redo").bind('click', editor._redo);
         $("#toolbox-source").bind('click', editor._source_show);
