@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 10:35+0000\n"
-"PO-Revision-Date: 2025-06-11 06:58+0000\n"
+"PO-Revision-Date: 2025-06-25 06:56+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -290,8 +290,8 @@ msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"추가 기능, 묶음 상품들, 또는 변형은  PATCH/PUT를 통해 업데이트 할 수 없습니"
-"다. 전용 중첩은 마지막 지점에서 사용해주세요."
+"추가 기능, 묶음 상품들, 또는 변형은 PATCH/PUT를 통해 업데이트 할 수 "
+"없습니다. 전용 중첩은 마지막 지점에서 사용하세요"
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
@@ -660,15 +660,17 @@ msgid "Your password must contain both numeric and alphabetic characters."
 msgstr "비밀번호는 숫자와 알파벳 문자가 모두 포함되어야 합니다"
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, fuzzy, python-format
+#, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
 msgstr[0] ""
+"단수형\n"
 "비밀번호가 이전 비밀번호와 동일하지 않을 수 있습니다.\n"
-"귀하의 비밀번호는 %(history_length)s 이전 비밀번호와 동일하지 않을 수 있습니"
-"다."
+"복수형\n"
+"귀하의 비밀번호는 %(history_length)s 이전 비밀번호 중 하나와 동일하지 않을 "
+"수 있습니다."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -690,13 +692,14 @@ msgstr ""
 #, fuzzy, python-brace-format
 #| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "{a_attr}>pretix</a>를 기반으로 {name}에 의해  작동합니다"
+msgstr "이 서비스는 {name}에 의해 제공되며 pretix(온라인 이벤트 티켓팅 및 등록 "
+"시스템) 시스템 기반으로 작동합니다"
 
 #: pretix/base/context.py:48
 #, fuzzy, python-brace-format
 #| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "{a_attr}>pretix</a>를 기반으로 {name}에 의해  작동합니다"
+msgstr "이 서비스는 {name}에서 제공하며 pretix를 기반으로 합니다."
 
 #: pretix/base/context.py:55
 #, python-format
@@ -726,16 +729,16 @@ msgid "Incompatible SSO provider: \"{error}\"."
 msgstr "호환되지 않는 단일 로그인(Single Sign On) 제공자: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:111
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "\"범위\"를 요청하는 것이 아닙니다."
+msgstr "'{scope}' 요청이 포함되어 있지 않습니다."
 
 #: pretix/base/customersso/oidc.py:117
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
-msgstr "범위 \"{scope}\"를 요청하고 있지만 제공자는 이를 지원합니다: {scope}"
+msgstr "범위 \"{scope}\"를 요청하고 있지만 제공자는 이를 지원합니다: {scopes}"
 
 #: pretix/base/customersso/oidc.py:127
 #, python-brace-format
@@ -2020,7 +2023,7 @@ msgstr "주문 지역 설정"
 #: pretix/base/exporters/orderlist.py:275
 #, fuzzy, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr "세율 {%}의 세금으로 총합"
+msgstr "세율{%}의 세금으로 총합"
 
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
@@ -2028,9 +2031,9 @@ msgid "Net at {rate} % tax"
 msgstr "순세율 %{rate} 세금"
 
 #: pretix/base/exporters/orderlist.py:277
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr "세율 % 세금에서의 세금 가치"
+msgstr "{rate} % 세금에서의 세금 가치"
 
 #: pretix/base/exporters/orderlist.py:280
 msgid "Invoice numbers"
@@ -2070,7 +2073,7 @@ msgstr "외부고객  아이디"
 #: pretix/base/exporters/orderlist.py:293
 #, fuzzy, python-brace-format
 msgid "Paid by {method}"
-msgstr "{방법}으로 결제됨"
+msgstr "{방법}에 의해 결제됨"
 
 #: pretix/base/exporters/orderlist.py:448
 #: pretix/base/exporters/orderlist.py:894
@@ -3152,10 +3155,10 @@ msgid "Individual customer"
 msgstr "개별 고객"
 
 #: pretix/base/invoice.py:138
-#, fuzzy, python-format
+#, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "%d 페이지"
+msgstr "%d의%d 페이지"
 
 #: pretix/base/invoice.py:375
 msgctxt "invoice"
@@ -3303,7 +3306,7 @@ msgstr "단일 가격: {net_price} 순 / {gross_price} 총합"
 #, fuzzy, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "단일 가격: {price}"
+msgstr "단일 가격: {가격}"
 
 #: pretix/base/invoice.py:742 pretix/base/invoice.py:748
 msgctxt "invoice"
@@ -3356,8 +3359,7 @@ msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
-msgstr ""
-"{날짜}에 {당국}에서 발표한 1:{rate}의 변환율을 사용하면 다음과 같습니다:"
+msgstr "{날짜}에 {당국}에서 발표한 1:{세율}의 변환율을 사용하면 다음과 같습니다:"
 
 #: pretix/base/invoice.py:909
 #, fuzzy, python-brace-format
@@ -3365,8 +3367,7 @@ msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
-msgstr ""
-"{날짜}에 {당국}에서 게시한 1:{rate}의 변환율을 사용하면 송장 총액이 {총합}에 "
+msgstr "{날짜}에 {당국}에서 게시한 1:{세율}의 변환율을 사용하면 송장 총액이 {총합}에 "
 "해당합니다."
 
 #: pretix/base/invoice.py:923
@@ -4210,11 +4211,9 @@ msgid "Available for dates starting from"
 msgstr "다음 날짜부터 사용 가능"
 
 #: pretix/base/models/discount.py:182
-#, fuzzy
-#| msgid "Available until"
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "다음까지 사용가능"
+msgstr "다음~까지 사용가능"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -5448,16 +5447,12 @@ msgid "Unknown country code."
 msgstr "알수 없는 국가 코드 입니다"
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum date must not be before the minimum value."
-msgstr "최대 카운트는 최소 카운트보다 커야 합니다."
+msgstr "종료일(최대 날짜)은 시작일(최소값)보다 앞서면 안됩니다."
 
 #: pretix/base/models/items.py:1925
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum value must not be lower than the minimum value."
-msgstr "최대 카운트는 최소 카운트보다 커야 합니다."
+msgstr "최대 값은 최소 값보다 커야 합니다."
 
 #: pretix/base/models/items.py:1942
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -5913,10 +5908,8 @@ msgid "Cart ID (e.g. session key)"
 msgstr "카트 ID(예: 세션 키)"
 
 #: pretix/base/models/orders.py:3102
-#, fuzzy
-#| msgid "Gift card: Expiration date"
 msgid "Limit for extending expiration date"
-msgstr "기프트 카드: 만료일"
+msgstr "만료일 연장 제한"
 
 #: pretix/base/models/orders.py:3131
 msgid "Cart position"
@@ -6080,9 +6073,9 @@ msgid "Teams"
 msgstr "팀들"
 
 #: pretix/base/models/organizer.py:406
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr "'이메일'을 위해 '팀'에 초대하기"
+msgstr "'{email}'님을 '{team}' 팀에 초대하기"
 
 #: pretix/base/models/organizer.py:538
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
@@ -6216,35 +6209,37 @@ msgstr ""
 
 #: pretix/base/models/tax.py:205 pretix/base/models/tax.py:218
 #: pretix/base/models/tax.py:244
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "tax_code"
 msgid ""
 "Exempt based on article {article}, section {section} ({letter}) of Council "
 "Directive 2006/112/EC"
-msgstr "위원회 지침 2006/112/EC의 {조문}, 섹션 {{편지}}에 따라 면제됩니다"
+msgstr ""
+"2006년 제정된 유럽연합 이사회 지침 2006/112/EC의 제{article}조 제{section}항 "
+"({letter}호)에 따라 면제됩니다"
 
 #: pretix/base/models/tax.py:231
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "tax_code"
 msgid ""
 "Exempt based on article {article}, section ({letter}) of Council Directive "
 "2006/112/EC"
-msgstr "2006/112/EC 이사회 지침 제{조문}, 섹션({편지})에 따라 면제됩니다"
+msgstr "2006년 제정된 유럽연합 이사회 지침 2006/112/EC의 제{article}조 ({letter}항)"
+"에 따라 면제됩니다"
 
 #: pretix/base/models/tax.py:252
 msgctxt "tax_code"
 msgid "Exempt based on article 309 of Council Directive 2006/112/EC"
 msgstr ""
-"2006/112/EC 이사회 지침 제309조에 따른 면제( 세우타/멜리야 의 공급에 대한 명"
-"시적 부가가치세는 면세-EU VAT지역 밖이므로 해당지역으로의 공급은 수출로 간주"
-"함)"
+"2006년 제정된 유럽연합 이사회 지침 2006/112/EC의 제309조에 따라 면제됩니다( "
+"세우타/멜리야 의 공급에 대한 명시적 부가가치세는 면세-EU VAT지역 밖이므로 "
+"해당지역으로의 공급은 수출로 간주함)"
 
 #: pretix/base/models/tax.py:254
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr ""
-"중고 운송수단을 구매하면 ICA 적용한다 (EU 회원국간의 재화 이동에 서 발생하는 "
-"VAT 개념)"
+msgstr "중고 운송수단을 구매하면 EU 회원국 간 물품 취득(ICA)을 적용한다 (EU "
+"회원국간의 재화 이동에 서 발생하는 VAT 개념)"
 
 #: pretix/base/models/tax.py:256
 msgctxt "tax_code"
@@ -6255,7 +6250,7 @@ msgstr ""
 #: pretix/base/models/tax.py:258
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of works of art"
-msgstr "예술작품은 ICA(EU 회원간의  재화이동에서 적용되는 VAT개념)을 적용한다"
+msgstr "예술작품은 ICA(EU 회원간의 재화이동에서 적용되는 VAT개념)을 적용한다"
 
 #: pretix/base/models/tax.py:260
 msgctxt "tax_code"
@@ -6268,8 +6263,8 @@ msgstr ""
 msgctxt "tax_code"
 msgid "France domestic VAT franchise in base"
 msgstr ""
-"프랑스 소규모 사업자를 위한 부가가치세 면세제도(\"TVA  non applicable, "
-"article 293 B du CGI\" 기입)"
+"프랑스 소규모 사업자를 위한 부가가치세 면세제도("
+"\"TVA non applicable, article 293 B du CGI\" 기입)"
 
 #: pretix/base/models/tax.py:264
 msgctxt "tax_code"
@@ -6317,9 +6312,8 @@ msgstr "청구서 주소에 따라 세율이 변경되는 경우 총 금액을 �
 
 #: pretix/base/models/tax.py:359
 msgid "Use EU reverse charge taxation rules"
-msgstr ""
-"EU 내 VAT 처리 방식 중 하나로 국경거래에서 VAT 납부 책임을 구매자에게 전가하"
-"는  과세 규칙 사용 (프랑스, 독일 등)"
+msgstr "EU 내 VAT 처리 방식(국경거래에서 VAT 납부 책임을 구매자에게 전가하는 과세 "
+"규칙)을 사용합니다 (프랑스, 독일 등)"
 
 #: pretix/base/models/tax.py:363
 msgid ""
@@ -6333,7 +6327,7 @@ msgstr ""
 
 #: pretix/base/models/tax.py:365
 msgid "DEPRECATED"
-msgstr "사용중단 예정 (폐지 예정입니다)"
+msgstr "사용중단 예정 (폐지 예정)"
 
 #: pretix/base/models/tax.py:366
 msgid ""
@@ -6352,7 +6346,7 @@ msgstr ""
 
 #: pretix/base/models/tax.py:374 pretix/plugins/stripe/payment.py:299
 msgid "Merchant country"
-msgstr "상인 국가"
+msgstr "상업국가"
 
 #: pretix/base/models/tax.py:376
 msgid ""
@@ -6370,12 +6364,12 @@ msgstr ""
 #: pretix/base/models/tax.py:416 pretix/control/forms/event.py:1560
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
-msgstr "이 세법을 0이 아닌 세율과 결합하는 것은 의미가 없습니다."
+msgstr "이 세법은 0이 아닌 세율과 결합하는 이 세율코드는 의미가 없습니다."
 
 #: pretix/base/models/tax.py:421 pretix/control/forms/event.py:1564
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
-msgstr "이 세법을 제로 세율과 결합하는 것은 의미가 없습니다."
+msgstr "이 세법을 제로 세율과 결합하는 세율코드는 의미가 없습니다."
 
 #: pretix/base/models/tax.py:426
 #, python-brace-format
@@ -6400,9 +6394,9 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
-"EU 내 VAT 처리 방식중 하나로 국경거래에서 VAT 납부책임을 구매자에게 전가하는 "
-"과세 규칙:  2006/112/EEC 이사회 지침 제194조, 196조에 따르면 부가가치세 책임"
-"은 서비스 수혜자에게 있습니다."
+"(EU 내 VAT 처리 방식)국경거래에서 VAT 납부책임을 구매자에게 전가하는 과세 "
+"규칙: 2006/112/EEC 이사회 지침 제194조, 196조에 따르면 부가가치세 책임은 "
+"서비스 수혜자에게 있습니다."
 
 #: pretix/base/models/tax.py:574
 msgctxt "invoice"
@@ -6427,7 +6421,7 @@ msgstr "제품 가격 인하(%)"
 
 #: pretix/base/models/vouchers.py:197
 msgid "Number of times this voucher can be redeemed."
-msgstr "이 바우처를 사용할 수 있는 횟수."
+msgstr "이 바우처가 사용될 수 있는 횟수입니다"
 
 #: pretix/base/models/vouchers.py:201 pretix/control/views/vouchers.py:120
 msgid "Redeemed"
@@ -6484,7 +6478,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:265
 msgid "This variation of the product select above is being used."
-msgstr "위의 선택한  제품의 변형(옵션)이 사용되고 있습니다."
+msgstr "위의 선택한 제품의 변형(옵션)이 사용되고 있습니다."
 
 #: pretix/base/models/vouchers.py:274
 msgid ""
@@ -6545,7 +6539,7 @@ msgstr "이 변형은 이 제품에 속하지 않습니다."
 
 #: pretix/base/models/vouchers.py:355
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr "현재 애드온 제품에 대한 바우처를 만드는 것은 불가능합니다."
+msgstr "현재 묶음 제품에 대한 바우처를 만드는 것은 불가능합니다."
 
 #: pretix/base/models/vouchers.py:357 pretix/base/models/vouchers.py:469
 msgid ""
@@ -6575,7 +6569,7 @@ msgstr "이 바우처가 할당량을 차단하려면 특정 날짜를 선택해
 
 #: pretix/base/models/vouchers.py:384
 msgid "You can not select a subevent if your event is not an event series."
-msgstr "이벤트가 이벤트 시리즈가 아닌 경우 하위 이벤트를 선택할 수 없습니다."
+msgstr "당신의이벤트가 이벤트 시리즈가 아닌 경우 하위 이벤트를 선택할 수 없습니다."
 
 #: pretix/base/models/vouchers.py:482
 msgid ""
@@ -17957,20 +17951,13 @@ msgid ""
 "Your %(instance)s team\n"
 msgstr ""
 "안녕하세요.\n"
-"\n"
 "누군가 %(주소)를 %(instance)의 발신자 주소로 사용해 달라고 요청했습니다.\n"
-"\n"
 "이렇게 하면 이 이메일 주소에서 발신된 것으로 표시된 이메일을 보낼 수 "
 "있습니다.\n"
-"\n"
 "만약 당신이라면, 다음 확인 코드를 입력해 주세요:\n"
-"\n"
 "%(코드)\n"
-"\n"
 "이것이 당신의 요청이 아니라면, 이 이메일을 무시해도 괜찮습니다.\n"
-"\n"
 "감사해요.\n"
-"\n"
 "%(인스턴스) 팀\n"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
@@ -18018,23 +18005,14 @@ msgid ""
 "Your pretix team\n"
 msgstr ""
 "안녕하세요.\n"
-"\n"
 "이벤트를 수행할 플랫폼인 프리틱스의 팀에 초대되었습니다\n"
-"\n"
 "티켓 판매.\n"
-"\n"
 "주최자: %(주최자)\n"
-"\n"
 "팀: %(팀)\n"
-"\n"
 "해당 팀에 합류하려면 다음 링크를 클릭하세요:\n"
-"\n"
 "%(url)s\n"
-"\n"
 "가입을 원하지 않으시면 이 이메일을 무시하거나 삭제하셔도 됩니다.\n"
-"\n"
 "감사해요.\n"
-"\n"
 "프리픽스 팀\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt:1
@@ -18057,19 +18035,13 @@ msgid ""
 "Your %(instance)s team\n"
 msgstr ""
 "안녕하세요.\n"
-"\n"
 "비정상적이거나 새로운 위치에서 %(인스턴스) 계정에 로그인한 것이 "
 "감지되었습니다. 로그인은 %(국가)의 %(os)에서 %(에이전트)를 사용하여 "
 "수행되었습니다.\n"
-"\n"
 "만약 이 이메일이 당신이라면, 이 이메일을 무시해도 됩니다.\n"
-"\n"
 "본인이 아닌 경우 계정 설정에서 비밀번호를 변경하는 것이 좋습니다:\n"
-"\n"
 "%(url)s\n"
-"\n"
 "감사해요.\n"
-"\n"
 "%(인스턴스) 팀\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
@@ -18640,29 +18612,30 @@ msgstr "티켓샵을 게시하려면 먼저 다음 문제를 해결해야 합니
 #: pretix/control/templates/pretixcontrol/event/live.html:51
 #: pretix/control/templates/pretixcontrol/event/live.html:65
 msgid "Go live"
-msgstr ""
+msgstr "실시간으로 전환하기"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:59
 msgid "If you want to, you can publish your ticket shop now."
-msgstr ""
+msgstr "원하신다면 지금 티켓 판매 페이지를 공개하실 수 있습니다"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:83
 msgid ""
 "Your shop is currently in test mode. All orders are not persistent and can "
 "be deleted at any point."
-msgstr ""
+msgstr "현재 상점이 테스트 모드로 설정되어 있습니다. 모든 주문은 실제로 저장되지 "
+"않으며, 언제든 삭제될 수 있습니다."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:88
 msgid "Permanently delete all orders created in test mode"
-msgstr ""
+msgstr "테스트 모드에서 생성된 모든 주문을 영구적으로 삭제합니다"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:93
 msgid "Disable test mode"
-msgstr ""
+msgstr "테스트 모드 해제"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:99
 msgid "Your shop is currently in production mode."
-msgstr ""
+msgstr "현재 상점이 운영 모드로 설정되어 있습니다"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:102
 msgid ""
@@ -18670,6 +18643,9 @@ msgid ""
 "As long as the shop is in test mode, all orders that are created are marked "
 "as test orders and can be deleted again."
 msgstr ""
+"테스트 주문을 해보고 싶다면 상점의 테스트 모드를 켤 수 있습니다. 테스트 "
+"모드가 활성화된 동안 생성되는 모든 주문은 테스트 주문으로 처리되며, 언제든 "
+"삭제할 수 있습니다"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:104
 msgid ""
@@ -18677,6 +18653,9 @@ msgid ""
 "vouchers and might perform actual payments. The only difference is that you "
 "can delete test orders. Use at your own risk!"
 msgstr ""
+"테스트 주문 역시 할당량에 포함되며, 실제 바우처 사용과 결제가 발생할 수 "
+"있습니다. 단지 테스트 주문은 삭제가 가능하다는 점만 다릅니다. 사용 시 이 "
+"점에 유의하시고, 본인의 책임 하에 이용해 주세요"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:108
 msgid ""
@@ -18684,6 +18663,8 @@ msgid ""
 "sales channels such as the box office or resellers module are still created "
 "as production orders."
 msgstr ""
+"참고로, 테스트 모드는 메인 웹 상점에만 적용되며, 박스오피스나 리셀러 모듈 등 "
+"다른 판매 채널에서 발생하는 주문은 실제 운영 주문으로 생성됩니다"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:112
 msgid ""
@@ -18691,23 +18672,26 @@ msgid ""
 "recommend enabling test mode if your customers already know your shop, as it "
 "will confuse them."
 msgstr ""
+"상점에 이미 실제 주문이 존재하는 것으로 확인됩니다. 고객들이 이미 상점을 "
+"이용하고 있다면, 테스트 모드 활성화 시 혼란이 발생할 수 있으므로 권장하지 "
+"않습니다"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:119
 msgid "Enable test mode"
-msgstr ""
+msgstr "테스트 모드 시작"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:12
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:12
 msgid "All actions"
-msgstr ""
+msgstr "모든 작업"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:14
 msgid "Team actions"
-msgstr ""
+msgstr "팀 작업"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:17
 msgid "Customer actions"
-msgstr ""
+msgstr "고객 작업"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:49
 #: pretix/control/templates/pretixcontrol/event/logs_embed.html:10
@@ -18715,14 +18699,14 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:20
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:35
 msgid "Personal data was cleared from this log entry."
-msgstr ""
+msgstr "이 로그 기록에서 개인정보가 삭제되었습니다"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:58
 #: pretix/control/templates/pretixcontrol/event/logs_embed.html:19
 #: pretix/control/templates/pretixcontrol/includes/logs.html:12
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:44
 msgid "This change was performed by a pretix administrator."
-msgstr ""
+msgstr "이 변경 작업은 pretix 관리자가 진행하였습니다"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:86
 #: pretix/control/templates/pretixcontrol/event/logs_embed.html:47
@@ -18734,7 +18718,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:72
 #: pretix/control/templates/pretixcontrol/search/payments.html:147
 msgid "Inspect"
-msgstr ""
+msgstr "점검하기"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:94
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:50
@@ -18745,30 +18729,30 @@ msgstr "결과 없음"
 #: pretix/control/templates/pretixcontrol/event/mail.html:7
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:11
 msgid "Email settings"
-msgstr ""
+msgstr "이메일 설정"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:21
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:22
 msgid "Sending method"
-msgstr ""
+msgstr "전송방식"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:25
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:26
 msgid "Custom SMTP server"
-msgstr ""
+msgstr "직접 설정하는 SMTP 서버"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:27
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:28
 msgid "System-provided email server"
-msgstr ""
+msgstr "시스템 제공 이메일 서버"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:60
 msgid "Calendar invites"
-msgstr ""
+msgstr "일정 초대"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:66
 msgid "Email design"
-msgstr ""
+msgstr "이메일 디자인"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:79
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:29
@@ -18777,63 +18761,63 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:97
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:120
 msgid "Preview"
-msgstr ""
+msgstr "미리보기"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:87
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:58
 msgid "Email content"
-msgstr ""
+msgstr "메일 내용"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:90
 msgid "Placed order"
-msgstr ""
+msgstr "주문 완료"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:93
 msgid "Paid order"
-msgstr ""
+msgstr "결제 완료 주문"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:96
 msgid "Free order"
-msgstr ""
+msgstr "무료 주문"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:99
 #: pretix/control/templates/pretixcontrol/order/index.html:249
 #: pretix/control/templates/pretixcontrol/order/index.html:532
 msgid "Resend link"
-msgstr ""
+msgstr "링크 재전송"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:105
 msgid "Payment reminder"
-msgstr ""
+msgstr "결제 알림"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:108
 msgid "Payment failed"
-msgstr ""
+msgstr "지불 실패"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 msgid "Waiting list notification"
-msgstr ""
+msgstr "대기자 명단 알림"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:117
 msgid "Order custom mail"
-msgstr ""
+msgstr "주문 맞춤 메일"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:120
 msgid "Reminder to download tickets"
-msgstr ""
+msgstr "티켓 다운로드 알림"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:123
 msgid "Order approval process"
-msgstr ""
+msgstr "주문 승인 절차"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:126
 msgid "Attachments"
-msgstr ""
+msgstr "첨부파일"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:6
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:5
 msgid "Payment settings"
-msgstr ""
+msgstr "결제 설정"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:23
 #: pretix/control/templates/pretixcontrol/user/settings.html:48
@@ -30279,10 +30263,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/forms/customer.py:90
-#, fuzzy
-#| msgid "Your current password"
 msgid "Forgot your password?"
-msgstr "현재 비밀번호"
+msgstr "현재 비밀번호를 잊었습니까?"
 
 #: pretix/presale/forms/customer.py:146
 msgid ""
@@ -32440,10 +32422,9 @@ msgid "Event overview"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:21
-#, fuzzy, python-format
-#| msgid "Event timezone"
+#, python-format
 msgid "Events in %(month)s"
-msgstr "이벤트 시간대"
+msgstr "이벤트 시간대 %(month)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:91
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:104
@@ -32989,7 +32970,7 @@ msgstr ""
 
 #: pretix/settings.py:802
 msgid "Kosovo"
-msgstr ""
+msgstr "코소보"
 
 #, fuzzy
 #~| msgctxt "refund_source"
