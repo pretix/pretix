@@ -1126,64 +1126,79 @@ var editor = {
         if ($("#source-container").is(':visible')) {
             return true;
         }
-        switch (e.keyCode) {
-            case 38:  /* Up arrow */
-                thing.set('top', thing.get('top') - step);
-                thing.setCoords();
-                editor._create_savepoint();
-                break;
-            case 40:  /* Down arrow */
-                thing.set('top', thing.get('top') + step);
-                thing.setCoords();
-                editor._create_savepoint();
-                break;
-            case 37:  /* Left arrow  */
-                thing.set('left', thing.get('left') - step);
-                thing.setCoords();
-                editor._create_savepoint();
-                break;
-            case 39:  /* Right arrow  */
-                thing.set('left', thing.get('left') + step);
-                thing.setCoords();
-                editor._create_savepoint();
-                break;
-            case 8:  /* Backspace */
-            case 46:  /* Delete */
-                editor._delete();
-                break;
-            case 65:  /* A */
-                if (e.ctrlKey || e.metaKey) {
+        if (e.ctrlKey || e.metaKey) {
+            switch (e.key) {
+                case "a":
                     editor._selectAll();
-                }
-                break;
-            case 89:  /* Y */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "y":
                     editor._redo();
-                }
-                break;
-            case 90:  /* Z */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "z":
                     editor._undo();
-                }
-                break;
-            case 88:  /* X */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "x":
                     editor._cut();
-                }
-                break;
-            case 86:  /* V */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "v":
                     editor._paste();
-                }
-                break;
-            case 67:  /* C */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "c":
                     editor._copy();
-                }
-                break;
-            default:
-                return;
+                    break;
+                case "d":
+                    editor._duplicate();
+                    break;
+                default:
+                    return;
+            }
+        } else {
+            switch (e.key) {
+                case "ArrowUp":
+                    thing.set('top', thing.get('top') - step);
+                    thing.setCoords();
+                    editor._create_savepoint();
+                    break;
+                case "ArrowDown":
+                    thing.set('top', thing.get('top') + step);
+                    thing.setCoords();
+                    editor._create_savepoint();
+                    break;
+                case "ArrowLeft":
+                    thing.set('left', thing.get('left') - step);
+                    thing.setCoords();
+                    editor._create_savepoint();
+                    break;
+                case "ArrowRight":
+                    thing.set('left', thing.get('left') + step);
+                    thing.setCoords();
+                    editor._create_savepoint();
+                    break;
+                case "Backspace":
+                case "Del":
+                case "Delete":
+                    editor._delete();
+                    break;
+                case "Cut":
+                    editor._cut();
+                    break;
+                case "Copy":
+                    editor._copy();
+                    break;
+                case "Paste":
+                    editor._paste();
+                    break;
+                case "Redo":
+                    editor._redo();
+                    break;
+                case "Undo":
+                    editor._undo();
+                    break;
+                default:
+                    return;
+            }
         }
+
         e.preventDefault();
         editor.fabric.renderAll();
         editor._update_toolbox_values();
