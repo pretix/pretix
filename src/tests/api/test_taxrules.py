@@ -91,7 +91,6 @@ def test_rule_create_auto_default(token_client, organizer, event):
             "price_includes_tax": True,
             "eu_reverse_charge": False,
             "home_country": "DE",
-            "default": True,
         },
         format='json'
     )
