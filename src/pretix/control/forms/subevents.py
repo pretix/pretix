@@ -133,16 +133,12 @@ class SubEventBulkEditForm(I18nModelForm):
             # i18n fields
             if k in self.mixed_values:
                 self.fields[k].widget.attrs['placeholder'] = '[{}]'.format(_('Selection contains various values'))
-            else:
-                self.fields[k].widget.attrs['placeholder'] = ''
             self.fields[k].one_required = False
 
         for k in ('geo_lat', 'geo_lon', 'comment'):
             # scalar fields
             if k in self.mixed_values:
                 self.fields[k].widget.attrs['placeholder'] = '[{}]'.format(_('Selection contains various values'))
-            else:
-                self.fields[k].widget.attrs['placeholder'] = ''
             self.fields[k].widget.is_required = False
             self.fields[k].required = False
 
