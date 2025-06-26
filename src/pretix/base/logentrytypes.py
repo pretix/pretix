@@ -148,7 +148,7 @@ class TaxRuleLogEntryType(EventLogEntryType):
 
 
 class WaitingListEntryLogEntryType(EventLogEntryType):
-    object_link_wrapper = _('{val}')
+    object_link_wrapper = '{val}'
     object_link_viewname = 'control:event.orders.waitinglist'
     content_type = WaitingListEntry
 
