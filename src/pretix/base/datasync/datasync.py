@@ -195,7 +195,8 @@ class OutboundSyncProvider:
 
         :return: The returned objects must have at least the following properties:
 
-                - `id`: Unique identifier
+                - `id`: Unique identifier for this mapping. If the mappings are Django models, the database primary key
+                  should be used. This may be referenced in other mappings, to establish relations between objects.
                 - `pretix_model`: Which pretix model to use as data source in this mapping. Possible values are
                   the keys of ``sourcefields.AVAILABLE_MODELS``
                 - `external_object_type`: Destination object type in the target system. opaque string of maximum 128 characters.
