@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
-"PO-Revision-Date: 2025-06-24 23:00+0000\n"
+"PO-Revision-Date: 2025-06-26 15:17+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3493,11 +3493,9 @@ msgid "Tax rule {val}"
 msgstr "Steuer-Regel {val}"
 
 #: pretix/base/logentrytypes.py:151
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "Date {val}"
+#, python-brace-format
 msgid "{val}"
-msgstr "Termin {val}"
+msgstr "{val}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
@@ -5621,6 +5619,10 @@ msgid ""
 "with changing the type of question without data loss. Consider hiding this "
 "question and creating a new one instead."
 msgstr ""
+"Das System enthält bereits Antworten auf diese Frage. Der Typ kann daher "
+"nicht mehr so geändert werden, dass dabei nicht alle Daten übertragen werden "
+"können. Wir empfehlen, stattdessen diese Frage zu verstecken und eine neue "
+"Frage anzulegen."
 
 #: pretix/base/models/items.py:1961
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -13001,12 +13003,10 @@ msgid "Product variation \"{product} – {variation}\" becomes unavailable"
 msgstr "Produktvariante „{product} – {variation}“ ist nicht mehr verfügbar"
 
 #: pretix/base/timeline.py:351
-#, fuzzy, python-brace-format
-#| msgctxt "timeline"
-#| msgid "Payment provider \"{name}\" can no longer be selected"
+#, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" becomes active"
-msgstr "Zahlungsanbieter „{name}“ kann nicht mehr ausgewählt werden"
+msgstr "Zahlungsanbieter „{name}“ wird aktiv"
 
 #: pretix/base/timeline.py:369
 #, python-brace-format
@@ -19873,10 +19873,8 @@ msgstr "Produktliste"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:253
 #: pretix/control/templates/pretixcontrol/event/settings.html:389
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "Incompatible settings"
-msgstr "Rechnungseinstellungen"
+msgstr "Inkompatible Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:254
 #: pretix/control/templates/pretixcontrol/event/settings.html:390
@@ -19884,6 +19882,8 @@ msgid ""
 "Customers won't be able to add themselves to the waiting list, because "
 "\"Hide all products that are sold out\" is enabled."
 msgstr ""
+"Kunden werden sich nicht auf die Warteliste eintragen können, da "
+"\"Verstecke alle ausverkauften Produkte\" eingeschaltet ist."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:261
 msgctxt "subevents"
@@ -21391,16 +21391,14 @@ msgid "Count"
 msgstr "Anzahl"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:92
-#, fuzzy, python-format
-#| msgid "Copy answers"
+#, python-format
 msgid "%% of answers"
-msgstr "Antworten kopieren"
+msgstr "%% der Antworten"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:93
-#, fuzzy, python-format
-#| msgid "Number of tickets"
+#, python-format
 msgid "%% of tickets"
-msgstr "Anzahl Tickets"
+msgstr "%% der Tickets"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:112
 #: pretix/control/templates/pretixcontrol/order/transactions.html:67
@@ -25219,14 +25217,8 @@ msgid "Item prices"
 msgstr "Produktpreise"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:197
-#, fuzzy
-#| msgid ""
-#| "You selected a set of dates that currently have different check-in list "
-#| "setups. You can therefore not change their check-in lists in bulk."
 msgid "You selected a set of dates that currently have different quota setups."
-msgstr ""
-"Die ausgewählten Termine enthalten unterschiedliche Check-in-Listen und "
-"können daher nicht gemeinsam bearbeitet werden."
+msgstr "Die ausgewählten Termine enthalten unterschiedliche Kontingente."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:198
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:373
@@ -25234,6 +25226,8 @@ msgid ""
 "Using this option will <strong>delete all current quotas</strong> from "
 "<strong>all selected dates</strong>."
 msgstr ""
+"Die Nutzung dieser Option wird <strong>alle derzeitigen Kontingente</strong> "
+"von <strong>allen ausgewählten Terminen löschen</strong>."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:277
 msgid ""
@@ -25244,20 +25238,18 @@ msgstr ""
 "können daher nicht gemeinsam bearbeitet werden."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:372
-#, fuzzy
-#| msgid "Add to existing quota"
 msgid "Delete existing quotas"
-msgstr "Zu bestehendem Kontingent hinzufügen"
+msgstr "Existierende Kontingente löschen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:374
 msgid "This cannot be reverted. Are you sure to proceed?"
 msgstr ""
+"Diese Aktion kann nicht rückgängig gemacht werden. Willst du sicher "
+"fortfahren?"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:381
-#, fuzzy
-#| msgid "Process refund"
 msgid "Proceed"
-msgstr "Erstattung verarbeiten"
+msgstr "Fortfahren"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:6
@@ -30771,10 +30763,8 @@ msgid "A ticket holder of this order received a mass email."
 msgstr "Ein Ticketinhaber dieser Bestellung hat eine Rundmail erhalten."
 
 #: pretix/plugins/sendmail/signals.py:134
-#, fuzzy
-#| msgid "The order received a mass email."
 msgid "The person on the waiting list received a mass email."
-msgstr "Die Bestellung hat eine Rundmail erhalten."
+msgstr "Die Person auf der Warteliste hat eine Rundmail erhalten."
 
 #: pretix/plugins/sendmail/signals.py:139
 msgid "An email rule was created"
@@ -33395,10 +33385,8 @@ msgid "Renew reservation"
 msgstr "Reservierung verlängern"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:522
-#, fuzzy
-#| msgid "Reservation period"
 msgid "Reservation renewed"
-msgstr "Reservierungszeitraum"
+msgstr "Reservierung verlängert"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:528
 msgid "Overview of your ordered products."
@@ -34653,7 +34641,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:5
 msgid "Event overview by month, week, etc."
-msgstr ""
+msgstr "Event-Übersicht nach Monat, Woche, etc."
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:26
 msgid "iCal"
