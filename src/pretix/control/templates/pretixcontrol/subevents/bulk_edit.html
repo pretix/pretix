@@ -51,7 +51,7 @@
                             <div class="field-content">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {% bootstrap_field form.geo_lat layout="inline" %}
+                                        {% bootstrap_field form.geo_lat layout="inline" placeholder=_("Latitude") %}
                                         {% if global_settings.opencagedata_apikey %}
                                             <p class="attrib">
                                                 <a href="https://openstreetmap.org/" target="_blank" tabindex="-1">
@@ -61,7 +61,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-md-6">
-                                        {% bootstrap_field form.geo_lon layout="inline" %}
+                                        {% bootstrap_field form.geo_lon layout="inline" placeholder=_("Longitude") %}
                                     </div>
                                 </div>
                             </div>
