@@ -49,23 +49,10 @@ def set_default_tax_rate(app, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0281_event_is_remote"),
+        ("pretixbase", "0282_taxrule_default"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name="taxrule",
-            name="default",
-            field=models.BooleanField(default=False),
-        ),
-        migrations.AddConstraint(
-            model_name="taxrule",
-            constraint=models.UniqueConstraint(
-                condition=models.Q(("default", True)),
-                fields=("event",),
-                name="one_default_per_event",
-            ),
-        ),
         migrations.RunPython(
             set_default_tax_rate,
             migrations.RunPython.noop,
