@@ -24,6 +24,9 @@ import logging
 from functools import cached_property
 
 from django.db import models
+from django.utils.translation import (
+    gettext as _, gettext_lazy, ngettext_lazy, pgettext_lazy,
+)
 
 from pretix.base.models import Event, Order, OrderPosition
 
@@ -48,6 +51,11 @@ class OrderSyncQueue(models.Model):
     triggered = models.DateTimeField(blank=False, null=False, auto_now_add=True)
     failed_attempts = models.PositiveIntegerField(default=0)
     not_before = models.DateTimeField(blank=False, null=False, db_index=True)
+    need_manual_retry = models.CharField(blank=True, null=True, choices=[
+        ('recoverable', _('Temporary error, retry exceeded')),
+        ('unrecoverable', _('Misconfiguration')),
+        ('unhandled', _('Unhandled exception'))
+    ])
 
     class Meta:
         unique_together = (("order", "sync_provider"),)

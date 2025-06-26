@@ -66,7 +66,7 @@ def sync_all():
     with scopes_disabled():
         queue = (
             OrderSyncQueue.objects
-            .filter(not_before__lt=now())
+            .filter(not_before__lt=now(), need_manual_retry__isnull=True)
             .order_by(Window(
                 expression=RowNumber(),
                 partition_by=[F("event_id")],
@@ -231,7 +231,8 @@ class OutboundSyncProvider:
                         "error": e.messages,
                         "full_message": e.full_message,
                     })
-                    sq.delete()
+                    sq.need_manual_retry = "unrecoverable"
+                    sq.save()
                 except RecoverableSyncError as e:
                     sq.failed_attempts += 1
                     sq.not_before = self.next_retry_date(sq)
@@ -246,7 +247,8 @@ class OutboundSyncProvider:
                             "error": e.messages,
                             "full_message": e.full_message,
                         })
-                        sq.delete()
+                        sq.need_manual_retry = "recoverable"
+                        sq.save()
                     else:
                         sq.save()
                 except Exception as e:
@@ -259,7 +261,8 @@ class OutboundSyncProvider:
                         "error": [],
                         "full_message": str(e),
                     })
-                    sq.delete()
+                    sq.need_manual_retry = "unhandled"
+                    sq.save()
                 else:
                     if not all(res.get("action", "") == "nothing_to_do" for res in mapped_objects.values()):
                         sq.order.log_action("pretix.event.order.data_sync.success", {
