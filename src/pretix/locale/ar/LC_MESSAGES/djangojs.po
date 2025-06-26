@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-30 10:36+0000\n"
+"POT-Creation-Date: 2025-06-26 09:11+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
-#: pretix/static/pretixpresale/js/ui/cart.js:92
+#: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "المتابعة"
 
@@ -341,13 +341,13 @@ msgid "Currently inside"
 msgstr "حاليا بالداخل"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixcontrol/js/ui/question.js:136
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
 msgstr "نعم"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:138
+#: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "No"
 msgstr "لا"
@@ -685,23 +685,23 @@ msgstr "لا شيء"
 msgid "Selected only"
 msgstr "المختارة فقط"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:782
+#: pretix/static/pretixcontrol/js/ui/main.js:811
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:785
+#: pretix/static/pretixcontrol/js/ui/main.js:814
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:943
+#: pretix/static/pretixcontrol/js/ui/main.js:972
 msgid "Use a different name internally"
 msgstr "قم باستخدم اسم مختلف داخليا"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:983
+#: pretix/static/pretixcontrol/js/ui/main.js:1012
 msgid "Click to close"
 msgstr "اضغط لاغلاق الصفحة"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1064
+#: pretix/static/pretixcontrol/js/ui/main.js:1093
 msgid "You have unsaved changes!"
 msgstr "لم تقم بحفظ التعديلات!"
 
@@ -715,11 +715,11 @@ msgstr "حساب السعر الافتراضي…"
 msgid "No results"
 msgstr "البحث في النتائج"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:42
+#: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
 msgstr "غير ذلك"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:82
+#: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "احسب"
 
@@ -733,7 +733,7 @@ msgstr[3] "أيام"
 msgstr[4] "أيام عديدة"
 msgstr[5] "أخرى"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:48
+#: pretix/static/pretixpresale/js/ui/cart.js:47
 #, fuzzy
 #| msgid "The items in your cart are no longer reserved for you."
 msgid ""
@@ -741,16 +741,16 @@ msgid ""
 "complete your order as long as they’re available."
 msgstr "لم تعد العناصر الموجودة في عربة التسوق الخاصة بك محجوزة لك."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:50
+#: pretix/static/pretixpresale/js/ui/cart.js:49
 msgid "Cart expired"
 msgstr "انتهت صلاحية عربة التسوق"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:59
-#: pretix/static/pretixpresale/js/ui/cart.js:87
+#: pretix/static/pretixpresale/js/ui/cart.js:58
+#: pretix/static/pretixpresale/js/ui/cart.js:84
 msgid "Your cart is about to expire."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/cart.js:64
+#: pretix/static/pretixpresale/js/ui/cart.js:62
 #, fuzzy
 #| msgid "The items in your cart are reserved for you for one minute."
 #| msgid_plural ""
@@ -764,13 +764,13 @@ msgstr[3] "سيتم حجز العناصر لك في سلة التسوق لعدة
 msgstr[4] "سيتم حجز العناصر لك في سلة التسوق لدقائق {num}."
 msgstr[5] "سيتم حجز العناصر لك في سلة التسوق لمدة {num}."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:86
+#: pretix/static/pretixpresale/js/ui/cart.js:83
 #, fuzzy
 #| msgid "Cart expired"
 msgid "Your cart has expired."
 msgstr "انتهت صلاحية عربة التسوق"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:89
+#: pretix/static/pretixpresale/js/ui/cart.js:86
 #, fuzzy
 #| msgid "The items in your cart are no longer reserved for you."
 msgid ""
@@ -778,11 +778,11 @@ msgid ""
 "complete your order as long as they're available."
 msgstr "لم تعد العناصر الموجودة في عربة التسوق الخاصة بك محجوزة لك."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:90
+#: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/cart.js:93
+#: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Renew reservation"
 msgstr ""
 
@@ -807,19 +807,16 @@ msgid "Google Pay"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:16
 msgctxt "widget"
 msgid "Quantity"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:18
 msgctxt "widget"
 msgid "Increase quantity"
 msgstr ""
@@ -835,27 +832,23 @@ msgid "Filter"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:19
 msgctxt "widget"
 msgid "Price"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:20
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:22
 #, fuzzy
 #| msgid "Selected only"
 msgctxt "widget"
@@ -863,7 +856,6 @@ msgid "Select"
 msgstr "المختارة فقط"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:23
 #, fuzzy, javascript-format
 #| msgid "Selected only"
 msgctxt "widget"
@@ -871,7 +863,6 @@ msgid "Select %s"
 msgstr "المختارة فقط"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:24
 #, fuzzy, javascript-format
 #| msgctxt "widget"
 #| msgid "See variations"
@@ -880,89 +871,74 @@ msgid "Select variant %s"
 msgstr "أنظر إلى الاختلافات"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:25
 msgctxt "widget"
 msgid "Sold out"
 msgstr "تم البيع بالكامل"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:26
 msgctxt "widget"
 msgid "Buy"
 msgstr "اشتري"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:27
 msgctxt "widget"
 msgid "Register"
 msgstr "سجل"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:28
 msgctxt "widget"
 msgid "Reserved"
 msgstr "محجوز"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:29
 msgctxt "widget"
 msgid "FREE"
 msgstr "مجاني"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:30
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "من %(currency) s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:31
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:32
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "يشمل %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:33
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "بالإضافة إلى %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:34
 msgctxt "widget"
 msgid "incl. taxes"
 msgstr "شامل الضريبة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:35
 msgctxt "widget"
 msgid "plus taxes"
 msgstr "بالإضافة إلى الضرائب"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:36
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "متوفر حاليا: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:37
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "متوفرة مع القسيمة فقط"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 #: pretix/static/pretixpresale/js/widget/widget.js:43
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:38
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:41
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "currently available: %s"
@@ -971,13 +947,11 @@ msgid "Not yet available"
 msgstr "متوفر حاليا: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:39
 msgctxt "widget"
 msgid "Not available anymore"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:40
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "currently available: %s"
@@ -986,26 +960,22 @@ msgid "Currently not available"
 msgstr "متوفر حاليا: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:42
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "الحد الأدنى للطلب: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:43
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "إغلاق متجر التذاكر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:44
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "لا يمكن تحميل متجر التذاكر."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:45
 msgctxt "widget"
 msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
@@ -1013,7 +983,6 @@ msgid ""
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:47
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Close ticket shop"
@@ -1022,7 +991,6 @@ msgid "Open ticket shop"
 msgstr "إغلاق متجر التذاكر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:48
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Resume checkout"
@@ -1031,13 +999,11 @@ msgid "Checkout"
 msgstr "استئناف الدفع"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:49
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "لا يمكن إنشاء سلة التسوق. الرجاء المحاولة مرة أخرى في وقت لاحق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:50
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
@@ -1045,13 +1011,11 @@ msgid ""
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:52
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "قائمة الإنتظار"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:53
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -1061,31 +1025,26 @@ msgstr ""
 "إضافتها إلى سلة التسوق الموجودة حالياً."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:55
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "استئناف الدفع"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:56
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "استبدال قسيمة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:57
 msgctxt "widget"
 msgid "Redeem"
 msgstr "استبدال"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:58
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "رمز القسيمة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:59
 msgctxt "widget"
 msgid "Close"
 msgstr "إغلاق"
@@ -1104,13 +1063,11 @@ msgid "You cannot cancel this operation. Please wait for loading to finish."
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:60
 msgctxt "widget"
 msgid "Continue"
 msgstr "استمرار"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:61
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "See variations"
@@ -1119,7 +1076,6 @@ msgid "Show variants"
 msgstr "أنظر إلى الاختلافات"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:62
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "See variations"
@@ -1128,55 +1084,46 @@ msgid "Hide variants"
 msgstr "أنظر إلى الاختلافات"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:63
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "اختر فعالية أخرى"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:64
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "اختر تاريخا آخر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:65
 msgctxt "widget"
 msgid "Back"
 msgstr "العودة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:66
 msgctxt "widget"
 msgid "Next month"
 msgstr "الشهر القادم"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:67
 msgctxt "widget"
 msgid "Previous month"
 msgstr "الشهر السابق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:72
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:68
 msgctxt "widget"
 msgid "Next week"
 msgstr "الأسبوع القادم"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:73
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:69
 msgctxt "widget"
 msgid "Previous week"
 msgstr "الأسبوع السابق"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:74
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:70
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "خيارات المقاعد"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:75
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:71
 msgctxt "widget"
 msgid ""
 "Some or all ticket categories are currently sold out. If you want, you can "
@@ -1185,7 +1132,6 @@ msgid ""
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:76
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:72
 #, fuzzy
 #| msgid "Load more"
 msgctxt "widget"
@@ -1193,132 +1139,106 @@ msgid "Load more"
 msgstr "تحميل المزيد"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:78
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:74
 msgid "Mo"
 msgstr "الإثنين"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:79
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:75
 msgid "Tu"
 msgstr "الثلاثاء"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:80
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:76
 msgid "We"
 msgstr "الأربعاء"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:77
 msgid "Th"
 msgstr "الخميس"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:78
 msgid "Fr"
 msgstr "الجمعة"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:79
 msgid "Sa"
 msgstr "السبت"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:80
 msgid "Su"
 msgstr "الأحد"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:81
 msgid "Monday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:82
 msgid "Tuesday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:83
 msgid "Wednesday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:88
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:84
 msgid "Thursday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:89
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:85
 msgid "Friday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:86
 msgid "Saturday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:91
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:87
 msgid "Sunday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:94
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:90
 msgid "January"
 msgstr "يناير"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:95
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:91
 msgid "February"
 msgstr "فبراير"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:96
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:92
 msgid "March"
 msgstr "مارس"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:97
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:93
 msgid "April"
 msgstr "أبريل"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:98
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:94
 msgid "May"
 msgstr "مايو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:99
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:95
 msgid "June"
 msgstr "يونيو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:100
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:96
 msgid "July"
 msgstr "يوليو"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:101
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:97
 msgid "August"
 msgstr "أغسطس"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:102
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:98
 msgid "September"
 msgstr "سبتمبر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:103
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:99
 msgid "October"
 msgstr "أكتوبر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:104
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:100
 msgid "November"
 msgstr "نوفمبر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:105
-#: pretix/static/pretixpresale/js/widget/widget.v1.js:101
 msgid "December"
 msgstr "ديسمبر"
 
