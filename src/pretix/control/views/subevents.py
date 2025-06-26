@@ -49,7 +49,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.formats import get_format
 from django.utils.functional import cached_property
-from django.utils.timezone import make_aware
+from django.utils.timezone import now, make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
 from django.views.generic import CreateView, FormView, ListView, UpdateView
@@ -768,8 +768,15 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
         ctx['time_formset'] = self.time_formset
 
         tf = get_format('TIME_INPUT_FORMATS')[0]
+        ctx['time_admission_sample'] = time(8, 30, 0).strftime(tf)
         ctx['time_begin_sample'] = time(9, 0, 0).strftime(tf)
         ctx['time_end_sample'] = time(18, 0, 0).strftime(tf)
+
+        df = get_format('DATETIME_INPUT_FORMATS')[0]
+        ctx['datetime_sample'] = now().replace(
+            year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
+        ).strftime(df)
+
         return ctx
 
     @cached_property
