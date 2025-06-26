@@ -261,10 +261,11 @@ class OutboundSyncProvider:
                     })
                     sq.delete()
                 else:
-                    sq.order.log_action("pretix.event.order.data_sync.success", {
-                        "provider": self.identifier,
-                        "objects": mapped_objects
-                    })
+                    if not all(res.get("action", "") == "nothing_to_do" for res in mapped_objects.values()):
+                        sq.order.log_action("pretix.event.order.data_sync.success", {
+                            "provider": self.identifier,
+                            "objects": mapped_objects
+                        })
                     sq.delete()
 
     @cached_property
@@ -333,6 +334,9 @@ class OutboundSyncProvider:
                     "object_type": mapping.external_object_type,
                     "external_id_field": external_id_field,
                     "id_value": id_value,
+
+                    # optional:
+                    "action": "nothing_to_do",  # to inform that no action was taken, because the data was already up-to-date
 
                     # optional:
                     "external_link_href": "https://external-system.example.com/backend/link/to/contact/123/",
