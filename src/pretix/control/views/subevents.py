@@ -49,7 +49,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.formats import get_format
 from django.utils.functional import cached_property
-from django.utils.timezone import now, make_aware
+from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
 from django.views.generic import CreateView, FormView, ListView, UpdateView
