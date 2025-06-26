@@ -116,7 +116,7 @@ class RecoverableSyncError(BaseSyncError):
     pass
 
 
-StaticMapping = namedtuple('StaticMapping', ('pk', 'pretix_model', 'external_object_type', 'pretix_id_field', 'external_id_field', 'property_mapping'))
+StaticMapping = namedtuple('StaticMapping', ('id', 'pretix_model', 'external_object_type', 'pretix_id_field', 'external_id_field', 'property_mapping'))
 
 
 class OutboundSyncProvider:
@@ -195,7 +195,7 @@ class OutboundSyncProvider:
 
         :return: The returned objects must have at least the following properties:
 
-                - `pk`: Unique identifier
+                - `id`: Unique identifier
                 - `pretix_model`: Which pretix model to use as data source in this mapping. Possible values are
                   the keys of ``sourcefields.AVAILABLE_MODELS``
                 - `external_object_type`: Destination object type in the target system. opaque string of maximum 128 characters.
@@ -322,7 +322,7 @@ class OutboundSyncProvider:
         :param mapping: The mapping object as returned by ``self.mappings``
         :param mapped_objects: Information about objects that were synced in the same sync run, by mapping definitions
                                *before* the current one in order of ``self.mappings``.
-                               Type is a dictionary ``{mapping.pk: [list of return values of this method]}``
+                               Type is a dictionary ``{mapping.id: [list of return values of this method]}``
                                Useful to create associations between objects in the target system.
 
         Example code to create return value::
@@ -342,7 +342,7 @@ class OutboundSyncProvider:
         This method needs to be idempotent, i.e. calling it multiple times with the same input values should create
         only a single object in the target system.
 
-        Subsequent calls with the same mapping and pk_value should update the existing object, instead of creating a new one.
+        Subsequent calls with the same mapping and id_value should update the existing object, instead of creating a new one.
         In a SQL database, you might use an `INSERT OR UPDATE` or `UPSERT` statement; many REST APIs provide an equivalent API call.
         """
         raise NotImplementedError()
@@ -397,11 +397,11 @@ class OutboundSyncProvider:
         mapped_objects = {}
         for mapping in self.mappings:
             if mapping.pretix_model == 'Order':
-                mapped_objects[mapping.pk] = [
+                mapped_objects[mapping.id] = [
                     self.sync_object(order_inputs, mapping, mapped_objects)
                 ]
             elif mapping.pretix_model == 'OrderPosition':
-                mapped_objects[mapping.pk] = [
+                mapped_objects[mapping.id] = [
                     self.sync_object({
                         **order_inputs, EVENT_OR_SUBEVENT: op.subevent or self.event, ORDER_POSITION: op
                     }, mapping, mapped_objects)
