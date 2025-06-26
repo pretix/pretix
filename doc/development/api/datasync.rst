@@ -75,7 +75,7 @@ shown. Therein, a ``sync_object_with_properties`` method is defined like as foll
 .. code-block:: python
 
     def sync_object_with_properties(
-            self, identifier_field, identifier_value, properties: list, inputs: dict,
+            self, external_id_field, id_value, properties: list, inputs: dict,
             mapping, mapped_objects: dict, **kwargs,
     ):
         # First, we query the external service if our object-to-sync already exists there.
@@ -83,8 +83,8 @@ shown. Therein, a ``sync_object_with_properties`` method is defined like as foll
         # data gracefully.
         pre_existing_object = self.fake_api_client.retrieve_object(
             mapping.external_object_type,
-            identifier_field,
-            identifier_value
+            external_id_field,
+            id_value
         )
 
         # We use the helper function ``assign_properties`` to update a pre-existing object.
@@ -100,21 +100,21 @@ shown. Therein, a ``sync_object_with_properties`` method is defined like as foll
         # other properties.
         result = self.fake_api_client.create_or_update_object(mapping.external_object_type, {
             **update_values,
-            identifier_field: identifier_value,
+            external_id_field: id_value,
             "_id": pre_existing_object and pre_existing_object.get("_id"),
         })
 
-        # Finally, return a dictionary containing at least `object_type`, `identifier_field`,
-        # `identifier_value`, `external_link_href`, and `external_link_display_name` keys.
+        # Finally, return a dictionary containing at least `object_type`, `external_id_field`,
+        # `id_value`, `external_link_href`, and `external_link_display_name` keys.
         # Further keys may be provided for your internal use. This dictionary is provided
         # in following calls in the ``mapped_objects`` dict, to allow creating associations
         # to this object.
         return {
             "object_type": mapping.external_object_type,
-            "identifier_field": identifier_field,
-            "identifier_value": identifier_value,
-            "external_link_href": f"https://example.org/external-system/{mapping.external_object_type}/{identifier_value}/",
-            "external_link_display_name": f"Contact #{identifier_value} - Jane Doe",
+            "external_id_field": external_id_field,
+            "id_value": id_value,
+            "external_link_href": f"https://example.org/external-system/{mapping.external_object_type}/{id_value}/",
+            "external_link_display_name": f"Contact #{id_value} - Jane Doe",
             "my_result": result,
         }
 
