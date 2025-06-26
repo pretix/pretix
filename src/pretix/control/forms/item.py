@@ -346,6 +346,9 @@ class QuotaForm(I18nModelForm):
         field_classes = {
             'subevent': SafeModelChoiceField,
         }
+        widgets = {
+            'size': forms.NumberInput(attrs={'placeholder': _('Unlimited')})
+        }
 
     def save(self, *args, **kwargs):
         creating = not self.instance.pk
