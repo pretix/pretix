@@ -179,7 +179,7 @@ class OutboundSyncProvider:
         """
         return now() + timedelta(hours=1)
 
-    def order_valid_for_sync(self, order):
+    def should_sync_order(self, order):
         """
         Optionally override this method to exclude certain orders from sync by returning ``False``
         """
@@ -380,8 +380,8 @@ class OutboundSyncProvider:
         return info
 
     def sync_order(self, order):
-        if not self.order_valid_for_sync(order):
-            logger.debug("Skipping order %r (not valid for sync)", order)
+        if not self.should_sync_order(order):
+            logger.debug("Skipping order %r", order)
             return
 
         logger.debug("Syncing order %r", order)
