@@ -65,7 +65,7 @@ def thumbset(source, arg):
     if not cached_thumbset:
         for thumbsize, factor in get_srcset_sizes(arg):
             try:
-                t = get_thumbnail(source, thumbsize, formats=formats, only_if_resized=True)
+                t = get_thumbnail(source, thumbsize, formats=formats, skip_if_limited_by_input=True)
                 if t:
                     srcs.append(f"{t.thumb.url} {factor}")
             except:
