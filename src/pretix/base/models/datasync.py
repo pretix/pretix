@@ -52,9 +52,9 @@ class OrderSyncQueue(models.Model):
     failed_attempts = models.PositiveIntegerField(default=0)
     not_before = models.DateTimeField(blank=False, null=False, db_index=True)
     need_manual_retry = models.CharField(blank=True, null=True, choices=[
-        ('recoverable', _('Temporary error, retry exceeded')),
-        ('unrecoverable', _('Misconfiguration')),
-        ('unhandled', _('Unhandled exception'))
+        ('recoverable', _('Temporary error, auto-retry limit exceeded')),
+        ('unrecoverable', _('Misconfiguration, please check provider settings')),
+        ('unhandled', _('System error, needs manual intervention'))
     ])
 
     class Meta:

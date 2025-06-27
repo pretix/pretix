@@ -1,0 +1,48 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h2>{% trans "Sync problems" %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        {% if queue_items %}
+                            <label aria-label="{% trans "select all rows for batch-operation" %}"
+                               class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                        {% endif %}
+                    </th>
+                    <th>{% trans "Order" %}</th>
+                    <th>{% trans "Sync provider" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Failure mode" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in queue_items %}
+                    <tr>
+                        <td><input type="checkbox" name="idlist" value="{{ item.pk }}"></td>
+                        <td><a href="{% url "control:event.order" event=item.order.event.slug organizer=item.order.event.organizer.slug code=item.order.code %}">{{ item.order.full_code }}</a></td>
+                        <td>{{ item.sync_provider }}</td>
+                        <td>{{ item.triggered }}</td>
+                        <td>{{ item.get_need_manual_retry_display }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                    <td colspan="5" align="center">{% trans "No problems." %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% if queue_items %}
+            <tfoot>
+                <tr><td colspan="5">
+                    <button type="submit" name="action" value="retry" class="btn btn-primary"><i class="fa fa-refresh"></i> Retry selected</button>
+                    <button type="submit" name="action" value="cancel" class="btn btn-danger"><i class="fa fa-times"></i> Cancel selected</button>
+                </td></tr>
+            </tfoot>
+        {% endif %}
+        </table>
+    </form>
+{% endblock %}

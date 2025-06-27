@@ -14,7 +14,7 @@
                 <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline pull-right">
                     {% csrf_token %}
                     {% if pending %}
-                        {% if pending.not_before > now %}
+                        {% if pending.not_before > now or pending.need_manual_retry %}
                         <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
                         {% endif %}
                         <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-times"></i> {% trans "Cancel" %}</button>
@@ -26,7 +26,10 @@
                 <p><b>{{ display_name }}</b></p>
                 {% if pending %}
                     <p>
-                        {% if pending.failed_attempts %}
+                        {% if pending.need_manual_retry %}
+                            <i class="fa fa-warning"></i>
+                            {% trans "Error" %}: {{ pending.get_need_manual_retry_display }}
+                        {% elif pending.failed_attempts %}
                             <i class="fa fa-warning"></i>
                             {% blocktrans trimmed with num=pending.failed_attempts max=pending.max_retry_attempts %}
                             Error. Retry {{ num }} of {{ max }}.
