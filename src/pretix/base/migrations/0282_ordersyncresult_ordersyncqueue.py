@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 ('triggered', models.DateTimeField(auto_now_add=True)),
                 ('failed_attempts', models.PositiveIntegerField(default=0)),
                 ('not_before', models.DateTimeField(db_index=True)),
-                ('need_manual_retry', models.CharField(null=True)),
+                ('need_manual_retry', models.CharField(null=True, max_length=20)),
                 ('in_flight', models.BooleanField(default=False)),
                 ('in_flight_since', models.DateTimeField(blank=True, null=True)),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='queued_sync_jobs', to='pretixbase.event')),

@@ -49,7 +49,7 @@ class OrderSyncQueue(models.Model):
     triggered = models.DateTimeField(blank=False, null=False, auto_now_add=True)
     failed_attempts = models.PositiveIntegerField(default=0)
     not_before = models.DateTimeField(blank=False, null=False, db_index=True)
-    need_manual_retry = models.CharField(blank=True, null=True, choices=[
+    need_manual_retry = models.CharField(blank=True, null=True, max_length=20, choices=[
         ('exceeded', _('Temporary error, auto-retry limit exceeded')),
         ('permanent', _('Misconfiguration, please check provider settings')),
         ('config', _('Misconfiguration, please check provider settings')),
