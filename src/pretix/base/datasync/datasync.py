@@ -47,9 +47,18 @@ from pretix.helpers import OF_SELF
 logger = logging.getLogger(__name__)
 
 
-@receiver(periodic_task, dispatch_uid="data_sync_periodic")
-def on_periodic_task(sender, **kwargs):
+@receiver(periodic_task, dispatch_uid="data_sync_periodic_sync_all")
+def periodic_sync_all(sender, **kwargs):
     sync_all.apply_async()
+
+
+@receiver(periodic_task, dispatch_uid="data_sync_periodic_reset_in_flight")
+def periodic_reset_in_flight(sender, **kwargs):
+    for sq in OrderSyncQueue.objects.filter(
+        in_flight=True,
+        in_flight_since__lt=now() - timedelta(minutes=20),
+    ):
+        sq.set_sync_error('timeout', [], 'Timeout')
 
 
 sync_targets = EventPluginRegistry({"identifier": lambda o: o.identifier})
@@ -60,7 +69,11 @@ def sync_all():
     with scopes_disabled():
         queue = (
             OrderSyncQueue.objects
-            .filter(not_before__lt=now(), need_manual_retry__isnull=True)
+            .filter(
+                in_flight=False,
+                not_before__lt=now(),
+                need_manual_retry__isnull=True,
+            )
             .order_by(Window(
                 expression=RowNumber(),
                 partition_by=[F("event_id")],
@@ -93,7 +106,7 @@ class UnrecoverableSyncError(BaseSyncError):
     """
     A SyncProvider encountered a permanent problem, where a retry will not be successful.
     """
-    log_action_type = "pretix.event.order.data_sync.failed.permanent"
+    failure_mode = "permanent"
 
 
 class SyncConfigError(UnrecoverableSyncError):
@@ -101,7 +114,7 @@ class SyncConfigError(UnrecoverableSyncError):
     A SyncProvider is misconfigured in a way where a retry without configuration change will
     not be successful.
     """
-    log_action_type = "pretix.event.order.data_sync.failed.config"
+    failure_mode = "config"
 
 
 class RecoverableSyncError(BaseSyncError):
@@ -152,6 +165,7 @@ class OutboundSyncProvider:
         OrderSyncQueue.objects.update_or_create(
             order=order,
             sync_provider=cls.identifier,
+            in_flight=False,
             defaults={
                 "event": order.event,
                 "triggered_by": triggered_by,
@@ -216,54 +230,35 @@ class OutboundSyncProvider:
                         .select_related("order")
                         .get(pk=queue_item.pk)
                     )
+                    if sq.in_flight:
+                        continue
+                    sq.in_flight = True
+                    sq.in_flight_since = now()
+                    sq.save()
                 except DatabaseError:
                     continue
                 try:
                     mapped_objects = self.sync_order(sq.order)
                 except UnrecoverableSyncError as e:
-                    logger.warning(
-                        f"Could not sync order {sq.order.code} to {type(self).__name__}",
-                        exc_info=True,
-                    )
-                    sq.order.log_action(e.log_action_type, {
-                        "provider": self.identifier,
-                        "error": e.messages,
-                        "full_message": e.full_message,
-                    })
-                    sq.need_manual_retry = "unrecoverable"
-                    sq.save()
+                    sq.set_sync_error(e.failure_mode, e.messages, e.full_message)
                 except RecoverableSyncError as e:
                     sq.failed_attempts += 1
                     sq.not_before = self.next_retry_date(sq)
-                    logger.info(
-                        f"Could not sync order {sq.order.code} to {type(self).__name__} (transient error, attempt #{sq.failed_attempts})",
-                        exc_info=True,
-                    )
                     if sq.failed_attempts >= self.max_attempts:
                         sentry_sdk.capture_exception(e)
-                        sq.order.log_action("pretix.event.order.data_sync.failed.exceeded", {
-                            "provider": self.identifier,
-                            "error": e.messages,
-                            "full_message": e.full_message,
-                        })
-                        sq.need_manual_retry = "recoverable"
-                        sq.save()
+                        sq.set_sync_error("exceeded", e.messages, e.full_message)
                     else:
-                        sq.save()
+                        logger.info(
+                            f"Could not sync order {sq.order.code} to {type(self).__name__} "
+                            f"(transient error, attempt #{sq.failed_attempts}, next {sq.not_before})",
+                            exc_info=True,
+                        )
+                        sq.clear_in_flight()
                 except Exception as e:
-                    logger.exception(
-                        f"Could not sync order {sq.order.code} to {type(self).__name__} (unhandled exception)"
-                    )
                     sentry_sdk.capture_exception(e)
-                    sq.order.log_action("pretix.event.order.data_sync.failed.internal", {
-                        "provider": self.identifier,
-                        "error": [],
-                        "full_message": str(e),
-                    })
-                    sq.need_manual_retry = "unhandled"
-                    sq.save()
+                    sq.set_sync_error("internal", [], str(e))
                 else:
-                    if not all(res.get("action", "") == "nothing_to_do" for res in mapped_objects.values()):
+                    if not all(all(res.get("action", "") == "nothing_to_do" for res in res_list) for res_list in mapped_objects.values()):
                         sq.order.log_action("pretix.event.order.data_sync.success", {
                             "provider": self.identifier,
                             "objects": mapped_objects
