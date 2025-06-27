@@ -73,6 +73,10 @@ class OrderSyncQueue(models.Model):
         return self._provider_class_info[0]
 
     @property
+    def provider_display_name(self):
+        return self.provider_class.display_name
+
+    @property
     def is_provider_active(self):
         return self._provider_class_info[1]
 
