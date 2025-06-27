@@ -26,6 +26,7 @@ from unittest import mock
 import pytest
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from tests.api.utils import _test_configurable_serializer
 
 from pretix.base.models import (
     InvoiceAddress, ItemVariation, Order, OrderPosition, SeatingPlan, SubEvent,
@@ -156,6 +157,15 @@ def test_subevent_list(token_client, organizer, event, subevent):
     resp = token_client.get('/api/v1/organizers/{}/events/?with_availability_for=web'.format(organizer.slug))
     assert resp.status_code == 200
     assert resp.data['results'][0]['best_availability_state'] is None
+
+    _test_configurable_serializer(
+        token_client,
+        "/api/v1/organizers/{}/events/{}/subevents/".format(organizer.slug, event.slug),
+        [
+            "name", "active", "item_price_overrides",
+        ],
+        expands=[]
+    )
 
 
 @pytest.mark.django_db

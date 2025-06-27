@@ -23,15 +23,19 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from pretix.api.serializers import ConfigurableSerializerMixin
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import Checkin, CheckinList
 
 
-class CheckinListSerializer(I18nAwareModelSerializer):
+class CheckinListSerializer(ConfigurableSerializerMixin, I18nAwareModelSerializer):
     checkin_count = serializers.IntegerField(read_only=True)
     position_count = serializers.IntegerField(read_only=True)
+    expand_fields = {
+        "subevent": SubEventSerializer,
+    }
 
     class Meta:
         model = CheckinList
@@ -41,17 +45,6 @@ class CheckinListSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        if 'subevent' in self.context['request'].query_params.getlist('expand'):
-            self.fields['subevent'] = SubEventSerializer(read_only=True)
-
-        for exclude_field in self.context['request'].query_params.getlist('exclude'):
-            p = exclude_field.split('.')
-            if p[0] in self.fields:
-                if len(p) == 1:
-                    del self.fields[p[0]]
-                elif len(p) == 2:
-                    self.fields[p[0]].child.fields.pop(p[1])
 
     def validate(self, data):
         data = super().validate(data)
