@@ -898,6 +898,7 @@ var editor = {
 
     _update_toolbox: function () {
         var selected = editor.fabric.getActiveObjects();
+        $(".object-buttons button").prop("disabled", selected.length == 0);
         if (selected.length > 1) {
             $("#toolbox").attr("data-type", "group");
             $("#toolbox-heading").text(gettext("Group of objects"));
@@ -1048,8 +1049,11 @@ var editor = {
     },
 
     _cut: function () {
-        editor._history_modification_in_progress = true;
         var thing = editor.fabric.getActiveObject();
+        if (!thing) {
+            return false;
+        }
+        editor._history_modification_in_progress = true;
         if (thing.type === "activeSelection") {
             editor.clipboard = editor.dump(thing._objects);
             thing.forEachObject(function (o) {
@@ -1066,15 +1070,16 @@ var editor = {
     },
 
     _copy: function () {
-        editor._history_modification_in_progress = true;
         var thing = editor.fabric.getActiveObject();
+        if (!thing) {
+            return false;
+        }
         if (thing.type === "activeSelection") {
             editor.clipboard = editor.dump(thing._objects);
         } else {
             editor.clipboard = editor.dump([thing]);
         }
-        editor._history_modification_in_progress = false;
-        editor._create_savepoint();
+        return true;
     },
 
     _paste: function () {
@@ -1098,8 +1103,19 @@ var editor = {
         editor._create_savepoint();
     },
 
+    _duplicate: function () {
+        var prevClipboad = editor.clipboard;
+        if (editor._copy()) {
+            editor._paste();
+            editor.clipboard = prevClipboad;
+        }
+    },
+
     _delete: function () {
         var thing = editor.fabric.getActiveObject();
+        if (!thing) {
+            return false;
+        }
         if (thing.type === "activeSelection") {
             thing.forEachObject(function (o) {
                 editor.fabric.remove(o);
@@ -1119,64 +1135,79 @@ var editor = {
         if ($("#source-container").is(':visible')) {
             return true;
         }
-        switch (e.keyCode) {
-            case 38:  /* Up arrow */
-                thing.set('top', thing.get('top') - step);
-                thing.setCoords();
-                editor._create_savepoint();
-                break;
-            case 40:  /* Down arrow */
-                thing.set('top', thing.get('top') + step);
-                thing.setCoords();
-                editor._create_savepoint();
-                break;
-            case 37:  /* Left arrow  */
-                thing.set('left', thing.get('left') - step);
-                thing.setCoords();
-                editor._create_savepoint();
-                break;
-            case 39:  /* Right arrow  */
-                thing.set('left', thing.get('left') + step);
-                thing.setCoords();
-                editor._create_savepoint();
-                break;
-            case 8:  /* Backspace */
-            case 46:  /* Delete */
-                editor._delete();
-                break;
-            case 65:  /* A */
-                if (e.ctrlKey || e.metaKey) {
+        if (e.ctrlKey || e.metaKey) {
+            switch (e.key) {
+                case "a":
                     editor._selectAll();
-                }
-                break;
-            case 89:  /* Y */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "y":
                     editor._redo();
-                }
-                break;
-            case 90:  /* Z */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "z":
                     editor._undo();
-                }
-                break;
-            case 88:  /* X */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "x":
                     editor._cut();
-                }
-                break;
-            case 86:  /* V */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "v":
                     editor._paste();
-                }
-                break;
-            case 67:  /* C */
-                if (e.ctrlKey || e.metaKey) {
+                    break;
+                case "c":
                     editor._copy();
-                }
-                break;
-            default:
-                return;
+                    break;
+                case "d":
+                    editor._duplicate();
+                    break;
+                default:
+                    return;
+            }
+        } else {
+            switch (e.key) {
+                case "ArrowUp":
+                    thing.set('top', thing.get('top') - step);
+                    thing.setCoords();
+                    editor._create_savepoint();
+                    break;
+                case "ArrowDown":
+                    thing.set('top', thing.get('top') + step);
+                    thing.setCoords();
+                    editor._create_savepoint();
+                    break;
+                case "ArrowLeft":
+                    thing.set('left', thing.get('left') - step);
+                    thing.setCoords();
+                    editor._create_savepoint();
+                    break;
+                case "ArrowRight":
+                    thing.set('left', thing.get('left') + step);
+                    thing.setCoords();
+                    editor._create_savepoint();
+                    break;
+                case "Backspace":
+                case "Del":
+                case "Delete":
+                    editor._delete();
+                    break;
+                case "Cut":
+                    editor._cut();
+                    break;
+                case "Copy":
+                    editor._copy();
+                    break;
+                case "Paste":
+                    editor._paste();
+                    break;
+                case "Redo":
+                    editor._redo();
+                    break;
+                case "Undo":
+                    editor._undo();
+                    break;
+                default:
+                    return;
+            }
         }
+
         e.preventDefault();
         editor.fabric.renderAll();
         editor._update_toolbox_values();
@@ -1234,6 +1265,9 @@ var editor = {
         } else {
             $("#editor-save").addClass("btn-success").removeClass("btn-primary").find(".fa").attr("class", "fa fa-fw fa-check");
         }
+
+        $("#toolbox-undo").prop("disabled", editor._history_pos == editor.history.length-1);
+        $("#toolbox-redo").prop("disabled", editor._history_pos == 0);
     },
 
     _save: function () {
@@ -1417,10 +1451,8 @@ var editor = {
             editor._create_savepoint();
         });
         $("#toolbox .colorpickerfield").bind('changeColor', editor._update_values_from_toolbox);
-        $("#toolbox-copy").bind('click', editor._copy);
-        $("#toolbox-cut").bind('click', editor._cut);
+        $("#toolbox-duplicate").bind('click', editor._duplicate);
         $("#toolbox-delete").bind('click', editor._delete);
-        $("#toolbox-paste").bind('click', editor._paste);
         $("#toolbox-undo").bind('click', editor._undo);
         $("#toolbox-redo").bind('click', editor._redo);
         $("#toolbox-source").bind('click', editor._source_show);
