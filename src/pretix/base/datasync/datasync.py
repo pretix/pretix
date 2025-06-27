@@ -153,12 +153,15 @@ class OutboundSyncProvider:
         """
         if not hasattr(cls, 'identifier'):
             raise TypeError('Call this method on a derived class that defines an "identifier" attribute.')
-        OrderSyncQueue.objects.create(
+        OrderSyncQueue.objects.update_or_create(
             order=order,
-            event=order.event,
             sync_provider=cls.identifier,
-            triggered_by=triggered_by,
-            not_before=not_before or now(),
+            defaults={
+                "event": order.event,
+                "triggered_by": triggered_by,
+                "not_before": not_before or now(),
+                "need_manual_retry": None,
+            },
         )
 
     @classmethod
