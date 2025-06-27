@@ -29,9 +29,12 @@ from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import TemplateView, ListView
 
 from pretix.base.datasync.datasync import sync_targets
 from pretix.base.models import Event, Order
+from pretix.base.models.datasync import OrderSyncQueue
+from pretix.control.permissions import AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin
 from pretix.control.signals import order_info
 from pretix.control.views.orders import OrderView
 
@@ -77,6 +80,7 @@ class ControlSyncJob(OrderView):
         elif self.request.POST.get("run_job_now"):
             job = self.order.queued_sync_jobs.get(pk=self.request.POST.get("run_job_now"))
             job.not_before = now()
+            job.need_manual_retry = None
             job.save()
             messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
 
@@ -84,3 +88,44 @@ class ControlSyncJob(OrderView):
 
     def get(self, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
+
+class FailedSyncJobsView(ListView):
+    template_name = 'pretixcontrol/datasync/failed_jobs.html'
+    model = OrderSyncQueue
+    context_object_name = 'queue_items'
+    paginate_by = 20
+    ordering = ('triggered',)
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            need_manual_retry__isnull=False,
+        ).select_related(
+            'order'
+        )
+
+    def post(self, request, *args, **kwargs):
+        items = self.get_queryset().filter(pk__in=request.POST.getlist('idlist'))
+
+        if self.request.POST.get("action") == "retry":
+            for item in items:
+                item.not_before = now()
+                item.need_manual_retry = None
+                item.save()
+            messages.success(self.request, _('The selected jobs have been set to run as soon as possible.'))
+        elif self.request.POST.get("action") == "cancel":
+            items.delete()
+            messages.success(self.request, _('The selected jobs have been canceled.'))
+
+        return redirect(request.get_full_path())
+
+
+class GlobalFailedSyncJobsView(AdministratorPermissionRequiredMixin, FailedSyncJobsView):
+    pass
+
+
+class OrganizerFailedSyncJobsView(OrganizerPermissionRequiredMixin, FailedSyncJobsView):
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            event__organizer=self.request.organizer
+        )

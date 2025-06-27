@@ -451,6 +451,11 @@ def get_global_navigation(request):
                     'url': reverse('control:global.sysreport'),
                     'active': (url.url_name == 'global.sysreport'),
                 },
+                {
+                    'label': _('Data sync problems'),
+                    'url': reverse('control:global.datasync.failedjobs'),
+                    'active': (url.url_name == 'global.datasync.failedjobs'),
+                },
             ]
         })
 
