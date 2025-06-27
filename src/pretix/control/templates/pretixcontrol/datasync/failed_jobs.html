@@ -33,7 +33,7 @@
                                 {{ item.order.full_code }}
                             </a>
                         </td>
-                        <td>{{ item.sync_provider }}</td>
+                        <td>{{ item.provider_display_name }}</td>
                         <td>
                             {{ item.triggered }}
                             {% if staff_session %}({{ item.triggered_by }}){% endif %}

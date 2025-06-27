@@ -423,10 +423,21 @@ class OrderPrintLogEntryType(OrderLogEntryType):
         )
 
 
-@log_entry_types.new_from_dict({
-    "pretix.event.order.data_sync.success": _("Data successfully transferred to {provider}."),
-})
 class OrderDataSyncLogEntryType(OrderLogEntryType):
+    def display(self, logentry, data):
+        try:
+            from pretix.base.datasync.datasync import sync_targets
+            provider_class, meta = sync_targets.get(identifier=data['provider'])
+            data['provider_display_name'] = provider_class.display_name
+        except (KeyError, AttributeError):
+            data['provider_display_name'] = data.get('provider')
+        return super().display(logentry, data)
+
+
+@log_entry_types.new_from_dict({
+    "pretix.event.order.data_sync.success": _("Data successfully transferred to {provider_display_name}."),
+})
+class OrderDataSyncSuccessLogEntryType(OrderDataSyncLogEntryType):
     def display(self, logentry, data):
         links = []
         if data.get('provider') and data.get('objects'):
@@ -443,12 +454,13 @@ class OrderDataSyncLogEntryType(OrderLogEntryType):
 
 
 @log_entry_types.new_from_dict({
-    "pretix.event.order.data_sync.failed.config": _("Transferring data to {provider} failed due to invalid configuration:"),
-    "pretix.event.order.data_sync.failed.exceeded": _("Maximum number of retries exceeded while transferring data to {provider}:"),
-    "pretix.event.order.data_sync.failed.permanent": _("Error while transferring data to {provider}:"),
-    "pretix.event.order.data_sync.failed.internal": _("Internal error while transferring data to {provider}."),
+    "pretix.event.order.data_sync.failed.config": _("Transferring data to {provider_display_name} failed due to invalid configuration:"),
+    "pretix.event.order.data_sync.failed.exceeded": _("Maximum number of retries exceeded while transferring data to {provider_display_name}:"),
+    "pretix.event.order.data_sync.failed.permanent": _("Error while transferring data to {provider_display_name}:"),
+    "pretix.event.order.data_sync.failed.internal": _("Internal error while transferring data to {provider_display_name}."),
+    "pretix.event.order.data_sync.failed.timeout": _("Internal error while transferring data to {provider_display_name}."),
 })
-class OrderDataSyncErrorLogEntryType(OrderLogEntryType):
+class OrderDataSyncErrorLogEntryType(OrderDataSyncLogEntryType):
     def display(self, logentry, data):
         errmes = data["error"]
         if not isinstance(errmes, list):
