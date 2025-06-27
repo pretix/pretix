@@ -23,18 +23,21 @@
 from itertools import groupby
 
 from django.contrib import messages
+from django.db.models import Q
 from django.dispatch import receiver
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView
 
 from pretix.base.datasync.datasync import sync_targets
 from pretix.base.models import Event, Order
 from pretix.base.models.datasync import OrderSyncQueue
-from pretix.control.permissions import AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
+)
 from pretix.control.signals import order_info
 from pretix.control.views.orders import OrderView
 
@@ -99,7 +102,8 @@ class FailedSyncJobsView(ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(
-            need_manual_retry__isnull=False,
+            Q(need_manual_retry__isnull=False)
+            | Q(failed_attempts__gt=0)
         ).select_related(
             'order'
         )

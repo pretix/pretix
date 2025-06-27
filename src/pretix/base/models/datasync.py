@@ -23,10 +23,8 @@
 import logging
 from functools import cached_property
 
-from django.db import models
-from django.utils.translation import (
-    gettext as _, gettext_lazy, ngettext_lazy, pgettext_lazy,
-)
+from django.db import IntegrityError, models
+from django.utils.translation import gettext as _
 
 from pretix.base.models import Event, Order, OrderPosition
 
@@ -52,13 +50,17 @@ class OrderSyncQueue(models.Model):
     failed_attempts = models.PositiveIntegerField(default=0)
     not_before = models.DateTimeField(blank=False, null=False, db_index=True)
     need_manual_retry = models.CharField(blank=True, null=True, choices=[
-        ('recoverable', _('Temporary error, auto-retry limit exceeded')),
-        ('unrecoverable', _('Misconfiguration, please check provider settings')),
-        ('unhandled', _('System error, needs manual intervention'))
+        ('exceeded', _('Temporary error, auto-retry limit exceeded')),
+        ('permanent', _('Misconfiguration, please check provider settings')),
+        ('config', _('Misconfiguration, please check provider settings')),
+        ('internal', _('System error, needs manual intervention')),
+        ('timeout', _('System error, needs manual intervention')),
     ])
+    in_flight = models.BooleanField(default=False)
+    in_flight_since = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        unique_together = (("order", "sync_provider"),)
+        unique_together = (("order", "sync_provider", "in_flight"),)
         ordering = ("triggered",)
 
     @cached_property
@@ -77,6 +79,27 @@ class OrderSyncQueue(models.Model):
     @property
     def max_retry_attempts(self):
         return self.provider_class.max_attempts
+
+    def set_sync_error(self, failure_mode, messages, full_message):
+        logger.exception(
+            f"Could not sync order {self.order.code} to {type(self).__name__} ({failure_mode})"
+        )
+        self.order.log_action(f"pretix.event.order.data_sync.failed.{failure_mode}", {
+            "provider": self.sync_provider,
+            "error": messages,
+            "full_message": full_message,
+        })
+        self.need_manual_retry = failure_mode
+        self.clear_in_flight()
+
+    def clear_in_flight(self):
+        self.in_flight = False
+        self.in_flight_since = None
+        try:
+            self.save()
+        except IntegrityError:
+            # if setting in_flight=False fails due to UNIQUE constraint, just delete the current instance
+            self.delete()
 
 
 class OrderSyncResult(models.Model):
