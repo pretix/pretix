@@ -685,8 +685,26 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
 
     class Meta:
         model = TaxRule
-        fields = ('id', 'name', 'rate', 'code', 'price_includes_tax', 'eu_reverse_charge', 'home_country',
-                  'internal_name', 'keep_gross_if_rate_changes', 'custom_rules')
+        fields = ('id', 'name', 'default', 'rate', 'code', 'price_includes_tax', 'eu_reverse_charge', 'home_country',
+                  'internal_name', 'keep_gross_if_rate_changes', 'custom_rules', 'default')
+
+    def create(self, validated_data):
+        if "default" not in validated_data and not self.context["event"].tax_rules.exists():
+            validated_data["default"] = True
+        return super().create(validated_data)
+
+    def save(self, **kwargs):
+        if self.validated_data.get("default"):
+            if self.instance and self.instance.pk:
+                self.context["event"].tax_rules.exclude(pk=self.instance.pk).update(default=False)
+            else:
+                self.context["event"].tax_rules.update(default=False)
+        return super().save(**kwargs)
+
+    def validate_default(self, value):
+        if not value and self.instance.default:
+            raise ValidationError("You can't remove the default property, instead set it on another tax rule.")
+        return value
 
 
 class EventSettingsSerializer(SettingsSerializer):
@@ -712,6 +730,8 @@ class EventSettingsSerializer(SettingsSerializer):
         'allow_modifications_after_checkin',
         'last_order_modification_date',
         'show_quota_left',
+        'tax_rule_payment',
+        'tax_rule_cancellation',
         'waiting_list_enabled',
         'waiting_list_auto_disable',
         'waiting_list_hours',
@@ -942,6 +962,8 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_random_uid',
         'system_question_order',
+        'tax_rule_payment',
+        'tax_rule_cancellation',
     ]
 
     def __init__(self, *args, **kwargs):
