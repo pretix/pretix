@@ -55,12 +55,6 @@ def on_periodic_task(sender, **kwargs):
 sync_targets = EventPluginRegistry({"identifier": lambda o: o.identifier})
 
 
-def sync_event_to_target(event, target_cls, queued_orders):
-    with scope(organizer=event.organizer):
-        with target_cls(event=event) as p:
-            p.sync_queued_orders(queued_orders)
-
-
 @app.task()
 def sync_all():
     with scopes_disabled():
@@ -84,7 +78,9 @@ def sync_all():
                 for sq in queued_orders:
                     sq.delete()
 
-            sync_event_to_target(event, target_cls, queued_orders)
+            with scope(organizer=event.organizer):
+                with target_cls(event=event) as p:
+                    p.sync_queued_orders(queued_orders)
 
 
 class BaseSyncError(Exception):
