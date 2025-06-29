@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
-"PO-Revision-Date: 2025-05-30 11:06+0000\n"
+"PO-Revision-Date: 2025-06-30 01:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -658,7 +658,7 @@ msgstr "Utilisateur {system}"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:30
 #: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
-msgstr "E-mail"
+msgstr "E-Mail"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:675
@@ -1521,7 +1521,7 @@ msgstr "rue"
 #: pretix/presale/templates/pretixpresale/event/order.html:323
 msgctxt "address"
 msgid "State"
-msgstr "État/Province/Région"
+msgstr "État"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
 #: pretix/base/models/orders.py:3288 pretix/base/models/orders.py:3323
@@ -3509,11 +3509,9 @@ msgid "Tax rule {val}"
 msgstr "Règle fiscale {val}"
 
 #: pretix/base/logentrytypes.py:151
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "Date {val}"
+#, python-brace-format
 msgid "{val}"
-msgstr "Date {val}"
+msgstr "{val}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
@@ -4092,7 +4090,7 @@ msgstr "Nom de l'entreprise"
 #: pretix/base/models/orders.py:3276 pretix/base/settings.py:83
 #: pretix/plugins/stripe/payment.py:272
 msgid "Select country"
-msgstr "Sélectionnez le pays"
+msgstr "Sélectionner le pays"
 
 #: pretix/base/models/customers.py:381
 msgctxt "openidconnect"
@@ -5660,6 +5658,9 @@ msgid ""
 "with changing the type of question without data loss. Consider hiding this "
 "question and creating a new one instead."
 msgstr ""
+"Le système contient déjà des réponses à cette question qui ne sont pas "
+"compatibles avec un changement de type de question sans perte de données. "
+"Envisagez de masquer cette question et d'en créer une nouvelle à la place."
 
 #: pretix/base/models/items.py:1961
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -13130,12 +13131,10 @@ msgstr ""
 "La variation de produit \"{product} - {variation}\" devient indisponible"
 
 #: pretix/base/timeline.py:351
-#, fuzzy, python-brace-format
-#| msgctxt "timeline"
-#| msgid "Payment provider \"{name}\" can no longer be selected"
+#, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" becomes active"
-msgstr "Le fournisseur de paiement « {name} » ne peut plus être sélectionné"
+msgstr "Le prestataire de paiement « {name} » devient actif"
 
 #: pretix/base/timeline.py:369
 #, python-brace-format
@@ -17607,7 +17606,7 @@ msgstr "Connexion"
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr "Inscription"
+msgstr "S'enregistrer"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -17837,7 +17836,7 @@ msgstr "Se déconnecter"
 
 #: pretix/control/templates/pretixcontrol/base.html:249
 msgid "Organizer account"
-msgstr "Compte de l'organisateur"
+msgstr "Compte organisateur"
 
 #: pretix/control/templates/pretixcontrol/base.html:272
 msgid "Search for events"
@@ -19236,7 +19235,7 @@ msgstr "Optionnel"
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:22
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:58
 msgid "Geocoding data © OpenStreetMap"
-msgstr "Données de géocodage ©️ OpenStreetMap"
+msgstr "Données de géocodage © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:4
 msgid "Failed to retrieve geo coordinates"
@@ -20041,10 +20040,8 @@ msgstr "Liste des produits"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:253
 #: pretix/control/templates/pretixcontrol/event/settings.html:389
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "Incompatible settings"
-msgstr "Paramètres de facturation"
+msgstr "Paramètres incompatibles"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:254
 #: pretix/control/templates/pretixcontrol/event/settings.html:390
@@ -20052,6 +20049,8 @@ msgid ""
 "Customers won't be able to add themselves to the waiting list, because "
 "\"Hide all products that are sold out\" is enabled."
 msgstr ""
+"Les clients ne pourront pas s'ajouter à la liste d'attente, car l'option « "
+"Cacher tous les produits épuisés » est activée."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:261
 msgctxt "subevents"
@@ -21581,16 +21580,14 @@ msgid "Count"
 msgstr "Compter"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:92
-#, fuzzy, python-format
-#| msgid "Copy answers"
+#, python-format
 msgid "%% of answers"
-msgstr "Copier les réponses"
+msgstr "%% de réponses"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:93
-#, fuzzy, python-format
-#| msgid "Number of tickets"
+#, python-format
 msgid "%% of tickets"
-msgstr "Nombre de billets"
+msgstr "%% de billets"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:112
 #: pretix/control/templates/pretixcontrol/order/transactions.html:67
@@ -22439,7 +22436,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:230
 msgid "Contact email"
-msgstr "E-mail de contact"
+msgstr "Email de contact"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:234
 msgid ""
@@ -24647,7 +24644,7 @@ msgstr "Authentification à deux facteurs désactivée"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:57
 msgid "invited, pending response"
-msgstr "invité, en attente d'une réponse"
+msgstr "invité, en attente de réponse"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:59
 msgid "resend invite"
@@ -25440,15 +25437,10 @@ msgid "Item prices"
 msgstr "Prix des articles"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:197
-#, fuzzy
-#| msgid ""
-#| "You selected a set of dates that currently have different check-in list "
-#| "setups. You can therefore not change their check-in lists in bulk."
 msgid "You selected a set of dates that currently have different quota setups."
 msgstr ""
-"Vous avez sélectionné un ensemble de dates qui ont actuellement différentes "
-"configurations de liste d’archivage. Vous ne pouvez donc pas modifier leurs "
-"listes d’enregistrement en masse."
+"Vous avez sélectionné un ensemble de dates qui ont actuellement des "
+"configurations de quotas différentes."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:198
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:373
@@ -25456,6 +25448,8 @@ msgid ""
 "Using this option will <strong>delete all current quotas</strong> from "
 "<strong>all selected dates</strong>."
 msgstr ""
+"Cette option permet de <strong> supprimer tous les quotas actuels</strong> "
+"de <strong>toutes les dates sélectionnées</strong>."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:277
 msgid ""
@@ -25467,20 +25461,18 @@ msgstr ""
 "listes d’enregistrement en masse."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:372
-#, fuzzy
-#| msgid "Add to existing quota"
 msgid "Delete existing quotas"
-msgstr "Ajouter au quota existant"
+msgstr "Supprimer les quotas existants"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:374
 msgid "This cannot be reverted. Are you sure to proceed?"
 msgstr ""
+"Il n'est pas possible de revenir en arrière. Êtes-vous sûr de pouvoir "
+"continuer ?"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:381
-#, fuzzy
-#| msgid "Process refund"
 msgid "Proceed"
-msgstr "Processus de remboursement"
+msgstr "Procéder"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:6
@@ -26565,9 +26557,9 @@ msgid ""
 "address bar and make sure it is correct and that the link has not been used "
 "before."
 msgstr ""
-"Vous avez utilisé un lien invalide. Veuillez copier le lien de votre email "
-"dans la barre d'adresse et assurez-vous qu'il est correct et que le lien n' "
-"a jamais été utilisé auparavant."
+"Vous avez utilisé un lien non valide. Veuillez copier le lien de votre "
+"courriel dans la barre d'adresse et assurez-vous qu'il est correct et qu'il "
+"n'a pas été utilisé auparavant."
 
 #: pretix/control/views/auth.py:252
 msgid ""
@@ -31069,10 +31061,8 @@ msgid "A ticket holder of this order received a mass email."
 msgstr "Un détenteur de billet de cette commande a reçu un courriel de masse."
 
 #: pretix/plugins/sendmail/signals.py:134
-#, fuzzy
-#| msgid "The order received a mass email."
 msgid "The person on the waiting list received a mass email."
-msgstr "La commande a reçu un email de masse."
+msgstr "La personne inscrite sur la liste d'attente a reçu un e-mail de masse."
 
 #: pretix/plugins/sendmail/signals.py:139
 msgid "An email rule was created"
@@ -33716,10 +33706,8 @@ msgid "Renew reservation"
 msgstr "Renouveler la réservation"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:522
-#, fuzzy
-#| msgid "Reservation period"
 msgid "Reservation renewed"
-msgstr "Période de réservation"
+msgstr "Réservation renouvelée"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:528
 msgid "Overview of your ordered products."
@@ -34994,7 +34982,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:5
 msgid "Event overview by month, week, etc."
-msgstr ""
+msgstr "Aperçu des événements par mois, semaine, etc."
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:26
 msgid "iCal"
