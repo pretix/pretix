@@ -334,7 +334,8 @@ function get_label_text_for_id(id) {
 
 function set_timezone_times_for_event($el, local_tz, $bracket) {
     var force_longform_date = false;
-    if ($el.find("span[data-time-short]").length == 0) {
+    // if ($el.find("span[data-time-short]").length == 0) {
+    if ($el.not(":has(span[data-time-short])")) {
         var $el_s = $el.find("span.event-time-start").first();
         var $el_e = $el.find("span.event-time-end").first();
 
