@@ -91,8 +91,7 @@ body {
     background: #eee;
 }
 .panel-pdf-editor .panel-heading {
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding: 4px;
     position: sticky;
     top: 0;
     z-index: 1;
