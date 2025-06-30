@@ -618,7 +618,7 @@ $(function () {
     $fei_div.insertBefore($infofirst);
 
     // calendar view
-    $(".table-calendar td.has-events ul.events").each(function() {
+    $(".table-calendar td.has-events ul.events li").each(function() {
         set_timezone_times_for_event($(this), local_tz)
     });
 
