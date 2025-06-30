@@ -9,11 +9,10 @@
         {% if possible %}
             <p>{% blocktrans %}Are you sure you want to delete the tax rule <strong>{{ taxrule }}</strong>?{% endblocktrans %}</p>
         {% else %}
-            <p>{% blocktrans %}You cannot delete a tax rule that is in use for a product or has been in use for any existing orders.{% endblocktrans %}</p>
+            <p>{% blocktrans %}You cannot delete a tax rule that is in use for a product, has been in use for any existing orders, or is the default tax rule of the event.{% endblocktrans %}</p>
         {% endif %}
         <div class="form-group submit-group">
-            <a href="{% url "control:event.settings.tax" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn
-btn-default btn-cancel">
+            <a href="{% url "control:event.settings.tax" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
             {% if possible %}

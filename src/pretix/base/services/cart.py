@@ -1534,7 +1534,10 @@ def get_fees(event, request, total, invoice_address, payments, positions):
             total_remaining -= to_pay
 
             if payment_fee:
-                payment_fee_tax_rule = event.settings.tax_rate_default or TaxRule.zero()
+                if event.settings.tax_rule_payment == "default":
+                    payment_fee_tax_rule = event.cached_default_tax_rule or TaxRule.zero()
+                else:
+                    payment_fee_tax_rule = TaxRule.zero()
                 payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross', invoice_address=invoice_address)
                 fees.append(OrderFee(
                     fee_type=OrderFee.FEE_TYPE_PAYMENT,

@@ -174,8 +174,7 @@ class CancelForm(forms.Form):
         label=_('Keep a cancellation fee of'),
         help_text=_('If you keep a fee, all positions within this order will be canceled and the order will be reduced '
                     'to a cancellation fee. Payment and shipping fees will be canceled as well, so include them '
-                    'in your cancellation fee if you want to keep them. Please always enter a gross value, '
-                    'tax will be calculated automatically.'),
+                    'in your cancellation fee if you want to keep them.'),
     )
     cancel_invoice = forms.BooleanField(
         label=_('Generate cancellation for invoice'),
@@ -200,6 +199,19 @@ class CancelForm(forms.Form):
         self.fields['cancellation_fee'].max_value = self.instance.total
         if not self.instance.invoices.exists():
             del self.fields['cancel_invoice']
+        if self.instance.event.settings.tax_rule_cancellation == 'split':
+            self.fields['cancellation_fee'].help_text = str(self.fields['cancellation_fee'].help_text) + ' ' + _(
+                'Please enter a gross amount. As per your event settings, the taxes will be split the same way as the '
+                'order positions.'
+            )
+        elif self.instance.event.settings.tax_rule_cancellation == 'default':
+            self.fields['cancellation_fee'].help_text = str(self.fields['cancellation_fee'].help_text) + ' ' + _(
+                'Please enter a gross amount. As per your event settings, the default tax rate will be charged.'
+            )
+        elif self.instance.event.settings.tax_rule_cancellation == 'none':
+            self.fields['cancellation_fee'].help_text = str(self.fields['cancellation_fee'].help_text) + ' ' + _(
+                'As per your event settings, no tax will be charged.'
+            )
 
     def clean_cancellation_fee(self):
         val = self.cleaned_data['cancellation_fee'] or Decimal('0.00')
