@@ -334,8 +334,7 @@ function get_label_text_for_id(id) {
 
 function set_timezone_times_for_event($el, local_tz, $bracket) {
     var force_longform_date = false;
-    // if ($el.find("span[data-time-short]").length == 0) {
-    if ($el.not(":has(span[data-time-short])")) {
+    if ($el.find("span[data-time-short]").length === 0) {
         var $el_s = $el.find("span.event-time-start").first();
         var $el_e = $el.find("span.event-time-end").first();
 
@@ -345,7 +344,11 @@ function set_timezone_times_for_event($el, local_tz, $bracket) {
         var start_tz = moment.tz.zone($el_s.attr("data-timezone"));
         var end_t = moment.tz($el_e.attr("datetime") || $el_e.attr("data-time"), $el_e.attr("data-timezone"));
         var end_tz = moment.tz.zone($el_e.attr("data-timezone"));
-        var start_date_mismatch = (start_t.tz(start_tz.name).format("YYYY-MM-DD") != start_t.tz(local_tz).format("YYYY-MM-DD"));
+
+        var start_date_mismatch = false;
+        if (start_tz) {
+            start_date_mismatch = (start_t.tz(start_tz.name).format("YYYY-MM-DD") != start_t.tz(local_tz).format("YYYY-MM-DD"));
+        }
 
         // if end_tz is not defined, we assume the end time is in the same timezone as the start time
         var end_date_mismatch = false;
