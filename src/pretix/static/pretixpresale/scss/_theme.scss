@@ -81,8 +81,8 @@ h2.content-header {
 @media (min-width: $screen-sm-min) {
   .main-box {
     margin: calc(20px * var(--pretix-body-bg-white-0)) auto;
-    padding-left: calc(25px * var(--pretix-body-bg-white-0) + 15px * var(--pretix-body-bg-white-1));
-    padding-right: calc(25px * var(--pretix-body-bg-white-0) + 15px * var(--pretix-body-bg-white-1));
+    padding-left: calc(5px * var(--pretix-body-bg-white-0) + 15px * var(--pretix-body-bg-white-1));
+    padding-right: calc(5px * var(--pretix-body-bg-white-0) + 15px * var(--pretix-body-bg-white-1));
     border-radius: calc(#{$border-radius-large} * var(--pretix-body-bg-white-0));
   }
   .page-header-links-outside {
