@@ -24,9 +24,7 @@ import time
 
 from django.contrib.staticfiles import finders
 from django.http import HttpResponse
-from django.templatetags.static import static
 from django.utils.http import http_date
-from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
 from django.views.decorators.http import condition
 
@@ -42,25 +40,6 @@ def _get_source_cache_key():
         with open(finders.find("pretixbase/scss/_theme_variables.scss"), "r") as f:
             _source_cache_key = hashlib.sha256(f.read().encode()).hexdigest()[:12]
     return _source_cache_key
-
-
-@cache_page(3600)
-def browserconfig_xml(request):
-    return HttpResponse(
-        """<?xml version="1.0" encoding="utf-8"?>
-<browserconfig>
-    <msapplication>
-        <tile>
-            <square150x150logo src="{}"/>
-            <square310x310logo src="{}"/>
-            <TileColor>#3b1c4a</TileColor>
-        </tile>
-    </msapplication>
-</browserconfig>""".format(
-            static('pretixbase/img/icons/mstile-150x150.png'),
-            static('pretixbase/img/icons/mstile-310x310.png'),
-        ), content_type='text/xml'
-    )
 
 
 @gzip_page
