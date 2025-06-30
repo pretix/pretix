@@ -10,7 +10,7 @@ def set_default_tax_rate(app, schema_editor):
     TaxRule = app.get_model('pretixbase', 'TaxRule')
 
     # Handling of events with tax_rate_default set
-    for s in Event_SettingsStore.objects.filter(key="tax_rate_default"):
+    for s in Event_SettingsStore.objects.filter(key="tax_rate_default").iterator():
         updated = TaxRule.objects.filter(pk=s.value, event_id=s.object_id).update(default=True)
         if updated:
             # Delete deprecated settings key
@@ -29,7 +29,7 @@ def set_default_tax_rate(app, schema_editor):
             cache.delete('hierarkey_{}_{}'.format('event', s.object_id))
 
     # Handling of events with tax_rate_default not set
-    for e in Event.objects.only("pk").exclude(Exists(TaxRule.objects.filter(default=True, event_id=OuterRef("pk")))):
+    for e in Event.objects.only("pk").exclude(Exists(TaxRule.objects.filter(default=True, event_id=OuterRef("pk")))).iterator():
         fav_tax_rules = e.tax_rules.annotate(c=Count("item")).order_by("-c", "pk")[:1]
         if fav_tax_rules:
             fav_tax_rules[0].default = True
