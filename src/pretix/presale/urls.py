@@ -236,6 +236,5 @@ locale_patterns = [
     re_path(r'^locale/set$', pretix.presale.views.locale.LocaleSet.as_view(), name='locale.set'),
     re_path(r'^robots.txt$', pretix.presale.views.robots.robots_txt, name='robots.txt'),
     re_path(r'^browserconfig.xml$', pretix.presale.views.theme.browserconfig_xml, name='browserconfig.xml'),
-    re_path(r'^site.webmanifest$', pretix.presale.views.theme.webmanifest, name='site.webmanifest'),
     path('widget/v<int:version>.<slug:lang>.js', pretix.presale.views.widget.widget_js, name='widget.js'),
 ]

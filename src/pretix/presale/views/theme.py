@@ -63,34 +63,6 @@ def browserconfig_xml(request):
     )
 
 
-@cache_page(3600)
-def webmanifest(request):
-    return HttpResponse(
-        """{
-    "name": "",
-    "short_name": "",
-    "icons": [
-        {
-            "src": "%s",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "%s",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ],
-    "theme_color": "#3b1c4a",
-    "background_color": "#3b1c4a",
-    "display": "standalone"
-}""" % (
-            static('pretixbase/img/icons/android-chrome-192x192.png'),
-            static('pretixbase/img/icons/android-chrome-512x512.png'),
-        ), content_type='text/json'
-    )
-
-
 @gzip_page
 @condition(etag_func=lambda request, **kwargs: request.GET.get("version"))
 def theme_css(request, **kwargs):

@@ -43,6 +43,7 @@ from pretix.base.views import applepay, js_helpers
 
 from .base.views import (
     cachedfiles, csp, health, js_catalog, metrics, redirect, source,
+    webmanifest,
 )
 
 base_patterns = [
@@ -51,6 +52,7 @@ base_patterns = [
     re_path(r'^healthcheck/$', health.healthcheck,
             name='healthcheck'),
     re_path(r'^redirect/$', redirect.redir_view, name='redirect'),
+    re_path(r'^site.webmanifest$', webmanifest.webmanifest, name='site.webmanifest'),
     re_path(r'^jsi18n/(?P<lang>[a-zA-Z-_]+)/$', js_catalog.js_catalog, name='javascript-catalog'),
     re_path(r'^metrics$', metrics.serve_metrics,
             name='metrics'),
