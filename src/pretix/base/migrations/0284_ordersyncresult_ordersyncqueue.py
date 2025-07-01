@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0281_event_is_remote'),
+        ('pretixbase', '0283_taxrule_default_taxrule_backfill'),
     ]
 
     operations = [
