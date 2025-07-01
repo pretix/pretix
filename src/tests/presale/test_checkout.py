@@ -60,6 +60,12 @@ from pretix.testutils.sessions import get_cart_session_key
 from .test_timemachine import TimemachineTestMixin
 
 
+@pytest.fixture
+def class_monkeypatch(request, monkeypatch):
+    request.cls.monkeypatch = monkeypatch
+
+
+@pytest.mark.usefixtures("class_monkeypatch")
 class BaseCheckoutTestCase:
     @scopes_disabled()
     def setUp(self):
@@ -98,6 +104,7 @@ class BaseCheckoutTestCase:
         self.workshopquota.items.add(self.workshop2)
         self.workshopquota.variations.add(self.workshop2a)
         self.workshopquota.variations.add(self.workshop2b)
+        self.monkeypatch.setattr("django.db.transaction.on_commit", lambda t: t())
 
     def _set_session(self, key, value):
         session = self.client.session
@@ -1356,6 +1363,110 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
+
+    def test_invoice_transmission_providers_email_special_case(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="transmission_email_other"]')), 1)
+
+        self.event.settings.invoice_generate = "False"
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="transmission_email_other"]')), 0)
+
+    def test_invoice_transmission_providers_all_fields_loaded(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="transmission_email_address"]')), 1)
+        self.assertEqual(len(doc.select('input[name="transmission_email_other"]')), 1)
+        self.assertEqual(len(doc.select('input[name="transmission_it_sdi_codice_fiscale"]')), 1)
+        self.assertEqual(len(doc.select('input[name="transmission_it_sdi_pec"]')), 1)
+        self.assertEqual(len(doc.select('input[name="transmission_it_sdi_recipient_code"]')), 1)
+        self.assertEqual(len(doc.select('input[name="transmission_peppol_participant_id"]')), 1)
+        self.assertEqual(len(doc.select('select[name="transmission_type"]')), 1)
+        self.assertEqual(len(doc.select('select[name="transmission_type"] option')), 3)
+
+    def test_invoice_transmission_invalid_submission(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost',
+            'transmission_type': 'it_sdi',
+        }, follow=True)
+        assert "The selected transmission type is not available" in response.content.decode()
+
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'IT',
+            'state': 'MI',
+            'email': 'admin@localhost',
+            'transmission_type': 'it_sdi',
+        }, follow=True)
+        print(response.content.decode())
+        assert "This field is required for the selected type" in response.content.decode()
+
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'IT',
+            'state': 'MI',
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
+        }, follow=True)
+        assert "must be used for this country" in response.content.decode()
 
     def test_invoice_address_hidden_for_free(self):
         self.event.settings.invoice_address_asked = True
@@ -3849,6 +3960,120 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             o = Order.objects.get(pk=oid['order_id'])
             o.payments.first().confirm()
             assert len(djmail.outbox) == 0
+
+    def test_order_confirmation_mail_invoice_attached(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+        ia = InvoiceAddress.objects.create(
+            is_business=True,
+            country=Country('AT'),
+            transmission_type="email",
+            transmission_info={
+                "transmission_email_other": False,
+                "transmission_email_address": None,
+            }
+        )
+
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            djmail.outbox = []
+            _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+            assert len(djmail.outbox) == 1
+            assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+
+    def test_order_confirmation_mail_invoice_sent_somewhere_else(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+        ia = InvoiceAddress.objects.create(
+            is_business=True,
+            country=Country('AT'),
+            transmission_type="email",
+            transmission_info={
+                "transmission_email_other": True,
+                "transmission_email_address": "invoice@example.org",
+            }
+        )
+
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            djmail.outbox = []
+            _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+            assert len(djmail.outbox) == 2
+            assert ["invoice@example.org"] == djmail.outbox[0].to
+            assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+            assert ["admin@example.org"] == djmail.outbox[1].to
+            assert not any(["Invoice_" in a[0] for a in djmail.outbox[1].attachments])
+
+    def test_order_paid_confirmation_mail_invoice_attached(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_generate = "paid"
+        self.event.settings.invoice_email_attachment = True
+        ia = InvoiceAddress.objects.create(
+            is_business=True,
+            country=Country('AT'),
+            transmission_type="email",
+            transmission_info={
+                "transmission_email_other": False,
+                "transmission_email_address": None,
+            }
+        )
+
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            djmail.outbox = []
+            oid = _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+            assert len(djmail.outbox) == 1
+            assert not any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+            o = Order.objects.get(pk=oid['order_id'])
+            o.payments.first().confirm()
+            assert len(djmail.outbox) == 2
+            assert any(["Invoice_" in a[0] for a in djmail.outbox[1].attachments])
+
+    def test_order_paid_confirmation_mail_invoice_sent_somewhere_else(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_generate = "paid"
+        self.event.settings.invoice_email_attachment = True
+        ia = InvoiceAddress.objects.create(
+            is_business=True,
+            country=Country('AT'),
+            transmission_type="email",
+            transmission_info={
+                "transmission_email_other": True,
+                "transmission_email_address": "invoice@example.org",
+            }
+        )
+
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            djmail.outbox = []
+            oid = _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+            assert len(djmail.outbox) == 1
+            assert ["admin@example.org"] == djmail.outbox[0].to
+            assert not any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+
+            o = Order.objects.get(pk=oid['order_id'])
+            o.payments.first().confirm()
+            assert len(djmail.outbox) == 3
+            assert ["invoice@example.org"] == djmail.outbox[2].to
+            assert any(["Invoice_" in a[0] for a in djmail.outbox[2].attachments])
 
     def test_locale_region_not_saved(self):
         self.event.settings.origin = 'US'

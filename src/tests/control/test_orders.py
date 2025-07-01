@@ -47,9 +47,9 @@ from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
 from pretix.base.models import (
-    Event, GiftCard, InvoiceAddress, Item, Order, OrderFee, OrderPayment,
-    OrderPosition, OrderRefund, Organizer, Question, QuestionAnswer, Quota,
-    Team, User,
+    Event, GiftCard, Invoice, InvoiceAddress, Item, Order, OrderFee,
+    OrderPayment, OrderPosition, OrderRefund, Organizer, Question,
+    QuestionAnswer, Quota, Team, User,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
@@ -623,6 +623,19 @@ def test_order_invoice_create_ok(client, env):
     assert 'alert-success' in response.content.decode()
     with scopes_disabled():
         assert env[2].invoices.exists()
+
+
+@pytest.mark.django_db
+def test_order_invoice_retransmit(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        i = generate_invoice(env[2])
+        i.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+        i.save()
+    response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/retransmit' % i.pk, {}, follow=True)
+    assert 'alert-success' in response.content.decode()
+    i.refresh_from_db()
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
 
 
 @pytest.mark.django_db

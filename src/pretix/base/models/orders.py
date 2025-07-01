@@ -1970,7 +1970,7 @@ class OrderPayment(models.Model):
                     trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
                 )
 
-        transmit_invoice_task = invoice_transmission_separately(self.order)
+        transmit_invoice_task = invoice_transmission_separately(invoice)
         transmit_invoice_mail = not transmit_invoice_task and self.order.event.settings.invoice_email_attachment and self.order.email
 
         if send_mail and self.order.sales_channel.identifier in self.order.event.settings.mail_sales_channel_placed_paid:

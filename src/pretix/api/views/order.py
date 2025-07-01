@@ -1964,7 +1964,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             raise PermissionDenied('The invoice file is no longer stored on the server.')
 
         with transaction.atomic(durable=True):
-            invoice = self.order.invoices.select_for_update(of=OF_SELF).get(pk=invoice.pk)
+            invoice = Invoice.objects.select_for_update(of=OF_SELF).get(pk=invoice.pk)
 
             if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
                 raise CurrentlyInflightException()
