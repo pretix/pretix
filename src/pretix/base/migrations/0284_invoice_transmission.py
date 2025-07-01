@@ -64,9 +64,9 @@ class Migration(migrations.Migration):
             field=models.CharField(default="email", max_length=255),
         ),
         migrations.RunSQL(
-            "UPDATE pretixbase_eventsettingsstore SET key = 'mail_text_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_text'"
+            "UPDATE pretixbase_event_settingsstore SET key = 'mail_text_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_text'"
         ),
         migrations.RunSQL(
-            "UPDATE pretixbase_eventsettingsstore SET key = 'mail_subject_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_subject'"
+            "UPDATE pretixbase_event_settingsstore SET key = 'mail_subject_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_subject'"
         ),
     ]
