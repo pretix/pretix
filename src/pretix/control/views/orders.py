@@ -1725,6 +1725,7 @@ class OrderInvoiceRetransmit(OrderView):
             invoice.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
             invoice.transmission_date = now()
             invoice.save(update_fields=["transmission_status", "transmission_date"])
+            messages.success(self.request, _('The invoice has been scheduled for retransmission.'))
             self.order.log_action('pretix.event.order.invoice.retransmitted', user=self.request.user, data={
                 'invoice': invoice.pk,
                 'full_invoice_no': invoice.full_invoice_no,

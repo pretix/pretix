@@ -28,7 +28,7 @@ import pytest
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models import Invoice, InvoiceAddress, Order, OrderPosition
 from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
@@ -370,6 +370,26 @@ def test_invoice_detail(token_client, organizer, event, item, invoice):
                                                                                   invoice.number))
     assert resp.status_code == 200
     assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_invoice_retransmit(token_client, organizer, event, invoice):
+    invoice.transmission_status = Invoice.TRANSMISSION_STATUS_INFLIGHT
+    invoice.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/retransmit/'.format(
+        organizer.slug, event.slug, invoice.number
+    ))
+    assert resp.status_code == 409
+
+    invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+    invoice.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/retransmit/'.format(
+        organizer.slug, event.slug, invoice.number
+    ))
+    assert resp.status_code == 204
+
+    invoice.refresh_from_db()
+    assert invoice.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
 
 
 @pytest.mark.django_db

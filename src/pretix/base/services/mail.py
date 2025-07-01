@@ -658,7 +658,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             raise SendMailException('Failed to send an email to {}.'.format(to))
         else:
             for i in invoices_sent:
-                if i.transmission_provider == "email":
+                if i.transmission_type == "email":
                     if i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
                         i.transmission_date = now()
                         i.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED

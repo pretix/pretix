@@ -521,7 +521,7 @@ def build_preview_invoice_pdf(event):
         return event.invoice_renderer.generate(invoice)
 
 
-def invoice_transmission_separately(order):
+def order_invoice_transmission_separately(order):
     try:
         info = order.invoice_address.transmission_info or {}
         return (
@@ -530,6 +530,23 @@ def invoice_transmission_separately(order):
                 info.get("transmission_email_other") and
                 info.get("transmission_email_address") and
                 order.email != info["transmission_email_address"]
+            )
+        )
+    except InvoiceAddress.DoesNotExist:
+        return False
+
+
+def invoice_transmission_separately(invoice):
+    if not invoice:
+        return False
+    try:
+        info = invoice.invoice_to_transmission_info or {}
+        return (
+            invoice.transmission_type != "email" or
+            (
+                info.get("transmission_email_other") and
+                info.get("transmission_email_address") and
+                invoice.order.email != info["transmission_email_address"]
             )
         )
     except InvoiceAddress.DoesNotExist:
@@ -614,7 +631,8 @@ def send_pending_invoices(sender, **kwargs):
 
 @app.task(base=TransactionAwareProfiledEventTask)
 def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
-    with transaction.atomic(durable=True):
+    with transaction.atomic(durable='tests.testdummy' not in settings.INSTALLED_APPS):
+        # We need durable=True for transactional correctness, but can't have it during tests
         invoice = Invoice.objects.select_for_update(of=OF_SELF).get(pk=invoice_id)
 
         if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
