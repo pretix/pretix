@@ -129,6 +129,8 @@ class GlobalFailedSyncJobsView(AdministratorPermissionRequiredMixin, FailedSyncJ
 
 
 class OrganizerFailedSyncJobsView(OrganizerPermissionRequiredMixin, FailedSyncJobsView):
+    permission = "can_change_organizer_settings"
+
     def get_queryset(self):
         return super().get_queryset().filter(
             event__organizer=self.request.organizer

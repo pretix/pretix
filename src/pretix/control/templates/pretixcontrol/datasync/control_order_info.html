@@ -15,12 +15,12 @@
                     {% csrf_token %}
                     {% if pending %}
                         {% if pending.not_before > now or pending.need_manual_retry %}
-                        <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
+                            <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
                         {% endif %}
                         <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-times"></i> {% trans "Cancel" %}</button>
                     {% else %}
-                            <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
-                            <input type="hidden" name="queue_sync" value="true">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
+                        <input type="hidden" name="queue_sync" value="true">
                     {% endif %}
                 </form>
                 <p><b>{{ display_name }}</b></p>
@@ -33,7 +33,8 @@
                             <i class="fa fa-warning"></i>
                             {% blocktrans trimmed with num=pending.failed_attempts max=pending.max_retry_attempts %}
                             Error. Retry {{ num }} of {{ max }}.
-                            {% endblocktrans %}{% if pending.not_before %}
+                            {% endblocktrans %}
+                            {% if pending.not_before %}
                                 {% blocktrans trimmed with datetime=pending.not_before|date:"SHORT_DATETIME_FORMAT" %}
                                 Waiting until {{ datetime }}
                                 {% endblocktrans %}

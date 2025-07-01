@@ -4,6 +4,8 @@
 Data sync providers
 ===================
 
+.. warning:: This feature is considered **experimental**. It might change at any time without prior notice.
+
 pretix provides connectivity to many external services through plugins. A common requirement
 is unidirectionally sending (order, customer, ticket, ...) data into external systems.
 The transfer is usually triggered by signals provided by pretix core (e.g. ``order_created``),
@@ -35,14 +37,15 @@ within it has to call `MyListSyncProvider.enqueue_order` to enqueue the order fo
 
 
 Furthermore, most of these plugins need to translate data from some pretix objects (e.g. orders)
-into an external systems' data structures. Sometimes, there is only one reasonable way or the
+into an external system's data structures. Sometimes, there is only one reasonable way or the
 plugin author makes an opinionated decision what information from which objects should be
 transferred into which data structures in the external system.
 
 Otherwise, you can use a ``PropertyMappingFormSet`` to let the user set up a mapping from pretix model fields
 to external data fields. You could store the mapping information either in the event settings, or in a separate
 data model. Your implementation of :func:`OutboundSyncProvider.mappings`
-needs to provide a list of mappings, with at least the properties defined in
+needs to provide a list of mappings, which can be e.g. static objects or model instances, as long as they
+have at least the properties defined in
 :class:`pretix.base.datasync.datasync.StaticMapping`.
 
 .. code-block:: python
@@ -59,7 +62,7 @@ Currently, we support ``Order`` and ``OrderPosition`` as data sources, with the 
 :func:`pretix.base.datasync.sourcefields.get_data_fields`.
 
 To perform the actual sync, implement ``sync_object_with_properties`` and optionally
-``finalize_sync_order``. The former is called for each object to be created, according to the ``mappings``:
+``finalize_sync_order``. The former is called for each object to be created according to the ``mappings``.
 For each order that was enqueued using ``enqueue_order``:
 
 - each Mapping with ``pretix_model == "Order"`` results in one call to `sync_object_with_properties`,
@@ -70,9 +73,11 @@ For each order that was enqueued using ``enqueue_order``:
 
 For example implementations, see the test cases in :package:``tests.base.test_datasync``.
 In :class:`SimpleOrderSync`, a basic data transfer of order data only is
-shown. Therein, a ``sync_object_with_properties`` method is defined like as follows:
+shown. Therein, a ``sync_object_with_properties`` method is defined as follows:
 
 .. code-block:: python
+
+    from pretix.base.datasync.utils import assign_properties
 
     def sync_object_with_properties(
             self, external_id_field, id_value, properties: list, inputs: dict,
@@ -90,7 +95,7 @@ shown. Therein, a ``sync_object_with_properties`` method is defined like as foll
         # We use the helper function ``assign_properties`` to update a pre-existing object.
         update_values = assign_properties(
             new_values=properties,
-            old_vlaues=pre_existing_object or {},
+            old_values=pre_existing_object or {},
             is_new=pre_existing_object is None
         )
 
@@ -118,6 +123,16 @@ shown. Therein, a ``sync_object_with_properties`` method is defined like as foll
             "my_result": result,
         }
 
+.. note:: The result dictionaries of earlier invocations of `sync_object_with_properties` are 
+          only provided in subsequent calls of the same sync run, such that a mapping can 
+          refer to e.g. the external id of an object created by a preceding mapping. 
+          However, the result dictionaries are currently not provided across runs. This will 
+          likely change in a future revision of this API, to allow easier integration of external 
+          systems that do not allow retrieving/updating data by a pretix-provided key.
+
+ `mapped_objects` is a dictionary of lists of dictionaries. The keys to the dictionary are 
+ the mapping identifiers (`mapping.id`), the lists contain the result dictionaries returned 
+ by `sync_object_with_properties`.
 
 In :class:`OrderAndTicketAssociationSync`, an example is given where orders, order positions,
 and the association between them are transferred.

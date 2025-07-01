@@ -245,6 +245,9 @@ class OutboundSyncProvider:
                     sq.in_flight_since = now()
                     sq.save()
                 except DatabaseError:
+                    # Either select_for_update failed to lock the row, or we couldn't set in_flight
+                    # as this order is already in flight (UNIQUE violation). In either case, we ignore
+                    # this order for now.
                     continue
                 try:
                     mapped_objects = self.sync_order(sq.order)
