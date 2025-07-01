@@ -203,9 +203,35 @@ Query parameters
 Most list endpoints allow a filtering of the results using query parameters. In this case, booleans should be passed
 as the string values ``true`` and ``false``.
 
+Ordering
+--------
+
 If the ``ordering`` parameter is documented for a resource, you can use it to sort the result set by one of the allowed
 fields. Prepend a ``-`` to the field name to reverse the sort order.
 
+Filtering and expanding fields
+------------------------------
+
+On many endpoints, you can modify what fields are being returned:
+
+- Using the ``include`` query parameter, you can chose which fields will be returned as part of the response.
+  For example, if you pass ``include=code&include=email`` to the list of orders, you will receive a list of only
+  order codes and email addresses.
+
+- Using the ``exclude`` query parameter, you can chose which fields will not be returned as part of the response.
+  For example, if you pass ``exclude=payments&exclude=refunds`` to the list of orders, you will receive a list
+  without the payment and refund objects.
+
+- Using the ``expand`` query parameter, you can chose which fields will be expanded into full objects. For example,
+  if you pass ``expand=voucher`` to the list of order positions, the response will contain a full voucher object
+  instead of just the ID. If you do not have permission to view vouchers, a 403 status code is returned.
+  For performance reasons, this option is only available for a limited number of fields that are noted as
+  "expandable" in the documentation of the respective object.
+
+In all of these, you can use dotted notation to address fields of sub-objects, such as ``positions.checkins.gate``.
+
+These options are not available everywhere as we are slowly rolling them out throughout the codebase. Please check
+the individual endpoint documentation for availability.
 
 Idempotency
 -----------

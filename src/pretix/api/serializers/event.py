@@ -48,7 +48,8 @@ from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
 from pretix.api.serializers import (
-    CompatibleJSONField, SalesChannelMigrationMixin,
+    CompatibleJSONField, ConfigurableSerializerMixin,
+    SalesChannelMigrationMixin,
 )
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
@@ -167,7 +168,7 @@ class ValidKeysField(Field):
         }
 
 
-class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
+class EventSerializer(SalesChannelMigrationMixin, ConfigurableSerializerMixin, I18nAwareModelSerializer):
     meta_data = MetaDataField(required=False, source='*')
     item_meta_properties = MetaPropertyField(required=False, source='*')
     plugins = PluginsField(required=False, source='*')
@@ -198,10 +199,11 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not hasattr(self.context['request'], 'event'):
-            self.fields.pop('valid_keys')
+            self.fields.pop('valid_keys', None)
         if not self.context.get('request') or 'with_availability_for' not in self.context['request'].GET:
-            self.fields.pop('best_availability_state')
-        self.fields['limit_sales_channels'].child_relation.queryset = self.context['organizer'].sales_channels.all()
+            self.fields.pop('best_availability_state', None)
+        if 'limit_sales_channels' in self.fields:
+            self.fields['limit_sales_channels'].child_relation.queryset = self.context['organizer'].sales_channels.all()
 
     def validate(self, data):
         data = super().validate(data)
@@ -483,7 +485,7 @@ class SubEventItemVariationSerializer(I18nAwareModelSerializer):
         fields = ('variation', 'price', 'disabled', 'available_from', 'available_until')
 
 
-class SubEventSerializer(I18nAwareModelSerializer):
+class SubEventSerializer(ConfigurableSerializerMixin, I18nAwareModelSerializer):
     item_price_overrides = SubEventItemSerializer(source='subeventitem_set', many=True, required=False)
     variation_price_overrides = SubEventItemVariationSerializer(source='subeventitemvariation_set', many=True, required=False)
     seat_category_mapping = SeatCategoryMappingField(source='*', required=False)
@@ -502,7 +504,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.context.get('request') or 'with_availability_for' not in self.context['request'].GET:
-            self.fields.pop('best_availability_state')
+            self.fields.pop('best_availability_state', None)
 
     def validate(self, data):
         data = super().validate(data)

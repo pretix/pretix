@@ -146,9 +146,69 @@ Endpoints
                                  attribute with values of 100 for "tickets available", values less than 100 for "tickets sold out or reserved",
                                  and ``null`` for "status unknown". These values might be served from a cache. This parameter can make the response
                                  slow.
+   :query string include: Limit the output to the given field. Can be passed multiple times.
+   :query string exclude: Exclude a field from the output. Can be passed multiple times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/
+
+   Returns information on one sub-event, identified by its ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/subevents/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": {"en": "First Sample Conference"},
+        "event": "sampleconf",
+        "active": false,
+        "is_public": true,
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "geo_lat": null,
+        "geo_lon": null,
+        "seating_plan": null,
+        "seat_category_mapping": {},
+        "item_price_overrides": [
+          {
+            "item": 2,
+            "disabled": false,
+            "available_from": null,
+            "available_until": null,
+            "price": "12.00"
+          }
+        ],
+        "variation_price_overrides": [],
+        "meta_data": {}
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the main event
+   :param id: The ``id`` field of the sub-event to fetch
+   :query string include: Limit the output to the given field. Can be passed multiple times.
+   :query string exclude: Exclude a field from the output. Can be passed multiple times.
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/subevents/
 
@@ -236,63 +296,6 @@ Endpoints
    :statuscode 400: The sub-event could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
-
-
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/
-
-   Returns information on one sub-event, identified by its ID.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      GET /api/v1/organizers/bigevents/events/sampleconf/subevents/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "id": 1,
-        "name": {"en": "First Sample Conference"},
-        "event": "sampleconf",
-        "active": false,
-        "is_public": true,
-        "date_from": "2017-12-27T10:00:00Z",
-        "date_to": null,
-        "date_admission": null,
-        "presale_start": null,
-        "presale_end": null,
-        "location": null,
-        "geo_lat": null,
-        "geo_lon": null,
-        "seating_plan": null,
-        "seat_category_mapping": {},
-        "item_price_overrides": [
-          {
-            "item": 2,
-            "disabled": false,
-            "available_from": null,
-            "available_until": null,
-            "price": "12.00"
-          }
-        ],
-        "variation_price_overrides": [],
-        "meta_data": {}
-      }
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :param event: The ``slug`` field of the main event
-   :param id: The ``id`` field of the sub-event to fetch
-   :statuscode 200: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/
 

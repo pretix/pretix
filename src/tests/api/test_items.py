@@ -42,6 +42,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from tests.api.utils import _test_configurable_serializer
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
@@ -359,10 +360,17 @@ TEST_ITEM_RES = {
 
 
 @pytest.mark.django_db
-def test_item_list(token_client, organizer, event, team, item):
+def test_item_list(token_client, organizer, event, team, item, taxrule):
     cat = event.categories.create(name="foo")
+    cat2 = event.categories.create(name="bar")
+    item.category = cat2
+    item.tax_rule = taxrule
+    item.save()
     res = dict(TEST_ITEM_RES)
     res["id"] = item.pk
+    res["category"] = cat2.pk
+    res["tax_rule"] = taxrule.pk
+    res["tax_rate"] = "19.00"
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
@@ -400,11 +408,11 @@ def test_item_list(token_client, organizer, event, team, item):
     assert resp.status_code == 200
     assert [] == resp.data['results']
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?tax_rate=0'.format(organizer.slug, event.slug))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?tax_rate=19'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?tax_rate=19'.format(organizer.slug, event.slug))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?tax_rate=0'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [] == resp.data['results']
 
@@ -418,6 +426,15 @@ def test_item_list(token_client, organizer, event, team, item):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?search=Free'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [] == resp.data['results']
+
+    _test_configurable_serializer(
+        token_client,
+        "/api/v1/organizers/{}/events/{}/items/".format(organizer.slug, event.slug),
+        [
+            "name", "free_price", "variations",
+        ],
+        expands=["category", "tax_rule"],
+    )
 
 
 @pytest.mark.django_db

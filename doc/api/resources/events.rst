@@ -152,6 +152,8 @@ Endpoints
                                  and ``null`` for "status unknown". These values might be served from a cache. This parameter can make the response
                                  slow.
    :query search: Only return events matching a given search query.
+   :query string include: Limit the output to the given field. Can be passed multiple times.
+   :query string exclude: Exclude a field from the output. Can be passed multiple times.
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
    :statuscode 401: Authentication failure
@@ -223,6 +225,8 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
+   :query string include: Limit the output to the given field. Can be passed multiple times.
+   :query string exclude: Exclude a field from the output. Can be passed multiple times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
