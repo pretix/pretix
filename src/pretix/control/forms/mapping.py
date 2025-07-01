@@ -105,11 +105,12 @@ class PropertyMappingFormSet(formset_factory(
           - `external_field`: Name of the target field in the external system. Implementation-defined by the sync provider.
           - `value_map`: Dictionary mapping pretix value to external value. Only used for enumeration-type fields.
           - `overwrite`: Mode of operation if the object already exists in the target system.
-                - `MODE_OVERWRITE` (`"overwrite"`) to always overwrite existing value.
-                - `MODE_SET_IF_NEW` (`"if_new"`) to only set the value if object does not exist in target system yet.
-                - `MODE_SET_IF_EMPTY` (`"if_empty"`) to only set the value if object does not exist in target system,
-                    or the field is currently empty in target system.
-                - `MODE_APPEND_LIST` (`"append"`) if the field is an array or a multi-select: add the value to the list.
+
+            - `MODE_OVERWRITE` (`"overwrite"`) to always overwrite existing value.
+            - `MODE_SET_IF_NEW` (`"if_new"`) to only set the value if object does not exist in target system yet.
+            - `MODE_SET_IF_EMPTY` (`"if_empty"`) to only set the value if object does not exist in target system,
+              or the field is currently empty in target system.
+            - `MODE_APPEND_LIST` (`"append"`) if the field is an array or a multi-select: add the value to the list.
         """
         mappings = [f.cleaned_data for f in self.ordered_forms]
         return json.dumps(mappings)
