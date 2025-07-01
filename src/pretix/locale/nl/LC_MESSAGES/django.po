@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
-"PO-Revision-Date: 2025-06-10 04:00+0000\n"
+"PO-Revision-Date: 2025-07-01 23:00+0000\n"
 "Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22192,7 +22192,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:230
 msgid "Contact email"
-msgstr "Contact-e-mailadres"
+msgstr "Contact e-mailadres"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:234
 msgid ""
