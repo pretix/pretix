@@ -267,20 +267,20 @@ class OutboundSyncProvider:
     @cached_property
     def data_fields(self):
         return {
-            f.key: (f.required_input, f.label, f.type, f.enum_opts, f.getter)
+            f.key: f
             for f in get_data_fields(self.event)
         }
 
     def get_field_value(self, inputs, mapping_entry):
         key = mapping_entry["pretix_field"]
         try:
-            required_input, label, ptype, enum_opts, getter = self.data_fields[key]
+            field = self.data_fields[key]
         except KeyError:
             raise SyncConfigError(['Field "%s" is not valid for %s. Please check your %s settings.' % (key, "/".join(inputs.keys()), self.display_name)])
-        input = inputs[required_input]
-        val = getter(input)
+        input = inputs[field.required_input]
+        val = field.getter(input)
         if isinstance(val, list):
-            if enum_opts and mapping_entry.get("value_map"):
+            if field.enum_opts and mapping_entry.get("value_map"):
                 map = json.loads(mapping_entry["value_map"])
                 try:
                     val = [map[el] for el in val]
