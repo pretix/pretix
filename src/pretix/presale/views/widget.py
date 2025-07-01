@@ -218,7 +218,7 @@ def widget_js(request, version, lang, **kwargs):
         return resp
 
     gs = GlobalSettingsObject()
-    fname = gs.settings.get('widget_file_{}_{}'.format(version, lang))
+    fname = gs.settings.get('widget_file_v{}_{}'.format(version, lang))
     resp = None
     if fname and not settings.DEBUG:
         if isinstance(fname, File):
@@ -238,8 +238,8 @@ def widget_js(request, version, lang, **kwargs):
                 'widget/widget.{}.{}.{}.js'.format(version, lang, checksum),
                 ContentFile(data)
             )
-            gs.settings.set('widget_file_{}_{}'.format(version, lang), 'file://' + newname)
-            gs.settings.set('widget_checksum_{}_{}'.format(version, lang), checksum)
+            gs.settings.set('widget_file_v{}_{}'.format(version, lang), 'file://' + newname)
+            gs.settings.set('widget_checksum_v{}_{}'.format(version, lang), checksum)
             cache.set('widget_js_data_v{}_{}'.format(version, lang), data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
     resp._csp_ignore = True
