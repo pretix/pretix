@@ -51,7 +51,7 @@ class OrderSyncQueue(models.Model):
     not_before = models.DateTimeField(blank=False, null=False, db_index=True)
     need_manual_retry = models.CharField(blank=True, null=True, max_length=20, choices=[
         ('exceeded', _('Temporary error, auto-retry limit exceeded')),
-        ('permanent', _('Misconfiguration, please check provider settings')),
+        ('permanent', _('Provider reported a permanent error')),
         ('config', _('Misconfiguration, please check provider settings')),
         ('internal', _('System error, needs manual intervention')),
         ('timeout', _('System error, needs manual intervention')),
