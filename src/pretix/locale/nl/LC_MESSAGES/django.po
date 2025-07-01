@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
 "PO-Revision-Date: 2025-07-01 23:00+0000\n"
-"Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
+"Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -30323,7 +30323,7 @@ msgstr "(excl. belasting)"
 
 #: pretix/plugins/reports/exporters.py:275
 msgid "(incl. taxes)"
-msgstr "(incl. belasting)"
+msgstr "(incl. btw)"
 
 #: pretix/plugins/reports/exporters.py:285
 #: pretix/plugins/reports/exporters.py:304
