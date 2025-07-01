@@ -1277,7 +1277,7 @@ Vue.component('pretix-widget-event-list-entry', {
             if (this.event.availability.reason) {
                 o['pretix-widget-event-availability-' + this.event.availability.reason] = true;
             }
-            return o
+            return o;
         },
         location: function () {
             return this.event.location.replace(/\s*\n\s*/g, ', ');
