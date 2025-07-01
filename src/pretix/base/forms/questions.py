@@ -1277,7 +1277,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                     )
                 ):
                     # This looks like a very unclean hack (and probably really is one), but hear me out:
-                    # With pretix 2025.6, we introduced invoice transmission types and added the "send to another email"
+                    # With pretix 2025.7, we introduced invoice transmission types and added the "send to another email"
                     # feature for the email provider. This feature was previously part of the bank transfer payment
                     # provider and opt-in. With this change, this feature becomes available for all pretix shops, which
                     # we think is a good thing in the long run as it is an useful feature for every business customer.
@@ -1366,6 +1366,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
                 required_fields = transmission_type.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
                 for r in required_fields:
+                    if r not in self.fields:
+                        raise ValidationError(
+                            _("The selected type of invoice transmission requires a field that is currently not "
+                              "available, please reach out to the organizer.")
+                        )
                     if not data.get(r):
                         raise ValidationError({r: _("This field is required for the selected type of invoice transmission.")})
 
