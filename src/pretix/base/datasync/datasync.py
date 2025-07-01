@@ -25,75 +25,24 @@ import logging
 from collections import namedtuple
 from datetime import timedelta
 from functools import cached_property
-from itertools import groupby
 from typing import Protocol
 
 import sentry_sdk
 from django.db import DatabaseError, transaction
-from django.db.models import F, Window
-from django.db.models.functions import RowNumber
-from django.dispatch import receiver
 from django.utils.timezone import now
-from django_scopes import scope, scopes_disabled
 
 from pretix.base.datasync.sourcefields import (
     EVENT, EVENT_OR_SUBEVENT, ORDER, ORDER_POSITION, get_data_fields,
 )
 from pretix.base.logentrytype_registry import make_link
 from pretix.base.models.datasync import OrderSyncQueue, OrderSyncResult
-from pretix.base.signals import EventPluginRegistry, periodic_task
-from pretix.celery_app import app
+from pretix.base.signals import EventPluginRegistry
 from pretix.helpers import OF_SELF
 
 logger = logging.getLogger(__name__)
 
 
-@receiver(periodic_task, dispatch_uid="data_sync_periodic_sync_all")
-def periodic_sync_all(sender, **kwargs):
-    sync_all.apply_async()
-
-
-@receiver(periodic_task, dispatch_uid="data_sync_periodic_reset_in_flight")
-def periodic_reset_in_flight(sender, **kwargs):
-    for sq in OrderSyncQueue.objects.filter(
-        in_flight=True,
-        in_flight_since__lt=now() - timedelta(minutes=20),
-    ):
-        sq.set_sync_error('timeout', [], 'Timeout')
-
-
 sync_targets = EventPluginRegistry({"identifier": lambda o: o.identifier})
-
-
-@app.task()
-def sync_all():
-    with scopes_disabled():
-        queue = (
-            OrderSyncQueue.objects
-            .filter(
-                in_flight=False,
-                not_before__lt=now(),
-                need_manual_retry__isnull=True,
-            )
-            .order_by(Window(
-                expression=RowNumber(),
-                partition_by=[F("event_id")],
-                order_by="not_before",
-            ))
-            .prefetch_related("event")
-            [:1000]
-        )
-        grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.event.pk)), lambda q: (q.sync_provider, q.event))
-        for (target, event), queued_orders in grouped:
-            target_cls, meta = sync_targets.get(identifier=target, active_in=event)
-
-            if not target_cls:
-                # sync plugin not found (plugin deactivated or uninstalled) -> drop outstanding jobs
-                OrderSyncQueue.objects.filter(pk__in=[sq.pk for sq in queued_orders]).delete()
-
-            with scope(organizer=event.organizer):
-                with target_cls(event=event) as p:
-                    p.sync_queued_orders(queued_orders)
 
 
 class BaseSyncError(Exception):
