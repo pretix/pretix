@@ -8,7 +8,7 @@ Data sync providers
 
 pretix provides connectivity to many external services through plugins. A common requirement
 is unidirectionally sending (order, customer, ticket, ...) data into external systems.
-The transfer is usually triggered by signals provided by pretix core (e.g. ``order_created``),
+The transfer is usually triggered by signals provided by pretix core (e.g. :data:`order_placed`),
 but performed asynchronously.
 
 Such plugins should use the :class:`OutboundSyncProvider` API to utilize the queueing, retry and mapping mechanisms as well as the user interface for configuration and monitoring.
@@ -23,11 +23,11 @@ like this, for example:
     class MyListSyncProvider(OutboundSyncProvider):
         identifier = "my_list"
         display_name = "My Mailing List Service"
-        # ...
+        # ...c
 
 
 The plugin must register listeners in `signals.py` for all signals that should to trigger a sync and
-within it has to call `MyListSyncProvider.enqueue_order` to enqueue the order for synchronization:
+within it has to call :meth:`MyListSyncProvider.enqueue_order` to enqueue the order for synchronization:
 
 .. code-block:: python
 
@@ -41,9 +41,9 @@ into an external system's data structures. Sometimes, there is only one reasonab
 plugin author makes an opinionated decision what information from which objects should be
 transferred into which data structures in the external system.
 
-Otherwise, you can use a ``PropertyMappingFormSet`` to let the user set up a mapping from pretix model fields
+Otherwise, you can use a :class:`PropertyMappingFormSet` to let the user set up a mapping from pretix model fields
 to external data fields. You could store the mapping information either in the event settings, or in a separate
-data model. Your implementation of :func:`OutboundSyncProvider.mappings`
+data model. Your implementation of :attr:`OutboundSyncProvider.mappings`
 needs to provide a list of mappings, which can be e.g. static objects or model instances, as long as they
 have at least the properties defined in
 :class:`pretix.base.datasync.datasync.StaticMapping`.
@@ -58,20 +58,24 @@ have at least the properties defined in
             ]
 
 
-Currently, we support ``Order`` and ``OrderPosition`` as data sources, with the data fields defined in
+Currently, we support `orders` and `order positions` as data sources, with the data fields defined in
 :func:`pretix.base.datasync.sourcefields.get_data_fields`.
 
-To perform the actual sync, implement ``sync_object_with_properties`` and optionally
-``finalize_sync_order``. The former is called for each object to be created according to the ``mappings``.
-For each order that was enqueued using ``enqueue_order``:
+To perform the actual sync, implement :func:`sync_object_with_properties` and optionally
+:func:`finalize_sync_order`. The former is called for each object to be created according to the ``mappings``.
+For each order that was enqueued using :func:`enqueue_order`:
 
-- each Mapping with ``pretix_model == "Order"`` results in one call to `sync_object_with_properties`,
+- each Mapping with ``pretix_model == "Order"`` results in one call to :func:`sync_object_with_properties`,
 - each Mapping with ``pretix_model == "OrderPosition"`` results in one call to
-  ``sync_object_with_properties`` per order position,
-- ``finalize_sync_order`` is called one time after all calls to ``sync_object_with_properties``.
+  :func:`sync_object_with_properties` per order position,
+- :func:`finalize_sync_order` is called one time after all calls to :func:`sync_object_with_properties`.
 
 
-For example implementations, see the test cases in :package:``tests.base.test_datasync``.
+Implementation examples
+-----------------------
+
+For example implementations, see the test cases in :mod:`tests.base.test_datasync`.
+
 In :class:`SimpleOrderSync`, a basic data transfer of order data only is
 shown. Therein, a ``sync_object_with_properties`` method is defined as follows:
 
@@ -123,23 +127,61 @@ shown. Therein, a ``sync_object_with_properties`` method is defined as follows:
             "my_result": result,
         }
 
-.. note:: The result dictionaries of earlier invocations of `sync_object_with_properties` are 
-          only provided in subsequent calls of the same sync run, such that a mapping can 
-          refer to e.g. the external id of an object created by a preceding mapping. 
-          However, the result dictionaries are currently not provided across runs. This will 
-          likely change in a future revision of this API, to allow easier integration of external 
+.. note:: The result dictionaries of earlier invocations of :func:`sync_object_with_properties` are
+          only provided in subsequent calls of the same sync run, such that a mapping can
+          refer to e.g. the external id of an object created by a preceding mapping.
+          However, the result dictionaries are currently not provided across runs. This will
+          likely change in a future revision of this API, to allow easier integration of external
           systems that do not allow retrieving/updating data by a pretix-provided key.
 
- `mapped_objects` is a dictionary of lists of dictionaries. The keys to the dictionary are 
- the mapping identifiers (`mapping.id`), the lists contain the result dictionaries returned 
- by `sync_object_with_properties`.
+``mapped_objects`` is a dictionary of lists of dictionaries. The keys to the dictionary are
+the mapping identifiers (``mapping.id``), the lists contain the result dictionaries returned
+by :func:`sync_object_with_properties`.
+
 
 In :class:`OrderAndTicketAssociationSync`, an example is given where orders, order positions,
 and the association between them are transferred.
 
 
+The OutboundSyncProvider base class
+-----------------------------------
+
 .. autoclass:: pretix.base.datasync.datasync.OutboundSyncProvider
    :members:
 
+
+Property mapping format
+-----------------------
+
+To allow the user to configure property mappings, you can use the PropertyMappingFormSet,
+which will generate the required ``property_mappings`` value automatically. If you need
+to specify the property mappings programmatically, you can refer to the description below
+on their format.
+
 .. autoclass:: pretix.control.forms.mapping.PropertyMappingFormSet
    :members: to_property_mappings_json
+
+A simple JSON-serialized ``property_mappings`` list for mapping some order information can look like this:
+
+.. code-block:: json
+
+      [
+        {
+            "pretix_field": "email",
+            "external_field": "orderemail",
+            "value_map": "",
+            "overwrite": "overwrite",
+        },
+        {
+            "pretix_field": "order_status",
+            "external_field": "status",
+            "value_map": "{\"n\": \"pending\", \"p\": \"paid\", \"e\": \"expired\", \"c\": \"canceled\", \"r\": \"refunded\"}",
+            "overwrite": "overwrite",
+        },
+        {
+            "pretix_field": "order_total",
+            "external_field": "total",
+            "value_map": "",
+            "overwrite": "overwrite",
+        }
+      ]
