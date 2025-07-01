@@ -25,7 +25,7 @@ from django import forms
 from django.forms import formset_factory
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.datasync.sourcefields import QUESTION_TYPE_IDENTIFIERS
+from pretix.base.models import Question
 from pretix.base.models.datasync import (
     MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
 )
@@ -118,7 +118,7 @@ class PropertyMappingFormSet(formset_factory(
 
 def pretix_fields_choices(pretix_fields, initial_choice):
     return [
-        (f.key, f.label + " [" + QUESTION_TYPE_IDENTIFIERS[f.type] + "]")
+        (f.key, f.label + " [" + Question.TYPE_CHOICES[f.type] + "]")
         for f in pretix_fields
         if not f.deprecated or f.key == initial_choice
     ]
