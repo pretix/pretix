@@ -289,13 +289,13 @@
                                     {% bootstrap_field f.DELETE form_group_class="" layout="inline" %}
                                 </div>
                                 <div class="col-sm-4">
-                                    {% bootstrap_field f.time_from layout="inline" %}
+                                    {% bootstrap_field f.time_from layout="inline" placeholder=time_begin_sample %}
                                 </div>
                                 <div class="col-sm-4">
-                                    {% bootstrap_field f.time_to layout="inline" %}
+                                    {% bootstrap_field f.time_to layout="inline" placeholder=time_end_sample %}
                                 </div>
                                 <div class="col-sm-3">
-                                    {% bootstrap_field f.time_admission layout="inline" %}
+                                    {% bootstrap_field f.time_admission layout="inline" placeholder=time_admission_sample %}
                                 </div>
                                 <div class="col-sm-1 text-right flip">
                                     <button type="button" class="btn btn-danger btn-block"
@@ -315,13 +315,13 @@
                                     {% bootstrap_field time_formset.empty_form.DELETE form_group_class="" layout="inline" %}
                                 </div>
                                 <div class="col-sm-4">
-                                    {% bootstrap_field time_formset.empty_form.time_from layout="inline" %}
+                                    {% bootstrap_field time_formset.empty_form.time_from layout="inline" placeholder=time_begin_sample %}
                                 </div>
                                 <div class="col-sm-4">
-                                    {% bootstrap_field time_formset.empty_form.time_to layout="inline" %}
+                                    {% bootstrap_field time_formset.empty_form.time_to layout="inline" placeholder=time_end_sample %}
                                 </div>
                                 <div class="col-sm-3">
-                                    {% bootstrap_field time_formset.empty_form.time_admission layout="inline" %}
+                                    {% bootstrap_field time_formset.empty_form.time_admission layout="inline" placeholder=time_admission_sample %}
                                 </div>
                                 <div class="col-sm-1 text-right flip">
                                     <button type="button" class="btn btn-danger btn-block"
@@ -338,13 +338,13 @@
                             <label for="subevent_add_many_slots_first">
                                 <strong>{% trans "Start of first slot" %}</strong>
                             </label>
-                            <input class="form-control timepickerfield" id="subevent_add_many_slots_first" value="{{ time_begin_sample }}">
+                            <input class="form-control timepickerfield" id="subevent_add_many_slots_first" value="{{ time_begin_sample }}" placeholder="{{ time_begin_sample }}">
                         </div>
                         <div class="col-md-2 col-sm-12">
                             <label for="subevent_add_many_slots_end">
                                 <strong>{% trans "End of time slots" %}</strong>
                             </label>
-                            <input class="form-control timepickerfield" id="subevent_add_many_slots_end" value="{{ time_end_sample }}">
+                            <input class="form-control timepickerfield" id="subevent_add_many_slots_end" value="{{ time_end_sample }}" placeholder="{{ time_end_sample }}">
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <label for="subevent_add_many_slots_length">
@@ -409,8 +409,8 @@
         </fieldset>
         <fieldset>
             <legend>{% trans "Timeline" %}</legend>
-            {% bootstrap_field form.rel_presale_start layout="control" %}
-            {% bootstrap_field form.rel_presale_end layout="control" %}
+            {% bootstrap_field form.rel_presale_start layout="control" placeholder=datetime_sample %}
+            {% bootstrap_field form.rel_presale_end layout="control" placeholder=datetime_sample %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Quotas" %}</legend>

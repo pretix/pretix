@@ -2,7 +2,7 @@
 {% load ibanformat %}
 {% load bootstrap3 %}
 
-{% bootstrap_field form.payer layout="inline" %}
-{% bootstrap_field form.iban layout="inline" %}
-{% bootstrap_field form.bic layout="inline" %}
+{% bootstrap_field form.payer layout="inline" placeholder=_("Account holder") %}
+{% bootstrap_field form.iban layout="inline" placeholder=_("IBAN") %}
+{% bootstrap_field form.bic layout="inline" placeholder=_("BIC (optional)") %}
 {% bootstrap_form_errors form error_types="all" %}
