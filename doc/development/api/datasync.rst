@@ -125,3 +125,6 @@ and the association between them are transferred.
 
 .. autoclass:: pretix.base.datasync.datasync.OutboundSyncProvider
    :members:
+
+.. autoclass:: pretix.control.forms.mapping.PropertyMappingFormSet
+   :members: to_property_mappings_json
