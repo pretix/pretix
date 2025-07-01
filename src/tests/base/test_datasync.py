@@ -436,7 +436,11 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
             **update_values,
             external_id_field: id_value,
             "_id": pre_existing_object and pre_existing_object.get("_id"),
-            "links": [f"link:{obj['object_type']}:{obj['my_result']['_id']}" for am in mapping.association_mappings for obj in mapped_objects[am.via_mapping_id]]
+            "links": [
+                f"link:{obj['object_type']}:{obj['my_result']['_id']}"
+                for am in mapping.association_mappings
+                for obj in mapped_objects[am.via_mapping_id]
+            ]
         })
 
         return {
