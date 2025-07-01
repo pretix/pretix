@@ -74,7 +74,7 @@ class PropertyMappingFormSet(formset_factory(
     can_delete=True,
     extra=0,
 )):
-    template_name = "pretixcontrol/datasync/property_mapping_formset.html"
+    template_name = "pretixcontrol/datasync/property_mappings_formset.html"
 
     def __init__(self, pretix_fields, external_fields, available_modes, prefix, *args, initial_json=None, **kwargs):
         if initial_json:
@@ -95,7 +95,22 @@ class PropertyMappingFormSet(formset_factory(
         ctx["external_fields_id"] = self.prefix + "external-fields"
         return ctx
 
-    def to_property_mapping_json(self):
+    def to_property_mappings_json(self):
+        """
+        Returns a property mapping configuration as a JSON-serialized list of dictionaries.
+
+        Each entry specifies how to transfer data from one pretix field to one field in the external system:
+
+          - `pretix_field`: Name of a pretix data source field as declared in `pretix.base.datasync.sourcefields.get_data_fields`.
+          - `external_field`: Name of the target field in the external system. Implementation-defined by the sync provider.
+          - `value_map`: Dictionary mapping pretix value to external value. Only used for enumeration-type fields.
+          - `overwrite`: Mode of operation if the object already exists in the target system.
+                - `MODE_OVERWRITE` (`"overwrite"`) to always overwrite existing value.
+                - `MODE_SET_IF_NEW` (`"if_new"`) to only set the value if object does not exist in target system yet.
+                - `MODE_SET_IF_EMPTY` (`"if_empty"`) to only set the value if object does not exist in target system,
+                    or the field is currently empty in target system.
+                - `MODE_APPEND_LIST` (`"append"`) if the field is an array or a multi-select: add the value to the list.
+        """
         mappings = [f.cleaned_data for f in self.ordered_forms]
         return json.dumps(mappings)
 

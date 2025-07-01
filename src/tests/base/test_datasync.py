@@ -217,7 +217,7 @@ class SimpleOrderSync(OutboundSyncProvider):
                 id=1,
                 pretix_model='Order', external_object_type='ticketorders',
                 pretix_id_field='event_order_code', external_id_field='ordernumber',
-                property_mapping=json.dumps([
+                property_mappings=json.dumps([
                     {
                         "pretix_field": "email",
                         "external_field": "orderemail",
@@ -311,7 +311,7 @@ def test_simple_order_sync(event):
 
 
 StaticMappingWithAssociations = namedtuple('StaticMappingWithAssociations', (
-    'id', 'pretix_model', 'external_object_type', 'pretix_id_field', 'external_id_field', 'property_mapping', 'association_mapping'
+    'id', 'pretix_model', 'external_object_type', 'pretix_id_field', 'external_id_field', 'property_mappings', 'association_mappings'
 ))
 AssociationMapping = namedtuple('AssociationMapping', (
     'via_mapping_id'
@@ -329,7 +329,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
                 id=1,
                 pretix_model='OrderPosition', external_object_type='tickets',
                 pretix_id_field='ticket_id', external_id_field='ticketnumber',
-                property_mapping=json.dumps([
+                property_mappings=json.dumps([
                     {
                         "pretix_field": "ticket_price",
                         "external_field": "amount",
@@ -376,13 +376,13 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
                         "overwrite": MODE_OVERWRITE,
                     },
                 ]),
-                association_mapping=[],
+                association_mappings=[],
             ),
             StaticMappingWithAssociations(
                 id=2,
                 pretix_model='Order', external_object_type='ticketorders',
                 pretix_id_field='event_order_code', external_id_field='ordernumber',
-                property_mapping=json.dumps([
+                property_mappings=json.dumps([
                     {
                         "pretix_field": "email",
                         "external_field": "orderemail",
@@ -414,7 +414,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
                         "overwrite": MODE_OVERWRITE,
                     },
                 ]),
-                association_mapping=[
+                association_mappings=[
                     AssociationMapping(via_mapping_id=1)
                 ],
             ),
@@ -436,7 +436,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
             **update_values,
             external_id_field: id_value,
             "_id": pre_existing_object and pre_existing_object.get("_id"),
-            "links": [f"link:{obj['object_type']}:{obj['my_result']['_id']}" for am in mapping.association_mapping for obj in mapped_objects[am.via_mapping_id]]
+            "links": [f"link:{obj['object_type']}:{obj['my_result']['_id']}" for am in mapping.association_mappings for obj in mapped_objects[am.via_mapping_id]]
         })
 
         return {

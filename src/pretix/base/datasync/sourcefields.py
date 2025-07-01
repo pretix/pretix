@@ -514,8 +514,8 @@ def get_data_fields(event, for_model=None):
         return src_fields
 
 
-def translate_property_mappings(property_mapping, checkin_list_map):
-    mappings = json.loads(property_mapping)
+def translate_property_mappings(property_mappings, checkin_list_map):
+    mappings = json.loads(property_mappings)
 
     for mapping in mappings:
         if mapping["pretix_field"].startswith("checkin_date_"):
