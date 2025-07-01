@@ -26,6 +26,7 @@ from collections import namedtuple
 from datetime import timedelta
 from functools import cached_property
 from itertools import groupby
+from typing import Protocol
 
 import sentry_sdk
 from django.db import DatabaseError, transaction
@@ -122,6 +123,15 @@ class RecoverableSyncError(BaseSyncError):
     at a later time.
     """
     pass
+
+
+class ObjectMapping(Protocol):
+    id: int
+    pretix_model: str
+    external_object_type: str
+    pretix_id_field: str
+    external_id_field: str
+    property_mappings: str
 
 
 StaticMapping = namedtuple('StaticMapping', ('id', 'pretix_model', 'external_object_type', 'pretix_id_field', 'external_id_field', 'property_mappings'))
@@ -299,14 +309,14 @@ class OutboundSyncProvider:
 
     def sync_object_with_properties(
             self,
-            external_id_field,
+            external_id_field: str,
             id_value,
             properties: list,
             inputs: dict,
-            mapping,
+            mapping: ObjectMapping,
             mapped_objects: dict,
             **kwargs,
-    ):
+    ) -> dict:
         """
         This method is called for each object that needs to be created/updated in the external system -- which these are is
         determined by the implementation of the `mapping` property.
