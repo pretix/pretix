@@ -984,7 +984,10 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
 
     mail_bcc = forms.CharField(
         label=_("Bcc address"),
-        help_text=_("All emails will be sent to this address as a Bcc copy"),
+        help_text=' '.join([
+            str(_("All emails will be sent to this address as a Bcc copy.")),
+            str(_("You can specify multiple recipients separated by commas.")),
+        ]),
         validators=[multimail_validate],
         required=False,
         max_length=255
