@@ -6,7 +6,7 @@
     <fieldset>
         <legend>{% trans "General information" %}</legend>
         {% bootstrap_field form.name layout="control" %}
-        <div class="form-group">
+        <div class="form-group{% if form.slug.errors %} has-error{% endif %}">
             <label class="col-md-3 control-label" for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
             <div class="col-md-9 form-inline">
                 <button class="btn btn-default pull-right flip" type="button" id="event-slug-random-generate"
@@ -14,6 +14,9 @@
                     {% trans "Set to random" %}
                 </button>
                 {% bootstrap_field form.slug form_group_class="helper-display-inline" show_label=False layout="inline" %}
+                {% for error in form.slug.errors %}
+                    <div class="help-block">{{ error }}</div>
+                {% endfor %}
                 <div class="help-block">
                     {% blocktrans trimmed %}
                         This is the address users can buy your tickets at. Should be short, only contain lowercase
