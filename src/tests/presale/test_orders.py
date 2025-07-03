@@ -710,6 +710,7 @@ class OrdersTest(BaseOrdersTest):
             customer.set_password('foo')
             customer.save()
         self.order.customer = customer
+        self.order.save()
         with scopes_disabled():
             self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total,
                                        state=OrderPayment.PAYMENT_STATE_CONFIRMED)
