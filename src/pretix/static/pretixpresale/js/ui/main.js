@@ -223,7 +223,7 @@ var form_handlers = function (el) {
         });
     }
 
-    el.find('.use_giftcard').on("click", function (e) {
+    el.find('.use_giftcard').on("click", function () {
         var value = $(this).data('value');
         $('#id_payment_giftcard-code').val(value)
     })
