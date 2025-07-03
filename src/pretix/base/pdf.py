@@ -159,8 +159,17 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("123.45 EUR"),
         "evaluate": lambda op, order, event: money_filter(op.price, event.currency)
     }),
+    ("price_with_bundled", {
+        "label": _("Price including bundled products"),
+        "editor_sample": _("123.45 EUR"),
+        "evaluate": lambda op, order, event: money_filter(op.price + sum(
+            p.price
+            for p in op.addons.all()
+            if not p.canceled and p.is_bundled
+        ), event.currency)
+    }),
     ("price_with_addons", {
-        "label": _("Price including add-ons"),
+        "label": _("Price including add-ons and bundled products"),
         "editor_sample": _("123.45 EUR"),
         "evaluate": lambda op, order, event: money_filter(op.price + sum(
             p.price
