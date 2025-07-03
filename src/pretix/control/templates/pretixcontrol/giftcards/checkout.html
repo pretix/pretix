@@ -21,7 +21,8 @@
                         {{ c.value|money:c.currency }}
                     </div>
                     <div class="col-sm-2 col-md-1 text-right">
-                        <button name="use_giftcard" value="{{ c.secret }}" title="{% trans "Use gift card" %}"
+                        <button name="use_giftcard" class="use_giftcard" data-value="{{ c.secret }}"
+                                title="{% trans "Use gift card" %}"
                                 aria-describedby="gc-code-{{ forloop.counter }} gc-value-{{ forloop.counter }}"
                             class="btn btn-primary btn-xs">
                             {% trans "Apply" %}
