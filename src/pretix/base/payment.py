@@ -100,7 +100,7 @@ class PaymentProviderForm(Form):
 
 class GiftCardPaymentForm(PaymentProviderForm):
     def __init__(self, *args, **kwargs):
-        self.customer_gift_cards = kwargs.pop('customer_gift_cards')
+        self.customer_gift_cards = kwargs.pop('customer_gift_cards') if 'customer_gift_cards' in kwargs else None
         self.event = kwargs.pop('event')
         self.testmode = kwargs.pop('testmode')
         self.positions = kwargs.pop('positions')
