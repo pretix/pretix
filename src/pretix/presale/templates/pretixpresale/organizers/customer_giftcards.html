@@ -9,7 +9,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                {% icon "id-badge" %}
+                {% icon "gift" %}
                 <strong>{% trans "Gift cards" %}</strong> ({{ page_obj.paginator.count }})
             </h3>
         </div>
@@ -20,7 +20,7 @@
                     <article class="row">
                         <div class="col-xs-6">
                             <h4>
-                                {{ gc }}
+                                {% icon "gift" %} {{ gc }}
                             </h4>
                             {% if gc.issuance %}
                             <p class="text-muted">
@@ -32,7 +32,7 @@
                             <p class="text-muted">
                                 <small>
                                 {% if gc.expired %}
-                                    {% icon "minus-square-o" %}
+                                    {% icon "clock-o" %}
                                     {% trans "Expired" %}
                                     <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
                                         {% if gc.expires %}
