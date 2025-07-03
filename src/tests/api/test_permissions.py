@@ -64,6 +64,8 @@ event_permission_sub_urls = [
     ('get', 'can_view_orders', 'revokedsecrets/1/', 404),
     ('get', 'can_view_orders', 'blockedsecrets/', 200),
     ('get', 'can_view_orders', 'blockedsecrets/1/', 404),
+    ('get', 'can_view_orders', 'transactions/', 200),
+    ('get', 'can_view_orders', 'transactions/1/', 404),
     ('get', 'can_view_orders', 'orders/', 200),
     ('get', 'can_view_orders', 'orderpositions/', 200),
     ('delete', 'can_change_orders', 'orderpositions/1/', 404),

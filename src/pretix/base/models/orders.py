@@ -2933,7 +2933,7 @@ class Transaction(models.Model):
     Even before the introduction of the Transaction Model pretix *did* store historical data for auditability in the
     LogEntry model. However, it's almost impossible to do efficient reporting on that data.
 
-    Transactions should never be generated manually but only through the ``order.create_transactions()``
+    Transactions should never be generated manually but only through the ``o<rder.create_transactions()``
     method which should be called **within the same database transaction**.
 
     The big downside of this approach is that you need to remember to update transaction records every time you change

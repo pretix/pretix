@@ -25,6 +25,7 @@ at :ref:`plugin-docs`.
    seats
    orders
    invoices
+   transactions
    vouchers
    discounts
    checkin
