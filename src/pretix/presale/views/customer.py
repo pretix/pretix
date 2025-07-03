@@ -372,7 +372,7 @@ class CustomerAccountBaseMixin(CustomerRequiredMixin):
                 'label': _('Gift cards'),
                 'url': eventreverse(self.request.organizer, 'presale:organizer.customer.giftcards', kwargs={}),
                 'active': url_name.startswith('organizer.customer.giftcard'),
-                'icon': 'money',
+                'icon': 'gift',
             },
             {
                 'label': _('Addresses'),
