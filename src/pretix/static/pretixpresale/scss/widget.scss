@@ -837,6 +837,7 @@ $table-bg-accent: rgba(128, 128, 128, 0.05);
 .pretix-widget-alert-holder,
 .pretix-widget-frame-holder,
 .pretix-widget-lightbox-holder {
+  margin: auto;
   border: none;
   background: transparent;
   overflow: visible;
