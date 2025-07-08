@@ -961,6 +961,7 @@ $table-bg-accent: rgba(128, 128, 128, 0.05);
 
 .pretix-widget-frame-inner {
   width: 80vw;
+  max-width: 1080px;
   height: 80vh;
 }
 .pretix-widget-frame-inner iframe {
@@ -1087,3 +1088,9 @@ $table-bg-accent: rgba(128, 128, 128, 0.05);
   }
 }
 
+@media (max-width: 800px) {
+  .pretix-widget-frame-inner {
+    width: calc(100vw - 50px);
+    height: calc(100vh - 50px);
+  }
+}
