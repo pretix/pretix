@@ -27,7 +27,7 @@ If an order is fully settled, the sums of both columns match. However, as the mo
 happen at the same time, at some times during the lifecycle of an order the sums are not balanced, in which case we
 consider an order to be "pending payment" or "overpaid".
 
-In the API, the left column is represented by the "transaction" resource listed on this page.
+In the API, the "Debit" column is represented by the "transaction" resource listed on this page.
 In many cases, the left column *usually* also matches the data returned by the :ref:`rest-invoices` resource, but there
 are two important differences:
 
@@ -38,11 +38,11 @@ are two important differences:
   pretix always creates a new transaction whenever there is a change to a ticket that concerns the **price**, **tax rate**,
   **product**, or **date** (in an event series).
 
-The :ref:`rest-orders` themselves are not a good representation of the left side of the table since for accounting
+The :ref:`rest-orders` themselves are not a good representation of the "Debit" side of the table for accounting
 purposes since they are not immutable:
 They will only tell you the current state of the order, not what it was a week ago.
 
-The right column is represented by the :ref:`order-payment-resource` and :ref:`order-refund-resource`.
+The "Credit" column is represented by the :ref:`order-payment-resource` and :ref:`order-refund-resource`.
 
 
 Resource description
@@ -133,9 +133,9 @@ Endpoints
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string order: Only return transactions matching the given order code.
    :query datetime_since: Only return transactions with a datetime at or after the given time.
-   :query datetime_before: Only return transactions with a datetime after the given time.
+   :query datetime_before: Only return transactions with a datetime before the given time.
    :query created_since: Only return transactions with a creation time at or after the given time.
-   :query created_before: Only return transactions with a creation time after the given time.
+   :query created_before: Only return transactions with a creation time before the given time.
    :query item: Only return transactions that match the given item ID.
    :query item__in: Only return transactions that match one of the given item IDs (separated with a comma).
    :query variation: Only return transactions that match the given variation ID.
@@ -165,7 +165,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/transactions/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/transactions/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -184,7 +184,7 @@ Endpoints
         "results": [
           {
             "id": 123,
-            "event": "bigevents",
+            "event": "sampleconf",
             "order": "FOO",
             "count": 1,
             "created": "2017-12-01T10:00:00Z",
@@ -208,9 +208,9 @@ Endpoints
    :query string event: Only return transactions matching the given event slug.
    :query string order: Only return transactions matching the given order code.
    :query datetime_since: Only return transactions with a datetime at or after the given time.
-   :query datetime_before: Only return transactions with a datetime after the given time.
+   :query datetime_before: Only return transactions with a datetime before the given time.
    :query created_since: Only return transactions with a creation time at or after the given time.
-   :query created_before: Only return transactions with a creation time after the given time.
+   :query created_before: Only return transactions with a creation time before the given time.
    :query item: Only return transactions that match the given item ID.
    :query item__in: Only return transactions that match one of the given item IDs (separated with a comma).
    :query variation: Only return transactions that match the given variation ID.
@@ -227,7 +227,6 @@ Endpoints
    :query fee_type__in: Only return transactions that match one of the given fee types (separated with a comma).
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``datetime``, ``created``, and ``id``.
    :param organizer: The ``slug`` field of a valid organizer
-   :param event: The ``slug`` field of a valid event
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
