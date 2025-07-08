@@ -639,11 +639,16 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ))
 
         if self.invoice.introductory_text:
+            # While all intro fields are appended without any blank lines; we do want one before the optional intro
+            # text. However, if there are no prior intro fields, adding an additional spacer will waste space.
+            if story:
+                story.append(Spacer(1, 5 * mm))
+
             story.append(Paragraph(
                 self._clean_text(self.invoice.introductory_text, tags=['br']),
                 self.stylesheet['Normal']
             ))
-            story.append(Spacer(1, 10 * mm))
+            story.append(Spacer(1, 5 * mm))
 
         return story
 
