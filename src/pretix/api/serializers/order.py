@@ -56,7 +56,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
-    PrintLog, RevokedTicketSecret,
+    PrintLog, RevokedTicketSecret, Transaction,
 )
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
@@ -1783,3 +1783,23 @@ class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
     class Meta:
         model = BlockedTicketSecret
         fields = ('id', 'secret', 'updated', 'blocked')
+
+
+class TransactionSerializer(I18nAwareModelSerializer):
+    order = serializers.SlugRelatedField(slug_field="code", read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = (
+            "id", "order", "created", "datetime", "positionid", "count", "item", "variation",
+            "subevent", "price", "tax_rate", "tax_rule", "tax_code", "tax_value", "fee_type",
+            "internal_type"
+        )
+
+
+class OrganizerTransactionSerializer(TransactionSerializer):
+    event = serializers.SlugRelatedField(source="order.event", slug_field="slug", read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = TransactionSerializer.Meta.fields + ("event",)

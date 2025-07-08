@@ -57,9 +57,9 @@ from pretix.api.serializers.order import (
     BlockedTicketSecretSerializer, InvoiceSerializer, OrderCreateSerializer,
     OrderPaymentCreateSerializer, OrderPaymentSerializer,
     OrderPositionSerializer, OrderRefundCreateSerializer,
-    OrderRefundSerializer, OrderSerializer, PriceCalcSerializer,
-    PrintLogSerializer, RevokedTicketSecretSerializer,
-    SimulatedOrderSerializer,
+    OrderRefundSerializer, OrderSerializer, OrganizerTransactionSerializer,
+    PriceCalcSerializer, PrintLogSerializer, RevokedTicketSecretSerializer,
+    SimulatedOrderSerializer, TransactionSerializer,
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
@@ -80,6 +80,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, PrintLog, QuestionAnswer, RevokedTicketSecret,
+    Transaction,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.pdf import get_images
@@ -2030,3 +2031,61 @@ class BlockedSecretViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return BlockedTicketSecret.objects.filter(event=self.request.event)
+
+
+with scopes_disabled():
+    class TransactionFilter(FilterSet):
+        order = django_filters.CharFilter(field_name='order', lookup_expr='code__iexact')
+        event = django_filters.CharFilter(field_name='order__event', lookup_expr='slug__iexact')
+        datetime_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
+        datetime_before = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='lt')
+        created_since = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='gte')
+        created_before = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='lt')
+
+        class Meta:
+            model = Transaction
+            fields = {
+                'item': ['exact', 'in'],
+                'variation': ['exact', 'in'],
+                'subevent': ['exact', 'in'],
+                'tax_rule': ['exact', 'in'],
+                'tax_code': ['exact', 'in'],
+                'tax_rate': ['exact', 'in'],
+                'fee_type': ['exact', 'in'],
+            }
+
+
+class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TransactionSerializer
+    queryset = Transaction.objects.none()
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
+    ordering = ('datetime', 'pk')
+    ordering_fields = ('datetime', 'created', 'id',)
+    filterset_class = TransactionFilter
+    permission = 'can_view_orders'
+
+    def get_queryset(self):
+        return Transaction.objects.filter(order__event=self.request.event).select_related("order")
+
+
+class OrganizerTransactionViewSet(TransactionViewSet):
+    serializer_class = OrganizerTransactionSerializer
+    permission = None
+
+    def get_queryset(self):
+        qs = Transaction.objects.filter(
+            order__event__organizer=self.request.organizer
+        ).select_related("order", "order__event")
+
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            qs = qs.filter(
+                order__event__in=self.request.auth.get_events_with_permission("can_view_orders"),
+            )
+        elif self.request.user.is_authenticated:
+            qs = qs.filter(
+                order__event__in=self.request.user.get_events_with_permission("can_view_orders", request=self.request)
+            )
+        else:
+            raise PermissionDenied("Unknown authentication scheme")
+
+        return qs
