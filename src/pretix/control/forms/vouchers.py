@@ -233,7 +233,7 @@ class VoucherForm(I18nModelForm):
                 data, self.instance.event
             )
         except ValidationError as e:
-            raise ValidationError({"quota": e.message})
+            raise ValidationError({"subevent": e.message})
         try:
             Voucher.clean_max_usages(data, self.instance.redeemed)
         except ValidationError as e:
