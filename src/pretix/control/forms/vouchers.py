@@ -208,12 +208,15 @@ class VoucherForm(I18nModelForm):
             if self.instance and self.instance.pk:
                 cnt -= self.instance.redeemed  # these do not need quota any more
 
-        Voucher.clean_item_properties(
-            data, self.instance.event,
-            self.instance.quota, self.instance.item, self.instance.variation,
-            seats_given=data.get('seat') or data.get('seats'),
-            block_quota=data.get('block_quota')
-        )
+        try:
+            Voucher.clean_item_properties(
+                data, self.instance.event,
+                self.instance.quota, self.instance.item, self.instance.variation,
+                seats_given=data.get('seat') or data.get('seats'),
+                block_quota=data.get('block_quota')
+            )
+        except ValidationError as e:
+            raise ValidationError({"itemvar": e.message})
         if not data.get('show_hidden_items') and (
             (self.instance.quota and all(i.hide_without_voucher for i in self.instance.quota.items.all()))
             or (self.instance.item and self.instance.item.hide_without_voucher)
@@ -224,10 +227,17 @@ class VoucherForm(I18nModelForm):
                       'them.')
                 ]
             })
-        Voucher.clean_subevent(
-            data, self.instance.event
-        )
-        Voucher.clean_max_usages(data, self.instance.redeemed)
+
+        try:
+            Voucher.clean_subevent(
+                data, self.instance.event
+            )
+        except ValidationError as e:
+            raise ValidationError({"subevent": e.message})
+        try:
+            Voucher.clean_max_usages(data, self.instance.redeemed)
+        except ValidationError as e:
+            raise ValidationError({"max_usages": e.message})
         check_quota = Voucher.clean_quota_needs_checking(
             data, self.initial_instance_data,
             item_changed=data.get('itemvar') != self.initial.get('itemvar'),
