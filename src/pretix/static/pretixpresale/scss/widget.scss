@@ -1115,11 +1115,16 @@ $table-bg-accent: rgba(128, 128, 128, 0.05);
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-sizing: border-box;
-    padding: 0;
+    padding: 40px 0 0;
+    background: var(--pretix-brand-primary);
   }
   .pretix-widget-frame-close,
   .pretix-widget-lightbox-close {
-    top: 12px;
+    top: 9px;
     right: 12px;
+
+    button:focus {
+      outline-color: #fff;
+    }
   }
 }
