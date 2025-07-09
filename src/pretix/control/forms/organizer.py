@@ -778,7 +778,6 @@ class GiftCardUpdateForm(forms.ModelForm):
                 'data-select2-url': reverse('control:organizer.ticket_select2', kwargs={
                     'organizer': organizer.slug,
                 }),
-                'data-placeholder': _('Ticket')
             }
         )
         self.fields['owner_ticket'].widget.choices = self.fields['owner_ticket'].choices
@@ -814,7 +813,6 @@ class ReusableMediumUpdateForm(forms.ModelForm):
                 'data-select2-url': reverse('control:organizer.ticket_select2', kwargs={
                     'organizer': organizer.slug,
                 }),
-                'data-placeholder': _('Ticket')
             }
         )
         self.fields['linked_orderposition'].widget.choices = self.fields['linked_orderposition'].choices
@@ -827,7 +825,6 @@ class ReusableMediumUpdateForm(forms.ModelForm):
                 'data-select2-url': reverse('control:organizer.giftcards.select2', kwargs={
                     'organizer': organizer.slug,
                 }),
-                'data-placeholder': _('Gift card')
             }
         )
         self.fields['linked_giftcard'].widget.choices = self.fields['linked_giftcard'].choices
@@ -841,7 +838,6 @@ class ReusableMediumUpdateForm(forms.ModelForm):
                     'data-select2-url': reverse('control:organizer.customers.select2', kwargs={
                         'organizer': organizer.slug,
                     }),
-                    'data-placeholder': _('Customer')
                 }
             )
             self.fields['customer'].widget.choices = self.fields['customer'].choices

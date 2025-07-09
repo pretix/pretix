@@ -115,7 +115,6 @@ class VoucherForm(I18nModelForm):
                         'event': instance.event.slug,
                         'organizer': instance.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices

@@ -279,7 +279,6 @@ class OrderMailForm(BaseMailForm):
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
@@ -360,7 +359,6 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
                         'event': self.event.slug,
                         'organizer': self.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
