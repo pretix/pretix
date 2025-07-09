@@ -689,6 +689,8 @@ class CartManager:
         voucher_use_diff = Counter()
         operations = []
 
+        raise CartError(f"{items} ________ {self._items_cache}")
+
         for i in items:
             if self.event.has_subevents:
                 if not i.get('subevent') or int(i.get('subevent')) not in self._subevents_cache:
