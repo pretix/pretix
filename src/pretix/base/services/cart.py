@@ -683,13 +683,32 @@ class CartManager:
 
     def add_new_items(self, items: List[dict]):
         # Fetch items from the database
+
+        item_ids = [i['item'] for i in items]
+        filtered_items = [i for i in item_ids if i and i not in self._items_cache]
+
+        related = self.event.items.select_related('category')
+
+        final = {
+            i.pk: i
+            for i in related.prefetch_related(
+                'addons', 'bundles', 'addons__addon_category', 'quotas'
+            ).annotate(
+                has_variations=Count('variations'),
+            ).filter(
+                id__in=filtered_items
+            ).order_by()
+        }
+
+        raise CartError(f"{filtered_items} ________ {self._items_cache} ________ {related} ________ {final}")
+
         self._update_items_cache([i['item'] for i in items], [i['variation'] for i in items])
         self._update_subevents_cache([i['subevent'] for i in items if i.get('subevent')])
         quota_diff = Counter()
         voucher_use_diff = Counter()
         operations = []
 
-        raise CartError(f"{items} ________ {self._items_cache}")
+
 
         for i in items:
             if self.event.has_subevents:
