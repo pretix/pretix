@@ -1123,8 +1123,14 @@ $table-bg-accent: rgba(128, 128, 128, 0.05);
     top: 8px;
     right: 12px;
 
-    button:focus {
-      outline-color: #fff;
+    button {
+      background-color: #fff;
+      path {
+        fill: var(--pretix-brand-primary) !important;
+      }
+      &:focus {
+        outline-color: #fff;
+      }
     }
   }
 }
