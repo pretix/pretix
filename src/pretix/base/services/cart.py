@@ -687,6 +687,8 @@ class CartManager:
         item_ids = [i['item'] for i in items]
         filtered_items = [i for i in item_ids if i and i not in self._items_cache]
 
+        qs = self.event.items.filter(id__in=filtered_items)
+
         related = self.event.items.select_related('category')
 
         final = {
@@ -700,7 +702,7 @@ class CartManager:
             ).order_by()
         }
 
-        raise CartError(f"{filtered_items} ________ {self._items_cache} ________ {related} ________ {final}")
+        raise CartError(f"{list(qs)} ________ {self._items_cache} ________ {related} ________ {final}")
 
         self._update_items_cache([i['item'] for i in items], [i['variation'] for i in items])
         self._update_subevents_cache([i['subevent'] for i in items if i.get('subevent')])
