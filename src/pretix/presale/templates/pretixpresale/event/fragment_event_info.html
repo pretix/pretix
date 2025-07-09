@@ -60,15 +60,6 @@
                     </span>
                 {% endif %}
             {% endif %}
-            <br>
-            {% if subevent %}
-                <a href="{% eventurl event "presale:event.ical.download" subevent=subevent.pk %}">
-            {% else %}
-                <a href="{% eventurl event "presale:event.ical.download" %}">
-            {% endif %}
-            <span class="fa fa-calendar" aria-hidden="true"></span>
-            {% trans "Add to Calendar" %}
-            </a>
         </p>
     </div>
 {% endif %}

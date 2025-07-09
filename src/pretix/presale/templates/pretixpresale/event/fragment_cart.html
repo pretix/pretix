@@ -433,6 +433,20 @@
         </div>
     {% endfor %}
     </div>
+
+    {% if calendar %}
+        <div role="rowgroup" class="cart-rowgroup-calendar">
+            <div role="row" class="row cart-row">
+                <div role="cell" class="calendar">
+                    <a href="{% eventurl event "presale:cart.ical.download" %}">
+                    <span class="fa fa-calendar" aria-hidden="true"></span>
+                    {% trans "Add to Calendar" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     {% if not hide_prices %}
         <div role="rowgroup" class="cart-rowgroup-total">
         {% if event.settings.display_net_prices and cart.tax_total %}

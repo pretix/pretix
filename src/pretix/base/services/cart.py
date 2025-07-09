@@ -443,17 +443,17 @@ class CartManager:
                     raise CartError(error_messages['unavailable'])
 
             if op.subevent and op.item.pk in op.subevent.item_overrides and not op.subevent.item_overrides[op.item.pk].is_available():
-                raise CartError(error_messages['not_for_sale'])
+                raise CartError(f"L446: {error_messages['not_for_sale']}")
 
             if op.subevent and op.variation and op.variation.pk in op.subevent.var_overrides and \
                     not op.subevent.var_overrides[op.variation.pk].is_available():
-                raise CartError(error_messages['not_for_sale'])
+                raise CartError(f"L450: {error_messages['not_for_sale']}")
 
             if op.item.has_variations and not op.variation:
-                raise CartError(error_messages['not_for_sale'])
+                raise CartError(f"L453: {error_messages['not_for_sale']}")
 
             if op.variation and op.variation.item_id != op.item.pk:
-                raise CartError(error_messages['not_for_sale'])
+                raise CartError(f"L456: {error_messages['not_for_sale']}")
 
             if op.voucher and not op.voucher.applies_to(op.item, op.variation):
                 raise CartError(error_messages['voucher_invalid_item'])
