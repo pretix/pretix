@@ -234,10 +234,10 @@ def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_r
     elif key.startswith('bundled-subevent-item_'):
         try:
             subparts = value.split("_", 2)
-            e_id = int(subparts[0])
+            item_id = int(subparts[0])
             subevent_id = int(subparts[1])
             return {
-                'item': e_id,
+                'item': item_id,
                 'variation': None,
                 'count': 1,
                 'price': price,
