@@ -715,7 +715,7 @@ class CartManager:
             # If they are not, the user supplied item IDs which either do not exist or belong to
             # a different event
             if i['item'] not in self._items_cache or (i['variation'] and i['variation'] not in self._variations_cache):
-                raise CartError(error_messages['not_for_sale'])
+                raise CartError(f"718: {error_messages['not_for_sale']}")
 
             item = self._items_cache[i['item']]
             variation = self._variations_cache[i['variation']] if i['variation'] is not None else None
@@ -767,7 +767,7 @@ class CartManager:
                 if bundle.bundled_item_id not in self._items_cache or (
                         bundle.bundled_variation_id and bundle.bundled_variation_id not in self._variations_cache
                 ):
-                    raise CartError(error_messages['not_for_sale'])
+                    raise CartError(f"L770: {error_messages['not_for_sale']}")
                 bitem = self._items_cache[bundle.bundled_item_id]
                 bvar = self._variations_cache[bundle.bundled_variation_id] if bundle.bundled_variation_id else None
                 bundle_quotas = list(bitem.quotas.filter(subevent=subevent)
@@ -908,7 +908,7 @@ class CartManager:
             # If they are not, the user supplied item IDs which either do not exist or belong to
             # a different event
             if a['item'] not in self._items_cache or (a['variation'] and a['variation'] not in self._variations_cache):
-                raise CartError(error_messages['not_for_sale'])
+                raise CartError(f"L911: {error_messages['not_for_sale']}")
 
             # Only attach addons to things that are actually in this user's cart
             if a['addon_to'] not in cpcache:
