@@ -41,7 +41,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import EmailValidator
 from django.db.models.functions import Upper
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.email import get_available_placeholders
@@ -115,7 +115,6 @@ class VoucherForm(I18nModelForm):
                         'event': instance.event.slug,
                         'organizer': instance.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices

@@ -176,7 +176,6 @@ class AutoCheckinRuleForm(forms.ModelForm):
                         "organizer": self.event.organizer.slug,
                     },
                 ),
-                "data-placeholder": _("Check-in list"),
             }
         )
         self.fields["list"].widget.choices = self.fields["list"].choices
