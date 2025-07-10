@@ -2444,7 +2444,7 @@ class CheckinFilterForm(FilterForm):
                     'event': self.event.slug,
                     'organizer': self.event.organizer.slug,
                 }),
-                'data-placeholder': _('All Check-in lists'),
+                'data-placeholder': _('All check-in lists'),
             }
         )
         self.fields['checkin_list'].widget.choices = self.fields['checkin_list'].choices
