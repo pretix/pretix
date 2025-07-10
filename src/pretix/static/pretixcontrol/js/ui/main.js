@@ -330,6 +330,7 @@ var form_handlers = function (el) {
                 dependent.prop('disabled', !enabled).closest('.form-group, .form-field-boundary').toggleClass('disabled', !enabled);
                 if (!enabled && !dependent.is('[data-checkbox-dependency-visual]')) {
                     dependent.prop('checked', false);
+                    dependent.trigger('change')
                 }
             };
         update();
