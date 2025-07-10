@@ -113,7 +113,6 @@ class EventWizardFoundationForm(forms.Form):
                 attrs={
                     'data-model-select2': 'generic',
                     'data-select2-url': reverse('control:organizers.select2') + '?can_create=1',
-                    'data-placeholder': _('Organizer')
                 }
             ),
             empty_label=None,

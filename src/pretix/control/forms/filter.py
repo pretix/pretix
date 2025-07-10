@@ -1246,9 +1246,7 @@ class SubEventFilterForm(FilterForm):
     )
     query = forms.CharField(
         label=_('Event name'),
-        widget=forms.TextInput(attrs={
-            'placeholder': _('Event name'),
-        }),
+        widget=forms.TextInput(),
         required=False
     )
 
@@ -1693,9 +1691,7 @@ class EventFilterForm(FilterForm):
     )
     query = forms.CharField(
         label=_('Event name'),
-        widget=forms.TextInput(attrs={
-            'placeholder': _('Event name'),
-        }),
+        widget=forms.TextInput(),
         required=False
     )
     date_from = forms.DateField(
@@ -2448,7 +2444,7 @@ class CheckinFilterForm(FilterForm):
                     'event': self.event.slug,
                     'organizer': self.event.organizer.slug,
                 }),
-                'data-placeholder': _('Check-in list'),
+                'data-placeholder': _('All check-in lists'),
             }
         )
         self.fields['checkin_list'].widget.choices = self.fields['checkin_list'].choices

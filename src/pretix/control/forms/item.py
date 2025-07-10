@@ -47,9 +47,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import (
-    gettext as __, gettext_lazy as _, pgettext_lazy,
-)
+from django.utils.translation import gettext as __, gettext_lazy as _
 from django_scopes.forms import (
     SafeModelChoiceField, SafeModelMultipleChoiceField,
 )
@@ -330,7 +328,6 @@ class QuotaForm(I18nModelForm):
                         'event': self.event.slug,
                         'organizer': self.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
@@ -351,6 +348,9 @@ class QuotaForm(I18nModelForm):
         ]
         field_classes = {
             'subevent': SafeModelChoiceField,
+        }
+        widgets = {
+            'size': forms.NumberInput(attrs={'placeholder': _('Unlimited')})
         }
 
     def save(self, *args, **kwargs):

@@ -409,7 +409,6 @@ class OrderPositionAddForm(forms.Form):
                         'event': order.event.slug,
                         'organizer': order.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
@@ -705,7 +704,6 @@ class OrderContactForm(forms.ModelForm):
                     'data-select2-url': reverse('control:organizer.customers.select2', kwargs={
                         'organizer': self.instance.event.organizer.slug,
                     }),
-                    'data-placeholder': _('Customer')
                 }
             )
             self.fields['customer'].widget.choices = self.fields['customer'].choices
