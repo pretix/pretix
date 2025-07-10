@@ -8,6 +8,7 @@ pretix
    :target: https://docs.pretix.eu/
 
 .. image:: https://github.com/pretix/pretix/workflows/Tests/badge.svg
+   :target: https://github.com/pretix/pretix/actions/workflows/tests.yml
 
 .. image:: https://codecov.io/gh/pretix/pretix/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pretix/pretix
