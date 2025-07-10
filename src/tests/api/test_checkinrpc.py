@@ -79,7 +79,7 @@ def order(event, item, other_item, taxrule):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={'full_name': "Peter"},
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            secret=b"z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
         )
         OrderPosition.objects.create(
@@ -89,7 +89,7 @@ def order(event, item, other_item, taxrule):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={'full_name': "Michael"},
-            secret="sf4HZG73fU6kwddgjg2QOusFbYZwVKpK",
+            secret=b"sf4HZG73fU6kwddgjg2QOusFbYZwVKpK",
             pseudonymization_id="BACDEFGHKL",
         )
         OrderPosition.objects.create(
@@ -99,7 +99,7 @@ def order(event, item, other_item, taxrule):
             addon_to=op1,
             variation=None,
             price=Decimal("0"),
-            secret="3u4ez6vrrbgb3wvezxhq446p548dt2wn",
+            secret=b"3u4ez6vrrbgb3wvezxhq446p548dt2wn",
             pseudonymization_id="FOOBAR12345",
         )
         return o
@@ -127,7 +127,7 @@ def order2(event2, item_on_event2):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={'full_name': "John"},
-            secret="y8tPmyc5BEK2G9pifSNumwp4NXAaIE4P",
+            secret=b"y8tPmyc5BEK2G9pifSNumwp4NXAaIE4P",
             pseudonymization_id="A23456789",
         )
         OrderPosition.objects.create(
@@ -137,7 +137,7 @@ def order2(event2, item_on_event2):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={'full_name': "Paul"},
-            secret="xrahgLCfodoNOIZ4uxn75gNBM1bb6m1h",
+            secret=b"xrahgLCfodoNOIZ4uxn75gNBM1bb6m1h",
             pseudonymization_id="B23456797345",
         )
         return o
@@ -267,7 +267,7 @@ def test_by_pk_not_allowed(token_client, organizer, clist, event, order):
 def test_by_secret(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
-    resp = _redeem(token_client, organizer, clist, p.secret, {})
+    resp = _redeem(token_client, organizer, clist, p.secret.decode(), {})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
 
@@ -276,9 +276,9 @@ def test_by_secret(token_client, organizer, clist, event, order):
 def test_by_secret_special_chars(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
-    p.secret = "abc+-/=="
+    p.secret = b"abc+-/=="
     p.save()
-    resp = _redeem(token_client, organizer, clist, p.secret, {})
+    resp = _redeem(token_client, organizer, clist, p.secret.decode(), {})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
 
@@ -297,7 +297,7 @@ def test_by_medium(token_client, organizer, clist, event, order):
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
         ci = clist.checkins.get(position=order.positions.first())
-    assert ci.raw_barcode == "abcdef"
+    assert ci.raw_barcode == b"abcdef"
     assert ci.raw_source_type == "barcode"
 
 
@@ -330,7 +330,7 @@ def test_by_medium_wrong_event(token_client, organizer, clist, event, order2):
     assert resp.data['reason'] == 'invalid'
     with scopes_disabled():
         ci = clist.checkins.get()
-    assert ci.raw_barcode == "abcdef"
+    assert ci.raw_barcode == b"abcdef"
     assert ci.raw_source_type == "barcode"
 
 
@@ -793,7 +793,7 @@ def test_redeem_unknown(token_client, organizer, clist, event, order):
 def test_redeem_unknown_revoked(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
-        event.revoked_secrets.create(position=p, secret='revoked_secret')
+        event.revoked_secrets.create(position=p, secret=b'revoked_secret')
     resp = _redeem(token_client, organizer, clist, 'revoked_secret', {})
     assert resp.status_code == 400
     assert resp.data["status"] == "error"
@@ -806,7 +806,7 @@ def test_redeem_unknown_revoked(token_client, organizer, clist, event, order):
 def test_redeem_unknown_revoked_force(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
-        event.revoked_secrets.create(position=p, secret='revoked_secret')
+        event.revoked_secrets.create(position=p, secret=b'revoked_secret')
     resp = _redeem(token_client, organizer, clist, 'revoked_secret', {'force': True})
     assert resp.status_code == 201
     assert resp.data["status"] == "ok"
@@ -867,7 +867,7 @@ def test_redeem_addon_if_match_ambiguous(token_client, organizer, clist, item, o
 @pytest.mark.django_db
 def test_redeem_addon_if_match_and_revoked_force(token_client, organizer, clist, other_item, event, order):
     with scopes_disabled():
-        event.revoked_secrets.create(position=order.positions.get(positionid=1), secret='revoked_secret')
+        event.revoked_secrets.create(position=order.positions.get(positionid=1), secret=b'revoked_secret')
         clist.all_products = False
         clist.addon_match = True
         clist.save()

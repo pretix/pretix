@@ -2498,7 +2498,7 @@ class OrderPosition(AbstractPosition):
         verbose_name=_('Tax value')
     )
 
-    secret = models.CharField(max_length=255, null=False, blank=False, db_index=True)
+    secret = models.BinaryField(null=False, blank=False, db_index=True)
     web_secret = models.CharField(max_length=32, default=generate_secret, db_index=True)
     pseudonymization_id = models.CharField(
         max_length=16,
@@ -2616,6 +2616,13 @@ class OrderPosition(AbstractPosition):
             else:
                 reasons[b] = b
         return reasons
+
+    @property
+    def secret_text(self):
+        if isinstance(self.secret, str):
+            return self.secret
+        else:
+            return self.secret.decode("utf-8", "replace")
 
     @property
     def can_modify_answers(self) -> bool:
@@ -3436,7 +3443,7 @@ class RevokedTicketSecret(models.Model):
         related_name='revoked_secrets',
         null=True,
     )
-    secret = models.TextField(db_index=True)
+    secret = models.BinaryField(db_index=True)
     created = models.DateTimeField(auto_now_add=True)
 
 
@@ -3448,7 +3455,7 @@ class BlockedTicketSecret(models.Model):
         related_name='blocked_secrets',
         null=True,
     )
-    secret = models.TextField(db_index=True)
+    secret = models.BinaryField(db_index=True)
     blocked = models.BooleanField()
     updated = models.DateTimeField(auto_now=True)
 

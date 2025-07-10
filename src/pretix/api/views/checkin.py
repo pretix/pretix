@@ -466,20 +466,21 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         F('addon_to').asc(nulls_first=True)
     )
 
+    raw_barcode_str = raw_barcode.decode("utf-8", "replace")
     q = Q(secret=raw_barcode)
     if any(cl.addon_match for cl in checkinlists):
         q |= Q(addon_to__secret=raw_barcode)
-    if raw_barcode.isnumeric() and not untrusted_input and legacy_url_support:
-        q |= Q(pk=raw_barcode)
+    if raw_barcode_str.isnumeric() and not untrusted_input and legacy_url_support:
+        q |= Q(pk=raw_barcode_str)
 
     op_candidates = list(queryset.filter(q))
-    if not op_candidates and '+' in raw_barcode and legacy_url_support:
+    if not op_candidates and b'+' in raw_barcode and legacy_url_support:
         # In application/x-www-form-urlencoded, you can encodes space ' ' with '+' instead of '%20'.
         # `id`, however, is part of a path where this technically is not allowed. Old versions of our
         # scan apps still do it, so we try work around it!
-        q = Q(secret=raw_barcode.replace('+', ' '))
+        q = Q(secret=raw_barcode.replace(b'+', b' '))
         if any(cl.addon_match for cl in checkinlists):
-            q |= Q(addon_to__secret=raw_barcode.replace('+', ' '))
+            q |= Q(addon_to__secret=raw_barcode.replace(b'+', b' '))
         op_candidates = list(queryset.filter(q))
 
     # 2. Handle the "nothing found" case: Either it's really a bogus secret that we don't know (-> error), or it
@@ -490,7 +491,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             media = ReusableMedium.objects.select_related('linked_orderposition').active().get(
                 organizer_id=checkinlists[0].event.organizer_id,
                 type=source_type,
-                identifier=raw_barcode,
+                identifier=raw_barcode_str,
                 linked_orderposition__isnull=False,
             )
             raw_barcode_for_checkin = raw_barcode
@@ -865,7 +866,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         answers_data = self.request.data.get('answers')
         return _redeem_process(
             checkinlists=[self.checkinlist],
-            raw_barcode=kwargs['pk'],
+            raw_barcode=kwargs['pk'].encode("utf-8"),
             answers_data=answers_data,
             datetime=dt,
             force=force,
@@ -899,7 +900,7 @@ class CheckinRPCRedeemView(views.APIView):
         s.is_valid(raise_exception=True)
         return _redeem_process(
             checkinlists=s.validated_data['lists'],
-            raw_barcode=s.validated_data['secret'],
+            raw_barcode=s.validated_data['secret'].encode("utf-8"),
             source_type=s.validated_data['source_type'],
             answers_data=s.validated_data.get('answers'),
             datetime=s.validated_data.get('datetime') or now(),

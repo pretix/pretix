@@ -189,7 +189,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "tax_rate": "0.00",
             "tax_value": "0.00",
             "tax_code": None,
-            "secret": op.secret,
+            "secret": op.secret.decode(),
             "addon_to": None,
             "subevent": None,
             "checkins": [],

@@ -630,7 +630,7 @@ def test_import_secret(user, event, item):
     import_orders.apply(
         args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
     ).get()
-    assert OrderPosition.objects.filter(secret="Dieter").count() == 1
+    assert OrderPosition.objects.filter(secret=b"Dieter").count() == 1
 
 
 @pytest.mark.django_db

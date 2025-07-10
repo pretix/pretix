@@ -1417,9 +1417,9 @@ class OrderChangeTests(SoupTest):
         r = self.client.get('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ))
-        assert self.op1.secret[:5] in r.content.decode()
-        assert self.op2.secret[:5] in r.content.decode()
-        assert self.op3.secret[:5] not in r.content.decode()
+        assert self.op1.secret.decode()[:5] in r.content.decode()
+        assert self.op2.secret.decode()[:5] in r.content.decode()
+        assert self.op3.secret.decode()[:5] not in r.content.decode()
 
     def test_change_item_success(self):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(

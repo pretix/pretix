@@ -119,7 +119,7 @@ def order(event, item, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            secret=b"z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
             positionid=1,
         )
@@ -129,7 +129,7 @@ def order(event, item, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="YBiYJrmF5ufiTLdV1iDf",
+            secret=b"YBiYJrmF5ufiTLdV1iDf",
             pseudonymization_id="JKLM",
             canceled=True,
             positionid=2,
@@ -163,7 +163,7 @@ def order2(event2, item2):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="asdlfksdgdfgxcbfgdhfg",
+            secret=b"asdlfksdgdfgxcbfgdhfg",
             pseudonymization_id="AC892345",
             positionid=1,
         )

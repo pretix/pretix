@@ -146,7 +146,7 @@ def order(event, item, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            secret=b"z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
             positionid=1,
         )
@@ -156,7 +156,7 @@ def order(event, item, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="YBiYJrmF5ufiTLdV1iDf",
+            secret=b"YBiYJrmF5ufiTLdV1iDf",
             pseudonymization_id="JKLM",
             canceled=True,
             positionid=2,
@@ -883,7 +883,7 @@ def test_order_create_position_secret_optional(token_client, organizer, event, i
     assert resp.status_code == 201
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
-        assert o.positions.first().secret == "aaa"
+        assert o.positions.first().secret == b"aaa"
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(

@@ -397,13 +397,22 @@
                     </div>
                     <div class="row control-group squaresize">
                         <div class="col-sm-12">
-                            <label for="toolbox-col">{% trans "QR color" %}</label><br>
+                            <label for="toolbox-qrcolor">{% trans "QR color" %}</label><br>
                             <div class="input-group">
                                 <input type="text" value="#000000" class="input-block-level form-control colorpickerfield"
                                        id="toolbox-qrcolor">
                                 <span class="input-group-addon contrast-icon">
                                 </span>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row control-group squaresize">
+                        <div class="col-sm-12">
+                            <label for="toolbox-barcodeformat">{% trans "Barcode format" %}</label><br>
+                            <select class="input-block-level form-control" id="toolbox-barcodeformat">
+                                <option value="qr">QR Code</option>
+                                <option value="aztec">Aztec barcode</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row control-group squaresize">

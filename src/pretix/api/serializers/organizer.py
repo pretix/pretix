@@ -154,7 +154,7 @@ class FlexibleTicketRelatedField(serializers.PrimaryKeyRelatedField):
         elif isinstance(data, str):
             try:
                 return queryset.get(
-                    Q(secret=data)
+                    Q(secret=data.encode())
                     | Q(pseudonymization_id=data)
                     | Q(pk__in=ReusableMedium.objects.filter(
                         organizer=self.context['organizer'],

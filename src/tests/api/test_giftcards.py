@@ -152,7 +152,7 @@ def test_giftcard_detail_expand(token_client, organizer, event, giftcard):
         "tax_rate": "0.00",
         "tax_value": "0.00",
         "tax_code": None,
-        "secret": op.secret,
+        "secret": op.secret.decode(),
         "addon_to": None,
         "subevent": None,
         "checkins": [],

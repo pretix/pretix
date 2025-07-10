@@ -134,7 +134,7 @@ def order(event, item, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            secret=b"z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
             positionid=1,
         )
@@ -144,7 +144,7 @@ def order(event, item, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="YBiYJrmF5ufiTLdV1iDf",
+            secret=b"YBiYJrmF5ufiTLdV1iDf",
             pseudonymization_id="JKLM",
             canceled=True,
             positionid=2,
@@ -1471,7 +1471,7 @@ def test_position_update_change_price_and_tax_rule(token_client, organizer, even
 @pytest.mark.django_db
 def test_position_update_secret(token_client, organizer, event, order, item):
     with scopes_disabled():
-        order.positions.create(item=item, price=Decimal('23.00'), secret='alreadyused')
+        order.positions.create(item=item, price=Decimal('23.00'), secret=b'alreadyused')
         p = order.positions.first()
         psw = p.web_secret
     resp = token_client.patch(

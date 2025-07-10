@@ -52,11 +52,11 @@ def env0():
     shirt_red = ItemVariation.objects.create(item=shirt, default_price=14, value="Red")
     OrderPosition.objects.create(
         order=o1, item=shirt, variation=shirt_red,
-        price=12, attendee_name_parts={}, secret='1234'
+        price=12, attendee_name_parts={}, secret=b'1234'
     )
     OrderPosition.objects.create(
         order=o1, item=shirt, variation=shirt_red,
-        price=12, attendee_name_parts={}, secret='5678'
+        price=12, attendee_name_parts={}, secret=b'5678'
     )
     return event, o1
 

@@ -267,9 +267,15 @@ def assign_ticket_secret(event, position, force_invalidate_if_revokation_list_us
         force_invalidate=force_invalidate,
         **kwargs
     )
+    if isinstance(secret, str):
+        secret = secret.encode("utf-8")
+    assert isinstance(secret, bytes)
     changed = position.secret != secret
     if position.secret and changed and gen.use_revocation_list and position.pk:
-        position.revoked_secrets.create(event=event, secret=position.secret)
+        old_secret = position.secret
+        if isinstance(old_secret, str):
+            old_secret = old_secret.encode("utf-8")
+        position.revoked_secrets.create(event=event, secret=old_secret)
     position.secret = secret
     if save and changed:
         position.save()

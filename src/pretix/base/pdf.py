@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import base64
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -47,8 +47,12 @@ from collections import OrderedDict, defaultdict
 from functools import partial
 from io import BytesIO
 
+import aztec_code_generator
 import jsonschema
 import reportlab.rl_config
+import reportlab.graphics.widgetbase
+import reportlab.lib.validators
+import reportlab.lib.attrmap
 from bidi import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -96,7 +100,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Ticket code (barcode content)"),
         "editor_sample": "tdmruoekvkpbv1o2mv8xccvqcikvr58u",
         "evaluate": lambda orderposition, order, event: (
-            orderposition.secret[:30] + "…" if len(orderposition.secret) > 32 else orderposition.secret
+            orderposition.secret_text[:30] + "…" if len(orderposition.secret_text) > 32 else orderposition.secret_text
         )
     }),
     ("order", {
@@ -756,6 +760,69 @@ def generate_compressed_addon_list(op, order, event):
     return addonlist
 
 
+class IsBytes(reportlab.lib.validators.Validator):
+    @staticmethod
+    def test(x):
+        return isinstance(x, bytes)
+isBytes = IsBytes()
+
+
+class AztecCodeWidget(reportlab.graphics.widgetbase.Widget):
+    codeName = "Aztec"
+    _attrMap = reportlab.lib.attrmap.AttrMap(
+        BASE = reportlab.graphics.widgetbase.Widget,
+        value = reportlab.lib.attrmap.AttrMapValue(isBytes, desc='Aztec data'),
+        ecLevel = reportlab.lib.attrmap.AttrMapValue(reportlab.lib.validators.isNumber, desc='Error correction percentage'),
+        barFillColor = reportlab.lib.attrmap.AttrMapValue(reportlab.lib.validators.isColor, desc='bar color'),
+        barWidth = reportlab.lib.attrmap.AttrMapValue(reportlab.lib.validators.isNumber, desc='Width of bars'),
+        barHeight = reportlab.lib.attrmap.AttrMapValue(reportlab.lib.validators.isNumber, desc='Height of bars'),
+        barBorder = reportlab.lib.attrmap.AttrMapValue(reportlab.lib.validators.isNumber, desc='Width of border'),
+    )
+    x = 0
+    y = 0
+    value = None
+    ecLevel = 23
+    barFillColor = reportlab.lib.colors.black
+    barHeight = 32 * mm
+    barWidth = 32 * mm
+    barBorder = 4
+
+    def __init__(self, value=b'Hello World', **kw):
+        for k, v in kw.items():
+            setattr(self, k, v)
+
+        self.__dict__["aztec"] = aztec_code_generator.AztecCode(value, ec_percent=self.ecLevel)
+
+    def draw(self):
+        g = reportlab.graphics.shapes.Group()
+
+        color = self.barFillColor
+        border = self.barBorder
+        width = self.barWidth
+        height = self.barHeight
+        x = self.x
+        y = self.y
+
+        g.add(reportlab.graphics.barcode.qr.SRect(x, y, width, height, fillColor=None))
+
+        min_wh = float(min(width, height))
+        box_size = min_wh / (self.aztec.size + border * 2.0)
+        offset_x = x + (width - min_wh) / 2.0
+        offset_y = y + (min_wh - height) / 2.0
+
+        for y in range(self.aztec.size):
+            for x in range(self.aztec.size):
+                if not self.aztec.matrix[y][x]:
+                    x1 = (x + border) * box_size
+                    y1 = (y + border + 1) * box_size
+                    s = reportlab.graphics.barcode.qr.SRect(
+                        offset_x + x1, offset_y + height - y1,
+                        box_size, box_size, fillColor=color
+                    )
+                    g.add(s)
+
+        return g
+
 class Renderer:
 
     def __init__(self, event, layout, background_file):
@@ -812,30 +879,56 @@ class Renderer:
 
     def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
         content = o.get('content', 'secret')
-        if content == 'secret':
-            # do not use get_text_content because it uses a shortened version of secret
-            # and does not deal with our default value here properly
-            content = op.secret
-        else:
-            content = self._get_text_content(op, order, o)
+        barcode_type = o.get('barcodeType', 'qr')
 
-        if len(content) == 0:
-            return
-
-        level = 'H'
-        if len(content) > 32:
-            level = 'M'
-        if len(content) > 128:
-            level = 'L'
         reqs = float(o['size']) * mm
-        kwargs = {}
-        if o.get('nowhitespace', False):
-            kwargs['barBorder'] = 0
 
-        if o.get('color'):
-            kwargs['barFillColor'] = Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255)
+        if barcode_type == 'qr':
+            if content == 'secret':
+                # do not use get_text_content because it uses a shortened version of secret
+                # and does not deal with our default value here properly
+                content = op.secret_text
+            else:
+                content = self._get_text_content(op, order, o)
 
-        qrw = QrCodeWidget(content, barLevel=level, barHeight=reqs, barWidth=reqs, **kwargs)
+            if len(content) == 0:
+                return
+
+            level = 'H'
+            if len(content) > 32:
+                level = 'M'
+            if len(content) > 128:
+                level = 'L'
+            kwargs = {}
+            if o.get('nowhitespace', False):
+                kwargs['barBorder'] = 0
+
+            if o.get('color'):
+                kwargs['barFillColor'] = Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255)
+
+            qrw = QrCodeWidget(content, barLevel=level, barHeight=reqs, barWidth=reqs, **kwargs)
+
+        elif barcode_type == 'aztec':
+            if content == 'secret':
+                content = op.secret
+            else:
+                content = self._get_text_content(op, order, o)
+
+            if len(content) == 0:
+                return
+
+            kwargs = {}
+            if o.get('nowhitespace', False):
+                kwargs['barBorder'] = 0
+
+            if o.get('color'):
+                kwargs['barFillColor'] = Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255)
+
+            qrw = AztecCodeWidget(content, barHeight=reqs, barWidth=reqs, **kwargs)
+
+        else:
+            raise NotImplementedError()
+
         d = Drawing(reqs, reqs)
         d.add(qrw)
         qr_x = float(o['left']) * mm
@@ -846,7 +939,9 @@ class Renderer:
         # This helps automated processing of the PDF file by 3rd parties, e.g. when checking tickets for resale
         data = {
             "issuer": settings.SITE_URL,
-            o.get('content', 'secret'): content
+            o.get('content', 'secret'):
+                (content.decode("ascii") if all(32 < i < 128 for i in content) else base64.b64encode(content).decode()) \
+                    if isinstance(content, bytes) else content,
         }
         canvas.saveState()
         canvas.setFont('Open Sans', .01)

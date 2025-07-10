@@ -455,7 +455,7 @@ class Secret(ImportColumn):
         super().__init__(*args)
 
     def clean(self, value, previous_values):
-        if value and (value in self._cached or OrderPosition.all.filter(order__event__organizer=self.event.organizer, secret=value).exists()):
+        if value and (value in self._cached or OrderPosition.all.filter(order__event__organizer=self.event.organizer, secret=value.encode()).exists()):
             raise ValidationError(
                 _('You cannot assign a position secret that already exists.')
             )
@@ -464,7 +464,7 @@ class Secret(ImportColumn):
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         if value:
-            position.secret = value
+            position.secret = value.encode()
 
 
 class Locale(ImportColumn):

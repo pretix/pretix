@@ -66,7 +66,7 @@ def order(event, item):
         variation=None,
         price=Decimal("23"),
         attendee_name_parts={'_legacy': "Peter"},
-        secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+        secret=b"z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
         pseudonymization_id="ABCDEFGHKL",
     )
     return o

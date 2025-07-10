@@ -122,7 +122,7 @@ def order(event, item, device, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            secret=b"z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
             positionid=1,
         )
@@ -132,7 +132,7 @@ def order(event, item, device, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="YBiYJrmF5ufiTLdV1iDf",
+            secret=b"YBiYJrmF5ufiTLdV1iDf",
             pseudonymization_id="JKLM",
             canceled=True,
             positionid=2,
@@ -173,7 +173,7 @@ def order2(event2, item2):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="asdlfksdgdfgxcbfgdhfg",
+            secret=b"asdlfksdgdfgxcbfgdhfg",
             pseudonymization_id="AC892345",
             positionid=1,
         )
@@ -1179,7 +1179,7 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="foobar",
+            secret=b"foobar",
             pseudonymization_id="BAZ",
         )
         order.refresh_from_db()
@@ -1945,7 +1945,7 @@ def test_order_delete_test_mode_voucher_cancelled_order(token_client, organizer,
 
 @pytest.mark.django_db
 def test_revoked_secret_list(token_client, organizer, event):
-    r = event.revoked_secrets.create(secret="abcd")
+    r = event.revoked_secrets.create(secret=b"abcd")
     res = {
         "id": r.id,
         "secret": "abcd",
@@ -1960,7 +1960,7 @@ def test_revoked_secret_list(token_client, organizer, event):
 
 @pytest.mark.django_db
 def test_blocked_secret_list(token_client, organizer, event):
-    r = event.blocked_secrets.create(secret="abcd", blocked=True)
+    r = event.blocked_secrets.create(secret=b"abcd", blocked=True)
     res = {
         "id": r.id,
         "secret": "abcd",

@@ -61,7 +61,7 @@ def event():
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"title": "Mr", "given_name": "Peter", "middle_name": "A", "family_name": "Jones"},
-            secret='hutjztuxhkbtwnesv2suqv26k6ttytxx'
+            secret=b'hutjztuxhkbtwnesv2suqv26k6ttytxx'
         )
         OrderPosition.objects.create(
             order=order_paid,
@@ -69,7 +69,7 @@ def event():
             variation=None,
             price=Decimal("13"),
             attendee_name_parts={"title": "Mrs", "given_name": "Andrea", "middle_name": "J", "family_name": "Zulu"},
-            secret='ggsngqtnmhx74jswjngw3fk8pfwz2a7k'
+            secret=b'ggsngqtnmhx74jswjngw3fk8pfwz2a7k'
         )
         yield event
 
@@ -160,7 +160,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
             variation=None,
             company='BARCORP',
             price=Decimal("23"),
-            secret='hutjztuxhkbtwnesv2suqv26k6ttytyy'
+            secret=b'hutjztuxhkbtwnesv2suqv26k6ttytyy'
         )
         InvoiceAddress.objects.create(
             order=event.orders.get(code='BAR'),
@@ -249,7 +249,7 @@ def test_csv_order_by_orderdatetime(event):
         variation=None,
         price=Decimal("23"),
         attendee_name_parts={"title": "Mx", "given_name": "Alex", "middle_name": "F", "family_name": "Nord"},
-        secret='asdfasdfasdfasdfasdfasdfasfdasdf'
+        secret=b'asdfasdfasdfasdfasdfasdfasfdasdf'
     )
 
     c = CSVCheckinList(event, organizer=event.organizer)

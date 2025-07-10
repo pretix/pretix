@@ -1528,9 +1528,9 @@ class OrderTestCase(BaseQuotaTestCase):
     def test_no_duplicate_position_secret(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                     admission=True, allow_cancel=False)
-        p1 = OrderPosition.objects.create(order=self.order, item=item1, secret='ABC',
+        p1 = OrderPosition.objects.create(order=self.order, item=item1, secret=b'ABC',
                                           variation=None, price=23)
-        p2 = OrderPosition.objects.create(order=self.order, item=item1, secret='ABC',
+        p2 = OrderPosition.objects.create(order=self.order, item=item1, secret=b'ABC',
                                           variation=None, price=23)
         assert p1.secret != p2.secret
         assert self.order.user_cancel_allowed is False

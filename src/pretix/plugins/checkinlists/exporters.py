@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import base64
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -602,7 +602,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 if cl.include_pending:
                     row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))
                 if form_data['secrets']:
-                    row.append(op.secret)
+                    row.append(op.secret.decode("ascii") if all(32 < i < 128 for i in op.secret) else base64.b64encode(op.secret).decode())
                 row.append(op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '') or op.order.email or '')
                 row.append(str(op.order.phone) if op.order.phone else '')
                 if self.event.has_subevents:
@@ -709,7 +709,7 @@ class CSVCheckinCodeList(CheckInListMixin, ListExporter):
 
         for op in qs:
             row = [
-                op.secret,
+                op.secret.decode("ascii") if all(32 < i < 128 for i in op.secret) else base64.b64encode(op.secret).decode(),
                 str(op.item),
                 (str(op.variation.value) if op.variation else ""),
                 _('Yes') if op.order.status == Order.STATUS_PAID else _('No'),
@@ -815,7 +815,7 @@ class CheckinLogList(ListExporter):
                 ci.get_type_display(),
                 ci.position.order.code if ci.position else '',
                 ci.position.positionid if ci.position else '',
-                ci.raw_barcode or ci.position.secret,
+                ci.raw_barcode or (ci.position.secret.decode("ascii") if all(32 < i < 128 for i in ci.position.secret) else base64.b64encode(ci.position.secret).decode()),
                 str(ci.position.item) if ci.position else (str(ci.raw_item) if ci.raw_item else ''),
                 name,
                 str(ci.device) if ci.device else '',

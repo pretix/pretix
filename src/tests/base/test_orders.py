@@ -4000,7 +4000,7 @@ def test_issue_when_paid_and_changed(event):
     gc1 = op.issued_gift_cards.get()
     assert gc1.value == op.price
     op.refresh_from_db()
-    assert op.secret == gc1.secret
+    assert op.secret == gc1.secret.encode()
 
     order.refresh_from_db()
     ocm = OrderChangeManager(order)

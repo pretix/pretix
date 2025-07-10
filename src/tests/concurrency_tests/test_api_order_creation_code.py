@@ -109,6 +109,6 @@ async def test_quota_race_condition_same_ticket_secret(live_server, session, dev
                   headers={"Authorization": f"Device {device.api_token}"}),
     )
     with scopes_disabled():
-        assert await sync_to_async(OrderPosition.objects.filter(secret="foobarbaz").count)() == 1
-        assert await sync_to_async(OrderPosition.objects.exclude(secret="foobarbaz").count)() == 1
+        assert await sync_to_async(OrderPosition.objects.filter(secret=b"foobarbaz").count)() == 1
+        assert await sync_to_async(OrderPosition.objects.exclude(secret=b"foobarbaz").count)() == 1
     assert [r1, r2].count(201) == 2

@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import binascii
+import base64
 import logging
 import os
 from collections import Counter, defaultdict
@@ -273,6 +275,17 @@ class AnswerSerializer(I18nAwareModelSerializer):
         return data
 
 
+class SecretField(serializers.Field):
+    def to_internal_value(self, data):
+        try:
+            return base64.b64decode(data)
+        except binascii.Error:
+            return data.encode("utf-8")
+
+    def to_representation(self, instance):
+        return instance.decode("ascii") if all(32 < i < 128 for i in instance) else base64.b64encode(instance).decode()
+
+
 class CheckinSerializer(I18nAwareModelSerializer):
     device_id = serializers.SlugRelatedField(
         source='device',
@@ -307,7 +320,7 @@ class PrintLogSerializer(serializers.ModelSerializer):
 
 class FailedCheckinSerializer(I18nAwareModelSerializer):
     error_reason = serializers.ChoiceField(choices=Checkin.REASONS, required=True, allow_null=False)
-    raw_barcode = serializers.CharField(required=True, allow_null=False)
+    raw_barcode = SecretField(required=True, allow_null=False)
     position = serializers.PrimaryKeyRelatedField(queryset=OrderPosition.all.none(), required=False, allow_null=True)
     raw_item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     raw_variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
@@ -517,6 +530,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     seat = InlineSeatSerializer(read_only=True)
     country = CompatibleCountryField(source='*')
     attendee_name = serializers.CharField(required=False)
+    secret = SecretField()
     plugin_data = OrderPositionPluginDataField(source='*', allow_null=True, read_only=True)
 
     class Meta:
@@ -608,6 +622,7 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
     order__valid_if_pending = serializers.SlugRelatedField(read_only=True, slug_field='valid_if_pending', source='order')
     order__require_approval = serializers.SlugRelatedField(read_only=True, slug_field='require_approval', source='order')
     order__locale = serializers.SlugRelatedField(read_only=True, slug_field='locale', source='order')
+    secret = SecretField()
 
     class Meta:
         model = OrderPosition
@@ -936,7 +951,7 @@ class OrderFeeCreateSerializer(I18nAwareModelSerializer):
 class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
     addon_to = serializers.IntegerField(required=False, allow_null=True)
-    secret = serializers.CharField(required=False)
+    secret = SecretField(required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)
     seat = serializers.CharField(required=False, allow_null=True)
     price = serializers.DecimalField(required=False, allow_null=True, decimal_places=2,
@@ -1772,6 +1787,7 @@ class OrderRefundCreateSerializer(I18nAwareModelSerializer):
 
 
 class RevokedTicketSecretSerializer(I18nAwareModelSerializer):
+    secret = SecretField()
 
     class Meta:
         model = RevokedTicketSecret
@@ -1779,6 +1795,7 @@ class RevokedTicketSecretSerializer(I18nAwareModelSerializer):
 
 
 class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
+    secret = SecretField()
 
     class Meta:
         model = BlockedTicketSecret

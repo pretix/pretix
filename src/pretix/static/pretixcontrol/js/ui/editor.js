@@ -325,6 +325,7 @@ var editor = {
                     text_i18n: o.text_i18n || {},
                     nowhitespace: o.nowhitespace || false,
                     color: col,
+                    barcodeType: o.barcodeType,
                 });
             } else  if (o.type === "poweredby") {
                 d.push({
@@ -351,6 +352,7 @@ var editor = {
             o.content = d.content;
             o.scaleToHeight(editor._mm2px(d.size));
             o.nowhitespace = d.nowhitespace || false;
+            o.barcodeType = d.barcodeType || 'qr';
             if (!d.color) {
               d.color = [0, 0, 0, 1];
             }
@@ -650,6 +652,7 @@ var editor = {
             $("#toolbox-qrcolor").val("#" + ((1 << 24) + (col[0] << 16) + (col[1] << 8) + col[2]).toString(16).slice(1));
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-qrwhitespace").prop("checked", o.nowhitespace || false);
+            $("#toolbox-barcodeformat").val(o.barcodeType || 'qr');
         } else if (o.type === "imagearea") {
             $("#toolbox-height").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-width").val(editor._px2mm(o.width * o.scaleX).toFixed(2));
@@ -751,6 +754,7 @@ var editor = {
             o.set('scaleY', 1);
             o.set('top', new_top)
             o.set('fill', $("#toolbox-qrcolor").val());
+            o.set('barcodeType', $("#toolbox-barcodeformat").val());
             o.nowhitespace = $("#toolbox-qrwhitespace").prop("checked") || false;
 
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
@@ -1040,6 +1044,7 @@ var editor = {
             fill: '#000',
             content: $(this).attr("data-content"),
             text: '',
+            barcodeType: 'qr',
             nowhitespace: true,
         });
         rect.setControlsVisibility({'mtr': false, 'mb': false, 'mt': false, 'mr': false, 'ml': false});

@@ -50,7 +50,7 @@ def order(event, item, device, taxrule):
             event=event,
             email="dummy@dummy.test",
             status=Order.STATUS_PENDING,
-            secret="k24fiuwvu8kxz3y1",
+            secret=b"k24fiuwvu8kxz3y1",
             datetime=datetime.datetime(
                 2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc
             ),
@@ -75,7 +75,7 @@ def order(event, item, device, taxrule):
             variation=None,
             price=Decimal("23"),
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            secret=b"z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
             positionid=1,
         )

@@ -125,7 +125,7 @@ def test_typeahead(organizer, admin_user, client, gift_card):
     team.can_view_orders = True
     team.save()
 
-    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret[0:3])
+    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret.decode()[0:3])
     d = json.loads(r.content)
     assert d == {"results": [{'event': 'Dummy', 'id': op.pk, 'text': 'FOO-1 (Early-bird ticket)'}], "pagination": {"more": False}}
     r = client.get('/control/organizer/dummy/ticket_select2?query=DUMMY-FOO-1')
@@ -143,13 +143,13 @@ def test_typeahead(organizer, admin_user, client, gift_card):
     team.can_view_orders = False
     team.save()
 
-    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret[0:3])
+    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret.decode()[0:3])
     d = json.loads(r.content)
     assert d == {"results": [], "pagination": {"more": False}}
     r = client.get('/control/organizer/dummy/ticket_select2?query=FOO-1')
     d = json.loads(r.content)
     assert d == {"results": [], "pagination": {"more": False}}
-    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret)
+    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret.decode())
     d = json.loads(r.content)
     assert d == {"results": [{'event': 'Dummy', 'id': op.pk, 'text': 'FOO-1 (Early-bird ticket)'}], "pagination": {"more": False}}
 
@@ -157,12 +157,12 @@ def test_typeahead(organizer, admin_user, client, gift_card):
     team.can_view_orders = True
     team.save()
 
-    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret[0:3])
+    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret.decode()[0:3])
     d = json.loads(r.content)
     assert d == {"results": [], "pagination": {"more": False}}
     r = client.get('/control/organizer/dummy/ticket_select2?query=FOO-1')
     d = json.loads(r.content)
     assert d == {"results": [], "pagination": {"more": False}}
-    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret)
+    r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret.decode())
     d = json.loads(r.content)
     assert d == {"results": [{'event': 'Dummy', 'id': op.pk, 'text': 'FOO-1 (Early-bird ticket)'}], "pagination": {"more": False}}

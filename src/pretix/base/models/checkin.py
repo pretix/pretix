@@ -389,7 +389,7 @@ class Checkin(models.Model):
 
     # For "raw" scans where we do not know which position they belong to (e.g. scan of signed
     # barcode that is not in database).
-    raw_barcode = models.TextField(null=True, blank=True)
+    raw_barcode = models.BinaryField(null=True, blank=True)
     raw_source_type = models.CharField(
         max_length=100,
         null=True, blank=True,

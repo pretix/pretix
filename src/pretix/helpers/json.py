@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import base64
+
 from django.core.files import File
 from i18nfield.utils import I18nJSONEncoder
 from phonenumber_field.phonenumber import PhoneNumber
@@ -36,8 +38,10 @@ class CustomJSONEncoder(I18nJSONEncoder):
             return obj.name
         elif isinstance(obj, LazyI18nStringList):
             return [s.data for s in obj.data]
-        if isinstance(obj, PhoneNumber):
+        elif isinstance(obj, PhoneNumber):
             return str(obj)
+        elif isinstance(obj, bytes):
+            return base64.b64encode(obj).decode()
         else:
             return super().default(obj)
 

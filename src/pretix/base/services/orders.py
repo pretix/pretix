@@ -3240,7 +3240,7 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                 )
                 gc.transactions.create(value=p.price - issued, order=order, acceptor=sender.organizer)
                 any_giftcards = True
-                p.secret = gc.secret
+                p.secret = gc.secret.encode()
                 p.save(update_fields=['secret'])
 
     if any_giftcards:

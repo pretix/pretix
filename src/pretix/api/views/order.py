@@ -19,10 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import binascii
 import datetime
 import logging
 import mimetypes
 import os
+import base64
 from decimal import Decimal
 from zoneinfo import ZoneInfo
 
@@ -30,7 +32,7 @@ import django_filters
 from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.db.models import (
-    Exists, F, OuterRef, Prefetch, Q, Subquery, prefetch_related_objects,
+    Exists, F, OuterRef, Prefetch, Q, Subquery, prefetch_related_objects, BinaryField
 )
 from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse, HttpResponse
@@ -1020,6 +1022,22 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+class BinaryFilter(django_filters.CharFilter):
+    def filter(self, qs, value):
+        if value in django_filters.constants.EMPTY_VALUES:
+            return qs
+        if self.distinct:
+            qs = qs.distinct()
+        values = [value.encode("utf-8")]
+        try:
+            values.append(base64.b64decode(value))
+        except binascii.Error:
+            pass
+        lookup = f"{self.field_name}__in"
+        qs = self.get_method(qs)(**{lookup: values})
+        return qs
+
+
 with scopes_disabled():
     class OrderPositionFilter(FilterSet):
         order = django_filters.CharFilter(field_name='order', lookup_expr='code__iexact')
@@ -1060,6 +1078,11 @@ with scopes_disabled():
                 'pseudonymization_id': ['exact'],
                 'voucher__code': ['exact'],
                 'voucher': ['exact'],
+            }
+            filter_overrides = {
+                BinaryField: {
+                    'filter_class': BinaryFilter,
+                }
             }
 
 
