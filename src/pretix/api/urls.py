@@ -132,6 +132,8 @@ urlpatterns = [
             name="checkinrpc.redeem"),
     re_path(r'^organizers/(?P<organizer>[^/]+)/checkinrpc/search/$', checkin.CheckinRPCSearchView.as_view(),
             name="checkinrpc.search"),
+    re_path(r'^organizers/(?P<organizer>[^/]+)/checkinrpc/annul/$', checkin.CheckinRPCAnnulView.as_view(),
+            name="checkinrpc.annul"),
     re_path(r'^organizers/(?P<organizer>[^/]+)/settings/$', organizer.OrganizerSettingsView.as_view(),
             name="organizer.settings"),
     re_path(r'^organizers/(?P<organizer>[^/]+)/giftcards/(?P<giftcard>[^/]+)/', include(giftcard_router.urls)),

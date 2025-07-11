@@ -359,3 +359,65 @@ Performing a ticket search
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or check-in list does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested check-in list does not exist.
+
+.. _`rest-checkin-annul`:
+
+Annulment of a check-in
+-----------------------
+
+.. http:post:: /api/v1/organizers/(organizer)/checkinrpc/annul/
+
+   If a check-in was made in error and the person was not let in, it can be annulled. We do not recommend this to be used
+   in case of manual check-ins or user interfaces because it is too prone for human errors. It is mostly intended for
+   automated entry systems like a turnstile or automated door, where the check-in is first created, then the door is
+   opened, and then the check-in may be annulled if the system knows that the turnstile did not turn or was out of
+   order.
+
+   This endpoint supports passing multiple check-in lists for the context of a multi-event scan. However, each
+   check-in list passed needs to be from a distinct event.
+
+   Check-ins created by a device can only be annulled by the same device. The datetime of annulment may not be more than
+   15 minutes after the datetime of check-in (value subject to change).
+
+   A status code of 404 is returned if no check-in was found for the given nonce. A status code of 400 is returned when
+   multiple check-ins match the nonce, the input is invalid in another way, the annulment is made from the wrong device,
+   the check-in is already in an annulled or failed state, or the datetime constraint is not valid.
+
+   :<json string nonce: ``nonce`` value of the original check-in.
+   :<json array lists: List of check-in list IDs to search on. No two check-in lists may be from the same event.
+   :<json datetime datetime: Specifies the client-side datetime of the annulment. If not supplied, the current time will be used.
+   :<json string error_explanation: A human-readable description of why the check-in was annulled (optional).
+   :>json string status: ``"ok"``
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/checkinrpc/redeem/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+      {
+        "lists": [1],
+        "nonce": "Pvrk50vUzQd0DhdpNRL4I4OcXsvg70uA",
+        "error_explanation": "Turnstile did not turn"
+      }
+
+   **Example successful response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "status": "ok",
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :statuscode 200: no error
+   :statuscode 400: Invalid or incomplete request, see above
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested nonce does not exist.
