@@ -30,7 +30,7 @@ Check-ins
 
 .. automodule:: pretix.base.signals
    :no-index:
-   :members: checkin_created
+   :members: checkin_created, checkin_annulled
 
 
 Frontend
