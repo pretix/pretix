@@ -55,6 +55,7 @@ at :ref:`plugin-docs`.
    digital
    exhibitors
    imported_secrets
+   offlinesales
    shipping
    billing_invoices
    billing_var
