@@ -109,3 +109,19 @@ class UploadedFileField(serializers.Field):
             return None
         request = self.context['request']
         return request.build_absolute_uri(url)
+
+
+class PluginsField(serializers.Field):
+
+    def to_representation(self, obj):
+        from pretix.base.plugins import get_all_plugins
+
+        return sorted([
+            p.module for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in obj.get_plugins()
+        ])
+
+    def to_internal_value(self, data):
+        return {
+            'plugins': data
+        }

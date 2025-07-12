@@ -50,6 +50,7 @@ from rest_framework.relations import SlugRelatedField
 from pretix.api.serializers import (
     CompatibleJSONField, SalesChannelMigrationMixin,
 )
+from pretix.api.serializers.fields import PluginsField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import (
@@ -61,6 +62,9 @@ from pretix.base.models.items import (
     ItemMetaProperty, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.models.tax import CustomRulesValidator
+from pretix.base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+)
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
@@ -123,22 +127,6 @@ class SeatCategoryMappingField(Field):
             raise ValidationError('seat_category_mapping needs to be an object (str -> int).')
         return {
             'seat_category_mapping': data or {}
-        }
-
-
-class PluginsField(Field):
-
-    def to_representation(self, obj):
-        from pretix.base.plugins import get_all_plugins
-
-        return sorted([
-            p.module for p in get_all_plugins()
-            if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in obj.get_plugins()
-        ])
-
-    def to_internal_value(self, data):
-        return {
-            'plugins': data
         }
 
 
@@ -283,17 +271,28 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         from pretix.base.plugins import get_all_plugins
 
         plugins_available = {
-            p.module: p for p in get_all_plugins(self.instance)
+            p.module: p for p in get_all_plugins(event=self.instance)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
+        current_plugins = self.instance.get_plugins() if self.instance and self.instance.pk else []
         settings_holder = self.instance if self.instance and self.instance.pk else self.context['organizer']
 
+        allowed_levels = (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
         for plugin in value.get('plugins'):
             if plugin not in plugins_available:
                 raise ValidationError(_('Unknown plugin: \'{name}\'.').format(name=plugin))
             if getattr(plugins_available[plugin], 'restricted', False):
                 if plugin not in settings_holder.settings.allowed_restricted_plugins:
                     raise ValidationError(_('Restricted plugin: \'{name}\'.').format(name=plugin))
+            level = getattr(plugins_available[plugin], 'level', PLUGIN_LEVEL_EVENT)
+            if level not in allowed_levels:
+                raise ValidationError('Plugin cannot be enabled on this level: \'{name}\'.'.format(name=plugin))
+
+            if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID and plugin not in self.context['organizer'].get_plugins():
+                if plugin not in current_plugins:
+                    # Technically, this is allowed, but consumers might be confused if the API call doesn't do anything
+                    # so we prevent this change.
+                    raise ValidationError('Plugin should be enabled on organizer level first: \'{name}\'.'.format(name=plugin))
 
         return value
 

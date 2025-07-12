@@ -70,9 +70,9 @@ from pretix.base.forms.widgets import (
     SplitDateTimePickerWidget, format_placeholders_help_text,
 )
 from pretix.base.models import (
-    Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardAcceptance,
-    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
-    SalesChannel, Team,
+    Customer, Device, Event, EventMetaProperty, Gate, GiftCard,
+    GiftCardAcceptance, Membership, MembershipType, OrderPosition, Organizer,
+    ReusableMedium, SalesChannel, Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
@@ -1204,3 +1204,19 @@ class SalesChannelForm(I18nModelForm):
                 )
 
         return d
+
+
+class OrganizerPluginEventsForm(forms.Form):
+    events = SafeEventMultipleChoiceField(
+        queryset=Event.objects.none(),
+        widget=forms.CheckboxSelectMultiple(attrs={
+            'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
+        }),
+        label=_("Events with active plugin"),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        events = kwargs.pop('events')
+        super().__init__(*args, **kwargs)
+        self.fields['events'].queryset = events

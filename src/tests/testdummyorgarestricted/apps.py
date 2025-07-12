@@ -19,26 +19,15 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import os
-from pretix.testutils.settings import *  # NOQA
+from pretix.base.plugins import PLUGIN_LEVEL_ORGANIZER, PluginConfig
 
 
-TEST_DIR = os.path.dirname(__file__)
+class TestDummyOrgaRestrictedApp(PluginConfig):
+    name = 'tests.testdummyorgarestricted'
+    verbose_name = 'testdummyorgarestricted'
 
-TEMPLATES[0]['DIRS'].append(os.path.join(TEST_DIR, 'templates'))  # NOQA
-
-INSTALLED_APPS.append('tests.testdummy')  # NOQA
-INSTALLED_APPS.append('tests.testdummyrestricted')  # NOQA
-INSTALLED_APPS.append('tests.testdummyhidden')  # NOQA
-INSTALLED_APPS.append('tests.testdummyorga')  # NOQA
-INSTALLED_APPS.append('tests.testdummyhybrid')  # NOQA
-INSTALLED_APPS.append('tests.testdummyorgarestricted')  # NOQA
-
-PRETIX_AUTH_BACKENDS = [
-    'pretix.base.auth.NativeAuthBackend',
-    'tests.testdummy.auth.TestFormAuthBackend',
-    'tests.testdummy.auth.TestRequestAuthBackend',
-]
-
-for a in PLUGINS:
-    INSTALLED_APPS.remove(a)
+    class PretixPluginMeta:
+        name = 'testdummyorgarestricted'
+        version = '1.0.0'
+        level = PLUGIN_LEVEL_ORGANIZER
+        restricted = True
