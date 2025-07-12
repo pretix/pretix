@@ -692,13 +692,14 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
                     if value == "enable" and module in plugins_available:
                         pluginmeta = plugins_available[module]
                         if getattr(pluginmeta, 'restricted', False):
-                            if module not in request.event.settings.allowed_restricted_plugins:
+                            if module not in request.organizer.settings.allowed_restricted_plugins:
                                 continue
 
-                        if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                        level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
+                        if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
                             continue
 
-                        if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
                             choose_events_next = module
 
                         self.object.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
@@ -724,7 +725,8 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
                         messages.success(self.request, mark_safe("".join(info)))
                     elif value == "disable" and module in plugins_available:
                         pluginmeta = plugins_available[module]
-                        if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                        level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
+                        if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
                             continue
                         self.object.log_action('pretix.organizer.plugins.disabled', user=self.request.user,
                                                data={'plugin': module})
