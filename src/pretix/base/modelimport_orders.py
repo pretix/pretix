@@ -76,6 +76,7 @@ class GroupingColumn(ImportColumn):
         'value will be put in the same order, but MUST be consecutive lines of the input file.'
     )
     order_level = True
+    default_label = "---"
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         pass
