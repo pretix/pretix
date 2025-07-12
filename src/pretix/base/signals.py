@@ -444,6 +444,20 @@ class EventPluginRegistry(Registry):
 
         super().__init__({"plugin": get_plugin, **keys})
 
+    def filter(self, **kwargs):
+        entries = self.registered_entries
+        if event := kwargs.pop("event", None):
+            entries = {
+                entry: meta
+                for entry, meta in entries.items()
+                if is_app_active(event, meta["plugin"])
+            }
+        return (
+            (entry, meta)
+            for entry, meta in entries.items()
+            if all(value == meta[key] for key, value in kwargs.items())
+        )
+
 
 class OrganizerPluginRegistry(Registry):
     """
@@ -473,6 +487,20 @@ class OrganizerPluginRegistry(Registry):
             return app
 
         super().__init__({"plugin": get_plugin, **keys})
+
+    def filter(self, **kwargs):
+        entries = self.registered_entries
+        if organizer := kwargs.pop("organizer", None):
+            entries = {
+                entry: meta
+                for entry, meta in entries.items()
+                if is_app_active(organizer, meta["plugin"])
+            }
+        return (
+            (entry, meta)
+            for entry, meta in entries.items()
+            if all(value == meta[key] for key, value in kwargs.items())
+        )
 
 
 event_live_issues = EventPluginSignal()
