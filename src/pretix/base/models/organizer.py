@@ -153,7 +153,7 @@ class Organizer(LoggedModel):
         """
         Returns the names of the plugins activated for this organizer as a list.
         """
-        if self.plugins is None:
+        if not self.plugins:
             return []
         return self.plugins.split(",")
 
@@ -161,7 +161,7 @@ class Organizer(LoggedModel):
         from pretix.base.plugins import get_all_plugins
 
         return {
-            p.module: p for p in get_all_plugins(self)
+            p.module: p for p in get_all_plugins(organizer=self)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 
