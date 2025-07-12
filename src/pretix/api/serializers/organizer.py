@@ -24,6 +24,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
@@ -32,6 +33,7 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.auth.devicesecurity import get_all_security_profiles
 from pretix.api.serializers import AsymmetricField
+from pretix.api.serializers.fields import PluginsField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 from pretix.api.serializers.settings import SettingsSerializer
@@ -43,6 +45,10 @@ from pretix.base.models import (
     SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
+from pretix.base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+    PLUGIN_LEVEL_ORGANIZER,
+)
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.settings import validate_organizer_settings
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
@@ -53,13 +59,47 @@ logger = logging.getLogger(__name__)
 
 class OrganizerSerializer(I18nAwareModelSerializer):
     public_url = serializers.SerializerMethodField('get_organizer_url', read_only=True)
+    plugins = PluginsField(required=False, source='*')
+    name = serializers.CharField(read_only=True)
+    slug = serializers.CharField(read_only=True)
 
     def get_organizer_url(self, organizer):
         return build_absolute_uri(organizer, 'presale:organizer.index')
 
     class Meta:
         model = Organizer
-        fields = ('name', 'slug', 'public_url')
+        fields = ('name', 'slug', 'public_url', 'plugins')
+
+    def validate_plugins(self, value):
+        from pretix.base.plugins import get_all_plugins
+
+        plugins_available = {
+            p.module: p for p in get_all_plugins(organizer=self.instance)
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+        settings_holder = self.instance
+
+        allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
+        for plugin in value.get('plugins'):
+            if plugin not in plugins_available:
+                raise ValidationError(_('Unknown plugin: \'{name}\'.').format(name=plugin))
+            if getattr(plugins_available[plugin], 'restricted', False):
+                if plugin not in settings_holder.settings.allowed_restricted_plugins:
+                    raise ValidationError(_('Restricted plugin: \'{name}\'.').format(name=plugin))
+            if getattr(plugins_available[plugin], 'level', PLUGIN_LEVEL_EVENT) not in allowed_levels:
+                raise ValidationError('Plugin cannot be enabled on this level: \'{name}\'.'.format(name=plugin))
+
+        return value
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        plugins = validated_data.pop('plugins', None)
+        organizer = super().update(instance, validated_data)
+        # Plugins
+        if plugins is not None:
+            organizer.set_active_plugins(plugins)
+            organizer.save()
+        return organizer
 
 
 class SeatingPlanSerializer(I18nAwareModelSerializer):

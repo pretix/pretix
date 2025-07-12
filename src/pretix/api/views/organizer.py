@@ -56,7 +56,7 @@ from pretix.helpers import OF_SELF
 from pretix.helpers.dicts import merge_dicts
 
 
-class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
+class OrganizerViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrganizerSerializer
     queryset = Organizer.objects.none()
     lookup_field = 'slug'
@@ -82,6 +82,33 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
             return Organizer.objects.filter(pk=self.request.auth.organizer_id)
         else:
             return Organizer.objects.filter(pk=self.request.auth.team.organizer_id)
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        original_data = self.get_serializer(instance=serializer.instance).data
+
+        current_plugins_value = serializer.instance.get_plugins()
+        updated_plugins_value = serializer.validated_data.get('plugins', None)
+
+        super().perform_update(serializer)
+
+        if serializer.data == original_data:
+            # Performance optimization: If nothing was changed, we do not need to save or log anything.
+            # This costs us a few cycles on save, but avoids thousands of lines in our log.
+            return
+
+        if updated_plugins_value is not None and set(updated_plugins_value) != set(current_plugins_value):
+            enabled = {m: 'enabled' for m in updated_plugins_value if m not in current_plugins_value}
+            disabled = {m: 'disabled' for m in current_plugins_value if m not in updated_plugins_value}
+            changed = merge_dicts(enabled, disabled)
+
+            for module, operation in changed.items():
+                serializer.instance.log_action(
+                    'pretix.organizer.plugins.' + operation,
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={'plugin': module}
+                )
 
 
 class SeatingPlanViewSet(viewsets.ModelViewSet):

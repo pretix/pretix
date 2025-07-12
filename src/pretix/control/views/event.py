@@ -353,7 +353,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
     def available_plugins(self, event):
         from pretix.base.plugins import get_all_plugins
 
-        return (p for p in get_all_plugins(event) if not p.name.startswith('.')
+        return (p for p in get_all_plugins(event=event) if not p.name.startswith('.')
                 and getattr(p, 'visible', True))
 
     def prepare_links(self, pluginmeta, key):
