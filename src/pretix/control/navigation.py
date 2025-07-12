@@ -496,6 +496,13 @@ def get_organizer_navigation(request):
                     'active': url.url_name == 'organizer.edit',
                 },
                 {
+                    'label': _('Plugins'),
+                    'url': reverse('control:organizer.settings.plugins', kwargs={
+                        'organizer': request.organizer.slug,
+                    }),
+                    'active': url.url_name == 'organizer.settings.plugins',
+                },
+                {
                     'label': _('Event metadata'),
                     'url': reverse('control:organizer.properties', kwargs={
                         'organizer': request.organizer.slug
