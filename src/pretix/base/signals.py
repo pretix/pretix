@@ -450,6 +450,23 @@ class EventPluginRegistry(Registry):
 
         super().__init__({"plugin": get_plugin, **keys})
 
+    def filter(self, active_in=None, **kwargs):
+        result = super().filter(**kwargs)
+        if active_in is not None:
+            result = (
+                (entry, meta)
+                for entry, meta in result
+                if is_app_active(active_in, meta['plugin'])
+            )
+        return result
+
+    def get(self, active_in=None, **kwargs):
+        item, meta = super().get(**kwargs)
+        if meta and active_in is not None:
+            if not is_app_active(active_in, meta['plugin']):
+                return None, None
+        return item, meta
+
 
 class OrganizerPluginRegistry(Registry):
     """
