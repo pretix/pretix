@@ -30,6 +30,10 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from packaging.requirements import Requirement
 
+PLUGIN_LEVEL_EVENT = 'event'
+PLUGIN_LEVEL_ORGANIZER = 'organizer'
+PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID = 'event_organizer'
+
 
 class PluginType(Enum):
     """
@@ -91,3 +95,8 @@ class PluginConfig(AppConfig, metaclass=PluginConfigMeta):
                     self.name, req, requirement_version
                 ))
                 sys.exit(1)
+
+        if not hasattr(self.PretixPluginMeta, 'level'):
+            self.PretixPluginMeta.level = PLUGIN_LEVEL_EVENT
+        if self.PretixPluginMeta.level not in (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+            raise ImproperlyConfigured(f"Unknown plugin level '{self.PretixPluginMeta.level}'")
