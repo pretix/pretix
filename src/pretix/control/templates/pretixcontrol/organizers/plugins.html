@@ -105,7 +105,7 @@
                                             <div class="plugin-action">
                                                 <span class="text-muted">{% trans "Incompatible" %}</span>
                                             </div>
-                                        {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
+                                        {% elif plugin.restricted and plugin.module not in request.organizer.settings.allowed_restricted_plugins %}
                                             <div class="plugin-action">
                                                 <span class="text-muted">{% trans "Not available" %}</span>
                                             </div>

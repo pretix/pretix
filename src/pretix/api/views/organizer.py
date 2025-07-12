@@ -65,6 +65,7 @@ class OrganizerViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
     filter_backends = (TotalOrderingFilter,)
     ordering = ('slug',)
     ordering_fields = ('name', 'slug')
+    write_permission = "can_change_organizer_settings"
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
