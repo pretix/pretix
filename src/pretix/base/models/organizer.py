@@ -68,6 +68,8 @@ class Organizer(LoggedModel):
     :param slug: A globally unique, short name for this organizer, to be used
                  in URLs and similar places.
     :type slug: str
+    :param plugins: A comma-separated list of plugin names that are active for this organizer.
+    :type plugins: str
     """
 
     settings_namespace = 'organizer'
@@ -90,6 +92,10 @@ class Organizer(LoggedModel):
         ],
         verbose_name=_("Short form"),
         unique=True
+    )
+    plugins = models.TextField(
+        verbose_name=_("Plugins"),
+        null=False, blank=True, default="",
     )
 
     class Meta:
@@ -142,6 +148,52 @@ class Organizer(LoggedModel):
         from pretix.base.cache import ObjectRelatedCache
 
         return ObjectRelatedCache(self)
+
+    def get_plugins(self):
+        """
+        Returns the names of the plugins activated for this organizer as a list.
+        """
+        if self.plugins is None:
+            return []
+        return self.plugins.split(",")
+
+    def get_available_plugins(self):
+        from pretix.base.plugins import get_all_plugins
+
+        return {
+            p.module: p for p in get_all_plugins(self)
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+
+    def set_active_plugins(self, modules, allow_restricted=frozenset()):
+        plugins_active = self.get_plugins()
+        plugins_available = self.get_available_plugins()
+
+        enable = [m for m in modules if m not in plugins_active and m in plugins_available]
+
+        for module in enable:
+            if getattr(plugins_available[module].app, 'restricted', False) and module not in allow_restricted:
+                modules.remove(module)
+            elif hasattr(plugins_available[module].app, 'installed'):
+                getattr(plugins_available[module].app, 'installed')(self)
+
+        self.plugins = ",".join(modules)
+
+    def enable_plugin(self, module, allow_restricted=frozenset()):
+        plugins_active = self.get_plugins()
+        if module not in plugins_active:
+            plugins_active.append(module)
+            self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
+
+    def disable_plugin(self, module):
+        plugins_active = self.get_plugins()
+        if module in plugins_active:
+            plugins_active.remove(module)
+            self.set_active_plugins(plugins_active)
+
+            plugins_available = self.get_available_plugins()
+            if module in plugins_available and hasattr(plugins_available[module].app, 'uninstalled'):
+                getattr(plugins_available[module].app, 'uninstalled')(self)
 
     @property
     def timezone(self):

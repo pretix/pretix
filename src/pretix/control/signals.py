@@ -32,11 +32,11 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.dispatch import Signal
+from pretix.base.signals import (
+    DeprecatedSignal, EventPluginSignal, GlobalSignal, OrganizerPluginSignal,
+)
 
-from pretix.base.signals import DeprecatedSignal, EventPluginSignal
-
-html_page_start = Signal()
+html_page_start = GlobalSignal()
 """
 This signal allows you to put code in the beginning of the main page for every
 page in the backend. You are expected to return HTML.
@@ -80,7 +80,7 @@ in pretix.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-nav_topbar = Signal()
+nav_topbar = GlobalSignal()
 """
 Arguments: ``request``
 
@@ -99,7 +99,7 @@ This is no ``EventPluginSignal``, so you do not get the event in the ``sender`` 
 and you may get the signal regardless of whether your plugin is active.
 """
 
-nav_global = Signal()
+nav_global = GlobalSignal()
 """
 Arguments: ``request``
 
@@ -150,7 +150,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 An additional keyword argument ``subevent`` *can* contain a sub-event.
 """
 
-user_dashboard_widgets = Signal()
+user_dashboard_widgets = GlobalSignal()
 """
 Arguments: 'user'
 
@@ -221,7 +221,7 @@ Deprecated signal, no longer works. We just keep the definition so old plugins d
 break the installation.
 """
 
-nav_organizer = Signal()
+nav_organizer = OrganizerPluginSignal(allow_legacy_plugins=True)
 """
 Arguments: 'organizer', 'request'
 
@@ -350,14 +350,14 @@ will be passed a ``form`` variable with your form.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-oauth_application_registered = Signal()
+oauth_application_registered = GlobalSignal()
 """
 Arguments: ``user``, ``application``
 
 This signal will be called whenever a user registers a new OAuth application.
 """
 
-order_search_filter_q = Signal()
+order_search_filter_q = GlobalSignal()
 """
 Arguments: ``query``
 
