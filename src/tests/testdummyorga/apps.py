@@ -19,16 +19,14 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from pretix.base.plugins import PluginConfig
+from pretix.base.plugins import PLUGIN_LEVEL_ORGANIZER, PluginConfig
 
 
-class TestDummyApp(PluginConfig):
-    name = 'tests.testdummy'
-    verbose_name = '.testdummy'
+class TestDummyOrgaApp(PluginConfig):
+    name = 'tests.testdummyorga'
+    verbose_name = 'testdummyorga'
 
     class PretixPluginMeta:
-        name = '.testdummy'
+        name = 'testdummyorga'
         version = '1.0.0'
-
-    def ready(self):
-        from tests.testdummy import signals  # noqa
+        level = PLUGIN_LEVEL_ORGANIZER

@@ -19,16 +19,16 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from pretix.base.plugins import PluginConfig
+from pretix.base.plugins import (
+    PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID, PluginConfig,
+)
 
 
-class TestDummyApp(PluginConfig):
-    name = 'tests.testdummy'
-    verbose_name = '.testdummy'
+class TestDummyHybridApp(PluginConfig):
+    name = 'tests.testdummyhybrid'
+    verbose_name = 'testdummyhybrid'
 
     class PretixPluginMeta:
-        name = '.testdummy'
+        name = 'testdummyhybrid'
         version = '1.0.0'
-
-    def ready(self):
-        from tests.testdummy import signals  # noqa
+        level = PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID
