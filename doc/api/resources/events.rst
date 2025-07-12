@@ -424,9 +424,9 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer of the event to create.
    :param event: The ``slug`` field of the event to copy settings and items from.
    :statuscode 201: no error
-   :statuscode 400: The event could not be created due to invalid submitted data.
+   :statuscode 400: The event could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to update this resource.
 
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/
