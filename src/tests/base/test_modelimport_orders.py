@@ -58,8 +58,8 @@ def user():
     return User.objects.create_user('test@localhost', 'test')
 
 
-def inputfile_factory(multiplier=1):
-    d = [
+def inputfile_factory(data=None, multiplier=1):
+    d = data or [
         {
             'A': 'Dieter',
             'B': 'Schneider',
@@ -113,7 +113,7 @@ def inputfile_factory(multiplier=1):
     if multiplier > 1:
         d = d * multiplier
     f = StringIO()
-    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'], dialect=csv.excel)
+    w = csv.DictWriter(f, d[0].keys(), dialect=csv.excel)
     w.writeheader()
     w.writerows(d)
     f.seek(0)
@@ -875,3 +875,88 @@ def test_import_question_valid(user, event, item):
     assert a6.last().question == q1
 
 # TODO: validate question
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_mixed_order_size(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    data = [
+        {"G": "GRP1", "EMAIL": "a@example.com", "NAME": "A1"},
+        {"G": "GRP1", "EMAIL": "a@example.com", "NAME": "A2"},
+        {"G": "GRP1", "EMAIL": "a@example.com", "NAME": "A3"},
+        {"G": "GRP2", "EMAIL": "b@example.com", "NAME": "B1"},
+        {"G": "GRP3", "EMAIL": "c@example.com", "NAME": "C1"},
+        {"G": "GRP3", "EMAIL": "c@example.com", "NAME": "C2"},
+    ]
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['grouping'] = 'csv:G'
+    settings['email'] = 'csv:EMAIL'
+    settings['attendee_name_full_name'] = 'csv:NAME'
+    settings['orders'] = 'mixed'
+    import_orders.apply(
+        args=(event.pk, inputfile_factory(data).id, settings, 'en', user.pk)
+    )
+    assert event.orders.count() == 3
+
+    o = event.orders.get(email="a@example.com")
+    assert o.positions.count() == 3
+    assert set(pos.positionid for pos in o.positions.all()) == {1, 2, 3}
+    assert set(pos.attendee_name for pos in o.positions.all()) == {"A1", "A2", "A3"}
+
+    o = event.orders.get(email="b@example.com")
+    assert o.positions.count() == 1
+
+    o = event.orders.get(email="c@example.com")
+    assert o.positions.count() == 2
+    assert set(pos.positionid for pos in o.positions.all()) == {1, 2}
+    assert set(pos.attendee_name for pos in o.positions.all()) == {"C1", "C2"}
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_mixed_order_size_validate_consecutive(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    data = [
+        {"G": "GRP1", "EMAIL": "a@example.com", "NAME": "A1"},
+        {"G": "GRP1", "EMAIL": "a@example.com", "NAME": "A2"},
+        {"G": "GRP1", "EMAIL": "a@example.com", "NAME": "A3"},
+        {"G": "GRP2", "EMAIL": "b@example.com", "NAME": "B1"},
+        {"G": "GRP3", "EMAIL": "c@example.com", "NAME": "C1"},
+        {"G": "GRP1", "EMAIL": "c@example.com", "NAME": "C2"},
+    ]
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['grouping'] = 'csv:G'
+    settings['email'] = 'csv:EMAIL'
+    settings['attendee_name_full_name'] = 'csv:NAME'
+    settings['orders'] = 'mixed'
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory(data).id, settings, 'en', user.pk)
+        ).get()
+    assert 'The grouping "GRP1" occurs on non-consecutive lines (seen again on line 6).' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_mixed_order_size_consistency(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    data = [
+        {"G": "GRP1", "EMAIL": "a1@example.com", "NAME": "A1"},
+        {"G": "GRP1", "EMAIL": "a2@example.com", "NAME": "A2"},
+        {"G": "GRP1", "EMAIL": "a3@example.com", "NAME": "A3"},
+        {"G": "GRP2", "EMAIL": "b@example.com", "NAME": "B1"},
+        {"G": "GRP3", "EMAIL": "c@example.com", "NAME": "C1"},
+        {"G": "GRP3", "EMAIL": "c@example.com", "NAME": "C2"},
+    ]
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['grouping'] = 'csv:G'
+    settings['email'] = 'csv:EMAIL'
+    settings['attendee_name_full_name'] = 'csv:NAME'
+    settings['orders'] = 'mixed'
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory(data).id, settings, 'en', user.pk)
+        ).get()
+    assert ('Inconsistent data in row 2: Column Email address contains value "a2@example.com", but for this order, '
+            'the value has already been set to "a1@example.com".') in str(excinfo.value)

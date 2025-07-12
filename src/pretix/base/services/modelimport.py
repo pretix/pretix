@@ -89,6 +89,9 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                 _('Orders cannot have more than %(max)s positions.') % {'max': django_settings.PRETIX_MAX_ORDER_SIZE}
             )
 
+        used_groupers = set()
+        current_grouper = []
+        current_order_level_data = {}
         orders = []
         order = None
 
@@ -97,7 +100,28 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
         lock_seats = []
         for i, record in enumerate(data):
             try:
-                if order is None or settings['orders'] == 'many':
+                create_new_order = (
+                    order is None or
+                    settings['orders'] == 'many' or
+                    (settings['orders'] == 'mixed' and record["grouping"] != current_grouper)
+                )
+
+                if create_new_order:
+                    if settings['orders'] == 'mixed':
+                        if record["grouping"] in used_groupers:
+                            raise DataImportError(
+                                _('The grouping "%(value)s" occurs on non-consecutive lines (seen again on line %(row)s).') % {
+                                    "value": record["grouping"],
+                                    "row": i + 1,
+                                }
+                            )
+                        current_grouper = record["grouping"]
+                        used_groupers.add(current_grouper)
+
+                    current_order_level_data = {
+                        c.identifier: record.get(c.identifier)
+                        for c in cols if getattr(c, "order_level", False)
+                    }
                     order = Order(
                         event=event,
                         testmode=settings['testmode'],
@@ -108,6 +132,12 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                     order._address.name_parts = {'_scheme': event.settings.name_scheme}
                     orders.append(order)
 
+                if settings['orders'] == 'mixed' and len(order._positions) >= django_settings.PRETIX_MAX_ORDER_SIZE:
+                    raise DataImportError(
+                        _('Orders cannot have more than %(max)s positions.') % {
+                            'max': django_settings.PRETIX_MAX_ORDER_SIZE}
+                    )
+
                 position = OrderPosition(positionid=len(order._positions) + 1)
                 position.attendee_name_parts = {'_scheme': event.settings.name_scheme}
                 position.meta_info = {}
@@ -115,13 +145,24 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                 position.assign_pseudonymization_id()
 
                 for c in cols:
-                    c.assign(record.get(c.identifier), order, position, order._address)
+                    value = record.get(c.identifier)
+                    if getattr(c, "order_level", False) and value != current_order_level_data.get(c.identifier):
+                        raise DataImportError(
+                            _('Inconsistent data in row {row}: Column {col} contains value "{val_line}", but '
+                              'for this order, the value has already been set to "{val_order}".').format(
+                                row=i + 1,
+                                col=c.verbose_name,
+                                val_line=value,
+                                val_order=current_order_level_data.get(c.identifier) or "",
+                            )
+                        )
+                    c.assign(value, order, position, order._address)
 
                 if position.seat is not None:
                     lock_seats.append((order.sales_channel, position.seat))
             except (ValidationError, ImportError) as e:
                 raise DataImportError(
-                    _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
+                    _('Invalid data in row {row}: {message}').format(row=i + 1, message=str(e))
                 )
 
         try:
