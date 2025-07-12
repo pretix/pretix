@@ -48,13 +48,13 @@ class PluginType(Enum):
     EXPORT = 4
 
 
-def get_all_plugins(event=None, organizer=None) -> List[type]:
+def get_all_plugins(*, event=None, organizer=None) -> List[type]:
     """
     Returns the PretixPluginMeta classes of all plugins found in the installed Django apps.
     """
     assert not event or not organizer
     plugins = []
-    event_fallback_used = True
+    event_fallback_used = False
     for app in apps.get_app_configs():
         if hasattr(app, 'PretixPluginMeta'):
             meta = app.PretixPluginMeta

@@ -273,7 +273,11 @@ class OrganizerPluginSignal(PluginSignal[Organizer]):
             allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
             if getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT) not in allowed_levels:
                 if getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT and self.allow_legacy_plugins:
-                    warnings.warn('This signal will soon be only available for plugins that declare to be organizer-level', stacklevel=3)
+                    warnings.warn(
+                        'This signal will soon be only available for plugins that declare to be organizer-level',
+                        stacklevel=3,
+                        category=DeprecationWarning,
+                    )
                 else:
                     raise ImproperlyConfigured(
                         f"{app} uses an OrganizerPluginSignal but is not a plugin that can be active on organizer level"
@@ -302,7 +306,11 @@ class GlobalSignal(django.dispatch.Signal):
 class DeprecatedSignal(GlobalSignal):
 
     def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
-        warnings.warn('This signal is deprecated and will soon be removed', stacklevel=3)
+        warnings.warn(
+            'This signal is deprecated and will soon be removed',
+            stacklevel=3,
+            category=DeprecationWarning,
+        )
         super().connect(receiver, sender=None, weak=True, dispatch_uid=None)
 
 
