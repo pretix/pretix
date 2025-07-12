@@ -551,8 +551,7 @@ class Event(EventMixin, LoggedModel):
     :type presale_end: datetime
     :param location: venue
     :type location: str
-    :param plugins: A comma-separated list of plugin names that are active for this
-                    event.
+    :param plugins: A comma-separated list of plugin names that are active for this event.
     :type plugins: str
     :param has_subevents: Enable event series functionality
     :type has_subevents: bool
