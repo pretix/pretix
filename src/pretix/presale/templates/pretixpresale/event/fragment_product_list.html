@@ -72,9 +72,11 @@
                                 {% endblocktrans %}
                                 </span>
                                 <span aria-hidden="true">{{ item.min_price|money:event.currency }} – {{ item.max_price|money:event.currency }}</span>
-                            {% elif not item.min_price and not item.max_price and not item.mandatory_priced_addons %}
-                                <span class="text-uppercase">{% trans "free" context "price" %}</span>
-                            {% elif not item.mandatory_priced_addons  %}
+                            {% elif not item.min_price and not item.max_price %}
+                                {% if not item.mandatory_priced_addons %}
+                                    <span class="text-uppercase">{% trans "free" context "price" %}</span>
+                                {% endif %}
+                            {% else %}
                                 {{ item.min_price|money:event.currency }}
                             {% endif %}
                         </div>
