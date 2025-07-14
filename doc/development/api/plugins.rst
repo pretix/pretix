@@ -62,7 +62,7 @@ level              string               System level the plugin can be activated
                                         Set to ``pretix.base.plugins.PLUGIN_LEVEL_ORGANIZER`` for plugins that can be
                                         activated only for the organizer as a whole and are active for any event within
                                         that organizer.
-                                        Set to ``pretix.base.plugins.PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID`` for events that
+                                        Set to ``pretix.base.plugins.PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID`` for plugins that
                                         can be activated at organizer level but are considered active only within events
                                         for which they have also been specifically activated.
                                         More levels, e.g. user-level plugins, might be invented in the future.
