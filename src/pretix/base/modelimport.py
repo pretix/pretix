@@ -111,6 +111,13 @@ class ImportColumn:
         """
         return gettext_lazy('Keep empty')
 
+    @property
+    def help_text(self):
+        """
+        Additional description of the column
+        """
+        return None
+
     def __init__(self, event):
         self.event = event
 

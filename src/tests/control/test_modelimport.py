@@ -59,9 +59,10 @@ Anke,Müller,anke@example.net
     r = client.post('/control/event/dummy/dummy/orders/import/', {
         'file': file
     }, follow=True)
+    print(r.content)
     doc = BeautifulSoup(r.content, "lxml")
-    assert doc.select("select[name=orders]")
-    assert doc.select("select[name=status]")
+    assert doc.select("input[name=orders]")
+    assert doc.select("input[name=status]")
     assert doc.select("select[name=attendee_email]")
     assert b"Dieter" in r.content
     assert b"daniel@example.org" in r.content

@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.modelimport_orders import get_order_import_columns
@@ -62,7 +63,8 @@ class ProcessForm(forms.Form):
                 choices=choices,
                 widget=forms.Select(
                     attrs={'data-static': 'true'}
-                )
+                ),
+                help_text=c.help_text,
             )
 
     def get_columns(self):
@@ -75,14 +77,17 @@ class OrdersProcessForm(ProcessForm):
         choices=(
             ('many', _('Create a separate order for each line')),
             ('one', _('Create one order with one position per line')),
-        )
+            ('mixed', _('Group multiple lines together into the same order based on a grouping column')),
+        ),
+        widget=forms.RadioSelect,
     )
     status = forms.ChoiceField(
         label=_('Order status'),
         choices=(
             ('paid', _('Create orders as fully paid')),
             ('pending', _('Create orders as pending and still require payment')),
-        )
+        ),
+        widget=forms.RadioSelect,
     )
     testmode = forms.BooleanField(
         label=_('Create orders as test mode orders'),
@@ -98,6 +103,17 @@ class OrdersProcessForm(ProcessForm):
 
     def get_columns(self):
         return get_order_import_columns(self.event)
+
+    def clean(self):
+        data = super().clean()
+
+        grouping = data.get("grouping") and data.get("grouping") != "empty"
+        if data.get("orders") != "mixed" and grouping:
+            raise ValidationError({"grouping": [_("A grouping cannot be specified for this import mode.")]})
+        if data.get("orders") == "mixed" and not grouping:
+            raise ValidationError({"grouping": [_("A grouping needs to be specified for this import mode.")]})
+
+        return data
 
 
 class VouchersProcessForm(ProcessForm):
