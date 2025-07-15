@@ -83,6 +83,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
+    PrintLog,
 )
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.payment import PaymentException
@@ -597,6 +598,7 @@ class OrderDetail(OrderView):
             'item__questions', 'issued_gift_cards', 'owned_gift_cards', 'linked_media',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
             Prefetch('all_checkins', queryset=Checkin.all.select_related('list').order_by('datetime')),
+            Prefetch('print_logs', queryset=PrintLog.objects.select_related('device').order_by('datetime')),
         ).order_by('positionid')
 
         positions = []

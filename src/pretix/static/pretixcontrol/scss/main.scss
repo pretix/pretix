@@ -636,6 +636,10 @@ details summary {
 .position-buttons {
     padding-left: 20px;
 }
+.print-logs {
+    padding-left: 20px;
+    font-size: $font-size-small;
+}
 
 .pos-canceled * {
     color: $brand-danger;

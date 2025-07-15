@@ -500,6 +500,18 @@
                                         {% eventsignal event "pretix.control.signals.order_position_buttons" order=order position=line request=request %}
                                     </div>
                                 {% endif %}
+                                {% if staff_session %}
+                                    <div class="admin-only print-logs">
+                                        {% for pl in line.print_logs.all %}
+                                            <span class="fa fa-print"></span>
+                                            {{ pl.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                                            {{ pl.get_type_display }}
+                                            ({{ pl.source }}{% if pl.device %}, #{{ pl.device.device_id }}{% endif %})
+                                            {% if not pl.successful %}<span class="fa fa-warning fa-fw"></span>{% endif %}
+                                            <br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                                 {% if line.issued_gift_cards %}
                                     <dl>
                                         {% for gc in line.issued_gift_cards.all %}
