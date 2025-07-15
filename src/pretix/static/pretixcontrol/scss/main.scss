@@ -490,6 +490,13 @@ td > p:last-child,
     }
 }
 
+.admin-only,
+.panel-default > .panel-heading.admin-only,
+.panel-default > legend > .panel-heading.admin-only {
+    background-color: rgba(255, 231, 97, 0.1);
+    background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, .06), rgba(0, 0, 0, .06) 20px, transparent 20px, transparent 40px, rgba(0, 0, 0, .06) 40px);
+}
+
 .quotabox {
     display: inline-block;
     vertical-align: top;

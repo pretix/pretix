@@ -788,7 +788,7 @@
                                                     {{ p.html_info|safe }}
                                                     {% if staff_session %}
                                                         <p>
-                                                            <a href="" class="btn btn-default btn-xs" data-expandpayment data-id="{{ p.pk }}">
+                                                            <a href="" class="btn btn-default btn-xs admin-only" data-expandpayment data-id="{{ p.pk }}">
                                                                 <span class="fa-eye fa fa-fw"></span>
                                                                 {% trans "Inspect" %}
                                                             </a>
@@ -800,7 +800,7 @@
                                             <tr>
                                                 <td colspan="1"></td>
                                                 <td colspan="5">
-                                                    <a href="" class="btn btn-default btn-xs" data-expandpayment data-id="{{ p.pk }}">
+                                                    <a href="" class="btn btn-default btn-xs admin-only" data-expandpayment data-id="{{ p.pk }}">
                                                         <span class="fa-eye fa fa-fw"></span>
                                                         {% trans "Inspect" %}
                                                     </a>
@@ -904,7 +904,7 @@
                                                         {% endif %}
                                                         {% if staff_session %}
                                                             <p>
-                                                                <a href="" class="btn btn-default btn-xs" data-expandrefund
+                                                                <a href="" class="btn btn-default btn-xs admin-only" data-expandrefund
                                                                    data-id="{{ r.pk }}">
                                                                     <span class="fa-eye fa fa-fw"></span>
                                                                     {% trans "Inspect" %}
