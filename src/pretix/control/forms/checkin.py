@@ -215,3 +215,9 @@ class CheckinListSimulatorForm(forms.Form):
         )
         self.fields['gate'].widget.choices = self.fields['gate'].choices
         self.fields['gate'].label = _('Gate')
+
+
+class CheckinResetForm(forms.Form):
+    ok = forms.BooleanField(
+        label=_("I am sure that the check-in state of the entire event should be reset.")
+    )
