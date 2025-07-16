@@ -68,6 +68,7 @@ from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
 from ...helpers.iter import chunked_iterable
 from ...helpers.safe_openpyxl import remove_invalid_excel_chars
+from ...multidomain.urlreverse import build_absolute_uri
 from ..exporter import (
     ListExporter, MultiSheetListExporter, OrganizerLevelExportMixin,
 )
@@ -287,6 +288,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Email address verified'))
         headers.append(_('External customer ID'))
         headers.append(_('Payment providers'))
+        headers.append(_('Order link'))
         if form_data.get('include_payment_amounts'):
             payment_methods = self._get_all_payment_methods(qs)
             for id, vn in payment_methods:
@@ -401,6 +403,13 @@ class OrderListExporter(MultiSheetListExporter):
                 str(self.providers.get(p, p)) for p in sorted(set((order.payment_providers or '').split(',')))
                 if p and p != 'free'
             ]))
+
+            row.append(
+                build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                    'order': order.code,
+                    'secret': order.secret,
+                })
+            )
 
             if form_data.get('include_payment_amounts'):
                 payment_methods = self._get_all_payment_methods(qs)
