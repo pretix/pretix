@@ -50,14 +50,14 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.models import Checkin, Order, OrderPosition, LogEntry
+from pretix.base.models import Checkin, LogEntry, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.orders import PrintLog
 from pretix.base.services.checkin import (
     LazyRuleVars, _logic_annotate_for_graphic_explain,
 )
 from pretix.base.signals import checkin_created
-from pretix.base.views.tasks import AsyncPostView, AsyncFormView
+from pretix.base.views.tasks import AsyncFormView, AsyncPostView
 from pretix.control.forms.checkin import (
     CheckinListForm, CheckinListSimulatorForm, CheckinResetForm,
 )
