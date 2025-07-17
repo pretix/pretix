@@ -21,6 +21,7 @@
 #
 import pytest
 from django.core.files.base import ContentFile
+from tests.api.utils import _test_configurable_serializer
 from tests.const import SAMPLE_PNG
 
 TEST_ORGANIZER_RES = {
@@ -35,6 +36,15 @@ def test_organizer_list(token_client, organizer):
     resp = token_client.get('/api/v1/organizers/')
     assert resp.status_code == 200
     assert TEST_ORGANIZER_RES in resp.data['results']
+
+    _test_configurable_serializer(
+        token_client,
+        "/api/v1/organizers/",
+        [
+            "name", "public_url"
+        ],
+        expands=[],
+    )
 
 
 @pytest.mark.django_db

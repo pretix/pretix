@@ -121,6 +121,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
+        ctx['request'] = self.request
         return ctx
 
     def perform_update(self, serializer):
