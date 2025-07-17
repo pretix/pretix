@@ -43,13 +43,13 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scope, scopes_disabled
-from tests import assert_num_queries
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPosition, Organizer, SeatingPlan,
 )
 from pretix.base.models.orders import OrderFee
+from pretix.testutils.queries import assert_num_queries
 
 
 @pytest.fixture
