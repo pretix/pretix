@@ -23,7 +23,7 @@
 from collections import namedtuple
 from functools import partial
 
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import Checkin, InvoiceAddress, Order, Question
@@ -463,7 +463,7 @@ def get_data_fields(event, for_model=None):
                 get_enum_opts(q),
                 partial(lambda qq, position: get_answer(position, qq.identifier), q),
             )
-            for q in event.questions.all().prefetch_related("options")
+            for q in event.questions.filter(~Q(type=Question.TYPE_FILE)).prefetch_related("options")
         ]
     )
     if not any(field_name == "given_name" for field_name, label, weight in name_scheme["fields"]):

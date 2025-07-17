@@ -116,9 +116,12 @@ class PropertyMappingFormSet(formset_factory(
         return json.dumps(mappings)
 
 
+QUESTION_TYPE_LABELS = dict(Question.TYPE_CHOICES)
+
+
 def pretix_fields_choices(pretix_fields, initial_choice):
     return [
-        (f.key, f.label + " [" + Question.TYPE_CHOICES[f.type] + "]")
+        (f.key, f.label + " [" + QUESTION_TYPE_LABELS[f.type] + "]")
         for f in pretix_fields
         if not f.deprecated or f.key == initial_choice
     ]
