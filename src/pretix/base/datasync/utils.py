@@ -58,8 +58,8 @@ def _add_to_list(out, field_name, current_value, new_item, list_sep):
     if list_sep is not None:
         new_item = new_item.replace(list_sep, "")
         current_value = current_value.split(list_sep) if current_value else []
-    else:
-        current_value = list(current_value)
+    elif not isinstance(current_value, (list, tuple)):
+        current_value = [str(current_value)]
     if new_item not in current_value:
         new_list = current_value + [new_item]
         if list_sep is not None:
