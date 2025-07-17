@@ -188,3 +188,12 @@ A simple JSON-serialized ``property_mappings`` list for mapping some order infor
             "overwrite": "overwrite",
         }
       ]
+
+
+Translating mappings on Event copy
+----------------------------------
+
+Property mappings can contain references to event-specific primary keys. Therefore, plugins must register to the
+event_copy_data signal and call translate_property_mappings on all property mappings they store.
+
+.. autofunction:: pretix.base.datasync.utils.translate_property_mappings
