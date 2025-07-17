@@ -383,6 +383,10 @@ def event_index(request, organizer, event):
     ctx['has_cancellation_requests'] = can_view_orders and CancellationRequest.objects.filter(
         order__event=request.event
     ).exists()
+    ctx['has_sync_problems'] = can_change_event_settings and request.event.queued_sync_jobs.filter(
+        Q(need_manual_retry__isnull=False)
+        | Q(failed_attempts__gt=0)
+    ).exists()
 
     ctx['timeline'] = [
         {

@@ -36,7 +36,8 @@ from pretix.base.datasync.datasync import sync_targets
 from pretix.base.models import Event, Order
 from pretix.base.models.datasync import OrderSyncQueue
 from pretix.control.permissions import (
-    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin, EventPermissionRequiredMixin,
+    AdministratorPermissionRequiredMixin, EventPermissionRequiredMixin,
+    OrganizerPermissionRequiredMixin,
 )
 from pretix.control.signals import order_info
 from pretix.control.views.orders import OrderView
@@ -97,7 +98,7 @@ class FailedSyncJobsView(ListView):
     template_name = 'pretixcontrol/datasync/failed_jobs.html'
     model = OrderSyncQueue
     context_object_name = 'queue_items'
-    paginate_by = 20
+    paginate_by = 100
     ordering = ('triggered',)
 
     def get_queryset(self):
