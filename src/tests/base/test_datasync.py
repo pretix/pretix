@@ -263,7 +263,7 @@ class SimpleOrderSync(OutboundSyncProvider):
             **kwargs,
     ):
         pre_existing_object = self.fake_api_client.retrieve_object(mapping.external_object_type, external_id_field, id_value)
-        update_values = assign_properties(properties, pre_existing_object or {}, is_new=pre_existing_object is None)
+        update_values = assign_properties(properties, pre_existing_object or {}, is_new=pre_existing_object is None, list_sep=";")
         result = self.fake_api_client.create_or_update_object(mapping.external_object_type, {
             **update_values,
             external_id_field: id_value,
@@ -431,7 +431,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
             **kwargs,
     ):
         pre_existing_object = self.fake_api_client.retrieve_object(mapping.external_object_type, external_id_field, id_value)
-        update_values = assign_properties(properties, pre_existing_object or {}, is_new=pre_existing_object is None)
+        update_values = assign_properties(properties, pre_existing_object or {}, is_new=pre_existing_object is None, list_sep=";")
         result = self.fake_api_client.create_or_update_object(mapping.external_object_type, {
             **update_values,
             external_id_field: id_value,
@@ -509,12 +509,12 @@ def test_legacy_name_splitting(event):
 
 def test_assign_properties():
     assert assign_properties(
-        [("name", "Alice", MODE_OVERWRITE)], {"name": "A"}, is_new=False
+        [("name", "Alice", MODE_OVERWRITE)], {"name": "A"}, is_new=False, list_sep=";"
     ) == {"name": "Alice"}
     assert (
-        assign_properties([("name", "Alice", MODE_SET_IF_NEW)], {}, is_new=False) == {}
+        assign_properties([("name", "Alice", MODE_SET_IF_NEW)], {}, is_new=False, list_sep=";") == {}
     )
-    assert assign_properties([("name", "Alice", MODE_SET_IF_NEW)], {}, is_new=True) == {
+    assert assign_properties([("name", "Alice", MODE_SET_IF_NEW)], {}, is_new=True, list_sep=";") == {
         "name": "Alice"
     }
     assert assign_properties(
@@ -524,6 +524,7 @@ def test_assign_properties():
         ],
         {},
         is_new=True,
+        list_sep=";",
     ) == {"name": "Alice"}
     assert (
         assign_properties(
@@ -533,6 +534,7 @@ def test_assign_properties():
             ],
             {"name": "Bob"},
             is_new=False,
+            list_sep=";",
         )
         == {}
     )
@@ -544,6 +546,7 @@ def test_assign_properties():
             ],
             {},
             is_new=False,
+            list_sep=";",
         )
         == {}
     )
@@ -554,6 +557,7 @@ def test_assign_properties():
         ],
         {},
         is_new=True,
+        list_sep=";",
     ) == {"name": "Alice"}
     assert (
         assign_properties(
@@ -563,28 +567,29 @@ def test_assign_properties():
             ],
             {"name": "Bob"},
             is_new=False,
+            list_sep=";",
         )
         == {}
     )
     assert assign_properties(
-        [("name", "Alice", MODE_SET_IF_EMPTY)], {}, is_new=False
+        [("name", "Alice", MODE_SET_IF_EMPTY)], {}, is_new=False, list_sep=";"
     ) == {"name": "Alice"}
 
     assert assign_properties(
-        [("name", "Alice", MODE_SET_IF_EMPTY)], {}, is_new=False
+        [("name", "Alice", MODE_SET_IF_EMPTY)], {}, is_new=False, list_sep=";"
     ) == {"name": "Alice"}
 
     assert assign_properties(
-        [("colors", "red", MODE_APPEND_LIST)], {}, is_new=False
+        [("colors", "red", MODE_APPEND_LIST)], {}, is_new=False, list_sep=";"
     ) == {"colors": "red"}
     assert assign_properties(
-        [("colors", "red", MODE_APPEND_LIST)], {"colors": "red"}, is_new=False
+        [("colors", "red", MODE_APPEND_LIST)], {"colors": "red"}, is_new=False, list_sep=";"
     ) == {}
     assert assign_properties(
-        [("colors", "red", MODE_APPEND_LIST)], {"colors": "blue"}, is_new=False
+        [("colors", "red", MODE_APPEND_LIST)], {"colors": "blue"}, is_new=False, list_sep=";"
     ) == {"colors": "blue;red"}
     assert assign_properties(
-        [("colors", "red", MODE_APPEND_LIST)], {"colors": "green;blue"}, is_new=False
+        [("colors", "red", MODE_APPEND_LIST)], {"colors": "green;blue"}, is_new=False, list_sep=";"
     ) == {"colors": "green;blue;red"}
     assert assign_properties(
         [("colors", "red", MODE_APPEND_LIST)], {"colors": ["green", "blue"]}, is_new=False, list_sep=None
