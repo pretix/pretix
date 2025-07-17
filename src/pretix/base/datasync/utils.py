@@ -32,29 +32,43 @@ def assign_properties(
     new_values: List[Tuple[str, str, str]], old_values: dict, is_new, list_sep
 ):
     """
+    Generates a dictionary mapping property keys to new values, handling conditional overwrites and list updates
+    according to an update mode specified per property.
 
-    :param list_sep: if set to a string, the MODE_APPEND_LIST mode operates on strings separated by this value.
-                     if set to None, it operates on native lists.
+    Supported update modes are:
+     - `MODE_OVERWRITE`:  Replaces the existing value with the new value.
+     - `MODE_SET_IF_NEW`: Only sets the property if `is_new` is True.
+     - `MODE_SET_IF_EMPTY`: Only sets the property if the field is empty or missing in old_values.
+     - `MODE_APPEND_LIST`: Appends the new value to the list from old_values (or the empty list if missing),
+                           using `list_sep` as a separator.
+
+    :param new_values: List of tuples, where each tuple contains (field_name, new_value, update_mode).
+    :param old_values: Dictionary, current property values in the external system.
+    :param is_new: Boolean, whether the object will be newly created in the external system.
+    :param list_sep: If string, used as a separator for MODE_APPEND_LIST. If None, native lists are used.
+    :raises SyncConfigError: If an invalid update mode is specified.
+    :returns: A dictionary containing the properties that need to be updated in the external system.
     """
+
     out = {}
 
-    for field_name, v, mode in new_values:
-        if mode == MODE_OVERWRITE:
-            out[field_name] = v
+    for field_name, new_value, update_mode in new_values:
+        if update_mode == MODE_OVERWRITE:
+            out[field_name] = new_value
             continue
-        elif mode == MODE_SET_IF_NEW and not is_new:
+        elif update_mode == MODE_SET_IF_NEW and not is_new:
             continue
-        if not v:
+        if not new_value:
             continue
 
         current_value = old_values.get(field_name, out.get(field_name, ""))
-        if mode in (MODE_SET_IF_EMPTY, MODE_SET_IF_NEW):
+        if update_mode in (MODE_SET_IF_EMPTY, MODE_SET_IF_NEW):
             if not current_value:
-                out[field_name] = v
-        elif mode == MODE_APPEND_LIST:
-            _add_to_list(out, field_name, current_value, v, list_sep)
+                out[field_name] = new_value
+        elif update_mode == MODE_APPEND_LIST:
+            _add_to_list(out, field_name, current_value, new_value, list_sep)
         else:
-            raise SyncConfigError(["Invalid update mode " + mode])
+            raise SyncConfigError(["Invalid update mode " + update_mode])
     return out
 
 
