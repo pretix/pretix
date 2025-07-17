@@ -53,7 +53,7 @@ base_patterns = [
             name='healthcheck'),
     re_path(r'^redirect/$', redirect.redir_view, name='redirect'),
     re_path(r'^site.webmanifest$', webmanifest.webmanifest, name='site.webmanifest'),
-    re_path(r'^jsi18n/(?P<lang>[a-zA-Z-_]+)/$', js_catalog.js_catalog, name='javascript-catalog'),
+    re_path(r'^jsi18n/(?P<lang>[a-zA-Z0-9_-]+)/$', js_catalog.js_catalog, name='javascript-catalog'),
     re_path(r'^metrics$', metrics.serve_metrics,
             name='metrics'),
     re_path(r'^csp_report/$', csp.csp_report, name='csp.report'),

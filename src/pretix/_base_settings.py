@@ -115,6 +115,7 @@ ALL_LANGUAGES = [
     ('sk', _('Slovak')),
     ('sv', _('Swedish')),
     ('es', _('Spanish')),
+    ('es-419', _('Spanish (Latin America)')),
     ('tr', _('Turkish')),
     ('uk', _('Ukrainian')),
 ]
@@ -171,6 +172,12 @@ EXTRA_LANG_INFO = {
         'code': 'nb-no',
         'name': 'Norwegian Bokmal',
         'name_local': 'norsk (bokmål)',
+    },
+    'es-419': {
+        'bidi': False,
+        'code': 'es-419',
+        'name': 'Spanish (Latin America)',
+        'name_local': 'Español',
     },
 }
 

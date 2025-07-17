@@ -32,7 +32,6 @@ from django.conf import settings
 from django.utils import translation
 from django.utils.formats import get_format
 from django.utils.translation import to_locale
-from django.utils.translation.trans_real import TranslationCatalog
 
 date_conversion_to_moment = {
     '%a': 'ddd',
@@ -175,7 +174,7 @@ def get_language_score(locale):
 
     Note that there is no valid score for "en", since it's technically not "translated".
     """
-    catalog = None
+    catalog = {}
     app_configs = reversed(apps.get_app_configs())
 
     for app in app_configs:
@@ -198,10 +197,15 @@ def get_language_score(locale):
                 )
             except:
                 continue
-            if catalog is None:
-                catalog = TranslationCatalog(translation)
-            else:
-                catalog.update(translation)
+
+            catalog.update(translation._catalog.copy())
+
+            # Also add fallback catalog (e.g. es for es-419, de for de-informal, …)
+            while translation._fallback:
+                if not locale.startswith(translation._fallback.info().get("language", "XX")):
+                    break
+                translation = translation._fallback
+                catalog.update(translation._catalog.copy())
 
     # Add pretix' main translation folder as well as installation-specific translation folders
     for localedir in reversed(settings.LOCALE_PATHS):
@@ -214,10 +218,13 @@ def get_language_score(locale):
             )
         except:
             continue
-        if catalog is None:
-            catalog = TranslationCatalog(translation)
-        else:
-            catalog.update(translation)
+        catalog.update(translation._catalog.copy())
+
+        while translation._fallback:
+            if not locale.startswith(translation._fallback.info().get("language", "XX")):
+                break
+            translation = translation._fallback
+            catalog.update(translation._catalog.copy())
 
     if not catalog:
         score = 1
