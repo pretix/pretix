@@ -20,7 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-import json
 from collections import namedtuple
 from functools import partial
 
@@ -512,21 +511,6 @@ def get_data_fields(event, for_model=None):
         ]
     else:
         return src_fields
-
-
-def translate_property_mappings(property_mappings, checkin_list_map):
-    mappings = json.loads(property_mappings)
-
-    for mapping in mappings:
-        if mapping["pretix_field"].startswith("checkin_date_"):
-            old_id = int(mapping["pretix_field"][len("checkin_date_"):])
-            if old_id not in checkin_list_map:
-                # old_id might not be in checkin_list_map, because copying of an event series only copies check-in
-                # lists covering the whole series, not individual dates.
-                mapping["pretix_field"] = "_invalid_" + mapping["pretix_field"]
-            else:
-                mapping["pretix_field"] = "checkin_date_%d" % checkin_list_map[old_id].pk
-    return json.dumps(mappings)
 
 
 def get_enum_opts(q):
