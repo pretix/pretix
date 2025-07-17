@@ -103,7 +103,8 @@ shown. Therein, a ``sync_object_with_properties`` method is defined as follows:
         update_values = assign_properties(
             new_values=properties,
             old_values=pre_existing_object or {},
-            is_new=pre_existing_object is None
+            is_new=pre_existing_object is None,
+            list_sep=";",
         )
 
         # Then we can send our new data to the external service. The specifics of course depends

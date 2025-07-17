@@ -29,8 +29,13 @@ from pretix.base.models.datasync import (
 
 
 def assign_properties(
-    new_values: List[Tuple[str, str, str]], old_values: dict, is_new=True, list_sep=";",
+    new_values: List[Tuple[str, str, str]], old_values: dict, is_new, list_sep
 ):
+    """
+
+    :param list_sep: if set to a string, the MODE_APPEND_LIST mode operates on strings separated by this value.
+                     if set to None, it operates on native lists.
+    """
     out = {}
 
     for field_name, v, mode in new_values:
