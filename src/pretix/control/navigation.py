@@ -660,6 +660,18 @@ def get_organizer_navigation(request):
         'icon': 'download',
     })
 
+    if 'can_change_organizer_settings' in request.orgapermset:
+        merge_in(nav, [{
+            'parent': reverse('control:organizer.export', kwargs={
+                'organizer': request.organizer.slug,
+            }),
+            'label': _('Data sync problems'),
+            'url': reverse('control:organizer.datasync.failedjobs', kwargs={
+                'organizer': request.organizer.slug,
+            }),
+            'active': (url.url_name == 'organizer.datasync.failedjobs'),
+        }])
+
     merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_organizer.send(request.organizer, request=request, organizer=request.organizer)),
             []),
