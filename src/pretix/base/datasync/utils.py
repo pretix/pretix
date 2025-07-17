@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import json
 from typing import List, Tuple
 
 from pretix.base.datasync.datasync import SyncConfigError
@@ -65,3 +65,39 @@ def _add_to_list(out, field_name, current_value, new_item, list_sep):
         if list_sep is not None:
             new_list = list_sep.join(new_list)
         out[field_name] = new_list
+
+
+def translate_property_mappings(property_mappings, checkin_list_map):
+    """
+    To properly handle copied events, users of data fields as provided by get_data_fields need to register to the
+    event_copy_data signal and translate all stored references to those fields using this method.
+
+    For example, if you store your mappings in a custom Django model with a ForeignKey to Event:
+
+    .. code-block:: python
+
+        @receiver(signal=event_copy_data, dispatch_uid="my_sync_event_copy_data")
+        def event_copy_data_receiver(sender, other, checkin_list_map, **kwargs):
+            object_mappings = other.my_object_mappings.all()
+            object_mapping_map = {}
+            for om in object_mappings:
+                om = copy.copy(om)
+                object_mapping_map[om.pk] = om
+                om.pk = None
+                om.event = sender
+                om.property_mappings = translate_property_mappings(om.property_mappings, checkin_list_map)
+                om.save()
+
+    """
+    mappings = json.loads(property_mappings)
+
+    for mapping in mappings:
+        if mapping["pretix_field"].startswith("checkin_date_"):
+            old_id = int(mapping["pretix_field"][len("checkin_date_"):])
+            if old_id not in checkin_list_map:
+                # old_id might not be in checkin_list_map, because copying of an event series only copies check-in
+                # lists covering the whole series, not individual dates.
+                mapping["pretix_field"] = "_invalid_" + mapping["pretix_field"]
+            else:
+                mapping["pretix_field"] = "checkin_date_%d" % checkin_list_map[old_id].pk
+    return json.dumps(mappings)
