@@ -478,6 +478,7 @@ urlpatterns = [
                 name='event.orders.checkinlists.edit'),
         re_path(r'^checkinlists/(?P<list>\d+)/delete$', checkin.CheckinListDelete.as_view(),
                 name='event.orders.checkinlists.delete'),
+        re_path(r'^datasync/failedjobs/$', datasync.EventFailedSyncJobsView.as_view(), name='event.datasync.failedjobs'),
     ])),
     re_path(r'^event/(?P<organizer>[^/]+)/$', RedirectView.as_view(pattern_name='control:organizer'), name='event.organizerredirect'),
 ]
