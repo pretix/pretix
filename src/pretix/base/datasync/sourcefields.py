@@ -122,6 +122,12 @@ def get_data_fields(event, for_model=None):
     Returns tuple of (required_input, key, label, type, enum_opts, getter)
 
     Type is one of the Question types as defined in Question.TYPE_CHOICES.
+
+    The data type of the return value of `getter` depends on `type`:
+    - TYPE_CHOICE_MULTIPLE: list of strings
+    - TYPE_CHOICE: list, containing zero or one strings
+    - TYPE_BOOLEAN: boolean
+    - all other: string
     """
     name_scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
     name_headers = []
@@ -402,7 +408,7 @@ def get_data_fields(event, for_model=None):
                 _("Order status"),
                 Question.TYPE_CHOICE,
                 Order.STATUS_CHOICE,
-                lambda order: [str(order.status)],
+                lambda order: [order.status],
             ),
             DataFieldInfo(
                 ORDER,
@@ -423,10 +429,10 @@ def get_data_fields(event, for_model=None):
             DataFieldInfo(
                 ORDER,
                 "order_locale",
-                _("Order locale country code"),
-                Question.TYPE_COUNTRYCODE,
-                None,
-                lambda order: order.locale.split("_")[0],
+                _("Order language code"),
+                Question.TYPE_CHOICE,
+                [(lc, lc) for lc in event.settings.locales],
+                lambda order: [order.locale],
             ),
             DataFieldInfo(
                 ORDER_POSITION,
