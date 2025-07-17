@@ -53,8 +53,11 @@ have at least the properties defined in
     # class MyListSyncProvider, contd.
         def mappings(self):
             return [
-                StaticMapping(1, 'Order', 'Contact', 'email', 'email',
-                              self.event.settings.mylist_order_mapping))
+                StaticMapping(
+                    id=1, pretix_model='Order', external_object_type='Contact',
+                    pretix_id_field='email', external_id_field='email',
+                    property_mappings=self.event.settings.mylist_order_mapping,
+                ))
             ]
 
 

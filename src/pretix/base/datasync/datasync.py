@@ -30,10 +30,12 @@ from typing import Protocol
 import sentry_sdk
 from django.db import DatabaseError, transaction
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.datasync.sourcefields import (
     EVENT, EVENT_OR_SUBEVENT, ORDER, ORDER_POSITION, get_data_fields,
 )
+from pretix.base.i18n import language
 from pretix.base.logentrytype_registry import make_link
 from pretix.base.models.datasync import OrderSyncQueue, OrderSyncResult
 from pretix.base.signals import EventPluginRegistry
@@ -179,6 +181,10 @@ class OutboundSyncProvider:
         raise NotImplementedError
 
     def sync_queued_orders(self, queued_orders):
+        """
+        This method should catch all Exceptions and handle them appropriately. It should never throw
+        an Exception, as that may block the entire queue.
+        """
         for queue_item in queued_orders:
             with transaction.atomic():
                 try:
@@ -205,7 +211,9 @@ class OutboundSyncProvider:
                 except RecoverableSyncError as e:
                     sq.failed_attempts += 1
                     sq.not_before = self.next_retry_date(sq)
+                    # model changes saved by set_sync_error / clear_in_flight calls below
                     if sq.failed_attempts >= self.max_attempts:
+                        logger.exception('Failed to sync order (max attempts exceeded)')
                         sentry_sdk.capture_exception(e)
                         sq.set_sync_error("exceeded", e.messages, e.full_message)
                     else:
@@ -216,6 +224,7 @@ class OutboundSyncProvider:
                         )
                         sq.clear_in_flight()
                 except Exception as e:
+                    logger.exception('Failed to sync order (unhandled exception)')
                     sentry_sdk.capture_exception(e)
                     sq.set_sync_error("internal", [], str(e))
                 else:
@@ -238,7 +247,10 @@ class OutboundSyncProvider:
         try:
             field = self.data_fields[key]
         except KeyError:
-            raise SyncConfigError(['Field "%s" is not valid for %s. Please check your %s settings.' % (key, "/".join(inputs.keys()), self.display_name)])
+            with language(self.event.settings.locale):
+                raise SyncConfigError([_(
+                    'Field "{field_name}" is not valid for {available_inputs}. Please check your {provider_name} settings.'
+                ).format(key=key, available_inputs="/".join(inputs.keys()), provider_name=self.display_name)])
         input = inputs[field.required_input]
         val = field.getter(input)
         if isinstance(val, list):
@@ -247,7 +259,8 @@ class OutboundSyncProvider:
                 try:
                     val = [map[el] for el in val]
                 except KeyError:
-                    raise SyncConfigError([f'Please update value mapping for field "{key}" - option "{val}" not assigned'])
+                    with language(self.event.settings.locale):
+                        raise SyncConfigError([_('Please update value mapping for field "{field_name}" - option "{val}" not assigned').format(field_name=key, val=val)])
 
             val = ",".join(val)
         return val
@@ -278,7 +291,11 @@ class OutboundSyncProvider:
                          specified by ``mapping.pretix_model``
         :param properties: All properties defined in ``mapping.property_mappings``, as list of three-tuples
                            ``(external_field, value, overwrite)``
-        :param inputs: All pretix model instances from which data can be retrieved for this mapping
+        :param inputs: All pretix model instances from which data can be retrieved for this mapping.
+                       Dictionary mapping from sourcefields.ORDER_POSITION, .ORDER, .EVENT, .EVENT_OR_SUBEVENT to the
+                       relevant Django model.
+                       Most providers don't need to use this parameter directly, as `properties` and `id_value`
+                       already contain the values as evaluated from the available inputs.
         :param mapping: The mapping object as returned by ``self.mappings``
         :param mapped_objects: Information about objects that were synced in the same sync run, by mapping definitions
                                *before* the current one in order of ``self.mappings``.
@@ -294,7 +311,9 @@ class OutboundSyncProvider:
                     "id_value": id_value,
 
                     # optional:
-                    "action": "nothing_to_do",  # to inform that no action was taken, because the data was already up-to-date
+                    "action": "nothing_to_do",  # to inform that no action was taken, because the data was already up-to-date.
+                                                # other values for action (e.g. create, update) currently have no special
+                                                # meaning, but are visible for debugging purposes to admins.
 
                     # optional:
                     "external_link_href": "https://external-system.example.com/backend/link/to/contact/123/",
