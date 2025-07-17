@@ -36,7 +36,7 @@ from pretix.base.datasync.datasync import sync_targets
 from pretix.base.models import Event, Order
 from pretix.base.models.datasync import OrderSyncQueue
 from pretix.control.permissions import (
-    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
+    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin, EventPermissionRequiredMixin,
 )
 from pretix.control.signals import order_info
 from pretix.control.views.orders import OrderView
@@ -134,4 +134,13 @@ class OrganizerFailedSyncJobsView(OrganizerPermissionRequiredMixin, FailedSyncJo
     def get_queryset(self):
         return super().get_queryset().filter(
             event__organizer=self.request.organizer
+        )
+
+
+class EventFailedSyncJobsView(EventPermissionRequiredMixin, FailedSyncJobsView):
+    permission = "can_change_event_settings"
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            event=self.request.event
         )
