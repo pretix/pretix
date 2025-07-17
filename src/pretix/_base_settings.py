@@ -177,7 +177,7 @@ EXTRA_LANG_INFO = {
         'bidi': False,
         'code': 'es-419',
         'name': 'Spanish (Latin America)',
-        'name_local': 'Español (Hispanoamerica)',
+        'name_local': 'Español',
     },
 }
 

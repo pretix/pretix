@@ -204,7 +204,6 @@ def get_language_score(locale):
             while translation._fallback:
                 if not locale.startswith(translation._fallback.info().get("language", "XX")):
                     break
-                catalog.update(translation._fallback._catalog.copy())
                 translation = translation._fallback
                 catalog.update(translation._catalog.copy())
 
@@ -224,7 +223,6 @@ def get_language_score(locale):
         while translation._fallback:
             if not locale.startswith(translation._fallback.info().get("language", "XX")):
                 break
-            catalog.update(translation._fallback._catalog.copy())
             translation = translation._fallback
             catalog.update(translation._catalog.copy())
 
