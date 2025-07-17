@@ -79,8 +79,11 @@ class ControlSyncJob(OrderView):
             messages.success(self.request, _('The sync job has been enqueued and will run in the next minutes.'))
         elif self.request.POST.get("cancel_job"):
             job = self.order.queued_sync_jobs.get(pk=self.request.POST.get("cancel_job"))
-            job.delete()
-            messages.success(self.request, _('The sync job has been canceled.'))
+            if job.in_flight:
+                messages.warning(self.request, _('The sync job is already in progress.'))
+            else:
+                job.delete()
+                messages.success(self.request, _('The sync job has been canceled.'))
         elif self.request.POST.get("run_job_now"):
             job = self.order.queued_sync_jobs.get(pk=self.request.POST.get("run_job_now"))
             job.not_before = now()
