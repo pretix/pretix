@@ -18,5 +18,6 @@ Contents:
    customview
    cookieconsent
    auth
+   datasync
    general
    quality
