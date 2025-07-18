@@ -260,7 +260,9 @@ class OutboundSyncProvider:
                     val = [map[el] for el in val]
                 except KeyError:
                     with language(self.event.settings.locale):
-                        raise SyncConfigError([_('Please update value mapping for field "{field_name}" - option "{val}" not assigned').format(field_name=key, val=val)])
+                        raise SyncConfigError([_(
+                            'Please update value mapping for field "{field_name}" - option "{val}" not assigned'
+                        ).format(field_name=key, val=val)])
 
             val = ",".join(val)
         return val
