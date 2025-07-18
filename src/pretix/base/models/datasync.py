@@ -114,6 +114,7 @@ class OrderSyncResult(models.Model):
     order_position = models.ForeignKey(
         OrderPosition, on_delete=models.CASCADE, related_name="sync_results", blank=True, null=True,
     )
+    mapping_id = models.IntegerField(blank=False, null=False)
     external_object_type = models.CharField(blank=False, null=False, max_length=128)
     external_id_field = models.CharField(blank=False, null=False, max_length=128)
     id_value = models.CharField(blank=False, null=False, max_length=128)

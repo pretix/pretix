@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0283_taxrule_default_taxrule_backfill'),
+        ('pretixbase', '0281_event_is_remote'),
     ]
 
     operations = [
@@ -16,6 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('sync_provider', models.CharField(max_length=128)),
+                ('mapping_id', models.IntegerField()),
                 ('external_object_type', models.CharField(max_length=128)),
                 ('external_id_field', models.CharField(max_length=128)),
                 ('id_value', models.CharField(max_length=128)),
