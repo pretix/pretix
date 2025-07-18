@@ -37,7 +37,7 @@
             <p>
                 {{ log.display }}
                 {% if staff_session %}
-                    <a href="" class="btn btn-default btn-xs" data-expandlogs data-id="{{ log.pk }}">
+                    <a href="" class="btn btn-default btn-xs admin-only" data-expandlogs data-id="{{ log.pk }}">
                         <span class="fa-eye fa fa-fw"></span>
                         {% trans "Inspect" %}
                     </a>
