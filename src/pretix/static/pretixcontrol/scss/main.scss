@@ -48,7 +48,7 @@ nav.navbar {
 }
 
 nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
-    background: $brand-danger !important;
+    background-color: $brand-danger !important;
 }
 
 .navbar-header .navbar-events {
@@ -500,6 +500,16 @@ td > p:last-child,
         transparent 12px,
         transparent 22px, 
         rgba(255, 255, 255, .5) 24px);
+}
+
+
+.danger.admin-only {
+    background-image: repeating-linear-gradient(135deg, 
+        rgba(0, 0, 0, .1),
+        rgba(0, 0, 0, .1) 10px,
+        transparent 12px,
+        transparent 22px, 
+        rgba(0, 0, 0, .1) 24px);
 }
 
 .quotabox {
