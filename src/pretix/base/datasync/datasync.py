@@ -204,36 +204,37 @@ class OutboundSyncProvider:
                     # as this order is already in flight (UNIQUE violation). In either case, we ignore
                     # this order for now.
                     continue
-                try:
+
+            try:
+                with transaction.atomic():
                     mapped_objects = self.sync_order(sq.order)
-                except UnrecoverableSyncError as e:
-                    sq.set_sync_error(e.failure_mode, e.messages, e.full_message)
-                except RecoverableSyncError as e:
-                    sq.failed_attempts += 1
-                    sq.not_before = self.next_retry_date(sq)
-                    # model changes saved by set_sync_error / clear_in_flight calls below
-                    if sq.failed_attempts >= self.max_attempts:
-                        logger.exception('Failed to sync order (max attempts exceeded)')
-                        sentry_sdk.capture_exception(e)
-                        sq.set_sync_error("exceeded", e.messages, e.full_message)
-                    else:
-                        logger.info(
-                            f"Could not sync order {sq.order.code} to {type(self).__name__} "
-                            f"(transient error, attempt #{sq.failed_attempts}, next {sq.not_before})",
-                            exc_info=True,
-                        )
-                        sq.clear_in_flight()
-                except Exception as e:
-                    logger.exception('Failed to sync order (unhandled exception)')
-                    sentry_sdk.capture_exception(e)
-                    sq.set_sync_error("internal", [], str(e))
-                else:
                     if not all(all(res.get("action", "") == "nothing_to_do" for res in res_list) for res_list in mapped_objects.values()):
                         sq.order.log_action("pretix.event.order.data_sync.success", {
                             "provider": self.identifier,
                             "objects": mapped_objects
                         })
                     sq.delete()
+            except UnrecoverableSyncError as e:
+                sq.set_sync_error(e.failure_mode, e.messages, e.full_message)
+            except RecoverableSyncError as e:
+                sq.failed_attempts += 1
+                sq.not_before = self.next_retry_date(sq)
+                # model changes saved by set_sync_error / clear_in_flight calls below
+                if sq.failed_attempts >= self.max_attempts:
+                    logger.exception('Failed to sync order (max attempts exceeded)')
+                    sentry_sdk.capture_exception(e)
+                    sq.set_sync_error("exceeded", e.messages, e.full_message)
+                else:
+                    logger.info(
+                        f"Could not sync order {sq.order.code} to {type(self).__name__} "
+                        f"(transient error, attempt #{sq.failed_attempts}, next {sq.not_before})",
+                        exc_info=True,
+                    )
+                    sq.clear_in_flight()
+            except Exception as e:
+                logger.exception('Failed to sync order (unhandled exception)')
+                sentry_sdk.capture_exception(e)
+                sq.set_sync_error("internal", [], str(e))
 
     @cached_property
     def data_fields(self):
