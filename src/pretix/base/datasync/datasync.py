@@ -353,13 +353,17 @@ class OutboundSyncProvider:
             mapping=mapping,
             mapped_objects=mapped_objects,
         )
-        OrderSyncResult.objects.create(
+        OrderSyncResult.objects.update_or_create(
             order=inputs.get(ORDER), order_position=inputs.get(ORDER_POSITION), sync_provider=self.identifier,
-            external_object_type=info.get('object_type'),
-            external_id_field=info.get('external_id_field'),
-            id_value=info.get('id_value'),
-            external_link_href=info.get('external_link_href'),
-            external_link_display_name=info.get('external_link_display_name'),
+            mapping_id=mapping.id,
+            defaults=dict(
+                external_object_type=info.get('object_type'),
+                external_id_field=info.get('external_id_field'),
+                id_value=info.get('id_value'),
+                external_link_href=info.get('external_link_href'),
+                external_link_display_name=info.get('external_link_display_name'),
+                transmitted=now(),
+            )
         )
         return info
 
@@ -376,7 +380,6 @@ class OutboundSyncProvider:
                 "voucher",
             )
         )
-        order.sync_results.filter(sync_provider=self.identifier).delete()
         order_inputs = {ORDER: order, EVENT: self.event}
         mapped_objects = {}
         for mapping in self.mappings:
