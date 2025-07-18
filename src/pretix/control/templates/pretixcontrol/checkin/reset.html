@@ -1,0 +1,50 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Reset check-in" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Reset check-in" %}</h1>
+    <form action="" method="post" class="" data-asynctask>
+        {% csrf_token %}
+        <p>
+            {% blocktrans trimmed %}
+                With this feature, you can reset the entire check-in state of the event.
+                This will delete all check-in records as well as all records of printed tickets or badges.
+                We recommend to use this feature after testing your hardware setup but only before your
+                event started, and you admitted any real attendees or printed any real badges or tickets.
+            {% endblocktrans %}
+        </p>
+        <p class="alert alert-danger">
+            {% blocktrans trimmed count count=checkins %}
+                This will permanently delete <strong>1 check-in</strong>.
+            {% plural %}
+                This will permanently delete <strong>{{ count }} check-ins</strong>.
+            {% endblocktrans %}
+            {% blocktrans trimmed count count=printlogs %}
+                Additionally, <strong>1 print log</strong> will be deleted.
+            {% plural %}
+                Additionally, <strong>{{ count }} print logs</strong> will be deleted.
+            {% endblocktrans %}
+            <br>
+            <strong>
+                {% trans "This cannot be reverted!" %}
+            </strong>
+        </p>
+        <p>
+            {% blocktrans trimmed %}
+                The deleted entries will still show up in the "Order history" section, but for all other
+                purposes the system will behave as if they never existed.
+            {% endblocktrans %}
+        </p>
+            {% bootstrap_form form layout="inline" %}
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.orders.checkinlists" organizer=request.event.organizer.slug event=request.event.slug %}"
+               class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Proceed with reset" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

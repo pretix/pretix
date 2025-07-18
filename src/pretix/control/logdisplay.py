@@ -722,6 +722,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.giftcards.transaction.manual': _('A manual transaction has been performed.'),
     'pretix.team.token.created': _('The token "{name}" has been created.'),
     'pretix.team.token.deleted': _('The token "{name}" has been revoked.'),
+    'pretix.event.checkin.reset': _('The check-in and print log state has been reset.')
 })
 class CoreLogEntryType(LogEntryType):
     pass
