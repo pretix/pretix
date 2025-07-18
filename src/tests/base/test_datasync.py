@@ -29,7 +29,7 @@ from django.utils.timezone import now
 from django_scopes import scope
 
 from pretix.base.datasync.datasync import (
-    OutboundSyncProvider, StaticMapping, sync_all, sync_targets,
+    OutboundSyncProvider, StaticMapping, sync_targets,
 )
 from pretix.base.datasync.utils import assign_properties
 from pretix.base.models import (
@@ -38,6 +38,7 @@ from pretix.base.models import (
 from pretix.base.models.datasync import (
     MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
 )
+from pretix.base.services.datasync import sync_all
 
 
 @pytest.fixture(scope='function')
@@ -308,6 +309,17 @@ def test_simple_order_sync(event):
     expected['ticketorders'][0]['status'] = 'paid'
     expected['ticketorders'][0]['payment_date'] = paydate.isoformat()
     assert SimpleOrderSync.fake_api_client.fake_database == expected
+
+
+@pytest.mark.django_db
+def test_enqueue_order_twice(event):
+    _register_with_fake_plugin_name(sync_targets, SimpleOrderSync, 'testplugin')
+
+    for order in event.orders.order_by("code").all():
+        SimpleOrderSync.enqueue_order(order, 'testcase_1st')
+
+    for order in event.orders.order_by("code").all():
+        SimpleOrderSync.enqueue_order(order, 'testcase_2nd')
 
 
 StaticMappingWithAssociations = namedtuple('StaticMappingWithAssociations', (
