@@ -183,6 +183,8 @@ event_urls = [
 organizer_urls = [
     'organizer/abc/edit',
     'organizer/abc/',
+    'organizer/abc/settings/plugins',
+    'organizer/abc/settings/plugin-events/pretix.plugins.sendmail',
     'organizer/abc/settings/email',
     'organizer/abc/settings/email/setup',
     'organizer/abc/teams',
@@ -287,7 +289,7 @@ def test_wrong_event(perf_patch, client, env, url):
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(organizer=env[2], can_change_event_settings=True)
+    t = Team.objects.create(pk=2, organizer=env[2], can_change_event_settings=True)
     t.members.add(env[1])
     t.limit_events.add(event2)
 
@@ -418,7 +420,7 @@ event_permission_urls = [
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_wrong_event_permission(perf_patch, client, env, perm, url, code, http_method):
     t = Team(
-        organizer=env[2], all_events=True
+        pk=2, organizer=env[2], all_events=True
     )
     setattr(t, perm, False)
     t.save()
@@ -438,7 +440,7 @@ def test_limited_event_permission_for_other_event(perf_patch, client, env, perm,
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(organizer=env[2], can_change_event_settings=True)
+    t = Team.objects.create(pk=2, organizer=env[2], can_change_event_settings=True)
     t.members.add(env[1])
     t.limit_events.add(event2)
 
@@ -453,7 +455,7 @@ def test_limited_event_permission_for_other_event(perf_patch, client, env, perm,
 @pytest.mark.django_db
 def test_current_permission(client, env):
     t = Team(
-        organizer=env[2], all_events=True
+        pk=2, organizer=env[2], all_events=True
     )
     setattr(t, 'can_change_event_settings', True)
     t.save()
@@ -471,7 +473,7 @@ def test_current_permission(client, env):
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_correct_event_permission_all_events(perf_patch, client, env, perm, url, code, http_method):
-    t = Team(organizer=env[2], all_events=True)
+    t = Team(pk=2, organizer=env[2], all_events=True)
     setattr(t, perm, True)
     t.save()
     t.members.add(env[1])
@@ -489,7 +491,7 @@ def test_correct_event_permission_all_events(perf_patch, client, env, perm, url,
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_correct_event_permission_limited(perf_patch, client, env, perm, url, code, http_method):
-    t = Team(organizer=env[2])
+    t = Team(pk=2, organizer=env[2])
     setattr(t, perm, True)
     t.save()
     t.members.add(env[1])
@@ -522,6 +524,8 @@ organizer_permission_urls = [
     ("can_change_teams", "organizer/dummy/team/1/edit", 200),
     ("can_change_teams", "organizer/dummy/team/1/delete", 200),
     ("can_change_organizer_settings", "organizer/dummy/edit", 200),
+    ("can_change_organizer_settings", "organizer/dummy/settings/plugins", 200),
+    ("can_change_organizer_settings", "organizer/dummy/settings/plugin-events/pretix.plugins.sendmail", 200),
     ("can_change_organizer_settings", "organizer/dummy/settings/email", 200),
     ("can_change_organizer_settings", "organizer/dummy/settings/email/setup", 200),
     ("can_change_organizer_settings", "organizer/dummy/devices", 200),
@@ -580,7 +584,7 @@ organizer_permission_urls = [
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
 def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
-    t = Team(organizer=env[2])
+    t = Team(pk=2, organizer=env[2])
     setattr(t, perm, False)
     t.save()
     t.members.add(env[1])
@@ -592,7 +596,7 @@ def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
 def test_correct_organizer_permission(perf_patch, client, env, perm, url, code):
-    t = Team(organizer=env[2])
+    t = Team(pk=2, organizer=env[2])
     setattr(t, perm, True)
     t.save()
     t.members.add(env[1])
