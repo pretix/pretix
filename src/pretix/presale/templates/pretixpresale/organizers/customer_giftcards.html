@@ -63,8 +63,9 @@
                             {% endif %}
                         </div>
                         <div class="col-xs-6 text-right">
-                            {% trans "Remaining value" %}:
-                            <p class="text-right">{{ gc.value|money:gc.currency }}</p>
+                            {% blocktrans trimmed with value=gc.value|money:gc.currency %}
+                                Remaining value: <p class="text-right">{{ value }}</p>
+                            {% endblocktrans %}
                         </div>
                     </article>
                     {% endfor %}
