@@ -762,10 +762,11 @@ class GiftCardCreateForm(forms.ModelForm):
 class GiftCardUpdateForm(forms.ModelForm):
     class Meta:
         model = GiftCard
-        fields = ['expires', 'conditions', 'owner_ticket']
+        fields = ['expires', 'conditions', 'owner_ticket', 'customer']
         field_classes = {
             'expires': SplitDateTimeField,
             'owner_ticket': SafeOrderPositionChoiceField,
+            'customer': SafeModelChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
@@ -787,6 +788,22 @@ class GiftCardUpdateForm(forms.ModelForm):
         )
         self.fields['owner_ticket'].widget.choices = self.fields['owner_ticket'].choices
         self.fields['owner_ticket'].required = False
+
+        if organizer.settings.customer_accounts:
+            self.fields['customer'].queryset = organizer.customers.all()
+            self.fields['customer'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'generic',
+                    'data-select2-url': reverse('control:organizer.customers.select2', kwargs={
+                        'organizer': organizer.slug,
+                    }),
+                    'data-placeholder': _('Customer')
+                }
+            )
+            self.fields['customer'].widget.choices = self.fields['customer'].choices
+            self.fields['customer'].required = False
+        else:
+            del self.fields['customer']
 
 
 class ReusableMediumUpdateForm(forms.ModelForm):
