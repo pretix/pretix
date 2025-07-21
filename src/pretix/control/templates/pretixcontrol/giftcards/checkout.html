@@ -6,7 +6,7 @@
 {{ request.event.settings.payment_giftcard_public_description|rich_text }}
 {% if customer_gift_cards %}
     <p><strong>
-        <span class="sr-only">Info:</span>
+        <span class="sr-only">{% trans "Information" %}</span>
         {% trans "You have gift cards available:" %}
     </strong></p>
     <form method="post">
