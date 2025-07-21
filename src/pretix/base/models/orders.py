@@ -1821,7 +1821,7 @@ class OrderPayment(models.Model):
 
     def fail(self, info=None, user=None, auth=None, log_data=None, send_mail=True):
         """
-        Marks the order as failed and sets info to ``info``, but only if the order is in ``created`` or ``pending``
+        Marks the order as failed and sets info to ``info``, but only if the order is in ``created``, ``pending`` or ``canceled``
         state. This is equivalent to setting ``state`` to ``OrderPayment.PAYMENT_STATE_FAILED`` and logging a failure,
         but it adds strong database locking since we do not want to report a failure for an order that has just
         been marked as paid.
@@ -1829,7 +1829,11 @@ class OrderPayment(models.Model):
         """
         with transaction.atomic():
             locked_instance = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
-            if locked_instance.state not in (OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING):
+            if locked_instance.state in (
+                OrderPayment.PAYMENT_STATE_CONFIRMED,
+                OrderPayment.PAYMENT_STATE_FAILED,
+                OrderPayment.PAYMENT_STATE_REFUNDED
+            ):
                 # Race condition detected, this payment is already confirmed
                 logger.info('Failed payment {} but ignored due to likely race condition.'.format(
                     self.full_id,
