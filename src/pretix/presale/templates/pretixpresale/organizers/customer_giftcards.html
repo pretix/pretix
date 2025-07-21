@@ -25,27 +25,27 @@
                             {% if gc.issuance %}
                             <p class="text-muted">
                                 {% icon "calendar" %}
-                                <span>{% trans "Issued on" %}:</span>
-                                {{ gc.issuance }}
+                                {% blocktrans trimmed %}
+                                    Issued on {{ gc.issuance }}
+                                {% endblocktrans %}
                             </p>
                             {% endif %}
                             <p class="text-muted">
                                 <small>
                                 {% if gc.expired %}
                                     {% icon "clock-o" %}
-                                    {% trans "Expired" %}
-                                    <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
-                                        {% if gc.expires %}
-                                        {% trans " since" %}
-                                        {{ gc.expires|date:"SHORT_DATETIME_FORMAT" }}
-                                        {% endif %}
-                                    </time>
+                                    {% if gc.expires %}
+                                        {% blocktrans trimmed with date=gc.expires|date:"SHORT_DATETIME_FORMAT" %}
+                                            Expired since {{ date }}
+                                        {% endblocktrans %}
+                                    {% else %}
+                                        {% trans "Expired" %}
+                                    {% endif %}
                                 {% elif gc.expires %}
                                     {% icon "check" %}
-                                    {% trans "Valid until" %}
-                                    <time datetime="{{ gc.date_end|date:"Y-m-d H:i" }}">
-                                        {{ gc.expires|date:"SHORT_DATETIME_FORMAT" }}
-                                    </time>
+                                    {% blocktrans trimmed with date=gc.expires|date:"SHORT_DATETIME_FORMAT" %}
+                                        Valid until {{ date }}
+                                    {% endblocktrans %}
                                 {% else %}
                                     {% icon "check" %}
                                     {% trans "Valid" %}
@@ -70,7 +70,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="text-center">{% trans "You don’t have any gift cards in your account currently." %}</p>
+                <p class="text-center">{% trans "You don’t have any gift cards in your account currently. So far, only gift cards resulting from refunds show up here, any purchased gift cards show up under the orders tab." %}</p>
             {% endif %}
         </div>
     </div>
