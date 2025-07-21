@@ -1380,7 +1380,10 @@ class GiftCardPayment(BasePaymentProvider):
         if not self.request:
             return None
         cs = cart_session(self.request)
-        if cs.get('customer_mode', 'guest') == 'login':
+        customer = getattr(self.request, "customer", None)
+        if customer:
+            return customer.usable_gift_cards
+        elif cs.get('customer_mode', 'guest') == 'login':
             try:
                 customer = self.request.organizer.customers.get(pk=cs["customer"])
                 return customer.usable_gift_cards
