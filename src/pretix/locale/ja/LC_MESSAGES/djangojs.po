@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:11+0000\n"
-"PO-Revision-Date: 2025-06-02 09:00+0000\n"
+"PO-Revision-Date: 2025-07-23 01:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/ja/>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -401,7 +401,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:210
 msgid "We are processing your request …"
-msgstr "リクエストを処理しています…"
+msgstr "リクエストを処理中です …"
 
 #: pretix/static/pretixbase/js/asynctask.js:213
 msgid ""
@@ -415,7 +415,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:270
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "数分以上かかる場合は、お問い合わせください。"
 
 #: pretix/static/pretixbase/js/asynctask.js:325
 msgid "Close message"
@@ -627,18 +627,16 @@ msgid "Unknown error."
 msgstr "不明なエラー。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:292
-#, fuzzy
-#| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
-msgstr "色彩のコントラストが良く読みやすいです！"
+msgstr "あなたの色は素晴らしいコントラストを持ち、優れたアクセシビリティを提供します"
+"。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:296
-#, fuzzy
-#| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
-msgstr "色彩のコントラストは読むのに十分です！"
+msgstr "あなたの色は適切なコントラストを持ち、最小限のアクセシビリティ要件に十分です"
+"。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:300
 msgid ""
@@ -649,11 +647,11 @@ msgstr ""
 #: pretix/static/pretixcontrol/js/ui/main.js:416
 #: pretix/static/pretixcontrol/js/ui/main.js:436
 msgid "Search query"
-msgstr "検索ワード"
+msgstr "検索クエリ"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:434
 msgid "All"
-msgstr "全"
+msgstr "全て"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:435
 msgid "None"
