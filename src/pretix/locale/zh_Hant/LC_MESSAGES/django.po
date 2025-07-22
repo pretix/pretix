@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
-"PO-Revision-Date: 2025-05-06 16:20+0000\n"
-"Last-Translator: KC Tseng <tkc0204@gmail.com>\n"
+"PO-Revision-Date: 2025-07-23 01:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -89,7 +89,7 @@ msgstr "希臘語"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "希伯來語"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -671,16 +671,14 @@ msgid ""
 msgstr "API銷售渠道沒有內建功能，但可用於自定義整合。"
 
 #: pretix/base/context.py:38
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "由 {name} 基於 <a {a_attr}>pretix 提供支援</a>"
+msgstr "<a {a_name_attr}>由{name}提供支援</a> <a {a_attr}>基於pretix</a>"
 
 #: pretix/base/context.py:48
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "由 {name} 基於 <a {a_attr}>pretix 提供支援</a>"
+msgstr "<a {a_attr}>由{name}提供支援，基於pretix</a>"
 
 #: pretix/base/context.py:55
 #, python-format
@@ -3399,11 +3397,9 @@ msgid "Tax rule {val}"
 msgstr "稅務規則{val}"
 
 #: pretix/base/logentrytypes.py:151
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "Date {val}"
+#, python-brace-format
 msgid "{val}"
-msgstr "日期{val}"
+msgstr "{val}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
@@ -4154,12 +4150,9 @@ msgid "Available for dates starting from"
 msgstr "適用日期始於"
 
 #: pretix/base/models/discount.py:182
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "之前開始的所有日期"
+msgstr "適用於從開始到"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -4241,13 +4234,13 @@ msgstr "可選擇的。在此日期之前不會銷售任何商品。"
 
 #: pretix/base/models/event.py:621
 msgid "This event is remote or partially remote."
-msgstr ""
+msgstr "此活動是遠程的或部分遠程的。"
 
 #: pretix/base/models/event.py:622
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
-msgstr ""
+msgstr "這將用於讓使用者知道活動是否在不同的時區，讓我們計算使用者的當地時間。"
 
 #: pretix/base/models/event.py:642 pretix/control/navigation.py:65
 msgid "Plugins"
@@ -5362,7 +5355,8 @@ msgid ""
 "The system already contains answers to this question that are not compatible "
 "with changing the type of question without data loss. Consider hiding this "
 "question and creating a new one instead."
-msgstr ""
+msgstr "系統已經包含此問題的答案，這些答案與在不丟失資料的情況下更改問題型別不相容。 "
+"考慮隱藏這個問題，改造一個新問題。"
 
 #: pretix/base/models/items.py:1961
 #: pretix/control/templates/pretixcontrol/items/question.html:90
@@ -5806,10 +5800,8 @@ msgid "Cart ID (e.g. session key)"
 msgstr "購物車 ID（如: 工作階段金鑰）"
 
 #: pretix/base/models/orders.py:3102
-#, fuzzy
-#| msgid "Gift card: Expiration date"
 msgid "Limit for extending expiration date"
-msgstr "禮品卡：失效日期"
+msgstr "延長到期日期的限制"
 
 #: pretix/base/models/orders.py:3131
 msgid "Cart position"
@@ -9325,10 +9317,8 @@ msgstr ""
 "這不如語言優先，因此主要與全球不同地區使用的語言（如英語）相關。"
 
 #: pretix/base/settings.py:1316
-#, fuzzy
-#| msgid "This is not an event series."
 msgid "This shop represents an event"
-msgstr "這不是一個事件系列。"
+msgstr "這家商店代表著一個活動"
 
 #: pretix/base/settings.py:1318
 msgid ""
@@ -9956,21 +9946,14 @@ msgstr ""
 "例如，這應該導向你網站的一部分，該部分解釋了你如何使用在售票處收集的數據。"
 
 #: pretix/base/settings.py:2071
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information URL"
-msgstr "帳戶資訊"
+msgstr "無障礙資訊網址"
 
 #: pretix/base/settings.py:2072
-#, fuzzy
-#| msgid ""
-#| "This should point e.g. to a part of your website that explains how you "
-#| "use data gathered in your ticket shop."
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
-msgstr ""
-"例如，這應該導向你網站的一部分，該部分解釋了你如何使用在售票處收集的數據。"
+msgstr "例如，這應該指向您網站的一部分，該部分解釋了您的售票處如何遵守無障礙法規。"
 
 #: pretix/base/settings.py:2079
 #: pretix/presale/templates/pretixpresale/event/base.html:228
@@ -9978,10 +9961,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/accessibility.html:6
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
 #: pretix/presale/templates/pretixpresale/organizers/base.html:111
-#, fuzzy
-#| msgid "Account information"
 msgid "Accessibility information"
-msgstr "帳戶資訊"
+msgstr "無障礙資訊"
 
 #: pretix/base/settings.py:2083
 #, fuzzy
