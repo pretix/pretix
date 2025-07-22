@@ -127,7 +127,7 @@ def get_data_fields(event, for_model=None):
     - TYPE_CHOICE_MULTIPLE: list of strings
     - TYPE_CHOICE: list, containing zero or one strings
     - TYPE_BOOLEAN: boolean
-    - all other: string
+    - all other (including TYPE_NUMBER): string
     """
     name_scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
     name_headers = []
@@ -344,7 +344,7 @@ def get_data_fields(event, for_model=None):
                 _("Product ID"),
                 Question.TYPE_NUMBER,
                 None,
-                lambda position: position.item.pk,
+                lambda position: str(position.item.pk),
             ),
             DataFieldInfo(
                 EVENT,
@@ -411,6 +411,14 @@ def get_data_fields(event, for_model=None):
                 lambda order: [order.status],
             ),
             DataFieldInfo(
+                ORDER_POSITION,
+                "ticket_status",
+                _("Ticket status"),
+                Question.TYPE_CHOICE,
+                Order.STATUS_CHOICE,
+                lambda position: [Order.STATUS_CANCELED if position.canceled else position.order.status],
+            ),
+            DataFieldInfo(
                 ORDER,
                 "order_date",
                 _("Order date and time"),
@@ -440,7 +448,7 @@ def get_data_fields(event, for_model=None):
                 _("Order position ID"),
                 Question.TYPE_NUMBER,
                 None,
-                lambda op: op.pk,
+                lambda op: str(op.pk),
             ),
         ]
         + [
