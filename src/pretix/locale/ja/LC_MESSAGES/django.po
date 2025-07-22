@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
-"PO-Revision-Date: 2025-06-02 09:00+0000\n"
+"PO-Revision-Date: 2025-07-22 14:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -1340,7 +1340,7 @@ msgstr "日付"
 #: pretix/plugins/reports/exporters.py:884
 #: pretix/plugins/ticketoutputpdf/exporters.py:96
 msgid "Order code"
-msgstr "注文番号"
+msgstr "注文コード"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/forms/auth.py:160 pretix/base/modelimport_orders.py:59
