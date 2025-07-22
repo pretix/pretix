@@ -44,7 +44,7 @@ from django.contrib import messages
 from django.core.cache import caches
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import translation
 from django.utils.crypto import get_random_string
@@ -68,7 +68,7 @@ from pretix.base.timemachine import time_machine_now
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.ical import get_public_ical
+
 from pretix.presale.views import (
     CartMixin, EventViewMixin, allow_cors_if_namespaced,
     allow_frame_if_namespaced, iframe_entry_view_wrapper,
@@ -619,23 +619,6 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
                 })
             else:
                 return redirect_to_url(self.get_error_url())
-
-
-class CartIcalDownload(EventViewMixin, CartMixin, View):
-    def get(self, request, *args, **kwargs):
-        cart = self.get_cart()
-
-        events = cart.get('positions', [])
-        cal = get_public_ical(events)
-
-        resp = HttpResponse(cal.serialize(), content_type='text/calendar')
-        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}.ics"'.format(
-            events[0].organizer.slug, events[0].slug, '0',
-        )
-
-        resp['X-Robots-Tag'] = 'noindex'
-        return resp
-
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')

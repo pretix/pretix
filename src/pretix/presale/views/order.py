@@ -50,7 +50,7 @@ from django.core.files import File
 from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Q, Subquery, Sum
 from django.http import (
-    FileResponse, Http404, HttpResponseRedirect, JsonResponse,
+    FileResponse, Http404, HttpResponse, HttpResponseRedirect, JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -98,6 +98,7 @@ from pretix.presale.views import (
 from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
+from pretix.presale.ical import get_public_ical
 
 class OrderDetailMixin(NoSearchIndexViewMixin):
 
@@ -116,6 +117,21 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
             'secret': self.order.secret
         })
 
+
+class CartIcalDownload(EventViewMixin, OrderDetailMixin, CartMixin, View):
+    def get(self, request, *args, **kwargs):
+        events = [self.order.event]
+        if self.order.event.has_subevents:
+            events = list(self.order.event.subevents.all())
+        cal = get_public_ical(events)
+
+        resp = HttpResponse(cal.serialize(), content_type='text/calendar')
+        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}.ics"'.format(
+            self.order.code, self.order.secret, '0',
+        )
+
+        resp['X-Robots-Tag'] = 'noindex'
+        return resp
 
 class OrderPositionDetailMixin(NoSearchIndexViewMixin):
     @cached_property

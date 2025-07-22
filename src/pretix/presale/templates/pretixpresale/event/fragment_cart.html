@@ -438,7 +438,7 @@
         <div role="rowgroup" class="cart-rowgroup-calendar">
             <div role="row" class="row cart-row">
                 <div role="cell" class="calendar">
-                    <a href="{% eventurl event "presale:cart.ical.download" %}">
+                    <a href="{% eventurl event "presale:event.order.ical.download" secret=order.secret order=order.code %}">
                     <span class="fa fa-calendar" aria-hidden="true"></span>
                     {% trans "Add to Calendar" %}
                     </a>

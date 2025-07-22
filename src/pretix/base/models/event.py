@@ -1490,6 +1490,10 @@ class SubEvent(EventMixin, LoggedModel):
     date_from = models.DateTimeField(verbose_name=_("Event start time"))
     date_to = models.DateTimeField(null=True, blank=True,
                                    verbose_name=_("Event end time"))
+
+    # session_date_blocks = models.ForeignKey('SubeventSessions', on_delete=models.PROTECT, null=True, blank=True,
+    #                                         related_name='subevent_blocks', verbose_name=_('Subevent Blocks'))
+
     date_admission = models.DateTimeField(null=True, blank=True,
                                           verbose_name=_("Admission time"))
     presale_end = models.DateTimeField(

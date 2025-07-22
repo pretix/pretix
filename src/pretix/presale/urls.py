@@ -56,7 +56,6 @@ frame_wrapped_urls = [
     re_path(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
     re_path(r'^cart/voucher$', pretix.presale.views.cart.CartApplyVoucher.as_view(), name='event.cart.voucher'),
     re_path(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
-    re_path(r'^cart/ical$', pretix.presale.views.cart.CartIcalDownload.as_view(), name='cart.ical.download'),
     re_path(r'^cart/answer/(?P<answer>[^/]+)/$',
             pretix.presale.views.cart.AnswerDownload.as_view(),
             name='event.cart.download.answer'),
@@ -146,6 +145,9 @@ event_patterns = [
     re_path(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/invoice/(?P<invoice>[0-9]+)$',
             pretix.presale.views.order.InvoiceDownload.as_view(),
             name='event.invoice.download'),
+    re_path(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/ical$',
+            pretix.presale.views.order.CartIcalDownload.as_view(),
+            name='event.order.ical.download'),
 
     re_path(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/$',
             pretix.presale.views.order.OrderPositionDetails.as_view(),
