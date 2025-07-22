@@ -121,6 +121,7 @@ class OrderSyncResult(models.Model):
     external_link_href = models.CharField(blank=True, null=True, max_length=255)
     external_link_display_name = models.CharField(blank=True, null=True, max_length=255)
     transmitted = models.DateTimeField(blank=False, null=False, auto_now_add=True)
+    sync_info = models.JSONField()
 
     class Meta:
         indexes = [

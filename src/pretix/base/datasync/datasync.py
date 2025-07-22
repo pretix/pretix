@@ -302,17 +302,12 @@ class OutboundSyncProvider:
         :param mapping: The mapping object as returned by ``self.mappings``
         :param mapped_objects: Information about objects that were synced in the same sync run, by mapping definitions
                                *before* the current one in order of ``self.mappings``.
-                               Type is a dictionary ``{mapping.id: [list of return values of this method]}``
+                               Type is a dictionary ``{mapping.id: [list of OrderSyncResult objects]}``
                                Useful to create associations between objects in the target system.
 
         Example code to create return value::
 
                  return {
-                    # required:
-                    "object_type": mapping.external_object_type,
-                    "external_id_field": external_id_field,
-                    "id_value": id_value,
-
                     # optional:
                     "action": "nothing_to_do",  # to inform that no action was taken, because the data was already up-to-date.
                                                 # other values for action (e.g. create, update) currently have no special
@@ -323,6 +318,8 @@ class OutboundSyncProvider:
                     "external_link_display_name": "Contact #123 - Jane Doe",
                     "...optionally further values you need in mapped_objects for association": 123456789,
                  }
+
+        The return value needs to be JSON serializable.
 
         This method needs to be idempotent, i.e. calling it multiple times with the same input values should create
         only a single object in the target system.
@@ -354,19 +351,22 @@ class OutboundSyncProvider:
             mapping=mapping,
             mapped_objects=mapped_objects,
         )
-        OrderSyncResult.objects.update_or_create(
+        external_link_href = info.pop('external_link_href', None)
+        external_link_display_name = info.pop('external_link_display_name', None)
+        obj, created = OrderSyncResult.objects.update_or_create(
             order=inputs.get(ORDER), order_position=inputs.get(ORDER_POSITION), sync_provider=self.identifier,
             mapping_id=mapping.id,
             defaults=dict(
-                external_object_type=info.get('object_type'),
-                external_id_field=info.get('external_id_field'),
-                id_value=info.get('id_value'),
-                external_link_href=info.get('external_link_href'),
-                external_link_display_name=info.get('external_link_display_name'),
+                external_object_type=mapping.external_object_type,
+                external_id_field=mapping.external_id_field,
+                id_value=id_value,
+                external_link_href=external_link_href,
+                external_link_display_name=external_link_display_name,
+                sync_info=info,
                 transmitted=now(),
             )
         )
-        return info
+        return obj
 
     def sync_order(self, order):
         if not self.should_sync_order(order):

@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
                 ('external_link_href', models.CharField(max_length=255, null=True)),
                 ('external_link_display_name', models.CharField(max_length=255, null=True)),
                 ('transmitted', models.DateTimeField(auto_now_add=True)),
+                ('sync_info', models.JSONField()),
                 ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sync_results', to='pretixbase.order')),
                 ('order_position', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='sync_results', to='pretixbase.orderposition')),
             ],
