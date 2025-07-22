@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
 "PO-Revision-Date: 2025-07-23 01:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -2986,7 +2986,7 @@ msgstr "名前に特殊文字を使わないでください。"
 
 #: pretix/base/forms/questions.py:287
 msgid "Please enter a shorter name."
-msgstr "もっと短い名前を入力してください。"
+msgstr "より短い名前を入力してください。"
 
 #: pretix/base/forms/questions.py:312
 msgctxt "phonenumber"
@@ -3002,8 +3002,7 @@ msgstr "電話番号（国際エリアコードなし）"
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
-msgstr ""
-"画像が横向きでアップロードされています。縦向きの画像をアップロードしてくださ"
+msgstr "横向きの画像がアップロードされています。縦向きの画像をアップロードしてくださ"
 "い。"
 
 #: pretix/base/forms/questions.py:502
