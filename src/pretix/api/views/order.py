@@ -943,6 +943,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def change(self, request, **kwargs):
         order = self.get_object()
+        check_quotas = self.request.query_params.get('check_quotas', 'true') == 'true'
 
         serializer = OrderChangeOperationSerializer(
             context={'order': order, **self.get_serializer_context()},
@@ -1008,7 +1009,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             elif serializer.validated_data.get('recalculate_taxes') == 'keep_gross':
                 ocm.recalculate_taxes(keep='gross')
 
-            ocm.commit()
+            ocm.commit(check_quotas=check_quotas)
         except OrderError as e:
             raise ValidationError(str(e))
 
@@ -1087,6 +1088,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true') == 'true'
         return ctx
 
     def get_queryset(self):

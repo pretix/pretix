@@ -1202,6 +1202,41 @@ def test_position_update_change_item_no_quota(token_client, organizer, event, or
     )
     assert resp.status_code == 400
     assert 'quota' in str(resp.data)
+    
+@pytest.mark.django_db
+def test_position_update_change_item_no_quota_check_quota_false(token_client, organizer, event, order):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        op = order.positions.first()
+    payload = {
+        'item': item2.pk,
+    }
+    assert op.item != item2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/?check_quotas=false'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.item == item2
+    
+@pytest.mark.django_db
+def test_position_update_change_item_no_quota_check_quota_true(token_client, organizer, event, order):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        op = order.positions.first()
+    payload = {
+        'item': item2.pk,
+    }
+    assert op.item != item2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/?check_quotas=true'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'quota' in str(resp.data)
 
 
 @pytest.mark.django_db
@@ -1316,6 +1351,27 @@ def test_position_update_change_subevent_quota_empty(token_client, organizer, ev
     )
     assert resp.status_code == 400
     assert 'quota' in str(resp.data)
+    
+@pytest.mark.django_db
+def test_position_update_change_subevent_quota_empty_check_quota_false(token_client, organizer, event, order, quota, item, subevent):
+    with scopes_disabled():
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc))
+        q2 = se2.quotas.create(name="foo", size=0, event=event)
+        q2.items.add(item)
+        op = order.positions.first()
+        op.subevent = subevent
+        op.save()
+    payload = {
+        'subevent': se2.pk,
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/?check_quotas=false'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.subevent == se2
 
 
 @pytest.mark.django_db
@@ -1598,6 +1654,29 @@ def test_position_add_quota_empty(token_client, organizer, event, order, quota, 
     )
     assert resp.status_code == 400
     assert 'quota' in str(resp.data)
+    
+@pytest.mark.django_db
+def test_position_add_quota_empty_check_quota_false(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+        quota.size = 1
+        quota.save()
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?check_quotas=false'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert order.positions.count() == 2
+        op = order.positions.last()
+        assert op.item == item
+        assert op.price == item.default_price
+        assert op.positionid == 3
 
 
 @pytest.mark.django_db
@@ -1801,8 +1880,58 @@ def test_order_change_patch(token_client, organizer, event, order, quota):
         assert f.value == Decimal('10.00')
         order.refresh_from_db()
         assert order.total == Decimal('109.44')
+        
+@pytest.mark.django_db
+def test_order_change_patch_no_quota(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        p = order.positions.first()
+    payload = {
+        'patch_positions': [
+            {
+                'position': p.pk,
+                'body': {
+                    'item': item2.pk,
+                    'price': '99.44',
+                },
+            },
+        ]
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'quota' in str(resp.data)
 
-
+@pytest.mark.django_db
+def test_order_change_patch_no_quota_check_quota_false(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        p = order.positions.first()
+    payload = {
+        'patch_positions': [
+            {
+                'position': p.pk,
+                'body': {
+                    'item': item2.pk,
+                    'price': '99.44',
+                },
+            },
+        ]
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/?check_quotas=false'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        p.refresh_from_db()
+        assert p.price == Decimal('99.44')
+        assert p.item == item2
+        
 @pytest.mark.django_db
 def test_order_change_cancel_and_create(token_client, organizer, event, order, quota, item):
     with scopes_disabled():
