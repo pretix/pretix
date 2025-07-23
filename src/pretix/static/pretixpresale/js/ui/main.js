@@ -633,6 +633,13 @@ $(function () {
         $fei_list_div.insertBefore($list_infofirst);
     });
 
+    // cart view
+    $("dl div.cart-icon-details").each(function() {
+        var $cid_list_div = set_timezone_times_for_event($(this), local_tz, $("<div style='width: fit-content;'>"))
+        var $cid_infofirst = $(this).find(".event-time").first();
+        $cid_list_div.insertBefore($cid_infofirst);
+    });
+
     // For a very weird reason, window width is 0 on an initial load of the widget
     if ($(window).width() > 0) {
         setup_week_calendar()

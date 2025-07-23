@@ -69,14 +69,41 @@
                         <span class="fa fa-calendar fa-fw" aria-hidden="true"></span> {{ line.subevent.name }}
                         <br>
                         <span class="text-muted" aria-hidden="true">
-                            {{ line.subevent.get_date_range_display_with_times_as_html }}
+                            <!-- {{ line.subevent.get_date_range_display_with_times_as_html }} -->
+                            {{ line.subevent.get_date_range_display_as_html }}
                         </span>
-                        <span class="sr-only">
+                        <!-- <span class="sr-only">
                             <time datetime="{% if event.settings.show_times %}{{ line.subevent.date_from.isoformat }}{% else %}{{ line.subevent.date_from|date:"Y-m-d" }}{% endif %}">{{ line.subevent.get_date_from_display }}</time>
                             {% if event.settings.show_date_to and line.subevent.date_to %}
                                 – <time datetime="{% if event.settings.show_times %}{{ line.subevent.date_to.isoformat }}{% else %}{{ line.subevent.date_to|date:"Y-m-d" }}{% endif %}">{{ line.subevent.get_date_to_display }}</time>
                             {% endif %}
+                        </span> -->
+
+                        {% if event.settings.show_times %}
+                        <br>
+                        <span class="event-time event-time-start" data-time="{{ line.subevent.date_from.isoformat }}" data-timezone="{{ event.timezone }}">
+                            <br>
+                            <span class="fa fa-clock-o" aria-hidden="true"></span>
+                            {% with time_human=line.subevent.date_from|date:"TIME_FORMAT" time_24=line.subevent.date_from|time:"H:i" %}
+                                {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                    Begin: {{ time }}
+                                {% endblocktrans %}
+                                {{ event.tzstr }}
+                            {% endwith %}
                         </span>
+                            {% if event.settings.show_date_to and line.subevent.date_to %}
+                            <span class="event-time event-time-end" data-time="{{ line.subevent.date_to.isoformat }}" data-timezone="{{ event.timezone }}">
+                                <br>
+                                <span class="fa fa-clock-o" aria-hidden="true"></span>
+                                {% with time_human=line.subevent.date_to|date:"TIME_FORMAT" time_24=line.subevent.date_to|time:"H:i" %}
+                                    {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                        End: {{ time }}
+                                    {% endblocktrans %}
+                                    {{ event.tzstr }}
+                                {% endwith %}
+                            </span>
+                            {% endif %}
+                        {% endif %}
                         </dd>
                     </div>
                     {% if line.subevent.location %}
@@ -85,9 +112,10 @@
                         <dt class="sr-only">{% trans "Location:" %}</dt>
                         <dd>
                             <div class="collapse-lines" data-expand-text="{% trans "Show full location" %}" aria-hidden="true">
-                                <span class="content text-muted" id="full-location-{{ line.pk }}">{{ line.subevent.location|linebreaksbr }}</span>
+                                <span class="fa fa-map-pin" aria-hidden="true"></span>
+                                <span class="content text-muted" id="full-location-{{ line.pk }}"> {{ line.subevent.location|linebreaksbr }}</span>
                             </div>
-                            <div class="sr-only">{{ line.subevent.location|linebreaksbr }}</div>
+                            <div class="sr-only"> {{ line.subevent.location|linebreaksbr }}</div>
                         </dd>
                     </div>
                     {% endif %}
