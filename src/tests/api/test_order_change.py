@@ -1202,7 +1202,8 @@ def test_position_update_change_item_no_quota(token_client, organizer, event, or
     )
     assert resp.status_code == 400
     assert 'quota' in str(resp.data)
-    
+
+
 @pytest.mark.django_db
 def test_position_update_change_item_no_quota_check_quota_false(token_client, organizer, event, order):
     with scopes_disabled():
@@ -1220,7 +1221,8 @@ def test_position_update_change_item_no_quota_check_quota_false(token_client, or
     assert resp.status_code == 200
     op.refresh_from_db()
     assert op.item == item2
-    
+
+
 @pytest.mark.django_db
 def test_position_update_change_item_no_quota_check_quota_true(token_client, organizer, event, order):
     with scopes_disabled():
@@ -1351,7 +1353,8 @@ def test_position_update_change_subevent_quota_empty(token_client, organizer, ev
     )
     assert resp.status_code == 400
     assert 'quota' in str(resp.data)
-    
+
+
 @pytest.mark.django_db
 def test_position_update_change_subevent_quota_empty_check_quota_false(token_client, organizer, event, order, quota, item, subevent):
     with scopes_disabled():
@@ -1654,7 +1657,8 @@ def test_position_add_quota_empty(token_client, organizer, event, order, quota, 
     )
     assert resp.status_code == 400
     assert 'quota' in str(resp.data)
-    
+
+
 @pytest.mark.django_db
 def test_position_add_quota_empty_check_quota_false(token_client, organizer, event, order, quota, item):
     with scopes_disabled():
@@ -1880,7 +1884,8 @@ def test_order_change_patch(token_client, organizer, event, order, quota):
         assert f.value == Decimal('10.00')
         order.refresh_from_db()
         assert order.total == Decimal('109.44')
-        
+
+
 @pytest.mark.django_db
 def test_order_change_patch_no_quota(token_client, organizer, event, order, quota):
     with scopes_disabled():
@@ -1904,6 +1909,7 @@ def test_order_change_patch_no_quota(token_client, organizer, event, order, quot
     )
     assert resp.status_code == 400
     assert 'quota' in str(resp.data)
+
 
 @pytest.mark.django_db
 def test_order_change_patch_no_quota_check_quota_false(token_client, organizer, event, order, quota):
@@ -1931,7 +1937,8 @@ def test_order_change_patch_no_quota_check_quota_false(token_client, organizer, 
         p.refresh_from_db()
         assert p.price == Decimal('99.44')
         assert p.item == item2
-        
+
+
 @pytest.mark.django_db
 def test_order_change_cancel_and_create(token_client, organizer, event, order, quota, item):
     with scopes_disabled():
