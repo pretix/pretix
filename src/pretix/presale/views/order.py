@@ -122,7 +122,11 @@ class CartIcalDownload(EventViewMixin, OrderDetailMixin, CartMixin, View):
     def get(self, request, *args, **kwargs):
         events = [self.order.event]
         if self.order.event.has_subevents:
-            events = list(self.order.event.subevents.all())
+            events = self.order.event.subevents.filter(
+                id__in=[
+                    p.subevent_id for p in self.order.positions.all()
+                ]
+            )
         cal = get_public_ical(events)
 
         resp = HttpResponse(cal.serialize(), content_type='text/calendar')
