@@ -373,7 +373,6 @@ class OrderChangeVariationTest(BaseOrdersTest):
         assert response.status_code == 200
         response = self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
             }, follow=True)
         assert response.status_code == 200
         assert 'alert-danger' in response.content.decode()
@@ -1038,7 +1037,6 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
-                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
             },
         )
         assert response.status_code == 200
@@ -1072,7 +1070,6 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
-                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
                 f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1'
             },
         )
