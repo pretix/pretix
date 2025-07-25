@@ -81,6 +81,7 @@ class BaseOrdersTest(TestCase):
                                           admission=True)
         self.quota_tickets.items.add(self.ticket)
         self.event.settings.set('attendee_names_asked', True)
+        self.event.settings.set('change_allow_user_remove_positions', True)
         self.question = Question.objects.create(question='Foo', type=Question.TYPE_STRING, event=self.event,
                                                 required=False)
         self.ticket.questions.add(self.question)
@@ -349,6 +350,29 @@ class OrderChangeVariationTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 f'op-{shirt_pos.pk}-itemvar': f'{self.shirt.pk}-{self.shirt_red.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            }, follow=True)
+        assert response.status_code == 200
+        assert 'alert-danger' in response.content.decode()
+
+    def test_change_variation_remove_disabled(self):
+        self.event.settings.change_allow_user_remove_positions = False
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_blue,
+                price=Decimal("12"),
+            )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
             }, follow=True)
         assert response.status_code == 200
@@ -993,6 +1017,67 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             assert a.canceled
             self.order.refresh_from_db()
             assert self.order.total == Decimal('23.00')
+            
+    def test_remove_addon_disabled(self):
+        self.event.settings.change_allow_user_remove_positions = False
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            },
+        )
+        assert response.status_code == 200
+        assert 'alert-danger' in response.content.decode()
+        
+    def test_remove_addon_disabled_multiple(self):
+        self.event.settings.change_allow_user_remove_positions = False
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Stranck"}
+            )
+            self.order.total += Decimal("24")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1'
+            },
+        )
+        assert response.status_code == 200
+        assert 'alert-danger' in response.content.decode()
 
     def test_do_not_remove_unavailable_on_adding(self):
         self.iao.max_count = 2

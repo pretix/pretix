@@ -1544,12 +1544,12 @@ class OrderChangeMixin:
                         messages.error(request, e.message % e.params if e.params else e.message)
                         return self.get(request, *args, **kwargs)
 
-                    for (i, v), (c, price) in selected.items():
+                    for (i, v), (count, price) in selected.items():
                         addons_data.append({
                             'addon_to': p.pk,
                             'item': i.pk,
                             'variation': v.pk if v else None,
-                            'count': c,
+                            'count': count,
                             'price': price,
                         })
             try:
@@ -1565,6 +1565,7 @@ class OrderChangeMixin:
             messages.error(self.request, _('An error occurred. Please see the details below.'))
         else:
             try:
+                self._validate_cancel_positions(ocm)
                 self._validate_total_diff(ocm)
             except OrderError as e:
                 messages.error(self.request, str(e))
@@ -1621,6 +1622,12 @@ class OrderChangeMixin:
                 })
 
         return self.get(request, *args, **kwargs)
+
+    def _validate_cancel_positions(self, ocm):
+        if not self.request.event.settings.change_allow_user_remove_positions:
+            for op in ocm._operations:
+                if isinstance(op, ocm.CancelOperation):
+                    raise OrderError(_('You may not remove positions from your order.'))
 
     def _validate_total_diff(self, ocm):
         pr = self.get_price_requirement()
