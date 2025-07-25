@@ -582,7 +582,7 @@ class QuotaSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Quota
         fields = ('id', 'name', 'size', 'items', 'variations', 'subevent', 'closed', 'close_when_sold_out',
-                  'release_after_exit', 'available', 'available_number')
+                  'release_after_exit', 'available', 'available_number', 'ignore_for_event_availability')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
