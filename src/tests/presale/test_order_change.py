@@ -1017,12 +1017,12 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             assert a.canceled
             self.order.refresh_from_db()
             assert self.order.total == Decimal('23.00')
-            
+
     def test_remove_addon_disabled(self):
         self.event.settings.change_allow_user_remove_positions = False
         self.event.settings.change_allow_user_variation = True
         self.event.settings.change_allow_user_price = 'any'
-        
+
         with scopes_disabled():
             OrderPosition.objects.create(
                 order=self.order,
@@ -1043,12 +1043,12 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         )
         assert response.status_code == 200
         assert 'alert-danger' in response.content.decode()
-        
+
     def test_remove_addon_disabled_multiple(self):
         self.event.settings.change_allow_user_remove_positions = False
         self.event.settings.change_allow_user_variation = True
         self.event.settings.change_allow_user_price = 'any'
-        
+
         with scopes_disabled():
             OrderPosition.objects.create(
                 order=self.order,
