@@ -546,7 +546,8 @@ class DeviceViewSet(mixins.CreateModelMixin,
 
 
 class OrganizerSettingsView(views.APIView):
-    permission = 'can_change_organizer_settings'
+    permission = None
+    write_permission = 'can_change_organizer_settings'
 
     def get(self, request, *args, **kwargs):
         s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer, context={
