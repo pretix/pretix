@@ -355,31 +355,6 @@ class OrderChangeVariationTest(BaseOrdersTest):
         assert response.status_code == 200
         assert 'alert-danger' in response.content.decode()
 
-    def test_change_variation_remove_disabled(self):
-        self.event.settings.change_allow_user_remove_positions = False
-        self.event.settings.change_allow_user_variation = True
-        self.event.settings.change_allow_user_price = 'any'
-
-        with scopes_disabled():
-            OrderPosition.objects.create(
-                order=self.order,
-                item=self.shirt,
-                variation=self.shirt_blue,
-                addon_to=self.ticket_pos,
-                price=Decimal("12"),
-            )
-            self.order.total += Decimal("12")
-            self.order.save()
-        response = self.client.get(
-            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
-        )
-        assert response.status_code == 200
-        response = self.client.post(
-            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-            }, follow=True)
-        assert response.status_code == 200
-        assert 'alert-danger' in response.content.decode()
-
     def test_change_variation_require_same_product(self):
         self.event.settings.change_allow_user_variation = True
         self.event.settings.change_allow_user_price = 'any'
@@ -1089,6 +1064,37 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1'
+            },
+        )
+        assert response.status_code == 200
+        assert 'alert-danger' in response.content.decode()
+
+    def test_remove_addon_variation_disabled(self):
+        self.event.settings.change_allow_user_remove_positions = False
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop2,
+                variation=self.workshop2a,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 2a' in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
             },
         )
         assert response.status_code == 200
