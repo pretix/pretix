@@ -365,8 +365,11 @@ class OrderChangeVariationTest(BaseOrdersTest):
                 order=self.order,
                 item=self.shirt,
                 variation=self.shirt_blue,
+                addon_to=self.ticket_pos,
                 price=Decimal("12"),
             )
+            self.order.total += Decimal("12")
+            self.order.save()
         response = self.client.get(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
@@ -1035,6 +1038,15 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             self.order.save()
 
         response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')[0].attrs['checked']
+
+        response = self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
             },
@@ -1068,6 +1080,12 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             self.order.save()
 
         response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        response = self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
                 f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1'
