@@ -50,6 +50,7 @@ from paypalcheckoutsdk.payments import CapturesRefundRequest, RefundsGetRequest
 from paypalhttp import HttpError
 
 from pretix.base.decimal import round_decimal
+from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
@@ -116,7 +117,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                      )
                  )),
                 ('secret',
-                 forms.CharField(
+                 SecretKeySettingsField(
                      label=_('Secret'),
                      max_length=80,
                      min_length=80,
