@@ -49,8 +49,8 @@ subevent                              integer                    ID of the date 
 show_hidden_items                     boolean                    Only if set to ``true``, this voucher allows to buy products with the property ``hide_without_voucher``. Defaults to ``true``.
 all_addons_included                   boolean                    If set to ``true``, all add-on products for the product purchased with this voucher are included in the base price.
 all_bundles_included                  boolean                    If set to ``true``, all bundled products for the product purchased with this voucher are added without their designated price.
-budget                                decimal (string)           The budget a voucher is allowed to consume before being used up (or ``null``)
-budget_used                           decimal (string)           The amount of budget the voucher has already used up.
+budget                                money (string)             The budget a voucher is allowed to consume before being used up (or ``null``)
+budget_used                           money (string)             The amount of budget the voucher has already used up.
 ===================================== ========================== =======================================================
 
 
@@ -103,7 +103,7 @@ Endpoints
             "all_addons_included": false,
             "all_bundles_included": false,
             "budget": None,
-            "budget_used": 0
+            "budget_used": "0.00"
           }
         ]
       }
@@ -175,7 +175,7 @@ Endpoints
         "all_addons_included": false,
         "all_bundles_included": false,
         "budget": None,
-        "budget_used": 0
+        "budget_used": "0.00"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -247,7 +247,7 @@ Endpoints
         "all_addons_included": false,
         "all_bundles_included": false,
         "budget": None,
-        "budget_used": 0
+        "budget_used": "0.00"
       }
 
    :param organizer: The ``slug`` field of the organizer to create a voucher for
@@ -386,7 +386,7 @@ Endpoints
         "all_addons_included": false,
         "all_bundles_included": false,
         "budget": None,
-        "budget_used": 0
+        "budget_used": "0.00"
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
