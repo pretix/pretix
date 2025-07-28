@@ -1896,7 +1896,8 @@ TEST_QUOTA_RES = {
     "subevent": None,
     "close_when_sold_out": False,
     "release_after_exit": False,
-    "closed": False
+    "closed": False,
+    "ignore_for_event_availability": False,
 }
 
 
