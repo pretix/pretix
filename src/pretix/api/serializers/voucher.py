@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from decimal import Decimal
+
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -64,6 +66,7 @@ class SeatGuidField(serializers.CharField):
 
 class VoucherSerializer(I18nAwareModelSerializer):
     seat = SeatGuidField(allow_null=True, required=False)
+    budget_used = serializers.DecimalField(read_only=True, max_digits=13, decimal_places=2, min_value=Decimal('0.00'))
 
     class Meta:
         model = Voucher

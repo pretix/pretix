@@ -1750,7 +1750,7 @@ def test_event_expand_seat_filter_and_querycount(token_client, organizer, event,
     with scope(organizer=organizer):
         v0 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-0'))
 
-    with assert_num_queries(13):
+    with assert_num_queries(14):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
                                 '?expand=orderposition&expand=cartposition&expand=voucher&is_available=false'
                                 .format(organizer.slug, event.slug))
@@ -1769,7 +1769,7 @@ def test_event_expand_seat_filter_and_querycount(token_client, organizer, event,
         v1 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-1'))
         v2 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-2'))
 
-    with assert_num_queries(13):
+    with assert_num_queries(16):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
                                 '?expand=orderposition&expand=cartposition&expand=voucher&is_available=false'
                                 .format(organizer.slug, event.slug))
