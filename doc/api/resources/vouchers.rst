@@ -215,7 +215,7 @@ Endpoints
         "subevent": null,
         "show_hidden_items": false,
         "all_addons_included": false,
-        "all_bundles_included": false,
+        "all_bundles_included": false
       }
 
    **Example response**:
