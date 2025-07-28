@@ -81,6 +81,8 @@ TEST_VOUCHER_RES = {
     'all_bundles_included': False,
     'subevent': None,
     'seat': None,
+    'budget': None,
+    'budget_used': "0.00",
 }
 
 

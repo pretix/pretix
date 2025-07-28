@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from decimal import Decimal
+
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -64,14 +66,15 @@ class SeatGuidField(serializers.CharField):
 
 class VoucherSerializer(I18nAwareModelSerializer):
     seat = SeatGuidField(allow_null=True, required=False)
+    budget_used = serializers.DecimalField(read_only=True, max_digits=13, decimal_places=2, min_value=Decimal('0.00'))
 
     class Meta:
         model = Voucher
         fields = ('id', 'code', 'max_usages', 'redeemed', 'min_usages', 'valid_until', 'block_quota',
                   'allow_ignore_quota', 'price_mode', 'value', 'item', 'variation', 'quota',
                   'tag', 'comment', 'subevent', 'show_hidden_items', 'seat', 'all_addons_included',
-                  'all_bundles_included')
-        read_only_fields = ('id', 'redeemed')
+                  'all_bundles_included', 'budget', 'budget_used')
+        read_only_fields = ('id', 'redeemed', 'budget_used')
         list_serializer_class = VoucherListSerializer
 
     def validate(self, data):
