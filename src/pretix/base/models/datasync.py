@@ -136,3 +136,14 @@ class OrderSyncResult(models.Model):
         prov, meta = sync_targets.get(identifier=self.sync_provider)
         if prov:
             return prov.get_external_link_html(self.order.event, self.external_link_href, self.external_link_display_name)
+
+    def to_result_dict(self):
+        return {
+            "position": self.order_position_id,
+            "object_type": self.external_object_type,
+            "external_id_field": self.external_id_field,
+            "id_value": self.id_value,
+            "external_link_href": self.external_link_href,
+            "external_link_display_name": self.external_link_display_name,
+            **self.sync_info,
+        }

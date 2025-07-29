@@ -208,10 +208,13 @@ class OutboundSyncProvider:
             try:
                 with transaction.atomic():
                     mapped_objects = self.sync_order(sq.order)
-                    if not all(all(res.get("action", "") == "nothing_to_do" for res in res_list) for res_list in mapped_objects.values()):
+                    if not all(all(not res or res.sync_info.get("action", "") == "nothing_to_do" for res in res_list) for res_list in mapped_objects.values()):
                         sq.order.log_action("pretix.event.order.data_sync.success", {
                             "provider": self.identifier,
-                            "objects": mapped_objects
+                            "objects": {
+                                mapping_id: [osr and osr.to_result_dict() for osr in results]
+                                for mapping_id, results in mapped_objects.items()
+                            },
                         })
                     sq.delete()
             except UnrecoverableSyncError as e:
@@ -399,6 +402,21 @@ class OutboundSyncProvider:
                 raise SyncConfigError("Invalid pretix model '{}'".format(mapping.pretix_model))
         self.finalize_sync_order(order)
         return mapped_objects
+
+    def filter_mapped_objects(self, mapped_objects, inputs):
+        """
+        For order positions, only
+        """
+        if ORDER_POSITION in inputs:
+            return {
+                mapping_id: [
+                    osr for osr in results
+                    if osr and (osr.order_position_id is None or osr.order_position_id == inputs[ORDER_POSITION].id)
+                ]
+                for mapping_id, results in mapped_objects.items()
+            }
+        else:
+            return mapped_objects
 
     def finalize_sync_order(self, order):
         """
