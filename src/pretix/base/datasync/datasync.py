@@ -206,17 +206,16 @@ class OutboundSyncProvider:
                     continue
 
             try:
-                with transaction.atomic():
-                    mapped_objects = self.sync_order(sq.order)
-                    if not all(all(not res or res.sync_info.get("action", "") == "nothing_to_do" for res in res_list) for res_list in mapped_objects.values()):
-                        sq.order.log_action("pretix.event.order.data_sync.success", {
-                            "provider": self.identifier,
-                            "objects": {
-                                mapping_id: [osr and osr.to_result_dict() for osr in results]
-                                for mapping_id, results in mapped_objects.items()
-                            },
-                        })
-                    sq.delete()
+                mapped_objects = self.sync_order(sq.order)
+                if not all(all(not res or res.sync_info.get("action", "") == "nothing_to_do" for res in res_list) for res_list in mapped_objects.values()):
+                    sq.order.log_action("pretix.event.order.data_sync.success", {
+                        "provider": self.identifier,
+                        "objects": {
+                            mapping_id: [osr and osr.to_result_dict() for osr in results]
+                            for mapping_id, results in mapped_objects.items()
+                        },
+                    })
+                sq.delete()
             except UnrecoverableSyncError as e:
                 sq.set_sync_error(e.failure_mode, e.messages, e.full_message)
             except RecoverableSyncError as e:
