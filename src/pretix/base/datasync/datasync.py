@@ -25,7 +25,7 @@ import logging
 from collections import namedtuple
 from datetime import timedelta
 from functools import cached_property
-from typing import Protocol
+from typing import Protocol, Optional
 
 import sentry_sdk
 from django.db import DatabaseError, transaction
@@ -286,7 +286,7 @@ class OutboundSyncProvider:
             mapping: ObjectMapping,
             mapped_objects: dict,
             **kwargs,
-    ) -> dict:
+    ) -> Optional[dict]:
         """
         This method is called for each object that needs to be created/updated in the external system -- which these are is
         determined by the implementation of the `mapping` property.
@@ -321,7 +321,10 @@ class OutboundSyncProvider:
                     "...optionally further values you need in mapped_objects for association": 123456789,
                  }
 
-        The return value needs to be JSON serializable.
+        The return value needs to be a JSON serializable dict, or None.
+
+        Return None only in case you decide this object should not be synced at all in this mapping. Do not return None in
+        case the object is already up-to-date in the target system (return "action": "nothing_to_do" instead).
 
         This method needs to be idempotent, i.e. calling it multiple times with the same input values should create
         only a single object in the target system.
@@ -353,6 +356,8 @@ class OutboundSyncProvider:
             mapping=mapping,
             mapped_objects=mapped_objects,
         )
+        if not info:
+            return None
         external_link_href = info.pop('external_link_href', None)
         external_link_display_name = info.pop('external_link_display_name', None)
         obj, created = OrderSyncResult.objects.update_or_create(
