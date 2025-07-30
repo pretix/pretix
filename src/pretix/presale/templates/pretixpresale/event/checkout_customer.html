@@ -5,6 +5,7 @@
 {% load eventurl %}
 {% load rich_text %}
 {% block inner %}
+    <h3 class="sr-only">{% trans "Customer account" %}</h3>
     <form method="post">
         {% csrf_token %}
         <div class="panel-group" id="customer">

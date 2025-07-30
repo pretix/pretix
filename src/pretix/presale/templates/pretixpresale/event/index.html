@@ -81,7 +81,7 @@
                 <div class="panel panel-default">
                 <div class="panel-heading">
             {% endif %}
-            <h3 class="panel-title"><strong>
+            <h2 class="panel-title"><strong>
                 {% if subevent_list_foldable %}
                     {% if show_cart %}
                         {% trans "Add tickets for a different date" %}
@@ -91,7 +91,7 @@
                 {% else %}
                     {% trans "Choose date to book a ticket" %}
                 {% endif %}</strong>
-            </h3>
+            </h2>
             {% if subevent_list_foldable %}
                 </summary>
                 <div>
@@ -219,6 +219,7 @@
                     </aside>
                 {% endif %}
 
+                <h2 class="sr-only">{% trans "Products" %}</h2>
                 {% include "pretixpresale/event/fragment_product_list.html" %}
                 {% if ev.presale_is_running and display_add_to_cart %}
                     <div class="front-page">
@@ -246,14 +247,14 @@
     </main>
     {% if show_vouchers %}
         <aside class="front-page" aria-labelledby="redeem-a-voucher">
-            <h3 id="redeem-a-voucher">{% trans "Redeem a voucher" %}</h3>
+            <h2 class="h3" id="redeem-a-voucher">{% trans "Redeem a voucher" %}</h2>
             {% include "pretixpresale/event/fragment_voucher_form.html" %}
         </aside>
     {% endif %}
     {% if not cart_namespace %}
         {% eventsignal event "pretix.presale.signals.front_page_bottom" subevent=subevent request=request %}
         <aside class="front-page" aria-labelledby="if-you-already-ordered-a-ticket">
-            <h3 id="if-you-already-ordered-a-ticket">{% trans "If you have already ordered a ticket" %}</h3>
+            <h2 class="h3" id="if-you-already-ordered-a-ticket">{% trans "If you have already ordered a ticket" %}</h2>
             <div class="row">
                 <div class="col-md-8 col-xs-12">
                     <p>

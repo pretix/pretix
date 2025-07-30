@@ -8,6 +8,7 @@
     {% include "pretixpresale/event/fragment_walletdetection_head.html" %}
 {% endblock %}
 {% block inner %}
+    <h3 class="sr-only">{% trans "Payment" %}</h3>
     {% if current_payments %}
         <p>{% trans "You already selected the following payment methods:" %}</p>
         <form method="post">
