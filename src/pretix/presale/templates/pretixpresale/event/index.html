@@ -47,7 +47,6 @@
             {{ ev.event_microdata }}
         </script>
     {% endautoescape %}
-    <main aria-label="{% if show_cart %}{% trans "Your cart, general information, add products to your cart" %}{% else %}{% trans "General information, add products to your cart" %}{% endif %}">
     {% if show_cart %}
         {% include "pretixpresale/event/fragment_cart_box.html" with open=1 %}
     {% endif %}
@@ -244,7 +243,6 @@
             </form>
         {% endif %}
     {% endif %}
-    </main>
     {% if show_vouchers %}
         <aside class="front-page" aria-labelledby="redeem-a-voucher">
             <h2 class="h3" id="redeem-a-voucher">{% trans "Redeem a voucher" %}</h2>

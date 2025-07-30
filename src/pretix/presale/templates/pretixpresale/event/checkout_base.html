@@ -53,10 +53,8 @@
         </a>
     {% endif %}
 </aside>
-<main aria-label="{% trans "Checkout" %}">
     <h2>{% trans "Checkout" %}</h2>
     {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     {% block inner %}
     {% endblock %}
-</main>
 {% endblock %}
