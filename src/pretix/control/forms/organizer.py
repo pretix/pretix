@@ -731,6 +731,22 @@ class GiftCardCreateForm(forms.ModelForm):
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
 
+        if self.organizer.settings.customer_accounts:
+            self.fields['customer'].queryset = self.organizer.customers.all()
+            self.fields['customer'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'generic',
+                    'data-select2-url': reverse('control:organizer.customers.select2', kwargs={
+                        'organizer': self.organizer.slug,
+                    }),
+                    'data-placeholder': _('Customer')
+                }
+            )
+            self.fields['customer'].widget.choices = self.fields['customer'].choices
+            self.fields['customer'].required = False
+        else:
+            del self.fields['customer']
+
     def clean_secret(self):
         s = self.cleaned_data['secret']
         if GiftCard.objects.filter(
@@ -749,9 +765,10 @@ class GiftCardCreateForm(forms.ModelForm):
 
     class Meta:
         model = GiftCard
-        fields = ['secret', 'currency', 'testmode', 'expires', 'conditions']
+        fields = ['secret', 'currency', 'testmode', 'expires', 'conditions', 'customer']
         field_classes = {
-            'expires': SplitDateTimeField
+            'expires': SplitDateTimeField,
+            'customer': SafeModelChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
