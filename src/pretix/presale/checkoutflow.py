@@ -1410,8 +1410,10 @@ class PaymentStep(CartMixin, TemplateFlowStep):
             ctx['selected'] = self.request.POST['payment']
         elif self.single_use_payment:
             ctx['selected'] = self.single_use_payment['provider']
-        elif "giftcard" in self.request.event.get_payment_providers():
-            ctx['selected'] = "giftcard"
+        elif ("giftcard" in self.request.event.get_payment_providers()
+              and self.cart_customer
+              and self.cart_customer.usable_gift_cards()):
+            ctx['selected'] = 'giftcard'
         else:
             ctx['selected'] = ''
         ctx['cart'] = self.get_cart()
