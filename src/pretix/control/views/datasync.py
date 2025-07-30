@@ -32,7 +32,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView
 
-from pretix.base.datasync.datasync import sync_targets
+from pretix.base.datasync.datasync import datasync_providers
 from pretix.base.models import Event, Order
 from pretix.base.models.datasync import OrderSyncQueue
 from pretix.control.permissions import (
@@ -45,7 +45,7 @@ from pretix.control.views.orders import OrderView
 
 @receiver(order_info, dispatch_uid="datasync_control_order_info")
 def on_control_order_info(sender: Event, request, order: Order, **kwargs):
-    providers = [provider for provider, meta in sync_targets.filter(active_in=sender)]
+    providers = [provider for provider, meta in datasync_providers.filter(active_in=sender)]
     if not providers:
         return ""
 
@@ -72,7 +72,7 @@ class ControlSyncJob(OrderView):
     permission = 'can_change_orders'
 
     def post(self, request, provider, *args, **kwargs):
-        prov, meta = sync_targets.get(active_in=self.request.event, identifier=provider)
+        prov, meta = datasync_providers.get(active_in=self.request.event, identifier=provider)
 
         if self.request.POST.get("queue_sync") == "true":
             prov.enqueue_order(self.order, 'user')

@@ -44,7 +44,7 @@ from pretix.helpers import OF_SELF
 logger = logging.getLogger(__name__)
 
 
-sync_targets = EventPluginRegistry({"identifier": lambda o: o.identifier})
+datasync_providers = EventPluginRegistry({"identifier": lambda o: o.identifier})
 
 
 class BaseSyncError(Exception):

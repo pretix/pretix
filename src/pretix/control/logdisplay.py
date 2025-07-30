@@ -47,7 +47,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.datasync.datasync import sync_targets
+from pretix.base.datasync.datasync import datasync_providers
 from pretix.base.logentrytypes import (
     DiscountLogEntryType, EventLogEntryType, ItemCategoryLogEntryType,
     ItemLogEntryType, LogEntryType, OrderLogEntryType, QuestionLogEntryType,
@@ -426,8 +426,8 @@ class OrderPrintLogEntryType(OrderLogEntryType):
 class OrderDataSyncLogEntryType(OrderLogEntryType):
     def display(self, logentry, data):
         try:
-            from pretix.base.datasync.datasync import sync_targets
-            provider_class, meta = sync_targets.get(identifier=data['provider'])
+            from pretix.base.datasync.datasync import datasync_providers
+            provider_class, meta = datasync_providers.get(identifier=data['provider'])
             data['provider_display_name'] = provider_class.display_name
         except (KeyError, AttributeError):
             data['provider_display_name'] = data.get('provider')
@@ -441,7 +441,7 @@ class OrderDataSyncSuccessLogEntryType(OrderDataSyncLogEntryType):
     def display(self, logentry, data):
         links = []
         if data.get('provider') and data.get('objects'):
-            prov, meta = sync_targets.get(identifier=data['provider'])
+            prov, meta = datasync_providers.get(identifier=data['provider'])
             if prov:
                 for objs in data['objects'].values():
                     links.append(", ".join(

@@ -30,7 +30,7 @@ from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scope, scopes_disabled
 
-from pretix.base.datasync.datasync import sync_targets
+from pretix.base.datasync.datasync import datasync_providers
 from pretix.base.models.datasync import OrderSyncQueue
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
@@ -72,7 +72,7 @@ def sync_all():
         )
         grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.event.pk)), lambda q: (q.sync_provider, q.event))
         for (target, event), queued_orders in grouped:
-            target_cls, meta = sync_targets.get(identifier=target, active_in=event)
+            target_cls, meta = datasync_providers.get(identifier=target, active_in=event)
 
             if not target_cls:
                 # sync plugin not found (plugin deactivated or uninstalled) -> drop outstanding jobs

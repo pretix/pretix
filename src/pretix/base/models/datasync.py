@@ -65,8 +65,8 @@ class OrderSyncQueue(models.Model):
 
     @cached_property
     def _provider_class_info(self):
-        from pretix.base.datasync.datasync import sync_targets
-        return sync_targets.get(identifier=self.sync_provider)
+        from pretix.base.datasync.datasync import datasync_providers
+        return datasync_providers.get(identifier=self.sync_provider)
 
     @property
     def provider_class(self):
@@ -132,8 +132,8 @@ class OrderSyncResult(models.Model):
         if not self.external_link_display_name:
             return None
 
-        from pretix.base.datasync.datasync import sync_targets
-        prov, meta = sync_targets.get(identifier=self.sync_provider)
+        from pretix.base.datasync.datasync import datasync_providers
+        prov, meta = datasync_providers.get(identifier=self.sync_provider)
         if prov:
             return prov.get_external_link_html(self.order.event, self.external_link_href, self.external_link_display_name)
 

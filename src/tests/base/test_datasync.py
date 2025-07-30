@@ -29,7 +29,7 @@ from django.utils.timezone import now
 from django_scopes import scope
 
 from pretix.base.datasync.datasync import (
-    OutboundSyncProvider, StaticMapping, sync_targets,
+    OutboundSyncProvider, StaticMapping, datasync_providers,
 )
 from pretix.base.datasync.utils import assign_properties
 from pretix.base.models import (
@@ -283,7 +283,7 @@ class SimpleOrderSync(OutboundSyncProvider):
 
 @pytest.mark.django_db
 def test_simple_order_sync(event):
-    _register_with_fake_plugin_name(sync_targets, SimpleOrderSync, 'testplugin')
+    _register_with_fake_plugin_name(datasync_providers, SimpleOrderSync, 'testplugin')
 
     for order in event.orders.order_by("code").all():
         SimpleOrderSync.enqueue_order(order, 'testcase')
@@ -313,7 +313,7 @@ def test_simple_order_sync(event):
 
 @pytest.mark.django_db
 def test_enqueue_order_twice(event):
-    _register_with_fake_plugin_name(sync_targets, SimpleOrderSync, 'testplugin')
+    _register_with_fake_plugin_name(datasync_providers, SimpleOrderSync, 'testplugin')
 
     for order in event.orders.order_by("code").all():
         SimpleOrderSync.enqueue_order(order, 'testcase_1st')
@@ -449,7 +449,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
             external_id_field: id_value,
             "_id": pre_existing_object and pre_existing_object.get("_id"),
             "links": [
-                f"link:{obj['object_type']}:{obj['my_result']['_id']}"
+                f"link:{obj.external_object_type}:{obj.sync_info['my_result']['_id']}"
                 for am in mapping.association_mappings
                 for obj in mapped_objects[am.via_mapping_id]
             ]
@@ -467,7 +467,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
 
 @pytest.mark.django_db
 def test_association_sync(event):
-    _register_with_fake_plugin_name(sync_targets, OrderAndTicketAssociationSync, 'testplugin')
+    _register_with_fake_plugin_name(datasync_providers, OrderAndTicketAssociationSync, 'testplugin')
 
     for order in event.orders.order_by("code").all():
         OrderAndTicketAssociationSync.enqueue_order(order, 'testcase')
@@ -496,7 +496,7 @@ def test_association_sync(event):
 
 @pytest.mark.django_db
 def test_legacy_name_splitting(event):
-    _register_with_fake_plugin_name(sync_targets, OrderAndTicketAssociationSync, 'testplugin')
+    _register_with_fake_plugin_name(datasync_providers, OrderAndTicketAssociationSync, 'testplugin')
 
     for order in event.orders.order_by("code").all():
         OrderAndTicketAssociationSync.enqueue_order(order, 'testcase')
