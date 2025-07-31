@@ -259,6 +259,12 @@ def assign_ticket_secret(event, position, force_invalidate_if_revokation_list_us
         kwargs['valid_until'] = position.valid_until
     if 'order_datetime' in params:
         kwargs['order_datetime'] = position.order.datetime
+    if 'order_position' in params:
+        kwargs['order_position'] = position
+    if 'order' in params:
+        kwargs['order'] = position.order
+    if 'organizer' in params:
+        kwargs['organizer'] = position.organizer
     secret = gen.generate_secret(
         item=position.item,
         variation=position.variation,
