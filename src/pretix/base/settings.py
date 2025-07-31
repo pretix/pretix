@@ -1783,6 +1783,15 @@ DEFAULTS = {
             label=_("Customers can change their selected add-on products"),
         )
     },
+    'change_allow_user_remove_positions': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Customers can remove positions from their order"),
+        )
+    },
     'change_allow_user_price': {
         'default': 'gte',
         'type': str,
