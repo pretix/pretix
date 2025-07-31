@@ -53,11 +53,12 @@
                 {{ request.event.settings.checkout_success_text|rich_text }}
             {% endif %}
             <p class="iframe-hidden">{% blocktrans trimmed %}
-                Please bookmark or save the link to this exact page if you want to access your order later. We also sent you an email containing the link to the address you specified.
+                Please bookmark or save the link to this exact page if you want to access your order later.
+                We also sent you an email to the address you specified containing the link to this page.
             {% endblocktrans %}</p>
             <p class="iframe-only">{% blocktrans trimmed %}
-                Please save the following link if you want to access your order later. We
-                also sent you an email containing the link to the address you specified.
+                Please save the following link if you want to access your order later.
+                We also sent you an email to the address you specified containing the link.
             {% endblocktrans %}<br>
                 <code>{{ url }}</code></p>
         </div>
