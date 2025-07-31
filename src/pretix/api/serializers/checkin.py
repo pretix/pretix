@@ -104,3 +104,14 @@ class MiniCheckinListSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+class CheckinRPCAnnulInputSerializer(serializers.Serializer):
+    lists = serializers.PrimaryKeyRelatedField(required=True, many=True, queryset=CheckinList.objects.none())
+    nonce = serializers.CharField(required=True, allow_null=False)
+    datetime = serializers.DateTimeField(required=False, allow_null=True)
+    error_explanation = serializers.CharField(required=False, allow_null=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['lists'].child_relation.queryset = CheckinList.objects.filter(event__in=self.context['events']).select_related('event')

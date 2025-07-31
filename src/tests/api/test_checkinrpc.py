@@ -1077,3 +1077,97 @@ def test_reason_explanation_localization(token_client, organizer, clist, other_i
         assert resp.data["status"] == "error"
         assert resp.data["reason"] == "invalid_time"
         assert resp.data["reason_explanation"] == "Erst ab 01.01.2020 12:00 gültig."
+
+
+@pytest.mark.django_db
+def test_annul_simple(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = _redeem(token_client, organizer, clist, p.secret, {
+        'nonce': 'nooooonce'
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+    resp = token_client.post('/api/v1/organizers/{}/checkinrpc/annul/'.format(organizer.slug), {
+        'lists': [clist.pk],
+        'nonce': 'nooooonce',
+        'error_explanation': 'Turnstile did not turn',
+    }, format='json', headers={})
+    assert resp.status_code == 200
+
+    with scopes_disabled():
+        ci = p.all_checkins.get()
+        assert not ci.successful
+        assert ci.error_reason == Checkin.REASON_ANNULLED
+        assert ci.error_explanation == "Turnstile did not turn"
+
+
+@pytest.mark.django_db
+def test_annul_failures(device_client, team, organizer, clist, clist_event2, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = _redeem(device_client, organizer, clist, p.secret, {
+        'nonce': 'nooooonce',
+        'datetime': '2025-04-01T12:23:45Z',
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+    resp = device_client.post('/api/v1/organizers/{}/checkinrpc/annul/'.format(organizer.slug), {
+        'lists': [clist.pk],
+    }, format='json', headers={})
+    assert resp.status_code == 400
+    assert resp.data == {"nonce": ["This field is required."]}
+
+    resp = device_client.post('/api/v1/organizers/{}/checkinrpc/annul/'.format(organizer.slug), {
+        'lists': [clist_event2.pk],
+        'nonce': 'nooooonce',
+        'error_explanation': 'Turnstile did not turn',
+    }, format='json', headers={})
+    assert resp.status_code == 404
+    assert resp.data == {"detail": "No check-in found based on nonce"}
+
+    resp = device_client.post('/api/v1/organizers/{}/checkinrpc/annul/'.format(organizer.slug), {
+        'lists': [clist.pk],
+        'nonce': 'notfound',
+        'error_explanation': 'Turnstile did not turn',
+    }, format='json', headers={})
+    assert resp.status_code == 404
+    assert resp.data == {"detail": "No check-in found based on nonce"}
+
+    with scopes_disabled():
+        lcnt = order.all_logentries().count()
+
+    resp = device_client.post('/api/v1/organizers/{}/checkinrpc/annul/'.format(organizer.slug), {
+        'lists': [clist.pk],
+        'nonce': 'nooooonce',
+        'error_explanation': 'Turnstile did not turn',
+    }, format='json', headers={})
+    assert resp.status_code == 400
+    assert resp.data == {
+        'non_field_errors': ['Annulment is not allowed more than 15 minutes after check-in']
+    }
+
+    with scopes_disabled():
+        assert order.all_logentries().count() == lcnt + 1
+
+    t = team.tokens.create(name='Foo')
+    team.all_events = True
+    team.save()
+    device_client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+
+    resp = device_client.post('/api/v1/organizers/{}/checkinrpc/annul/'.format(organizer.slug), {
+        'lists': [clist.pk],
+        'nonce': 'nooooonce',
+        'error_explanation': 'Turnstile did not turn',
+        'datetime': '2025-04-01T12:24:45Z',
+    }, format='json', headers={})
+    assert resp.status_code == 400
+    assert resp.data == {
+        'non_field_errors': ['Annulment is only allowed from the same device']
+    }
+
+    with scopes_disabled():
+        ci = p.all_checkins.get()
+        assert ci.successful
