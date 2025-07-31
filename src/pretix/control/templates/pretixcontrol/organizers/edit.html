@@ -12,7 +12,7 @@
         {% blocktrans with name=organizer.name %}Organizer settings{% endblocktrans %}
         {% if request.user.is_staff and staff_session %}
             <a href="{% url "control:organizer.delete" organizer=organizer.slug %}"
-                    class="btn btn-danger hidden-print">
+                    class="btn btn-danger hidden-print admin-only">
                 <span class="fa fa-trash"></span>
             </a>
         {% endif %}

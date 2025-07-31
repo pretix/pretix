@@ -89,7 +89,7 @@
                                         </button>
                                     {% endif %}
                                     {% if staff_session and t.info %}
-                                        <pre><code>{{ t.info|pprint }}</code></pre>
+                                        <pre class="admin-only"><code>{{ t.info|pprint }}</code></pre>
                                     {% endif %}
                                     {% if t.acceptor and t.acceptor != request.organizer %}
                                         <span class="text-muted">
