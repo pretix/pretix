@@ -668,6 +668,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('External customer ID'),
             _('Check-in lists'),
             _('Payment providers'),
+            _('Position order link')
         ]
 
         # get meta_data labels from first cached event
@@ -811,6 +812,14 @@ class OrderListExporter(MultiSheetListExporter):
                     str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
                     if p and p != 'free'
                 ]))
+
+                row.append(
+                    build_absolute_uri(order.event, 'presale:event.order.position', kwargs={
+                        'order': order.code,
+                        'secret': op.web_secret,
+                        'position': op.positionid
+                    })
+                )
 
                 if has_subevents:
                     if op.subevent:
