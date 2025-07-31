@@ -1926,6 +1926,7 @@ Manipulating individual positions
 
       (Full order position resource, see above.)
 
+   :query boolean check_quotas: Whether to check quotas before committing item changes, default is ``true``
    :param organizer: The ``slug`` field of the organizer of the event
    :param event: The ``slug`` field of the event
    :param id: The ``id`` field of the order position to update
@@ -2005,6 +2006,7 @@ Manipulating individual positions
 
       (Full order position resource, see above.)
 
+   :query boolean check_quotas: Whether to check quotas before creating the new position, default is ``true``
    :param organizer: The ``slug`` field of the organizer of the event
    :param event: The ``slug`` field of the event
 
@@ -2291,6 +2293,7 @@ otherwise, such as splitting an order or changing fees.
 
       (Full order position resource, see above.)
 
+   :query boolean check_quotas: Whether to check quotas before patching or creating positions, default is ``true``
    :param organizer: The ``slug`` field of the organizer of the event
    :param event: The ``slug`` field of the event
    :param code: The ``code`` field of the order to update
