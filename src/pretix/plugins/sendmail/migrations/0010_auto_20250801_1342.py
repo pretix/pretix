@@ -2,6 +2,7 @@
 
 from django.db import migrations
 
+
 def migrate_pending_overdue(apps, schema_editor):
     Rule = apps.get_model("sendmail", "Rule")
     for r in Rule.objects.filter(restrict_to_status__icontains="p__overdue"):
