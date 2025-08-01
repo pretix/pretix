@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
 "PO-Revision-Date: 2025-08-01 18:00+0000\n"
-"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -2982,7 +2982,7 @@ msgstr "指定されていません"
 
 #: pretix/base/forms/questions.py:225
 msgid "Please do not use special characters in names."
-msgstr "名前に特殊文字を使わないでください。"
+msgstr "名前に特殊文字を使用しないでください。"
 
 #: pretix/base/forms/questions.py:287
 msgid "Please enter a shorter name."
@@ -3007,7 +3007,7 @@ msgstr "横向きの画像がアップロードされています。縦向きの
 
 #: pretix/base/forms/questions.py:502
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr "縦４ｘ幅３の比率の画像をアップロードしてください。"
+msgstr "幅が高さの3/4となるような画像をアップロードしてください。"
 
 #: pretix/base/forms/questions.py:505
 msgid ""
@@ -3176,7 +3176,7 @@ msgstr "個人の顧客"
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "%dページのうち %dページ"
+msgstr "%d / %d ページ"
 
 #: pretix/base/invoice.py:375
 msgctxt "invoice"
@@ -3638,12 +3638,12 @@ msgstr "有効な販売チャネルを入力してください。"
 #: pretix/base/modelimport_orders.py:585
 #: pretix/base/modelimport_vouchers.py:291
 msgid "Multiple matching seats were found."
-msgstr "該当する席が複数見つかりました。"
+msgstr "マッチする席が複数見つかりました。"
 
 #: pretix/base/modelimport_orders.py:587
 #: pretix/base/modelimport_vouchers.py:293
 msgid "No matching seat was found."
-msgstr "該当する席が見つかりませんでした。"
+msgstr "マッチする席が見つかりませんでした。"
 
 #: pretix/base/modelimport_orders.py:590
 #: pretix/base/modelimport_vouchers.py:296 pretix/base/services/cart.py:213
@@ -3681,7 +3681,7 @@ msgstr "顧客"
 
 #: pretix/base/modelimport_orders.py:711
 msgid "No matching customer was found."
-msgstr "該当する顧客が見つかりませんでした。"
+msgstr "マッチする顧客が見つかりませんでした。"
 
 #: pretix/base/modelimport_vouchers.py:50 pretix/base/models/vouchers.py:488
 msgid "A voucher with this code already exists."
@@ -11001,26 +11001,25 @@ msgid ""
 msgstr ""
 "こんにちは、\n"
 "\n"
-"あなたは{event}の空席待ちリストにご自身で登録し、{product}の製品についても登"
-"録されました。\n"
+"あなたは{event}の空席待ちリストにご自身で登録し、\n"
+"{product}の製品についても登録されました。\n"
 "\n"
-"現在、あなたのためにチケットが用意されています！\n"
-"次のバウチャーコードを入力することで、今から{hours}時間以内に当社のチケット"
-"ショップで引き換えることができます。\n"
+"チケットをご用意できました！以下のバウチャーコードを入力して、\n"
+"今から{hours}時間以内にチケットショップでご利用いただけます！\n"
 "\n"
 "{code}\n"
 "\n"
-"または、次のリンクをクリックするだけでも構いません。\n"
+"または、以下のリンクをクリックしてください：\n"
 "\n"
 "{url}\n"
 "\n"
-"このリンクは今後{hours}時間以内にのみ有効ですので、ご注意ください。その時間内"
-"にバウチャーを引き換えない場合、チケットは空席待ちリストの次の人に再割り当て"
-"されます。\n"
+"このリンクは今後{hours}時間以内にのみ有効ですので、ご注意ください！\n"
+"時間内にバウチャーを引き換えない場合、\n"
+"チケットは空席待ちリストの次の人に再割り当てされます。\n"
 "\n"
-"もしもうチケットが必要ない場合は、次のリンクをクリックして知らせていただける"
-"と幸いです。このようにして、できるだけ早く次の待ちリストの方にチケットを送る"
-"ことができます。\n"
+"もうチケットが必要ない場合は、次のリンクをクリックして\n"
+"お知らせいただければ幸いです。このようにして、できるだけ早く\n"
+"空席待ちリストの次の方にチケットを送ることができます。\n"
 "\n"
 "{url_remove}\n"
 "\n"
@@ -11083,10 +11082,10 @@ msgid ""
 msgstr ""
 "こんにちは、\n"
 "\n"
-"{event}のご注文を承認しました。当イベントへのご参加を心よりお待ちしておりま"
-"す。\n"
+"{event}のご注文を承認しました。\n"
+"当イベントへのご参加を心よりお待ちしております。\n"
 "\n"
-"有効期限{expire_date}までにご注文の支払いを完了してください。\n"
+"ご注文へのお支払いを{expire_date}までに完了してください。\n"
 "\n"
 "以下のリンクから支払い方法を選択し、支払いを行ってください：\n"
 "\n"
@@ -18139,8 +18138,8 @@ msgid ""
 msgstr ""
 "こんにちは、\n"
 "\n"
-"あなたは、pretixというイベントチケット販売プラットフォームのチームに招待され"
-"ました。\n"
+"あなたは、pretixというイベントチケット販売プラットフォームの\n"
+"チームに招待されました。\n"
 "\n"
 "主催者: %(organizer)s\n"
 "チーム: %(team)s\n"
@@ -18208,15 +18207,15 @@ msgid ""
 "Best regards,  \n"
 "Your pretix team\n"
 msgstr ""
-"前略\n"
+"こんにちは\n"
 "\n"
-"お客様のpretixアカウントの情報が変更されましたので、お知らせいたします。具体"
-"的には、以下の変更が行われました：\n"
+"お客様のpretixアカウントの情報が変更されましたので、お知らせいたします。\n"
+"具体的には、以下の変更が行われました：\n"
 "\n"
 "%(messages)s\n"
 "\n"
-"もしもこの変更がお客様自身によるものでない場合は、直ちにお問い合わせくださ"
-"い。\n"
+"もしもこの変更がお客様自身によるものでない場合は、直ちにお問い合わせください"
+"。\n"
 "\n"
 "アカウント設定の確認や変更はこちらから行えます：\n"
 "\n"
@@ -29586,7 +29585,7 @@ msgstr "あなたの販売に関する印刷可能なレポートを生成しま
 #: pretix/plugins/reports/exporters.py:97
 #, python-format
 msgid "Page %d of %d"
-msgstr "ページ%d / %d"
+msgstr "%d / %d ページ"
 
 #: pretix/plugins/reports/exporters.py:200
 #, python-format
@@ -33755,7 +33754,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:5
 msgid "Event overview by month, week, etc."
-msgstr "月又は週別ほかのイベント概要"
+msgstr "月間、週間、その他のイベント概要."
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:26
 msgid "iCal"
