@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-26 09:09+0000\n"
-"PO-Revision-Date: 2025-07-23 01:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2025-08-01 18:00+0000\n"
+"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -33045,7 +33045,7 @@ msgstr "注文リンクを再送する"
 #: pretix/presale/templates/pretixpresale/event/offline.html:4
 #: pretix/presale/templates/pretixpresale/event/offline.html:8
 msgid "Shop offline"
-msgstr "ショップがオープン"
+msgstr "ショップが閉店中です"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
 msgid "This ticket shop is currently turned off."
