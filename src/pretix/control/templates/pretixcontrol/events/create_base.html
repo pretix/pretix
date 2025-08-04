@@ -31,7 +31,7 @@
             {% trans "Every event needs to be created as part of an organizer account. Currently, you do not have access to any organizer accounts." %}
         </div>
         {% if staff_session %}
-            <a href="{% url "control:organizers.add" %}" class="btn btn-default">
+            <a href="{% url "control:organizers.add" %}" class="btn btn-default admin-only">
                 {% trans "Create a new organizer" %}
             </a>
         {% endif %}
