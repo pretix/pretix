@@ -22,6 +22,7 @@
 from babel.core import Locale
 from django.core.cache import cache
 from django.utils import translation
+from django.utils.translation import gettext_noop
 from django_countries import Countries, collator
 from django_countries.fields import CountryField
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
@@ -118,3 +119,12 @@ def get_phone_prefixes_sorted_and_localized():
     _cached_phone_prefixes[cache_key] = val
     cache.set(cache_key, val, 3600 * 24 * 30)
     return val
+
+
+custom_translations = [
+    # Hotfix to allow pretix to provide custom translations until
+    # https://github.com/SmileyChris/django-countries/pull/471
+    # is merged
+    gettext_noop("Belarus"),
+    gettext_noop("French Guiana"),
+]
