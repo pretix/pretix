@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 14:07+0000\n"
-"PO-Revision-Date: 2025-08-04 13:52+0000\n"
+"PO-Revision-Date: 2025-08-04 14:14+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -34213,32 +34213,23 @@ msgstr ""
 "abzuschließen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
 "Bitte speichern Sie den Link zu genau dieser Seite, wenn Sie später auf Ihre "
-"Bestellung zugreifen wollen. Wir haben Ihnen außerdem soeben einen Link mit "
-"dieser Adresse an Ihre E-Mail-Adresse geschickt."
+"Bestellung zugreifen wollen. Wir haben Ihnen diesen Link außerdem soeben an "
+"Ihre E-Mail-Adresse geschickt."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:59
-#, fuzzy
-#| msgid ""
-#| "Please save the following link if you want to access your order later. We "
-#| "also sent you an email containing the link to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email to the address you specified containing the link."
 msgstr ""
 "Bitte speichern Sie folgenden Link ab, wenn Sie später auf Ihre Bestellung "
-"zugreifen wollen. Wir haben Ihnen außerdem soeben einen Link mit dieser "
-"Adresse an Ihre E-Mail-Adresse geschickt."
+"zugreifen wollen. Wir haben Ihnen diesen Link außerdem soeben an Ihre E-Mail-"
+"Adresse geschickt."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:74
 #: pretix/presale/templates/pretixpresale/event/position.html:18
