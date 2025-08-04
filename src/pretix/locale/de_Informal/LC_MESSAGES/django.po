@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:44+0000\n"
-"PO-Revision-Date: 2025-06-26 15:17+0000\n"
+"PO-Revision-Date: 2025-08-04 13:52+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -144,8 +144,9 @@ msgid "Spanish"
 msgstr "Spanisch"
 
 #: pretix/_base_settings.py:118
+#, fuzzy
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Spanisch (Lateinamerika)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -2098,10 +2099,8 @@ msgid "External customer ID"
 msgstr "Externe Kundennummer"
 
 #: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
 msgid "Order link"
-msgstr "Bestelluhrzeit"
+msgstr "Bestell-Link"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -2361,10 +2360,8 @@ msgid "Check-in lists"
 msgstr "Check-in-Listen"
 
 #: pretix/base/exporters/orderlist.py:671
-#, fuzzy
-#| msgid "Resend order link"
 msgid "Position order link"
-msgstr "Link erneut senden"
+msgstr "Link zur Bestellposition"
 
 #: pretix/base/exporters/orderlist.py:840
 msgid "Order transaction data"
@@ -3561,7 +3558,7 @@ msgstr "Mehrere passende Termine gefunden."
 
 #: pretix/base/modelimport_orders.py:73
 msgid "Grouping"
-msgstr ""
+msgstr "Gruppierung"
 
 #: pretix/base/modelimport_orders.py:75
 msgid ""
@@ -3569,6 +3566,10 @@ msgid ""
 "together...\". Lines with the same grouping value will be put in the same "
 "order, but MUST be consecutive lines of the input file."
 msgstr ""
+"Nur anwendbar, wenn der Importmodus auf \"Mehrere Zeilen gruppieren…\" "
+"steht. Zeilen mit dem selben Gruppierungswert werden in die gleiche "
+"Bestellung gebucht, aber MÜSSEN in aufeinanderfolgenden Zeilen der "
+"Eingabedatei stehen."
 
 #: pretix/base/modelimport_orders.py:101
 msgid "Enter a valid phone number."
@@ -3580,6 +3581,9 @@ msgid ""
 "The date can be specified through its full name, full date and time, or "
 "internal ID, provided only one date in the system matches the input."
 msgstr ""
+"Der Termin kann über seinen vollen Namen, sein vollständiges Datum samt "
+"Uhrzeit oder seine interne ID referenziert werden, solange die "
+"Referenzierung eindeutig ist."
 
 #: pretix/base/modelimport_orders.py:120 pretix/presale/views/waiting.py:157
 msgctxt "subevent"
@@ -3590,6 +3594,8 @@ msgstr "Du musst einen Termin auswählen."
 msgid ""
 "The product can be specified by its internal ID, full name or internal name."
 msgstr ""
+"Das Produkt kann über seine interne ID, seinen vollen Namen oder seinen "
+"internen Namen referenziert werden."
 
 #: pretix/base/modelimport_orders.py:149
 #: pretix/base/modelimport_vouchers.py:194
@@ -3610,6 +3616,8 @@ msgstr "Variante"
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
 msgstr ""
+"Die Variante kann über ihre interne ID oder ihre vollständige Bezeichnung "
+"referenziert werden."
 
 #: pretix/base/modelimport_orders.py:181
 #: pretix/base/modelimport_vouchers.py:225
@@ -3639,10 +3647,8 @@ msgid "Invoice address"
 msgstr "Rechnungsadresse"
 
 #: pretix/base/modelimport_orders.py:265 pretix/base/modelimport_orders.py:417
-#, fuzzy
-#| msgid "The count needs to be equal to or greater than zero."
 msgid "The country needs to be specified using a two-letter country code."
-msgstr "Die Anzahl muss mindestens null sein."
+msgstr "Das Land muss mit einem zweistelligen Ländercode angegeben werden."
 
 #: pretix/base/modelimport_orders.py:281 pretix/base/modelimport_orders.py:432
 msgid "Please enter a valid country code."
@@ -3651,6 +3657,8 @@ msgstr "Bitte gib ein gültiges Länderkürzel ein."
 #: pretix/base/modelimport_orders.py:290 pretix/base/modelimport_orders.py:441
 msgid "The state can be specified by its short form or full name."
 msgstr ""
+"Der Bundesstaat kann über eine Kurzform oder den vollen Namen spezifiziert "
+"werden."
 
 #: pretix/base/modelimport_orders.py:300 pretix/base/modelimport_orders.py:450
 msgid "States are not supported for this country."
@@ -3707,16 +3715,16 @@ msgid ""
 "The sales channel can be specified by it's internal identifier or its full "
 "name."
 msgstr ""
+"Der Verkaufskanal kann über seine interne Identifikation oder seinen vollen "
+"Namen referenziert werden."
 
 #: pretix/base/modelimport_orders.py:599 pretix/base/modelimport_orders.py:601
 msgid "Please enter a valid sales channel."
 msgstr "Bitte gib einen gültigen Verkaufskanal ein."
 
 #: pretix/base/modelimport_orders.py:611
-#, fuzzy
-#| msgid "The refund amount needs to be positive and less than {}."
 msgid "The seat needs to be specified by its internal ID."
-msgstr "Der Rückbuchungsbetrag muss positiv und geringer als {} sein."
+msgstr "Der Sitzplatz muss mit der internen ID referenziert werden."
 
 #: pretix/base/modelimport_orders.py:626
 #: pretix/base/modelimport_vouchers.py:291
@@ -7443,16 +7451,12 @@ msgid "123.45 EUR"
 msgstr "123,45 EUR"
 
 #: pretix/base/pdf.py:163
-#, fuzzy
-#| msgid "Price including add-ons"
 msgid "Price including bundled products"
-msgstr "Preis inklusive Zusatzprodukte"
+msgstr "Preis inkl. enthaltener Produkte"
 
 #: pretix/base/pdf.py:172
-#, fuzzy
-#| msgid "Price including add-ons"
 msgid "Price including add-ons and bundled products"
-msgstr "Preis inklusive Zusatzprodukte"
+msgstr "Preis inklusive enthaltener und Zusatzprodukte"
 
 #: pretix/base/pdf.py:182 pretix/base/pdf.py:340
 #: pretix/base/services/invoices.py:476
@@ -8691,6 +8695,8 @@ msgid ""
 "The grouping \"%(value)s\" occurs on non-consecutive lines (seen again on "
 "line %(row)s)."
 msgstr ""
+"Der Gruppierungswert \"%(value)s\" taucht in nicht aufeinander folgenden "
+"Zeilen auf (erneut gesehen in Zeile %(row)s)."
 
 #: pretix/base/services/modelimport.py:151
 #, python-brace-format
@@ -8698,6 +8704,9 @@ msgid ""
 "Inconsistent data in row {row}: Column {col} contains value \"{val_line}\", "
 "but for this order, the value has already been set to \"{val_order}\"."
 msgstr ""
+"Inkonsistente Daten in Zeile {row}: Spalte {col} enthält Wert \"{val_line}\""
+", aber für diese Bestellung wurde der Wert bereits auf \"{val_order}\" "
+"festgelegt."
 
 #: pretix/base/services/modelimport.py:165
 #: pretix/base/services/modelimport.py:277
@@ -9845,33 +9854,26 @@ msgstr ""
 
 #: pretix/base/settings.py:1037 pretix/base/settings.py:1045
 #: pretix/base/settings.py:1059 pretix/base/settings.py:1068
-#, fuzzy
-#| msgid "Default tax code"
 msgid "Use default tax rate"
-msgstr "Standard-Steuerkodierung"
+msgstr "Standard-Steuersatz verwenden"
 
 #: pretix/base/settings.py:1038 pretix/base/settings.py:1046
 #: pretix/base/settings.py:1057 pretix/base/settings.py:1066
-#, fuzzy
-#| msgid "Charge updated."
 msgid "Charge no taxes"
-msgstr "Buchung geändert."
+msgstr "Keine Steuern erheben"
 
 #: pretix/base/settings.py:1042
-#, fuzzy
-#| msgid "Tax rule for payment fees"
 msgid "Tax handling on payment fees"
-msgstr "Steuer-Regel für Zahlungsgebühren"
+msgstr "Besteuerung für Zahlungsgebühren"
 
 #: pretix/base/settings.py:1058 pretix/base/settings.py:1067
 msgid "Use same taxes as order positions (split according to net prices)"
 msgstr ""
+"Besteuerung entsprechend der Bestellpositionen (Aufteilung nach Nettopreis)"
 
 #: pretix/base/settings.py:1063
-#, fuzzy
-#| msgid "Charge a fixed cancellation fee"
 msgid "Tax handling on cancellation fees"
-msgstr "Feste Stornogebühr berechnen"
+msgstr "Besteuerung für Stornogebühren"
 
 #: pretix/base/settings.py:1079 pretix/base/settings.py:1091
 msgid "Do not generate invoices"
@@ -13259,6 +13261,8 @@ msgstr "Alle Stationen"
 #: pretix/control/forms/checkin.py:222
 msgid "I am sure that the check-in state of the entire event should be reset."
 msgstr ""
+"Ich bin sicher, dass der Check-in-Zustand der gesamten Veranstaltung "
+"zurückgesetzt werden soll."
 
 #: pretix/control/forms/event.py:91
 msgid "Use languages"
@@ -13518,10 +13522,8 @@ msgid "Bcc address"
 msgstr "BCC-Adresse"
 
 #: pretix/control/forms/event.py:987 pretix/control/forms/organizer.py:585
-#, fuzzy
-#| msgid "All emails will be sent to this address as a Bcc copy"
 msgid "All emails will be sent to this address as a Bcc copy."
-msgstr "Alle E-Mails werden in Bcc-Kopie an diese Adresse geschickt"
+msgstr "Alle E-Mails werden in Bcc-Kopie an diese Adresse geschickt."
 
 #: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:593
 msgid "Signature"
@@ -14984,6 +14986,8 @@ msgstr "Eine Bestellung mit einem Ticket pro Zeile erstellen"
 msgid ""
 "Group multiple lines together into the same order based on a grouping column"
 msgstr ""
+"Mehrere Zeilen zu einer Bestellung gruppieren auf Basis einer "
+"Gruppierungsspalte"
 
 #: pretix/control/forms/modelimport.py:87
 msgid "Create orders as fully paid"
@@ -14998,16 +15002,13 @@ msgid "Create orders as test mode orders"
 msgstr "Bestellungen im Test-Modus anlegen"
 
 #: pretix/control/forms/modelimport.py:112
-#, fuzzy
-#| msgid "You cannot generate an invoice for this order."
 msgid "A grouping cannot be specified for this import mode."
-msgstr "Du kannst für diese Bestellung keine Rechnung erzeugen."
+msgstr ""
+"Eine Gruppierungsspalte kann für diesen Importmodus nicht ausgewählt werden."
 
 #: pretix/control/forms/modelimport.py:114
-#, fuzzy
-#| msgid "A variation needs to be set for this item."
 msgid "A grouping needs to be specified for this import mode."
-msgstr "Zu diesem Produkt muss eine Variante ausgewählt werden."
+msgstr "Eine Gruppierungsspalte muss für diesen Importmodus ausgewählt werden."
 
 #: pretix/control/forms/orders.py:85
 msgid "Confirm order regardless of payment"
@@ -15071,13 +15072,6 @@ msgid "Keep a cancellation fee of"
 msgstr "Stornogebühr einbehalten"
 
 #: pretix/control/forms/orders.py:175
-#, fuzzy
-#| msgid ""
-#| "If you keep a fee, all positions within this order will be canceled and "
-#| "the order will be reduced to a cancellation fee. Payment and shipping "
-#| "fees will be canceled as well, so include them in your cancellation fee "
-#| "if you want to keep them. Please always enter a gross value, tax will be "
-#| "calculated automatically."
 msgid ""
 "If you keep a fee, all positions within this order will be canceled and the "
 "order will be reduced to a cancellation fee. Payment and shipping fees will "
@@ -15086,10 +15080,7 @@ msgid ""
 msgstr ""
 "Wenn du eine Gebühr einbehältst, werden alle Positionen dieser Bestellung "
 "einzeln storniert. Die Bestellung selbst bleibt als Bestellung vorhanden und "
-"enthält nur noch die Stornogebühr. Zahlungs- und Versandgebühren werden "
-"ebenfalls storniert und müssen ggf. manuell in die Stornogebühr aufgenommen "
-"werden. Bitte gib einen Bruttobetrag ein, die Steuern werden automatisch "
-"berechnet."
+"enthält nur noch die Stornogebühr."
 
 #: pretix/control/forms/orders.py:180
 msgid "Generate cancellation for invoice"
@@ -15112,18 +15103,23 @@ msgid ""
 "Please enter a gross amount. As per your event settings, the taxes will be "
 "split the same way as the order positions."
 msgstr ""
+"Bitte gib einen Bruttobetrag ein. Basierend auf deinen "
+"Veranstaltungseinstellungen wird die Steuer entsprechend der "
+"Bestellpositionen aufgeteilt."
 
 #: pretix/control/forms/orders.py:209
 msgid ""
 "Please enter a gross amount. As per your event settings, the default tax "
 "rate will be charged."
 msgstr ""
+"Bitte gib einen Bruttobetrag ein. Basierend auf deinen "
+"Veranstaltungseinstellungen wird der Standard-Steuersatz angewendet."
 
 #: pretix/control/forms/orders.py:213
-#, fuzzy
-#| msgid "The event settings have been changed."
 msgid "As per your event settings, no tax will be charged."
-msgstr "Die Veranstaltungs-Einstellungen wurden geändert."
+msgstr ""
+"Basierend auf deinen Veranstaltungseinstellungen wird keine Steuer "
+"angewendet."
 
 #: pretix/control/forms/orders.py:241
 msgid "A mail will only be sent if the order is fully paid after this."
@@ -17037,10 +17033,8 @@ msgid "The token \"{name}\" has been revoked."
 msgstr "Der Token \"{name}\" wurde invalidiert."
 
 #: pretix/control/logdisplay.py:725
-#, fuzzy
-#| msgid "The check-in list has been deleted."
 msgid "The check-in and print log state has been reset."
-msgstr "Die Check-in-Liste wurde gelöscht."
+msgstr "Die Check-in- und Druckprotokoll-Zustand wurde zurückgesetzt."
 
 #: pretix/control/logdisplay.py:732
 msgid "A meta property has been added to this event."
@@ -18620,10 +18614,8 @@ msgstr "Verbundene Geräte"
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:90
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:4
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:6
-#, fuzzy
-#| msgid "Delete check-ins"
 msgid "Reset check-in"
-msgstr "Check-ins löschen"
+msgstr "Check-in zurücksetzen"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:163
 #: pretix/control/templates/pretixcontrol/items/categories.html:57
@@ -18644,40 +18636,45 @@ msgid ""
 "hardware setup but only before your event started, and you admitted any real "
 "attendees or printed any real badges or tickets."
 msgstr ""
+"Mit dieser Funktion kannst du den vollständigen Check-in-Zustand einer "
+"Veranstaltung zurücksetzen. Dies löscht alle Check-ins sowie alle "
+"Druckzustände aller Tickets und Badges. Wir empfehlen diese Funktion nur zu "
+"nutzen, nachdem du den Test deines Hardware-Setups abgeschlossen hast, aber "
+"bevor die Veranstaltung beginnt und echte Teilnehmer eingelassen oder echte "
+"Tickets und Badges gedruckt werden."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:18
 #, python-format
 msgid "This will permanently delete <strong>1 check-in</strong>."
 msgid_plural ""
 "This will permanently delete <strong>%(count)s check-ins</strong>."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dies wird <strong>1 Check-in</strong> dauerhaft löschen."
+msgstr[1] "Dies wird <strong>%(count)s Check-ins</strong> dauerhaft löschen."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:23
 #, python-format
 msgid "Additionally, <strong>1 print log</strong> will be deleted."
 msgid_plural ""
 "Additionally, <strong>%(count)s print logs</strong> will be deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Zusätzlich wird <strong>1 Druckprotokolle</strong> gelöscht."
+msgstr[1] "Zusätzlich werden <strong>%(count)s Druckprotokolle</strong> gelöscht."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:30
-#, fuzzy
-#| msgid "This operation cannot be reversed."
 msgid "This cannot be reverted!"
-msgstr "Diese Operation kann nicht rückgängig gemacht werden."
+msgstr "Diese Operation kann nicht rückgängig gemacht werden!"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:34
+#, fuzzy
 msgid ""
 "The deleted entries will still show up in the \"Order history\" section, but "
 "for all other purposes the system will behave as if they never existed."
 msgstr ""
+"Die gelöschten Einträge tauchen weiter im \"Bestellverlauf\" auf, aber für "
+"alle anderen Zwecke verhält sich das System als hätten sie nie existiert."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:46
-#, fuzzy
-#| msgid "Proceed with checkout"
 msgid "Proceed with reset"
-msgstr "Zur Kasse"
+msgstr "Mit Löschung fortfahren"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:22
 msgid ""
@@ -20239,16 +20236,13 @@ msgstr ""
 "Möchtest du die Steuer-Regel <strong>%(taxrule)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:12
-#, fuzzy
-#| msgid ""
-#| "You cannot delete a tax rule that is in use for a product or has been in "
-#| "use for any existing orders."
 msgid ""
 "You cannot delete a tax rule that is in use for a product, has been in use "
 "for any existing orders, or is the default tax rule of the event."
 msgstr ""
 "Du kannst keine Steuerregel löschen, die für ein Produkt oder bei "
-"bestehenden Bestellungen im Einsatz ist."
+"bestehenden Bestellungen im Einsatz ist oder die Standardregel der "
+"Veranstaltung ist."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:7
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:14
@@ -24842,10 +24836,8 @@ msgid "Text box"
 msgstr "Textbox"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:59
-#, fuzzy
-#| msgid "Code"
 msgid "QR Code"
-msgstr "Code"
+msgstr "QR-Code"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:64
 msgid "QR code for Check-In"
@@ -24861,7 +24853,7 @@ msgstr "Anderer QR-Code"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:87
 msgid "Image"
-msgstr ""
+msgstr "Bild"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:92
 msgid ""
@@ -24883,7 +24875,7 @@ msgstr "pretix-Logo"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:107
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplizieren"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:117
 msgid "Undo"
@@ -28359,13 +28351,11 @@ msgstr "Der Eintrag wurde auf einen anderen Termin übertragen."
 
 #: pretix/helpers/countries.py:128
 msgid "Belarus"
-msgstr ""
+msgstr "Belarus"
 
 #: pretix/helpers/countries.py:129
-#, fuzzy
-#| msgid "French"
 msgid "French Guiana"
-msgstr "Französisch"
+msgstr "Französisch-Guayana"
 
 #: pretix/helpers/daterange.py:56 pretix/helpers/daterange.py:118
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:77
@@ -32862,10 +32852,8 @@ msgstr "Information"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:222
 #: pretix/presale/templates/pretixpresale/organizers/base.html:100
-#, fuzzy
-#| msgid "Contact:"
 msgid "Contact"
-msgstr "Kontakt:"
+msgstr "Kontakt"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:225
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:118
