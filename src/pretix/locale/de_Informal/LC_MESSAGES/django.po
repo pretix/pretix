@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 14:07+0000\n"
-"PO-Revision-Date: 2025-08-04 13:52+0000\n"
+"PO-Revision-Date: 2025-08-04 14:14+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -144,7 +144,6 @@ msgid "Spanish"
 msgstr "Spanisch"
 
 #: pretix/_base_settings.py:118
-#, fuzzy
 msgid "Spanish (Latin America)"
 msgstr "Spanisch (Lateinamerika)"
 
@@ -18665,7 +18664,6 @@ msgid "This cannot be reverted!"
 msgstr "Diese Operation kann nicht rückgängig gemacht werden!"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:34
-#, fuzzy
 msgid ""
 "The deleted entries will still show up in the \"Order history\" section, but "
 "for all other purposes the system will behave as if they never existed."
@@ -34158,11 +34156,6 @@ msgstr ""
 "abzuschließen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
@@ -34174,10 +34167,6 @@ msgstr ""
 "geschickt."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:59
-#, fuzzy
-#| msgid ""
-#| "Please save the following link if you want to access your order later. We "
-#| "also sent you an email containing the link to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email to the address you specified containing the link."
