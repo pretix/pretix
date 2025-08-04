@@ -8,7 +8,7 @@ def migrate_pending_overdue(apps, schema_editor):
     for r in Rule.objects.filter(restrict_to_status__icontains="p__overdue"):
         rts = r.restrict_to_status
         rts.remove('p__overdue')
-        rts.append('n__overdue')
+        rts.append('n__pending_overdue')
         r.restrict_to_status = rts
 
         r.save(update_fields=["restrict_to_status"])
