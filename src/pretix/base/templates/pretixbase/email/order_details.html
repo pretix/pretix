@@ -60,11 +60,17 @@
             </td>
             <td>
                 {{ event.name }}
-                {% if not event.has_subevents and event.settings.show_dates_on_frontpage %}
-                    <br>
-                    {{ event.get_date_range_display }}
-                    {% if event.settings.show_times %}
-                        {{ event.date_from|date:"TIME_FORMAT" }}
+                {% if not event.has_subevents %}
+                    {% if event.settings.show_dates_on_frontpage %}
+                        <br>
+                        {{ event.get_date_range_display }}
+                        {% if event.settings.show_times %}
+                            {{ event.date_from|date:"TIME_FORMAT" }}
+                        {% endif %}
+                    {% endif %}
+                    {% if event.location %}
+                        <br>
+                        {{ event.location }}
                     {% endif %}
                 {% endif %}
             </td>
