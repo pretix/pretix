@@ -533,7 +533,7 @@ var form_handlers = function (el) {
             allowClear: !$s.prop("required"),
             width: '100%',
             language: $("body").attr("data-select2-locale"),
-            placeholder: $(this).attr("data-placeholder"),
+            placeholder: $(this).attr("data-placeholder") || "",
             ajax: {
                 url: $(this).attr('data-select2-url'),
                 data: function (params) {
@@ -594,7 +594,7 @@ var form_handlers = function (el) {
                     }
                 }
             },
-            placeholder: $(this).attr("data-placeholder"),
+            placeholder: $(this).attr("data-placeholder") | "",
             templateResult: function (res) {
                 if (!res.id) {
                     return res.text;
