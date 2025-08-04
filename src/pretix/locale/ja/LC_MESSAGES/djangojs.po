@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 09:11+0000\n"
+"POT-Creation-Date: 2025-08-04 12:44+0000\n"
 "PO-Revision-Date: 2025-07-23 01:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/ja/>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -569,48 +569,48 @@ msgstr "チェックイン用QRコード"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "以下の理由によりPDFファイルの読み込みに失敗しました："
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:903
+#: pretix/static/pretixcontrol/js/ui/editor.js:904
 msgid "Group of objects"
 msgstr "オブジェクトグループ"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:908
+#: pretix/static/pretixcontrol/js/ui/editor.js:909
 msgid "Text object (deprecated)"
 msgstr "テキストオブジェクト (廃止済)"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:910
+#: pretix/static/pretixcontrol/js/ui/editor.js:911
 msgid "Text box"
 msgstr "テキストボックス"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:912
+#: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Barcode area"
 msgstr "バーコードエリア"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:914
+#: pretix/static/pretixcontrol/js/ui/editor.js:915
 msgid "Image area"
 msgstr "画像エリア"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:916
+#: pretix/static/pretixcontrol/js/ui/editor.js:917
 msgid "Powered by pretix"
 msgstr "Pretixのイベントチケット売り場"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:918
+#: pretix/static/pretixcontrol/js/ui/editor.js:919
 msgid "Object"
 msgstr "オブジェクト"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:922
+#: pretix/static/pretixcontrol/js/ui/editor.js:923
 msgid "Ticket design"
 msgstr "チケットのデザイン"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1258
+#: pretix/static/pretixcontrol/js/ui/editor.js:1292
 msgid "Saving failed."
 msgstr "保存できませんでした。"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1327
-#: pretix/static/pretixcontrol/js/ui/editor.js:1378
+#: pretix/static/pretixcontrol/js/ui/editor.js:1361
+#: pretix/static/pretixcontrol/js/ui/editor.js:1412
 msgid "Error while uploading your PDF file, please try again."
 msgstr "PDFのアップロード中に問題が発生しました。再試行してください。"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1361
+#: pretix/static/pretixcontrol/js/ui/editor.js:1395
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "変更内容を保存せずに編集を終了しますか？"
 
@@ -628,15 +628,17 @@ msgstr "不明なエラー。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:292
 msgid "Your color has great contrast and will provide excellent accessibility."
-msgstr "あなたの色は素晴らしいコントラストを持ち、優れたアクセシビリティを提供します"
-"。"
+msgstr ""
+"あなたの色は素晴らしいコントラストを持ち、優れたアクセシビリティを提供しま"
+"す。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:296
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
-msgstr "あなたの色は適切なコントラストを持ち、最小限のアクセシビリティ要件に十分です"
-"。"
+msgstr ""
+"あなたの色は適切なコントラストを持ち、最小限のアクセシビリティ要件に十分で"
+"す。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:300
 msgid ""
@@ -644,40 +646,40 @@ msgid ""
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:416
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:417
+#: pretix/static/pretixcontrol/js/ui/main.js:437
 msgid "Search query"
 msgstr "検索クエリ"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:434
+#: pretix/static/pretixcontrol/js/ui/main.js:435
 msgid "All"
 msgstr "全て"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:436
 msgid "None"
 msgstr "ない"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:439
+#: pretix/static/pretixcontrol/js/ui/main.js:440
 msgid "Selected only"
 msgstr "選択したもののみ"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:811
+#: pretix/static/pretixcontrol/js/ui/main.js:812
 msgid "Enter page number between 1 and %(max)s."
 msgstr "1以上%(max)s以下のページ番号を入力。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:814
+#: pretix/static/pretixcontrol/js/ui/main.js:815
 msgid "Invalid page number."
 msgstr "無効なページ番号。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:972
+#: pretix/static/pretixcontrol/js/ui/main.js:973
 msgid "Use a different name internally"
 msgstr "内部で別の名前を使用してください"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1012
+#: pretix/static/pretixcontrol/js/ui/main.js:1013
 msgid "Click to close"
 msgstr "クリックして閉じる"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1093
+#: pretix/static/pretixcontrol/js/ui/main.js:1094
 msgid "You have unsaved changes!"
 msgstr "保存されていない変更があります！"
 
