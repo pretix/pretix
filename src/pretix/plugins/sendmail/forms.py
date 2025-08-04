@@ -389,7 +389,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
         choices.insert(0, ('n__pending_approval', _('approval pending')))
         if not self.event.settings.get('payment_term_expire_automatically', as_type=bool):
             choices.append(
-                ('p__overdue', _('pending with payment overdue'))
+                ('n__pending_overdue', _('pending with payment overdue'))
             )
         self.fields['restrict_to_status'] = forms.MultipleChoiceField(
             label=pgettext_lazy('sendmail_from', 'Restrict to orders with status'),
