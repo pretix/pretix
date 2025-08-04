@@ -18,6 +18,7 @@ Apps
 APM
 as
 Aufbuchungen
+aufeinanderfolgenden
 Aufteilungsliste
 aufzubuchen
 auschecken
@@ -44,6 +45,7 @@ Bcc
 BCC
 Beispielevent
 Beispielproduktvariantenbeschreibung
+Belarus
 Benachrichtigungs
 Benachrichtigungsart
 Benachrichtigungsarten
@@ -146,6 +148,8 @@ GiroCode
 giropay
 GPL
 Grants
+Gruppierungswert
+Gruppierungsspalte
 Guide
 Gutscheineinlöser
 herunterscrollen
@@ -318,6 +322,7 @@ Stornobedingungen
 Stornobeleg
 Stornodatum
 Stornogebühr
+Stornogebühren
 Stornos
 Strg
 Stripe
