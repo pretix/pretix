@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-04 14:07+0000\n"
 "PO-Revision-Date: 2025-07-21 21:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
@@ -653,7 +653,7 @@ msgstr "{system} Bruger"
 #: pretix/presale/forms/customer.py:298 pretix/presale/forms/customer.py:344
 #: pretix/presale/forms/customer.py:388 pretix/presale/forms/user.py:40
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:31
-#: pretix/presale/templates/pretixpresale/event/order.html:299
+#: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
 msgstr "Email"
 
@@ -940,7 +940,7 @@ msgstr "Internt ID"
 #: pretix/plugins/checkinlists/exporters.py:508
 #: pretix/presale/checkoutflow.py:1538 pretix/presale/forms/checkout.py:84
 #: pretix/presale/forms/waitinglist.py:80
-#: pretix/presale/templates/pretixpresale/event/order.html:303
+#: pretix/presale/templates/pretixpresale/event/order.html:304
 msgid "Phone number"
 msgstr "Telefonnummer"
 
@@ -991,7 +991,7 @@ msgstr "Fuldt navn"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:86
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:35
-#: pretix/presale/templates/pretixpresale/event/order.html:311
+#: pretix/presale/templates/pretixpresale/event/order.html:312
 msgid "Name"
 msgstr "Navn"
 
@@ -1294,8 +1294,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:268
 #: pretix/control/templates/pretixcontrol/order/index.html:341
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:312
-#: pretix/presale/templates/pretixpresale/event/order.html:235
-#: pretix/presale/templates/pretixpresale/event/order.html:256
+#: pretix/presale/templates/pretixpresale/event/order.html:236
+#: pretix/presale/templates/pretixpresale/event/order.html:257
 msgid "Invoices"
 msgstr "Fakturaer"
 
@@ -1390,7 +1390,7 @@ msgstr "Fakturaafsender:"
 #: pretix/plugins/checkinlists/exporters.py:534
 #: pretix/plugins/reports/exporters.py:840
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:88
-#: pretix/presale/templates/pretixpresale/event/order.html:315
+#: pretix/presale/templates/pretixpresale/event/order.html:316
 msgid "Address"
 msgstr "Adresse"
 
@@ -1441,7 +1441,7 @@ msgstr "By"
 #: pretix/plugins/reports/exporters.py:837
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:92
-#: pretix/presale/templates/pretixpresale/event/order.html:319
+#: pretix/presale/templates/pretixpresale/event/order.html:320
 msgid "Country"
 msgstr "Land"
 
@@ -1459,7 +1459,7 @@ msgstr "CVR-nr."
 #: pretix/plugins/reports/exporters.py:844
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
-#: pretix/presale/templates/pretixpresale/event/order.html:326
+#: pretix/presale/templates/pretixpresale/event/order.html:327
 msgid "VAT ID"
 msgstr "CVR-nr."
 
@@ -1489,7 +1489,7 @@ msgstr "Fakturamodtager:"
 #: pretix/plugins/reports/exporters.py:839
 #: pretix/plugins/reports/exporters.py:885
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
-#: pretix/presale/templates/pretixpresale/event/order.html:307
+#: pretix/presale/templates/pretixpresale/event/order.html:308
 msgid "Company"
 msgstr "Virksomhed"
 
@@ -1508,7 +1508,7 @@ msgstr "Vejnavn / Nr."
 #: pretix/plugins/checkinlists/exporters.py:538
 #: pretix/plugins/reports/exporters.py:843
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:95
-#: pretix/presale/templates/pretixpresale/event/order.html:322
+#: pretix/presale/templates/pretixpresale/event/order.html:323
 msgctxt "address"
 msgid "State"
 msgstr "Stat / region"
@@ -1567,7 +1567,7 @@ msgstr "Afbestilling"
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 #: pretix/control/templates/pretixcontrol/order/index.html:272
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:70
-#: pretix/presale/templates/pretixpresale/event/order.html:243
+#: pretix/presale/templates/pretixpresale/event/order.html:244
 msgid "Invoice"
 msgstr "Faktura"
 
@@ -2509,7 +2509,7 @@ msgstr "Status på tilbagebetalinger"
 #: pretix/control/templates/pretixcontrol/search/payments.html:78
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:374
-#: pretix/presale/templates/pretixpresale/event/order.html:66
+#: pretix/presale/templates/pretixpresale/event/order.html:67
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:70
 msgid "Order"
 msgstr "Bestilling"
@@ -2696,7 +2696,7 @@ msgstr "Arrangør"
 #: pretix/control/templates/pretixcontrol/search/payments.html:119
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:67
 #: pretix/presale/forms/checkout.py:259
-#: pretix/presale/templates/pretixpresale/event/order.html:68
+#: pretix/presale/templates/pretixpresale/event/order.html:69
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:84
@@ -3311,7 +3311,7 @@ msgstr "Faktura"
 #: pretix/base/invoice.py:664
 #: pretix/control/templates/pretixcontrol/order/index.html:272
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:70
-#: pretix/presale/templates/pretixpresale/event/order.html:243
+#: pretix/presale/templates/pretixpresale/event/order.html:244
 msgctxt "invoice"
 msgid "Cancellation"
 msgstr "Afbestilling"
@@ -6914,7 +6914,7 @@ msgstr "Købte produkter"
 
 #: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:384
 #: pretix/base/services/placeholders.py:393
-#: pretix/base/templates/pretixbase/email/order_details.html:141
+#: pretix/base/templates/pretixbase/email/order_details.html:147
 msgid "View order details"
 msgstr "Vis bestillingsdetaljer"
 
@@ -7052,7 +7052,7 @@ msgstr ""
 "arrangøren."
 
 #: pretix/base/payment.py:313
-#: pretix/presale/templates/pretixpresale/event/order.html:115
+#: pretix/presale/templates/pretixpresale/event/order.html:116
 msgid "Pay now"
 msgstr "Betal nu"
 
@@ -12370,7 +12370,7 @@ msgid "Event:"
 msgstr "Arrangement:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:23
-#: pretix/base/templates/pretixbase/email/order_details.html:74
+#: pretix/base/templates/pretixbase/email/order_details.html:80
 msgid "Order code:"
 msgstr "Bestillingsnr.:"
 
@@ -12379,7 +12379,7 @@ msgid "created by"
 msgstr "Oprettet af"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:34
-#: pretix/base/templates/pretixbase/email/order_details.html:126
+#: pretix/base/templates/pretixbase/email/order_details.html:132
 msgid "Contact:"
 msgstr "Kontakt:"
 
@@ -12391,7 +12391,7 @@ msgstr ""
 "Du modtager denne e-mail fordi du har afgivet bestilling på følgende "
 "arrangement:"
 
-#: pretix/base/templates/pretixbase/email/order_details.html:83
+#: pretix/base/templates/pretixbase/email/order_details.html:89
 msgid "Details:"
 msgstr "Bestillingsdetaljer:"
 
@@ -17006,7 +17006,7 @@ msgstr "Generelt"
 #: pretix/plugins/stripe/apps.py:44
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:42
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:11
-#: pretix/presale/templates/pretixpresale/event/order.html:85
+#: pretix/presale/templates/pretixpresale/event/order.html:86
 msgid "Payment"
 msgstr "Betaling"
 
@@ -17071,7 +17071,7 @@ msgstr "Overblik"
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:9
 #: pretix/plugins/reports/accountingreport.py:497
 #: pretix/plugins/reports/accountingreport.py:684
-#: pretix/presale/templates/pretixpresale/event/order.html:136
+#: pretix/presale/templates/pretixpresale/event/order.html:137
 #, fuzzy
 msgid "Refunds"
 msgstr "Tilbagebetalt"
@@ -21333,7 +21333,7 @@ msgstr "Ja, godkend bestilling"
 #: pretix/control/templates/pretixcontrol/order/cancel.html:10
 #: pretix/control/templates/pretixcontrol/order/index.html:68
 #: pretix/control/templates/pretixcontrol/order/index.html:166
-#: pretix/presale/templates/pretixpresale/event/order.html:478
+#: pretix/presale/templates/pretixpresale/event/order.html:479
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
 msgstr "Annuller bestilling"
@@ -21818,7 +21818,7 @@ msgid "Change products"
 msgstr "Ændr produkter"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:370
-#: pretix/presale/templates/pretixpresale/event/order.html:196
+#: pretix/presale/templates/pretixpresale/event/order.html:197
 msgid "Ordered items"
 msgstr "Bestilling"
 
@@ -21908,12 +21908,12 @@ msgid "Total"
 msgstr "Total"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:718
-#: pretix/presale/templates/pretixpresale/event/order.html:209
+#: pretix/presale/templates/pretixpresale/event/order.html:210
 msgid "Successful payments"
 msgstr "Gennemførte betalinger"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:727
-#: pretix/presale/templates/pretixpresale/event/order.html:218
+#: pretix/presale/templates/pretixpresale/event/order.html:219
 msgid "Pending total"
 msgstr "Afventende i alt"
 
@@ -21985,7 +21985,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:963
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:90
-#: pretix/presale/templates/pretixpresale/event/order.html:317
+#: pretix/presale/templates/pretixpresale/event/order.html:318
 msgid "ZIP code and city"
 msgstr "Postnummer og by"
 
@@ -32725,9 +32725,9 @@ msgstr ""
 "refundering."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:152
-#: pretix/presale/templates/pretixpresale/event/order.html:390
-#: pretix/presale/templates/pretixpresale/event/order.html:426
-#: pretix/presale/templates/pretixpresale/event/order.html:447
+#: pretix/presale/templates/pretixpresale/event/order.html:391
+#: pretix/presale/templates/pretixpresale/event/order.html:427
+#: pretix/presale/templates/pretixpresale/event/order.html:448
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:113
 msgid ""
 "The refund will be issued in form of a gift card that you can use for "
@@ -33151,43 +33151,52 @@ msgstr ""
 "bestillingen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
+#, fuzzy
+#| msgid ""
+#| "Please bookmark or save the link to this exact page if you want to access "
+#| "your order later. We also sent you an email containing the link to the "
+#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
-"your order later. We also sent you an email containing the link to the "
-"address you specified."
+"your order later. We also sent you an email to the address you specified "
+"containing the link to this page."
 msgstr ""
 "Du bør gemme linket til denne side, hvis du ønsker at at tilgå din ordre "
 "senere. Vi har også sendt dig en e-mail indeholdende linket til denne "
 "adresse."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:58
+#: pretix/presale/templates/pretixpresale/event/order.html:59
+#, fuzzy
+#| msgid ""
+#| "Please save the following link if you want to access your order later. We "
+#| "also sent you an email containing the link to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
-"also sent you an email containing the link to the address you specified."
+"also sent you an email to the address you specified containing the link."
 msgstr ""
 "Gem venligst det nedenstående link, hvis du vil ændre i din booking senere. "
 "Vi har også sendt linket til den emailadresse, du har oplyst."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:73
+#: pretix/presale/templates/pretixpresale/event/order.html:74
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
 msgstr "Se i administrationen"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:90
+#: pretix/presale/templates/pretixpresale/event/order.html:91
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
 msgstr "En betaling på %(total)s afventer stadig for denne ordre."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:95
+#: pretix/presale/templates/pretixpresale/event/order.html:96
 #, python-format
 msgid "Please complete your payment before %(date)s"
 msgstr "Gennemfør venligst betaling inden %(date)s"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:107
+#: pretix/presale/templates/pretixpresale/event/order.html:108
 msgid "Re-try payment or choose another payment method"
 msgstr "Prøv at betale igen - eller vælg en anden betalingsmetode"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:125
+#: pretix/presale/templates/pretixpresale/event/order.html:126
 msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
@@ -33195,109 +33204,109 @@ msgstr ""
 "Vi har modtaget din anmodning om at annullere denne ordre. Vær tålmodig, "
 "mens arrangementets arrangør træffer afgørelse om anmodningen."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:143
+#: pretix/presale/templates/pretixpresale/event/order.html:144
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
 "En tilbagebetaling på %(amount)s vil snart blive overført til dig - vær "
 "venligst tålmodig."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:150
+#: pretix/presale/templates/pretixpresale/event/order.html:151
 msgid "Print"
 msgstr "Print"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:152
+#: pretix/presale/templates/pretixpresale/event/order.html:153
 #, python-format
 msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:162
+#: pretix/presale/templates/pretixpresale/event/order.html:163
 #, python-format
 msgid "The current value of your gift card is %(value)s."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:169
+#: pretix/presale/templates/pretixpresale/event/order.html:170
 #, fuzzy, python-format
 msgid "This gift card is valid until %(expiry)s."
 msgstr "Denne funktion er ikke aktiveret."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:180
+#: pretix/presale/templates/pretixpresale/event/order.html:181
 #, python-format
 msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:198
+#: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/position.html:33
 #, fuzzy
 msgid "Change ordered items"
 msgstr "Ret din ordre"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:199
-#: pretix/presale/templates/pretixpresale/event/order.html:290
+#: pretix/presale/templates/pretixpresale/event/order.html:200
+#: pretix/presale/templates/pretixpresale/event/order.html:291
 #: pretix/presale/templates/pretixpresale/event/position.html:34
 msgid "Change details"
 msgstr "Ret oplysningerne"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:262
+#: pretix/presale/templates/pretixpresale/event/order.html:263
 msgid ""
 "You need to select a payment method above before you can request an invoice."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:267
-#: pretix/presale/templates/pretixpresale/event/order.html:274
+#: pretix/presale/templates/pretixpresale/event/order.html:268
+#: pretix/presale/templates/pretixpresale/event/order.html:275
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
 msgstr "Anmod om faktura"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:286
+#: pretix/presale/templates/pretixpresale/event/order.html:287
 msgid "Your information"
 msgstr "Dine oplysninger"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:289
+#: pretix/presale/templates/pretixpresale/event/order.html:290
 msgid "Change your information"
 msgstr "Ændr dine oplysninger"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:334
+#: pretix/presale/templates/pretixpresale/event/order.html:335
 msgid "Internal Reference"
 msgstr "Intern reference"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:349
+#: pretix/presale/templates/pretixpresale/event/order.html:350
 msgctxt "action"
 msgid "Change or cancel your order"
 msgstr "Ret eller afbestil din ordre"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:351
+#: pretix/presale/templates/pretixpresale/event/order.html:352
 #, fuzzy
 msgctxt "action"
 msgid "Change your order"
 msgstr "Ret din ordre"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:353
+#: pretix/presale/templates/pretixpresale/event/order.html:354
 msgctxt "action"
 msgid "Cancel your order"
 msgstr "Annuller bestilling"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:361
+#: pretix/presale/templates/pretixpresale/event/order.html:362
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:369
+#: pretix/presale/templates/pretixpresale/event/order.html:370
 msgid "Change order"
 msgstr "Ret din ordre"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:381
+#: pretix/presale/templates/pretixpresale/event/order.html:382
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
 #, fuzzy
 msgid "You can request to cancel this order."
 msgstr "Du kan ikke annullere denne bestilling."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:384
+#: pretix/presale/templates/pretixpresale/event/order.html:385
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
 msgid ""
 "If your request is approved, the organizer will determine if you will "
@@ -33305,41 +33314,41 @@ msgid ""
 "their cancellation policy."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:392
-#: pretix/presale/templates/pretixpresale/event/order.html:428
-#: pretix/presale/templates/pretixpresale/event/order.html:449
+#: pretix/presale/templates/pretixpresale/event/order.html:393
+#: pretix/presale/templates/pretixpresale/event/order.html:429
+#: pretix/presale/templates/pretixpresale/event/order.html:450
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:394
-#: pretix/presale/templates/pretixpresale/event/order.html:430
-#: pretix/presale/templates/pretixpresale/event/order.html:451
+#: pretix/presale/templates/pretixpresale/event/order.html:395
+#: pretix/presale/templates/pretixpresale/event/order.html:431
+#: pretix/presale/templates/pretixpresale/event/order.html:452
 msgid "The refund will be issued to your original payment method."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:396
-#: pretix/presale/templates/pretixpresale/event/order.html:409
-#: pretix/presale/templates/pretixpresale/event/order.html:432
-#: pretix/presale/templates/pretixpresale/event/order.html:453
-#: pretix/presale/templates/pretixpresale/event/order.html:465
-#: pretix/presale/templates/pretixpresale/event/order.html:470
+#: pretix/presale/templates/pretixpresale/event/order.html:397
+#: pretix/presale/templates/pretixpresale/event/order.html:410
+#: pretix/presale/templates/pretixpresale/event/order.html:433
+#: pretix/presale/templates/pretixpresale/event/order.html:454
+#: pretix/presale/templates/pretixpresale/event/order.html:466
+#: pretix/presale/templates/pretixpresale/event/order.html:471
 msgid "This will invalidate all tickets in this order."
 msgstr "Dette vil annullere alle billetter i ordren."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:401
+#: pretix/presale/templates/pretixpresale/event/order.html:402
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
 msgstr ""
 "Du kan anmode om at annullere denne ordre, men du ville ikke få pengene "
 "tilbage."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:405
+#: pretix/presale/templates/pretixpresale/event/order.html:406
 #, fuzzy
 msgid "You can cancel this order, but you will not receive a refund."
 msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:414
+#: pretix/presale/templates/pretixpresale/event/order.html:415
 #, python-format
 msgid ""
 "You can request to cancel this order. If your request is approved, a "
@@ -33347,7 +33356,7 @@ msgid ""
 "receive a refund of the remainder."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:420
+#: pretix/presale/templates/pretixpresale/event/order.html:421
 #, python-format
 msgid ""
 "You can cancel this order. In this case, a cancellation fee of "
@@ -33355,18 +33364,18 @@ msgid ""
 "remainder."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:437
+#: pretix/presale/templates/pretixpresale/event/order.html:438
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:442
+#: pretix/presale/templates/pretixpresale/event/order.html:443
 #, fuzzy
 msgid "You can cancel this order and receive a full refund."
 msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:461
+#: pretix/presale/templates/pretixpresale/event/order.html:462
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
 #, python-format
 msgid ""
@@ -33374,7 +33383,7 @@ msgid ""
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:467
+#: pretix/presale/templates/pretixpresale/event/order.html:468
 msgid "You can cancel this order using the following button."
 msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
 

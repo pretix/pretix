@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-04 14:07+0000\n"
 "PO-Revision-Date: 2024-12-25 23:27+0000\n"
 "Last-Translator: Aarni Heinonen <vamoosev@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.pretix.eu/"
@@ -688,7 +688,7 @@ msgstr "{system} 用户"
 #: pretix/presale/forms/customer.py:298 pretix/presale/forms/customer.py:344
 #: pretix/presale/forms/customer.py:388 pretix/presale/forms/user.py:40
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:31
-#: pretix/presale/templates/pretixpresale/event/order.html:299
+#: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
 msgstr "Email"
 
@@ -984,7 +984,7 @@ msgstr "内部标识符"
 #: pretix/plugins/checkinlists/exporters.py:508
 #: pretix/presale/checkoutflow.py:1538 pretix/presale/forms/checkout.py:84
 #: pretix/presale/forms/waitinglist.py:80
-#: pretix/presale/templates/pretixpresale/event/order.html:303
+#: pretix/presale/templates/pretixpresale/event/order.html:304
 msgid "Phone number"
 msgstr "电话号码"
 
@@ -1035,7 +1035,7 @@ msgstr "全名"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:86
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:35
-#: pretix/presale/templates/pretixpresale/event/order.html:311
+#: pretix/presale/templates/pretixpresale/event/order.html:312
 msgid "Name"
 msgstr "姓名"
 
@@ -1347,8 +1347,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:268
 #: pretix/control/templates/pretixcontrol/order/index.html:341
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:312
-#: pretix/presale/templates/pretixpresale/event/order.html:235
-#: pretix/presale/templates/pretixpresale/event/order.html:256
+#: pretix/presale/templates/pretixpresale/event/order.html:236
+#: pretix/presale/templates/pretixpresale/event/order.html:257
 msgid "Invoices"
 msgstr "发票"
 
@@ -1444,7 +1444,7 @@ msgstr "发票发送者:"
 #: pretix/plugins/checkinlists/exporters.py:534
 #: pretix/plugins/reports/exporters.py:840
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:88
-#: pretix/presale/templates/pretixpresale/event/order.html:315
+#: pretix/presale/templates/pretixpresale/event/order.html:316
 msgid "Address"
 msgstr "地址"
 
@@ -1495,7 +1495,7 @@ msgstr "城市"
 #: pretix/plugins/reports/exporters.py:837
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:92
-#: pretix/presale/templates/pretixpresale/event/order.html:319
+#: pretix/presale/templates/pretixpresale/event/order.html:320
 msgid "Country"
 msgstr "国家"
 
@@ -1513,7 +1513,7 @@ msgstr "税号"
 #: pretix/plugins/reports/exporters.py:844
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
-#: pretix/presale/templates/pretixpresale/event/order.html:326
+#: pretix/presale/templates/pretixpresale/event/order.html:327
 msgid "VAT ID"
 msgstr "增值税ID"
 
@@ -1543,7 +1543,7 @@ msgstr "发票收件人:"
 #: pretix/plugins/reports/exporters.py:839
 #: pretix/plugins/reports/exporters.py:885
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
-#: pretix/presale/templates/pretixpresale/event/order.html:307
+#: pretix/presale/templates/pretixpresale/event/order.html:308
 msgid "Company"
 msgstr "公司"
 
@@ -1562,7 +1562,7 @@ msgstr "街道地址"
 #: pretix/plugins/checkinlists/exporters.py:538
 #: pretix/plugins/reports/exporters.py:843
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:95
-#: pretix/presale/templates/pretixpresale/event/order.html:322
+#: pretix/presale/templates/pretixpresale/event/order.html:323
 msgctxt "address"
 msgid "State"
 msgstr "州"
@@ -1621,7 +1621,7 @@ msgstr "取消"
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 #: pretix/control/templates/pretixcontrol/order/index.html:272
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:70
-#: pretix/presale/templates/pretixpresale/event/order.html:243
+#: pretix/presale/templates/pretixpresale/event/order.html:244
 msgid "Invoice"
 msgstr "发票"
 
@@ -2624,7 +2624,7 @@ msgstr "退款状态"
 #: pretix/control/templates/pretixcontrol/search/payments.html:78
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:374
-#: pretix/presale/templates/pretixpresale/event/order.html:66
+#: pretix/presale/templates/pretixpresale/event/order.html:67
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:70
 msgid "Order"
 msgstr "订单"
@@ -2821,7 +2821,7 @@ msgstr "组织者"
 #: pretix/control/templates/pretixcontrol/search/payments.html:119
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:67
 #: pretix/presale/forms/checkout.py:259
-#: pretix/presale/templates/pretixpresale/event/order.html:68
+#: pretix/presale/templates/pretixpresale/event/order.html:69
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:84
@@ -3455,7 +3455,7 @@ msgstr "发票"
 #: pretix/base/invoice.py:664
 #: pretix/control/templates/pretixcontrol/order/index.html:272
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:70
-#: pretix/presale/templates/pretixpresale/event/order.html:243
+#: pretix/presale/templates/pretixpresale/event/order.html:244
 msgctxt "invoice"
 msgid "Cancellation"
 msgstr "取消"
@@ -7143,7 +7143,7 @@ msgstr "改变产品"
 
 #: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:384
 #: pretix/base/services/placeholders.py:393
-#: pretix/base/templates/pretixbase/email/order_details.html:141
+#: pretix/base/templates/pretixbase/email/order_details.html:147
 msgid "View order details"
 msgstr "查看订单详情"
 
@@ -7278,7 +7278,7 @@ msgid ""
 msgstr "由于该礼品卡的代码不唯一，因此无法兑换。请联系此活动的组织者。"
 
 #: pretix/base/payment.py:313
-#: pretix/presale/templates/pretixpresale/event/order.html:115
+#: pretix/presale/templates/pretixpresale/event/order.html:116
 msgid "Pay now"
 msgstr "现在付款"
 
@@ -12781,7 +12781,7 @@ msgid "Event:"
 msgstr "活动："
 
 #: pretix/base/templates/pretixbase/email/order_details.html:23
-#: pretix/base/templates/pretixbase/email/order_details.html:74
+#: pretix/base/templates/pretixbase/email/order_details.html:80
 msgid "Order code:"
 msgstr "订单号："
 
@@ -12793,7 +12793,7 @@ msgid "created by"
 msgstr "创建"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:34
-#: pretix/base/templates/pretixbase/email/order_details.html:126
+#: pretix/base/templates/pretixbase/email/order_details.html:132
 #, fuzzy
 #| msgid "Bancontact"
 msgid "Contact:"
@@ -12805,7 +12805,7 @@ msgid ""
 "event:"
 msgstr "您收到此电子邮件是因为您订购了以下活动："
 
-#: pretix/base/templates/pretixbase/email/order_details.html:83
+#: pretix/base/templates/pretixbase/email/order_details.html:89
 #, fuzzy
 #| msgid "Order details"
 msgid "Details:"
@@ -17812,7 +17812,7 @@ msgstr "一般"
 #: pretix/plugins/stripe/apps.py:44
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:42
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:11
-#: pretix/presale/templates/pretixpresale/event/order.html:85
+#: pretix/presale/templates/pretixpresale/event/order.html:86
 msgid "Payment"
 msgstr "支付"
 
@@ -17878,7 +17878,7 @@ msgstr "概述"
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:9
 #: pretix/plugins/reports/accountingreport.py:497
 #: pretix/plugins/reports/accountingreport.py:684
-#: pretix/presale/templates/pretixpresale/event/order.html:136
+#: pretix/presale/templates/pretixpresale/event/order.html:137
 msgid "Refunds"
 msgstr "退款"
 
@@ -22456,7 +22456,7 @@ msgstr "是的，批准订单"
 #: pretix/control/templates/pretixcontrol/order/cancel.html:10
 #: pretix/control/templates/pretixcontrol/order/index.html:68
 #: pretix/control/templates/pretixcontrol/order/index.html:166
-#: pretix/presale/templates/pretixpresale/event/order.html:478
+#: pretix/presale/templates/pretixpresale/event/order.html:479
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
 msgstr "取消订单"
@@ -22967,7 +22967,7 @@ msgid "Change products"
 msgstr "改变产品"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:370
-#: pretix/presale/templates/pretixpresale/event/order.html:196
+#: pretix/presale/templates/pretixpresale/event/order.html:197
 msgid "Ordered items"
 msgstr "有序项目"
 
@@ -23063,12 +23063,12 @@ msgid "Total"
 msgstr "总计"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:718
-#: pretix/presale/templates/pretixpresale/event/order.html:209
+#: pretix/presale/templates/pretixpresale/event/order.html:210
 msgid "Successful payments"
 msgstr "成功支付订单"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:727
-#: pretix/presale/templates/pretixpresale/event/order.html:218
+#: pretix/presale/templates/pretixpresale/event/order.html:219
 msgid "Pending total"
 msgstr "尚未付款总额"
 
@@ -23136,7 +23136,7 @@ msgstr "更改"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:963
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:90
-#: pretix/presale/templates/pretixpresale/event/order.html:317
+#: pretix/presale/templates/pretixpresale/event/order.html:318
 msgid "ZIP code and city"
 msgstr "邮政编码及城市"
 
@@ -34589,9 +34589,9 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:152
-#: pretix/presale/templates/pretixpresale/event/order.html:390
-#: pretix/presale/templates/pretixpresale/event/order.html:426
-#: pretix/presale/templates/pretixpresale/event/order.html:447
+#: pretix/presale/templates/pretixpresale/event/order.html:391
+#: pretix/presale/templates/pretixpresale/event/order.html:427
+#: pretix/presale/templates/pretixpresale/event/order.html:448
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:113
 msgid ""
 "The refund will be issued in form of a gift card that you can use for "
@@ -35058,42 +35058,51 @@ msgid "Please note that we still await your payment to complete the process."
 msgstr "请注意，我们仍在等待您的付款以完成此过程。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
+#, fuzzy
+#| msgid ""
+#| "Please bookmark or save the link to this exact page if you want to access "
+#| "your order later. We also sent you an email containing the link to the "
+#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
-"your order later. We also sent you an email containing the link to the "
-"address you specified."
+"your order later. We also sent you an email to the address you specified "
+"containing the link to this page."
 msgstr ""
 "如果您想稍后访问订单，请将该链接添加为书签或保存到此页面。 我们还向您发送了一"
 "封电子邮件，其中包含指定地址的链接。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:58
+#: pretix/presale/templates/pretixpresale/event/order.html:59
+#, fuzzy
+#| msgid ""
+#| "Please save the following link if you want to access your order later. We "
+#| "also sent you an email containing the link to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
-"also sent you an email containing the link to the address you specified."
+"also sent you an email to the address you specified containing the link."
 msgstr ""
 "如果您想稍后访问订单，请保存以下链接。 我们还向您发送了一封电子邮件，其中包含"
 "指定地址的链接。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:73
+#: pretix/presale/templates/pretixpresale/event/order.html:74
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:90
+#: pretix/presale/templates/pretixpresale/event/order.html:91
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
 msgstr "此订单仍有%(total)s的货款尚未支付。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:95
+#: pretix/presale/templates/pretixpresale/event/order.html:96
 #, python-format
 msgid "Please complete your payment before %(date)s"
 msgstr "请在%(date)s之前完成付款"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:107
+#: pretix/presale/templates/pretixpresale/event/order.html:108
 msgid "Re-try payment or choose another payment method"
 msgstr "重新尝试付款或选择其他付款方式"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:125
+#: pretix/presale/templates/pretixpresale/event/order.html:126
 #, fuzzy
 #| msgid ""
 #| "You can not cancel this order yourself. Please contact the event "
@@ -35103,18 +35112,18 @@ msgid ""
 "the event organizer decides on the cancellation."
 msgstr "您无法自行取消此订单。 请联系活动组织者了解更多信息。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:143
+#: pretix/presale/templates/pretixpresale/event/order.html:144
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr "您很快就会收到%(amount)s的退款，请耐心等待。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:150
+#: pretix/presale/templates/pretixpresale/event/order.html:151
 #, fuzzy
 #| msgid "Imprint"
 msgid "Print"
 msgstr "版本说明"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:152
+#: pretix/presale/templates/pretixpresale/event/order.html:153
 #, python-format
 msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
@@ -35123,17 +35132,17 @@ msgstr ""
 "我们已将您的退款%(amount)s转为礼物卡。在下次购买时，您可以在付款时使用以下礼"
 "品卡代码:"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:162
+#: pretix/presale/templates/pretixpresale/event/order.html:163
 #, python-format
 msgid "The current value of your gift card is %(value)s."
 msgstr "您礼物卡金额 %(value)s."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:169
+#: pretix/presale/templates/pretixpresale/event/order.html:170
 #, python-format
 msgid "This gift card is valid until %(expiry)s."
 msgstr "礼品卡将在%(expiry)s. 失效。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:180
+#: pretix/presale/templates/pretixpresale/event/order.html:181
 #, python-format
 msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
@@ -35142,86 +35151,86 @@ msgstr ""
 "退款%(amount)s已经发送给您。根据付款方式，请允许需要大约14天处理时间才会显示"
 "在您的帐上。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:198
+#: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/position.html:33
 #, fuzzy
 #| msgid "Cancel order"
 msgid "Change ordered items"
 msgstr "取消订单"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:199
-#: pretix/presale/templates/pretixpresale/event/order.html:290
+#: pretix/presale/templates/pretixpresale/event/order.html:200
+#: pretix/presale/templates/pretixpresale/event/order.html:291
 #: pretix/presale/templates/pretixpresale/event/position.html:34
 msgid "Change details"
 msgstr "更改细节"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:262
+#: pretix/presale/templates/pretixpresale/event/order.html:263
 msgid ""
 "You need to select a payment method above before you can request an invoice."
 msgstr "请在生成收据前确认付款方式。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:267
-#: pretix/presale/templates/pretixpresale/event/order.html:274
+#: pretix/presale/templates/pretixpresale/event/order.html:268
+#: pretix/presale/templates/pretixpresale/event/order.html:275
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
 msgstr "请求发票"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:286
+#: pretix/presale/templates/pretixpresale/event/order.html:287
 #, fuzzy
 #| msgctxt "checkoutflow"
 #| msgid "Your information"
 msgid "Your information"
 msgstr "您的信息"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:289
+#: pretix/presale/templates/pretixpresale/event/order.html:290
 #, fuzzy
 #| msgid "Change order information"
 msgid "Change your information"
 msgstr "更改订单信息"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:334
+#: pretix/presale/templates/pretixpresale/event/order.html:335
 msgid "Internal Reference"
 msgstr "内部参考"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:349
+#: pretix/presale/templates/pretixpresale/event/order.html:350
 msgctxt "action"
 msgid "Change or cancel your order"
 msgstr "更改或取消订单"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:351
+#: pretix/presale/templates/pretixpresale/event/order.html:352
 #, fuzzy
 #| msgid "Cancel order"
 msgctxt "action"
 msgid "Change your order"
 msgstr "取消订单"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:353
+#: pretix/presale/templates/pretixpresale/event/order.html:354
 #, fuzzy
 #| msgid "Cancel order"
 msgctxt "action"
 msgid "Cancel your order"
 msgstr "取消订单"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:361
+#: pretix/presale/templates/pretixpresale/event/order.html:362
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
 msgstr "若您需要更改已购买订单，请点击以下按钮更改您的订单。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:369
+#: pretix/presale/templates/pretixpresale/event/order.html:370
 #, fuzzy
 #| msgid "Cancel order"
 msgid "Change order"
 msgstr "取消订单"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:381
+#: pretix/presale/templates/pretixpresale/event/order.html:382
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
 #, fuzzy
 #| msgid "You cannot cancel this order."
 msgid "You can request to cancel this order."
 msgstr "您无法取消此订单。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:384
+#: pretix/presale/templates/pretixpresale/event/order.html:385
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
 msgid ""
 "If your request is approved, the organizer will determine if you will "
@@ -35229,38 +35238,38 @@ msgid ""
 "their cancellation policy."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:392
-#: pretix/presale/templates/pretixpresale/event/order.html:428
-#: pretix/presale/templates/pretixpresale/event/order.html:449
+#: pretix/presale/templates/pretixpresale/event/order.html:393
+#: pretix/presale/templates/pretixpresale/event/order.html:429
+#: pretix/presale/templates/pretixpresale/event/order.html:450
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr "退款可以按原来付款方式退款或发放礼品卡。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:394
-#: pretix/presale/templates/pretixpresale/event/order.html:430
-#: pretix/presale/templates/pretixpresale/event/order.html:451
+#: pretix/presale/templates/pretixpresale/event/order.html:395
+#: pretix/presale/templates/pretixpresale/event/order.html:431
+#: pretix/presale/templates/pretixpresale/event/order.html:452
 msgid "The refund will be issued to your original payment method."
 msgstr "您可以取消此订单并获得原始付款金额的全额退款。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:396
-#: pretix/presale/templates/pretixpresale/event/order.html:409
-#: pretix/presale/templates/pretixpresale/event/order.html:432
-#: pretix/presale/templates/pretixpresale/event/order.html:453
-#: pretix/presale/templates/pretixpresale/event/order.html:465
-#: pretix/presale/templates/pretixpresale/event/order.html:470
+#: pretix/presale/templates/pretixpresale/event/order.html:397
+#: pretix/presale/templates/pretixpresale/event/order.html:410
+#: pretix/presale/templates/pretixpresale/event/order.html:433
+#: pretix/presale/templates/pretixpresale/event/order.html:454
+#: pretix/presale/templates/pretixpresale/event/order.html:466
+#: pretix/presale/templates/pretixpresale/event/order.html:471
 msgid "This will invalidate all tickets in this order."
 msgstr "这将使您订单所有门票无效。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:401
+#: pretix/presale/templates/pretixpresale/event/order.html:402
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
 msgstr "您可以要求取消此订单，但您不会收到退款。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:405
+#: pretix/presale/templates/pretixpresale/event/order.html:406
 msgid "You can cancel this order, but you will not receive a refund."
 msgstr "您可已取消此订单，但您不会收到退款。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:414
+#: pretix/presale/templates/pretixpresale/event/order.html:415
 #, python-format
 msgid ""
 "You can request to cancel this order. If your request is approved, a "
@@ -35270,7 +35279,7 @@ msgstr ""
 "您可以要求消此订单。 如果订单被许可，将扣除<strong>%(fee)s</strong>的取消费"
 "用，您将收到剩余的退款到您的原始付款方式。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:420
+#: pretix/presale/templates/pretixpresale/event/order.html:421
 #, python-format
 msgid ""
 "You can cancel this order. In this case, a cancellation fee of "
@@ -35280,17 +35289,17 @@ msgstr ""
 "您可以取消此订单。 如果订单被许可，将扣除<strong>%(fee)s</strong>的取消费用，"
 "您将收到剩余的退款到您的原始付款方式。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:437
+#: pretix/presale/templates/pretixpresale/event/order.html:438
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr "您可取消此订单。若您的成功取消订单，您可获得全额退款。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:442
+#: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "You can cancel this order and receive a full refund."
 msgstr "您可以取消此订单并获得原始付款方。"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:461
+#: pretix/presale/templates/pretixpresale/event/order.html:462
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
 #, python-format
 msgid ""
@@ -35298,7 +35307,7 @@ msgid ""
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:467
+#: pretix/presale/templates/pretixpresale/event/order.html:468
 msgid "You can cancel this order using the following button."
 msgstr "您可以使用以下按钮取消此订单。"
 

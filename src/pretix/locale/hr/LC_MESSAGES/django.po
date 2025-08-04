@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-04 14:07+0000\n"
 "PO-Revision-Date: 2025-03-04 16:16+0000\n"
 "Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -656,7 +656,7 @@ msgstr "{system} Korisnik"
 #: pretix/presale/forms/customer.py:298 pretix/presale/forms/customer.py:344
 #: pretix/presale/forms/customer.py:388 pretix/presale/forms/user.py:40
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:31
-#: pretix/presale/templates/pretixpresale/event/order.html:299
+#: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
 msgstr "E-pošta"
 
@@ -945,7 +945,7 @@ msgstr "Eksterni identifikator"
 #: pretix/plugins/checkinlists/exporters.py:508
 #: pretix/presale/checkoutflow.py:1538 pretix/presale/forms/checkout.py:84
 #: pretix/presale/forms/waitinglist.py:80
-#: pretix/presale/templates/pretixpresale/event/order.html:303
+#: pretix/presale/templates/pretixpresale/event/order.html:304
 msgid "Phone number"
 msgstr "Broj telefona"
 
@@ -996,7 +996,7 @@ msgstr "Puno ime"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:86
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:35
-#: pretix/presale/templates/pretixpresale/event/order.html:311
+#: pretix/presale/templates/pretixpresale/event/order.html:312
 msgid "Name"
 msgstr "Ime"
 
@@ -1299,8 +1299,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:268
 #: pretix/control/templates/pretixcontrol/order/index.html:341
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:312
-#: pretix/presale/templates/pretixpresale/event/order.html:235
-#: pretix/presale/templates/pretixpresale/event/order.html:256
+#: pretix/presale/templates/pretixpresale/event/order.html:236
+#: pretix/presale/templates/pretixpresale/event/order.html:257
 msgid "Invoices"
 msgstr "Računi"
 
@@ -1395,7 +1395,7 @@ msgstr "Pošiljatelj računa:"
 #: pretix/plugins/checkinlists/exporters.py:534
 #: pretix/plugins/reports/exporters.py:840
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:88
-#: pretix/presale/templates/pretixpresale/event/order.html:315
+#: pretix/presale/templates/pretixpresale/event/order.html:316
 msgid "Address"
 msgstr "Adresa"
 
@@ -1446,7 +1446,7 @@ msgstr "Grad"
 #: pretix/plugins/reports/exporters.py:837
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:92
-#: pretix/presale/templates/pretixpresale/event/order.html:319
+#: pretix/presale/templates/pretixpresale/event/order.html:320
 msgid "Country"
 msgstr "Država"
 
@@ -1464,7 +1464,7 @@ msgstr "Porezni broj"
 #: pretix/plugins/reports/exporters.py:844
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
-#: pretix/presale/templates/pretixpresale/event/order.html:326
+#: pretix/presale/templates/pretixpresale/event/order.html:327
 msgid "VAT ID"
 msgstr "PDV broj"
 
@@ -1494,7 +1494,7 @@ msgstr "Primatelj računa:"
 #: pretix/plugins/reports/exporters.py:839
 #: pretix/plugins/reports/exporters.py:885
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:83
-#: pretix/presale/templates/pretixpresale/event/order.html:307
+#: pretix/presale/templates/pretixpresale/event/order.html:308
 msgid "Company"
 msgstr "Tvrtka"
 
@@ -1513,7 +1513,7 @@ msgstr "Adresa ulice"
 #: pretix/plugins/checkinlists/exporters.py:538
 #: pretix/plugins/reports/exporters.py:843
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:95
-#: pretix/presale/templates/pretixpresale/event/order.html:322
+#: pretix/presale/templates/pretixpresale/event/order.html:323
 msgctxt "address"
 msgid "State"
 msgstr "Država"
@@ -1572,7 +1572,7 @@ msgstr "Otkazivanje"
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 #: pretix/control/templates/pretixcontrol/order/index.html:272
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:70
-#: pretix/presale/templates/pretixpresale/event/order.html:243
+#: pretix/presale/templates/pretixpresale/event/order.html:244
 msgid "Invoice"
 msgstr "Račun"
 
@@ -2510,7 +2510,7 @@ msgstr "Stanja povrata"
 #: pretix/control/templates/pretixcontrol/search/payments.html:78
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:374
-#: pretix/presale/templates/pretixpresale/event/order.html:66
+#: pretix/presale/templates/pretixpresale/event/order.html:67
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:70
 msgid "Order"
 msgstr "Narudžba"
@@ -2699,7 +2699,7 @@ msgstr "Organizator"
 #: pretix/control/templates/pretixcontrol/search/payments.html:119
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:67
 #: pretix/presale/forms/checkout.py:259
-#: pretix/presale/templates/pretixpresale/event/order.html:68
+#: pretix/presale/templates/pretixpresale/event/order.html:69
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:84
@@ -3310,7 +3310,7 @@ msgstr "Račun"
 #: pretix/base/invoice.py:664
 #: pretix/control/templates/pretixcontrol/order/index.html:272
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:70
-#: pretix/presale/templates/pretixpresale/event/order.html:243
+#: pretix/presale/templates/pretixpresale/event/order.html:244
 msgctxt "invoice"
 msgid "Cancellation"
 msgstr "Otkazivanje"
@@ -6813,7 +6813,7 @@ msgstr "Kupljeni proizvodi"
 
 #: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:384
 #: pretix/base/services/placeholders.py:393
-#: pretix/base/templates/pretixbase/email/order_details.html:141
+#: pretix/base/templates/pretixbase/email/order_details.html:147
 msgid "View order details"
 msgstr "Pogledaj detalje narudžbe"
 
@@ -6941,7 +6941,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/payment.py:313
-#: pretix/presale/templates/pretixpresale/event/order.html:115
+#: pretix/presale/templates/pretixpresale/event/order.html:116
 msgid "Pay now"
 msgstr "Plati sada"
 
@@ -11679,7 +11679,7 @@ msgid "Event:"
 msgstr "Događaj:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:23
-#: pretix/base/templates/pretixbase/email/order_details.html:74
+#: pretix/base/templates/pretixbase/email/order_details.html:80
 msgid "Order code:"
 msgstr "Šifra narudžbe:"
 
@@ -11688,7 +11688,7 @@ msgid "created by"
 msgstr "stvorio/la"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:34
-#: pretix/base/templates/pretixbase/email/order_details.html:126
+#: pretix/base/templates/pretixbase/email/order_details.html:132
 msgid "Contact:"
 msgstr "Kontakt:"
 
@@ -11698,7 +11698,7 @@ msgid ""
 "event:"
 msgstr "Primili ste ovu e-poštu jer ste naručili za sljedeći događaj:"
 
-#: pretix/base/templates/pretixbase/email/order_details.html:83
+#: pretix/base/templates/pretixbase/email/order_details.html:89
 msgid "Details:"
 msgstr "Detalji:"
 
@@ -15950,7 +15950,7 @@ msgstr "Općenito"
 #: pretix/plugins/stripe/apps.py:44
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:42
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:11
-#: pretix/presale/templates/pretixpresale/event/order.html:85
+#: pretix/presale/templates/pretixpresale/event/order.html:86
 msgid "Payment"
 msgstr "Plaćanje"
 
@@ -16014,7 +16014,7 @@ msgstr "Pregled"
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:9
 #: pretix/plugins/reports/accountingreport.py:497
 #: pretix/plugins/reports/accountingreport.py:684
-#: pretix/presale/templates/pretixpresale/event/order.html:136
+#: pretix/presale/templates/pretixpresale/event/order.html:137
 msgid "Refunds"
 msgstr "Povrati"
 
@@ -20049,7 +20049,7 @@ msgstr "Da, odobri narudžbu"
 #: pretix/control/templates/pretixcontrol/order/cancel.html:10
 #: pretix/control/templates/pretixcontrol/order/index.html:68
 #: pretix/control/templates/pretixcontrol/order/index.html:166
-#: pretix/presale/templates/pretixpresale/event/order.html:478
+#: pretix/presale/templates/pretixpresale/event/order.html:479
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
 msgstr "Otkaži narudžbu"
@@ -20506,7 +20506,7 @@ msgid "Change products"
 msgstr "Promijeni proizvode"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:370
-#: pretix/presale/templates/pretixpresale/event/order.html:196
+#: pretix/presale/templates/pretixpresale/event/order.html:197
 msgid "Ordered items"
 msgstr "Naručene stavke"
 
@@ -20595,12 +20595,12 @@ msgid "Total"
 msgstr "Ukupno"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:718
-#: pretix/presale/templates/pretixpresale/event/order.html:209
+#: pretix/presale/templates/pretixpresale/event/order.html:210
 msgid "Successful payments"
 msgstr "Uspješna plaćanja"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:727
-#: pretix/presale/templates/pretixpresale/event/order.html:218
+#: pretix/presale/templates/pretixpresale/event/order.html:219
 msgid "Pending total"
 msgstr "Ukupno na čekanju"
 
@@ -20668,7 +20668,7 @@ msgstr "Promijeni"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:963
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:90
-#: pretix/presale/templates/pretixpresale/event/order.html:317
+#: pretix/presale/templates/pretixpresale/event/order.html:318
 msgid "ZIP code and city"
 msgstr "Poštanski broj i grad"
 
@@ -30773,9 +30773,9 @@ msgstr ""
 "Organizator će vas kontaktirati kako bi razjasnio detalje vašeg povrata."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:152
-#: pretix/presale/templates/pretixpresale/event/order.html:390
-#: pretix/presale/templates/pretixpresale/event/order.html:426
-#: pretix/presale/templates/pretixpresale/event/order.html:447
+#: pretix/presale/templates/pretixpresale/event/order.html:391
+#: pretix/presale/templates/pretixpresale/event/order.html:427
+#: pretix/presale/templates/pretixpresale/event/order.html:448
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:113
 msgid ""
 "The refund will be issued in form of a gift card that you can use for "
@@ -31197,74 +31197,87 @@ msgstr ""
 "Imajte na umu da još uvijek čekamo vaše plaćanje da bismo dovršili proces."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
+#, fuzzy
+#| msgid ""
+#| "Please bookmark or save the link to this exact page if you want to access "
+#| "your order later. We also sent you an email containing the link to the "
+#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
-"your order later. We also sent you an email containing the link to the "
-"address you specified."
+"your order later. We also sent you an email to the address you specified "
+"containing the link to this page."
 msgstr ""
 "Molimo vas da spremite poveznicu na ovu stranicu ako želite kasnije "
 "pristupiti svojoj narudžbi. Također smo vam poslali e-mail s poveznicom na "
 "adresu koju ste naveli."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:58
+#: pretix/presale/templates/pretixpresale/event/order.html:59
+#, fuzzy
+#| msgid ""
+#| "Please bookmark or save the link to this exact page if you want to access "
+#| "your order later. We also sent you an email containing the link to the "
+#| "address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
-"also sent you an email containing the link to the address you specified."
+"also sent you an email to the address you specified containing the link."
 msgstr ""
+"Molimo vas da spremite poveznicu na ovu stranicu ako želite kasnije "
+"pristupiti svojoj narudžbi. Također smo vam poslali e-mail s poveznicom na "
+"adresu koju ste naveli."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:73
+#: pretix/presale/templates/pretixpresale/event/order.html:74
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
 msgstr "Pogledaj u backendu"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:90
+#: pretix/presale/templates/pretixpresale/event/order.html:91
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
 msgstr "Plaćanje od %(total)s još uvijek je na čekanju za ovu narudžbu."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:95
+#: pretix/presale/templates/pretixpresale/event/order.html:96
 #, python-format
 msgid "Please complete your payment before %(date)s"
 msgstr "Molimo dovršite svoje plaćanje prije %(date)s"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:107
+#: pretix/presale/templates/pretixpresale/event/order.html:108
 msgid "Re-try payment or choose another payment method"
 msgstr "Ponovno pokušajte plaćanje ili odaberite drugi način plaćanja"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:125
+#: pretix/presale/templates/pretixpresale/event/order.html:126
 msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:143
+#: pretix/presale/templates/pretixpresale/event/order.html:144
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
 "Povrat u iznosu od %(amount)s bit će uskoro poslan, molimo budite strpljivi."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:150
+#: pretix/presale/templates/pretixpresale/event/order.html:151
 msgid "Print"
 msgstr "Ispis"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:152
+#: pretix/presale/templates/pretixpresale/event/order.html:153
 #, python-format
 msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:162
+#: pretix/presale/templates/pretixpresale/event/order.html:163
 #, python-format
 msgid "The current value of your gift card is %(value)s."
 msgstr "Trenutna vrijednost vaše poklon kartice je %(value)s."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:169
+#: pretix/presale/templates/pretixpresale/event/order.html:170
 #, python-format
 msgid "This gift card is valid until %(expiry)s."
 msgstr "Ova poklon kartica vrijedi do %(expiry)s."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:180
+#: pretix/presale/templates/pretixpresale/event/order.html:181
 #, python-format
 msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
@@ -31273,56 +31286,56 @@ msgstr ""
 "Povrat u iznosu od %(amount)s poslan je vama. Ovisno o metodi plaćanja, "
 "molimo pričekajte do 14 dana dok se ne pojavi na vašem izvodu."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:198
+#: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/position.html:33
 msgid "Change ordered items"
 msgstr "Promijenite naručene stavke"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:199
-#: pretix/presale/templates/pretixpresale/event/order.html:290
+#: pretix/presale/templates/pretixpresale/event/order.html:200
+#: pretix/presale/templates/pretixpresale/event/order.html:291
 #: pretix/presale/templates/pretixpresale/event/position.html:34
 msgid "Change details"
 msgstr "Promijeni detalje"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:262
+#: pretix/presale/templates/pretixpresale/event/order.html:263
 msgid ""
 "You need to select a payment method above before you can request an invoice."
 msgstr "Morate odabrati način plaćanja prije nego što možete zatražiti račun."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:267
-#: pretix/presale/templates/pretixpresale/event/order.html:274
+#: pretix/presale/templates/pretixpresale/event/order.html:268
+#: pretix/presale/templates/pretixpresale/event/order.html:275
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
 msgstr "Zatraži račun"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:286
+#: pretix/presale/templates/pretixpresale/event/order.html:287
 msgid "Your information"
 msgstr "Vaše informacije"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:289
+#: pretix/presale/templates/pretixpresale/event/order.html:290
 msgid "Change your information"
 msgstr "Promijenite svoje podatke"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:334
+#: pretix/presale/templates/pretixpresale/event/order.html:335
 msgid "Internal Reference"
 msgstr "Interna referenca"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:349
+#: pretix/presale/templates/pretixpresale/event/order.html:350
 msgctxt "action"
 msgid "Change or cancel your order"
 msgstr "Promijenite ili otkažite svoju narudžbu"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:351
+#: pretix/presale/templates/pretixpresale/event/order.html:352
 msgctxt "action"
 msgid "Change your order"
 msgstr "Promijeni svoju narudžbu"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:353
+#: pretix/presale/templates/pretixpresale/event/order.html:354
 msgctxt "action"
 msgid "Cancel your order"
 msgstr "Otkaži svoju narudžbu"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:361
+#: pretix/presale/templates/pretixpresale/event/order.html:362
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
@@ -31330,16 +31343,16 @@ msgstr ""
 "Ako želite napraviti promjene na proizvodima koje ste kupili, možete "
 "kliknuti na gumb za promjenu svoje narudžbe."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:369
+#: pretix/presale/templates/pretixpresale/event/order.html:370
 msgid "Change order"
 msgstr "Promijeni narudžbu"
 
-#: pretix/presale/templates/pretixpresale/event/order.html:381
+#: pretix/presale/templates/pretixpresale/event/order.html:382
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
 msgid "You can request to cancel this order."
 msgstr "Možete zatražiti otkazivanje ove narudžbe."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:384
+#: pretix/presale/templates/pretixpresale/event/order.html:385
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
 msgid ""
 "If your request is approved, the organizer will determine if you will "
@@ -31347,40 +31360,40 @@ msgid ""
 "their cancellation policy."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:392
-#: pretix/presale/templates/pretixpresale/event/order.html:428
-#: pretix/presale/templates/pretixpresale/event/order.html:449
+#: pretix/presale/templates/pretixpresale/event/order.html:393
+#: pretix/presale/templates/pretixpresale/event/order.html:429
+#: pretix/presale/templates/pretixpresale/event/order.html:450
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
 "Povrat se može izdati na vaš izvorni način plaćanja ili kao poklon kartica."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:394
-#: pretix/presale/templates/pretixpresale/event/order.html:430
-#: pretix/presale/templates/pretixpresale/event/order.html:451
+#: pretix/presale/templates/pretixpresale/event/order.html:395
+#: pretix/presale/templates/pretixpresale/event/order.html:431
+#: pretix/presale/templates/pretixpresale/event/order.html:452
 msgid "The refund will be issued to your original payment method."
 msgstr "Povrat će biti izdan na vaš izvorni način plaćanja."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:396
-#: pretix/presale/templates/pretixpresale/event/order.html:409
-#: pretix/presale/templates/pretixpresale/event/order.html:432
-#: pretix/presale/templates/pretixpresale/event/order.html:453
-#: pretix/presale/templates/pretixpresale/event/order.html:465
-#: pretix/presale/templates/pretixpresale/event/order.html:470
+#: pretix/presale/templates/pretixpresale/event/order.html:397
+#: pretix/presale/templates/pretixpresale/event/order.html:410
+#: pretix/presale/templates/pretixpresale/event/order.html:433
+#: pretix/presale/templates/pretixpresale/event/order.html:454
+#: pretix/presale/templates/pretixpresale/event/order.html:466
+#: pretix/presale/templates/pretixpresale/event/order.html:471
 msgid "This will invalidate all tickets in this order."
 msgstr "Ovo će poništiti sve ulaznice u ovoj narudžbi."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:401
+#: pretix/presale/templates/pretixpresale/event/order.html:402
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
 msgstr ""
 "Možete zatražiti otkazivanje ove narudžbe, ali nećete dobiti povrat novca."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:405
+#: pretix/presale/templates/pretixpresale/event/order.html:406
 msgid "You can cancel this order, but you will not receive a refund."
 msgstr "Možete otkazati ovu narudžbu, ali nećete dobiti povrat novca."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:414
+#: pretix/presale/templates/pretixpresale/event/order.html:415
 #, python-format
 msgid ""
 "You can request to cancel this order. If your request is approved, a "
@@ -31388,7 +31401,7 @@ msgid ""
 "receive a refund of the remainder."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:420
+#: pretix/presale/templates/pretixpresale/event/order.html:421
 #, python-format
 msgid ""
 "You can cancel this order. In this case, a cancellation fee of "
@@ -31396,7 +31409,7 @@ msgid ""
 "remainder."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:437
+#: pretix/presale/templates/pretixpresale/event/order.html:438
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
@@ -31404,11 +31417,11 @@ msgstr ""
 "Možete zatražiti otkazivanje ove narudžbe. Ako vaš zahtjev bude odobren, "
 "dobit ćete potpuni povrat novca."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:442
+#: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "You can cancel this order and receive a full refund."
 msgstr "Možete otkazati ovu narudžbu i dobiti potpuni povrat novca."
 
-#: pretix/presale/templates/pretixpresale/event/order.html:461
+#: pretix/presale/templates/pretixpresale/event/order.html:462
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
 #, python-format
 msgid ""
@@ -31416,7 +31429,7 @@ msgid ""
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/order.html:467
+#: pretix/presale/templates/pretixpresale/event/order.html:468
 msgid "You can cancel this order using the following button."
 msgstr "Možete otkazati ovu narudžbu pomoću sljedećeg gumba."
 
