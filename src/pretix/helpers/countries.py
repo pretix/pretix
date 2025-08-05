@@ -127,4 +127,6 @@ custom_translations = [
     # is merged
     gettext_noop("Belarus"),
     gettext_noop("French Guiana"),
+    gettext_noop("North Macedonia"),
+    gettext_noop("Macao"),
 ]
