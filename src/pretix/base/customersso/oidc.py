@@ -199,6 +199,7 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         params['client_id'] = provider.configuration['client_id']
         params['client_secret'] = provider.configuration['client_secret']
 
+    resp = None
     try:
         resp = requests.post(
             endpoint,
@@ -214,7 +215,10 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         resp.raise_for_status()
         data = resp.json()
     except RequestException:
-        logger.exception('Could not retrieve authorization token')
+        if resp:
+            logger.exception(f'Could not retrieve authorization token. Response: {resp.text}')
+        else:
+            logger.exception('Could not retrieve authorization token')
         raise ValidationError(
             _('Login was not successful. Error message: "{error}".').format(
                 error='could not reach login provider',
@@ -222,6 +226,7 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         )
 
     if 'access_token' not in data:
+        logger.error(f'Could not find access token. Response: {data}')
         raise ValidationError(
             _('Login was not successful. Error message: "{error}".').format(
                 error='access token missing',
@@ -229,6 +234,7 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         )
 
     endpoint = provider.configuration['provider_config']['userinfo_endpoint']
+    resp = None
     try:
         # https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
         resp = requests.get(
@@ -240,7 +246,10 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         resp.raise_for_status()
         userinfo = resp.json()
     except RequestException:
-        logger.exception('Could not retrieve user info')
+        if resp:
+            logger.exception(f'Could not retrieve user info. Response: {resp.text}')
+        else:
+            logger.exception('Could not retrieve user info')
         raise ValidationError(
             _('Login was not successful. Error message: "{error}".').format(
                 error='could not fetch user info',
