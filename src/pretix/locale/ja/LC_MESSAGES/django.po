@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 07:29+0000\n"
-"PO-Revision-Date: 2025-08-01 18:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2025-08-05 20:00+0000\n"
+"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -19025,7 +19025,7 @@ msgstr "テストモードを無効にします"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:99
 msgid "Your shop is currently in production mode."
-msgstr "現在、貴店は製造モードです。"
+msgstr "このショップは本番モードになっています。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:102
 msgid ""
