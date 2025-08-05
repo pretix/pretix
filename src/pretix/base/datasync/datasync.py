@@ -25,7 +25,7 @@ import logging
 from collections import namedtuple
 from datetime import timedelta
 from functools import cached_property
-from typing import Protocol, Optional
+from typing import Optional, Protocol
 
 import sentry_sdk
 from django.db import DatabaseError, transaction
