@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 14:07+0000\n"
+"POT-Creation-Date: 2025-08-05 07:29+0000\n"
 "PO-Revision-Date: 2022-04-28 02:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -16478,8 +16478,8 @@ msgstr "sau"
 #| "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgid ""
 "You can either supply a list of email addresses with one email address per "
-"line, or the contents of a CSV file with a title column and one or more of "
-"the columns \"email\", \"number\", \"name\", or \"tag\"."
+"line, or the contents of a CSV file with a title row and one or more of the "
+"columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
 "Puteți furniza fie o listă de adrese de e-mail cu câte o adresă de e-mail pe "
 "linie, fie un fișier CSV cu o coloană de titlu și una sau mai multe dintre "
@@ -29278,6 +29278,14 @@ msgstr ""
 #| msgid "French"
 msgid "French Guiana"
 msgstr "Teritoriile Franceze de Sud"
+
+#: pretix/helpers/countries.py:130
+msgid "North Macedonia"
+msgstr ""
+
+#: pretix/helpers/countries.py:131
+msgid "Macao"
+msgstr ""
 
 #: pretix/helpers/daterange.py:56 pretix/helpers/daterange.py:118
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:77

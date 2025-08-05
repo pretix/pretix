@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 14:07+0000\n"
+"POT-Creation-Date: 2025-08-05 07:29+0000\n"
 "PO-Revision-Date: 2025-07-06 01:00+0000\n"
 "Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
@@ -15860,10 +15860,15 @@ msgid "or"
 msgstr "of"
 
 #: pretix/control/forms/vouchers.py:305
+#, fuzzy
+#| msgid ""
+#| "You can either supply a list of email addresses with one email address "
+#| "per line, or the contents of a CSV file with a title column and one or "
+#| "more of the columns \"email\", \"number\", \"name\", or \"tag\"."
 msgid ""
 "You can either supply a list of email addresses with one email address per "
-"line, or the contents of a CSV file with a title column and one or more of "
-"the columns \"email\", \"number\", \"name\", or \"tag\"."
+"line, or the contents of a CSV file with a title row and one or more of the "
+"columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
 "U kunt een lijst van e-mailadressen opgeven, met een e-mailadres per regel, "
 "of de inhoud van een CSV-bestand met een headerrij en een of meerdere van de "
@@ -28302,6 +28307,14 @@ msgstr ""
 #| msgid "French"
 msgid "French Guiana"
 msgstr "Frans"
+
+#: pretix/helpers/countries.py:130
+msgid "North Macedonia"
+msgstr ""
+
+#: pretix/helpers/countries.py:131
+msgid "Macao"
+msgstr ""
 
 #: pretix/helpers/daterange.py:56 pretix/helpers/daterange.py:118
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:77

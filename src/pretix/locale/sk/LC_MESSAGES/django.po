@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 14:07+0000\n"
+"POT-Creation-Date: 2025-08-05 07:29+0000\n"
 "PO-Revision-Date: 2025-03-15 20:49+0000\n"
 "Last-Translator: Kristian Feldsam <feldsam@gmail.com>\n"
 "Language-Team: Slovak <https://translate.pretix.eu/projects/pretix/pretix/sk/"
@@ -15665,8 +15665,8 @@ msgstr "alebo"
 #| "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgid ""
 "You can either supply a list of email addresses with one email address per "
-"line, or the contents of a CSV file with a title column and one or more of "
-"the columns \"email\", \"number\", \"name\", or \"tag\"."
+"line, or the contents of a CSV file with a title row and one or more of the "
+"columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
 "Môžete poskytnúť buď zoznam e-mailových adries s jednou e-mailovou adresou "
 "na riadok, alebo súbor CSV so stĺpcom s názvom a jedným alebo viacerými "
@@ -27644,6 +27644,14 @@ msgstr ""
 #| msgid "French"
 msgid "French Guiana"
 msgstr "Francúzsky"
+
+#: pretix/helpers/countries.py:130
+msgid "North Macedonia"
+msgstr ""
+
+#: pretix/helpers/countries.py:131
+msgid "Macao"
+msgstr ""
 
 #: pretix/helpers/daterange.py:56 pretix/helpers/daterange.py:118
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:77

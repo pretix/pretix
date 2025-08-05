@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 14:07+0000\n"
+"POT-Creation-Date: 2025-08-05 07:29+0000\n"
 "PO-Revision-Date: 2025-06-11 02:00+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
@@ -14850,10 +14850,15 @@ msgid "or"
 msgstr "Hoặc"
 
 #: pretix/control/forms/vouchers.py:305
+#, fuzzy
+#| msgid ""
+#| "You can either supply a list of email addresses with one email address "
+#| "per line, or the contents of a CSV file with a title column and one or "
+#| "more of the columns \"email\", \"number\", \"name\", or \"tag\"."
 msgid ""
 "You can either supply a list of email addresses with one email address per "
-"line, or the contents of a CSV file with a title column and one or more of "
-"the columns \"email\", \"number\", \"name\", or \"tag\"."
+"line, or the contents of a CSV file with a title row and one or more of the "
+"columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
 "Bạn có thể cung cấp danh sách các địa chỉ email với một địa chỉ email trên "
 "mỗi dòng hoặc nội dung của tệp CSV với cột tiêu đề và một hoặc nhiều cột  "
@@ -26641,6 +26646,14 @@ msgstr ""
 #| msgid "French"
 msgid "French Guiana"
 msgstr "Tiếng Pháp"
+
+#: pretix/helpers/countries.py:130
+msgid "North Macedonia"
+msgstr ""
+
+#: pretix/helpers/countries.py:131
+msgid "Macao"
+msgstr ""
 
 #: pretix/helpers/daterange.py:56 pretix/helpers/daterange.py:118
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:77
