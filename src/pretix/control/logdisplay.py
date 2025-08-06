@@ -43,9 +43,11 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.datasync.datasync import datasync_providers
 from pretix.base.logentrytypes import (
     DiscountLogEntryType, EventLogEntryType, ItemCategoryLogEntryType,
     ItemLogEntryType, LogEntryType, OrderLogEntryType, QuestionLogEntryType,
@@ -419,6 +421,51 @@ class OrderPrintLogEntryType(OrderLogEntryType):
             ) if logentry.event else data["datetime"],
             type=dict(PrintLog.PRINT_TYPES)[data["type"]],
         )
+
+
+class OrderDataSyncLogEntryType(OrderLogEntryType):
+    def display(self, logentry, data):
+        try:
+            from pretix.base.datasync.datasync import datasync_providers
+            provider_class, meta = datasync_providers.get(identifier=data['provider'])
+            data['provider_display_name'] = provider_class.display_name
+        except (KeyError, AttributeError):
+            data['provider_display_name'] = data.get('provider')
+        return super().display(logentry, data)
+
+
+@log_entry_types.new_from_dict({
+    "pretix.event.order.data_sync.success": _("Data successfully transferred to {provider_display_name}."),
+})
+class OrderDataSyncSuccessLogEntryType(OrderDataSyncLogEntryType):
+    def display(self, logentry, data):
+        links = []
+        if data.get('provider') and data.get('objects'):
+            prov, meta = datasync_providers.get(identifier=data['provider'])
+            if prov:
+                for objs in data['objects'].values():
+                    links.append(", ".join(
+                        prov.get_external_link_html(logentry.event, obj['external_link_href'], obj['external_link_display_name'])
+                        for obj in objs
+                        if obj and 'external_link_href' in obj and 'external_link_display_name' in obj
+                    ))
+
+        return mark_safe(escape(super().display(logentry, data)) + "".join("<p>" + link + "</p>" for link in links))
+
+
+@log_entry_types.new_from_dict({
+    "pretix.event.order.data_sync.failed.config": _("Transferring data to {provider_display_name} failed due to invalid configuration:"),
+    "pretix.event.order.data_sync.failed.exceeded": _("Maximum number of retries exceeded while transferring data to {provider_display_name}:"),
+    "pretix.event.order.data_sync.failed.permanent": _("Error while transferring data to {provider_display_name}:"),
+    "pretix.event.order.data_sync.failed.internal": _("Internal error while transferring data to {provider_display_name}."),
+    "pretix.event.order.data_sync.failed.timeout": _("Internal error while transferring data to {provider_display_name}."),
+})
+class OrderDataSyncErrorLogEntryType(OrderDataSyncLogEntryType):
+    def display(self, logentry, data):
+        errmes = data["error"]
+        if not isinstance(errmes, list):
+            errmes = [errmes]
+        return mark_safe(escape(super().display(logentry, data)) + "".join("<p>" + escape(msg) + "</p>" for msg in errmes))
 
 
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")

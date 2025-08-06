@@ -37,9 +37,9 @@ from django.urls import include, re_path
 from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
-    auth, checkin, dashboards, discounts, event, geo, global_settings, item,
-    main, modelimport, oauth, orders, organizer, pdf, search, shredder,
-    subevents, typeahead, user, users, vouchers, waitinglist,
+    auth, checkin, dashboards, datasync, discounts, event, geo,
+    global_settings, item, main, modelimport, oauth, orders, organizer, pdf,
+    search, shredder, subevents, typeahead, user, users, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -58,6 +58,7 @@ urlpatterns = [
     re_path(r'^global/license/$', global_settings.LicenseCheckView.as_view(), name='global.license'),
     re_path(r'^global/sysreport/$', global_settings.SysReportView.as_view(), name='global.sysreport'),
     re_path(r'^global/message/$', global_settings.MessageView.as_view(), name='global.message'),
+    re_path(r'^global/datasync/failedjobs/$', datasync.GlobalFailedSyncJobsView.as_view(), name='global.datasync.failedjobs'),
     re_path(r'^logdetail/$', global_settings.LogDetailView.as_view(), name='global.logdetail'),
     re_path(r'^logdetail/payment/$', global_settings.PaymentDetailView.as_view(), name='global.paymentdetail'),
     re_path(r'^logdetail/refund/$', global_settings.RefundDetailView.as_view(), name='global.refunddetail'),
@@ -248,6 +249,7 @@ urlpatterns = [
     re_path(r'^organizer/(?P<organizer>[^/]+)/export/(?P<pk>[^/]+)/delete$', organizer.DeleteScheduledExportView.as_view(),
             name='organizer.export.scheduled.delete'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/ticket_select2$', typeahead.ticket_select2, name='organizer.ticket_select2'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/datasync/failedjobs/$', datasync.OrganizerFailedSyncJobsView.as_view(), name='organizer.datasync.failedjobs'),
     re_path(r'^nav/typeahead/$', typeahead.nav_context_list, name='nav.typeahead'),
     re_path(r'^events/$', main.EventList.as_view(), name='events'),
     re_path(r'^events/add$', main.EventWizard.as_view(), name='events.add'),
@@ -428,6 +430,8 @@ urlpatterns = [
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/cancellationrequests/(?P<req>\d+)/delete$',
                 orders.OrderCancellationRequestDelete.as_view(),
                 name='event.order.cancellationrequests.delete'),
+        re_path(r'^orders/(?P<code>[0-9A-Z]+)/sync_job/(?P<provider>[^/]+)/$', datasync.ControlSyncJob.as_view(),
+                name='event.order.sync_job'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/transactions/$', orders.OrderTransactions.as_view(), name='event.order.transactions'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/$', orders.OrderDetail.as_view(), name='event.order'),
         re_path(r'^invoice/(?P<invoice>[^/]+)$', orders.InvoiceDownload.as_view(),
@@ -474,6 +478,7 @@ urlpatterns = [
                 name='event.orders.checkinlists.edit'),
         re_path(r'^checkinlists/(?P<list>\d+)/delete$', checkin.CheckinListDelete.as_view(),
                 name='event.orders.checkinlists.delete'),
+        re_path(r'^datasync/failedjobs/$', datasync.EventFailedSyncJobsView.as_view(), name='event.datasync.failedjobs'),
     ])),
     re_path(r'^event/(?P<organizer>[^/]+)/$', RedirectView.as_view(pattern_name='control:organizer'), name='event.organizerredirect'),
 ]

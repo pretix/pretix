@@ -1,0 +1,74 @@
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+{% load escapejson %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {% trans "Data transfer to external systems" %}
+        </h3>
+    </div>
+    <ul class="list-group">
+        {% for identifier, display_name, pending, objects in providers %}
+            <li class="list-group-item">
+                <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline pull-right">
+                    {% csrf_token %}
+                    {% if pending %}
+                        {% if pending.not_before > now or pending.need_manual_retry %}
+                            <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
+                        {% endif %}
+                        <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-times"></i> {% trans "Cancel" %}</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
+                        <input type="hidden" name="queue_sync" value="true">
+                    {% endif %}
+                </form>
+                <p><b>{{ display_name }}</b></p>
+                {% if pending %}
+                    <p>
+                        {% if pending.need_manual_retry %}
+                            <i class="fa fa-warning"></i>
+                            {% trans "Error" %}: {{ pending.get_need_manual_retry_display }}
+                        {% elif pending.failed_attempts %}
+                            <i class="fa fa-warning"></i>
+                            {% blocktrans trimmed with num=pending.failed_attempts max=pending.max_retry_attempts %}
+                            Error. Retry {{ num }} of {{ max }}.
+                            {% endblocktrans %}
+                            {% if pending.not_before %}
+                                {% blocktrans trimmed with datetime=pending.not_before|date:"SHORT_DATETIME_FORMAT" %}
+                                Waiting until {{ datetime }}
+                                {% endblocktrans %}
+                            {% endif %}
+                        {% elif pending.not_before > now %}
+                            {% blocktrans trimmed with datetime=pending.not_before|date:"SHORT_DATETIME_FORMAT" %}
+                            Waiting until {{ datetime }}
+                            {% endblocktrans %}
+                        {% else %}
+                            <i class="fa fa-hourglass"></i> {% trans "Pending" %}
+                        {% endif %}
+                        <span class="text-muted">({% blocktrans trimmed with datetime=pending.triggered|date:"SHORT_DATETIME_FORMAT" %}triggered at {{ datetime }}
+                        {% endblocktrans %})</span>
+                        <!-- {{ pending.triggered_by }} / {{ pending.triggered }} -->
+                    </p>
+                {% endif %}
+
+                <ul>
+                    {% for obj in objects %}
+                        <li>
+                            {% if obj.external_link_html %}
+                                {{ obj.external_link_html }}
+                            {% else %}
+                                {{ obj.external_object_type }}
+                                {% trans "identified by" %} {{ obj.external_id_field }}
+                                <em>{{ obj.id_value }}</em>
+                            {% endif %}
+                            &nbsp; <time class="text-muted" datetime="{{ obj.transmitted.isoformat }}">{{ obj.transmitted|date:"SHORT_DATETIME_FORMAT" }}</time>
+                        </li>
+                    {% empty %}
+                        <li>{% trans "No data transmitted." %}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
