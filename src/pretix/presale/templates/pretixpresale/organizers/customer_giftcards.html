@@ -25,8 +25,8 @@
                             {% if gc.issuance %}
                             <p class="text-muted">
                                 {% icon "calendar" %}
-                                {% blocktrans trimmed %}
-                                    Issued on {{ gc.issuance }}
+                                {% blocktrans trimmed with date=gc.issuance|date:"SHORT_DATE_FORMAT" %}
+                                    Issued on {{ date }}
                                 {% endblocktrans %}
                             </p>
                             {% endif %}
@@ -64,14 +64,18 @@
                         </div>
                         <div class="col-xs-6 text-right">
                             {% blocktrans trimmed with value=gc.value|money:gc.currency %}
-                                Remaining value: <p class="text-right">{{ value }}</p>
+                                Remaining value:
                             {% endblocktrans %}
+                            <p class="text-right">{{ value }}</p>
                         </div>
                     </article>
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="text-center">{% trans "You don’t have any gift cards in your account currently. So far, only gift cards resulting from refunds show up here, any purchased gift cards show up under the orders tab." %}</p>
+                <p class="text-center">
+                    {% trans "You don’t have any gift cards in your account currently." %}
+                    {% trans "Currently, only gift cards resulting from refunds show up here, any purchased gift cards show up under the orders tab." %}
+                </p>
             {% endif %}
         </div>
     </div>
