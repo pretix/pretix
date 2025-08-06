@@ -1221,7 +1221,7 @@ class OrderRefundView(OrderView):
                 giftcard = self.request.organizer.issued_gift_cards.create(
                     expires=expires,
                     currency=self.request.event.currency,
-                    customer=order.customer if order.customer else None,
+                    customer=order.customer,
                     testmode=order.testmode
                 )
                 giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
