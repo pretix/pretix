@@ -218,7 +218,7 @@ class SimpleOrderSync(OutboundSyncProvider):
                 id=1,
                 pretix_model='Order', external_object_type='ticketorders',
                 pretix_id_field='event_order_code', external_id_field='ordernumber',
-                property_mappings=json.dumps([
+                property_mappings=[
                     {
                         "pretix_field": "email",
                         "external_field": "orderemail",
@@ -249,7 +249,7 @@ class SimpleOrderSync(OutboundSyncProvider):
                         "value_map": "",
                         "overwrite": MODE_OVERWRITE,
                     },
-                ])
+                ],
             )
         ]
 
@@ -341,7 +341,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
                 id=1,
                 pretix_model='OrderPosition', external_object_type='tickets',
                 pretix_id_field='ticket_id', external_id_field='ticketnumber',
-                property_mappings=json.dumps([
+                property_mappings=[
                     {
                         "pretix_field": "ticket_price",
                         "external_field": "amount",
@@ -387,14 +387,14 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
                         }),
                         "overwrite": MODE_OVERWRITE,
                     },
-                ]),
+                ],
                 association_mappings=[],
             ),
             StaticMappingWithAssociations(
                 id=2,
                 pretix_model='Order', external_object_type='ticketorders',
                 pretix_id_field='event_order_code', external_id_field='ordernumber',
-                property_mappings=json.dumps([
+                property_mappings=[
                     {
                         "pretix_field": "email",
                         "external_field": "orderemail",
@@ -425,7 +425,7 @@ class OrderAndTicketAssociationSync(OutboundSyncProvider):
                         }),
                         "overwrite": MODE_OVERWRITE,
                     },
-                ]),
+                ],
                 association_mappings=[
                     AssociationMapping(via_mapping_id=1)
                 ],
