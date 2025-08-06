@@ -19,3 +19,18 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import stripe
+from stripe import StripeClient
+
+from pretix import __version__
+
+
+def get_stripe_client(api_key):
+    stripe.set_app_info(
+        "pretix",
+        partner_id="pp_partner_FSaz4PpKIur7Ox",
+        version=__version__,
+        url="https://pretix.eu",
+    )
+    stripe.enable_telemetry = False
+    return StripeClient(api_key)
