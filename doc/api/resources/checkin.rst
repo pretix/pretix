@@ -393,7 +393,7 @@ Annulment of a check-in
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/checkinrpc/redeem/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/checkinrpc/annul/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
