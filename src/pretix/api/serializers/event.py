@@ -848,6 +848,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'cancel_terms_paid',
         'cancel_terms_unpaid',
         'change_allow_user_variation',
+        'change_allow_user_remove_positions',
         'change_allow_user_addons',
         'change_allow_user_until',
         'change_allow_user_price',
