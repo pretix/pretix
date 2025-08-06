@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 07:29+0000\n"
-"PO-Revision-Date: 2025-08-05 07:58+0000\n"
+"PO-Revision-Date: 2025-08-06 09:46+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6159,7 +6159,7 @@ msgstr "Wert"
 
 #: pretix/base/models/orders.py:2546
 msgid "Order position"
-msgstr "Bestelltes Produkt"
+msgstr "Bestellposition"
 
 #: pretix/base/models/orders.py:3091
 msgid "Cart ID (e.g. session key)"
