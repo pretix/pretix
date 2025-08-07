@@ -76,7 +76,9 @@ def sync_all():
 
             if not target_cls:
                 # sync plugin not found (plugin deactivated or uninstalled) -> drop outstanding jobs
-                OrderSyncQueue.objects.filter(pk__in=[sq.pk for sq in queued_orders]).delete()
+                num_deleted, _ = OrderSyncQueue.objects.filter(pk__in=[sq.pk for sq in queued_orders]).delete()
+                logger.info("Deleted %d queue entries from %r because plugin %s inactive", num_deleted, event, target)
+                continue
 
             with scope(organizer=event.organizer):
                 with target_cls(event=event) as p:
