@@ -35,6 +35,7 @@ from django.views.generic import ListView
 from pretix.base.datasync.datasync import datasync_providers
 from pretix.base.models import Event, Order
 from pretix.base.models.datasync import OrderSyncQueue
+from pretix.base.services.datasync import sync_single
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, EventPermissionRequiredMixin,
     OrganizerPermissionRequiredMixin,
@@ -86,10 +87,14 @@ class ControlSyncJob(OrderView):
                 messages.success(self.request, _('The sync job has been canceled.'))
         elif self.request.POST.get("run_job_now"):
             job = self.order.queued_sync_jobs.get(pk=self.request.POST.get("run_job_now"))
-            job.not_before = now()
-            job.need_manual_retry = None
-            job.save()
-            messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
+            if job.in_flight:
+                messages.success(self.request, _('The sync job is already in progress.'))
+            else:
+                job.not_before = now()
+                job.need_manual_retry = None
+                job.save()
+                sync_single.apply_async(args=(job.pk,))
+                messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
 
         return redirect(self.get_order_url())
 
