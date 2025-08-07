@@ -102,6 +102,14 @@ def normalize_email(email):
         return None
 
 
+def get_email_domain(email):
+    if email:
+        local, host = email.split("@")
+        return host
+    else:
+        return None
+
+
 ORDER_POSITION = 'position'
 ORDER = 'order'
 EVENT = 'event'
@@ -315,6 +323,14 @@ def get_data_fields(event, for_model=None):
                 Question.TYPE_STRING,
                 None,
                 lambda order: normalize_email(order.email),
+            ),
+            DataFieldInfo(
+                ORDER,
+                "email_domain",
+                _("Order email domain"),
+                Question.TYPE_STRING,
+                None,
+                lambda order: get_email_domain(normalize_email(order.email)),
             ),
             DataFieldInfo(
                 ORDER,
