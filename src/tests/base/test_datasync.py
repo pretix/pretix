@@ -61,7 +61,7 @@ def event():
         option2 = question2.options.create(identifier="F2", answer="vegan")
 
         o1 = Order.objects.create(
-            code='1AAA', event=event, email='anonymous@example.org',
+            code='1AAA', event=event, email='anonymous@🌈.example.org',
             status=Order.STATUS_PENDING, locale='en',
             datetime=now(), expires=now() + timedelta(days=10),
             total=46,
@@ -100,7 +100,7 @@ def expected_order_sync_result():
             {
                 '_id': 0,
                 'ordernumber': 'DUMMY-1AAA',
-                'orderemail': 'anonymous@example.org',
+                'orderemail': 'anonymous@xn--og8h.example.org',
                 'status': 'pending',
                 'total': '46.00',
                 'payment_date': None,
@@ -158,7 +158,7 @@ def expected_sync_result_with_associations():
             {
                 '_id': 0,
                 'ordernumber': 'DUMMY-1AAA',
-                'orderemail': 'anonymous@example.org',
+                'orderemail': 'anonymous@xn--og8h.example.org',
                 'firstname': '',
                 'lastname': '',
                 'status': 'pending',

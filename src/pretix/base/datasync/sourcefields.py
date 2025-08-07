@@ -93,6 +93,15 @@ def split_name_on_last_space(name, part):
     return name_parts[part] if len(name_parts) > part else ""
 
 
+def normalize_email(email):
+    if email:
+        local, host = email.split("@")
+        host = host.encode("idna").decode()
+        return f"{local}@{host}"
+    else:
+        return None
+
+
 ORDER_POSITION = 'position'
 ORDER = 'order'
 EVENT = 'event'
@@ -173,8 +182,10 @@ def get_data_fields(event, for_model=None):
                 _("Attendee email"),
                 Question.TYPE_STRING,
                 None,
-                lambda position: position.attendee_email
-                or (position.addon_to.attendee_email if position.addon_to else None),
+                lambda position: normalize_email(
+                    position.attendee_email
+                    or (position.addon_to.attendee_email if position.addon_to else None)
+                ),
             ),
             DataFieldInfo(
                 ORDER_POSITION,
@@ -182,9 +193,11 @@ def get_data_fields(event, for_model=None):
                 _("Attendee or order email"),
                 Question.TYPE_STRING,
                 None,
-                lambda position: position.attendee_email
-                or (position.addon_to.attendee_email if position.addon_to else None)
-                or position.order.email,
+                lambda position: normalize_email(
+                    position.attendee_email
+                    or (position.addon_to.attendee_email if position.addon_to else None)
+                    or position.order.email
+                ),
             ),
             DataFieldInfo(
                 ORDER_POSITION,
@@ -301,7 +314,7 @@ def get_data_fields(event, for_model=None):
                 _("Order email"),
                 Question.TYPE_STRING,
                 None,
-                lambda order: order.email,
+                lambda order: normalize_email(order.email),
             ),
             DataFieldInfo(
                 ORDER,
