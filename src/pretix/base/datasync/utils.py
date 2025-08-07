@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import json
 from typing import List, Tuple
 
 from pretix.base.datasync.datasync import SyncConfigError
@@ -108,15 +107,17 @@ def translate_property_mappings(property_mappings, checkin_list_map):
                 om.save()
 
     """
-    mappings = json.loads(property_mappings)
+    mappings = []
 
-    for mapping in mappings:
-        if mapping["pretix_field"].startswith("checkin_date_"):
-            old_id = int(mapping["pretix_field"][len("checkin_date_"):])
+    for mapping in property_mappings:
+        pretix_field = mapping["pretix_field"]
+        if pretix_field.startswith("checkin_date_"):
+            old_id = int(pretix_field[len("checkin_date_"):])
             if old_id not in checkin_list_map:
                 # old_id might not be in checkin_list_map, because copying of an event series only copies check-in
                 # lists covering the whole series, not individual dates.
-                mapping["pretix_field"] = "_invalid_" + mapping["pretix_field"]
+                pretix_field = "_invalid_" + pretix_field
             else:
-                mapping["pretix_field"] = "checkin_date_%d" % checkin_list_map[old_id].pk
-    return json.dumps(mappings)
+                pretix_field = "checkin_date_%d" % checkin_list_map[old_id].pk
+        mappings.append({**mapping, "pretix_field": pretix_field})
+    return mappings

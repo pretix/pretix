@@ -19,8 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import json
-
 from django import forms
 from django.forms import formset_factory
 from django.utils.translation import gettext_lazy as _
@@ -76,9 +74,7 @@ class PropertyMappingFormSet(formset_factory(
 )):
     template_name = "pretixcontrol/datasync/property_mappings_formset.html"
 
-    def __init__(self, pretix_fields, external_fields, available_modes, prefix, *args, initial_json=None, **kwargs):
-        if initial_json:
-            kwargs["initial"] = json.loads(initial_json)
+    def __init__(self, pretix_fields, external_fields, available_modes, prefix, *args, **kwargs):
         super().__init__(
             form_kwargs={
                 "pretix_fields": pretix_fields,
@@ -95,9 +91,9 @@ class PropertyMappingFormSet(formset_factory(
         ctx["external_fields_id"] = self.prefix + "external-fields"
         return ctx
 
-    def to_property_mappings_json(self):
+    def to_property_mappings_list(self):
         """
-        Returns a property mapping configuration as a JSON-serialized list of dictionaries.
+        Returns a property mapping configuration as a JSON-serializable list of dictionaries.
 
         Each entry specifies how to transfer data from one pretix field to one field in the external system:
 
@@ -113,7 +109,7 @@ class PropertyMappingFormSet(formset_factory(
             - `MODE_APPEND_LIST` (`"append"`) if the field is an array or a multi-select: add the value to the list.
         """
         mappings = [f.cleaned_data for f in self.ordered_forms]
-        return json.dumps(mappings)
+        return mappings
 
 
 QUESTION_TYPE_LABELS = dict(Question.TYPE_CHOICES)
