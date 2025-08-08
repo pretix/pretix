@@ -9,9 +9,13 @@ def backfill_voucher_created(apps, schema_editor):
     Voucher = apps.get_model("pretixbase", "Voucher")
     LogEntry = apps.get_model("pretixbase", "LogEntry")
     ContentType = apps.get_model("contenttypes", "ContentType")
-    ct = ContentType.objects.get(app_label='pretixbase', model='voucher')
+    ct = None
 
     for v in Voucher.objects.filter(created__isnull=True).iterator():
+        if ct:
+            # "Lazy-loading" to prevent this to be executed on new DBs where the content type does not yet
+            # exist -- but also no vouchers do
+            ct = ContentType.objects.get(app_label='pretixbase', model='voucher')
         v.created = LogEntry.objects.filter(
             content_type=ct,
             object_id=v.pk,
