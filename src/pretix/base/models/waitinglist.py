@@ -207,16 +207,19 @@ class WaitingListEntry(LoggedModel):
                 block_quota=True,
                 subevent=self.subevent,
             )
-            v.log_action('pretix.voucher.added.waitinglist', {
+            v.log_action('pretix.voucher.added', {
                 'item': self.item.pk,
                 'variation': self.variation.pk if self.variation else None,
                 'tag': 'waiting-list',
                 'block_quota': True,
                 'valid_until': v.valid_until.isoformat(),
                 'max_usages': 1,
+                'subevent': self.subevent.pk if self.subevent else None,
+                'source': 'waitinglist',
+            }, user=user, auth=auth)
+            v.log_action('pretix.voucher.added.waitinglist', {
                 'email': self.email,
                 'waitinglistentry': self.pk,
-                'subevent': self.subevent.pk if self.subevent else None,
             }, user=user, auth=auth)
             self.voucher = v
             self.save()

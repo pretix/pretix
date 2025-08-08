@@ -43,7 +43,7 @@ from django.forms import formset_factory, inlineformset_factory
 from django.forms.utils import ErrorDict
 from django.urls import reverse
 from django.utils.crypto import get_random_string
-from django.utils.html import conditional_escape
+from django.utils.html import conditional_escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
@@ -695,7 +695,9 @@ class WebHookForm(forms.ModelForm):
         self.fields['events'].choices = [
             (
                 a.action_type,
-                mark_safe('{} – <code>{}</code>'.format(a.verbose_name, a.action_type))
+                format_html('{} – <code>{}</code><br><span class="text-muted">{}</span>', a.verbose_name, a.action_type, a.help_text)
+                if a.help_text else
+                format_html('{} – <code>{}</code>', a.verbose_name, a.action_type)
             ) for a in get_all_webhook_events().values()
         ]
         if self.instance and self.instance.pk:
