@@ -86,6 +86,7 @@ Endpoints
           {
             "id": 1,
             "created": "2020-09-18T14:17:40.971519Z",
+            "code": "43K6LKM37FBVR2YG",
             "max_usages": 1,
             "redeemed": 0,
             "valid_until": null,
