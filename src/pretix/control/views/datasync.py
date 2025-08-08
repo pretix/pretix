@@ -23,6 +23,7 @@
 from itertools import groupby
 
 from django.contrib import messages
+from django.db import transaction
 from django.db.models import Q
 from django.dispatch import receiver
 from django.http import HttpResponseNotAllowed
@@ -42,6 +43,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.signals import order_info
 from pretix.control.views.orders import OrderView
+from pretix.helpers import OF_SELF
 
 
 @receiver(order_info, dispatch_uid="datasync_control_order_info")
@@ -79,22 +81,28 @@ class ControlSyncJob(OrderView):
             prov.enqueue_order(self.order, 'user')
             messages.success(self.request, _('The sync job has been enqueued and will run in the next minutes.'))
         elif self.request.POST.get("cancel_job"):
-            job = self.order.queued_sync_jobs.get(pk=self.request.POST.get("cancel_job"))
-            if job.in_flight:
-                messages.warning(self.request, _('The sync job is already in progress.'))
-            else:
-                job.delete()
-                messages.success(self.request, _('The sync job has been canceled.'))
+            with transaction.atomic():
+                job = self.order.queued_sync_jobs.select_for_update(of=OF_SELF).get(
+                    pk=self.request.POST.get("cancel_job")
+                )
+                if job.in_flight:
+                    messages.warning(self.request, _('The sync job is already in progress.'))
+                else:
+                    job.delete()
+                    messages.success(self.request, _('The sync job has been canceled.'))
         elif self.request.POST.get("run_job_now"):
-            job = self.order.queued_sync_jobs.get(pk=self.request.POST.get("run_job_now"))
-            if job.in_flight:
-                messages.success(self.request, _('The sync job is already in progress.'))
-            else:
-                job.not_before = now()
-                job.need_manual_retry = None
-                job.save()
-                sync_single.apply_async(args=(job.pk,))
-                messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
+            with transaction.atomic():
+                job = self.order.queued_sync_jobs.select_for_update(of=OF_SELF).get(
+                    pk=self.request.POST.get("run_job_now")
+                )
+                if job.in_flight:
+                    messages.success(self.request, _('The sync job is already in progress.'))
+                else:
+                    job.not_before = now()
+                    job.need_manual_retry = None
+                    job.save()
+                    sync_single.apply_async(args=(job.pk,))
+                    messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
 
         return redirect(self.get_order_url())
 
