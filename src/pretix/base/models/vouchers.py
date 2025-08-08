@@ -174,6 +174,9 @@ class Voucher(LoggedModel):
         ('percent', _('Reduce product price by (%)')),
     )
 
+    created = models.DateTimeField(
+        auto_now_add=True,
+    )
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
