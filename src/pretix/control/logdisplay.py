@@ -563,11 +563,11 @@ class CoreOrderLogEntryType(OrderLogEntryType):
 @log_entry_types.new_from_dict({
     'pretix.voucher.added': _('The voucher has been created.'),
     'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
-    'pretix.voucher.added.waitinglist': _('The voucher has been created and sent to a person on the waiting list.'),
     'pretix.voucher.expired.waitinglist': _(
         'The voucher has been set to expire because the recipient removed themselves from the waiting list.'),
     'pretix.voucher.changed': _('The voucher has been changed.'),
     'pretix.voucher.deleted': _('The voucher has been deleted.'),
+    'pretix.voucher.added.waitinglist': _('The voucher has been sent to {email} through the waiting list.'),
 })
 class CoreVoucherLogEntryType(VoucherLogEntryType):
     pass
