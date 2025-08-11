@@ -73,4 +73,9 @@ class Migration(migrations.Migration):
                 decimal_places=2, default=Decimal("0.00"), max_digits=13
             ),
         ),
+        migrations.AddField(
+            model_name="order",
+            name="tax_rounding_mode",
+            field=models.CharField(default="line", max_length=100),
+        ),
     ]
