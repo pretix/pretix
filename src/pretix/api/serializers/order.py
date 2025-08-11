@@ -52,9 +52,10 @@ from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import (
-    CachedFile, Checkin, Customer, Invoice, InvoiceAddress, InvoiceLine, Item,
-    ItemVariation, Order, OrderPosition, Question, QuestionAnswer,
-    ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule, Voucher,
+    CachedFile, Checkin, Customer, Device, Invoice, InvoiceAddress,
+    InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
+    QuestionAnswer, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
+    Voucher,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
@@ -64,10 +65,13 @@ from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
 from pretix.base.services.locking import LOCK_TRUST_WINDOW, lock_objects
 from pretix.base.services.pricing import (
-    apply_discounts, get_line_price, get_listed_price, is_included_for_free,
+    apply_discounts, apply_rounding, get_line_price, get_listed_price,
+    is_included_for_free,
 )
 from pretix.base.services.quotas import QuotaAvailability
-from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+from pretix.base.settings import (
+    COUNTRIES_WITH_STATE_IN_ADDRESS, ROUNDING_MODES,
+)
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -833,14 +837,15 @@ class OrderSerializer(I18nAwareModelSerializer):
         list_serializer_class = OrderListSerializer
         fields = (
             'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
-            'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
-            'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
-            'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date', 'plugin_data',
+            'payment_provider', 'fees', 'total', 'tax_rounding_mode', 'comment', 'custom_followup_at', 'invoice_address',
+            'positions', 'downloads', 'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds',
+            'require_approval', 'sales_channel', 'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date',
+            'plugin_data',
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
-            'payment_provider', 'fees', 'total', 'positions', 'downloads', 'customer',
-            'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel', 'cancellation_date'
+            'payment_provider', 'fees', 'total', 'tax_rounding_mode', 'positions', 'downloads', 'customer',
+            'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel', 'cancellation_date',
         )
 
     def __init__(self, *args, **kwargs):
@@ -1159,6 +1164,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
+    tax_rounding_mode = serializers.ChoiceField(choices=ROUNDING_MODES, allow_null=True, required=False,)
     locale = serializers.ChoiceField(choices=[], required=False, allow_null=True)
 
     def __init__(self, *args, **kwargs):
@@ -1175,7 +1181,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'checkin_text', 'payment_info', 'payment_date',
                   'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at',
-                  'require_approval', 'valid_if_pending', 'expires', 'api_meta')
+                  'require_approval', 'valid_if_pending', 'expires', 'api_meta', 'tax_rounding_mode')
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -1701,7 +1707,31 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 else:
                     f.save()
 
-        order.total += sum([f.value for f in fees])
+        rounding_mode = validated_data.get("tax_rounding_mode")
+        if not rounding_mode:
+            if isinstance(self.context.get("auth"), Device):
+                # Safety fallback to avoid differences in tax reporting
+                brand = self.context.get("auth").software_brand or ""
+                if "pretixPOS" in brand or "pretixKIOSK" in brand:
+                    rounding_mode = "line"
+        if not rounding_mode:
+            rounding_mode = self.context["event"].settings.tax_rounding
+        changed = apply_rounding(
+            rounding_mode,
+            self.context["event"].currency,
+            [*pos_map.values(), *fees]
+        )
+        for line in changed:
+            if isinstance(line, OrderPosition):
+                line.save(update_fields=[
+                    "price", "price_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+                ])
+            elif isinstance(line, OrderFee):
+                line.save(update_fields=[
+                    "value", "value_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+                ])
+
+        order.total = sum([c.price for c in pos_map.values()]) + sum([f.value for f in fees])
         if simulate:
             order.fees = fees
             order.positions = pos_map.values()

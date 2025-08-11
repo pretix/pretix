@@ -77,7 +77,6 @@ from pretix.control.forms import (
 )
 from pretix.helpers.countries import CachedCountries
 
-
 ROUNDING_MODES = (
     ('line', _('Rounding every line individually')),
     ('sum_by_net', _('Rounding by order total, keeping net prices stable')),
