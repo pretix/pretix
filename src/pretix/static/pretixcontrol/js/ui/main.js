@@ -594,7 +594,7 @@ var form_handlers = function (el) {
                     }
                 }
             },
-            placeholder: $(this).attr("data-placeholder") | "",
+            placeholder: $(this).attr("data-placeholder") || "",
             templateResult: function (res) {
                 if (!res.id) {
                     return res.text;
