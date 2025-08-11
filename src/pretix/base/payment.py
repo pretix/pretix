@@ -72,7 +72,7 @@ from pretix.helpers.countries import CachedCountries
 from pretix.helpers.format import format_map
 from pretix.helpers.money import DecimalTextInput
 from pretix.multidomain.urlreverse import build_absolute_uri
-from pretix.presale.views import get_cart, get_cart_total
+from pretix.presale.views import get_cart, get_cart_position_sum
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
@@ -1149,7 +1149,7 @@ class FreeOrderProvider(BasePaymentProvider):
         from .services.cart import get_fees
 
         cart = get_cart(request)
-        total = get_cart_total(request)
+        total = get_cart_position_sum(request)
         try:
             total += sum([f.value for f in get_fees(self.event, request, total, None, None, cart)])
         except TaxRule.SaleNotAllowed:

@@ -92,7 +92,7 @@ from pretix.presale.signals import (
 )
 from pretix.presale.utils import customer_login
 from pretix.presale.views import (
-    CartMixin, get_cart, get_cart_is_free, get_cart_total,
+    CartMixin, get_cart, get_cart_is_free, get_cart_position_sum,
 )
 from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
@@ -1262,7 +1262,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     @cached_property
     def _total_order_value(self):
         cart = get_cart(self.request)
-        total = get_cart_total(self.request)
+        total = get_cart_position_sum(self.request)
         try:
             total += sum([
                 f.value for f in get_fees(
@@ -1425,7 +1425,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
             return False
 
         cart = get_cart(self.request)
-        total = get_cart_total(self.request)
+        total = get_cart_position_sum(self.request)
         try:
             total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address,
                                                     self.cart_session.get('payments', []), cart)])

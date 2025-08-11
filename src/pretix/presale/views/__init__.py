@@ -32,6 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import copy
+import warnings
 from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -167,7 +168,6 @@ class CartMixin:
 
         if not order:
             apply_rounding(self.request.event.settings.tax_rounding, self.request.event.currency, [*lcp, *fees])
-            print([(p.price, p.tax_value, ) for p in lcp])
             total = sum(p.price for p in lcp)
 
         net_total = sum(p.price - p.tax_value for p in lcp)
@@ -378,7 +378,13 @@ def get_cart(request):
     return request._cart_cache
 
 
-def get_cart_total(request):
+def get_cart_position_sum(request):
+    """
+    Return an estimate of the current cart total. This estimate does not account for fees and
+    may not include proper rounding of taxes. This means it is useful e.g. as an input for
+    determining fees or determining e.g. which payment provider to offer, but is no reliable
+    estimate for the final order value.
+    """
     from pretix.presale.views.cart import get_or_create_cart_id
 
     if not hasattr(request, '_cart_total_cache'):
@@ -389,6 +395,12 @@ def get_cart_total(request):
                 cart_id=get_or_create_cart_id(request), event=request.event
             ).aggregate(sum=Sum('price'))['sum'] or Decimal('0.00')
     return request._cart_total_cache
+
+
+def get_cart_total(request):
+    warnings.warn('Use get_cart_position_sum() instead of get_cart_total().',
+                  DeprecationWarning)
+    return get_cart_position_sum(request)
 
 
 def get_cart_invoice_address(request):
@@ -415,7 +427,7 @@ def get_cart_is_free(request):
         cs = cart_session(request)
         pos = get_cart(request)
         ia = get_cart_invoice_address(request)
-        total = get_cart_total(request)
+        total = get_cart_position_sum(request)
         try:
             fees = get_fees(request.event, request, total, ia, cs.get('payments', []), pos)
         except TaxRule.SaleNotAllowed:
