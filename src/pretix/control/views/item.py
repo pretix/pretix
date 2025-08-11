@@ -60,7 +60,8 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
 from pretix.api.serializers.item import (
-    ItemAddOnSerializer, ItemBundleSerializer, ItemVariationSerializer,
+    ItemAddOnSerializer, ItemBundleSerializer, ItemProgramTimeSerializer,
+    ItemVariationSerializer,
 )
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
@@ -69,15 +70,17 @@ from pretix.base.models import (
     Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.items import (
+    ItemAddOn, ItemBundle, ItemMetaValue, ItemProgramTime,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
-    ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemUpdateForm,
-    ItemVariationForm, ItemVariationsFormSet, QuestionForm, QuestionOptionForm,
-    QuotaForm,
+    ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
+    ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
+    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -1497,6 +1500,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                     'bundles', 'bundles', 'base_item', order=False,
                     serializer=ItemBundleSerializer
                 )
+            elif k == 'program_times':
+                self.save_formset(
+                    'program_times', 'program_times', 'item', order=False,
+                    serializer=ItemProgramTimeSerializer
+                )
             else:
                 v.save()
 
@@ -1558,6 +1566,16 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 self.request.POST if self.request.method == "POST" else None,
                 queryset=ItemBundle.objects.filter(base_item=self.get_object()),
                 event=self.request.event, item=self.item, prefix="bundles"
+            )),
+            ('program_times', inlineformset_factory(
+                Item, ItemProgramTime,
+                form=ItemProgramTimeForm, formset=ItemProgramTimeFormSet,
+                fk_name='item',
+                can_order=False, can_delete=True, extra=0
+            )(
+                self.request.POST if self.request.method == "POST" else None,
+                queryset=ItemProgramTime.objects.filter(item=self.get_object()),
+                event=self.request.event, item=self.item, prefix="program_times"
             )),
         ])
         if not self.object.has_variations:

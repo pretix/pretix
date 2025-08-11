@@ -58,7 +58,9 @@ from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.items import (
+    ItemAddOn, ItemBundle, ItemMetaValue, ItemProgramTime,
+)
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
@@ -1320,4 +1322,79 @@ class ItemMetaValueForm(forms.ModelForm):
         fields = ['value']
         widgets = {
             'value': forms.TextInput()
+        }
+
+
+class ItemProgramTimeFormSet(I18nFormSet):
+    template = "pretixcontrol/item/include_program_times.html"
+    title = _('Program times')
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.get('event')
+        self.item = kwargs.pop('item')
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        kwargs['item'] = self.item
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        self.is_valid()
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            locales=self.locales,
+            item=self.item,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form
+
+    def clean(self):
+        super().clean()
+        dts = set()
+        for i in range(0, self.total_form_count()):
+            form = self.forms[i]
+            if self.can_delete:
+                if self._should_delete_form(form):
+                    # This form is going to be deleted so any of its errors
+                    # should not cause the entire formset to be invalid.
+                    try:
+                        dts.remove(form.cleaned_data['start'])
+                        dts.remove(form.cleaned_data['end'])
+                    except KeyError:
+                        pass
+                    continue
+
+
+class ItemProgramTimeForm(I18nModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.item = kwargs.pop('item')
+        super().__init__(*args, **kwargs)
+        # instance = kwargs.get('instance', None)
+        initial = kwargs.get('initial', {})
+        kwargs['initial'] = initial
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = ItemProgramTime
+        localized_fields = '__all__'
+        fields = [
+            'start',
+            'end',
+        ]
+        field_classes = {
+            'start': forms.SplitDateTimeField,
+            'end': forms.SplitDateTimeField,
+        }
+        widgets = {
+            'start': SplitDateTimePickerWidget(),
+            'end': SplitDateTimePickerWidget(attrs={
+                'data-date-after': '#id_program_times-{form_index}-start_0'
+            }),
         }
