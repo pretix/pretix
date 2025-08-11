@@ -78,6 +78,13 @@ from pretix.control.forms import (
 from pretix.helpers.countries import CachedCountries
 
 
+ROUNDING_MODES = (
+    ('line', _('Rounding every line individually')),
+    ('sum_by_net', _('Rounding by order total, keeping net prices stable')),
+    ('sum_by_gross', _('Rounding by order total, keeping gross prices stable')),
+)
+
+
 def country_choice_kwargs():
     allcountries = list(CachedCountries())
     allcountries.insert(0, ('', _('Select country')))
@@ -473,18 +480,10 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Rounding of taxes"),
             widget=forms.RadioSelect,
-            choices=(
-                ('line', _('Rounding every line individually')),
-                ('sum_by_net', _('Rounding by order total, keeping net prices stable')),
-                ('sum_by_gross', _('Rounding by order total, keeping gross prices stable')),
-            ),
+            choices=ROUNDING_MODES,
         ),
         'serializer_kwargs': dict(
-            choices=(
-                ('line', _('Rounding every line individually')),
-                ('sum_by_net', _('Rounding by order total, keeping net prices stable')),
-                ('sum_by_gross', _('Rounding by order total, keeping gross prices stable')),
-            ),
+            choices=ROUNDING_MODES,
         ),
     },
     'invoice_address_asked': {

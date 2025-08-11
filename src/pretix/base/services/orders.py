@@ -1076,6 +1076,7 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         sales_channel=sales_channel,
         customer=customer,
         valid_if_pending=valid_if_pending,
+        tax_rounding_mode=event.settings.tax_rounding,
     )
     if customer:
         order.email_known_to_work = customer.is_verified
@@ -2814,8 +2815,7 @@ class OrderChangeManager:
         if fee_changed:
             fees = list(self.order.fees.all())
 
-        print("round", positions, fees)
-        changed = apply_rounding(self.order.event.settings.tax_rounding, self.order.event.currency, [*positions, *fees])
+        changed = apply_rounding(self.order.tax_rounding_mode, self.order.event.currency, [*positions, *fees])
         for l in changed:
             if isinstance(l, OrderPosition):
                 l.save(update_fields=[

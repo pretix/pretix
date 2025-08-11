@@ -81,7 +81,7 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.settings import PERSON_NAME_SCHEMES, ROUNDING_MODES
 from pretix.base.signals import allow_ticket_download, order_gracefully_delete
 from pretix.base.timemachine import time_machine_now
 
@@ -323,6 +323,11 @@ class Order(LockModel, LoggedModel):
     invoice_dirty = models.BooleanField(
         # Invoice needs to be re-issued when the order is paid again
         default=False,
+    )
+    tax_rounding_mode = models.CharField(
+        max_length=100,
+        choices=ROUNDING_MODES,
+        default="line",
     )
 
     objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='event__organizer')

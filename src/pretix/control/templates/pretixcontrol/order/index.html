@@ -683,7 +683,7 @@
                                 {% endif %}
                                 {% if django_settings.DEBUG %}
                                     <br/>
-                                    <small>
+                                    <small class="admin-only">
                                         price = {{ line.price|floatformat:2 }}<br>
                                         rounding_correction = {{ line.price_includes_rounding_correction|floatformat:2 }}<br>
                                         tax_value = {{ line.tax_value|floatformat:2 }}<br>
@@ -733,7 +733,7 @@
                                 {% endif %}
                                 {% if django_settings.DEBUG %}
                                     <br/>
-                                    <small>
+                                    <small class="admin-only">
                                         price = {{ fee.value|floatformat:2 }}<br>
                                         rounding_correction = {{ fee.value_includes_rounding_correction|floatformat:2 }}<br>
                                         tax_value = {{ fee.tax_value|floatformat:2 }}<br>
@@ -769,6 +769,10 @@
                         </div>
                         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
                             <strong>{{ items.total|money:event.currency }}</strong>
+                            <br/>
+                            <small class="admin-only">
+                                tax_rounding_mode = {{ order.tax_rounding_mode }}
+                            </small>
                         </div>
                         <div class="clearfix"></div>
                     </div>
