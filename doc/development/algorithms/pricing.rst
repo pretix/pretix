@@ -178,3 +178,128 @@ Flowchart
 ---------
 
 .. image:: /images/cart_pricing.png
+
+
+.. _`algorithms-rounding`:
+
+Rounding of taxes
+-----------------
+
+pretix internally always stores taxes on a per-line level, like this:
+
+ ========== ========== =========== ======= =============
+   Product   Tax rate   Net price     Tax   Gross price
+ ========== ========== =========== ======= =============
+  Ticket A       19 %       84.03   15.97        100.00
+  Ticket B       19 %       84.03   15.97        100.00
+  Ticket C       19 %       84.03   15.97        100.00
+  Ticket D       19 %       84.03   15.97        100.00
+  Ticket E       19 %       84.03   15.97        100.00
+       Sum                 420.15   79.85        500.00
+ ========== ========== =========== ======= =============
+
+This has a few significant advantages:
+
+- We can report both net and gross prices for every individual ticket.
+
+- We can report both net and gross prices for every filter imaginable, such as the gross sum of all sales of Ticket A
+  or the net sum of all sales for a specific date in an event series. All numbers will be exact.
+
+- When splitting the order into two, both net price and gross price are split without any changes in rounding.
+
+The main problem with this approach is that some external systems, formats, or jurisdictions expect a rounding scheme
+that works differently. For example, the EN 16931 standard for electronic invoicing expects us to build the sum of
+net values and then compute the tax on the document level, like this:
+
+ ================= ========== ===========
+          Product   Tax rate   Net price
+ ================= ========== ===========
+         Ticket A       19 %       84.03
+         Ticket B       19 %       84.03
+         Ticket C       19 %       84.03
+         Ticket D       19 %       84.03
+         Ticket E       19 %       84.03
+          Net sum                 420.15
+  Taxes on 420.15                  79.83
+        Gross sum                 499.98
+ ================= ========== ===========
+
+As the example shows, this causes a difference in the end price that needs to be paid by the end user.
+So depending on the rounding scheme, a different payment amount might be due.
+This has significant disadvantages:
+
+- It is impossible to guarantee a stable gross price this way, i.e. if you advertise a price of €100 per ticket to
+  consumers, they will be confused when they only need to pay €499.98.
+
+- When splitting the order, the sum of the new orders might require additional payment or refund of a few cents.
+
+pretix therefore allows you to choose between the following options:
+
+Rounding every line individually
+""""""""""""""""""""""""""""""""
+
+Algorithm identifier: ``line``
+
+This is our original algorithm where the tax value is rounded for every line individually.
+
+**This is our current algorithm and we recommend it whenever you do not have different requirements.**
+For the example above:
+
+ ========== ========== =========== ======= =============
+   Product   Tax rate   Net price     Tax   Gross price
+ ========== ========== =========== ======= =============
+  Ticket A       19 %       84.03   15.97        100.00
+  Ticket B       19 %       84.03   15.97        100.00
+  Ticket C       19 %       84.03   15.97        100.00
+  Ticket D       19 %       84.03   15.97        100.00
+  Ticket E       19 %       84.03   15.97        100.00
+       Sum                 420.15   79.85        500.00
+ ========== ========== =========== ======= =============
+
+
+Rounding by order total, keeping net prices stable
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Algorithm identifier: ``sum_by_net``
+
+In this algorithm, the gross prices of some the individual lines will be modified such that the end value will be
+compliant with the computation scheme expected by e.g. EN16931. This will lead to different gross prices to be shown
+for tickets of the same type, but the net price will stay always the same.
+
+**This is our current algorithm and we recommend it whenever you need to round taxes on document-level and primarily deal with business customers.**
+For the example above:
+
+ ========== ========== =========== ============================== ==============================
+   Product   Tax rate   Net price                            Tax                    Gross price
+ ========== ========== =========== ============================== ==============================
+  Ticket A       19 %       84.03   15.96 (incl. -0.01 rounding)   99.99 (incl. -0.01 rounding)
+  Ticket B       19 %       84.03   15.96 (incl. -0.01 rounding)   99.99 (incl. -0.01 rounding)
+  Ticket C       19 %       84.03                          15.97                         100.00
+  Ticket D       19 %       84.03                          15.97                         100.00
+  Ticket E       19 %       84.03                          15.97                         100.00
+       Sum                 420.15                          78.83                         499.98
+ ========== ========== =========== ============================== ==============================
+
+
+Rounding by order total, keeping gross prices stable
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Algorithm identifier: ``sum_by_gross``
+
+In this algorithm, the net prices of some the individual lines will be modified such that the end value will be
+compliant with the computation scheme expected by e.g. EN16931. This will lead to different net prices to be shown
+for tickets of the same type, but the gross price will stay always the same.
+
+**This is our current algorithm and we recommend it whenever you need to round taxes on document-level and primarily deal with consumers.**
+For the example above:
+
+ ========== ========== ============================= ============================== =============
+   Product   Tax rate                     Net price                            Tax   Gross price
+ ========== ========== ============================= ============================== =============
+  Ticket A       19 %   84.04 (incl. 0.01 rounding)   15.96 (incl. -0.01 rounding)        100.00
+  Ticket B       19 %   84.04 (incl. 0.01 rounding)   15.96 (incl. -0.01 rounding)        100.00
+  Ticket C       19 %                         84.03                          15.97        100.00
+  Ticket D       19 %                         84.03                          15.97        100.00
+  Ticket E       19 %                         84.03                          15.97        100.00
+       Sum                                   420.17                          79.83        500.00
+ ========== ========== ============================= ============================== =============
