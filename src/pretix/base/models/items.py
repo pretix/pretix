@@ -2307,7 +2307,7 @@ class ItemProgramTime(models.Model):
     :param end: The date and time this program time ends
     :type end: datetime
     """
-    item = models.ForeignKey('Item', on_delete=models.CASCADE)
+    item = models.ForeignKey('Item', related_name='item_program_times', on_delete=models.CASCADE)
     start = models.DateTimeField(
         verbose_name=_("Start"),
         null=True, blank=True
