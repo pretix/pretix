@@ -2713,7 +2713,7 @@ class OrderChangeManager:
             fee._calculate_tax()
             if payment_fee != 0:
                 fee.save()
-                fees.append(new_fee)
+                fees.append(fee)
             elif fee.pk:
                 if fee in fees:
                     fees.remove(fee)
@@ -3295,14 +3295,16 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
         fee.value = new_fee
         fee.internal_type = payment_provider.identifier
         fee._calculate_tax()
-        if not fee.pk:
-            fees.append(fee)
-        fee.save()
-    else:
-        if fee.pk:
-            fee.delete()
         if fee in fees:
             fees.remove(fee)
+        # "Update instance in the fees array
+        fees.append(fee)
+        fee.save()
+    else:
+        if fee in fees:
+            fees.remove(fee)
+        if fee.pk:
+            fee.delete()
         fee = None
 
     rounding_changed |= set(apply_rounding(
