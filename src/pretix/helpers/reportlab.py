@@ -84,6 +84,8 @@ class FontFallbackParagraph(Paragraph):
         super().__init__(text, style, *args, **kwargs)
 
     def _font_supports_text(self, text, font_name):
+        if not text:
+            return True
         font = pdfmetrics.getFont(font_name)
         return all(
             ord(c) in font.face.charToGlyph or not c.isprintable()
