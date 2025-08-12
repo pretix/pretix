@@ -3110,7 +3110,7 @@ def test_order_create_rounding_mode(token_client, organizer, event, item, quota,
     res['fees'][0]['value'] = Decimal("100.00")
     res['positions'] = [
         {
-            "item": 1,
+            "item": item.pk,
             "price": "100.00",
         }
     ] * 4
@@ -3148,7 +3148,7 @@ def test_order_create_rounding_default_pretixpos_fallback(device, device_client,
     res['fees'][0]['value'] = Decimal("100.00")
     res['positions'] = [
         {
-            "item": 1,
+            "item": item.pk,
             "price": "100.00",
         }
     ] * 4
