@@ -110,7 +110,7 @@ dev = [
   "aiohttp==3.12.*",
   "coverage",
   "coveralls",
-  "fakeredis==2.30.*",
+  "fakeredis==2.31.*",
   "flake8==7.3.*",
   "freezegun",
   "isort==6.0.*",
