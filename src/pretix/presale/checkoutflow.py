@@ -91,9 +91,7 @@ from pretix.presale.signals import (
     question_form_fields_overrides,
 )
 from pretix.presale.utils import customer_login
-from pretix.presale.views import (
-    CartMixin, get_cart, get_cart_is_free, get_cart_position_sum,
-)
+from pretix.presale.views import CartMixin, get_cart, get_cart_is_free
 from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
     get_or_create_cart_id,
@@ -1262,18 +1260,16 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     @cached_property
     def _total_order_value(self):
         cart = get_cart(self.request)
-        total = get_cart_position_sum(self.request)
         try:
-            total += sum([
-                f.value for f in get_fees(
-                    self.request.event, self.request, total, self.invoice_address,
-                    [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')],
-                    cart,
-                )
-            ])
+            fees = get_fees(
+                event=self.request.event, request=self.request, invoice_address=self.invoice_address,
+                payments=[p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')],
+                positions=cart,
+            )
         except TaxRule.SaleNotAllowed:
             # ignore for now, will fail on order creation
-            pass
+            fees = []
+        total = sum([c.price for c in cart]) + sum([f.value for f in fees])
         return Decimal(total)
 
     @cached_property
@@ -1399,7 +1395,13 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['current_payments'] = [p for p in self.current_selected_payments(self._total_order_value) if p.get('multi_use_supported')]
+        ctx['cart'] = self.get_cart()
+        ctx['current_payments'] = [
+            p for p in self.current_selected_payments(
+                ctx['cart']['positions'], ctx['cart']['fees'], ctx['cart']['invoice_address'],
+            )
+            if p.get('multi_use_supported')
+        ]
         ctx['remaining'] = self._total_order_value - sum(p['payment_amount'] for p in ctx['current_payments']) + sum(p['fee'] for p in ctx['current_payments'])
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
@@ -1412,7 +1414,6 @@ class PaymentStep(CartMixin, TemplateFlowStep):
             ctx['selected'] = self.single_use_payment['provider']
         else:
             ctx['selected'] = ''
-        ctx['cart'] = self.get_cart()
         return ctx
 
     def _is_allowed(self, prov, request):
@@ -1425,14 +1426,21 @@ class PaymentStep(CartMixin, TemplateFlowStep):
             return False
 
         cart = get_cart(self.request)
-        total = get_cart_position_sum(self.request)
         try:
-            total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address,
-                                                    self.cart_session.get('payments', []), cart)])
+            fees = get_fees(
+                event=self.request.event,
+                request=self.request,
+                invoice_address=self.invoice_address,
+                payments=self.cart_session.get('payments', []),
+                positions=cart
+            )
         except TaxRule.SaleNotAllowed:
             # ignore for now, will fail on order creation
-            pass
-        selected = self.current_selected_payments(total, warn=warn, total_includes_payment_fees=True)
+            fees = []
+        total = sum([c.price for c in cart]) + sum([f.value for f in fees])
+
+        selected = self.current_selected_payments(cart, fees, self.invoice_address, warn=warn)
+        print(sum(p['payment_amount'] for p in selected), total)
         if sum(p['payment_amount'] for p in selected) != total:
             if warn:
                 messages.error(request, _('Please select a payment method to proceed.'))
@@ -1516,7 +1524,11 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart(answers=True)
 
-        selected_payments = self.current_selected_payments(ctx['cart']['total'], total_includes_payment_fees=True)
+        selected_payments = self.current_selected_payments(
+            ctx['cart']['positions'],
+            ctx['cart']['fees'],
+            ctx['cart']['invoice_address'],
+        )
         ctx['payments'] = []
         for p in selected_payments:
             if p['provider'] == 'free':

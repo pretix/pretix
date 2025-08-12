@@ -978,7 +978,7 @@ def test_split_fees(event):
     op2 = OrderPosition(price=Decimal("10.70"), item=item)
     op2._calculate_tax(tax_rule=tr7, invoice_address=InvoiceAddress())
     of1 = OrderFee(value=Decimal("5.00"), fee_type=OrderFee.FEE_TYPE_SHIPPING)
-    of1._calculate_tax(tax_rule=tr7, invoice_address=InvoiceAddress())
+    of1._calculate_tax(tax_rule=tr7, invoice_address=InvoiceAddress(), event=event)
 
     # Example of a 10% service fee
     assert split_fee_for_taxes([op1, op2], Decimal("2.26"), event) == [
