@@ -1376,10 +1376,10 @@ class ItemProgramTimeForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.item = kwargs.pop('item')
         super().__init__(*args, **kwargs)
-        # instance = kwargs.get('instance', None)
         initial = kwargs.get('initial', {})
         kwargs['initial'] = initial
-        super().__init__(*args, **kwargs)
+
+        self.fields['end'].widget.attrs['data-date-after'] = '#id_{prefix}-start_0'.format(prefix=self.prefix)
 
     class Meta:
         model = ItemProgramTime
@@ -1394,7 +1394,5 @@ class ItemProgramTimeForm(I18nModelForm):
         }
         widgets = {
             'start': SplitDateTimePickerWidget(),
-            'end': SplitDateTimePickerWidget(attrs={
-                'data-date-after': '#id_program_times-{form_index}-start_0'
-            }),
+            'end': SplitDateTimePickerWidget(),
         }
