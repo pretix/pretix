@@ -1398,7 +1398,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         ctx['cart'] = self.get_cart()
         ctx['current_payments'] = [
             p for p in self.current_selected_payments(
-                ctx['cart']['positions'], ctx['cart']['fees'], ctx['cart']['invoice_address'],
+                ctx['cart']['raw'], ctx['cart']['fees'], ctx['cart']['invoice_address'],
             )
             if p.get('multi_use_supported')
         ]
@@ -1440,7 +1440,6 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         total = sum([c.price for c in cart]) + sum([f.value for f in fees])
 
         selected = self.current_selected_payments(cart, fees, self.invoice_address, warn=warn)
-        print(sum(p['payment_amount'] for p in selected), total)
         if sum(p['payment_amount'] for p in selected) != total:
             if warn:
                 messages.error(request, _('Please select a payment method to proceed.'))
@@ -1525,7 +1524,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['cart'] = self.get_cart(answers=True)
 
         selected_payments = self.current_selected_payments(
-            ctx['cart']['positions'],
+            ctx['cart']['raw'],
             ctx['cart']['fees'],
             ctx['cart']['invoice_address'],
         )

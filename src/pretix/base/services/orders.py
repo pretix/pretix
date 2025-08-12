@@ -3241,6 +3241,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
         raise Exception('change_payment_provider should only be called in atomic transaction!')
 
     oldtotal = order.total
+    already_paid = order.payment_refund_sum
     e = OrderPayment.objects.filter(fee=OuterRef('pk'), state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED,
                                                                    OrderPayment.PAYMENT_STATE_REFUNDED))
     open_fees = list(
@@ -3257,18 +3258,43 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
         fee = OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.00'), order=order)
     old_fee = fee.value
 
+    positions = list(order.positions.all())
+    fees = list(order.fees.all())
+    rounding_changed = set(apply_rounding(
+        order.tax_rounding_mode, order.event.currency, [*positions, *[f for f in fees if f.pk != fee.pk]]
+    ))
+    total_without_fee = sum(c.price for c in positions) + sum(f.value for f in fees if f.pk != fee.pk)
+    pending_sum_without_fee = max(Decimal("0.00"), total_without_fee - already_paid)
+
     new_fee = payment_provider.calculate_fee(
-        order.pending_sum - old_fee if amount is None else amount
+        pending_sum_without_fee if amount is None else amount
     )
     if new_fee:
         fee.value = new_fee
         fee.internal_type = payment_provider.identifier
         fee._calculate_tax()
+        if not fee.pk:
+            fees.append(fee)
         fee.save()
     else:
         if fee.pk:
             fee.delete()
+        if fee in fees:
+            fees.remove(fee)
         fee = None
+
+    rounding_changed |= set(apply_rounding(
+        order.tax_rounding_mode, order.event.currency, [*positions, *fees]
+    ))
+    for l in rounding_changed:
+        if isinstance(l, OrderPosition):
+            l.save(update_fields=[
+                "price", "price_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+            ])
+        elif isinstance(l, OrderFee):
+            l.save(update_fields=[
+                "value", "value_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+            ])
 
     open_payment = None
     if new_payment:
@@ -3296,7 +3322,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
                 },
             )
 
-    order.total = (order.positions.aggregate(sum=Sum('price'))['sum'] or 0) + (order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
+    order.total = sum(c.price for c in positions) + sum(f.value for f in fees)
     order.save(update_fields=['total'])
 
     if not new_payment:
