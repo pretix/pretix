@@ -123,6 +123,22 @@ def get_private_icals(event, positions):
     creation_time = datetime.datetime.now(datetime.timezone.utc)
     calobjects = []
 
+    for p in positions:
+        program_times = p.item.item_program_times.all()
+        if program_times:
+            for pt in program_times:
+                cal = vobject.iCalendar()
+                cal.add('prodid').value = '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME.replace(" ", "_"))
+
+                vevent = cal.add('vevent')
+                vevent.add('summary').value = str(p.item.name)
+                vevent.add('description').value = _('Program time')
+                vevent.add('dtstamp').value = creation_time
+                vevent.add('dtstart').value = pt.start.astimezone(tz)
+                vevent.add('dtend').value = pt.end.astimezone(tz)
+
+                calobjects.append(cal)
+
     evs = set(p.subevent or event for p in positions)
     for ev in evs:
         if isinstance(ev, Event):
