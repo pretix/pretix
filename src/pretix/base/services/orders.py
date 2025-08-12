@@ -2689,14 +2689,18 @@ class OrderChangeManager:
         except InvoiceAddress.DoesNotExist:
             pass
 
-        split_order.total = sum([p.price for p in split_positions if not p.canceled])
-
+        fees = []
         for fee in self.order.fees.exclude(fee_type=OrderFee.FEE_TYPE_PAYMENT):
             new_fee = modelcopy(fee)
             new_fee.pk = None
             new_fee.order = split_order
-            split_order.total += new_fee.value
             new_fee.save()
+            fees.append(new_fee)
+
+        changed_by_rounding = set(apply_rounding(
+            self.order.tax_rounding_mode, self.event.currency, [p for p in split_positions if not p.canceled] + fees
+        ))
+        split_order.total = sum([p.price for p in split_positions if not p.canceled])
 
         if split_order.total != Decimal('0.00') and self.order.status != Order.STATUS_PAID:
             pp = self._get_payment_provider()
@@ -2709,9 +2713,27 @@ class OrderChangeManager:
             fee._calculate_tax()
             if payment_fee != 0:
                 fee.save()
+                fees.append(new_fee)
             elif fee.pk:
+                if fee in fees:
+                    fees.remove(fee)
                 fee.delete()
-            split_order.total += fee.value
+
+            changed_by_rounding |= set(apply_rounding(
+                self.order.tax_rounding_mode, self.event.currency, [p for p in split_positions if not p.canceled] + fees
+            ))
+            split_order.total = sum([p.price for p in split_positions if not p.canceled]) + sum([f.value for f in fees])
+
+        for l in changed_by_rounding:
+            if isinstance(l, OrderPosition):
+                l.save(update_fields=[
+                    "price", "price_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+                ])
+            elif isinstance(l, OrderFee):
+                l.save(update_fields=[
+                    "value", "value_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+                ])
+        split_order.total = sum([p.price for p in split_positions if not p.canceled]) + sum([f.value for f in fees])
 
         remaining_total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
         offset_amount = min(max(0, self.completed_payment_sum - remaining_total), split_order.total)
