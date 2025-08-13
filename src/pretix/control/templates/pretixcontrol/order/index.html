@@ -271,7 +271,7 @@
                                     <a href="{% url "control:event.invoice.download" invoice=i.pk event=request.event.slug organizer=request.event.organizer.slug %}" target="_blank">
                                         {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}{% trans "Invoice" %}{% endif %}
                                         {{ i.number }}</a>
-                                    ({{ i.date|date:"SHORT_DATE_FORMAT" }})
+                                    ({{ i.date|date:"SHORT_DATE_FORMAT" }}, {{ i.transmission_type_instance.verbose_name }})
                                     {% if i.transmission_status == "unknown" %}
                                         {# Legacy invoice, before the introduction of transmission status #}
                                         {% if i.transmission_date.year == 1970 %}
@@ -290,10 +290,14 @@
                                             </span>
                                         {% endif %}
                                     {% elif i.transmission_status == "pending" %}
-                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice is scheduled to be transmitted" %}">
-                                            <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
-                                            <span class="fa fa-clock-o text-success fa-stack-1x fa-stack-shifted"></span>
-                                        </span>
+                                        {% if i.transmission_type_instance.enforce_transmission %}
+                                            <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice is scheduled to be transmitted" %}">
+                                                <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                                <span class="fa fa-clock-o text-success fa-stack-1x fa-stack-shifted"></span>
+                                            </span>
+                                        {% else %}
+                                            <span class="fa fa-envelope fa-background text-muted" data-toggle="tooltip" title="{% trans "Invoice is not yet transmitted" %}"></span>
+                                        {% endif %}
                                     {% elif i.transmission_status == "inflight" %}
                                         <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice is currently in transmission" %}">
                                             <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
