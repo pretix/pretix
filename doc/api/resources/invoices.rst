@@ -186,7 +186,7 @@ Italian Exchange System
 """""""""""""""""""""""
 
 The identifier ``"it_sdi"`` represents the transmission of XML invoices through the `Sistema di Interscambio`_ network used in Italy.
-This is only availble for addresses with country ``"IT"``.
+This is only available for addresses with country ``"IT"``.
 This is not supported by pretix out of the box and requires the use of a suitable plugin.
 The ``transmission_info`` object may contain the following properties:
 
