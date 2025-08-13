@@ -3127,7 +3127,7 @@ def test_order_create_rounding_mode(token_client, organizer, event, item, quota,
         assert resp.data["positions"][0]["price"] == "99.99"
         assert resp.data["positions"][-1]["price"] == "100.00"
 
-    res["tax_rounding_mode"] = "sum_by_gross"
+    res["tax_rounding_mode"] = "sum_by_net_keep_gross"
     for simulate in (True, False):
         res["simulate"] = simulate
         resp = token_client.post(

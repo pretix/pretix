@@ -78,9 +78,10 @@ from pretix.control.forms import (
 from pretix.helpers.countries import CachedCountries
 
 ROUNDING_MODES = (
-    ('line', _('Round taxes for every line individually')),
-    ('sum_by_net', _('Round taxes by order total, keeping net prices stable')),
-    ('sum_by_gross', _('Round taxes by order total, keeping gross prices stable')),
+    ('line', _('Compute taxes for every line individually')),
+    ('sum_by_net', _('Compute taxes based on net total')),
+    ('sum_by_net_keep_gross', _('Compute taxes based on net total with stable gross prices')),
+    # We could also have sum_by_gross, but we're not aware of any use-cases for it
 )
 
 
