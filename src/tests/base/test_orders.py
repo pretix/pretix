@@ -1821,6 +1821,63 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == self.op1.price + self.op2.price
 
     @classscope(attr='o')
+    def test_change_price_with_rounding_change_impossible(self):
+        # Order starts with 2*100€ tickets, but rounding corrects it to 199€. Then, the user tries to force both prices
+        # to 100€. No luck.
+        self.order.status = Order.STATUS_PAID
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.op1.price = Decimal("100.00")
+        self.op1._calculate_tax(tax_rule=self.tr19)
+        self.op1.save()
+        self.op2.price = Decimal("100.00")
+        self.op2._calculate_tax(tax_rule=self.tr19)
+        self.op2.save()
+        self.order.refresh_from_db()
+        self.ocm.regenerate_secret(self.op1)
+        self.ocm.commit()  # Force re-rounding
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        assert self.order.total == Decimal("199.99")
+
+        self.ocm.change_price(self.op1, Decimal('100.00'))
+        self.ocm.change_price(self.op2, Decimal('100.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.op2.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal("199.99")
+        assert self.op1.price == Decimal('99.99')
+        assert self.op2.price == Decimal('100.00')
+
+    @classscope(attr='o')
+    def test_change_price_with_rounding_change_autocorrected(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.op1.price = Decimal("0.00")
+        self.op1._calculate_tax(tax_rule=self.tr19)
+        self.op1.save()
+        self.op2.price = Decimal("100.00")
+        self.op2._calculate_tax(tax_rule=self.tr19)
+        self.op2.save()
+        self.order.refresh_from_db()
+        self.ocm.regenerate_secret(self.op1)
+        self.ocm.commit()  # Force re-rounding
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        assert self.order.total == Decimal("100.00")
+
+        self.ocm.change_price(self.op1, Decimal('100.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.op2.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal("199.99")
+        assert self.op1.price == Decimal('99.99')
+        assert self.op2.price == Decimal('100.00')
+
+    @classscope(attr='o')
     def test_change_price_net_success(self):
         self.tr7.price_includes_tax = False
         self.tr7.save()

@@ -1793,7 +1793,7 @@ class OrderChangeManager:
         if position.issued_gift_cards.exists():
             raise OrderError(self.error_messages['gift_card_change'])
 
-        self._totaldiff_guesstimate += price.gross - position.price
+        self._totaldiff_guesstimate += price.gross - position.price + position.price_includes_rounding_correction
 
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
@@ -2419,10 +2419,15 @@ class OrderChangeManager:
                     'new_price': op.price.gross
                 })
                 position.price = op.price.gross
+                position.price_includes_rounding_correction = Decimal("0.00")
                 position.tax_rate = op.price.rate
                 position.tax_value = op.price.tax
+                position.tax_value_includes_rounding_correction = Decimal("0.00")
                 position.tax_code = op.price.code
-                position.save(update_fields=['price', 'tax_rate', 'tax_value', 'tax_code'])
+                position.save(update_fields=[
+                    'price', 'price_includes_rounding_correction', 'tax_rate', 'tax_value',
+                    'tax_value_includes_rounding_correction', 'tax_code'
+                ])
             elif isinstance(op, self.TaxRuleOperation):
                 if isinstance(op.position, OrderPosition):
                     position = position_cache.setdefault(op.position.pk, op.position)

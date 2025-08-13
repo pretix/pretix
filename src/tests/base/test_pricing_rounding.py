@@ -219,3 +219,29 @@ def test_round_currency_without_decimals():
     assert sum(l.price for l in lines) == Decimal("49990.00")
     assert sum(l.tax_value for l in lines) == Decimal("7982.00")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("42008.00")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("rounding_mode", [
+    "sum_by_net",
+    "sum_by_net_keep_gross",
+])
+def test_do_not_touch_free(rounding_mode):
+    l1 = OrderPosition(
+        price=Decimal("0.00"),
+    )
+    l1._calculate_tax(tax_rule=TaxRule(rate=Decimal("7.00")), invoice_address=InvoiceAddress())
+    l2 = OrderPosition(
+        price=Decimal("23.00"),
+    )
+    l2._calculate_tax(tax_rule=TaxRule(rate=Decimal("7.00")), invoice_address=InvoiceAddress())
+    apply_rounding(rounding_mode, "EUR", [l1, l2])
+    assert l2.price == Decimal("23.01")
+    assert l2.price_includes_rounding_correction == Decimal("0.01")
+    assert l2.tax_value == Decimal("1.51")
+    assert l2.tax_value_includes_rounding_correction == Decimal("0.01")
+    assert l2.tax_rate == Decimal("7.00")
+    assert l1.price == Decimal("0.00")
+    assert l1.price_includes_rounding_correction == Decimal("0.00")
+    assert l1.tax_value == Decimal("0.00")
+    assert l1.tax_value_includes_rounding_correction == Decimal("0.00")
