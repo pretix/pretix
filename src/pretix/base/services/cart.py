@@ -1430,11 +1430,12 @@ class CartManager:
         )
 
         for cp, (new_price, discount) in zip(positions, discount_results):
-            if cp.price != new_price or cp.discount_id != (discount.pk if discount else None):
-                diff += new_price - cp.price
+            if (cp.price - cp.price_includes_rounding_correction) != new_price or cp.discount_id != (discount.pk if discount else None):
+                diff += new_price - (cp.price - cp.price_includes_rounding_correction)
                 cp.price = new_price
+                cp.price_includes_rounding_correction = Decimal("0.00")
                 cp.discount = discount
-                cp.save(update_fields=['price', 'discount'])
+                cp.save(update_fields=['price', 'price_includes_rounding_correction', 'discount'])
 
         return diff
 

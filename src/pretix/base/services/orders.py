@@ -947,10 +947,11 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
         ]
     )
     for cp, (new_price, discount) in zip(sorted_positions, discount_results):
-        if cp.price != new_price or cp.discount_id != (discount.pk if discount else None):
+        if cp.price - cp.price_includes_rounding_correction != new_price or cp.discount_id != (discount.pk if discount else None):
             cp.price = new_price
+            cp.price_includes_rounding_correction = Decimal("0.00")
             cp.discount = discount
-            cp.save(update_fields=['price', 'discount'])
+            cp.save(update_fields=['price', 'price_includes_rounding_correction', 'discount'])
 
     # After applying discounts, add-on positions might still have a reference to the *old* version of the
     # parent position, which can screw up ordering later since the system sees inconsistent data.
