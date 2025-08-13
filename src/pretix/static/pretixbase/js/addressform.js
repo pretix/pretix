@@ -63,7 +63,6 @@ $(function () {
                             }
                             dependents.transmission_type.append(o);
                         });
-                    }
                 }
 
                 for (var k in dependents) {
