@@ -56,7 +56,6 @@ $(function () {
                     var selected_transmission_type = dependents.transmission_type.prop("data-selected-value");
                     if (selected_transmission_type) dependents.transmission_type.prop("data-selected-value", "");
                     dependents.transmission_type.find("option:not([value=''])").remove();
-                    if (data.transmission_types.length > 0) {
                         $.each(data.transmission_types, function (k, s) {
                             var o = $("<option>").attr("value", s.code).text(s.name);
                             if (selected_transmission_type === s.code) {
