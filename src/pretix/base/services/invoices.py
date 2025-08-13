@@ -51,7 +51,9 @@ from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
-from pretix.base.invoicing.transmission import transmission_providers, get_transmission_types
+from pretix.base.invoicing.transmission import (
+    get_transmission_types, transmission_providers,
+)
 from pretix.base.models import (
     ExchangeRate, Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
 )
@@ -654,7 +656,7 @@ def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
 
     providers = sorted([
         provider
-        for provider, __ in transmission_providers.filter(type=invoice.transmission_type, event=sender)
+        for provider, __ in transmission_providers.filter(type=invoice.transmission_type, active_in=sender)
     ], key=lambda p: (-p.priority, p.identifier))
     for provider in providers:
         if provider.is_available(sender, invoice.invoice_to_country, invoice.invoice_to_is_business):
