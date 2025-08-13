@@ -658,24 +658,50 @@ def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
         provider
         for provider, __ in transmission_providers.filter(type=invoice.transmission_type, active_in=sender)
     ], key=lambda p: (-p.priority, p.identifier))
-    for provider in providers:
-        if provider.is_available(sender, invoice.invoice_to_country, invoice.invoice_to_is_business):
-            break
-    else:
-        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
-        invoice.transmission_date = now()
-        invoice.save(update_fields=["transmission_status", "transmission_date"])
-        invoice.order.log_action(
-            "pretix.event.order.invoice.sending_failed",
-            data={
-                "full_invoice_no": invoice.full_invoice_no,
-                "transmission_provider": None,
-                "transmission_type": invoice.transmission_type,
-                "data": {
-                    "reason": "no_provider",
-                },
-            }
-        )
+
+    testmode_failure = False
+    provider = None
+    for p in providers:
+        if p.is_available(sender, invoice.invoice_to_country, invoice.invoice_to_is_business):
+            if invoice.order.testmode:
+                if p.testmode_supported:
+                    provider = p
+                    break
+                else:
+                    testmode_failure = True
+            else:
+                provider = p
+                break
+
+    if not provider:
+        if testmode_failure:
+            invoice.transmission_status = Invoice.TRANSMISSION_STATUS_TESTMODE_IGNORED
+            invoice.transmission_date = now()
+            invoice.save(update_fields=["transmission_status", "transmission_date"])
+            invoice.order.log_action(
+                "pretix.event.order.invoice.testmode_ignored",
+                data={
+                    "full_invoice_no": invoice.full_invoice_no,
+                    "transmission_provider": None,
+                    "transmission_type": invoice.transmission_type,
+                }
+            )
+        else:
+            invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+            invoice.transmission_date = now()
+            invoice.save(update_fields=["transmission_status", "transmission_date"])
+            invoice.order.log_action(
+                "pretix.event.order.invoice.sending_failed",
+                data={
+                    "full_invoice_no": invoice.full_invoice_no,
+                    "transmission_provider": None,
+                    "transmission_type": invoice.transmission_type,
+                    "data": {
+                        "reason": "no_provider",
+                    },
+                }
+            )
+        return
 
     try:
         provider.transmit(invoice)

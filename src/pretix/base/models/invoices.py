@@ -115,12 +115,14 @@ class Invoice(models.Model):
     TRANSMISSION_STATUS_COMPLETED = "completed"
     TRANSMISSION_STATUS_FAILED = "failed"
     TRANSMISSION_STATUS_UNKNOWN = "unknown"
+    TRANSMISSION_STATUS_TESTMODE_IGNORED = "testmode_ignored"
     TRANSMISSION_STATUS_CHOICES = (
         (TRANSMISSION_STATUS_PENDING, _("pending transmission")),
         (TRANSMISSION_STATUS_INFLIGHT, _("currently being transmitted")),
         (TRANSMISSION_STATUS_COMPLETED, _("transmitted")),
         (TRANSMISSION_STATUS_FAILED, _("failed")),
         (TRANSMISSION_STATUS_UNKNOWN, _("unknown")),
+        (TRANSMISSION_STATUS_TESTMODE_IGNORED, _("not transmitted due to test mode")),
     )
 
     order = models.ForeignKey('Order', related_name='invoices', db_index=True, on_delete=models.CASCADE)
