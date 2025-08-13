@@ -170,7 +170,7 @@ PEPPOL
 """"""
 
 The identifier ``"peppol"`` represents the transmission of XML invoices through the `PEPPOL`_ network.
-This is only availble for business addresses.
+This is only available for business addresses.
 This is not supported by pretix out of the box and requires the use of a suitable plugin.
 The ``transmission_info`` object may contain the following properties:
 
