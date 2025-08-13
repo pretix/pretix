@@ -209,7 +209,7 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
     return [new_prices.get(idx, (p[3], None)) for idx, p in enumerate(positions)]
 
 
-def apply_rounding(rounding_mode: Literal["line", "sum_by_gross", "sum_by_net"], currency: str,
+def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep_gross"], currency: str,
                    lines: List[Union[OrderPosition, CartPosition, OrderFee]]) -> list:
     """
     Given a a list of order positions / cart positions / order fees (may be mixed), applies the given rounding mode
@@ -218,13 +218,13 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_gross", "sum_by_net"],
 
     When rounding mode is set to ``"line"``, the tax will be computed and rounded individually for every line.
 
-    When rounding mode is set to ``"sum_by_gross"``, the tax values of the individual lines will be adjusted such that
-    the per-taxrate/taxcode subtotal is rounded correctly. The gross prices will stay constant.
+    When rounding mode is set to ``"sum_by_net_keep_gross"``, the tax values of the individual lines will be adjusted
+    such that the per-taxrate/taxcode subtotal is rounded correctly. The gross prices will stay constant.
 
     When rounding mode is set to ``"sum_by_net"``, the gross prices and tax values of the individual lines will be
     adjusted such that the per-taxrate/taxcode subtotal is rounded correctly. The net prices will stay constant.
 
-    :param rounding_mode: One of ``"line"``, ``"sum_by_gross"``, or ``"sum_by_net"``.
+    :param rounding_mode: One of ``"line"``, ``"sum_by_net"``, or ``"sum_by_net_keep_gross"``.
     :param currency: Currency that will be used to determine rounding precision
     :param lines: List of order/cart contents
     :return: Collection of ``lines`` members that have been changed and may need to be persisted to the database.
@@ -240,20 +240,26 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_gross", "sum_by_net"],
     if rounding_mode == "sum_by_net":
         for (tax_rate, tax_code), lines in groupby(sorted(lines, key=_key), key=_key):
             lines = list(sorted(lines, key=lambda l: -(l.price - l.price_includes_rounding_correction)))
+
+            # Compute the net and gross total of the line-based computation method
             net_total = sum(
                 l.price - l.price_includes_rounding_correction - l.tax_value + l.tax_value_includes_rounding_correction
                 for l in lines
             )
             gross_total = sum(l.price - l.price_includes_rounding_correction for l in lines)
+
+            # Compute the gross total we need to achieve based on the net total
             target_gross_total = round_decimal((net_total * (1 + tax_rate / 100)), currency)
 
+            # Add/subtract the smallest possible from both gross prices and tax values (so net values stay the same)
+            # until the values align
             diff = target_gross_total - gross_total
             diff_sgn = -1 if diff < 0 else 1
             for l in lines:
                 if diff:
                     apply_diff = diff_sgn * minimum_unit
                     l.price = l.price - l.price_includes_rounding_correction + apply_diff
-                    l.price_includes_rounding_correction = diff_sgn * minimum_unit
+                    l.price_includes_rounding_correction = apply_diff
                     l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction + apply_diff
                     l.tax_value_includes_rounding_correction = apply_diff
                     diff -= apply_diff
@@ -265,27 +271,46 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_gross", "sum_by_net"],
                     l.tax_value_includes_rounding_correction = Decimal("0.00")
                     changed.append(l)
 
-    elif rounding_mode == "sum_by_gross":
+    elif rounding_mode == "sum_by_net_keep_gross":
         for (tax_rate, tax_code), lines in groupby(sorted(lines, key=_key), key=_key):
             lines = list(sorted(lines, key=lambda l: -(l.price - l.price_includes_rounding_correction)))
+
+            # Compute the net and gross total of the line-based computation method
             net_total = sum(
                 l.price - l.price_includes_rounding_correction - l.tax_value + l.tax_value_includes_rounding_correction
                 for l in lines
             )
             gross_total = sum(l.price - l.price_includes_rounding_correction for l in lines)
+
+            # Compute the net total that would yield the correct gross total (if possible)
             target_net_total = round_decimal(gross_total - (gross_total * (1 - 100 / (100 + tax_rate))), currency)
 
-            diff = target_net_total - net_total
-            diff_sgn = -1 if diff < 0 else 1
+            # Compute the gross total that would be computed from that net total – this will be different than
+            # gross_total when there is no possible net value for the gross total
+            # e.g. 99.99 at 19% is impossible since 84.03 + 19% = 100.00 and 84.02 + 19% = 99.98
+            target_gross_total = round_decimal((target_net_total * (1 + tax_rate / 100)), currency)
+
+            diff_gross = target_gross_total - gross_total
+            diff_net = target_net_total - net_total
+            diff_gross_sgn = -1 if diff_gross < 0 else 1
+            diff_net_sgn = -1 if diff_net < 0 else 1
             for l in lines:
-                if diff:
-                    apply_diff = diff_sgn * minimum_unit
+                if diff_gross:
+                    apply_diff = diff_gross_sgn * minimum_unit
+                    l.price = l.price - l.price_includes_rounding_correction + apply_diff
+                    l.price_includes_rounding_correction = apply_diff
+                    l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction + apply_diff
+                    l.tax_value_includes_rounding_correction = apply_diff
+                    changed.append(l)
+                    diff_gross -= apply_diff
+                elif diff_net:
+                    apply_diff = diff_net_sgn * minimum_unit
                     l.price = l.price - l.price_includes_rounding_correction
                     l.price_includes_rounding_correction = Decimal("0.00")
                     l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction - apply_diff
                     l.tax_value_includes_rounding_correction = -apply_diff
-                    diff -= apply_diff
                     changed.append(l)
+                    diff_net -= apply_diff
                 elif l.price_includes_rounding_correction or l.tax_value_includes_rounding_correction:
                     l.price = l.price - l.price_includes_rounding_correction
                     l.price_includes_rounding_correction = Decimal("0.00")

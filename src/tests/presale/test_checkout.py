@@ -2399,8 +2399,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             assert op2.tax_value == Decimal("15.97")
             assert op2.tax_value_includes_rounding_correction == Decimal("0.00")
 
-    def test_rounding_sum_by_gross(self):
-        self.event.settings.tax_rounding = "sum_by_gross"
+    def test_rounding_sum_by_net_keep_gross(self):
+        self.event.settings.tax_rounding = "sum_by_net_keep_gross"
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.ticket.default_price = Decimal("100.00")
         self.ticket.save()

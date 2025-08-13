@@ -848,19 +848,23 @@ class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
         self.fields["display_net_prices"].label = _("Prices shown to customer")
         self.fields["display_net_prices"].widget = DisplayNetPricesBooleanSelect()
         help_text = {
-            "line": _("Recommended when e-invoicing is not required. Each product will be sold with the advertised "
-                      "net and gross price. However, in orders of more than one product, the total tax amount "
-                      "can differ from when it would be computed from the order total."),
-            "sum_by_net": _("Recommended for e-invoicing in Europe when you primarily sell to business customers and "
-                            "show prices to customers excluding tax. "
-                            "For orders of more than one product, the gross price of some products may be changed "
-                            "automatically to ensure correct rounding of the order total, while the net prices "
-                            "stay as configured. This may cause the actual payment amount to differ from buying the "
-                            "products individually."),
-            "sum_by_gross": _("Recommended for e-invoicing in Europe when you primarily sell to consumers. "
-                              "For an order of more than one product, the net price of some products may be changed "
-                              "automatically to ensure correct rounding of the order total, while the gross prices "
-                              "stay as configured."),
+            "line": _(
+                "Recommended when e-invoicing is not required. Each product will be sold with the advertised "
+                "net and gross price. However, in orders of more than one product, the total tax amount "
+                "can differ from when it would be computed from the order total."
+            ),
+            "sum_by_net": _(
+                "Recommended for e-invoicing when you primarily sell to business customers and "
+                "show prices to customers excluding tax. "
+                "The gross price of some products may be changed to ensure correct rounding, while the net "
+                "prices will be presented as configured. This may cause the actual payment amount to differ."
+            ),
+            "sum_by_net_keep_gross": _(
+                "Recommended for e-invoicing when you primarily sell to consumers. "
+                "The gross or net price of some products may be changed automatically to ensure correct "
+                "rounding of the order total. The system attempts to keep gross prices as configured whenever "
+                "possible."
+            ),
         }
         self.fields["tax_rounding"].choices = (
             (k, format_html('{}<br><span class="text-muted">{}</span>', v, help_text.get(k, "")))
