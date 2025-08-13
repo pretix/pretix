@@ -658,7 +658,7 @@ class InvoiceSettings(EventSettingsViewMixin, EventSettingsFormView):
         types = get_transmission_types()
         providers = defaultdict(list)
         ready = defaultdict(lambda: False)
-        for p, __ in transmission_providers.filter(event=self.request.event):
+        for p, __ in transmission_providers.filter(active_in=self.request.event):
             is_ready_result = p.is_ready(self.request.event)
             providers[p.type].append((p, is_ready_result, p.settings_url(self.request.event)))
             ready[p.type] = ready[p.type] or is_ready_result
