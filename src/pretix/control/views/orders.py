@@ -373,6 +373,10 @@ class OrderOverpaidRefundBulkActionView(BaseOrderBulkActionView):
                         comment=_("Refund for overpayment"),
                         provider=payment.provider
                     )
+                    instance.log_action('pretix.event.order.refund.created', {
+                        'local_id': refund.local_id,
+                        'provider': refund.provider,
+                    }, user=self.request.user)
                     payment.payment_provider.execute_refund(refund)
                     return True
             except (ValueError, PaymentException):
