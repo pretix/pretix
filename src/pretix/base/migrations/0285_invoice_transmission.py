@@ -47,6 +47,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL(
             "UPDATE pretixbase_invoice SET transmission_status = 'completed' WHERE transmission_date IS NOT NULL",
+            migrations.RunSQL.noop,
         ),
         migrations.AddField(
             model_name="invoice",
@@ -64,9 +65,11 @@ class Migration(migrations.Migration):
             field=models.CharField(default="email", max_length=255),
         ),
         migrations.RunSQL(
-            "UPDATE pretixbase_event_settingsstore SET key = 'mail_text_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_text'"
+            "UPDATE pretixbase_event_settingsstore SET key = 'mail_text_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_text'",
+            "UPDATE pretixbase_event_settingsstore SET key = 'payment_banktransfer_invoice_email_text' WHERE key = 'mail_text_order_invoice'",
         ),
         migrations.RunSQL(
-            "UPDATE pretixbase_event_settingsstore SET key = 'mail_subject_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_subject'"
+            "UPDATE pretixbase_event_settingsstore SET key = 'mail_subject_order_invoice' WHERE key = 'payment_banktransfer_invoice_email_subject'",
+            "UPDATE pretixbase_event_settingsstore SET key = 'payment_banktransfer_invoice_email_subject' WHERE key = 'mail_subject_order_invoice'",
         ),
     ]
