@@ -286,7 +286,7 @@ gross prices stay the same.
 
 **This is less confusing to consumers and the end result is still compliant to EN 16931, so we recommend this for e-invoicing when (primarily) consumers are involved.**
 
-The main downside is that it might be confusing when sellin got business customers, since the prices of the identical tickets appear to be different.
+The main downside is that it might be confusing when selling to business customers, since the prices of the identical tickets appear to be different.
 Full computation for the example above:
 
  ========== ========== ============================= ============================== =============
