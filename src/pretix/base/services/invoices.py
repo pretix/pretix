@@ -51,7 +51,7 @@ from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
-from pretix.base.invoicing.transmission import transmission_providers
+from pretix.base.invoicing.transmission import transmission_providers, get_transmission_types
 from pretix.base.models import (
     ExchangeRate, Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
 )
@@ -616,11 +616,16 @@ def retry_stuck_invoices(sender, **kwargs):
 @scopes_disabled()
 def send_pending_invoices(sender, **kwargs):
     with transaction.atomic():
-        # Transmit all invoices that have not been transmitted by another process within
-        # the last hour (TODO: consider backwards-compatibility of this, maybe exclude email)
+        # Transmit all invoices that have not been transmitted by another process if the provider enforces
+        # transmission
+        types = [
+            tt.identifier for tt in get_transmission_types()
+            if tt.enforce_transmission
+        ]
         qs = Invoice.objects.filter(
+            transmission_type__in=types,
             transmission_status=Invoice.TRANSMISSION_STATUS_PENDING,
-            created__lte=now() - timedelta(hours=1),
+            created__lte=now() - timedelta(minutes=15),
         ).select_for_update(
             of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked
         )

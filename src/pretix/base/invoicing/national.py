@@ -37,6 +37,7 @@ class ItalianSdITransmissionType(TransmissionType):
     verbose_name = pgettext_lazy("italian_invoice", "Italian Exchange System (SdI)")
     public_name = pgettext_lazy("italian_invoice", "Exchange System (SdI)")
     exclusive = True
+    enforce_transmission = True
 
     def is_available(self, event, country: Country, is_business: bool):
         return str(country) == "IT" and super().is_available(event, country, is_business)

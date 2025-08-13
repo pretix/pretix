@@ -67,6 +67,14 @@ class TransmissionType:
         """
         return False
 
+    @property
+    def enforce_transmission(self) -> bool:
+        """
+        If a transmission type enforces transmission, every invoice created with this type will be transferred.
+        If not, the backend user is in some cases trusted to decide whether or not to transmit it.
+        """
+        return False
+
     def is_available(self, event, country: Country, is_business: bool) -> bool:
         providers = transmission_providers.filter(type=self.identifier, active_in=event)
         return any(
