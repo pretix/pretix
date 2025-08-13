@@ -1382,7 +1382,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 if transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
                     raise ValidationError({
                         "transmission_type": "The transmission type '%s' must be used for this country or address type." % (
-                            transmission_type.identifier,
+                            transmission_type.public_name,
                         )
                     })
 
