@@ -1676,7 +1676,7 @@ class OrderChangeManager:
         self.split_order = None
         self.reissue_invoice = reissue_invoice
         self._committed = False
-        self._totaldiff = 0
+        self._totaldiff_guesstimate = 0
         self._quotadiff = Counter()
         self._seatdiff = Counter()
         self._operations = []
@@ -1793,7 +1793,7 @@ class OrderChangeManager:
         if position.issued_gift_cards.exists():
             raise OrderError(self.error_messages['gift_card_change'])
 
-        self._totaldiff += price.gross - position.price
+        self._totaldiff_guesstimate += price.gross - position.price
 
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
@@ -1838,29 +1838,29 @@ class OrderChangeManager:
                 else:
                     new_tax = tax_rule.tax(pos.price, base_price_is='gross', currency=self.event.currency,
                                            override_tax_rate=new_rate, override_tax_code=new_code)
-                self._totaldiff += new_tax.gross - pos.price
+                self._totaldiff_guesstimate += new_tax.gross - pos.price
                 self._operations.append(self.PriceOperation(pos, new_tax, new_tax.gross - pos.price))
                 self._invoice_dirty = True
 
     def cancel_fee(self, fee: OrderFee):
-        self._totaldiff -= fee.value
+        self._totaldiff_guesstimate -= fee.value
         self._operations.append(self.CancelFeeOperation(fee, -fee.value))
         self._invoice_dirty = True
 
     def add_fee(self, fee: OrderFee):
-        self._totaldiff += fee.value
+        self._totaldiff_guesstimate += fee.value
         self._invoice_dirty = True
         self._operations.append(self.AddFeeOperation(fee, fee.value))
 
     def change_fee(self, fee: OrderFee, value: Decimal):
         value = (fee.tax_rule or TaxRule.zero()).tax(value, base_price_is='gross', invoice_address=self._invoice_address,
                                                      force_fixed_gross_price=True)
-        self._totaldiff += value.gross - fee.value
+        self._totaldiff_guesstimate += value.gross - fee.value
         self._invoice_dirty = True
         self._operations.append(self.FeeValueOperation(fee, value, value.gross - fee.value))
 
     def cancel(self, position: OrderPosition):
-        self._totaldiff -= position.price
+        self._totaldiff_guesstimate -= position.price
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position, -position.price))
         if position.seat:
@@ -1926,7 +1926,7 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._totaldiff += price.gross
+        self._totaldiff_guesstimate += price.gross
         self._quotadiff.update(new_quotas)
         if seat:
             self._seatdiff.update([seat])
@@ -2222,8 +2222,8 @@ class OrderChangeManager:
             if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < diff):
                 raise OrderError(self.error_messages['quota'].format(name=quota.name))
 
-    def _check_paid_price_change(self):
-        if self.order.status == Order.STATUS_PAID and self._totaldiff > 0:
+    def _check_paid_price_change(self, totaldiff):
+        if self.order.status == Order.STATUS_PAID and totaldiff > 0:
             if self.order.pending_sum > Decimal('0.00'):
                 self.order.status = Order.STATUS_PENDING
                 self.order.set_expires(
@@ -2231,7 +2231,7 @@ class OrderChangeManager:
                     self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
                 )
                 self.order.save()
-        elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff < 0:
+        elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and totaldiff < 0:
             if self.order.pending_sum <= Decimal('0.00') and not self.order.require_approval:
                 self.order.status = Order.STATUS_PAID
                 self.order.save()
@@ -2258,7 +2258,7 @@ class OrderChangeManager:
                         user=self.user,
                         auth=self.auth
                     )
-        elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff > 0:
+        elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and totaldiff > 0:
             if self.open_payment:
                 try:
                     self.open_payment.payment_provider.cancel_payment(self.open_payment)
@@ -2278,11 +2278,11 @@ class OrderChangeManager:
                         auth=self.auth,
                     )
 
-    def _check_paid_to_free(self):
-        if self.event.currency == 'XXX' and self.order.total + self._totaldiff > Decimal("0.00"):
+    def _check_paid_to_free(self, totaldiff):
+        if self.event.currency == 'XXX' and self.order.total + totaldiff > Decimal("0.00"):
             raise OrderError(error_messages['currency_XXX'])
 
-        if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)) and not self.order.require_approval:
+        if self.order.total == 0 and (totaldiff < 0 or (self.split_order and self.split_order.total > 0)) and not self.order.require_approval:
             if not self.order.fees.exists() and not self.order.positions.exists():
                 # The order is completely empty now, so we cancel it.
                 self.order.status = Order.STATUS_CANCELED
@@ -2290,7 +2290,7 @@ class OrderChangeManager:
                 order_canceled.send(self.order.event, order=self.order)
             elif self.order.status != Order.STATUS_CANCELED:
                 # if the order becomes free, mark it paid using the 'free' provider
-                # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
+                # this could happen if positions have been made cheaper or removed (totaldiff < 0)
                 # or positions got split off to a new order (split_order with positive total)
                 p = self.order.payments.create(
                     state=OrderPayment.PAYMENT_STATE_CREATED,
@@ -2851,6 +2851,7 @@ class OrderChangeManager:
 
         self.order.total = total
         self.order.save()
+        return total
 
     def _check_order_size(self):
         if (len(self.order.positions.all()) + len([op for op in self._operations if isinstance(op, self.AddOperation)])) > settings.PRETIX_MAX_ORDER_SIZE:
@@ -2859,23 +2860,6 @@ class OrderChangeManager:
                     'max': settings.PRETIX_MAX_ORDER_SIZE,
                 }
             )
-
-    def _payment_fee_diff(self):
-        total = self.order.total + self._totaldiff
-        if self.open_payment:
-            current_fee = Decimal('0.00')
-            if self.open_payment and self.open_payment.fee:
-                current_fee = self.open_payment.fee.value
-            total -= current_fee
-
-            # Do not change payment fees of paid orders
-            payment_fee = Decimal('0.00')
-            if self.order.pending_sum - current_fee != 0:
-                prov = self.open_payment.payment_provider
-                if prov:
-                    payment_fee = prov.calculate_fee(total - self.completed_payment_sum)
-
-                self._totaldiff += payment_fee - current_fee
 
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
@@ -3007,6 +2991,13 @@ class OrderChangeManager:
                 shared_lock_objects=[self.event]
             )
 
+    def guess_totaldiff(self):
+        """
+        Return the estimated difference of ``order.total`` based on the currently queued operations. This is only
+        a guess since it does not account for (a) tax rounding or (b) payment fee changes.
+        """
+        return self._totaldiff_guesstimate
+
     def commit(self, check_quotas=True):
         if self._committed:
             # an order change can only be committed once
@@ -3022,8 +3013,6 @@ class OrderChangeManager:
         # so it's dangerous to keep the cache around.
         self.order._prefetched_objects_cache = {}
 
-        # finally, incorporate difference in payment fees
-        self._payment_fee_diff()
         self._check_order_size()
 
         with transaction.atomic():
@@ -3031,6 +3020,7 @@ class OrderChangeManager:
             if locked_instance.last_modified != self.order.last_modified:
                 raise OrderError(error_messages['race_condition'])
 
+            original_total = self.order.total
             if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
                 if check_quotas:
                     self._check_quotas()
@@ -3042,9 +3032,10 @@ class OrderChangeManager:
                 self._perform_operations()
             except TaxRule.SaleNotAllowed:
                 raise OrderError(self.error_messages['tax_rule_country_blocked'])
-            self._recalculate_rounding_total_and_payment_fee()
-            self._check_paid_price_change()
-            self._check_paid_to_free()
+            new_total = self._recalculate_rounding_total_and_payment_fee()
+            totaldiff = new_total - original_total
+            self._check_paid_price_change(totaldiff)
+            self._check_paid_to_free(totaldiff)
             if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
                 self._reissue_invoice()
             self._clear_tickets_cache()
