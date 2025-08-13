@@ -196,3 +196,26 @@ def test_round_up():
     assert sum(l.price for l in lines) == Decimal("499.90")
     assert sum(l.tax_value for l in lines) == Decimal("79.82")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("420.08")
+
+
+@pytest.mark.django_db
+def test_round_currency_without_decimals():
+    lines = [OrderPosition(
+        price=Decimal("9998.00"),
+        tax_value=Decimal("1596.00"),
+        tax_rate=Decimal("19.00"),
+        tax_code="S",
+    ) for _ in range(5)]
+    assert sum(l.price for l in lines) == Decimal("49990.00")
+    assert sum(l.tax_value for l in lines) == Decimal("7980.00")
+    assert sum(l.price - l.tax_value for l in lines) == Decimal("42010.00")
+
+    apply_rounding("sum_by_net", "JPY", lines)
+    assert sum(l.price for l in lines) == Decimal("49992.00")
+    assert sum(l.tax_value for l in lines) == Decimal("7982.00")
+    assert sum(l.price - l.tax_value for l in lines) == Decimal("42010.00")
+
+    apply_rounding("sum_by_net_keep_gross", "JPY", lines)
+    assert sum(l.price for l in lines) == Decimal("49990.00")
+    assert sum(l.tax_value for l in lines) == Decimal("7982.00")
+    assert sum(l.price - l.tax_value for l in lines) == Decimal("42008.00")
