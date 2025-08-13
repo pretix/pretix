@@ -863,7 +863,7 @@ class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
                 "Recommended for e-invoicing when you primarily sell to consumers. "
                 "The gross or net price of some products may be changed automatically to ensure correct "
                 "rounding of the order total. The system attempts to keep gross prices as configured whenever "
-                "possible."
+                "possible. Gross prices may still change if they are impossible to derive from a rounded net price."
             ),
         }
         self.fields["tax_rounding"].choices = (
