@@ -1088,7 +1088,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
-        ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true') == 'true'
+        ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         return ctx
 
     def get_queryset(self):

@@ -83,7 +83,7 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
 
     def create(self, validated_data):
         ocm = self.context['ocm']
-        check_quotas = self.context['check_quotas'] if 'check_quotas' in self.context else True
+        check_quotas = self.context.get('check_quotas', True)
 
         try:
             ocm.add_position(
@@ -311,7 +311,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         ocm = self.context['ocm']
-        check_quotas = self.context['check_quotas'] if 'check_quotas' in self.context else True
+        check_quotas = self.context.get('check_quotas', True)
         current_seat = {'seat_guid': instance.seat.seat_guid} if instance.seat else None
         item = validated_data.get('item', instance.item)
         variation = validated_data.get('variation', instance.variation)
