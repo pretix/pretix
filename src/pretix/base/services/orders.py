@@ -974,8 +974,8 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
         raise OrderError(err)
 
 
-def _get_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
-              meta_info: dict, event: Event, require_approval=False):
+def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
+                             meta_info: dict, event: Event, require_approval=False):
     fees = []
     # Pre-rounding, pre-fee total is used for fee calculation
     total = sum([c.price - c.price_includes_rounding_correction for c in positions])
@@ -1056,7 +1056,7 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
 
     # Final calculation of fees, also performs final rounding
     try:
-        fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+        fees = _apply_rounding_and_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
     except TaxRule.SaleNotAllowed:
         raise OrderError(error_messages['country_blocked'])
 
