@@ -86,7 +86,7 @@ def get_event_navigation(request: HttpRequest):
                 'active': url.url_name == 'event.settings.mail',
             },
             {
-                'label': _('Tax rules'),
+                'label': _('Taxes'),
                 'url': reverse('control:event.settings.tax', kwargs={
                     'event': request.event.slug,
                     'organizer': request.event.organizer.slug,
