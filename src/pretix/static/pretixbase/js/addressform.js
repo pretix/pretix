@@ -46,13 +46,11 @@ $(function () {
                 var selected_state = dependents.state.prop("data-selected-value");
                 if (selected_state) dependents.state.prop("data-selected-value", "");
                 dependents.state.find("option:not([value=''])").remove();
-                if (data.data.length > 0) {
-                    $.each(data.data, function (k, s) {
-                        var o = $("<option>").attr("value", s.code).text(s.name);
-                        if (selected_state === s.code) o.prop("selected", true);
-                        dependents.state.append(o);
-                    });
-                }
+                $.each(data.data, function (k, s) {
+                    var o = $("<option>").attr("value", s.code).text(s.name);
+                    if (selected_state === s.code) o.prop("selected", true);
+                    dependents.state.append(o);
+                });
 
                 if (dependents.transmission_type) {
                     var selected_transmission_type = dependents.transmission_type.prop("data-selected-value");
