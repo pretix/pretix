@@ -68,7 +68,7 @@ from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, DEFAULTS, PERSON_NAME_SCHEMES,
-    PERSON_NAME_TITLE_GROUPS, validate_event_settings,
+    PERSON_NAME_TITLE_GROUPS, ROUNDING_MODES, validate_event_settings,
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
@@ -541,7 +541,6 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'show_date_to',
         'show_times',
         'show_items_outside_presale_period',
-        'display_net_prices',
         'hide_prices_from_attendees',
         'presale_start_show_date',
         'locales',
@@ -799,6 +798,76 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         return value
 
 
+class DisplayNetPricesBooleanSelect(forms.RadioSelect):
+    def __init__(self, attrs=None):
+        choices = (
+            ("false", format_html(
+                '{} <br><span class="text-muted">{}</span>',
+                _("Prices including tax"),
+                _("Recommended if you sell tickets at least partly to consumers.")
+            )),
+            ("true", format_html(
+                '{} <br><span class="text-muted">{}</span>',
+                _("Prices excluding tax"),
+                _("Recommended only if you sell tickets primarily to business customers.")
+            )),
+        )
+        super().__init__(attrs, choices)
+
+    def format_value(self, value):
+        try:
+            return {
+                True: "true",
+                False: "false",
+                "true": "true",
+                "false": "false",
+            }[value]
+        except KeyError:
+            return "unknown"
+
+    def value_from_datadict(self, data, files, name):
+        value = data.get(name)
+        return {
+            True: True,
+            "True": True,
+            "False": False,
+            False: False,
+            "true": True,
+            "false": False,
+        }.get(value)
+
+
+class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
+    auto_fields = [
+        'display_net_prices',
+        'tax_rounding',
+    ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["display_net_prices"].label = _("Prices shown to customer")
+        self.fields["display_net_prices"].widget = DisplayNetPricesBooleanSelect()
+        help_text = {
+            "line": _("Recommended when e-invoicing is not required. Each product will be sold with the advertised "
+                      "net and gross price. However, in orders of more than one product, the total tax amount "
+                      "can differ from when it would be computed from the order total."),
+            "sum_by_net": _("Recommended for e-invoicing in Europe when you primarily sell to business customers and "
+                            "show prices to customers excluding tax. "
+                            "For orders of more than one product, the gross price of some products may be changed "
+                            "automatically to ensure correct rounding of the order total, while the net prices "
+                            "stay as configured. This may cause the actual payment amount to differ from buying the "
+                            "products individually."),
+            "sum_by_gross": _("Recommended for e-invoicing in Europe when you primarily sell to consumers. "
+                              "For an order of more than one product, the net price of some products may be changed "
+                              "automatically to ensure correct rounding of the order total, while the gross prices "
+                              "stay as configured."),
+        }
+        self.fields["tax_rounding"].choices = (
+            (k, format_html('{}<br><span class="text-muted">{}</span>', v, help_text.get(k, "")))
+            for k, v in ROUNDING_MODES
+        )
+
+
 class ProviderForm(SettingsForm):
     """
     This is a SettingsForm, but if fields are set to required=True, validation
@@ -882,7 +951,6 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_logo_image',
         'invoice_renderer_highlight_order_code',
         'invoice_renderer_font',
-        'tax_rounding',
     ]
 
     invoice_generate_sales_channels = forms.MultipleChoiceField(
@@ -1528,7 +1596,10 @@ class TaxRuleLineForm(I18nForm):
     rate = forms.DecimalField(
         label=_('Deviating tax rate'),
         max_digits=10, decimal_places=2,
-        required=False
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'placeholder': _('Deviating tax rate'),
+        })
     )
     invoice_text = I18nFormField(
         label=_('Text on invoice'),

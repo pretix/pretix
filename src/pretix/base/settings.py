@@ -78,9 +78,9 @@ from pretix.control.forms import (
 from pretix.helpers.countries import CachedCountries
 
 ROUNDING_MODES = (
-    ('line', _('Rounding every line individually')),
-    ('sum_by_net', _('Rounding by order total, keeping net prices stable')),
-    ('sum_by_gross', _('Rounding by order total, keeping gross prices stable')),
+    ('line', _('Round taxes for every line individually')),
+    ('sum_by_net', _('Round taxes by order total, keeping net prices stable')),
+    ('sum_by_gross', _('Round taxes by order total, keeping gross prices stable')),
 )
 
 
@@ -330,7 +330,7 @@ DEFAULTS = {
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
-            label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
+            label=_("Show net prices instead of gross prices in the product list"),
             help_text=_("Independent of your choice, the cart will show gross prices as this is the price that needs to be "
                         "paid."),
 
@@ -480,6 +480,11 @@ DEFAULTS = {
             label=_("Rounding of taxes"),
             widget=forms.RadioSelect,
             choices=ROUNDING_MODES,
+            help_text=_(
+                "Note that if you transfer your sales data from pretix to an external system for tax reporting, you "
+                "need to make sure to account for possible rounding differences if your external system rounds "
+                "differently than pretix."
+            )
         ),
         'serializer_kwargs': dict(
             choices=ROUNDING_MODES,
