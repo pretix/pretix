@@ -48,6 +48,8 @@ The provider class
 
    .. autoattribute:: priority
 
+   .. autoattribute:: testmode_supported
+
    .. automethod:: is_ready
 
       This is an abstract method, you **must** override this!

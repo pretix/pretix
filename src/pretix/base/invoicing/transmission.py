@@ -127,6 +127,13 @@ class TransmissionProvider:
         """
         raise NotImplementedError
 
+    @property
+    def testmode_supported(self) -> bool:
+        """
+        Whether testmode invoices may be passed to this provider.
+        """
+        return True
+
     def is_ready(self, event) -> bool:
         """
         Return whether this provider has all required configuration to be used in this event.
@@ -153,6 +160,8 @@ class TransmissionProvider:
         - Create a log entry of action type ``pretix.event.order.invoice.sent`` or
           ``pretix.event.order.invoice.sending_failed`` with the fields ``full_invoice_no``, ``transmission_provider``,
           ``transmission_type`` and a provider-specific ``data`` field.
+
+        Make sure to either handle ``invoice.order.testmode`` properly or set ``testmode_supported`` to ``False``.
         """
         raise NotImplementedError
 
