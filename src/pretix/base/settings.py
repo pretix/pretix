@@ -2705,7 +2705,7 @@ Your {event} team"""))  # noqa: W291
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
-you receive this message because an order for {event} was placed by {order_email} and we have been asked to forward the invoice to you.
+please find attached a new invoice for order {code} for {event}. This order has been placed by {order_email}.
 
 Best regards,  
 
