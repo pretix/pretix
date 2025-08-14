@@ -34,12 +34,13 @@ from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
 from freezegun import freeze_time
+from i18nfield.strings import LazyI18nString
 from tests.testdummy.signals import FoobazSalesChannel
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, GiftCard, InvoiceAddress, Item, Order, OrderPosition,
-    Organizer, SeatingPlan,
+    CartPosition, Event, GiftCard, Invoice, InvoiceAddress, Item, Order,
+    OrderPosition, Organizer, SeatingPlan,
 )
 from pretix.base.models.items import SubEventItem
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
@@ -48,7 +49,9 @@ from pretix.base.payment import (
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.secrets import assign_ticket_secret
-from pretix.base.services.invoices import generate_invoice
+from pretix.base.services.invoices import (
+    generate_cancellation, generate_invoice,
+)
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, approve_order, cancel_order,
     deny_order, expire_orders, reactivate_order, send_download_reminders,
@@ -574,6 +577,83 @@ def test_approve_send_to_attendees(event):
 
 
 @pytest.mark.django_db
+def test_approve_mail_invoice_attached(event):
+    djmail.outbox = []
+    event.settings.invoice_address_asked = True
+    event.settings.invoice_address_required = True
+    event.settings.invoice_generate = "True"
+    event.settings.invoice_email_attachment = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, require_approval=True, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"},
+        positionid=1
+    )
+    InvoiceAddress.objects.create(
+        order=o1,
+        is_business=True,
+        country=Country('AT'),
+        transmission_type="email",
+        transmission_info={}
+    )
+    o1.create_transactions()
+    assert o1.transactions.count() == 0
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert len(djmail.outbox) == 1
+    assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+
+
+@pytest.mark.django_db(transaction=True)
+def test_approve_mail_invoice_sent_somewhere_else(event):
+    djmail.outbox = []
+    event.settings.invoice_address_asked = True
+    event.settings.invoice_address_required = True
+    event.settings.invoice_generate = "True"
+    event.settings.invoice_email_attachment = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, require_approval=True, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"},
+        positionid=1
+    )
+    InvoiceAddress.objects.create(
+        order=o1,
+        is_business=True,
+        country=Country('AT'),
+        transmission_type="email",
+        transmission_info={
+            "transmission_email_address": "invoice@example.org",
+        }
+    )
+    o1.create_transactions()
+    assert o1.transactions.count() == 0
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert len(djmail.outbox) == 2
+    assert ["invoice@example.org"] == djmail.outbox[0].to
+    assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+    assert ["dummy@dummy.test"] == djmail.outbox[1].to
+    assert not any(["Invoice_" in a[0] for a in djmail.outbox[1].attachments])
+
+
+@pytest.mark.django_db
 def test_approve_free(event):
     djmail.outbox = []
     event.settings.invoice_generate = True
@@ -668,6 +748,67 @@ def test_deny(event):
     assert o1.invoices.count() == 2
     assert len(djmail.outbox) == 1
     assert 'denied' in djmail.outbox[0].subject
+
+
+@pytest.mark.django_db(transaction=True)
+def test_mark_invoices_as_sent(event):
+    djmail.outbox = []
+    event.settings.invoice_address_asked = True
+    event.settings.invoice_address_required = True
+    event.settings.invoice_generate = "True"
+    event.settings.invoice_email_attachment = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"},
+        positionid=1
+    )
+    ia = InvoiceAddress.objects.create(
+        order=o1,
+        is_business=True,
+        country=Country('AT'),
+        transmission_type="email",
+        transmission_info={
+            "transmission_email_address": "invoice@example.org",
+        }
+    )
+    o1.create_transactions()
+    i = generate_invoice(o1)
+    assert i.transmission_type == "email"
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
+    assert not i.transmission_provider
+
+    # Not marked as sent because it is not the right address
+    o1.send_mail(
+        subject=LazyI18nString({"en": "Hey"}),
+        template=LazyI18nString({"en": "Just wanted to send this invoice"}),
+        context={},
+        invoices=[i]
+    )
+    i.refresh_from_db()
+    assert i.transmission_type == "email"
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
+
+    # If no other address is there, order address will be accepted
+    ia.transmission_info = {}
+    ia.save()
+    o1.send_mail(
+        subject=LazyI18nString({"en": "Hey"}),
+        template=LazyI18nString({"en": "Just wanted to send this invoice"}),
+        context={},
+        invoices=[i]
+    )
+    i.refresh_from_db()
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_COMPLETED
+    assert i.transmission_provider == "email_pdf"
 
 
 class PaymentReminderTests(TestCase):
@@ -1033,6 +1174,12 @@ class DownloadReminderTests(TestCase):
         assert len(djmail.outbox) == 0
 
 
+@pytest.fixture
+def class_monkeypatch(request, monkeypatch):
+    request.cls.monkeypatch = monkeypatch
+
+
+@pytest.mark.usefixtures("class_monkeypatch")
 class OrderCancelTests(TestCase):
     def setUp(self):
         super().setUp()
@@ -1060,6 +1207,7 @@ class OrderCancelTests(TestCase):
             self.order.create_transactions()
             generate_invoice(self.order)
             djmail.outbox = []
+        self.monkeypatch.setattr("django.db.transaction.on_commit", lambda t: t())
 
     @classscope(attr='o')
     def test_cancel_canceled(self):
@@ -1110,6 +1258,56 @@ class OrderCancelTests(TestCase):
         assert self.order.invoices.count() == 2
         assert self.order.transactions.count() == 4
         assert self.order.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('0.00')
+
+    @classscope(attr='o')
+    def test_cancel_mail_invoice_attached(self):
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+        InvoiceAddress.objects.update_or_create(
+            order=self.order,
+            defaults=dict(
+                is_business=True,
+                country=Country('AT'),
+                transmission_type="email",
+                transmission_info={}
+            )
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        djmail.outbox = []
+        cancel_order(self.order.pk, send_mail=True)
+        assert len(djmail.outbox) == 1
+        assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+
+    @classscope(attr='o')
+    def test_cancel_mail_invoice_sent_somewhere_else(self):
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+        InvoiceAddress.objects.update_or_create(
+            order=self.order,
+            defaults=dict(
+                is_business=True,
+                country=Country('AT'),
+                transmission_type="email",
+                transmission_info={
+                    "transmission_email_address": "invoice@example.org",
+                }
+            )
+        )
+        # Recreate invoice because otherwise it will be sent where the original was sent
+        generate_cancellation(self.order.invoices.get())
+        generate_invoice(self.order)
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        djmail.outbox = []
+        cancel_order(self.order.pk, send_mail=True)
+        print([s.subject for s in djmail.outbox])
+        print([s.to for s in djmail.outbox])
+        assert len(djmail.outbox) == 2
+        assert ["invoice@example.org"] == djmail.outbox[0].to
+        assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+        assert ["dummy@dummy.test"] == djmail.outbox[1].to
+        assert not any(["Invoice_" in a[0] for a in djmail.outbox[1].attachments])
 
     @classscope(attr='o')
     def test_cancel_paid_with_too_high_fee(self):
@@ -1239,6 +1437,7 @@ class OrderCancelTests(TestCase):
         assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
 
 
+@pytest.mark.usefixtures("class_monkeypatch")
 class OrderChangeManagerTests(TestCase):
     def setUp(self):
         super().setUp()
@@ -1247,6 +1446,7 @@ class OrderChangeManagerTests(TestCase):
             self.event = Event.objects.create(organizer=self.o, name='Dummy', slug='dummy', date_from=now(),
                                               plugins='pretix.plugins.banktransfer')
             self.event.settings.invoice_generate = "True"
+            self.event.settings.invoice_email_attachment = True
             self.order = Order.objects.create(
                 code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING, locale='en',
@@ -1301,6 +1501,7 @@ class OrderChangeManagerTests(TestCase):
             self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.stalls, seat_guid="A1")
             self.seat_a2 = self.event.seats.create(seat_number="A2", product=self.stalls, seat_guid="A2")
             self.seat_a3 = self.event.seats.create(seat_number="A3", product=self.stalls, seat_guid="A3")
+        self.monkeypatch.setattr("django.db.transaction.on_commit", lambda t: t())
 
     def _enable_reverse_charge(self):
         self.tr7.eu_reverse_charge = True
@@ -3524,6 +3725,79 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.valid_from is None
         assert self.op1.valid_until is None
+
+    @classscope(attr='o')
+    def test_new_invoice_attached(self):
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+        djmail.outbox = []
+        self.ocm.add_position(self.ticket, None, Decimal('0.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+        assert len(djmail.outbox) == 1
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[0].attachments]) == 2
+
+    @classscope(attr='o')
+    def test_new_invoice_send_somewhere_else(self):
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+
+        InvoiceAddress.objects.update_or_create(
+            order=self.order,
+            defaults=dict(
+                is_business=True,
+                country=Country('AT'),
+                transmission_type="email",
+                transmission_info={
+                    "transmission_email_address": "invoice@example.org",
+                }
+            )
+        )
+
+        djmail.outbox = []
+        self.ocm.add_position(self.ticket, None, Decimal('0.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+
+        # Cancellation is still sent to old method!
+        assert len(djmail.outbox) == 2
+        assert ["dummy@dummy.test"] == djmail.outbox[0].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[0].attachments]) == 1
+        assert ["invoice@example.org"] == djmail.outbox[1].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[1].attachments]) == 1
+
+    @classscope(attr='o')
+    def test_new_invoice_split_send_somewhere_else(self):
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+
+        InvoiceAddress.objects.update_or_create(
+            order=self.order,
+            defaults=dict(
+                is_business=True,
+                country=Country('AT'),
+                transmission_type="email",
+                transmission_info={
+                    "transmission_email_address": "invoice@example.org",
+                }
+            )
+        )
+
+        djmail.outbox = []
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+
+        # Cancellation is still sent to old method!
+        assert len(djmail.outbox) == 4
+        assert ["dummy@dummy.test"] == djmail.outbox[0].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[0].attachments]) == 1
+        assert ["dummy@dummy.test"] == djmail.outbox[1].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[1].attachments]) == 0
+        assert ["invoice@example.org"] == djmail.outbox[2].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[2].attachments]) == 1
+        assert ["invoice@example.org"] == djmail.outbox[3].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[3].attachments]) == 1
 
 
 @pytest.mark.django_db

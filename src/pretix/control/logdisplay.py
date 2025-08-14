@@ -524,6 +524,11 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
     'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
     'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
+    'pretix.event.order.invoice.sent': _('The invoice {full_invoice_no} has been sent.'),
+    'pretix.event.order.invoice.sending_failed': _('The transmission of invoice {full_invoice_no} has failed.'),
+    'pretix.event.order.invoice.testmode_ignored': _('Invoice {full_invoice_no} has not been transmitted because '
+                                                     'no transmission provider supports test mode invoices.'),
+    'pretix.event.order.invoice.retransmitted': _('The invoice {full_invoice_no} has been scheduled for retransmission.'),
     'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
     'pretix.event.order.custom_followup_at': _('The order\'s follow-up date has been updated.'),
     'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
@@ -536,6 +541,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.email.error': _('Sending of an email has failed.'),
     'pretix.event.order.email.attachments.skipped': _('The email has been sent without attached tickets since they '
                                                       'would have been too large to be likely to arrive.'),
+    'pretix.event.order.email.invoice': _('An invoice email has been sent.'),
     'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),
     'pretix.event.order.position.email.custom_sent': _('A custom email has been sent to an attendee.'),
     'pretix.event.order.email.download_reminder_sent': _('An email has been sent with a reminder that the ticket '

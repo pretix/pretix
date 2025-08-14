@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/settings_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load getitem %}
 {% block inside %}
     <h1>{% trans "Invoice settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -58,6 +59,99 @@
                 {% bootstrap_field form.invoice_renderer_font layout="control" %}
                 {% bootstrap_field form.invoice_renderer_highlight_order_code layout="control" %}
                 {% bootstrap_field form.invoice_eu_currencies layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Invoice transmission" %}</legend>
+                <p>
+                    {% blocktrans trimmed %}
+                        pretix can transmit invoices using different transmission methods. Different transmission methods
+                        might be required depending on country and industry. By default, sending invoices as PDF files
+                        via email is always available. Other types of transmission can be added by plugins.
+                    {% endblocktrans %}
+                </p>
+                <p>
+                    {% blocktrans trimmed %}
+                        Whether a transmission method listed here is actually selectable for customers may depend on
+                        the country of the customer or whether the customer is entering a business address.
+                    {% endblocktrans %}
+                </p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>{% trans "Transmission method" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        {% for t in transmission_types %}
+                            {% if transmission_providers|getitem:t.identifier %}
+                                <tbody>
+                                <tr>
+                                    <th scope="colgroup" class="text-muted">
+                                        {{ t.verbose_name }}
+                                    </th>
+                                    <th>
+                                        {% if ready|getitem:t.identifier %}
+                                            <span class="text-success">
+                                                <span class="fa fa-check fa-fw"></span>
+                                                {% trans "Available" %}
+                                                {% if t.exclusive %}
+                                                    <span data-toggle="tooltip" title="{% trans "When this type is available for an invoice address, no other type can be selected." %}">
+                                                        {% trans "(exclusive)" %}
+                                                    </span>
+                                                {% endif %}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">
+                                                <span class="fa fa-ban fa-fw"></span>
+                                                {% trans "Unavailable" %}
+                                            </span>
+                                        {% endif %}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                {% for p, is_ready, settings_url in transmission_providers|getitem:t.identifier %}
+                                    <tr>
+                                        <td>
+                                            {{ p.verbose_name }}
+                                        </td>
+                                        <td>
+                                            {% if is_ready %}
+                                                <span class="text-success">
+                                                    <span class="fa fa-check fa-fw"></span>
+                                                    {% trans "Available" %}
+                                                </span>
+                                            {% else %}
+                                                <span class="text-muted">
+                                                    <span class="fa fa-ban fa-fw"></span>
+                                                    {% trans "Not configured" %}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right">
+                                            {% if settings_url %}
+                                                <a href="{{ settings_url }}" class="btn btn-default">
+                                                    <span class="fa fa-cog" aria-hidden="true"></span>
+                                                    {% trans "Settings" %}
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+                <p>
+                    {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
+                    <a href="{{ plugin_settings_url }}" class="btn btn-default">
+                        <i class="fa fa-plus"></i> {% trans "Enable additional invoice transmission plugins" %}
+                    </a>
+                </p>
             </fieldset>
         </div>
         <div class="form-group submit-group">

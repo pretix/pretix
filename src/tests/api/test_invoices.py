@@ -28,7 +28,7 @@ import pytest
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models import Invoice, InvoiceAddress, Order, OrderPosition
 from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
@@ -201,6 +201,7 @@ TEST_INVOICE_RES = {
     "invoice_from_tax_id": "",
     "invoice_from_vat_id": "",
     "invoice_to": "Sample company\nNew Zealand\nVAT-ID: DE123",
+    "invoice_to_is_business": False,
     "invoice_to_company": "Sample company",
     "invoice_to_name": "",
     "invoice_to_street": "",
@@ -210,6 +211,7 @@ TEST_INVOICE_RES = {
     "invoice_to_country": "NZ",
     "invoice_to_vat_id": "DE123",
     "invoice_to_beneficiary": "",
+    "invoice_to_transmission_info": {},
     "custom_field": None,
     "date": "2017-12-10",
     "refers": None,
@@ -260,7 +262,11 @@ TEST_INVOICE_RES = {
             "tax_name": "",
             "tax_rate": "19.00"
         }
-    ]
+    ],
+    "transmission_type": "email",
+    "transmission_provider": None,
+    "transmission_status": "pending",
+    "transmission_date": None
 }
 
 
@@ -364,6 +370,26 @@ def test_invoice_detail(token_client, organizer, event, item, invoice):
                                                                                   invoice.number))
     assert resp.status_code == 200
     assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_invoice_retransmit(token_client, organizer, event, invoice):
+    invoice.transmission_status = Invoice.TRANSMISSION_STATUS_INFLIGHT
+    invoice.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/retransmit/'.format(
+        organizer.slug, event.slug, invoice.number
+    ))
+    assert resp.status_code == 409
+
+    invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+    invoice.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/retransmit/'.format(
+        organizer.slug, event.slug, invoice.number
+    ))
+    assert resp.status_code == 204
+
+    invoice.refresh_from_db()
+    assert invoice.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
 
 
 @pytest.mark.django_db
