@@ -42,6 +42,9 @@ $(function () {
                 }
                 url.searchParams.append($(this).attr("name").split("-").pop(), $(this).val());
             })
+            if (dependents.transmission_type) {
+                url.searchParams.append("transmission_type_required", !dependents.transmission_type.find("option[value='-']").length);
+            }
             xhr = $.getJSON(url, function (data) {
                 var selected_state = dependents.state.prop("data-selected-value");
                 if (selected_state) dependents.state.prop("data-selected-value", "");
@@ -55,14 +58,14 @@ $(function () {
                 if (dependents.transmission_type) {
                     var selected_transmission_type = dependents.transmission_type.prop("data-selected-value");
                     if (selected_transmission_type) dependents.transmission_type.prop("data-selected-value", "");
-                    dependents.transmission_type.find("option:not([value=''])").remove();
-                        $.each(data.transmission_types, function (k, s) {
-                            var o = $("<option>").attr("value", s.code).text(s.name);
-                            if (selected_transmission_type === s.code) {
-                                o.prop("selected", true);
-                            }
-                            dependents.transmission_type.append(o);
-                        });
+                    dependents.transmission_type.find("option:not([value='']):not([value='-'])").remove();
+                    $.each(data.transmission_types, function (k, s) {
+                        var o = $("<option>").attr("value", s.code).text(s.name);
+                        if (selected_transmission_type === s.code) {
+                            o.prop("selected", true);
+                        }
+                        dependents.transmission_type.append(o);
+                    });
                 }
 
                 for (var k in dependents) {
@@ -81,7 +84,10 @@ $(function () {
 						dependent.closest(".form-group").find(".control-label").text(options.label);
 					}
 
-					const required = 'required' in options && options.required && isAnyRequired && visible;
+					const required = 'required' in options && visible && (
+						(options.required === 'if_any' && isAnyRequired) ||
+						(options.required === true)
+					);
 					dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
 					dependent.prop("required", required);
 

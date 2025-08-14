@@ -1130,7 +1130,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             'invoice' in self.request.GET or
             # Checking for self.invoice_address.pk is not enough as when an invoice_address has been added and later edited to be empty, it’s not None.
             # So check initial values as invoice_form can receive pre-filled values from invoice_address, widget-data or overwrites from plug-ins.
-            is_form_filled(self.invoice_form, ignore_keys=('is_business', 'country'))
+            is_form_filled(self.invoice_form, ignore_keys=('is_business', 'country', 'transmission_type'))
         )
 
         if self.cart_customer:

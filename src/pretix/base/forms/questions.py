@@ -1170,8 +1170,20 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 str(_('If you are registered in Switzerland, you can enter your UID instead.')),
             ])
 
+        transmission_type_choices = [
+            (t.identifier, t.public_name) for t in get_transmission_types()
+        ]
+        if not self.address_required or self.all_optional:
+            transmission_type_choices.insert(0, ("-", _("No invoice requested")))
+        self.fields['transmission_type'] = forms.ChoiceField(
+            label=_('Invoice transmission method'),
+            choices=transmission_type_choices
+        )
+
         self.fields['country'].choices = CachedCountries()
         self.fields['country'].widget.attrs['data-trigger-address-info'] = 'on'
+        self.fields['is_business'].widget.attrs['data-trigger-address-info'] = 'on'
+        self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
 
         c = [('', '---')]
         fprefix = self.prefix + '-' if self.prefix else ''
@@ -1258,14 +1270,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 else:
                     v.widget.attrs['autocomplete'] = 'section-invoice billing ' + autocomplete
 
-        self.fields['is_business'].widget.attrs['data-trigger-address-info'] = 'on'
-        self.fields['transmission_type'] = forms.ChoiceField(
-            label=_('Invoice transmission method'),
-            choices=[
-                (t.identifier, t.public_name) for t in get_transmission_types()
-            ]
-        )
-        self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
+        # Add transmission type specific fields
         for transmission_type in get_transmission_types():
             for k, f in transmission_type.invoice_address_form_fields.items():
                 if (
@@ -1330,11 +1335,23 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         self.instance.name_parts = data.get('name_parts')
 
-        if all(
-                not v for k, v in data.items() if k not in ('is_business', 'country', 'name_parts')
-        ) and name_parts_is_empty(data.get('name_parts', {})):
+        form_is_empty = all(
+            not v for k, v in data.items()
+            if k not in ('is_business', 'country', 'name_parts', 'transmission_type') and not k.startswith("transmission_")
+        ) and name_parts_is_empty(data.get('name_parts', {}))
+
+        if form_is_empty:
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
+            if data['transmission_type'] == "-":
+                data['transmission_type'] = 'email'  # our actual default for now, we can revisit this later
+
+        else:
+            if data['transmission_type'] == "-":
+                raise ValidationError(
+                    {"transmission_type": _("If you enter an invoice address, you also need to select an invoice "
+                                            "transmission method.")}
+                )
 
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass
