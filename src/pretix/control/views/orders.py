@@ -66,7 +66,7 @@ from django.utils.html import conditional_escape, escape
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext, gettext_lazy as _, ngettext
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic import (
     DetailView, FormView, ListView, TemplateView, View,
 )
@@ -550,30 +550,6 @@ class OrderDetail(OrderView):
         ctx['download_buttons'] = self.download_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = self.order.pending_sum
-
-        unsent_invoices = [
-            ii.pk for ii in ctx['invoices']
-            if ii.transmission_type == "email" and ii.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED
-        ]
-        if unsent_invoices:
-            with language(self.order.locale):
-                ctx['invoices_send_link'] = reverse('control:event.order.sendmail', kwargs={
-                    'event': self.request.event.slug,
-                    'organizer': self.request.event.organizer.slug,
-                    'code': self.order.code
-                }) + '?' + urlencode({
-                    'subject': ngettext('Your invoice', 'Your invoices', len(unsent_invoices)),
-                    'message': ngettext(
-                        'Hello,\n\nplease find your invoice attached to this email.\n\n'
-                        'Your {event} team',
-                        'Hello,\n\nplease find your invoices attached to this email.\n\n'
-                        'Your {event} team',
-                        len(unsent_invoices)
-                    ).format(
-                        event="{event}",
-                    ),
-                    'attach_invoices': unsent_invoices
-                }, doseq=True)
 
         return ctx
 
