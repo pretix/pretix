@@ -30,12 +30,12 @@ from pretix.base.models import Event, Organizer
 def test_no_invoice_address(client):
     response = client.get('/js_helpers/address_form/?country=DE')
     assert response.json() == {
-        'city': {'required': True},
+        'city': {'required': 'if_any'},
         'data': [],
         'state': {'label': 'State', 'required': False, 'visible': False},
-        'street': {'required': True},
+        'street': {'required': 'if_any'},
         'vat_id': {'required': False, 'visible': True},
-        'zipcode': {'required': True}
+        'zipcode': {'required': 'if_any'}
     }
 
     response = client.get('/js_helpers/address_form/?country=CR')
@@ -43,19 +43,19 @@ def test_no_invoice_address(client):
         'city': {'required': False},
         'data': [],
         'state': {'label': 'State', 'required': False, 'visible': False},
-        'street': {'required': True},
+        'street': {'required': 'if_any'},
         'vat_id': {'required': False, 'visible': False},
         'zipcode': {'required': False}
     }
 
     response = client.get('/js_helpers/address_form/?country=US')
     d = response.json()
-    assert d['state'] == {'label': 'State', 'required': True, 'visible': True}
+    assert d['state'] == {'label': 'State', 'required': 'if_any', 'visible': True}
     assert d['data'][0] == {'code': 'AL', 'name': 'Alabama'}
 
     response = client.get('/js_helpers/address_form/?country=IT')
     d = response.json()
-    assert d['state'] == {'label': 'Province', 'required': True, 'visible': True}
+    assert d['state'] == {'label': 'Province', 'required': 'if_any', 'visible': True}
     assert d['data'][0] == {'code': 'AG', 'name': 'Agrigento'}
 
 
@@ -81,15 +81,15 @@ def test_invalid_event(client):
 @pytest.mark.django_db
 def test_provider_only_email_available(client, event):
     response = client.get(
-        '/js_helpers/address_form/?country=DE&invoice=true&organizer=org&event=ev'
+        '/js_helpers/address_form/?country=DE&invoice=true&organizer=org&event=ev&transmission_type_required=true'
     )
     assert response.status_code == 200
     d = response.json()
     assert d == {
-        'city': {'required': True},
+        'city': {'required': 'if_any'},
         'data': [],
         'state': {'label': 'State', 'required': False, 'visible': False},
-        'street': {'required': True},
+        'street': {'required': 'if_any'},
         'transmission_email_address': {'required': False, 'visible': False},
         'transmission_email_other': {'required': False, 'visible': False},
         'transmission_it_sdi_codice_fiscale': {'required': False, 'visible': False},
@@ -99,14 +99,39 @@ def test_provider_only_email_available(client, event):
         'transmission_type': {'visible': False},
         'transmission_types': [{'code': 'email', 'name': 'Email'}],
         'vat_id': {'required': False, 'visible': True},
-        'zipcode': {'required': True}
+        'zipcode': {'required': 'if_any'}
+    }
+
+
+@pytest.mark.django_db
+def test_provider_italy_sdi_not_enforced_when_optional(client, event):
+    response = client.get(
+        '/js_helpers/address_form/?country=IT&invoice=true&organizer=org&event=ev&transmission_type_required=false'
+    )
+    assert response.status_code == 200
+    d = response.json()
+    del d['data']
+    assert d == {
+        'city': {'required': 'if_any'},
+        'state': {'label': 'Province', 'required': 'if_any', 'visible': True},
+        'street': {'required': 'if_any'},
+        'transmission_email_address': {'required': False, 'visible': False},
+        'transmission_email_other': {'required': False, 'visible': False},
+        'transmission_it_sdi_codice_fiscale': {'required': False, 'visible': False},
+        'transmission_it_sdi_pec': {'required': False, 'visible': False},
+        'transmission_it_sdi_recipient_code': {'required': False, 'visible': False},
+        'transmission_peppol_participant_id': {'required': False, 'visible': False},
+        'transmission_type': {'visible': True},
+        'transmission_types': [{'code': 'it_sdi', 'name': 'Exchange System (SdI)'}],
+        'vat_id': {'required': False, 'visible': True},
+        'zipcode': {'required': 'if_any'}
     }
 
 
 @pytest.mark.django_db
 def test_provider_italy_sdi_enforced_individual(client, event):
     response = client.get(
-        '/js_helpers/address_form/?country=IT&invoice=true&organizer=org&event=ev'
+        '/js_helpers/address_form/?country=IT&invoice=true&organizer=org&event=ev&transmission_type_required=true'
     )
     assert response.status_code == 200
     d = response.json()
@@ -131,7 +156,7 @@ def test_provider_italy_sdi_enforced_individual(client, event):
 @pytest.mark.django_db
 def test_provider_italy_sdi_enforced_business(client, event):
     response = client.get(
-        '/js_helpers/address_form/?country=IT&invoice=true&organizer=org&event=ev'
+        '/js_helpers/address_form/?country=IT&invoice=true&organizer=org&event=ev&transmission_type_required=true'
         '&is_business=business'
     )
     assert response.status_code == 200
@@ -158,15 +183,15 @@ def test_provider_italy_sdi_enforced_business(client, event):
 def test_email_peppol_choice(client, event):
     response = client.get(
         '/js_helpers/address_form/?country=DE&invoice=true&organizer=org&event=ev'
-        '&is_business=business'
+        '&is_business=business&transmission_type_required=true'
     )
     assert response.status_code == 200
     d = response.json()
     assert d == {
-        'city': {'required': True},
+        'city': {'required': 'if_any'},
         'data': [],
         'state': {'label': 'State', 'required': False, 'visible': False},
-        'street': {'required': True},
+        'street': {'required': 'if_any'},
         'transmission_email_address': {'required': False, 'visible': True},
         'transmission_email_other': {'required': False, 'visible': True},
         'transmission_it_sdi_codice_fiscale': {'required': False, 'visible': False},
@@ -179,7 +204,7 @@ def test_email_peppol_choice(client, event):
             {'code': 'peppol', 'name': 'PEPPOL'},
         ],
         'vat_id': {'required': False, 'visible': True},
-        'zipcode': {'required': True}
+        'zipcode': {'required': 'if_any'}
     }
 
     response = client.get(

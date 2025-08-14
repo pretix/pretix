@@ -1415,6 +1415,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.settings.invoice_address_required = True
         self.event.settings.invoice_generate = "True"
         self.event.settings.invoice_email_attachment = True
+        self.event.settings.invoice_address_vatid = True
 
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             'is_business': 'business',
@@ -1447,8 +1448,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'state': 'MI',
             'email': 'admin@localhost',
             'transmission_type': 'it_sdi',
+            'vat_id': '',
         }, follow=True)
-        print(response.content.decode())
         assert "This field is required for the selected type" in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -1467,6 +1468,57 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'transmission_type': 'email',
         }, follow=True)
         assert "must be used for this country" in response.content.decode()
+
+    def test_invoice_optional_transmission(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = False
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+        self.event.settings.invoice_address_vatid = True
+
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost',
+            'transmission_type': '-',
+        }, follow=True)
+        assert "If you enter an invoice address, you also need to select an invoice" in response.content.decode()
+
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': '',
+            'name_parts_0': '',
+            'name_parts_1': '',
+            'name_parts_2': '',
+            'name_parts_3': '',
+            'street': '',
+            'zipcode': '',
+            'city': '',
+            'country': 'IT',
+            'state': '',
+            'email': 'admin@localhost',
+            'transmission_type': '-',
+            'vat_id': '',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            ia = InvoiceAddress.objects.get()
+            assert ia.transmission_type == "email"
 
     def test_invoice_address_hidden_for_free(self):
         self.event.settings.invoice_address_asked = True
@@ -1518,7 +1570,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'city': 'Here',
             'country': 'DE',
             'vat_id': 'DE123456',
-            'email': 'admin@localhost'
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)

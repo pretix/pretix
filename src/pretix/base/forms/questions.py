@@ -1343,11 +1343,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if form_is_empty:
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
-            if data['transmission_type'] == "-":
+            if data.get('transmission_type') == "-":
                 data['transmission_type'] = 'email'  # our actual default for now, we can revisit this later
 
         else:
-            if data['transmission_type'] == "-":
+            if data.get('transmission_type') == "-":
                 raise ValidationError(
                     {"transmission_type": _("If you enter an invoice address, you also need to select an invoice "
                                             "transmission method.")}
@@ -1384,6 +1384,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 required_fields = transmission_type.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
                 for r in required_fields:
                     if r not in self.fields:
+                        logger.info(f"Transmission type {transmission_type.identifier} required field {r} which is not available.")
                         raise ValidationError(
                             _("The selected type of invoice transmission requires a field that is currently not "
                               "available, please reach out to the organizer.")
