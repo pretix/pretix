@@ -541,6 +541,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.email.error': _('Sending of an email has failed.'),
     'pretix.event.order.email.attachments.skipped': _('The email has been sent without attached tickets since they '
                                                       'would have been too large to be likely to arrive.'),
+    'pretix.event.order.email.invoice': _('An invoice email has been sent.'),
     'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),
     'pretix.event.order.position.email.custom_sent': _('A custom email has been sent to an attendee.'),
     'pretix.event.order.email.download_reminder_sent': _('An email has been sent with a reminder that the ticket '
