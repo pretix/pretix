@@ -70,12 +70,9 @@ def get_all_plugins(*, event=None, organizer=None) -> List[type]:
                     if not app.is_available(event):
                         continue
                 elif organizer and hasattr(app, 'is_available'):
-                    # TODO: Re-think this behaviour. I don't think we have a better one available that's backwards-compatible?
-                    if event_fallback_used:
-                        # No events exist, no need to run query again
-                        continue
-                    event_fallback = organizer.events.first()
-                    event_fallback_used = True
+                    if not event_fallback_used:
+                        event_fallback = organizer.events.first()
+                        event_fallback_used = True
                     if not event_fallback or not app.is_available(event_fallback):
                         continue
             elif level == PLUGIN_LEVEL_ORGANIZER:
