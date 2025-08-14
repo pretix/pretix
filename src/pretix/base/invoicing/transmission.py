@@ -132,7 +132,7 @@ class TransmissionProvider:
         """
         Whether testmode invoices may be passed to this provider.
         """
-        return True
+        return False
 
     def is_ready(self, event) -> bool:
         """
