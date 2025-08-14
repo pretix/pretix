@@ -40,6 +40,15 @@
                                         {% if selected == p.provider.identifier %}checked="checked"{% endif %}
                                         data-wallets="{{ p.provider.walletqueries|join:"|" }}"/>
                                 <strong class="accordion-label-text">{{ p.provider.public_name }}</strong>
+                                {% if p.provider.identifier == 'giftcard' and p.provider.customer_gift_cards %}
+                                    <small>
+                                        {% blocktrans trimmed count count=p.provider.customer_gift_cards|length %}
+                                            ({{ count }} available)
+                                        {% plural %}
+                                            ({{ count }} available)
+                                        {% endblocktrans %}
+                                    </small>
+                                {% endif %}
                             </span>
                         </label>
                     </legend>
