@@ -117,7 +117,7 @@ urlpatterns = [
     re_path(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/settings/plugins$',
             organizer.OrganizerPlugins.as_view(), name='organizer.settings.plugins'),
-    re_path(r'^organizer/(?P<organizer>[^/]+)/settings/plugin-events/(?P<plugin>[^/]+)$',
+    re_path(r'^organizer/(?P<organizer>[^/]+)/settings/plugins/(?P<plugin>[^/]+)/events$',
             organizer.OrganizerPluginEvents.as_view(), name='organizer.settings.plugin-events'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/settings/email$',
             organizer.OrganizerMailSettings.as_view(), name='organizer.settings.mail'),
