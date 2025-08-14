@@ -54,6 +54,7 @@ def get_all_plugins(*, event=None, organizer=None) -> List[type]:
     """
     assert not event or not organizer
     plugins = []
+    event_fallback = None
     event_fallback_used = False
     for app in apps.get_app_configs():
         if hasattr(app, 'PretixPluginMeta'):
@@ -73,9 +74,9 @@ def get_all_plugins(*, event=None, organizer=None) -> List[type]:
                     if event_fallback_used:
                         # No events exist, no need to run query again
                         continue
-                    event = organizer.events.first()
+                    event_fallback = organizer.events.first()
                     event_fallback_used = True
-                    if not event or not app.is_available(event):
+                    if not event_fallback or not app.is_available(event_fallback):
                         continue
             elif level == PLUGIN_LEVEL_ORGANIZER:
                 if organizer and hasattr(app, 'is_available'):
