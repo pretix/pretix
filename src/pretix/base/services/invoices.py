@@ -657,7 +657,6 @@ def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
         for provider, __ in transmission_providers.filter(type=invoice.transmission_type, active_in=sender)
     ], key=lambda p: (-p.priority, p.identifier))
 
-    testmode_failure = False
     provider = None
     for p in providers:
         if p.is_available(sender, invoice.invoice_to_country, invoice.invoice_to_is_business):
@@ -694,7 +693,6 @@ def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
             }
         )
         return
-
 
     try:
         provider.transmit(invoice)
