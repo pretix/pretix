@@ -529,7 +529,6 @@ def order_invoice_transmission_separately(order):
         return (
             order.invoice_address.transmission_type != "email" or
             (
-                info.get("transmission_email_other") and
                 info.get("transmission_email_address") and
                 order.email != info["transmission_email_address"]
             )
@@ -546,7 +545,6 @@ def invoice_transmission_separately(invoice):
         return (
             invoice.transmission_type != "email" or
             (
-                info.get("transmission_email_other") and
                 info.get("transmission_email_address") and
                 invoice.order.email != info["transmission_email_address"]
             )

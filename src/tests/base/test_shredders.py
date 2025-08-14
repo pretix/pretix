@@ -211,7 +211,7 @@ def test_invoice_address_shredder(event, order):
             "invoice_data": {
                 "name": "Peter", "country": "DE", "is_business": False, "internal_reference": "",
                 "state": "", "company": "ACME", "street": "Sesam Street", "city": "Sample City", "zipcode": "12345",
-                "transmission_type": "email", "transmission_info": {"transmission_email_other": "other@example.org"}
+                "transmission_type": "email", "transmission_info": {"transmission_email_address": "other@example.org"}
             }
         }
     )
@@ -219,7 +219,7 @@ def test_invoice_address_shredder(event, order):
         company='Acme Company', street='221B Baker Street',
         zipcode='12345', city='London', country='UK',
         order=order, transmission_type="email", transmission_info={
-            "transmission_email_other": "other@example.org"
+            "transmission_email_address": "other@example.org"
         }
     )
     s = InvoiceAddressShredder(event)
@@ -241,7 +241,7 @@ def test_invoice_address_shredder(event, order):
             'vat_id_validated': False,
             'zipcode': '12345',
             "transmission_type": "email",
-            "transmission_info": {"transmission_email_other": "other@example.org"}
+            "transmission_info": {"transmission_email_address": "other@example.org"}
         }
     }
     s.shred_data()

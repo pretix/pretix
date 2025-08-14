@@ -3420,8 +3420,9 @@ class InvoiceAddress(models.Model):
 
         t, __ = transmission_types.get(identifier=self.transmission_type)
         data.append((_("Transmission type"), t.public_name))
+        form_data = t.transmission_info_to_form_data(self.transmission_info or {})
         for k, f in t.invoice_address_form_fields.items():
-            v = (self.transmission_info or {}).get(k)
+            v = form_data.get(k)
             if v is True:
                 v = _("Yes")
             elif v is False:

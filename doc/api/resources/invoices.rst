@@ -158,12 +158,9 @@ The ``transmission_info`` object may contain the following properties:
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-transmission_email_other              boolean                    Optional. Whether the invoice should be transmitted to
-                                                                 an email address other than the order email address.
+transmission_email_address            string                     Optional. An email address other than the order address
+                                                                 that the invoice should be sent to.
                                                                  Business customers only.
-transmission_email_address            string                     Required when ``transmission_email_other`` is set,
-                                                                 ignored otherwise. The email address that the invoice
-                                                                 should be sent to.
 ===================================== ========================== =======================================================
 
 PEPPOL
