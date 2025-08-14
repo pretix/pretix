@@ -771,7 +771,7 @@ def test_mark_invoices_as_sent(event):
         attendee_name_parts={'full_name': "Peter"},
         positionid=1
     )
-    InvoiceAddress.objects.create(
+    ia = InvoiceAddress.objects.create(
         order=o1,
         is_business=True,
         country=Country('AT'),
@@ -785,6 +785,8 @@ def test_mark_invoices_as_sent(event):
     assert i.transmission_type == "email"
     assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
     assert not i.transmission_provider
+
+    # Not marked as sent because it is not the right address
     o1.send_mail(
         subject=LazyI18nString({"en": "Hey"}),
         template=LazyI18nString({"en": "Just wanted to send this invoice"}),
@@ -793,6 +795,18 @@ def test_mark_invoices_as_sent(event):
     )
     i.refresh_from_db()
     assert i.transmission_type == "email"
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
+
+    # If no other address is there, order address will be accepted
+    ia.transmission_info = {}
+    ia.save()
+    o1.send_mail(
+        subject=LazyI18nString({"en": "Hey"}),
+        template=LazyI18nString({"en": "Just wanted to send this invoice"}),
+        context={},
+        invoices=[i]
+    )
+    i.refresh_from_db()
     assert i.transmission_status == Invoice.TRANSMISSION_STATUS_COMPLETED
     assert i.transmission_provider == "email_pdf"
 

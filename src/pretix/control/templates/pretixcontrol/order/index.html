@@ -366,12 +366,6 @@
                                         <br/>
                                     {% endif %}
                                 {% endfor %}
-                                {% if invoices_send_link %}
-                                    <br/>
-                                    <a class="btn btn-default btn-xs" href="{{ invoices_send_link }}">
-                                        {% trans "Email invoices" %}
-                                    </a>
-                                {% endif %}
                                 {% if can_generate_invoice and 'can_change_orders' in request.eventpermset %}
                                     <br/>
                                     <form class="form-inline helper-display-inline" method="post"

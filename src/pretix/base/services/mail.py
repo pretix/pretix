@@ -659,6 +659,17 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         else:
             for i in invoices_sent:
                 if i.transmission_type == "email":
+                    # Mark invoice as sent when it was sent to the requested address *either* at the time of invoice
+                    # creation *or* as of right now.
+                    expected_recipients = [
+                        (i.invoice_to_transmission_info or {}).get("transmission_email_address") or i.order.email,
+                    ]
+                    try:
+                        expected_recipients.append(order.invoice_address.transmission_info.get("transmission_email_address") or i.order.email)
+                    except InvoiceAddress.DoesNotExist:
+                        pass
+                    if not any(t in expected_recipients for t in to):
+                        continue
                     if i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
                         i.transmission_date = now()
                         i.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
