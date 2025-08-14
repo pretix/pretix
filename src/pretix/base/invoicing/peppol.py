@@ -161,4 +161,7 @@ class PeppolTransmissionType(TransmissionType):
         }
 
     def invoice_address_form_fields_required(self, country: Country, is_business: bool):
-        return {"transmission_peppol_participant_id"}
+        base = {
+            "company", "street", "zipcode", "city", "country",
+        }
+        return base | {"transmission_peppol_participant_id"}

@@ -39,12 +39,12 @@ from pretix.base.settings import (
 
 def _info(cc):
     info = {
-        'street': {'required': True},
-        'zipcode': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
-        'city': {'required': cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED},
+        'street': {'required': 'if_any'},
+        'zipcode': {'required': 'if_any' if cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED else False},
+        'city': {'required': 'if_any' if cc in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED else False},
         'state': {
             'visible': cc in COUNTRIES_WITH_STATE_IN_ADDRESS,
-            'required': cc in COUNTRIES_WITH_STATE_IN_ADDRESS,
+            'required': 'if_any' if cc in COUNTRIES_WITH_STATE_IN_ADDRESS else False,
             'label': COUNTRY_STATE_LABEL.get(cc, pgettext('address', 'State')),
         },
         'vat_id': {'visible': cc in VAT_ID_COUNTRIES, 'required': False},
@@ -70,11 +70,12 @@ def address_form(request):
         # Do not consider live=True, as this does not expose sensitive information and we also want it accessible
         # from e.g. the backend when the event is not yet life.
         organizer = get_object_or_404(Organizer, slug=request.GET.get("organizer"))
-        with scope(organizer=organizer):
+        with (scope(organizer=organizer)):
             event = get_object_or_404(organizer.events, slug=request.GET.get("event"))
             country = Country(cc)
             is_business = request.GET.get("is_business") == "business"
             selected_transmission_type = request.GET.get("transmission_type")
+            transmission_type_required = request.GET.get("transmission_type_required") == "true"
 
             info["transmission_types"] = []
 
@@ -93,11 +94,14 @@ def address_form(request):
                 "visible": [t["code"] for t in info["transmission_types"]] != ["email"],
             }
             if selected_transmission_type not in [t["code"] for t in info["transmission_types"]]:
-                # The previously selected transmission type is no longer selectable, e.g. because
-                # of a country change. To avoid a second roundtrip to this endpoint, let's show
-                # the fields as if the first remaining option were selected (which is what the client
-                # side will now do).
-                selected_transmission_type = info["transmission_types"][0]["code"]
+                if transmission_type_required:
+                    # The previously selected transmission type is no longer selectable, e.g. because
+                    # of a country change. To avoid a second roundtrip to this endpoint, let's show
+                    # the fields as if the first remaining option were selected (which is what the client
+                    # side will now do).
+                    selected_transmission_type = info["transmission_types"][0]["code"]
+                else:
+                    selected_transmission_type = "-"
 
             for transmission_type in get_transmission_types():
                 required = transmission_type.invoice_address_form_fields_required(

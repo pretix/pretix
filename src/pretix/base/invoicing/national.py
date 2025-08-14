@@ -67,6 +67,9 @@ class ItalianSdITransmissionType(TransmissionType):
         return {"transmission_it_sdi_codice_fiscale", "transmission_it_sdi_pec"}
 
     def invoice_address_form_fields_required(self, country: Country, is_business: bool):
+        base = {
+            "street", "zipcode", "city", "state", "country",
+        }
         if is_business:
-            return {"vat_id", "transmission_it_sdi_pec", "transmission_it_sdi_recipient_code"}
-        return {"transmission_it_sdi_codice_fiscale"}
+            return base | {"company", "vat_id", "transmission_it_sdi_pec", "transmission_it_sdi_recipient_code"}
+        return base | {"transmission_it_sdi_codice_fiscale"}
