@@ -114,7 +114,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/events/sampleconf/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
