@@ -602,10 +602,7 @@ def test_approve_mail_invoice_attached(event):
         is_business=True,
         country=Country('AT'),
         transmission_type="email",
-        transmission_info={
-            "transmission_email_other": False,
-            "transmission_email_address": None,
-        }
+        transmission_info={}
     )
     o1.create_transactions()
     assert o1.transactions.count() == 0
@@ -642,7 +639,6 @@ def test_approve_mail_invoice_sent_somewhere_else(event):
         country=Country('AT'),
         transmission_type="email",
         transmission_info={
-            "transmission_email_other": True,
             "transmission_email_address": "invoice@example.org",
         }
     )
@@ -781,7 +777,6 @@ def test_mark_invoices_as_sent(event):
         country=Country('AT'),
         transmission_type="email",
         transmission_info={
-            "transmission_email_other": True,
             "transmission_email_address": "invoice@example.org",
         }
     )
@@ -1260,10 +1255,7 @@ class OrderCancelTests(TestCase):
                 is_business=True,
                 country=Country('AT'),
                 transmission_type="email",
-                transmission_info={
-                    "transmission_email_other": False,
-                    "transmission_email_address": None,
-                }
+                transmission_info={}
             )
         )
         self.order.status = Order.STATUS_PAID
@@ -1284,7 +1276,6 @@ class OrderCancelTests(TestCase):
                 country=Country('AT'),
                 transmission_type="email",
                 transmission_info={
-                    "transmission_email_other": True,
                     "transmission_email_address": "invoice@example.org",
                 }
             )
@@ -3744,7 +3735,6 @@ class OrderChangeManagerTests(TestCase):
                 country=Country('AT'),
                 transmission_type="email",
                 transmission_info={
-                    "transmission_email_other": True,
                     "transmission_email_address": "invoice@example.org",
                 }
             )
@@ -3774,7 +3764,6 @@ class OrderChangeManagerTests(TestCase):
                 country=Country('AT'),
                 transmission_type="email",
                 transmission_info={
-                    "transmission_email_other": True,
                     "transmission_email_address": "invoice@example.org",
                 }
             )
