@@ -77,6 +77,7 @@ class EmailTransmissionProvider(TransmissionProvider):
     type = "email"
     verbose_name = _("PDF via email")
     priority = 1000
+    testmode_supported = True
 
     def is_ready(self, event) -> bool:
         return True
