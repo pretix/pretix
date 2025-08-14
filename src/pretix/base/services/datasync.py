@@ -52,6 +52,22 @@ def periodic_reset_in_flight(sender, **kwargs):
         sq.set_sync_error('timeout', [], 'Timeout')
 
 
+def run_sync(queue):
+    grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.event.pk)), lambda q: (q.sync_provider, q.event))
+    for (target, event), queued_orders in grouped:
+        target_cls, meta = datasync_providers.get(identifier=target, active_in=event)
+
+        if not target_cls:
+            # sync plugin not found (plugin deactivated or uninstalled) -> drop outstanding jobs
+            num_deleted, _ = OrderSyncQueue.objects.filter(pk__in=[sq.pk for sq in queued_orders]).delete()
+            logger.info("Deleted %d queue entries from %r because plugin %s inactive", num_deleted, event, target)
+            continue
+
+        with scope(organizer=event.organizer):
+            with target_cls(event=event) as p:
+                p.sync_queued_orders(queued_orders)
+
+
 @app.task()
 def sync_all():
     with scopes_disabled():
@@ -70,16 +86,20 @@ def sync_all():
             .prefetch_related("event")
             [:1000]
         )
-        grouped = groupby(sorted(queue, key=lambda q: (q.sync_provider, q.event.pk)), lambda q: (q.sync_provider, q.event))
-        for (target, event), queued_orders in grouped:
-            target_cls, meta = datasync_providers.get(identifier=target, active_in=event)
+        run_sync(queue)
 
-            if not target_cls:
-                # sync plugin not found (plugin deactivated or uninstalled) -> drop outstanding jobs
-                num_deleted, _ = OrderSyncQueue.objects.filter(pk__in=[sq.pk for sq in queued_orders]).delete()
-                logger.info("Deleted %d queue entries from %r because plugin %s inactive", num_deleted, event, target)
-                continue
 
-            with scope(organizer=event.organizer):
-                with target_cls(event=event) as p:
-                    p.sync_queued_orders(queued_orders)
+@app.task()
+def sync_single(queue_item_id: int):
+    with scopes_disabled():
+        queue = (
+            OrderSyncQueue.objects
+            .filter(
+                pk=queue_item_id,
+                in_flight=False,
+                not_before__lt=now(),
+                need_manual_retry__isnull=True,
+            )
+            .prefetch_related("event")
+        )
+        run_sync(queue)
