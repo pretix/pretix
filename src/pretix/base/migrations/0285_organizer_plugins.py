@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0283_taxrule_default_taxrule_backfill"),
+        ("pretixbase", "0284_ordersyncresult_ordersyncqueue"),
     ]
 
     operations = [
