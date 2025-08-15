@@ -3314,6 +3314,24 @@ class InvoiceAddress(models.Model):
                     kwargs['update_fields'] = {'name_cached', 'name_parts'}.union(kwargs['update_fields'])
         super().save(**kwargs)
 
+    def clear(self, except_name=False):
+        self.is_business = False
+        if not except_name:
+            self.name_cached = ""
+            self.name_parts = {}
+        self.company = ""
+        self.street = ""
+        self.zipcode = ""
+        self.city = ""
+        self.country_old = ""
+        self.country = ""
+        self.state = ""
+        self.vat_id = ""
+        self.vat_id_validated = False
+        self.custom_field = None
+        self.internal_reference = ""
+        self.beneficiary = ""
+
     def describe(self):
         parts = [
             self.company,

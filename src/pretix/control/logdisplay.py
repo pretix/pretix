@@ -321,6 +321,14 @@ class OrderChangedSplitFrom(OrderLogEntryType):
         _('Denied scan of position #{posid} at {datetime} for list "{list}", type "{type}", error code "{errorcode}".'),
         _('Denied scan of position #{posid} for list "{list}", type "{type}", error code "{errorcode}".'),
     ),
+    'pretix.event.checkin.annulled': (
+        _('Annulled scan of position #{posid} at {datetime} for list "{list}", type "{type}".'),
+        _('Annulled scan of position #{posid} for list "{list}", type "{type}".'),
+    ),
+    'pretix.event.checkin.annulment.ignored': (
+        _('Ignored annulment of position #{posid} at {datetime} for list "{list}", type "{type}".'),
+        _('Ignored annulment of position #{posid} for list "{list}", type "{type}".'),
+    ),
     'pretix.control.views.checkin.reverted': _('The check-in of position #{posid} on list "{list}" has been reverted.'),
     'pretix.event.checkin.reverted': _('The check-in of position #{posid} on list "{list}" has been reverted.'),
 })

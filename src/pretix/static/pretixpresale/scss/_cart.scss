@@ -221,7 +221,7 @@
         &.has-downloads.hide-prices .download-desktop {
             margin-left: 50%;
         }
-        &.total .product {
+        &.subtotal .product, &.total .product {
             width: 50%;
         }
         .count {

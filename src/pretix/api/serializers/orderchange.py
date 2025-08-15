@@ -83,6 +83,7 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
 
     def create(self, validated_data):
         ocm = self.context['ocm']
+        check_quotas = self.context.get('check_quotas', True)
 
         try:
             ocm.add_position(
@@ -96,7 +97,7 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
                 valid_until=validated_data.get('valid_until'),
             )
             if self.context.get('commit', True):
-                ocm.commit()
+                ocm.commit(check_quotas=check_quotas)
                 return validated_data['order'].positions.order_by('-positionid').first()
             else:
                 return OrderPosition()  # fake to appease DRF
@@ -310,6 +311,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         ocm = self.context['ocm']
+        check_quotas = self.context.get('check_quotas', True)
         current_seat = {'seat_guid': instance.seat.seat_guid} if instance.seat else None
         item = validated_data.get('item', instance.item)
         variation = validated_data.get('variation', instance.variation)
@@ -356,7 +358,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
                 ocm.change_ticket_secret(instance, secret)
 
             if self.context.get('commit', True):
-                ocm.commit()
+                ocm.commit(check_quotas=check_quotas)
                 instance.refresh_from_db()
         except OrderError as e:
             raise ValidationError(str(e))

@@ -20,12 +20,13 @@
 # <https://www.gnu.org/licenses/>.
 #
 import operator
+from datetime import timedelta
 from functools import reduce
 
 import django_filters
 from django.conf import settings
 from django.core.exceptions import ValidationError as BaseValidationError
-from django.db import transaction
+from django.db import connection, transaction
 from django.db.models import (
     Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
     prefetch_related_objects,
@@ -39,17 +40,19 @@ from django.utils.translation import gettext
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from packaging.version import parse
-from rest_framework import views, viewsets
+from rest_framework import status, views, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import (
+    NotFound, PermissionDenied, ValidationError,
+)
 from rest_framework.fields import DateTimeField
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
 from pretix.api.serializers.checkin import (
-    CheckinListSerializer, CheckinRPCRedeemInputSerializer,
-    MiniCheckinListSerializer,
+    CheckinListSerializer, CheckinRPCAnnulInputSerializer,
+    CheckinRPCRedeemInputSerializer, MiniCheckinListSerializer,
 )
 from pretix.api.serializers.item import QuestionSerializer
 from pretix.api.serializers.order import (
@@ -66,6 +69,8 @@ from pretix.base.models.orders import PrintLog
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
 )
+from pretix.base.signals import checkin_annulled
+from pretix.helpers import OF_SELF
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
@@ -999,3 +1004,79 @@ class CheckinRPCSearchView(ListAPIView):
             qs = qs.none()
 
         return qs
+
+
+class CheckinRPCAnnulView(views.APIView):
+    def post(self, request, *args, **kwargs):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            events = self.request.auth.get_events_with_permission(('can_change_orders', 'can_checkin_orders'))
+        elif self.request.user.is_authenticated:
+            events = self.request.user.get_events_with_permission(('can_change_orders', 'can_checkin_orders'), self.request).filter(
+                organizer=self.request.organizer
+            )
+        else:
+            raise ValueError("unknown authentication method")
+
+        s = CheckinRPCAnnulInputSerializer(data=request.data, context={'events': events})
+        s.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+            try:
+                qs = Checkin.all.all()
+                if isinstance(request.auth, Device):
+                    qs = qs.filter(device=request.auth)
+                ci = qs.select_for_update(
+                    of=OF_SELF,
+                ).select_related("position", "position__order", "position__order__event").get(
+                    list__in=s.validated_data['lists'],
+                    nonce=s.validated_data['nonce'],
+                )
+                if connection.features.has_select_for_update_of and ci.position_id:
+                    # Lock position as well, can't do it with of= above because relation is nullable
+                    OrderPosition.objects.select_for_update(of=OF_SELF).get(pk=ci.position_id)
+
+                if not ci.successful or not ci.position:
+                    raise ValidationError("Cannot annul an unsuccessful checkin")
+            except Checkin.DoesNotExist:
+                raise NotFound("No check-in found based on nonce")
+            except Checkin.MultipleObjectsReturned:
+                raise ValidationError("Multiple check-ins found based on nonce")
+
+            annulment_time = s.validated_data.get("datetime") or now()
+
+            if annulment_time - ci.datetime > timedelta(minutes=15):
+                # Compare to sent datetime, which makes this cheatable, but allows offline annulment of checkins
+                ci.position.order.log_action('pretix.event.checkin.annulment.ignored', data={
+                    'checkin': ci.pk,
+                    'position': ci.position.id,
+                    'positionid': ci.position.positionid,
+                    'datetime': annulment_time,
+                    'error_explanation': s.validated_data.get("error_explanation"),
+                    'type': ci.type,
+                    'list': ci.list_id,
+                }, user=request.user, auth=request.auth)
+                return Response({
+                    "non_field_errors": ["Annulment is not allowed more than 15 minutes after check-in"]
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            if ci.device and ci.device != request.auth:
+                return Response({
+                    "non_field_errors": ["Annulment is only allowed from the same device"]
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            ci.successful = False
+            ci.error_reason = Checkin.REASON_ANNULLED
+            ci.error_explanation = s.validated_data.get("error_explanation")
+            ci.save(update_fields=["successful", "error_reason", "error_explanation"])
+            ci.position.order.log_action('pretix.event.checkin.annulled', data={
+                'checkin': ci.pk,
+                'position': ci.position.id,
+                'positionid': ci.position.positionid,
+                'datetime': annulment_time,
+                'error_explanation': s.validated_data.get("error_explanation"),
+                'type': ci.type,
+                'list': ci.list_id,
+            }, user=request.user, auth=request.auth)
+            checkin_annulled.send(ci.position.order.event, checkin=ci)
+
+        return Response({"status": "ok"}, status=status.HTTP_200_OK)
