@@ -377,6 +377,14 @@ def get_data_fields(event, for_model=None):
                 lambda position: str(position.item.pk),
             ),
             DataFieldInfo(
+                ORDER_POSITION,
+                "product_is_admission",
+                _("Product is admission product"),
+                Question.TYPE_BOOLEAN,
+                None,
+                lambda position: bool(position.item.admission),
+            ),
+            DataFieldInfo(
                 EVENT,
                 "event_slug",
                 _("Event short form"),
