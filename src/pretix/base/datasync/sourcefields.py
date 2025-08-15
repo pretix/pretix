@@ -120,10 +120,23 @@ AVAILABLE_MODELS = {
     'Order': (ORDER, EVENT),
 }
 
+DataFieldCategory = namedtuple(
+    'DataFieldCategory',
+    field_names=('sort_index', 'label',),
+)
+
+CAT_ORDER_POSITION = DataFieldCategory(10, _('Order position details'))
+CAT_ATTENDEE = DataFieldCategory(11, _('Attendee details'))
+CAT_QUESTIONS = DataFieldCategory(12, _('Questions'))
+CAT_PRODUCT = DataFieldCategory(20, _('Product details'))
+CAT_ORDER = DataFieldCategory(21, _('Order details'))
+CAT_INVOICE_ADDRESS = DataFieldCategory(22, _('Invoice address'))
+CAT_EVENT = DataFieldCategory(30, _('Event information'))
+CAT_EVENT_OR_SUBEVENT = DataFieldCategory(31, _('Event or subevent information'))
 
 DataFieldInfo = namedtuple(
     'DataFieldInfo',
-    field_names=('required_input', 'key', 'label', 'type', 'enum_opts', 'getter', 'deprecated'),
+    field_names=('required_input', 'category', 'key', 'label', 'type', 'enum_opts', 'getter', 'deprecated'),
     defaults=[False]
 )
 
@@ -157,6 +170,7 @@ def get_data_fields(event, for_model=None):
         [
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_name",
                 _("Attendee name"),
                 Question.TYPE_STRING,
@@ -168,6 +182,7 @@ def get_data_fields(event, for_model=None):
         + [
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_name_" + k,
                 _("Attendee") + ": " + label,
                 Question.TYPE_STRING,
@@ -187,6 +202,7 @@ def get_data_fields(event, for_model=None):
         + [
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_email",
                 _("Attendee email"),
                 Question.TYPE_STRING,
@@ -198,6 +214,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_or_order_email",
                 _("Attendee or order email"),
                 Question.TYPE_STRING,
@@ -210,6 +227,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_company",
                 _("Attendee company"),
                 Question.TYPE_STRING,
@@ -218,6 +236,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_street",
                 _("Attendee address street"),
                 Question.TYPE_STRING,
@@ -226,6 +245,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_zipcode",
                 _("Attendee address ZIP code"),
                 Question.TYPE_STRING,
@@ -234,6 +254,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_city",
                 _("Attendee address city"),
                 Question.TYPE_STRING,
@@ -242,6 +263,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_country",
                 _("Attendee address country"),
                 Question.TYPE_COUNTRYCODE,
@@ -252,6 +274,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_company",
                 _("Invoice address company"),
                 Question.TYPE_STRING,
@@ -260,6 +283,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_name",
                 _("Invoice address name"),
                 Question.TYPE_STRING,
@@ -270,6 +294,7 @@ def get_data_fields(event, for_model=None):
         + [
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_name_" + k,
                 _("Invoice address") + ": " + label,
                 Question.TYPE_STRING,
@@ -287,6 +312,7 @@ def get_data_fields(event, for_model=None):
         + [
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_street",
                 _("Invoice address street"),
                 Question.TYPE_STRING,
@@ -295,6 +321,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_zipcode",
                 _("Invoice address ZIP code"),
                 Question.TYPE_STRING,
@@ -303,6 +330,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_city",
                 _("Invoice address city"),
                 Question.TYPE_STRING,
@@ -311,6 +339,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_country",
                 _("Invoice address country"),
                 Question.TYPE_COUNTRYCODE,
@@ -319,6 +348,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "email",
                 _("Order email"),
                 Question.TYPE_STRING,
@@ -327,6 +357,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "email_domain",
                 _("Order email domain"),
                 Question.TYPE_STRING,
@@ -335,6 +366,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "order_code",
                 _("Order code"),
                 Question.TYPE_STRING,
@@ -343,6 +375,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "event_order_code",
                 _("Event and order code"),
                 Question.TYPE_STRING,
@@ -351,6 +384,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "order_total",
                 _("Order total"),
                 Question.TYPE_NUMBER,
@@ -359,6 +393,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_PRODUCT,
                 "product",
                 _("Product and variation name"),
                 Question.TYPE_STRING,
@@ -370,6 +405,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_PRODUCT,
                 "product_id",
                 _("Product ID"),
                 Question.TYPE_NUMBER,
@@ -378,6 +414,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_PRODUCT,
                 "product_is_admission",
                 _("Product is admission product"),
                 Question.TYPE_BOOLEAN,
@@ -386,6 +423,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 EVENT,
+                CAT_EVENT,
                 "event_slug",
                 _("Event short form"),
                 Question.TYPE_STRING,
@@ -394,6 +432,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 EVENT,
+                CAT_EVENT,
                 "event_name",
                 _("Event name"),
                 Question.TYPE_STRING,
@@ -402,6 +441,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 EVENT_OR_SUBEVENT,
+                CAT_EVENT_OR_SUBEVENT,
                 "event_date_from",
                 _("Event start date"),
                 Question.TYPE_DATETIME,
@@ -410,6 +450,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 EVENT_OR_SUBEVENT,
+                CAT_EVENT_OR_SUBEVENT,
                 "event_date_to",
                 _("Event end date"),
                 Question.TYPE_DATETIME,
@@ -418,6 +459,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ORDER_POSITION,
                 "voucher_code",
                 _("Voucher code"),
                 Question.TYPE_STRING,
@@ -426,6 +468,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ORDER_POSITION,
                 "ticket_id",
                 _("Order code and position number"),
                 Question.TYPE_STRING,
@@ -434,6 +477,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ORDER_POSITION,
                 "ticket_price",
                 _("Ticket price"),
                 Question.TYPE_NUMBER,
@@ -442,6 +486,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "order_status",
                 _("Order status"),
                 Question.TYPE_CHOICE,
@@ -450,6 +495,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ORDER_POSITION,
                 "ticket_status",
                 _("Ticket status"),
                 Question.TYPE_CHOICE,
@@ -458,6 +504,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "order_date",
                 _("Order date and time"),
                 Question.TYPE_DATETIME,
@@ -466,6 +513,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "payment_date",
                 _("Payment date and time"),
                 Question.TYPE_DATETIME,
@@ -474,6 +522,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "order_locale",
                 _("Order language code"),
                 Question.TYPE_CHOICE,
@@ -482,6 +531,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ORDER_POSITION,
                 "position_id",
                 _("Order position ID"),
                 Question.TYPE_NUMBER,
@@ -490,6 +540,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_ORDER,
                 "presale_order_url",
                 _("Order URL"),
                 Question.TYPE_STRING,
@@ -504,6 +555,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ORDER_POSITION,
                 "presale_ticket_url",
                 _("Ticket URL"),
                 Question.TYPE_STRING,
@@ -521,6 +573,7 @@ def get_data_fields(event, for_model=None):
         + [
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ORDER_POSITION,
                 "checkin_date_" + str(cl.pk),
                 _("Check-in datetime on list {}").format(cl.name),
                 Question.TYPE_DATETIME,
@@ -532,6 +585,7 @@ def get_data_fields(event, for_model=None):
         + [
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_QUESTIONS,
                 "question_" + q.identifier,
                 _("Question: {name}").format(name=str(q.question)),
                 q.type,
@@ -545,6 +599,7 @@ def get_data_fields(event, for_model=None):
         src_fields += [
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_name_given_name",
                 _("Attendee") + ": " + _("Given name") + " (⚠️ auto-generated, not recommended)",
                 Question.TYPE_STRING,
@@ -554,6 +609,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_name_given_name",
                 _("Invoice address") + ": " + _("Given name") + " (⚠️ auto-generated, not recommended)",
                 Question.TYPE_STRING,
@@ -567,6 +623,7 @@ def get_data_fields(event, for_model=None):
         src_fields += [
             DataFieldInfo(
                 ORDER_POSITION,
+                CAT_ATTENDEE,
                 "attendee_name_family_name",
                 _("Attendee") + ": " + _("Family name") + " (⚠️ auto-generated, not recommended)",
                 Question.TYPE_STRING,
@@ -576,6 +633,7 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                CAT_INVOICE_ADDRESS,
                 "invoice_address_name_family_name",
                 _("Invoice address") + ": " + _("Family name") + " (⚠️ auto-generated, not recommended)",
                 Question.TYPE_STRING,
