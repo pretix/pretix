@@ -28,6 +28,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import Checkin, InvoiceAddress, Order, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 def get_answer(op, question_identifier=None):
@@ -98,6 +99,14 @@ def normalize_email(email):
         local, host = email.split("@")
         host = host.encode("idna").decode()
         return f"{local}@{host}"
+    else:
+        return None
+
+
+def get_email_domain(email):
+    if email:
+        local, host = email.split("@")
+        return host
     else:
         return None
 
@@ -318,6 +327,14 @@ def get_data_fields(event, for_model=None):
             ),
             DataFieldInfo(
                 ORDER,
+                "email_domain",
+                _("Order email domain"),
+                Question.TYPE_STRING,
+                None,
+                lambda order: get_email_domain(normalize_email(order.email)),
+            ),
+            DataFieldInfo(
+                ORDER,
                 "order_code",
                 _("Order code"),
                 Question.TYPE_STRING,
@@ -358,6 +375,14 @@ def get_data_fields(event, for_model=None):
                 Question.TYPE_NUMBER,
                 None,
                 lambda position: str(position.item.pk),
+            ),
+            DataFieldInfo(
+                ORDER_POSITION,
+                "product_is_admission",
+                _("Product is admission product"),
+                Question.TYPE_BOOLEAN,
+                None,
+                lambda position: bool(position.item.admission),
             ),
             DataFieldInfo(
                 EVENT,
@@ -462,6 +487,35 @@ def get_data_fields(event, for_model=None):
                 Question.TYPE_NUMBER,
                 None,
                 lambda op: str(op.pk),
+            ),
+            DataFieldInfo(
+                ORDER,
+                "presale_order_url",
+                _("Order URL"),
+                Question.TYPE_STRING,
+                None,
+                lambda order: build_absolute_uri(
+                    event,
+                    'presale:event.order', kwargs={
+                        'order': order.code,
+                        'secret': order.secret,
+                    }
+                ),
+            ),
+            DataFieldInfo(
+                ORDER_POSITION,
+                "presale_ticket_url",
+                _("Ticket URL"),
+                Question.TYPE_STRING,
+                None,
+                lambda op: build_absolute_uri(
+                    event,
+                    'presale:event.order.position', kwargs={
+                        'order': op.order.code,
+                        'secret': op.web_secret,
+                        'position': op.positionid
+                    }
+                ),
             ),
         ]
         + [
