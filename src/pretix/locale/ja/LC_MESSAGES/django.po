@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-05 07:29+0000\n"
-"PO-Revision-Date: 2025-08-08 06:00+0000\n"
+"PO-Revision-Date: 2025-08-15 09:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -145,7 +145,7 @@ msgstr "スペイン語"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "スペイン語 (ラテンアメリカ)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -2083,10 +2083,8 @@ msgid "External customer ID"
 msgstr "内部コメント"
 
 #: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
 msgid "Order link"
-msgstr "注文時刻"
+msgstr "注文リンク"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -2346,10 +2344,8 @@ msgid "Check-in lists"
 msgstr "チェックインリスト"
 
 #: pretix/base/exporters/orderlist.py:671
-#, fuzzy
-#| msgid "Resend order link"
 msgid "Position order link"
-msgstr "注文リンクを再送する"
+msgstr "座席位置注文リンク"
 
 #: pretix/base/exporters/orderlist.py:840
 msgid "Order transaction data"
@@ -3541,7 +3537,7 @@ msgstr "複数の一致する日付が見つかりました。"
 
 #: pretix/base/modelimport_orders.py:73
 msgid "Grouping"
-msgstr ""
+msgstr "グループ化"
 
 #: pretix/base/modelimport_orders.py:75
 msgid ""
@@ -3549,6 +3545,10 @@ msgid ""
 "together...\". Lines with the same grouping value will be put in the same "
 "order, but MUST be consecutive lines of the input file."
 msgstr ""
+"\"インポートモード\"が\"複数行をグループ化..."
+"\"に設定されている場合のみ適用されます"
+"。同じグループ化値を持つ行は同じ注文にまとめられますが、入力ファイルの連続し"
+"た行でなければなりません。"
 
 #: pretix/base/modelimport_orders.py:101
 msgid "Enter a valid phone number."
@@ -3559,7 +3559,8 @@ msgctxt "subevents"
 msgid ""
 "The date can be specified through its full name, full date and time, or "
 "internal ID, provided only one date in the system matches the input."
-msgstr ""
+msgstr "日付は、正式名称、完全な日付時刻、または内部IDで指定できます。ただし、システ"
+"ム内で入力に一致する日付が1つのみの場合に限ります。"
 
 #: pretix/base/modelimport_orders.py:120 pretix/presale/views/waiting.py:157
 msgctxt "subevent"
@@ -3569,7 +3570,7 @@ msgstr "日付を選択する必要があります。"
 #: pretix/base/modelimport_orders.py:131
 msgid ""
 "The product can be specified by its internal ID, full name or internal name."
-msgstr ""
+msgstr "製品は、内部ID、正式名称、内部名称で指定できます。"
 
 #: pretix/base/modelimport_orders.py:149
 #: pretix/base/modelimport_vouchers.py:194
@@ -3589,7 +3590,7 @@ msgstr "製品のバリエーション"
 
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
-msgstr ""
+msgstr "バリエーションは、内部IDまたは正式名称で指定できます。"
 
 #: pretix/base/modelimport_orders.py:181
 #: pretix/base/modelimport_vouchers.py:225
@@ -3619,10 +3620,8 @@ msgid "Invoice address"
 msgstr "請求先の住所"
 
 #: pretix/base/modelimport_orders.py:265 pretix/base/modelimport_orders.py:417
-#, fuzzy
-#| msgid "The count needs to be equal to or greater than zero."
 msgid "The country needs to be specified using a two-letter country code."
-msgstr "カウントはゼロ以上である必要があります。"
+msgstr "国は2文字の国コードを使用して指定する必要があります。"
 
 #: pretix/base/modelimport_orders.py:281 pretix/base/modelimport_orders.py:432
 msgid "Please enter a valid country code."
@@ -3630,7 +3629,7 @@ msgstr "有効な国コードを入力してください。"
 
 #: pretix/base/modelimport_orders.py:290 pretix/base/modelimport_orders.py:441
 msgid "The state can be specified by its short form or full name."
-msgstr ""
+msgstr "州は、短縮形または正式名称で指定できます。"
 
 #: pretix/base/modelimport_orders.py:300 pretix/base/modelimport_orders.py:450
 msgid "States are not supported for this country."
@@ -3686,17 +3685,15 @@ msgstr "有効な言語コードを入力してください。"
 msgid ""
 "The sales channel can be specified by it's internal identifier or its full "
 "name."
-msgstr ""
+msgstr "販売チャネルは、内部識別子または正式名称で指定できます。"
 
 #: pretix/base/modelimport_orders.py:599 pretix/base/modelimport_orders.py:601
 msgid "Please enter a valid sales channel."
 msgstr "有効な販売チャネルを入力してください。"
 
 #: pretix/base/modelimport_orders.py:611
-#, fuzzy
-#| msgid "The refund amount needs to be positive and less than {}."
 msgid "The seat needs to be specified by its internal ID."
-msgstr "返金額は正であり、 {}未満である必要があります。"
+msgstr "座席は内部IDで指定する必要があります。"
 
 #: pretix/base/modelimport_orders.py:626
 #: pretix/base/modelimport_vouchers.py:291
@@ -7306,16 +7303,12 @@ msgid "123.45 EUR"
 msgstr "123.45 EUR"
 
 #: pretix/base/pdf.py:163
-#, fuzzy
-#| msgid "Price including add-ons"
 msgid "Price including bundled products"
-msgstr "アドオンを含む価格"
+msgstr "バンドル商品を含む価格"
 
 #: pretix/base/pdf.py:172
-#, fuzzy
-#| msgid "Price including add-ons"
 msgid "Price including add-ons and bundled products"
-msgstr "アドオンを含む価格"
+msgstr "アドオンおよびバンドル商品を含む価格"
 
 #: pretix/base/pdf.py:182 pretix/base/pdf.py:340
 #: pretix/base/services/invoices.py:476
@@ -8509,7 +8502,8 @@ msgstr "注文には%(max)sポジションを超えることはできません�
 msgid ""
 "The grouping \"%(value)s\" occurs on non-consecutive lines (seen again on "
 "line %(row)s)."
-msgstr ""
+msgstr "グループ化\"%(value)s\"が連続していない行に出現しています"
+"（%(row)s行目で再び確認されました）。"
 
 #: pretix/base/services/modelimport.py:151
 #, python-brace-format
@@ -8517,6 +8511,8 @@ msgid ""
 "Inconsistent data in row {row}: Column {col} contains value \"{val_line}\", "
 "but for this order, the value has already been set to \"{val_order}\"."
 msgstr ""
+"{row}行目のデータが不整合です：{col}列の値が\"{val_line}"
+"\"ですが、この注文では既に値が\"{val_order}\"に設定されています。"
 
 #: pretix/base/services/modelimport.py:165
 #: pretix/base/services/modelimport.py:277
@@ -9602,33 +9598,25 @@ msgstr "プレセールが始まる前に、プレセールの開始日を表示
 
 #: pretix/base/settings.py:1037 pretix/base/settings.py:1045
 #: pretix/base/settings.py:1059 pretix/base/settings.py:1068
-#, fuzzy
-#| msgid "Default tax code"
 msgid "Use default tax rate"
-msgstr "デフォルト"
+msgstr "デフォルト税率を使用"
 
 #: pretix/base/settings.py:1038 pretix/base/settings.py:1046
 #: pretix/base/settings.py:1057 pretix/base/settings.py:1066
-#, fuzzy
-#| msgid "Charge updated."
 msgid "Charge no taxes"
-msgstr "料金が更新されました。"
+msgstr "税金を課さない"
 
 #: pretix/base/settings.py:1042
-#, fuzzy
-#| msgid "Tax rule for payment fees"
 msgid "Tax handling on payment fees"
-msgstr "支払手数料に関する税則"
+msgstr "支払手数料の課税設定"
 
 #: pretix/base/settings.py:1058 pretix/base/settings.py:1067
 msgid "Use same taxes as order positions (split according to net prices)"
-msgstr ""
+msgstr "座席と同じ税率を適用（税抜価格に応じて分割）"
 
 #: pretix/base/settings.py:1063
-#, fuzzy
-#| msgid "Charge a fixed cancellation fee"
 msgid "Tax handling on cancellation fees"
-msgstr "固定キャンセル料を請求する"
+msgstr "キャンセル料の課税設定"
 
 #: pretix/base/settings.py:1079 pretix/base/settings.py:1091
 msgid "Do not generate invoices"
@@ -12896,7 +12884,7 @@ msgstr "すべてのゲート"
 
 #: pretix/control/forms/checkin.py:222
 msgid "I am sure that the check-in state of the entire event should be reset."
-msgstr ""
+msgstr "イベント全体のチェックイン記録が初期化されることを確認します。"
 
 #: pretix/control/forms/event.py:91
 msgid "Use languages"
@@ -13148,10 +13136,8 @@ msgid "Bcc address"
 msgstr "Bccアドレス"
 
 #: pretix/control/forms/event.py:987 pretix/control/forms/organizer.py:585
-#, fuzzy
-#| msgid "All emails will be sent to this address as a Bcc copy"
 msgid "All emails will be sent to this address as a Bcc copy."
-msgstr "すべてのメールは、このアドレスに Bcc コピーとして送信される"
+msgstr "すべてのメールがこのアドレスにBccコピーとして送信されます。"
 
 #: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:593
 msgid "Signature"
@@ -14589,7 +14575,7 @@ msgstr "ラインごとに1つの座席で個別の注文を作成する"
 #: pretix/control/forms/modelimport.py:80
 msgid ""
 "Group multiple lines together into the same order based on a grouping column"
-msgstr ""
+msgstr "グループ化列に基づいて複数行を同じ注文にまとめます"
 
 #: pretix/control/forms/modelimport.py:87
 msgid "Create orders as fully paid"
@@ -14604,16 +14590,12 @@ msgid "Create orders as test mode orders"
 msgstr "テストモードの注文を作成"
 
 #: pretix/control/forms/modelimport.py:112
-#, fuzzy
-#| msgid "You cannot generate an invoice for this order."
 msgid "A grouping cannot be specified for this import mode."
-msgstr "この注文には請求書を発行することができません。"
+msgstr "このインポートモードではグループ化を指定できません。"
 
 #: pretix/control/forms/modelimport.py:114
-#, fuzzy
-#| msgid "A variation needs to be set for this item."
 msgid "A grouping needs to be specified for this import mode."
-msgstr "このアイテムには変更が必要です。"
+msgstr "このインポートモードではグループ化を指定する必要があります。"
 
 #: pretix/control/forms/orders.py:85
 msgid "Confirm order regardless of payment"
@@ -14674,23 +14656,15 @@ msgid "Keep a cancellation fee of"
 msgstr "キャンセル料を預かる（対象）"
 
 #: pretix/control/forms/orders.py:175
-#, fuzzy
-#| msgid ""
-#| "If you keep a fee, all positions within this order will be canceled and "
-#| "the order will be reduced to a cancellation fee. Payment and shipping "
-#| "fees will be canceled as well, so include them in your cancellation fee "
-#| "if you want to keep them. Please always enter a gross value, tax will be "
-#| "calculated automatically."
 msgid ""
 "If you keep a fee, all positions within this order will be canceled and the "
 "order will be reduced to a cancellation fee. Payment and shipping fees will "
 "be canceled as well, so include them in your cancellation fee if you want to "
 "keep them."
 msgstr ""
-"手数料を保持する場合、この注文内のすべてのポジションがキャンセルされ、注文は"
-"キャンセル手数料に削減されます。支払いと配送料もキャンセルされるため、それら"
-"を保持したい場合はキャンセル手数料に含めてください。常に総額を入力してくださ"
-"い。税金は自動的に計算されます。"
+"手数料を保持する場合、この注文内のすべての座席がキャンセルされ、注文はキャン"
+"セル料のみに変更されます。決済手数料と配送料もキャンセルされるため、それらを"
+"保持したい場合はキャンセル料に含めてください。"
 
 #: pretix/control/forms/orders.py:180
 msgid "Generate cancellation for invoice"
@@ -14712,19 +14686,18 @@ msgstr ""
 msgid ""
 "Please enter a gross amount. As per your event settings, the taxes will be "
 "split the same way as the order positions."
-msgstr ""
+msgstr "総額を入力してください。イベント設定により、税金は注文座席と同じ方法で分割さ"
+"れます。"
 
 #: pretix/control/forms/orders.py:209
 msgid ""
 "Please enter a gross amount. As per your event settings, the default tax "
 "rate will be charged."
-msgstr ""
+msgstr "総額を入力してください。イベント設定に従い、既定の税率が課税されます。"
 
 #: pretix/control/forms/orders.py:213
-#, fuzzy
-#| msgid "The event settings have been changed."
 msgid "As per your event settings, no tax will be charged."
-msgstr "イベントの設定が変更されました。"
+msgstr "イベント設定により、税金は課税されません。"
 
 #: pretix/control/forms/orders.py:241
 msgid "A mail will only be sent if the order is fully paid after this."
@@ -15484,19 +15457,14 @@ msgid "or"
 msgstr "または"
 
 #: pretix/control/forms/vouchers.py:305
-#, fuzzy
-#| msgid ""
-#| "You can either supply a list of email addresses with one email address "
-#| "per line, or the contents of a CSV file with a title column and one or "
-#| "more of the columns \"email\", \"number\", \"name\", or \"tag\"."
 msgid ""
 "You can either supply a list of email addresses with one email address per "
 "line, or the contents of a CSV file with a title row and one or more of the "
 "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
-"電子メールアドレスのリストを1行に1つずつ提供するか、タイトル列と1つ以上の列"
-"「email」、「number」、「name」、「tag」を含むCSVファイルの内容を提供できま"
-"す。"
+"電子メールアドレスのリストを1行に1つずつ提示するか、タイトル行と1つ以上の列（"
+"\"email\"、\"number\"、\"name\"、\"tag\""
+"）を含むCSVファイルの内容を提示できます。"
 
 #: pretix/control/forms/vouchers.py:339
 msgid "Maximum usages per voucher"
@@ -16582,10 +16550,8 @@ msgid "The token \"{name}\" has been revoked."
 msgstr "トークン「{name}」は取り消されました。"
 
 #: pretix/control/logdisplay.py:725
-#, fuzzy
-#| msgid "The check-in list has been deleted."
 msgid "The check-in and print log state has been reset."
-msgstr "チェックインリストが削除されました。"
+msgstr "チェックインと印刷ログの状態がリセットされました。"
 
 #: pretix/control/logdisplay.py:732
 msgid "A meta property has been added to this event."
@@ -18150,10 +18116,8 @@ msgstr "接続されたデバイス"
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:90
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:4
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:6
-#, fuzzy
-#| msgid "Delete check-ins"
 msgid "Reset check-in"
-msgstr "チケットのチェックインが完了しました"
+msgstr "チェックインをリセット"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:163
 #: pretix/control/templates/pretixcontrol/items/categories.html:57
@@ -18174,38 +18138,39 @@ msgid ""
 "hardware setup but only before your event started, and you admitted any real "
 "attendees or printed any real badges or tickets."
 msgstr ""
+"この機能により、イベント全体のチェックイン状態をリセットできます。すべてのチ"
+"ェックイン記録および印刷済みチケット・バッジの記録が削除されます。ハードウェ"
+"ア設定のテスト完了後、かつイベント開始前（実際の参加者の受付や本番チケット・"
+"バッジの印刷を行う前）での使用を推奨します。"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:18
 #, python-format
 msgid "This will permanently delete <strong>1 check-in</strong>."
 msgid_plural ""
 "This will permanently delete <strong>%(count)s check-ins</strong>."
-msgstr[0] ""
+msgstr[0] "これにより<strong>%(count)s件のチェックイン</strong>が完全に削除されます。"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:23
 #, python-format
 msgid "Additionally, <strong>1 print log</strong> will be deleted."
 msgid_plural ""
 "Additionally, <strong>%(count)s print logs</strong> will be deleted."
-msgstr[0] ""
+msgstr[0] "さらに、<strong>%(count)s件の印刷ログ</strong>が削除されます。"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:30
-#, fuzzy
-#| msgid "This operation cannot be reversed."
 msgid "This cannot be reverted!"
-msgstr "この操作は元に戻すことはできません。"
+msgstr "この操作は元に戻せません！"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:34
 msgid ""
 "The deleted entries will still show up in the \"Order history\" section, but "
 "for all other purposes the system will behave as if they never existed."
-msgstr ""
+msgstr "削除されたエントリは\"注文履歴\"セクションには残りますが"
+"、その他すべての機能では、それらが存在しなかったものとして扱われます。"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:46
-#, fuzzy
-#| msgid "Proceed with checkout"
 msgid "Proceed with reset"
-msgstr "チェックアウトを続行します"
+msgstr "リセットを実行"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:22
 msgid ""
@@ -19727,15 +19692,11 @@ msgid ""
 msgstr "<strong>%(taxrule)s</strong>の税のルールを削除してもよろしいですか？"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:12
-#, fuzzy
-#| msgid ""
-#| "You cannot delete a tax rule that is in use for a product or has been in "
-#| "use for any existing orders."
 msgid ""
 "You cannot delete a tax rule that is in use for a product, has been in use "
 "for any existing orders, or is the default tax rule of the event."
-msgstr ""
-"製品に使用されている税規則や既存の注文で使用された税規則は削除できません。"
+msgstr "税規則は削除できません。製品で使用中、既存注文で使用済み、またはイベントの既"
+"定税規則に設定されています。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:7
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:14
@@ -24212,10 +24173,8 @@ msgid "Text box"
 msgstr "テキストボックス"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:59
-#, fuzzy
-#| msgid "Code"
 msgid "QR Code"
-msgstr "コード"
+msgstr "QRコード"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:64
 msgid "QR code for Check-In"
@@ -24231,7 +24190,7 @@ msgstr "注文番号"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:87
 msgid "Image"
-msgstr ""
+msgstr "画像"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:92
 msgid ""
@@ -24253,7 +24212,7 @@ msgstr "プレティックスのロゴ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:107
 msgid "Duplicate"
-msgstr ""
+msgstr "複製"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:117
 msgid "Undo"
@@ -27644,21 +27603,19 @@ msgstr "空席待ちリストのエントリは転送されました。"
 
 #: pretix/helpers/countries.py:128
 msgid "Belarus"
-msgstr ""
+msgstr "ベラルーシ"
 
 #: pretix/helpers/countries.py:129
-#, fuzzy
-#| msgid "French"
 msgid "French Guiana"
-msgstr "フランス語"
+msgstr "フランス領ギアナ"
 
 #: pretix/helpers/countries.py:130
 msgid "North Macedonia"
-msgstr ""
+msgstr "北マケドニア"
 
 #: pretix/helpers/countries.py:131
 msgid "Macao"
-msgstr ""
+msgstr "マカオ"
 
 #: pretix/helpers/daterange.py:56 pretix/helpers/daterange.py:118
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:77
@@ -32065,10 +32022,8 @@ msgstr "情報"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:222
 #: pretix/presale/templates/pretixpresale/organizers/base.html:100
-#, fuzzy
-#| msgid "Contact:"
 msgid "Contact"
-msgstr "連絡先："
+msgstr "連絡先"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:225
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:118
@@ -33331,30 +33286,20 @@ msgstr ""
 "い。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
-"後で注文にアクセスしたい場合は、この正確なページへのリンクをブックマークまた"
-"は保存してください。また、指定したアドレスへのリンクが記載されたメールをお送"
-"りしました。"
+"後で注文にアクセスしたい場合は、このページのリンクをブックマークまたは保存し"
+"てください。また、指定されたアドレスに、このページへのリンクが記載されたメー"
+"ルをお送りしました。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:59
-#, fuzzy
-#| msgid ""
-#| "Please save the following link if you want to access your order later. We "
-#| "also sent you an email containing the link to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email to the address you specified containing the link."
-msgstr ""
-"以下のリンクを保存してください。後で注文にアクセスしたい場合に使用できます。"
+msgstr "以下のリンクを保存してください。後で注文にアクセスしたい場合に使用できます。"
 "また、指定したアドレスにリンクを含むメールも送信しました。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:74
