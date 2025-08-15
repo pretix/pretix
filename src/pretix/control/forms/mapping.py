@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from itertools import groupby
+
 from django import forms
 from django.forms import formset_factory
 from django.utils.translation import gettext_lazy as _
@@ -116,8 +118,13 @@ QUESTION_TYPE_LABELS = dict(Question.TYPE_CHOICES)
 
 
 def pretix_fields_choices(pretix_fields, initial_choice):
+    pretix_fields = sorted(pretix_fields, key=lambda f: f.category)
+    grouped_fields = groupby(pretix_fields, lambda f: f.category)
     return [
-        (f.key, f.label + " [" + QUESTION_TYPE_LABELS[f.type] + "]")
-        for f in pretix_fields
-        if not f.deprecated or f.key == initial_choice
+        (f"{cat}", [
+            (f.key, f.label + " [" + QUESTION_TYPE_LABELS[f.type] + "]")
+            for f in fields
+            if not f.deprecated or f.key == initial_choice
+        ])
+        for ((idx, cat), fields) in grouped_fields
     ]
