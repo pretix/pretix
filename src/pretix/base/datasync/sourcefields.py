@@ -492,7 +492,7 @@ def get_data_fields(event, for_model=None):
                 ORDER,
                 "presale_order_url",
                 _("Order URL"),
-                Question.TYPE_TEXT,
+                Question.TYPE_STRING,
                 None,
                 lambda order: build_absolute_uri(
                     event,
@@ -506,7 +506,7 @@ def get_data_fields(event, for_model=None):
                 ORDER_POSITION,
                 "presale_ticket_url",
                 _("Ticket URL"),
-                Question.TYPE_TEXT,
+                Question.TYPE_STRING,
                 None,
                 lambda op: build_absolute_uri(
                     event,
