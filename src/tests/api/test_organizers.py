@@ -53,7 +53,7 @@ def test_organizer_detail(token_client, organizer):
 def test_organizer_patch(token_client, organizer):
     with scopes_disabled():
         # An event needs to exist for the backwards-compatibility mechanism in get_all_plugins to trigger
-        organizer.events.create(
+        event = organizer.events.create(
             name="Event", slug="e2", live=True,
             date_from=datetime(2020, 1, 10, 16, 0, tzinfo=zoneinfo.ZoneInfo("UTC")),
             date_to=datetime(2020, 1, 10, 17, 0, tzinfo=zoneinfo.ZoneInfo("UTC")),
@@ -85,6 +85,22 @@ def test_organizer_patch(token_client, organizer):
     assert resp.data == {
         "plugins": ["Plugin cannot be enabled on this level: 'pretix.plugins.statistics'."]
     }
+
+    event.plugins = "tests.testdummyhybrid,tests.testdummy"
+    event.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/'.format(organizer.slug),
+        {
+            'slug': 'willbeignored',
+            'name': 'Willbeignored',
+            'plugins': ['tests.testdummyorga']
+        },
+        format='json',
+    )
+    assert resp.status_code == 200
+
+    event.refresh_from_db()
+    assert event.plugins == "tests.testdummy"
 
 
 @pytest.mark.django_db

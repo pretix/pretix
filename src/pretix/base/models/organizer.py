@@ -185,12 +185,21 @@ class Organizer(LoggedModel):
         self.plugins = ",".join(modules)
 
     def enable_plugin(self, module, allow_restricted=frozenset()):
+        """
+        Adds a plugin to the list of plugins, calling its ``installed`` hook (if available).
+        It is the caller's responsibility to save the organizer object.
+        """
         plugins_active = self.get_plugins()
         if module not in plugins_active:
             plugins_active.append(module)
             self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
 
     def disable_plugin(self, module):
+        """
+        Removes a plugin from the list of plugins, calling its ``uninstalled`` hook (if available).
+        It is the caller's responsibility to save the organizer object and, in case of a hybrid organizer-event plugin,
+        to remove it from all events.
+        """
         plugins_active = self.get_plugins()
         if module in plugins_active:
             plugins_active.remove(module)
