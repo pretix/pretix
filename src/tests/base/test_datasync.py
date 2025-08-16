@@ -182,6 +182,11 @@ def _register_with_fake_plugin_name(registry, obj, plugin_name):
 
     class App:
         name = plugin_name
+
+        class PretixPluginMeta:
+            pass
+
+    obj.__mocked_app = App
     registry.register(obj)
     registry.registered_entries[obj]['plugin'] = App
 

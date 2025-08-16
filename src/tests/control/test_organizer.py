@@ -424,30 +424,30 @@ class OrganizerTest(SoupTest):
         assert "tests.testdummyorgarestricted" in self.orga1.get_plugins()
 
     def test_plugin_events(self):
-        resp = self.client.get('/control/organizer/%s/settings/plugin-events/tests.testdummyorga' % self.orga1.slug)
+        resp = self.client.get('/control/organizer/%s/settings/plugins/tests.testdummyorga/events' % self.orga1.slug)
         assert resp.status_code == 404
         assert b"only be enabled for the entire organizer account" in resp.content
 
         resp = self.client.get(
-            '/control/organizer/%s/settings/plugin-events/tests.testdummyrestricted' % self.orga1.slug)
+            '/control/organizer/%s/settings/plugins/tests.testdummyrestricted/events' % self.orga1.slug)
         assert resp.status_code == 404
         assert b"currently not allowed" in resp.content
 
-        resp = self.client.get('/control/organizer/%s/settings/plugin-events/tests.testdummyhybrid' % self.orga1.slug)
+        resp = self.client.get('/control/organizer/%s/settings/plugins/tests.testdummyhybrid/events' % self.orga1.slug)
         assert resp.status_code == 404
         assert b"currently not active on the organizer" in resp.content
 
-        resp = self.client.get('/control/organizer/%s/settings/plugin-events/pretix.plugins.stripe' % self.orga1.slug)
+        resp = self.client.get('/control/organizer/%s/settings/plugins/pretix.plugins.stripe/events' % self.orga1.slug)
         assert resp.status_code == 200
 
-        resp = self.client.post('/control/organizer/%s/settings/plugin-events/pretix.plugins.stripe' % self.orga1.slug,
+        resp = self.client.post('/control/organizer/%s/settings/plugins/pretix.plugins.stripe/events' % self.orga1.slug,
                                 {'events': self.event1.pk})
         assert resp.status_code == 302
         self.event1.refresh_from_db()
         assert 'pretix.plugins.stripe' in self.event1.get_plugins()
         assert 'pretix.plugins.banktransfer' in self.event1.get_plugins()
 
-        resp = self.client.post('/control/organizer/%s/settings/plugin-events/pretix.plugins.banktransfer' % self.orga1.slug,
+        resp = self.client.post('/control/organizer/%s/settings/plugins/pretix.plugins.banktransfer/events' % self.orga1.slug,
                                 {})
         assert resp.status_code == 302
         self.event1.refresh_from_db()

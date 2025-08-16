@@ -168,10 +168,10 @@ def test_logentrytype_registry():
     by_my_plugin = reg.filter(plugin=apps.get_app_config("testdummy"))
     assert set(type(typ) for typ, meta in by_my_plugin) == {MyType}
 
-    by_active_plugin = reg.filter(event=Event(plugins=""))
+    by_active_plugin = reg.filter(active_in=Event(plugins=""))
     assert set(type(typ) for typ, meta in by_active_plugin) == {MyOtherType}
 
-    by_active_plugin = reg.filter(event=Event(plugins="tests.testdummy"))
+    by_active_plugin = reg.filter(active_in=Event(plugins="tests.testdummy"))
     assert set(type(typ) for typ, meta in by_active_plugin) == {MyType, MyOtherType}
 
 

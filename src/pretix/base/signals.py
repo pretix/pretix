@@ -63,6 +63,9 @@ def get_defining_app(o):
     if "sentry" in o.__module__:
         o = o.__wrapped__
 
+    if hasattr(o, "__mocked_app"):
+        return o.__mocked_app
+
     # Find the Django application this belongs to
     searchpath = o.__module__
 

@@ -403,6 +403,8 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
             is_active = plugin.module in active_plugins
             if getattr(plugin, "level", PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_ORGANIZER:
                 is_active = plugin.module in organizer_active_plugins
+            if getattr(plugin, "level", PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                is_active = is_active and plugin.module in organizer_active_plugins
 
             settings_links = self.prepare_links(plugin, 'settings_links') if is_active else None
             navigation_links = self.prepare_links(plugin, 'navigation_links') if is_active else None
@@ -451,10 +453,11 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                                 )
                                 continue
 
-                            self.object.organizer.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
-                                                             data={'plugin': module})
-                            self.object.organizer.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
-                            save_organizer = True
+                            if module not in self.object.organizer.get_plugins():
+                                self.object.organizer.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
+                                                                 data={'plugin': module})
+                                self.object.organizer.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
+                                save_organizer = True
 
                         self.object.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                data={'plugin': module})
