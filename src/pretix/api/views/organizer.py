@@ -19,7 +19,9 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import operator
 from decimal import Decimal
+from functools import reduce
 
 import django_filters
 from django.contrib.auth.hashers import make_password
@@ -48,9 +50,12 @@ from pretix.api.serializers.organizer import (
     TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
 )
 from pretix.base.models import (
-    Customer, Device, GiftCard, GiftCardTransaction, Membership,
-    MembershipType, Organizer, SalesChannel, SeatingPlan, Team, TeamAPIToken,
-    TeamInvite, User,
+    Customer, Device, Event, GiftCard, GiftCardTransaction, LogEntry,
+    Membership, MembershipType, Organizer, SalesChannel, SeatingPlan, Team,
+    TeamAPIToken, TeamInvite, User,
+)
+from pretix.base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
 )
 from pretix.helpers import OF_SELF
 from pretix.helpers.dicts import merge_dicts
@@ -86,6 +91,8 @@ class OrganizerViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
 
     @transaction.atomic()
     def perform_update(self, serializer):
+        from pretix.base.plugins import get_all_plugins
+
         original_data = self.get_serializer(instance=serializer.instance).data
 
         current_plugins_value = serializer.instance.get_plugins()
@@ -102,6 +109,38 @@ class OrganizerViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
             enabled = {m: 'enabled' for m in updated_plugins_value if m not in current_plugins_value}
             disabled = {m: 'disabled' for m in current_plugins_value if m not in updated_plugins_value}
             changed = merge_dicts(enabled, disabled)
+
+            plugins_available = {
+                p.module: p
+                for p in get_all_plugins(organizer=serializer.instance)
+                if not p.name.startswith('.') and getattr(p, 'visible', True)
+            }
+            qs = []
+            for module in disabled:
+                pluginmeta = plugins_available[module]
+                level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
+                if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                    qs.append(Q(plugins__regex='(^|,)' + module + '(,|$)'))
+
+            if qs:
+                events_to_disable = set(self.request.organizer.events.filter(
+                    reduce(operator.or_, qs)
+                ).values_list("pk", flat=True))
+                logentries_to_save = []
+                events_to_save = []
+
+                for e in self.request.organizer.events.filter(pk__in=events_to_disable):
+                    for module in disabled:
+                        if module in e.get_plugins():
+                            logentries_to_save.append(
+                                e.log_action('pretix.event.plugins.disabled', user=self.request.user, auth=self.request.auth,
+                                             data={'plugin': module}, save=False)
+                            )
+                            e.disable_plugin(module)
+                            events_to_save.append(e)
+
+                Event.objects.bulk_update(events_to_save, fields=["plugins"])
+                LogEntry.objects.bulk_create(logentries_to_save)
 
             for module, operation in changed.items():
                 serializer.instance.log_action(

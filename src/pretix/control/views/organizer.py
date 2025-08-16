@@ -728,6 +728,25 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
                         level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
                         if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
                             continue
+
+                        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                            events_to_disable = set(self.request.organizer.events.filter(
+                                plugins__regex='(^|,)' + module + '(,|$)'
+                            ).values_list("pk", flat=True))
+                            logentries_to_save = []
+                            events_to_save = []
+
+                            for e in self.request.organizer.events.filter(pk__in=events_to_disable):
+                                logentries_to_save.append(
+                                    e.log_action('pretix.event.plugins.disabled', user=self.request.user,
+                                                 data={'plugin': module}, save=False)
+                                )
+                                e.disable_plugin(module)
+                                events_to_save.append(e)
+
+                            Event.objects.bulk_update(events_to_save, fields=["plugins"])
+                            LogEntry.objects.bulk_create(logentries_to_save)
+
                         self.object.log_action('pretix.organizer.plugins.disabled', user=self.request.user,
                                                data={'plugin': module})
                         self.object.disable_plugin(module)

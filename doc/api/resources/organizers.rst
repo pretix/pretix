@@ -21,7 +21,9 @@ public_url                            string                     The public, cus
                                                                  the list of all events can be found (read-only).
 plugins                               list                       A list of package names of the enabled plugins for this
                                                                  organizer. Note that most plugins are enabled on the
-                                                                 event level (or both levels).
+                                                                 event level (or both levels). If you remove a plugin
+                                                                 that is also enabled on some events, it will
+                                                                 automatically be removed from all events as well.
 ===================================== ========================== =======================================================
 
 
