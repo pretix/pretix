@@ -858,6 +858,39 @@ def test_event_update_plugins_validation(token_client, organizer, event, item, m
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
+            "plugins": ["tests.testdummyorga"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"plugins": ["Plugin cannot be enabled on this level: 'tests.testdummyorga'."]}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["tests.testdummyhybrid"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"plugins": ["Plugin should be enabled on organizer level first: 'tests.testdummyhybrid'."]}
+
+    with scopes_disabled():
+        organizer.enable_plugin("tests.testdummyhybrid")
+        organizer.save()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["tests.testdummyhybrid"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
             "all_sales_channels": False,
             "limit_sales_channels": ["web"],
             "sales_channels": ["bar"],

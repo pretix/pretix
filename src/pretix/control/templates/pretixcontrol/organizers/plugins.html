@@ -1,13 +1,13 @@
-{% extends "pretixcontrol/event/settings_base.html" %}
+{% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
 {% load static %}
 {% load bootstrap3 %}
-{% block inside %}
+{% block content %}
     <h1>{% trans "Available plugins" %}</h1>
     <p>
         {% blocktrans trimmed %}
-            On this page, you can choose plugins you want to enable for your event. Plugins might bring additional
-            software functionality, connect your event to third-party services, or apply other forms of customizations.
+            On this page, you can choose plugins you want to enable for your organizer account. Plugins might bring additional
+            software functionality, connect your events to third-party services, or apply other forms of customizations.
         {% endblocktrans %}
     </p>
     {% if "success" in request.GET %}
@@ -42,7 +42,7 @@
                 <fieldset data-plugin-category="{{ cat }}" data-plugin-category-label="{{ catlabel }}">
                     <legend>{{ catlabel }}</legend>
                     <div class="plugin-list">
-                        {% for plugin, is_active, settings_links, navigation_links in plist %}
+                        {% for plugin, is_active, settings_links, navigation_links, events_counter in plist %}
                             <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}" data-plugin-module="{{ plugin.module }}" data-plugin-name="{{ plugin.name }}">
                             {% if plugin.featured %}
                                <div class="panel panel-default">
@@ -69,10 +69,33 @@
                                                 {% if show_meta %}
                                                     <span class="text-muted text-sm">{{ plugin.version }}</span>
                                                 {% endif %}
-                                                {% if is_active %}
+                                                {% if is_active and level == "organizer" %}
                                                     <span class="label label-success" data-is-active>
                                                         <span class="fa fa-check" aria-hidden="true"></span>
                                                         {% trans "Active" %}
+                                                    </span>
+                                                {% elif events_counter == events_total %}
+                                                    <span class="label label-success" data-is-active>
+                                                        <span class="fa fa-check" aria-hidden="true"></span>
+                                                        {% trans "Active (all events)" %}
+                                                    </span>
+                                                {% elif events_counter %}
+                                                    <span class="label label-info" data-is-active>
+                                                        <span class="fa fa-check" aria-hidden="true"></span>
+                                                        {% blocktrans trimmed count count=events_counter %}
+                                                            Active ({{ count }} event)
+                                                        {% plural %}
+                                                            Active ({{ count }} events)
+                                                        {% endblocktrans %}
+                                                    </span>
+                                                {% elif level == "event_organizer" %}
+                                                    <span class="label label-info" data-is-active>
+                                                        <span class="fa fa-check" aria-hidden="true"></span>
+                                                        {% blocktrans trimmed count count=0 %}
+                                                            Active ({{ count }} event)
+                                                        {% plural %}
+                                                            Active ({{ count }} events)
+                                                        {% endblocktrans %}
                                                     </span>
                                                 {% endif %}
                                             </h4>
@@ -82,20 +105,15 @@
                                             <div class="plugin-action">
                                                 <span class="text-muted">{% trans "Incompatible" %}</span>
                                             </div>
-                                        {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
+                                        {% elif plugin.restricted and plugin.module not in request.organizer.settings.allowed_restricted_plugins %}
                                             <div class="plugin-action">
                                                 <span class="text-muted">{% trans "Not available" %}</span>
                                             </div>
                                         {% elif is_active %}
-                                            {% if plugin.level == "organizer" %}
+                                            {% if plugin.level == "event_organizer" %}
                                                 <p class="text-muted">
-                                                    <span class="fa fa-group" aria-hidden="true"></span>
-                                                    {% trans "This plugin can only be disabled for the entire organizer account." %}
-                                                </p>
-                                            {% elif plugin.level == "event_organizer" %}
-                                                <p class="text-muted">
-                                                    <span class="fa fa-group" aria-hidden="true"></span>
-                                                    {% trans "After disabling this plugin, some functionality may remain active in the organizer account." %}
+                                                    <span class="fa fa-calendar" aria-hidden="true"></span>
+                                                    {% trans "Parts of this plugin can be enabled or disabled for events individually." %}
                                                 </p>
                                             {% endif %}
                                             <div class="plugin-action flip">
@@ -123,37 +141,37 @@
                                                         </ul>
                                                     </div>
                                                 {% endif %}
-                                                {% if plugin.level == "organizer" %}
-                                                    <a href="{% url "control:organizer.settings.plugins" organizer=request.organizer.slug %}?q={{ plugin.module|urlencode }}"
-                                                       class="btn btn-default" target="_blank">
-                                                        <span class="fa fa-external-link" aria-hidden="true"></span>
-                                                        {% trans "Open in organizer settings" %}
+                                                <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
+                                                        value="disable">{% trans "Disable" %}</button>
+                                                {% if plugin.level == "event_organizer" %}
+                                                    <a class="btn btn-default {% if plugin.featured %} btn-lg{% endif %}"
+                                                        href="{% url "control:organizer.settings.plugin-events" organizer=request.organizer.slug plugin=plugin.module %}">
+                                                        {% trans "Manage events" %}
                                                     </a>
-                                                {% else %}
-                                                    <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
-                                                            value="disable">{% trans "Disable" %}</button>
                                                 {% endif %}
                                             </div>
                                         {% else %}
                                             {% if plugin.level == "organizer" %}
+                                                <div class="plugin-action flip">
+                                                    <button class="btn btn-primary{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
+                                                            value="enable">{% trans "Enable" %}</button>
+                                                </div>
+                                            {% elif not plugin.level or plugin.level == "event" %}
                                                 <p class="text-muted">
-                                                    <span class="fa fa-group" aria-hidden="true"></span>
-                                                    {% trans "This plugin can only be enabled for the entire organizer account." %}
+                                                    <span class="fa fa-calendar" aria-hidden="true"></span>
+                                                    {% trans "This plugin can be enabled or disabled for events individually." %}
                                                 </p>
                                                 <div class="plugin-action flip">
-                                                    <a href="{% url "control:organizer.settings.plugins" organizer=request.organizer.slug %}?q={{ plugin.module|urlencode }}"
-                                                       class="btn btn-default" target="_blank">
-                                                        <span class="fa fa-external-link" aria-hidden="true"></span>
-                                                        {% trans "Open in organizer settings" %}
+                                                    <a class="btn btn-default {% if plugin.featured %} btn-lg{% endif %}"
+                                                        href="{% url "control:organizer.settings.plugin-events" organizer=request.organizer.slug plugin=plugin.module %}">
+                                                        {% trans "Manage events" %}
                                                     </a>
                                                 </div>
-                                            {% else %}
-                                                {% if plugin.level == "event_organizer" and not plugin.module in request.organizer.get_plugins %}
-                                                    <p class="text-muted">
-                                                        <span class="fa fa-group" aria-hidden="true"></span>
-                                                        {% trans "Enabling this plugin will enable some of its functionality for the entire organizer account." %}
-                                                    </p>
-                                                {% endif %}
+                                            {% elif plugin.level == "event_organizer" %}
+                                                <p class="text-muted">
+                                                    <span class="fa fa-calendar" aria-hidden="true"></span>
+                                                    {% trans "Parts of this plugin can be enabled or disabled for events individually." %}
+                                                </p>
                                                 <div class="plugin-action flip">
                                                     <button class="btn btn-primary{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
                                                             value="enable">{% trans "Enable" %}</button>

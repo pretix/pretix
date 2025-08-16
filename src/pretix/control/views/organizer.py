@@ -33,10 +33,13 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
+import logging
 import re
+from collections import Counter
 from datetime import time, timedelta
 from decimal import Decimal
 from hashlib import sha1
+from itertools import groupby
 from json import JSONDecodeError
 
 import bleach
@@ -59,9 +62,11 @@ from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
@@ -69,6 +74,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import (
     CreateView, DetailView, FormView, ListView, TemplateView, UpdateView,
 )
+from django.views.generic.detail import SingleObjectMixin
 
 from pretix.api.models import ApiCall, WebHook
 from pretix.api.webhooks import manually_retry_all_calls
@@ -91,6 +97,10 @@ from pretix.base.models.giftcards import (
 from pretix.base.models.orders import CancellationRequest
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.payment import PaymentException
+from pretix.base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+    PLUGIN_LEVEL_ORGANIZER,
+)
 from pretix.base.services.export import multiexport, scheduled_organizer_export
 from pretix.base.services.mail import SendMailException, mail, prefix_subject
 from pretix.base.signals import register_multievent_data_exporters
@@ -108,9 +118,9 @@ from pretix.control.forms.organizer import (
     GiftCardAcceptanceInviteForm, GiftCardCreateForm, GiftCardUpdateForm,
     KnownDomainFormset, MailSettingsForm, MembershipTypeForm,
     MembershipUpdateForm, OrganizerDeleteForm, OrganizerFooterLinkFormset,
-    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm,
-    ReusableMediumCreateForm, ReusableMediumUpdateForm, SalesChannelForm,
-    SSOClientForm, SSOProviderForm, TeamForm, WebHookForm,
+    OrganizerForm, OrganizerPluginEventsForm, OrganizerSettingsForm,
+    OrganizerUpdateForm, ReusableMediumCreateForm, ReusableMediumUpdateForm,
+    SalesChannelForm, SSOClientForm, SSOProviderForm, TeamForm, WebHookForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
@@ -128,6 +138,8 @@ from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.customer import TokenGenerator
+
+logger = logging.getLogger(__name__)
 
 
 class OrganizerList(PaginationMixin, ListView):
@@ -580,6 +592,263 @@ class OrganizerCreate(CreateView):
         return reverse('control:organizer', kwargs={
             'organizer': self.object.slug,
         })
+
+
+class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, TemplateView, SingleObjectMixin):
+    model = Organizer
+    context_object_name = 'organizer'
+    permission = 'can_change_organizer_settings'
+    template_name = 'pretixcontrol/organizers/plugins.html'
+
+    def get_object(self, queryset=None) -> Organizer:
+        return self.request.organizer
+
+    def available_plugins(self, organizer):
+        from pretix.base.plugins import get_all_plugins
+
+        return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
+                and getattr(p, 'visible', True))
+
+    def prepare_links(self, pluginmeta, key):
+        links = getattr(pluginmeta, key, [])
+        try:
+            result = []
+            for linktext, urlname, kwargs in links:
+                try:
+                    result.append((
+                        reverse(urlname, kwargs={"organizer": self.request.organizer.slug}),
+                        " > ".join(map(str, linktext)) if isinstance(linktext, tuple) else linktext,
+                    ))
+                except NoReverseMatch:
+                    if pluginmeta.level != PLUGIN_LEVEL_ORGANIZER:
+                        # Ignore, link might be for another level
+                        pass
+                    else:
+                        raise
+            return result
+        except:
+            logger.exception('Failed to resolve settings links.')
+            return []
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        from pretix.base.plugins import CATEGORY_LABELS, CATEGORY_ORDER
+
+        context = super().get_context_data(*args, **kwargs)
+        plugins = list(self.available_plugins(self.object))
+
+        active_counter = Counter()
+        events_total = 0
+        for e in self.object.events.only("plugins").iterator():
+            events_total += 1
+            for p in e.get_plugins():
+                active_counter[p] += 1
+        plugins_grouped = groupby(
+            sorted(
+                plugins,
+                key=lambda p: (
+                    str(getattr(p, 'category', _('Other'))),
+                    (0 if getattr(p, 'featured', False) else 1),
+                    str(p.name).lower().replace('pretix ', '')
+                ),
+            ),
+            lambda p: str(getattr(p, 'category', _('Other')))
+        )
+        plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
+
+        active_plugins = self.object.get_plugins()
+
+        def plugin_details(plugin):
+            is_active = plugin.module in active_plugins
+            events_counter = active_counter[plugin.module]
+            settings_links = self.prepare_links(plugin, 'settings_links') if is_active else None
+            navigation_links = self.prepare_links(plugin, 'navigation_links') if is_active else None
+            return plugin, is_active, settings_links, navigation_links, events_counter
+
+        context['plugins'] = sorted([
+            (c, CATEGORY_LABELS.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
+            for c, plist
+            in plugins_grouped
+        ], key=lambda c: (CATEGORY_ORDER.index(c[0]), c[1]) if c[0] in CATEGORY_ORDER else (999, str(c[1])))
+        context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
+        context['events_total'] = events_total
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        plugins_available = {
+            p.module: p for p in self.available_plugins(self.object)
+        }
+        choose_events_next = False
+        with transaction.atomic():
+            for key, value in request.POST.items():
+                if key.startswith("plugin:"):
+                    module = key.split(":")[1]
+                    if value == "enable" and module in plugins_available:
+                        pluginmeta = plugins_available[module]
+                        if getattr(pluginmeta, 'restricted', False):
+                            if module not in request.organizer.settings.allowed_restricted_plugins:
+                                continue
+
+                        level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
+                        if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                            continue
+
+                        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                            choose_events_next = module
+
+                        self.object.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
+                                               data={'plugin': module})
+                        self.object.enable_plugin(module, allow_restricted=request.organizer.settings.allowed_restricted_plugins)
+
+                        links = self.prepare_links(pluginmeta, 'settings_links')
+                        if links:
+                            info = [
+                                '<p>',
+                                format_html(_('The plugin {} is now active, you can configure it here:'),
+                                            format_html("<strong>{}</strong>", pluginmeta.name)),
+                                '</p><p>',
+                            ] + [
+                                format_html('<a href="{}" class="btn btn-default">{}</a> ', url, text)
+                                for url, text in links
+                            ] + ['</p>']
+                        else:
+                            info = [
+                                format_html(_('The plugin {} is now active.'),
+                                            format_html("<strong>{}</strong>", pluginmeta.name)),
+                            ]
+                        messages.success(self.request, mark_safe("".join(info)))
+                    elif value == "disable" and module in plugins_available:
+                        pluginmeta = plugins_available[module]
+                        level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
+                        if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                            continue
+
+                        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                            events_to_disable = set(self.request.organizer.events.filter(
+                                plugins__regex='(^|,)' + module + '(,|$)'
+                            ).values_list("pk", flat=True))
+                            logentries_to_save = []
+                            events_to_save = []
+
+                            for e in self.request.organizer.events.filter(pk__in=events_to_disable):
+                                logentries_to_save.append(
+                                    e.log_action('pretix.event.plugins.disabled', user=self.request.user,
+                                                 data={'plugin': module}, save=False)
+                                )
+                                e.disable_plugin(module)
+                                events_to_save.append(e)
+
+                            Event.objects.bulk_update(events_to_save, fields=["plugins"])
+                            LogEntry.objects.bulk_create(logentries_to_save)
+
+                        self.object.log_action('pretix.organizer.plugins.disabled', user=self.request.user,
+                                               data={'plugin': module})
+                        self.object.disable_plugin(module)
+                        messages.success(self.request, _('The plugin has been disabled.'))
+            self.object.save()
+        if choose_events_next:
+            return redirect(reverse('control:organizer.settings.plugin-events', kwargs={
+                'organizer': self.request.organizer.slug,
+                'plugin': choose_events_next,
+            }))
+        else:
+            return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:organizer.settings.plugins', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+
+class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
+    model = Organizer
+    context_object_name = 'organizer'
+    permission = 'can_change_organizer_settings'
+    template_name = 'pretixcontrol/organizers/plugin_events.html'
+    form_class = OrganizerPluginEventsForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["events"] = self.request.user.get_events_with_permission(
+            "can_change_event_settings", request=self.request
+        ).filter(organizer=self.request.organizer)
+        kwargs["initial"] = {
+            "events": self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)')
+        }
+        return kwargs
+
+    def available_plugins(self, organizer):
+        from pretix.base.plugins import get_all_plugins
+
+        return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
+                and getattr(p, 'visible', True))
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            plugin=self.plugin,
+            **kwargs
+        )
+
+    def dispatch(self, request, *args, **kwargs):
+        plugins_available = {
+            p.module: p for p in self.available_plugins(self.request.organizer)
+        }
+        if kwargs["plugin"] not in plugins_available:
+            raise Http404(_("Unknown plugin."))
+        self.plugin = plugins_available[kwargs["plugin"]]
+        level = getattr(self.plugin, "level", PLUGIN_LEVEL_EVENT)
+        if level == PLUGIN_LEVEL_ORGANIZER:
+            raise Http404(_("This plugin can only be enabled for the entire organizer account."))
+        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID and self.plugin.module not in self.request.organizer.get_plugins():
+            raise Http404(_("This plugin is currently not active on the organizer account."))
+
+        if getattr(self.plugin, 'restricted', False):
+            if self.plugin.module not in request.organizer.settings.allowed_restricted_plugins:
+                raise Http404(_("This plugin is currently not allowed for this organizer account."))
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse('control:organizer.settings.plugins', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        enabled_events_before = set(
+            self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)').values_list("pk", flat=True)
+        )
+        enabled_events_now = {e.pk for e in form.cleaned_data["events"]}
+
+        events_to_enable = enabled_events_now - enabled_events_before
+        events_to_disable = enabled_events_before - enabled_events_now
+        events_to_save = []
+        logentries_to_save = []
+
+        for e in self.request.organizer.events.filter(pk__in=events_to_enable):
+            logentries_to_save.append(
+                e.log_action('pretix.event.plugins.enabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
+            )
+            e.enable_plugin(self.plugin.module, allow_restricted=self.request.organizer.settings.allowed_restricted_plugins)
+            events_to_save.append(e)
+
+        for e in self.request.organizer.events.filter(pk__in=events_to_disable):
+            logentries_to_save.append(
+                e.log_action('pretix.event.plugins.disabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
+            )
+            e.disable_plugin(self.plugin.module)
+            events_to_save.append(e)
+
+        Event.objects.bulk_update(events_to_save, fields=["plugins"])
+        LogEntry.objects.bulk_create(logentries_to_save)
+        messages.success(self.request, _("Your changes have been saved."))
+        return super().form_valid(form)
 
 
 class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):

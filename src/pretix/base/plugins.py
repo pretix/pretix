@@ -28,7 +28,12 @@ import importlib_metadata as metadata
 from django.apps import AppConfig, apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.translation import gettext_lazy as _
 from packaging.requirements import Requirement
+
+PLUGIN_LEVEL_EVENT = 'event'
+PLUGIN_LEVEL_ORGANIZER = 'organizer'
+PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID = 'event_organizer'
 
 
 class PluginType(Enum):
@@ -43,11 +48,14 @@ class PluginType(Enum):
     EXPORT = 4
 
 
-def get_all_plugins(event=None) -> List[type]:
+def get_all_plugins(*, event=None, organizer=None) -> List[type]:
     """
     Returns the PretixPluginMeta classes of all plugins found in the installed Django apps.
     """
+    assert not event or not organizer
     plugins = []
+    event_fallback = None
+    event_fallback_used = False
     for app in apps.get_app_configs():
         if hasattr(app, 'PretixPluginMeta'):
             meta = app.PretixPluginMeta
@@ -56,8 +64,26 @@ def get_all_plugins(event=None) -> List[type]:
             if app.name in settings.PRETIX_PLUGINS_EXCLUDE:
                 continue
 
-            if hasattr(app, 'is_available') and event:
-                if not app.is_available(event):
+            level = getattr(app, "level", PLUGIN_LEVEL_EVENT)
+            if level == PLUGIN_LEVEL_EVENT:
+                if event and hasattr(app, 'is_available'):
+                    if not app.is_available(event):
+                        continue
+                elif organizer and hasattr(app, 'is_available'):
+                    if not event_fallback_used:
+                        event_fallback = organizer.events.first()
+                        event_fallback_used = True
+                    if not event_fallback or not app.is_available(event_fallback):
+                        continue
+            elif level == PLUGIN_LEVEL_ORGANIZER:
+                if organizer and hasattr(app, 'is_available'):
+                    if not app.is_available(organizer):
+                        continue
+                elif event and hasattr(app, 'is_available'):
+                    if not app.is_available(event.organizer):
+                        continue
+            elif level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID and (event or organizer) and hasattr(app, 'is_available'):
+                if not app.is_available(event or organizer):
                     continue
 
             plugins.append(meta)
@@ -91,3 +117,26 @@ class PluginConfig(AppConfig, metaclass=PluginConfigMeta):
                     self.name, req, requirement_version
                 ))
                 sys.exit(1)
+
+        if not hasattr(self.PretixPluginMeta, 'level'):
+            self.PretixPluginMeta.level = PLUGIN_LEVEL_EVENT
+        if self.PretixPluginMeta.level not in (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+            raise ImproperlyConfigured(f"Unknown plugin level '{self.PretixPluginMeta.level}'")
+
+
+CATEGORY_ORDER = [
+    'FEATURE',
+    'PAYMENT',
+    'INTEGRATION',
+    'CUSTOMIZATION',
+    'FORMAT',
+    'API',
+]
+CATEGORY_LABELS = {
+    'FEATURE': _('Features'),
+    'PAYMENT': _('Payment providers'),
+    'INTEGRATION': _('Integrations'),
+    'CUSTOMIZATION': _('Customizations'),
+    'FORMAT': _('Output and export formats'),
+    'API': _('API features'),
+}

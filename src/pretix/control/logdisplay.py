@@ -784,6 +784,25 @@ class CoreLogEntryType(LogEntryType):
 
 
 @log_entry_types.new_from_dict({
+    'pretix.organizer.plugins.enabled': _('The plugin has been enabled.'),
+    'pretix.organizer.plugins.disabled': _('The plugin has been disabled.'),
+})
+class OrganizerPluginStateLogEntryType(LogEntryType):
+    object_link_wrapper = _('Plugin {val}')
+
+    def get_object_link_info(self, logentry) -> Optional[dict]:
+        if 'plugin' in logentry.parsed_data:
+            app = app_cache.get(logentry.parsed_data['plugin'])
+            if app and hasattr(app, 'PretixPluginMeta'):
+                return {
+                    'href': reverse('control:organizer.settings.plugins', kwargs={
+                        'organizer': logentry.event.organizer.slug,
+                    }) + '#plugin_' + logentry.parsed_data['plugin'],
+                    'val': app.PretixPluginMeta.name
+                }
+
+
+@log_entry_types.new_from_dict({
     'pretix.event.item_meta_property.added': _('A meta property has been added to this event.'),
     'pretix.event.item_meta_property.deleted': _('A meta property has been removed from this event.'),
     'pretix.event.item_meta_property.changed': _('A meta property has been changed on this event.'),

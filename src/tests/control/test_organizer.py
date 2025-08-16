@@ -380,3 +380,76 @@ class OrganizerTest(SoupTest):
         assert doc.select('.alert-danger')
         with scopes_disabled():
             assert self.orga1.sales_channels.filter(identifier="web").exists()
+
+    def test_plugins(self):
+        doc = self.get_doc('/control/organizer/%s/settings/plugins' % self.orga1.slug)
+        self.assertIn("Stripe", doc.select(".form-plugins")[0].text)
+        self.assertIn("Enable", doc.select("[name=\"plugin:tests.testdummyorga\"]")[0].text)
+        self.assertIn("Enable", doc.select("[name=\"plugin:tests.testdummyhybrid\"]")[0].text)
+        assert not doc.select("[name=\"plugin:pretix.plugins.stripe\"]")
+        assert not doc.select("[name=\"plugin:tests.testdummy\"]")
+        assert not doc.select("[name=\"plugin:tests.testdummyrestricted\"]")
+        assert not doc.select("[name=\"plugin:tests.testdummyorgarestricted\"]")
+        assert not doc.select("[name=\"plugin:tests.testdummyhidden\"]")
+
+        doc = self.post_doc('/control/organizer/%s/settings/plugins' % self.orga1.slug,
+                            {'plugin:tests.testdummyorga': 'enable'})
+        self.assertIn("Disable", doc.select("[name=\"plugin:tests.testdummyorga\"]")[0].text)
+
+        doc = self.post_doc('/control/organizer/%s/settings/plugins' % self.orga1.slug,
+                            {'plugin:tests.testdummyhybrid': 'enable'})
+        self.assertIn("Events with plugin testdummyhybrid", doc.select("h1")[0].text)
+        self.orga1.refresh_from_db()
+        assert "tests.testdummyhybrid" in self.orga1.get_plugins()
+
+        doc = self.post_doc('/control/organizer/%s/settings/plugins' % self.orga1.slug,
+                            {'plugin:tests.testdummyhybrid': 'disable'})
+        self.assertIn("Enable", doc.select("[name=\"plugin:tests.testdummyhybrid\"]")[0].text)
+
+        self.post_doc('/control/organizer/%s/settings/plugins' % self.orga1.slug,
+                      {'plugin:tests.testdummy': 'enable'})
+        self.orga1.refresh_from_db()
+        assert "tests.testdummy" not in self.orga1.get_plugins()
+
+        self.post_doc('/control/organizer/%s/settings/plugins' % self.orga1.slug,
+                      {'plugin:tests.testdummyorgarestricted': 'enable'})
+        self.orga1.refresh_from_db()
+        assert "testdummyorgarestricted" not in self.orga1.get_plugins()
+
+        self.orga1.settings.allowed_restricted_plugins = ["tests.testdummyorgarestricted"]
+
+        self.post_doc('/control/organizer/%s/settings/plugins' % self.orga1.slug,
+                      {'plugin:tests.testdummyorgarestricted': 'enable'})
+        self.orga1.refresh_from_db()
+        assert "tests.testdummyorgarestricted" in self.orga1.get_plugins()
+
+    def test_plugin_events(self):
+        resp = self.client.get('/control/organizer/%s/settings/plugins/tests.testdummyorga/events' % self.orga1.slug)
+        assert resp.status_code == 404
+        assert b"only be enabled for the entire organizer account" in resp.content
+
+        resp = self.client.get(
+            '/control/organizer/%s/settings/plugins/tests.testdummyrestricted/events' % self.orga1.slug)
+        assert resp.status_code == 404
+        assert b"currently not allowed" in resp.content
+
+        resp = self.client.get('/control/organizer/%s/settings/plugins/tests.testdummyhybrid/events' % self.orga1.slug)
+        assert resp.status_code == 404
+        assert b"currently not active on the organizer" in resp.content
+
+        resp = self.client.get('/control/organizer/%s/settings/plugins/pretix.plugins.stripe/events' % self.orga1.slug)
+        assert resp.status_code == 200
+
+        resp = self.client.post('/control/organizer/%s/settings/plugins/pretix.plugins.stripe/events' % self.orga1.slug,
+                                {'events': self.event1.pk})
+        assert resp.status_code == 302
+        self.event1.refresh_from_db()
+        assert 'pretix.plugins.stripe' in self.event1.get_plugins()
+        assert 'pretix.plugins.banktransfer' in self.event1.get_plugins()
+
+        resp = self.client.post('/control/organizer/%s/settings/plugins/pretix.plugins.banktransfer/events' % self.orga1.slug,
+                                {})
+        assert resp.status_code == 302
+        self.event1.refresh_from_db()
+        assert 'pretix.plugins.banktransfer' not in self.event1.get_plugins()
+        assert 'pretix.plugins.stripe' in self.event1.get_plugins()

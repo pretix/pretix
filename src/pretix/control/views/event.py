@@ -61,7 +61,7 @@ from django.http import (
     JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from django.utils.functional import cached_property
 from django.utils.html import conditional_escape, format_html
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -103,6 +103,10 @@ from pretix.presale.views.widget import (
 from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
+)
+from ...base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+    PLUGIN_LEVEL_ORGANIZER,
 )
 from ...base.services.mail import prefix_subject
 from ...base.services.placeholders import get_sample_context
@@ -349,42 +353,35 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
     def available_plugins(self, event):
         from pretix.base.plugins import get_all_plugins
 
-        return (p for p in get_all_plugins(event) if not p.name.startswith('.')
+        return (p for p in get_all_plugins(event=event) if not p.name.startswith('.')
                 and getattr(p, 'visible', True))
 
     def prepare_links(self, pluginmeta, key):
         links = getattr(pluginmeta, key, [])
         try:
-            return [
-                (
-                    reverse(urlname, kwargs={"organizer": self.request.organizer.slug, "event": self.request.event.slug, **kwargs}),
-                    " > ".join(map(str, linktext)) if isinstance(linktext, tuple) else linktext,
-                ) for linktext, urlname, kwargs in links
-            ]
+            result = []
+            for linktext, urlname, kwargs in links:
+                try:
+                    result.append((
+                        reverse(urlname, kwargs={"organizer": self.request.organizer.slug, "event": self.request.event.slug, **kwargs}),
+                        " > ".join(map(str, linktext)) if isinstance(linktext, tuple) else linktext,
+                    ))
+                except NoReverseMatch:
+                    if pluginmeta.level != PLUGIN_LEVEL_EVENT:
+                        # Ignore, link might be for another level
+                        pass
+                    else:
+                        raise
+            return result
         except:
             logger.exception('Failed to resolve settings links.')
             return []
 
     def get_context_data(self, *args, **kwargs) -> dict:
+        from pretix.base.plugins import CATEGORY_LABELS, CATEGORY_ORDER
+
         context = super().get_context_data(*args, **kwargs)
         plugins = list(self.available_plugins(self.object))
-
-        order = [
-            'FEATURE',
-            'PAYMENT',
-            'INTEGRATION',
-            'CUSTOMIZATION',
-            'FORMAT',
-            'API',
-        ]
-        labels = {
-            'FEATURE': _('Features'),
-            'PAYMENT': _('Payment providers'),
-            'INTEGRATION': _('Integrations'),
-            'CUSTOMIZATION': _('Customizations'),
-            'FORMAT': _('Output and export formats'),
-            'API': _('API features'),
-        }
 
         plugins_grouped = groupby(
             sorted(
@@ -400,17 +397,24 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
 
         active_plugins = self.object.get_plugins()
+        organizer_active_plugins = self.request.organizer.get_plugins()
 
         def plugin_details(plugin):
             is_active = plugin.module in active_plugins
+            if getattr(plugin, "level", PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_ORGANIZER:
+                is_active = plugin.module in organizer_active_plugins
+            if getattr(plugin, "level", PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                is_active = is_active and plugin.module in organizer_active_plugins
+
             settings_links = self.prepare_links(plugin, 'settings_links') if is_active else None
             navigation_links = self.prepare_links(plugin, 'navigation_links') if is_active else None
-            return (plugin, is_active, settings_links, navigation_links)
+            return plugin, is_active, settings_links, navigation_links
+
         context['plugins'] = sorted([
-            (c, labels.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
+            (c, CATEGORY_LABELS.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
             for c, plist
             in plugins_grouped
-        ], key=lambda c: (order.index(c[0]), c[1]) if c[0] in order else (999, str(c[1])))
+        ], key=lambda c: (CATEGORY_ORDER.index(c[0]), c[1]) if c[0] in CATEGORY_ORDER else (999, str(c[1])))
         context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
         return context
 
@@ -427,6 +431,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         }
 
         with transaction.atomic():
+            save_organizer = False
             for key, value in request.POST.items():
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
@@ -436,8 +441,26 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                             if module not in request.event.settings.allowed_restricted_plugins:
                                 continue
 
-                        self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
-                                                      data={'plugin': module})
+                        if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) not in (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                            continue
+
+                        if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                            if not request.user.has_organizer_permission(request.organizer, "can_change_organizer_settings", request):
+                                messages.error(
+                                    request,
+                                    _("You do not have sufficient permission to enable plugins that need to be enabled "
+                                      "for the entire organizer account.")
+                                )
+                                continue
+
+                            if module not in self.object.organizer.get_plugins():
+                                self.object.organizer.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
+                                                                 data={'plugin': module})
+                                self.object.organizer.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
+                                save_organizer = True
+
+                        self.object.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                               data={'plugin': module})
                         self.object.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
 
                         links = self.prepare_links(pluginmeta, 'settings_links')
@@ -463,12 +486,14 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                         self.object.disable_plugin(module)
                         messages.success(self.request, _('The plugin has been disabled.'))
             self.object.save()
+            if save_organizer:
+                self.object.organizer.save()
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.plugins', kwargs={
-            'organizer': self.get_object().organizer.slug,
-            'event': self.get_object().slug,
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
         })
 
 
