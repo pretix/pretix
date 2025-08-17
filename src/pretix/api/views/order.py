@@ -250,7 +250,7 @@ class OrderViewSetMixin:
             opq = OrderPosition.all
         else:
             opq = OrderPosition.objects
-        if request.query_params.get('pdf_data', 'false'),lower() == 'true' and getattr(request, 'event', None):
+        if request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(request, 'event', None):
             prefetch_related_objects([request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [request.event],
