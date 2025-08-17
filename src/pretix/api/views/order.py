@@ -228,7 +228,7 @@ class OrderViewSetMixin:
     def get_queryset(self):
         qs = self.get_base_queryset()
         if 'fees' not in self.request.GET.getlist('exclude'):
-            if self.request.query_params.get('include_canceled_fees', 'false') == 'true':
+            if self.request.query_params.get('include_canceled_fees', 'false').lower() == 'true':
                 fqs = OrderFee.all
             else:
                 fqs = OrderFee.objects
@@ -246,11 +246,11 @@ class OrderViewSetMixin:
         return qs
 
     def _positions_prefetch(self, request):
-        if request.query_params.get('include_canceled_positions', 'false') == 'true':
+        if request.query_params.get('include_canceled_positions', 'false').lower() == 'true':
             opq = OrderPosition.all
         else:
             opq = OrderPosition.objects
-        if request.query_params.get('pdf_data', 'false') == 'true' and getattr(request, 'event', None):
+        if request.query_params.get('pdf_data', 'false'),lower() == 'true' and getattr(request, 'event', None):
             prefetch_related_objects([request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [request.event],
@@ -344,7 +344,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         return ctx
 
     def get_base_queryset(self):
@@ -943,7 +943,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def change(self, request, **kwargs):
         order = self.get_object()
-        check_quotas = self.request.query_params.get('check_quotas', 'true') == 'true'
+        check_quotas = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
 
         serializer = OrderChangeOperationSerializer(
             context={'order': order, **self.get_serializer_context()},
@@ -1087,18 +1087,18 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         return ctx
 
     def get_queryset(self):
-        if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
+        if self.request.query_params.get('include_canceled_positions', 'false').lower() == 'true':
             qs = OrderPosition.all
         else:
             qs = OrderPosition.objects
 
         qs = qs.filter(order__event=self.request.event)
-        if self.request.query_params.get('pdf_data', 'false') == 'true':
+        if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [self.request.event],
