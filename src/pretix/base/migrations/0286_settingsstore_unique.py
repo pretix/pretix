@@ -6,7 +6,7 @@ from hierarkey.utils import CleanHierarkeyDuplicates
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("pretixbase", "0284_ordersyncresult_ordersyncqueue"),
+        ("pretixbase", "0285_voucher_created"),
     ]
 
     operations = [
