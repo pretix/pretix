@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-19 17:02+0000\n"
+"PO-Revision-Date: 2025-08-19 17:08+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -932,7 +932,7 @@ msgstr "Teilnehmer*innen-Adresse: Straße"
 
 #: pretix/base/datasync/sourcefields.py:250
 msgid "Attendee address ZIP code"
-msgstr "Attendee address ZIP code"
+msgstr "Teilnehmer*innen-Adresse: PLZ"
 
 #: pretix/base/datasync/sourcefields.py:259
 msgid "Attendee address city"
