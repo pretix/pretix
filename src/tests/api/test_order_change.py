@@ -248,6 +248,147 @@ def test_order_update_state_validation(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_order_update_transmission_validation(token_client, organizer, event, order):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": False,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "",
+                "state": "",
+                "zipcode": "",
+                "city": "Paris",
+                "country": "FR",
+                "internal_reference": "",
+                "vat_id": "",
+                "transmission_type": "invalid",
+                "transmission_info": {},
+            }
+        }
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"invoice_address": {"transmission_type": ["Unknown transmission type."]}}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": True,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "",
+                "zipcode": "",
+                "city": "Test",
+                "country": "FR",
+                "internal_reference": "",
+                "vat_id": "",
+                "transmission_type": "it_sdi",
+                "transmission_info": {
+                    "transmission_it_sdi_pec": "foobar",
+                },
+            }
+        }
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"invoice_address": {
+        "transmission_type": ["The selected transmission type is not available for this country or address type."]
+    }}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": True,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "",
+                "zipcode": "",
+                "city": "Test",
+                "country": "IT",
+                "internal_reference": "",
+                "vat_id": "",
+                "transmission_type": "it_sdi",
+                "transmission_info": {
+                    "transmission_it_sdi_pec": "foobar",
+                },
+            }
+        }
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"invoice_address": {"transmission_info": {
+        "transmission_it_sdi_pec": ["Enter a valid email address.", "Enter a valid email address."],
+        "transmission_it_sdi_recipient_code": ["This field is required."]
+    }}}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": True,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "Via Da Vinci 1",
+                "zipcode": "12345",
+                "city": "Test",
+                "country": "IT",
+                "state": "MI",
+                "internal_reference": "",
+                "vat_id": "",
+                "transmission_type": "it_sdi",
+                "transmission_info": {
+                    "transmission_it_sdi_pec": "foobar@pec.it",
+                    "transmission_it_sdi_recipient_code": "1234567",
+                },
+            }
+        }
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        "invoice_address": {"vat_id": ["This field is required for the selected type of invoice transmission."]}
+    }
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": True,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "Via Una 1",
+                "zipcode": "12345",
+                "city": "Test",
+                "country": "FR",
+                "internal_reference": "",
+                "vat_id": "",
+                "transmission_type": "peppol",
+                "transmission_info": {
+                    "transmission_peppol_participant_id": "9930:DE811569869",
+                    "ignored": "parameter",
+                },
+            }
+        }
+    )
+    assert resp.status_code == 200
+    order.invoice_address.refresh_from_db()
+    assert order.invoice_address.transmission_type == "peppol"
+    assert order.invoice_address.transmission_info == {
+        "transmission_peppol_participant_id": "9930:DE811569869",
+    }
+
+
+@pytest.mark.django_db
 def test_order_update_allowed_fields(token_client, organizer, event, order):
     event.settings.locales = ['de', 'en']
     resp = token_client.patch(
@@ -442,6 +583,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         "invoice_from_vat_id": "",
         "invoice_to": "Sample company\nNew Zealand\nVAT-ID: DE123",
         "invoice_to_company": "Sample company",
+        "invoice_to_is_business": False,
         "invoice_to_name": "",
         "invoice_to_street": "",
         "invoice_to_zipcode": "",
@@ -450,6 +592,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         "invoice_to_country": "NZ",
         "invoice_to_vat_id": "DE123",
         "invoice_to_beneficiary": "",
+        "invoice_to_transmission_info": {},
         "custom_field": None,
         'date': now().astimezone(event.timezone).date().isoformat(),
         'refers': None,
@@ -500,7 +643,11 @@ def test_order_create_invoice(token_client, organizer, event, order):
         'foreign_currency_display': None,
         'foreign_currency_rate': None,
         'foreign_currency_rate_date': None,
-        'internal_reference': ''
+        'internal_reference': '',
+        'transmission_date': None,
+        'transmission_provider': None,
+        'transmission_status': 'pending',
+        'transmission_type': 'email',
     }
 
     resp = token_client.post(

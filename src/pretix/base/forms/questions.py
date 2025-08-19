@@ -54,7 +54,6 @@ from django.core.validators import (
 from django.db.models import QuerySet
 from django.forms import Select, widgets
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
-from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -78,6 +77,7 @@ from pretix.base.forms.widgets import (
 from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
+from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
@@ -736,7 +736,7 @@ class BaseQuestionsForm(forms.Form):
                 initial=country,
                 widget=forms.Select(attrs={
                     'autocomplete': 'country',
-                    'data-country-information-url': reverse('js_helpers.states'),
+                    'data-trigger-address-info': 'on',
                 }),
             )
             c = [('', '---')]
@@ -1142,10 +1142,18 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if (not kwargs.get('instance') or not kwargs['instance'].country) and not kwargs["initial"].get("country"):
             kwargs['initial']['country'] = guess_country_from_request(self.request, self.event)
 
+        if kwargs.get('instance'):
+            kwargs['initial'].update(kwargs['instance'].transmission_info or {})
+            kwargs['initial']['transmission_type'] = kwargs['instance'].transmission_type
+
         super().__init__(*args, **kwargs)
 
+        # Individuals do not have a company name or VAT ID
         self.fields["company"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
         self.fields["vat_id"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
+
+        # The internal reference is a very business-specific field and might confuse non-business users
+        self.fields["internal_reference"].widget.attrs["data-display-dependency"] = f'input[name="{self.add_prefix("is_business")}"][value="business"]'
 
         if not self.ask_vat_id:
             del self.fields['vat_id']
@@ -1162,8 +1170,20 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 str(_('If you are registered in Switzerland, you can enter your UID instead.')),
             ])
 
+        transmission_type_choices = [
+            (t.identifier, t.public_name) for t in get_transmission_types()
+        ]
+        if not self.address_required or self.all_optional:
+            transmission_type_choices.insert(0, ("-", _("No invoice requested")))
+        self.fields['transmission_type'] = forms.ChoiceField(
+            label=_('Invoice transmission method'),
+            choices=transmission_type_choices
+        )
+
         self.fields['country'].choices = CachedCountries()
-        self.fields['country'].widget.attrs['data-country-information-url'] = reverse('js_helpers.states')
+        self.fields['country'].widget.attrs['data-trigger-address-info'] = 'on'
+        self.fields['is_business'].widget.attrs['data-trigger-address-info'] = 'on'
+        self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
 
         c = [('', '---')]
         fprefix = self.prefix + '-' if self.prefix else ''
@@ -1250,6 +1270,44 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 else:
                     v.widget.attrs['autocomplete'] = 'section-invoice billing ' + autocomplete
 
+        # Add transmission type specific fields
+        for transmission_type in get_transmission_types():
+            for k, f in transmission_type.invoice_address_form_fields.items():
+                if (
+                    transmission_type.identifier == "email" and
+                    k in ("transmission_email_other", "transmission_email_address") and
+                    (
+                        event.settings.invoice_generate == "False" or
+                        not event.settings.invoice_email_attachment
+                    )
+                ):
+                    # This looks like a very unclean hack (and probably really is one), but hear me out:
+                    # With pretix 2025.7, we introduced invoice transmission types and added the "send to another email"
+                    # feature for the email provider. This feature was previously part of the bank transfer payment
+                    # provider and opt-in. With this change, this feature becomes available for all pretix shops, which
+                    # we think is a good thing in the long run as it is an useful feature for every business customer.
+                    # However, there's two scenarios where it might be bad that we add it without opt-in:
+                    # - When the organizer has turned off invoice generation in pretix and is collecting invoice information
+                    #   only for other reasons or to later create invoices with a separate software. In this case it
+                    #   would be very bad for the user to be able to ask for the invoice to be sent somewhere else, and
+                    #   that information then be ignored because the organizer has not updated their process.
+                    # - When the organizer has intentionally turned off invoices being attached to emails, because that
+                    #   would somehow be a contradiction.
+                    # Now, the obvious solution would be to make the TransmissionType.invoice_address_form_fields property
+                    # a function that depends on the event as an input. However, I believe this is the wrong approach
+                    # over the long term. As a generalized concept, we DO want invoice address collection to be
+                    # *independent* of event settings, in order to (later) e.g. implement invoice address editing within
+                    # customer accounts. Hence, this hack directly in the form to provide (some) backwards compatibility
+                    # only for the default transmission type "email".
+                    continue
+
+                self.fields[k] = f
+                f._required = f.required
+                f.required = False
+                f.widget.is_required = False
+                if 'required' in f.widget.attrs:
+                    del f.widget.attrs['required']
+
     def clean(self):
         from pretix.base.addressvalidation import \
             validate_address  # local import to prevent impact on startup time
@@ -1277,11 +1335,23 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         self.instance.name_parts = data.get('name_parts')
 
-        if all(
-                not v for k, v in data.items() if k not in ('is_business', 'country', 'name_parts')
-        ) and name_parts_is_empty(data.get('name_parts', {})):
+        form_is_empty = all(
+            not v for k, v in data.items()
+            if k not in ('is_business', 'country', 'name_parts', 'transmission_type') and not k.startswith("transmission_")
+        ) and name_parts_is_empty(data.get('name_parts', {}))
+
+        if form_is_empty:
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
+            if data.get('transmission_type') == "-":
+                data['transmission_type'] = 'email'  # our actual default for now, we can revisit this later
+
+        else:
+            if data.get('transmission_type') == "-":
+                raise ValidationError(
+                    {"transmission_type": _("If you enter an invoice address, you also need to select an invoice "
+                                            "transmission method.")}
+                )
 
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass
@@ -1302,6 +1372,37 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                     messages.warning(self.request, e.message)
         else:
             self.instance.vat_id_validated = False
+
+        for transmission_type in get_transmission_types():
+            if transmission_type.identifier == data.get("transmission_type"):
+                if not transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
+                    raise ValidationError({
+                        "transmission_type": _("The selected transmission type is not available in your country or for "
+                                               "your type of address.")
+                    })
+
+                required_fields = transmission_type.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
+                for r in required_fields:
+                    if r not in self.fields:
+                        logger.info(f"Transmission type {transmission_type.identifier} required field {r} which is not available.")
+                        raise ValidationError(
+                            _("The selected type of invoice transmission requires a field that is currently not "
+                              "available, please reach out to the organizer.")
+                        )
+                    if not data.get(r):
+                        raise ValidationError({r: _("This field is required for the selected type of invoice transmission.")})
+
+                self.instance.transmission_type = transmission_type.identifier
+                self.instance.transmission_info = {
+                    k: data.get(k) for k in transmission_type.invoice_address_form_fields
+                }
+            elif transmission_type.exclusive:
+                if transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
+                    raise ValidationError({
+                        "transmission_type": "The transmission type '%s' must be used for this country or address type." % (
+                            transmission_type.public_name,
+                        )
+                    })
 
 
 class BaseInvoiceNameForm(BaseInvoiceAddressForm):

@@ -66,7 +66,7 @@ from django.utils.html import conditional_escape, escape
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext, gettext_lazy as _, ngettext
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic import (
     DetailView, FormView, ListView, TemplateView, View,
 )
@@ -93,7 +93,7 @@ from pretix.base.services.cancelevent import cancel_event
 from pretix.base.services.export import export, scheduled_event_export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
-    invoice_qualified, regenerate_invoice,
+    invoice_qualified, regenerate_invoice, transmit_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import (
@@ -550,27 +550,6 @@ class OrderDetail(OrderView):
         ctx['download_buttons'] = self.download_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = self.order.pending_sum
-
-        unsent_invoices = [ii.pk for ii in ctx['invoices'] if not ii.sent_to_customer]
-        if unsent_invoices:
-            with language(self.order.locale):
-                ctx['invoices_send_link'] = reverse('control:event.order.sendmail', kwargs={
-                    'event': self.request.event.slug,
-                    'organizer': self.request.event.organizer.slug,
-                    'code': self.order.code
-                }) + '?' + urlencode({
-                    'subject': ngettext('Your invoice', 'Your invoices', len(unsent_invoices)),
-                    'message': ngettext(
-                        'Hello,\n\nplease find your invoice attached to this email.\n\n'
-                        'Your {event} team',
-                        'Hello,\n\nplease find your invoices attached to this email.\n\n'
-                        'Your {event} team',
-                        len(unsent_invoices)
-                    ).format(
-                        event="{event}",
-                    ),
-                    'attach_invoices': unsent_invoices
-                }, doseq=True)
 
         return ctx
 
@@ -1681,6 +1660,8 @@ class OrderInvoiceRegenerate(OrderView):
         else:
             if not inv.event.settings.invoice_regenerate_allowed:
                 messages.error(self.request, _('Invoices may not be changed after they are created.'))
+            elif not inv.regenerate_allowed:
+                messages.error(self.request, _('Invoices may not be changed after they are transmitted.'))
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
             elif inv.sent_to_organizer:
@@ -1695,6 +1676,37 @@ class OrderInvoiceRegenerate(OrderView):
                     'invoice': inv.pk
                 })
                 messages.success(self.request, _('The invoice has been regenerated.'))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):  # NOQA
+        return HttpResponseNotAllowed(['POST'])
+
+
+class OrderInvoiceRetransmit(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        with transaction.atomic(durable=True):
+            try:
+                invoice = self.order.invoices.select_for_update(of=OF_SELF).get(pk=kwargs.get("id"))
+            except Invoice.DoesNotExist:
+                messages.error(self.request, _('Unknown invoice.'))
+                return redirect(self.get_order_url())
+
+            if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
+                messages.error(self.request, _('The invoice is currently being transmitted. You can start a new attempt after '
+                                               'the current one has been completed.'))
+                return redirect(self.get_order_url())
+
+            invoice.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
+            invoice.transmission_date = now()
+            invoice.save(update_fields=["transmission_status", "transmission_date"])
+            messages.success(self.request, _('The invoice has been scheduled for retransmission.'))
+            self.order.log_action('pretix.event.order.invoice.retransmitted', user=self.request.user, data={
+                'invoice': invoice.pk,
+                'full_invoice_no': invoice.full_invoice_no,
+            })
+        transmit_invoice.apply_async(args=(self.request.event.pk, invoice.pk, True))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):  # NOQA

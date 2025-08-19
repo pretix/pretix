@@ -19,20 +19,3 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from .invoicing.pdf import (
-    BaseInvoiceRenderer, BaseReportlabInvoiceRenderer, ClassicInvoiceRenderer,
-    Modern1Renderer, Modern1SimplifiedRenderer, NumberedCanvas,
-    ThumbnailingImageReader, addon_aware_groupby,
-)
-
-# This module consists for backwards compatibility of imports from plugins.
-__all__ = [
-    "addon_aware_groupby",
-    "NumberedCanvas",
-    "BaseInvoiceRenderer",
-    "BaseReportlabInvoiceRenderer",
-    "ClassicInvoiceRenderer",
-    "Modern1Renderer",
-    "Modern1SimplifiedRenderer",
-    "ThumbnailingImageReader",
-]
