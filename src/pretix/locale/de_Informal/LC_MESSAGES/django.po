@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-06 09:46+0000\n"
+"PO-Revision-Date: 2025-08-19 17:02+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -564,22 +564,16 @@ msgid "Event series date deleted"
 msgstr "Veranstaltungsreihe: Termin gelöscht"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "Produktbezeichnung"
+msgstr "Produkt geändert"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
-"Produkt geändert (inkl. Produkt hinzugefügt oder gelöscht und inkl. "
-"Änderungen an Unterobjekten wie z.B. Varianten oder enthaltenen Produkten)"
+"Dies schließt hinzugefügte oder gelöschte Produkt und Änderungen an "
+"Unterobjekten wie z.B. Varianten oder enthaltenen Produkten) ein."
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -614,28 +608,24 @@ msgid "Waiting list entry received voucher"
 msgstr "Wartelisten-Eintrag hat Gutschein erhalten"
 
 #: pretix/api/webhooks.py:412
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "Gutscheincode"
+msgstr "Gutschein hinzugefügt"
 
 #: pretix/api/webhooks.py:416
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "Gutschein zugewiesen"
+msgstr "Gutschein geändert"
 
 #: pretix/api/webhooks.py:417
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
+"Nur explizite Änderungen am Gutschein, nicht z.B. Änderungen an der Anzahl "
+"der Einlösungen."
 
 #: pretix/api/webhooks.py:421
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "Gutschein eingelöst"
+msgstr "Gutschein gelöscht"
 
 #: pretix/api/webhooks.py:425
 msgid "Customer account created"
@@ -824,6 +814,8 @@ msgid ""
 "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
 "your {provider_name} settings."
 msgstr ""
+"Feld \"{field_name}\" ist nicht gültig für {available_inputs}. Bitte prüfe "
+"die Einstellungen für {provider_name}."
 
 #: pretix/base/datasync/datasync.py:267
 #, python-brace-format
@@ -831,18 +823,16 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
+"Bitte aktualisiere die Werte-Zuordnung für Feld \"{field_name}\". Option "
+"\"{val}\" ist nicht zugeordnet"
 
 #: pretix/base/datasync/sourcefields.py:128
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "Bestellzeilen"
+msgstr "Details der Bestellposition"
 
 #: pretix/base/datasync/sourcefields.py:129
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "E-Mail Teilnehmer*in"
+msgstr "Details Teilnehmer*in"
 
 #: pretix/base/datasync/sourcefields.py:130 pretix/base/exporters/answers.py:66
 #: pretix/base/models/items.py:1767 pretix/control/navigation.py:172
@@ -852,10 +842,8 @@ msgid "Questions"
 msgstr "Fragen"
 
 #: pretix/base/datasync/sourcefields.py:131
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "Produktdaten"
+msgstr "Produktdetails"
 
 #: pretix/base/datasync/sourcefields.py:132
 #: pretix/control/templates/pretixcontrol/event/settings.html:280
@@ -880,17 +868,13 @@ msgid "Invoice address"
 msgstr "Rechnungsadresse"
 
 #: pretix/base/datasync/sourcefields.py:134
-#, fuzzy
-#| msgid "Meta information"
 msgid "Event information"
-msgstr "Meta-Informationen"
+msgstr "Veranstaltungs-Informationen"
 
 #: pretix/base/datasync/sourcefields.py:135
-#, fuzzy
-#| msgid "Send recovery information"
 msgctxt "subevent"
 msgid "Event or date information"
-msgstr "Wiederherstellungsinformationen senden"
+msgstr "Veranstaltungs- oder Termininformationen"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:604
@@ -915,10 +899,8 @@ msgstr "Name Teilnehmer*in"
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:628
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "Name Teilnehmer*in"
+msgstr "Teilnehmer*in"
 
 #: pretix/base/datasync/sourcefields.py:207
 #: pretix/base/exporters/orderlist.py:611 pretix/base/forms/questions.py:685
@@ -932,10 +914,8 @@ msgid "Attendee email"
 msgstr "E-Mail Teilnehmer*in"
 
 #: pretix/base/datasync/sourcefields.py:219
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee or order email"
-msgstr "E-Mail Teilnehmer*in"
+msgstr "E-Mail Teilnehmer*in oder Bestellung"
 
 #: pretix/base/datasync/sourcefields.py:232 pretix/base/pdf.py:186
 #: pretix/control/templates/pretixcontrol/order/index.html:595
@@ -947,28 +927,20 @@ msgid "Attendee company"
 msgstr "Teilnehmer*innen-Firma"
 
 #: pretix/base/datasync/sourcefields.py:241
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "Teilnehmer*innen-Adresse"
+msgstr "Teilnehmer*innen-Adresse: Straße"
 
 #: pretix/base/datasync/sourcefields.py:250
-#, fuzzy
-#| msgid "Attendee ZIP code"
 msgid "Attendee address ZIP code"
-msgstr "Teilnehmer*innen-PLZ"
+msgstr "Attendee address ZIP code"
 
 #: pretix/base/datasync/sourcefields.py:259
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address city"
-msgstr "Teilnehmer*innen-Adresse"
+msgstr "Teilnehmer*innen-Adresse: Stadt"
 
 #: pretix/base/datasync/sourcefields.py:268
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address country"
-msgstr "Teilnehmer*innen-Adresse"
+msgstr "Teilnehmer*innen-Adresse: Land"
 
 #: pretix/base/datasync/sourcefields.py:279 pretix/base/pdf.py:344
 msgid "Invoice address company"
@@ -1003,16 +975,12 @@ msgid "Invoice address country"
 msgstr "Rechnungsadresse: Land"
 
 #: pretix/base/datasync/sourcefields.py:353
-#, fuzzy
-#| msgid "Order details"
 msgid "Order email"
-msgstr "Bestellung"
+msgstr "E-Mail-Adresse der Bestellung"
 
 #: pretix/base/datasync/sourcefields.py:362
-#, fuzzy
-#| msgid "Organizer domain"
 msgid "Order email domain"
-msgstr "Veranstalterdomain"
+msgstr "E-Mail-Domain der Bestellung"
 
 #: pretix/base/datasync/sourcefields.py:371
 #: pretix/base/exporters/invoices.py:201 pretix/base/exporters/invoices.py:328
@@ -1043,10 +1011,8 @@ msgid "Order code"
 msgstr "Bestellnummer"
 
 #: pretix/base/datasync/sourcefields.py:380
-#, fuzzy
-#| msgid "End order date"
 msgid "Event and order code"
-msgstr "Bestelldatum Ende"
+msgstr "Veranstaltungskurzform und Bestellnummer"
 
 #: pretix/base/datasync/sourcefields.py:389
 #: pretix/base/exporters/orderlist.py:262 pretix/base/notifications.py:201
@@ -1058,8 +1024,6 @@ msgid "Order total"
 msgstr "Gesamtbetrag"
 
 #: pretix/base/datasync/sourcefields.py:398
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Product and variation name"
 msgstr "Produkt und Variante"
 
@@ -1071,16 +1035,12 @@ msgid "Product ID"
 msgstr "Produkt-ID"
 
 #: pretix/base/datasync/sourcefields.py:419
-#, fuzzy
-#| msgid "Non-admission product"
 msgid "Product is admission product"
-msgstr "Kein Zutrittsprodukt"
+msgstr "Produkt ist Zutrittsprodukt"
 
 #: pretix/base/datasync/sourcefields.py:428
-#, fuzzy
-#| msgid "Event short name"
 msgid "Event short form"
-msgstr "Veranstaltungs-Kürzel"
+msgstr "Veranstaltungskurzform"
 
 #: pretix/base/datasync/sourcefields.py:437 pretix/base/exporters/events.py:57
 #: pretix/base/exporters/orderlist.py:262
@@ -1123,10 +1083,8 @@ msgid "Order code and position number"
 msgstr "Bestellnummer und Nummer des Tickets"
 
 #: pretix/base/datasync/sourcefields.py:482
-#, fuzzy
-#| msgid "Ticket page"
 msgid "Ticket price"
-msgstr "Ticket-Seite"
+msgstr "Ticketpreis"
 
 #: pretix/base/datasync/sourcefields.py:491 pretix/base/notifications.py:204
 #: pretix/control/forms/filter.py:211 pretix/control/forms/modelimport.py:85
@@ -1134,22 +1092,16 @@ msgid "Order status"
 msgstr "Bestellstatus"
 
 #: pretix/base/datasync/sourcefields.py:500
-#, fuzzy
-#| msgid "Device status"
 msgid "Ticket status"
-msgstr "Gerätestatus"
+msgstr "Ticketstatus"
 
 #: pretix/base/datasync/sourcefields.py:509
-#, fuzzy
-#| msgid "Purchase date and time"
 msgid "Order date and time"
-msgstr "Kaufdatum und -uhrzeit"
+msgstr "Bestelldatum und Uhrzeit"
 
 #: pretix/base/datasync/sourcefields.py:518
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Payment date and time"
-msgstr "Druckdatum und -uhrzeit"
+msgstr "Zahlungsdatum und Uhrzeit"
 
 #: pretix/base/datasync/sourcefields.py:527
 #: pretix/base/exporters/orderlist.py:271
@@ -1160,10 +1112,8 @@ msgid "Order locale"
 msgstr "Bestellsprache"
 
 #: pretix/base/datasync/sourcefields.py:536
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position ID"
-msgstr "Bestellposition"
+msgstr "Interne ID der Bestellposition"
 
 #: pretix/base/datasync/sourcefields.py:545
 #: pretix/base/exporters/orderlist.py:291
@@ -1171,22 +1121,18 @@ msgid "Order link"
 msgstr "Bestell-Link"
 
 #: pretix/base/datasync/sourcefields.py:560
-#, fuzzy
-#| msgid "Ticket block"
 msgid "Ticket link"
-msgstr "Ticket-Sperre"
+msgstr "Ticket-Link"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list {val}"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "Check-in-Liste {val}"
+msgstr "Check-in-Zeitpunkt auf Liste {}"
 
 #: pretix/base/datasync/sourcefields.py:590
-#, fuzzy, python-brace-format
-#| msgid "Question: %(name)s"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "Frage: %(name)s"
+msgstr "Frage: {name}"
 
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:614 pretix/base/settings.py:3559
@@ -3380,14 +3326,12 @@ msgstr ""
 "kannst."
 
 #: pretix/base/forms/questions.py:1177
-#, fuzzy
-#| msgid "Cancellation requested"
 msgid "No invoice requested"
-msgstr "Stornierung angefragt"
+msgstr "Keine Rechnung angefordert"
 
 #: pretix/base/forms/questions.py:1179
 msgid "Invoice transmission method"
-msgstr ""
+msgstr "Übertragung der Rechnung"
 
 #: pretix/base/forms/questions.py:1324
 msgid "You need to provide a company name."
@@ -3402,26 +3346,28 @@ msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
 msgstr ""
+"Wenn du eine Rechnungsadresse eingibst, musst du auch eine "
+"Übertragungsmethode ausfüllen."
 
 #: pretix/base/forms/questions.py:1380
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid ""
 "The selected transmission type is not available in your country or for your "
 "type of address."
 msgstr ""
-"Der ausgewählte Medientyp ist in den Veranstalter-Einstellungen nicht "
-"aktiviert."
+"Die ausgewählte Übertragungsmethode ist für dein Land oder deine Art von "
+"Adresse nicht verfügbar."
 
 #: pretix/base/forms/questions.py:1389
 msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
 msgstr ""
+"Die ausgewählte Übertragungsmethode erfordert ein Feld, das derzeit nicht "
+"verfügbar ist. Bitte kontaktiere den Veranstalter."
 
 #: pretix/base/forms/questions.py:1393
 msgid "This field is required for the selected type of invoice transmission."
-msgstr ""
+msgstr "Dieses Feld ist verpflichtend für diese Übertragungsmethode."
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
@@ -3535,62 +3481,49 @@ msgid "Individual customer"
 msgstr "Privatkunde"
 
 #: pretix/base/invoicing/email.py:50
-#, fuzzy
-#| msgid ""
-#| "Please additionally send my invoice directly to our accounting department"
 msgid "Email invoice directly to accounting department"
-msgstr ""
-"Ich möchte, dass die Rechnung zusätzlich direkt an unsere Buchhaltung "
-"geschickt wird"
+msgstr "Rechnung direkt an die Buchhaltung schicken"
 
 #: pretix/base/invoicing/email.py:51
-#, fuzzy
-#| msgid "The invoice was sent to the designated email address."
 msgid ""
 "If not selected, the invoice will be sent to you using the email address "
 "listed above."
-msgstr "Die Rechnung wurde an die angegebene E-Mail-Adresse verschickt."
+msgstr ""
+"Wenn diese Option nicht ausgewählt ist, senden wir die Rechnung an die oben "
+"angegebene E-Mail-Adresse."
 
 #: pretix/base/invoicing/email.py:55
-#, fuzzy
-#| msgid "Email address verified"
 msgid "Email address for invoice"
-msgstr "E-Mail-Adresse verifiziert"
+msgstr "E-Mail-Adresse für Rechnungen"
 
 #: pretix/base/invoicing/email.py:91
-#, fuzzy
-#| msgid "Preview email"
 msgid "PDF via email"
-msgstr "E-Mail-Vorschau"
+msgstr "PDF via E-Mail"
 
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "Italienisches Austauschsystem (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "Austauschsystem (SdI)"
 
 #: pretix/base/invoicing/national.py:49
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr "Gutscheincode"
+msgstr "Steuernummer"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "Adresse für zertifizierte elektronische Mail"
 
 #: pretix/base/invoicing/national.py:57
-#, fuzzy
-#| msgid "Recipient"
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "Empfänger"
+msgstr "Empfänger-Code"
 
 #: pretix/base/invoicing/pdf.py:140
 #, python-format
@@ -3832,6 +3765,8 @@ msgstr "Veranstaltungsdatum: {date_range}"
 msgid ""
 "A PEPPOL participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
+"Eine PEPPOL-Teilnehmer-ID beginnt immer mit einem Präfix, gefolgt von einem "
+"Doppelpunkt (:)."
 
 #: pretix/base/invoicing/peppol.py:132
 #, python-format
@@ -3839,6 +3774,9 @@ msgid ""
 "The PEPPOL participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"Der Präfix %(number)s für Peppol-Teilnehmer-IDs ist unserem System nicht "
+"bekannt. Bitte kontaktiere uns, wenn du sicher bist, dass diese ID korrekt "
+"ist."
 
 #: pretix/base/invoicing/peppol.py:136
 #, python-format
@@ -3846,10 +3784,13 @@ msgid ""
 "The PEPPOL participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"Die Peppol-Teilnehmer-ID passt nicht zu den Validierungsregeln für den "
+"Präfix %(number)s. Bitte kontaktiere uns, wenn du sicher bist, dass diese ID "
+"korrekt ist."
 
 #: pretix/base/invoicing/peppol.py:156
 msgid "PEPPOL participant ID"
-msgstr ""
+msgstr "PEPPOL-Teilnehmer-ID"
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
@@ -4485,10 +4426,8 @@ msgid "Ticket not valid at this time"
 msgstr "Ticket aktuell nicht gültig"
 
 #: pretix/base/models/checkin.py:368
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Check-in annulled"
-msgstr "Check-in-Status"
+msgstr "Check-in annulliert"
 
 #: pretix/base/models/customers.py:55
 msgid "Provider name"
@@ -4591,21 +4530,19 @@ msgstr "Mehrere Werte mit Leerzeichen trennen"
 
 #: pretix/base/models/datasync.py:53
 msgid "Temporary error, auto-retry limit exceeded"
-msgstr ""
+msgstr "Temporärer Fehler, Anzahl automatischer Versuche überschritten"
 
 #: pretix/base/models/datasync.py:54
-#, fuzzy
-#| msgid "Stripe reported an error: %s"
 msgid "Provider reported a permanent error"
-msgstr "Stripe meldete einen Fehler: %s"
+msgstr "Endgültiger Fehler zurückgegeben"
 
 #: pretix/base/models/datasync.py:55
 msgid "Misconfiguration, please check provider settings"
-msgstr ""
+msgstr "Fehlkonfiguration, bitte prüfe die Synchronisations-Einstellungen"
 
 #: pretix/base/models/datasync.py:56 pretix/base/models/datasync.py:57
 msgid "System error, needs manual intervention"
-msgstr ""
+msgstr "Systemfehler, benötigt manuelle Intervention"
 
 #: pretix/base/models/devices.py:70 pretix/base/models/items.py:1675
 msgid "Internal identifier"
@@ -5162,21 +5099,16 @@ msgid "Manual transaction"
 msgstr "Manuelle Transaktion"
 
 #: pretix/base/models/invoices.py:120
-#, fuzzy
-#| msgid "Pending amount"
 msgid "pending transmission"
-msgstr "Offener Betrag"
+msgstr "warte auf Übertragung"
 
 #: pretix/base/models/invoices.py:121
 msgid "currently being transmitted"
-msgstr ""
+msgstr "wird derzeit übertragen"
 
 #: pretix/base/models/invoices.py:122
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "transmitted"
-msgstr "Kein Termin ausgewählt."
+msgstr "übertragen"
 
 #: pretix/base/models/invoices.py:123 pretix/plugins/sendmail/models.py:52
 msgid "failed"
@@ -5188,10 +5120,8 @@ msgid "unknown"
 msgstr "unbekannt"
 
 #: pretix/base/models/invoices.py:125
-#, fuzzy
-#| msgid "in private test mode"
 msgid "not transmitted due to test mode"
-msgstr "offline und im Testmodus"
+msgstr "nicht übertragen wegen Testmodus"
 
 #: pretix/base/models/invoices.py:217
 #, python-format
@@ -6642,10 +6572,8 @@ msgstr ""
 "später zuordnen kannst."
 
 #: pretix/base/models/orders.py:3422
-#, fuzzy
-#| msgid "Transaction time"
 msgid "Transmission type"
-msgstr "Transaktionsuhrzeit"
+msgstr "Übertragungsart"
 
 #: pretix/base/models/orders.py:3520
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
@@ -14123,6 +14051,8 @@ msgid ""
 "This will only be used if the invoice is sent to a different email address "
 "or at a different time than the order confirmation."
 msgstr ""
+"Dies wird nur verwendet, wenn die Rechnung an eine andere E-Mail-Adresse "
+"oder zu einem anderen Zeitpunkt als die Bestellbestätigung verschickt wird."
 
 #: pretix/control/forms/event.py:1246
 msgid ""
@@ -15448,34 +15378,24 @@ msgid "We were unable to resolve this hostname."
 msgstr "Wir konnten diesen Hostnamen nicht auflösen."
 
 #: pretix/control/forms/mapping.py:40
-#, fuzzy
-#| msgid "Overview"
 msgid "Overwrite"
-msgstr "Überblick"
+msgstr "Überschreiben"
 
 #: pretix/control/forms/mapping.py:41
-#, fuzzy
-#| msgid "Fill form"
 msgid "Fill if new"
-msgstr "Formular ausfüllen"
+msgstr "Befüllen wenn neu"
 
 #: pretix/control/forms/mapping.py:42
-#, fuzzy
-#| msgid "Fill form"
 msgid "Fill if empty"
-msgstr "Formular ausfüllen"
+msgstr "Befüllen wenn leer"
 
 #: pretix/control/forms/mapping.py:43
-#, fuzzy
-#| msgid "Add me to the list"
 msgid "Add to list"
-msgstr "Zur Liste hinzufügen"
+msgstr "Zu Liste hinzufügen"
 
 #: pretix/control/forms/mapping.py:50
-#, fuzzy
-#| msgid "pretix Logo"
 msgid "pretix field"
-msgstr "pretix-Logo"
+msgstr "pretix-Feld"
 
 #: pretix/control/forms/modelimport.py:50
 #, python-brace-format
@@ -16247,7 +16167,7 @@ msgstr "Ein Verkaufskanal mit dem gleichen Identifikator existiert bereits."
 
 #: pretix/control/forms/organizer.py:1217
 msgid "Events with active plugin"
-msgstr ""
+msgstr "Veranstaltungen mit aktiver Erweiterung"
 
 #: pretix/control/forms/renderers.py:56
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:139
@@ -16700,50 +16620,38 @@ msgstr ""
 "wurde abgelehnt. Fehlercode: \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"Ein Scan für Ticket #{posid} am {datetime} für die Liste \"{list}\" (Typ: "
-"\"{type}\") wurde abgelehnt. Fehlercode: \"{errorcode}\"."
+"Scan für Ticket #{posid} am {datetime} für die Liste \"{list}\" (Typ: "
+"\"{type}\") wurde annulliert."
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Ein Scan für Ticket #{posid} für die Liste \"{list}\" (Typ: \"{type}\") "
-"wurde abgelehnt. Fehlercode: \"{errorcode}\"."
+"Scan für Ticket #{posid} für die Liste \"{list}\" (Typ: \"{type}\") wurde "
+"annulliert."
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} at {datetime} for list \"{list}\", "
 "type \"{type}\"."
 msgstr ""
-"Ein Scan für Ticket #{posid} am {datetime} für die Liste \"{list}\" (Typ: "
-"\"{type}\") wurde abgelehnt. Fehlercode: \"{errorcode}\"."
+"Die Annullierung eines Scans für Ticket #{posid} um {datetime} für die Liste "
+"\"{list}\" (Typ: \"{type}\") wurde ignoriert."
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Ein Scan für Ticket #{posid} für die Liste \"{list}\" (Typ: \"{type}\") "
-"wurde abgelehnt. Fehlercode: \"{errorcode}\"."
+"Die Annullierung eines Scans für Ticket #{posid} für die Liste \"{list}\" "
+"(Typ: \"{type}\") wurde ignoriert."
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:333
 #, python-brace-format
@@ -16821,7 +16729,7 @@ msgstr "Ticket #{posid} wurde am {datetime} als Typ \"{type}\" gedruckt."
 #: pretix/control/logdisplay.py:446
 #, python-brace-format
 msgid "Data successfully transferred to {provider_display_name}."
-msgstr ""
+msgstr "Daten erfolgreich an {provider_display_name} übertragen."
 
 #: pretix/control/logdisplay.py:465
 #, python-brace-format
@@ -16829,6 +16737,8 @@ msgid ""
 "Transferring data to {provider_display_name} failed due to invalid "
 "configuration:"
 msgstr ""
+"Die Übertragung von Daten an {provider_display_name} ist wegen ungültiger "
+"Konfiguration fehlgeschlagen:"
 
 #: pretix/control/logdisplay.py:466
 #, python-brace-format
@@ -16836,16 +16746,19 @@ msgid ""
 "Maximum number of retries exceeded while transferring data to "
 "{provider_display_name}:"
 msgstr ""
+"Maximale Anzahl an Wiederholungen bei der Übertragung von Daten an "
+"{provider_display_name} erreicht:"
 
 #: pretix/control/logdisplay.py:467
 #, python-brace-format
 msgid "Error while transferring data to {provider_display_name}:"
-msgstr ""
+msgstr "Fehler bei der Übertragung von Daten an {provider_display_name}:"
 
 #: pretix/control/logdisplay.py:468 pretix/control/logdisplay.py:469
 #, python-brace-format
 msgid "Internal error while transferring data to {provider_display_name}."
 msgstr ""
+"Interner Fehler bei der Übertragung von Daten an {provider_display_name}."
 
 #: pretix/control/logdisplay.py:483 pretix/control/logdisplay.py:818
 msgid "The settings of a payment provider have been changed."
@@ -16975,15 +16888,14 @@ msgid "The invoice has been reissued."
 msgstr "Die Rechnung wurde neu ausgestellt."
 
 #: pretix/control/logdisplay.py:527
-#, fuzzy, python-brace-format
-#| msgid "The invite has been resent."
+#, python-brace-format
 msgid "The invoice {full_invoice_no} has been sent."
-msgstr "Die Einladung wurde erneut verschickt."
+msgstr "Die Rechnung {full_invoice_no} wurde verschickt."
 
 #: pretix/control/logdisplay.py:528
 #, python-brace-format
 msgid "The transmission of invoice {full_invoice_no} has failed."
-msgstr ""
+msgstr "Die Übertragung der Rechnung {full_invoice_no} ist fehlgeschlagen."
 
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
@@ -16991,11 +16903,14 @@ msgid ""
 "Invoice {full_invoice_no} has not been transmitted because the transmission "
 "provider does not support test mode invoices."
 msgstr ""
+"Rechnung {full_invoice_no} wurde nicht übertragen, weil die "
+"Übertragungsmethode keine Testmodus-Rechnungen unterstützt."
 
 #: pretix/control/logdisplay.py:531
 #, python-brace-format
 msgid "The invoice {full_invoice_no} has been scheduled for retransmission."
 msgstr ""
+"Die Rechnung {full_invoice_no} wurde zur erneuten Übermittlung vorgemerkt."
 
 #: pretix/control/logdisplay.py:532
 msgid "The order's internal comment has been updated."
@@ -17043,10 +16958,8 @@ msgstr ""
 "als üblicherweise akzeptiert."
 
 #: pretix/control/logdisplay.py:544
-#, fuzzy
-#| msgid "A custom email has been sent."
 msgid "An invoice email has been sent."
-msgstr "Eine individuelle E-Mail wurde verschickt."
+msgstr "Eine Rechnungs-E-Mail wurde verschickt."
 
 #: pretix/control/logdisplay.py:545
 msgid "A custom email has been sent."
@@ -17165,10 +17078,9 @@ msgid "The voucher has been deleted."
 msgstr "Der Gutschein wurde gelöscht."
 
 #: pretix/control/logdisplay.py:584
-#, fuzzy, python-brace-format
-#| msgid "A voucher has been sent to a person on the waiting list."
+#, python-brace-format
 msgid "The voucher has been sent to {email} through the waiting list."
-msgstr "Ein Gutschein wurde verschickt."
+msgstr "Der Gutschein wurde über die Warteliste an {email} verschickt."
 
 #: pretix/control/logdisplay.py:593
 #, python-brace-format
@@ -18167,7 +18079,7 @@ msgstr "Systembericht"
 
 #: pretix/control/navigation.py:455 pretix/control/navigation.py:675
 msgid "Data sync problems"
-msgstr ""
+msgstr "Datensynchronisation-Probleme"
 
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -19391,11 +19303,8 @@ msgid "Other features"
 msgstr "Andere Funktionen"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:8
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Transfer to other date"
 msgid "Data transfer to external systems"
-msgstr "Zu anderem Termin verschieben"
+msgstr "Datentransfer an externe Systeme"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:18
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
@@ -19403,10 +19312,8 @@ msgid "Retry now"
 msgstr "Jetzt wiederholen"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:22
-#, fuzzy
-#| msgid "Pay now"
 msgid "Sync now"
-msgstr "Jetzt bezahlen"
+msgstr "Jetzt synchronisieren"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:31
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
@@ -19417,37 +19324,30 @@ msgstr "Fehler"
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:34
 #, python-format
 msgid "Error. Retry %(num)s of %(max)s."
-msgstr ""
+msgstr "Fehler. Versuch %(num)s von %(max)s."
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:38
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:43
-#, fuzzy, python-format
-#| msgid "Valid until %(datetime)s"
+#, python-format
 msgid "Waiting until %(datetime)s"
-msgstr "Gültig bis %(datetime)s"
+msgstr "Warten bis %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:49
-#, fuzzy, python-format
-#| msgid "Valid until %(datetime)s"
+#, python-format
 msgid "triggered at %(datetime)s"
-msgstr "Gültig bis %(datetime)s"
+msgstr "ausgelöst am %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:62
-#, fuzzy
-#| msgid "Identifier"
 msgid "identified by"
-msgstr "Identifikator"
+msgstr "identifiziert durch"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:68
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "No data transmitted."
-msgstr "Kein Termin ausgewählt."
+msgstr "Keine Daten übermittelt."
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:5
 msgid "Sync problems"
-msgstr ""
+msgstr "Synchronisationsprobleme"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:7
 msgid ""
@@ -19455,46 +19355,39 @@ msgid ""
 "external system has failed. You can start another attempt to sync them "
 "manually."
 msgstr ""
+"Auf dieser Seite findest du Bestellungen, bei denen die Synchronisation zu "
+"einem externen System fehlgeschlagen ist. Du kannst einen erneuten Versuch "
+"manuell starten."
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:24
-#, fuzzy
-#| msgid "SSO provider"
 msgid "Sync provider"
-msgstr "SSO-Provider"
+msgstr "Synchronisationsdienst"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:26
-#, fuzzy
-#| msgid "Failed"
 msgid "Failure mode"
-msgstr "Fehlgeschlagen"
+msgstr "Fehlermodus"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:51
 #, python-format
 msgid "Temporary error, will retry after %(datetime)s"
-msgstr ""
+msgstr "Temporärer Fehler, wird nach %(datetime)s erneut versucht"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:63
-#, fuzzy
-#| msgid "No products"
 msgid "No problems."
-msgstr "Keine Produkte"
+msgstr "Keine Probleme."
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:74
-#, fuzzy
-#| msgid "Delete selected"
 msgid "Retry selected"
-msgstr "Ausgewählte löschen"
+msgstr "Ausgewählte erneut versuchen"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:75
-#, fuzzy
-#| msgid "Cancel event"
 msgid "Cancel selected"
-msgstr "Veranstaltung absagen"
+msgstr "Ausgewählte stornieren"
 
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:31
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:62
 msgid "Edit value mapping"
-msgstr ""
+msgstr "Werte-Zuordnung ändern"
 
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:76
 #: pretix/control/templates/pretixcontrol/event/settings.html:487
@@ -20167,10 +20060,12 @@ msgid ""
 "Orders in this event could not be <strong>synced to an external system</"
 "strong> as configured."
 msgstr ""
+"Bestellungen in dieser Veranstaltung konnten nicht wie konfiguriert "
+"<strong>mit einem externen System synchronisiert werden</strong>."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:88
 msgid "Show sync problems"
-msgstr ""
+msgstr "Synchronisations-Probleme anzeigen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:151
 #: pretix/control/templates/pretixcontrol/order/index.html:1062
@@ -20208,10 +20103,8 @@ msgid "Invoice customization"
 msgstr "Anpassung der Rechnungen"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:64
-#, fuzzy
-#| msgid "Invoice generation"
 msgid "Invoice transmission"
-msgstr "Rechnungserstellung"
+msgstr "Rechnungsübertragung"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:66
 msgid ""
@@ -20220,6 +20113,11 @@ msgid ""
 "default, sending invoices as PDF files via email is always available. Other "
 "types of transmission can be added by plugins."
 msgstr ""
+"pretix kann Rechnungen auf verschiedene Arten übertragen. Verschiedene "
+"Übertragungsmethoden können je nach Land oder Branche notwendig sein. "
+"Standardmäßig ist der Versand von Rechnungen als PDF-Datei per E-Mail immer "
+"verfügbar. Andere Übertragungsmethoden können von Erweiterungen hinzugefügt "
+"werden."
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:73
 msgid ""
@@ -20227,12 +20125,13 @@ msgid ""
 "customers may depend on the country of the customer or whether the customer "
 "is entering a business address."
 msgstr ""
+"Ob eine hier gelistete Übertragungsmethode für Kunden tatsächlich auswählbar "
+"ist, kann vom Land des Kunden abhängig sein oder davon, ob eine "
+"Firmenadresse eingegeben wird."
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:82
-#, fuzzy
-#| msgid "Transaction time"
 msgid "Transmission method"
-msgstr "Transaktionsuhrzeit"
+msgstr "Übertragungsmethode"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:98
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:125
@@ -20246,28 +20145,24 @@ msgid ""
 "When this type is available for an invoice address, no other type can be "
 "selected."
 msgstr ""
+"Wenn diese Methode für eine Adresse verfügbar ist, können andere Methoden "
+"nicht mehr ausgewählt werden."
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:101
 msgid "(exclusive)"
-msgstr ""
+msgstr "(exklusiv)"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:108
-#, fuzzy
-#| msgid "Available"
 msgid "Unavailable"
-msgstr "Verfügbar"
+msgstr "Nicht verfügbar"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:130
-#, fuzzy
-#| msgid "Follow-up configured"
 msgid "Not configured"
-msgstr "Wiedervorlage gesetzt"
+msgstr "Nicht konfiguriert"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:152
-#, fuzzy
-#| msgid "Enable additional payment plugins"
 msgid "Enable additional invoice transmission plugins"
-msgstr "Erweiterungen für zusätzliche Zahlungsdienstleister aktivieren"
+msgstr "Erweiterungen für zusätzliche Übertragungswege aktivieren"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:159
 msgid "Save and show preview"
@@ -20669,16 +20564,18 @@ msgid "Not available"
 msgstr "Nicht verfügbar"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:93
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be disabled for the entire organizer account."
-msgstr "Dieses Plugin kann aus folgenden Gründen nicht aktiviert werden:"
+msgstr ""
+"Diese Erweiterung kann nur für das gesamte Veranstalterkonto deaktiviert "
+"werden."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:98
 msgid ""
 "After disabling this plugin, some functionality may remain active in the "
 "organizer account."
 msgstr ""
+"Nachdem diese Erweiterung deaktiviert ist kann manche Funktionalität auf "
+"Ebene des Veranstalterkontos aktiv bleiben."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:104
 #: pretix/control/templates/pretixcontrol/event/plugins.html:116
@@ -20694,10 +20591,8 @@ msgstr "Gehe zu"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:130
 #: pretix/control/templates/pretixcontrol/event/plugins.html:147
-#, fuzzy
-#| msgid "Organizer settings"
 msgid "Open in organizer settings"
-msgstr "Veranstalter-Einstellungen"
+msgstr "Veranstalter-Einstellungen öffnen"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:134
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
@@ -20712,16 +20607,17 @@ msgstr "Deaktivieren"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:141
 #: pretix/control/views/organizer.py:807
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be enabled for the entire organizer account."
-msgstr "Dieses Plugin kann aus folgenden Gründen nicht aktiviert werden:"
+msgstr ""
+"Diese Erweiterung kann nur für das ganze Veranstalterkonto aktiviert werden."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:154
 msgid ""
 "Enabling this plugin will enable some of its functionality for the entire "
 "organizer account."
 msgstr ""
+"Wenn diese Erweiterung aktiviert wird, wird manche Funktionalität für das "
+"ganze Veranstalterkonto aktiviert."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:159
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:157
@@ -23336,55 +23232,36 @@ msgid "Invoice was not yet emailed to customer"
 msgstr "Rechnung wurde noch nicht per E-Mail verschickt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:294
-#, fuzzy
-#| msgid "One webhook is scheduled to be retried."
-#| msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgid "Invoice is scheduled to be transmitted"
-msgstr "Ein Webhook ist zur Wiederholung geplant."
+msgstr "Die Rechnung ist zur Übermittlung vorgemerkt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:299
-#, fuzzy
-#| msgid "Invoice was not yet emailed to customer"
 msgid "Invoice is not yet transmitted"
-msgstr "Rechnung wurde noch nicht per E-Mail verschickt"
+msgstr "Rechnung wurde noch nicht übermittelt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:302
-#, fuzzy
-#| msgid "This ticket shop is currently in test mode."
 msgid "Invoice is currently in transmission"
-msgstr "Dieser Ticketshop ist momentan im Testmodus."
+msgstr "Die Rechnung wird gerade übermittelt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:307
-#, fuzzy
-#| msgid "live and in test mode"
 msgid "Invoice not transmitted in test mode"
-msgstr "live und im Testmodus"
+msgstr "Die Rechnung wurde wegen Testmodus nicht übermittelt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:312
-#, fuzzy
-#| msgid "Device registration failed."
 msgid "Invoice transmission failed"
-msgstr "Geräteeinrichtung fehlgeschlagen."
+msgstr "Die Übermittlung der Rechnung ist fehlgeschlagen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:317
-#, fuzzy
-#| msgid "An invoice has been generated."
 msgid "Invoice has been transmitted"
-msgstr "Eine Rechnung wurde erstellt."
+msgstr "Die Rechnung wurde übermittelt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:329
-#, fuzzy
-#| msgctxt "refund_state"
-#| msgid "in transit"
 msgid "Transmit"
-msgstr "auf dem Weg"
+msgstr "Übertragen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:331
-#, fuzzy
-#| msgctxt "refund_state"
-#| msgid "in transit"
 msgid "Retransmit"
-msgstr "auf dem Weg"
+msgstr "Erneut übertragen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:342
 msgid "Rebuild the invoice with updated data but the same invoice number."
@@ -25335,10 +25212,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
-#, fuzzy, python-format
-#| msgid "Events in %(month)s"
+#, python-format
 msgid "Events with plugin %(name)s"
-msgstr "Veranstaltungen im %(month)s"
+msgstr "Veranstaltungen mit %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:18
 #, python-format
@@ -25346,6 +25222,8 @@ msgid ""
 "The plugin \"%(name)s\" can be enabled or disabled for every event "
 "individually."
 msgstr ""
+"Die Erweiterung \"%(name)s\" kann für jede Veranstaltung einzeln an- oder "
+"abgeschaltet werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
@@ -25353,6 +25231,9 @@ msgid ""
 "The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
+"Die Erweiterung \"%(name)s\" ist für Ihr Veranstalterkonto aktiv, muss "
+"jedoch auch für die einzelnen Veranstaltungen aktiviert werden, für die sie "
+"benutzt werden soll."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:31
 msgid ""
@@ -25360,58 +25241,52 @@ msgid ""
 "that it might still be necessary to configure the plugin for each event "
 "individually."
 msgstr ""
+"Mit diesem Formular kannst du die Erweiterung schnell für viele "
+"Veranstaltungen aktivieren oder deaktivieren. Bitte beachte, dass es ggf. "
+"trotzdem nötig ist, die Veranstaltung für die einzelnen Veranstaltungen zu "
+"konfigurieren."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:8
-#, fuzzy
-#| msgid ""
-#| "On this page, you can choose plugins you want to enable for your event. "
-#| "Plugins might bring additional software functionality, connect your event "
-#| "to third-party services, or apply other forms of customizations."
 msgid ""
 "On this page, you can choose plugins you want to enable for your organizer "
 "account. Plugins might bring additional software functionality, connect your "
 "events to third-party services, or apply other forms of customizations."
 msgstr ""
-"Auf dieser Seite kannst du Erweiterungen auswählen, die du für deine "
-"Veranstaltung aktivieren willst. Erweiterungen fügen der Software "
-"zusätzliche Funktionen hinzu, verbinden deine Veranstaltung mit anderen "
+"Auf dieser Seite kannst du Erweiterungen auswählen, die du für dein "
+"Veranstalterkonto aktivieren willst. Erweiterungen fügen der Software "
+"zusätzliche Funktionen hinzu, verbinden deine Veranstaltungen mit anderen "
 "Online-Diensten oder nehmen andere Arten von Anpassungen vor."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:80
-#, fuzzy
-#| msgid "All events"
 msgid "Active (all events)"
-msgstr "Alle Veranstaltungen"
+msgstr "Aktiv (alle Veranstaltungen)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:85
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:94
-#, fuzzy, python-format
-#| msgid "%(count)s event"
-#| msgid_plural "%(count)s events"
+#, python-format
 msgid "Active (%(count)s event)"
 msgid_plural "Active (%(count)s events)"
-msgstr[0] "%(count)s Veranstaltung"
-msgstr[1] "%(count)s Veranstaltungen"
+msgstr[0] "Aktiv (%(count)s Veranstaltung)"
+msgstr[1] "Aktiv (%(count)s Veranstaltungen)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:116
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:173
 msgid ""
 "Parts of this plugin can be enabled or disabled for events individually."
 msgstr ""
+"Teile dieser Erweiterung können für Veranstaltungen individuell aktiviert "
+"oder deaktiviert werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:149
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:167
-#, fuzzy
-#| msgctxt "day calendar"
-#| msgid "Single events"
 msgid "Manage events"
-msgstr "Einzelveranstaltungen"
+msgstr "Veranstaltungen verwalten"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:162
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can be enabled or disabled for events individually."
-msgstr "Dieses Plugin kann aus folgenden Gründen nicht aktiviert werden:"
+msgstr ""
+"Diese Erweiterung kann für Veranstaltungen einzeln aktiviert oder "
+"deaktiviert werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -27731,43 +27606,30 @@ msgstr[0] "{num} Bestellung"
 msgstr[1] "{num} Bestellungen"
 
 #: pretix/control/views/datasync.py:82
-#, fuzzy
-#| msgid "The quota has been re-opened and will not close again."
 msgid "The sync job has been enqueued and will run in the next minutes."
 msgstr ""
-"Das Kontingent wurde geöffnet und wird nicht automatisch wieder geschlossen."
+"Die Synchronisation wurde eingeplant und wird in den nächsten Minuten "
+"ausgeführt."
 
 #: pretix/control/views/datasync.py:89 pretix/control/views/datasync.py:99
-#, fuzzy
-#| msgid "The invoice file has already been exported."
 msgid "The sync job is already in progress."
-msgstr "Die Rechnungsdatei wurde bereits exportiert."
+msgstr "Die Synchronisation läuft bereits."
 
 #: pretix/control/views/datasync.py:92
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The sync job has been canceled."
-msgstr "Die Bestellung wurde storniert."
+msgstr "Die Synchronisation wurde abgebrochen."
 
 #: pretix/control/views/datasync.py:105
-#, fuzzy
-#| msgid "The order has been set to require payment before use."
 msgid "The sync job has been set to run as soon as possible."
-msgstr "Die Bestellung erfordert nun eine Zahlung um verwendet zu werden."
+msgstr "Die Synchronisation läuft nun zum nächstmöglichen Zeitpunkt."
 
 #: pretix/control/views/datasync.py:136
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been deleted or disabled."
 msgid "The selected jobs have been set to run as soon as possible."
-msgstr "Die ausgewählten Termine wurden gelöscht oder deaktiviert."
+msgstr "Die gewählten Aufgaben laufen nun zum nächstmöglichen Zeitpunkt."
 
 #: pretix/control/views/datasync.py:139
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been enabled."
 msgid "The selected jobs have been canceled."
-msgstr "Die ausgewählten Termine wurden aktiviert."
+msgstr "Die ausgewählten Aufgaben wurden storniert."
 
 #: pretix/control/views/discounts.py:67 pretix/control/views/discounts.py:109
 #: pretix/control/views/discounts.py:214
@@ -27802,12 +27664,12 @@ msgid "Not all discounts have been selected."
 msgstr "Es wurden nicht alle Rabatte ausgewählt."
 
 #: pretix/control/views/event.py:454
-#, fuzzy
-#| msgid "You do not have sufficient permission to perform this export."
 msgid ""
 "You do not have sufficient permission to enable plugins that need to be "
 "enabled for the entire organizer account."
-msgstr "Du hast nicht die nötige Berechtigung, um diesen Export durchzuführen."
+msgstr ""
+"Du hast keine ausreichende Berechtigung, um Erweiterungen zu aktivieren, die "
+"für das ganze Veranstalterkonto aktiv sein müssen."
 
 #: pretix/control/views/event.py:473 pretix/control/views/organizer.py:713
 #, python-brace-format
@@ -27815,10 +27677,9 @@ msgid "The plugin {} is now active, you can configure it here:"
 msgstr "Die Erweiterung {} ist nun aktiv, du kannst sie hier konfigurieren:"
 
 #: pretix/control/views/event.py:482 pretix/control/views/organizer.py:722
-#, fuzzy, python-brace-format
-#| msgid "The plugin {} is now active."
+#, python-brace-format
 msgid "The plugin {} is now active."
-msgstr "Die Erweiterung ist nun aktiv."
+msgstr "Die Erweiterung {} ist nun aktiv."
 
 #: pretix/control/views/event.py:547
 msgid ""
@@ -28570,11 +28431,9 @@ msgstr ""
 "Rechnungen dürfen nicht mehr verändert werden, nachdem sie erstellt wurden."
 
 #: pretix/control/views/orders.py:1664
-#, fuzzy
-#| msgid "Invoices may not be changed after they are created."
 msgid "Invoices may not be changed after they are transmitted."
 msgstr ""
-"Rechnungen dürfen nicht mehr verändert werden, nachdem sie erstellt wurden."
+"Rechnungen können nicht mehr geändert werden, nachdem sie übermittelt wurden."
 
 #: pretix/control/views/orders.py:1666 pretix/control/views/orders.py:1728
 msgid "The invoice has already been canceled."
@@ -28597,12 +28456,12 @@ msgid ""
 "The invoice is currently being transmitted. You can start a new attempt "
 "after the current one has been completed."
 msgstr ""
+"Die Rechnung wird derzeit übermittelt. Du kannst einen neuen Versuch "
+"starten, nachdem der aktuelle abgeschlossen ist."
 
 #: pretix/control/views/orders.py:1704
-#, fuzzy
-#| msgid "The invoice has been cleaned of personal data."
 msgid "The invoice has been scheduled for retransmission."
-msgstr "Die Rechnung wurde von persönlichen Daten bereinigt."
+msgstr "Die Rechnung wurde zur erneuten Übermittlung eingeplant."
 
 #: pretix/control/views/orders.py:1761
 msgid "The email has been queued to be sent."
@@ -28805,22 +28664,17 @@ msgid "Administrators"
 msgstr "Administratoren"
 
 #: pretix/control/views/organizer.py:803
-#, fuzzy
-#| msgid "Unknown plugin: '{name}'."
 msgid "Unknown plugin."
-msgstr "Unbekannte Erweiterung: '{name}'."
+msgstr "Unbekannte Erweiterung."
 
 #: pretix/control/views/organizer.py:809
-#, fuzzy
-#| msgid "The relevant plugin is currently not active."
 msgid "This plugin is currently not active on the organizer account."
-msgstr "Die notwendige Erweiterung ist nicht aktiv."
+msgstr "Diese Erweiterung ist derzeit in deinem Veranstalterkonto nicht aktiv."
 
 #: pretix/control/views/organizer.py:813
-#, fuzzy
-#| msgid "A payment is currently pending for this order."
 msgid "This plugin is currently not allowed for this organizer account."
-msgstr "Eine Zahlung für diese Bestellung ist noch offen."
+msgstr ""
+"Diese Erweiterung ist derzeit in diesem Veranstalterkonto nicht erlaubt."
 
 #: pretix/control/views/organizer.py:902
 msgid "The team has been created. You can now add members to the team."
