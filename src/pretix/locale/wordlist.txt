@@ -49,6 +49,7 @@ DSS
 DNS
 EEA
 eInvoices
+enqueued
 EPC
 EPS
 eps
@@ -90,6 +91,7 @@ Melilla
 Mercado
 MerchantID
 Mifare
+Misconfiguration
 MobilePay
 MOTO
 Multibanco
