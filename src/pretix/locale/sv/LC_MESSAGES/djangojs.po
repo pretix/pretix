@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 12:49+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2024-09-12 03:00+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -354,7 +354,7 @@ msgstr "Nej"
 msgid "close"
 msgstr "stäng"
 
-#: pretix/static/pretixbase/js/addressform.js:59
+#: pretix/static/pretixbase/js/addressform.js:105
 #: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "obligatorisk"

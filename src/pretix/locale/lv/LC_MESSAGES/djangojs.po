@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 12:49+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2022-04-06 03:00+0000\n"
 "Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -352,7 +352,7 @@ msgstr "Nē"
 msgid "close"
 msgstr "aizvērt"
 
-#: pretix/static/pretixbase/js/addressform.js:59
+#: pretix/static/pretixbase/js/addressform.js:105
 #: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "obligāts"

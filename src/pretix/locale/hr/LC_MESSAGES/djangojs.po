@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 12:49+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2025-03-16 10:17+0000\n"
 "Last-Translator: Robert Rigo <kontakt@bicikli.hr>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -346,7 +346,7 @@ msgstr "Ne"
 msgid "close"
 msgstr "zatvori"
 
-#: pretix/static/pretixbase/js/addressform.js:59
+#: pretix/static/pretixbase/js/addressform.js:105
 #: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr ""

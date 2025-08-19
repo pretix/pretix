@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 12:49+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2025-06-25 06:56+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -358,7 +358,7 @@ msgstr "아니오"
 msgid "close"
 msgstr "마감"
 
-#: pretix/static/pretixbase/js/addressform.js:59
+#: pretix/static/pretixbase/js/addressform.js:105
 #: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "필수사항"

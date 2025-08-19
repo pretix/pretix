@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 12:49+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -359,7 +359,7 @@ msgstr "لا"
 msgid "close"
 msgstr "إغلاق"
 
-#: pretix/static/pretixbase/js/addressform.js:59
+#: pretix/static/pretixbase/js/addressform.js:105
 #: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "مطلوب"
