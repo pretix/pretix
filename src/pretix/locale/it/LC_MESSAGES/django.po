@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-07-04 00:00+0000\n"
-"Last-Translator: Rosariocastellana <rosariocastellana@gmail.com>\n"
+"PO-Revision-Date: 2025-08-19 17:46+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3555,31 +3555,27 @@ msgstr ""
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "Sistema di Interscambio Italiano (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "Sistema di Interscambio (SdI)"
 
 #: pretix/base/invoicing/national.py:49
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr "Codice carta regalo"
+msgstr "Codice Fiscale"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "Indirizzo PEC"
 
 #: pretix/base/invoicing/national.py:57
-#, fuzzy
-#| msgid "Recipients"
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "Destinatari"
+msgstr "Codice destinatario"
 
 #: pretix/base/invoicing/pdf.py:140
 #, python-format
