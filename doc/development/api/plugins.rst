@@ -79,7 +79,7 @@ A working example would be:
     try:
         from pretix.base.plugins import PluginConfig, PLUGIN_LEVEL_EVENT
     except ImportError:
-        raise RuntimeError("Please use pretix 2.7 or above to run this plugin!")
+        raise RuntimeError("Please use pretix 2025.7 or above to run this plugin!")
     from django.utils.translation import gettext_lazy as _
 
 
