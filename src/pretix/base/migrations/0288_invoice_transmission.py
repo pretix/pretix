@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0284_ordersyncresult_ordersyncqueue"),
+        ("pretixbase", "0287_organizer_plugins"),
     ]
 
     operations = [
