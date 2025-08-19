@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:01+0000\n"
-"PO-Revision-Date: 2025-08-19 16:31+0000\n"
+"PO-Revision-Date: 2025-08-19 16:34+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -168,11 +168,11 @@ msgstr "pretixSCAN"
 #: pretix/api/auth/devicesecurity.py:118
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
 msgstr ""
-"pretixSCAN (Kiosk-Modus, keine Bestellungs-Synchronisierung, keine Suche)"
+"pretixSCAN (Kiosk-Modus, keine Bestellungs-Synchronisation, keine Suche)"
 
 #: pretix/api/auth/devicesecurity.py:153
 msgid "pretixSCAN (online only, no order sync)"
-msgstr "pretixSCAN (nur online, keine Bestellungs-Synchronisierung)"
+msgstr "pretixSCAN (nur online, keine Bestellungs-Synchronisation)"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:402
 msgid "Application name"
@@ -822,8 +822,8 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
-"Bitte aktualisieren Sie das Werte-Mapping für Feld \"{field_name}\". Option "
-"\"{val}\" ist nicht zugeordnet"
+"Bitte aktualisieren Sie die Werte-Zuordnung für Feld \"{field_name}\". "
+"Option \"{val}\" ist nicht zugeordnet"
 
 #: pretix/base/datasync/sourcefields.py:128
 msgid "Order position details"
@@ -18110,7 +18110,7 @@ msgstr "Systembericht"
 
 #: pretix/control/navigation.py:455 pretix/control/navigation.py:675
 msgid "Data sync problems"
-msgstr "Datensynchronisierungs-Probleme"
+msgstr "Datensynchronisation-Probleme"
 
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -19377,7 +19377,7 @@ msgstr "Keine Daten übermittelt."
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:5
 msgid "Sync problems"
-msgstr "Synchronisierungsprobleme"
+msgstr "Synchronisationsprobleme"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:7
 msgid ""
@@ -19385,7 +19385,7 @@ msgid ""
 "external system has failed. You can start another attempt to sync them "
 "manually."
 msgstr ""
-"Auf dieser Seite finden Sie Bestellungen, bei denen die Synchronisierung zu "
+"Auf dieser Seite finden Sie Bestellungen, bei denen die Synchronisation zu "
 "einem externen System fehlgeschlagen ist. Sie können einen erneuten Versuch "
 "manuell starten."
 
@@ -19417,7 +19417,7 @@ msgstr "Ausgewählte stornieren"
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:31
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:62
 msgid "Edit value mapping"
-msgstr "Werte-Mapping ändern"
+msgstr "Werte-Zuordnung ändern"
 
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:76
 #: pretix/control/templates/pretixcontrol/event/settings.html:487
@@ -24766,7 +24766,7 @@ msgid ""
 msgstr ""
 "Wenn die Software des Gerätes diese Funktion unterstützt, wird das Gerät "
 "persönliche Daten wie z.B. Bestelldaten beim nächsten "
-"Synchronisierungsversuch vom Gerät löschen. Nicht-personenbezogene Daten wie "
+"Synchronisationsversuch vom Gerät löschen. Nicht-personenbezogene Daten wie "
 "z.B. Veranstaltungsdaten oder Kassentransaktionen werden nicht gelöscht, bis "
 "Sie die Software manuell deinstallieren oder zurücksetzen."
 
