@@ -871,8 +871,6 @@ msgid "Event information"
 msgstr "Veranstaltungs-Informationen"
 
 #: pretix/base/datasync/sourcefields.py:135
-#, fuzzy
-#| msgid "Event or subevent information"
 msgctxt "subevent"
 msgid "Event or date information"
 msgstr "Veranstaltungs- oder Termininformationen"
@@ -3518,9 +3516,6 @@ msgid "Fiscal code"
 msgstr "Steuernummer"
 
 #: pretix/base/invoicing/national.py:53
-#, fuzzy
-#| msgctxt "italian_invoice"
-#| msgid "Address for certified electronical mail"
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
 msgstr "Adresse für zertifizierte elektronische Mail"
