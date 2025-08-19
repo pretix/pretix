@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-19 16:34+0000\n"
+"PO-Revision-Date: 2025-08-19 16:54+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1122,10 +1122,8 @@ msgid "Order link"
 msgstr "Bestell-Link"
 
 #: pretix/base/datasync/sourcefields.py:560
-#, fuzzy
-#| msgid "Ticket block"
 msgid "Ticket link"
-msgstr "Ticket-Sperre"
+msgstr "Ticket-Link"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, python-brace-format
@@ -3781,7 +3779,7 @@ msgid ""
 "The PEPPOL participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
-"Der Präfix %(number)s für Peppol-Teilnehmer-IDs ist unserem System nicht "
+"Der Präfix %(number)s für PEPPOL-Teilnehmer-IDs ist unserem System nicht "
 "bekannt. Bitte kontaktieren Sie uns, wenn Sie sicher sind, dass diese ID "
 "korrekt ist."
 
@@ -3791,7 +3789,7 @@ msgid ""
 "The PEPPOL participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
-"Die Peppol-Teilnehmer-ID passt nicht zu den Validierungsregeln für den "
+"Die PEPPOL-Teilnehmer-ID passt nicht zu den Validierungsregeln für den "
 "Präfix %(number)s. Bitte kontaktieren Sie uns, wenn Sie sicher sind, dass "
 "diese ID korrekt ist."
 
@@ -16929,16 +16927,13 @@ msgid "The transmission of invoice {full_invoice_no} has failed."
 msgstr "Die Übertragung der Rechnung {full_invoice_no} ist fehlgeschlagen."
 
 #: pretix/control/logdisplay.py:529
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Invoice {full_invoice_no} has not been transmitted because no "
-#| "transmission provider supports test mode invoices."
+#, python-brace-format
 msgid ""
 "Invoice {full_invoice_no} has not been transmitted because the transmission "
 "provider does not support test mode invoices."
 msgstr ""
-"Rechnung {full_invoice_no} wurde nicht übertragen, weil keine "
-"Übertragungsmethode Testmodus-Rechnungen unterstützt."
+"Rechnung {full_invoice_no} wurde nicht übertragen, weil die "
+"Übertragungsmethode keine Testmodus-Rechnungen unterstützt."
 
 #: pretix/control/logdisplay.py:531
 #, python-brace-format
@@ -25270,10 +25265,7 @@ msgstr ""
 "abgeschaltet werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
-#, fuzzy, python-format
-#| msgid ""
-#| "The plugin \"%(name)s\" is enabled for your organizer account,  but also "
-#| "needs to be enabled for the specific events you want to use it with."
+#, python-format
 msgid ""
 "The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
