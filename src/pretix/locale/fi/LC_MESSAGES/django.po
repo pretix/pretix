@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:01+0000\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2025-05-04 16:00+0000\n"
 "Last-Translator: Pekka Sarkola <pekka.sarkola@gispo.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -882,7 +882,8 @@ msgstr "Meta informaatio"
 #: pretix/base/datasync/sourcefields.py:135
 #, fuzzy
 #| msgid "customer account information"
-msgid "Event or subevent information"
+msgctxt "subevent"
+msgid "Event or date information"
 msgstr "Asiakkaan tilitiedot"
 
 #: pretix/base/datasync/sourcefields.py:175
@@ -1145,10 +1146,12 @@ msgid "Payment date and time"
 msgstr "Tulostuspäivä ja aika"
 
 #: pretix/base/datasync/sourcefields.py:527
-#, fuzzy
-#| msgid "Order code"
-msgid "Order language code"
-msgstr "Tilauskoodi"
+#: pretix/base/exporters/orderlist.py:271
+#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
+#: pretix/control/templates/pretixcontrol/order/index.html:193
+#: pretix/control/templates/pretixcontrol/pdf/index.html:249
+msgid "Order locale"
+msgstr "Tilauksen kieli"
 
 #: pretix/base/datasync/sourcefields.py:536
 #, fuzzy
@@ -1157,16 +1160,17 @@ msgid "Order position ID"
 msgstr "Tilausjärjestys"
 
 #: pretix/base/datasync/sourcefields.py:545
+#: pretix/base/exporters/orderlist.py:291
 #, fuzzy
-#| msgid "Order"
-msgid "Order URL"
-msgstr "Tilaus"
+#| msgid "Order time"
+msgid "Order link"
+msgstr "Tilauksen aika"
 
 #: pretix/base/datasync/sourcefields.py:560
 #, fuzzy
-#| msgid "Ticket"
-msgid "Ticket URL"
-msgstr "Lippu"
+#| msgid "Ticket block"
+msgid "Ticket link"
+msgstr "Lippulohko"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, fuzzy, python-brace-format
@@ -2395,13 +2399,6 @@ msgstr "Viimeinen maksupäivämäärä"
 msgid "Fees"
 msgstr "Kulu"
 
-#: pretix/base/exporters/orderlist.py:271
-#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
-#: pretix/control/templates/pretixcontrol/order/index.html:193
-#: pretix/control/templates/pretixcontrol/pdf/index.html:249
-msgid "Order locale"
-msgstr "Tilauksen kieli"
-
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Gross at {rate} % tax"
@@ -2451,12 +2448,6 @@ msgstr "Sähköpostiosoite vahvistettu"
 #: pretix/base/exporters/orderlist.py:668
 msgid "External customer ID"
 msgstr "Asiakastunnus"
-
-#: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
-msgid "Order link"
-msgstr "Tilauksen aika"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -3577,7 +3568,7 @@ msgstr "Lahjakortin koodi"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
-msgid "Address for certified electronical mail"
+msgid "Address for certified electronic mail"
 msgstr ""
 
 #: pretix/base/invoicing/national.py:57
@@ -16461,8 +16452,8 @@ msgstr ""
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
 msgid ""
-"Invoice {full_invoice_no} has not been transmitted because no transmission "
-"provider supports test mode invoices."
+"Invoice {full_invoice_no} has not been transmitted because the transmission "
+"provider does not support test mode invoices."
 msgstr ""
 
 #: pretix/control/logdisplay.py:531
@@ -23979,7 +23970,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
 msgid ""
-"The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+"The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
 
@@ -34668,6 +34659,21 @@ msgstr "Kirjoita käyttöoikeudet"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Order code"
+#~ msgid "Order language code"
+#~ msgstr "Tilauskoodi"
+
+#, fuzzy
+#~| msgid "Order"
+#~ msgid "Order URL"
+#~ msgstr "Tilaus"
+
+#, fuzzy
+#~| msgid "Ticket"
+#~ msgid "Ticket URL"
+#~ msgstr "Lippu"
 
 #~ msgid "Email invoices"
 #~ msgstr "Lähetä laskut sähköpostilla"

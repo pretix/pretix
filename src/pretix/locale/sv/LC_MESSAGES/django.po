@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:01+0000\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2025-01-30 12:39+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -879,7 +879,8 @@ msgstr "Metainformation"
 #: pretix/base/datasync/sourcefields.py:135
 #, fuzzy
 #| msgid "Send recovery information"
-msgid "Event or subevent information"
+msgctxt "subevent"
+msgid "Event or date information"
 msgstr "Skicka återställningsinformation"
 
 #: pretix/base/datasync/sourcefields.py:175
@@ -1142,10 +1143,12 @@ msgid "Payment date and time"
 msgstr "Utskriftsdatum och tid"
 
 #: pretix/base/datasync/sourcefields.py:527
-#, fuzzy
-#| msgid "Order code"
-msgid "Order language code"
-msgstr "Bokningsnummer"
+#: pretix/base/exporters/orderlist.py:271
+#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
+#: pretix/control/templates/pretixcontrol/order/index.html:193
+#: pretix/control/templates/pretixcontrol/pdf/index.html:249
+msgid "Order locale"
+msgstr "Språk på bokningen"
 
 #: pretix/base/datasync/sourcefields.py:536
 #, fuzzy
@@ -1154,16 +1157,17 @@ msgid "Order position ID"
 msgstr "Bokad produkt"
 
 #: pretix/base/datasync/sourcefields.py:545
+#: pretix/base/exporters/orderlist.py:291
 #, fuzzy
-#| msgid "Order"
-msgid "Order URL"
-msgstr "Bokning"
+#| msgid "Order time"
+msgid "Order link"
+msgstr "Tid för bokning"
 
 #: pretix/base/datasync/sourcefields.py:560
 #, fuzzy
-#| msgid "Ticket"
-msgid "Ticket URL"
-msgstr "Biljett"
+#| msgid "Ticket block"
+msgid "Ticket link"
+msgstr "Biljettblock"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, fuzzy, python-brace-format
@@ -2391,13 +2395,6 @@ msgstr "Sista betalningsdag"
 msgid "Fees"
 msgstr "Moms"
 
-#: pretix/base/exporters/orderlist.py:271
-#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
-#: pretix/control/templates/pretixcontrol/order/index.html:193
-#: pretix/control/templates/pretixcontrol/pdf/index.html:249
-msgid "Order locale"
-msgstr "Språk på bokningen"
-
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Gross at {rate} % tax"
@@ -2447,12 +2444,6 @@ msgstr "Email adress verifierad"
 #: pretix/base/exporters/orderlist.py:668
 msgid "External customer ID"
 msgstr "Externt kund ID"
-
-#: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
-msgid "Order link"
-msgstr "Tid för bokning"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -3584,7 +3575,7 @@ msgstr "Presentkorts kod"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
-msgid "Address for certified electronical mail"
+msgid "Address for certified electronic mail"
 msgstr ""
 
 #: pretix/base/invoicing/national.py:57
@@ -16893,8 +16884,8 @@ msgstr ""
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
 msgid ""
-"Invoice {full_invoice_no} has not been transmitted because no transmission "
-"provider supports test mode invoices."
+"Invoice {full_invoice_no} has not been transmitted because the transmission "
+"provider does not support test mode invoices."
 msgstr ""
 
 #: pretix/control/logdisplay.py:531
@@ -25250,7 +25241,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
 msgid ""
-"The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+"The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
 
@@ -36502,6 +36493,21 @@ msgstr "Skrivrättigheter"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Order code"
+#~ msgid "Order language code"
+#~ msgstr "Bokningsnummer"
+
+#, fuzzy
+#~| msgid "Order"
+#~ msgid "Order URL"
+#~ msgstr "Bokning"
+
+#, fuzzy
+#~| msgid "Ticket"
+#~ msgid "Ticket URL"
+#~ msgstr "Biljett"
 
 #~ msgid "Email invoices"
 #~ msgstr "E-posta fakturor"

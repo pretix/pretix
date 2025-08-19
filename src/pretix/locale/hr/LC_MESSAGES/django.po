@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:01+0000\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2025-03-04 16:16+0000\n"
 "Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -883,7 +883,8 @@ msgstr "Meta informacije"
 #: pretix/base/datasync/sourcefields.py:135
 #, fuzzy
 #| msgid "Send recovery information"
-msgid "Event or subevent information"
+msgctxt "subevent"
+msgid "Event or date information"
 msgstr "Pošalji informacije za oporavak"
 
 #: pretix/base/datasync/sourcefields.py:175
@@ -1146,10 +1147,12 @@ msgid "Payment date and time"
 msgstr "Datum i vrijeme ispisa"
 
 #: pretix/base/datasync/sourcefields.py:527
-#, fuzzy
-#| msgid "Order code"
-msgid "Order language code"
-msgstr "Šifra narudžbe"
+#: pretix/base/exporters/orderlist.py:271
+#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
+#: pretix/control/templates/pretixcontrol/order/index.html:193
+#: pretix/control/templates/pretixcontrol/pdf/index.html:249
+msgid "Order locale"
+msgstr "Jezična postavka narudžbe"
 
 #: pretix/base/datasync/sourcefields.py:536
 #, fuzzy
@@ -1158,16 +1161,17 @@ msgid "Order position ID"
 msgstr "Pozicija narudžbe"
 
 #: pretix/base/datasync/sourcefields.py:545
+#: pretix/base/exporters/orderlist.py:291
 #, fuzzy
-#| msgid "Order"
-msgid "Order URL"
-msgstr "Narudžba"
+#| msgid "Order time"
+msgid "Order link"
+msgstr "Vrijeme narudžbe"
 
 #: pretix/base/datasync/sourcefields.py:560
 #, fuzzy
-#| msgid "Ticket"
-msgid "Ticket URL"
-msgstr "Ulaznica"
+#| msgid "Ticket block"
+msgid "Ticket link"
+msgstr "Blok ulaznica"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, fuzzy, python-brace-format
@@ -2395,13 +2399,6 @@ msgstr "Datum posljednjeg plaćanja"
 msgid "Fees"
 msgstr "Naknade"
 
-#: pretix/base/exporters/orderlist.py:271
-#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
-#: pretix/control/templates/pretixcontrol/order/index.html:193
-#: pretix/control/templates/pretixcontrol/pdf/index.html:249
-msgid "Order locale"
-msgstr "Jezična postavka narudžbe"
-
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Gross at {rate} % tax"
@@ -2451,12 +2448,6 @@ msgstr "Adresa e-pošte potvrđena"
 #: pretix/base/exporters/orderlist.py:668
 msgid "External customer ID"
 msgstr "Eksterni ID kupca"
-
-#: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
-msgid "Order link"
-msgstr "Vrijeme narudžbe"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -3584,7 +3575,7 @@ msgstr "Kod poklon kartice"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
-msgid "Address for certified electronical mail"
+msgid "Address for certified electronic mail"
 msgstr ""
 
 #: pretix/base/invoicing/national.py:57
@@ -15595,8 +15586,8 @@ msgstr ""
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
 msgid ""
-"Invoice {full_invoice_no} has not been transmitted because no transmission "
-"provider supports test mode invoices."
+"Invoice {full_invoice_no} has not been transmitted because the transmission "
+"provider does not support test mode invoices."
 msgstr ""
 
 #: pretix/control/logdisplay.py:531
@@ -23105,7 +23096,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
 msgid ""
-"The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+"The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
 
@@ -33481,6 +33472,21 @@ msgstr "Pravo pisanja"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Order code"
+#~ msgid "Order language code"
+#~ msgstr "Šifra narudžbe"
+
+#, fuzzy
+#~| msgid "Order"
+#~ msgid "Order URL"
+#~ msgstr "Narudžba"
+
+#, fuzzy
+#~| msgid "Ticket"
+#~ msgid "Ticket URL"
+#~ msgstr "Ulaznica"
 
 #~ msgid "Email invoices"
 #~ msgstr "E-pošta računi"

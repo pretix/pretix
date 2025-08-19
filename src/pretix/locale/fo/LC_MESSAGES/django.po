@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:01+0000\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2025-02-13 22:00+0000\n"
 "Last-Translator: Andrias Magnussen <andrias.magnussen@om.org>\n"
 "Language-Team: Faroese <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -853,8 +853,11 @@ msgid "Event information"
 msgstr "Bíleggingar upplýsingar broyttir"
 
 #: pretix/base/datasync/sourcefields.py:135
-msgid "Event or subevent information"
-msgstr ""
+#, fuzzy
+#| msgid "Order information changed"
+msgctxt "subevent"
+msgid "Event or date information"
+msgstr "Bíleggingar upplýsingar broyttir"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:604
@@ -1094,26 +1097,29 @@ msgid "Payment date and time"
 msgstr "Gjald váttað"
 
 #: pretix/base/datasync/sourcefields.py:527
-#, fuzzy
-#| msgid "Order changed"
-msgid "Order language code"
-msgstr "Bílegging broytt"
+#: pretix/base/exporters/orderlist.py:271
+#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
+#: pretix/control/templates/pretixcontrol/order/index.html:193
+#: pretix/control/templates/pretixcontrol/pdf/index.html:249
+msgid "Order locale"
+msgstr ""
 
 #: pretix/base/datasync/sourcefields.py:536
 msgid "Order position ID"
 msgstr ""
 
 #: pretix/base/datasync/sourcefields.py:545
+#: pretix/base/exporters/orderlist.py:291
 #, fuzzy
 #| msgid "Order denied"
-msgid "Order URL"
+msgid "Order link"
 msgstr "Bílegging avvíst"
 
 #: pretix/base/datasync/sourcefields.py:560
 #, fuzzy
-#| msgid "Target URL"
-msgid "Ticket URL"
-msgstr "Target URL"
+#| msgid "Ticket checked in"
+msgid "Ticket link"
+msgstr "Atgongumerki kekka inn"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, python-brace-format
@@ -2310,13 +2316,6 @@ msgstr ""
 msgid "Fees"
 msgstr ""
 
-#: pretix/base/exporters/orderlist.py:271
-#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
-#: pretix/control/templates/pretixcontrol/order/index.html:193
-#: pretix/control/templates/pretixcontrol/pdf/index.html:249
-msgid "Order locale"
-msgstr ""
-
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Gross at {rate} % tax"
@@ -2366,12 +2365,6 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:668
 msgid "External customer ID"
 msgstr ""
-
-#: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order denied"
-msgid "Order link"
-msgstr "Bílegging avvíst"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -3438,7 +3431,7 @@ msgstr ""
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
-msgid "Address for certified electronical mail"
+msgid "Address for certified electronic mail"
 msgstr ""
 
 #: pretix/base/invoicing/national.py:57
@@ -14898,8 +14891,8 @@ msgstr ""
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
 msgid ""
-"Invoice {full_invoice_no} has not been transmitted because no transmission "
-"provider supports test mode invoices."
+"Invoice {full_invoice_no} has not been transmitted because the transmission "
+"provider does not support test mode invoices."
 msgstr ""
 
 #: pretix/control/logdisplay.py:531
@@ -22313,7 +22306,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
 msgid ""
-"The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+"The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
 
@@ -32282,3 +32275,18 @@ msgstr ""
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Order changed"
+#~ msgid "Order language code"
+#~ msgstr "Bílegging broytt"
+
+#, fuzzy
+#~| msgid "Order denied"
+#~ msgid "Order URL"
+#~ msgstr "Bílegging avvíst"
+
+#, fuzzy
+#~| msgid "Target URL"
+#~ msgid "Ticket URL"
+#~ msgstr "Target URL"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:01+0000\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2025-08-19 16:34+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
@@ -871,7 +871,10 @@ msgid "Event information"
 msgstr "Veranstaltungs-Informationen"
 
 #: pretix/base/datasync/sourcefields.py:135
-msgid "Event or subevent information"
+#, fuzzy
+#| msgid "Event or subevent information"
+msgctxt "subevent"
+msgid "Event or date information"
 msgstr "Veranstaltungs- oder Termininformationen"
 
 #: pretix/base/datasync/sourcefields.py:175
@@ -1102,7 +1105,11 @@ msgid "Payment date and time"
 msgstr "Zahlungsdatum und Uhrzeit"
 
 #: pretix/base/datasync/sourcefields.py:527
-msgid "Order language code"
+#: pretix/base/exporters/orderlist.py:271
+#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
+#: pretix/control/templates/pretixcontrol/order/index.html:193
+#: pretix/control/templates/pretixcontrol/pdf/index.html:249
+msgid "Order locale"
 msgstr "Bestellsprache"
 
 #: pretix/base/datasync/sourcefields.py:536
@@ -1110,12 +1117,15 @@ msgid "Order position ID"
 msgstr "Interne ID der Bestellposition"
 
 #: pretix/base/datasync/sourcefields.py:545
-msgid "Order URL"
-msgstr "Bestell-URL"
+#: pretix/base/exporters/orderlist.py:291
+msgid "Order link"
+msgstr "Bestell-Link"
 
 #: pretix/base/datasync/sourcefields.py:560
-msgid "Ticket URL"
-msgstr "Ticket-URL"
+#, fuzzy
+#| msgid "Ticket block"
+msgid "Ticket link"
+msgstr "Ticket-Sperre"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, python-brace-format
@@ -2343,13 +2353,6 @@ msgstr "Datum der letzten Zahlung"
 msgid "Fees"
 msgstr "Gebühren"
 
-#: pretix/base/exporters/orderlist.py:271
-#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
-#: pretix/control/templates/pretixcontrol/order/index.html:193
-#: pretix/control/templates/pretixcontrol/pdf/index.html:249
-msgid "Order locale"
-msgstr "Bestellsprache"
-
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Gross at {rate} % tax"
@@ -2399,10 +2402,6 @@ msgstr "E-Mail-Adresse verifiziert"
 #: pretix/base/exporters/orderlist.py:668
 msgid "External customer ID"
 msgstr "Externe Kundennummer"
-
-#: pretix/base/exporters/orderlist.py:291
-msgid "Order link"
-msgstr "Bestell-Link"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -3521,8 +3520,11 @@ msgid "Fiscal code"
 msgstr "Steuernummer"
 
 #: pretix/base/invoicing/national.py:53
+#, fuzzy
+#| msgctxt "italian_invoice"
+#| msgid "Address for certified electronical mail"
 msgctxt "italian_invoice"
-msgid "Address for certified electronical mail"
+msgid "Address for certified electronic mail"
 msgstr "Adresse für zertifizierte elektronische Mail"
 
 #: pretix/base/invoicing/national.py:57
@@ -16927,10 +16929,13 @@ msgid "The transmission of invoice {full_invoice_no} has failed."
 msgstr "Die Übertragung der Rechnung {full_invoice_no} ist fehlgeschlagen."
 
 #: pretix/control/logdisplay.py:529
-#, python-brace-format
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Invoice {full_invoice_no} has not been transmitted because no "
+#| "transmission provider supports test mode invoices."
 msgid ""
-"Invoice {full_invoice_no} has not been transmitted because no transmission "
-"provider supports test mode invoices."
+"Invoice {full_invoice_no} has not been transmitted because the transmission "
+"provider does not support test mode invoices."
 msgstr ""
 "Rechnung {full_invoice_no} wurde nicht übertragen, weil keine "
 "Übertragungsmethode Testmodus-Rechnungen unterstützt."
@@ -25265,9 +25270,12 @@ msgstr ""
 "abgeschaltet werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+#| "needs to be enabled for the specific events you want to use it with."
 msgid ""
-"The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+"The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
 "Die Erweiterung \"%(name)s\" ist für Ihr Veranstalterkonto aktiv, muss "
@@ -36440,6 +36448,15 @@ msgstr "Schreibzugriff"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid "Order language code"
+#~ msgstr "Bestellsprache"
+
+#~ msgid "Order URL"
+#~ msgstr "Bestell-URL"
+
+#~ msgid "Ticket URL"
+#~ msgstr "Ticket-URL"
 
 #~ msgid "Email invoices"
 #~ msgstr "Rechnungen per E-Mail verschicken"

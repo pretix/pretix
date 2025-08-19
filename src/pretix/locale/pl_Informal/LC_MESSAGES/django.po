@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:01+0000\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2025-01-20 01:00+0000\n"
 "Last-Translator: Serge Bazanski <sergiusz@q3k.org>\n"
 "Language-Team: Polish (informal) <https://translate.pretix.eu/projects/"
@@ -877,8 +877,11 @@ msgid "Event information"
 msgstr "Szczegóły konta zmienione"
 
 #: pretix/base/datasync/sourcefields.py:135
-msgid "Event or subevent information"
-msgstr ""
+#, fuzzy
+#| msgid "Account information changed"
+msgctxt "subevent"
+msgid "Event or date information"
+msgstr "Szczegóły konta zmienione"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:604
@@ -1140,10 +1143,12 @@ msgid "Payment date and time"
 msgstr "Czas zakończenia wydarzenia"
 
 #: pretix/base/datasync/sourcefields.py:527
-#, fuzzy
-#| msgid "Order code"
-msgid "Order language code"
-msgstr "Kod zamówienia"
+#: pretix/base/exporters/orderlist.py:271
+#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
+#: pretix/control/templates/pretixcontrol/order/index.html:193
+#: pretix/control/templates/pretixcontrol/pdf/index.html:249
+msgid "Order locale"
+msgstr "Lokalizacja zamówienia"
 
 #: pretix/base/datasync/sourcefields.py:536
 #, fuzzy
@@ -1152,16 +1157,17 @@ msgid "Order position ID"
 msgstr "Pozycje zamówienia"
 
 #: pretix/base/datasync/sourcefields.py:545
+#: pretix/base/exporters/orderlist.py:291
 #, fuzzy
-#| msgid "Order"
-msgid "Order URL"
-msgstr "Zamówienie"
+#| msgid "Order time"
+msgid "Order link"
+msgstr "Czas zamówienia"
 
 #: pretix/base/datasync/sourcefields.py:560
 #, fuzzy
-#| msgid "Target URL"
-msgid "Ticket URL"
-msgstr "URL celu"
+#| msgid "Ticket code"
+msgid "Ticket link"
+msgstr "Kod biletu"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, fuzzy, python-brace-format
@@ -2389,13 +2395,6 @@ msgstr "Data ostatniej płatności"
 msgid "Fees"
 msgstr "Opłaty"
 
-#: pretix/base/exporters/orderlist.py:271
-#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
-#: pretix/control/templates/pretixcontrol/order/index.html:193
-#: pretix/control/templates/pretixcontrol/pdf/index.html:249
-msgid "Order locale"
-msgstr "Lokalizacja zamówienia"
-
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Gross at {rate} % tax"
@@ -2445,12 +2444,6 @@ msgstr "Adres email zweryfikowany"
 #: pretix/base/exporters/orderlist.py:668
 msgid "External customer ID"
 msgstr "Zewnętrzne ID klienta"
-
-#: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
-msgid "Order link"
-msgstr "Czas zamówienia"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -3564,7 +3557,7 @@ msgstr "Kod karty podarunkowej"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
-msgid "Address for certified electronical mail"
+msgid "Address for certified electronic mail"
 msgstr ""
 
 #: pretix/base/invoicing/national.py:57
@@ -15149,8 +15142,8 @@ msgstr ""
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
 msgid ""
-"Invoice {full_invoice_no} has not been transmitted because no transmission "
-"provider supports test mode invoices."
+"Invoice {full_invoice_no} has not been transmitted because the transmission "
+"provider does not support test mode invoices."
 msgstr ""
 
 #: pretix/control/logdisplay.py:531
@@ -22590,7 +22583,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
 msgid ""
-"The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+"The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
 
@@ -32607,6 +32600,21 @@ msgstr ""
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Order code"
+#~ msgid "Order language code"
+#~ msgstr "Kod zamówienia"
+
+#, fuzzy
+#~| msgid "Order"
+#~ msgid "Order URL"
+#~ msgstr "Zamówienie"
+
+#, fuzzy
+#~| msgid "Target URL"
+#~ msgid "Ticket URL"
+#~ msgstr "URL celu"
 
 #, fuzzy
 #~| msgid "Please enter the same password twice"

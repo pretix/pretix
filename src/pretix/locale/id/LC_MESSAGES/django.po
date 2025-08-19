@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:01+0000\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2023-11-18 15:00+0000\n"
 "Last-Translator: liimee <git.taaa@fedora.email>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
@@ -886,7 +886,8 @@ msgstr "informasi meta"
 #: pretix/base/datasync/sourcefields.py:135
 #, fuzzy
 #| msgid "Send recovery information"
-msgid "Event or subevent information"
+msgctxt "subevent"
+msgid "Event or date information"
 msgstr "Kirim informasi pemulihan"
 
 #: pretix/base/datasync/sourcefields.py:175
@@ -1149,10 +1150,12 @@ msgid "Payment date and time"
 msgstr "Tanggal dan waktu pencetakan"
 
 #: pretix/base/datasync/sourcefields.py:527
-#, fuzzy
-#| msgid "Order code"
-msgid "Order language code"
-msgstr "Kode pemesanan"
+#: pretix/base/exporters/orderlist.py:271
+#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
+#: pretix/control/templates/pretixcontrol/order/index.html:193
+#: pretix/control/templates/pretixcontrol/pdf/index.html:249
+msgid "Order locale"
+msgstr "Pesan lokal"
 
 #: pretix/base/datasync/sourcefields.py:536
 #, fuzzy
@@ -1161,16 +1164,17 @@ msgid "Order position ID"
 msgstr "Posisi pesanan"
 
 #: pretix/base/datasync/sourcefields.py:545
+#: pretix/base/exporters/orderlist.py:291
 #, fuzzy
-#| msgid "Order"
-msgid "Order URL"
-msgstr "Pesanan"
+#| msgid "Order time"
+msgid "Order link"
+msgstr "Waktu pemesanan"
 
 #: pretix/base/datasync/sourcefields.py:560
 #, fuzzy
-#| msgid "Ticket"
-msgid "Ticket URL"
-msgstr "Tiket"
+#| msgid "Ticket block"
+msgid "Ticket link"
+msgstr "Blok tiket"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, fuzzy, python-brace-format
@@ -2401,13 +2405,6 @@ msgstr "Tanggal pembayaran terakhir"
 msgid "Fees"
 msgstr "Biaya"
 
-#: pretix/base/exporters/orderlist.py:271
-#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
-#: pretix/control/templates/pretixcontrol/order/index.html:193
-#: pretix/control/templates/pretixcontrol/pdf/index.html:249
-msgid "Order locale"
-msgstr "Pesan lokal"
-
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Gross at {rate} % tax"
@@ -2457,12 +2454,6 @@ msgstr "Alamat email terverifikasi"
 #: pretix/base/exporters/orderlist.py:668
 msgid "External customer ID"
 msgstr "ID pelanggan eksternal"
-
-#: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
-msgid "Order link"
-msgstr "Waktu pemesanan"
 
 #: pretix/base/exporters/orderlist.py:295
 #, python-brace-format
@@ -3598,7 +3589,7 @@ msgstr "Kode kartu hadiah"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
-msgid "Address for certified electronical mail"
+msgid "Address for certified electronic mail"
 msgstr ""
 
 #: pretix/base/invoicing/national.py:57
@@ -17016,8 +17007,8 @@ msgstr ""
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
 msgid ""
-"Invoice {full_invoice_no} has not been transmitted because no transmission "
-"provider supports test mode invoices."
+"Invoice {full_invoice_no} has not been transmitted because the transmission "
+"provider does not support test mode invoices."
 msgstr ""
 
 #: pretix/control/logdisplay.py:531
@@ -25445,7 +25436,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
 msgid ""
-"The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+"The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
 
@@ -36811,6 +36802,21 @@ msgstr "Akses tulis"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Order code"
+#~ msgid "Order language code"
+#~ msgstr "Kode pemesanan"
+
+#, fuzzy
+#~| msgid "Order"
+#~ msgid "Order URL"
+#~ msgstr "Pesanan"
+
+#, fuzzy
+#~| msgid "Ticket"
+#~ msgid "Ticket URL"
+#~ msgstr "Tiket"
 
 #~ msgid "Email invoices"
 #~ msgstr "Faktur email"

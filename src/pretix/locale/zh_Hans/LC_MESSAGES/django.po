@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:01+0000\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2024-12-25 23:27+0000\n"
 "Last-Translator: Aarni Heinonen <vamoosev@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.pretix.eu/"
@@ -911,7 +911,8 @@ msgstr "元信息"
 #: pretix/base/datasync/sourcefields.py:135
 #, fuzzy
 #| msgid "Send recovery information"
-msgid "Event or subevent information"
+msgctxt "subevent"
+msgid "Event or date information"
 msgstr "发送恢复信息"
 
 #: pretix/base/datasync/sourcefields.py:175
@@ -1188,10 +1189,12 @@ msgid "Payment date and time"
 msgstr "印刷日期和时间"
 
 #: pretix/base/datasync/sourcefields.py:527
-#, fuzzy
-#| msgid "Order code"
-msgid "Order language code"
-msgstr "订单代码"
+#: pretix/base/exporters/orderlist.py:271
+#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
+#: pretix/control/templates/pretixcontrol/order/index.html:193
+#: pretix/control/templates/pretixcontrol/pdf/index.html:249
+msgid "Order locale"
+msgstr "订单地区"
 
 #: pretix/base/datasync/sourcefields.py:536
 #, fuzzy
@@ -1200,16 +1203,17 @@ msgid "Order position ID"
 msgstr "订单位置"
 
 #: pretix/base/datasync/sourcefields.py:545
+#: pretix/base/exporters/orderlist.py:291
 #, fuzzy
-#| msgid "Order"
-msgid "Order URL"
-msgstr "订单"
+#| msgid "Order time"
+msgid "Order link"
+msgstr "订单时间"
 
 #: pretix/base/datasync/sourcefields.py:560
 #, fuzzy
-#| msgid "Ticket"
-msgid "Ticket URL"
-msgstr "门票"
+#| msgid "Ticket layout"
+msgid "Ticket link"
+msgstr "票证布局"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, fuzzy, python-brace-format
@@ -2466,13 +2470,6 @@ msgstr "最后付款日期"
 msgid "Fees"
 msgstr "费用"
 
-#: pretix/base/exporters/orderlist.py:271
-#: pretix/base/exporters/orderlist.py:666 pretix/base/modelimport_orders.py:508
-#: pretix/control/templates/pretixcontrol/order/index.html:193
-#: pretix/control/templates/pretixcontrol/pdf/index.html:249
-msgid "Order locale"
-msgstr "订单地区"
-
 #: pretix/base/exporters/orderlist.py:276
 #, python-brace-format
 msgid "Gross at {rate} % tax"
@@ -2528,12 +2525,6 @@ msgstr "E-mail 地址已验证"
 #| msgid "Customer VAT ID"
 msgid "External customer ID"
 msgstr "客户增值税号"
-
-#: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
-msgid "Order link"
-msgstr "订单时间"
 
 #: pretix/base/exporters/orderlist.py:295
 #, fuzzy, python-brace-format
@@ -3729,7 +3720,7 @@ msgstr "礼品卡代码"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
-msgid "Address for certified electronical mail"
+msgid "Address for certified electronic mail"
 msgstr ""
 
 #: pretix/base/invoicing/national.py:57
@@ -17312,8 +17303,8 @@ msgstr ""
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
 msgid ""
-"Invoice {full_invoice_no} has not been transmitted because no transmission "
-"provider supports test mode invoices."
+"Invoice {full_invoice_no} has not been transmitted because the transmission "
+"provider does not support test mode invoices."
 msgstr ""
 
 #: pretix/control/logdisplay.py:531
@@ -25841,7 +25832,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
 msgid ""
-"The plugin \"%(name)s\" is enabled for your organizer account,  but also "
+"The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
 
@@ -37482,6 +37473,21 @@ msgstr "录入权限"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Order code"
+#~ msgid "Order language code"
+#~ msgstr "订单代码"
+
+#, fuzzy
+#~| msgid "Order"
+#~ msgid "Order URL"
+#~ msgstr "订单"
+
+#, fuzzy
+#~| msgid "Ticket"
+#~ msgid "Ticket URL"
+#~ msgstr "门票"
 
 #, fuzzy
 #~| msgid "All invoices"
