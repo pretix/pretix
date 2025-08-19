@@ -59,6 +59,11 @@ $(function () {
                     var selected_transmission_type = dependents.transmission_type.prop("data-selected-value");
                     if (selected_transmission_type) dependents.transmission_type.prop("data-selected-value", "");
                     dependents.transmission_type.find("option:not([value='']):not([value='-'])").remove();
+
+                    if (!data.transmission_type.visible) {
+                        selected_transmission_type = "email";
+                    }
+
                     $.each(data.transmission_types, function (k, s) {
                         var o = $("<option>").attr("value", s.code).text(s.name);
                         if (selected_transmission_type === s.code) {
@@ -66,6 +71,7 @@ $(function () {
                         }
                         dependents.transmission_type.append(o);
                     });
+
                 }
 
                 for (var k in dependents) {
