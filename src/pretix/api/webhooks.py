@@ -414,7 +414,7 @@ def register_default_webhook_events(sender, **kwargs):
         ParametrizedVoucherWebhookEvent(
             'pretix.voucher.changed',
             _('Voucher changed'),
-            _('Only includes explicit to the voucher, not e.g. an increase of the number of redemptions.')
+            _('Only includes explicit changes to the voucher, not e.g. an increase of the number of redemptions.')
         ),
         ParametrizedVoucherWebhookEvent(
             'pretix.voucher.deleted',
