@@ -423,17 +423,22 @@ class Registry:
         )
 
 
-class EventPluginRegistry(Registry):
+class PluginAwareRegistry(Registry):
     """
     A Registry which automatically annotates entries with a "plugin" key, specifying which plugin
     the entry is defined in. This allows the consumer of entries to determine whether an entry is
-    enabled for a given event, or filter only for entries defined by enabled plugins.
+    enabled for a given event or organizer, or filter only for entries defined by enabled plugins.
 
     .. code-block:: python
 
         logtype, meta = my_registry.find(action_type="foo.bar.baz")
         # meta["plugin"] contains the django app name of the defining plugin
     """
+    allowed_levels = [
+        PLUGIN_LEVEL_EVENT,
+        PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+        PLUGIN_LEVEL_ORGANIZER,
+    ]
 
     def __init__(self, keys):
         def get_plugin(o):
@@ -441,13 +446,12 @@ class EventPluginRegistry(Registry):
             if app != "CORE":
                 if not hasattr(app, "PretixPluginMeta"):
                     raise ImproperlyConfigured(
-                        f"{app} uses an EventPluginRegistry but is not a pretix plugin"
+                        f"{app} uses an PluginAwareRegistry but is not a pretix plugin"
                     )
-                allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID, PLUGIN_LEVEL_EVENT)
-                if getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT) not in allowed_levels:
-                    # This check is redundant for now, but will be useful if we ever add other levels
+                level = getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT)
+                if level not in self.allowed_levels:
                     raise ImproperlyConfigured(
-                        f"{app} uses an EventPluginRegistry but is not a plugin that can be active on event or organizer level"
+                        f"{app} has level {level} but should have one of {self.allowed_levels} to use this registry"
                     )
             return app
 
@@ -471,51 +475,7 @@ class EventPluginRegistry(Registry):
         return item, meta
 
 
-class OrganizerPluginRegistry(Registry):
-    """
-    A Registry which automatically annotates entries with a "plugin" key, specifying which plugin
-    the entry is defined in. This allows the consumer of entries to determine whether an entry is
-    enabled for a given event, or filter only for entries defined by enabled plugins.
-
-    .. code-block:: python
-
-        logtype, meta = my_registry.find(action_type="foo.bar.baz")
-        # meta["plugin"] contains the django app name of the defining plugin
-    """
-
-    def __init__(self, keys):
-        def get_plugin(o):
-            app = get_defining_app(o)
-            if app != "CORE":
-                if not hasattr(app, "PretixPluginMeta"):
-                    raise ImproperlyConfigured(
-                        f"{app} uses an OrganizerPluginRegistry but is not a pretix plugin"
-                    )
-                allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
-                if getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT) not in allowed_levels:
-                    raise ImproperlyConfigured(
-                        f"{app} uses an OrganizerPluginRegistry but is not a plugin that can be active on organizer level"
-                    )
-            return app
-
-        super().__init__({"plugin": get_plugin, **keys})
-
-    def filter(self, active_in=None, **kwargs):
-        result = super().filter(**kwargs)
-        if active_in is not None:
-            result = (
-                (entry, meta)
-                for entry, meta in result
-                if is_app_active(active_in, meta['plugin'])
-            )
-        return result
-
-    def get(self, active_in=None, **kwargs):
-        item, meta = super().get(**kwargs)
-        if meta and active_in is not None:
-            if not is_app_active(active_in, meta['plugin']):
-                return None, None
-        return item, meta
+EventPluginRegistry = PluginAwareRegistry  # for backwards compatibility
 
 
 event_live_issues = EventPluginSignal()
