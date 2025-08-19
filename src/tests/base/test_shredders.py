@@ -140,7 +140,7 @@ def test_waitinglist_shredder(event, item):
     )
     wle.send_voucher()
     assert '@' in wle.voucher.comment
-    assert '@' in wle.voucher.all_logentries().last().data
+    assert '@' in wle.voucher.all_logentries().get(action_type="pretix.voucher.added.waitinglist").data
     s = WaitingListShredder(event)
     f = list(s.generate_files())
     assert json.loads(f[0][2]) == [
@@ -166,7 +166,7 @@ def test_waitinglist_shredder(event, item):
     assert '@' not in wle.email
     assert '+49' not in str(wle.phone)
     assert '@' not in wle.voucher.comment
-    assert '@' not in wle.voucher.all_logentries().last().data
+    assert '@' not in wle.voucher.all_logentries().get(action_type="pretix.voucher.added.waitinglist").data
 
 
 @pytest.mark.django_db
