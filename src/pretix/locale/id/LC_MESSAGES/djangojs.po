@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-19 12:49+0000\n"
 "PO-Revision-Date: 2023-09-20 14:01+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
@@ -350,7 +350,7 @@ msgid "close"
 msgstr "menutup"
 
 #: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:513
+#: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "diperlukan"
 
@@ -787,7 +787,7 @@ msgstr "Anda mendapatkan %(currency)s %(amount)s kembali"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Silakan masukkan jumlah yang dapat disimpan oleh penyelenggara."
 
-#: pretix/static/pretixpresale/js/ui/main.js:558
+#: pretix/static/pretixpresale/js/ui/main.js:554
 msgid "Your local time:"
 msgstr "Waktu setempat Anda:"
 

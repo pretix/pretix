@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-19 12:49+0000\n"
 "PO-Revision-Date: 2025-05-30 11:06+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -345,7 +345,7 @@ msgid "close"
 msgstr "fermer"
 
 #: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:513
+#: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "obligatoire"
 
@@ -768,7 +768,7 @@ msgid "Please enter the amount the organizer can keep."
 msgstr ""
 "Veuillez indiquer le montant que l'organisateur est autorisé à retenir."
 
-#: pretix/static/pretixpresale/js/ui/main.js:558
+#: pretix/static/pretixpresale/js/ui/main.js:554
 msgid "Your local time:"
 msgstr "Votre heure locale :"
 

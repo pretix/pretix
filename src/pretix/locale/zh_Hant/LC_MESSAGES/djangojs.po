@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-19 12:49+0000\n"
 "PO-Revision-Date: 2025-05-06 16:20+0000\n"
 "Last-Translator: KC Tseng <tkc0204@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
@@ -346,7 +346,7 @@ msgid "close"
 msgstr "關閉"
 
 #: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:513
+#: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "需要"
 
@@ -755,7 +755,7 @@ msgstr "你拿回 %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "請輸入主辦方可以保留的金額。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:558
+#: pretix/static/pretixpresale/js/ui/main.js:554
 msgid "Your local time:"
 msgstr "你的當地時間："
 
