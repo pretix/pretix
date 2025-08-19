@@ -640,6 +640,14 @@ $(function () {
         $cid_list_div.insertBefore($cid_infofirst);
     });
 
+    // registration confirmation view
+    $("ul.addon-list").each(function() {
+        // set_timezone_times_for_event($(this), local_tz)
+        var $aid_list_div = set_timezone_times_for_event($(this), local_tz, $("<div style='width: fit-content;'>"))
+        var $aid_infofirst = $(this).find(".event-time").first();
+        $aid_list_div.insertBefore($aid_infofirst);
+    });
+
     // For a very weird reason, window width is 0 on an initial load of the widget
     if ($(window).width() > 0) {
         setup_week_calendar()
