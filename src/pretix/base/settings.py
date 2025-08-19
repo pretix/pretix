@@ -114,7 +114,7 @@ def restricted_plugin_kwargs():
     from pretix.base.plugins import get_all_plugins
 
     plugins_available = [
-        (p.module, p.name) for p in get_all_plugins(None)
+        (p.module, p.name) for p in get_all_plugins()
         if (
             not p.name.startswith('.') and
             getattr(p, 'restricted', False) and

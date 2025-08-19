@@ -31,12 +31,9 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+from pretix.base.signals import EventPluginSignal, GlobalSignal
 
-from django.dispatch import Signal
-
-from pretix.base.signals import EventPluginSignal
-
-global_html_head = Signal()
+global_html_head = GlobalSignal()
 """
 Arguments: ``request``
 
@@ -47,7 +44,7 @@ of every page in the frontend. You will get the request as the keyword argument
 This signal is called regardless of whether your plugin is active for all pages of the system.
 """
 
-global_html_page_header = Signal()
+global_html_page_header = GlobalSignal()
 """
 Arguments: ``request``
 
@@ -58,7 +55,7 @@ of every page in the frontend. You will get the request as the keyword argument
 This signal is called regardless of whether your plugin is active for all pages of the system.
 """
 
-global_html_footer = Signal()
+global_html_footer = GlobalSignal()
 """
 Arguments: ``request``
 
@@ -134,7 +131,7 @@ are expected to return a dictionary containing the keys ``label`` and ``url``.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-global_footer_link = Signal()
+global_footer_link = GlobalSignal()
 """
 Arguments: ``request``
 

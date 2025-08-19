@@ -327,6 +327,28 @@ class EventsTest(SoupTest):
         self.event1.refresh_from_db()
         assert "testdummyrestricted" in self.event1.plugins
 
+        self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
+                      {'plugin:tests.testdummyorga': 'enable'})
+        self.event1.refresh_from_db()
+        assert "testdummyorga" not in self.event1.plugins
+
+        self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
+                      {'plugin:tests.testdummyhybrid': 'enable'})
+        self.event1.refresh_from_db()
+        assert "tests.testdummyhybrid" not in self.event1.plugins
+        self.orga1.refresh_from_db()
+        assert "tests.testdummyhybrid" not in self.orga1.plugins
+
+        t2 = Team.objects.create(organizer=self.orga1, can_change_organizer_settings=True)
+        t2.members.add(self.user)
+
+        self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
+                      {'plugin:tests.testdummyhybrid': 'enable'})
+        self.event1.refresh_from_db()
+        assert "tests.testdummyhybrid" in self.event1.plugins
+        self.orga1.refresh_from_db()
+        assert "tests.testdummyhybrid" in self.orga1.plugins
+
     def test_testmode_enable(self):
         self.event1.testmode = False
         self.event1.save()

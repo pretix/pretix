@@ -551,8 +551,7 @@ class Event(EventMixin, LoggedModel):
     :type presale_end: datetime
     :param location: venue
     :type location: str
-    :param plugins: A comma-separated list of plugin names that are active for this
-                    event.
+    :param plugins: A comma-separated list of plugin names that are active for this event.
     :type plugins: str
     :param has_subevents: Enable event series functionality
     :type has_subevents: bool
@@ -1393,7 +1392,7 @@ class Event(EventMixin, LoggedModel):
         from pretix.base.plugins import get_all_plugins
 
         return {
-            p.module: p for p in get_all_plugins(self)
+            p.module: p for p in get_all_plugins(event=self)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 
@@ -1412,12 +1411,20 @@ class Event(EventMixin, LoggedModel):
         self.plugins = ",".join(modules)
 
     def enable_plugin(self, module, allow_restricted=frozenset()):
+        """
+        Adds a plugin to the list of plugins, calling its ``installed`` hook (if available).
+        It is the caller's responsibility to save the event object.
+        """
         plugins_active = self.get_plugins()
         if module not in plugins_active:
             plugins_active.append(module)
             self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
 
     def disable_plugin(self, module):
+        """
+        Adds a plugin to the list of plugins, calling its ``uninstalled`` hook (if available).
+        It is the caller's responsibility to save the event object.
+        """
         plugins_active = self.get_plugins()
         if module in plugins_active:
             plugins_active.remove(module)

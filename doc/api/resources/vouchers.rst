@@ -54,6 +54,10 @@ budget                                money (string)             The budget a vo
 budget_used                           money (string)             The amount of budget the voucher has already used up.
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 2025.7
+
+    The attributes ``created``, ``budget``, and ``budget_used`` have been added.
+
 
 Endpoints
 ---------
