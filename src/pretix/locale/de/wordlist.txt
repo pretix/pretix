@@ -93,6 +93,7 @@ csv
 Customer
 CZK
 Dashboard
+Datensynchronisation
 Debug
 dekodi
 deliverability
@@ -242,6 +243,7 @@ PayPals
 PayU
 PCI
 Personalisierung
+PEPPOl
 PKCE
 Platzhalterzeichen
 Play
@@ -298,6 +300,7 @@ schiefgeht
 schiefgelaufen
 Scope
 Scopes
+SdI
 sechsstelligen
 Secret
 Security
@@ -330,6 +333,7 @@ Stripe
 Stripes
 Strong
 Swish
+Synchronisations
 systemweiten
 Tab
 tag
@@ -377,6 +381,7 @@ USt
 Überweisungs
 Überzahlten
 Validierung
+Validierungsregeln
 Venmo
 Veranstalterdomain
 Veranstaltereinstellungen

@@ -50,7 +50,7 @@ class ItalianSdITransmissionType(TransmissionType):
                 required=False,
             ),
             "transmission_it_sdi_pec": forms.EmailField(
-                label=pgettext_lazy("italian_invoice", "Address for certified electronical mail"),
+                label=pgettext_lazy("italian_invoice", "Address for certified electronic mail"),
                 widget=forms.EmailInput()
             ),
             "transmission_it_sdi_recipient_code": forms.CharField(

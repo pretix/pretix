@@ -24,7 +24,7 @@ from collections import namedtuple
 from functools import partial
 
 from django.db.models import Max, Q
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import Checkin, InvoiceAddress, Order, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -132,7 +132,7 @@ CAT_PRODUCT = DataFieldCategory(20, _('Product details'))
 CAT_ORDER = DataFieldCategory(21, _('Order details'))
 CAT_INVOICE_ADDRESS = DataFieldCategory(22, _('Invoice address'))
 CAT_EVENT = DataFieldCategory(30, _('Event information'))
-CAT_EVENT_OR_SUBEVENT = DataFieldCategory(31, _('Event or subevent information'))
+CAT_EVENT_OR_SUBEVENT = DataFieldCategory(31, pgettext_lazy('subevent', 'Event or date information'))
 
 DataFieldInfo = namedtuple(
     'DataFieldInfo',
@@ -524,7 +524,7 @@ def get_data_fields(event, for_model=None):
                 ORDER,
                 CAT_ORDER,
                 "order_locale",
-                _("Order language code"),
+                _("Order locale"),
                 Question.TYPE_CHOICE,
                 [(lc, lc) for lc in event.settings.locales],
                 lambda order: [order.locale],
@@ -542,7 +542,7 @@ def get_data_fields(event, for_model=None):
                 ORDER,
                 CAT_ORDER,
                 "presale_order_url",
-                _("Order URL"),
+                _("Order link"),
                 Question.TYPE_STRING,
                 None,
                 lambda order: build_absolute_uri(
@@ -557,7 +557,7 @@ def get_data_fields(event, for_model=None):
                 ORDER_POSITION,
                 CAT_ORDER_POSITION,
                 "presale_ticket_url",
-                _("Ticket URL"),
+                _("Ticket link"),
                 Question.TYPE_STRING,
                 None,
                 lambda op: build_absolute_uri(
