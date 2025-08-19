@@ -1458,8 +1458,11 @@ class OrderTransition(OrderView):
             }
         )
 
+    @transaction.atomic()
     def post(self, request, *args, **kwargs):
         to = self.request.POST.get('status', '')
+        self.order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p' and self.mark_paid_form.is_valid():
             ps = self.mark_paid_form.cleaned_data['amount']
 
@@ -1489,13 +1492,12 @@ class OrderTransition(OrderView):
                 for p in self.order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_PENDING,
                                                                OrderPayment.PAYMENT_STATE_CREATED)):
                     try:
-                        with transaction.atomic():
-                            if p.payment_provider:
-                                p.payment_provider.cancel_payment(p)
-                            self.order.log_action('pretix.event.order.payment.canceled', {
-                                'local_id': p.local_id,
-                                'provider': p.provider,
-                            }, user=self.request.user if self.request.user.is_authenticated else None)
+                        if p.payment_provider:
+                            p.payment_provider.cancel_payment(p)
+                        self.order.log_action('pretix.event.order.payment.canceled', {
+                            'local_id': p.local_id,
+                            'provider': p.provider,
+                        }, user=self.request.user if self.request.user.is_authenticated else None)
                     except PaymentException as e:
                         self.order.log_action(
                             'pretix.event.order.payment.canceled.failed',
