@@ -665,7 +665,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         (i.invoice_to_transmission_info or {}).get("transmission_email_address") or i.order.email,
                     ]
                     try:
-                        expected_recipients.append(order.invoice_address.transmission_info.get("transmission_email_address") or i.order.email)
+                        expected_recipients.append((order.invoice_address.transmission_info or {}).get("transmission_email_address") or i.order.email)
                     except InvoiceAddress.DoesNotExist:
                         pass
                     if not any(t in expected_recipients for t in to):

@@ -3410,7 +3410,7 @@ class InvoiceAddress(models.Model):
             'internal_reference': self.internal_reference,
             'beneficiary': self.beneficiary,
             'transmission_type': self.transmission_type,
-            **self.transmission_info,
+            **(self.transmission_info or {}),
         })
         return d
 
