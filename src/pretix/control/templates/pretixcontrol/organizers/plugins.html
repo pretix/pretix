@@ -69,34 +69,36 @@
                                                 {% if show_meta %}
                                                     <span class="text-muted text-sm">{{ plugin.version }}</span>
                                                 {% endif %}
-                                                {% if is_active and level == "organizer" %}
-                                                    <span class="label label-success" data-is-active>
-                                                        <span class="fa fa-check" aria-hidden="true"></span>
-                                                        {% trans "Active" %}
-                                                    </span>
-                                                {% elif events_counter == events_total %}
-                                                    <span class="label label-success" data-is-active>
-                                                        <span class="fa fa-check" aria-hidden="true"></span>
-                                                        {% trans "Active (all events)" %}
-                                                    </span>
-                                                {% elif events_counter %}
-                                                    <span class="label label-info" data-is-active>
-                                                        <span class="fa fa-check" aria-hidden="true"></span>
-                                                        {% blocktrans trimmed count count=events_counter %}
-                                                            Active ({{ count }} event)
-                                                        {% plural %}
-                                                            Active ({{ count }} events)
-                                                        {% endblocktrans %}
-                                                    </span>
-                                                {% elif level == "event_organizer" %}
-                                                    <span class="label label-info" data-is-active>
-                                                        <span class="fa fa-check" aria-hidden="true"></span>
-                                                        {% blocktrans trimmed count count=0 %}
-                                                            Active ({{ count }} event)
-                                                        {% plural %}
-                                                            Active ({{ count }} events)
-                                                        {% endblocktrans %}
-                                                    </span>
+                                                {% if is_active or plugin.level == "event" %}
+                                                    {% if plugin.level == "organizer" %}
+                                                        <span class="label label-success" data-is-active>
+                                                            <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% trans "Active" %}
+                                                        </span>
+                                                    {% elif events_counter == events_total %}
+                                                        <span class="label label-success" data-is-active>
+                                                            <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% trans "Active (all events)" %}
+                                                        </span>
+                                                    {% elif events_counter %}
+                                                        <span class="label label-info" data-is-active>
+                                                            <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% blocktrans trimmed count count=events_counter %}
+                                                                Active ({{ count }} event)
+                                                            {% plural %}
+                                                                Active ({{ count }} events)
+                                                            {% endblocktrans %}
+                                                        </span>
+                                                    {% elif level == "event_organizer" %}
+                                                        <span class="label label-info" data-is-active>
+                                                            <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% blocktrans trimmed count count=0 %}
+                                                                Active ({{ count }} event)
+                                                            {% plural %}
+                                                                Active ({{ count }} events)
+                                                            {% endblocktrans %}
+                                                        </span>
+                                                    {% endif %}
                                                 {% endif %}
                                             </h4>
                                             {% include "pretixcontrol/event/fragment_plugin_description.html" with plugin=plugin %}
