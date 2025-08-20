@@ -121,7 +121,7 @@ $(function () {
 
             if (!(url in responseCache)) {
                 responseCache[url] = new Promise((resolve, reject) => {
-                    $.getJSON(url, function (data) {
+                    xhr = $.getJSON(url, function (data) {
                         resolve(data);
                     }).fail(function(){
                         reject();
