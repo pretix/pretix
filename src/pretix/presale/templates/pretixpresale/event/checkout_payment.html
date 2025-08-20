@@ -9,6 +9,34 @@
 {% endblock %}
 {% block inner %}
     <h3 class="sr-only">{% trans "Payment" %}</h3>
+    {% if customer_gift_cards %}
+        <p><strong>
+            <span class="sr-only">{% trans "Information" %}</span>
+            {% trans "The following gift cards are available in your customer account:" %}
+        </strong></p>
+        <form method="post">
+            {% csrf_token %}
+            <ul class="list-group">
+                {% for c in customer_gift_cards %}
+                    <li class="list-group-item row">
+                        <div class="col-xs-9" id="gc-code-{{ forloop.counter }}">
+                            {{ c }}
+                        </div>
+                        <div class="col-xs-2 text-right" id="gc-value-{{ forloop.counter }}">
+                            {{ c.value|money:c.currency }}
+                        </div>
+                        <div class="col-xs-1 text-right">
+                            <button name="use_giftcard" value="{{ c.secret }}" title="{% trans "Use gift card" %}"
+                                    aria-describedby="gc-code-{{ forloop.counter }} gc-value-{{ forloop.counter }}"
+                                class="btn btn-primary btn-xs">
+                                {% trans "Apply" %}
+                            </button>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </form>
+    {% endif %}
     {% if current_payments %}
         <p>{% trans "You already selected the following payment methods:" %}</p>
         <form method="post">
@@ -77,6 +105,15 @@
                                            aria-controls="payment_{{ p.provider.identifier }}"
                                            data-wallets="{{ p.provider.walletqueries|join:"|" }}" />
                                     <strong class="accordion-label-text">{{ p.provider.public_name }}</strong>
+                                    {% if p.provider.identifier == 'giftcard' and p.provider.customer_gift_cards %}
+                                        <small>
+                                            {% blocktrans trimmed count count=p.provider.customer_gift_cards|length %}
+                                                ({{ count }} available)
+                                            {% plural %}
+                                                ({{ count }} available)
+                                            {% endblocktrans %}
+                                        </small>
+                                    {% endif %}
                                 </span>
                             </label>
                         </legend>
