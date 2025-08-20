@@ -191,13 +191,14 @@ class SubEventDelete(EventPermissionRequiredMixin, CompatDeleteView):
                 self.object.delete()
                 messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
             except ProtectedError:
-                self.object.log_action(
-                    'pretix.subevent.changed', user=self.request.user, data={
-                        'active': False
-                    }, save=False,
-                )
-                self.object.active = False
-                self.object.save(update_fields=['active'])
+                if self.object.active:
+                    self.object.log_action(
+                        'pretix.subevent.changed', user=self.request.user, data={
+                            'active': False
+                        }, save=False,
+                    )
+                    self.object.active = False
+                    self.object.save(update_fields=['active'])
                 messages.error(self.request, pgettext_lazy(
                     'subevent',
                     'The date could not be deleted as some constraints (e.g. data created by plug-ins) did not allow '
