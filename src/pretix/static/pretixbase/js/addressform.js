@@ -121,8 +121,11 @@ $(function () {
 
             if (!(url in responseCache)) {
                 responseCache[url] = new Promise((resolve, reject) => {
-                    xhr = $.getJSON(url, function (data) {
-                        resolve(data);
+                    xhr = $.ajax({
+                        dataType: "json",
+                        url: url,
+                        timeout: 3000,
+                        success: resolve,
                     }).fail(function(){
                         reject();
                     });
