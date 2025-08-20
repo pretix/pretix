@@ -1181,9 +1181,6 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         )
 
         self.fields['country'].choices = CachedCountries()
-        self.fields['country'].widget.attrs['data-trigger-address-info'] = 'on'
-        self.fields['is_business'].widget.attrs['data-trigger-address-info'] = 'on'
-        self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
 
         c = [('', '---')]
         fprefix = self.prefix + '-' if self.prefix else ''
@@ -1262,14 +1259,6 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         else:
             del self.fields['custom_field']
 
-        for k, v in self.fields.items():
-            if v.widget.attrs.get('autocomplete') or k == 'name_parts':
-                autocomplete = v.widget.attrs.get('autocomplete', '')
-                if autocomplete.strip() == "off":
-                    v.widget.attrs['autocomplete'] = 'off'
-                else:
-                    v.widget.attrs['autocomplete'] = 'section-invoice billing ' + autocomplete
-
         # Add transmission type specific fields
         for transmission_type in get_transmission_types():
             for k, f in transmission_type.invoice_address_form_fields.items():
@@ -1307,6 +1296,18 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 f.widget.is_required = False
                 if 'required' in f.widget.attrs:
                     del f.widget.attrs['required']
+
+        for k, v in self.fields.items():
+            if v.widget.attrs.get('autocomplete') or k == 'name_parts':
+                autocomplete = v.widget.attrs.get('autocomplete', '')
+                if autocomplete.strip() == "off":
+                    v.widget.attrs['autocomplete'] = 'off'
+                else:
+                    v.widget.attrs['autocomplete'] = 'section-invoice billing ' + autocomplete
+
+        self.fields['country'].widget.attrs['data-trigger-address-info'] = 'on'
+        self.fields['is_business'].widget.attrs['data-trigger-address-info'] = 'on'
+        self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
 
     def clean(self):
         from pretix.base.addressvalidation import \
