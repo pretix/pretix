@@ -638,10 +638,12 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
         active_counter = Counter()
         events_total = 0
+        org_plugins = self.object.get_plugins()
         for e in self.object.events.only("plugins").iterator():
             events_total += 1
             for p in e.get_plugins():
-                active_counter[p] += 1
+                if p in org_plugins:
+                    active_counter[p] += 1
         plugins_grouped = groupby(
             sorted(
                 plugins,
