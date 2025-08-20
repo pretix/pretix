@@ -141,7 +141,7 @@ $(function () {
                         required = false;
 
                     dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
-                    dependent.prop("required", required);
+                    dependent.prop("required", required).prop("disabled", false);
                 }
             }).finally(function () {
                 loader.hide();
