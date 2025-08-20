@@ -119,45 +119,32 @@ $(function () {
                 url.searchParams.append("transmission_type_required", !dependents.transmission_type.find("option[value='-']").length);
             }
 
-            function load() {
-                xhr = $.getJSON(url, function (data) {
-                    responseCache[url] = data;
-                    update_form(data);
-                }).always(function() {
-                    loader.hide();
-                }).fail(function(){
-                    if (responseCache[url] === "LOADING") delete responseCache[url];
-
-                    // In case of errors, show everything and require nothing, we can still handle errors in backend
-                    for(var k in dependents) {
-                        const dependent = dependents[k],
-                            visible = true,
-                            required = false;
-
-                        dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
-                        dependent.prop("required", required);
-                    }
-                });
+            if (!(url in responseCache)) {
+                responseCache[url] = new Promise((resolve, reject) => {
+                    $.getJSON(url, function (data) {
+                        resolve(data);
+                    }).fail(function(){
+                        reject();
+                    });
+                })
             }
 
-            if (url in responseCache) {
-                if (responseCache[url] === "LOADING") {
-                    // Let's wait 200ms, then retry anyways
-                    window.setTimeout(function () {
-                        if (responseCache[url] === "LOADING") {
-                            delete responseCache[url];
-                            load();
-                        } else {
-                            update_form(responseCache[url]);
-                        }
-                    }, 200);
-                } else {
-                    update_form(responseCache[url]);
+            Promise.resolve(responseCache[url]).then(function (data) {
+                responseCache[url] = data;
+                update_form(data);
+            }).catch(function () {
+                // In case of errors, show everything and require nothing, we can still handle errors in backend
+                for (var k in dependents) {
+                    const dependent = dependents[k],
+                        visible = true,
+                        required = false;
+
+                    dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
+                    dependent.prop("required", required);
                 }
-            } else {
-                responseCache[url] = "LOADING";
-                load();
-            }
+            }).finally(function () {
+                loader.hide();
+            });
         };
         update();
         dependencies.on("change", update);
