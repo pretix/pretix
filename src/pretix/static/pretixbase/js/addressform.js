@@ -133,6 +133,7 @@ $(function () {
                 responseCache[url] = data;
                 update_form(data);
             }).catch(function () {
+                delete responseCache[url];
                 // In case of errors, show everything and require nothing, we can still handle errors in backend
                 for (var k in dependents) {
                     const dependent = dependents[k],
