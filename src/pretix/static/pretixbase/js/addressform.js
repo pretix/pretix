@@ -1,6 +1,10 @@
 $(function () {
     "use strict";
 
+    // Responses are expected to only depend on the GET parameters passed, so we can have a little client-side cache
+    // to prevent fetching the same thing many times.
+    var responseCache = {};
+
     $("[data-address-information-url]").each(function () {
         let xhr;
         const form = $(this);
@@ -20,6 +24,75 @@ $(function () {
         form.find("select[name*=transmission_], textarea[name*=transmission_], input[name*=transmission_]").each(function () {
             dependents[$(this).attr("name").split("-").pop()] = $(this)
         })
+
+        if (!Object.values(dependents).some((el) => el.length)) {
+            // No address fields found, do not create request
+            return;
+        }
+
+        const update_form = function (data) {
+            var selected_state = dependents.state.prop("data-selected-value");
+            if (selected_state) dependents.state.prop("data-selected-value", "");
+            dependents.state.find("option:not([value=''])").remove();
+            $.each(data.data, function (k, s) {
+                var o = $("<option>").attr("value", s.code).text(s.name);
+                if (selected_state === s.code) o.prop("selected", true);
+                dependents.state.append(o);
+            });
+
+            if (dependents.transmission_type) {
+                var selected_transmission_type = dependents.transmission_type.prop("data-selected-value");
+                if (selected_transmission_type) dependents.transmission_type.prop("data-selected-value", "");
+                dependents.transmission_type.find("option:not([value='']):not([value='-'])").remove();
+
+                if (!data.transmission_type.visible) {
+                    selected_transmission_type = "email";
+                }
+
+                $.each(data.transmission_types, function (k, s) {
+                    var o = $("<option>").attr("value", s.code).text(s.name);
+                    if (selected_transmission_type === s.code) {
+                        o.prop("selected", true);
+                    }
+                    dependents.transmission_type.append(o);
+                });
+
+            }
+
+            for (var k in dependents) {
+                const options = data[k],
+                    dependent = dependents[k];
+                let visible = 'visible' in options ? options.visible : true;
+
+                if (dependent.is("[data-display-dependency]")) {
+                    const dependency = $(dependent.attr("data-display-dependency"));
+                    visible = visible && (
+                        (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val()
+                    );
+                }
+
+                if ('label' in options) {
+                    dependent.closest(".form-group").find(".control-label").text(options.label);
+                }
+
+                const required = 'required' in options && visible && (
+                    (options.required === 'if_any' && isAnyRequired) ||
+                    (options.required === true)
+                );
+                dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
+                dependent.prop("required", required);
+
+                const label = dependent.closest(".form-group").find("label");
+                const labelRequired = label.find(".label-required");
+                if (!required) {
+                    labelRequired.remove();
+                } else if (!labelRequired.length) {
+                    label.append('<i class="label-required">' + gettext('required') + '</i>')
+                }
+            }
+            for (var k in dependents) dependents[k].prop("disabled", false);
+            loader.hide();
+        }
 
         const update = function (ev) {
             if (xhr) {
@@ -45,80 +118,44 @@ $(function () {
             if (dependents.transmission_type) {
                 url.searchParams.append("transmission_type_required", !dependents.transmission_type.find("option[value='-']").length);
             }
-            xhr = $.getJSON(url, function (data) {
-                var selected_state = dependents.state.prop("data-selected-value");
-                if (selected_state) dependents.state.prop("data-selected-value", "");
-                dependents.state.find("option:not([value=''])").remove();
-                $.each(data.data, function (k, s) {
-                    var o = $("<option>").attr("value", s.code).text(s.name);
-                    if (selected_state === s.code) o.prop("selected", true);
-                    dependents.state.append(o);
+
+            function load() {
+                xhr = $.getJSON(url, function (data) {
+                    responseCache[url] = data;
+                    update_form(data);
+                }).always(function() {
+                    loader.hide();
+                }).fail(function(){
+                    // In case of errors, show everything and require nothing, we can still handle errors in backend
+                    for(var k in dependents) {
+                        const dependent = dependents[k],
+                            visible = true,
+                            required = false;
+
+                        dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
+                        dependent.prop("required", required);
+                    }
                 });
+            }
 
-                if (dependents.transmission_type) {
-                    var selected_transmission_type = dependents.transmission_type.prop("data-selected-value");
-                    if (selected_transmission_type) dependents.transmission_type.prop("data-selected-value", "");
-                    dependents.transmission_type.find("option:not([value='']):not([value='-'])").remove();
-
-                    if (!data.transmission_type.visible) {
-                        selected_transmission_type = "email";
-                    }
-
-                    $.each(data.transmission_types, function (k, s) {
-                        var o = $("<option>").attr("value", s.code).text(s.name);
-                        if (selected_transmission_type === s.code) {
-                            o.prop("selected", true);
+            if (url in responseCache) {
+                if (responseCache[url] === "LOADING") {
+                    // Let's wait 200ms, then retry anyways
+                    window.setTimeout(function () {
+                        if (responseCache[url] === "LOADING") {
+                            delete responseCache[url];
+                            load();
+                        } else {
+                            update_form(responseCache[url]);
                         }
-                        dependents.transmission_type.append(o);
-                    });
-
+                    }, 200);
+                } else {
+                    update_form(responseCache[url]);
                 }
-
-                for (var k in dependents) {
-                    const options = data[k],
-                        dependent = dependents[k];
-                    let visible = 'visible' in options ? options.visible : true;
-
-                    if (dependent.is("[data-display-dependency]")) {
-                        const dependency = $(dependent.attr("data-display-dependency"));
-                        visible = visible && (
-                            (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val()
-                        );
-                    }
-
-					if ('label' in options) {
-						dependent.closest(".form-group").find(".control-label").text(options.label);
-					}
-
-					const required = 'required' in options && visible && (
-						(options.required === 'if_any' && isAnyRequired) ||
-						(options.required === true)
-					);
-					dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
-					dependent.prop("required", required);
-
-					const label = dependent.closest(".form-group").find("label");
-					const labelRequired = label.find(".label-required");
-					if (!required) {
-						labelRequired.remove();
-					} else if (!labelRequired.length) {
-						label.append('<i class="label-required">' + gettext('required') + '</i>')
-					}
-                }
-                for (var k in dependents) dependents[k].prop("disabled", false);
-            }).always(function() {
-                loader.hide();
-            }).fail(function(){
-                // In case of errors, show everything and require nothing, we can still handle errors in backend
-                for(var k in dependents) {
-                    const dependent = dependents[k],
-                        visible = true,
-                        required = false;
-
-                    dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
-                    dependent.prop("required", required);
-                }
-            });
+            } else {
+                responseCache[url] = "LOADING";
+                load();
+            }
         };
         update();
         dependencies.on("change", update);
