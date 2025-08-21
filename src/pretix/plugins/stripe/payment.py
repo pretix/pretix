@@ -1870,6 +1870,7 @@ class StripePromptPay(StripeRedirectMethod):
                 "billing_details": {
                     "email": payment.order.email,
                 },
+
             },
         }
 

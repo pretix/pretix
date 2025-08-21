@@ -668,6 +668,16 @@ For backwards compatibility reasons, this signal is only sent when a **successfu
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+checkin_annulled = EventPluginSignal()
+"""
+Arguments: ``checkin``
+
+This signal is sent out every time a check-in is annulled (i.e. changed to unsuccessful after it
+already was successful).
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 logentry_display = EventPluginSignal()
 """
 Arguments: ``logentry``
