@@ -1867,6 +1867,10 @@ class StripePromptPay(StripeRedirectMethod):
         return {
             "payment_method_data": {
                 "type": "promptpay",
+                "billing_details": {
+                    "email": payment.order.email,
+                },
+
             },
         }
 
