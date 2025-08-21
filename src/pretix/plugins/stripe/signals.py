@@ -47,7 +47,7 @@ def register_payment_provider(sender, **kwargs):
     from .payment import (
         StripeAffirm, StripeAlipay, StripeBancontact, StripeCC, StripeEPS,
         StripeGiropay, StripeIdeal, StripeKlarna, StripeMobilePay,
-        StripeMultibanco, StripePayPal, StripePrzelewy24, StripePromptPay,
+        StripeMultibanco, StripePayPal, StripePromptPay, StripePrzelewy24,
         StripeRevolutPay, StripeSEPADirectDebit, StripeSettingsHolder,
         StripeSofort, StripeSwish, StripeTwint, StripeWeChatPay,
     )
