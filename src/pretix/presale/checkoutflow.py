@@ -1130,7 +1130,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             'invoice' in self.request.GET or
             # Checking for self.invoice_address.pk is not enough as when an invoice_address has been added and later edited to be empty, it’s not None.
             # So check initial values as invoice_form can receive pre-filled values from invoice_address, widget-data or overwrites from plug-ins.
-            is_form_filled(self.invoice_form, ignore_keys=('is_business', 'country'))
+            is_form_filled(self.invoice_form, ignore_keys=('is_business', 'country', 'transmission_type'))
         )
 
         if self.cart_customer:
@@ -1144,6 +1144,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         "_state_for_address": a.state_for_address,
                         "_name": a.name,
                         "is_business": "business" if a.is_business else "individual",
+                        **(a.transmission_info or {}),
                     }
                     if a.name_parts:
                         name_parts = a.name_parts
@@ -1165,7 +1166,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
                     for k in (
                         "company", "street", "zipcode", "city", "country", "state",
-                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
+                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary",
+                        "transmission_type",
                     ):
                         v = getattr(a, k) or ""
                         # always add all values of an address even when empty,

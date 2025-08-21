@@ -87,6 +87,17 @@
                                                 <span class="text-muted">{% trans "Not available" %}</span>
                                             </div>
                                         {% elif is_active %}
+                                            {% if plugin.level == "organizer" %}
+                                                <p class="text-muted">
+                                                    <span class="fa fa-group" aria-hidden="true"></span>
+                                                    {% trans "This plugin can only be disabled for the entire organizer account." %}
+                                                </p>
+                                            {% elif plugin.level == "event_organizer" %}
+                                                <p class="text-muted">
+                                                    <span class="fa fa-group" aria-hidden="true"></span>
+                                                    {% trans "After disabling this plugin, some functionality may remain active in the organizer account." %}
+                                                </p>
+                                            {% endif %}
                                             <div class="plugin-action flip">
                                                 {% if navigation_links %}
                                                     <div class="btn-group">
@@ -112,14 +123,42 @@
                                                         </ul>
                                                     </div>
                                                 {% endif %}
-                                                <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
-                                                        value="disable">{% trans "Disable" %}</button>
+                                                {% if plugin.level == "organizer" %}
+                                                    <a href="{% url "control:organizer.settings.plugins" organizer=request.organizer.slug %}?q={{ plugin.module|urlencode }}"
+                                                       class="btn btn-default" target="_blank">
+                                                        <span class="fa fa-external-link" aria-hidden="true"></span>
+                                                        {% trans "Open in organizer settings" %}
+                                                    </a>
+                                                {% else %}
+                                                    <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
+                                                            value="disable">{% trans "Disable" %}</button>
+                                                {% endif %}
                                             </div>
                                         {% else %}
-                                            <div class="plugin-action flip">
-                                                <button class="btn btn-primary{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
-                                                        value="enable">{% trans "Enable" %}</button>
-                                            </div>
+                                            {% if plugin.level == "organizer" %}
+                                                <p class="text-muted">
+                                                    <span class="fa fa-group" aria-hidden="true"></span>
+                                                    {% trans "This plugin can only be enabled for the entire organizer account." %}
+                                                </p>
+                                                <div class="plugin-action flip">
+                                                    <a href="{% url "control:organizer.settings.plugins" organizer=request.organizer.slug %}?q={{ plugin.module|urlencode }}"
+                                                       class="btn btn-default" target="_blank">
+                                                        <span class="fa fa-external-link" aria-hidden="true"></span>
+                                                        {% trans "Open in organizer settings" %}
+                                                    </a>
+                                                </div>
+                                            {% else %}
+                                                {% if plugin.level == "event_organizer" and not plugin.module in request.organizer.get_plugins %}
+                                                    <p class="text-muted">
+                                                        <span class="fa fa-group" aria-hidden="true"></span>
+                                                        {% trans "Enabling this plugin will enable some of its functionality for the entire organizer account." %}
+                                                    </p>
+                                                {% endif %}
+                                                <div class="plugin-action flip">
+                                                    <button class="btn btn-primary{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
+                                                            value="enable">{% trans "Enable" %}</button>
+                                                </div>
+                                            {% endif %}
                                         {% endif %}
                             {% if plugin.featured %}
                                     </div>

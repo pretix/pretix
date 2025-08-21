@@ -38,6 +38,10 @@ available_number                      integer                    Number of avail
                                                                  slightly out of date. ``null`` means unlimited.
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 2025.7
+
+    The attribute ``ignore_for_event_availability`` has been added.
+
 Endpoints
 ---------
 

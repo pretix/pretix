@@ -88,7 +88,7 @@ from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
-    regenerate_invoice,
+    regenerate_invoice, transmit_invoice,
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
@@ -228,7 +228,7 @@ class OrderViewSetMixin:
     def get_queryset(self):
         qs = self.get_base_queryset()
         if 'fees' not in self.request.GET.getlist('exclude'):
-            if self.request.query_params.get('include_canceled_fees', 'false') == 'true':
+            if self.request.query_params.get('include_canceled_fees', 'false').lower() == 'true':
                 fqs = OrderFee.all
             else:
                 fqs = OrderFee.objects
@@ -246,11 +246,11 @@ class OrderViewSetMixin:
         return qs
 
     def _positions_prefetch(self, request):
-        if request.query_params.get('include_canceled_positions', 'false') == 'true':
+        if request.query_params.get('include_canceled_positions', 'false').lower() == 'true':
             opq = OrderPosition.all
         else:
             opq = OrderPosition.objects
-        if request.query_params.get('pdf_data', 'false') == 'true' and getattr(request, 'event', None):
+        if request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(request, 'event', None):
             prefetch_related_objects([request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [request.event],
@@ -344,7 +344,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         return ctx
 
     def get_base_queryset(self):
@@ -943,7 +943,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def change(self, request, **kwargs):
         order = self.get_object()
-        check_quotas = self.request.query_params.get('check_quotas', 'true') == 'true'
+        check_quotas = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
 
         serializer = OrderChangeOperationSerializer(
             context={'order': order, **self.get_serializer_context()},
@@ -1087,18 +1087,18 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         return ctx
 
     def get_queryset(self):
-        if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
+        if self.request.query_params.get('include_canceled_positions', 'false').lower() == 'true':
             qs = OrderPosition.all
         else:
             qs = OrderPosition.objects
 
         qs = qs.filter(order__event=self.request.event)
-        if self.request.query_params.get('pdf_data', 'false') == 'true':
+        if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [self.request.event],
@@ -1891,6 +1891,12 @@ class RetryException(APIException):
     default_code = 'retry_later'
 
 
+class CurrentlyInflightException(APIException):
+    status_code = 409
+    default_detail = 'The requested action is already in progress.'
+    default_code = 'currently_inflight'
+
+
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = InvoiceSerializer
     queryset = Invoice.objects.none()
@@ -1940,12 +1946,51 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         return resp
 
     @action(detail=True, methods=['POST'])
+    def transmit(self, request, **kwargs):
+        invoice = self.get_object()
+        if invoice.shredded:
+            raise PermissionDenied('The invoice file is no longer stored on the server.')
+
+        if invoice.transmission_status != Invoice.TRANSMISSION_STATUS_PENDING:
+            raise PermissionDenied('The invoice is not in pending state.')
+
+        transmit_invoice.apply_async(args=(self.request.event.pk, invoice.pk, False))
+        return Response(status=204)
+
+    @action(detail=True, methods=['POST'])
+    def retransmit(self, request, **kwargs):
+        invoice = self.get_object()
+        if invoice.shredded:
+            raise PermissionDenied('The invoice file is no longer stored on the server.')
+
+        with transaction.atomic(durable=True):
+            invoice = Invoice.objects.select_for_update(of=OF_SELF).get(pk=invoice.pk)
+
+            if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
+                raise CurrentlyInflightException()
+
+            invoice.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
+            invoice.transmission_date = now()
+            invoice.save(update_fields=["transmission_status", "transmission_date"])
+            invoice.order.log_action(
+                'pretix.event.order.invoice.retransmitted',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={
+                    'invoice': invoice.pk,
+                    'full_invoice_no': invoice.full_invoice_no,
+                }
+            )
+        transmit_invoice.apply_async(args=(self.request.event.pk, invoice.pk, True))
+        return Response(status=204)
+
+    @action(detail=True, methods=['POST'])
     def regenerate(self, request, **kwargs):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
-        if not inv.event.settings.invoice_regenerate_allowed:
-            raise PermissionDenied('Invoices may not be changed after they are created.')
+        if not inv.regenerate_allowed:
+            raise PermissionDenied('Invoice may not be regenerated.')
         elif inv.shredded:
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         elif inv.sent_to_organizer:

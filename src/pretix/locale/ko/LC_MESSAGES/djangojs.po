@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2025-06-25 06:56+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -358,8 +358,8 @@ msgstr "아니오"
 msgid "close"
 msgstr "마감"
 
-#: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:513
+#: pretix/static/pretixbase/js/addressform.js:105
+#: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "필수사항"
 
@@ -772,7 +772,7 @@ msgstr "%(통화)의 %(금액)을 돌려받습니다"
 msgid "Please enter the amount the organizer can keep."
 msgstr "주최자가 보관할 수 있는 금액을 입력해 주세요"
 
-#: pretix/static/pretixpresale/js/ui/main.js:558
+#: pretix/static/pretixpresale/js/ui/main.js:554
 msgid "Your local time:"
 msgstr "귀하의 지역시간"
 

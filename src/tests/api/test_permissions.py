@@ -75,6 +75,7 @@ event_permission_sub_urls = [
     ('get', 'can_view_orders', 'invoices/1/', 404),
     ('post', 'can_change_orders', 'invoices/1/regenerate/', 404),
     ('post', 'can_change_orders', 'invoices/1/reissue/', 404),
+    ('post', 'can_change_orders', 'invoices/1/retransmit/', 404),
     ('get', 'can_view_orders', 'waitinglistentries/', 200),
     ('get', 'can_view_orders', 'waitinglistentries/1/', 404),
     ('post', 'can_change_orders', 'waitinglistentries/', 400),
@@ -203,6 +204,7 @@ event_permission_sub_urls = [
 ]
 
 org_permission_sub_urls = [
+    ('patch', 'can_change_organizer_settings', '', 200),
     ('get', 'can_change_organizer_settings', 'settings/', 200),
     ('patch', 'can_change_organizer_settings', 'settings/', 200),
     ('get', 'can_change_organizer_settings', 'webhooks/', 200),

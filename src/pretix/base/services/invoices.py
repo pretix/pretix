@@ -51,11 +51,16 @@ from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
+from pretix.base.invoicing.transmission import (
+    get_transmission_types, transmission_providers,
+)
 from pretix.base.models import (
     ExchangeRate, Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
 )
 from pretix.base.models.tax import EU_CURRENCIES
-from pretix.base.services.tasks import TransactionAwareTask
+from pretix.base.services.tasks import (
+    TransactionAwareProfiledEventTask, TransactionAwareTask,
+)
 from pretix.base.signals import invoice_line_text, periodic_task
 from pretix.celery_app import app
 from pretix.helpers.database import OF_SELF, rolledback_transaction
@@ -71,12 +76,13 @@ def _location_oneliner(loc):
 @transaction.atomic
 def build_invoice(invoice: Invoice) -> Invoice:
     invoice.locale = invoice.event.settings.get('invoice_language', invoice.event.settings.locale)
+    invoice.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
     if invoice.locale == '__user__':
         invoice.locale = invoice.order.locale or invoice.event.settings.locale
 
     lp = invoice.order.payments.last()
 
-    with language(invoice.locale, invoice.event.settings.region):
+    with (language(invoice.locale, invoice.event.settings.region)):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
         invoice.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
         invoice.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
@@ -127,6 +133,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             invoice.internal_reference = ia.internal_reference
             invoice.custom_field = ia.custom_field
             invoice.invoice_to_company = ia.company
+            invoice.invoice_to_is_business = ia.is_business
             invoice.invoice_to_name = ia.name
             invoice.invoice_to_street = ia.street
             invoice.invoice_to_zipcode = ia.zipcode
@@ -134,6 +141,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
             invoice.invoice_to_country = ia.country
             invoice.invoice_to_state = ia.state
             invoice.invoice_to_beneficiary = ia.beneficiary
+            invoice.invoice_to_transmission_info = ia.transmission_info or {}
+            invoice.transmission_type = ia.transmission_type
 
             if ia.vat_id:
                 invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % ia.vat_id
@@ -356,7 +365,9 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.payment_provider_stamp = ''
     cancellation.file = None
     cancellation.sent_to_organizer = None
-    cancellation.sent_to_customer = None
+    cancellation.transmission_provider = None
+    cancellation.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
+    cancellation.transmission_date = None
     with language(invoice.locale, invoice.event.settings.region):
         cancellation.invoice_from = invoice.event.settings.get('invoice_address_from')
         cancellation.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
@@ -512,6 +523,36 @@ def build_preview_invoice_pdf(event):
         return event.invoice_renderer.generate(invoice)
 
 
+def order_invoice_transmission_separately(order):
+    try:
+        info = order.invoice_address.transmission_info or {}
+        return (
+            order.invoice_address.transmission_type != "email" or
+            (
+                info.get("transmission_email_address") and
+                order.email != info["transmission_email_address"]
+            )
+        )
+    except InvoiceAddress.DoesNotExist:
+        return False
+
+
+def invoice_transmission_separately(invoice):
+    if not invoice:
+        return False
+    try:
+        info = invoice.invoice_to_transmission_info or {}
+        return (
+            invoice.transmission_type != "email" or
+            (
+                info.get("transmission_email_address") and
+                invoice.order.email != info["transmission_email_address"]
+            )
+        )
+    except InvoiceAddress.DoesNotExist:
+        return False
+
+
 @receiver(signal=periodic_task)
 @scopes_disabled()
 def send_invoices_to_organizer(sender, **kwargs):
@@ -551,3 +592,124 @@ def send_invoices_to_organizer(sender, **kwargs):
                 else:
                     i.sent_to_organizer = False
                 i.save(update_fields=['sent_to_organizer'])
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+def retry_stuck_invoices(sender, **kwargs):
+    with transaction.atomic():
+        qs = Invoice.objects.filter(
+            transmission_status=Invoice.TRANSMISSION_STATUS_INFLIGHT,
+            transmission_date__lte=now() - timedelta(hours=24),
+        ).select_for_update(
+            of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked
+        )
+        batch_size = 5000
+        for invoice in qs[:batch_size]:
+            invoice.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
+            invoice.transmission_date = now()
+            invoice.save(update_fields=["transmission_status", "transmission_date"])
+            transmit_invoice.apply_async(args=(invoice.event_id, invoice.pk, True))
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+def send_pending_invoices(sender, **kwargs):
+    with transaction.atomic():
+        # Transmit all invoices that have not been transmitted by another process if the provider enforces
+        # transmission
+        types = [
+            tt.identifier for tt in get_transmission_types()
+            if tt.enforce_transmission
+        ]
+        qs = Invoice.objects.filter(
+            transmission_type__in=types,
+            transmission_status=Invoice.TRANSMISSION_STATUS_PENDING,
+            created__lte=now() - timedelta(minutes=15),
+        ).select_for_update(
+            of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked
+        )
+        batch_size = 5000
+        for invoice in qs[:batch_size]:
+            transmit_invoice.apply_async(args=(invoice.event_id, invoice.pk, False))
+
+
+@app.task(base=TransactionAwareProfiledEventTask)
+def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
+    with transaction.atomic(durable='tests.testdummy' not in settings.INSTALLED_APPS):
+        # We need durable=True for transactional correctness, but can't have it during tests
+        invoice = Invoice.objects.select_for_update(of=OF_SELF).get(pk=invoice_id)
+
+        if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
+            logger.info(f"Did not transmit invoice {invoice.pk} due to being in inflight state.")
+            return
+
+        if invoice.transmission_status != Invoice.TRANSMISSION_STATUS_PENDING and not allow_retransmission:
+            logger.info(f"Did not transmit invoice {invoice.pk} due to status being {invoice.transmission_status}.")
+            return
+
+        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_INFLIGHT
+        invoice.transmission_date = now()
+        invoice.save(update_fields=["transmission_status", "transmission_date"])
+
+    providers = sorted([
+        provider
+        for provider, __ in transmission_providers.filter(type=invoice.transmission_type, active_in=sender)
+    ], key=lambda p: (-p.priority, p.identifier))
+
+    provider = None
+    for p in providers:
+        if p.is_available(sender, invoice.invoice_to_country, invoice.invoice_to_is_business):
+            provider = p
+            break
+
+    if not provider:
+        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+        invoice.transmission_date = now()
+        invoice.save(update_fields=["transmission_status", "transmission_date"])
+        invoice.order.log_action(
+            "pretix.event.order.invoice.sending_failed",
+            data={
+                "full_invoice_no": invoice.full_invoice_no,
+                "transmission_provider": None,
+                "transmission_type": invoice.transmission_type,
+                "data": {
+                    "reason": "no_provider",
+                },
+            }
+        )
+        return
+
+    if invoice.order.testmode and not provider.testmode_supported:
+        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_TESTMODE_IGNORED
+        invoice.transmission_date = now()
+        invoice.save(update_fields=["transmission_status", "transmission_date"])
+        invoice.order.log_action(
+            "pretix.event.order.invoice.testmode_ignored",
+            data={
+                "full_invoice_no": invoice.full_invoice_no,
+                "transmission_provider": None,
+                "transmission_type": invoice.transmission_type,
+            }
+        )
+        return
+
+    try:
+        provider.transmit(invoice)
+    except Exception as e:
+        logger.exception(f"Transmission of invoice {invoice.pk} failed with exception.")
+        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+        invoice.transmission_date = now()
+        invoice.save(update_fields=["transmission_status", "transmission_date"])
+        invoice.order.log_action(
+            "pretix.event.order.invoice.sending_failed",
+            data={
+                "full_invoice_no": invoice.full_invoice_no,
+                "transmission_provider": None,
+                "transmission_type": invoice.transmission_type,
+                "data": {
+                    "reason": "exception",
+                    "exception": str(e),
+                },
+            }
+        )

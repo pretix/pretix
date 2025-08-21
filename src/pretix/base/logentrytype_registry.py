@@ -26,7 +26,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.signals import EventPluginRegistry
+from pretix.base.signals import PluginAwareRegistry
 
 
 def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
@@ -55,7 +55,7 @@ def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
         return format_html(wrapper, **a_map)
 
 
-class LogEntryTypeRegistry(EventPluginRegistry):
+class LogEntryTypeRegistry(PluginAwareRegistry):
     def __init__(self):
         super().__init__({'action_type': lambda o: getattr(o, 'action_type')})
 

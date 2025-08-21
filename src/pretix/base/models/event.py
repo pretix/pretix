@@ -551,8 +551,7 @@ class Event(EventMixin, LoggedModel):
     :type presale_end: datetime
     :param location: venue
     :type location: str
-    :param plugins: A comma-separated list of plugin names that are active for this
-                    event.
+    :param plugins: A comma-separated list of plugin names that are active for this event.
     :type plugins: str
     :param has_subevents: Enable event series functionality
     :type has_subevents: bool
@@ -1085,7 +1084,7 @@ class Event(EventMixin, LoggedModel):
             s.save(force_insert=True)
 
         valid_sales_channel_identifers = set(self.organizer.sales_channels.values_list("identifier", flat=True))
-        skip_settings = (
+        skip_settings = {
             'ticket_secrets_pretix_sig1_pubkey',
             'ticket_secrets_pretix_sig1_privkey',
             # no longer used, but we still don't need to copy them
@@ -1093,7 +1092,10 @@ class Event(EventMixin, LoggedModel):
             'presale_css_checksum',
             'presale_widget_css_file',
             'presale_widget_css_checksum',
-        )
+        } | {
+            # Some settings might already exist due to e.g. the timezone being special in the API
+            s.key for s in self.settings._objects.all()
+        }
         settings_to_save = []
         for s in other.settings._objects.all():
             if s.key in skip_settings:
@@ -1390,7 +1392,7 @@ class Event(EventMixin, LoggedModel):
         from pretix.base.plugins import get_all_plugins
 
         return {
-            p.module: p for p in get_all_plugins(self)
+            p.module: p for p in get_all_plugins(event=self)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 
@@ -1409,12 +1411,20 @@ class Event(EventMixin, LoggedModel):
         self.plugins = ",".join(modules)
 
     def enable_plugin(self, module, allow_restricted=frozenset()):
+        """
+        Adds a plugin to the list of plugins, calling its ``installed`` hook (if available).
+        It is the caller's responsibility to save the event object.
+        """
         plugins_active = self.get_plugins()
         if module not in plugins_active:
             plugins_active.append(module)
             self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
 
     def disable_plugin(self, module):
+        """
+        Adds a plugin to the list of plugins, calling its ``uninstalled`` hook (if available).
+        It is the caller's responsibility to save the event object.
+        """
         plugins_active = self.get_plugins()
         if module in plugins_active:
             plugins_active.remove(module)

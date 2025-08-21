@@ -65,11 +65,16 @@ invoice_address                       object                     Invoice address
 ├ state                               string                     Customer state (ISO 3166-2 code). Only supported in
                                                                  AU, BR, CA, CN, MY, MX, and US.
 ├ internal_reference                  string                     Customer's internal reference to be printed on the invoice
+
 ├ custom_field                        string                     Custom invoice address field
 ├ vat_id                              string                     Customer VAT ID
-└ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
+├ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
                                                                  happens in rare cases.
+├ transmission_type                   string                     Transmission channel for invoice (see also :ref:`rest-transmission-types`).
+                                                                 Defaults to ``email``.
+└ transmission_info                   object                     Transmission-channel specific information (or ``null``).
+                                                                 See also :ref:`rest-transmission-types`.
 positions                             list of objects            List of order positions (see below). By default, only
                                                                  non-canceled positions are included.
 fees                                  list of objects            List of fees included in the order total. By default, only
@@ -141,6 +146,10 @@ plugin_data                           object                     Additional data
 .. versionchanged:: 2025.2
 
    The ``plugin_data`` attribute has been added.
+
+.. versionchanged:: 2025.6
+
+   The ``invoice_address.transmission_type`` and ``invoice_address.transmission_info`` attributes have been added.
 
 .. _order-position-resource:
 
@@ -368,7 +377,9 @@ List of all orders
                 "state": "",
                 "internal_reference": "",
                 "vat_id": "EU123456789",
-                "vat_id_validated": false
+                "vat_id_validated": false,
+                "transmission_type": "email",
+                "transmission_info": {}
             },
             "positions": [
               {
@@ -610,7 +621,9 @@ Fetching individual orders
             "state": "",
             "internal_reference": "",
             "vat_id": "EU123456789",
-            "vat_id_validated": false
+            "vat_id_validated": false,
+            "transmission_type": "email",
+            "transmission_info": {}
         },
         "positions": [
           {
@@ -1017,6 +1030,8 @@ Creating orders
       * ``vat_id_validated`` (optional) – If you need support for reverse charge (rarely the case), you need to check
          yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
          trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
+     * ``transmission_type`` (optional, defaults to ``email``)
+     * ``transmission_info`` (optional, see also :ref:`rest-transmission-types`)
 
    * ``positions``
 

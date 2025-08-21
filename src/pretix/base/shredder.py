@@ -524,8 +524,11 @@ class InvoiceAddressShredder(BaseDataShredder):
             d = le.parsed_data
             if 'invoice_data' in d and not isinstance(d['invoice_data'], bool):
                 for field in d['invoice_data']:
-                    if d['invoice_data'][field]:
-                        d['invoice_data'][field] = '█'
+                    if d['invoice_data'][field] and field != "transmission_type":
+                        if field == "transmission_info":
+                            d['invoice_data'][field] = {"_shredded": True}
+                        else:
+                            d['invoice_data'][field] = '█'
                 le.data = json.dumps(d)
                 le.shredded = True
                 le.save(update_fields=['data', 'shredded'])
@@ -600,6 +603,7 @@ class InvoiceShredder(BaseDataShredder):
                 i.additional_text = "█"
                 i.invoice_to = "█"
                 i.payment_provider_text = "█"
+                i.transmission_info = {"_shredded": True}
                 i.save()
                 i.lines.update(description="█")
 

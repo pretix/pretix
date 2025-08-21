@@ -49,6 +49,7 @@ DSS
 DNS
 EEA
 eInvoices
+enqueued
 EPC
 EPS
 eps
@@ -90,6 +91,7 @@ Melilla
 Mercado
 MerchantID
 Mifare
+Misconfiguration
 MobilePay
 MOTO
 Multibanco
@@ -106,6 +108,7 @@ overpayment
 OXXO
 Pago
 PayU
+PEPPOL
 PCI
 PKCE
 PDFs
@@ -132,12 +135,15 @@ redemptions
 Referer
 renderer
 renderers
+retransmission
+Retransmit
 Revolut
 Sa
 Samplecity
 SAQ
 SCA
 selectable
+SdI
 SEPA
 silvicultural
 smtp

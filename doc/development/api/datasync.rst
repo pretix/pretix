@@ -11,19 +11,22 @@ is unidirectionally sending (order, customer, ticket, ...) data into external sy
 The transfer is usually triggered by signals provided by pretix core (e.g. :data:`order_placed`),
 but performed asynchronously.
 
-Such plugins should use the :class:`OutboundSyncProvider` API to utilize the queueing, retry and mapping mechanisms as well as the user interface for configuration and monitoring.
+Such plugins should use the :class:`OutboundSyncProvider` API to utilize the queueing, retry and mapping 
+mechanisms as well as the user interface for configuration and monitoring. Sync providers are registered 
+in the :py:attr:`pretix.base.datasync.datasync.datasync_providers` :ref:`registry <registries>`.
 
-An :class:`OutboundSyncProvider` for registering event participants in a mailing list could start
+An :class:`OutboundSyncProvider` for subscribing event participants to a mailing list could start
 like this, for example:
 
 .. code-block:: python
 
-    from pretix.base.datasync.datasync import OutboundSyncProvider
+    from pretix.base.datasync.datasync import (OutboundSyncProvider, datasync_providers)
 
+    @datasync_providers.register
     class MyListSyncProvider(OutboundSyncProvider):
         identifier = "my_list"
         display_name = "My Mailing List Service"
-        # ...c
+        # ...
 
 
 The plugin must register listeners in `signals.py` for all signals that should to trigger a sync and
@@ -36,7 +39,10 @@ within it has to call :meth:`MyListSyncProvider.enqueue_order` to enqueue the or
         MyListSyncProvider.enqueue_order(order, "order_placed")
 
 
-Furthermore, most of these plugins need to translate data from some pretix objects (e.g. orders)
+Property mappings
+-----------------
+
+Most of these plugins need to translate data from some pretix objects (e.g. orders)
 into an external system's data structures. Sometimes, there is only one reasonable way or the
 plugin author makes an opinionated decision what information from which objects should be
 transferred into which data structures in the external system.
@@ -86,6 +92,7 @@ shown. Therein, a ``sync_object_with_properties`` method is defined as follows:
 
     from pretix.base.datasync.utils import assign_properties
 
+    # class MyListSyncProvider, contd.
     def sync_object_with_properties(
             self, external_id_field, id_value, properties: list, inputs: dict,
             mapping, mapped_objects: dict, **kwargs,

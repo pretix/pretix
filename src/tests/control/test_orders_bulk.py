@@ -300,6 +300,7 @@ def test_order_bulk_overpaid_refund_explicit_id(client, env, order1, order2):
     with scopes_disabled():
         assert order1.refunds.exists()
         assert order1.refunds.get().amount == Decimal('2.00')
+        assert order1.all_logentries().count() == 1
 
 
 @pytest.mark.django_db

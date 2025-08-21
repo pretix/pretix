@@ -21,22 +21,22 @@
 #
 from datetime import timedelta
 
-from django.dispatch import Signal, receiver
+from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.api.models import ApiCall, WebHookCall
-from pretix.base.signals import EventPluginSignal, periodic_task
+from pretix.base.signals import EventPluginSignal, GlobalSignal, periodic_task
 from pretix.helpers.periodic import minimum_interval
 
-register_webhook_events = Signal()
+register_webhook_events = GlobalSignal()
 """
 This signal is sent out to get all known webhook events. Receivers should return an
 instance of a subclass of ``pretix.api.webhooks.WebhookEvent`` or a list of such
 instances.
 """
 
-register_device_security_profile = Signal()
+register_device_security_profile = GlobalSignal()
 """
 This signal is sent out to get all known device security_profiles. Receivers should
 return an instance of a subclass of ``pretix.api.auth.devicesecurity.BaseSecurityProfile``

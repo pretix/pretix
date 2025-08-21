@@ -818,7 +818,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
         ctx['expand'] = self.request.query_params.getlist('expand')
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         return ctx
 
     def get_filterset_kwargs(self):
@@ -837,9 +837,9 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self, ignore_status=False, ignore_products=False):
         qs = _checkin_list_position_queryset(
             [self.checkinlist],
-            ignore_status=self.request.query_params.get('ignore_status', 'false') == 'true' or ignore_status,
+            ignore_status=self.request.query_params.get('ignore_status', 'false').lower() == 'true' or ignore_status,
             ignore_products=ignore_products,
-            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             expand=self.request.query_params.getlist('expand'),
         )
 
@@ -881,7 +881,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             user=self.request.user,
             auth=self.request.auth,
             expand=self.request.query_params.getlist('expand'),
-            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             questions_supported=self.request.data.get('questions_supported', True),
             canceled_supported=self.request.data.get('canceled_supported', False),
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
@@ -916,7 +916,7 @@ class CheckinRPCRedeemView(views.APIView):
             user=self.request.user,
             auth=self.request.auth,
             expand=self.request.query_params.getlist('expand'),
-            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             questions_supported=s.validated_data['questions_supported'],
             use_order_locale=s.validated_data['use_order_locale'],
             canceled_supported=True,
@@ -994,9 +994,9 @@ class CheckinRPCSearchView(ListAPIView):
     def get_queryset(self, ignore_status=False, ignore_products=False):
         qs = _checkin_list_position_queryset(
             self.lists,
-            ignore_status=self.request.query_params.get('ignore_status', 'false') == 'true' or ignore_status,
+            ignore_status=self.request.query_params.get('ignore_status', 'false').lower() == 'true' or ignore_status,
             ignore_products=ignore_products,
-            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             expand=self.request.query_params.getlist('expand'),
         )
 

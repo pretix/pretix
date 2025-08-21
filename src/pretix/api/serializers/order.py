@@ -42,6 +42,7 @@ from rest_framework.reverse import reverse
 
 from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
+from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
     InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
@@ -49,6 +50,7 @@ from pretix.api.serializers.item import (
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
+from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Invoice, InvoiceAddress, InvoiceLine, Item,
     ItemVariation, Order, OrderPosition, Question, QuestionAnswer,
@@ -102,6 +104,13 @@ class CountryField(serializers.Field):
         return str(src) if src else None
 
 
+class TransmissionInfoSerializer(serializers.Serializer):
+    def __init__(self, *args, transmission_type, **kwargs):
+        super().__init__(*args, **kwargs)
+        for k, v in transmission_type.invoice_address_form_fields.items():
+            self.fields[k] = form_field_to_serializer_field(v)
+
+
 class InvoiceAddressSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
     name = serializers.CharField(required=False)
@@ -109,7 +118,8 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
     class Meta:
         model = InvoiceAddress
         fields = ('last_modified', 'is_business', 'company', 'name', 'name_parts', 'street', 'zipcode', 'city', 'country',
-                  'state', 'vat_id', 'vat_id_validated', 'custom_field', 'internal_reference')
+                  'state', 'vat_id', 'vat_id_validated', 'custom_field', 'internal_reference', 'transmission_type',
+                  'transmission_info')
         read_only_fields = ('last_modified',)
 
     def __init__(self, *args, **kwargs):
@@ -145,6 +155,48 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
             if not pycountry.subdivisions.get(code=cc + '-' + data.get('state')):
                 raise ValidationError(
                     {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
+                )
+
+        if data.get("transmission_type"):
+            for t in get_transmission_types():
+                if data.get("transmission_type") == t.identifier:
+                    if not t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
+                        raise ValidationError({
+                            "transmission_type": "The selected transmission type is not available for this country or address type."
+                        })
+
+                    ts = TransmissionInfoSerializer(transmission_type=t, data=data.get("transmission_info", {}))
+                    try:
+                        ts.is_valid(raise_exception=True)
+                    except ValidationError as e:
+                        raise ValidationError(
+                            {"transmission_info": e.detail}
+                        )
+                    data["transmission_info"] = ts.validated_data
+
+                    required_fields = t.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
+                    for r in required_fields:
+                        if r in self.fields:
+                            if not data.get(r):
+                                raise ValidationError(
+                                    {r: "This field is required for the selected type of invoice transmission."}
+                                )
+                        else:
+                            if not ts.validated_data.get(r):
+                                raise ValidationError(
+                                    {"transmission_info": {r: "This field is required for the selected type of invoice transmission."}}
+                                )
+                    break  # do not call else branch of for loop
+                elif t.exclusive:
+                    if t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
+                        raise ValidationError({
+                            "transmission_type": "The transmission type '%s' must be used for this country or address type." % (
+                                t.identifier,
+                            )
+                        })
+            else:
+                raise ValidationError(
+                    {"transmission_type": "Unknown transmission type."}
                 )
 
         return data
@@ -1725,12 +1777,13 @@ class InvoiceSerializer(I18nAwareModelSerializer):
         model = Invoice
         fields = ('event', 'order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
                   'invoice_from_city', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
-                  'invoice_to', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street', 'invoice_to_zipcode',
-                  'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id', 'invoice_to_beneficiary',
-                  'custom_field', 'date', 'refers', 'locale',
+                  'invoice_to', 'invoice_to_is_business', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street',
+                  'invoice_to_zipcode', 'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id',
+                  'invoice_to_beneficiary', 'invoice_to_transmission_info', 'custom_field', 'date', 'refers', 'locale',
                   'introductory_text', 'additional_text', 'payment_provider_text', 'payment_provider_stamp',
                   'footer_text', 'lines', 'foreign_currency_display', 'foreign_currency_rate',
-                  'foreign_currency_rate_date', 'internal_reference')
+                  'foreign_currency_rate_date', 'internal_reference', 'transmission_type', 'transmission_provider',
+                  'transmission_status', 'transmission_date')
 
 
 class OrderPaymentCreateSerializer(I18nAwareModelSerializer):

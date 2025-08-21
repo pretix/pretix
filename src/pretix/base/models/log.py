@@ -40,9 +40,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import connections, models
 from django.utils.functional import cached_property
 
-from pretix.base.logentrytype_registry import log_entry_types, make_link
-from pretix.base.signals import is_app_active, logentry_object_link
-
 
 class VisibleOnlyManager(models.Manager):
     def get_queryset(self):
@@ -91,6 +88,8 @@ class LogEntry(models.Model):
         indexes = [models.Index(fields=["datetime", "id"])]
 
     def display(self):
+        from pretix.base.logentrytype_registry import log_entry_types
+
         log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
         if log_entry_type:
             return log_entry_type.display(self, self.parsed_data)
@@ -128,6 +127,11 @@ class LogEntry(models.Model):
 
     @cached_property
     def display_object(self):
+        from pretix.base.logentrytype_registry import (
+            log_entry_types, make_link,
+        )
+        from pretix.base.signals import is_app_active, logentry_object_link
+
         from . import (
             Discount, Event, Item, Order, Question, Quota, SubEvent, Voucher,
         )

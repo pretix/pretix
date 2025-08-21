@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2025-05-05 09:40+0000\n"
 "Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -348,8 +348,8 @@ msgstr "No"
 msgid "close"
 msgstr "Chiudi"
 
-#: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:513
+#: pretix/static/pretixbase/js/addressform.js:105
+#: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "richiesta"
 
@@ -785,7 +785,7 @@ msgstr "Ricevi indietro %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Inserisci l'importo che l'organizzatore può trattenere."
 
-#: pretix/static/pretixpresale/js/ui/main.js:558
+#: pretix/static/pretixpresale/js/ui/main.js:554
 msgid "Your local time:"
 msgstr "Ora locale:"
 

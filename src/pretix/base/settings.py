@@ -114,7 +114,7 @@ def restricted_plugin_kwargs():
     from pretix.base.plugins import get_all_plugins
 
     plugins_available = [
-        (p.module, p.name) for p in get_all_plugins(None)
+        (p.module, p.name) for p in get_all_plugins()
         if (
             not p.name.startswith('.') and
             getattr(p, 'restricted', False) and
@@ -2695,6 +2695,20 @@ You can change your order details and view the status of your order at
 {url}
 
 Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_order_invoice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Invoice {invoice_number}")),
+    },
+    'mail_text_order_invoice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+please find attached a new invoice for order {code} for {event}. This order has been placed by {order_email}.
+
+Best regards,  
+
 Your {event} team"""))  # noqa: W291
     },
     'mail_days_download_reminder': {
