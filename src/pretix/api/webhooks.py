@@ -78,6 +78,13 @@ class WebhookEvent:
         """
         raise NotImplementedError()  # NOQA
 
+    @property
+    def help_text(self) -> str:
+        """
+        A human-readable description
+        """
+        return ""
+
 
 def get_all_webhook_events():
     global _ALL_EVENTS
@@ -97,9 +104,10 @@ def get_all_webhook_events():
 
 
 class ParametrizedWebhookEvent(WebhookEvent):
-    def __init__(self, action_type, verbose_name):
+    def __init__(self, action_type, verbose_name, help_text=""):
         self._action_type = action_type
         self._verbose_name = verbose_name
+        self._help_text = help_text
         super().__init__()
 
     @property
@@ -109,6 +117,10 @@ class ParametrizedWebhookEvent(WebhookEvent):
     @property
     def verbose_name(self):
         return self._verbose_name
+
+    @property
+    def help_text(self):
+        return self._help_text
 
 
 class ParametrizedOrderWebhookEvent(ParametrizedWebhookEvent):
@@ -157,6 +169,19 @@ class ParametrizedEventWebhookEvent(ParametrizedWebhookEvent):
             'notification_id': logentry.pk,
             'organizer': event.organizer.slug,
             'event': event.slug,
+            'action': logentry.action_type,
+        }
+
+
+class ParametrizedVoucherWebhookEvent(ParametrizedWebhookEvent):
+
+    def build_payload(self, logentry: LogEntry):
+        # do not use content_object, this is also called in deletion
+        return {
+            'notification_id': logentry.pk,
+            'organizer': logentry.event.organizer.slug,
+            'event': logentry.event.slug,
+            'voucher': logentry.object_id,
             'action': logentry.action_type,
         }
 
@@ -346,8 +371,9 @@ def register_default_webhook_events(sender, **kwargs):
         ),
         ParametrizedItemWebhookEvent(
             'pretix.event.item.*',
-            _('Product changed (including product added or deleted and including changes to nested objects like '
-              'variations or bundles)'),
+            _('Product changed'),
+            _('This includes product added or deleted and changes to nested objects like '
+              'variations or bundles.'),
         ),
         ParametrizedEventWebhookEvent(
             'pretix.event.live.activated',
@@ -380,6 +406,19 @@ def register_default_webhook_events(sender, **kwargs):
         ParametrizedWaitingListEntryWebhookEvent(
             'pretix.event.orders.waitinglist.voucher_assigned',
             _('Waiting list entry received voucher'),
+        ),
+        ParametrizedVoucherWebhookEvent(
+            'pretix.voucher.added',
+            _('Voucher added'),
+        ),
+        ParametrizedVoucherWebhookEvent(
+            'pretix.voucher.changed',
+            _('Voucher changed'),
+            _('Only includes explicit changes to the voucher, not e.g. an increase of the number of redemptions.')
+        ),
+        ParametrizedVoucherWebhookEvent(
+            'pretix.voucher.deleted',
+            _('Voucher deleted'),
         ),
         ParametrizedCustomerWebhookEvent(
             'pretix.customer.created',

@@ -321,6 +321,14 @@ class OrderChangedSplitFrom(OrderLogEntryType):
         _('Denied scan of position #{posid} at {datetime} for list "{list}", type "{type}", error code "{errorcode}".'),
         _('Denied scan of position #{posid} for list "{list}", type "{type}", error code "{errorcode}".'),
     ),
+    'pretix.event.checkin.annulled': (
+        _('Annulled scan of position #{posid} at {datetime} for list "{list}", type "{type}".'),
+        _('Annulled scan of position #{posid} for list "{list}", type "{type}".'),
+    ),
+    'pretix.event.checkin.annulment.ignored': (
+        _('Ignored annulment of position #{posid} at {datetime} for list "{list}", type "{type}".'),
+        _('Ignored annulment of position #{posid} for list "{list}", type "{type}".'),
+    ),
     'pretix.control.views.checkin.reverted': _('The check-in of position #{posid} on list "{list}" has been reverted.'),
     'pretix.event.checkin.reverted': _('The check-in of position #{posid} on list "{list}" has been reverted.'),
 })
@@ -516,6 +524,11 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
     'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
     'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
+    'pretix.event.order.invoice.sent': _('The invoice {full_invoice_no} has been sent.'),
+    'pretix.event.order.invoice.sending_failed': _('The transmission of invoice {full_invoice_no} has failed.'),
+    'pretix.event.order.invoice.testmode_ignored': _('Invoice {full_invoice_no} has not been transmitted because '
+                                                     'the transmission provider does not support test mode invoices.'),
+    'pretix.event.order.invoice.retransmitted': _('The invoice {full_invoice_no} has been scheduled for retransmission.'),
     'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
     'pretix.event.order.custom_followup_at': _('The order\'s follow-up date has been updated.'),
     'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
@@ -528,6 +541,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.email.error': _('Sending of an email has failed.'),
     'pretix.event.order.email.attachments.skipped': _('The email has been sent without attached tickets since they '
                                                       'would have been too large to be likely to arrive.'),
+    'pretix.event.order.email.invoice': _('An invoice email has been sent.'),
     'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),
     'pretix.event.order.position.email.custom_sent': _('A custom email has been sent to an attendee.'),
     'pretix.event.order.email.download_reminder_sent': _('An email has been sent with a reminder that the ticket '
@@ -563,11 +577,11 @@ class CoreOrderLogEntryType(OrderLogEntryType):
 @log_entry_types.new_from_dict({
     'pretix.voucher.added': _('The voucher has been created.'),
     'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
-    'pretix.voucher.added.waitinglist': _('The voucher has been created and sent to a person on the waiting list.'),
     'pretix.voucher.expired.waitinglist': _(
         'The voucher has been set to expire because the recipient removed themselves from the waiting list.'),
     'pretix.voucher.changed': _('The voucher has been changed.'),
     'pretix.voucher.deleted': _('The voucher has been deleted.'),
+    'pretix.voucher.added.waitinglist': _('The voucher has been sent to {email} through the waiting list.'),
 })
 class CoreVoucherLogEntryType(VoucherLogEntryType):
     pass
@@ -773,6 +787,25 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
 })
 class CoreLogEntryType(LogEntryType):
     pass
+
+
+@log_entry_types.new_from_dict({
+    'pretix.organizer.plugins.enabled': _('The plugin has been enabled.'),
+    'pretix.organizer.plugins.disabled': _('The plugin has been disabled.'),
+})
+class OrganizerPluginStateLogEntryType(LogEntryType):
+    object_link_wrapper = _('Plugin {val}')
+
+    def get_object_link_info(self, logentry) -> Optional[dict]:
+        if 'plugin' in logentry.parsed_data:
+            app = app_cache.get(logentry.parsed_data['plugin'])
+            if app and hasattr(app, 'PretixPluginMeta'):
+                return {
+                    'href': reverse('control:organizer.settings.plugins', kwargs={
+                        'organizer': logentry.event.organizer.slug,
+                    }) + '#plugin_' + logentry.parsed_data['plugin'],
+                    'val': app.PretixPluginMeta.name
+                }
 
 
 @log_entry_types.new_from_dict({

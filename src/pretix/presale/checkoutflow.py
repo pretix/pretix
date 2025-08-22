@@ -957,6 +957,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             d['phone'] = str(d['phone'])
         self.cart_session['contact_form_data'] = d
         if self.address_asked or self.request.event.settings.invoice_name_required:
+            if not self.address_asked:
+                # Invoice address was there, but is no longer asked for, however, name is still required
+                self.invoice_form.instance.clear(except_name=True)
+
             addr = self.invoice_form.save()
 
             if self.cart_customer and self.invoice_form.cleaned_data.get('save'):
@@ -995,6 +999,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                                          'rate to your purchase and the price of the products in your cart has '
                                          'changed accordingly.'))
                 return redirect_to_url(self.get_next_url(request) + '?open_cart=true')
+        elif 'invoice_address' in self.cart_session:
+            # Invoice address was there, but is no longer asked for
+            self.invoice_address.delete()
+            del self.cart_session['invoice_address']
 
         try:
             validate_memberships_in_order(self.cart_customer, self.positions, self.request.event, lock=False,
@@ -1120,7 +1128,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             'invoice' in self.request.GET or
             # Checking for self.invoice_address.pk is not enough as when an invoice_address has been added and later edited to be empty, it’s not None.
             # So check initial values as invoice_form can receive pre-filled values from invoice_address, widget-data or overwrites from plug-ins.
-            is_form_filled(self.invoice_form, ignore_keys=('is_business', 'country'))
+            is_form_filled(self.invoice_form, ignore_keys=('is_business', 'country', 'transmission_type'))
         )
 
         if self.cart_customer:
@@ -1134,6 +1142,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         "_state_for_address": a.state_for_address,
                         "_name": a.name,
                         "is_business": "business" if a.is_business else "individual",
+                        **(a.transmission_info or {}),
                     }
                     if a.name_parts:
                         name_parts = a.name_parts
@@ -1155,7 +1164,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
                     for k in (
                         "company", "street", "zipcode", "city", "country", "state",
-                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
+                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary",
+                        "transmission_type",
                     ):
                         v = getattr(a, k) or ""
                         # always add all values of an address even when empty,

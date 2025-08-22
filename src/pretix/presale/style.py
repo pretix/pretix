@@ -26,11 +26,10 @@ from urllib.parse import urljoin, urlsplit
 import sass
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from django.dispatch import Signal
 from django.templatetags.static import static as _static
 
 from pretix.base.models import Event, Organizer
-from pretix.base.signals import EventPluginSignal
+from pretix.base.signals import EventPluginSignal, GlobalSignal
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
 )
@@ -38,7 +37,7 @@ from pretix.multidomain.urlreverse import (
 logger = logging.getLogger('pretix.presale.style')
 
 
-register_fonts = Signal()
+register_fonts = GlobalSignal()
 """
 Return a dictionaries of the following structure. Paths should be relative to static root or an absolute URL. In the
 latter case, the fonts won't be available for PDF-rendering.

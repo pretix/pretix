@@ -197,6 +197,7 @@ def order_overview(
         item.all_variations = list(item.variations.all())
         item.has_variations = (len(item.all_variations) > 0)
         item.num = {}
+        item.subevent = subevent
         if item.has_variations:
             for var in item.all_variations:
                 variid = var.id

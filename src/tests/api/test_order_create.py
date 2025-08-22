@@ -437,7 +437,9 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
             'vat_id': '',
             'vat_id_validated': False,
             'internal_reference': '',
-            'custom_field': None
+            'custom_field': None,
+            'transmission_type': 'email',
+            'transmission_info': None,
         },
         'positions': [
             {
@@ -589,6 +591,39 @@ def test_order_create_invoice_address_optional(token_client, organizer, event, i
         o = Order.objects.get(code=resp.data['code'])
         with pytest.raises(InvoiceAddress.DoesNotExist):
             o.invoice_address
+
+
+@pytest.mark.django_db
+def test_order_create_invoice_address_transmission_type_validation(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['invoice_address'] = {
+        "is_business": True,
+        "company": "This is my company name",
+        "name": "John Doe",
+        "name_parts": {},
+        "street": "",
+        "zipcode": "",
+        "city": "Test",
+        "country": "FR",
+        "internal_reference": "",
+        "vat_id": "",
+        "transmission_type": "it_sdi",
+        "transmission_info": {
+            "transmission_it_sdi_pec": "foobar@pec.it",
+            "transmission_it_sdi_recipient_code": "1234567",
+        },
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"invoice_address": {
+        "transmission_type": ["The selected transmission type is not available for this country or address type."]
+    }}
 
 
 @pytest.mark.django_db

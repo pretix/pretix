@@ -38,13 +38,13 @@ from pretix.base.datasync.sourcefields import (
 from pretix.base.i18n import language
 from pretix.base.logentrytype_registry import make_link
 from pretix.base.models.datasync import OrderSyncQueue, OrderSyncResult
-from pretix.base.signals import EventPluginRegistry
+from pretix.base.signals import PluginAwareRegistry
 from pretix.helpers import OF_SELF
 
 logger = logging.getLogger(__name__)
 
 
-datasync_providers = EventPluginRegistry({"identifier": lambda o: o.identifier})
+datasync_providers = PluginAwareRegistry({"identifier": lambda o: o.identifier})
 
 
 class BaseSyncError(Exception):

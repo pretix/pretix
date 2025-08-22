@@ -14,6 +14,7 @@ The voucher resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the voucher
+created                               datetime                   The creation date of the voucher. For vouchers created before pretix 2025.7.0, this is guessed retroactively and might not be accurate.
 code                                  string                     The voucher code that is required to redeem the voucher
 max_usages                            integer                    The maximum number of times this voucher can be
                                                                  redeemed (default: 1).
@@ -53,6 +54,10 @@ budget                                money (string)             The budget a vo
 budget_used                           money (string)             The amount of budget the voucher has already used up.
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 2025.7
+
+    The attributes ``created``, ``budget``, and ``budget_used`` have been added.
+
 
 Endpoints
 ---------
@@ -84,6 +89,7 @@ Endpoints
         "results": [
           {
             "id": 1,
+            "created": "2020-09-18T14:17:40.971519Z",
             "code": "43K6LKM37FBVR2YG",
             "max_usages": 1,
             "redeemed": 0,
@@ -156,6 +162,7 @@ Endpoints
 
       {
         "id": 1,
+        "created": "2020-09-18T14:17:40.971519Z",
         "code": "43K6LKM37FBVR2YG",
         "max_usages": 1,
         "redeemed": 0,
@@ -228,6 +235,7 @@ Endpoints
 
       {
         "id": 1,
+        "created": "2020-09-18T14:17:40.971519Z",
         "code": "43K6LKM37FBVR2YG",
         "max_usages": 1,
         "redeemed": 0,
@@ -321,6 +329,7 @@ Endpoints
       [
         {
           "id": 1,
+          "created": "2020-09-18T14:17:40.971519Z",
           "code": "43K6LKM37FBVR2YG",
           …
         }, …
@@ -367,6 +376,7 @@ Endpoints
 
       {
         "id": 1,
+        "created": "2020-09-18T14:17:40.971519Z",
         "code": "43K6LKM37FBVR2YG",
         "max_usages": 1,
         "redeemed": 0,

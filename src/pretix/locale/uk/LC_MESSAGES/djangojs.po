@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2024-05-22 16:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -348,8 +348,8 @@ msgstr "Ні"
 msgid "close"
 msgstr "Закрити"
 
-#: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:513
+#: pretix/static/pretixbase/js/addressform.js:105
+#: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "обов'язкове"
 
@@ -786,7 +786,7 @@ msgstr "Ви отримаєте в поверненні %(amount)s %(currency)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Введіть суму, яку може залишити організатор."
 
-#: pretix/static/pretixpresale/js/ui/main.js:558
+#: pretix/static/pretixpresale/js/ui/main.js:554
 msgid "Your local time:"
 msgstr "Ваш місцевий час:"
 

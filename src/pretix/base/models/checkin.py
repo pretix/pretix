@@ -350,6 +350,7 @@ class Checkin(models.Model):
     REASON_BLOCKED = 'blocked'
     REASON_UNAPPROVED = 'unapproved'
     REASON_INVALID_TIME = 'invalid_time'
+    REASON_ANNULLED = 'annulled'
     REASONS = (
         (REASON_CANCELED, _('Order canceled')),
         (REASON_INVALID, _('Unknown ticket')),
@@ -364,6 +365,7 @@ class Checkin(models.Model):
         (REASON_BLOCKED, _('Ticket blocked')),
         (REASON_UNAPPROVED, _('Order not approved')),
         (REASON_INVALID_TIME, _('Ticket not valid at this time')),
+        (REASON_ANNULLED, _('Check-in annulled')),
     )
 
     successful = models.BooleanField(

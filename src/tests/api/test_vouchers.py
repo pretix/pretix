@@ -91,6 +91,7 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
     res = dict(TEST_VOUCHER_RES)
     res['item'] = item.pk
     res['id'] = voucher.pk
+    res['created'] = voucher.created.isoformat().replace('+00:00', 'Z')
     res['code'] = voucher.code
     q2 = copy.copy(quota)
     q2.pk = None
@@ -264,6 +265,7 @@ def test_voucher_detail(token_client, organizer, event, voucher, item):
     res['item'] = item.pk
     res['id'] = voucher.pk
     res['code'] = voucher.code
+    res['created'] = voucher.created.isoformat().replace('+00:00', 'Z')
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/vouchers/{}/'.format(organizer.slug, event.slug,
                                                                                   voucher.pk))

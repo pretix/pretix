@@ -273,6 +273,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-attendee_name_parts_0' % self.ticket_pos.id: '',
+                'transmission_type': 'email',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -304,6 +305,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-attendee_name_parts_0' % self.ticket_pos.id: 'Peter',
+                'transmission_type': 'email',
             }, follow=True)
         self.assertRedirects(response, '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                                 self.order.secret),
@@ -326,6 +328,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): '',
+                'transmission_type': 'email',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -350,6 +353,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): '',
+                'transmission_type': 'email',
             }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -357,6 +361,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                'transmission_type': 'email',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -374,6 +379,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                'transmission_type': 'email',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -390,6 +396,7 @@ class OrdersTest(BaseOrdersTest):
                 'street': 'Main Street',
                 'city': 'Heidelberg',
                 'country': 'DE',
+                'transmission_type': 'email',
             }, follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
@@ -403,6 +410,7 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                'transmission_type': 'email',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -419,6 +427,7 @@ class OrdersTest(BaseOrdersTest):
                 'street': 'Main Street',
                 'city': 'Heidelberg',
                 'country': 'DE',
+                'transmission_type': 'email',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -436,6 +445,7 @@ class OrdersTest(BaseOrdersTest):
                 'street': 'Main Street',
                 'city': 'Heidelberg',
                 'country': 'DE',
+                'transmission_type': 'email',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -477,8 +487,12 @@ class OrdersTest(BaseOrdersTest):
         # Not all fields filled out, expect success
         response = self.client.post(
             '/%s/%s/ticket/%s/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
-                                               self.ticket_pos.positionid, self.ticket_pos.web_secret)
+                                               self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            {
+                'transmission_type': 'email',
+            }
         )
+        print(response.content.decode())
         self.assertRedirects(response,
                              '/%s/%s/ticket/%s/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.ticket_pos.positionid, self.ticket_pos.web_secret),

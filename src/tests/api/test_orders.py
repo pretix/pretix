@@ -326,7 +326,9 @@ TEST_ORDER_RES = {
         "internal_reference": "",
         "custom_field": "Custom info",
         "vat_id": "DE123",
-        "vat_id_validated": True
+        "vat_id_validated": True,
+        "transmission_type": "email",
+        "transmission_info": None,
     },
     "require_approval": False,
     "valid_if_pending": False,

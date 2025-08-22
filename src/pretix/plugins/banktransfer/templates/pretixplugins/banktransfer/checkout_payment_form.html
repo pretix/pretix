@@ -1,6 +1,5 @@
 {% load i18n %}
 {% load ibanformat %}
-{% load bootstrap3 %}
 
 {% if details or code %}
     <p>{% blocktrans trimmed %}
@@ -37,9 +36,4 @@
         After completing your purchase, we will ask you to transfer the money to our bank account, using a personal
         reference code.
     {% endblocktrans %}</p>
-{% endif %}
-{% if form.fields %}
-    <div class="col-md-12">
-        {% bootstrap_form form layout='inline' %}
-    </div>
 {% endif %}

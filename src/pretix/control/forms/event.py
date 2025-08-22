@@ -1272,6 +1272,20 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         required=False,
         widget=I18nMarkdownTextarea,
     )
+    mail_subject_order_invoice = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+        help_text=_("This will only be used if the invoice is sent to a different email address or at a different time "
+                    "than the order confirmation."),
+    )
+    mail_text_order_invoice = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nMarkdownTextarea,
+        help_text=_("This will only be used if the invoice is sent to a different email address or at a different time "
+                    "than the order confirmation."),
+    )
     mail_subject_download_reminder = I18nFormField(
         label=_("Subject sent to order contact address"),
         required=False,
@@ -1423,6 +1437,8 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         'mail_text_order_payment_failed': ['event', 'order'],
         'mail_subject_order_payment_failed': ['event', 'order'],
         'mail_text_order_custom_mail': ['event', 'order'],
+        'mail_text_order_invoice': ['event', 'order', 'invoice'],
+        'mail_subject_order_invoice': ['event', 'order', 'invoice'],
         'mail_text_download_reminder': ['event', 'order'],
         'mail_subject_download_reminder': ['event', 'order'],
         'mail_text_download_reminder_attendee': ['event', 'order', 'position'],

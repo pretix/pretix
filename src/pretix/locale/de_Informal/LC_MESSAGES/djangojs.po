@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:44+0000\n"
+"POT-Creation-Date: 2025-08-19 16:02+0000\n"
 "PO-Revision-Date: 2025-05-30 11:07+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -345,8 +345,8 @@ msgstr "Nein"
 msgid "close"
 msgstr "schließen"
 
-#: pretix/static/pretixbase/js/addressform.js:59
-#: pretix/static/pretixpresale/js/ui/main.js:513
+#: pretix/static/pretixbase/js/addressform.js:105
+#: pretix/static/pretixpresale/js/ui/main.js:509
 msgid "required"
 msgstr "erforderlich"
 
@@ -771,7 +771,7 @@ msgstr "Du erhältst %(currency)s %(amount)s zurück"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Bitte gib den Betrag ein, den der Veranstalter einbehalten darf."
 
-#: pretix/static/pretixpresale/js/ui/main.js:558
+#: pretix/static/pretixpresale/js/ui/main.js:554
 msgid "Your local time:"
 msgstr "Deine lokale Zeit:"
 
