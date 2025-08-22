@@ -226,7 +226,7 @@ However, calculating the tax rate from the net total has significant disadvantag
 - When splitting an order into two, the combined of the new orders is not guaranteed to be the same as the total of the
   original order. Therefore, additional payments or refunds of very small amounts might be necessary.
 
-To allow organizers to make your own choices on this matter, pretix provides following options:
+To allow organizers to make their own choices on this matter, pretix provides the following options:
 
 Compute taxes for every line individually
 """""""""""""""""""""""""""""""""""""""""
