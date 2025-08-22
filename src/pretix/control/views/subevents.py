@@ -174,36 +174,38 @@ class SubEventDelete(EventPermissionRequiredMixin, CompatDeleteView):
             return HttpResponseRedirect(self.get_success_url())
         return super().get(request, *args, **kwargs)
 
-    @transaction.atomic
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
-        if not self.object.allow_delete():
-            messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
-                                                              'placed.'))
-            return HttpResponseRedirect(self.get_success_url())
-        else:
-            try:
+        try:
+            with transaction.atomic():
+                if not self.object.allow_delete():
+                    messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
+                                                                      'placed.'))
+                    return HttpResponseRedirect(success_url)
+                self.object.log_action('pretix.subevent.deleted', user=self.request.user)
                 CartPosition.objects.filter(addon_to__subevent=self.object).delete()
                 self.object.cartposition_set.all().delete()
                 self.object.delete()
-                self.object.log_action('pretix.subevent.deleted', user=self.request.user)
-                messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
-            except ProtectedError:
-                if self.object.active:
+        except ProtectedError:
+            if self.object.active:
+                with transaction.atomic():
                     self.object.log_action(
                         'pretix.subevent.changed', user=self.request.user, data={
                             'active': False
                         },
                     )
-                    self.object.active = False
-                    self.object.save(update_fields=['active'])
-                messages.error(self.request, pgettext_lazy(
-                    'subevent',
-                    'The date could not be deleted as some constraints (e.g. data created by plug-ins) did not allow '
-                    'it. The date was disabled instead.'
-                ))
+                self.object.active = False
+                self.object.save(update_fields=['active'])
+            messages.error(self.request, pgettext_lazy(
+                'subevent',
+                'The date could not be deleted as some constraints (e.g. data created by plug-ins) did not allow '
+                'it. The date was disabled instead.'
+            ))
+        else:
+            messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
+
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:
