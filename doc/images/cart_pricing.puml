@@ -23,6 +23,7 @@ partition "For every cart position" {
     --> "Store as line_price (gross), tax_rate"
 }
 --> "Apply discount engine"
+--> "Apply tax rounding"
 --> "Store as price (gross)"
 
 @enduml

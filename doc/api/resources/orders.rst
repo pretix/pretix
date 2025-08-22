@@ -41,6 +41,7 @@ expires                               datetime                   The order will 
 payment_date                          date                       **DEPRECATED AND INACCURATE** Date of payment receipt
 payment_provider                      string                     **DEPRECATED AND INACCURATE** Payment provider used for this order
 total                                 money (string)             Total value of this order
+tax_rounding_mode                     string                     Tax rounding mode, see :ref:`algorithms-rounding`
 comment                               string                     Internal comment on this order
 api_meta                              object                     Meta data for that order. Only available through API, no guarantees
                                                                  on the content structure. You can use this to save references to your system.
@@ -144,12 +145,16 @@ plugin_data                           object                     Additional data
    The ``tax_code`` attribute has been added.
 
 .. versionchanged:: 2025.2
-
    The ``plugin_data`` attribute has been added.
 
 .. versionchanged:: 2025.6
 
    The ``invoice_address.transmission_type`` and ``invoice_address.transmission_info`` attributes have been added.
+  
+
+.. versionchanged:: 2025.8
+
+   The ``tax_rounding_mode`` attribute has been added.
 
 .. _order-position-resource:
 
@@ -358,6 +363,7 @@ List of all orders
             "payment_provider": "banktransfer",
             "fees": [],
             "total": "23.00",
+            "tax_rounding_mode": "line",
             "comment": "",
             "custom_followup_at": null,
             "checkin_attention": false,
@@ -601,6 +607,7 @@ Fetching individual orders
         "payment_provider": "banktransfer",
         "fees": [],
         "total": "23.00",
+        "tax_rounding_mode": "line",
         "comment": "",
         "api_meta": {},
         "custom_followup_at": null,
@@ -1009,6 +1016,7 @@ Creating orders
      provider will not be called to do anything about this (i.e. if you pass a bank account to a debit provider, *no*
      charge will be created), this is just informative in case you *handled the payment already*.
    * ``payment_date`` (optional) – Date and time of the completion of the payment.
+   * ``tax_rounding_mode`` (optional)
    * ``comment`` (optional)
    * ``custom_followup_at`` (optional)
    * ``checkin_attention`` (optional)
