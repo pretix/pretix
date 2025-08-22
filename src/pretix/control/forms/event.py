@@ -857,7 +857,7 @@ class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
                 "Recommended for e-invoicing when you primarily sell to business customers and "
                 "show prices to customers excluding tax. "
                 "The gross price of some products may be changed to ensure correct rounding, while the net "
-                "prices will be presented as configured. This may cause the actual payment amount to differ."
+                "prices will be kept as configured. This may cause the actual payment amount to differ."
             ),
             "sum_by_net_keep_gross": _(
                 "Recommended for e-invoicing when you primarily sell to consumers. "

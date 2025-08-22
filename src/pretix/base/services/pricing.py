@@ -212,7 +212,7 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
 def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep_gross"], currency: str,
                    lines: List[Union[OrderPosition, CartPosition, OrderFee]]) -> list:
     """
-    Given a a list of order positions / cart positions / order fees (may be mixed), applies the given rounding mode
+    Given a list of order positions / cart positions / order fees (may be mixed), applies the given rounding mode
     and mutates the ``price``, ``price_includes_rounding_correction``, ``tax_value``, and
     ``tax_value_includes_rounding_correction`` attributes.
 
