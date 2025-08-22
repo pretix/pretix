@@ -47,7 +47,7 @@ TZ = ZoneInfo('Europe/Berlin')
 
 @pytest.fixture(scope='function')
 def event():
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     o.settings.customer_accounts = True
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
