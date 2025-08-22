@@ -247,7 +247,7 @@ sendmail_view_classes = EventPluginSignal()
 This signal allows you to register subclasses of ``pretix.plugins.sendmail.views.BaseSenderView`` that should be
 discovered by this plugin.
 
-As with all plugin signals, the ``sender`` keyword will contain the event.
+As with all event-level plugin signals, the ``sender`` keyword will contain the event.
 """
 
 

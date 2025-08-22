@@ -898,7 +898,7 @@ This signals allows you to add fees to an order while it is being created. You a
 return a list of ``OrderFee`` objects that are not yet saved to the database
 (because there is no order yet).
 
-As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
+As with all event-level plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
 argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
 tax calculation). The argument ``meta_info`` contains the order's meta dictionary. The ``total``
 keyword argument will contain the total cart sum without any fees. You should not rely on this
@@ -916,7 +916,7 @@ This signals allows you to return a human-readable description for a fee type ba
 and ``internal_type`` attributes of the ``OrderFee`` model that you get as keyword arguments. You are
 expected to return a string or None, if you don't know about this fee.
 
-As with all plugin signals, the ``sender`` keyword argument will contain the event.
+As with all event-level plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
 allow_ticket_download = EventPluginSignal()
