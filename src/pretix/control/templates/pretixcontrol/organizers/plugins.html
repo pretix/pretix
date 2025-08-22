@@ -75,7 +75,7 @@
                                                             <span class="fa fa-check" aria-hidden="true"></span>
                                                             {% trans "Active" %}
                                                         </span>
-                                                    {% elif events_counter == events_total %}
+                                                    {% elif events_total and events_counter == events_total %}
                                                         <span class="label label-success" data-is-active>
                                                             <span class="fa fa-check" aria-hidden="true"></span>
                                                             {% trans "Active (all events)" %}
