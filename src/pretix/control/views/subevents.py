@@ -195,7 +195,7 @@ class SubEventDelete(EventPermissionRequiredMixin, CompatDeleteView):
                     self.object.log_action(
                         'pretix.subevent.changed', user=self.request.user, data={
                             'active': False
-                        }, save=False,
+                        },
                     )
                     self.object.active = False
                     self.object.save(update_fields=['active'])
