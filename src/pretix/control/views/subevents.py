@@ -185,10 +185,10 @@ class SubEventDelete(EventPermissionRequiredMixin, CompatDeleteView):
             return HttpResponseRedirect(self.get_success_url())
         else:
             try:
-                self.object.log_action('pretix.subevent.deleted', user=self.request.user)
                 CartPosition.objects.filter(addon_to__subevent=self.object).delete()
                 self.object.cartposition_set.all().delete()
                 self.object.delete()
+                self.object.log_action('pretix.subevent.deleted', user=self.request.user)
                 messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
             except ProtectedError:
                 if self.object.active:
