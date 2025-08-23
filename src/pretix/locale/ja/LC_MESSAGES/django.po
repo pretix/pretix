@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-15 09:00+0000\n"
+"PO-Revision-Date: 2025-08-23 07:07+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -159,8 +159,7 @@ msgstr "ウクライナ語"
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
-msgstr ""
-"デバイスへのフルアクセス（注文とギフトカードの読み出し及び変更、商品と設定の"
+msgstr "デバイスへのフルアクセス（注文とギフトカードの読み出し及び変更、製品と設定の"
 "読み出し）"
 
 #: pretix/api/auth/devicesecurity.py:80
@@ -235,7 +234,7 @@ msgstr "コメント"
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1466
 #, python-brace-format
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "この商品（\"{}\"）は割り当てられていません。"
+msgstr "この製品（\"{}\"）は割り当てられていません。"
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1698
 #: pretix/base/models/items.py:1917 pretix/base/models/items.py:2203
@@ -300,19 +299,18 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
-msgstr "現在、パーソナライズできるのは入場券（チケット）のみです。"
+msgstr "現在、パーソナライズできるのは入場券製品だけです。"
 
 #: pretix/api/serializers/item.py:317
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
-msgstr ""
-"ギフトカードは、引き換え（利用）の時点で消費税が課税されます。このため、ギフ"
-"トカード商品の税率は、税率0％以外に設定してはいけません。"
+msgstr "ギフトカードは、引き換え（利用）の時点で消費税が課税されます。このため、ギフ"
+"トカード製品の税率は、税率0％以外に設定してはいけません。"
 
 #: pretix/api/serializers/item.py:322 pretix/control/forms/item.py:781
 msgid "Gift card products should not be admission products at the same time."
-msgstr "ギフトカード商品は、同時に入場券とすることはできません。"
+msgstr "ギフトカード製品は、同時に入場券とすることはできません。"
 
 #: pretix/api/serializers/item.py:524
 msgid ""
@@ -432,7 +430,7 @@ msgstr "メールの送信に失敗しました。再送信してください。
 #: pretix/api/views/order.py:719 pretix/base/services/cart.py:216
 #: pretix/base/services/orders.py:191 pretix/presale/views/order.py:790
 msgid "One of the selected products is not available in the selected country."
-msgstr "選択された国では、選択された商品のお取り扱いはございません。"
+msgstr "選択された国では、選択された製品のお取り扱いはございません。"
 
 #: pretix/api/webhooks.py:262 pretix/base/notifications.py:233
 msgid "New order placed"
@@ -444,7 +442,7 @@ msgstr "リリースが必要な新規受注"
 
 #: pretix/api/webhooks.py:270 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr "支払い済みと表示された商品"
+msgstr "支払済み設定済み"
 
 #: pretix/api/webhooks.py:274 pretix/base/models/checkin.py:355
 #: pretix/base/notifications.py:251
@@ -554,22 +552,15 @@ msgid "Event series date deleted"
 msgstr "イベントシリーズの日程が削除されました"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "製品名"
+msgstr "製品が変更されました"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
-msgstr ""
-"製品が変更されました（製品の追加または削除、バリエーションやバンドルのような"
-"ネストされたオブジェクトの変更を含む）"
+msgstr "製品の追加・削除、ならびにバリエーションやバンドル等の入れ子オブジェクトの変"
+"更を含みます。"
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -604,28 +595,23 @@ msgid "Waiting list entry received voucher"
 msgstr "空席待ちリストの登録者がバウチャーを受け取りました"
 
 #: pretix/api/webhooks.py:412
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "バウチャーコード"
+msgstr "バウチャーが追加されました"
 
 #: pretix/api/webhooks.py:416
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "割引券が割り当てられました"
+msgstr "バウチャーが変更されました"
 
 #: pretix/api/webhooks.py:417
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
-msgstr ""
+msgstr "バウチャーへの明示的な変更のみが含まれ、例えば利用回数の増加などは含まれませ"
+"ん。"
 
 #: pretix/api/webhooks.py:421
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "クーポンを利用しました"
+msgstr "バウチャーが削除されました"
 
 #: pretix/api/webhooks.py:425
 msgid "Customer account created"
@@ -811,25 +797,25 @@ msgid ""
 "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
 "your {provider_name} settings."
 msgstr ""
+"フィールド\"{field_name}\"は"
+"{available_inputs}に対して有効ではありません。{provider_name}の設定を確認して"
+"ください。"
 
 #: pretix/base/datasync/datasync.py:267
 #, python-brace-format
 msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
-msgstr ""
+msgstr "フィールド\"{field_name}\"の値マッピングを更新してください - オプション\""
+"{val}\"が割り当てられていません"
 
 #: pretix/base/datasync/sourcefields.py:128
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "受注ライン"
+msgstr "注文内容詳細"
 
 #: pretix/base/datasync/sourcefields.py:129
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "参加者のメールアドレス"
+msgstr "参加者詳細"
 
 #: pretix/base/datasync/sourcefields.py:130 pretix/base/exporters/answers.py:66
 #: pretix/base/models/items.py:1767 pretix/control/navigation.py:172
@@ -839,10 +825,8 @@ msgid "Questions"
 msgstr "質問"
 
 #: pretix/base/datasync/sourcefields.py:131
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "製品データ"
+msgstr "製品詳細"
 
 #: pretix/base/datasync/sourcefields.py:132
 #: pretix/control/templates/pretixcontrol/event/settings.html:280
@@ -867,17 +851,13 @@ msgid "Invoice address"
 msgstr "請求先の住所"
 
 #: pretix/base/datasync/sourcefields.py:134
-#, fuzzy
-#| msgid "Meta information"
 msgid "Event information"
-msgstr "メタ情報"
+msgstr "イベント情報"
 
 #: pretix/base/datasync/sourcefields.py:135
-#, fuzzy
-#| msgid "Send recovery information"
 msgctxt "subevent"
 msgid "Event or date information"
-msgstr "回復情報を送信します"
+msgstr "イベント・日程情報"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:604
@@ -902,10 +882,8 @@ msgstr "参加者の名前"
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:628
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "参加者の名前"
+msgstr "参加者"
 
 #: pretix/base/datasync/sourcefields.py:207
 #: pretix/base/exporters/orderlist.py:611 pretix/base/forms/questions.py:685
@@ -919,10 +897,8 @@ msgid "Attendee email"
 msgstr "参加者のメールアドレス"
 
 #: pretix/base/datasync/sourcefields.py:219
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee or order email"
-msgstr "参加者のメールアドレス"
+msgstr "参加者・注文者メール"
 
 #: pretix/base/datasync/sourcefields.py:232 pretix/base/pdf.py:186
 #: pretix/control/templates/pretixcontrol/order/index.html:595
@@ -934,28 +910,20 @@ msgid "Attendee company"
 msgstr "参加者の会社"
 
 #: pretix/base/datasync/sourcefields.py:241
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "参加者の住所"
+msgstr "参加者住所（番地）"
 
 #: pretix/base/datasync/sourcefields.py:250
-#, fuzzy
-#| msgid "Attendee ZIP code"
 msgid "Attendee address ZIP code"
-msgstr "参加者の郵便番号"
+msgstr "参加者住所（郵便番号）"
 
 #: pretix/base/datasync/sourcefields.py:259
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address city"
-msgstr "参加者の住所"
+msgstr "参加者住所（市区町村）"
 
 #: pretix/base/datasync/sourcefields.py:268
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address country"
-msgstr "参加者の住所"
+msgstr "参加者住所（国）"
 
 #: pretix/base/datasync/sourcefields.py:279 pretix/base/pdf.py:344
 msgid "Invoice address company"
@@ -990,16 +958,12 @@ msgid "Invoice address country"
 msgstr "請求先の国"
 
 #: pretix/base/datasync/sourcefields.py:353
-#, fuzzy
-#| msgid "Order details"
 msgid "Order email"
-msgstr "注文の詳細"
+msgstr "注文者メール"
 
 #: pretix/base/datasync/sourcefields.py:362
-#, fuzzy
-#| msgid "Organizer domain"
 msgid "Order email domain"
-msgstr "主催者のドメイン"
+msgstr "注文者メールドメイン"
 
 #: pretix/base/datasync/sourcefields.py:371
 #: pretix/base/exporters/invoices.py:201 pretix/base/exporters/invoices.py:328
@@ -1030,10 +994,8 @@ msgid "Order code"
 msgstr "注文コード"
 
 #: pretix/base/datasync/sourcefields.py:380
-#, fuzzy
-#| msgid "End order date"
 msgid "Event and order code"
-msgstr "終了日"
+msgstr "イベント・注文コード"
 
 #: pretix/base/datasync/sourcefields.py:389
 #: pretix/base/exporters/orderlist.py:262 pretix/base/notifications.py:201
@@ -1045,29 +1007,23 @@ msgid "Order total"
 msgstr "注文合計"
 
 #: pretix/base/datasync/sourcefields.py:398
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Product and variation name"
-msgstr "製品名とバリエーション"
+msgstr "製品・バリエーション名"
 
 #: pretix/base/datasync/sourcefields.py:410 pretix/base/exporters/items.py:57
 #: pretix/base/exporters/orderlist.py:597
 #: pretix/base/exporters/orderlist.py:908
 #: pretix/base/exporters/waitinglist.py:112
 msgid "Product ID"
-msgstr "商品ID"
+msgstr "製品ID"
 
 #: pretix/base/datasync/sourcefields.py:419
-#, fuzzy
-#| msgid "Non-admission product"
 msgid "Product is admission product"
-msgstr "入場に使用できない製品"
+msgstr "製品は入場券製品です"
 
 #: pretix/base/datasync/sourcefields.py:428
-#, fuzzy
-#| msgid "Event short name"
 msgid "Event short form"
-msgstr "イベントの略称"
+msgstr "イベント略称"
 
 #: pretix/base/datasync/sourcefields.py:437 pretix/base/exporters/events.py:57
 #: pretix/base/exporters/orderlist.py:262
@@ -1110,10 +1066,8 @@ msgid "Order code and position number"
 msgstr "注文コードとポジション番号"
 
 #: pretix/base/datasync/sourcefields.py:482
-#, fuzzy
-#| msgid "Ticket page"
 msgid "Ticket price"
-msgstr "チケットページ"
+msgstr "チケット価格"
 
 #: pretix/base/datasync/sourcefields.py:491 pretix/base/notifications.py:204
 #: pretix/control/forms/filter.py:211 pretix/control/forms/modelimport.py:85
@@ -1121,22 +1075,16 @@ msgid "Order status"
 msgstr "注文の状況"
 
 #: pretix/base/datasync/sourcefields.py:500
-#, fuzzy
-#| msgid "Device status"
 msgid "Ticket status"
-msgstr "デバイスの状態"
+msgstr "チケットの状態"
 
 #: pretix/base/datasync/sourcefields.py:509
-#, fuzzy
-#| msgid "Purchase date and time"
 msgid "Order date and time"
-msgstr "購入日時"
+msgstr "注文日時"
 
 #: pretix/base/datasync/sourcefields.py:518
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Payment date and time"
-msgstr "日付と時刻の印刷"
+msgstr "支払日時"
 
 #: pretix/base/datasync/sourcefields.py:527
 #: pretix/base/exporters/orderlist.py:271
@@ -1147,10 +1095,8 @@ msgid "Order locale"
 msgstr "注文のロケール"
 
 #: pretix/base/datasync/sourcefields.py:536
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position ID"
-msgstr "注文の位置"
+msgstr "注文明細ID"
 
 #: pretix/base/datasync/sourcefields.py:545
 #: pretix/base/exporters/orderlist.py:291
@@ -1158,22 +1104,18 @@ msgid "Order link"
 msgstr "注文リンク"
 
 #: pretix/base/datasync/sourcefields.py:560
-#, fuzzy
-#| msgid "Ticket block"
 msgid "Ticket link"
-msgstr "チケットのチェックインが完了しました"
+msgstr "チケットへのリンク"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list {val}"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "チェックイン・リスト{val}"
+msgstr "リスト{}のチェックイン日時"
 
 #: pretix/base/datasync/sourcefields.py:590
-#, fuzzy, python-brace-format
-#| msgid "Question: %(name)s"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "質問: %(name)s"
+msgstr "質問：{name}"
 
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:614 pretix/base/settings.py:3559
@@ -1829,7 +1771,7 @@ msgstr "国"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
 msgid "Tax ID"
-msgstr "税番号"
+msgstr "納税者識別番号"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
@@ -2005,9 +1947,8 @@ msgstr "製品データ"
 
 #: pretix/base/exporters/items.py:51
 msgid "Download a spreadsheet with details about all products and variations."
-msgstr ""
-"全ての商品とバリエーションの詳細について、スプレッドシートをダウンロードして"
-"ください。"
+msgstr "すべての製品とバリエーションの詳細情報を含むスプレッドシートをダウンロードし"
+"ます。"
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:599
 #: pretix/base/exporters/orderlist.py:910
@@ -2020,7 +1961,7 @@ msgstr "バリエーションID"
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr "商品カテゴリー"
+msgstr "製品カテゴリ"
 
 #: pretix/base/exporters/items.py:60 pretix/base/models/discount.py:64
 #: pretix/base/models/items.py:96 pretix/base/models/items.py:483
@@ -2139,27 +2080,25 @@ msgstr "提供可能期間の終期"
 
 #: pretix/base/exporters/items.py:82 pretix/base/models/items.py:609
 msgid "This product can only be bought using a voucher."
-msgstr "この商品は、バウチャーでのみ購入できます。"
+msgstr "この製品は、バウチャーでのみ購入できます。"
 
 #: pretix/base/exporters/items.py:83 pretix/base/models/items.py:622
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
-msgstr ""
-"この商品は、商品の引き換えに用いるバウチャーと一致した場合にのみ表示されま"
-"す。"
+msgstr "この製品は、該当するバウチャーが使用された時のみ表示されます。"
 
 #: pretix/base/exporters/items.py:84 pretix/base/models/items.py:615
 msgid "Buying this product requires approval"
-msgstr "この商品の購入には、承認が必要"
+msgstr "この製品の購入には承認が必要です"
 
 #: pretix/base/exporters/items.py:85 pretix/base/models/items.py:628
 msgid "Only sell this product as part of a bundle"
-msgstr "この商品は、セット商品の一部としてのみ販売"
+msgstr "この製品はバンドルの一部としてのみ販売します"
 
 #: pretix/base/exporters/items.py:86 pretix/base/models/items.py:635
 msgid "Allow product to be canceled or changed"
-msgstr "商品のキャンセルや変更を認める"
+msgstr "製品のキャンセル・変更を許可"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:641
 msgid "Minimum amount per order"
@@ -2190,7 +2129,7 @@ msgstr "元の価格"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:685
 msgid "This product is a gift card"
-msgstr "この商品は、ギフトカードです"
+msgstr "この製品はギフトカードです"
 
 #: pretix/base/exporters/items.py:93 pretix/base/models/items.py:691
 #: pretix/base/models/items.py:1190
@@ -2548,7 +2487,7 @@ msgstr "終了日"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:12
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:91
 msgid "Product"
-msgstr "商品"
+msgstr "製品"
 
 #: pretix/base/exporters/orderlist.py:618 pretix/base/models/vouchers.py:315
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -2734,7 +2673,7 @@ msgstr "日付"
 
 #: pretix/base/exporters/orderlist.py:920
 msgid "Tax rule ID"
-msgstr "税番号"
+msgstr "税制ルールID"
 
 #: pretix/base/exporters/orderlist.py:923
 #: pretix/plugins/reports/accountingreport.py:320
@@ -2903,7 +2842,7 @@ msgstr "ブロッキングバウチャー"
 
 #: pretix/base/exporters/orderlist.py:1153 pretix/control/views/item.py:994
 msgid "Current user's carts"
-msgstr "ユーザーのカートにある商品"
+msgstr "現在のユーザーのカート"
 
 #: pretix/base/exporters/orderlist.py:1153
 msgid "Exited orders"
@@ -3364,14 +3303,12 @@ msgstr ""
 "を主張する必要があるかもしれません。"
 
 #: pretix/base/forms/questions.py:1177
-#, fuzzy
-#| msgid "Cancellation requested"
 msgid "No invoice requested"
-msgstr "キャンセルがリクエストされました"
+msgstr "請求書不要"
 
 #: pretix/base/forms/questions.py:1179
 msgid "Invoice transmission method"
-msgstr ""
+msgstr "請求書送付方法"
 
 #: pretix/base/forms/questions.py:1324
 msgid "You need to provide a company name."
@@ -3385,25 +3322,24 @@ msgstr "あなたの名前を提供する必要があります。"
 msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
-msgstr ""
+msgstr "請求書送付先住所を入力する場合は、請求書送付方法も選択する必要があります。"
 
 #: pretix/base/forms/questions.py:1380
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid ""
 "The selected transmission type is not available in your country or for your "
 "type of address."
-msgstr "選択されたメディアタイプは、この主催者の設定で有効になっていません。"
+msgstr "選択された送信方式は、お客様の国または住所の種類ではご利用いただけません。"
 
 #: pretix/base/forms/questions.py:1389
 msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
-msgstr ""
+msgstr "選択された請求書送付方法には、現在利用できない項目が必要です。主催者にお問い"
+"合わせください。"
 
 #: pretix/base/forms/questions.py:1393
 msgid "This field is required for the selected type of invoice transmission."
-msgstr ""
+msgstr "この項目は、選択された請求書送付方法に必要です。"
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
@@ -3508,67 +3444,54 @@ msgstr "時間"
 
 #: pretix/base/forms/widgets.py:234 pretix/base/forms/widgets.py:239
 msgid "Business or institutional customer"
-msgstr "ビジネスまたは機関の顧客"
+msgstr "企業・団体顧客"
 
 #: pretix/base/forms/widgets.py:238
 msgid "Individual customer"
 msgstr "個人の顧客"
 
 #: pretix/base/invoicing/email.py:50
-#, fuzzy
-#| msgid ""
-#| "Please additionally send my invoice directly to our accounting department"
 msgid "Email invoice directly to accounting department"
-msgstr "私たちの会計部門にも請求書を直接送付してください"
+msgstr "経理部門に請求書を直接メール送信"
 
 #: pretix/base/invoicing/email.py:51
-#, fuzzy
-#| msgid "The invoice was sent to the designated email address."
 msgid ""
 "If not selected, the invoice will be sent to you using the email address "
 "listed above."
-msgstr "請求書は、指定されたメールアドレスあてに送信されました。"
+msgstr "選択されていない場合、請求書は上記に記載されたメールアドレスに送信されます。"
 
 #: pretix/base/invoicing/email.py:55
-#, fuzzy
-#| msgid "Email address verified"
 msgid "Email address for invoice"
-msgstr "メールアドレスが確認されました"
+msgstr "請求書送信先メールアドレス"
 
 #: pretix/base/invoicing/email.py:91
-#, fuzzy
-#| msgid "Preview email"
 msgid "PDF via email"
-msgstr "プレビューのメール"
+msgstr "PDFをメールで送信"
 
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "イタリア電子交換システム（SdI）"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "電子交換システム（SdI）"
 
 #: pretix/base/invoicing/national.py:49
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr "ギフトカードのコード"
+msgstr "納税者番号"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "認証付き電子メールアドレス"
 
 #: pretix/base/invoicing/national.py:57
-#, fuzzy
-#| msgid "Recipient"
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "受取人"
+msgstr "受取人コード"
 
 #: pretix/base/invoicing/pdf.py:140
 #, python-format
@@ -3810,7 +3733,7 @@ msgstr "イベントの日程: {date_range}"
 #: pretix/base/invoicing/peppol.py:128
 msgid ""
 "A PEPPOL participant ID always starts with a prefix, followed by a colon (:)."
-msgstr ""
+msgstr "PEPPOL参加者IDは常にプレフィックスで始まり、その後にコロン（:）が続きます。"
 
 #: pretix/base/invoicing/peppol.py:132
 #, python-format
@@ -3818,6 +3741,8 @@ msgid ""
 "The PEPPOL participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"PEPPOL参加者IDのプレフィックス「%(number)s」は当システムで認識されていません"
+"。このIDが正しいことをご確認の上、お問い合わせください。"
 
 #: pretix/base/invoicing/peppol.py:136
 #, python-format
@@ -3825,6 +3750,8 @@ msgid ""
 "The PEPPOL participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"PEPPOL参加者IDがプレフィックス「%(number)s」の検証ルールと一致しません。このI"
+"Dが正しいことをご確認の上、お問い合わせください。"
 
 #: pretix/base/invoicing/peppol.py:156
 msgid "PEPPOL participant ID"
@@ -3981,7 +3908,7 @@ msgstr "製品は、内部ID、正式名称、内部名称で指定できます�
 #: pretix/base/modelimport_orders.py:149
 #: pretix/base/modelimport_vouchers.py:194
 msgid "No matching product was found."
-msgstr "該当する商品が見つかりませんでした。"
+msgstr "該当する製品が見つかりませんでした。"
 
 #: pretix/base/modelimport_orders.py:151
 #: pretix/base/modelimport_vouchers.py:196
@@ -4056,7 +3983,7 @@ msgstr "州・都道府県"
 
 #: pretix/base/modelimport_orders.py:468
 msgid "Calculate from product"
-msgstr "商品から計算する"
+msgstr "製品から計算する"
 
 #: pretix/base/modelimport_orders.py:486
 #: pretix/control/templates/pretixcontrol/checkin/index.html:111
@@ -4213,7 +4140,7 @@ msgstr "座席指定のバウチャーは一度しか使用できません。"
 #: pretix/base/modelimport_vouchers.py:306 pretix/base/models/vouchers.py:522
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "このシートでは、商品 \"{prod}\" を選択しなければなりません。"
+msgstr "このシートでは、製品 \"{prod}\" を選択しなければなりません。"
 
 #: pretix/base/modelimport_vouchers.py:318 pretix/base/models/vouchers.py:288
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
@@ -4224,7 +4151,7 @@ msgstr "タグ"
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:300
 msgid "Shows hidden products that match this voucher"
-msgstr "このクーポンに適合する隠された商品を表示する"
+msgstr "このクーポンに適合する隠された製品を表示する"
 
 #: pretix/base/modelimport_vouchers.py:343 pretix/base/models/vouchers.py:304
 msgid "Offer all add-on products for free when redeeming this voucher"
@@ -4295,12 +4222,12 @@ msgstr "パスワードの再設定"
 
 #: pretix/base/models/checkin.py:55
 msgid "All products (including newly created ones)"
-msgstr "全ての商品（新規に作成されたものを含む）"
+msgstr "全ての製品（新規に作成されたものを含む）"
 
 #: pretix/base/models/checkin.py:56 pretix/plugins/badges/exporters.py:436
 #: pretix/plugins/checkinlists/exporters.py:851
 msgid "Limit to products"
-msgstr "商品の限度"
+msgstr "製品のみに制限"
 
 #: pretix/base/models/checkin.py:60
 msgid ""
@@ -4640,7 +4567,7 @@ msgstr "割引は常にバンドル製品に適用されません"
 
 #: pretix/base/models/discount.py:115 pretix/base/models/discount.py:170
 msgid "Ignore products discounted by a voucher"
-msgstr "バウチャーで割引された商品は除外してください"
+msgstr "バウチャーで割引された製品を除外する"
 
 #: pretix/base/models/discount.py:116
 msgid ""
@@ -4649,10 +4576,10 @@ msgid ""
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still be considered."
 msgstr ""
-"このオプションがチェックされている場合、すでにクーポンを使用して割引を受けた"
-"商品はこの割引の対象外となります。ただし、クーポンを使用して隠し商品を解除し"
-"たり、完売したクォータにアクセスするために使用する商品は引き続き対象となりま"
-"す。"
+"このオプションにチェックを入れると、バウチャーによって既に割引を受けた製品は"
+"、この割引の対象外となります。ただし、例えば非公開製品のロック解除や完売枠へ"
+"のアクセス取得などの目的でのみバウチャーを使用する製品は、引き続き対象となり"
+"ます。"
 
 #: pretix/base/models/discount.py:121
 msgid "Minimum number of matching products"
@@ -4664,16 +4591,15 @@ msgstr "マッチング製品の最小総額"
 
 #: pretix/base/models/discount.py:133
 msgid "Apply discount to same set of products"
-msgstr "同じ商品のセットに割引を適用します"
+msgstr "同じ製品セットに割引を適用する"
 
 #: pretix/base/models/discount.py:134
 msgid ""
 "By default, the discount is applied across the same selection of products "
 "than the condition for the discount given above. If you want, you can "
 "however also select a different selection of products."
-msgstr ""
-"デフォルトでは、割引は上記の割引条件と同じ選択された商品に適用されます。しか"
-"し、別の商品の選択も可能です。"
+msgstr "デフォルトでは、上記で指定した割引条件と同じ製品選択に対して割引が適用されま"
+"す。ただし、ご希望であれば異なる製品選択を指定することも可能です。"
 
 #: pretix/base/models/discount.py:140
 msgid "Apply discount to specific products"
@@ -4681,7 +4607,7 @@ msgstr "特定の製品に割引を適用します"
 
 #: pretix/base/models/discount.py:145
 msgid "Percentual discount on matching products"
-msgstr "マッチング商品の割引率"
+msgstr "該当製品への割引率"
 
 #: pretix/base/models/discount.py:152
 msgid "Apply discount only to this number of matching products"
@@ -4696,11 +4622,11 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
-"このオプションを使用すると、「X個購入してY個を割引/無料で入手」というタイプの"
-"割引を作成できます。例えば、「一致する商品の最小数」を4に設定し、この値を2に"
-"設定すると、顧客のカートは4つのチケットのグループに分割され、各グループ内で最"
-"も安い2つのチケットが割引されます。すべての一致する商品に割引を適用したい場合"
-"は、このフィールドを空のままにしてください。"
+"このオプションでは「X個購入でY個割引/無料」タイプの割引を作成できます。例えば"
+"、「対象製品の最小数」を4に設定し、この値を2に設定すると、顧客のカートは4枚の"
+"チケットずつのグループに分割され、各グループ内で最も安い2枚のチケットが割引さ"
+"れます。対象製品すべてに割引を適用したい場合は、この項目を空欄のままにしてく"
+"ださい。"
 
 #: pretix/base/models/discount.py:165
 msgid "Apply to add-on products"
@@ -5144,7 +5070,7 @@ msgstr "非公開テストモード中"
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr "税番号: %s"
+msgstr "納税者識別番号: %s"
 
 #: pretix/base/models/invoices.py:223 pretix/base/services/invoices.py:148
 #, python-format
@@ -5928,7 +5854,7 @@ msgstr "質問の種類"
 #: pretix/base/models/items.py:1697
 #: pretix/control/templates/pretixcontrol/items/questions.html:55
 msgid "Required question"
-msgstr "質問を要求"
+msgstr "必須の質問"
 
 #: pretix/base/models/items.py:1704
 msgid "This question will be asked to buyers of the selected products"
