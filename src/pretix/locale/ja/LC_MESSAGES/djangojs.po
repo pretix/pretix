@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:02+0000\n"
-"PO-Revision-Date: 2025-07-23 01:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/ja/>\n"
+"PO-Revision-Date: 2025-08-24 16:00+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -209,7 +209,7 @@ msgstr "方向転換"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr "入口"
+msgstr "エントリー"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
@@ -644,7 +644,8 @@ msgstr ""
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
-msgstr ""
+msgstr "あなたの色は白に対して十分なコントラストがありません。サイトのアクセシビリテ"
+"ィに影響します。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:417
 #: pretix/static/pretixcontrol/js/ui/main.js:437
@@ -719,7 +720,7 @@ msgstr "カートの有効期限が切れています"
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
 msgid "Your cart is about to expire."
-msgstr ""
+msgstr "カートの有効期限が近づいています。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
 msgid "The items in your cart are reserved for you for one minute."
@@ -784,12 +785,12 @@ msgstr "数量を増やす"
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Filter events by"
-msgstr ""
+msgstr "イベントをフィルタ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Filter"
-msgstr ""
+msgstr "フィルタ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
@@ -974,7 +975,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr "購入を続行する"
+msgstr "チェックアウトを続行する"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
@@ -997,17 +998,14 @@ msgid "Close"
 msgstr "閉じる"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Close checkout"
-msgstr "購入を続行する"
+msgstr "チェックアウトを閉じる"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
-msgstr ""
+msgstr "この操作はキャンセルできません。読み込みが完了するまでお待ちください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
