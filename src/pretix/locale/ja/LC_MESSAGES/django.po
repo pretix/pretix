@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-24 16:00+0000\n"
+"PO-Revision-Date: 2025-08-25 01:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -77,7 +77,7 @@ msgstr "フランス語"
 
 #: pretix/_base_settings.py:101
 msgid "Finnish"
-msgstr "フィン語"
+msgstr "フィンランド語"
 
 #: pretix/_base_settings.py:102
 msgid "Galician"
@@ -293,8 +293,9 @@ msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"種類、追加製品及び同梱物のPATCH/PUT による変更は無効です。別のリソースを利用"
-"してください。"
+"PATCH/"
+"PUTによるアドオン、バンドル、またはバリエーションの更新はサポートされていませ"
+"ん。専用のネストされたエンドポイントを使用してください。"
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
@@ -304,8 +305,8 @@ msgstr "現在、パーソナライズできるのは入場券製品だけです
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
-msgstr "ギフトカードは、引き換え（利用）の時点で消費税が課税されます。このため、ギフ"
-"トカード製品の税率は、税率0％以外に設定してはいけません。"
+msgstr "ギフトカード製品は、引き換え（利用）の時点で消費税が課税されます。税率0％以外"
+"に設定してはいけません。"
 
 #: pretix/api/serializers/item.py:322 pretix/control/forms/item.py:781
 msgid "Gift card products should not be admission products at the same time."
@@ -315,12 +316,13 @@ msgstr "ギフトカード製品は、同時に入場券とすることはでき
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
-msgstr ""
-"PATCH/PUTによるオプションの変更はできません。別のリソースを使用してください。"
+msgstr "PATCH/"
+"PUTによるオプションの更新はサポートされていません。専用のネストされたエンドポ"
+"イントを使用してください。"
 
 #: pretix/api/serializers/item.py:538 pretix/control/forms/item.py:176
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "質問は、チェックイン時に問われた質問に依存してはなりません。"
+msgstr "質問はチェックイン時に質問される項目に依存することはできません。"
 
 #: pretix/api/serializers/item.py:543 pretix/control/forms/item.py:181
 msgid "Circular dependency between questions detected."
@@ -338,13 +340,12 @@ msgstr "このタイプの質問は、チェックイン時に表示すること
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
-msgstr ""
-"同じ種類で同じIDを持つ媒体が、すでにあなたの主催者アカウントに存在します。"
+msgstr "同じ識別子とタイプを持つメディアが既にあなたの主催者アカウントに存在します。"
 
 #: pretix/api/serializers/order.py:81
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "\"{input}\" は選択することができません。"
+msgstr "「{input}」は有効な選択肢ではありません。"
 
 #: pretix/api/serializers/order.py:1427 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1589
@@ -355,7 +356,7 @@ msgstr "選択した座席 \"{seat}\"はご利用になれません。"
 #: pretix/api/serializers/order.py:1453 pretix/api/serializers/order.py:1460
 #, python-brace-format
 msgid "The product \"{}\" is not available on this date."
-msgstr "その日程に製品\"{}\"のお取り扱いはありません。"
+msgstr "製品「{}」はこの日付では利用できません。"
 
 #: pretix/api/serializers/order.py:1475 pretix/api/views/cart.py:200
 #, python-brace-format
@@ -373,7 +374,8 @@ msgstr "このメールアドレスを持つアカウントは既に登録され
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
-msgstr "同じコードのギフトカードが既にイベントカートにあります。"
+msgstr "同じシークレットを持つギフトカードが、あなたのアカウントまたは関連する主催者"
+"アカウントに既に存在します。"
 
 #: pretix/api/serializers/organizer.py:369
 #: pretix/control/views/organizer.py:1042
@@ -434,11 +436,11 @@ msgstr "新しい注文が入りました"
 
 #: pretix/api/webhooks.py:266 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr "リリースが必要な新規受注"
+msgstr "新しい注文には承認が必要です"
 
 #: pretix/api/webhooks.py:270 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr "支払済み設定済み"
+msgstr "注文が支払い済みとして設定されました"
 
 #: pretix/api/webhooks.py:274 pretix/base/models/checkin.py:355
 #: pretix/base/notifications.py:251
@@ -449,7 +451,7 @@ msgstr "注文がキャンセルされました"
 
 #: pretix/api/webhooks.py:278 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr "再開された注文"
+msgstr "注文が再び有効になりました"
 
 #: pretix/api/webhooks.py:282 pretix/base/notifications.py:263
 msgid "Order expired"
@@ -457,7 +459,7 @@ msgstr "注文の有効期限が切れました"
 
 #: pretix/api/webhooks.py:286
 msgid "Order expiry date changed"
-msgstr "注文の期限が変更されました"
+msgstr "注文の有効期限が変更されました"
 
 #: pretix/api/webhooks.py:290 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -474,7 +476,7 @@ msgstr "注文が変更されました"
 
 #: pretix/api/webhooks.py:302
 msgid "Refund of payment created"
-msgstr "払戻しが生成されました"
+msgstr "払い戻しが作成されました"
 
 #: pretix/api/webhooks.py:306 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -482,19 +484,19 @@ msgstr "外部からの払い戻し"
 
 #: pretix/api/webhooks.py:310
 msgid "Refund of payment requested by customer"
-msgstr "お客様から支払いの返金が要求されました"
+msgstr "お客様から払い戻しが要求されました"
 
 #: pretix/api/webhooks.py:314
 msgid "Refund of payment completed"
-msgstr "払戻し完了"
+msgstr "払い戻し完了"
 
 #: pretix/api/webhooks.py:318
 msgid "Refund of payment canceled"
-msgstr "払戻しがキャンセルされました"
+msgstr "払い戻しがキャンセルされました"
 
 #: pretix/api/webhooks.py:322
 msgid "Refund of payment failed"
-msgstr "払戻しに失敗しました"
+msgstr "払い戻しに失敗しました"
 
 #: pretix/api/webhooks.py:326
 msgid "Payment confirmed"
@@ -506,7 +508,7 @@ msgstr "注文が承認されました"
 
 #: pretix/api/webhooks.py:334
 msgid "Order denied"
-msgstr "注文が拒絶されました"
+msgstr "注文が却下されました"
 
 #: pretix/api/webhooks.py:338
 msgid "Order deleted"
@@ -514,7 +516,7 @@ msgstr "注文が削除されました"
 
 #: pretix/api/webhooks.py:342
 msgid "Ticket checked in"
-msgstr "チケットがチェックインしました"
+msgstr "チケットがチェックインされました"
 
 #: pretix/api/webhooks.py:346
 msgid "Ticket check-in reverted"
@@ -535,7 +537,7 @@ msgstr "イベントが削除されました"
 #: pretix/api/webhooks.py:362
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "イベントシリーズの日程が追加されました"
+msgstr "イベントシリーズに日程が追加されました"
 
 #: pretix/api/webhooks.py:366
 msgctxt "subevent"
