@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-23 07:07+0000\n"
+"PO-Revision-Date: 2025-08-24 16:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -234,7 +234,7 @@ msgstr "コメント"
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1466
 #, python-brace-format
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "この製品（\"{}\"）は割り当てられていません。"
+msgstr "製品「{}」にクォータが割り当てられていません。"
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1698
 #: pretix/base/models/items.py:1917 pretix/base/models/items.py:2203
@@ -251,9 +251,8 @@ msgstr "このサブイベントは本イベントのサブイベントではあ
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
-msgstr ""
-"在庫数や支払いの設定が完了していないため、イベントを「公開」することができま"
-"せん。"
+msgstr "イベントを「公開」として作成することはできません。販売を公開する前に、イベン"
+"トにクォータと支払い方法を追加する必要があります。"
 
 #: pretix/api/serializers/event.py:234 pretix/api/serializers/event.py:554
 #, python-brace-format
@@ -359,13 +358,10 @@ msgid "The product \"{}\" is not available on this date."
 msgstr "その日程に製品\"{}\"のお取り扱いはありません。"
 
 #: pretix/api/serializers/order.py:1475 pretix/api/views/cart.py:200
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "There is not enough quota available on quota \"{}\" to perform the "
-#| "operation."
+#, python-brace-format
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr "\"{name}\"には、この変更を実行するための十分な容量が残っていません。"
+msgstr "クォータ\"{}\"の残量が不足しているため、操作を実行できません。"
 
 #: pretix/api/serializers/organizer.py:145
 #: pretix/control/forms/organizer.py:893 pretix/presale/forms/customer.py:458
@@ -580,15 +576,15 @@ msgstr "ショップのテストモードが無効になりました"
 
 #: pretix/api/webhooks.py:396
 msgid "Waiting list entry added"
-msgstr "空席待ちリストにエントリーが追加されました"
+msgstr "空席待ちリスト登録が追加されました"
 
 #: pretix/api/webhooks.py:400
 msgid "Waiting list entry changed"
-msgstr "空席待ちリストのエントリーが変更されました"
+msgstr "空席待ちリスト登録が変更されました"
 
 #: pretix/api/webhooks.py:404
 msgid "Waiting list entry deleted"
-msgstr "空席待ちリストのエントリーが削除されました"
+msgstr "空席待ちリスト登録が削除されました"
 
 #: pretix/api/webhooks.py:408
 msgid "Waiting list entry received voucher"
@@ -1552,12 +1548,12 @@ msgstr "入場時間"
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:610
 #: pretix/base/models/event.py:1515 pretix/control/forms/subevents.py:93
 msgid "Start of presale"
-msgstr "先行販売開始"
+msgstr "前売り開始"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:604
 #: pretix/base/models/event.py:1509 pretix/control/forms/subevents.py:99
 msgid "End of presale"
-msgstr "先行販売終了"
+msgstr "前売り終了"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:351
 #: pretix/base/models/event.py:616 pretix/base/models/event.py:1521
@@ -2066,7 +2062,7 @@ msgstr "空席待ちリスト"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:172
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:149
 msgid "Available from"
-msgstr "提供可能期間の始期"
+msgstr "販売開始日時"
 
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:87
 #: pretix/base/models/items.py:229 pretix/base/models/items.py:285
@@ -2076,7 +2072,7 @@ msgstr "提供可能期間の始期"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:177
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:154
 msgid "Available until"
-msgstr "提供可能期間の終期"
+msgstr "販売終了日時"
 
 #: pretix/base/exporters/items.py:82 pretix/base/models/items.py:609
 msgid "This product can only be bought using a voucher."
@@ -2807,14 +2803,13 @@ msgstr "支払いの詳細"
 
 #: pretix/base/exporters/orderlist.py:1145
 msgid "Quota availabilities"
-msgstr "クォータの利用可能性"
+msgstr "利用可能クォータ"
 
 #: pretix/base/exporters/orderlist.py:1147
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
-msgstr ""
-"すべての割り当てとその現在の利用可能性を含むスプレッドシートをダウンロードし"
-"てください。"
+msgstr "すべてのクォータの現在の利用可能数を含むスプレッドシートをダウンロードします"
+"。"
 
 #: pretix/base/exporters/orderlist.py:1152
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -2824,7 +2819,7 @@ msgstr "クォータ名"
 #: pretix/base/exporters/orderlist.py:1152
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
 msgid "Total quota"
-msgstr "合計クォータ"
+msgstr "クォータ合計"
 
 #: pretix/base/exporters/orderlist.py:1152
 #: pretix/control/templates/pretixcontrol/event/cancel.html:20
@@ -3121,8 +3116,7 @@ msgstr "空席待ちリスト"
 
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
-msgstr ""
-"すべての待ちリストデータが入ったスプレッドシートをダウンロードしてください。"
+msgstr "すべての空席待ちリストデータを含むスプレッドシートをダウンロードします。"
 
 #: pretix/base/exporters/waitinglist.py:49
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:102
@@ -3139,7 +3133,7 @@ msgstr "バウチャーを待っています"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:227
 #: pretix/control/views/waitinglist.py:333
 msgid "Voucher assigned"
-msgstr "割引券が割り当てられました"
+msgstr "バウチャーが割り当てられました"
 
 #: pretix/base/exporters/waitinglist.py:64
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:110
@@ -3150,14 +3144,14 @@ msgstr "バウチャー引き換え待ち"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:223
 #: pretix/control/views/waitinglist.py:329
 msgid "Voucher redeemed"
-msgstr "クーポンを利用しました"
+msgstr "バウチャーを利用しました"
 
 #: pretix/base/exporters/waitinglist.py:80
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:116
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:225
 #: pretix/control/views/waitinglist.py:331
 msgid "Voucher expired"
-msgstr "クーポンの有効期限が切れています"
+msgstr "バウチャーの有効期限が切れています"
 
 #: pretix/base/exporters/waitinglist.py:117
 #: pretix/base/modelimport_orders.py:111 pretix/base/modelimport_vouchers.py:60
@@ -3755,7 +3749,7 @@ msgstr ""
 
 #: pretix/base/invoicing/peppol.py:156
 msgid "PEPPOL participant ID"
-msgstr ""
+msgstr "PEPPOL参加者ID"
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
@@ -4093,7 +4087,7 @@ msgstr "クォータからチケットを予約します"
 
 #: pretix/base/modelimport_vouchers.py:127 pretix/base/models/vouchers.py:236
 msgid "Allow to bypass quota"
-msgstr "クォータをバイパスすることを許可します"
+msgstr "クォータをバイパスすることを許可"
 
 #: pretix/base/modelimport_vouchers.py:135 pretix/base/models/vouchers.py:242
 msgid "Price mode"
@@ -4119,11 +4113,11 @@ msgstr "価格モードなしに値を設定することは意味がありませ
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
-msgstr "割当上限"
+msgstr "クォータ"
 
 #: pretix/base/modelimport_vouchers.py:253
 msgid "You cannot specify a quota if you specified a product."
-msgstr "製品を指定した場合、割り当てを指定することはできません。"
+msgstr "製品を指定した場合、クォータを指定することはできません。"
 
 #: pretix/base/modelimport_vouchers.py:282 pretix/base/models/vouchers.py:498
 msgid "You need to choose a date if you select a seat."
@@ -4151,7 +4145,7 @@ msgstr "タグ"
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:300
 msgid "Shows hidden products that match this voucher"
-msgstr "このクーポンに適合する隠された製品を表示する"
+msgstr "このバウチャーに適合する非表示の製品を表示する"
 
 #: pretix/base/modelimport_vouchers.py:343 pretix/base/models/vouchers.py:304
 msgid "Offer all add-on products for free when redeeming this voucher"
@@ -4374,10 +4368,8 @@ msgid "Ticket not valid at this time"
 msgstr "このチケットは現在有効ではありません"
 
 #: pretix/base/models/checkin.py:368
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Check-in annulled"
-msgstr "チェックインの状況"
+msgstr "チェックイン取消"
 
 #: pretix/base/models/customers.py:55
 msgid "Provider name"
@@ -4478,21 +4470,19 @@ msgstr "複数の値をスペースで区切ってください"
 
 #: pretix/base/models/datasync.py:53
 msgid "Temporary error, auto-retry limit exceeded"
-msgstr ""
+msgstr "一時的なエラー、自動再試行回数の上限を超過"
 
 #: pretix/base/models/datasync.py:54
-#, fuzzy
-#| msgid "Stripe reported an error: %s"
 msgid "Provider reported a permanent error"
-msgstr "Stripe はエラーを報告しました：%s"
+msgstr "プロバイダーで恒久的エラーが発生"
 
 #: pretix/base/models/datasync.py:55
 msgid "Misconfiguration, please check provider settings"
-msgstr ""
+msgstr "設定エラーです。プロバイダー設定を確認してください"
 
 #: pretix/base/models/datasync.py:56 pretix/base/models/datasync.py:57
 msgid "System error, needs manual intervention"
-msgstr ""
+msgstr "システムエラーです。手動での対応が必要です"
 
 #: pretix/base/models/devices.py:70 pretix/base/models/items.py:1675
 msgid "Internal identifier"
@@ -4576,10 +4566,10 @@ msgid ""
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still be considered."
 msgstr ""
-"このオプションにチェックを入れると、バウチャーによって既に割引を受けた製品は"
-"、この割引の対象外となります。ただし、例えば非公開製品のロック解除や完売枠へ"
-"のアクセス取得などの目的でのみバウチャーを使用する製品は、引き続き対象となり"
-"ます。"
+"このオプションがチェックされている場合、既にバウチャーによって割引を受けた製"
+"品はこの割引の対象になりません。ただし、例えば非表示製品のロック解除や売り切"
+"れクォータへのアクセス権取得のためだけにバウチャーを使用している製品は、引き"
+"続き対象となります。"
 
 #: pretix/base/models/discount.py:121
 msgid "Minimum number of matching products"
@@ -4639,20 +4629,20 @@ msgid ""
 "to e.g. unlock a hidden product or gain access to sold-out quota will still "
 "receive the discount."
 msgstr ""
-"このオプションがチェックされている場合、すでにクーポンを使用して割引を受けた"
-"商品には割引が適用されません。ただし、クーポンを使用して隠し商品を解除した"
-"り、完売したクォータにアクセスするために使用する商品には引き続き割引が適用さ"
-"れます。"
+"このオプションがチェックされている場合、すでにバウチャーを使用して割引を受け"
+"た商品には割引が適用されません。ただし、バウチャーを使用して隠し商品を解除し"
+"たり、完売したクォータにアクセスするために使用する商品には引き続き割引が適用"
+"されます。"
 
 #: pretix/base/models/discount.py:177
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr "この日から始まる日付で利用可能"
+msgstr "利用可能な開催日：開始日"
 
 #: pretix/base/models/discount.py:182
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "これより以前に開始する日付で利用可能"
+msgstr "利用可能な開催日：終了日"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -4694,7 +4684,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:88
 msgid "The end of the presale period has to be later than its start."
-msgstr "プレセール期間の終了は、開始よりも後でなければなりません。"
+msgstr "前売り期間の終了は、開始よりも後でなければなりません。"
 
 #: pretix/base/models/event.py:90
 msgid "The end of the event has to be later than its start."
@@ -4735,9 +4725,8 @@ msgstr ""
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
-msgstr ""
-"任意です。この日付以降に商品は販売されません。この値を設定しない場合、プリ"
-"セールはイベントの終了日後に終了します。"
+msgstr "任意です。この日付以降に商品は販売されません。この値を設定しない場合、前売り"
+"はイベントの終了日後に終了します。"
 
 #: pretix/base/models/event.py:611 pretix/base/models/event.py:1516
 #: pretix/control/forms/subevents.py:94
@@ -4815,7 +4804,7 @@ msgstr "少なくとも1つの有料製品を設定していますが、通貨�
 
 #: pretix/base/models/event.py:1321
 msgid "You need to configure at least one quota to sell anything."
-msgstr "何かを販売するには、少なくとも1つの割り当てを設定する必要があります。"
+msgstr "何かを販売するには、少なくとも1つのクォータを設定する必要があります。"
 
 #: pretix/base/models/event.py:1326
 #, python-brace-format
@@ -4843,7 +4832,7 @@ msgstr "イベントは始まる前に終了することはできません。"
 
 #: pretix/base/models/event.py:1462
 msgid "The event's presale cannot end before it starts."
-msgstr "イベントの先行販売は開始前に終了することはできません。"
+msgstr "イベントの前売りは開始前に終了することはできません。"
 
 #: pretix/base/models/event.py:1492
 msgid ""
@@ -5035,21 +5024,16 @@ msgid "Manual transaction"
 msgstr "マニュアル取引"
 
 #: pretix/base/models/invoices.py:120
-#, fuzzy
-#| msgid "Pending amount"
 msgid "pending transmission"
-msgstr "保留中の金額"
+msgstr "送信保留中"
 
 #: pretix/base/models/invoices.py:121
 msgid "currently being transmitted"
-msgstr ""
+msgstr "現在送信中"
 
 #: pretix/base/models/invoices.py:122
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "transmitted"
-msgstr "日付が選択されていません。"
+msgstr "送信済み"
 
 #: pretix/base/models/invoices.py:123 pretix/plugins/sendmail/models.py:52
 msgid "failed"
@@ -5061,10 +5045,8 @@ msgid "unknown"
 msgstr "未知"
 
 #: pretix/base/models/invoices.py:125
-#, fuzzy
-#| msgid "in private test mode"
 msgid "not transmitted due to test mode"
-msgstr "非公開テストモード中"
+msgstr "テストモードのため送信されませんでした"
 
 #: pretix/base/models/invoices.py:217
 #, python-format
@@ -5184,12 +5166,12 @@ msgstr "動的な有効性"
 #: pretix/base/models/items.py:444 pretix/control/forms/item.py:668
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
 msgid "Hide product if unavailable"
-msgstr "利用できない場合は製品を非表示にしてください"
+msgstr "利用不可の場合は製品を非表示"
 
 #: pretix/base/models/items.py:445 pretix/control/forms/item.py:669
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "Show product with info on why it’s unavailable"
-msgstr "品切れの理由をその理由とともに表示"
+msgstr "製品を利用不可の理由とともに表示"
 
 #: pretix/base/models/items.py:456 pretix/base/models/items.py:781
 msgid "Don't use re-usable media, use regular one-off tickets"
@@ -5259,7 +5241,8 @@ msgid ""
 msgstr ""
 "この価格は、入力フィールドのデフォルト値として使用されます。ユーザーはより低"
 "い値を選択することができますが、無料価格オプションなしでこの商品の価格が下が"
-"ることはありません。また、価格を下げる割引券が使用された場合は無視されます。"
+"ることはありません。また、価格を下げるバウチャーが使用された場合は無視されま"
+"す。"
 
 #: pretix/base/models/items.py:527
 msgid "Whether or not buying this product allows a person to enter your event"
@@ -5281,7 +5264,7 @@ msgstr "このチケットの空席待ちリストを表示"
 
 #: pretix/base/models/items.py:544
 msgid "This will only work if waiting lists are enabled for this event."
-msgstr "このイベントで待ちリストが有効になっている場合のみ機能します。"
+msgstr "これは、このイベントで空席待ちリストが有効になっている場合にのみ機能します。"
 
 #: pretix/base/models/items.py:548 pretix/base/settings.py:1398
 #: pretix/control/forms/event.py:1690
@@ -5290,7 +5273,7 @@ msgstr "チケットの残り枚数を表示する"
 
 #: pretix/base/models/items.py:549
 msgid "Publicly show how many tickets are still available."
-msgstr "利用可能なチケットの残数を公表します。"
+msgstr "残りチケット数を公開する。"
 
 #: pretix/base/models/items.py:556 pretix/control/forms/item.py:633
 msgid "Product picture"
@@ -5299,7 +5282,7 @@ msgstr "製品の写真"
 #: pretix/base/models/items.py:585
 msgctxt "hidden_if_available_legacy"
 msgid "Only show after sellout of"
-msgstr "この商品の販売終了後にのみ表示する"
+msgstr "完売後のみ表示："
 
 #: pretix/base/models/items.py:586
 msgid ""
@@ -5309,11 +5292,11 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
-"ここでクォータを選択すると、そのクォータが利用できない場合にのみこの製品が表"
-"示されます。売り切れ商品を非表示にするオプションと組み合わせると、売り切れた"
-"商品をより高価な商品と交換することができます。参照されたクォータの全チケット"
-"が予約されているがまだ売れていない短い期間があるかもしれませんが、その間に両"
-"方の商品が表示されることがあります。"
+"ここでクォータを選択すると、この製品はそのクォータが利用不可の場合にのみ表示"
+"されます。売り切れ製品を非表示にするオプションと組み合わせることで、製品が売"
+"り切れた際により高価な製品に切り替えることができます。参照されたクォータ内の"
+"すべてのチケットが予約中で、販売未完了の場合、一時的に両方の製品が表示される"
+"可能性があります。"
 
 #: pretix/base/models/items.py:596
 msgid "Only show after sellout of"
@@ -5338,9 +5321,8 @@ msgstr ""
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
-msgstr ""
-"この製品を購入するには、ユーザーはこの製品に直接適用されるか、割り当てを介し"
-"て適用されるバウチャーが必要です。"
+msgstr "この製品を購入するには、ユーザーはこの製品に直接適用されるか、クォータ経由で"
+"適用されるバウチャーが必要です。"
 
 #: pretix/base/models/items.py:617
 msgid ""
@@ -5646,7 +5628,7 @@ msgstr "アイテムの入手可能な期間は、開始前に終了すること
 
 #: pretix/base/models/items.py:1156
 msgid "This is shown below the variation name in lists."
-msgstr "これはリスト内の変動名の下に表示されます。"
+msgstr "これはリスト内のバリエーション名の下に表示されます。"
 
 #: pretix/base/models/items.py:1183
 msgid "Require approval"
@@ -5659,9 +5641,9 @@ msgid ""
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
-"もしこの変更が注文の一部である場合、その注文は「承認」状態になり、支払いと完"
-"了が行われる前にあなたによって確認される必要があります。たとえば、特定のグ"
-"ループにのみ利用可能な割引チケットなどに使用できます。"
+"このバリエーションが注文に含まれる場合、注文は「承認」状態になり、支払いと完"
+"了の前にお客様による確認が必要になります。これは特定のグループのみが利用でき"
+"る割引チケットなどに使用できます。"
 
 #: pretix/base/models/items.py:1195 pretix/control/navigation.py:591
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
@@ -5783,7 +5765,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1586
 msgid "A variation needs to be set for this item."
-msgstr "このアイテムには変更が必要です。"
+msgstr "この項目にはバリエーションを設定する必要があります。"
 
 #: pretix/base/models/items.py:1588
 msgid "The chosen variation does not belong to this item."
@@ -6018,12 +6000,12 @@ msgstr "アイテム"
 #: pretix/base/models/items.py:2088 pretix/control/forms/item.py:915
 #: pretix/plugins/autocheckin/models.py:74
 msgid "Variations"
-msgstr "変化"
+msgstr "バリエーション"
 
 #: pretix/base/models/items.py:2092
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr "イベントの可用性を決定する際に、このクォータは無視してください"
+msgstr "イベントの有効性を判定する際、このクォータを無視する"
 
 #: pretix/base/models/items.py:2093
 msgid ""
@@ -6032,13 +6014,13 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
-"これを有効にすると、イベントカレンダーでイベントの可用性を決定する際にこの"
-"クォータは無視されます。これは、各イベントに追加される商品などに便利ですが、"
-"その商品が売り切れと表示されることを防ぐべきではありません。"
+"これを有効にすると、イベントカレンダーでイベントの有効性を判定する際、このク"
+"ォータが無視されます。これは例えば、各イベントに追加されているが、イベントが"
+"売り切れとして表示されることを妨げるべきではない商品などに有効です。"
 
 #: pretix/base/models/items.py:2100
 msgid "Close this quota permanently once it is sold out"
-msgstr "これらのクォータが売り切れたら、それを永久に閉鎖してください"
+msgstr "売り切れた際にこのクォータを永続的に閉じる"
 
 #: pretix/base/models/items.py:2101
 msgid ""
@@ -6046,9 +6028,9 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
-"これを有効にすると、クォータが一度売り切れると、キャンセルや有効期限切れの注"
-"文によって再び利用可能になっても、もうチケットは販売されません。もちろん、い"
-"つでも手動で再開することができます。"
+"これを有効にすると、クォータが一度売り切れた場合、キャンセルや注文期限切れに"
+"よってチケットが再び利用可能になっても、それ以上のチケットは販売されません。"
+"もちろん、手動でいつでも再開することは可能です。"
 
 #: pretix/base/models/items.py:2109
 msgid "Allow to sell more tickets once people have checked out"
@@ -6063,11 +6045,12 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
-"このオプションを使用すると、イベントの出口で人々がスキャンされると、クォータ"
-"がすぐに解放されます。これは、入場時と出口で両方スキャンされ、出口のスキャン"
-"がより最近の場合にのみ発生します。スキャンがどちらのチェックインリストにあっ"
-"たかは問いませんが、「出口スキャン後の再入場を許可」に設定されている場合は、"
-"誤って過剰予約されるのを防ぐためにチェックインリストは無視されます。"
+"このオプションを使用すると、イベントの退場口で人々がスキャンされるとすぐにク"
+"ォータが解放されます。これは、入場と退場の両方でスキャンされ、退場の方が最新"
+"のスキャンである場合にのみ発生します。どちらのスキャンがどのチェックインリス"
+"トで行われたかは関係ありませんが、「退場スキャン後の再入場を許可する」に設定"
+"されているチェックインリストは、偶発的なオーバーブッキングを防ぐため無視され"
+"ます。"
 
 #: pretix/base/models/items.py:2122 pretix/control/navigation.py:156
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -6080,9 +6063,8 @@ msgstr "クォータ（割り当て上限）"
 
 #: pretix/base/models/items.py:2195
 msgid "All variations must belong to an item contained in the items list."
-msgstr ""
-"すべての変化は、アイテムリストに含まれるアイテムに属していなければなりませ"
-"ん。"
+msgstr "すべてのバリエーションは、アイテムリストに含まれるアイテムに属していなければ"
+"なりません。"
 
 #: pretix/base/models/items.py:2206
 msgid ""
@@ -6278,12 +6260,12 @@ msgstr "その座席「{seat}」はもう利用できません。"
 #: pretix/base/models/orders.py:1062
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr "そのクーポン「{voucher}」の予算が不足しています。"
+msgstr "そのバウチャー「{voucher}」の予算が不足しています。"
 
 #: pretix/base/models/orders.py:1063
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr "そのクーポンコード「{voucher}」はすでに使用されています。"
+msgstr "そのバウチャー「{voucher}」はすでに使用されています。"
 
 #: pretix/base/models/orders.py:1405
 msgid "<file>"
@@ -6463,10 +6445,8 @@ msgid "This reference will be printed on your invoice for your convenience."
 msgstr "この参照は、お客様の便宜のために請求書に印刷されます。"
 
 #: pretix/base/models/orders.py:3422
-#, fuzzy
-#| msgid "Transaction time"
 msgid "Transmission type"
-msgstr "入場時間"
+msgstr "送信タイプ"
 
 #: pretix/base/models/orders.py:3520
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
@@ -6595,7 +6575,7 @@ msgstr ""
 
 #: pretix/base/models/organizer.py:411
 msgid "Can view vouchers"
-msgstr "クーポンを表示できます"
+msgstr "バウチャーを表示できます"
 
 #: pretix/base/models/organizer.py:415
 msgid "Can change vouchers"
@@ -6948,7 +6928,7 @@ msgstr "製品の価格を(%)割引"
 
 #: pretix/base/models/vouchers.py:200
 msgid "Number of times this voucher can be redeemed."
-msgstr "このクーポンは何回利用できますか。"
+msgstr "このバウチャーが使用可能な回数。"
 
 #: pretix/base/models/vouchers.py:204 pretix/control/views/vouchers.py:120
 msgid "Redeemed"
@@ -6962,19 +6942,18 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
-"もし複数に設定されている場合、クーポンは初回使用時にこの数の商品と引き換える"
-"必要があります。後の使用では、より少ない数の商品にも使用できます。ただし、こ"
-"れは一部の場合において、例えばキャンセルの場合には、合計の使用回数がこの制限"
-"よりも少なくなることを意味します。"
+"もし複数に設定されている場合、バウチャーは初回使用時にこの数の商品と引き換え"
+"る必要があります。後の使用では、より少ない数の商品にも使用できます。ただし、"
+"これは一部の場合において、例えばキャンセルの場合には、合計の使用回数がこの制"
+"限よりも少なくなることを意味します。"
 
 #: pretix/base/models/vouchers.py:217
 msgid ""
 "This is the maximum monetary amount that will be discounted using this "
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
-msgstr ""
-"これは、この割引券を使用して割引される最大金額です。この金額に達すると、割引"
-"券はもはや使用できません。"
+msgstr "これは、このバウチャーを使用して割引される最大金額です。この金額に達すると、"
+"バウチャーはもはや使用できません。"
 
 #: pretix/base/models/vouchers.py:230
 msgid ""
@@ -6982,8 +6961,8 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
-"このバウチャーが有効になると、影響を受ける製品の割り当てから差し引かれ、この"
-"バウチャーコードを持つ人はチケットを受け取ることが保証されます。"
+"有効化すると、このバウチャーは対象製品のクォータから差し引かれ、このバウチャ"
+"ーコードを持つすべての人がチケットを確実に受け取ることが保証されます。"
 
 #: pretix/base/models/vouchers.py:238
 msgid ""
@@ -6999,9 +6978,9 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
-"この製品は、クーポンが利用された場合にユーザーのカートに追加されます。特定の"
-"製品の代わりに、クォータを選択することもできます。この場合、そのクォータに割"
-"り当てられたすべての製品が選択できます。"
+"この製品は、バウチャーが利用された場合にユーザーのカートに追加されます。特定"
+"の製品の代わりに、クォータを選択することもできます。この場合、そのクォータに"
+"割り当てられたすべての製品が選択できます。"
 
 #: pretix/base/models/vouchers.py:268
 msgid "This variation of the product select above is being used."
@@ -7010,9 +6989,8 @@ msgstr "上記の製品のバリエーションが使用されています。"
 #: pretix/base/models/vouchers.py:277
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
-msgstr ""
-"有効になっている場合、このクォータに影響を受けるすべての製品に対してクーポン"
-"が有効です。"
+msgstr "有効にすると、このクォータに影響を受けるすべての製品に対してバウチャーが有効"
+"です。"
 
 #: pretix/base/models/vouchers.py:284
 msgid "Specific seat"
@@ -7032,7 +7010,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:8
 msgid "Vouchers"
-msgstr "クーポン"
+msgstr "バウチャー (クーポン)"
 
 #: pretix/base/models/vouchers.py:342
 msgid "You cannot select a quota that belongs to a different event."
@@ -7112,9 +7090,8 @@ msgstr ""
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
-msgstr ""
-"選択した商品やクォータが売り切れまたは完全に予約済みのため、クォータをブロッ"
-"クするバウチャを作成することはできません。"
+msgstr "選択した商品やクォータが売り切れまたは完全に予約済みのため、クォータをブロッ"
+"クするバウチャーを作成することはできません。"
 
 #: pretix/base/models/vouchers.py:507
 #, python-brace-format
@@ -7132,11 +7109,11 @@ msgstr ""
 
 #: pretix/base/models/waitinglist.py:64
 msgid "On waiting list since"
-msgstr "このときから現在まで空席待ちリストに搭載"
+msgstr "空席待ちリスト登録日時"
 
 #: pretix/base/models/waitinglist.py:84
 msgid "Assigned voucher"
-msgstr "割り当てられたバウチャー"
+msgstr "割当済みのバウチャー"
 
 #: pretix/base/models/waitinglist.py:93
 msgid "The product the user waits for."
@@ -7148,11 +7125,11 @@ msgstr "上記で選択した製品のバリエーション。"
 
 #: pretix/base/models/waitinglist.py:113
 msgid "Waiting list entry"
-msgstr "待ちリストのエントリ"
+msgstr "空席待ちリスト登録"
 
 #: pretix/base/models/waitinglist.py:114
 msgid "Waiting list entries"
-msgstr "待ちリストのエントリー"
+msgstr "空席待ちリスト登録"
 
 #: pretix/base/models/waitinglist.py:159
 msgid "This product is currently not available."
@@ -7173,7 +7150,7 @@ msgstr "このエントリーは匿名化され、もはや使用できません
 #: pretix/base/models/waitinglist.py:204
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
-msgstr "{email}の待ちリストエントリから自動的に作成されました"
+msgstr "{email}の空席待ちリスト登録から自動作成"
 
 #: pretix/base/models/waitinglist.py:300
 msgid "The selected item does not belong to this event."
@@ -7187,9 +7164,8 @@ msgstr "この製品の特定のバリエーションを選択してください
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
-msgstr ""
-"すでにこの待ちリストに登録されています！チケットが利用可能になり次第、お知ら"
-"せいたします。"
+msgstr "すでにこの空席待ちリストに登録されています！チケットが利用可能になり次第、お"
+"知らせいたします。"
 
 #: pretix/base/notifications.py:192 pretix/control/navigation.py:193
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:20
@@ -7331,9 +7307,8 @@ msgstr "このギフトカードはすでにお支払いに使用されていま
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
-msgstr ""
-"ギフトカードの代わりにバウチャーを入力しましたね。バウチャーは商品選択の下の"
-"ショップの最初のページでのみ入力できます。"
+msgstr "ギフトカードではなくバウチャーが入力されています。バウチャーはショップの最初"
+"のページでのみ入力できます。製品選択の下に表示されます。"
 
 #: pretix/base/payment.py:149
 msgid "This gift card is not known."
@@ -7642,11 +7617,11 @@ msgstr "サンプル製品"
 
 #: pretix/base/pdf.py:126
 msgid "Variation name"
-msgstr "変異名"
+msgstr "バリエーション名"
 
 #: pretix/base/pdf.py:127
 msgid "Sample variation"
-msgstr "サンプルの変化"
+msgstr "バリエーションの例"
 
 #: pretix/base/pdf.py:131
 msgid "Product description"
@@ -8072,11 +8047,11 @@ msgstr "イベントの入場"
 
 #: pretix/base/reldate.py:41
 msgid "Presale start"
-msgstr "プレセール開始"
+msgstr "前売り開始"
 
 #: pretix/base/reldate.py:42
 msgid "Presale end"
-msgstr "プリセール終了"
+msgstr "前売り終了"
 
 #: pretix/base/reldate.py:186
 msgid "before"
@@ -8323,8 +8298,7 @@ msgstr ""
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
-msgstr ""
-"この割引コードはすでに使用されています。別の商品に使用する場合は、関連する行"
+msgstr "このバウチャーはすでに使用されています。別の商品に使用する場合は、関連する行"
 "をカートから削除してください。"
 
 #: pretix/base/services/cart.py:182
@@ -8337,7 +8311,7 @@ msgstr "このバウチャーはこの商品には有効ではありません。
 
 #: pretix/base/services/cart.py:184
 msgid "This voucher is not valid for this seat."
-msgstr "このクーポンはこの席には有効ではありません。"
+msgstr "このバウチャーはこの席には有効ではありません。"
 
 #: pretix/base/services/cart.py:186
 msgid ""
@@ -8351,7 +8325,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:191
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr "ご利用いただけるクーポンは、現在販売されていない商品に有効です。"
+msgstr "ご利用いただけるバウチャーは、現在販売されていない商品に有効です。"
 
 #: pretix/base/services/cart.py:192
 msgctxt "subevent"
@@ -8913,7 +8887,7 @@ msgstr "行{row}のデータが無効です: {message}"
 
 #: pretix/base/services/modelimport.py:258
 msgid "A voucher cannot be created without a code."
-msgstr "コードなしではクーポンは作成できません。"
+msgstr "コードなしではバウチャーは作成できません。"
 
 #: pretix/base/services/orders.py:134
 msgid ""
@@ -9107,7 +9081,7 @@ msgstr "クォータ{name}には、操作を実行するための十分な容量
 
 #: pretix/base/services/orders.py:1579
 msgid "There is no quota defined that allows this operation."
-msgstr "この操作を許可する定義された割り当てはありません。"
+msgstr "この操作を許可する定義されたクォータはありません。"
 
 #: pretix/base/services/orders.py:1580
 msgid "The selected product is not active or has no price set."
@@ -9804,7 +9778,7 @@ msgstr ""
 
 #: pretix/base/settings.py:817
 msgid "End of presale text"
-msgstr "プレセール終了"
+msgstr "前売り終了"
 
 #: pretix/base/settings.py:820
 msgid ""
@@ -9985,7 +9959,7 @@ msgstr "開始日を表示します"
 
 #: pretix/base/settings.py:1026
 msgid "Show the presale start date before presale has started."
-msgstr "プレセールが始まる前に、プレセールの開始日を表示します。"
+msgstr "前売りが始まる前に、前売りの開始日を表示します。"
 
 #: pretix/base/settings.py:1037 pretix/base/settings.py:1045
 #: pretix/base/settings.py:1059 pretix/base/settings.py:1068
@@ -10175,7 +10149,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1294
 msgid "Show items outside presale period"
-msgstr "プレセール期間外のアイテムを表示します"
+msgstr "前売り期間外のアイテムを表示します"
 
 #: pretix/base/settings.py:1295
 msgid ""
@@ -10259,7 +10233,7 @@ msgstr "製品のデフォルトで展開されたバリエーションを表示
 
 #: pretix/base/settings.py:1426
 msgid "Enable waiting list"
-msgstr "待ちリストを有効にする"
+msgstr "空席待ちリストを有効にする"
 
 #: pretix/base/settings.py:1427 pretix/control/forms/event.py:1696
 msgid ""
@@ -10268,14 +10242,13 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
-"チケットが売り切れになると、人々は待ちリストに自分自身を追加することができま"
-"す。チケットが再び利用可能になると、待ちリストの最初の人のために予約され、そ"
-"の人はチケットを購入するために使用できるバウチャーが付いた電子メール通知を受"
-"け取ります。"
+"チケットが完売すると、お客様は空席待ちリストに自分を追加できます。チケットが"
+"再び利用可能になるとすぐに、空席待ちリストの最初の人にチケットが予約され、こ"
+"の人はチケット購入に使用できるバウチャー付きのメール通知を受信します。"
 
 #: pretix/base/settings.py:1438
 msgid "Automatic waiting list assignments"
-msgstr "自動待ちリストの割り当て"
+msgstr "自動空席待ちリスト割り当て"
 
 #: pretix/base/settings.py:1439
 msgid ""
@@ -10285,15 +10258,14 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
-"チケットの容量が空きになった場合、自動的にバウチャーを作成し、その商品の待ち"
-"リストの最初の人に送信します。これが有効でない場合、メールは自動的に送信され"
-"ませんが、コントロールパネルから手動で送信することができます。待ちリストを無"
-"効にしてもこのオプションを有効にしている場合、チケットは引き続き送信されま"
-"す。"
+"チケットの空きが出た場合、自動的にバウチャーを作成し、その製品の空席待ちリス"
+"トの最初の人に送信します。これがアクティブでない場合、メールは自動的に送信さ"
+"れませんが、コントロールパネルから手動で送信できます。空席待ちリストを無効に"
+"してもこのオプションを有効にしておくと、チケットは引き続き送信されます。"
 
 #: pretix/base/settings.py:1455
 msgid "Waiting list response time"
-msgstr "待ちリストへの対応時間"
+msgstr "空席待ちリスト応答時間"
 
 #: pretix/base/settings.py:1458
 msgid ""
@@ -10301,12 +10273,12 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
-"チケットバウチャーが空席待ちリストの人に送信された場合、有効期限が切れるまで"
-"この数時間以内に引き換えられ、リストの次の人に再割り当てする必要があります。"
+"空席待ちリストの人にチケットバウチャーが送信された場合、この時間数以内に使用"
+"する必要があり、期限が切れると空席待ちリストの次の人に再割り当てされます。"
 
 #: pretix/base/settings.py:1469
 msgid "Disable waiting list"
-msgstr "待ちリストを無効にします"
+msgstr "空席待ちリストを無効にする"
 
 #: pretix/base/settings.py:1470
 msgid ""
@@ -10316,10 +10288,10 @@ msgid ""
 "still people on the waiting list. Vouchers that have already been sent "
 "remain active."
 msgstr ""
-"この日付を過ぎると、待ちリストは完全に無効になります。つまり、誰もがもはや待"
-"ちリストに自分自身を追加することはできなくなりますが、クォータが許可する場合"
-"は、まだ待ちリストにいる人がいても、チケットが再び販売されることになります。"
-"すでに送信されたバウチャーは有効のままです。"
+"この日付以降、空席待ちリストは完全に無効になります。つまり、誰も空席待ちリス"
+"トに自分を追加できなくなりますが、空席待ちリストに人がまだいても、クォータが"
+"許可すればチケットが再び販売可能になります。すでに送信されたバウチャーは有効"
+"のままです。"
 
 #: pretix/base/settings.py:1482
 msgid "Ask for a name"
@@ -10327,7 +10299,7 @@ msgstr "名前を尋ねる"
 
 #: pretix/base/settings.py:1483
 msgid "Ask for a name when signing up to the waiting list."
-msgstr "待ちリストにサインアップする際に名前をお聞かせください。"
+msgstr "空席待ちリストへの登録時に名前を求める。"
 
 #: pretix/base/settings.py:1492
 msgid "Require name"
@@ -10335,7 +10307,7 @@ msgstr "名前を要求"
 
 #: pretix/base/settings.py:1493
 msgid "Require a name when signing up to the waiting list.."
-msgstr "待ちリストにサインアップする際には、名前が必要です。"
+msgstr "空席待ちリストに登録する際には、名前の入力が必要です。"
 
 #: pretix/base/settings.py:1503
 msgid "Ask for a phone number"
@@ -10343,7 +10315,7 @@ msgstr "電話番号を要求"
 
 #: pretix/base/settings.py:1504
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr "ウェイティングリストに登録する際に、電話番号を要求します。"
+msgstr "空席待ちリストへの登録時に電話番号を求める。"
 
 #: pretix/base/settings.py:1513
 msgid "Require phone number"
@@ -10378,10 +10350,10 @@ msgid ""
 "if they want more than one ticket, as every entry only grants one single "
 "ticket at a time."
 msgstr ""
-"増加した制限により、顧客は同じ固有のメールアドレスを使用して特定の製品の複数"
-"のチケットをリクエストすることができます。ただし、この設定に関係なく、1回のエ"
-"ントリーで1つのチケットしか付与されません。したがって、複数のチケットを希望す"
-"る場合は、空席待ちリストのフォームを複数回記入する必要があります。"
+"制限を増やすと、お客様は同じ固有のメールアドレスを使用して、特定の製品に対し"
+"て複数のチケットを要求できます。ただし、この設定に関係なく、複数のチケットが"
+"必要な場合は空席待ちリストのフォームを複数回記入する必要があります。各登録は"
+"一度に1枚のチケットのみを付与するためです。"
 
 #: pretix/base/settings.py:1555
 msgid "Show number of check-ins to customer"
@@ -11463,7 +11435,7 @@ msgstr ""
 #: pretix/base/settings.py:2545
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr "あなたは{event}の空席待ちリストから選ばれました"
+msgstr "{event}の空席待ちリストから選ばれました"
 
 #: pretix/base/settings.py:2549
 #, python-brace-format
@@ -11497,8 +11469,8 @@ msgid ""
 msgstr ""
 "こんにちは、\n"
 "\n"
-"あなたは{event}の空席待ちリストにご自身で登録し、\n"
-"{product}の製品についても登録されました。\n"
+"{event}の製品{product}の空席待ちリストに登録いただき\n"
+"ありがとうございます。\n"
 "\n"
 "チケットをご用意できました！以下のバウチャーコードを入力して、\n"
 "今から{hours}時間以内にチケットショップでご利用いただけます！\n"
@@ -11519,8 +11491,8 @@ msgstr ""
 "\n"
 "{url_remove}\n"
 "\n"
-"よろしくお願いします、  \n"
-"あなたの{event}チーム"
+"よろしくお願いいたします。\n"
+"{event}チーム"
 
 #: pretix/base/settings.py:2578
 #, python-brace-format
@@ -11705,17 +11677,7 @@ msgid "Invoice {invoice_number}"
 msgstr "請求書 {invoice_number}"
 
 #: pretix/base/settings.py:2706
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "somebody requested a list of your orders for {event}.\n"
-#| "The list is as follows:\n"
-#| "\n"
-#| "{orders}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11728,13 +11690,12 @@ msgid ""
 msgstr ""
 "こんにちは、\n"
 "\n"
-"誰かが{event}の注文リストをリクエストしました。\n"
-"リストは以下の通りです：\n"
+"{event}の注文{code}に関する新しい請求書を添付いたします。この注文は{order_ema"
+"il}によって行われました。\n"
 "\n"
-"{orders}\n"
+"よろしくお願いいたします。\n"
 "\n"
-"よろしくお願いします、\n"
-"あなたの{event}チーム"
+"{event}チーム一同"
 
 #: pretix/base/settings.py:2724 pretix/base/settings.py:2740
 #, python-brace-format
@@ -12423,7 +12384,7 @@ msgstr "請求先住所には、企業名の入力が必要です。"
 
 #: pretix/base/settings.py:3924
 msgid "The last payment date cannot be before the end of presale."
-msgstr "最終支払い日はプレセールの終了日より前にすることはできません。"
+msgstr "最終支払い日は前売りの終了日より前にすることはできません。"
 
 #: pretix/base/settings.py:3932
 #, python-brace-format
@@ -12469,8 +12430,7 @@ msgstr ""
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
-msgstr ""
-"この操作により、待ちリストからすべての名前、メールアドレス、電話番号が削除さ"
+msgstr "これにより、空席待ちリストからすべての名前、メールアドレス、電話番号が削除さ"
 "れます。"
 
 #: pretix/base/shredder.py:421
@@ -13121,14 +13081,14 @@ msgstr "ダウンロードのリマインダーが送信されています"
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
-msgstr "製品「{name}」が利用可能になりました"
+msgstr "製品「{name}」が利用可能に"
 
 #: pretix/base/timeline.py:217 pretix/base/timeline.py:241
 #: pretix/base/timeline.py:290
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr "製品「{name}」が利用できなくなりました"
+msgstr "製品「{name}」が利用不可に"
 
 #: pretix/base/timeline.py:255
 #, python-brace-format
@@ -13674,7 +13634,8 @@ msgstr ""
 msgid ""
 "This will only be used if the invoice is sent to a different email address "
 "or at a different time than the order confirmation."
-msgstr ""
+msgstr "これは、請求書が注文確認とは異なるメールアドレスに送信される場合、または異な"
+"る時間に送信される場合にのみ使用されます。"
 
 #: pretix/control/forms/event.py:1246
 msgid ""
@@ -13813,10 +13774,10 @@ msgid ""
 "can for example be used to provide widgets that give discounts or unlock "
 "secret products."
 msgstr ""
-"ウィジェットが設定されている場合、そのクーポンが入力されたかのように製品を表"
-"示し、ウィジェットを介して製品が購入されると、このクーポンが使用されます。こ"
-"れは、例えば割引を提供したり、秘密の製品を解除したりするために使用することが"
-"できます。"
+"ウィジェットが設定されている場合、そのバウチャーが入力されたかのように製品を"
+"表示し、ウィジェットを介して製品が購入されると、このバウチャーが使用されます"
+"。これは、例えば割引を提供したり、秘密の製品を解除したりするために使用するこ"
+"とができます。"
 
 #: pretix/control/forms/event.py:1637
 msgid "Compatibility mode"
@@ -14070,7 +14031,7 @@ msgstr "チェックイン済みのチケットが少なくとも1枚"
 
 #: pretix/control/forms/filter.py:597
 msgid "Affected quota"
-msgstr "影響を受けた割り当て"
+msgstr "影響を受けたクォータ"
 
 #: pretix/control/forms/filter.py:634 pretix/control/forms/filter.py:639
 #: pretix/control/forms/filter.py:665 pretix/control/forms/filter.py:670
@@ -14112,7 +14073,7 @@ msgstr "支払い期限"
 
 #: pretix/control/forms/filter.py:1202 pretix/control/forms/filter.py:1669
 msgid "Shop live and presale running"
-msgstr "公開中かつ予約販売が開催中です"
+msgstr "公開中かつ前売り実施中です"
 
 #: pretix/control/forms/filter.py:1203 pretix/control/forms/filter.py:2007
 msgid "Inactive"
@@ -14123,14 +14084,14 @@ msgstr "非アクティブ"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:117
 #: pretix/control/templates/pretixcontrol/subevents/index.html:170
 msgid "Presale not started"
-msgstr "予約販売の開始前"
+msgstr "前売り開始前"
 
 #: pretix/control/forms/filter.py:1205 pretix/control/forms/filter.py:1672
 #: pretix/control/templates/pretixcontrol/events/index.html:151
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:115
 #: pretix/control/templates/pretixcontrol/subevents/index.html:168
 msgid "Presale over"
-msgstr "予約販売終了"
+msgstr "前売り終了"
 
 #: pretix/control/forms/filter.py:1210 pretix/control/forms/filter.py:1213
 #: pretix/control/forms/filter.py:1698 pretix/control/forms/filter.py:1701
@@ -14303,7 +14264,7 @@ msgstr "クォータの処理"
 
 #: pretix/control/forms/filter.py:2100
 msgid "Allow to ignore quota"
-msgstr "割り当てを無視することを許可"
+msgstr "クォータを無視することを許可"
 
 #: pretix/control/forms/filter.py:2105 pretix/control/forms/filter.py:2107
 msgid "Filter by tag"
@@ -14311,7 +14272,7 @@ msgstr "タグでフィルターする"
 
 #: pretix/control/forms/filter.py:2112 pretix/control/forms/filter.py:2114
 msgid "Search voucher"
-msgstr "検索バウチャー"
+msgstr "バウチャーを検索"
 
 #: pretix/control/forms/filter.py:2159 pretix/control/forms/vouchers.py:130
 #: pretix/control/views/typeahead.py:782 pretix/control/views/typeahead.py:786
@@ -14740,7 +14701,7 @@ msgstr "今はクォータに追加しないでください"
 
 #: pretix/control/forms/item.py:424
 msgid "Add product to an existing quota"
-msgstr "既存の割り当てに製品を追加"
+msgstr "既存のクォータに製品を追加"
 
 #: pretix/control/forms/item.py:425
 msgid "Create a new quota for this product"
@@ -14752,11 +14713,11 @@ msgstr "クォータのオプション"
 
 #: pretix/control/forms/item.py:439
 msgid "Add to existing quota"
-msgstr "追加の割り当てを行います"
+msgstr "既存のクォータに追加する"
 
 #: pretix/control/forms/item.py:448
 msgid "New quota name"
-msgstr "新しい割り当て名"
+msgstr "新しいクォータ名"
 
 #: pretix/control/forms/item.py:454
 msgid "Size"
@@ -14801,9 +14762,8 @@ msgstr ""
 msgid ""
 "This option is deprecated. For new products, use the newer option below that "
 "refers to another product instead of a quota."
-msgstr ""
-"このオプションは非推奨です。新しい製品については、クォータではなく別の製品を"
-"参照する新しいオプションを使用してください。"
+msgstr "このオプションは非推奨です。新しい製品では、クォータではなく別の製品を参照す"
+"る以下の新しいオプションを使用してください。"
 
 #: pretix/control/forms/item.py:698 pretix/control/forms/item.py:714
 msgid "Shown independently of other products"
@@ -14977,34 +14937,24 @@ msgid "We were unable to resolve this hostname."
 msgstr "このホスト名を解決できませんでした。"
 
 #: pretix/control/forms/mapping.py:40
-#, fuzzy
-#| msgid "Overview"
 msgid "Overwrite"
-msgstr "概要"
+msgstr "上書き"
 
 #: pretix/control/forms/mapping.py:41
-#, fuzzy
-#| msgid "Fill form"
 msgid "Fill if new"
-msgstr "フォームに記入する"
+msgstr "新規の場合は記入"
 
 #: pretix/control/forms/mapping.py:42
-#, fuzzy
-#| msgid "Fill form"
 msgid "Fill if empty"
-msgstr "フォームに記入する"
+msgstr "空の場合は記入"
 
 #: pretix/control/forms/mapping.py:43
-#, fuzzy
-#| msgid "Add me to the list"
 msgid "Add to list"
-msgstr "リストに私を追加する"
+msgstr "リストに追加"
 
 #: pretix/control/forms/mapping.py:50
-#, fuzzy
-#| msgid "pretix Logo"
 msgid "pretix field"
-msgstr "プレティックスのロゴ"
+msgstr "pretixフィールド"
 
 #: pretix/control/forms/modelimport.py:50
 #, python-brace-format
@@ -15072,19 +15022,18 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:94
 msgid "Overbook quota"
-msgstr "クォータを超えるオーバーブッキング"
+msgstr "クォータを超過予約する"
 
 #: pretix/control/forms/orders.py:95
 msgid ""
 "If you check this box, this operation will be performed even if it leads to "
 "an overbooked quota and you having sold more tickets than you planned!"
-msgstr ""
-"このボックスをチェックすると、クォータが超過し、予定よりも多くのチケットを販"
-"売することになっても、この操作が実行されます!"
+msgstr "このボックスにチェックを入れると、クォータの超過予約が発生し、予定よりも多く"
+"のチケットを販売することになっても、この操作が実行されます！"
 
 #: pretix/control/forms/orders.py:136
 msgid "Overbook quota and ignore late payment"
-msgstr "クォータを超過し、支払いの遅延を無視します"
+msgstr "クォータの超過と支払いの遅延を無視します"
 
 #: pretix/control/forms/orders.py:137
 msgid ""
@@ -15093,9 +15042,9 @@ msgid ""
 "operation will also be performed regardless of the settings for late "
 "payments."
 msgstr ""
-"このボックスをチェックすると、クォータが超過し、予定よりも多くのチケットを販"
-"売することになっても、この操作が実行されます！また、遅延支払いの設定に関係な"
-"く、この操作が実行されます。"
+"このボックスにチェックを入れると、クォータを超過して予定より多くのチケットが"
+"販売されてしまう場合でも、この操作が実行されます！また、支払い遅延の設定に関"
+"係なく操作が実行されます。"
 
 #: pretix/control/forms/orders.py:167 pretix/control/forms/orders.py:226
 #: pretix/control/forms/orders.py:240
@@ -15215,8 +15164,7 @@ msgstr "注文が変更されたことを通知するメールを顧客に送信
 
 #: pretix/control/forms/orders.py:324
 msgid "Allow to overbook quotas when performing this operation"
-msgstr ""
-"この操作を行う際には、クォータをオーバーブッキングすることを許可してください"
+msgstr "この操作を実行する際にクォータの超過予約を許可する"
 
 #: pretix/control/forms/orders.py:340
 msgid "Add-on to"
@@ -15738,7 +15686,7 @@ msgstr "同じコードの引換券が既にイベントカートにあります
 
 #: pretix/control/forms/organizer.py:1217
 msgid "Events with active plugin"
-msgstr ""
+msgstr "有効なプラグインを使用するイベント"
 
 #: pretix/control/forms/renderers.py:56
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:139
@@ -15848,9 +15796,8 @@ msgstr "選択された製品は無効です。"
 msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
-msgstr ""
-"そのクーポンは非表示商品にのみ適用されますが、それを表示するように選択してい"
-"ません。"
+msgstr "そのバウチャーは非表示商品にのみ適用されますが、それを表示するように選択して"
+"いません。"
 
 #: pretix/control/forms/vouchers.py:271
 msgid "Codes"
@@ -15925,11 +15872,11 @@ msgstr ""
 
 #: pretix/control/forms/vouchers.py:339
 msgid "Maximum usages per voucher"
-msgstr "クーポンごとの最大利用回数"
+msgstr "バウチャーごとの最大利用回数"
 
 #: pretix/control/forms/vouchers.py:342
 msgid "Number of times times EACH of these vouchers can be redeemed."
-msgstr "これらのクーポンはそれぞれ何回利用できますか。"
+msgstr "これらのバウチャーはそれぞれ何回利用できますか。"
 
 #: pretix/control/forms/vouchers.py:356
 msgid "Specific seat IDs"
@@ -16186,50 +16133,36 @@ msgstr ""
 "\"、エラーコード \"{errorcode}\"。"
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"位置#{posid}の{datetime}のスキャンは、リスト\"{list}\"、タイプ\"{type}\"のエ"
-"ラーコード\"{errorcode}\"によって拒否されました。"
+"リスト\"{list}\"、タイプ\"{type}\"において"
+"、{datetime}に実行されたポジション#{posid}のスキャンを取り消しました。"
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} for list \"{list}\", type \"{type}\"."
-msgstr ""
-"リスト \"{list}\" の位置 #{posid} のスキャンは拒否されました。タイプ \"{type}"
-"\"、エラーコード \"{errorcode}\"。"
+msgstr "リスト\"{list}\"、タイプ\"{type}\"のポジション"
+"#{posid}のスキャンを取り消しました。"
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} at {datetime} for list \"{list}\", "
 "type \"{type}\"."
 msgstr ""
-"位置#{posid}の{datetime}のスキャンは、リスト\"{list}\"、タイプ\"{type}\"のエ"
-"ラーコード\"{errorcode}\"によって拒否されました。"
+"リスト\"{list}\"、タイプ\"{type}\"において"
+"、{datetime}に実行されたポジション#{posid}の取り消しを無視しました。"
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} for list \"{list}\", type \"{type}\"."
-msgstr ""
-"リスト \"{list}\" の位置 #{posid} のスキャンは拒否されました。タイプ \"{type}"
-"\"、エラーコード \"{errorcode}\"。"
+msgstr "リスト\"{list}\"、タイプ\"{type}\"のポジション"
+"#{posid}の取り消しを無視しました。"
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:333
 #, python-brace-format
@@ -16306,31 +16239,31 @@ msgstr "ポジション#{posid}は{datetime}に\"{type}\"のタイプで印刷�
 #: pretix/control/logdisplay.py:446
 #, python-brace-format
 msgid "Data successfully transferred to {provider_display_name}."
-msgstr ""
+msgstr "{provider_display_name}へのデータ転送が正常に完了しました。"
 
 #: pretix/control/logdisplay.py:465
 #, python-brace-format
 msgid ""
 "Transferring data to {provider_display_name} failed due to invalid "
 "configuration:"
-msgstr ""
+msgstr "設定が無効なため、{provider_display_name}へのデータ転送に失敗しました:"
 
 #: pretix/control/logdisplay.py:466
 #, python-brace-format
 msgid ""
 "Maximum number of retries exceeded while transferring data to "
 "{provider_display_name}:"
-msgstr ""
+msgstr "{provider_display_name}へのデータ転送で最大再試行回数を超過しました:"
 
 #: pretix/control/logdisplay.py:467
 #, python-brace-format
 msgid "Error while transferring data to {provider_display_name}:"
-msgstr ""
+msgstr "{provider_display_name}へのデータ転送でエラーが発生しました:"
 
 #: pretix/control/logdisplay.py:468 pretix/control/logdisplay.py:469
 #, python-brace-format
 msgid "Internal error while transferring data to {provider_display_name}."
-msgstr ""
+msgstr "{provider_display_name}へのデータ転送で内部エラーが発生しました。"
 
 #: pretix/control/logdisplay.py:483 pretix/control/logdisplay.py:818
 msgid "The settings of a payment provider have been changed."
@@ -16457,27 +16390,27 @@ msgid "The invoice has been reissued."
 msgstr "請求書が再発行されました。"
 
 #: pretix/control/logdisplay.py:527
-#, fuzzy, python-brace-format
-#| msgid "The invite has been resent."
+#, python-brace-format
 msgid "The invoice {full_invoice_no} has been sent."
-msgstr "招待状が再送されました。"
+msgstr "請求書{full_invoice_no}が送信されました。"
 
 #: pretix/control/logdisplay.py:528
 #, python-brace-format
 msgid "The transmission of invoice {full_invoice_no} has failed."
-msgstr ""
+msgstr "請求書{full_invoice_no}の送信に失敗しました。"
 
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
 msgid ""
 "Invoice {full_invoice_no} has not been transmitted because the transmission "
 "provider does not support test mode invoices."
-msgstr ""
+msgstr "送信プロバイダーがテストモード請求書に対応していないため、請求書{full_invoice"
+"_no}は送信されませんでした。"
 
 #: pretix/control/logdisplay.py:531
 #, python-brace-format
 msgid "The invoice {full_invoice_no} has been scheduled for retransmission."
-msgstr ""
+msgstr "請求書{full_invoice_no}の再送信が予定されました。"
 
 #: pretix/control/logdisplay.py:532
 msgid "The order's internal comment has been updated."
@@ -16522,10 +16455,8 @@ msgstr ""
 "メールが送信されました。"
 
 #: pretix/control/logdisplay.py:544
-#, fuzzy
-#| msgid "A custom email has been sent."
 msgid "An invoice email has been sent."
-msgstr "カスタムのメールが送信されました。"
+msgstr "請求書メールが送信されました。"
 
 #: pretix/control/logdisplay.py:545
 msgid "A custom email has been sent."
@@ -16614,23 +16545,21 @@ msgstr "そのバウチャーは作成されました。"
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
-msgstr ""
-"そのクーポンは、受取人が空席待ちリストから自分自身を削除したため、期限切に設"
-"定されました。"
+msgstr "受信者が空席待ちリストから自分を削除したため、バウチャーの有効期限が設定され"
+"ました。"
 
 #: pretix/control/logdisplay.py:582
 msgid "The voucher has been changed."
-msgstr "そのクーポンは変更されました。"
+msgstr "そのバウチャーは変更されました。"
 
 #: pretix/control/logdisplay.py:583
 msgid "The voucher has been deleted."
 msgstr "そのバウチャーは削除されました。"
 
 #: pretix/control/logdisplay.py:584
-#, fuzzy, python-brace-format
-#| msgid "A voucher has been sent to a person on the waiting list."
+#, python-brace-format
 msgid "The voucher has been sent to {email} through the waiting list."
-msgstr "空席待ちリストの人にバウチャーが送られました。"
+msgstr "バウチャーが空席待ちリストを通じて{email}に送信されました。"
 
 #: pretix/control/logdisplay.py:593
 #, python-brace-format
@@ -17002,11 +16931,11 @@ msgstr "主催者「{name}」は削除されました。"
 
 #: pretix/control/logdisplay.py:760 pretix/control/logdisplay.py:986
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr "空席待ちリストの人にバウチャーが送られました。"
+msgstr "空席待ちリストの人にバウチャーが送信されました。"
 
 #: pretix/control/logdisplay.py:761
 msgid "An entry has been transferred to another waiting list."
-msgstr "エントリーが別の待ちリストに移動されました。"
+msgstr "登録が別の空席待ちリストに転送されました。"
 
 #: pretix/control/logdisplay.py:762
 msgid "The team has been created."
@@ -17065,7 +16994,7 @@ msgstr "イベントの日程にクォータが変更されました。"
 #: pretix/control/logdisplay.py:774
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
-msgstr "イベント日の割り当てが取り除かれました。"
+msgstr "イベント日からクォータが削除されました。"
 
 #: pretix/control/logdisplay.py:775
 msgid "The device has been created."
@@ -17405,15 +17334,15 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:987
 msgid "An entry has been removed from the waiting list."
-msgstr "空席待ちリストからエントリーが削除されました。"
+msgstr "登録が空席待ちリストから削除されました。"
 
 #: pretix/control/logdisplay.py:988
 msgid "An entry has been changed on the waiting list."
-msgstr "待ちリストのエントリーが変更されました。"
+msgstr "空席待ちリストの登録が変更されました。"
 
 #: pretix/control/logdisplay.py:989
 msgid "An entry has been added to the waiting list."
-msgstr "待ちリストにエントリーが追加されました。"
+msgstr "空席待ちリストに登録が追加されました。"
 
 #: pretix/control/middleware.py:153 pretix/control/middleware.py:167
 msgid ""
@@ -17621,7 +17550,7 @@ msgstr "システムレポート"
 
 #: pretix/control/navigation.py:455 pretix/control/navigation.py:675
 msgid "Data sync problems"
-msgstr ""
+msgstr "データ同期の問題"
 
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -18826,11 +18755,8 @@ msgid "Other features"
 msgstr "他の特徴"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:8
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Transfer to other date"
 msgid "Data transfer to external systems"
-msgstr "他の日に変更します"
+msgstr "外部システムへのデータ転送"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:18
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
@@ -18838,10 +18764,8 @@ msgid "Retry now"
 msgstr "もう一度やり直してください"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:22
-#, fuzzy
-#| msgid "Pay now"
 msgid "Sync now"
-msgstr "今すぐ支払う"
+msgstr "今すぐ同期"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:31
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
@@ -18852,84 +18776,68 @@ msgstr "エラー"
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:34
 #, python-format
 msgid "Error. Retry %(num)s of %(max)s."
-msgstr ""
+msgstr "エラー。再試行%(num)s/%(max)s回目。"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:38
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:43
-#, fuzzy, python-format
-#| msgid "Valid until %(datetime)s"
+#, python-format
 msgid "Waiting until %(datetime)s"
-msgstr "%(datetime)s まで有効"
+msgstr "%(datetime)sまで待機中"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:49
-#, fuzzy, python-format
-#| msgid "Valid until %(datetime)s"
+#, python-format
 msgid "triggered at %(datetime)s"
-msgstr "%(datetime)s まで有効"
+msgstr "%(datetime)sに実行されました"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:62
-#, fuzzy
-#| msgid "Identifier"
 msgid "identified by"
 msgstr "識別子"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:68
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "No data transmitted."
-msgstr "日付が選択されていません。"
+msgstr "データが送信されませんでした。"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:5
 msgid "Sync problems"
-msgstr ""
+msgstr "同期の問題"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:7
 msgid ""
 "On this page, we provide a list of orders where data synchronization to an "
 "external system has failed. You can start another attempt to sync them "
 "manually."
-msgstr ""
+msgstr "このページでは、外部システムへのデータ同期が失敗した注文の一覧を表示していま"
+"す。手動で再度同期を試行することができます。"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:24
-#, fuzzy
-#| msgid "SSO provider"
 msgid "Sync provider"
-msgstr "SSOプロバイダー"
+msgstr "同期プロバイダー"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:26
-#, fuzzy
-#| msgid "Failed"
 msgid "Failure mode"
-msgstr "失敗しました"
+msgstr "障害モード"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:51
 #, python-format
 msgid "Temporary error, will retry after %(datetime)s"
-msgstr ""
+msgstr "一時的なエラーです。%(datetime)s後に再試行します"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:63
-#, fuzzy
-#| msgid "No products"
 msgid "No problems."
-msgstr "製品なし"
+msgstr "問題はみつかりません。"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:74
-#, fuzzy
-#| msgid "Delete selected"
 msgid "Retry selected"
-msgstr "選択したものを削除します"
+msgstr "選択項目を再試行"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:75
-#, fuzzy
-#| msgid "Cancel event"
 msgid "Cancel selected"
-msgstr "イベントをキャンセルします"
+msgstr "キャンセルが選択されました"
 
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:31
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:62
 msgid "Edit value mapping"
-msgstr ""
+msgstr "値のマッピング設定を編集"
 
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:76
 #: pretix/control/templates/pretixcontrol/event/settings.html:487
@@ -19385,8 +19293,7 @@ msgstr ""
 msgid ""
 "This operation will destroy your event including all configuration, "
 "products, quotas, questions, vouchers, lists, etc."
-msgstr ""
-"この操作は、すべての構成、製品、割り当て、質問、バウチャー、リストなどを含む"
+msgstr "この操作は、すべての構成、製品、クォータ、質問、バウチャー、リストなどを含む"
 "イベントを破壊します。"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:15
@@ -19579,11 +19486,12 @@ msgstr "影響を受ける注文を表示"
 msgid ""
 "Orders in this event could not be <strong>synced to an external system</"
 "strong> as configured."
-msgstr ""
+msgstr "このイベントの注文は、設定された<strong>外部システムとの同期</strong>ができま"
+"せんでした。"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:88
 msgid "Show sync problems"
-msgstr ""
+msgstr "同期の問題を表示"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:151
 #: pretix/control/templates/pretixcontrol/order/index.html:1062
@@ -19621,10 +19529,8 @@ msgid "Invoice customization"
 msgstr "請求書のカスタマイズ"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:64
-#, fuzzy
-#| msgid "Invoice generation"
 msgid "Invoice transmission"
-msgstr "請求書の作成"
+msgstr "請求書の送信"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:66
 msgid ""
@@ -19633,19 +19539,22 @@ msgid ""
 "default, sending invoices as PDF files via email is always available. Other "
 "types of transmission can be added by plugins."
 msgstr ""
+"pretixは、さまざまな送信方法を使用して請求書を送信できます。国や業界によって"
+"異なる送信方法が必要になる場合があります。デフォルトでは、PDFファイルをメール"
+"経由で送信することが常に利用可能です。その他の送信タイプは、プラグインによっ"
+"て追加できます。"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:73
 msgid ""
 "Whether a transmission method listed here is actually selectable for "
 "customers may depend on the country of the customer or whether the customer "
 "is entering a business address."
-msgstr ""
+msgstr "ここに記載された送信方法が実際に顧客が選択できるかどうかは、顧客の国や顧客が"
+"事業所住所を入力するかどうかに依存する場合があります。"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:82
-#, fuzzy
-#| msgid "Transaction time"
 msgid "Transmission method"
-msgstr "入場時間"
+msgstr "送信方法"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:98
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:125
@@ -19658,29 +19567,23 @@ msgstr "提供可能"
 msgid ""
 "When this type is available for an invoice address, no other type can be "
 "selected."
-msgstr ""
+msgstr "このタイプが請求先住所で利用可能な場合、他のタイプは選択できません。"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:101
 msgid "(exclusive)"
-msgstr ""
+msgstr "(排他的)"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:108
-#, fuzzy
-#| msgid "Available"
 msgid "Unavailable"
-msgstr "提供可能"
+msgstr "利用不可"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:130
-#, fuzzy
-#| msgid "Follow-up configured"
 msgid "Not configured"
-msgstr "フォローアップが設定されました"
+msgstr "未設定"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:152
-#, fuzzy
-#| msgid "Enable additional payment plugins"
 msgid "Enable additional invoice transmission plugins"
-msgstr "追加の支払い方法のプラグインを有効にする"
+msgstr "追加の請求書送信プラグインを有効にする"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:159
 msgid "Save and show preview"
@@ -19770,9 +19673,9 @@ msgid ""
 "vouchers and might perform actual payments. The only difference is that you "
 "can delete test orders. Use at your own risk!"
 msgstr ""
-"テスト注文はまだクォータにカウントされ、実際にクーポンを使用し、実際の支払い"
-"を行う可能性があります。唯一の違いは、テスト注文を削除できることです。自己責"
-"任でご利用ください！"
+"テスト注文はまだクォータにカウントされ、実際にバウチャーを使用し、実際の支払"
+"いを行う可能性があります。唯一の違いは、テスト注文を削除できることです。自己"
+"責任でご利用ください！"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:108
 msgid ""
@@ -19914,7 +19817,7 @@ msgstr "支払い済みの注文"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 msgid "Waiting list notification"
-msgstr "待ちリスト通知"
+msgstr "空席待ちリスト通知"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:117
 msgid "Order custom mail"
@@ -20077,16 +19980,15 @@ msgid "Not available"
 msgstr "売り切れ又は在庫なし"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:93
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be disabled for the entire organizer account."
-msgstr "このプラグインは次の理由で有効にできません："
+msgstr "このプラグインは、主催者アカウント全体でのみ無効化できます。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:98
 msgid ""
 "After disabling this plugin, some functionality may remain active in the "
 "organizer account."
-msgstr ""
+msgstr "このプラグインを無効化した後も、主催者アカウント内で一部の機能が有効なままに"
+"なる場合があります。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:104
 #: pretix/control/templates/pretixcontrol/event/plugins.html:116
@@ -20102,10 +20004,8 @@ msgstr "進む"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:130
 #: pretix/control/templates/pretixcontrol/event/plugins.html:147
-#, fuzzy
-#| msgid "Organizer settings"
 msgid "Open in organizer settings"
-msgstr "主催者の設定"
+msgstr "主催者設定で開く"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:134
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
@@ -20120,16 +20020,15 @@ msgstr "無効にする"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:141
 #: pretix/control/views/organizer.py:807
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be enabled for the entire organizer account."
-msgstr "このプラグインは次の理由で有効にできません："
+msgstr "このプラグインは、主催者アカウント全体でのみ有効化できます。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:154
 msgid ""
 "Enabling this plugin will enable some of its functionality for the entire "
 "organizer account."
-msgstr ""
+msgstr "このプラグインを有効にすると、主催者アカウント全体でその機能の一部が有効にな"
+"ります。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:159
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:157
@@ -20196,9 +20095,9 @@ msgid ""
 "ticket types in more detail, you can later do so in the \"Products\" section "
 "in the navigation. Don't worry, you can change everything you input here."
 msgstr ""
-"より高度な機能を使用したい場合、例えば非入場商品、商品のバリエーション、カス"
-"タムクォータ、アドオン商品を追加したり、チケットタイプを詳細に変更したい場合"
-"は、後でナビゲーションの「商品」セクションで行うことができます。心配しないで"
+"より高度な機能を使用したい場合、例えば非入場製品、製品のバリエーション、カス"
+"タムクォータ、アドオン製品を追加したり、チケットタイプを詳細に変更したい場合"
+"は、後でナビゲーションの「製品」セクションで行うことができます。心配しないで"
 "ください、ここで入力したすべてを変更することができます。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:134
@@ -20359,9 +20258,8 @@ msgstr "互換性のない設定"
 msgid ""
 "Customers won't be able to add themselves to the waiting list, because "
 "\"Hide all products that are sold out\" is enabled."
-msgstr ""
-"「売り切れた製品をすべて非表示にする」が有効になっているため、お客様は自分を"
-"待機リストに追加することはできません。"
+msgstr "「完売した製品をすべて非表示にする」が有効になっているため、お客様は空席待ち"
+"リストにご自身を追加できません。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:261
 msgctxt "subevents"
@@ -20403,9 +20301,8 @@ msgstr "カート"
 msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as hidden products, add-on products or product bundles."
-msgstr ""
-"現在の待ちリストは、隠し商品、アドオン商品、または商品のバンドルなど、pretix"
-"の一部の高度な機能と互換性がありません。"
+msgstr "空席待ちリストは現在、非表示製品、アドオン製品、製品バンドルなどのpretixの高"
+"度な機能の一部と互換性がありません。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:371
 msgid ""
@@ -20414,17 +20311,16 @@ msgid ""
 "quota, you might run into situations where people are sent an email from the "
 "waiting list but still are unable to book a seat."
 msgstr ""
-"待ちリストは、主にクォータに基づいて可用性を決定します。座席表を使用し、利用"
-"可能な座席数が利用可能なクォータよりも少ない場合、待ちリストからメールが送ら"
-"れても席を予約できない状況に遭遇することがあります。"
+"空席待ちリストは主にクォータに基づいて空席状況を判断します。座席表を使用して"
+"いて、利用可能な座席数が利用可能なクォータより少ない場合、空席待ちリストから"
+"メールが送信されても座席を予約できない状況が発生する可能性があります。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:378
 msgid ""
 "Specifically, this means the waiting list is not safe to use together with "
 "the minimum distance feature of our seating plan module."
-msgstr ""
-"具体的には、これは空席待ちリストが座席計画モジュールの最短距離機能と一緒に使"
-"用するのは安全ではないことを意味します。"
+msgstr "具体的には、これは空席待ちリストが座席表モジュールの最小距離機能と一緒に使用"
+"するのが安全でないことを意味します。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:399
 msgid "Waiting customers"
@@ -20432,7 +20328,7 @@ msgstr "待っているお客様"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:405
 msgid "Manage waiting list"
-msgstr "待ちリストを管理します"
+msgstr "空席待ちリストを管理"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:418
 msgid "Item metadata"
@@ -20841,7 +20737,7 @@ msgstr "日付なし"
 #: pretix/control/templates/pretixcontrol/events/index.html:141
 #: pretix/control/templates/pretixcontrol/subevents/index.html:158
 msgid "More quotas"
-msgstr "もっと割り当て"
+msgstr "さらにクォータを追加"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:149
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:113
@@ -21119,14 +21015,14 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/item/base.html:24
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:79
 msgid "Manage quotas"
-msgstr "割り当てを管理します"
+msgstr "クォータを管理"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:82
 #: pretix/control/templates/pretixcontrol/items/quotas.html:34
 #: pretix/control/templates/pretixcontrol/items/quotas.html:38
 msgid "Create a new quota"
-msgstr "新しい割り当てを作成します"
+msgstr "新しいクォータを作成"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:34
 msgid ""
@@ -21326,7 +21222,7 @@ msgstr[0] "その処理で、 %(count)s 枚のバウチャーが使用不可に�
 #: pretix/control/templates/pretixcontrol/item/delete.html:29
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:31
 msgid "Show affected vouchers"
-msgstr "影響を受けるクーポンを表示します"
+msgstr "影響を受けるバウチャーを表示します"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:34
 #, python-format
@@ -21393,7 +21289,7 @@ msgstr "限られた時間内でのみ利用可能"
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:164
 #: pretix/control/templates/pretixcontrol/items/index.html:132
 msgid "Only visible with a voucher"
-msgstr "バウチャーがないと見えない"
+msgstr "バウチャーがあるときだけ表示"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:72
 msgid ""
@@ -21405,7 +21301,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:149
 msgid "New variation"
-msgstr "新しい変異"
+msgstr "新しいバリエーション"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:242
 msgid "Add a new variation"
@@ -21762,7 +21658,7 @@ msgstr "バンドルの一部としてのみ利用可能"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:135
 msgid "Can only be bought using a voucher"
-msgstr "バウチャーを使用してのみ購入可能"
+msgstr "バウチャー利用時のみ購入可能"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:149
 #: pretix/control/templates/pretixcontrol/order/index.html:668
@@ -21954,7 +21850,7 @@ msgstr "クォータの編集"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:30
 msgid "Open quota and disable closing"
-msgstr "クォータを設定し、クロージングを無効にする"
+msgstr "クォータを開放し、終了を無効にする"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:32
 msgid ""
@@ -21962,22 +21858,21 @@ msgid ""
 "through cancellations, they will not become available again unless you "
 "manually re-open the quota on this page."
 msgstr ""
-"このクォータは完売し、閉鎖されています。キャンセルなどによりチケットが利用可"
-"能になったとしても、このページでクォータを手動で再度開くまで再度利用可能には"
-"なりません。"
+"このクォータは完売し、終了しています。キャンセル等でチケットが利用可能になっ"
+"ても、このページでクォータを手動で再開しない限り、再び利用可能にはなりません"
+"。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:38
 msgid "Open quota"
-msgstr "オープンクォータ"
+msgstr "クォータを開放"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:39
 msgid ""
 "This quota is closed since it has been sold out before. Tickets are "
 "theoretically available, but will not be sold unless you manually re-open "
 "the quota."
-msgstr ""
-"このクォータは完売したため、閉鎖されています。チケットは理論的には利用可能で"
-"すが、クォータを手動で再オープンしない限り販売されません。"
+msgstr "このクォータは以前に完売したため終了しています。理論的にはチケットは利用可能"
+"ですが、クォータを手動で再開しない限り販売されません。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:47
 msgid "Usage overview"
@@ -21991,30 +21886,31 @@ msgstr "利用可能性の計算"
 msgid ""
 "A plugin is active that might modify the actual result of this quota from "
 "what you see here."
-msgstr ""
-"このクォータの実際の結果を変更する可能性があるプラグインがアクティブです。"
+msgstr "このクォータの実際の結果を、ここで表示されているものから変更する可能性がある"
+"プラグインがアクティブになっています。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:86
 #, python-format
 msgid "This quota is currently overbooked by %(num)s tickets."
-msgstr "このクォータは、現在%(num)s枚のチケットが過剰に予約されています。"
+msgstr "このクォータは現在%(num)sチケット分超過予約されています。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:93
 msgid ""
 "Your event contains vouchers that affect products covered by this quota and "
 "that allow a user to buy products even if this quota is sold out."
 msgstr ""
-"イベントには、この割り当て対象の製品に影響を与えるバウチャーが含まれており、"
-"この割り当てが売り切れていてもユーザーが製品を購入できるようにします。"
+"あなたのイベントには、このクォータが対象とする商品に影響するバウチャーが含ま"
+"れており、このクォータが完売していてもユーザーが商品を購入できるようになって"
+"います。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:104
 msgid "Quota history"
-msgstr "割り当て履歴"
+msgstr "クォータ履歴"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:6
 msgid "Delete quota"
-msgstr "割り当てを削除します"
+msgstr "クォータを削除"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:9
 #, python-format
@@ -22035,9 +21931,9 @@ msgid ""
 "applied to. If you apply two quotas to the same product, it will only be "
 "available if <strong>both</strong> quotas have capacity left."
 msgstr ""
-"この見積もりに適用する製品または製品のバリエーションを選択してください。同じ"
-"製品に2つの見積もりを適用する場合、<strong>両方</strong>の見積もりにまだ容量"
-"がある場合のみ利用可能になります。"
+"このクォータを適用する商品または商品バリエーションを選択してください。同じ商"
+"品に2つのクォータを適用した場合、<strong>両方</strong>のクォータに残り容量が"
+"ある場合にのみ利用可能になります。"
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:41
 msgid "Advanced options"
@@ -22053,15 +21949,16 @@ msgid ""
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
-"製品を実際に利用可能にするには、クォータも必要です。クォータは、あなたの製品"
-"が販売するインスタンスの数を定義します。これにより、イベントが無制限の参加者"
-"を受け入れるか、参加者の数が制限されるかを設定できます。製品を複数のクォータ"
-"に割り当てることで、例えば、販売されるチケットの総数と特定のチケットタイプの"
-"数を同時に制限したい場合など、より複雑な要件を満たすことができます。"
+"製品を実際に利用可能にするには、クォータも必要です。クォータは、pretixが製品"
+"のインスタンスをいくつ販売するかを定義します。これにより、イベントが無制限の"
+"参加者を受け入れることができるか、参加者数が制限されるかを設定できます。より"
+"複雑な要件を満たすために、製品を複数のクォータに割り当てることができます。例"
+"えば、販売されるチケットの総数と特定のチケット種別の数を同時に制限したい場合"
+"などです。"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:25
 msgid "Your search did not match any quotas."
-msgstr "検索結果は見つかりませんでした。"
+msgstr "検索条件に一致するクォータが見つかりませんでした。"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:27
 msgid "You haven't created any quotas yet."
@@ -22579,9 +22476,8 @@ msgid ""
 "orders automatically. To free quota capacity, you can mark it as expired "
 "manually."
 msgstr ""
-"この注文の支払いは期限切れですが、自動的に注文を期限切れにしないように設定さ"
-"れています。クォータ容量を解放するために、手動で期限切れにマークすることがで"
-"きます。"
+"この注文の支払いが期限切れですが、注文を自動的に期限切れにしない設定になって"
+"います。クォータ容量を解放するには、手動で期限切れとして設定できます。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:116
 #: pretix/control/views/orders.py:373
@@ -22672,55 +22568,36 @@ msgid "Invoice was not yet emailed to customer"
 msgstr "請求書はまだ顧客にメールされていません"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:294
-#, fuzzy
-#| msgid "One webhook is scheduled to be retried."
-#| msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgid "Invoice is scheduled to be transmitted"
-msgstr "%(count)s つのwebhookのリトライがスケジュールされました。"
+msgstr "請求書は送信予定です"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:299
-#, fuzzy
-#| msgid "Invoice was not yet emailed to customer"
 msgid "Invoice is not yet transmitted"
-msgstr "請求書はまだ顧客にメールされていません"
+msgstr "請求書はまだ送信されていません"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:302
-#, fuzzy
-#| msgid "This ticket shop is currently in test mode."
 msgid "Invoice is currently in transmission"
-msgstr "このチケットショップは現在テストモードです。"
+msgstr "請求書は現在送信処理中です"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:307
-#, fuzzy
-#| msgid "live and in test mode"
 msgid "Invoice not transmitted in test mode"
-msgstr "公開中かつテストモード"
+msgstr "テストモードでは請求書は送信されていません"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:312
-#, fuzzy
-#| msgid "Device registration failed."
 msgid "Invoice transmission failed"
-msgstr "デバイスの登録に失敗しました。"
+msgstr "請求書の送信に失敗しました"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:317
-#, fuzzy
-#| msgid "An invoice has been generated."
 msgid "Invoice has been transmitted"
-msgstr "請求書が生成されました。"
+msgstr "請求書の送信が完了しました"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:329
-#, fuzzy
-#| msgctxt "refund_state"
-#| msgid "in transit"
 msgid "Transmit"
-msgstr "輸送中"
+msgstr "送信"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:331
-#, fuzzy
-#| msgctxt "refund_state"
-#| msgid "in transit"
 msgid "Retransmit"
-msgstr "輸送中"
+msgstr "再送信"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:342
 msgid "Rebuild the invoice with updated data but the same invoice number."
@@ -23325,17 +23202,16 @@ msgid ""
 "new tickets due to the products being disabled. You can choose to inform "
 "people on the waiting list by using this option."
 msgstr ""
-"待ちリストは自動的に削除されませんが、製品が無効になったため新しいチケットは"
-"受け付けられません。このオプションを使用して、待ちリストの人々に通知すること"
-"ができます。"
+"空席待ちリストは自動的に削除されませんが、製品が無効になっているため新しいチ"
+"ケットは受信できません。このオプションを使用して空席待ちリストの人々に通知す"
+"ることを選択できます。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:71
 msgid ""
 "You should not execute this function multiple times for the same event, or "
 "everyone on the waiting list will get multiple emails."
-msgstr ""
-"同じイベントに対してこの関数を複数回実行しないでください。そうすると、空席待"
-"ちリストの全員が複数のメールを受け取ってしまいます。"
+msgstr "同じイベントに対してこの機能を複数回実行しないでください。空席待ちリストのす"
+"べての人が複数のメールを受信してしまいます。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:83
 msgid "Cancel all orders"
@@ -23592,9 +23468,8 @@ msgstr "インポート設定"
 msgid ""
 "The import will be performed regardless of your quotas, so it will be "
 "possible to overbook your event using this option."
-msgstr ""
-"このオプションを使用すると、クォータに関係なくインポートが実行されるため、イ"
-"ベントの予約数を超過することが可能になります。"
+msgstr "インポートはクォータに関係なく実行されるため、このオプションを使用してイベン"
+"トを超過予約することが可能になります。"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:57
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:57
@@ -24012,9 +23887,8 @@ msgstr "主催者を削除"
 msgid ""
 "This operation will destroy this organizer including all events, "
 "configuration, products, quotas, questions, vouchers, lists, etc."
-msgstr ""
-"この操作は、すべてのイベント、設定、製品、クォータ、質問、バウチャー、リスト"
-"などを含む、この主催者を破壊します。"
+msgstr "この操作により、すべてのイベント、設定、製品、クォータ、質問、バウチャー、リ"
+"ストなどを含む、この主催者が削除されます。"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:22
 #, python-format
@@ -24621,24 +24495,24 @@ msgstr "これは年間パスや10枚券などの商品を有効にするため�
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
-#, fuzzy, python-format
-#| msgid "Events in %(month)s"
+#, python-format
 msgid "Events with plugin %(name)s"
-msgstr "%(month)sのイベント"
+msgstr "プラグイン%(name)sを使用するイベント"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:18
 #, python-format
 msgid ""
 "The plugin \"%(name)s\" can be enabled or disabled for every event "
 "individually."
-msgstr ""
+msgstr "プラグイン「%(name)s」は、各イベントごとに個別に有効化または無効化できます。"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
 msgid ""
 "The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
-msgstr ""
+msgstr "プラグイン「%(name)s」は主催者アカウントで有効になっていますが、使用したい特"
+"定のイベントでも有効にする必要があります。"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:31
 msgid ""
@@ -24646,56 +24520,45 @@ msgid ""
 "that it might still be necessary to configure the plugin for each event "
 "individually."
 msgstr ""
+"このフォームを使用すると、多数のイベントに対して素早く有効化または無効化でき"
+"ます。ただし、各イベントごとに個別にプラグインを設定する必要がある場合がある"
+"ことにご注意ください。"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:8
-#, fuzzy
-#| msgid ""
-#| "On this page, you can choose plugins you want to enable for your event. "
-#| "Plugins might bring additional software functionality, connect your event "
-#| "to third-party services, or apply other forms of customizations."
 msgid ""
 "On this page, you can choose plugins you want to enable for your organizer "
 "account. Plugins might bring additional software functionality, connect your "
 "events to third-party services, or apply other forms of customizations."
 msgstr ""
-"このページでは、イベントで有効にしたいプラグインを選択できます。プラグインは"
-"追加のソフトウェア機能を提供したり、イベントをサードパーティーサービスに接続"
-"したり、その他のカスタマイズを適用したりすることがあります。"
+"このページでは、主催者アカウントで有効にしたいプラグインを選択できます。プラ"
+"グインにより、追加のソフトウェア機能の提供、イベントとサードパーティサービス"
+"の連携、またはその他のカスタマイズが可能になります。"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:80
-#, fuzzy
-#| msgid "All events"
 msgid "Active (all events)"
-msgstr "全てのイベント"
+msgstr "アクティブ（全イベント）"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:85
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:94
-#, fuzzy, python-format
-#| msgid "%(count)s event"
-#| msgid_plural "%(count)s events"
+#, python-format
 msgid "Active (%(count)s event)"
 msgid_plural "Active (%(count)s events)"
-msgstr[0] "%(count)s 件のイベント"
+msgstr[0] "アクティブ（%(count)sイベント）"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:116
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:173
 msgid ""
 "Parts of this plugin can be enabled or disabled for events individually."
-msgstr ""
+msgstr "このプラグインの一部は、イベントごとに個別に有効化または無効化できます。"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:149
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:167
-#, fuzzy
-#| msgctxt "day calendar"
-#| msgid "Single events"
 msgid "Manage events"
-msgstr "単発イベント"
+msgstr "イベントを管理"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:162
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can be enabled or disabled for events individually."
-msgstr "このプラグインは次の理由で有効にできません："
+msgstr "このプラグインは、イベントごとに個別に有効化または無効化できます。"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -25608,7 +25471,7 @@ msgstr "多くの時間枠を追加します"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:266
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:124
 msgid "Add a new quota"
-msgstr "新しい割り当てを追加します"
+msgstr "新しいクォータを追加"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:485
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:128
@@ -25662,7 +25525,7 @@ msgstr "アイテムの価格"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:197
 msgid "You selected a set of dates that currently have different quota setups."
-msgstr "現在異なるクォータ設定の日付のセットを選択しました。"
+msgstr "現在異なるクォータ設定を持つ日付のセットを選択しています。"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:198
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:373
@@ -25683,7 +25546,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:372
 msgid "Delete existing quotas"
-msgstr "既存のクォータを削除する"
+msgstr "既存のクォータを削除"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:374
 msgid "This cannot be reverted. Are you sure to proceed?"
@@ -26310,7 +26173,7 @@ msgstr "コードをコピー"
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:39
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:39
 msgid "Voucher details"
-msgstr "クーポンの詳細"
+msgstr "バウチャーの詳細"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:44
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:70
@@ -26325,26 +26188,26 @@ msgid ""
 "quota for this voucher above, the product can still be unavailable to the "
 "voucher holder if another quota associated with the product is sold out!"
 msgstr ""
-"特定のクォータに「任意の製品」を選択し、このクーポンのためにクォータを予約す"
-"る場合、製品に関連付けられた別のクォータが売り切れている場合、クーポン保持者"
-"には製品が利用できないことがあります！"
+"特定のクォータに「任意の製品」を選択し、上記でこのバウチャーにクォータを予約"
+"することを選択した場合でも、製品に関連付けられた別のクォータが完売していると"
+"、バウチャー保有者は製品を利用できない場合があります！"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:133
 msgid "Delete voucher"
-msgstr "バウチャーを削除します"
+msgstr "バウチャー削除"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
-msgstr "割引券<strong>%(voucher)s</strong>を削除してもよろしいですか？"
+msgstr "バウチャー<strong>%(voucher)s</strong>を削除してもよろしいですか？"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
 msgid "Delete vouchers"
-msgstr "削除する券"
+msgstr "バウチャー削除"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:10
 msgid "Are you sure you want to delete the following vouchers?"
@@ -26368,9 +26231,8 @@ msgstr "カートを削除します"
 msgid ""
 "Are you sure you want to delete any cart positions with voucher "
 "<strong>%(voucher)s</strong>?"
-msgstr ""
-"カート内の位置に<strong>%(voucher)s</strong>の割引券がある場合、本当に削除し"
-"ますか？"
+msgstr "バウチャー<strong>%(voucher)s</strong>を利用しているカート内のすべての製品を"
+"削除しても大丈夫ですか？"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
 msgid ""
@@ -26423,14 +26285,14 @@ msgstr "バウチャーの履歴"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:81
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:94
 msgid "Import vouchers"
-msgstr "インポートバウチャー"
+msgstr "バウチャーをインポート"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:10
 msgid ""
 "Vouchers allow you to assign tickets to specific persons for a lower price. "
 "They also enable you to reserve some quota for your very special guests."
 msgstr ""
-"クーポンを使用すると、特定の人にチケットを割引価格で割り当てることができま"
+"バウチャーを使用すると、特定の人にチケットを割引価格で割り当てることができま"
 "す。また、非常に特別なゲストのために一定の枠を予約することも可能です。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:67
@@ -26487,7 +26349,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:32
 msgid "You haven't added any tags to vouchers yet."
-msgstr "まだクーポンにタグを追加していません。"
+msgstr "まだバウチャーにタグを追加していません。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:43
 msgid "Redeemed vouchers"
@@ -26507,9 +26369,8 @@ msgstr "削除されました"
 msgid ""
 "Are you sure you want to delete the following waiting list entry "
 "<strong>%(entry)s</strong>?"
-msgstr ""
-"以下の待ちリストエントリー <strong>%(entry)s</strong> を削除してもよろしいで"
-"すか？"
+msgstr "以下の空席待ちリスト登録<strong>%(entry)s</strong>を削除してもよろしいですか"
+"？"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
@@ -26531,25 +26392,23 @@ msgid ""
 "The waiting list is disabled, so if the event is sold out, people cannot add "
 "themselves to this list. If you want to enable it, go to the event settings."
 msgstr ""
-"待ちリストは無効になっていますので、イベントが売り切れの場合、人々はこのリス"
-"トに自分自身を追加することはできません。有効にしたい場合は、イベント設定に移"
-"動してください。"
+"空席待ちリストが無効になっているため、イベントが完売した場合、お客様は空席待"
+"ちリストにご自身を追加できません。有効にする場合は、イベント設定にアクセスし"
+"てください。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:21
 msgid ""
 "The waiting list is no longer active for this event. The waiting list no "
 "longer affects quotas and no longer notifies waiting users."
-msgstr ""
-"このイベントの待ちリストはもはやアクティブではありません。待ちリストは割り当"
-"てに影響を与えず、待っているユーザーに通知もされません。"
+msgstr "このイベントでは空席待ちリストが有効ではなくなりました。空席待ちリストはクォ"
+"ータに影響せず、待機中のユーザーに通知も行われません。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:26
 msgid ""
 "According to your event settings, sold out products are hidden from "
 "customers. This way, customers will not be able to discover the waiting list."
-msgstr ""
-"イベント設定によると、完売商品は顧客から非表示にされます。これにより、顧客は"
-"待ちリストを見つけることができなくなります。"
+msgstr "イベント設定により、完売した製品はお客様から非表示になります。これにより、お"
+"客様は空席待ちリストを見つけることができません。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:36
 msgid "Send vouchers"
@@ -26584,10 +26443,10 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
-"自動的にクーポンが送信<strong>されないように</strong>設定されています。十分な"
-"クオータがある場合、このテーブルの行の横にあるボタンをクリックして、選択した"
-"順序で1つずつ送信するか、このテキストの下にある大きなボタンを押して、最も待っ"
-"ている人々に可能な限り多くのクーポンを送信することができます。"
+"バウチャーが自動的に送信<strong>されない</strong>設定になっています。このテー"
+"ブルの各行の横にあるボタンをクリックして任意の順序で1つずつ送信する（十分なク"
+"ォータが利用可能な場合）か、このテキストの下にある大きなボタンを押して、最も"
+"長く待っている人々に現在可能な限り多くのバウチャーを送信することができます。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:77
 msgid "Send as many vouchers as possible"
@@ -26604,8 +26463,8 @@ msgid ""
 "waiting list in, you could sell tickets worth an additional "
 "<strong>%(amount)s</strong>."
 msgstr ""
-"もしイベントで空席待ちリストの全員を収容できるだけのスペースを確保できれば、"
-"追加で<strong>%(amount)s</strong>の価値のチケットを販売できます。"
+"空席待ちリストのすべての人を収容できるようにイベントのスペースを確保できれば"
+"、追加で<strong>%(amount)s</strong>相当のチケットを販売できます。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:113
 msgid "Successfully redeemed"
@@ -26627,13 +26486,12 @@ msgstr ""
 msgid ""
 "For safety reasons, the waiting list does not run if the quota is set to "
 "unlimited."
-msgstr ""
-"安全上の理由から、クォータが無制限に設定されている場合、待ちリストは実行され"
-"ません。"
+msgstr "安全上の理由により、クォータが無制限に設定されている場合、空席待ちリストは実"
+"行されません。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:234
 msgid "Quota unlimited"
-msgstr "クォータは無制限です"
+msgstr "クォータ無制限"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:240
 #, python-format
@@ -26679,9 +26537,8 @@ msgctxt "subevent"
 msgid ""
 "Please select the date to which the following waiting list entry should be "
 "transferred: <strong>%(entry)s</strong>?"
-msgstr ""
-"次の空席待ちリストの内容のどれを転送するか、日付を選択してください: "
-"<strong>%(entry)s</strong>?"
+msgstr "以下の空席待ちリスト登録を転送する日付を選択してください：<strong>%(entry)s</"
+"strong>"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:19
 msgid "Transfer"
@@ -26884,7 +26741,7 @@ msgstr "空席待ちリストの人々に提供可能"
 
 #: pretix/control/views/dashboards.py:223
 msgid "total waiting list length"
-msgstr "待ちリストの総数"
+msgstr "空席待ちリスト総数"
 
 #: pretix/control/views/dashboards.py:252
 #, python-brace-format
@@ -26933,8 +26790,8 @@ msgid ""
 "To start selling tickets, you need to create products or quotas. The fastest "
 "way to create this is to use our setup tool."
 msgstr ""
-"チケットの販売を開始するには、商品やクォータを作成する必要があります。これを"
-"素早く作成する方法は、当社のセットアップツールを使用することです。"
+"チケットの販売を開始するには、製品またはクォータを作成する必要があります。こ"
+"れらを作成する最も速い方法は、セットアップツールを使用することです。"
 
 #: pretix/control/views/dashboards.py:331
 msgid "Set up event"
@@ -26964,42 +26821,28 @@ msgid_plural "{num} orders"
 msgstr[0] "{num} つの注文"
 
 #: pretix/control/views/datasync.py:82
-#, fuzzy
-#| msgid "The quota has been re-opened and will not close again."
 msgid "The sync job has been enqueued and will run in the next minutes."
-msgstr "クォータは再度開かれ、再び閉じることはありません。"
+msgstr "同期ジョブがキューに追加されました。数分以内に実行されます。"
 
 #: pretix/control/views/datasync.py:89 pretix/control/views/datasync.py:99
-#, fuzzy
-#| msgid "The invoice file has already been exported."
 msgid "The sync job is already in progress."
-msgstr "請求書ファイルはすでにエクスポートされています。"
+msgstr "同期ジョブは既に実行中です。"
 
 #: pretix/control/views/datasync.py:92
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The sync job has been canceled."
-msgstr "注文はキャンセルされました。"
+msgstr "同期ジョブがキャンセルされました。"
 
 #: pretix/control/views/datasync.py:105
-#, fuzzy
-#| msgid "The order has been set to require payment before use."
 msgid "The sync job has been set to run as soon as possible."
-msgstr "注文は使用前に支払いが必要となっています。"
+msgstr "同期ジョブが可能な限り早く実行されるよう設定されました。"
 
 #: pretix/control/views/datasync.py:136
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been deleted or disabled."
 msgid "The selected jobs have been set to run as soon as possible."
-msgstr "選択した日付は削除されたか無効になっています。"
+msgstr "選択されたジョブが可能な限り早く実行されるよう設定されました。"
 
 #: pretix/control/views/datasync.py:139
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been enabled."
 msgid "The selected jobs have been canceled."
-msgstr "選択した日付が有効になりました。"
+msgstr "選択されたジョブがキャンセルされました。"
 
 #: pretix/control/views/discounts.py:67 pretix/control/views/discounts.py:109
 #: pretix/control/views/discounts.py:214
@@ -27034,12 +26877,11 @@ msgid "Not all discounts have been selected."
 msgstr "すべての割引が選択されていません。"
 
 #: pretix/control/views/event.py:454
-#, fuzzy
-#| msgid "You do not have sufficient permission to perform this export."
 msgid ""
 "You do not have sufficient permission to enable plugins that need to be "
 "enabled for the entire organizer account."
-msgstr "このエクスポートを実行するための十分な権限がありません。"
+msgstr "主催者アカウント全体で有効化する必要があるプラグインを有効にするのに十分な権"
+"限がありません。"
 
 #: pretix/control/views/event.py:473 pretix/control/views/organizer.py:713
 #, python-brace-format
@@ -27329,7 +27171,7 @@ msgstr "新しい質問が作成されました。"
 
 #: pretix/control/views/item.py:919
 msgid "The new quota has been created."
-msgstr "新しいノルマが作成されました。"
+msgstr "新しいクォータが作成されました。"
 
 #: pretix/control/views/item.py:982
 msgid "Exit scans"
@@ -27337,15 +27179,15 @@ msgstr "終了スキャン"
 
 #: pretix/control/views/item.py:989
 msgid "Vouchers and waiting list reservations"
-msgstr "バウチャーと空席待ちの予約"
+msgstr "バウチャーと空席待ちリスト予約"
 
 #: pretix/control/views/item.py:1004
 msgid "Available quota"
-msgstr "利用可能な割り当て"
+msgstr "利用可能なクォータ"
 
 #: pretix/control/views/item.py:1010
 msgid "Waiting list (pending)"
-msgstr "待ちリスト（保留中）"
+msgstr "空席待ちリスト（保留中）"
 
 #: pretix/control/views/item.py:1017
 msgid "Currently for sale"
@@ -27358,11 +27200,11 @@ msgstr "要求されたクォータは存在しません。"
 
 #: pretix/control/views/item.py:1092
 msgid "The quota has been re-opened and will not close again."
-msgstr "クォータは再度開かれ、再び閉じることはありません。"
+msgstr "クォータが再開され、再び終了することはありません。"
 
 #: pretix/control/views/item.py:1185
 msgid "The selected quota has been deleted."
-msgstr "選択された割り当てが削除されました。"
+msgstr "選択されたクォータが削除されました。"
 
 #: pretix/control/views/item.py:1208
 msgid "The requested item does not exist."
@@ -27780,10 +27622,8 @@ msgid "Invoices may not be changed after they are created."
 msgstr "請求書は作成された後に変更することはできません。"
 
 #: pretix/control/views/orders.py:1664
-#, fuzzy
-#| msgid "Invoices may not be changed after they are created."
 msgid "Invoices may not be changed after they are transmitted."
-msgstr "請求書は作成された後に変更することはできません。"
+msgstr "請求書は送信後に変更することはできません。"
 
 #: pretix/control/views/orders.py:1666 pretix/control/views/orders.py:1728
 msgid "The invoice has already been canceled."
@@ -27805,13 +27645,11 @@ msgstr "請求書から個人データが削除されました。"
 msgid ""
 "The invoice is currently being transmitted. You can start a new attempt "
 "after the current one has been completed."
-msgstr ""
+msgstr "請求書は現在送信中です。現在の処理が完了した後、新しい試行を開始できます。"
 
 #: pretix/control/views/orders.py:1704
-#, fuzzy
-#| msgid "The invoice has been cleaned of personal data."
 msgid "The invoice has been scheduled for retransmission."
-msgstr "請求書から個人データが削除されました。"
+msgstr "請求書の再送信が予定されました。"
 
 #: pretix/control/views/orders.py:1761
 msgid "The email has been queued to be sent."
@@ -28012,22 +27850,16 @@ msgid "Administrators"
 msgstr "管理者"
 
 #: pretix/control/views/organizer.py:803
-#, fuzzy
-#| msgid "Unknown plugin: '{name}'."
 msgid "Unknown plugin."
-msgstr "不明なプラグイン: '{name}'。"
+msgstr "不明なプラグインです。"
 
 #: pretix/control/views/organizer.py:809
-#, fuzzy
-#| msgid "The relevant plugin is currently not active."
 msgid "This plugin is currently not active on the organizer account."
-msgstr "関連するプラグインは、現在無効です。"
+msgstr "このプラグインは現在、主催者アカウントで有効になっていません。"
 
 #: pretix/control/views/organizer.py:813
-#, fuzzy
-#| msgid "A payment is currently pending for this order."
 msgid "This plugin is currently not allowed for this organizer account."
-msgstr "この注文に対する支払いは現在保留中です。"
+msgstr "このプラグインは現在、この主催者アカウントでは許可されていません。"
 
 #: pretix/control/views/organizer.py:902
 msgid "The team has been created. You can now add members to the team."
@@ -28343,12 +28175,10 @@ msgid "Please do not create more than 100.000 dates at once."
 msgstr "一度に10万以上の日付を作成しないでください。"
 
 #: pretix/control/views/subevents.py:1037
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "{} new dates have been created."
+#, python-brace-format
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr "新しい日付が作成されました。"
+msgstr "{} 新しい日付が作成されました。"
 
 #: pretix/control/views/typeahead.py:92
 msgid "Series:"
@@ -28476,11 +28306,11 @@ msgstr "新しいユーザーが作成されました。"
 
 #: pretix/control/views/vouchers.py:119
 msgid "Reserve quota"
-msgstr "割り当てを予約します"
+msgstr "クォータを予約"
 
 #: pretix/control/views/vouchers.py:119
 msgid "Bypass quota"
-msgstr "クォータをバイパスします"
+msgstr "クォータをバイパスする"
 
 #: pretix/control/views/vouchers.py:134
 msgid "Any product"
@@ -28539,15 +28369,15 @@ msgstr ""
 #: pretix/control/views/waitinglist.py:208
 #: pretix/control/views/waitinglist.py:227
 msgid "Waiting list entry not found."
-msgstr "待ちリストのエントリが見つかりませんでした。"
+msgstr "空席待ちリスト登録が見つかりません。"
 
 #: pretix/control/views/waitinglist.py:205
 msgid "The waiting list entry has been moved to the top."
-msgstr "待ちリストのエントリが一番上に移動しました。"
+msgstr "空席待ちリスト登録が最上位に移動されました。"
 
 #: pretix/control/views/waitinglist.py:224
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr "待ちリストのエントリがリストの最後に移動しました。"
+msgstr "空席待ちリスト登録がリストの最後に移動されました。"
 
 #: pretix/control/views/waitinglist.py:314
 msgid "On list since"
@@ -28571,7 +28401,7 @@ msgstr "これはイベントシリーズではありません。"
 
 #: pretix/control/views/waitinglist.py:410
 msgid "The waitinglist entry has been transferred."
-msgstr "空席待ちリストのエントリは転送されました。"
+msgstr "空席待ちリスト登録が転送されました。"
 
 #: pretix/helpers/countries.py:128
 msgid "Belarus"
@@ -28686,7 +28516,7 @@ msgstr "全てのお支払方法"
 
 #: pretix/plugins/autocheckin/forms.py:120
 msgid "All variations"
-msgstr "すべての変化"
+msgstr "すべてのバリエーション"
 
 #: pretix/plugins/autocheckin/forms.py:247
 msgid ""
@@ -31016,7 +30846,7 @@ msgstr "顧客や参加者に対して大量のメールが送信されました
 
 #: pretix/plugins/sendmail/signals.py:123
 msgid "Mass email was sent to waiting list entries."
-msgstr "空席待ちリストのエントリーに対して大量のメールが送信されました。"
+msgstr "空席待ちリスト登録に一斉メールが送信されました。"
 
 #: pretix/plugins/sendmail/signals.py:128
 msgid "The order received a mass email."
@@ -31028,7 +30858,7 @@ msgstr "この注文のチケット保持者は、大量のメールを受け取
 
 #: pretix/plugins/sendmail/signals.py:134
 msgid "The person on the waiting list received a mass email."
-msgstr "待機リストに載っている人が大量のメールを受け取りました。"
+msgstr "空席待ちリストの人が一斉メールを受信しました。"
 
 #: pretix/plugins/sendmail/signals.py:139
 msgid "An email rule was created"
@@ -31258,7 +31088,7 @@ msgstr ""
 #, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] "%(number)s 件の空席待ち"
+msgstr[0] "%(number)s件の空席待ちリスト登録"
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/apps.py:39 pretix/plugins/statistics/signals.py:37
@@ -31356,7 +31186,7 @@ msgstr ""
 #: pretix/plugins/stripe/apps.py:31 pretix/plugins/stripe/apps.py:34
 #: pretix/plugins/stripe/apps.py:44 pretix/plugins/stripe/payment.py:163
 msgid "Stripe"
-msgstr "ストライプ"
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/apps.py:40
 msgid ""
@@ -31401,11 +31231,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:196
 msgid "Connect with Stripe"
-msgstr "Stripeに接続してください"
+msgstr "Stripeと接続"
 
 #: pretix/plugins/stripe/payment.py:206
 msgid "Disconnect from Stripe"
-msgstr "Stripeから切断する"
+msgstr "Stripeから切断"
 
 #: pretix/plugins/stripe/payment.py:210
 msgid ""
@@ -31451,7 +31281,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:248 pretix/plugins/stripe/payment.py:253
 msgid "Stripe account"
-msgstr "ストライプアカウント"
+msgstr "Stripeアカウント"
 
 #: pretix/plugins/stripe/payment.py:261
 msgctxt "stripe"
@@ -31795,7 +31625,7 @@ msgstr "{bank}の銀行口座"
 
 #: pretix/plugins/stripe/payment.py:1526
 msgid "iDEAL via Stripe"
-msgstr "Stripeを介したiDEAL"
+msgstr "Stripe経由でiDEAL"
 
 #: pretix/plugins/stripe/payment.py:1530
 msgid ""
@@ -31819,7 +31649,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1563
 msgid "Bancontact via Stripe"
-msgstr "Stripeを経由するBancontact"
+msgstr "Stripe経由でBancontact"
 
 #: pretix/plugins/stripe/payment.py:1594
 msgid "SOFORT via Stripe"
@@ -31860,11 +31690,11 @@ msgstr "銀行 {bank} 、銀行口座 {iban}"
 
 #: pretix/plugins/stripe/payment.py:1676
 msgid "EPS via Stripe"
-msgstr "Stripeを介したEPS"
+msgstr "Stripe経由でEPS"
 
 #: pretix/plugins/stripe/payment.py:1707
 msgid "Multibanco via Stripe"
-msgstr "Multibanco 経由のStripe"
+msgstr "Multibanco 経由でStripe"
 
 #: pretix/plugins/stripe/payment.py:1711
 msgid ""
@@ -31874,7 +31704,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1729
 msgid "Przelewy24 via Stripe"
-msgstr "Stripeを介したPrzelewy24"
+msgstr "Stripe経由でPrzelewy24"
 
 #: pretix/plugins/stripe/payment.py:1733
 msgid ""
@@ -31887,7 +31717,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1768
 msgid "WeChat Pay via Stripe"
-msgstr "Stripeを介したWeChat Pay"
+msgstr "Stripe経由でWeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:1773
 msgid ""
@@ -31919,7 +31749,7 @@ msgstr "Stripe経由でPayPal"
 
 #: pretix/plugins/stripe/payment.py:1823
 msgid "Swish via Stripe"
-msgstr "Stripeを経由してスウィッシュ"
+msgstr "Stripe経由でSwish"
 
 #: pretix/plugins/stripe/payment.py:1828
 msgid ""
@@ -33661,7 +33491,7 @@ msgstr "位置番号#%(positionid)sの価格を%(old)sから%(new)sに変更し�
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:70
 #, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr "位置を追加します（%(item)s – %(variation)s）"
+msgstr "座席を追加します（%(item)s – %(variation)s）"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:74
 #, python-format
@@ -34033,13 +33863,13 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
-"上記の座席表のカテゴリのうち、いくつかは現在売り切れています。希望があれば、"
-"キャンセル待ちリストに自分の名前を追加することができます。その後、もし座席が"
-"再び利用可能になった場合に通知いたします。"
+"上記の座席表のカテゴリーの一部が現在完売しています。ご希望の場合は、空席待ち"
+"リストにご自身を追加できます。座席が再び利用可能になった際にお知らせいたしま"
+"す。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:213
 msgid "Join waiting list"
-msgstr "待ちリストに参加してください"
+msgstr "空席待ちリストに参加"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:230
 #: pretix/presale/templates/pretixpresale/event/voucher.html:437
@@ -34652,7 +34482,7 @@ msgstr "少なくとも%(number)s個の製品を選択する必要がありま�
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
-msgstr "空席待ちリストに私を追加してください"
+msgstr "空席待ちリストに追加"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:22
 #, python-format
@@ -34661,9 +34491,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
-"もしチケットが再び利用可能になった場合、空席待ちリストの最初の人にお知らせし"
-"ます。通知があった場合、次の人に割り当てるまでに%(hours)s時間以内にチケットを"
-"購入することができます。"
+"チケットが再び利用可能になった場合、空席待ちリストの最初の方々にお知らせいた"
+"します。お客様にお知らせした場合、%(hours)s時間以内にチケットをご購入いただく"
+"必要があり、期限内にご購入いただけない場合は次の人に割り当てられます。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
@@ -34672,8 +34502,8 @@ msgid ""
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
 "確保できるチケットは1枚だけですので、ご注意ください。複数のチケットが必要な場"
-"合は、空席待ちリストに自分自身を複数回追加する必要があります。必要な枚数が確"
-"保できるかどうかは、お約束できません。"
+"合は、空席待ちリストにご自身を複数回追加する必要があります。必要な枚数が確保"
+"できるかどうかは、お約束できません。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
@@ -34682,18 +34512,17 @@ msgid ""
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
 msgstr ""
-"1枚のチケットしか受け取れないことに注意してください。複数のチケットが必要な場"
-"合は、異なるメールアドレスで複数回待ちリストに登録する必要があります。特定の"
-"枚数のチケットを受け取れることは保証されていません。"
+"1枚のチケットしか受け取れないことにご注意ください。複数のチケットが必要な場合"
+"は、異なるメールアドレスで空席待ちリストに複数回登録する必要があります。特定"
+"の枚数のチケットを受け取れることは保証されていません。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:38
 msgid ""
 "You will <strong>not</strong> receive a confirmation email after you have "
 "been added to the waiting list. We will only contact you once a spot opens "
 "up."
-msgstr ""
-"リストに追加後、確認のメールは<strong>お送りしません</strong>。空席が出た場合"
-"のみ、こちらからお知らせいたします。"
+msgstr "空席待ちリストに追加された後、確認メールは<strong>送信されません</strong>。空"
+"きが出た場合のみご連絡いたします。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:44
 msgid "Add me to the list"
@@ -34701,7 +34530,7 @@ msgstr "リストに私を追加する"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:5
 msgid "Remove me from the waiting list"
-msgstr "空席待ちリストから私の名前を削除してください"
+msgstr "空席待ちリストから削除"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:9
 msgid ""
@@ -34709,14 +34538,15 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
-"あなたは空席待ちリストからチケットを購入するために選ばれました。もしもうチ"
-"ケットが必要ない場合は、できるだけ早くリストからチケットを削除していただける"
-"と次の待っている人にすぐに回すことができます!"
+"空席待ちリストから選ばれ、チケットをご購入いただけることになりました。チケッ"
+"トが不要になった場合は、お手数をおかけいたしますが、リストからチケットを削除"
+"していただけますようお願いいたします。これにより、次にお待ちの方に可能な限り"
+"迅速にお渡しできます！"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr "はい、チケットを削除してください"
+msgstr "はい、チケットを削除します"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:6
 msgid "Calendar"
@@ -34900,9 +34730,8 @@ msgstr "チケットが選択されていません。"
 msgid ""
 "Please tick a checkbox or enter a quantity for one of the ticket types to "
 "add to the cart."
-msgstr ""
-"チェックボックスにチェックを入れるか、カートに追加するチケットタイプの1つの数"
-"量を入力してください。"
+msgstr "チェックボックスにチェックを入れるか、数量を入力して、カートにチケットを追加"
+"してください。"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -35191,7 +35020,7 @@ msgstr "正の数のみ入力してください。"
 
 #: pretix/presale/views/cart.py:441
 msgid "We applied the voucher to as many products in your cart as we could."
-msgstr "カート内の商品に可能な限りクーポンを適用しました。"
+msgstr "カート内の商品に可能な限りバウチャーを適用しました。"
 
 #: pretix/presale/views/cart.py:476 pretix/presale/views/cart.py:484
 msgid ""
@@ -35457,50 +35286,44 @@ msgstr ""
 msgid ""
 "No ticket types are available for the waiting list, have a look at the "
 "ticket shop instead."
-msgstr ""
-"空席待ちリストのチケットタイプは利用できません。代わりにチケットショップをご"
-"覧ください。"
+msgstr "空席待ちリストで利用可能なチケットタイプがありません。代わりにチケットショッ"
+"プをご覧ください。"
 
 #: pretix/presale/views/waiting.py:137 pretix/presale/views/waiting.py:161
 msgid "Waiting lists are disabled for this event."
-msgstr "このイベントの待ちリストは無効になっています。"
+msgstr "このイベントでは空席待ちリストが無効になっています。"
 
 #: pretix/presale/views/waiting.py:173
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
-msgstr ""
-"現在この商品は利用可能なため、待ちリストに自分自身を追加することはできませ"
-"ん。"
+msgstr "この製品は現在利用可能であるため、空席待ちリストにご自身を追加できません。"
 
 #: pretix/presale/views/waiting.py:180
 #, python-brace-format
 msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
-msgstr ""
-"お待ちいただいているリストに追加しました。この商品が再入荷次第、{email}宛に"
-"メールをお送りします。"
+msgstr "空席待ちリストに追加いたしました。この製品が再び利用可能になり次第、{email}に"
+"メールをお送りいたします。"
 
 #: pretix/presale/views/waiting.py:208
 msgid "We could not find you on our waiting list."
-msgstr "私たちはあなたを待ちリストに見つけることができませんでした。"
+msgstr "空席待ちリストでお客様を見つけることができませんでした。"
 
 #: pretix/presale/views/waiting.py:212
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
-msgstr ""
-"あなたの待ちリストのスポットはもはや有効ではないか、すでに使用されています。"
-"ここで何もすることはありません。"
+msgstr "お客様の空席待ちリスト枠はすでに無効または使用済みです。ここで行うことはもう"
+"ありません。"
 
 #: pretix/presale/views/waiting.py:222
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
-msgstr ""
-"ありがとうございました！私たちはあなたの空席待ちリストの順番を他の誰かに割り"
-"当てます。"
+msgstr "ありがとうございます！お客様の空席待ちリスト枠を他の方に割り当てさせていただ"
+"きます。"
 
 #: pretix/presale/views/widget.py:390
 msgid "This ticket shop is currently disabled."
