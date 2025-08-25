@@ -108,7 +108,7 @@ def get_all_payment_providers():
 
     with rolledback_transaction():
         plugins = ",".join([app.name for app in apps.get_app_configs()])
-        organizer=Organizer.objects.create(
+        organizer = Organizer.objects.create(
             name="INTERNAL",
             plugins=plugins,
         )
