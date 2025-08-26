@@ -5,6 +5,7 @@
  * Released under the MIT license
  * https://github.com/select2/select2/blob/master/LICENSE.md
  */
+// !Note: edited to fix wrong aria-selected state on blur
 ;(function (factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
@@ -1266,7 +1267,6 @@ S2.define('select2/results',[
 
     container.on('results:focus', function (params) {
       params.element[0].classList.add('select2-results__option--highlighted');
-      params.element[0].setAttribute('aria-selected', 'true');
     });
 
     container.on('results:message', function (params) {
@@ -1328,8 +1328,7 @@ S2.define('select2/results',[
       var data = Utils.GetData(this, 'data');
 
       self.getHighlightedResults()
-          .removeClass('select2-results__option--highlighted')
-          .attr('aria-selected', 'false');
+          .removeClass('select2-results__option--highlighted');
 
       self.trigger('results:focus', {
         data: data,
