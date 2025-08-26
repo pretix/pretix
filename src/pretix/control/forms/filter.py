@@ -107,11 +107,16 @@ def get_all_payment_providers():
             return Event
 
     with rolledback_transaction():
+        plugins = ",".join([app.name for app in apps.get_app_configs()])
+        organizer = Organizer.objects.create(
+            name="INTERNAL",
+            plugins=plugins,
+        )
         event = Event.objects.create(
-            plugins=",".join([app.name for app in apps.get_app_configs()]),
+            plugins=plugins,
             name="INTERNAL",
             date_from=now(),
-            organizer=Organizer.objects.create(name="INTERNAL")
+            organizer=organizer,
         )
         event = FakeEvent(event)
         provs = register_payment_providers.send(
