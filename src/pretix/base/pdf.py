@@ -41,6 +41,8 @@ import os
 import re
 import subprocess
 import tempfile
+import pypdf
+import pypdf.generic
 import unicodedata
 import uuid
 from collections import OrderedDict, defaultdict
@@ -1189,6 +1191,24 @@ class Renderer:
                 bg_page = self.bg_pdf.pages[i]
                 if bg_page.rotation != 0:
                     bg_page.transfer_rotation_to_content()
+                bg_media_box = bg_page.mediabox
+                trsf = pypdf.Transformation()
+                if bg_media_box.bottom != 0:
+                    trsf = trsf.translate(0, -bg_media_box.bottom)
+                if bg_media_box.left != 0:
+                    trsf = trsf.translate(-bg_media_box.left, 0)
+                bg_page.add_transformation(trsf, False)
+                for b in ["/MediaBox", "/CropBox", "/BleedBox", "/TrimBox", "/ArtBox"]:
+                    if b in bg_page:
+                        rr = pypdf.generic.RectangleObject(bg_page[b])
+                        pt1 = trsf.apply_on(rr.lower_left)
+                        pt2 = trsf.apply_on(rr.upper_right)
+                        bg_page[pypdf.generic.NameObject(b)] = pypdf.generic.RectangleObject((
+                            min(pt1[0], pt2[0]),
+                            min(pt1[1], pt2[1]),
+                            max(pt1[0], pt2[0]),
+                            max(pt1[1], pt2[1]),
+                        ))
                 page.merge_page(bg_page, over=False)
                 output.add_page(page)
 
