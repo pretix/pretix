@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-26 09:40+0000\n"
+"PO-Revision-Date: 2025-08-26 19:00+0000\n"
 "Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -864,17 +864,13 @@ msgid "Invoice address"
 msgstr "Factuuradres"
 
 #: pretix/base/datasync/sourcefields.py:134
-#, fuzzy
-#| msgid "Meta information"
 msgid "Event information"
-msgstr "Meta-informatie"
+msgstr "Event-informatie"
 
 #: pretix/base/datasync/sourcefields.py:135
-#, fuzzy
-#| msgid "Send recovery information"
 msgctxt "subevent"
 msgid "Event or date information"
-msgstr "Stuur herstelinformatie"
+msgstr "Event- of datuminformatie"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:604
@@ -899,10 +895,8 @@ msgstr "Naam van aanwezige"
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:628
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "Naam van aanwezige"
+msgstr "Aanwezige"
 
 #: pretix/base/datasync/sourcefields.py:207
 #: pretix/base/exporters/orderlist.py:611 pretix/base/forms/questions.py:685
@@ -916,10 +910,8 @@ msgid "Attendee email"
 msgstr "E-mailadres van aanwezige"
 
 #: pretix/base/datasync/sourcefields.py:219
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee or order email"
-msgstr "E-mailadres van aanwezige"
+msgstr "E-mailadres van de aanwezige of de bestelling"
 
 #: pretix/base/datasync/sourcefields.py:232 pretix/base/pdf.py:186
 #: pretix/control/templates/pretixcontrol/order/index.html:595
@@ -931,28 +923,20 @@ msgid "Attendee company"
 msgstr "Bedrijf aanwezige"
 
 #: pretix/base/datasync/sourcefields.py:241
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "Adres van gast"
+msgstr "Adres aanwezige: straat"
 
 #: pretix/base/datasync/sourcefields.py:250
-#, fuzzy
-#| msgid "Attendee ZIP code"
 msgid "Attendee address ZIP code"
-msgstr "Adres gast: postcode"
+msgstr "Adres aanwezige: postcode"
 
 #: pretix/base/datasync/sourcefields.py:259
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address city"
-msgstr "Adres van gast"
+msgstr "Adres aanwezige: plaats"
 
 #: pretix/base/datasync/sourcefields.py:268
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address country"
-msgstr "Adres van gast"
+msgstr "Adres aanwezige: land"
 
 #: pretix/base/datasync/sourcefields.py:279 pretix/base/pdf.py:344
 msgid "Invoice address company"
@@ -987,16 +971,12 @@ msgid "Invoice address country"
 msgstr "Factuuradres: land"
 
 #: pretix/base/datasync/sourcefields.py:353
-#, fuzzy
-#| msgid "Order details"
 msgid "Order email"
-msgstr "Bestellingsdetails"
+msgstr "Emailadres bestelling"
 
 #: pretix/base/datasync/sourcefields.py:362
-#, fuzzy
-#| msgid "Organizer domain"
 msgid "Order email domain"
-msgstr "Domein van de organisator"
+msgstr "E-maildomein van de bestelling"
 
 #: pretix/base/datasync/sourcefields.py:371
 #: pretix/base/exporters/invoices.py:201 pretix/base/exporters/invoices.py:328
@@ -1027,10 +1007,8 @@ msgid "Order code"
 msgstr "Bestelcode"
 
 #: pretix/base/datasync/sourcefields.py:380
-#, fuzzy
-#| msgid "End order date"
 msgid "Event and order code"
-msgstr "Einddatum bestelling"
+msgstr "Code van event en bestelling"
 
 #: pretix/base/datasync/sourcefields.py:389
 #: pretix/base/exporters/orderlist.py:262 pretix/base/notifications.py:201
@@ -1042,10 +1020,8 @@ msgid "Order total"
 msgstr "Totaalbedrag van bestelling"
 
 #: pretix/base/datasync/sourcefields.py:398
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Product and variation name"
-msgstr "Productnaam en variant"
+msgstr "Product- en variantnaam"
 
 #: pretix/base/datasync/sourcefields.py:410 pretix/base/exporters/items.py:57
 #: pretix/base/exporters/orderlist.py:597
