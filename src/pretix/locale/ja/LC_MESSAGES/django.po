@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-25 01:00+0000\n"
+"PO-Revision-Date: 2025-08-27 08:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -672,7 +672,7 @@ msgstr "{system} のユーザー"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:31
 #: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
-msgstr "電子メール"
+msgstr "メール"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:675
@@ -785,9 +785,8 @@ msgstr "ログインできませんでした。エラーメッセージ: \"{erro
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
-msgstr ""
-"このアカウントの電子メールアドレスが未検証です。あなたの顧客アカウントの電子"
-"メールアドレスを先に検証してください。"
+msgstr "このアカウントのメールアドレスが未検証です。まず、あなたの顧客アカウントのメ"
+"ールアドレスを先に検証してください。"
 
 #: pretix/base/datasync/datasync.py:255
 #, python-brace-format
@@ -1359,7 +1358,7 @@ msgstr "アカウントが有効"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:100
 msgid "Verified email address"
-msgstr "確認済み電子メールアドレス"
+msgstr "確認済みメールアドレス"
 
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:68
@@ -1680,7 +1679,7 @@ msgstr "日付"
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:314
 msgid "Email address"
-msgstr "電子メールアドレス"
+msgstr "メールアドレス"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
@@ -2155,7 +2154,7 @@ msgstr ""
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
-msgstr "Eメールアドレス（テキストファイル）"
+msgstr "メールアドレス（テキストファイル）"
 
 #: pretix/base/exporters/mail.py:54
 msgid ""
@@ -2697,12 +2696,11 @@ msgstr "従来のバージョンから変換されました"
 
 #: pretix/base/exporters/orderlist.py:1019
 msgid "Payments and refunds"
-msgstr "内部参考資料"
+msgstr "支払いと払い戻し"
 
 #: pretix/base/exporters/orderlist.py:1021
 msgid "Download a spreadsheet of all payments or refunds of every order."
-msgstr ""
-"すべての注文の支払いまたは返金のスプレッドシートをダウンロードしてください。"
+msgstr "すべての注文の支払い・払い戻しをスプレッドシートでダウンロードする。"
 
 #: pretix/base/exporters/orderlist.py:1030
 msgid "Date range (payment date)"
@@ -2712,7 +2710,8 @@ msgstr "日付範囲（支払い日）"
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
-msgstr "この場合、非確定の支払いや未完了の返金は除外されます。"
+msgstr "これを使用すると、未確認の支払いや未完了の払い戻しは除外されることにご注意く"
+"ださい。"
 
 #: pretix/base/exporters/orderlist.py:1037
 msgid "Date range (start of transaction)"
@@ -2724,7 +2723,7 @@ msgstr "支払いの状態"
 
 #: pretix/base/exporters/orderlist.py:1051
 msgid "Refund states"
-msgstr "払い戻しの状態"
+msgstr "払い戻し状態"
 
 #: pretix/base/exporters/orderlist.py:1094
 #: pretix/base/exporters/orderlist.py:1235
@@ -6305,7 +6304,7 @@ msgstr "失敗"
 #: pretix/base/models/orders.py:1728
 msgctxt "payment_state"
 msgid "refunded"
-msgstr "返金されました"
+msgstr "払い戻し済み"
 
 #: pretix/base/models/orders.py:1756 pretix/base/models/orders.py:2181
 #: pretix/base/shredder.py:633
@@ -6320,7 +6319,7 @@ msgstr "外部から開始"
 #: pretix/base/models/orders.py:2123
 msgctxt "refund_state"
 msgid "created"
-msgstr "作成されました"
+msgstr "作成済み"
 
 #: pretix/base/models/orders.py:2124
 msgctxt "refund_state"
@@ -6330,7 +6329,7 @@ msgstr "輸送中"
 #: pretix/base/models/orders.py:2125
 msgctxt "refund_state"
 msgid "done"
-msgstr "完了しました"
+msgstr "完了"
 
 #: pretix/base/models/orders.py:2126
 msgctxt "refund_state"
@@ -7255,7 +7254,7 @@ msgstr "注文{order.code}は過払いされています。"
 #: pretix/base/notifications.py:294
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr "外部から{order.code}の返金が発生しました。"
+msgstr "外部から{order.code}の払い戻しが発生しました。"
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
@@ -7264,7 +7263,7 @@ msgstr "払い戻しをリクエストしました"
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr "{order.code}の返金手続きがリクエストされました。"
+msgstr "{order.code} の払い戻し処理が要求されました。"
 
 #: pretix/base/payment.py:85
 msgctxt "payment"
@@ -7482,7 +7481,7 @@ msgstr "この支払いは処理中のため、キャンセルできません。
 
 #: pretix/base/payment.py:1036
 msgid "Automatic refunds are not supported by this payment provider."
-msgstr "この支払いプロバイダーでは自動返金はサポートされていません。"
+msgstr "この決済プロバイダーは自動払い戻しに対応していません。"
 
 #: pretix/base/payment.py:1127
 msgid ""
@@ -9358,15 +9357,14 @@ msgstr ""
 
 #: pretix/base/settings.py:181
 msgid "Match orders based on email address"
-msgstr "電子メールアドレスに基づいて注文をマッチングします"
+msgstr "メールアドレスに基づいて注文を照合する"
 
 #: pretix/base/settings.py:182
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
-msgstr ""
-"これにより、登録済みの顧客は、購入時にログインしていなくても、同じメールアド"
-"レスで行われた注文にアクセスできるようになります。"
+msgstr "これにより、登録済みの顧客が購入時にログインしていなかった場合でも、同じメー"
+"ルアドレスで作成された注文にアクセスできるようになります。"
 
 #: pretix/base/settings.py:192
 msgid "Activate re-usable media"
@@ -9439,9 +9437,9 @@ msgid ""
 "page of the individual attendees. The ticket buyer will of course see the "
 "price."
 msgstr ""
-"1人の人が複数のチケットを購入し、すべての参加者にメールを送信する場合、このオ"
-"プションでは個々の参加者のチケットページにはチケット価格が表示されません。も"
-"ちろん、チケット購入者は価格を見ることができます。"
+"1人が複数のチケットを購入し、すべての参加者にメールを送信する場合、このオプシ"
+"ョンにより個々の参加者のチケットページにはチケット価格が表示されません。もち"
+"ろん、チケット購入者には価格が表示されます。"
 
 #: pretix/base/settings.py:358
 msgid "Ask for attendee names"
@@ -9474,17 +9472,16 @@ msgid ""
 "primary email address, not to the per-attendee addresses. You can however "
 "enable this in the email settings."
 msgstr ""
-"通常、Pretixは1つの注文ごとに1つのメールアドレスを要求し、注文確認はそのメー"
-"ルアドレスにのみ送信されます。このオプションを有効にすると、システムは個人の"
-"パーソナライズされたチケットごとに個別のメールアドレスを追加で要求します。こ"
-"れは、グループ注文の場合でも、すべての参加者の個別のアドレスを取得したい場合"
-"に便利です。ただし、Pretixはデフォルトで注文確認を1つの主要なメールアドレスに"
-"のみ送信し、参加者ごとのアドレスには送信しません。ただし、メール設定でこれを"
-"有効にすることができます。"
+"通常、pretixは注文ごとに1つのメールアドレスを要求し、注文確認はそのメールアド"
+"レスのみに送信されます。このオプションを有効にすると、システムは個人用チケッ"
+"トごとに個別のメールアドレスも追加で要求します。これは、グループ注文の場合で"
+"も参加者全員の個別のアドレスを取得したい場合に便利です。ただし、pretixは既定"
+"では注文確認を主要なメールアドレス1つのみに送信し、参加者別のアドレスには送信"
+"しません。これはメール設定で有効にすることができます。"
 
 #: pretix/base/settings.py:394
 msgid "Require email addresses per ticket"
-msgstr "チケットごとにメールアドレスが必要"
+msgstr "チケットごとにメールアドレスを必須にする"
 
 #: pretix/base/settings.py:395
 msgid ""
@@ -9492,9 +9489,9 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
-"すべての個別のチケットについて、顧客に個々のメールアドレスを入力してもらうよ"
-"うにしてください。詳細については上記のオプションをご覧ください。この設定に関"
-"係なく、注文確認のための1つのメールアドレスは常に必要です。"
+"すべての個人用チケットに個別のメールアドレスの入力を顧客に要求します。詳細は"
+"上記のオプションをご覧ください。この設定に関係なく、注文確認用のメールアドレ"
+"スは常に1つ必要です。"
 
 #: pretix/base/settings.py:407
 msgid "Ask for company per ticket"
@@ -9514,14 +9511,13 @@ msgstr "チケットごとに郵送先の住所が必要"
 
 #: pretix/base/settings.py:445
 msgid "Ask for the order email address twice"
-msgstr "注文者の電子メールアドレスを2回尋ねる"
+msgstr "注文のメールアドレスを2回入力させる"
 
 #: pretix/base/settings.py:446
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
-msgstr ""
-"お客様には、エラーを避けるために、プライマリーのメールアドレスを2回入力してい"
-"ただくようお願いします。"
+msgstr "エラーを避けるため、顧客にプライマリメールアドレスを2回入力するよう要求します"
+"。"
 
 #: pretix/base/settings.py:455
 msgid "Ask for a phone number per order"
@@ -10122,7 +10118,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1265
 msgid "Attach invoices to emails"
-msgstr "電子メールに請求書を添付"
+msgstr "メールに請求書を添付する"
 
 #: pretix/base/settings.py:1266
 msgid ""
@@ -10131,13 +10127,13 @@ msgid ""
 "on payment, they will be attached to the payment confirmation mail. If they "
 "are not automatically generated, they will not be attached to emails."
 msgstr ""
-"すべての注文に自動的に請求書が生成される場合、それらは注文確認メールに添付さ"
-"れます。支払い時に自動的に生成される場合、支払い確認メールに添付されます。自"
-"動的に生成されない場合、メールに添付されません。"
+"すべての注文に対して請求書が自動生成される場合、注文確認メールに添付されます"
+"。支払い時に自動生成される場合は、支払い確認メールに添付されます。自動生成さ"
+"れない場合は、メールに添付されません。"
 
 #: pretix/base/settings.py:1278
 msgid "Email address to receive a copy of each invoice"
-msgstr "請求書のコピーを受け取るためのメールアドレス"
+msgstr "各請求書のコピーを受信するメールアドレス"
 
 #: pretix/base/settings.py:1279
 msgid ""
@@ -10145,9 +10141,9 @@ msgid ""
 "creation. You can use this for an automated import of invoices to your "
 "accounting system. The invoice will be the only attachment of the email."
 msgstr ""
-"新しく作成された請求書は、作成後すぐにこのメールアドレスに送信されます。これ"
-"を使用して、請求書を自動的に会計システムにインポートできます。請求書はメール"
-"の唯一の添付ファイルとなります。"
+"新しく作成された各請求書は、作成後すぐにこのメールアドレスに送信されます。こ"
+"れを使用して、請求書を会計システムに自動インポートできます。請求書がメールの"
+"唯一の添付ファイルになります。"
 
 #: pretix/base/settings.py:1294
 msgid "Show items outside presale period"
@@ -10244,9 +10240,9 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
-"チケットが完売すると、お客様は空席待ちリストに自分を追加できます。チケットが"
-"再び利用可能になるとすぐに、空席待ちリストの最初の人にチケットが予約され、こ"
-"の人はチケット購入に使用できるバウチャー付きのメール通知を受信します。"
+"チケットが売り切れになると、空席待ちリストに登録できるようになります。チケッ"
+"トが再び利用可能になると、空席待ちリストの先頭の人にチケットが予約され、その"
+"人はチケット購入に使用できるバウチャー付きのメール通知を受け取ります。"
 
 #: pretix/base/settings.py:1438
 msgid "Automatic waiting list assignments"
@@ -10342,7 +10338,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1539
 msgid "Maximum number of entries per email address for the same product"
-msgstr "同じ製品に対する1つのメールアドレスあたりの最大エントリー数"
+msgstr "同一商品に対するメールアドレス当たりの最大登録件数"
 
 #: pretix/base/settings.py:1543
 msgid ""
@@ -10352,10 +10348,10 @@ msgid ""
 "if they want more than one ticket, as every entry only grants one single "
 "ticket at a time."
 msgstr ""
-"制限を増やすと、お客様は同じ固有のメールアドレスを使用して、特定の製品に対し"
-"て複数のチケットを要求できます。ただし、この設定に関係なく、複数のチケットが"
-"必要な場合は空席待ちリストのフォームを複数回記入する必要があります。各登録は"
-"一度に1枚のチケットのみを付与するためです。"
+"上限を増やすことで、顧客は同一の固有のメールアドレスを使用して特定の商品に対"
+"して複数のチケットを申請できます。ただし、この設定に関係なく、複数のチケット"
+"が必要な場合は空席待ちリストフォームを複数回記入する必要があります。各登録に"
+"つき一度に1枚のチケットのみが付与されるためです。"
 
 #: pretix/base/settings.py:1555
 msgid "Show number of check-ins to customer"
@@ -10442,7 +10438,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1630
 msgid "Do not issue ticket before email address is validated"
-msgstr "メールアドレスが確認される前にチケットを発行しない"
+msgstr "メールアドレスが検証されるまでチケットを発行しない"
 
 #: pretix/base/settings.py:1631
 msgid ""
@@ -10452,10 +10448,10 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
-"オンになっている場合、チケットは購入直後に直接ダウンロードできません。ファイ"
-"ルサイズが大きくなければ、支払い確認のメールに添付され、顧客はメール内のリン"
-"クをクリックするとすぐにページからダウンロードできます。他の販売チャネルを通"
-"じて行われた注文には影響しません。"
+"この機能を有効にすると、購入直後にチケットのダウンロードが提供されません。チ"
+"ケットは支払い確認メールに添付され（ファイルサイズが大きすぎない場合）、顧客"
+"はメール内のリンクをクリックするとすぐにページからダウンロードできるようにな"
+"ります。他の販売チャネル経由での注文には影響しません。"
 
 #: pretix/base/settings.py:1647
 msgid "Low availability threshold"
@@ -10612,14 +10608,12 @@ msgstr "前の価格と同じであれば、変更を許可します。"
 msgid ""
 "Allow changes regardless of price, as long as no refund is required (i.e. "
 "the resulting price is not lower than what has already been paid)."
-msgstr ""
-"返金が必要ない限り、価格に関係なく変更を許可してください（つまり、支払済みの"
-"金額よりも低くならないようにしてください）。"
+msgstr "払い戻しが不要である限り（つまり、変更後の価格が既に支払われた金額を下回らな"
+"い限り）、価格に関係なく変更を許可する。"
 
 #: pretix/base/settings.py:1798 pretix/base/settings.py:1809
 msgid "Allow changes regardless of price, even if this results in a refund."
-msgstr ""
-"価格に関係なく変更を許可し、それによって払い戻しが発生しても構いません。"
+msgstr "払い戻しが発生する場合でも、価格に関係なく変更を許可する。"
 
 #: pretix/base/settings.py:1802
 msgid "Requirement for changed prices"
@@ -10701,9 +10695,8 @@ msgstr "お客様は支払い済みの注文をキャンセル可能"
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
-msgstr ""
-"支払い方法によっては、支払ったお金は自動的に返金されます。それ以外の場合は、"
-"手動で返金処理を行うために返金が作成されます。"
+msgstr "払われた金額は、決済方法が対応している場合は自動的に払い戻されます。対応して"
+"いない場合は、手動で処理するための手動払い戻しが作成されます。"
 
 #: pretix/base/settings.py:1926 pretix/control/forms/orders.py:909
 msgid "Keep a fixed cancellation fee"
@@ -10719,27 +10712,27 @@ msgstr "パーセンテージのキャンセル料を設定"
 
 #: pretix/base/settings.py:1956
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr "顧客が自発的に低い返金額を選択できるようにします"
+msgstr "顧客が自主的により少ない払い戻し額を選択することを許可する"
 
 #: pretix/base/settings.py:1957
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
-msgstr ""
-"このオプションを有効にすると、お客様はあなたをサポートするために少額の払い戻"
-"しを選択することができます。"
+msgstr "このオプションを有効にすると、顧客はあなたをサポートするために、より少ない払"
+"い戻し金額を選択できるようになります。"
 
 #: pretix/base/settings.py:1962
 msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
-"ただし、ここでライトを点灯させ続けるのをご希望の場合は、以下のスライダーを使"
-"用して少額の払い戻しをリクエストすることを検討してください。ありがとう！"
+"ただし、私たちがここで運営を続けられるよう支援していただける場合は、下のスラ"
+"イダーを使用してより少ない払い戻し金額をリクエストすることをご検討ください。"
+"ありがとうございます！"
 
 #: pretix/base/settings.py:1969
 msgid "Voluntary lower refund explanation"
-msgstr "自発的な低額払い戻しの説明"
+msgstr "自主的減額払い戻しの説明"
 
 #: pretix/base/settings.py:1972
 msgid ""
@@ -10748,9 +10741,9 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organization."
 msgstr ""
-"このテキストは、払い戻しの仕組みの説明と、お客様が希望する金額を選択するため"
-"のスライダーの間に表示されます。たとえば、低い払い戻しを選択することが組織に"
-"とって有益であることを説明するために使用できます。"
+"このテキストは、払い戻しの仕組みについての説明と、顧客が受け取りたい金額を選"
+"択するためのスライダーの間に表示されます。例えば、より少ない払い戻し額を選択"
+"することがあなたの組織の支援につながることを説明するために使用できます。"
 
 #: pretix/base/settings.py:1987
 msgid "Step size for reduction amount"
@@ -10769,9 +10762,8 @@ msgstr ""
 msgid ""
 "Customers can only request a cancellation that needs to be approved by the "
 "event organizer before the order is canceled and a refund is issued."
-msgstr ""
-"お客様は、注文がキャンセルされ、返金が行われる前に、イベント主催者によって承"
-"認される必要があるキャンセルをリクエストすることができます。"
+msgstr "顧客はキャンセル申請のみを行うことができ、注文がキャンセルされ払い戻しが実行"
+"される前に、イベント主催者による承認が必要です。"
 
 #: pretix/base/settings.py:2008
 msgid ""
@@ -10782,25 +10774,25 @@ msgstr ""
 
 #: pretix/base/settings.py:2017 pretix/base/settings.py:2027
 msgid "All refunds are issued to the original payment method"
-msgstr "すべての払い戻しは元の支払い方法に対して行う"
+msgstr "すべての払い戻しは元の決済方法に実行されます"
 
 #: pretix/base/settings.py:2018 pretix/base/settings.py:2028
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
-msgstr "お客様はギフトカードと支払い方法への返金のいずれかを選択できる"
+msgstr "顧客はギフトカードと決済方法への払い戻しから選択できます"
 
 #: pretix/base/settings.py:2019 pretix/base/settings.py:2029
 msgid "All refunds are issued as gift cards"
-msgstr "すべての払い戻しはギフトカードとして発行"
+msgstr "すべての払い戻しはギフトカードとして発行されます"
 
 #: pretix/base/settings.py:2020 pretix/base/settings.py:2030
 msgid "Do not handle refunds automatically at all"
-msgstr "絶対に自動的に返金を処理しない"
+msgstr "払い戻しを自動処理しません"
 
 #: pretix/base/settings.py:2025
 #: pretix/control/templates/pretixcontrol/order/index.html:149
 msgid "Refund method"
-msgstr "返金方法"
+msgstr "払い戻し方法"
 
 #: pretix/base/settings.py:2051 pretix/base/settings.py:2064
 msgid "Terms of cancellation"
@@ -10896,9 +10888,7 @@ msgstr "チケットのファイルを添付"
 msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
-msgstr ""
-"チケットが{size}より大きい場合は、メール配信の問題を避けるために添付されませ"
-"ん。"
+msgstr "メール配信の問題を避けるため、{size}より大きいチケットは添付されません。"
 
 #: pretix/base/settings.py:2165 pretix/plugins/sendmail/forms.py:201
 #: pretix/plugins/sendmail/models.py:270
@@ -10910,8 +10900,7 @@ msgstr "カレンダーファイルを添付"
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
-msgstr ""
-"有効になっている場合、注文確認メールに.icsカレンダーファイルを添付します。"
+msgstr "有効にすると、注文確認メールに.icsカレンダーファイルを添付します。"
 
 #: pretix/base/settings.py:2175
 msgid "Attach calendar files only after order has been paid"
@@ -10952,9 +10941,8 @@ msgstr "主題の接頭辞"
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
-msgstr ""
-"これは、すべての送信メールの件名の前に追加されます。[prefix]の形式でフォー"
-"マットされます。たとえば、イベント名の短縮形を選択してください。"
+msgstr "これは送信するすべてのメールの件名の前に[prefix]"
+"の形式で追加されます。例えば、イベント名の短縮形を選択してください。"
 
 #: pretix/base/settings.py:2216 pretix/control/forms/mailsetup.py:37
 #: pretix/control/forms/mailsetup.py:119
@@ -10966,7 +10954,7 @@ msgstr "送信元のアドレス"
 #: pretix/base/settings.py:2217 pretix/control/forms/mailsetup.py:38
 #: pretix/control/forms/mailsetup.py:120
 msgid "Sender address for outgoing emails"
-msgstr "発信者のアドレス（送信元のメールアドレス）"
+msgstr "送信メールの送信者アドレス"
 
 #: pretix/base/settings.py:2226
 msgid "Sender name"
@@ -10976,9 +10964,8 @@ msgstr "送信者の名前"
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
-msgstr ""
-"発信者の名前は、送信者のアドレスと一緒に使用され、送信される電子メールに表示"
-"されます。デフォルトでは、イベント名が使用されます。"
+msgstr "送信メールの送信者アドレスと組み合わせて使用する送信者名です。既定ではイベン"
+"ト名になります。"
 
 #: pretix/base/settings.py:2245 pretix/base/settings.py:2302
 #: pretix/base/settings.py:2319 pretix/base/settings.py:2337
@@ -11109,17 +11096,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"こんにちは、\n"
+"こんにちは\n"
 "\n"
-"{event}の注文を承りました。\n"
-"イベント主催者の承認が必要な商品をご注文いただいたため、\n"
-"次のメールをお待ちいただくようお願い申し上げます。\n"
+"{event}のご注文を正常に受け付けました。\n"
+"イベント主催者の承認が必要な商品をご注文されましたので、\n"
+"次回のメールまでしばらくお待ちください。\n"
 "\n"
-"注文の詳細の変更と確認は、以下のURLから可能です。\n"
+"ご注文の詳細変更および状況確認は以下でご確認いただけます：\n"
 "{url}\n"
 "\n"
-"よろしくお願いいたします。  \n"
-"{event}チームより"
+"よろしくお願いいたします\n"
+"{event}チーム一同"
 
 #: pretix/base/settings.py:2341
 #, python-brace-format
@@ -11167,13 +11154,13 @@ msgid ""
 "sent before payment is confirmed or the order is approved. To avoid this "
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
-"このファイルは、新しい注文ごとに最初の電子メールに添付されます。したがって、"
-"上記の「注文済み」、「無料注文」、または「受注済み」のテキストと組み合わせら"
-"れます。注文連絡先と参加者の両方に送信されます。たとえば、利用規約を送信する"
-"ために使用できます。このファイルは、支払いが確認される前や注文が承認される前"
-"に送信される可能性があるため、非公開情報を送信しないでください。この重要な電"
-"子メールがスパムになるのを避けるために、最大{size} MBのPDFファイルのみをアッ"
-"プロードできます。"
+"このファイルは、すべての新規注文に対して送信する最初のメールに添付されます。"
+"そのため、上記の「注文受付」、「無料注文」、または「受注済み」のテキストと組"
+"み合わせられます。注文連絡先と参加者の両方に送信されます。これを使用して、例"
+"えば利用規約を送付できます。支払い確認前や注文承認前に送信される可能性がある"
+"ため、非公開情報の送付には使用しないでください。この重要なメールがスパムに振"
+"り分けられることを避けるため、{size} "
+"MBまでのPDFファイルのみアップロードできます。"
 
 #: pretix/base/settings.py:2391
 #, python-brace-format
@@ -11296,9 +11283,8 @@ msgstr "日数"
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
-msgstr ""
-"このメールは、注文の有効期限の何日前に送信されます。値が0の場合、メールは送信"
-"されません。"
+msgstr "このメールは注文の有効期限の何日前に送信されるかを設定します。値が0の場合、メ"
+"ールは送信されません。"
 
 #: pretix/base/settings.py:2472
 #, python-brace-format
@@ -11796,7 +11782,7 @@ msgstr ""
 #: pretix/base/settings.py:2778
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
-msgstr "{organizer}のアカウントの電子メールアドレスを確認する"
+msgstr "{organizer}でのアカウントのメールアドレスを確認してください"
 
 #: pretix/base/settings.py:2782
 #, python-brace-format
@@ -12099,13 +12085,12 @@ msgstr "電話番号フィールドのヘルプテキスト"
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
-msgstr ""
-"有効なメールアドレスを入力してください。後で注文を確認するために必要なリンク"
-"が含まれた注文確認書をお送りします。"
+msgstr "有効なメールアドレスを入力してください。後で注文にアクセスするために必要なリ"
+"ンクを含む注文確認をお送りします。"
 
 #: pretix/base/settings.py:3217
 msgid "Help text of the email field"
-msgstr "電子メールフィールドのヘルプテキスト"
+msgstr "メールフィールドのヘルプテキスト"
 
 #: pretix/base/settings.py:3243
 msgid "Allow creating a new team during event creation"
@@ -12373,7 +12358,8 @@ msgstr ""
 
 #: pretix/base/settings.py:3909
 msgid "You have to ask for attendee emails if you want to make them required."
-msgstr "参加者のメールアドレスを必須にする場合は、それを求める必要があります。"
+msgstr "参加者メールを必須にしたい場合は、参加者メールを要求する設定を有効にする必要"
+"があります。"
 
 #: pretix/base/settings.py:3913
 msgid ""
@@ -12417,7 +12403,7 @@ msgstr "この操作により、すべての注文から電話番号が削除さ
 
 #: pretix/base/shredder.py:290
 msgid "Emails"
-msgstr "Eメール"
+msgstr "メール"
 
 #: pretix/base/shredder.py:292
 msgid ""
@@ -12425,8 +12411,8 @@ msgid ""
 "logged email contents. This will also remove the association to customer "
 "accounts."
 msgstr ""
-"これにより、注文や参加者からすべてのメールアドレスが削除され、ログされたメー"
-"ルの内容も削除されます。また、顧客アカウントとの関連も削除されます。"
+"これにより、注文と参加者からすべてのメールアドレスが削除され、記録されたメー"
+"ルの内容も削除されます。また、顧客アカウントとの関連付けも削除されます。"
 
 #: pretix/base/shredder.py:369
 msgid ""
@@ -12661,7 +12647,7 @@ msgstr "構成リンク:"
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
 msgid "You receive these emails based on your notification settings."
-msgstr "あなたは通知設定に基づいてこれらの電子メールを受け取ります。"
+msgstr "この通知設定に基づいてこれらのメールを受信しています。"
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
@@ -12683,7 +12669,7 @@ msgstr "ここをクリックしてすぐにすべての通知を無効にする
 msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
-msgstr "あなたは次のイベントに登録されたため、このメールを受け取っています:"
+msgstr "誰かがあなたを以下のイベントに申し込んだため、このメールを受信しています："
 
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:59
@@ -12708,7 +12694,7 @@ msgstr "連絡先："
 msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
-msgstr "次のイベントの注文を行ったため、このメールを受け取っています:"
+msgstr "以下のイベントにご注文いただいたため、このメールを受信しています："
 
 #: pretix/base/templates/pretixbase/email/order_details.html:89
 msgid "Details:"
@@ -13392,9 +13378,9 @@ msgid ""
 "already received orders might lead to unexpected behavior when sorting or "
 "changing names."
 msgstr ""
-"これは、pretixが人の名前を求める方法を定義します。注文をすでに受け取った後に"
-"これを変更すると、名前の並べ替えや変更時に予期しない動作が発生する可能性があ"
-"ります。"
+"これは、pretixが人名を要求する方法を定義します。既に注文を受け付けた後にこれ"
+"を変更すると、名前の並び替えや変更時に予期しない動作が発生する可能性がありま"
+"す。"
 
 #: pretix/control/forms/event.py:528 pretix/control/forms/organizer.py:467
 msgid "Allowed titles"
@@ -13484,7 +13470,7 @@ msgstr "おすすめ"
 
 #: pretix/control/forms/event.py:949
 msgid "The online shop must be selected to receive these emails."
-msgstr "オンラインショップを選択して、これらのメールを受け取る必要があります。"
+msgstr "これらのメールを受信するにはオンラインショップを選択する必要があります。"
 
 #: pretix/control/forms/event.py:965
 msgid "Sales channels for checkout emails"
@@ -13494,17 +13480,15 @@ msgstr "チェックアウトメールの販売チャネル"
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
-msgstr ""
-"注文が確定し支払いが完了したメールは、これらの販売チャネルからの注文にのみ送"
-"信されます。オンラインショップは有効にする必要があります。"
+msgstr "注文済みおよび支払い済みメールは、これらの販売チャネルからの注文にのみ送信さ"
+"れます。オンラインショップを有効にする必要があります。"
 
 #: pretix/control/forms/event.py:977
 msgid ""
 "This email will only be send to orders from these sales channels. The online "
 "shop must be enabled."
-msgstr ""
-"このメールは、これらの販売チャンネルからの注文にのみ送信されます。オンライン"
-"ショップは有効にする必要があります。"
+msgstr "このメールは、これらの販売チャネルからの注文にのみ送信されます。オンラインシ"
+"ョップを有効にする必要があります。"
 
 #: pretix/control/forms/event.py:985 pretix/control/forms/organizer.py:583
 msgid "Bcc address"
@@ -13521,7 +13505,7 @@ msgstr "署名"
 #: pretix/control/forms/event.py:998
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
-msgstr "このメールには常に添付されます。利用可能なプレースホルダー：{event}"
+msgstr "これはすべてのメールに添付されます。利用可能なプレースホルダー：{event}"
 
 #: pretix/control/forms/event.py:1003 pretix/control/forms/organizer.py:601
 msgid "e.g. your contact details"
@@ -13545,7 +13529,7 @@ msgstr "注文者の連絡先アドレスに送られるテキスト"
 #: pretix/control/forms/event.py:1077 pretix/control/forms/event.py:1227
 #: pretix/control/forms/event.py:1272 pretix/control/forms/event.py:1302
 msgid "Send an email to attendees"
-msgstr "参加者に電子メールを送る"
+msgstr "参加者にメールを送信する"
 
 #: pretix/control/forms/event.py:1024 pretix/control/forms/event.py:1051
 #: pretix/control/forms/event.py:1078 pretix/control/forms/event.py:1228
@@ -13554,9 +13538,8 @@ msgid ""
 "If the order contains attendees with email addresses different from the "
 "person who orders the tickets, the following email will be sent out to the "
 "attendees."
-msgstr ""
-"注文には、チケットを注文する人と異なるメールアドレスを持つ参加者が含まれてい"
-"る場合、参加者に以下のメールが送信されます。"
+msgstr "チケット注文者と異なるメールアドレスを持つ参加者が注文に含まれている場合、以"
+"下のメールが参加者に送信されます。"
 
 #: pretix/control/forms/event.py:1029 pretix/control/forms/event.py:1056
 #: pretix/control/forms/event.py:1083 pretix/control/forms/event.py:1233
@@ -13628,8 +13611,7 @@ msgstr "（支払いが不完全な場合）"
 msgid ""
 "This email only applies to payment methods that can receive incomplete "
 "payments, such as bank transfer."
-msgstr ""
-"このメールは、銀行振込などの不完全な支払いを受け取ることができる支払方法にの"
+msgstr "このメールは、銀行振込などの不完全な支払いを受け取ることができる決済方法にの"
 "み適用されます。"
 
 #: pretix/control/forms/event.py:1206 pretix/control/forms/event.py:1213
@@ -13643,17 +13625,16 @@ msgstr "これは、請求書が注文確認とは異なるメールアドレス
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
-msgstr ""
-"このメールは、注文イベントが開始される何日前に送信されます。フィールドが空の"
-"場合、メールは送信されません。"
+msgstr "このメールは注文イベント開始の何日前に送信されるかを設定します。フィールドが"
+"空の場合、メールは送信されません。"
 
 #: pretix/control/forms/event.py:1250
 msgid "Subject for received order"
-msgstr "受注した注文に関する件"
+msgstr "受注済み注文の件名"
 
 #: pretix/control/forms/event.py:1255
 msgid "Text for received order"
-msgstr "受け取った注文のテキスト"
+msgstr "受注済み注文のテキスト"
 
 #: pretix/control/forms/event.py:1260
 msgid "Subject for approved order"
@@ -14021,11 +14002,11 @@ msgstr "注文が前に置かれました"
 
 #: pretix/control/forms/filter.py:577
 msgid "Minimal sum of payments and refunds"
-msgstr "支払いと払い戻しの最小額"
+msgstr "支払い・払い戻しの最低金額"
 
 #: pretix/control/forms/filter.py:582
 msgid "Maximal sum of payments and refunds"
-msgstr "支払いと払い戻しの最大合計"
+msgstr "支払い・払い戻しの最高金額"
 
 #: pretix/control/forms/filter.py:593
 msgid "At least one ticket with check-in"
@@ -14285,11 +14266,11 @@ msgstr "クォータ”{quota}”にある任意の商品"
 
 #: pretix/control/forms/filter.py:2281
 msgid "Refund status"
-msgstr "払い戻しの状況"
+msgstr "払い戻し状況"
 
 #: pretix/control/forms/filter.py:2283
 msgid "All open refunds"
-msgstr "すべての返金"
+msgstr "すべての未処理払い戻し"
 
 #: pretix/control/forms/filter.py:2284
 msgid "All refunds"
@@ -14467,7 +14448,7 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:131
 msgid "Email notifications"
-msgstr "電子メール通知"
+msgstr "メール通知"
 
 #: pretix/control/forms/global_settings.py:132
 msgid ""
@@ -14475,9 +14456,9 @@ msgid ""
 "available. This address will not be transmitted to pretix.eu, the emails "
 "will be sent by this server locally."
 msgstr ""
-"新しいアップデートが利用可能になった場合、このアドレスに通知します。このアド"
-"レスはpretix.euに送信されることはありません。メールはこのサーバーからローカル"
-"で送信されます。"
+"新しいアップデートが利用可能であることを検出した場合、このアドレスに通知しま"
+"す。このアドレスはpretix.euに送信されず、メールはこのサーバーからローカルで送"
+"信されます。"
 
 #: pretix/control/forms/global_settings.py:145
 msgid "Changes to pretix"
@@ -14898,9 +14879,9 @@ msgid ""
 "only use characters A-Z, a-z, 0-9, and common special characters "
 "({characters})."
 msgstr ""
-"パスワードには、当社のメールシステムでサポートされていない文字が含まれていま"
-"す。文字A-Z、a-z、0-9、および一般的な特殊文字({characters})のみを使用してくだ"
-"さい 。"
+"パスワードに当システムのメールシステムでサポートされていない文字が含まれてい"
+"ます。A-Z、a-z、0-9、および一般的な特殊文字（{characters}）のみを使用してくだ"
+"さい。"
 
 #: pretix/control/forms/mailsetup.py:70
 msgid "Use STARTTLS"
@@ -15051,7 +15032,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:167 pretix/control/forms/orders.py:226
 #: pretix/control/forms/orders.py:240
 msgid "Notify customer by email"
-msgstr "顧客に電子メールで通知"
+msgstr "顧客にメールで通知する"
 
 #: pretix/control/forms/orders.py:174
 msgid "Keep a cancellation fee of"
@@ -15080,9 +15061,8 @@ msgstr "コメント（ユーザーに送信）"
 msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
-msgstr ""
-"構成された電子メールテキストに対応するプレースホルダが存在する場合、通知メー"
-"ルに含まれます。"
+msgstr "設定されたメールテキストに対応するプレースホルダーが存在する場合、通知メール"
+"に含まれます。"
 
 #: pretix/control/forms/orders.py:204
 msgid ""
@@ -15162,7 +15142,7 @@ msgstr "ユーザーに通知します"
 #: pretix/control/forms/orders.py:320
 msgid ""
 "Send an email to the customer notifying that their order has been changed."
-msgstr "注文が変更されたことを通知するメールを顧客に送信します。"
+msgstr "注文が変更されたことを顧客に通知するメールを送信します。"
 
 #: pretix/control/forms/orders.py:324
 msgid "Allow to overbook quotas when performing this operation"
@@ -15282,9 +15262,8 @@ msgstr "チケットを添付する"
 msgid ""
 "Will be ignored if tickets exceed a given size limit to ensure email "
 "deliverability."
-msgstr ""
-"指定されたサイズ制限を超えるチケットは無視され、メールの配信可能性を確保しま"
-"す。"
+msgstr "メール配信を確実にするため、チケットが規定のサイズ上限を超える場合は無視され"
+"ます。"
 
 #: pretix/control/forms/orders.py:742
 msgid "Attach invoices"
@@ -15322,11 +15301,11 @@ msgstr "何もせず、注文どおりに保ちます。"
 #: pretix/control/forms/orders.py:836
 #, python-brace-format
 msgid "The refund amount needs to be positive and less than {}."
-msgstr "返金額は正であり、 {}未満である必要があります。"
+msgstr "払い戻し金額は正の値で、{}未満である必要があります。"
 
 #: pretix/control/forms/orders.py:842
 msgid "You need to specify an amount for a partial refund."
-msgstr "一部返金の金額を指定する必要があります。"
+msgstr "部分払い戻しには金額の指定が必要です。"
 
 #: pretix/control/forms/orders.py:854
 msgid "Cancel all dates"
@@ -15334,7 +15313,7 @@ msgstr "すべての予定をキャンセルします"
 
 #: pretix/control/forms/orders.py:873
 msgid "Automatically refund money if possible"
-msgstr "可能であれば自動的に返金します"
+msgstr "可能な場合は自動的に払い戻しを行う"
 
 #: pretix/control/forms/orders.py:876
 msgid ""
@@ -15342,13 +15321,13 @@ msgid ""
 "that have been blocked (manually or by a plugin) are not auto-canceled and "
 "you will need to deal with them manually."
 msgstr ""
-"自動返金をサポートする支払い方法のみ利用可能です。手動でブロックされたチケッ"
-"トやプラグインによってブロックされたチケットは自動的にキャンセルされませんの"
-"で、手動で対処する必要があります。"
+"自動払い戻しに対応している決済方法でのみ利用可能です。（手動またはプラグイン"
+"により）ブロックされたチケットは自動キャンセルされないため、手動で処理する必"
+"要があります。"
 
 #: pretix/control/forms/orders.py:880
 msgid "Create refund in the manual refund to-do list"
-msgstr "手動の払い戻しを行うための払い戻しリストを作成します"
+msgstr "手動払い戻し処理リストに払い戻しを作成する"
 
 #: pretix/control/forms/orders.py:883
 msgid ""
@@ -15358,16 +15337,17 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
-"手動払い戻しは作成され、手動払い戻しの作業リストにリストされます。自動払い戻"
-"し機能と組み合わせると、自動払い戻しをサポートしていない支払い方法でのみ手動"
-"払い戻しの作業リストに表示されます。異なる注文で相殺したり、ギフトカードを発"
-"行することで一部の注文を払い戻したい場合はチェックしないでください。"
+"手動払い戻しが作成され、手動払い戻し処理リストに表示されます。自動払い戻し機"
+"能と組み合わせて使用する場合、自動払い戻しに対応していない決済方法での支払い"
+"のみが手動払い戻し処理リストに表示されます。他の注文との相殺やギフトカード発"
+"行により一部の注文を払い戻したい場合は、このオプションをチェックしないでくだ"
+"さい。"
 
 #: pretix/control/forms/orders.py:889
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
-msgstr "元の支払い方法ではなく、ギフトカードで注文の代金を返金する"
+msgstr "元の決済方法ではなく注文金額をギフトカードに払い戻す"
 
 #: pretix/control/forms/orders.py:895
 msgid "Gift card validity"
@@ -15392,13 +15372,13 @@ msgid ""
 "series is only partially canceled since it consists of tickets for multiple "
 "dates."
 msgstr ""
-"選択された種類の料金は返金されませんが、代わりにキャンセル料に追加されます。"
-"イベントシリーズの注文が部分的にキャンセルされた場合、複数の日付のチケットか"
-"ら成るため、料金は返金されません。"
+"選択した手数料の種類は払い戻されず、代わりにキャンセル料に加算されます。イベ"
+"ントシリーズの注文が部分的にのみキャンセルされた場合、複数の日程のチケットで"
+"構成されているため、手数料は払い戻されません。"
 
 #: pretix/control/forms/orders.py:934
 msgid "Send information via email"
-msgstr "電子メールで情報を送信"
+msgstr "メールで情報を送信する"
 
 #: pretix/control/forms/orders.py:940
 msgid "Send information to waiting list"
@@ -15426,19 +15406,19 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"前略\n"
+"こんにちは。\n"
 "\n"
 "大変残念なお知らせですが、イベント {event} が中止になりました。\n"
 "\n"
-"購入代金 {refund_amount} は、お支払いと同じ方法で返金いたします。\n"
+"{refund_amount}を元の決済方法に払い戻しいたします。\n"
 "\n"
-"現時点での状況は、つぎのリンクでご確認いただけます。\n"
+"ご注文の現在の状況はこちらでご確認いただけます。\n"
 "\n"
 "{url}\n"
 "\n"
-"敬具  \n"
+"よろしくお願いいたします。  \n"
 "\n"
-"担当 {event} チーム"
+"{event}チーム一同"
 
 #: pretix/control/forms/orders.py:993
 #, python-brace-format
@@ -15453,15 +15433,15 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"前略\n"
+"こんにちは\n"
 "\n"
 "残念なお知らせですが、イベント {event} が中止となりました。\n"
 "\n"
-"そのため、空席待ちリストを基にして、チケットを受け取ることはありません。\n"
+"そのため、空席待ちリストからチケットをお渡しすることができません。\n"
 "\n"
-"敬具  \n"
+"よろしくお願いいたします\n"
 "\n"
-"担当 {event} チーム"
+"{event}チーム一同"
 
 #: pretix/control/forms/orders.py:1025 pretix/plugins/sendmail/forms.py:115
 #: pretix/plugins/sendmail/forms.py:208
@@ -16326,7 +16306,7 @@ msgstr "キャンセルリクエストは削除されました。"
 
 #: pretix/control/logdisplay.py:508
 msgid "The order has been refunded."
-msgstr "注文は返金されました。"
+msgstr "注文が払い戻しされました。"
 
 #: pretix/control/logdisplay.py:509 pretix/control/views/orders.py:1882
 msgid "The order has been reactivated."
@@ -17250,11 +17230,11 @@ msgstr "払い戻し{local_id}が作成されました。"
 #: pretix/control/logdisplay.py:915
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
-msgstr "外部エンティティによって{local_id}の払い戻しが作成されました。"
+msgstr "払い戻し {local_id} が外部機関によって作成されました。"
 
 #: pretix/control/logdisplay.py:916
 msgid "The customer requested you to issue a refund."
-msgstr "お客様から返金の手続きを依頼されました。"
+msgstr "顧客が払い戻しの実行を要求しました。"
 
 #: pretix/control/logdisplay.py:917
 #, python-brace-format
@@ -17457,7 +17437,7 @@ msgstr "概要"
 #: pretix/plugins/reports/accountingreport.py:685
 #: pretix/presale/templates/pretixpresale/event/order.html:137
 msgid "Refunds"
-msgstr "返金"
+msgstr "払い戻し"
 
 #: pretix/control/navigation.py:247
 msgid "Import"
@@ -19138,9 +19118,9 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
-"ユーザーが支払い済みの注文をキャンセルし、選択した支払い方法のために自動的に"
-"返金できない場合、手動で対応する必要があります。ただし、現在このイベントの通"
-"知をオフにしています。"
+"ユーザーが支払い済み注文のキャンセルを要求し、選択された決済方法などの理由で"
+"自動的に払い戻しができない場合、手動での対応が必要になります。ただし、このイ"
+"ベントの通知を現在オフにしています。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:46
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
@@ -19213,17 +19193,15 @@ msgid ""
 "If the change leads to a price reduction and automatic refunds are enabled "
 "for self-service cancellations, the system will try to refund the money "
 "automatically."
-msgstr ""
-"変更が価格の引き下げにつながり、自己サービスのキャンセルに対する自動払い戻し"
-"が有効になっている場合、システムは自動的にお金を払い戻そうとします。"
+msgstr "変更により価格が下がり、セルフサービスキャンセルで自動払い戻しが有効になって"
+"いる場合、システムは自動的に払い戻しを試行します。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:81
 msgid ""
 "Refunds can be issued as a gift card if the respective option is set, but "
 "there is no customer choice between gift card and direct refund."
-msgstr ""
-"返金は、該当するオプションが設定されている場合、ギフトカードとして発行するこ"
-"とができますが、顧客はギフトカードと直接の返金の選択肢がありません。"
+msgstr "関連オプションが設定されている場合、払い戻しはギフトカードとして発行できます"
+"が、ギフトカードと直接払い戻しを顧客が選択することはできません。"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
@@ -19257,9 +19235,8 @@ msgstr "イベントをキャンセルします"
 msgid ""
 "If you need to call off your event you want to cancel and refund all "
 "tickets, you can do so through this option."
-msgstr ""
-"イベントを中止し、全てのチケットをキャンセルして返金したい場合は、このオプ"
-"ションを利用することができます。"
+msgstr "イベントを中止する必要がある場合、このオプションを通じて全チケットのキャンセ"
+"ルと払い戻しを行うことができます。"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:55
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:68
@@ -19424,9 +19401,9 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
-"このイベントには<strong>過剰支払いの注文</strong>が含まれており、例えば重複し"
-"た支払いの試みによるものです。あなたはこれらのケースを確認し、過剰支払い額を"
-"ユーザーに返金することを検討すべきです。"
+"このイベントには<strong>過払い注文</strong>が含まれています（例：重複した支払"
+"い試行による）。該当するケースを確認し、ユーザーへの過払い金額の払い戻しを検"
+"討してください。"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:41
 msgid "Show overpaid orders"
@@ -19436,9 +19413,7 @@ msgstr "過剰に支払われた注文を表示します"
 msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
-msgstr ""
-"このイベントには、対応すべき<strong>保留中の払い戻し</strong>が含まれていま"
-"す。"
+msgstr "このイベントには処理すべき<strong>保留中の払い戻し</strong>が含まれています。"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:50
 msgid "Show pending refunds"
@@ -19475,10 +19450,10 @@ msgid ""
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"このイベントには<strong>完全支払いの注文</strong>が含まれており、支払いが到着"
-"した時にはクォータが残っていなかったため、支払い済みとしてマークされていない"
-"可能性があります。これらのケースを確認し、顧客に払い戻しを行うか、より多くの"
-"スペースを作成するかを検討してください。"
+"このイベントには、支払い済みとマークされていない<strong>完全支払い済み注文</s"
+"trong>が含まれています。これは、支払いが到着した時点で枠が残っていなかったこ"
+"とが原因と考えられます。該当するケースを確認し、顧客への払い戻しまたは追加枠"
+"の作成を検討してください。"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:79
 msgid "Show affected orders"
@@ -22119,9 +22094,8 @@ msgstr ""
 msgid ""
 "This will <strong>not</strong> automatically transfer the money back, but "
 "you will be offered options to refund the payment afterwards."
-msgstr ""
-"これは自動的にお金を返金するわけでは<strong>ありません</strong>が、後で支払い"
-"を返金するオプションが提供されます。"
+msgstr "これによって資金が<strong>自動的に</strong>払い戻されることはありませんが、後"
+"から支払いを払い戻すオプションが提供されます。"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:29
 #, python-format
@@ -22484,7 +22458,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:116
 #: pretix/control/views/orders.py:373
 msgid "Refund for overpayment"
-msgstr "支払超過の払い戻し"
+msgstr "過払い分の払い戻し"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:118
 #, python-format
@@ -22494,7 +22468,7 @@ msgstr "この注文は、現在 %(amount)s の過払い状態です。"
 #: pretix/control/templates/pretixcontrol/order/index.html:122
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr "%(amount)s の返金を始める"
+msgstr "%(amount)sの払い戻しを開始する"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:130
 #, python-format
@@ -22503,8 +22477,8 @@ msgid ""
 "can choose to refund the money below or reactivate it by extending the "
 "payment deadline."
 msgstr ""
-"この注文は%(amount)sの支払いを受け取ったにもかかわらず期限切れです。以下でお"
-"金を返金するか、支払い期限を延長して再度有効にすることができます。"
+"この注文は%(amount)sの支払いを受け取ったにもかかわらず期限切れです。以下で払"
+"い戻しを選択するか、支払い期限を延長して再度有効にすることができます。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:143
 msgid "Cancellation request"
@@ -22798,7 +22772,7 @@ msgstr "無視"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:58
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:123
 msgid "Process refund"
-msgstr "払い戻しを処理します"
+msgstr "払い戻しを処理する"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:987
 #: pretix/presale/templates/pretixpresale/event/base.html:141
@@ -22901,14 +22875,12 @@ msgstr "再起動します"
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
 msgid "Cancel refund"
-msgstr "払い戻しをキャンセルします"
+msgstr "払い戻しをキャンセルする"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
-msgstr ""
-"本当にこの返金をキャンセルしたいですか？このアクションは元に戻すことができま"
-"せん。"
+msgstr "この払い戻しを本当にキャンセルしますか？この操作は元に戻すことができません。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
@@ -22916,9 +22888,9 @@ msgid ""
 "will just mark this transfer as aborted in pretix. This will also not "
 "reactivate the order, it will just allow you to choose a new refund method."
 msgstr ""
-"お金がすでに戻り始めている場合、これはお金を止めるのではなく、単にこの送金を"
-"pretixで中止されたものとしてマークします。また、これは注文を再度有効にするわ"
-"けではなく、新しい払い戻し方法を選択できるようにします。"
+"資金が既に返金処理中の場合、この操作で資金の移動は停止されませんが、pretixで"
+"はこの転送が中止されたとマークされます。また、注文が再有効化されることもなく"
+"、単に新しい払い戻し方法を選択できるようになるだけです。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
@@ -22929,11 +22901,11 @@ msgstr "はい、払い戻しをキャンセルします"
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:9
 msgid "Refund order"
-msgstr "返金の注文"
+msgstr "注文を払い戻す"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:23
 msgid "How should the refund be sent?"
-msgstr "払い戻しはどのように送金されるべきですか？"
+msgstr "どのように払い戻しますか？"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:25
 msgid ""
@@ -22942,17 +22914,17 @@ msgid ""
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
-"自動返金に選択した支払いは、即座に返金リクエストが該当する支払いプロバイダー"
-"に通知されます。手動返金は保留返金として作成され、実際に顧客にお金を返金した"
-"後に完了としてマークできます。"
+"自動払い戻しに選択した支払いについては、直ちに関連する決済事業者に払い戻し要"
+"求が送信されます。手動払い戻しは保留中の払い戻しとして作成され、実際に顧客へ"
+"の資金返金が完了した後で完了済みとしてマークできます。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 msgid "Refund to original payment method"
-msgstr "元の支払い方法に返金します"
+msgstr "元の決済方法へ払い戻す"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:39
 msgid "Amount not refunded"
-msgstr "払い戻し額なし"
+msgstr "払い戻されていない金額"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:40
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:87
@@ -22965,11 +22937,11 @@ msgstr "全額"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:71
 msgid "This payment method does not support automatic refunds."
-msgstr "この支払い方法では自動返金に対応していません。"
+msgstr "この決済方法は自動払い戻しに対応していません。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:80
 msgid "Refund to a different payment method"
-msgstr "異なる支払い方法への返金"
+msgstr "異なる決済方法へ払い戻す"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:86
 msgid "Recipient / options"
@@ -23005,15 +22977,15 @@ msgstr "そのまま転送を続ける"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr "払い戻しに完了の印をつける"
+msgstr "払い戻しを完了済みとしてマークする"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:213
 msgid "Perform refund"
-msgstr "返金手続きを行います"
+msgstr "払い戻しを実行する"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
 msgid "Do you really want to mark this refund as complete?"
-msgstr "本当にこの返金を完了としてマークしますか？"
+msgstr "この払い戻しを本当に完了としてマークしますか？"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
@@ -23027,9 +22999,9 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is "
 "<strong>%(total)s</strong>."
 msgstr ""
-"私たちは、<strong>%(amount)s</strong>が<strong>%(method)s</strong>経由で返金"
-"されたことを通知しました。この返金が処理されると、注文は<strong>%(pending)s</"
-"strong>不足になります。注文の合計金額は<strong>%(total)s</strong>です。"
+"<strong>%(method)s</strong>経由で<strong>%(amount)s</strong>が払い戻されたと"
+"の通知を受けました。この払い戻しが処理された場合、注文は<strong>%(pending)s</"
+"strong>の未払い状態になります。注文合計は<strong>%(total)s</strong>です。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -23053,15 +23025,15 @@ msgstr "撤回可能な方法で、注文を取り消す。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:20
 msgid "How much do you want to refund?"
-msgstr "いくら返金しますか？"
+msgstr "いくら払い戻しますか？"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:25
 msgid "Refund full paid amount"
-msgstr "全額返金"
+msgstr "支払われた全額を払い戻す"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
 msgid "Refund only"
-msgstr "返金のみ"
+msgstr "払い戻しのみ"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:40
 msgid "What should happen to the order?"
@@ -23146,10 +23118,10 @@ msgid ""
 "orders can be created. Make sure that you check afterwards for any overpaid "
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
-"このページを使用して、イベントを中止する必要がある場合にすべての注文をキャン"
-"セルおよび返金することができます。これにより、すべての商品が無効になり、新し"
-"い注文を作成することができなくなります。その後、手動で対処する必要がある過払"
-"いの注文や保留中の返金がないかを確認してください。"
+"イベントを中止する必要がある場合、このページを使用して全注文を一度にキャンセ"
+"ルし払い戻すことができます。これにより全商品も無効化され、新しい注文は作成で"
+"きなくなります。その後、手動で対処する必要がある過払い注文や保留中の払い戻し"
+"がないか必ず確認してください。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
 msgid ""
@@ -23194,9 +23166,9 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
-"お客様の注文をギフトカードに払い戻すため、ギフトカードへのアクセス方法を説明"
-"する必要があります。これを行う最も簡単な方法は、こちらで提供された電子メール"
-"機能を使用して、注文に関する説明とリンクを含めることです。"
+"顧客の注文をギフトカードで払い戻すため、ギフトカードへのアクセス方法を説明す"
+"る必要があります。最も簡単な方法は、ここで提供されているメール機能を使用して"
+"、説明文と注文へのリンクを含めることです。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:64
 msgid ""
@@ -23634,7 +23606,7 @@ msgstr "アクションを選択"
 #: pretix/control/templates/pretixcontrol/orders/index.html:311
 #: pretix/control/views/orders.py:357
 msgid "Refund overpaid amount"
-msgstr "過払いの返金"
+msgstr "過払い分を払い戻す"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:319
 #: pretix/control/views/orders.py:342
@@ -23703,7 +23675,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:34
 msgid "No refunds are currently open."
-msgstr "現在、返金は受け付けておりません。"
+msgstr "現在、未処理の払い戻しはありません。"
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:109
@@ -27424,7 +27396,7 @@ msgstr "現時点ではこの支払いはキャンセルできません。"
 
 #: pretix/control/views/orders.py:907
 msgid "The refund has been canceled."
-msgstr "返金はキャンセルされました。"
+msgstr "払い戻しがキャンセルされました。"
 
 #: pretix/control/views/orders.py:909
 msgid "This refund can not be canceled at the moment."
@@ -27432,15 +27404,15 @@ msgstr "この払い戻しは現時点ではキャンセルできません。"
 
 #: pretix/control/views/orders.py:943
 msgid "The refund has been processed."
-msgstr "返金は処理されました。"
+msgstr "払い戻しが処理されました。"
 
 #: pretix/control/views/orders.py:945 pretix/control/views/orders.py:971
 msgid "This refund can not be processed at the moment."
-msgstr "申し訳ございませんが、現在この返金は処理できません。"
+msgstr "この払い戻しは現在処理できません。"
 
 #: pretix/control/views/orders.py:969
 msgid "The refund has been marked as done."
-msgstr "返金は完了とマークされました。"
+msgstr "払い戻しが完了済みとしてマークされました。"
 
 #: pretix/control/views/orders.py:995
 msgid "The request has been removed. If you want, you can now inform the user."
@@ -27490,9 +27462,8 @@ msgid ""
 "The refund was prevented due to a refund already being processed at the same "
 "time. Please have a look at the order details and check if your refund is "
 "still necessary."
-msgstr ""
-"返金は、同時に処理されている返金がすでにあるために阻止されました。注文の詳細"
-"をご確認いただき、返金がまだ必要かどうかをご確認ください。"
+msgstr "同時に他の払い戻しが処理されているため、この払い戻しは実行されませんでした。"
+"注文詳細を確認し、払い戻しがまだ必要かご確認ください。"
 
 #: pretix/control/views/orders.py:1255
 msgid "You entered an order in an event with a different currency."
@@ -27502,38 +27473,34 @@ msgstr "イベントで異なる通貨で注文を入力しました。"
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
-msgstr "まだ払い戻されていない支払いの金額を超えて返金することはできません。"
+msgstr "まだ払い戻されていない支払い金額を超える払い戻しはできません。"
 
 #: pretix/control/views/orders.py:1311
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
-msgstr ""
-"選択した支払い方法は、部分払いをサポートしていないため、全額払い戻しになりま"
-"す。"
+msgstr "全額払い戻しのみに対応している決済方法に対して、部分払い戻しを選択しました。"
 
 #: pretix/control/views/orders.py:1341
 #, python-brace-format
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
-msgstr ""
-"払い戻しの処理に失敗しました。別の方法で払い戻しを再試行してください。エラー"
-"メッセージは次の通りです: {}"
+msgstr "払い戻しの1つが処理に失敗しました。別の方法で払い戻しを再試行してください。エ"
+"ラーメッセージ：{}"
 
 #: pretix/control/views/orders.py:1347
 #, python-brace-format
 msgid "A refund of {} has been processed."
-msgstr "{}の返金が処理されました。"
+msgstr "{}の払い戻しが処理されました。"
 
 #: pretix/control/views/orders.py:1351
 #, python-brace-format
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
-msgstr ""
-"{}の払い戻しは保存されていますが、まだ完全に実行されていません。以下で完了と"
-"マークすることができます。"
+msgstr "{}の払い戻しが保存されましたが、まだ完全に実行されていません。以下で完了済み"
+"としてマークできます。"
 
 #: pretix/control/views/orders.py:1380
 msgid ""
@@ -27558,18 +27525,18 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"前略\n"
+"こんにちは\n"
 "\n"
-"ご注文に対する代金 {amount} を返金いたします。\n"
+"ご注文の{amount}を払い戻しいたしました。\n"
 "\n"
-"今後当ショップで、ギフトコード {giftcard} をチケットの購入にご利用いただけま"
-"す。\n"
+"ギフトカードコード {giftcard} "
+"を使用して、当ショップでの今後のチケット購入にご利用いただけます。\n"
 "\n"
-"担当 {event} チーム"
+"{event}チーム一同"
 
 #: pretix/control/views/orders.py:1401
 msgid "The refunds you selected do not match the selected total refund amount."
-msgstr "選択した返金額と選択した返金の合計額が一致しません。"
+msgstr "選択した各払い戻し額の合計が、指定された総払い戻し額と一致しません。"
 
 #: pretix/control/views/orders.py:1531
 msgid ""
@@ -29047,13 +29014,12 @@ msgid ""
 "can e.g. ban DE0012345 to ban all German IBANs with the bank identifier "
 "starting with 12345."
 msgstr ""
-"1行に1つのIBANまたはIBANプレフィックスを付けます。システムは、これらのIBANの"
-"いずれにも払い戻しを送信しようとしません。たとえば、サードパーティの支払いプ"
-"ロバイダーから多くの「転送された支払い」を受け取った場合に便利です。特定の国"
-"のIBANに払い戻しを送信したくない場合は、「GB」などの国コードをリストすること"
-"もできます。比較のためにチェック数字は無視されるため、たとえば、DE0012345を禁"
-"止して、銀行識別子が12345から始まるすべてのドイツのIBANを禁止することができま"
-"す。"
+"1行につき1つのIBANまたはIBANプレフィックスを入力してください。システムはこれ"
+"らのIBANへの払い戻しを試行しません。例えば、サードパーティの決済事業者から多"
+"くの「転送支払い」を受ける場合に便利です。特定の国からのIBANへの払い戻しを行"
+"いたくない場合は、「GB」などの国コードも入力できます。チェックデジットは比較"
+"時に無視されるため、例えばDE0012345を禁止することで、銀行識別子が12345で始ま"
+"るすべてのドイツのIBANを禁止できます。"
 
 #: pretix/plugins/banktransfer/payment.py:207
 msgid "Restrict to business customers"
@@ -29119,7 +29085,7 @@ msgstr "銀行口座 {iban}"
 
 #: pretix/plugins/banktransfer/payment.py:473
 msgid "Can only create a bank transfer refund from an existing payment."
-msgstr "既存の支払いからの銀行振込払い戻しのみが可能です。"
+msgstr "既存の支払いからのみ、銀行振込払い戻しを作成できます。"
 
 #: pretix/plugins/banktransfer/payment.py:493
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/new_refund_control_form.html:7
@@ -29141,7 +29107,7 @@ msgstr "支払い者"
 
 #: pretix/plugins/banktransfer/refund_export.py:93
 msgid "Refund"
-msgstr "返金"
+msgstr "払い戻し"
 
 #: pretix/plugins/banktransfer/signals.py:125
 msgid "The invoice was sent to the designated email address."
@@ -29403,9 +29369,8 @@ msgstr "銀行振込の払い戻しをエクスポート"
 msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
-msgstr ""
-"<strong>%(num_new)s</strong> 件の銀行振込払い戻しが行われ、まだエクスポートの"
-"一部ではありません。"
+msgstr "<strong>%(num_new)s</strong>件の銀行振込払い戻しが作成され、まだエクスポート"
+"に含まれていません。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
@@ -29440,10 +29405,11 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"                    一旦エクスポートファイルが生成されると、払い戻しが記録さ"
-"れますのでご注意ください。\n"
-"                    エクスポートファイルをダウンロードし、払い戻しを必ず実行"
-"してください。\n"
+"                    "
+"一旦エクスポートファイルが生成されると、払い戻しが完了済みとしてマークされる"
+"ことにご注意ください。\n"
+"                    "
+"エクスポートファイルをダウンロードし、払い戻しを必ず実行してください。\n"
 "                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
@@ -29489,13 +29455,13 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
-"あなたは、%(date)s 日間、 %(cnt)s 件の注文に対する、合計 %(sum)s件の払戻し情"
-"報のエクスポートファイルのダウンロードを実行するところです。"
+"%(date)s 日間、 %(cnt)s 件の注文に対する、合計 "
+"%(sum)s件の払戻し情報のエクスポートファイルのダウンロードしようとしています。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr "払い戻しはどの銀行口座から送金されるべきかをお知らせください。"
+msgstr "払い戻しをどの銀行口座から振り込むかを指定してください。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
@@ -29551,8 +29517,8 @@ msgstr "捨てる"
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
-msgstr ""
-"負の金額ですが、返金が記録されません。まず手動で返金を作成してください。"
+msgstr "金額がマイナスになりましたが、払い戻し処理を自動作成できません。手動払い戻し"
+"を作成してください。"
 
 #: pretix/plugins/banktransfer/views.py:166
 msgid "Problem sending email."
@@ -29632,9 +29598,8 @@ msgstr "通貨は選択されていません。"
 msgid ""
 "We could not find bank account information for the refund {refund_id}. It "
 "was marked as failed."
-msgstr ""
-"払い戻し{refund_id}の銀行口座情報が見つかりませんでした。失敗したとマークされ"
-"ています。"
+msgstr "払い戻し {refund_id} "
+"の銀行口座情報が見つかりませんでした。失敗としてマークされました。"
 
 #: pretix/plugins/banktransfer/views.py:745
 msgid "No valid orders have been found."
@@ -29883,7 +29848,7 @@ msgstr "確認メールの送信中にエラーが発生しました。"
 #: pretix/plugins/paypal2/payment.py:979 pretix/plugins/paypal2/payment.py:1000
 #, python-brace-format
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr "PayPalを通じての返金が失敗しました: {}"
+msgstr "PayPal経由での払い戻しに失敗しました：{}"
 
 #: pretix/plugins/paypal/payment.py:708 pretix/plugins/paypal/payment.py:716
 #: pretix/plugins/paypal2/payment.py:1077
@@ -30089,9 +30054,8 @@ msgstr "{icon} PayPalに接続"
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
-msgstr ""
-"外部で支払いが返金された場合に自動的に注文をキャンセルするために、PayPalの"
-"Webhookを次のエンドポイントに設定してください。"
+msgstr "外部で支払いが払い戻された際に自動的に注文をキャンセルするため、"
+"以下のエンドポイントにPayPal Webhookを設定してください。"
 
 #: pretix/plugins/paypal2/payment.py:277
 msgid "PayPal does not process payments in your event's currency."
@@ -30150,9 +30114,8 @@ msgstr ""
 msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
-msgstr ""
-"PayPalを通じて金額を返金することに失敗しました：元の支払いには自動返金を行う"
-"ために必要な情報が含まれていません。"
+msgstr "PayPal経由での金額払い戻しに失敗しました：元の支払いに自動払い戻し発行に必要"
+"な情報が含まれていません。"
 
 #: pretix/plugins/paypal2/payment.py:1104
 msgid "PayPal APM"
@@ -30172,7 +30135,7 @@ msgstr "支払いが拒否されました。"
 
 #: pretix/plugins/paypal2/signals.py:60
 msgid "Payment refunded."
-msgstr "払い戻しました。"
+msgstr "支払いが払い戻されました。"
 
 #: pretix/plugins/paypal2/signals.py:61
 msgid "Payment reversed."
@@ -31246,9 +31209,10 @@ msgid ""
 "automatically cancel orders when charges are refunded externally and to "
 "process asynchronous payment methods like SOFORT."
 msgstr ""
-"以下のエンドポイントに<a href=\"https://dashboard.stripe.com/account/"
-"webhooks\">Stripe Webhook</a>を設定して、外部で返金された場合に注文を自動的に"
-"キャンセルし、SOFORTのような非同期支払い方法を処理できるようにしてください。"
+"外部でチャージが払い戻された際の自動注文キャンセルや、SOFORTなどの非同期決済"
+"方法を処理するため、以下のエンドポイントに<a href="
+"\"https://dashboard.stripe.com/account/webhooks\">Stripe "
+"Webhook</a>を設定してください。"
 
 #: pretix/plugins/stripe/payment.py:222
 msgid "Enable MOTO payments for resellers"
@@ -31787,7 +31751,7 @@ msgstr "チャージが成功しました。"
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge refunded."
-msgstr "チャージが返金されました。"
+msgstr "チャージが払い戻されました。"
 
 #: pretix/plugins/stripe/signals.py:94
 msgid "Charge updated."
@@ -31957,15 +31921,17 @@ msgid ""
 "statement that you can obtain from your bank. You agree to receive "
 "notifications for future debits up to 2 days before they occur."
 msgstr ""
-"支払い情報を提供し、この支払いを確認することで、(A) %(sepa_creditor_name)s お"
-"よび当社の支払いサービスプロバイダであるStripe、およびその現地サービスプロバ"
-"イダであるPPRO に、あなたの口座からの引き落としの指示を送ることを承認し、(B) "
-"あなたの銀行に、その指示に従って口座からの引き落としを行うことを承認します。"
-"あなたの権利の一環として、あなたは銀行との契約条件に基づき、銀行から払い戻し"
-"を受ける権利があります。払い戻しは、口座から引き落としが行われた日から8週間以"
-"内に請求する必要があります。あなたの権利については、銀行から入手できる明細書"
-"で説明されています。また、今後の引き落としについては、発生する2日前までに通知"
-"を受けることに同意します。"
+"支払い情報を提供してこの支払いを確認することで、あなたは以下を承認します：(A)"
+" %(sepa_creditor_name)s "
+"および当社の決済サービスプロバイダーであるStripe、またはその現地サービスプロ"
+"バイダーであるPPROが、あなたの口座から引き落としを行うよう銀行に指示を送信す"
+"ること、(B) "
+"あなたの銀行がその指示に従ってあなたの口座から引き落としを行うこと。あなたの"
+"権利の一環として、銀行との契約の条件に基づき、銀行から払い戻しを受ける権利が"
+"あります。払い戻しは、口座から引き落とされた日から8週間以内に請求する必要があ"
+"ります。あなたの権利については、銀行から入手できる明細書で説明されています。"
+"今後の引き落としについて、実行の最大2日前までに通知を受け取ることに同意します"
+"。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:7
 msgid "Charge ID"
@@ -33535,7 +33501,7 @@ msgstr "払い戻しを受けることができます"
 msgid ""
 "The organizer will get in touch with you to clarify the details of your "
 "refund."
-msgstr "主催者はあなたに連絡して、払い戻しの詳細を説明します。"
+msgstr "主催者が払い戻しの詳細について確認のためご連絡いたします。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:152
 #: pretix/presale/templates/pretixpresale/event/order.html:395
@@ -33545,7 +33511,7 @@ msgstr "主催者はあなたに連絡して、払い戻しの詳細を説明し
 msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
-msgstr "払い戻しは、追加の購入に使用できるギフトカードの形で発行されます。"
+msgstr "払い戻しは、今後の購入にご利用いただけるギフトカードの形で発行されます。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:155
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:147
@@ -33554,9 +33520,8 @@ msgid ""
 "The refund amount will automatically be sent back to your original payment "
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
-msgstr ""
-"払い戻し金額は自動的に元の支払い方法に送金されます。支払い方法によっては、明"
-"細書に表示されるまで最大2週間かかる場合がありますので、ご了承ください。"
+msgstr "払い戻し金額は自動的に元の決済方法に返金されます。決済方法によって、明細に反"
+"映されるまで最大2週間かかる場合があります。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:161
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:165
@@ -33567,9 +33532,9 @@ msgid ""
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
-"ご利用いただいた支払い方法では、返金額は<strong>自動的にお客様に送金されませ"
-"ん</strong>。代わりに、イベント主催者が手動で送金を行う必要があります。少々お"
-"時間をいただく場合がありますので、ご了承ください。"
+"ご利用の決済方法では、払い戻し金額を<strong>自動的に返金することができません<"
+"/strong>。代わりに、イベント主催者が手動で送金を開始する必要があります。通常"
+"より時間がかかる場合がありますので、しばらくお待ちください。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:185
 msgid ""
@@ -34010,7 +33975,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:144
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
-msgstr "%(amount)sの返金が近々送られますので、お待ちください。"
+msgstr "%(amount)sの払い戻しを間もなくお送りします。しばらくお待ちください。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:151
 msgid "Print"
@@ -34021,9 +33986,8 @@ msgstr "印刷"
 msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
-msgstr ""
-"私たちは%(amount)sの払い戻しをギフトカードとして発行しました。次回のご購入時"
-"には、支払い時に以下のギフトカードコードをご利用いただけます:"
+msgstr "%(amount)sの払い戻しをギフトカードとして発行いたしました。次回ご購入の際に、"
+"以下のギフトカードコードを決済時にご利用いただけます："
 
 #: pretix/presale/templates/pretixpresale/event/order.html:163
 #, python-format
@@ -34040,9 +34004,8 @@ msgstr "このギフトカードは%(expiry)sまで有効です。"
 msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
-msgstr ""
-"%(amount)sの払い戻しを送金しました。支払い方法によっては、明細書に反映される"
-"まで最大14日かかる場合がありますので、ご了承ください。"
+msgstr "%(amount)sの払い戻しをお送りいたしました。決済方法によって、明細に反映される"
+"まで最大14日かかる場合があります。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/position.html:33
@@ -34115,24 +34078,21 @@ msgid ""
 "If your request is approved, the organizer will determine if you will "
 "receive a full refund or if a cancellation fee is deducted according to "
 "their cancellation policy."
-msgstr ""
-"もし承認された場合、主催者はキャンセルポリシーに従って、全額返金されるか、"
-"キャンセル手数料が差し引かれるかを決定します。"
+msgstr "リクエストが承認された場合、主催者のキャンセルポリシーに従って、全額払い戻し"
+"かキャンセル料を差し引いた払い戻しかを主催者が決定いたします。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:397
 #: pretix/presale/templates/pretixpresale/event/order.html:433
 #: pretix/presale/templates/pretixpresale/event/order.html:454
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
-msgstr ""
-"返金は元の支払い方法に対して行われるか、ギフトカードとして発行されることがあ"
-"ります。"
+msgstr "払い戻しは、元の決済方法またはギフトカードとして発行できます。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:399
 #: pretix/presale/templates/pretixpresale/event/order.html:435
 #: pretix/presale/templates/pretixpresale/event/order.html:456
 msgid "The refund will be issued to your original payment method."
-msgstr "払い戻しは元の支払い方法に行われます。"
+msgstr "払い戻しは元の決済方法に発行されます。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:401
 #: pretix/presale/templates/pretixpresale/event/order.html:414
@@ -34146,11 +34106,11 @@ msgstr "この注文のすべてのチケットが無効になります。"
 #: pretix/presale/templates/pretixpresale/event/order.html:406
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
-msgstr "この注文をキャンセルすることはできますが、返金は受け取れません。"
+msgstr "この注文のキャンセルを申請できますが、払い戻しは受けられません。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:410
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr "この注文をキャンセルすることはできますが、返金はありません。"
+msgstr "この注文をキャンセルできますが、払い戻しは受けられません。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:419
 #, python-format
@@ -34159,9 +34119,8 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
-"この注文をキャンセルすることをリクエストすることができます。リクエストが承認"
-"された場合、<strong>%(fee)s</strong>のキャンセル料が引かれ、残額が返金されま"
-"す。"
+"この注文のキャンセルを申請できます。リクエストが承認された場合、<strong>%(fee"
+")s</strong>のキャンセル料が差し引かれ、残額の払い戻しを受けることができます。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:425
 #, python-format
@@ -34170,20 +34129,19 @@ msgid ""
 "<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
 "remainder."
 msgstr ""
-"この注文をキャンセルすることができます。この場合、キャンセル手数料として "
-"<strong>%(fee)s</strong>が差し引かれ、残額が返金されます。"
+"この注文をキャンセルできます。この場合、<strong>%(fee)s</strong>のキャンセル"
+"料が差し引かれ、残額の払い戻しを受けることができます。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:442
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
-msgstr ""
-"この注文をキャンセルすることをリクエストすることができます。リクエストが承認"
-"されれば、全額返金されます。"
+msgstr "この注文のキャンセルを申請できます。リクエストが承認された場合、全額払い戻し"
+"を受けることができます。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:447
 msgid "You can cancel this order and receive a full refund."
-msgstr "この注文をキャンセルして全額返金を受け取ることができます。"
+msgstr "この注文をキャンセルして全額払い戻しを受けることができます。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:466
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
@@ -34232,13 +34190,12 @@ msgstr ""
 msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
-msgstr ""
-"ご希望であれば、%(fee)sのキャンセル手数料を差し引いた全額の返金をリクエストす"
-"ることができます。"
+msgstr "ご希望であれば、%(fee)sのキャンセル料を差し引いた全額の払い戻しを申請できます"
+"。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:67
 msgid "If you want, you can request a full refund."
-msgstr "ご希望であれば、全額返金をリクエストすることができます。"
+msgstr "ご希望であれば、全額払い戻しを申請できます。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:96
 msgid "Enter custom amount"
@@ -34256,16 +34213,16 @@ msgstr "ご利用いただけるギフトカードの有効期限は%(expiry_dat
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:126
 msgid "I want the refund as a gift card for later purchases"
-msgstr "後日の購入のためにギフトカードで返金してほしいです"
+msgstr "今後の購入用にギフトカードとして払い戻しを希望します"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:132
 msgid "I want the refund to be sent to my original payment method"
-msgstr "支払いと同じ決済方法で返金してほしいです"
+msgstr "元の決済方法への払い戻しを希望します"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:185
 msgid "The following payment methods will be used to refund the money to you:"
-msgstr "以下の支払い方法を使用して、お金を返金いたします："
+msgstr "以下の決済方法で払い戻しを行います："
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:218
 msgid "Yes, request cancellation"
@@ -35232,7 +35189,7 @@ msgstr "合計金額が変わらないように注文を変更することはで
 
 #: pretix/presale/views/order.py:1634
 msgid "You may not change your order in a way that would require a refund."
-msgstr "あなたは返金が必要となるような注文の変更はできません。"
+msgstr "払い戻しが発生する方向に注文を変更することはできません。"
 
 #: pretix/presale/views/order.py:1642
 msgid ""
