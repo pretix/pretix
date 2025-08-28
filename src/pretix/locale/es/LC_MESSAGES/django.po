@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-06-30 01:00+0000\n"
+"PO-Revision-Date: 2025-08-28 23:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -145,7 +145,7 @@ msgstr "Español"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Español (Latinoamérica)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -571,16 +571,12 @@ msgid "Product changed"
 msgstr "Nombre del producto"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
-"Producto cambiado (incluyendo producto agregado o eliminado e incluye "
-"cambios a los objetos anidados como variaciones o paquetes)"
+"Esto incluye productos añadidos o eliminados y cambios en objetos anidados, "
+"como variaciones o paquetes."
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -1180,16 +1176,14 @@ msgid "Ticket link"
 msgstr "Bloqueo de entrada"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list {val}"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "Lista de asistentes {val}"
+msgstr "Fecha y hora de registro en la lista {}"
 
 #: pretix/base/datasync/sourcefields.py:590
-#, fuzzy, python-brace-format
-#| msgid "Question: %(name)s"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "Pregunta: %(name)s"
+msgstr "Pregunta: {name}"
 
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:614 pretix/base/settings.py:3559
@@ -1557,7 +1551,7 @@ msgstr "Entrada para el evento {event}-{code}"
 #: pretix/plugins/reports/exporters.py:709
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
 msgid "Date range"
-msgstr "Rango de fechas"
+msgstr "Intervalo de fechas"
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
 msgid ""
@@ -2325,7 +2319,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:115 pretix/control/forms/event.py:1671
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr "URL semántica"
+msgstr "Slug del evento"
 
 #: pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:452
@@ -5167,11 +5161,8 @@ msgid "currently being transmitted"
 msgstr ""
 
 #: pretix/base/models/invoices.py:122
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "transmitted"
-msgstr "Fecha no seleccionada."
+msgstr "transmitido"
 
 #: pretix/base/models/invoices.py:123 pretix/plugins/sendmail/models.py:52
 msgid "failed"
@@ -10320,10 +10311,8 @@ msgstr "Código fiscal predeterminado"
 
 #: pretix/base/settings.py:1038 pretix/base/settings.py:1046
 #: pretix/base/settings.py:1057 pretix/base/settings.py:1066
-#, fuzzy
-#| msgid "Charge updated."
 msgid "Charge no taxes"
-msgstr "Carga actualizada."
+msgstr "No cobrar impuestos"
 
 #: pretix/base/settings.py:1042
 #, fuzzy
@@ -12107,17 +12096,7 @@ msgid "Invoice {invoice_number}"
 msgstr "Factura {invoice_number}"
 
 #: pretix/base/settings.py:2706
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "somebody requested a list of your orders for {event}.\n"
-#| "The list is as follows:\n"
-#| "\n"
-#| "{orders}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12128,15 +12107,14 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Hola, \n"
+"Hola,\n"
 "\n"
-"alguien pidió una lista de sus órdenes para {event} . \n"
-"La lista es la siguiente: \n"
+"Adjunto encontrará una nueva factura para el pedido {code} correspondiente "
+"al {event}. Este pedido ha sido realizado por {order_email}.\n"
 "\n"
-"{orders} \n"
+"Atentamente,  \n"
 "\n"
-"Saludos cordiales,  \n"
-"su equipo {event}"
+"Su equipo de {event}"
 
 #: pretix/base/settings.py:2724 pretix/base/settings.py:2740
 #, python-brace-format
@@ -14003,11 +13981,9 @@ msgid "Bcc address"
 msgstr "Direcciones en copia oculta"
 
 #: pretix/control/forms/event.py:987 pretix/control/forms/organizer.py:585
-#, fuzzy
-#| msgid "All emails will be sent to this address as a Bcc copy"
 msgid "All emails will be sent to this address as a Bcc copy."
 msgstr ""
-"Todos los correos electrónicos se enviarán a esta dirección en copia oculta"
+"Todos los correos electrónicos se enviarán a esta dirección en copia oculta."
 
 #: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:593
 msgid "Signature"
@@ -16050,7 +16026,7 @@ msgstr "Confirme que desea cancelar TODAS las fechas de esta serie de eventos."
 
 #: pretix/control/forms/organizer.py:93
 msgid "This slug is already in use. Please choose a different one."
-msgstr "Esta URL semántica ya está en uso. Por favor, elija una diferente."
+msgstr "Este slug ya está en uso. Por favor, elija uno diferente."
 
 #: pretix/control/forms/organizer.py:172
 msgid "You cannot choose the base domain of this installation."
@@ -16714,50 +16690,38 @@ msgstr ""
 "\"{type}\", código de error \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"Escaneo denegado de la posición #{posid} en {datetime} para la lista \"{list}"
-"\", escriba \"{type}\", código de error \"{errorcode}\"."
+"Escaneo anulado de la posición #{posid} a las {datetime} para la lista "
+"«{list}», tipo «{type}»."
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Escaneo denegado de la posición #{posid} para la lista \"{list}\", escriba "
-"\"{type}\", código de error \"{errorcode}\"."
+"Escaneo anulado de la posición #{posid} para la lista «{list}», tipo "
+"«{type}»."
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} at {datetime} for list \"{list}\", "
 "type \"{type}\"."
 msgstr ""
-"Escaneo denegado de la posición #{posid} en {datetime} para la lista \"{list}"
-"\", escriba \"{type}\", código de error \"{errorcode}\"."
+"Se ha ignorado la anulación de la posición #{posid} a las {datetime} para la "
+"lista «{list}», tipo «{type}»."
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Escaneo denegado de la posición #{posid} para la lista \"{list}\", escriba "
-"\"{type}\", código de error \"{errorcode}\"."
+"Se ha ignorado la anulación de la posición #{posid} para la lista «{list}», "
+"tipo «{type}»."
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:333
 #, python-brace-format
@@ -16995,10 +16959,9 @@ msgid "The invoice has been reissued."
 msgstr "Se ha vuelto a emitir la factura."
 
 #: pretix/control/logdisplay.py:527
-#, fuzzy, python-brace-format
-#| msgid "The invite has been resent."
+#, python-brace-format
 msgid "The invoice {full_invoice_no} has been sent."
-msgstr "La invitación ha sido reenviada."
+msgstr "Se ha enviado la factura {full_invoice_no}."
 
 #: pretix/control/logdisplay.py:528
 #, python-brace-format
@@ -17190,10 +17153,9 @@ msgid "The voucher has been deleted."
 msgstr "El vale de compra fue eliminado."
 
 #: pretix/control/logdisplay.py:584
-#, fuzzy, python-brace-format
-#| msgid "A voucher has been sent to a person on the waiting list."
+#, python-brace-format
 msgid "The voucher has been sent to {email} through the waiting list."
-msgstr "Se ha enviado un vale de compra a una persona en lista de espera."
+msgstr "El vale se ha enviado a {email} a través de la lista de espera."
 
 #: pretix/control/logdisplay.py:593
 #, python-brace-format
@@ -19328,10 +19290,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:30
-#, fuzzy
-#| msgid "This operation cannot be reversed."
 msgid "This cannot be reverted!"
-msgstr "Esta operación no se puede revertir."
+msgstr "¡Esto no tiene vuelta atrás!"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:34
 msgid ""
@@ -19506,10 +19466,8 @@ msgid "Temporary error, will retry after %(datetime)s"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:63
-#, fuzzy
-#| msgid "No products"
 msgid "No problems."
-msgstr "Ningún producto"
+msgstr "No hay problema."
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:74
 #, fuzzy
@@ -20701,10 +20659,10 @@ msgid "Not available"
 msgstr "No disponible"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:93
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be disabled for the entire organizer account."
-msgstr "Este plugin no puede ser habilitado por las siguientes razones:"
+msgstr ""
+"Este complemento solo se puede desactivar para toda la cuenta del "
+"organizador."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:98
 msgid ""
@@ -20744,10 +20702,9 @@ msgstr "Desactivar"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:141
 #: pretix/control/views/organizer.py:807
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be enabled for the entire organizer account."
-msgstr "Este plugin no puede ser habilitado por las siguientes razones:"
+msgstr ""
+"Este plugin solo se puede habilitar para toda la cuenta del organizador."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:154
 msgid ""
@@ -23385,11 +23342,8 @@ msgid "Invoice was not yet emailed to customer"
 msgstr "La factura aún no se envió por correo electrónico al cliente"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:294
-#, fuzzy
-#| msgid "One webhook is scheduled to be retried."
-#| msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgid "Invoice is scheduled to be transmitted"
-msgstr "Está previsto volver a intentar un webhook."
+msgstr "La factura está programada para ser transmitida"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:299
 #, fuzzy
@@ -23398,10 +23352,8 @@ msgid "Invoice is not yet transmitted"
 msgstr "La factura aún no se envió por correo electrónico al cliente"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:302
-#, fuzzy
-#| msgid "This ticket shop is currently in test mode."
 msgid "Invoice is currently in transmission"
-msgstr "Esta taquilla virtual está en modo de prueba."
+msgstr "La factura se está enviando actualmente"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:307
 #, fuzzy
@@ -23410,16 +23362,12 @@ msgid "Invoice not transmitted in test mode"
 msgstr "en vivo y en modo de prueba"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:312
-#, fuzzy
-#| msgid "Device registration failed."
 msgid "Invoice transmission failed"
-msgstr "Fallo en el registro del dispositivo."
+msgstr "Error en la transmisión de la factura"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:317
-#, fuzzy
-#| msgid "An invoice has been generated."
 msgid "Invoice has been transmitted"
-msgstr "Se ha generado una factura."
+msgstr "La factura ha sido enviada"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:329
 #, fuzzy
@@ -25380,10 +25328,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
-#, fuzzy, python-format
-#| msgid "Events in %(month)s"
+#, python-format
 msgid "Events with plugin %(name)s"
-msgstr "Eventos en %(month)s"
+msgstr "Eventos con plugin %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:18
 #, python-format
@@ -25453,10 +25400,9 @@ msgid "Manage events"
 msgstr "Eventos individuales"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:162
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can be enabled or disabled for events individually."
-msgstr "Este plugin no puede ser habilitado por las siguientes razones:"
+msgstr ""
+"Este plugin se puede activar o desactivar para eventos de forma individual."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -33832,10 +33778,8 @@ msgstr "Información"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:222
 #: pretix/presale/templates/pretixpresale/organizers/base.html:100
-#, fuzzy
-#| msgid "Contact:"
 msgid "Contact"
-msgstr "Contacto:"
+msgstr "Contacto"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:225
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:118
