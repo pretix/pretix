@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-27 08:00+0000\n"
+"PO-Revision-Date: 2025-08-28 13:43+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -15595,7 +15595,7 @@ msgstr ""
 #: pretix/control/forms/organizer.py:1040
 msgctxt "sso_oidc"
 msgid "Email field"
-msgstr "電子メールフィールド"
+msgstr "メールフィールド"
 
 #: pretix/control/forms/organizer.py:1041
 msgctxt "sso_oidc"
@@ -15604,9 +15604,9 @@ msgid ""
 "verified to really belong the the user. If this can't be guaranteed, "
 "security issues might arise."
 msgstr ""
-"SSOプロバイダから受信したメールアドレスが、このユーザに結びついていることが確"
-"認できました。もしこれが保証されない場合は、セキュリティ上の問題が生じること"
-"があります。"
+"SSOプロバイダーから受信したすべてのメールアドレスは、実際にそのユーザーのもの"
+"であることが確認済みであるとみなします。これが保証できない場合、セキュリティ"
+"の問題が発生する可能性があります。"
 
 #: pretix/control/forms/organizer.py:1048
 msgctxt "sso_oidc"
@@ -15795,7 +15795,7 @@ msgstr ""
 
 #: pretix/control/forms/vouchers.py:278
 msgid "Send vouchers via email"
-msgstr "電子メールでバウチャーを送信します"
+msgstr "バウチャーをメールで送信する"
 
 #: pretix/control/forms/vouchers.py:285
 #, python-brace-format
@@ -15818,18 +15818,18 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"前略\n"
+"こんにちは\n"
 "\n"
-"イベント {event} のバウチャー（申込コード）をこのメールでお送りします。:\n"
+"このメールにて、{event}のバウチャー（申込コード）をお送りします：\n"
 "\n"
 "{voucher_list}\n"
 "\n"
-"これは、当チケットショップでご利用いただけます。:\n"
+"こちらのチケットショップでご利用いただけます：\n"
 "\n"
 "{url}\n"
 "\n"
-"敬具 \n"
-"担当 {event} チーム"
+"よろしくお願いいたします\n"
+"{event}チーム一同"
 
 #: pretix/control/forms/vouchers.py:297
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:28
@@ -15848,9 +15848,8 @@ msgid ""
 "line, or the contents of a CSV file with a title row and one or more of the "
 "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
-"電子メールアドレスのリストを1行に1つずつ提示するか、タイトル行と1つ以上の列"
-"（\"email\"、\"number\"、\"name\"、\"tag\"）を含むCSVファイルの内容を提示でき"
-"ます。"
+"1行1メールアドレスのリスト、もしくは、タイトル行 と\"email\", \"number\", "
+"\"name\",  \"tag\" のうち1つ以上の列を含むCSVファイルを提供できます。"
 
 #: pretix/control/forms/vouchers.py:339
 msgid "Maximum usages per voucher"
@@ -15925,9 +15924,8 @@ msgstr "バウチャーコード{code}がリストに2回表示されていま�
 msgid ""
 "If vouchers should be sent by email, subject, message and recipients need to "
 "be specified."
-msgstr ""
-"バウチャーをメールで送る場合は、件名、メッセージ、受取人を指定する必要があり"
-"ます。"
+msgstr "バウチャーをメールで送信する場合は、件名、メッセージ、受信者を指定する必要が"
+"あります。"
 
 #: pretix/control/forms/vouchers.py:443
 #, python-brace-format
@@ -16339,9 +16337,8 @@ msgstr "メールアドレスは\"{old_email}\"から\"{new_email}\"に変更さ
 msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
-msgstr ""
-"そのメールアドレスは動作することが確認されました（ユーザーがメール内のリンク"
-"を初めてクリックしました）。"
+msgstr "メールアドレスが有効であることが確認されました（ユーザーが初回のメール内のリ"
+"ンクをクリックしました）。"
 
 #: pretix/control/logdisplay.py:520
 #, python-brace-format
@@ -16422,7 +16419,7 @@ msgstr "以前の支払い{local_id}の代わりに新しい支払いが開始�
 
 #: pretix/control/logdisplay.py:540
 msgid "An unidentified type email has been sent."
-msgstr "未確認のタイプの電子メールが送信されました。"
+msgstr "不明なタイプのメールが送信されました。"
 
 #: pretix/control/logdisplay.py:541 pretix/control/logdisplay.py:727
 msgid "Sending of an email has failed."
@@ -16452,72 +16449,70 @@ msgstr "参加者にカスタムメールが送信されました。"
 msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
-msgstr ""
-"チケットのダウンロードが可能であることを思い出させるメールが送信されました。"
+msgstr "チケットのダウンロードが可能であることを通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:549
 msgid ""
 "An email has been sent with a warning that the order is about to expire."
-msgstr ""
-"注文がまもなく期限切れになるという警告が含まれたメールが送信されました。"
+msgstr "注文が間もなく期限切れになることを警告するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:552
 msgid ""
 "An email has been sent to notify the user that the order has been canceled."
-msgstr "注文がキャンセルされたことをお知らせするためにメールが送信されました。"
+msgstr "注文がキャンセルされたことをユーザーに通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:553
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
-msgstr "イベントがキャンセルされたことを通知するためにメールが送信されました。"
+msgstr "イベントがキャンセルされたことをユーザーに通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:556
 msgid ""
 "An email has been sent to notify the user that the order has been changed."
-msgstr "注文が変更されたことをお知らせするためにメールが送信されました。"
+msgstr "注文が変更されたことをユーザーに通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:558
 msgid ""
 "An email has been sent to notify the user that the order has been received."
-msgstr "注文を受け付けたことをお知らせするためにメールが送信されました。"
+msgstr "注文が受信されたことをユーザーに通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:560
 msgid ""
 "An email has been sent to notify the user that payment has been received."
-msgstr "お支払いを受け取りましたというメールが送信されました。"
+msgstr "支払いを受領したことをユーザーに通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:562
 msgid ""
 "An email has been sent to notify the user that the order has been denied."
-msgstr "注文が拒否されたことを通知するためにメールが送信されました。"
+msgstr "注文が拒否されたことをユーザーに通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:563
 msgid ""
 "An email has been sent to notify the user that the order has been approved."
-msgstr "注文が承認されたことをお知らせするためにメールが送信されました。"
+msgstr "注文が承認されたことをユーザーに通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:566
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires payment."
-msgstr "注文を受け付けました。支払いが必要ですので、メールを送信しました。"
+msgstr "注文が受信され、支払いが必要であることをユーザーに通知するメールが送信されま"
+"した。"
 
 #: pretix/control/logdisplay.py:567
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
-msgstr ""
-"注文を受け取りました。承認が必要ですので、ユーザーに通知するためのメールが送"
-"信されました。"
+msgstr "注文が受信され、承認が必要であることをユーザーに通知するメールが送信されまし"
+"た。"
 
 #: pretix/control/logdisplay.py:570
 msgid ""
 "An email with a link to the order detail page has been resent to the user."
-msgstr "ユーザーに注文詳細ページへのリンクが含まれたメールが再送されました。"
+msgstr "注文詳細ページへのリンクを含むメールがユーザーに再送信されました。"
 
 #: pretix/control/logdisplay.py:571
 msgid "An email has been sent to notify the user that the payment failed."
-msgstr "支払いが失敗したことを通知するためにメールが送信されました。"
+msgstr "支払いが失敗したことをユーザーに通知するメールが送信されました。"
 
 #: pretix/control/logdisplay.py:578
 msgid "The voucher has been created."
@@ -19727,7 +19722,7 @@ msgstr "結果なし"
 #: pretix/control/templates/pretixcontrol/event/mail.html:7
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:11
 msgid "Email settings"
-msgstr "電子メールの設定"
+msgstr "メール設定"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:21
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:22
@@ -19742,7 +19737,7 @@ msgstr "カスタムSMTPサーバ"
 #: pretix/control/templates/pretixcontrol/event/mail.html:27
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:28
 msgid "System-provided email server"
-msgstr "システム提供の電子メールサーバ"
+msgstr "システム提供メールサーバー"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:60
 msgid "Calendar invites"
@@ -19750,7 +19745,7 @@ msgstr "カレンダーの招待"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:66
 msgid "Email design"
-msgstr "電子メールのデザイン"
+msgstr "メールデザイン"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:79
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:29
@@ -19764,7 +19759,7 @@ msgstr "プレビュー"
 #: pretix/control/templates/pretixcontrol/event/mail.html:87
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:58
 msgid "Email content"
-msgstr "電子メールの本文"
+msgstr "メールコンテンツ"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:90
 msgid "Placed order"
@@ -22122,9 +22117,8 @@ msgid ""
 "Do you really want to remove this cancellation request? The user will not be "
 "informed automatically, but you will have the option to email them "
 "individually in the next step."
-msgstr ""
-"本当にこのキャンセルリクエストを削除しますか？ユーザーには自動的に通知されま"
-"せんが、次のステップで個別にメールを送信するオプションがあります。"
+msgstr "このキャンセル申請を本当に削除しますか？ユーザーには自動的に通知されませんが"
+"、次のステップで個別にメールを送信することができます。"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:26
 msgid "Yes, delete request"
@@ -22349,7 +22343,7 @@ msgstr "言語設定を変更する"
 
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:18
 msgid "This language will be used whenever emails are sent to the users."
-msgstr "この言語は、ユーザーに電子メールを送る時に常に使用されます。"
+msgstr "この言語は、ユーザーにメールが送信される際に使用されます。"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:9
 msgid "Change order information"
@@ -22436,7 +22430,7 @@ msgstr "ユーザーとして注文を見る"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:85
 msgid "View email history"
-msgstr "電子メールの履歴を見る"
+msgstr "メール履歴を表示"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:89
 msgid "View transaction history"
@@ -22517,31 +22511,29 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:230
 msgid "Contact email"
-msgstr "連絡先のメールアドレス"
+msgstr "連絡先メール"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:234
 msgid ""
 "We know that this email address works because the user clicked a link we "
 "sent them."
-msgstr ""
-"このメールアドレスが機能していることは、ユーザーが私たちが送ったリンクをク"
-"リックしたことでわかっています。"
+msgstr "このメールアドレスは、ユーザーがこちらから送信したリンクをクリックしたため、"
+"有効であることが確認されています。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:278
 msgid ""
 "We don't know if this invoice was emailed to the customer since it was "
 "created before our system tracked this information"
-msgstr ""
-"この請求書が顧客にメールで送信されたかどうかはわかりません。なぜなら、この情"
-"報が追跡される前に作成されたからです:"
+msgstr "このシステムが情報を追跡する前に作成されたため、この請求書が顧客にメール送信"
+"されたかどうかは不明です"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:283
 msgid "Invoice was emailed to customer"
-msgstr "請求書が顧客にメールで送信されました"
+msgstr "請求書が顧客にメール送信されました"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:288
 msgid "Invoice was not yet emailed to customer"
-msgstr "請求書はまだ顧客にメールされていません"
+msgstr "請求書はまだ顧客にメール送信されていません"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:294
 msgid "Invoice is scheduled to be transmitted"
@@ -22804,7 +22796,7 @@ msgstr "注文履歴"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:6
 msgid "Email history"
-msgstr "電子メールの履歴"
+msgstr "メール履歴"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:33
 msgid ""
@@ -23043,18 +23035,18 @@ msgstr "注文はどうすればよいですか？"
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:7
 #: pretix/plugins/sendmail/signals.py:94
 msgid "Send email"
-msgstr "電子メールを送付"
+msgstr "メールを送信"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:30
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:74
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:42
 msgid "Email preview"
-msgstr "電子メールのプレビュー"
+msgstr "メールプレビュー"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:41
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:80
 msgid "Preview email"
-msgstr "プレビューのメール"
+msgstr "メールをプレビュー"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:44
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:89
@@ -23157,7 +23149,7 @@ msgstr "払い戻しオプション"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:8
 msgid "Send out emails"
-msgstr "電子メールを送る"
+msgstr "メールを送出する"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:54
 msgid ""
@@ -23184,8 +23176,8 @@ msgstr ""
 msgid ""
 "You should not execute this function multiple times for the same event, or "
 "everyone on the waiting list will get multiple emails."
-msgstr "同じイベントに対してこの機能を複数回実行しないでください。空席待ちリストのす"
-"べての人が複数のメールを受信してしまいます。"
+msgstr "同じイベントに対してこの機能を複数回実行すべきではありません。そうしないと、"
+"空席待ちリストのすべての人が複数のメールを受け取ることになります。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:83
 msgid "Cancel all orders"
@@ -23241,9 +23233,8 @@ msgstr "今すぐエクスポートを実行してください"
 msgid ""
 "Run export and send via email now. This will not change the next scheduled "
 "execution."
-msgstr ""
-"今すぐエクスポートを実行して、メールで送信してください。次回の予定された実行"
-"は変更されません。"
+msgstr "今すぐエクスポートを実行してメールで送信します。これにより次回のスケジュール"
+"実行が変更されることはありません。"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:95
 #: pretix/control/templates/pretixcontrol/organizers/export.html:95
@@ -23356,7 +23347,7 @@ msgstr "永遠に"
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:110
 msgid ""
 "Every time your schedule is executed, the report will be sent via email."
-msgstr "スケジュールが実行されるたびに、レポートはメールで送信されます。"
+msgstr "スケジュールが実行されるたびに、レポートがメールで送信されます。"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:111
 msgid "Please note the following limitations:"
@@ -23368,17 +23359,16 @@ msgid ""
 "exports that output e.g. statistical data, not for reports that include "
 "sensitive personal data."
 msgstr ""
-"電子メールは強力に暗号化された媒体ではありません。私たちは、統計データなどの"
-"出力に使用することをお勧めしますが、個人情報などの機密データを含むレポートに"
-"は使用しないでください。"
+"メールは強力に暗号化された媒体ではありません。これは統計データなどを出力する"
+"エクスポートにのみ使用することを推奨し、機密の個人データを含むレポートには使"
+"用しないことをお勧めします。"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:117
 msgid ""
 "Email is not made for large files. If your export ends up to be larger than "
 "20 megabytes, it will not be sent."
-msgstr ""
-"Emailは大きなファイルには適していません。エクスポートが20メガバイトを超える場"
-"合、送信できません。"
+msgstr "メールは大きなファイルには適していません。エクスポートが20メガバイトを超える"
+"場合、送信できません。"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:122
 msgid "Owner"
@@ -23400,8 +23390,8 @@ msgstr "オーナーは結果とエラーメッセージを受け取ります。
 msgid ""
 "The additional recipients you add below will only receive an email if the "
 "report was successful."
-msgstr ""
-"以下に追加した受信者は、レポートが成功した場合のみメールを受け取ります。"
+msgstr "以下で追加した追加受信者は、レポートが正常に完了した場合のみメールを受信しま"
+"す。"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:131
 msgid ""
@@ -23791,7 +23781,7 @@ msgstr "会員登録を追加"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:240
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:29
 msgid "Matched to the account based on the email address."
-msgstr "メールアドレスに基づいてアカウントにマッチングします。"
+msgstr "メールアドレスに基づいてアカウントに照合されました。"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:286
 msgid "Customer history"
@@ -24422,7 +24412,7 @@ msgstr "顧客アカウントの登録"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:63
 msgid "Customer account email change"
-msgstr "顧客アカウントのメールアドレス変更"
+msgstr "顧客アカウントのメール変更"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:66
 msgid "Customer account password reset"
@@ -24759,9 +24749,9 @@ msgid ""
 "have a pretix account, they will immediately be added to the event. "
 "Otherwise, they will be sent an email with an invitation."
 msgstr ""
-"新しいユーザーを追加するには、ここに彼らのメールアドレスを入力してください。"
-"すでにpretixアカウントを持っている場合、すぐにイベントに追加されます。それ以"
-"外の場合は、招待状が含まれたメールが送信されます。"
+"新しいユーザーを追加するには、ここでメールアドレスを入力してください。すでにp"
+"retixアカウントを持っている場合は、すぐにイベントに追加されます。アカウントを"
+"持っていない場合は、招待メールが送信されます。"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:85
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:134
@@ -25329,9 +25319,8 @@ msgstr "確認コード"
 msgid ""
 "Depending on the amount of data in your event, the following step may take a "
 "while to complete. We will inform you via email once it has been completed."
-msgstr ""
-"イベントのデータ量によっては、次のステップが完了するまでに時間がかかる場合が"
-"あります。完了した際には、メールでお知らせいたします。"
+msgstr "イベント内のデータ量によっては、次のステップの完了に時間がかかる場合がありま"
+"す。完了次第、メールでお知らせします。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
@@ -25953,7 +25942,7 @@ msgstr "通知の種類"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:57
 msgid "Email notification"
-msgstr "電子メール通知"
+msgstr "メール通知"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 msgid "Global"
@@ -26089,7 +26078,7 @@ msgstr "ログイン設定"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:11
 msgid "Send password reset email"
-msgstr "パスワードリセットのメールを送信します"
+msgstr "パスワードリセットメールを送信"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:17
 msgid "Generate 2FA emergency token"
@@ -26575,10 +26564,8 @@ msgid ""
 "You used an invalid link. Please copy the link from your email to the "
 "address bar and make sure it is correct and that the link has not been used "
 "before."
-msgstr ""
-"無効なリンクを使用しました。メールからリンクをコピーしてアドレスバーに貼り付"
-"け、正しいことを確認し、リンクが以前に使用されていないことを確認してくださ"
-"い。"
+msgstr "無効なリンクを使用しました。メールからリンクをアドレスバーにコピーして、正し"
+"いことと、以前にリンクが使用されていないことを確認してください。"
 
 #: pretix/control/views/auth.py:252
 #, python-brace-format
@@ -26605,16 +26592,16 @@ msgid ""
 "email containing further instructions. Please note that we will send at most "
 "one email every 24 hours."
 msgstr ""
-"有効なアカウントに登録された場合、追加の指示が記載されたメールをお送りしてい"
-"ます。24時間ごとに最大1通のメールを送信することにご注意ください。"
+"このアドレスが有効なアカウントに登録されている場合、詳しい手順を記載したメー"
+"ルをお送りしました。24時間以内に送信するメールは最大1通であることにご注意くだ"
+"さい。"
 
 #: pretix/control/views/auth.py:360
 msgid ""
 "If the address is registered to valid account, then we have sent you an "
 "email containing further instructions."
-msgstr ""
-"もしアドレスが有効なアカウントに登録されている場合、追加の指示が記載された"
-"メールをお送りしています。"
+msgstr "このアドレスが有効なアカウントに登録されている場合、詳しい手順を記載したメー"
+"ルをお送りしました。"
 
 #: pretix/control/views/auth.py:380
 msgid ""
@@ -26885,7 +26872,7 @@ msgstr "あなたの注文: %(code)s"
 
 #: pretix/control/views/event.py:904
 msgid "Unknown email renderer."
-msgstr "不明なメールのレンダラー。"
+msgstr "不明なメールレンダラーです。"
 
 #: pretix/control/views/event.py:920 pretix/control/views/orders.py:678
 #: pretix/presale/views/order.py:1088 pretix/presale/views/order.py:1095
@@ -27236,10 +27223,10 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
-"使用を希望するドメインのSPFレコードが見つかりませんでした。これは、電子メール"
-"がスパムとしてリジェクトされる可能性が高いことを意味します。当該ドメインにつ"
-"いて、SPFレコードの設定を強くお勧めします。当該ドメインのプロバイダーで、DNS"
-"の設定を行なってください。"
+"使用しようとしているドメインのSPFレコードが見つかりませんでした。これは、ほと"
+"んどのメールが拒否されるかスパムとしてマークされる可能性が非常に高いことを意"
+"味します。ドメインにSPFレコードを設定することを強く推奨します。これは、ドメイ"
+"ンを登録したプロバイダーのDNS設定で行うことができます。"
 
 #: pretix/control/views/mailsetup.py:207
 msgid ""
@@ -27249,11 +27236,10 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
-"使用しようとしているドメインのSPFレコードセットが見つかりましたが、このシステ"
-"ムの電子メールサーバーが含まれていません。これは、ほとんどの電子メールが拒否"
-"されたり、スパムとしてマークされたりする可能性が非常に高いことを意味します。"
-"このシステムをSPFレコードに含めるには、ドメインのDNS設定を更新する必要があり"
-"ます。"
+"使用しようとしているドメインのSPFレコードが見つかりましたが、このシステムのメ"
+"ールサーバーが含まれていません。これは、ほとんどのメールが拒否されるかスパム"
+"としてマークされる可能性が非常に高いことを意味します。このシステムをSPFレコー"
+"ドに含めるよう、ドメインのDNS設定を更新する必要があります。"
 
 #: pretix/control/views/mailsetup.py:216
 msgid "The verification code was incorrect, please try again."
@@ -27276,10 +27262,10 @@ msgid ""
 "all of your emails since they impose a maximum number of emails per time "
 "period."
 msgstr ""
-"Googleメールを取引メールに使用しないことをお勧めします。たとえば、チケット購"
-"入者全員に情報を送信する際など、短時間で多くのメールを送信しようとすると、"
-"Googleは一定期間あたりの最大メール数を課しているため、すべてのメールを配信し"
-"ない可能性が高いです。"
+"トランザクションメールにはGmailの使用をお勧めしません。短時間で多数のメールを"
+"送信する場合（例：すべてのチケット購入者への情報送信時）、Googleが時間当たり"
+"の最大メール数を制限しているため、すべてのメールが配信されない可能性が高くな"
+"ります。"
 
 #: pretix/control/views/main.py:218
 msgid "You do not have permission to clone this event."
@@ -27622,7 +27608,7 @@ msgstr "請求書の再送信が予定されました。"
 
 #: pretix/control/views/orders.py:1761
 msgid "The email has been queued to be sent."
-msgstr "そのメールは送信待ちになっています。"
+msgstr "メールが送信待ちキューに追加されました。"
 
 #: pretix/control/views/orders.py:1785 pretix/presale/views/order.py:1279
 msgid "This invoice has not been found"
@@ -27750,10 +27736,9 @@ msgid ""
 "\n"
 "attached to this email, you can find a new scheduled report for {name}."
 msgstr ""
-"こんにちは、\n"
+"こんにちは\n"
 "\n"
-"このメールに添付されているファイルに、{name} さんの新しい予定レポートがありま"
-"す。"
+"このメールに、{name}の新しい定期レポートを添付しています。"
 
 #: pretix/control/views/orders.py:2881 pretix/control/views/organizer.py:2242
 msgid ""
@@ -27761,8 +27746,8 @@ msgid ""
 "Depending on system load and type and size of export, this may take a few "
 "minutes."
 msgstr ""
-"あなたのエクスポートは間もなく開始されます。結果はメールで送信されます。シス"
-"テムの負荷やエクスポートの種類やサイズによっては、数分かかることがあります。"
+"エクスポートが間もなく開始される予定です。結果はメールで送信されます。システ"
+"ムの負荷やエクスポートの種類・サイズによっては、数分かかる場合があります。"
 
 #: pretix/control/views/orders.py:2960
 msgid "All orders have been canceled."
@@ -28054,9 +28039,8 @@ msgstr ""
 msgid ""
 "We've sent the customer an email with further instructions on resetting your "
 "password."
-msgstr ""
-"お客様にパスワードをリセットするためのさらなる指示を含むメールを送信しまし"
-"た。"
+msgstr "パスワードのリセットに関する詳しい手順を記載したメールを顧客にお送りしました"
+"。"
 
 #: pretix/control/views/organizer.py:3266
 msgid "The customer account has been anonymized."
@@ -28255,7 +28239,7 @@ msgstr "あなたのコメントは保存されました。"
 
 #: pretix/control/views/users.py:150
 msgid "We sent out an email containing further instructions."
-msgstr "私たちはさらなる指示を含むメールを送信しました。"
+msgstr "詳しい手順を記載したメールを送信しました。"
 
 #: pretix/control/views/users.py:170
 #, python-brace-format
@@ -28265,9 +28249,9 @@ msgid ""
 "(other than email, if possible). Any previous emergency tokens for this user "
 "remain active."
 msgstr ""
-"このユーザーの緊急トークンは「{token}」です。これは一度だけ使用できます。この"
-"コードは、認証済みのチャンネルを通じてのみ送信してください（可能であれば、"
-"メール以外）。このユーザーの以前の緊急トークンは有効のままです。"
+"このユーザーの緊急トークンは「{token}」です。これは一度のみ使用できます。認証"
+"されたチャネル（可能であればメール以外）でのみこのコードを送信するようにして"
+"ください。このユーザーの過去の緊急トークンは引き続き有効です。"
 
 #: pretix/control/views/users.py:314
 msgid "The new user has been created."
@@ -29111,7 +29095,7 @@ msgstr "払い戻し"
 
 #: pretix/plugins/banktransfer/signals.py:125
 msgid "The invoice was sent to the designated email address."
-msgstr "請求書は、指定されたメールアドレスあてに送信されました。"
+msgstr "請求書が指定されたメールアドレスに送信されました。"
 
 #: pretix/plugins/banktransfer/tasks.py:171
 msgid "Automatic split to multiple orders not possible."
@@ -29338,7 +29322,7 @@ msgstr "このウェブサイトでの追加のアクションは必要ありま
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:43
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:31
 msgid "We will send you an email as soon as we received your payment."
-msgstr "お支払いを受け取り次第、すぐにメールをお送りします。"
+msgstr "お支払いを確認次第、メールでご連絡いたします。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:57
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:69
@@ -29522,7 +29506,7 @@ msgstr "金額がマイナスになりましたが、払い戻し処理を自動
 
 #: pretix/plugins/banktransfer/views.py:166
 msgid "Problem sending email."
-msgstr "メールの送信に問題があります。"
+msgstr "メール送信に問題があります。"
 
 #: pretix/plugins/banktransfer/views.py:192
 msgid "Unknown order code"
@@ -30317,9 +30301,8 @@ msgstr ""
 msgid ""
 "The email address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
-msgstr ""
-"PayPalアカウントのメールアドレスが確認されていません。支払いを受け付ける前"
-"に、確認を完了させてください。"
+msgstr "PayPalアカウントのメールアドレスがまだ確認されていません。支払いの受け付けを"
+"開始する前に、この確認を完了する必要があります。"
 
 #: pretix/plugins/paypal2/views.py:275
 msgid ""
@@ -30561,7 +30544,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/apps.py:38
 msgid "Send out emails to all your customers or specific groups of customers."
-msgstr "すべての顧客や特定の顧客グループにメールを送信してください。"
+msgstr "すべての顧客または特定の顧客グループにメールを送信します。"
 
 #: pretix/plugins/sendmail/forms.py:60
 msgid "Attachment"
@@ -30573,9 +30556,8 @@ msgid ""
 "being sorted into spam folders. We recommend only using PDFs of no more than "
 "2 MB in size."
 msgstr ""
-"添付ファイルを送信すると、メールが届かない可能性やスパムフォルダに分類される"
-"可能性が高まります。2 MBを超えないPDFファイルのみを使用することをお勧めしま"
-"す。"
+"添付ファイルを送信すると、メールが届かなかったり、スパムフォルダに振り分けら"
+"れる可能性が高くなります。2MB以下のPDFのみの使用をお勧めします。"
 
 #: pretix/plugins/sendmail/forms.py:91
 msgctxt "sendmail_form"
@@ -30635,17 +30617,16 @@ msgstr "注文をした全員"
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
-msgstr ""
-"参加者全員（参加者のメールアドレスが指定されていない場合は、注文連絡先に戻り"
-"ます）"
+msgstr "すべての参加者（参加者のメールアドレスが提供されていない場合は注文連絡先にフ"
+"ォールバック）"
 
 #: pretix/plugins/sendmail/forms.py:224 pretix/plugins/sendmail/models.py:235
 msgid "Both (all order contact addresses and all attendee email addresses)"
-msgstr "両方（すべての注文連絡先アドレスとすべての参加者のメールアドレス）"
+msgstr "両方（すべての注文連絡先アドレスとすべての参加者メールアドレス）"
 
 #: pretix/plugins/sendmail/forms.py:230
 msgid "Attachment of tickets is disabled in this event's email settings."
-msgstr "このイベントのメール設定ではチケットの添付が無効になっています。"
+msgstr "このイベントのメール設定でチケットの添付が無効になっています。"
 
 #: pretix/plugins/sendmail/forms.py:234 pretix/plugins/sendmail/forms.py:386
 #: pretix/plugins/sendmail/views.py:267
@@ -30803,11 +30784,11 @@ msgstr[0] "%(time)sに開始するイベントの%(count)d 日前"
 
 #: pretix/plugins/sendmail/signals.py:102
 msgid "Scheduled emails"
-msgstr "予定されたメール"
+msgstr "スケジュール済みメール"
 
 #: pretix/plugins/sendmail/signals.py:122
 msgid "Mass email was sent to customers or attendees."
-msgstr "顧客や参加者に対して大量のメールが送信されました。"
+msgstr "一斉メールが顧客または参加者に送信されました。"
 
 #: pretix/plugins/sendmail/signals.py:123
 msgid "Mass email was sent to waiting list entries."
@@ -30815,11 +30796,11 @@ msgstr "空席待ちリスト登録に一斉メールが送信されました。
 
 #: pretix/plugins/sendmail/signals.py:128
 msgid "The order received a mass email."
-msgstr "注文は大量のメールを受け取りました。"
+msgstr "注文が一斉メールを受信しました。"
 
 #: pretix/plugins/sendmail/signals.py:129
 msgid "A ticket holder of this order received a mass email."
-msgstr "この注文のチケット保持者は、大量のメールを受け取りました。"
+msgstr "この注文のチケット保持者が一斉メールを受信しました。"
 
 #: pretix/plugins/sendmail/signals.py:134
 msgid "The person on the waiting list received a mass email."
@@ -30827,23 +30808,23 @@ msgstr "空席待ちリストの人が一斉メールを受信しました。"
 
 #: pretix/plugins/sendmail/signals.py:139
 msgid "An email rule was created"
-msgstr "電子メールのルールが作成されました"
+msgstr "メールのルールが作成されました"
 
 #: pretix/plugins/sendmail/signals.py:140
 msgid "An email rule was updated"
-msgstr "電子メールのルールが更新されました"
+msgstr "メールのルールが更新されました"
 
 #: pretix/plugins/sendmail/signals.py:141
 msgid "A scheduled email was sent to the order"
-msgstr "予定されたメールが注文に送信されました"
+msgstr "スケジュール済みメールが注文に送信されました"
 
 #: pretix/plugins/sendmail/signals.py:142
 msgid "A scheduled email was sent to a ticket holder"
-msgstr "チケット保持者に予定されたメールが送信されました"
+msgstr "スケジュール済みメールがチケット保持者に送信されました"
 
 #: pretix/plugins/sendmail/signals.py:143
 msgid "An email rule was deleted"
-msgstr "電子メールのルールが削除されました"
+msgstr "メールのルールが削除されました"
 
 #: pretix/plugins/sendmail/signals.py:146
 #, python-brace-format
@@ -30854,13 +30835,12 @@ msgstr "メールのルール {val}"
 msgid ""
 "This page shows you all mass emails you sent out manually. It does not "
 "include emails sent out automatically."
-msgstr ""
-"このページでは、手動で送信したすべての大量メールが表示されます。自動的に送信"
+msgstr "このページには、手動で送信したすべての一斉メールが表示されます。自動的に送信"
 "されたメールは含まれません。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:35
 msgid "Send a new email based on this"
-msgstr "これをもとに、新しく電子メールを送る"
+msgstr "これに基づいて新しいメールを送信"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:2
 msgid "Sent to orders:"
@@ -30885,14 +30865,14 @@ msgstr "注文連絡先"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:6
 msgid "Create Email Rule"
-msgstr "電子メールのルールを作成する"
+msgstr "メールのルールを作成"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:9
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
 msgid "Scheduled emails are not sent as long as your ticket shop is offline."
-msgstr "予定されたメールは、チケットショップがオフラインの間は送信されません。"
+msgstr "チケットショップがオフラインの間は、スケジュール済みメールは送信されません。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:63
@@ -30901,14 +30881,14 @@ msgid ""
 "your configured date. Typically, this will not be more than 10 minutes. Your "
 "email will never be sent earlier than the time you configured."
 msgstr ""
-"技術的な理由から、メールは設定した日付よりも少し遅れて送信されることがありま"
-"す。通常、これは10分を超えることはありません。メールは、設定した時間よりも早"
-"く送信されることはありません。"
+"技術的な理由により、メールは設定された日時より少し遅れて送信される場合があり"
+"ます。通常、10分以上遅れることはありません。設定した時刻より早く送信されるこ"
+"とはありません。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:6
 msgid "Delete Email Rule"
-msgstr "電子メールのルールを削除します"
+msgstr "メールのルールを削除します"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:9
 #, python-format
@@ -30918,7 +30898,7 @@ msgstr "ルール<strong>%(subject)s</strong>を削除してもよろしいで�
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:6
 msgid "Inspect Email Rule"
-msgstr "電子メールのルールを検査します"
+msgstr "メールのルールを検査"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:8
 msgid "This page shows when your rule is planned to be sent."
@@ -30927,7 +30907,7 @@ msgstr "このページには、あなたのルールが送信される予定の
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:18
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:29
 msgid "Email subject"
-msgstr "電子メールの件名"
+msgstr "メールの件名"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:30
@@ -30942,15 +30922,14 @@ msgstr "最後のスケジュール計算"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
 msgid "Scheduled email rules"
-msgstr "予定されたメールのルール"
+msgstr "スケジュール済みメールのルール"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
 "Email rules allow you to automatically send emails to your customers at a "
 "specific time before or after your event."
-msgstr ""
-"電子メールのルールを使用すると、イベントの前後に特定の時間に自動的に顧客に電"
-"子メールを送信することができます。"
+msgstr "メールのルールを使用すると、イベント開催前または開催後の特定の時刻に顧客へ自"
+"動的にメールを送信できます。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:101
@@ -30981,28 +30960,26 @@ msgstr "新しいルールのテンプレートを使う"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:7
 msgid "Update Email Rule"
-msgstr "電子メールのルールを更新します"
+msgstr "メールのルールを更新"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:21
 msgid ""
 "This email has already been sent for all existing dates. Changing it will "
 "have no effect unless you create additional dates in this event series."
-msgstr ""
-"このメールはすでにすべての既存の日付に送信されています。変更しても、このイベ"
-"ントシリーズに追加の日付を作成しない限り、効果はありません。"
+msgstr "このメールは既存のすべての日程に対して既に送信されています。このイベントシリ"
+"ーズで追加の日程を作成しない限り、変更しても効果はありません。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:23
 msgid "This email has already been sent. Changing it will have no effect."
-msgstr "このメールはすでに送信されています。変更しても効果はありません。"
+msgstr "このメールは既に送信されています。変更しても効果はありません。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:28
 msgid ""
 "This email has already been sent for some of the dates in your series. "
 "Changing it will only have an effect on dates for which the email has not "
 "yet been sent."
-msgstr ""
-"このメールは、シリーズの一部の日付についてすでに送信されています。変更を加え"
-"ても、まだ送信されていない日付にのみ影響があります。"
+msgstr "このメールはシリーズの一部の日程に対して既に送信されています。変更は、まだメ"
+"ールが送信されていない日程に対してのみ効果があります。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:77
 msgid "You need to preview your email before you can send it."
