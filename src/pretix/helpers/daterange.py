@@ -34,9 +34,7 @@
 
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import (
-    get_language, pgettext_lazy,
-)
+from django.utils.translation import get_language, pgettext_lazy
 
 from pretix.helpers.templatetags.date_fast import date_fast as _date
 
