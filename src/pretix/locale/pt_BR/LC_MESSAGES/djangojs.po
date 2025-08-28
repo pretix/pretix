@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:02+0000\n"
-"PO-Revision-Date: 2025-02-27 18:00+0000\n"
+"PO-Revision-Date: 2025-08-28 13:43+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.1\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -143,7 +143,7 @@ msgstr "Continuar"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
 msgid "Confirming your payment …"
-msgstr "Confirmado o seu pagamento  …"
+msgstr "Confirmando seu pagamento …"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:254
 msgid "Payment method unavailable"
@@ -165,7 +165,7 @@ msgstr "Receita total"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
-msgstr "Contactando Stripe …"
+msgstr "Contatando Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
 msgid "Total"
@@ -173,7 +173,7 @@ msgstr "Total"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
 msgid "Contacting your bank …"
-msgstr "Contactando o seu banco …"
+msgstr "Contatando o seu banco …"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
@@ -217,7 +217,7 @@ msgstr "Saída"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
-msgstr "Escanear um ingresso ou pesquisar e pressionar enter…"
+msgstr "Escanear um ingresso ou pesquisar e pressionar Enter…"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
@@ -370,9 +370,9 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
-"Sua solicitação chegou ao nosso servidor mas ainda precisamos esperar ela "
-"ser processada. Se isto tomar mais do que dois minutos, por favor entre em "
-"contato conosco ou retorne no seu navegador e tente novamente."
+"Sua solicitação chegou ao servidor, mas ainda esperamos que ela seja "
+"processada. Se isso demorar mais de dois minutos, entre em contato conosco "
+"ou volte ao seu navegador e tente novamente."
 
 #: pretix/static/pretixbase/js/asynctask.js:119
 #: pretix/static/pretixbase/js/asynctask.js:176
@@ -386,8 +386,8 @@ msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
-"Não conseguimos acessar o servidor, mas continuaremos tentando. Último "
-"código do erro: {code}"
+"No momento, não podemos acessar o servidor, mas continuamos tentando. Último "
+"código de erro: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:156
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
@@ -399,8 +399,8 @@ msgstr "A solicitação demorou muito. Por favor, tente novamente."
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
-"Não conseguimos acessar o servidor. Por favor, tente novamente. Código do "
-"erro: {code}"
+"No momento, não podemos acessar o servidor. Por favor, tente novamente. "
+"Código de erro: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:210
 msgid "We are processing your request …"
@@ -418,7 +418,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:270
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "Se isso demorar mais do que alguns minutos, entre em contato conosco."
 
 #: pretix/static/pretixbase/js/asynctask.js:325
 msgid "Close message"
@@ -630,26 +630,24 @@ msgid "Unknown error."
 msgstr "Erro desconhecido."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:292
-#, fuzzy
-#| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
-msgstr "Sua cor tem grande contraste e é muito fácil de ler!"
+msgstr "Sua cor tem ótimo contraste e proporcionará excelente acessibilidade."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:296
-#, fuzzy
-#| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
-"Sua cor tem um contraste aceitável e provavelmente é boa o suficiente para "
-"ler!"
+"Sua cor tem contraste decente e é suficiente para requisitos mínimos de "
+"acessibilidade."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:300
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
+"Sua cor não tem contraste suficiente com o branco. A acessibilidade do seu "
+"site será afetada."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:417
 #: pretix/static/pretixcontrol/js/ui/main.js:437
@@ -693,10 +691,8 @@ msgid "Calculating default price…"
 msgstr "Calculando o preço padrão…"
 
 #: pretix/static/pretixcontrol/js/ui/plugins.js:69
-#, fuzzy
-#| msgid "Search results"
 msgid "No results"
-msgstr "Resultados da busca"
+msgstr "Sem resultados"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
@@ -727,7 +723,7 @@ msgstr "Carrinho expirado"
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
 msgid "Your cart is about to expire."
-msgstr ""
+msgstr "Seu carrinho está para expirar."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
 msgid "The items in your cart are reserved for you for one minute."
@@ -737,16 +733,10 @@ msgstr[1] ""
 "Os itens em seu carrinho estão reservados para você por {num} minutos."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Your cart has expired."
-msgstr "Carrinho expirado"
+msgstr "Seu carrinho expirou."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
-#, fuzzy
-#| msgid ""
-#| "The items in your cart are no longer reserved for you. You can still "
-#| "complete your order as long as they’re available."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
@@ -756,11 +746,11 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "Você quer renovar o seu período de reserva?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Renew reservation"
-msgstr ""
+msgstr "Renovar reserva"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -800,12 +790,12 @@ msgstr "Aumentar quantidade"
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Filter events by"
-msgstr ""
+msgstr "Filtrar eventos por"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Filter"
-msgstr ""
+msgstr "Filtro"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
@@ -833,7 +823,7 @@ msgstr "Selecione"
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr "Selecion %s"
+msgstr "Selecione %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 #, javascript-format
@@ -955,12 +945,9 @@ msgid "Open ticket shop"
 msgstr "Abrir loja de ingressos"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Checkout"
-msgstr "Retomar checkout"
+msgstr "Checkout"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
@@ -1017,17 +1004,14 @@ msgid "Close"
 msgstr "Fechar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Close checkout"
-msgstr "Retomar checkout"
+msgstr "Fechar checkout"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
-msgstr ""
+msgstr "Você não pode cancelar esta operação. Aguarde o carregamento terminar."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
@@ -1130,31 +1114,31 @@ msgstr "Dom"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "Monday"
-msgstr ""
+msgstr "Segunda-feira"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "Tuesday"
-msgstr ""
+msgstr "Terça-feira"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "Wednesday"
-msgstr ""
+msgstr "Quarta-feira"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:88
 msgid "Thursday"
-msgstr ""
+msgstr "Quinta-feira"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:89
 msgid "Friday"
-msgstr ""
+msgstr "Sexta-feira"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "Saturday"
-msgstr ""
+msgstr "Sábado"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:91
 msgid "Sunday"
-msgstr ""
+msgstr "Domingo"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:94
 msgid "January"
