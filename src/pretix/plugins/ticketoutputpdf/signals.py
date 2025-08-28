@@ -205,5 +205,5 @@ The ``layout`` keyword argument will contain the layout which has been originall
 If you implement this signal and do not want to override the layout, make sure to return the ``layout`` keyword argument
 which you have been passed.
 
-As with all event-level plugin signals, the ``sender`` keyword will contain the event.
+As with all event plugin signals, the ``sender`` keyword will contain the event.
 """

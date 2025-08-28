@@ -67,7 +67,7 @@ register_event_fonts = EventPluginSignal()
 """
 Return a dictionaries of the following structure. Paths should be relative to static root or an absolute URL. In the
 latter case, the fonts won't be available for PDF-rendering.
-As with all event-level plugin signals, the ``sender`` keyword argument will contain the event.
+As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 
 {
     "font name": {
