@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-06-04 06:32+0000\n"
+"PO-Revision-Date: 2025-08-28 13:43+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -145,7 +145,7 @@ msgstr "Espanhol"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Espanhol (América latina)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -7963,7 +7963,7 @@ msgstr "Dia da semana de início do evento"
 #: pretix/base/pdf.py:275 pretix/base/pdf.py:304
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1240
 msgid "Friday"
-msgstr "Sexta-Feira"
+msgstr "Sexta-feira"
 
 #: pretix/base/pdf.py:279
 msgid "Event end date and time"
@@ -8716,19 +8716,19 @@ msgstr "dia da semana"
 
 #: pretix/base/services/checkin.py:358 pretix/control/forms/filter.py:1236
 msgid "Monday"
-msgstr "Segunda-Feira"
+msgstr "Segunda-feira"
 
 #: pretix/base/services/checkin.py:359 pretix/control/forms/filter.py:1237
 msgid "Tuesday"
-msgstr "Terça-Feira"
+msgstr "Terça-feira"
 
 #: pretix/base/services/checkin.py:360 pretix/control/forms/filter.py:1238
 msgid "Wednesday"
-msgstr "Quarta-Feira"
+msgstr "Quarta-feira"
 
 #: pretix/base/services/checkin.py:361 pretix/control/forms/filter.py:1239
 msgid "Thursday"
-msgstr "Quinta-Feira"
+msgstr "Quinta-feira"
 
 #: pretix/base/services/checkin.py:363 pretix/control/forms/filter.py:1241
 msgid "Saturday"
@@ -18511,7 +18511,7 @@ msgstr "executando em modo de desenvolvimento"
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr "Se isto demorar mais do que alguns minutos, entre em contato conosco."
+msgstr "Se isso demorar mais do que alguns minutos, entre em contato conosco."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
@@ -33750,10 +33750,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:510
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
-#, fuzzy
-#| msgid "Event description"
 msgid "Renew reservation"
-msgstr "Descrição do evento"
+msgstr "Renovar reserva"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:522
 #, fuzzy
