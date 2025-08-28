@@ -103,7 +103,7 @@ def daterange(df, dt, as_html=False):
             until=until,
         )
 
-    return _("{date_from}{until}{date_to}").format(
+    return "{date_from}{until}{date_to}".format(
         date_from=_date(df, "DATE_FORMAT"),
         date_to=_date(dt, "DATE_FORMAT"),
         until=until,
