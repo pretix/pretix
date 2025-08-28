@@ -230,7 +230,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
 class EventPluginSignal(PluginSignal[Event]):
     """
     This is an extension to Django's built-in signals which differs in a way that it sends
-    out it's events only to receivers which belong to plugins that are enabled for the given
+    out its events only to receivers which belong to plugins that are enabled for the given
     Event.
     """
     type = Event
@@ -254,7 +254,7 @@ class EventPluginSignal(PluginSignal[Event]):
 class OrganizerPluginSignal(PluginSignal[Organizer]):
     """
     This is an extension to Django's built-in signals which differs in a way that it sends
-    out it's events only to receivers which belong to plugins that are enabled for the given
+    out its events only to receivers which belong to plugins that are enabled for the given
     Organizer.
     """
     type = Organizer
