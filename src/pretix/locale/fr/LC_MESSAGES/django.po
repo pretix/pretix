@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-28 23:00+0000\n"
+"PO-Revision-Date: 2025-08-29 17:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -19534,7 +19534,7 @@ msgstr "Pas de problème."
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:74
 msgid "Retry selected"
-msgstr "Réessayer sélectionné"
+msgstr "Réessayer sélectionnés"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:75
 msgid "Cancel selected"
