@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-29 17:00+0000\n"
+"PO-Revision-Date: 2025-08-30 02:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -3226,8 +3226,7 @@ msgstr "Nuestro sistema no reconoce esta combinación de credenciales."
 #: pretix/presale/forms/customer.py:385 pretix/presale/forms/customer.py:457
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
-"Por razones de seguridad, por favor espere 5 minutos antes de intentarlo de "
-"nuevo."
+"Por motivos de seguridad, espere 5 minutos antes de volver a intentarlo."
 
 #: pretix/base/forms/auth.py:67 pretix/base/forms/auth.py:273
 msgid "This account is inactive."
@@ -15982,7 +15981,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:195
 msgid "You need to choose an event."
-msgstr "Debe elegir un evento."
+msgstr "Debe seleccionar un evento."
 
 #: pretix/control/forms/organizer.py:227
 msgid "You may set only one organizer domain."
@@ -18807,7 +18806,7 @@ msgstr "Cancelar"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:34
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:29
 msgid "Delete"
-msgstr "Borrar"
+msgstr "Eliminar"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -19646,31 +19645,30 @@ msgstr "Restablecer los ajustes del organizador"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr "Este es el registro SPF que encontramos en su dominio:"
+msgstr "Este es el registro SPF que hemos encontrado en su dominio:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
 msgstr ""
-"Para solucionar este problema, incluya la siguiente parte antes de la última "
-"palabra:"
+"Para solucionar esto, incluye la siguiente parte antes de la última palabra:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr "Su nuevo registro SPF podría verse así:"
+msgstr "El nuevo registro SPF podría tener el siguiente aspecto:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
 "Please keep in mind that updates to DNS might require multiple hours to take "
 "effect."
 msgstr ""
-"Tenga en cuenta que las actualizaciones de DNS pueden tardar varias horas en "
-"surtir efecto."
+"Tenga en cuenta que las actualizaciones del DNS pueden tardar varias horas "
+"en surtir efecto."
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:48
 msgid "We found an SPF record on your domain that includes this system. Great!"
 msgstr ""
-"Encontramos un registro SPF en su dominio que incluye este sistema. "
-"¡Excelente!"
+"Hemos encontrado un registro SPF en su dominio que incluye este sistema. "
+"¡Genial!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:54
 msgid "Verification"
@@ -23512,7 +23510,7 @@ msgstr "CIF válido en la UE"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:1022
 msgid "Check"
-msgstr "Cheque"
+msgstr "Comprobar"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:1076
 msgid "Order history"
@@ -28089,11 +28087,11 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
-"No pudimos encontrar un conjunto de registros SPF para el dominio que está "
-"intentando utilizar. Esto significa que hay un cambio muy alto en que la "
-"mayoría de los correos electrónicos serán rechazados o marcados como spam. "
-"Recomendamos encarecidamente establecer un registro SPF en el dominio. Puede "
-"hacerlo a través de la configuración de DNS del proveedor con el que "
+"No se pudo encontrar un registro SPF configurado para el dominio que está "
+"intentando usar. Esto significa que existe una alta probabilidad de que la "
+"mayoría de los correos electrónicos sean rechazados o marcados como spam. "
+"Recomendamos encarecidamente configurar un registro SPF en el dominio. Puede "
+"hacerlo a través de la configuración de DNS en el proveedor con el que "
 "registró su dominio."
 
 #: pretix/control/views/mailsetup.py:207
@@ -28104,12 +28102,12 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
-"Encontramos un conjunto de registros SPF para el dominio que estás "
-"intentando utilizar, pero no incluye el servidor de correo electrónico de "
-"este sistema. Esto significa que existe una gran probabilidad de que la "
-"mayoría de los correos electrónicos sean rechazados o marcados como spam. "
-"Debes actualizar la configuración DNS de tu dominio para incluir este "
-"sistema en el registro SPF."
+"Hemos encontrado un registro SPF configurado para el dominio que está "
+"intentando utilizar, pero no incluye el servidor de correo electrónico del "
+"mismo sistema. Esto significa que es muy probable que la mayoría de los "
+"correos electrónicos sean rechazados o marcados como spam. Debe actualizar "
+"la configuración DNS de su dominio para incluir este sistema en el registro "
+"SPF."
 
 #: pretix/control/views/mailsetup.py:216
 msgid "The verification code was incorrect, please try again."
