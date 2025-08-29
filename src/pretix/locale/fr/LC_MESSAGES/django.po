@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
 "PO-Revision-Date: 2025-08-29 17:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"Last-Translator: patch-works-be <webmaster@patch-works.be>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -2226,7 +2226,7 @@ msgstr "Position de commande"
 
 #: pretix/base/exporters/orderlist.py:103
 msgid "Order fees"
-msgstr "frais de la commande"
+msgstr "Frais de la commande"
 
 #: pretix/base/exporters/orderlist.py:111
 msgid "Only paid orders"
