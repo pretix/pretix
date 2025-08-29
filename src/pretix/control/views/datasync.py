@@ -82,27 +82,35 @@ class ControlSyncJob(OrderView):
             messages.success(self.request, _('The sync job has been enqueued and will run in the next minutes.'))
         elif self.request.POST.get("cancel_job"):
             with transaction.atomic():
-                job = self.order.queued_sync_jobs.select_for_update(of=OF_SELF).get(
-                    pk=self.request.POST.get("cancel_job")
-                )
-                if job.in_flight:
-                    messages.warning(self.request, _('The sync job is already in progress.'))
+                try:
+                    job = self.order.queued_sync_jobs.select_for_update(of=OF_SELF).get(
+                        pk=self.request.POST.get("cancel_job")
+                    )
+                except OrderSyncQueue.DoesNotExist:
+                    messages.error(self.request, _('The sync job could not be found.'))
                 else:
-                    job.delete()
-                    messages.success(self.request, _('The sync job has been canceled.'))
+                    if job.in_flight:
+                        messages.warning(self.request, _('The sync job is already in progress.'))
+                    else:
+                        job.delete()
+                        messages.success(self.request, _('The sync job has been canceled.'))
         elif self.request.POST.get("run_job_now"):
             with transaction.atomic():
-                job = self.order.queued_sync_jobs.select_for_update(of=OF_SELF).get(
-                    pk=self.request.POST.get("run_job_now")
-                )
-                if job.in_flight:
-                    messages.success(self.request, _('The sync job is already in progress.'))
+                try:
+                    job = self.order.queued_sync_jobs.select_for_update(of=OF_SELF).get(
+                        pk=self.request.POST.get("run_job_now")
+                    )
+                except OrderSyncQueue.DoesNotExist:
+                    messages.error(self.request, _('The sync job could not be found.'))
                 else:
-                    job.not_before = now()
-                    job.need_manual_retry = None
-                    job.save()
-                    sync_single.apply_async(args=(job.pk,))
-                    messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
+                    if job.in_flight:
+                        messages.success(self.request, _('The sync job is already in progress.'))
+                    else:
+                        job.not_before = now()
+                        job.need_manual_retry = None
+                        job.save()
+                        sync_single.apply_async(args=(job.pk,))
+                        messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
 
         return redirect(self.get_order_url())
 
