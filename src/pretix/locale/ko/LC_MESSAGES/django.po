@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-06-25 06:56+0000\n"
-"Last-Translator: 조정화 <junghwa.jo@om.org>\n"
+"PO-Revision-Date: 2025-09-01 18:00+0000\n"
+"Last-Translator: z3rrry <z3rrry@gmail.com>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -145,7 +145,7 @@ msgstr "스페인어"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "스페인어 (라틴 아메리카)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -617,7 +617,8 @@ msgstr "바우처 할당"
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
-msgstr ""
+msgstr "쿠폰에 대한 명시적인 변경 사항만 포함하며, 예를 들어 사용 횟수 증가 등은 "
+"포함하지 않습니다."
 
 #: pretix/api/webhooks.py:421
 #, fuzzy
@@ -729,18 +730,16 @@ msgstr ""
 "있습니다."
 
 #: pretix/base/context.py:38
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
 msgstr ""
-"이 서비스는 {name}에 의해 제공되며 pretix(온라인 이벤트 티켓팅 및 등록 시스"
-"템) 시스템 기반으로 작동합니다"
+"이 서비스는 <a {a_name_attr}>{name}</a>에 의해 제공되며 <a {a_attr}>pretix</"
+"a> 기반으로 작동합니다"
 
 #: pretix/base/context.py:48
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "이 서비스는 {name}에서 제공하며 pretix를 기반으로 합니다."
+msgstr "이 서비스는 <a {a_attr}>{name}</a>에서 제공하며 pretix를 기반으로 합니다."
 
 #: pretix/base/context.py:55
 #, python-format
@@ -812,13 +811,16 @@ msgid ""
 "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
 "your {provider_name} settings."
 msgstr ""
+"필드 \"{field_name}\"은 {available_inputs}에 유효하지 않습니다. "
+"{provider_name} 설정을 확인해 주세요."
 
 #: pretix/base/datasync/datasync.py:267
 #, python-brace-format
 msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
-msgstr ""
+msgstr "필드 \"{field_name}\"의 값 매핑을 업데이트해 주세요 - 옵션 \"{val}\"이 "
+"할당되지 않았습니다"
 
 #: pretix/base/datasync/sourcefields.py:128
 #, fuzzy
@@ -850,7 +852,7 @@ msgstr "상품 데이터"
 #: pretix/control/templates/pretixcontrol/order/index.html:176
 #: pretix/presale/templates/pretixpresale/event/order.html:22
 msgid "Order details"
-msgstr ""
+msgstr "주문 내역"
 
 #: pretix/base/datasync/sourcefields.py:133
 #: pretix/base/datasync/sourcefields.py:299
