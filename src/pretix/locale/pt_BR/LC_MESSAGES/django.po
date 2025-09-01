@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-28 23:00+0000\n"
+"PO-Revision-Date: 2025-09-02 07:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -1088,16 +1088,12 @@ msgid "Ticket status"
 msgstr "Status do ingresso"
 
 #: pretix/base/datasync/sourcefields.py:509
-#, fuzzy
-#| msgid "Purchase date and time"
 msgid "Order date and time"
-msgstr "Data e hora da compra"
+msgstr "Data e hora do pedido"
 
 #: pretix/base/datasync/sourcefields.py:518
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Payment date and time"
-msgstr "Data e hora de impressão"
+msgstr "Data e hora do pagamento"
 
 #: pretix/base/datasync/sourcefields.py:527
 #: pretix/base/exporters/orderlist.py:271
@@ -1108,10 +1104,8 @@ msgid "Order locale"
 msgstr "Localidade do pedido"
 
 #: pretix/base/datasync/sourcefields.py:536
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position ID"
-msgstr "Posição do pedido"
+msgstr "ID da posição do pedido"
 
 #: pretix/base/datasync/sourcefields.py:545
 #: pretix/base/exporters/orderlist.py:291
@@ -13838,10 +13832,9 @@ msgid "Bcc address"
 msgstr "Endereço Cco"
 
 #: pretix/control/forms/event.py:987 pretix/control/forms/organizer.py:585
-#, fuzzy
-#| msgid "All emails will be sent to this address as a Bcc copy"
 msgid "All emails will be sent to this address as a Bcc copy."
-msgstr "Todos os e-mails serão enviados para este endereço como uma cópia Cco"
+msgstr ""
+"Todos os e-mails serão enviados para este endereço como uma cópia oculta."
 
 #: pretix/control/forms/event.py:995 pretix/control/forms/organizer.py:593
 msgid "Signature"
@@ -16785,7 +16778,7 @@ msgstr "A fatura {full_invoice_no} foi enviada."
 #: pretix/control/logdisplay.py:528
 #, python-brace-format
 msgid "The transmission of invoice {full_invoice_no} has failed."
-msgstr ""
+msgstr "A transmissão da fatura {full_invoice_no} falhou."
 
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
@@ -19264,10 +19257,8 @@ msgid "Retry selected"
 msgstr "Excluir selecionado"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:75
-#, fuzzy
-#| msgid "Cancel event"
 msgid "Cancel selected"
-msgstr "Cancelar evento"
+msgstr "Cancelar selecionado"
 
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:31
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html:62
@@ -22983,11 +22974,8 @@ msgid "Invoice was not yet emailed to customer"
 msgstr "A fatura ainda não foi enviada por e-mail ao cliente"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:294
-#, fuzzy
-#| msgid "One webhook is scheduled to be retried."
-#| msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgid "Invoice is scheduled to be transmitted"
-msgstr "Um webhook está agendado para ser repetido."
+msgstr "Fatura com transmissão agendada"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:299
 #, fuzzy
@@ -23008,16 +22996,12 @@ msgid "Invoice not transmitted in test mode"
 msgstr "ativa e em modo de teste"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:312
-#, fuzzy
-#| msgid "Device registration failed."
 msgid "Invoice transmission failed"
-msgstr "Falha no registro do dispositivo."
+msgstr "Falha na transmissão da fatura"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:317
-#, fuzzy
-#| msgid "An invoice has been generated."
 msgid "Invoice has been transmitted"
-msgstr "Uma fatura foi gerada."
+msgstr "Fatura foi transmitida"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:329
 msgid "Transmit"
@@ -24841,10 +24825,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
-#, fuzzy, python-format
-#| msgid "Show next month, %(month)s"
+#, python-format
 msgid "Events with plugin %(name)s"
-msgstr "Exibir próximo mês, %(month)s"
+msgstr "Eventos com plugin %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:18
 #, python-format
@@ -24859,6 +24842,9 @@ msgid ""
 "The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
+"O plugin \"%(name)s\" está habilitado para sua conta de organização, mas "
+"também necessita ser habilitado para os eventos específicos que você queira "
+"utilizá-lo."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:31
 msgid ""
@@ -24900,6 +24886,8 @@ msgstr[1] "Ativos (%(count)s eventos)"
 msgid ""
 "Parts of this plugin can be enabled or disabled for events individually."
 msgstr ""
+"Partes deste plugin podem ser habilitados ou desabilitados para eventos "
+"individualmente."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:149
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:167
@@ -25719,7 +25707,7 @@ msgstr "Regra de repetição"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:192
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr ""
+msgstr "Repetir a cada %(interval)s %(freq)s, começando em %(start)s."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:258
 msgctxt "subevent"
@@ -27149,17 +27137,17 @@ msgid "Not all discounts have been selected."
 msgstr "Nem todos os descontos foram selecionados."
 
 #: pretix/control/views/event.py:454
-#, fuzzy
-#| msgid "You do not have sufficient permission to perform this export."
 msgid ""
 "You do not have sufficient permission to enable plugins that need to be "
 "enabled for the entire organizer account."
-msgstr "Você não tem permissão suficiente para executar essa exportação."
+msgstr ""
+"Você não possui permissão suficiente para habilitar plugins que precisam ser "
+"habilitados para toda a conta da organização."
 
 #: pretix/control/views/event.py:473 pretix/control/views/organizer.py:713
 #, python-brace-format
 msgid "The plugin {} is now active, you can configure it here:"
-msgstr ""
+msgstr "O plugin {} está ativo, você pode configurá-lo aqui:"
 
 #: pretix/control/views/event.py:482 pretix/control/views/organizer.py:722
 #, python-brace-format
@@ -32604,17 +32592,12 @@ msgid "You need to fill out all fields."
 msgstr "Você precisa preencher todos os campos."
 
 #: pretix/presale/forms/customer.py:69
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "You need to enter an email address."
-msgstr "Insira um endereço de e-mail válido."
+msgstr "Você precisa informar um endereço de e-mail."
 
 #: pretix/presale/forms/customer.py:70
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to enter a password."
-msgstr "Você precisa selecionar uma data."
+msgstr "Você precisa informar uma senha."
 
 #: pretix/presale/forms/customer.py:72
 msgid "We have not found an account with this email address and password."
@@ -33032,7 +33015,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:211
 msgid "Place binding order"
-msgstr ""
+msgstr "Efetuar pedido"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:213
 msgid "Submit registration"
