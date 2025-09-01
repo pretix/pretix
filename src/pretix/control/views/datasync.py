@@ -87,7 +87,7 @@ class ControlSyncJob(OrderView):
                         pk=self.request.POST.get("cancel_job")
                     )
                 except OrderSyncQueue.DoesNotExist:
-                    messages.error(self.request, _('The sync job could not be found.'))
+                    messages.info(self.request, _('The sync job could not be found. It may have been processed in the meantime.'))
                 else:
                     if job.in_flight:
                         messages.warning(self.request, _('The sync job is already in progress.'))
@@ -101,7 +101,7 @@ class ControlSyncJob(OrderView):
                         pk=self.request.POST.get("run_job_now")
                     )
                 except OrderSyncQueue.DoesNotExist:
-                    messages.error(self.request, _('The sync job could not be found.'))
+                    messages.info(self.request, _('The sync job could not be found. It may have been processed in the meantime.'))
                 else:
                     if job.in_flight:
                         messages.success(self.request, _('The sync job is already in progress.'))
