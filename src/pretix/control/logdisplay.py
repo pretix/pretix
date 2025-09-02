@@ -719,6 +719,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.customer.anonymized': _('The account has been disabled and anonymized.'),
     'pretix.customer.password.resetrequested': _('A new password has been requested.'),
     'pretix.customer.password.set': _('A new password has been set.'),
+    'pretix.customer.email.error': _('Sending of an email has failed.'),
     'pretix.reusable_medium.created': _('The reusable medium has been created.'),
     'pretix.reusable_medium.created.auto': _('The reusable medium has been created automatically.'),
     'pretix.reusable_medium.changed': _('The reusable medium has been changed.'),
@@ -752,6 +753,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.user.anonymized': _('This user has been anonymized.'),
     'pretix.user.oauth.authorized': _('The application "{application_name}" has been authorized to access your '
                                       'account.'),
+    'pretix.user.email.error': _('Sending of an email has failed.'),
     'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
     'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
     'pretix.control.auth.user.forgot_password.denied.repeated': _('A repeated password reset has been denied, as '

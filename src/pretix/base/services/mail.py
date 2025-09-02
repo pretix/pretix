@@ -405,8 +405,12 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         attach_cid_images(html_message, cid_images, verify_ssl=True)
         email.attach_alternative(html_message, "multipart/related")
 
+    log_target = None
+
     if user:
         user = User.objects.get(pk=user)
+        error_log_action_type = 'pretix.user.email.error'
+        log_target = user
 
     if event:
         with scopes_disabled():
@@ -426,12 +430,15 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
     with cm():
         if customer:
             customer = Customer.objects.get(pk=customer)
-        log_target = user or customer
+            if not user:
+                error_log_action_type = 'pretix.customer.email.error'
+                log_target = customer
 
         if event:
             if order:
                 try:
                     order = event.orders.get(pk=order)
+                    error_log_action_type = 'pretix.event.order.email.error'
                     log_target = order
                 except Order.DoesNotExist:
                     order = None
@@ -574,7 +581,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 except MaxRetriesExceededError:
                     if log_target:
                         log_target.log_action(
-                            'pretix.email.error',
+                            error_log_action_type,
                             data={
                                 'subject': 'SMTP code {}, max retries exceeded'.format(e.smtp_code),
                                 'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
@@ -587,7 +594,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             logger.exception('Error sending email')
             if log_target:
                 log_target.log_action(
-                    'pretix.email.error',
+                    error_log_action_type,
                     data={
                         'subject': 'SMTP code {}'.format(e.smtp_code),
                         'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
@@ -618,7 +625,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     message.append(f'{e}: {val[0]} {val[1].decode()}')
 
                 log_target.log_action(
-                    'pretix.email.error',
+                    error_log_action_type,
                     data={
                         'subject': 'SMTP error',
                         'message': '\n'.join(message),
@@ -635,7 +642,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 except MaxRetriesExceededError:
                     if log_target:
                         log_target.log_action(
-                            'pretix.email.error',
+                            error_log_action_type,
                             data={
                                 'subject': 'Internal error',
                                 'message': f'Max retries exceeded after error "{str(e)}"',
@@ -646,7 +653,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     raise e
             if log_target:
                 log_target.log_action(
-                    'pretix.email.error',
+                    error_log_action_type,
                     data={
                         'subject': 'Internal error',
                         'message': str(e),
