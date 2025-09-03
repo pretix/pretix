@@ -28,6 +28,8 @@
         <p>
             <a href="{% url "control:event.items.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new product" %}</a>
+            <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new category" %}</a>
         </p>
         <form method="post">
             {% csrf_token %}
