@@ -34,7 +34,9 @@
         <form method="post">
             {% csrf_token %}
         <div class="table-responsive">
-            <table class="table table-condensed table-hover table-items">
+            <table class="table table-condensed table-hover table-items"
+                   data-dnd-url="{% url "control:event.items.categories.reorder" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   data-dnd-group="categories">
                 <thead>
                 <tr>
                     <th>{% trans "Product name" %}</th>
@@ -50,10 +52,11 @@
 
                 {% for c, items in cat_list %}
                     {% if c %}
-                        <tbody>
-                            <tr class="sortable-disabled"><th colspan="9" scope="colgroup" class="text-muted">
+                        <tbody data-dnd-id="{{ c.id }}">
+                            <tr><th colspan="9" scope="colgroup" class="text-muted">
                                 {{ c.internal_name|default:c.name }}{% if c.category_type != "normal" %} <span class="font-normal">({{ c.get_category_type_display }})</span>{% endif %}
                                 <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" title="{% trans "Edit" %}"><span class="fa fa-edit fa-fw"></span></a>
+                                <span class="dnd-container pull-right" data-dnd-group="items" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
                             </th></tr>
                         </tbody>
                     {% endif %}
@@ -162,7 +165,7 @@
                             <td class="text-right flip col-actions">
                                 <button title="{% trans "Move up" %}" formaction="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
                                 <button title="{% trans "Move down" %}" formaction="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
-                                <span class="dnd-container" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
+                                <span class="dnd-container" data-dnd-group="items" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
                                 <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm" title="{% trans "Edit" %}"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "control:event.items.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ i.id }}" class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
                                 <a href="{% url "control:event.items.delete" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-danger btn-sm" title="{% trans "Delete" %}"><i class="fa fa-trash"></i></a>
