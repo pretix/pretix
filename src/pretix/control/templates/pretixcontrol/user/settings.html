@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Account settings" %}{% endblock %}
 {% block content %}
-{% if user.email != user.verified_email %}
+{% if not user.is_verified %}
     <div class="alert alert-info">
         {% trans "Please confirm your email address by clicking on the confirmation link in the email we sent you." %}
     </div>
