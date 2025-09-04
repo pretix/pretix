@@ -1189,26 +1189,7 @@ class Renderer:
 
             for i, page in enumerate(fg_pdf.pages):
                 bg_page = self.bg_pdf.pages[i]
-                if bg_page.rotation != 0:
-                    bg_page.transfer_rotation_to_content()
-                bg_media_box = bg_page.mediabox
-                trsf = pypdf.Transformation()
-                if bg_media_box.bottom != 0:
-                    trsf = trsf.translate(0, -bg_media_box.bottom)
-                if bg_media_box.left != 0:
-                    trsf = trsf.translate(-bg_media_box.left, 0)
-                bg_page.add_transformation(trsf, False)
-                for b in ["/MediaBox", "/CropBox", "/BleedBox", "/TrimBox", "/ArtBox"]:
-                    if b in bg_page:
-                        rr = pypdf.generic.RectangleObject(bg_page[b])
-                        pt1 = trsf.apply_on(rr.lower_left)
-                        pt2 = trsf.apply_on(rr.upper_right)
-                        bg_page[pypdf.generic.NameObject(b)] = pypdf.generic.RectangleObject((
-                            min(pt1[0], pt2[0]),
-                            min(pt1[1], pt2[1]),
-                            max(pt1[0], pt2[0]),
-                            max(pt1[1], pt2[1]),
-                        ))
+                _correct_page_media_box(bg_page)
                 page.merge_page(bg_page, over=False)
                 output.add_page(page)
 
@@ -1277,8 +1258,7 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
     else:
         for i, page in enumerate(fg_pdf.pages):
             bg_page = bg_pdf.pages[i]
-            if bg_page.rotation != 0:
-                bg_page.transfer_rotation_to_content()
+            _correct_page_media_box(bg_page)
             page.merge_page(bg_page, over=False)
 
         # pdf_header is a string like "%pdf-X.X"
@@ -1286,6 +1266,29 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
             fg_pdf.pdf_header = bg_pdf.pdf_header
 
         fg_pdf.write(out_file)
+
+
+def _correct_page_media_box(page: pypdf.PageObject):
+    if page.rotation != 0:
+        page.transfer_rotation_to_content()
+    media_box = page.mediabox
+    trsf = pypdf.Transformation()
+    if media_box.bottom != 0:
+        trsf = trsf.translate(0, -media_box.bottom)
+    if media_box.left != 0:
+        trsf = trsf.translate(-media_box.left, 0)
+    page.add_transformation(trsf, False)
+    for b in ["/MediaBox", "/CropBox", "/BleedBox", "/TrimBox", "/ArtBox"]:
+        if b in page:
+            rr = pypdf.generic.RectangleObject(page[b])
+            pt1 = trsf.apply_on(rr.lower_left)
+            pt2 = trsf.apply_on(rr.upper_right)
+            page[pypdf.generic.NameObject(b)] = pypdf.generic.RectangleObject((
+                min(pt1[0], pt2[0]),
+                min(pt1[1], pt2[1]),
+                max(pt1[0], pt2[0]),
+                max(pt1[1], pt2[1]),
+            ))
 
 
 @deconstructible
