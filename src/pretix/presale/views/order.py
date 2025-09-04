@@ -1525,6 +1525,7 @@ class OrderChangeMixin:
 
     def post(self, request, *args, **kwargs):
         was_paid = self.order.status == Order.STATUS_PAID
+        original_total = self.order.total
         ocm = OrderChangeManager(
             self.order,
             notify=True,
@@ -1576,7 +1577,8 @@ class OrderChangeMixin:
                 except OrderError as e:
                     messages.error(self.request, str(e))
                 else:
-                    if self.order.pending_sum < Decimal('0.00') and ocm._totaldiff < Decimal('0.00'):
+                    totaldiff = self.order.total - original_total
+                    if self.order.pending_sum < Decimal('0.00') and totaldiff < Decimal('0.00'):
                         auto_refund = (
                             not self.request.event.settings.cancel_allow_user_paid_require_approval
                             and self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard != "manually"
@@ -1604,7 +1606,7 @@ class OrderChangeMixin:
                 messages.info(self.request, _('You did not make any changes.'))
                 return redirect(self.get_self_url())
             else:
-                new_pending_sum = self.order.pending_sum + ocm._totaldiff
+                new_pending_sum = self.order.pending_sum + ocm.guess_totaldiff()
                 can_auto_refund = False
                 if new_pending_sum < Decimal('0.00'):
                     proposals = self.order.propose_auto_refunds(Decimal('-1.00') * new_pending_sum)
@@ -1612,7 +1614,7 @@ class OrderChangeMixin:
 
                 return render(request, self.confirm_template_name, {
                     'operations': ocm._operations,
-                    'totaldiff': ocm._totaldiff,
+                    'totaldiff': ocm.guess_totaldiff(),
                     'order': self.order,
                     'payment_refund_sum': self.order.payment_refund_sum,
                     'new_pending_sum': new_pending_sum,
@@ -1624,16 +1626,17 @@ class OrderChangeMixin:
 
     def _validate_total_diff(self, ocm):
         pr = self.get_price_requirement()
-        if ocm._totaldiff < Decimal('0.00') and pr == 'gte':
+        totaldiff = ocm.guess_totaldiff()
+        if totaldiff < Decimal('0.00') and pr == 'gte':
             raise OrderError(_('You may not change your order in a way that reduces the total price.'))
-        if ocm._totaldiff <= Decimal('0.00') and pr == 'gt':
+        if totaldiff <= Decimal('0.00') and pr == 'gt':
             raise OrderError(_('You may only change your order in a way that increases the total price.'))
-        if ocm._totaldiff != Decimal('0.00') and pr == 'eq':
+        if totaldiff != Decimal('0.00') and pr == 'eq':
             raise OrderError(_('You may not change your order in a way that changes the total price.'))
-        if ocm._totaldiff < Decimal('0.00') and self.order.total + ocm._totaldiff < self.order.payment_refund_sum and pr == 'gte_paid':
+        if totaldiff < Decimal('0.00') and self.order.total + totaldiff < self.order.payment_refund_sum and pr == 'gte_paid':
             raise OrderError(_('You may not change your order in a way that would require a refund.'))
 
-        if ocm._totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PAID:
+        if totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PAID:
             self.order.set_expires(
                 now(),
                 self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
@@ -1642,7 +1645,7 @@ class OrderChangeMixin:
                 raise OrderError(_('You may not change your order in a way that increases the total price since '
                                    'payments are no longer being accepted for this event.'))
 
-        if ocm._totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PENDING:
+        if totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PENDING:
             for p in self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_PENDING):
                 if not p.payment_provider.abort_pending_allowed:
                     raise OrderError(_('You may not change your order in a way that requires additional payment while '
