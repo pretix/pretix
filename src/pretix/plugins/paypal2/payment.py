@@ -54,7 +54,6 @@ from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
-from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
@@ -821,9 +820,6 @@ class PaypalMethod(BasePaymentProvider):
                 payment.confirm()
             except Quota.QuotaExceededException as e:
                 raise PaymentException(str(e))
-
-            except SendMailException:
-                messages.warning(request, _('There was an error sending the confirmation mail.'))
         finally:
             if 'payment_paypal_oid' in request.session:
                 del request.session['payment_paypal_oid']
